@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, darwin, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.4.1";
   pname = "iproute2mac";
 
   src = fetchFromGitHub {
     owner = "brona";
     repo = "iproute2mac";
     rev = "v${version}";
-    sha256 = "sha256-xakCNjmZpdVY7MMxk38EZatrakgkEeDhvljhl+aMmGg=";
+    sha256 = "sha256-MaL8eb9UOZ71BL4Jvc6Od+EJ+F6j96n9a+vRnHeveIU=";
   };
 
   buildInputs = [ python3 ];

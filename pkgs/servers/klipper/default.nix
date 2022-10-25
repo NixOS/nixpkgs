@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2022-09-16";
+  version = "unstable-2022-10-17";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "7527e57e5a778d069aaa05b01e03869c63a1a712";
-    sha256 = "sha256-k3tvV7uCdmPN4SvZixvPmOqt5jTN9tz0W6SUXN5g3Ss=";
+    rev = "0d9b2cc1fa297b9adedb14be31a8d5c8d7868681";
+    sha256 = "sha256-Yiqmi4/TrxpXzVVOEEyUVqKb3Gm6/tp+S4JeajujTjc=";
   };
 
   sourceRoot = "source/klippy";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [ (python3.withPackages ( p: with p; [ cffi ] )) ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
 
   # we need to run this to prebuild the chelper.
   postBuild = ''

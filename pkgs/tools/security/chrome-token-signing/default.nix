@@ -11,7 +11,8 @@ mkDerivation rec {
     sha256 = "sha256-wKy/RVR7jx5AkMJgHXsuV+jlzyfH5nDRggcIUgh2ML4=";
   };
 
-  buildInputs = [ qmake pcsclite pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ qmake pcsclite ];
   dontUseQmakeConfigure = true;
 
   patchPhase = ''

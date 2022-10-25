@@ -26,6 +26,8 @@
   # If you include more than one option list into a document, you need to
   # provide different ids.
 , variablelistId ? "configuration-variable-list"
+  # Strig to prefix to the option XML/HTML id attributes.
+, optionIdPrefix ? "opt-"
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -120,7 +122,7 @@ in rec {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
-      buildInputs = [
+      nativeBuildInputs = [
         pkgs.brotli
         (let
           self = (pkgs.python3Minimal.override {
@@ -183,6 +185,7 @@ in rec {
       --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
       --stringparam variablelistId '${variablelistId}' \
+      --stringparam optionIdPrefix '${optionIdPrefix}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml

@@ -1109,13 +1109,15 @@ This setup hook moves any libraries installed in the `lib64/` subdirectory into 
 
 This setup hook moves any systemd user units installed in the `lib/` subdirectory into `share/`. In addition, a link is provided from `share/` to `lib/` for compatibility. This is needed for systemd to find user services when installed into the user profile.
 
+This hook only runs when compiling for Linux.
+
 ### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
-### Bintools Wrapper {#bintools-wrapper}
+### Bintools Wrapper and hook {#bintools-wrapper}
 
-The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targetting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
+The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
 
 The Bintools Wrapper was only just recently split off from CC Wrapper, so the division of labor is still being worked out. For example, it shouldn’t care about the C standard library, but just take a derivation with the dynamic loader (which happens to be the glibc on linux). Dependency finding however is a task both wrappers will continue to need to share, and probably the most important to understand. It is currently accomplished by collecting directories of host-platform dependencies (i.e. `buildInputs` and `nativeBuildInputs`) in environment variables. The Bintools Wrapper’s setup hook causes any `lib` and `lib64` subdirectories to be added to `NIX_LDFLAGS`. Since the CC Wrapper and the Bintools Wrapper use the same strategy, most of the Bintools Wrapper code is sparsely commented and refers to the CC Wrapper. But the CC Wrapper’s code, by contrast, has quite lengthy comments. The Bintools Wrapper merely cites those, rather than repeating them, to avoid falling out of sync.
 
@@ -1123,173 +1125,20 @@ A final task of the setup hook is defining a number of standard environment vari
 
 A problem with this final task is that the Bintools Wrapper is honest and defines `LD` as `ld`. Most packages, however, firstly use the C compiler for linking, secondly use `LD` anyways, defining it as the C compiler, and thirdly, only so define `LD` when it is undefined as a fallback. This triple-threat means Bintools Wrapper will break those packages, as LD is already defined as the actual linker which the package won’t override yet doesn’t want to use. The workaround is to define, just for the problematic package, `LD` as the C compiler. A good way to do this would be `preConfigure = "LD=$CC"`.
 
-### CC Wrapper {#cc-wrapper}
+### CC Wrapper and hook {#cc-wrapper}
 
 The CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes. Specifically, a C compiler (GCC or Clang), wrapped binary tools, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the CC Wrapper. Packages typically depend on the CC Wrapper, which in turn (at run-time) depends on the Bintools Wrapper.
 
-Dependency finding is undoubtedly the main task of the CC Wrapper. This works just like the Bintools Wrapper, except that any `include` subdirectory of any relevant dependency is added to `NIX_CFLAGS_COMPILE`. The setup hook itself contains some lengthy comments describing the exact convoluted mechanism by which this is accomplished.
+Dependency finding is undoubtedly the main task of the CC Wrapper. This works just like the Bintools Wrapper, except that any `include` subdirectory of any relevant dependency is added to `NIX_CFLAGS_COMPILE`. The setup hook itself contains elaborate comments describing the exact mechanism by which this is accomplished.
 
 Similarly, the CC Wrapper follows the Bintools Wrapper in defining standard environment variables with the names of the tools it wraps, for the same reasons described above. Importantly, while it includes a `cc` symlink to the c compiler for portability, the `CC` will be defined using the compiler’s “real name” (i.e. `gcc` or `clang`). This helps lousy build systems that inspect on the name of the compiler rather than run it.
 
 Here are some more packages that provide a setup hook. Since the list of hooks is extensible, this is not an exhaustive list. The mechanism is only to be used as a last resort, so it might cover most uses.
 
-### Perl {#setup-hook-perl}
+### Other hooks
 
-Adds the `lib/site_perl` subdirectory of each build input to the `PERL5LIB` environment variable. For instance, if `buildInputs` contains Perl, then the `lib/site_perl` subdirectory of each input is added to the `PERL5LIB` environment variable.
-
-### Python {#setup-hook-python}
-
-Adds the `lib/${python.libPrefix}/site-packages` subdirectory of each build input to the `PYTHONPATH` environment variable.
-
-### pkg-config {#setup-hook-pkg-config}
-
-Adds the `lib/pkgconfig` and `share/pkgconfig` subdirectories of each build input to the `PKG_CONFIG_PATH` environment variable.
-
-### Automake {#setup-hook-automake}
-
-Adds the `share/aclocal` subdirectory of each build input to the `ACLOCAL_PATH` environment variable.
-
-### Autoconf {#setup-hook-autoconf}
-
-The `autoreconfHook` derivation adds `autoreconfPhase`, which runs autoreconf, libtoolize and automake, essentially preparing the configure script in autotools-based builds. Most autotools-based packages come with the configure script pre-generated, but this hook is necessary for a few packages and when you need to patch the package’s configure scripts.
-
-### libxml2 {#setup-hook-libxml2}
-
-Adds every file named `catalog.xml` found under the `xml/dtd` and `xml/xsl` subdirectories of each build input to the `XML_CATALOG_FILES` environment variable.
-
-### teTeX / TeX Live {#tetex-tex-live}
-
-Adds the `share/texmf-nix` subdirectory of each build input to the `TEXINPUTS` environment variable.
-
-### Qt 4 {#qt-4}
-
-Sets the `QTDIR` environment variable to Qt’s path.
-
-### gdk-pixbuf {#setup-hook-gdk-pixbuf}
-
-Exports `GDK_PIXBUF_MODULE_FILE` environment variable to the builder. Add librsvg package to `buildInputs` to get svg support. See also the [setup hook description in GNOME platform docs](#ssec-gnome-hooks-gdk-pixbuf).
-
-### GHC {#ghc}
-
-Creates a temporary package database and registers every Haskell build input in it (TODO: how?).
-
-### GNOME platform {#gnome-platform}
-
-Hooks related to GNOME platform and related libraries like GLib, GTK and GStreamer are described in [](#sec-language-gnome).
-
-### autoPatchelfHook {#setup-hook-autopatchelfhook}
-
-This is a special setup hook which helps in packaging proprietary software in that it automatically tries to find missing shared library dependencies of ELF files based on the given `buildInputs` and `nativeBuildInputs`.
-
-You can also specify a `runtimeDependencies` variable which lists dependencies to be unconditionally added to rpath of all executables. This is useful for programs that use dlopen 3 to load libraries at runtime.
-
-In certain situations you may want to run the main command (`autoPatchelf`) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the `dontAutoPatchelf` environment variable to a non-empty value.
-
-By default `autoPatchelf` will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the `autoPatchelfIgnoreMissingDeps` environment variable to a non-empty value. `autoPatchelfIgnoreMissingDeps` can be set to a list like `autoPatchelfIgnoreMissingDeps = [ "libcuda.so.1" "libcudart.so.1" ];` or to simply `[ "*" ]` to ignore all missing dependencies.
-
-The `autoPatchelf` command also recognizes a `--no-recurse` command line flag, which prevents it from recursing into subdirectories.
-
-### breakpointHook {#breakpointhook}
-
-This hook will make a build pause instead of stopping when a failure happens. It prevents nix from cleaning up the build environment immediately and allows the user to attach to a build environment using the `cntr` command. Upon build error it will print instructions on how to use `cntr`, which can be used to enter the environment for debugging. Installing cntr and running the command will provide shell access to the build sandbox of failed build. At `/var/lib/cntr` the sandboxed filesystem is mounted. All commands and files of the system are still accessible within the shell. To execute commands from the sandbox use the cntr exec subcommand. `cntr` is only supported on Linux-based platforms. To use it first add `cntr` to your `environment.systemPackages` on NixOS or alternatively to the root user on non-NixOS systems. Then in the package that is supposed to be inspected, add `breakpointHook` to `nativeBuildInputs`.
-
-```nix
-nativeBuildInputs = [ breakpointHook ];
-```
-
-When a build failure happens there will be an instruction printed that shows how to attach with `cntr` to the build sandbox.
-
-::: {.note}
-::: {.title}
-Caution with remote builds
-:::
-
-This won’t work with remote builds as the build environment is on a different machine and can’t be accessed by `cntr`. Remote builds can be turned off by setting `--option builders ''` for `nix-build` or `--builders ''` for `nix build`.
-:::
-
-### installShellFiles {#installshellfiles}
-
-This hook helps with installing manpages and shell completion files. It exposes 2 shell functions `installManPage` and `installShellCompletion` that can be used from your `postInstall` hook.
-
-The `installManPage` function takes one or more paths to manpages to install. The manpages must have a section suffix, and may optionally be compressed (with `.gz` suffix). This function will place them into the correct directory.
-
-The `installShellCompletion` function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of `--bash`, `--fish`, or `--zsh`. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag `--name NAME` before the path. If this flag is not provided, zsh completions will be renamed automatically such that `foobar.zsh` becomes `_foobar`. A root name may be provided for all paths using the flag `--cmd NAME`; this synthesizes the appropriate name depending on the shell (e.g. `--cmd foo` will synthesize the name `foo.bash` for bash and `_foo` for zsh). The path may also be a fifo or named fd (such as produced by `<(cmd)`), in which case the shell and name must be provided.
-
-```nix
-nativeBuildInputs = [ installShellFiles ];
-postInstall = ''
-  installManPage doc/foobar.1 doc/barfoo.3
-  # explicit behavior
-  installShellCompletion --bash --name foobar.bash share/completions.bash
-  installShellCompletion --fish --name foobar.fish share/completions.fish
-  installShellCompletion --zsh --name _foobar share/completions.zsh
-  # implicit behavior
-  installShellCompletion share/completions/foobar.{bash,fish,zsh}
-  # using named fd
-  installShellCompletion --cmd foobar \
-    --bash <($out/bin/foobar --bash-completion) \
-    --fish <($out/bin/foobar --fish-completion) \
-    --zsh <($out/bin/foobar --zsh-completion)
-'';
-```
-
-### libiconv, libintl {#libiconv-libintl}
-
-A few libraries automatically add to `NIX_LDFLAGS` their library, making their symbols automatically available to the linker. This includes libiconv and libintl (gettext). This is done to provide compatibility between GNU Linux, where libiconv and libintl are bundled in, and other systems where that might not be the case. Sometimes, this behavior is not desired. To disable this behavior, set `dontAddExtraLibs`.
-
-### validatePkgConfig {#validatepkgconfig}
-
-The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package. This helps catching some common errors in pkg-config files, such as undefined variables.
-
-### cmake {#cmake}
-
-Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to `CMAKE_PREFIX_PATH` so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting `configurePhase` to a custom value, or by setting `dontUseCmakeConfigure`. `cmakeFlags` controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
-
-### xcbuildHook {#xcbuildhook}
-
-Overrides the build and install phases to run the "xcbuild" command. This hook is needed when a project only comes with build files for the XCode build system. You can disable this behavior by setting buildPhase and configurePhase to a custom value. xcbuildFlags controls flags passed only to xcbuild.
-
-### Meson {#meson}
-
-Overrides the configure phase to run meson to generate Ninja files. To run these files, you should accompany Meson with ninja. By default, `enableParallelBuilding` is enabled as Meson supports parallel building almost everywhere.
-
-#### Variables controlling Meson {#variables-controlling-meson}
-
-##### `mesonFlags` {#mesonflags}
-
-Controls the flags passed to meson.
-
-##### `mesonBuildType` {#mesonbuildtype}
-
-Which [`--buildtype`](https://mesonbuild.com/Builtin-options.html#core-options) to pass to Meson. We default to `plain`.
-
-##### `mesonAutoFeatures` {#mesonautofeatures}
-
-What value to set [`-Dauto_features=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `enabled`.
-
-##### `mesonWrapMode` {#mesonwrapmode}
-
-What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `nodownload` as we disallow network access.
-
-##### `dontUseMesonConfigure` {#dontusemesonconfigure}
-
-Disables using Meson’s `configurePhase`.
-
-### ninja {#ninja}
-
-Overrides the build, install, and check phase to run ninja instead of make. You can disable this behavior with the `dontUseNinjaBuild`, `dontUseNinjaInstall`, and `dontUseNinjaCheck`, respectively. Parallel building is enabled by default in Ninja.
-
-### unzip {#unzip}
-
-This setup hook will allow you to unzip .zip files specified in `$src`. There are many similar packages like `unrar`, `undmg`, etc.
-
-### wafHook {#wafhook}
-
-Overrides the configure, build, and install phases. This will run the “waf” script used by many projects. If `wafPath` (default `./waf`) doesn’t exist, it will copy the version of waf available in Nixpkgs. `wafFlags` can be used to pass flags to the waf script.
-
-### scons {#scons}
-
-Overrides the build, install, and check phases. This uses the scons build system as a replacement for make. scons does not provide a configure phase, so everything is managed at build and install time.
+Many other packages provide hooks, that are not part of `stdenv`. You can find
+these in the [Hooks Reference](#chap-hooks).
 
 ## Purity in Nixpkgs {#sec-purity-in-nixpkgs}
 

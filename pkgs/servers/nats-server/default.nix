@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nats-server";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FifLZ6kQgNMyL+0Axc7lqvCk3eHc8pxKpm045jboSoQ=";
+    sha256 = "sha256-epu/LV9sXF8P+W8suo9wccZ7zr/O6jK6US6RviEULYQ=";
   };
 
   vendorSha256 = "sha256-yVTAgG3j2zrPEFGAcV4LSihws9XUoYrZ81fp/MYv8Eo=";

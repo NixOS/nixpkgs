@@ -31,7 +31,6 @@
 , nss
 , openssl
 , pango
-, procps
 , python3
 , stdenv
 , systemd

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.5.0";
+  version = "0.5.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i0rin4TLoqo+F2nWG4kcFp3x/cRtkMzAo5Ldyo0Si5w=";
+    hash = "sha256-orJkWVBZnbhRjYDI6s5fPymzpTmZE5MsmYWp3JOKjnU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

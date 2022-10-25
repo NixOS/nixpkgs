@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.

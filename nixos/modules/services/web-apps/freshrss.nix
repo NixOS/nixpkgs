@@ -155,9 +155,17 @@ in
         virtualHosts.${cfg.virtualHost} = {
           root = "${cfg.package}/p";
 
+          # php files handling
+          # this regex is mandatory because of the API
           locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
+            # By default, the variable PATH_INFO is not set under PHP-FPM
+            # But FreshRSS API greader.php need it. If you have a “Bad Request” error, double check this var!
+            # NOTE: the separate $path_info variable is required. For more details, see:
+            # https://trac.nginx.org/nginx/ticket/321
+            set $path_info $fastcgi_path_info;
+            fastcgi_param PATH_INFO $path_info;
             include ${pkgs.nginx}/conf/fastcgi_params;
             include ${pkgs.nginx}/conf/fastcgi.conf;
           '';
@@ -238,17 +246,17 @@ in
             # do installation or reconfigure
             if test -f ${cfg.dataDir}/config.php; then
               # reconfigure with settings
-              ${pkgs.php}/bin/php ./cli/reconfigure.php ${settingsFlags}
-              ${pkgs.php}/bin/php ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+              ./cli/reconfigure.php ${settingsFlags}
+              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
             else
               # Copy the user data template directory
               cp -r ./data ${cfg.dataDir}
 
               # check correct folders in data folder
-              ${pkgs.php}/bin/php ./cli/prepare.php
+              ./cli/prepare.php
               # install with settings
-              ${pkgs.php}/bin/php ./cli/do-install.php ${settingsFlags}
-              ${pkgs.php}/bin/php ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+              ./cli/do-install.php ${settingsFlags}
+              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
             fi
           '';
         };
@@ -267,7 +275,7 @@ in
           Group = "freshrss";
           StateDirectory = "freshrss";
           WorkingDirectory = cfg.package;
-          ExecStart = "${pkgs.php}/bin/php ./app/actualize_script.php";
+          ExecStart = "./app/actualize_script.php";
         } // systemd-hardening;
       };
     };

@@ -1,9 +1,9 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalPackages: {
   pname = "prio";
   version = "unstable-2018-09-13";
 

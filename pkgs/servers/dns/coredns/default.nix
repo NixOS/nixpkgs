@@ -33,6 +33,6 @@ buildGoModule rec {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem rtreffer deltaevo superherointj ];
+    maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
   };
 }

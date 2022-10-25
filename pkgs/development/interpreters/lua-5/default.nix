@@ -61,6 +61,7 @@ let
     in rec {
         buildEnv = callPackage ./wrapper.nix {
           lua = self;
+          makeWrapper = makeBinaryWrapper;
           inherit (luaPackages) requiredLuaModules;
         };
         withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
@@ -68,6 +69,8 @@ let
         interpreter = "${self}/bin/${executable}";
         inherit executable luaversion sourceVersion;
         luaOnBuild = luaOnBuildForHost.override { inherit packageOverrides; self = luaOnBuild; };
+
+        tests = callPackage ./tests { inherit (luaPackages) wrapLua; };
 
         inherit luaAttr;
   };
@@ -77,8 +80,8 @@ in
 rec {
   lua5_4 = callPackage ./interpreter.nix {
     self = lua5_4;
-    sourceVersion = { major = "5"; minor = "4"; patch = "3"; };
-    hash = "1yxvjvnbg4nyrdv10bq42gz6dr66pyan28lgzfygqfwy2rv24qgq";
+    sourceVersion = { major = "5"; minor = "4"; patch = "4"; };
+    hash = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 

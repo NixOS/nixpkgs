@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, zstd, stdenv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, zstd
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
@@ -11,14 +18,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-T8Hhody0jMmZb6/xMkSvKCv4STZPbcrf/UB3APspYDM=";
   };
 
-  # enable pkg-config feature of zstd
-  cargoPatches = [ ./zstd-pkg-config.patch ];
+  cargoPatches = [
+    # update mimalloc to fix build with older apple sdks
+    ./update-mimalloc.patch
 
-  cargoSha256 = "sha256-x/HzDYNy0FDxJmhjSUUEiyahM7Sw27aC+ULP/Ii0X/8=";
+    # enable pkg-config feature of zstd
+    ./zstd-pkg-config.patch
+  ];
+
+  cargoSha256 = "sha256-2Reqj+WP6OoaB/3Z5llZP4c5ToVmMNX0Fe0IqDwcg2E=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ zstd ];
+  buildInputs = [ zstd ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
@@ -26,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/EmbarkStudios/cargo-about/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ evanjs figsoda ];
-    broken = stdenv.isDarwin;
   };
 }

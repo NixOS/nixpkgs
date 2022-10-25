@@ -110,9 +110,6 @@ self: super: {
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
 
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
-
   # liquidhaskell does not support ghc version 8.8.x.
   liquid = markBroken super.liquid;
   liquid-base = markBroken super.liquid-base;

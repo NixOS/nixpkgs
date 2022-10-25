@@ -1,11 +1,17 @@
+diff --git a/geocode-glib/tests/meson.build b/geocode-glib/tests/meson.build
+index 5cd1fca..c2f9a9d 100644
 --- a/geocode-glib/tests/meson.build
 +++ b/geocode-glib/tests/meson.build
-@@ -1,4 +1,4 @@
+@@ -1,5 +1,5 @@
 -install_dir = get_option('prefix') / get_option('datadir') / 'installed-tests' / library_name
+-install_bindir = get_option('prefix') / get_option('libexecdir') / library_name
 +install_dir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / library_name
++install_bindir = get_option('installed_test_prefix') / 'libexec' / library_name
  
  e = executable('geo-uri',
                 'geo-uri.c',
+diff --git a/meson_options.txt b/meson_options.txt
+index 62b713d..1454416 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,6 +1,9 @@

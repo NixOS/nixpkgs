@@ -20,6 +20,7 @@ fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 http,,,,0.3-0,,vcunat
 inspect,,,,,,
+jsregexp,,,,,,
 ldbus,,,http://luarocks.org/dev,,,
 ldoc,https://github.com/stevedonovan/LDoc.git,,,,,
 lgi,,,,,,
@@ -86,7 +87,7 @@ mediator_lua,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
-nvim-cmp,,,,,
+nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
@@ -100,3 +101,4 @@ std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
 tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
+vusted,,,,,,figsoda

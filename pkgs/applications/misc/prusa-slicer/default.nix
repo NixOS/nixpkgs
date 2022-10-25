@@ -130,6 +130,15 @@ stdenv.mkDerivation rec {
     # likely due to commit e682dd84cff5d2420fcc0a40508557477f6cc9d3
     # See issue #185808 for details.
     sed -i 's|test_voronoi.cpp||g' tests/libslic3r/CMakeLists.txt
+
+    # prusa-slicer expects the OCCTWrapper shared library in the same folder as
+    # the executable when loading STEP files. We force the loader to find it in
+    # the usual locations (i.e. LD_LIBRARY_PATH) instead. See the manpage
+    # dlopen(3) for context.
+    if [ -f "src/libslic3r/Format/STEP.cpp" ]; then
+      substituteInPlace src/libslic3r/Format/STEP.cpp \
+        --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
+    fi
   '';
 
   src = fetchFromGitHub {
@@ -147,9 +156,18 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -s "$out/bin/prusa-slicer" "$out/bin/prusa-gcodeviewer"
 
+    mkdir -p "$out/lib"
+    mv -v $out/bin/*.so $out/lib/
+
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "$out/lib"
+    )
   '';
 
   meta = with lib; {

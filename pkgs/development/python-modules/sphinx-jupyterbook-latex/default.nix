@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sphinx_jupyterbook_latex";
-    sha256 = "sha256-XEYsrMcg85loIYvD3ikfgGXGeox0q03H/0wRgTaz+SI=";
+    sha256 = "sha256-QErSEpolSEkJaQLzfcF0oDlugEhN5Y9/KwVwC2IknLY=";
   };
 
   postPatch = ''

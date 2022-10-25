@@ -96,13 +96,13 @@ final: prev: {
     nativeBuildInputs = with pkgs; [
       pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
-      xcbuild
       darwin.apple_sdk.frameworks.CoreText
     ];
     buildInputs = with pkgs; [
       pixman
       cairo
       pango
+      giflib
     ];
   };
 
@@ -147,14 +147,13 @@ final: prev: {
   # ../../applications/video/epgstation
   epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
     buildInputs = [ pkgs.postgresql ];
-    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ] ++ lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
+    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
   # NOTE: this is a stub package to fetch npm dependencies for
   # ../../applications/video/epgstation/client
   epgstation-client = prev."epgstation-client-../../applications/video/epgstation/client".override (oldAttrs: {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
     meta = oldAttrs.meta // { platforms = lib.platforms.none; };
   });
 
@@ -222,11 +221,7 @@ final: prev: {
   });
 
   joplin = prev.joplin.override {
-    nativeBuildInputs = with pkgs; [
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      xcbuild
-    ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
       # required by sharp
       # https://sharp.pixelplumbing.com/install
@@ -290,10 +285,6 @@ final: prev: {
         installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
       done
     '';
-  };
-
-  mastodon-bot = prev.mastodon-bot.override {
-    nativeBuildInputs = lib.optionals stdenv.isDarwin [ pkgs.xcbuild ];
   };
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
@@ -412,7 +403,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-l/QKLmLcKJQFuc+X02LyICo0NWTUVaNNZ00jKJBqwDyhwMAhboD1FWwYV50rkH4Wls0RviAJSFzkC2ZrfawpfA==";
+      sha512 = "sha512-9Aeg4qiKlv9Wsjz4NO8k2CzRzlvS3A4FYVJ5+28sBBZ0eEwbiVOE/Jj7v6rZC1tFW2s4GSICQOAyuOjc6WsNew==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
@@ -432,7 +423,7 @@ final: prev: {
 
   pulp = prev.pulp.override {
     # tries to install purescript
-    npmFlags = "--ignore-scripts";
+    npmFlags = builtins.toString [ "--ignore-scripts" ];
 
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall =  ''
@@ -513,11 +504,7 @@ final: prev: {
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      pkgs.xcbuild
-    ];
+    nativeBuildInputs = [ final.node-pre-gyp ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {

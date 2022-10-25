@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "4.0.0";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14d3165a1781d053ffaa117daf27cc706128d2ec1d2977fdb05b6bb079888013";
+    sha256 = "sha256-Y5odWSJ4RIg5kwvf/SQrTU6pzgyeZWrqgQKCwtNrwSE=";
   };
 
   propagatedBuildInputs = [ python-utils ];

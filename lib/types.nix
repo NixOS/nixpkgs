@@ -262,7 +262,8 @@ rec {
     };
 
     unspecified = mkOptionType {
-      name = "unspecified value";
+      name = "unspecified";
+      description = "unspecified value";
       descriptionClass = "noun";
     };
 
@@ -616,8 +617,8 @@ rec {
       descriptionClass = "composite";
       check = isFunction;
       merge = loc: defs:
-        fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "[function body]" ]);
+        fnArgs: (mergeDefinitions (loc ++ [ "<function body>" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
       functor = (defaultFunctor "functionTo") // { wrapped = elemType; };

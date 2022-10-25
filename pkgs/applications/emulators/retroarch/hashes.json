@@ -2,8 +2,8 @@
     "atari800": {
         "owner": "libretro",
         "repo": "libretro-atari800",
-        "rev": "beab30e7ea10b7ed14d0514064f47d16f76cd995",
-        "sha256": "r9MsnasNhhYdFyr2VHJXkTXssB5U00JW6wN/+i+SNUk="
+        "rev": "94033288b026fe699bc50703609807aa8075f4dd",
+        "sha256": "fTKFELELt1g7t3uPgnXIgeMkkSbl9GHr0/k2FHcpDFI="
     },
     "beetle-gba": {
         "owner": "libretro",
@@ -14,38 +14,38 @@
     "beetle-lynx": {
         "owner": "libretro",
         "repo": "beetle-lynx-libretro",
-        "rev": "de0d520d679cb92767876d4e98da908b1ea6a2d6",
-        "sha256": "BszU5bnlHBOwQSZOM9P4WIP863rS5RluNWvGBFxqzYs="
+        "rev": "3d2fcc5a555bea748b76f92a082c40227dff8222",
+        "sha256": "PpFLi9DIvv8igtAqDPkLfH1CjkbeOumcpNCP7K9C1PY="
     },
     "beetle-ngp": {
         "owner": "libretro",
         "repo": "beetle-ngp-libretro",
-        "rev": "facf8e1f5440c5d289258ee3c483710f3bf916fb",
-        "sha256": "vDKDt7MvCB9XQYP291cwcEPDxfNIVgNSWtBYz9PVgcw="
+        "rev": "00c7cb8ea97ad9a372307405d8abf34e401fec8a",
+        "sha256": "MtZMPjgT4dQy+E+4jSDE08PRi0pwa+q48kmTHhfIQMY="
     },
     "beetle-pce-fast": {
         "owner": "libretro",
         "repo": "beetle-pce-fast-libretro",
-        "rev": "e8801687f232a6f8828b3ff5dadbc9fe1b0076fc",
-        "sha256": "YM+URLnMqsdmk/5yqCg8U4mPpgtmj5qne2CrbTpTeN8="
+        "rev": "cc248db4d2f47d0f255fbc1a3c651df4beb3d835",
+        "sha256": "euoNldhyEPfC9EgEX201mpSjns2qbCIAow0zmMKTnaE="
     },
     "beetle-pcfx": {
         "owner": "libretro",
         "repo": "beetle-pcfx-libretro",
-        "rev": "bfc0954e14b261a04dcf8dbe0df8798f16ae3f3c",
-        "sha256": "XzCb1lZFYgsg+3eQ1OqyycNxCgLtZFA30rno3ytdnoM="
+        "rev": "08632fcbc039f70dbd6da5810db9dcc304d7fbde",
+        "sha256": "G+OUs6k8dwH4BK+0X/g47wbY7Dpb3lT5TslLwPWq6g4="
     },
     "beetle-psx": {
         "owner": "libretro",
         "repo": "beetle-psx-libretro",
-        "rev": "5a24d54d30dd00d817d267cf92fd5b3f4640928f",
-        "sha256": "uG1BhElNW75PnfM+rEYfbl97iwRT89hnl84yvlgx6fg="
+        "rev": "bd6b9ef3049fe3f70a18ee6f752a935ae83c2f2b",
+        "sha256": "CXcLMOF6IXUrp14nyTQ5KK2LR+FyWcF0UcvHTxEVSo0="
     },
     "beetle-saturn": {
         "owner": "libretro",
         "repo": "beetle-saturn-libretro",
-        "rev": "dd18f9c477106263b3b7b050f4970d331ff7b23a",
-        "sha256": "RN5dmORtNOjIklSz/n11lz37bZ4IcPD7cyRcBGS4Oi8="
+        "rev": "054862a4ccb9b2f1bad9e5b075fc3d1116dc8055",
+        "sha256": "oL9YPvDGkUs0Tm/rNznnV+Tg5mcvqs1VcGVmz/fDHmw="
     },
     "beetle-snes": {
         "owner": "libretro",
@@ -53,66 +53,72 @@
         "rev": "d770563fc3c4bd9abb522952cefb4aa923ba0b91",
         "sha256": "zHPtfgp9hc8Q4gXJ5VgfJLWLeYjCsQhkfU1T5RM7AL0="
     },
+    "beetle-supafaust": {
+        "owner": "libretro",
+        "repo": "supafaust",
+        "rev": "85b5527231a6ad6f9475c15c8ff1b9d16884cd30",
+        "sha256": "6ynxRfGYlp7Fuq3XT2uHsR9Uwu7WMIYjclLc0Pf/qNM="
+    },
     "beetle-supergrafx": {
         "owner": "libretro",
         "repo": "beetle-supergrafx-libretro",
-        "rev": "59991a98c232b1a8350a9d67ac554c5b22771d3c",
-        "sha256": "zv3dAPWrj6hkNaFQ5vUKm5Orcrb2XO48WSkAFiAVUO0="
+        "rev": "3cfafe8c684a2f4f4532bcf18e25d2f8760ca45d",
+        "sha256": "hIBUMpXgX5zPi/W1vAhkuxprGfZQ/K5ZrtiswV36EMQ="
     },
     "beetle-vb": {
         "owner": "libretro",
         "repo": "beetle-vb-libretro",
-        "rev": "246555f8ed7e0b9e5748b2ee2ed6743187c61393",
-        "sha256": "96lQlDqx2bvFeovqGGkemxqS2zlHw92O6YeTEGlgf34="
+        "rev": "162918f06d9a705330b2ba128e0d3b65fd1a1bcc",
+        "sha256": "BtrdDob+B5g8Lq93LUhF7E0uWFUIMZneWFgH0VcsgPE="
     },
     "beetle-wswan": {
         "owner": "libretro",
         "repo": "beetle-wswan-libretro",
-        "rev": "d1fb3f399a2bc16b9ad0f2e8c8ba9f7051cd26bd",
-        "sha256": "p9mJv7zBFjNh1sh5iAjBZzxP6k8ydUNDXLQIjHl9doQ="
+        "rev": "16d96f64a32cbe1fa89c40b142298dbd007f2f4d",
+        "sha256": "LBtOQfVvP70OB6qMnFXtWdJUu7CkkMfSQ0iPGhe7xeI="
     },
     "blastem": {
         "owner": "libretro",
         "repo": "blastem",
-        "rev": "0786858437ed71996f43b7af0fbe627eb88152fc",
-        "sha256": "uEP5hSgLAle1cLv/EM7D11TJMAggu7pqWxfrUt3rhEg="
+        "rev": "277e4a62668597d4f59cadda1cbafb844f981d45",
+        "sha256": "EHvKElPw8V5Z6LnMaQXBCdM4niLIlF3aBm8dRbeYXHs="
     },
     "bluemsx": {
         "owner": "libretro",
         "repo": "bluemsx-libretro",
-        "rev": "92d0c41b4973854114c7b2d06ab727a266d404c5",
-        "sha256": "dL4k+zG8L4KK4lwf9eXPVGk/u5xQn2htIEpoKyj9kQI="
+        "rev": "acf358be18644a9df0ed9602d63c2f73d4fe605a",
+        "sha256": "K4mH+brakYZcVEeYMFUkFThqdZGt2+aP5DfpOgWSJxg="
     },
     "bsnes": {
         "owner": "libretro",
         "repo": "bsnes-libretro",
-        "rev": "26c583e1c5d09253b6c61e2b9d418e8758eef632",
-        "sha256": "Qa0ScFHcEgBUoWouNoW4JINZ2aHjNATndxhcwKw476Q="
+        "rev": "7679cb9618c37c9044158d5cf3da28ef25afa9af",
+        "sha256": "9ozzXvCAuafcZn9iq91tTq16e2mlYqjwauJUGSbFd+k="
     },
     "bsnes-hd": {
         "owner": "DerKoun",
         "repo": "bsnes-hd",
-        "rev": "65f24e56c37f46bb752190024bd4058e64ad77d1",
-        "sha256": "1dk2i71NOLeTTOZjVll8wrkr5dIH5bGSGUeeHqWjZHE="
+        "rev": "04821703aefdc909a4fd66d168433fcac06c2ba7",
+        "sha256": "QmNthbWb92vel5PFwJRXeEEVZHIxfvZ0ls+csodpGbU="
     },
     "bsnes-mercury": {
         "owner": "libretro",
         "repo": "bsnes-mercury",
-        "rev": "4ba6d8d88e57d3193d95e1bcf39e8d31121f76d4",
-        "sha256": "w2MVslgRlxW4SMzgcXP4gXr9A8B07N7LNrB1LXzk1Zk="
+        "rev": "fb9a41fe9bc230a07c4506cad3cbf21d3fa635b4",
+        "sha256": "gBOxKSv3j229IVdtffqFV/zSSacEs8UsBERnQgdFw4Y="
     },
     "citra": {
         "owner": "libretro",
         "repo": "citra",
-        "rev": "44e01f99016008eff18bc7a28234d1098382358d",
-        "sha256": "vIrUStv+VM8pYeznnWSVBRfSA71/B7VIY7B/syymGzE=",
+        "rev": "70bf7d8a63b0b501e8f5cff89a86a3e2d4083aa0",
+        "sha256": "uHWROH6/ZAZygkhEQGNyllncCp2XDCdYwy/CKgGKAcM=",
         "fetchSubmodules": true
     },
     "desmume": {
         "owner": "libretro",
         "repo": "desmume",
-        "rev": "5d0ae2be2c9fb6362af528b3722e81323318eb9f",
-        "sha256": "4bJ6fLZ+fV7SnZ71YT3JFcXFOgmskNUCmCHwc2QNl0A="
+        "rev": "fbd368c8109f95650e1f81bca1facd6d4d8687d7",
+        "sha256": "7MFa5zd1jdOCqSI+VPl5nAHE7Kfm/lA0lbSPFskzqaQ="
     },
     "desmume2015": {
         "owner": "libretro",
@@ -123,20 +129,20 @@
     "dolphin": {
         "owner": "libretro",
         "repo": "dolphin",
-        "rev": "6a0b6ee8a4d5363e669f5faf43abc8f17e4278a8",
-        "sha256": "TeeHnttGmCeOTDTK/gJM+RpusjDDndapZAa3T+oLiq0="
+        "rev": "9810e29a1f3633d32b6643b97a1147d83311d73a",
+        "sha256": "iIaVSJSC3mD1k751vQvWI6x0C/HhfjEaMwfX53FpZv4="
     },
     "dosbox": {
         "owner": "libretro",
         "repo": "dosbox-libretro",
-        "rev": "74cd17ed0ff810ff78cb8c1f1e45513bfe8a0f32",
-        "sha256": "0PIloW7j/87asDJ8IDw4r3r4muxNF+RbvkIRPLZQvRc="
+        "rev": "b7b24262c282c0caef2368c87323ff8c381b3102",
+        "sha256": "PG2eElenlEpu0U/NIh53p0uLqewnEdaq6Aoak5E1P3I="
     },
     "eightyone": {
         "owner": "libretro",
         "repo": "81-libretro",
-        "rev": "2e34567a320cba27b9162b1776db4de3cdb7cf03",
-        "sha256": "vjrHRLzc9Fy0MwV9d+LlcJTGJfVsRauEig8R+erBtfw="
+        "rev": "73f6cca62dabc84df946aea71cf457ce5ae5ea9d",
+        "sha256": "oovIKMZXxtLc+zmbguagTVoMPngokdN3xTBnb/+KUjY="
     },
     "fbalpha2012": {
         "owner": "libretro",
@@ -147,14 +153,14 @@
     "fbneo": {
         "owner": "libretro",
         "repo": "fbneo",
-        "rev": "e4625a196b9232ba93a156e3a5164aa11193f20a",
-        "sha256": "/5JmwuLWWBQWXnqCMjKzOC2XG6wo5a6xgQOYX1P1zcw="
+        "rev": "758f24740d81ff833c1868befd98ccd11909255f",
+        "sha256": "VhfsvohRWICWqKWry0fgUS76kiXBsnjY9DytxEvulKA="
     },
     "fceumm": {
         "owner": "libretro",
         "repo": "libretro-fceumm",
-        "rev": "b3c35b6515b2b6a789c589f976a4a323ebebe3eb",
-        "sha256": "zwFQGQyO0Vj/IBM1k8JB3D/jB3OwDuGdSHLavr8Fxgw="
+        "rev": "3d3cc53c0177e296af2427c29bbb31902b26f3b8",
+        "sha256": "Z5LqP6IBq0H6uM0027PSkW6JLvVDA/4CrO6bI478Z1o="
     },
     "flycast": {
         "owner": "libretro",
@@ -165,38 +171,38 @@
     "fmsx": {
         "owner": "libretro",
         "repo": "fmsx-libretro",
-        "rev": "11fa9f3c08cde567394c41320ca76798c2c64670",
-        "sha256": "1u5c5oDIjjXEquh6UBv2H1F/Ln7h44DTF1ohDG0Qnww="
+        "rev": "1360c9ff32b390383567774d01fbe5d6dfcadaa3",
+        "sha256": "LLGD29HKpV34IOJ2ygjHZZT7XQqHHXccnpGNfWCuabg="
     },
     "freeintv": {
         "owner": "libretro",
         "repo": "freeintv",
-        "rev": "295dd3c9e4b2d4f652f6a6a904afbe90a8187068",
-        "sha256": "tz0X6AfD7IL3Y50vjgSO5r6sDhu++6Gj8Rp7de5OqMk="
+        "rev": "9a65ec6e31d48ad0dae1f381c1ec61c897f970cb",
+        "sha256": "ZeWw/K6i04XRympqZ6sQG/yjN8cJglVcIkxpyRHx424="
     },
     "gambatte": {
         "owner": "libretro",
         "repo": "gambatte-libretro",
-        "rev": "15536214cdce31894d374b2ffa2494543057082b",
-        "sha256": "cTSoK6rezRajnuWPt7WkYn3SWL0sTu7h5X3Ig1KukDA="
+        "rev": "7e02df60048db0898131ea365f387a026e4e648d",
+        "sha256": "RnFuD8PL+/uPhWe+sSXMPm5+XH8FzCwY+MSquR/AB+o="
     },
     "genesis-plus-gx": {
         "owner": "libretro",
         "repo": "Genesis-Plus-GX",
-        "rev": "7520ac8aae7b08262c0472e724e6ef0bfe41d285",
-        "sha256": "wKcO/dulgZKgXTuHdcQvfSrfxSI5UA0az6qMLtP4K6g="
+        "rev": "5cdb31854074de1662266a0a675866ea7b787b42",
+        "sha256": "vMswSKM5aYlPZu5y4Z1L/+eaPBdQaLPPMKoC7B/xzqc="
     },
     "gpsp": {
         "owner": "libretro",
         "repo": "gpsp",
-        "rev": "f0f0b31f9ab95946965b75fed8d31e19290f3d43",
-        "sha256": "aiegBSpQDyXzVkyWuUpI66QvA1tqS8PQ8+75U89K10A="
+        "rev": "81649a2c8075201bb823cce8fdf16a31c92a3b6c",
+        "sha256": "De9Tke+fp6CtXzm0w6Qzts3jj1j/1uB0kYZfaWyNqA0="
     },
     "gw": {
         "owner": "libretro",
         "repo": "gw-libretro",
-        "rev": "d08a08154ce8ed8e9de80582c108f157e4c6b226",
-        "sha256": "PWd/r4BBmhiNqJdV6OaXHr4XCdR1GyVipq3zvyBcqEs="
+        "rev": "19a1cb3105ca4a82139fb4994e7995fd956f6f8d",
+        "sha256": "luhKXzxrXVNAHw8ArF1I78Zch7XEPwI3aqe0f6WRgD0="
     },
     "handy": {
         "owner": "libretro",
@@ -207,44 +213,44 @@
     "hatari": {
         "owner": "libretro",
         "repo": "hatari",
-        "rev": "e5e36a5262cfeadc3d1c7b411b7a70719c4f293c",
-        "sha256": "T4I3NVEMBKr5HLs60x48VNRl2TMnhqvaF+LTtYQ7qdU="
+        "rev": "1ebf0a0488580ef95c0b28f02223b31813c867c5",
+        "sha256": "i6dr+fFWPatRCIY+ajIZ1p3ERPV5ktv0nxHKxbGE5ao="
     },
     "mame": {
         "owner": "libretro",
         "repo": "mame",
-        "rev": "b7dd999590717638ceade2e24d16d63147aa12ad",
-        "sha256": "QgENNjykhO+WSxAb//J+R7QP3/rZnxqv7sarO4eBYuc="
+        "rev": "0d935696dce53a13eaf0705f4a108ee348f3c613",
+        "sha256": "HnJ3eHzTpR7Lsi1ATn3B314y0KNKJ0+qNGcDbFvmZEA="
     },
     "mame2000": {
         "owner": "libretro",
         "repo": "mame2000-libretro",
-        "rev": "dd9d6612c29bf5b29bc2f94cab2d43fe3dcd69ee",
-        "sha256": "X0fP0bNBk2hqXVdRspylLIjZO563aMXkyX4qgx/3Vr8="
+        "rev": "0208517404e841fce0c094f1a2776a0e1c6c101d",
+        "sha256": "WEJd7wSzY32sqMpMrjCD0hrOyAQq1WMBaGiY/2QQ4BQ="
     },
     "mame2003": {
         "owner": "libretro",
         "repo": "mame2003-libretro",
-        "rev": "3eb27d5f161522cf873c0642f14b8e2267b3820f",
-        "sha256": "TQ4FwboKeEP58hOL2hYs4OYes2o0wSKFSp4CqZV5r6I="
+        "rev": "cb0c89304b2cd584cda7105c6be4e69fa304f0e0",
+        "sha256": "ob/aUh5NZCfQvpA+nEs2QhVXeNBBVZesX/xQfatY9wU="
     },
     "mame2003-plus": {
         "owner": "libretro",
         "repo": "mame2003-plus-libretro",
-        "rev": "e5ee29ecb8182952f861f22516e5791625fe2671",
-        "sha256": "YunfAITR/Etm8lvEab/HigZoBz+ayJQ7ezjItWI/HvE="
+        "rev": "d88d5c118e8d7075ec0a4e6deebb4cd3f18a8dd1",
+        "sha256": "9offucQMCpMqo4StYscS6kivXCYHy4Sn+Cs/3MoNwsw="
     },
     "mame2010": {
         "owner": "libretro",
         "repo": "mame2010-libretro",
-        "rev": "932e6f2c4f13b67b29ab33428a4037dee9a236a8",
-        "sha256": "HSZRSnc+0300UE9fPcUOMrXABlxHhTewkFPTqQ4Srxs="
+        "rev": "5f524dd5fca63ec1dcf5cca63885286109937587",
+        "sha256": "OmJgDdlan/niGQfajv0KNG8NJfEKn7Nfe6GRQD+TZ8M="
     },
     "mame2015": {
         "owner": "libretro",
         "repo": "mame2015-libretro",
-        "rev": "e6a7aa4d53726e61498f68d6b8e2c092a2169fa2",
-        "sha256": "IgiLxYYuUIn3YE+kQCXzgshES2VNpUHn0Qjsorw0w/s="
+        "rev": "2599c8aeaf84f62fe16ea00daa460a19298c121c",
+        "sha256": "TURTX0XrvqwqKG3O3aCttDAdicBdge5F1thVvYgEHaw="
     },
     "mame2016": {
         "owner": "libretro",
@@ -255,20 +261,20 @@
     "melonds": {
         "owner": "libretro",
         "repo": "melonds",
-        "rev": "e93ec3e462d3dfc1556781510a3cee113f02abb2",
-        "sha256": "NDrsqX17OKw1/PIZSrWAxhVl+Qk/xG7lCnr6Ts+7YJ4="
+        "rev": "5e52c245fb38cabe881fbfa6513280ee44fc5bd8",
+        "sha256": "jWBZ5wg1dKEgoEV09VTGJ+I4+8uiivAHhpTiD9tPaYg="
     },
     "mesen": {
         "owner": "libretro",
         "repo": "mesen",
-        "rev": "bb9ea02eba28682986044a6f49329ec533aa26ba",
-        "sha256": "G2NQDpByvI9RFEwrRiKXcMnPtVtqpvEoZgk7/fk5qCU="
+        "rev": "9b412c1533a6d7eec7b2904775cbd26c21f02119",
+        "sha256": "Tf+lWfSU7AuW6Um5TXkWNAeg35W08YkYQwW0Yx3iNTM="
     },
     "mesen-s": {
         "owner": "libretro",
         "repo": "mesen-s",
-        "rev": "b0b53409eecb696fb13f411ffde72e8f576feb09",
-        "sha256": "lDHyeIsVsI5+ZK8EJI50alrFuu0uJmxscda5bR1UmQQ="
+        "rev": "32a7adfb4edb029324253cb3632dfc6599ad1aa8",
+        "sha256": "/OOMH7kt9Pmkdmy5m+I8FMvog5mqZHyrZvfjHccz8oo="
     },
     "meteor": {
         "owner": "libretro",
@@ -279,114 +285,120 @@
     "mgba": {
         "owner": "libretro",
         "repo": "mgba",
-        "rev": "5d48e0744059ebf38a4e937b256ffd5df4e0d103",
-        "sha256": "OYw2nlldFx5B7WX0E8Gbgfp1j4h65ZxyKDS9tneHXQg="
+        "rev": "199a03e719436018779fe9299706c597fb2e9231",
+        "sha256": "3Q3MBzezCvl1Er45AeUM/QI0a+JiGn/PfYpqMaaiuds="
     },
     "mupen64plus": {
         "owner": "libretro",
         "repo": "mupen64plus-libretro-nx",
-        "rev": "6e9dcd2cd9d23d3e79eaf2349bf7e9f25ad45bf1",
-        "sha256": "rs/VL2K6aS8Rl01IyxUiWipzLEzg+7+fbXxI0qN5X/I="
+        "rev": "c10546e333d57eb2e5a6ccef1e84cb6f9274c526",
+        "sha256": "dbS32slJBfz8DHeIQy20lAYw0+ig0LRgIaGfqW082xs="
     },
     "neocd": {
         "owner": "libretro",
         "repo": "neocd_libretro",
-        "rev": "327aeceecdf71c8a0c0af3d6dc53686c94fe44ad",
-        "sha256": "cY0P+0EQ0b9df+YT2EMvrxjp5L+DwIg31rEJqchU+hc="
+        "rev": "b7d96e794f2dfa500cba46c78cbc3c28349cfd05",
+        "sha256": "TG5xIqIM0MlHDNtPhyISqo/ctTqemKROwXgoqUsCQ0E="
     },
     "nestopia": {
         "owner": "libretro",
         "repo": "nestopia",
-        "rev": "a9e197f2583ef4f36e9e77d930a677e63a2c2f62",
-        "sha256": "QqmWSk8Ejf7QMJk0cVBgpnyqcK6oLjCnnXMXInuWfYc="
+        "rev": "a9ee6ca84f04990e209880fe47144e62b14253db",
+        "sha256": "q3pD2Cm/a62x3xW8JymU9w82zHlT0BoPlaSfzjZzh/c="
     },
     "np2kai": {
         "owner": "AZO234",
         "repo": "NP2kai",
-        "rev": "2b09ea6a589cdcae27bca27160b3f82638fbb45d",
-        "sha256": "M3kGA1TU3xui6of9XgUspI+Zf+hjYP1d2mgKwxsy3IQ=",
+        "rev": "606fafa7081b62df5f4727c34560da23927c21cd",
+        "sha256": "qS7OrY8bFkAmRgbzLCw9PqgxtKuVNKI+tsDVU7PqWIw=",
         "fetchSubmodules": true
     },
     "nxengine": {
         "owner": "libretro",
         "repo": "nxengine-libretro",
-        "rev": "bc692a392473a45f63cdccbb353c3445b530d671",
-        "sha256": "tAZkYHRKL+mI6f7YCnaU0qTSOZGW2o20p6wovMK1n2k="
+        "rev": "aa32afb8df8461920037bdbbddbff00bf465c6de",
+        "sha256": "Ic5YsNLoEZJ/vkjthwypwLN3ntB/5EX8bU92V80S7R4="
     },
     "o2em": {
         "owner": "libretro",
         "repo": "libretro-o2em",
-        "rev": "641f06d67d192a0677ec861fcb731d3ce8da0f87",
-        "sha256": "s3FreOziXeGhUyQdSoOywZldD21m3+OXK0EJ2Z8rXiY="
+        "rev": "3303cc15e4323280084471f694f6d34c78199725",
+        "sha256": "xH8Dlsg84q8awxjObMPXKZcJSwmix1YdRXIpee7rw6o="
     },
     "opera": {
         "owner": "libretro",
         "repo": "opera-libretro",
-        "rev": "3849c969c64b82e622a7655b327fa94bc5a4c7cc",
-        "sha256": "McSrvjrYTemqAAnfHELf9qXC6n6Dg4kNsUDA7e2DvkE="
+        "rev": "8a49bb8877611037438aeb857cb182f41ee0e3a1",
+        "sha256": "oH+sQi4D+xkqiJbq7fgGdHjgvyLt8UjlgXIo7K3wXZM="
     },
     "parallel-n64": {
         "owner": "libretro",
         "repo": "parallel-n64",
-        "rev": "b804ab1a199d6ff1f8fef4aa7dfcf663990e430b",
-        "sha256": "zAet6hYa/79CBbvwZNTNs/ayWuHHlwg+0Y4BAUFddBc="
+        "rev": "a03fdcba6b2e9993f050b50112f597ce2f44fa2c",
+        "sha256": "aJG+s+1OkHQHPvVzlJWU/VziQWj1itKkRwqcEBK+lgA="
     },
     "pcsx2": {
         "owner": "libretro",
         "repo": "pcsx2",
-        "rev": "0251730a21d7238856d79aa25e2942b48edb38f6",
-        "sha256": "a/lWLBCww4QwxdO7Sbvmfq0XF9FnP4xzF51ljsWk46I="
+        "rev": "ad7650949e6c8c87cd2c5e278af88e3722a321bc",
+        "sha256": "iqXCW28werxbZNo1hlDLiD3ywSZ9hvWmxwGPJ5bRZ+w="
     },
     "pcsx_rearmed": {
         "owner": "libretro",
         "repo": "pcsx_rearmed",
-        "rev": "e24732050e902bd5402b2b7da7c391d2ca8fa799",
-        "sha256": "tPz5E3QO6FucjYOzdjbY2FHLPz1Fmms10tdt7rZIW8U="
+        "rev": "5ced3945423cda0010597b27b7da6bce77b12baa",
+        "sha256": "8O2XyEr40HqQf8mHxmvB6/UT837HZw8SrKBy/JH66p4="
     },
     "picodrive": {
         "owner": "libretro",
         "repo": "picodrive",
-        "rev": "7ff457f2f833570013f2a7e2608ac40632e0735d",
-        "sha256": "xEG5swvvWFhvosC1XpFaZphESNaf4AtX+6UE02B57j8=",
+        "rev": "0a4ec83cbfaebb65fb1c40f26ffaf28131f9003b",
+        "sha256": "NOMQoDmXGrxrquAcSLo6Otcz8bH4gnhqcG/zzet3Dtk=",
         "fetchSubmodules": true
     },
     "play": {
         "owner": "jpd002",
         "repo": "Play-",
-        "rev": "39eb5c2eb6da65dc76b1c4d1319175a68120a77a",
-        "sha256": "EF3p0lvHjKGt4pxtTAkDM+uHsnW72lN+Ki8BaZIk/BQ=",
+        "rev": "1126c39cd8ebf56af347c475139d4db97fc7cc19",
+        "sha256": "H/cYFWl8rA/ZdoygEjr7h1y6Z0n29Z+OCzzVMvIuVyo=",
         "fetchSubmodules": true
     },
     "ppsspp": {
         "owner": "hrydgard",
         "repo": "ppsspp",
-        "rev": "83b8211abf7fb705835eb1ccf8feae04816ae96c",
-        "sha256": "8K4bz/GUnE8GrlAVFULMXLC+i3ZYvR28EpehEg6up4s=",
+        "rev": "4af4b0dddc638b00205d9943f17a2806e438fe83",
+        "sha256": "5n+Mg2ZDTJd5fk1OZAiYnCT13G3LAWahXPA+MwaOF08=",
         "fetchSubmodules": true
     },
     "prboom": {
         "owner": "libretro",
         "repo": "libretro-prboom",
-        "rev": "b22a6b19fd976a14374db9083baea9c91b079106",
-        "sha256": "NmEWRTHaZjV2Y6Wrc3WOamXCnOawKc2ja1KBDxokRiY="
+        "rev": "4e671fa0a4b7b892e17ac4e1803c9d627653a4c1",
+        "sha256": "d2/cpfhNczZkHzMGQIxO9jw65AMs9Jmh4ItiLLdDYsk="
     },
     "prosystem": {
         "owner": "libretro",
         "repo": "prosystem-libretro",
-        "rev": "fbf62c3dacaac694f7ec26cf9be10a51b27271e7",
-        "sha256": "Opb6CUeT/bnaTg4MJo7DNsVyaPa73PLbIor25HHWzZ0="
+        "rev": "cf544d3c8e40ff197ea5bb177a1269db31077803",
+        "sha256": "A7yQwzM8ewI+UCPQVyO7DNyiQCTw2yG1soi6l7T3pDE="
+    },
+    "puae": {
+        "owner": "libretro",
+        "repo": "libretro-uae",
+        "rev": "4d8ebafe3f91c4998e8d73940e9558d863ecf93b",
+        "sha256": "dzfZFm7L+Qe3WwSYiMLp3cQm8zk0pWVB68nBe/H1Hvc="
     },
     "quicknes": {
         "owner": "libretro",
         "repo": "QuickNES_Core",
-        "rev": "e6f08c165af45fc2d2f26c80ba0cfc33e26f9cfe",
-        "sha256": "JQtlqN3mvIwKy6iN9opHPHnh0E7AIn9JVitIfXklI/I="
+        "rev": "1b88a09f1c386ff9ee46bb371583ae04c5cb5dd0",
+        "sha256": "Q7DDufGTdP+R05ND56PxMNR96ZacJFxPi0ETieV2B58="
     },
     "sameboy": {
         "owner": "libretro",
         "repo": "sameboy",
-        "rev": "b154b7d3d885a3cf31203f0b8f50d3b37c8b742b",
-        "sha256": "tavGHiNpRiPkibi66orMf93cnCqQCD8XhSl/36nl/9M="
+        "rev": "09138330990da32362246c7034cf4de2ea0a2a2b",
+        "sha256": "hQWIuNwCykkJR+6naNarR50kUvIFNny+bbZHR6/GA/4="
     },
     "scummvm": {
         "owner": "libretro",
@@ -397,38 +409,38 @@
     "smsplus-gx": {
         "owner": "libretro",
         "repo": "smsplus-gx",
-        "rev": "9de9847dc8ba458e9522d5ae8b87bf71ad437257",
-        "sha256": "XzqQ/3XH5L79UQep+DZ+mDHnUJKZQXzjNCZNZw2mGvY="
+        "rev": "60af17ddb2231ba98f4ed1203e2a2f58d08ea088",
+        "sha256": "2SZR9BOTYLmtjEF4Bdl49H2pFNEIaU68VqlA7ll5TqU="
     },
     "snes9x": {
         "owner": "snes9xgit",
         "repo": "snes9x",
-        "rev": "3c729a9763263bc3a69f48370e43ae05e672970a",
-        "sha256": "01M6Wvbu1omMwh3Xg4RGh028jirGs7mLpxwKJgMRQxA="
+        "rev": "28be1a196d2c59ed4b6489d487187569a7370aff",
+        "sha256": "FW4ynSS+R1ygQaCS0UrWGktfHGtcy0P/Mp/BXKfmII0="
     },
     "snes9x2002": {
         "owner": "libretro",
         "repo": "snes9x2002",
-        "rev": "c4397de75a5f11403d154abd935e39fe969bca94",
-        "sha256": "yL4SIRR1Er+7Iq3YPfoe5ES47nvyA3UmGK+upLzKiFA="
+        "rev": "540baad622d9833bba7e0696193cb06f5f02f564",
+        "sha256": "WJh8Qf1/uFaL9f9d28qXsbpeAZfYGPgjoty3G6XAKSs="
     },
     "snes9x2005": {
         "owner": "libretro",
         "repo": "snes9x2005",
-        "rev": "23f759bc4bf2e39733296f7749e446418e3cd0f3",
-        "sha256": "/bZrMp7NHgdYvA3Tw1ZoWXRg7VxmatRUX5cCJsU3NCY="
+        "rev": "fd45b0e055bce6cff3acde77414558784e93e7d0",
+        "sha256": "zjA/G62V38/hj+WjJDGAs48AcTUIiMWL8feCqLsCRnI="
     },
     "snes9x2010": {
         "owner": "libretro",
         "repo": "snes9x2010",
-        "rev": "c98224bc74aa0bbf355d128b22e4a2a4e94215b0",
-        "sha256": "mf5msdwdcRRfFWHwmWLS/qKd7gNlLwexGEB6wB6TfhE="
+        "rev": "e86e54624a7910a64a9a744e3734d4067c48d240",
+        "sha256": "U1eeXuhYssAOgiNOZ7fr/8rkPScts3GmWgK6ki39PVA="
     },
     "stella": {
         "owner": "stella-emu",
         "repo": "stella",
-        "rev": "efb2a9f299cad241e12d811580f28d75b6c3438d",
-        "sha256": "QYwDTd8EZUMXJiuSJtoW8XQXgl+Wx0lPkNLOwzM5bzA="
+        "rev": "7193c405327e0f2156d24d53836162f4b44af079",
+        "sha256": "A9icQON+0WrknjGp/0wiFNSWs2ot2s0X5lucCdk4O/s="
     },
     "stella2014": {
         "owner": "libretro",
@@ -439,14 +451,14 @@
     "swanstation": {
         "owner": "libretro",
         "repo": "swanstation",
-        "rev": "0e53a5ac09a30d73d78b628f7e4954ebe5615801",
-        "sha256": "vOu99fsm2oeSi96tWR+vV5suZSYCyXJVgOdvjnKbNhg="
+        "rev": "ff0b451a573885a5b3a4f291f7b22f3ffc667a17",
+        "sha256": "jz8tkvgonc4icRt12tt1BBCCiwec0ucix7Hp7PNPl8E="
     },
     "tgbdual": {
         "owner": "libretro",
         "repo": "tgbdual-libretro",
-        "rev": "1e0c4f931d8c5e859e6d3255d67247d7a2987434",
-        "sha256": "0wHv9DpKuzJ/q5vERqCo4GBLre2ggClBIWSjGnMLQq8="
+        "rev": "a6f3018e6a23030afc1873845ee54d4b2d8ec9d3",
+        "sha256": "MBUgYXX/Pc+TkwoS7OwbXSPssKUf6lwWx/bKhvwDkHs="
     },
     "thepowdertoy": {
         "owner": "libretro",
@@ -457,15 +469,15 @@
     "tic80": {
         "owner": "libretro",
         "repo": "tic-80",
-        "rev": "e9f62f85a154796c6baaee8a9f6fd0cfdd447019",
-        "sha256": "JTAoIqxqpaLjsQiIpJ4wQsREI5/rTxVxDywoL3oLI4Q=",
+        "rev": "bd6ce86174fc7c9d7d3a86263acf3a7de1b62c11",
+        "sha256": "RFp8sTSRwD+cgW3EYk3nBeY+zVKgZVQI5mjtfe2a64Q=",
         "fetchSubmodules": true
     },
     "vba-m": {
         "owner": "libretro",
         "repo": "vbam-libretro",
-        "rev": "254f6effebe882b7d3d29d9e417c6aeeabc08026",
-        "sha256": "vJWjdqJ913NLGL4G15sRPqO/wp9xPsuhUMLUuAbDRKk="
+        "rev": "7e30b038893de63e674944f75581d57c7685ea3a",
+        "sha256": "CmmiKiy0mFqAiagUHFV5wRSZ0MkzADrHRAG+h82dWAQ="
     },
     "vba-next": {
         "owner": "libretro",
@@ -476,8 +488,8 @@
     "vecx": {
         "owner": "libretro",
         "repo": "libretro-vecx",
-        "rev": "141af284202c86ed0d4ce9030c76954a144287cf",
-        "sha256": "p5vMuG2vr3BTJOQWNcTPb89MlkVrRvJNTIJSU8r9zfU="
+        "rev": "b5c17bb7fd4a704f58160bc699322a16d0643396",
+        "sha256": "nICXrVyoMWs2yDcewHd7z6rBt+haY/Dqf5lvF6RLnyg="
     },
     "virtualjaguar": {
         "owner": "libretro",
@@ -488,7 +500,7 @@
     "yabause": {
         "owner": "libretro",
         "repo": "yabause",
-        "rev": "17dfcd8de4700341d972993501d3a043925675ce",
-        "sha256": "xwW7Oe3Cy3yC0xC5acLW6OGUIG+dKd1mwiXK5ZAumdo="
+        "rev": "c7e02721eddb3de0ec7ae0d61e9e3afa5f586a62",
+        "sha256": "Y2YsPpgBA021pRDOFqH29zsRSbFIpRo5fq+tkknJbSA="
     }
 }

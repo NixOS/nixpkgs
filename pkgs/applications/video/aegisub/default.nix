@@ -130,6 +130,12 @@ stdenv.mkDerivation rec {
     ./remove-bundled-luajit.patch
   ];
 
+  # error: unknown type name 'NSUInteger'
+  postPatch = ''
+    substituteInPlace src/dialog_colorpicker.cpp \
+      --replace "NSUInteger" "size_t"
+  '';
+
   NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
   NIX_CFLAGS_LINK = "-L${luajit52}/lib";
 
@@ -153,7 +159,7 @@ stdenv.mkDerivation rec {
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
     license = licenses.bsd3;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres wegank ];
     platforms = platforms.unix;
   };
 }

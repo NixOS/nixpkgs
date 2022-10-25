@@ -8,12 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftools";
-  version = "5.19.8";
+  version = "5.19.12";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-    sha256 = "1kl7fifsa6vsm34xg3kd2svhx18n771hfj67nhwnlalmb9whhqv1";
+    sha256 = "sha256-xDalSMcxLOb8WjRyy+rYle749ShB++fHH9jki9/isLo=";
   };
+
+  patches = [ ./strip-binary-name.patch ];
 
   nativeBuildInputs = [ python3 bison flex ];
   buildInputs = (if (lib.versionAtLeast version "5.20")

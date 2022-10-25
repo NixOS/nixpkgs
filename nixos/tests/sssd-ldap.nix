@@ -91,6 +91,11 @@ in import ./make-test-python.nix ({pkgs, ...}: {
     machine.start()
     machine.wait_for_unit("openldap.service")
     machine.wait_for_unit("sssd.service")
-    machine.succeed("getent passwd ${testUser}")
+    result = machine.execute("getent passwd ${testUser}")
+    if result[0] == 0:
+      assert "${testUser}" in result[1]
+    else:
+      machine.wait_for_console_text("Backend is online")
+      machine.succeed("getent passwd ${testUser}")
   '';
 })

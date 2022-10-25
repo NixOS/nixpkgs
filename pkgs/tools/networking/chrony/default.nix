@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libcap, readline, texinfo, nss, nspr
 , libseccomp, pps-tools, gnutls }:
 
-assert stdenv.isLinux -> libcap != null;
-
 stdenv.mkDerivation rec {
   pname = "chrony";
   version = "4.3";

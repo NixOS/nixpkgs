@@ -61,12 +61,12 @@ let
 in
 python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.9.1";
+  version = "1.9.2";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-KWq3zUES8klXexNO9krlqZKZEajOhkTHF13t/3rxrPc=";
+    hash = "sha256-fafjVXRfzFrINzI/Ivfm1VY4YpemHkHwThBP54XoXM4=";
   };
 
   format = "other";

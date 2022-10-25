@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
-
-with lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, installShellFiles
+, libxslt
+, python3
+, re2c
+, buildDocs ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "ninja";
@@ -10,30 +20,51 @@ stdenv.mkDerivation rec {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+    hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
   };
 
-  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
+  nativeBuildInputs = [
+    python3
+    re2c
+    installShellFiles
+  ]
+  ++ lib.optionals buildDocs [
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt.bin
+  ];
 
   buildPhase = ''
+    runHook preBuild
+
     python configure.py --bootstrap
-  '' + optionalString buildDocs ''
+  '' + lib.optionalString buildDocs ''
     # "./ninja -vn manual" output copied here to support cross compilation.
     asciidoc -b docbook -d book -o build/manual.xml doc/manual.asciidoc
     xsltproc --nonet doc/docbook.xsl build/manual.xml > doc/manual.html
+  '' + ''
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin ninja
-    install -Dm444 misc/bash-completion $out/share/bash-completion/completions/ninja
-    install -Dm444 misc/zsh-completion $out/share/zsh/site-functions/_ninja
-  '' + optionalString buildDocs ''
+    installShellCompletion --name ninja \
+      --bash misc/bash-completion \
+      --zsh misc/zsh-completion
+  '' + lib.optionalString buildDocs ''
     install -Dm444 -t $out/share/doc/ninja doc/manual.asciidoc doc/manual.html
+  '' + ''
+
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Small build system with a focus on speed";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from

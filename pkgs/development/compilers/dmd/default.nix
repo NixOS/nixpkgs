@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper unzip which git ];
 
   buildInputs = [ gdb curl tzdata ]
-    ++ lib.optional stdenv.isDarwin [ Foundation gdb ];
+    ++ lib.optionals stdenv.isDarwin [ Foundation gdb ];
 
 
   osname = if stdenv.isDarwin then

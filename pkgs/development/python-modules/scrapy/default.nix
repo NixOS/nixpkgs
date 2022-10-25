@@ -12,6 +12,7 @@
 , itemloaders
 , jmespath
 , lxml
+, packaging
 , parsel
 , protego
 , pydispatcher
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.6.3";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-vf8arzVHwuVAQ206uGgLIQOTJ71dOi74nDQWWZLT5fM=";
+    hash = "sha256-Ssvg8fX7XqkTU1EriVjtMEvCX2373ig5oNh6SUNRWLk=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     itemadapter
     itemloaders
     lxml
+    packaging
     parsel
     protego
     pydispatcher
@@ -103,6 +105,9 @@ buildPythonPackage rec {
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
+    # Depends on uvloop
+    "test_asyncio_enabled_reactor_different_loop"
+    "test_asyncio_enabled_reactor_same_loop"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"

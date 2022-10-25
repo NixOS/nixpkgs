@@ -12,8 +12,28 @@ qtModule {
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
+  cmakeFlags = [
+    "-DQT6_INSTALL_PREFIX=${placeholder "out"}"
+    "-DQT_INSTALL_PREFIX=${placeholder "out"}"
+  ];
   postInstall = ''
     substituteInPlace "$out/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake" \
-      --replace ''\'''${QT6_INSTALL_PREFIX}' "$out"
+      --replace ''\'''${QT6_INSTALL_PREFIX}' "$dev"
   '';
+  devTools = [
+    "bin/qml"
+    "bin/qmlcachegen"
+    "bin/qmleasing"
+    "bin/qmlimportscanner"
+    "bin/qmllint"
+    "bin/qmlmin"
+    "bin/qmlplugindump"
+    "bin/qmlprofiler"
+    "bin/qmlscene"
+    "bin/qmltestrunner"
+  ];
+
+  NIX_CFLAGS_COMPILE = [
+    "-fmacro-prefix-map=${qtbase.dev}=qtbase.dev"
+  ];
 }

@@ -62,9 +62,9 @@ let
     SystemCallArchitectures = "native";
     SystemCallFilter = [
       # 1. allow a reasonable set of syscalls
-      "@system-service"
+      "@system-service @resources"
       # 2. and deny unreasonable ones
-      "~@privileged @resources"
+      "~@privileged"
       # 3. then allow the required subset within denied groups
       "@chown"
     ];
@@ -190,7 +190,7 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" ]
+      ++ [ "renew" "--no-random-sleep" ]
       ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
@@ -223,9 +223,9 @@ let
         # have many certificates, the renewals are distributed over
         # the course of the day to avoid rate limits.
         AccuracySec = "${toString (_24hSecs / numCerts)}s";
-
         # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
         RandomizedDelaySec = "24h";
+        FixedRandomDelay = true;
       };
     };
 
@@ -325,6 +325,7 @@ let
         '');
       } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp
@@ -376,7 +377,8 @@ let
 
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(ls -1 accounts)" ]; then
+        # We also need an account key. Avoids #190493
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.

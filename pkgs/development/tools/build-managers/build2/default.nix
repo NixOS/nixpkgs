@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     ./remove-config-store-paths.patch
     # Pick up sysdirs from NIX_LDFLAGS
     ./nix-ldflags-sysdirs.patch
+
+    ./remove-const-void-param.patch
   ];
 
   strictDeps = true;

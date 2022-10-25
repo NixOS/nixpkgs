@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
   buildInputs = [ python3 osi ];
 
-  cmakeFlags = lib.optional osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
+  cmakeFlags = lib.optionals osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 
   configurePhase = ''
     python build.py release

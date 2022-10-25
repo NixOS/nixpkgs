@@ -18,6 +18,8 @@
 , pytestCheckHook
 , matplotlib
 , pytest-xdist
+, gcc
+, llvmPackages
 }:
 
 buildPythonPackage rec {
@@ -46,7 +48,7 @@ buildPythonPackage rec {
         -i requirements.txt
   '';
 
-  checkInputs = [ pytestCheckHook pytest-xdist matplotlib ];
+  checkInputs = [ pytestCheckHook pytest-xdist matplotlib gcc ];
 
   # I've had to disable the following tests since they fail while using nix-build, but they do pass
   # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
@@ -88,12 +90,11 @@ buildPythonPackage rec {
     pyrevolve
     scipy
     sympy
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "devito" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://www.devitoproject.org/";
     description = "Code generation framework for automated finite difference computation";
     license = licenses.mit;

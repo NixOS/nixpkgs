@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2022.9.6";
+  version = "2022.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+8vsnSEEZ7uypASsJZ2MIK+riIF01Lxa1E3t0pC+e/I=";
+    hash = "sha256-E7rBRPtXa/E6jf75zULuGaiu2DHvq4hZjcwPwj/w9ww=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,12 @@ buildPythonPackage rec {
     pytest-freezegun
     pytestCheckHook
   ];
+
+  postPatch = ''
+    # https://github.com/natekspencer/pylitterbot/issues/73
+    substituteInPlace pyproject.toml \
+      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
+  '';
 
   pytestFlagsArray = [
     "--asyncio-mode=legacy"

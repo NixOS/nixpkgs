@@ -4,12 +4,9 @@
 , wrapQtAppsHook
 , qtmultimedia
 , qttools
-, qtscript
 , qtdeclarative
 , qtnetworkauth
 , qtbase
-, autogen
-, automake
 , makeWrapper
 , catch2
 , nodejs

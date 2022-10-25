@@ -17,6 +17,9 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/Shopify/toxiproxy/v2.Version=${version}" ];
 
+  # Fixes tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
   checkFlags = [ "-short" ];
 
   postInstall = ''

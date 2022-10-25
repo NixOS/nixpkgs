@@ -167,7 +167,7 @@ let
   rtpPath = ".";
 
   vimFarm = prefix: name: drvs:
-    let mkEntryFromDrv = drv: { name = "${prefix}/${drv.pname}"; path = drv; };
+    let mkEntryFromDrv = drv: { name = "${prefix}/${lib.getName drv}"; path = drv; };
     in linkFarm name (map mkEntryFromDrv drvs);
 
   /* Generates a packpath folder as expected by vim
@@ -243,10 +243,10 @@ let
       */
       plugImpl =
       ''
-        source ${vimPlugins.vim-plug.rtp}/plug.vim
+        source ${vimPlugins.vim-plug}/plug.vim
         silent! call plug#begin('/dev/null')
 
-        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
+        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg}'") plug.plugins) + ''
 
         call plug#end()
       '';

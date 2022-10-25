@@ -37,10 +37,11 @@ PKG_SET = "home-assistant.python.pkgs"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "ha-av": "av",
-    "youtube_dl": "youtube-dl-light",
+    "ha-HAP-python": "hap-python",
     "tensorflow": "tensorflow",
-    "fiblary3": "fiblary3-fork", # https://github.com/home-assistant/core/issues/66466
+    "youtube_dl": "youtube-dl-light",
 }
 
 

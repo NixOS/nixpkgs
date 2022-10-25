@@ -1,7 +1,8 @@
 { lib,
   mkCoqDerivation, recurseIntoAttrs,
-  mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
+  mathcomp, mathcomp-finmap, mathcomp-bigenough,
   hierarchy-builder,
+  single ? false,
   coqPackages, coq, version ? null }@args:
 with builtins // lib;
 let
@@ -36,20 +37,23 @@ let
   packages = [ "classical" "analysis" ];
 
   mathcomp_ = package: let
-      analysis-deps = map mathcomp_ (head (splitList (pred.equal package) packages));
-      pkgpath = if package == "analysis" then "theories" else "${package}";
-      pname = "mathcomp-${package}";
+      classical-deps = [ mathcomp.algebra mathcomp-finmap hierarchy-builder ];
+      analysis-deps = [ mathcomp.field mathcomp-bigenough ];
+      intra-deps = if package == "single" then []
+        else map mathcomp_ (head (splitList (pred.equal package) packages));
+      pkgpath = if package == "single" then "."
+        else if package == "analysis" then "theories" else "${package}";
+      pname = if package == "single" then "mathcomp-analysis-single"
+        else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release repo owner;
 
         namePrefix = [ "coq" "mathcomp" ];
 
         propagatedBuildInputs =
-          (if package == "classical" then
-             [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap ]
-           else
-             [ mathcomp.field mathcomp-bigenough mathcomp-real-closed ])
-          ++ [ analysis-deps ];
+          intra-deps
+          ++ optionals (elem package [ "classical" "single" ]) classical-deps
+          ++ optionals (elem package [ "analysis" "single" ]) analysis-deps;
 
         preBuild = ''
           cd ${pkgpath}
@@ -83,4 +87,4 @@ let
     );
     in patched-derivation;
 in
-mathcomp_ "analysis"
+mathcomp_ (if single then "single" else "analysis")

@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
-, donateLevel ? 0
 }:
 
 stdenv.mkDerivation rec {

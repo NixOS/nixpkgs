@@ -13,7 +13,6 @@
 , libxml2
 , glib
 , wrapGAppsNoGuiHook
-, vala
 , sqlite
 , libxslt
 , libstemmer
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.3.2";
+  version = "3.4.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "DtK5iRiVbW8WQpxgfdihTIT02gpIlw/S64yTq6PPmRM=";
+    sha256 = "s7OAyVcdfHQjtfQB5KLy143kcUOwNessEoHiQjxZIYs=";
   };
 
   postPatch = ''
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     asciidoc
     gettext

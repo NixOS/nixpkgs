@@ -84,7 +84,10 @@ HERE
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
+      export HOME="$NIX_BUILD_TOP/home"
+      mkdir -p "$HOME"
+      export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
+      export GRADLE_USER_HOME="$HOME/.gradle"
 
       # First, fetch the static dependencies.
       gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk11} -I gradle/support/fetchDependencies.gradle init
@@ -116,21 +119,10 @@ in stdenv.mkDerivation rec {
   patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
   postPatch = fixProtoc;
 
-  buildPhase = (lib.optionalString stdenv.isDarwin ''
-    export HOME=$(mktemp -d)
-
-    # construct a dummy /etc/passwd file - something attempts to determine
-    # the user's "real" home using this
-    DUMMY_PASSWD=$(realpath ../dummy-passwd)
-    cat > $DUMMY_PASSWD <<EOF
-    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
-    EOF
-
-    export NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-    export DYLD_INSERT_LIBRARIES=${libredirect}/lib/libredirect.dylib
-  '') + ''
-
-    export GRADLE_USER_HOME=$(mktemp -d)
+  buildPhase = ''
+    export HOME="$NIX_BUILD_TOP/home"
+    mkdir -p "$HOME"
+    export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
 
     ln -s ${deps}/dependencies dependencies
 
@@ -170,7 +162,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps

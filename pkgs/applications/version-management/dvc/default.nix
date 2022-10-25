@@ -23,7 +23,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo"
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
@@ -71,17 +72,17 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optional enableGoogle [
+  ] ++ lib.optionals enableGoogle [
     gcsfs
     google-cloud-storage
-  ] ++ lib.optional enableAWS [
+  ] ++ lib.optionals enableAWS [
     aiobotocore
     boto3
     s3fs
-  ] ++ lib.optional enableAzure [
+  ] ++ lib.optionals enableAzure [
     azure-identity
     knack
-  ] ++ lib.optional enableSSH [
+  ] ++ lib.optionals enableSSH [
     bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata

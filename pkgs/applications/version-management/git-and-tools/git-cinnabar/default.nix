@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
 , curl, libiconv, mercurial, zlib
+, CoreServices
 }:
 
 let
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf makeWrapper ];
-  buildInputs = [ curl zlib ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ curl zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
 
   # Ignore submodule status failing due to no git in environment.
   makeFlags = [ "SUBMODULE_STATUS=yes" ];

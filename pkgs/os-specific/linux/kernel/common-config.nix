@@ -411,6 +411,7 @@ let
       XFS_QUOTA     = option yes;
       XFS_POSIX_ACL = option yes;
       XFS_RT        = option yes; # XFS Realtime subvolume support
+      XFS_ONLINE_SCRUB = option yes;
 
       OCFS2_DEBUG_MASKLOG = option no;
 
@@ -481,6 +482,7 @@ let
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
       DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
+      HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
       IO_STRICT_DEVMEM                 = mkDefault yes;
@@ -504,6 +506,11 @@ let
       # Depends on MODULE_SIG and only really helps when you sign your modules
       # and enforce signatures which we don't do by default.
       SECURITY_LOCKDOWN_LSM = option no;
+
+      # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
+      PERSISTENT_KEYRINGS              = yes;
+      # enable temporary caching of the last request_key() result
+      KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack

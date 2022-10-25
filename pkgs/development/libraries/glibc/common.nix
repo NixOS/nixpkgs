@@ -36,6 +36,7 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
+, withLibcrypt ? false
 , meta
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
@@ -183,7 +184,9 @@ stdenv.mkDerivation ({
       # To avoid linking with -lgcc_s (dynamic link)
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
-    ] ++ lib.optional withGd "--with-gd";
+    ]
+    ++ lib.optional withGd "--with-gd"
+    ++ lib.optional (!withLibcrypt) "--disable-crypt";
 
   makeFlags = [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"

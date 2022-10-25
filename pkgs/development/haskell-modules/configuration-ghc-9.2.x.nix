@@ -169,9 +169,6 @@ self: super: {
   # lens >= 5.1 supports 9.2.1
   lens = doDistribute self.lens_5_2;
 
-  # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
-  alex = dontCheck super.alex;
-
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
@@ -229,4 +226,7 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  relude = dontCheck self.relude_1_1_0_0;
+  hermes-json = doJailbreak super.hermes-json;
 }

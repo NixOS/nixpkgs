@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, irmin-chunk, irmin-git, irmin-unix
+{ lib, buildDunePackage, irmin-chunk, irmin-git
 , mirage-block-ramdisk, mirage-block-unix, wodan }:
 
 buildDunePackage rec {
@@ -9,7 +9,6 @@ buildDunePackage rec {
     /* io-page-unix */ # No longer available in nixpkgs
     irmin-chunk
     irmin-git
-    irmin-unix
     mirage-block-ramdisk
     mirage-block-unix
     wodan

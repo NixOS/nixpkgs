@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, callPackage, enableWebui ? true }:
 
 buildGoModule rec {
   pname = "rmfakecloud";
@@ -13,8 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-NwDaPpjkQogXE37RGS3zEALlp3NuXP9RW//vbwM6y0A=";
 
-  postPatch = ''
-    # skip including the JS SPA, which is difficult to build
+  ui = callPackage ./webui.nix { inherit version src; };
+
+  postPatch = if enableWebui then ''
+    mkdir -p ui/build
+    cp -r ${ui}/* ui/build
+  '' else ''
     sed -i '/go:/d' ui/assets.go
   '';
 

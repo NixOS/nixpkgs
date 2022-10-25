@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.3.30";
+  version = "3.3.39";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LwMbqweRtH0l+89pRns6VbQgWOy3j34i76IwYdOUW0M=";
+    hash = "sha256-UJOV/KRJgy4r7iKWdlA8k51OLzMcfMHgFSvII/D5erA=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     cherrypy
     flask-compress
     flask-cors
-    flask_login
+    flask-login
     flask-restful
     flask-restx
     flask

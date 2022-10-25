@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.11.0";
+  version = "1.12.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CDDFhT47RAmalxZuDOxUpltUt/qqwHBxhy93uOTXswI=";
+    sha256 = "sha256-gT1tJRFhQ9FtLpZ5FxinSCXaFrd0qNCT2W8Grhcw2cU=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ udev pcsclite ];
 
   propagatedBuildInputs = [ openssl ];
+
+  outputs = [ "out" "dev" "man" ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"

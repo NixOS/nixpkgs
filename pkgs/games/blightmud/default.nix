@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, alsa-lib, openssl
-, withTTS ? false, llvmPackages, speechd }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, alsa-lib
+, openssl
+, withTTS ? false
+, speechd
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
@@ -16,50 +24,29 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withTTS "tts";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optional withTTS [ speechd ];
+  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
 
-  # Building the speech-dispatcher-sys crate for TTS support requires setting
-  # LIBCLANG_PATH.
-  LIBCLANG_PATH = lib.optionalString withTTS "${llvmPackages.libclang.lib}/lib";
-
-  preBuild = lib.optionalString withTTS ''
-    # When building w/ TTS the speech-dispatcher-sys crate's build.rs uses
-    # rust-bindgen with libspeechd. This bypasses the normal nixpkgs CC wrapper
-    # so we have to adapt the BINDGEN_EXTRA_CLANG_ARGS env var to compensate. See
-    # this blog post[0] for more information.
-    #
-    # [0]: https://hoverbear.org/blog/rust-bindgen-in-nix/
-
-    export BINDGEN_EXTRA_CLANG_ARGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
-      $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      -isystem ${llvmPackages.libclang.lib}/lib/clang/${
-        lib.getVersion llvmPackages.clang
-      }/include \
-      -idirafter ${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.config}/${
-        lib.getVersion stdenv.cc.cc
-      }/include \
-      -idirafter ${speechd}/include"
-  '';
-
-  checkFlags = let
-    # Most of Blightmud's unit tests pass without trouble in the isolated
-    # Nixpkgs build env. The following tests need to be skipped.
-    skipList = [
-      "test_connect"
-      "test_gmcp_negotiation"
-      "test_ttype_negotiation"
-      "test_reconnect"
-      "test_is_connected"
-      "test_mud"
-      "test_server"
-      "test_lua_script"
-      "timer_test"
-      "validate_assertion_fail"
-    ];
-    skipFlag = test: "--skip " + test;
-  in builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+  checkFlags =
+    let
+      # Most of Blightmud's unit tests pass without trouble in the isolated
+      # Nixpkgs build env. The following tests need to be skipped.
+      skipList = [
+        "test_connect"
+        "test_gmcp_negotiation"
+        "test_ttype_negotiation"
+        "test_reconnect"
+        "test_is_connected"
+        "test_mud"
+        "test_server"
+        "test_lua_script"
+        "timer_test"
+        "validate_assertion_fail"
+      ];
+      skipFlag = test: "--skip " + test;
+    in
+    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
   meta = with lib; {
     description = "A terminal MUD client written in Rust";

@@ -15,6 +15,7 @@
   fetchzip,
   filepath,
   generic-optics,
+  hermes-json,
   HUnit,
   lib,
   lock-file,
@@ -31,17 +32,16 @@
   terminal-size,
   text,
   time,
-  unix,
-  vector,
+  typed-process,
   wcwidth,
   word8,
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "1.1.3.0";
+  version = "2.0.0.2";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v1.1.3.0.tar.gz";
-    sha256 = "085phr84m0b056mj3c09gzcwv7b1wax7nhsg2qscahfz0q8f4ym7";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.2.tar.gz";
+    sha256 = "1xfcl7203sgc88a9xdnswwk7rirsaff7jb27yil7mrb7ni10g2f9";
   };
   isLibrary = true;
   isExecutable = true;
@@ -58,12 +58,12 @@ mkDerivation {
     extra
     filepath
     generic-optics
+    hermes-json
     lock-file
     MemoTrie
     mtl
     nix-derivation
     optics
-    random
     relude
     safe
     stm
@@ -71,8 +71,6 @@ mkDerivation {
     terminal-size
     text
     time
-    unix
-    vector
     wcwidth
     word8
   ];
@@ -89,12 +87,12 @@ mkDerivation {
     extra
     filepath
     generic-optics
+    hermes-json
     lock-file
     MemoTrie
     mtl
     nix-derivation
     optics
-    random
     relude
     safe
     stm
@@ -102,8 +100,7 @@ mkDerivation {
     terminal-size
     text
     time
-    unix
-    vector
+    typed-process
     wcwidth
     word8
   ];
@@ -120,6 +117,7 @@ mkDerivation {
     extra
     filepath
     generic-optics
+    hermes-json
     HUnit
     lock-file
     MemoTrie
@@ -135,8 +133,6 @@ mkDerivation {
     terminal-size
     text
     time
-    unix
-    vector
     wcwidth
     word8
   ];

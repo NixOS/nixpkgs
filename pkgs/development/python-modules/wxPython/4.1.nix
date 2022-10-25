@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
 , setuptools
 , which
@@ -12,6 +13,19 @@
 , ncurses
 , pango
 , wxGTK
+, AGL
+, AudioToolbox
+, AVFoundation
+, AVKit
+, Carbon
+, Cocoa
+, CoreFoundation
+, CoreMedia
+, IOKit
+, Kernel
+, OpenGL
+, Security
+, WebKit
 , pillow
 , numpy
 , libXinerama
@@ -40,6 +54,13 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "0a1mdhdkda64lnwm1dg0dlrf9rs4gkal3lra6hpqbwn718cf7r80";
   };
+
+  # ld: framework not found System
+  postPatch = ''
+    for file in ext/wxWidgets/configure*; do
+      substituteInPlace $file --replace "-framework System" ""
+    done
+  '';
 
   # https://github.com/NixOS/nixpkgs/issues/75759
   # https://github.com/wxWidgets/Phoenix/issues/1316
@@ -71,6 +92,20 @@ buildPythonPackage rec {
     libglvnd
     mesa
     webkitgtk
+  ] ++ lib.optionals stdenv.isDarwin [
+    AGL
+    AudioToolbox
+    AVFoundation
+    AVKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    CoreMedia
+    IOKit
+    Kernel
+    OpenGL
+    Security
+    WebKit
   ];
 
   propagatedBuildInputs = [ pillow numpy ];
@@ -97,7 +132,6 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;

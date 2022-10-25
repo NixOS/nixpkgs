@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "process_viewer";
   };
 }

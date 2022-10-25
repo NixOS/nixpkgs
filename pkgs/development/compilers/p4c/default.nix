@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
     bison
     flex
     cmake
-    python3
   ]
-  ++ lib.optional enableDocumentation [ doxygen graphviz ]
-  ++ lib.optional enableBPF [ libllvm libbpf ];
+  ++ lib.optionals enableDocumentation [ doxygen graphviz ]
+  ++ lib.optionals enableBPF [ libllvm libbpf ];
 
   buildInputs = [
     protobuf
@@ -76,6 +75,7 @@ stdenv.mkDerivation rec {
     boehmgc
     gmp
     flex
+    python3
   ];
 
   meta = with lib; {

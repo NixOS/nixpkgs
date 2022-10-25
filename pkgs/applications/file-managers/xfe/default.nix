@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
+{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, xcbutil, gcc, intltool, file, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "xfe";
-  version = "1.42";
+  version = "1.44";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xfe/xfe-${version}.tar.gz";
-    sha256 = "1v1v0vcbnm30kpyd3rj8f56yh7lfnwy7nbs9785wi229b29fiqx1";
+    url = "mirror://sourceforge/xfe/xfe-${version}.tar.xz";
+    sha256 = "594c14d185bdfc7e3132aefda7cf4e233625258ca9a1939359944a2c07c030b6";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fox gettext xlibsWrapper gcc intltool file libpng ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ fox gettext xlibsWrapper xcbutil gcc file libpng ];
 
   preConfigure = ''
     sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h

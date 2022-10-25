@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yrCg3qr96SUCHmT3IAF79/Ha+L82V3nIC6Hb5ugXoGk=";
   };
 
+  patches = lib.optionals (lib.versionAtLeast kernel.version "6.0") [
+    ./prl-tools-6.0.patch
+  ];
+
   hardeningDisable = [ "pic" "format" ];
 
   nativeBuildInputs = [ p7zip undmg perl bbe autoPatchelfHook ]

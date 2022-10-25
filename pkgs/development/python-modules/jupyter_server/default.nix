@@ -84,6 +84,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests/services/kernels/test_api.py"
     "tests/services/sessions/test_api.py"
+    # nbconvert failed: `relax_add_props` kwargs of validate has been
+    # deprecated for security reasons, and will be removed soon.
+    "tests/nbconvert/test_handlers.py"
   ];
 
   __darwinAllowLocalNetworking = true;

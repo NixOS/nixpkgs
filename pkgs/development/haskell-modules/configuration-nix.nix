@@ -95,12 +95,12 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
-  niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
-  ormolu = generateOptparseApplicativeCompletion "ormolu" (enableSeparateBinOutput super.ormolu);
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
 
   # Generate shell completion.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
     # The test suite needs the packages's executables in $PATH to succeed.
@@ -814,7 +814,7 @@ self: super: builtins.intersectAttrs super {
         install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
       '' + (drv.postInstall or "");
     })
-    (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
+    (self.generateOptparseApplicativeCompletions [ "pnbackup" ] super.pinboard-notes-backup);
 
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
@@ -875,7 +875,7 @@ self: super: builtins.intersectAttrs super {
   }) super.tophat;
 
   # Runtime dependencies and CLI completion
-  nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
+  nvfetcher = self.generateOptparseApplicativeCompletions [ "nvfetcher" ] (overrideCabal
     (drv: {
       # test needs network
       doCheck = false;
@@ -889,7 +889,7 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =
@@ -917,7 +917,7 @@ self: super: builtins.intersectAttrs super {
   # to arbitrary files in $HOME. This doesn't either not achieve anything
   # or even fail, so we prevent it and install everything necessary ourselves.
   # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
-  ats-format = generateOptparseApplicativeCompletion "atsfmt" (
+  ats-format = self.generateOptparseApplicativeCompletions [ "atsfmt" ] (
     justStaticExecutables (
       overrideCabal (drv: {
         # use vanilla Setup.hs

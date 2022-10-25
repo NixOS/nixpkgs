@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook
 , secp256k1 }:
 
 python3Packages.buildPythonApplication rec {

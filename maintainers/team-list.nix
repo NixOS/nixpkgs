@@ -110,6 +110,7 @@ with lib.maintainers; {
       astro
       SuperSandro2000
       revol-xut
+      oxapentane
     ];
     scope = "Maintain packages used in the C3D2 hackspace";
     shortName = "c3d2";
@@ -181,6 +182,8 @@ with lib.maintainers; {
     members = [
       cole-h
       grahamc
+      hoverbear
+      lheckemann
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
@@ -363,6 +366,17 @@ with lib.maintainers; {
     shortName = "Kodi";
   };
 
+  libretro = {
+    members = [
+      aanderse
+      edwtjo
+      MP2E
+      thiagokokada
+    ];
+    scope = "Maintain Libretro, RetroArch and related packages.";
+    shortName = "Libretro";
+  };
+
   linux-kernel = {
     members = [
       TredwellGit
@@ -382,6 +396,15 @@ with lib.maintainers; {
     ];
     scope = "Group registration for LumiGuide employees who collectively maintain packages.";
     shortName = "Lumiguide employees";
+  };
+
+  lua = {
+    githubTeams = [
+      "lua"
+    ];
+    scope = "Maintain the lua ecosystem.";
+    shortName = "lua";
+    enableFeatureFreezePing = true;
   };
 
   lumina = {
@@ -652,7 +675,6 @@ with lib.maintainers; {
     # Verify additions by approval of an already existing member of the team.
     members = [
       balsoft
-      mkaito
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";

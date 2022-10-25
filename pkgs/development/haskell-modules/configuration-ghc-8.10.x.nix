@@ -90,7 +90,7 @@ self: super: {
   }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
-  hnix = generateOptparseApplicativeCompletion "hnix"
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
     (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];

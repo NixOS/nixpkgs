@@ -161,6 +161,7 @@ extra-packages:
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
+  - ghc-exactprint == 1.5.0             # 2022-10-06: newer versions of ghc-exactprint require ghc 9.4.2
 
 package-maintainers:
   abbradar:
@@ -324,6 +325,7 @@ package-maintainers:
     - leb128-cereal
     - tasty-expected-failure
     - lhs2tex
+    - rec-def
   pacien:
     - ldgallery-compiler
   peti:

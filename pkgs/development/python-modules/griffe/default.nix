@@ -1,6 +1,6 @@
 { lib
 , aiofiles
-, buildPythonApplication
+, buildPythonPackage
 , cached-property
 , fetchFromGitHub
 , git
@@ -9,7 +9,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "griffe";
   version = "0.22.0";
   format = "pyproject";

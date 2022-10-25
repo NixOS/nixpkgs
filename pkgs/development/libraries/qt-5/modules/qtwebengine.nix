@@ -262,6 +262,6 @@ qtModule {
     # and qtwebengine 5.14+ requires at least SDK 10.14
     # (qtwebengine 5.12 is fine with SDK 10.12)
     # on aarch64-darwin we are already at MacOS SDK 11.0
-    broken = stdenv.isDarwin && stdenv.isx86_64 && (lib.versionAtLeast qtCompatVersion "5.14");
+    broken = stdenv.isDarwin;
   };
 }

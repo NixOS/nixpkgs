@@ -40,9 +40,7 @@ let
           hash = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
         };
       });
-    })
 
-    (self: super: {
       bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.0";
         postPatch = null;
@@ -54,31 +52,7 @@ let
           hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
         };
       });
-    })
 
-    (self: super: {
-      bleak = super.bleak.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "hbldh";
-          repo = "bleak";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AnH23AWrLw2jq6gSbx9VoGD8QXeCH5dN7FSVVdj4b3w=";
-        };
-      });
-
-      bleak-retry-connector = super.bleak-retry-connector.overridePythonAttrs (oldAttrs: rec {
-        version = "1.17.1";
-        src = fetchFromGitHub {
-          owner = "Bluetooth-Devices";
-          repo = "bleak-retry-connector";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-FoQ1cDORQaJcr6y9JaO4MigqV6jiBbwKNIIdYDgFNxQ=";
-        };
-      });
-    })
-
-    (self: super: {
       blebox-uniapi = super.blebox-uniapi.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.2";
         src = fetchFromGitHub {
@@ -88,22 +62,7 @@ let
           hash = "sha256-0Yiooy7YSUFjqqcyH2fPQ6AWuR0EJxfRRZTw/6JGcMA=";
         };
       });
-    })
 
-    (self: super: {
-      bluetooth-adapters = super.bluetooth-adapters.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.1";
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.dbus-fast ];
-        src = fetchFromGitHub {
-          owner = "Bluetooth-Devices";
-          repo = "bluetooth-adapters";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-LAT4r6RHJWTkrZvuL1aSQDiztvXiOJwGmNQKGFnvFB8=";
-        };
-      });
-    })
-
-    (self: super: {
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
         version = "4.0.0";
         src = fetchFromGitHub {
@@ -113,10 +72,29 @@ let
           hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
         };
       });
-    })
 
-    # pytest-aiohttp>0.3.0 breaks home-assistant tests
-    (self: super: {
+      hap-python = super.hap-python.overridePythonAttrs (oldAtrs: rec {
+        pname = "ha-hap-python";
+        version = "4.5.2";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "ha-HAP-python";
+          rev = "refs/tags/v4.5.2";
+          hash = "sha256-xCmx5QopNShKIuXewT+T86Bxyi4P0ddh8r2UlJ48Wig=";
+        };
+      });
+
+      iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = fetchFromGitHub {
+          owner = "flz";
+          repo = "iaqualink-py";
+          rev = "v${version}";
+          hash = "sha256-GDJwPBEU7cteAdYj7eo5tAo0G8AVcQR7KSxLNLhU/XU=";
+        };
+      });
+
+      # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
         src = self.fetchPypi {
@@ -161,22 +139,8 @@ let
       zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
-    })
 
-    (self: super: {
-      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
-        version = "0.20.1";
-        src = fetchFromGitHub {
-          owner = "plugwise";
-          repo = "python-plugwise";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Sk7L0JPwn7IXVl5GeERxrG/vrHXeNwUjW1mgm4g40Ng=";
-        };
-      });
-    })
-
-    # Pinned due to API changes in 0.1.0
-    (self: super: {
+      # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
         src = super.fetchPypi {
@@ -185,10 +149,8 @@ let
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
         };
       });
-    })
 
-    # Pinned due to API changes >0.3.5.3
-    (self: super: {
+      # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
         src = fetchFromGitHub {
@@ -198,29 +160,11 @@ let
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
-    })
 
-    (self: super: {
-      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.4";
-        src = fetchFromGitHub {
-          owner = "jabesq";
-          repo = "pyatmo";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
-        };
-        checkInputs = [ super.freezegun ];
-      });
-    })
-
-    (self: super: {
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
         doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
-    })
 
-
-    (self: super: {
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
@@ -229,9 +173,7 @@ let
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
         };
       });
-    })
 
-    (self: super: {
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.0";
         src = fetchFromGitHub {
@@ -241,20 +183,7 @@ let
           hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
         };
       });
-    })
 
-    (self: super: {
-      solax = super.solax.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.9";
-        src = super.fetchPypi {
-          pname = "solax";
-          inherit version;
-          hash = "sha256-5m2wxdTshAsEfldPAyXqAYYtH1VjqERRBUGzX6pV85I=";
-        };
-      });
-    })
-
-    (self: super: {
       pysoma = super.pysoma.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.10";
         src = super.fetchPypi {
@@ -263,10 +192,8 @@ let
           hash = "sha256-sU1qHbAjdIUu0etjate8+U1zvunbw3ddBtDVUU10CuE=";
         };
       });
-    })
 
-    # Pinned due to API changes in 0.3.0
-    (self: super: {
+      # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
         src = fetchFromGitHub {
@@ -276,10 +203,8 @@ let
           hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
         };
       });
-    })
 
-    # Pinned due to API changes in 0.4.0
-    (self: super: {
+      # Pinned due to API changes in 0.4.0
       vilfo-api-client = super.vilfo-api-client.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.3";
         src = fetchFromGitHub {
@@ -289,10 +214,8 @@ let
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
         };
       });
-    })
 
-    # Pinned due to API changes ~1.0
-    (self: super: {
+      # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
         src = fetchFromGitHub {
@@ -302,10 +225,8 @@ let
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
         };
       });
-    })
 
-    # home-assistant-frontend does not exist in python3.pkgs
-    (self: super: {
+      # home-assistant-frontend does not exist in python3.pkgs
       home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
@@ -333,7 +254,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.9.7";
+  hassVersion = "2022.10.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -351,7 +272,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-V6/y5HnJh8AVwkSg3uanYQRNvDcD1P0L+wBu98NpDek=";
+    hash = "sha256-y2X6tiR3TLbQ1tYUUuu8D0i5j+P0FnDWJ1mSlGPwIuY=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -374,6 +295,7 @@ in python.pkgs.buildPythonApplication rec {
       "orjson"
       "PyJWT"
       "requests"
+      "typing-extensions"
       "yarl"
     ];
   in ''

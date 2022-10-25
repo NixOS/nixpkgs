@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.8";
+  version = "1.50.11";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "z2JvWd0UbAIxdMQDSSDpZn8dJawsFWlRbWMTbDESVfo=";
+    sha256 = "iAD4Etie5hOIGIcDID86eHiWPCL4aVqvH6ChoUKNF64=";
   };
 
   depsBuildBuild = [
@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # 1.90 is alpha for API 2.
+      freeze = true;
     };
   };
 

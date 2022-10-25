@@ -11,14 +11,13 @@
 , python3
 , gobject-introspection
 , gettext
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , icu
 , sqlite
 , tzdata
 , libcanberra-gtk3
-, gcr
 , p11-kit
 , db
 , nspr
@@ -33,29 +32,31 @@
 , ninja
 , libkrb5
 , openldap
-, webkitgtk
+, webkitgtk_4_1
+, webkitgtk_5_0
 , libaccounts-glib
 , json-glib
 , glib
 , gtk3
+, gtk4
+, withGtk3 ? true
+, withGtk4 ? false
 , libphonenumber
 , gnome-online-accounts
 , libgweather
-, libgdata
-, gsettings-desktop-schemas
 , boost
 , protobuf
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.44.4";
+  version = "3.46.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wMZliDjVi6RgQqS55Qo7sRKWkeTNuEteugvzMLLMsus=";
+    sha256 = "5fooCVoYP3q1qSjjWoKDebSB3e+D7Ux7UaLjxK71zas=";
   };
 
   patches = [
@@ -67,8 +68,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
-      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
+      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -86,27 +86,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
-    libxml2
-    gtk3
+    libsoup_3
     gnome-online-accounts
-    gcr
     p11-kit
     libgweather
-    libgdata
     libaccounts-glib
-    json-glib
     icu
     sqlite
     libkrb5
     openldap
-    webkitgtk
     glib-networking
     libcanberra-gtk3
     pcre
     libphonenumber
     boost
     protobuf
+  ] ++ lib.optionals withGtk3 [
+    gtk3
+    webkitgtk_4_1
+  ] ++ lib.optionals withGtk4 [
+    gtk4
+    webkitgtk_5_0
   ];
 
   propagatedBuildInputs = [
@@ -115,8 +115,9 @@ stdenv.mkDerivation rec {
     nss
     nspr
     libical
-    libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
-    libsoup
+    libsoup_3
+    libxml2
+    json-glib
   ];
 
   cmakeFlags = [
@@ -125,7 +126,10 @@ stdenv.mkDerivation rec {
     "-DENABLE_INTROSPECTION=ON"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
-    "-DWITH_GWEATHER4=ON"
+    "-DENABLE_GTK=${lib.boolToString withGtk3}"
+    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
   ];
 
   passthru = {

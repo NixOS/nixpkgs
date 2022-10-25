@@ -359,6 +359,10 @@ self: super: {
     };
   });
 
+  flit-nvim = super.flit-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim ];
+  });
+
   forms = super.forms.overrideAttrs (old: {
     dependencies = with self; [ self.self ];
   });
@@ -518,8 +522,16 @@ self: super: {
       '';
     };
 
+  lazy-lsp-nvim = super.lazy-lsp-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig ];
+  });
+
   lean-nvim = super.lean-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  });
+
+  leap-ast-nvim = super.leap-ast-nvim.overrideAttrs (old: {
+    dependencies = with self; [ leap-nvim nvim-treesitter ];
   });
 
   lens-vim = super.lens-vim.overrideAttrs (old: {
@@ -612,8 +624,20 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  neo-tree-nvim = super.neo-tree-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim nui-nvim ];
+  });
+
+  noice-nvim = super.noice-nvim.overrideAttrs(old: {
+    dependencies = with self; [ nui-nvim nvim-notify ];
+  });
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
+    dependencies = with self; [ nvim-dap ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
@@ -655,8 +679,6 @@ self: super: {
   });
 
   inherit parinfer-rust;
-
-  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''
@@ -985,7 +1007,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-AY14YEdMpHXmiHwEA9hwSwwwJ8hYIomAuIuCJv1OUDw=";
+          cargoSha256 = "sha256-MzacdTuCaBIAyWxH+Uza1KToGZgGPcwMCe5JtQ+68/M=";
         };
       in
       ''

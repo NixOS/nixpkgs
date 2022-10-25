@@ -122,6 +122,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
     mainProgram = "borg";
-    maintainers = with maintainers; [ flokli dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

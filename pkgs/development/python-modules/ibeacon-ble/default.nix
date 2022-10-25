@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ibeacon-ble";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+DPbIIarEAaH1bNzo+FvLp0QpNUPhaJ8nPLdKJKfz0k=";
+    hash = "sha256-B+ftS/oNCECjCqB396K5iCl0aeJSBGVXshlvZ1kvEuo=";
   };
 
   nativeBuildInputs = [

@@ -147,4 +147,7 @@ self: super: {
 
   # 2022-05-31: weeder 2.3.0 requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;
+
+  # Restrictive upper bound on base and containers
+  sv2v = doJailbreak super.sv2v;
 }

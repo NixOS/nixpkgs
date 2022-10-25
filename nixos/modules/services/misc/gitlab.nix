@@ -6,6 +6,9 @@ let
   cfg = config.services.gitlab;
   opt = options.services.gitlab;
 
+  toml = pkgs.formats.toml {};
+  yaml = pkgs.formats.yaml {};
+
   ruby = cfg.packages.gitlab.ruby;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -89,16 +92,17 @@ let
     repos_path = "${cfg.statePath}/repositories";
     secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
-    redis = {
-      bin = "${pkgs.redis}/bin/redis-cli";
-      host = "127.0.0.1";
-      port = config.services.redis.servers.gitlab.port;
-      database = 0;
-      namespace = "resque:gitlab";
-    };
   };
 
   redisConfig.production.url = cfg.redisUrl;
+
+  cableYml = yaml.generate "cable.yml" {
+    production = {
+      adapter = "redis";
+      url = cfg.redisUrl;
+      channel_prefix = "gitlab_production";
+    };
+  };
 
   pagesArgs = [
     "-pages-domain" gitlabConfig.production.pages.host
@@ -188,16 +192,27 @@ let
     MALLOC_ARENA_MAX = "2";
   } // cfg.extraEnv;
 
+  runtimeDeps = with pkgs; [
+    nodejs
+    gzip
+    git
+    gnutar
+    postgresqlPackage
+    coreutils
+    procps
+    findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
+  ];
+
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -205,14 +220,14 @@ let
 
   gitlab-rails = pkgs.stdenv.mkDerivation {
     name = "gitlab-rails";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath runtimeDeps}:$PATH' \
           --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
@@ -468,9 +483,9 @@ in {
 
       redisUrl = mkOption {
         type = types.str;
-        default = "redis://localhost:${toString config.services.redis.servers.gitlab.port}/";
-        defaultText = literalExpression ''redis://localhost:''${toString config.services.redis.servers.gitlab.port}/'';
-        description = lib.mdDoc "Redis URL for all GitLab services except gitlab-shell";
+        default = "unix:/run/gitlab/redis.sock";
+        example = "redis://localhost:6379/";
+        description = lib.mdDoc "Redis URL for all GitLab services.";
       };
 
       extraGitlabRb = mkOption {
@@ -867,8 +882,41 @@ in {
         };
       };
 
+      workhorse.config = mkOption {
+        type = toml.type;
+        default = {};
+        example = literalExpression ''
+          {
+            object_storage.provider = "AWS";
+            object_storage.s3 = {
+              aws_access_key_id = "AKIAXXXXXXXXXXXXXXXX";
+              aws_secret_access_key = { _secret = "/var/keys/aws_secret_access_key"; };
+            };
+          };
+        '';
+        description = lib.mdDoc ''
+          Configuration options to add to Workhorse's configuration
+          file.
+
+          See
+          <https://gitlab.com/gitlab-org/gitlab/-/blob/master/workhorse/config.toml.example>
+          and
+          <https://docs.gitlab.com/ee/development/workhorse/configuration.html>
+          for examples and option documentation.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute `_secret` - a string pointing
+          to a file containing the value the option should be set
+          to. See the example to get a better picture of this: in the
+          resulting configuration file, the
+          `object_storage.s3.aws_secret_access_key` key will be set to
+          the contents of the {file}`/var/keys/aws_secret_access_key`
+          file.
+        '';
+      };
+
       extraConfig = mkOption {
-        type = types.attrs;
+        type = yaml.type;
         default = {};
         example = literalExpression ''
           {
@@ -972,8 +1020,9 @@ in {
     # Redis is required for the sidekiq queue runner.
     services.redis.servers.gitlab = {
       enable = mkDefault true;
-      port = mkDefault 31636;
-      bind = mkDefault "127.0.0.1";
+      user = mkDefault cfg.user;
+      unixSocket = mkDefault "/run/gitlab/redis.sock";
+      unixSocketPerm = mkDefault 770;
     };
 
     # We use postgres as the main data store.
@@ -1062,6 +1111,7 @@ in {
     # Ensure Docker Registry launches after the certificate generation job
     systemd.services.docker-registry = optionalAttrs cfg.registry.enable {
       wants = [ "gitlab-registry-cert.service" ];
+      after = [ "gitlab-registry-cert.service" ];
     };
 
     # Enable Docker Registry, if GitLab-Container Registry is enabled
@@ -1115,6 +1165,7 @@ in {
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/packages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
@@ -1168,6 +1219,7 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
+          ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
 
           ${cfg.packages.gitlab-shell}/bin/install
 
@@ -1357,6 +1409,7 @@ in {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
+        remarshal
         exiftool
         gitPackage
         gnutar
@@ -1371,6 +1424,17 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
+          set -o errexit -o pipefail -o nounset
+          shopt -s dotglob nullglob inherit_errexit
+
+          ${utils.genJqSecretsReplacementSnippet
+              cfg.workhorse.config
+              "${cfg.statePath}/config/gitlab-workhorse.json"}
+
+          json2toml "${cfg.statePath}/config/gitlab-workhorse.json" "${cfg.statePath}/config/gitlab-workhorse.toml"
+          rm "${cfg.statePath}/config/gitlab-workhorse.json"
+        '';
         ExecStart =
           "${cfg.packages.gitlab-workhorse}/bin/workhorse "
           + "-listenUmask 0 "
@@ -1378,6 +1442,7 @@ in {
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
+          + "-config ${cfg.statePath}/config/gitlab-workhorse.toml "
           + "-secretPath ${cfg.statePath}/.gitlab_workhorse_secret";
       };
     };

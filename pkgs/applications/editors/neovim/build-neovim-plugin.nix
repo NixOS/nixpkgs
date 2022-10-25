@@ -1,8 +1,6 @@
 { lib
 , stdenv
-, buildVimPluginFrom2Nix
-, buildLuarocksPackage
-, lua51Packages
+, lua
 , toVimPlugin
 }:
 let
@@ -19,16 +17,21 @@ in
     , ...
   }@attrs:
     let
-      originalLuaDrv = lua51Packages.${luaAttr};
-      luaDrv = lua51Packages.luaLib.overrideLuarocks originalLuaDrv (drv: {
+      originalLuaDrv = lua.pkgs.${luaAttr};
+
+      luaDrv = (lua.pkgs.luaLib.overrideLuarocks originalLuaDrv (drv: {
         extraConfig = ''
           -- to create a flat hierarchy
           lua_modules_path = "lua"
         '';
+        })).overrideAttrs (drv: {
+        version = attrs.version;
+        rockspecVersion = drv.rockspecVersion;
       });
-      finalDrv = toVimPlugin (luaDrv.overrideAttrs(oa: {
+
+      finalDrv = toVimPlugin (luaDrv.overrideAttrs(oa: attrs // {
           nativeBuildInputs = oa.nativeBuildInputs or [] ++ [
-            lua51Packages.luarocksMoveDataFolder
+            lua.pkgs.luarocksMoveDataFolder
           ];
         }));
     in

@@ -28,9 +28,9 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 # executable sage. No tests are run yet and no documentation is built.
 
 let
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pythonEnv # for patchShebangs
-    pkg-config
     blas lapack
     singular
     three
@@ -72,7 +72,7 @@ let
       []
     );
 
-  allInputs = lib.remove null (buildInputs ++ pythonEnv.extraLibs ++ [ makeWrapper ]);
+  allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs ++ [ makeWrapper ]);
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   pname = "sage-with-env";
   src = sage-env.lib.src;
 
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
 
   configurePhase = "#do nothing";
 

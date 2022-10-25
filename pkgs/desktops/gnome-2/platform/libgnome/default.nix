@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra-gtk2 libtool ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ popt zlib GConf gnome_vfs libcanberra-gtk2 libtool ];
   propagatedBuildInputs = [ glib libbonobo libogg ];
 }

@@ -53,6 +53,9 @@ in stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/postfix/raw/2f9d42453e67ebc43f786d98262a249037f80a77/f/postfix-3.6.2-glibc-234-build-fix.patch";
       sha256 = "sha256-xRUL5gaoIt6HagGlhsGwvwrAfYvzMgydsltYMWvl9BI=";
     })
+
+    # linux-6 compatibility
+    ./linux-6.patch
   ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

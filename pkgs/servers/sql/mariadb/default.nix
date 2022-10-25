@@ -44,7 +44,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
     ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
     ++ (if (lib.versionOlder version "10.6")
       then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
@@ -106,7 +106,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
   postInstall = ''
     # Remove Development components. Need to use libmysqlclient.
     rm "$out"/lib/mysql/plugin/daemon_example.ini
-    rm "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
+    rm "$out"/lib/{libmariadb.a,libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
     rm -f "$out"/bin/{mariadb-config,mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
@@ -203,15 +203,15 @@ in stdenv.mkDerivation (common // {
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
     "-DWITHOUT_TOKUDB=1"
-  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
     "-DWITH_NUMA=ON"
-  ] ++ lib.optional (!withStorageMroonga) [
+  ] ++ lib.optionals (!withStorageMroonga) [
     "-DWITHOUT_MROONGA=1"
-  ] ++ lib.optional (!withStorageRocks) [
+  ] ++ lib.optionals (!withStorageRocks) [
     "-DWITHOUT_ROCKSDB=1"
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
     "-DWITH_ROCKSDB_JEMALLOC=ON"
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DWITH_JEMALLOC=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DPLUGIN_AUTH_PAM=NO"

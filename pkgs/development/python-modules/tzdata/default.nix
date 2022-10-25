@@ -25,7 +25,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-subtests
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 

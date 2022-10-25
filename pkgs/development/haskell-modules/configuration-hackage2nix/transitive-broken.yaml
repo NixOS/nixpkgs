@@ -822,6 +822,8 @@ dont-distribute-packages:
  - boots-cloud
  - boots-web
  - borel
+ - box-csv
+ - box-socket
  - breakout
  - bricks
  - bricks-internal-test
@@ -1168,7 +1170,6 @@ dont-distribute-packages:
  - dep-t-advice
  - dep-t-dynamic
  - dep-t-value
- - dependent-literals
  - dependent-literals-plugin
  - dependent-state
  - depends
@@ -1372,6 +1373,7 @@ dont-distribute-packages:
  - fallingblocks
  - family-tree
  - fast-bech32
+ - fastcdc
  - fastirc
  - fastly
  - fastparser
@@ -1414,7 +1416,6 @@ dont-distribute-packages:
  - filepath-io-access
  - filesystem-abstractions
  - filesystem-enumerator
- - fin-int
  - find-clumpiness
  - findhttp
  - finitary-derive
@@ -1504,6 +1505,7 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
+ - gearhash
  - gedcom
  - geek
  - geek-server
@@ -1982,6 +1984,11 @@ dont-distribute-packages:
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
+ - hasql-streams-conduit
+ - hasql-streams-core
+ - hasql-streams-pipes
+ - hasql-streams-streaming
+ - hasql-streams-streamly
  - hasqlator-mysql
  - hasqly-mysql
  - hastache-aeson
@@ -2219,7 +2226,6 @@ dont-distribute-packages:
  - hws
  - hwsl2-bytevector
  - hwsl2-reducers
- - hxmppc
  - hxournal
  - hxt-binary
  - hxt-filter
@@ -2803,7 +2809,6 @@ dont-distribute-packages:
  - network-minihttp
  - network-netpacket
  - network-pgi
- - network-protocol-xmpp
  - network-rpca
  - network-stream
  - network-topic-models
@@ -2926,7 +2931,6 @@ dont-distribute-packages:
  - peparser
  - perdure
  - perf-analysis
- - perf_0_10_0
  - perfecthash
  - periodic-client
  - periodic-client-exe
@@ -3029,6 +3033,7 @@ dont-distribute-packages:
  - pred-trie
  - prednote-test
  - prefork
+ - prelate
  - presto-hdbc
  - preview
  - primal-memory
@@ -3255,6 +3260,10 @@ dont-distribute-packages:
  - rfc-redis
  - rfc-servant
  - rhythm-game-tutorial
+ - ribosome
+ - ribosome-app
+ - ribosome-host
+ - ribosome-host-test
  - ribosome-root
  - ridley-extras
  - rio-process-pool
@@ -3322,10 +3331,8 @@ dont-distribute-packages:
  - sarsi
  - sasl
  - sat-micro-hs
- - satchmo-backends
  - satchmo-examples
  - satchmo-funsat
- - satchmo-minisat
  - satchmo-toysat
  - sauron
  - sc2-lowlevel

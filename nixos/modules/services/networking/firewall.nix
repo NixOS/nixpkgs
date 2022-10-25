@@ -16,7 +16,7 @@
      certain packets anyway, you can insert rules at the start of
      this chain.
 
-   - ‘nixos-fw-rpfilter’ is used as the main chain in the raw table,
+   - ‘nixos-fw-rpfilter’ is used as the main chain in the mangle table,
      called from the built-in ‘PREROUTING’ chain.  If the kernel
      supports it and `cfg.checkReversePath` is set this chain will
      perform a reverse path filter test.
@@ -109,28 +109,28 @@ let
     ip46tables -N nixos-fw
 
     # Clean up rpfilter rules
-    ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2> /dev/null || true
-    ip46tables -t raw -F nixos-fw-rpfilter 2> /dev/null || true
-    ip46tables -t raw -X nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -D PREROUTING -j nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -F nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -X nixos-fw-rpfilter 2> /dev/null || true
 
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       # Perform a reverse-path test to refuse spoofers
-      # For now, we just drop, as the raw table doesn't have a log-refuse yet
-      ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
-      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+      # For now, we just drop, as the mangle table doesn't have a log-refuse yet
+      ip46tables -t mangle -N nixos-fw-rpfilter 2> /dev/null || true
+      ip46tables -t mangle -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCP4 client without first having to use APIPA
-      iptables -t raw -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
+      iptables -t mangle -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
 
       # Allows this host to act as a DHCPv4 server
-      iptables -t raw -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
+      iptables -t mangle -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
 
       ${optionalString cfg.logReversePathDrops ''
-        ip46tables -t raw -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
+        ip46tables -t mangle -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
       ''}
-      ip46tables -t raw -A nixos-fw-rpfilter -j DROP
+      ip46tables -t mangle -A nixos-fw-rpfilter -j DROP
 
-      ip46tables -t raw -A PREROUTING -j nixos-fw-rpfilter
+      ip46tables -t mangle -A PREROUTING -j nixos-fw-rpfilter
     ''}
 
     # Accept all traffic on the trusted interfaces.
@@ -218,7 +218,7 @@ let
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
-      ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
+      ip46tables -t mangle -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
     ''}
 
     ${cfg.extraStopCommands}

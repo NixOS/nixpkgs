@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "unconvert";
-  version = "unstable-2020-02-28";
+  version = "unstable-2022-09-18";
 
   src = fetchFromGitHub {
     owner = "mdempsky";
     repo = "unconvert";
-    rev = "95ecdbfc0b5f3e65790c43c77874ee5357ad8a8f";
-    sha256 = "sha256-jC2hbpGJeW9TBWIWdeLeGaoNdsm/gOKY4oaDsO5Fwlw=";
+    rev = "3f84926d692329767c21c2aef3dfb7889c956832";
+    sha256 = "sha256-vcRHriFCT5b8SKjtRSg+kZDcCAKySC1cKVq+FMZb+9M=";
   };
 
-  vendorSha256 = "sha256-HmksSYA4974w+J/7PkMKEkXEfIkldj+kVywvsfLgE38=";
+  vendorSha256 = "sha256-p77mLvGtohmC8J+bqqkM5kqc1pMPcFx7GhXOZ4q4jeM=";
 
   ldflags = [ "-s" "-w" ];
 

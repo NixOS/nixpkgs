@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
     platforms = platforms.all;
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 libssh2 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

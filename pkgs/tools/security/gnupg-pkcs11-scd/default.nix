@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Kb8p53gPkhxtOhH2COKwSDwbtRDFr6hHMJAkndV8Ukk=";
   };
 
-  buildInputs = [ pkcs11helper pkg-config openssl ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pkcs11helper openssl ];
 
   configureFlags = [
     "--with-libgpg-error-prefix=${libgpg-error.dev}"

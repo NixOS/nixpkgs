@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , installShellFiles
 , pbr
@@ -21,7 +21,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-manilaclient";
   version = "4.1.0";
   format = "setuptools";

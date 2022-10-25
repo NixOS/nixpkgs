@@ -49,10 +49,10 @@
       elpaBuild {
         pname = "annotate";
         ename = "annotate";
-        version = "1.7.2";
+        version = "1.8.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/annotate-1.7.2.tar";
-          sha256 = "0vdpv8k1cvkn3cvsnxqv299gvp470ga2pgmfvdqi7k1vzypgpp57";
+          url = "https://elpa.nongnu.org/nongnu/annotate-1.8.0.tar";
+          sha256 = "169cav480g2fm3z7d5dixrng2h8fv39sa9n066b79cb573p4bbcp";
         };
         packageRequires = [];
         meta = {
@@ -1208,10 +1208,10 @@
       elpaBuild {
         pname = "helm";
         ename = "helm";
-        version = "3.8.7";
+        version = "3.8.8";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-3.8.7.tar";
-          sha256 = "1n0m061amrzm0xpgqy2mp9vrk2960gqhl5hi6c1smcmm7nxqwz12";
+          url = "https://elpa.nongnu.org/nongnu/helm-3.8.8.tar";
+          sha256 = "1qsiw8gswjwfp79n7g103db7xsmk36lq6ln558ipn4cw0fpnq1sc";
         };
         packageRequires = [ helm-core popup ];
         meta = {
@@ -1223,10 +1223,10 @@
       elpaBuild {
         pname = "helm-core";
         ename = "helm-core";
-        version = "3.8.7";
+        version = "3.8.8";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.7.tar";
-          sha256 = "1sak74v3gg34zzlbbgvlzvg7gw32fhcbxp5kigigmwvvbj5imgs7";
+          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.8.tar";
+          sha256 = "0wg21425ki8n8d954lkmlyci6awwwv53jg4gn5z495vh27qiv3qn";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -2358,6 +2358,21 @@
           license = lib.licenses.free;
         };
       }) {};
+    sweeprolog = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "sweeprolog";
+        ename = "sweeprolog";
+        version = "0.4.5";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.4.5.tar";
+          sha256 = "17dbrn2yvc6ib4dig410kbmvpwp4iz6q9hx6g0mk3vxqjrmgwyls";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/sweeprolog.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     swift-mode = callPackage ({ elpaBuild, emacs, fetchurl, lib, seq }:
       elpaBuild {
         pname = "swift-mode";
@@ -2518,10 +2533,10 @@
       elpaBuild {
         pname = "tuareg";
         ename = "tuareg";
-        version = "2.3.0";
+        version = "3.0.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/tuareg-2.3.0.tar";
-          sha256 = "0a24q64yk4bbgsvm56j1y68zs9yi25qyl83xydx3ff75sk27f1yb";
+          url = "https://elpa.nongnu.org/nongnu/tuareg-3.0.1.tar";
+          sha256 = "0y98gwnbrcj3csd9yilk1izgzmp1ds5dh3y1bxgb2fzrjir3i13f";
         };
         packageRequires = [ caml emacs ];
         meta = {

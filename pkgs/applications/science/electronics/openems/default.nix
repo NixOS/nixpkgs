@@ -10,7 +10,6 @@
 , zlib
 , cmake
 , octave
-, gl2ps
 , mpi
 , withQcsxcad ? true
 , withMPI ? false

@@ -55,6 +55,11 @@ let
     check = builtins.isAttrs;
   };
 
+  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
+  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
+  # is defined elsewhere does not seem feasible.
+  constructedByMe = !opt.pkgs.isDefined;
+
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
@@ -358,7 +363,7 @@ in
         }
       )
       {
-        assertion = hasPlatform -> legacyOptionsDefined == [];
+        assertion = constructedByMe -> hasPlatform -> legacyOptionsDefined == [];
         message = ''
           Your system configures nixpkgs with the platform parameter${optionalString hasBuildPlatform "s"}:
           ${hostPlatformLine

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "5.2.3";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-DER6PBYXmZRgwFNVU5rpn87HrXMR+HnQf8cwHioUals=";
+    hash = "sha256-l14+l8FkiFmGuRZ9dyD/PEYH9nHVRRg1vMXMnVhg3K4=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Source package of the Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.

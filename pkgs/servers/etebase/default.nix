@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonPackage, aioredis, aiofiles, django_3
 , fastapi, msgpack, pynacl, typing-extensions
-, withLdap ? true, ldap }:
+, withLdap ? true, python-ldap }:
 
 buildPythonPackage rec {
   pname = "etebase-server";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     msgpack
     pynacl
     typing-extensions
-  ] ++ lib.optional withLdap ldap;
+  ] ++ lib.optional withLdap python-ldap;
 
   installPhase = ''
     mkdir -p $out/bin $out/lib

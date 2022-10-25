@@ -1,36 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-
-# Python dependencies
+, matplotlib
 , numpy
 , openpyxl
 , pandas
 , pandas-stubs
+, plotly
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 , requests
 , scikit-learn
 , tenacity
 , tqdm
+, typing-extensions
 , wandb
-
-# Check dependencies
-, pytest-mock
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.23.0";
+  version = "0.24.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7.1";
 
-  # Use GitHub source since PyPi source does not include tests
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    sha256 = "sha256-VH1XR2FocRX5AYpCruAKwQUXjXqvdJsVwKdtot5Bo+Y=";
+    hash = "sha256-0bXJoEq8FHRNaFMjncIwDbJROtFz/IJ4gD+LfvmtFUg=";
   };
 
   propagatedBuildInputs = [
@@ -39,25 +38,49 @@ buildPythonPackage rec {
     pandas
     pandas-stubs
     requests
-    scikit-learn
-    tenacity
     tqdm
-    wandb
+    typing-extensions
   ];
 
-  pythonImportsCheck = [ "openai" ];
-  checkInputs = [ pytestCheckHook pytest-mock ];
-  pytestFlagsArray = [ "openai/tests" ];
+  passthru.optional-dependencies = {
+    wandb = [
+      wandb
+    ];
+    embeddings = [
+      matplotlib
+      plotly
+      scikit-learn
+      tenacity
+    ];
+  };
+
+  pythonImportsCheck = [
+    "openai"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  pytestFlagsArray = [
+    "openai/tests"
+  ];
+
   OPENAI_API_KEY = "sk-foo";
+
   disabledTestPaths = [
-    "openai/tests/test_endpoints.py" # requires a real API key
+    # Requires a real API key
+    "openai/tests/test_endpoints.py"
+    # openai: command not found
     "openai/tests/test_file_cli.py"
+    "openai/tests/test_long_examples_validator.py"
   ];
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
     license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    maintainers = with maintainers; [ malo ];
   };
 }

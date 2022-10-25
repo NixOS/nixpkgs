@@ -70,6 +70,7 @@ in
             filenames = builtins.concatStringsSep " " [
               "pyproject.toml"
               "README.md"
+              "LICENSE"
             ];
           };
         } ./fixup-hook.sh

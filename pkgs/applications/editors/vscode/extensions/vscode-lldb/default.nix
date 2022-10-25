@@ -45,7 +45,8 @@ let
     inherit (stdenv.hostPlatform) system;
   }).nodeDependencies.override (old: {
     inherit src version;
-    buildInputs = [pkg-config libsecret];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [libsecret];
     dontNpmInstall = true;
   }));
 

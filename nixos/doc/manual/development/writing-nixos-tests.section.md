@@ -22,12 +22,12 @@ A NixOS test is a module that has the following structure:
 ```
 
 We refer to the whole test above as a test module, whereas the values
-in [`nodes.<name>`](#opt-nodes) are NixOS modules themselves.
+in [`nodes.<name>`](#test-opt-nodes) are NixOS modules themselves.
 
-The option [`testScript`](#opt-testScript) is a piece of Python code that executes the
+The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
-the option [`nodes`](#opt-nodes).
+the option [`nodes`](#test-opt-nodes).
 
 An example of a single-node test is
 [`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix).
@@ -171,7 +171,7 @@ The following methods are available on machine objects:
     least one will be returned.
 
     ::: {.note}
-    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `get_screen_text`
@@ -180,7 +180,7 @@ The following methods are available on machine objects:
     machine\'s screen using optical character recognition.
 
     ::: {.note}
-    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `send_monitor_command`
@@ -291,7 +291,7 @@ The following methods are available on machine objects:
     `get_screen_text` and `get_screen_text_variants`).
 
     ::: {.note}
-    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `wait_for_console_text`

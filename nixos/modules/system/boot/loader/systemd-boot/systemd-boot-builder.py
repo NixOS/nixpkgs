@@ -175,22 +175,22 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
+    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
+        if rex_profile.match(path):
+            prof = rex_profile.sub(r"\1", path)
+        else:
+            prof = None
         try:
-            if rex_profile.match(path):
-                prof = rex_profile.sub(r"\1", path)
-            else:
-                prof = "system"
             gen_number = int(rex_generation.sub(r"\1", path))
-            if not (prof, gen_number) in gens:
-                os.unlink(path)
         except ValueError:
-            pass
+            continue
+        if not (prof, gen_number, None) in gens:
+            os.unlink(path)
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)

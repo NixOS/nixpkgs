@@ -15,6 +15,7 @@
   <xsl:param name="documentType" />
   <xsl:param name="program" />
   <xsl:param name="variablelistId" />
+  <xsl:param name="optionIdPrefix" />
 
 
   <xsl:template match="/expr/list">
@@ -36,11 +37,11 @@
       <xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace"><xsl:value-of select="$variablelistId"/></xsl:attribute>
         <xsl:for-each select="attrs">
           <xsl:variable name="id" select="
-            concat('opt-',
+            concat($optionIdPrefix,
               translate(
                 attr[@name = 'name']/string/@value,
-                '*&lt; >[]:',
-                '_______'
+                '*&lt; >[]:&quot;',
+                '________'
             ))" />
           <varlistentry>
             <term xlink:href="#{$id}">

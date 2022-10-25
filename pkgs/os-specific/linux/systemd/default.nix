@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -27,6 +28,7 @@
 , util-linux
 , kbd
 , kmod
+, libxcrypt
 
   # Optional dependencies
 , pam
@@ -92,7 +94,7 @@
 , withOomd ? true
 , withPCRE2 ? true
 , withPolkit ? true
-, withPortabled ? false
+, withPortabled ? !stdenv.hostPlatform.isMusl
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
@@ -120,7 +122,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.4";
+  version = "251.5";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -137,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-lfG6flT1k8LZBAdDK+cF9RjmJMkHMJquMjQK3MINFd8=";
+    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -163,6 +165,7 @@ stdenv.mkDerivation {
     ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
+    ./0018-core-don-t-taint-on-unmerged-usr.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -331,6 +334,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -359,6 +363,7 @@ stdenv.mkDerivation {
       acl
       audit
       kmod
+      libxcrypt
       libcap
       libidn2
       libuuid
@@ -571,21 +576,22 @@ stdenv.mkDerivation {
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where, ignore ? [] }:
+      mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
-      let
-        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
-      in ''
-        set +e
-        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-        set -e
-        if [[ -n "$search" ]]; then
-          echo "Not all references to '${search}' have been replaced. Found the following matches:"
-          echo "$search"
-          exit 1
-        fi
-      '';
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
+        let
+          ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
+        in
+        ''
+          set +e
+          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+          set -e
+          if [[ -n "$search" ]]; then
+            echo "Not all references to '${search}' have been replaced. Found the following matches:"
+            echo "$search"
+            exit 1
+          fi
+        '';
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -664,7 +670,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup = lib.optionalString withCryptsetup ''
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
@@ -677,7 +690,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;

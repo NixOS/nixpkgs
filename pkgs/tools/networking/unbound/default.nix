@@ -48,20 +48,20 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.2";
+  version = "1.17.0";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-LjLyg4IMJMUcod2K/s/bdHxzhaE3q+hlyZ20sldANYE=";
+    hash = "sha256-3LyV14kdn5EMZuTtyfHy/eTeou7Bjjr591rtRKAvE0E=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
-    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"

@@ -2,11 +2,11 @@
 , dataPath ? "/var/lib/snappymail" }:
 stdenv.mkDerivation rec {
   pname = "snappymail";
-  version = "2.18.3";
+  version = "2.18.6";
 
   src = fetchurl {
     url = "https://github.com/the-djmaze/snappymail/releases/download/v${version}/snappymail-${version}.tar.gz";
-    sha256 = "sha256-QAdR7fhF05taVtoUqqbw6EELnSDwRtX2O43VN8p6L7Q=";
+    sha256 = "sha256-BoRumpU9HjkNDr113LvIGmpsLlRJtAmGhSBcUoGO8Vc=";
   };
 
   sourceRoot = "snappymail";

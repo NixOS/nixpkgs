@@ -9,7 +9,7 @@
 , sqlcipher
 
 # Needed for running tests:
-, qtbase, xvfb-run
+, xvfb-run
 
 , python3
 }:

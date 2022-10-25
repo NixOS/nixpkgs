@@ -33,6 +33,8 @@ buildGoModule rec {
       --zsh <($out/bin/cmctl completion zsh)
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A CLI tool for managing cert-manager service on Kubernetes clusters";
     longDescription = ''
@@ -48,6 +50,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/cert-manager/cert-manager";
     license = licenses.asl20;
     homepage = "https://cert-manager.io/";
-    maintainers = with maintainers; [ joshvanl superherointj ];
+    maintainers = with maintainers; [ joshvanl ];
   };
 }

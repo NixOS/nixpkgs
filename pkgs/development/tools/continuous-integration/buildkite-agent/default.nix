@@ -3,13 +3,13 @@
   nixosTests }:
 buildGoModule rec {
   pname = "buildkite-agent";
-  version = "3.39.0";
+  version = "3.39.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "sha256-wEi14Iax155S2tr+Qxa3figXPDKKIdFcwDYv/nsLScQ=";
+    sha256 = "sha256-sUBH0Oz1yeOgY5pmzM8XLoQ9vPiPODC6zeOO2n3meXs=";
   };
 
   vendorSha256 = "sha256-RD8BXwzrqHwgxdjpL++a9pIvzD9rfSTqguRVh+CbbnE=";

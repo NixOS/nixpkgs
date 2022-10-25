@@ -32,7 +32,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  setupPyBuildFlags = "-I${openems}/include -L${openems}/lib -R${openems}/lib";
+  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
 
   meta = with lib; {
     description = "Python interface to CSXCAD";

@@ -3,6 +3,8 @@
 , fetchRepoProject
 , writeScript
 , cmake
+, directx-shader-compiler
+, glslang
 , ninja
 , patchelf
 , perl
@@ -22,13 +24,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2022.Q3.3";
+  version = "2022.Q3.5";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "jbx6R6tDaVWD5jLVW2IiNaw+VwFkQ9EG2FvpAj/bfZ4=";
+    sha256 = "YY9/njuzGONqAtbM54OGGvC1V73JyL+IHkLSZs4JSYs=";
   };
 
   buildInputs = [
@@ -49,6 +51,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    directx-shader-compiler
+    glslang
     ninja
     patchelf
     perl

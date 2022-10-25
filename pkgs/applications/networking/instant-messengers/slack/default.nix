@@ -47,8 +47,8 @@ let
   x86_64-darwin-version = "4.28.182";
   x86_64-darwin-sha256 = "0x0zc45k0jh0hivgjymcxnnwc2lwyfq68rw39lbxp4i1ir2sbnxg";
 
-  x86_64-linux-version = "4.28.171";
-  x86_64-linux-sha256 = "sha256-rsHX/NLLGR0XZsg3Cc6GjNK6rSc9UmM2XkfjqwsJZV4=";
+  x86_64-linux-version = "4.28.184";
+  x86_64-linux-sha256 = "sha256-qAc9rHJbM7lmqNxOcOSnqnuib5zJ0Ry3hAGri8DKIlo=";
 
   aarch64-darwin-version = "4.28.182";
   aarch64-darwin-sha256 = "0bc8lhmpm0310gh1w9xkb8i1cpldchm4b4mzsr9h0mhvljxmvlyf";
@@ -194,10 +194,6 @@ let
       runHook preInstall
       mkdir -p $out/Applications/Slack.app
       cp -R . $out/Applications/Slack.app
-    '' + lib.optionalString (!stdenv.isAarch64) ''
-      # on aarch64-darwin we get: Could not write domain com.tinyspeck.slackmacgap; exiting
-      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -Bool YES
-    '' + ''
       runHook postInstall
     '';
   };

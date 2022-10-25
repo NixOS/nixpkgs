@@ -27,6 +27,7 @@
 , ApplicationServices
 , AppKit
 , Carbon
+, removeReferencesTo
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
@@ -80,6 +81,7 @@ rustPlatform.buildRustPackage rec {
     python2 # skia-bindings
     python3 # rust-xcb
     llvmPackages.clang # skia
+    removeReferencesTo
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   # All tests passes but at the end cargo prints for unknown reason:
@@ -115,6 +117,10 @@ rustPlatform.buildRustPackage rec {
       xorg.libXi
     ] ++ lib.optionals enableWayland [ wayland ]);
   in ''
+      # library skia embeds the path to its sources
+      remove-references-to -t "$SKIA_SOURCE_DIR" \
+        $out/bin/neovide
+
       wrapProgram $out/bin/neovide \
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
@@ -127,6 +133,8 @@ rustPlatform.buildRustPackage rec {
     install -m444 -Dt $out/share/icons/hicolor/scalable/apps assets/neovide.svg
     install -m444 -Dt $out/share/applications assets/neovide.desktop
   '';
+
+  disallowedReferences = [ SKIA_SOURCE_DIR ];
 
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";

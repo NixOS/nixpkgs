@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python39
+, python39, fetchpatch
 }:
 
 let
@@ -105,6 +105,16 @@ python3'.pkgs.buildPythonPackage rec {
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
     pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt
+  ];
+
+  patches = [
+    # Apply https://github.com/privacyidea/privacyidea/pull/3304, fixes
+    # `Exceeds the limit (4300) for integer string conversion` in the tests,
+    # see https://hydra.nixos.org/build/192932057
+    (fetchpatch {
+      url = "https://github.com/privacyidea/privacyidea/commit/0e28f36c0b3291a361669f4a3a77c294f4564475.patch";
+      sha256 = "sha256-QqcO8bkt+I2JKce/xk2ZhzEaLZ3E4uZ4x5W9Kk0pMQQ=";
+    })
   ];
 
   passthru.tests = { inherit (nixosTests) privacyidea; };

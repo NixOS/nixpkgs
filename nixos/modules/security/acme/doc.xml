@@ -237,8 +237,8 @@ services.bind = {
 
 <programlisting>
 systemd.services.dns-rfc2136-conf = {
-  requiredBy = ["acme-example.com.service", "bind.service"];
-  before = ["acme-example.com.service", "bind.service"];
+  requiredBy = ["acme-example.com.service" "bind.service"];
+  before = ["acme-example.com.service" "bind.service"];
   unitConfig = {
     ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
   };
@@ -249,18 +249,19 @@ systemd.services.dns-rfc2136-conf = {
   path = [ pkgs.bind ];
   script = ''
     mkdir -p /var/lib/secrets
+    chmod 755 /var/lib/secrets
     tsig-keygen rfc2136key.example.com &gt; /var/lib/secrets/dnskeys.conf
     chown named:root /var/lib/secrets/dnskeys.conf
     chmod 400 /var/lib/secrets/dnskeys.conf
 
-    # Copy the secret value from the dnskeys.conf, and put it in
-    # RFC2136_TSIG_SECRET below
+    # extract secret value from the dnskeys.conf
+    while read x y; do if [ "$x" = "secret" ]; then secret="''${y:1:''${#y}-3}"; fi; done &lt; /var/lib/secrets/dnskeys.conf
 
     cat &gt; /var/lib/secrets/certs.secret &lt;&lt; EOF
     RFC2136_NAMESERVER='127.0.0.1:53'
     RFC2136_TSIG_ALGORITHM='hmac-sha256.'
     RFC2136_TSIG_KEY='rfc2136key.example.com'
-    RFC2136_TSIG_SECRET='your secret key'
+    RFC2136_TSIG_SECRET='$secret'
     EOF
     chmod 400 /var/lib/secrets/certs.secret
   '';

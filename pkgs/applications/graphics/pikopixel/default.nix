@@ -1,7 +1,6 @@
 { lib
 , fetchurl
 , gnustep
-, gcc
 , llvmPackages_9
 }:
 

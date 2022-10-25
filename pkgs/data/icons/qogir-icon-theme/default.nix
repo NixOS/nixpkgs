@@ -13,18 +13,18 @@ let
   pname = "qogir-icon-theme";
 
 in
-lib.checkListOfEnum "${pname}: color variants" [ "default" "dark" "all" ] colorVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] colorVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "all" ] themeVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-07-20";
+  version = "2022-10-08";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-I+eojCTR3fXcp7v5Bdie9vstmJja9HB71aQSF5jLDD4=";
+    sha256 = "sha256-BZhZyPnmiS5mxJp4/QnE7bTynB/cZ0QsUKFMhyd/Ox4=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

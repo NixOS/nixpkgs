@@ -450,6 +450,7 @@ broken-packages:
   - bottom
   - boundingboxes
   - bowntz
+  - box
   - bpath
   - BPS
   - braid
@@ -1340,7 +1341,6 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
-  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding-gloss-example
@@ -1768,7 +1768,6 @@ broken-packages:
   - glue
   - gluturtle
   - g-npm
-  - gnuidn
   - goa
   - goal-core
   - goatee
@@ -2000,7 +1999,6 @@ broken-packages:
   - haskell-igraph
   - haskell-import-graph
   - haskell-in-space
-  - haskellish
   - haskell-kubernetes
   - HaskellLM
   - haskell-lsp
@@ -2063,6 +2061,7 @@ broken-packages:
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -3906,6 +3905,7 @@ broken-packages:
   - platinum-parsing
   - PlayingCards
   - playlists
+  - plex
   - plist
   - plist-buddy
   - plivo
@@ -3963,6 +3963,7 @@ broken-packages:
   - PortFusion
   - portray-pretty
   - portray-prettyprinter
+  - posit
   - positron
   - posix-acl
   - posix-api
@@ -4220,7 +4221,6 @@ broken-packages:
   - reanimate-svg
   - reasonable-lens
   - reason-export
-  - rec-def
   - record
   - record-encode
   - record-impl
@@ -4429,7 +4429,8 @@ broken-packages:
   - sandman
   - sarasvati
   - sat
-  - satchmo
+  - satchmo-backends
+  - satchmo-minisat
   - Saturnin
   - satyros
   - savage
@@ -4472,6 +4473,7 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
+  - SDL-mpeg
   - sdr
   - seacat
   - seakale
@@ -4656,7 +4658,6 @@ broken-packages:
   - singnal
   - singular-factory
   - sink
-  - sint
   - sitepipe
   - sixfiguregroup
   - sized-grid
@@ -4727,7 +4728,6 @@ broken-packages:
   - snaplet-mandrill
   - snaplet-mongodb-minimalistic
   - snaplet-postgresql-simple
-  - snaplet-purescript
   - snaplet-redis
   - snaplet-sass
   - snaplet-scoped-session
@@ -4944,7 +4944,6 @@ broken-packages:
   - supervisors
   - supplemented
   - surjective
-  - sv2v
   - sv-core
   - SVD2HS
   - svfactor
@@ -5033,6 +5032,7 @@ broken-packages:
   - tasty-mgolden
   - tasty-stats
   - tasty-test-vector
+  - TastyTLT
   - TBC
   - TBit
   - tcache-AWS
@@ -5180,6 +5180,7 @@ broken-packages:
   - time-w3c
   - timezone-detect
   - tintin
+  - tinyid
   - TinyLaunchbury
   - tiny-scheduler
   - tinytemplate
@@ -5567,7 +5568,6 @@ broken-packages:
   - web3-ipfs
   - webapi
   - webapp
-  - webauthn
   - WebBits
   - webcloud
   - webcrank

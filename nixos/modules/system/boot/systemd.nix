@@ -151,6 +151,9 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ optionals cfg.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+      "systemd-portabled.service"
     ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"

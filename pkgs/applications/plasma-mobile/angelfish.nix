@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules
@@ -20,8 +19,8 @@
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "22.06"
-, cargoSha256 ? "ckxShWgqGaApYoGQdrRQKCKOsbwUH5QP82x3BNM4Jx8="
+, cargoShaForVersion ? "22.09"
+, cargoSha256 ? "sha256-uxLvAhRV185srZZ0ZMsLRevAyMmajXERPRYotMcnLJA="
 }:
 
 # Guard against incomplete updates.

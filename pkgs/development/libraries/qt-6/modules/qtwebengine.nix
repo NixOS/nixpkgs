@@ -69,7 +69,7 @@
 , enableProprietaryCodecs ? true
 }:
 
-qtModule rec {
+qtModule {
   pname = "qtwebengine";
   qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
@@ -93,6 +93,12 @@ qtModule rec {
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
+
+  patches = [
+    # fixes consistent crashing in github on 6.4.0, can probably remove when there is a patch release
+    # https://codereview.qt-project.org/c/qt/qtwebengine/+/436316
+    ../patches/qtwebengine-fix.patch
+  ];
 
   postPatch = ''
     # Patch Chromium build tools
@@ -221,6 +227,10 @@ qtModule rec {
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  preConfigure = ''
+    export NINJAFLAGS="-j$NIX_BUILD_CORES"
+  '';
 
   postInstall = ''
     # This is required at runtime

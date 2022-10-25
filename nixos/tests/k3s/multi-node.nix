@@ -54,15 +54,15 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           role = "server";
           package = pkgs.k3s;
           clusterInit = true;
-          extraFlags = ''
-            --disable coredns \
-            --disable local-storage \
-            --disable metrics-server \
-            --disable servicelb \
-            --disable traefik \
-            --node-ip 192.168.1.1 \
-            --pause-image test.local/pause:local
-          '';
+          extraFlags = builtins.toString [
+            "--disable" "coredns"
+            "--disable" "local-storage"
+            "--disable" "metrics-server"
+            "--disable" "servicelb"
+            "--disable" "traefik"
+            "--node-ip" "192.168.1.1"
+            "--pause-image" "test.local/pause:local"
+          ];
         };
         networking.firewall.allowedTCPPorts = [ 2379 2380 6443 ];
         networking.firewall.allowedUDPPorts = [ 8472 ];
@@ -84,15 +84,15 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           serverAddr = "https://192.168.1.1:6443";
           clusterInit = false;
-          extraFlags = ''
-            --disable coredns \
-            --disable local-storage \
-            --disable metrics-server \
-            --disable servicelb \
-            --disable traefik \
-            --node-ip 192.168.1.3 \
-            --pause-image test.local/pause:local
-          '';
+          extraFlags = builtins.toString [
+            "--disable" "coredns"
+            "--disable" "local-storage"
+            "--disable" "metrics-server"
+            "--disable" "servicelb"
+            "--disable" "traefik"
+            "--node-ip" "192.168.1.3"
+            "--pause-image" "test.local/pause:local"
+          ];
         };
         networking.firewall.allowedTCPPorts = [ 2379 2380 6443 ];
         networking.firewall.allowedUDPPorts = [ 8472 ];
@@ -112,7 +112,10 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           role = "agent";
           serverAddr = "https://192.168.1.3:6443";
-          extraFlags = "--pause-image test.local/pause:local --node-ip 192.168.1.2";
+          extraFlags = lib.toString [
+            "--pause-image" "test.local/pause:local"
+            "--node-ip" "192.168.1.2"
+          ];
         };
         networking.firewall.allowedTCPPorts = [ 6443 ];
         networking.firewall.allowedUDPPorts = [ 8472 ];
@@ -126,7 +129,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ euank superherointj ];
+      maintainers = [ euank ];
     };
 
     testScript = ''

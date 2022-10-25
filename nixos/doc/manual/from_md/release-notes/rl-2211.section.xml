@@ -13,6 +13,13 @@
     <itemizedlist>
       <listitem>
         <para>
+          GNOME has been upgraded to 43. Please take a look at their
+          <link xlink:href="https://release.gnome.org/43/">Release
+          Notes</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           During cross-compilation, tests are now executed if the test
           suite can be executed by the build platform. This is the case
           when doing “native” cross-compilation where the build and host
@@ -132,6 +139,15 @@
       </listitem>
       <listitem>
         <para>
+          Improved performances of
+          <literal>lib.closePropagation</literal> which was previously
+          quadratic. This is used in e.g.
+          <literal>ghcWithPackages</literal>. Please see backward
+          incompatibilities notes below.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Cinnamon has been updated to 5.4. While at it, the cinnamon
           module now defaults to blueman as bluetooth manager and
           slick-greeter as lightdm greeter to match upstream.
@@ -211,6 +227,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/edneville/please">Please</link>,
+          a Sudo clone written in Rust. Available as
+          <link linkend="opt-security.please.enable">security.please</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
           an SMS alerting tool for the Prometheus Alertmanager.
           Available as
@@ -242,6 +265,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/prymitive/karma">karma</link>,
+          an alert dashboard for Prometheus Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.karma.enable">services.karma</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://languagetool.org/">languagetool</link>,
           a multilingual grammar, style, and spell checker. Available as
           <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
@@ -263,9 +293,23 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
+          notification service. Available as
+          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
           a simple and extensible webmail. Available as
           <link linkend="opt-services.alps.enable">services.alps</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
         </para>
       </listitem>
       <listitem>
@@ -322,6 +366,15 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
@@ -364,6 +417,13 @@
           <link xlink:href="https://listmonk.app">Listmonk</link>, a
           self-hosted newsletter manager. Enable using
           <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -445,6 +505,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openssh</literal> was updated to version 9.1,
+          disabling the generation of DSA keys when using
+          <literal>ssh-keygen -A</literal> as they are insecure. Also,
+          <literal>SetEnv</literal> directives in
+          <literal>ssh_config</literal> and
+          <literal>sshd_config</literal> are now first-match-wins
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
@@ -474,6 +544,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>p4</literal> package now only includes the
+          open-source Perforce Helix Core command-line client and APIs.
+          It no longer installs the unfree Helix Core Server binaries
+          <literal>p4d</literal>, <literal>p4broker</literal>, and
+          <literal>p4p</literal>. To install the Helix Core Server
+          binaries, use the <literal>p4d</literal> package instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coq</literal> package and versioned variants
           starting at <literal>coq_8_14</literal> no longer include
           CoqIDE, which is now available through
@@ -492,7 +572,9 @@
       <listitem>
         <para>
           <literal>pkgs.cosign</literal> does not provide the
-          <literal>cosigned</literal> binary anymore.
+          <literal>cosigned</literal> binary anymore. The
+          <literal>sget</literal> binary has been moved into its own
+          package.
         </para>
       </listitem>
       <listitem>
@@ -529,6 +611,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          10. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/management/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/changelog/#1000">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.closePropagation</literal> now needs that all
+          gathered sets have an <literal>outPath</literal> attribute.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           lemmy module option
           <literal>services.lemmy.settings.database.createLocally</literal>
           moved to
@@ -539,6 +637,35 @@
         <para>
           virtlyst package and <literal>services.virtlyst</literal>
           module removed, due to lack of maintainers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nix.checkConfig</literal> option now fully
+          disables the config check. The new
+          <literal>nix.checkAllErrors</literal> option behaves like
+          <literal>nix.checkConfig</literal> previously did.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>generateOptparseApplicativeCompletions</literal> and
+          <literal>generateOptparseApplicativeCompletion</literal> from
+          <literal>haskell.lib.compose</literal> (and
+          <literal>haskell.lib</literal>) have been deprecated in favor
+          of <literal>generateOptparseApplicativeCompletions</literal>
+          (plural!) as provided by the haskell package sets (so
+          <literal>haskellPackages.generateOptparseApplicativeCompletions</literal>
+          etc.). The latter allows for cross-compilation (by
+          automatically disabling generation of completion in the cross
+          case). For it to work properly you need to make sure that the
+          function comes from the same context as the package you are
+          trying to override, i.e. always use the same package set as
+          your package is coming from or – even better – use
+          <literal>self.generateOptparseApplicativeCompletions</literal>
+          if you are overriding a haskell package set. The old functions
+          are retained for backwards compatibility, but yield are
+          warning.
         </para>
       </listitem>
       <listitem>
@@ -561,6 +688,47 @@
       </listitem>
       <listitem>
         <para>
+          <literal>systemd-networkd</literal> v250 deprecated, renamed,
+          and moved some sections and settings which leads to the
+          following breaking module changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6PrefixDelegationConfig</literal>
+              is renamed to
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpPrefixDelegationConfig</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              no longer accepts the
+              <literal>ForceDHCPv6PDOtherInformation=</literal> setting.
+              Please use the <literal>WithoutRA=</literal> and
+              <literal>UseDelegatedPrefix=</literal> settings in your
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              and the <literal>DHCPv6Client=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              to control when the DHCPv6 client is started and how the
+              delegated prefixes are handled by the DHCPv6 client.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.networkConfig</literal>
+              no longer accepts the <literal>IPv6Token=</literal>
+              setting. Use the <literal>Token=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              instead. The
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6Prefixes.*.ipv6PrefixConfig</literal>
+              now also accepts the <literal>Token=</literal> setting.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>meta.mainProgram</literal> attribute of packages
           in <literal>wineWowPackages</literal> now defaults to
           <literal>&quot;wine64&quot;</literal>.
@@ -575,6 +743,12 @@
       </listitem>
       <listitem>
         <para>
+          The top-level <literal>termonad-with-packages</literal> alias
+          for <literal>termonad</literal> has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
@@ -585,6 +759,12 @@
         <para>
           Neovim can not be configured with plug anymore (still works
           for vim).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default <literal>kops</literal> version is now 1.25.1 and
+          support for 1.22 and older has been dropped.
         </para>
       </listitem>
       <listitem>
@@ -606,6 +786,16 @@
           <literal>luauSupport</literal> overrides, use
           <literal>features</literal> instead, which defaults to
           <literal>[ &quot;lua54&quot; &quot;luau&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.fetchNextcloudApp</literal> has been rewritten
+          to circumvent impurities in e.g. tarballs from GitHub and to
+          make it easier to apply patches. This means that your hashes
+          are out-of-date and the (previously required) attributes
+          <literal>name</literal> and <literal>version</literal> are no
+          longer accepted.
         </para>
       </listitem>
     </itemizedlist>
@@ -661,8 +851,54 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>polymc</literal> package has been removed due to
+          a rogue maintainer. It has been replaced by
+          <literal>prismlauncher</literal>, a fork by the rest of the
+          maintainers. For more details, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/196624">the
+          pull request that made this change</link> and
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">this
+          issue detailing the vulnerability</link>. Users with existing
+          installations should rename
+          <literal>~/.local/share/polymc</literal> to
+          <literal>~/.local/share/PrismLauncher</literal>. The main
+          config file’s path has also moved from
+          <literal>~/.local/share/polymc/polymc.cfg</literal> to
+          <literal>~/.local/share/PrismLauncher/prismlauncher.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.matrix-synapse</literal> systemd unit
           has been hardened.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana</literal> options were converted
+          to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.datasources</literal>
+          and <literal>services.grafana.provision.dashboards</literal>
+          options were converted to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration. They also now support specifying
+          the provisioning YAML file with <literal>path</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.alerting</literal>
+          option was added. It includes suboptions for every
+          alerting-related objects (with the exception of
+          <literal>notifiers</literal>), which means it’s now possible
+          to configure modern Grafana alerting declaratively.
         </para>
       </listitem>
       <listitem>
@@ -682,6 +918,14 @@
           0.8.36 to 2.0.15. See the
           <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
           release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>guake</literal> package has been updated from
+          3.6.3 to 3.9.0, see the
+          <link xlink:href="https://github.com/Guake/guake/releases">changelog</link>
+          for more details.
         </para>
       </listitem>
       <listitem>
@@ -730,6 +974,48 @@
           in the previous release, but udisks2 being enabled by default
           re-enabled it.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nextcloud has been updated to version
+          <emphasis role="strong">25</emphasis>. Additionally the
+          following things have changed for Nextcloud in NixOS:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Nextcloud <emphasis role="strong">&gt;=24</emphasis>,
+              the default PHP version is 8.1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Nextcloud <emphasis role="strong">23</emphasis> has been
+              removed since it will reach its
+              <link xlink:href="https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule/d76576a12a626d53305d480a6065b57cab705d3d">end
+              of life in December 2022</link>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For <literal>system.stateVersion</literal> being
+              <emphasis role="strong">&gt;=22.11</emphasis>, Nextcloud
+              25 will be installed by default. For older versions,
+              Nextcloud 24 will be installed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Please ensure that you only upgrade on major release at a
+              time! Nextcloud doesn’t support upgrades across multiple
+              versions, i.e. an upgrade from
+              <emphasis role="strong">23</emphasis> to
+              <emphasis role="strong">25</emphasis> is only possible
+              when upgrading to <emphasis role="strong">24</emphasis>
+              first.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>

@@ -105,9 +105,11 @@ let
 
     postPatch = ''
       substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '' + lib.optionalString stdenv.isDarwin ''
+      sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
     '';
 
-    postInstall = ''
+    postInstall = lib.optionalString stdenv.isLinux ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
       patchShebangs $out
@@ -119,8 +121,6 @@ let
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
-      # https://github.com/NixOS/nixpkgs/pull/186160#issuecomment-1212635918
-      broken = stdenv.isDarwin;
     };
   };
 

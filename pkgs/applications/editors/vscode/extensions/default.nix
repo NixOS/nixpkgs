@@ -225,8 +225,8 @@ let
         mktplcRef = {
           name = "vscode-apollo";
           publisher = "apollographql";
-          version = "1.19.9";
-          sha256 = "sha256-iJpzNKcuQrfq4Z0LXuadt6OKXelBbDQg/vuc7NJ2I5o=";
+          version = "1.19.11";
+          sha256 = "sha256-EixefDuJiw/p5yAR/UQLK1a1RXJLXlTmOlD34qpAN+U=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/apollographql.vscode-apollo/changelog";
@@ -326,7 +326,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=attilabuti.brainfuck-syntax";
           homepage = "https://github.com/attilabuti/brainfuck-syntax";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -410,7 +410,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=badochov.ocaml-formatter";
           homepage = "https://github.com/badochov/ocamlformatter-vscode";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -585,7 +585,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
           license = licenses.mit;
-          maintainers = with maintainers; [ imgabe superherointj ];
+          maintainers = with maintainers; [ imgabe  ];
         };
       };
 
@@ -673,8 +673,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.2.2";
-          sha256 = "sha256-llalyQXl+k/ugZq+Ti9mApHRqAGu6QyoMP51GtZnRJ4=";
+          version = "2.2.6";
+          sha256 = "sha256-1yZeyLrXuubhKzobWcd00F/CdU824uJDTkB6qlHkJlQ=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -698,8 +698,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.47.0";
-          sha256 = "sha256-KtDJo8rhQXkZtJz93E+J7eNiAIcLk4e5qKDLoR3DoGw=";
+          version = "0.48.1";
+          sha256 = "sha256-3TpZGvas+pfabHayaA6Yd9nOO2MbfXbCvCiTcbja9Vo=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -934,8 +934,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.8.0";
-          sha256 = "sha256-+8lEuQD73w+urAv2Tw0b+q6oQ66+gLgMPe3Luln9cuY=";
+          version = "9.9.0";
+          sha256 = "sha256-Yr7M4HyRNcsBf8YglQLvyZjblMhtkpMP+f9SH8oUav0=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -943,7 +943,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
           homepage = "https://github.com/prettier/prettier-vscode";
           license = licenses.mit;
-          maintainers = with maintainers; [ datafoo superherointj ];
+          maintainers = with maintainers; [ datafoo  ];
         };
       };
 
@@ -1134,7 +1134,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gencer.html-slim-scss-css-class-completion";
           homepage = "https://github.com/gencer/SCSS-Everywhere";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1150,7 +1150,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=gitlab.gitlab-workflow";
           homepage = "https://gitlab.com/gitlab-org/gitlab-vscode-extension#readme";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1368,11 +1368,16 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.8.0";
-          sha256 = "sha256-VD1g4DJfA0vDJ0cyHFDEtCEqQo0nXfPC5vknEU91cPk=";
+          version = "0.11.0";
+          sha256 = "sha256-okvwyD0m2r8ar85VtuBUNMUZGGrCfJ4DB9v7aSX5PjM=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
+          description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
+          homepage = "https://github.com/elixir-lsp/elixir-ls";
           license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
@@ -1400,24 +1405,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=IronGeek.vscode-env";
           homepage = "https://github.com/IronGeek/vscode-env.git";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
-        };
-      };
-
-      jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "elixir-ls";
-          publisher = "JakeBecker";
-          version = "0.11.0";
-          sha256 = "sha256-okvwyD0m2r8ar85VtuBUNMUZGGrCfJ4DB9v7aSX5PjM=";
-        };
-        meta = with lib; {
-          changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
-          description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
-          homepage = "https://github.com/elixir-lsp/elixir-ls";
-          license = licenses.mit;
-          maintainers = with maintainers; [ datafoo ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -1425,8 +1413,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.28.0";
-          sha256 = "sha256-ZH2n/r4iKNxf6QETmNnGc5KIAIE0hcAReX3p2MDkve8=";
+          version = "8.29.0";
+          sha256 = "sha256-khAlxN+y06aneZE97fqNg2esj/wvIUINiMdVc/exd38=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1468,7 +1456,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
           homepage = "https://github.com/jnoortheen/vscode-nix-ide";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj SuperSandro2000 ];
+          maintainers = with maintainers; [  SuperSandro2000 ];
         };
       };
 
@@ -1893,8 +1881,8 @@ let
         mktplcRef = {
           name = "color-highlight";
           publisher = "naumovs";
-          version = "2.5.0";
-          sha256 = "sha256-dYMDV84LEGXUjt/fbsSy3BVM5SsBHcPaDDll8KjPIWY=";
+          version = "2.6.0";
+          sha256 = "sha256-TcPQOAHCYeFHPdR85GIXsy3fx70p8cLdO2UNO0krUOs=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
@@ -1963,7 +1951,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=phoenixframework.phoenix";
           homepage = "https://github.com/phoenixframework/vscode-phoenix";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2027,7 +2015,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
           homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
           license = licenses.isc;
-          maintainers = with maintainers; [ ratsclub superherointj ];
+          maintainers = with maintainers; [ ratsclub  ];
         };
         mktplcRef = {
           name = "ocaml-platform";
@@ -2090,7 +2078,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Prisma.prisma";
           homepage = "https://github.com/prisma/language-tools";
           license = licenses.asl20;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2332,7 +2320,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stefanjarina.vscode-eex-snippets";
           homepage = "https://github.com/stefanjarina/vscode-eex-snippets";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2357,8 +2345,8 @@ let
         mktplcRef = {
           publisher = "stkb";
           name = "rewrap";
-          version = "1.16.1";
-          sha256 = "sha256-OTPNbwoQmKd73g8IwLKMIbe6c7E2jKNkzwuBU/f8dmY=";
+          version = "1.16.3";
+          sha256 = "sha256-WHeLTN992ltEZw2W7B3sJrHfAFsOGMq3llV4C0hXLNA=";
         };
         meta = with lib; {
           changelog = "https://github.com/stkb/Rewrap/blob/master/CHANGELOG.md";
@@ -2386,6 +2374,8 @@ let
           maintainers = with maintainers; [ datafoo ];
         };
       };
+
+      sumneko.lua = callPackage ./lua { };
 
       svelte.svelte-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2469,7 +2459,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal";
           homepage = "https://github.com/ALANVF/vscode-pascal-magic";
           license = licenses.mit;
-          maintainers = with maintainers; [ superherointj ];
+          maintainers = with maintainers; [  ];
         };
       };
 
@@ -2800,6 +2790,7 @@ let
 
   aliases = self: super: {
     # aliases
+    jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
   };
 

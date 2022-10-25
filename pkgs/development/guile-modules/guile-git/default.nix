@@ -20,11 +20,6 @@ stdenv.mkDerivation rec {
     sha256 = "x6apF9fmwzrkyzAexKjClOTFrbE31+fVhSLyFZkKRYU=";
   };
 
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-  '';
-
   nativeBuildInputs = [
     autoreconfHook pkg-config texinfo
   ];
@@ -34,8 +29,15 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     libgit2 scheme-bytestructures
   ];
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   enableParallelBuilding = true;
+
+  # Skipping proxy tests since it requires network access.
+  postConfigure = ''
+    sed -i -e '94i (test-skip 1)' ./tests/proxy.scm
+  '';
 
   meta = with lib; {
     description = "Bindings to Libgit2 for GNU Guile";

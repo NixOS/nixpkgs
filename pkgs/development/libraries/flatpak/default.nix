@@ -11,13 +11,15 @@
 , libxslt
 , pkg-config
 , xmlto
-, appstream-glib
 , substituteAll
+, runCommand
 , bison
 , xdg-dbus-proxy
 , p11-kit
+, appstream
 , bubblewrap
 , bzip2
+, curl
 , dbus
 , glib
 , gpgme
@@ -32,9 +34,8 @@
 , shared-mime-info
 , desktop-file-utils
 , gtk3
-, fuse
+, fuse3
 , nixosTests
-, libsoup
 , xz
 , zstd
 , ostree
@@ -51,16 +52,16 @@
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.12.7";
+  version = "1.14.0";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
+    url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-jidpc3cOok3fJZetSuzTa5g5PmvekeSOF0OqymfyeBU="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -80,12 +81,6 @@ stdenv.mkDerivation rec {
       p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
-    # Adapt paths exposed to sandbox for NixOS.
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
-      inherit (builtins) storeDir;
-    })
-
     # Allow gtk-doc to find schemas using XML_CATALOG_FILES environment variable.
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
@@ -94,8 +89,13 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
-    # But we want the GDK_PIXBUF_MODULE_FILE from the wrapper affect the icon validator.
-    ./validate-icon-pixbuf.patch
+    # Do not clear XDG_DATA_DIRS in fish shell
+    # https://github.com/flatpak/flatpak/pull/5123
+    ./no-breaking-fish.patch
+
+    # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
+    # and cannot bind FHS paths since those are not available on NixOS.
+    finalAttrs.passthru.icon-validator-patch
   ];
 
   nativeBuildInputs = [
@@ -110,14 +110,15 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     xmlto
-    appstream-glib
     bison
     wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
+    appstream
     bubblewrap
     bzip2
+    curl
     dbus
     dconf
     gpgme
@@ -125,14 +126,13 @@ stdenv.mkDerivation rec {
     libarchive
     libcap
     libseccomp
-    libsoup
     xz
     zstd
     polkit
     python3
     systemd
     xorg.libXau
-    fuse
+    fuse3
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
@@ -156,6 +156,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--with-curl"
     "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
     "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
@@ -187,8 +188,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    icon-validator-patch = substituteAll {
+      src = ./fix-icon-validation.patch;
+      inherit (builtins) storeDir;
+    };
+
     tests = {
       installedTests = nixosTests.installed-tests.flatpak;
+
+      validate-icon = runCommand "test-icon-validation" { } ''
+        ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        grep format=svg "$out"
+      '';
     };
   };
 
@@ -199,4 +210,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})

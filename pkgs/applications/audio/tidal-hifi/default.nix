@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tidal-hifi";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi_${version}_amd64.deb";
-    sha256 = "sha256-YydpWzGH+Orb8Vot8hchh+FFcd327VwQ8Kr7x8WYnv4=";
+    sha256 = "sha256-/ZESysxaDhMpyTKHjjoRMiLM7SMESA5VIfgWCqdyDck=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
-      --replace \ "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
+      --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi" \
       --replace "/usr/share/icons/hicolor/0x0/apps/tidal-hifi.png" "tidal-hifi.png"
 
     for size in 48 64 128 256 512; do

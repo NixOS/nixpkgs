@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       The following cores are included:
       ${lib.concatStringsSep "\n" (map (x: "  - ${x.name}") cores)}
     '';
-    # FIXME: exits with error on macOS:
+    # FIXME: exit with error on macOS:
     # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
     broken = stdenv.isDarwin;
   };

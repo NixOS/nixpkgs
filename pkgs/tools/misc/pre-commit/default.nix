@@ -37,9 +37,9 @@ buildPythonPackage rec {
     pyyaml
     toml
     virtualenv
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 
@@ -142,6 +142,10 @@ buildPythonPackage rec {
     "test_install_existing_hooks_no_overwrite"
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
+
+    # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
+    # but we use an absolute path so it's not an issue.
+    "test_environment_not_sourced"
   ];
 
   pythonImportsCheck = [

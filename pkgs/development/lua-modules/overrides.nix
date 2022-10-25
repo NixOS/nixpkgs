@@ -22,6 +22,7 @@
 , libmysqlclient
 , libuuid
 , libuv
+, libxcrypt
 , libyaml
 , mariadb
 , mpfr
@@ -336,6 +337,12 @@ with prev;
     ];
   });
 
+  luaposix = prev.luaLib.overrideLuarocks prev.luaposix (drv: {
+    externalDeps = [
+      { name = "CRYPT"; dep = libxcrypt; }
+    ];
+  });
+
   luasec = prev.luaLib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
       { name = "OPENSSL"; dep = openssl_1_1; }
@@ -427,7 +434,8 @@ with prev;
 
   luv = prev.luaLib.overrideLuarocks prev.luv (drv: {
 
-    buildInputs = [ pkg-config libuv ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libuv ];
 
     # Use system libuv instead of building local and statically linking
     extraVariables = {
@@ -512,12 +520,13 @@ with prev;
       make all
     '';
   });
-
-  # TODO just while testing, remove afterwards
-  # toVimPlugin should do it instead
-  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs (oa: {
-    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ vimUtils.vimGenDocHook ];
+  vusted = prev.vusted.overrideAttrs (_: {
+    # make sure vusted_entry.vim doesn't get wrapped
+    postInstall = ''
+      chmod -x $out/bin/vusted_entry.vim
+    '';
   });
+
 
   # aliases
   cjson = prev.lua-cjson;

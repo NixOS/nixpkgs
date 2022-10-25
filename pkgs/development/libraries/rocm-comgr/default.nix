@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-5C5bRdrt3xZAlRgtiIRTMAuwsFvVM4Win96P5+Pf5ZM=";
+    hash = "sha256-LQyMhqcWm8zqt6138fnT7EOq/F8bG3Iuf04PTemVQmg=";
   };
 
   sourceRoot = "source/lib/comgr";
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ clang rocm-device-libs llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_C_COMPILER=${clang}/bin/clang"
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     platforms = platforms.linux;
   };
 }
