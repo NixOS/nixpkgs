@@ -4,6 +4,7 @@
 , discordAlias ? false
 , discord
 , makeWrapper
+, fetchpatch
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,6 +17,15 @@ stdenvNoCC.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-afmQCOOZ1MwQkbZZNHYfq2+IRv2eOtYBrGVHzDEbUHw=";
   };
+
+  patches = lib.optional discordAlias [
+    # Needed until https://github.com/mlvzk/discocss/pull/17 gets merged
+    (fetchpatch {
+      name = "discocss-make-discord-target-binary-configurable.patch";
+      url = "https://github.com/mlvzk/discocss/commit/83b53f3d08cd1d448caa4aa77a4a19f2fdc2f523.patch";
+      sha256 = "sha256-T7OCmX2ZVcTSSp+nXVSNvOSB5IDg9dG5b/mL9kIemmk=";
+    })
+  ];
 
   dontBuild = true;
 
