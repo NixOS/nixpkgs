@@ -7269,13 +7269,15 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot = callPackage ../development/tools/godot {};
+  godot_4 = callPackage ../development/tools/godot/4 { };
 
-  godot-export-templates = callPackage ../development/tools/godot/export-templates.nix { };
+  godot = callPackage ../development/tools/godot/3 { };
 
-  godot-headless = callPackage ../development/tools/godot/headless.nix { };
+  godot-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
 
-  godot-server = callPackage ../development/tools/godot/server.nix { };
+  godot-headless = callPackage ../development/tools/godot/3/headless.nix { };
+
+  godot-server = callPackage ../development/tools/godot/3/server.nix { };
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
