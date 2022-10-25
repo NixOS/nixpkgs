@@ -32108,6 +32108,8 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
+  temporalite = callPackage ../applications/networking/cluster/temporalite { };
+
   tenacity = callPackage ../applications/audio/tenacity { };
 
   tendermint = callPackage ../tools/networking/tendermint { };
