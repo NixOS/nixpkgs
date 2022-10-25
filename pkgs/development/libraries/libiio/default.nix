@@ -10,11 +10,12 @@
 , libaio
 , runtimeShell
 , lib
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.23";
+  version = "0.24";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "analogdevicesinc";
     repo = "libiio";
     rev = "v${version}";
-    sha256 = "0awny9zb43dcnxa5jpxay2zxswydblnbn4x6vi5mlw1r48pzhjf8";
+    sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
   };
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     cmake
     flex
     bison
+    pkg-config
   ];
 
   buildInputs = [
