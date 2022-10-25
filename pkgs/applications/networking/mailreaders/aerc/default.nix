@@ -7,6 +7,7 @@
 , python3
 , w3m
 , dante
+, gawk
 }:
 
 buildGoModule rec {
@@ -46,7 +47,7 @@ buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ];
+  buildInputs = [ python3 notmuch gawk ];
 
   installPhase = ''
     runHook preInstall
