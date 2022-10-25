@@ -48,13 +48,13 @@
     "version": "2.4.2"
   },
   "alicloud": {
-    "hash": "sha256-k5WZpqZvoL4R1kQ0CBWK8JLkWCvfpkl1b849ZbJsPxw=",
+    "hash": "sha256-CyubHE3YFGDt4T4dJ6ZHgvQ6V/nIHK/LODkl7Qm65Sk=",
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.188.0",
+    "rev": "v1.189.0",
     "vendorHash": null,
-    "version": "1.188.0"
+    "version": "1.189.0"
   },
   "ansible": {
     "hash": "sha256-3nha5V4rNgVzgqliebmbC5e12Lj/zlCsyyiIVFlmUrY=",
@@ -138,13 +138,13 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "hash": "sha256-ivVgHJveSkfoV+Ctf9G7HbZScfKQ85kxdeBDfOptl6Q=",
+    "hash": "sha256-9r9Y1iegVgaZk+2bKB0uHy6w0JotDuNUXemOqtJSAeg=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.15.11",
+    "rev": "v1.16.0",
     "vendorHash": null,
-    "version": "1.15.11"
+    "version": "1.16.0"
   },
   "bigip": {
     "hash": "sha256-uSe+J4AlW8Dt96BVF1ZI/yrgWUbZsl64b/D+k5ysHC0=",
@@ -213,13 +213,13 @@
     "version": "1.3.0"
   },
   "cloudamqp": {
-    "hash": "sha256-RllW85iootELA7iz+UPD0s4KKP7gGRNHVwHd/CCUv0c=",
+    "hash": "sha256-EtFGqYNfyDbS4f1tjRTKcrQNFqEZmmILeuEOpwkx6/4=",
     "owner": "cloudamqp",
     "provider-source-address": "registry.terraform.io/cloudamqp/cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.19.3",
-    "vendorHash": "sha256-S8xlMpsHeJePYyydUpBSuOxW0APZw8qxcm+Ou9u1rWc=",
-    "version": "1.19.3"
+    "rev": "v1.20.0",
+    "vendorHash": "sha256-fDYkeUOW9wuypAJR1YFEQp8KhtTfMr8NZeT7TMYXEmU=",
+    "version": "1.20.0"
   },
   "cloudflare": {
     "hash": "sha256-uItV3BTB3bY8NrjD63oUWZMB0gEscEN4Y6aDTuDQW7c=",
@@ -286,13 +286,13 @@
     "version": "0.11.0"
   },
   "datadog": {
-    "hash": "sha256-viQDfs3xOsGOsRmTB6LkdN1JPc95UYpQ6et2ud+Or94=",
+    "hash": "sha256-GSm1SIWEPdQls3FXkRjvcxZDRjpNAoUQK1zUHvU4tZo=",
     "owner": "DataDog",
     "provider-source-address": "registry.terraform.io/DataDog/datadog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.16.0",
-    "vendorHash": "sha256-U533VGe37ItG5EK+fJo8Nj8t1MhDAHdT03ghQLL3WzI=",
-    "version": "3.16.0"
+    "rev": "v3.17.0",
+    "vendorHash": "sha256-xOXLwSKj48nY0ikh2+c8Ti1eNwnsizgAfWyhGE5ZAXE=",
+    "version": "3.17.0"
   },
   "dhall": {
     "hash": "sha256-K0j90YAzYqdyJD4aofyxAJF9QBYNMbhSVm/s1GvWuJ4=",
@@ -423,13 +423,13 @@
     "version": "2.2.0"
   },
   "github": {
-    "hash": "sha256-dUL01cuP5fQdPPm6+R1XDQNups5BJC2oq8LSjJ1+tB0=",
+    "hash": "sha256-sNm5/gj4QY7LvYpj5fUNcz/4gf+SiBaeu70VlWZC4aw=",
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v5.5.0",
+    "rev": "v5.6.0",
     "vendorHash": null,
-    "version": "5.5.0"
+    "version": "5.6.0"
   },
   "gitlab": {
     "hash": "sha256-eNd1o0UjG6A9OTRmcJfcPLLtWIJmdZ+viDnSZhyHpgY=",
@@ -506,13 +506,13 @@
     "version": "2.7.1"
   },
   "heroku": {
-    "hash": "sha256-V6jShbhVwsUTxj2tp2msIseZnckHgB7bBswqIRlrwjQ=",
+    "hash": "sha256-NabwjOTbBRlDNFBpCshxZMO9E958tfAIPPuyArvacFI=",
     "owner": "heroku",
     "provider-source-address": "registry.terraform.io/heroku/heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.1.5",
+    "rev": "v5.1.6",
     "vendorHash": null,
-    "version": "5.1.5"
+    "version": "5.1.6"
   },
   "hetznerdns": {
     "hash": "sha256-wmXZ6+5Ex3G2JUdw2is2VIo/X1X0V1Auw5KmYpGllug=",
@@ -1129,13 +1129,13 @@
     "version": "1.78.5"
   },
   "tfe": {
-    "hash": "sha256-jh5bRe/3OsdgvSpraYEc1NgvBmYb1tFuVSPQ2ZAesSY=",
+    "hash": "sha256-MDlRwB2iVi/Rv7/UtukI6mIDImz8Gnpm5Qv5R6EDpiU=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tfe",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.37.0",
-    "vendorHash": "sha256-Su5WpKF9zXeGKdaV8TxsTc6OGUYToNnXAbxWaNxS52U=",
-    "version": "0.37.0"
+    "rev": "v0.38.0",
+    "vendorHash": "sha256-reXq1MyAhHRet1WwDJZafdOg1r7J4sktQ/QhQUPhDak=",
+    "version": "0.38.0"
   },
   "thunder": {
     "hash": "sha256-fXvwBOIW3/76V3O9t25wff0oGViqSaSB2VgMdItXyn4=",

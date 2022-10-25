@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.26.0";
+  version = "0.27.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-XoiAnJDTwO93cMH8Z8mJbPfVMhq7c/Xc38gUNYmSX6Y=";
+    sha256 = "sha256-fU/qaYuuZM9tfveWYD4tCJugLELTR4DlQsr4WP/0f4o=";
   };
 
-  cargoSha256 = "sha256-5mu+8tmO70PZq13VuFeovgAmhPmL5G4ju5AvjsC7Idc=";
+  cargoSha256 = "sha256-csiwkBOiIzIVADjKFE8YvBRO0iqtEr4I4s0XDMyb7Sc=";
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
