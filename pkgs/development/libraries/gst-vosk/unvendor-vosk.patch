@@ -1,0 +1,49 @@
+diff --git a/meson.build b/meson.build
+index 866d5b3..f46f94f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -42,5 +42,4 @@ configure_file(
+ )
+ 
+ subdir('src')
+-subdir('vosk')
+ subdir('po')
+diff --git a/src/gstvosk.c b/src/gstvosk.c
+index ffc9340..47a5cb9 100644
+--- a/src/gstvosk.c
++++ b/src/gstvosk.c
+@@ -25,7 +25,6 @@
+ #include <gst/gst.h>
+ 
+ #include "gstvosk.h"
+-#include "vosk-api.h"
+ #include "../gst-vosk-config.h"
+ 
+ GST_DEBUG_CATEGORY_STATIC (gst_vosk_debug);
+diff --git a/src/gstvosk.h b/src/gstvosk.h
+index 855e5c1..b7cbbff 100644
+--- a/src/gstvosk.h
++++ b/src/gstvosk.h
+@@ -23,7 +23,7 @@
+ #include <gio/gio.h>
+ #include <gst/gst.h>
+ 
+-#include "vosk-api.h"
++#include "vosk_api.h"
+ 
+ G_BEGIN_DECLS
+ 
+diff --git a/src/meson.build b/src/meson.build
+index a1e5ea0..df0da58 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -4,8 +4,7 @@ gst_vosk_sources = [
+ 
+ vosk_libdir = meson.project_source_root() / 'vosk'
+ vosk_dep = declare_dependency(
+-	dependencies : cc.find_library('vosk', dirs : vosk_libdir),
+-	include_directories : include_directories('../vosk/'),
++	dependencies : cc.find_library('vosk'),
+ )
+ 
+ gstvosk = library('gstvosk',

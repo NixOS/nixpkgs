@@ -23,21 +23,21 @@ let
 in
 stdenv.mkDerivation {
   pname = "kaldi";
-  version = "2021-12-03";
+  version = "2022-07-20";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";
     repo = "kaldi";
-    rev = "2b016ab8cb018e031ab3bf01ec36cc2950c7e509";
-    sha256 = "sha256-R8CrY7cwU5XfeGEgeFuZ0ApsEcEmWN/lrZaCjz85tyk=";
+    rev = "9af2c5c16389e141f527ebde7ee432a0c1df9fb9";
+    sha256 = "sha256-+gX9cm5iUmeuufofxB6VZpjDjPp7+Lr/bhCSRypB0cU=";
   };
 
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"
     "-DBUILD_SHARED_LIBS=on"
+    "-DLAPACK_LIBRARIES=-llapack"
+    "-DBLAS_LIBRARIES=-lblas"
   ];
-
-  enableParallelBuilding = true;
 
   preConfigure = ''
     mkdir bin

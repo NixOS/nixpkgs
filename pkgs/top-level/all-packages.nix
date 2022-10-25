@@ -1447,6 +1447,8 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  vosk-api = callPackage ../tools/audio/vosk-api { };
+
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
     use64 = true;
@@ -5434,6 +5436,8 @@ with pkgs;
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
+
+    stt-vosk = callPackage ../tools/inputmethods/ibus-engines/ibus-stt-vosk { };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
@@ -19054,6 +19058,8 @@ with pkgs;
     callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg; });
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
   });
+
+  gst-vosk = callPackage ../development/libraries/gst-vosk { };
 
   gusb = callPackage ../development/libraries/gusb { };
 
