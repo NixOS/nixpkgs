@@ -2,7 +2,7 @@
 
 buildDunePackage {
   pname = "gettext-camomile";
-  inherit (ocaml_gettext) src version useDune2;
+  inherit (ocaml_gettext) src version;
 
   propagatedBuildInputs = [ camomile ocaml_gettext ];
 
