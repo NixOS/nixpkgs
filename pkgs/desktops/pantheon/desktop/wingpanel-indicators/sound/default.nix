@@ -7,6 +7,7 @@
 , python3
 , ninja
 , vala
+, gnome-settings-daemon
 , gtk3
 , granite
 , wingpanel
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gnome-settings-daemon
     granite
     gtk3
     libcanberra-gtk3
