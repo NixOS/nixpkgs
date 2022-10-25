@@ -41,6 +41,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
       systemd.targets.machines.wants = [ "systemd-nspawn@${containerName}.service" ];
 
       virtualisation.additionalPaths = [ containerSystem ];
+
+      # not needed, but we want to test the nspawn file generation
+      systemd.nspawn.${containerName} = { };
     };
 
     testScript = ''

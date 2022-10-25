@@ -277,9 +277,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
