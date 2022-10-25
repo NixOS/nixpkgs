@@ -1745,6 +1745,8 @@ in {
 
   cftime = callPackage ../development/python-modules/cftime { };
 
+  cgal-swig-bindings = callPackage ../development/python-modules/cgal-swig-bindings { };
+
   cgen = callPackage ../development/python-modules/cgen { };
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
