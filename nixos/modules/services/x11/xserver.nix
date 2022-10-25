@@ -327,6 +327,15 @@ in
         '';
       };
 
+      xkbCompat = mkOption {
+        type = types.str;
+        default = "complete";
+        example = "basic";
+        description = lib.mdDoc ''
+          X keyboard compatibility maps for XKB-unaware clients.
+        '';
+      };
+
       xkbModel = mkOption {
         type = types.str;
         default = "pc104";
@@ -645,6 +654,7 @@ in
               Option "XkbLayout" "${cfg.layout}"
               Option "XkbOptions" "${cfg.xkbOptions}"
               Option "XkbVariant" "${cfg.xkbVariant}"
+              Option "XkbCompat" "${cfg.xkbCompat}"
             EndSection
           '';
         }
