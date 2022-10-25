@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -103,6 +104,10 @@ stdenv.mkDerivation rec {
     rm -r $out/bin/*
     mv $out/rocfft_rtc_helper $out/bin
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.rocfft;
+  };
 
   meta = with lib; {
     description = "FFT implementation for ROCm ";

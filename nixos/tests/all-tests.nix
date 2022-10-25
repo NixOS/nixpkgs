@@ -546,6 +546,7 @@ in {
   restic = handleTest ./restic.nix {};
   retroarch = handleTest ./retroarch.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
+  rocfft = handleTest ./rocfft.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
   rss2email = handleTest ./rss2email.nix {};
