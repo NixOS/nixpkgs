@@ -14,7 +14,16 @@ let
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256-MGLTFcsWVC/gTdgjny6LwyOO6QRc1QcLkVzy677Lqqw=";
+          hash = "sha256-MGLTFcsWVC/gTdgjny6LwyOO6QRc1QcLkVzy677Lqqw=";
+        };
+      });
+
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.28";
+        src = self.fetchPypi {
+          pname = "prompt_toolkit";
+          inherit version;
+          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
         };
       });
     };
@@ -60,7 +69,6 @@ with py.pkgs; buildPythonApplication rec {
     jsonschema
     mock
     pytestCheckHook
-    pytest-xdist
   ];
 
   postPatch = ''
@@ -68,15 +76,7 @@ with py.pkgs; buildPythonApplication rec {
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
       --replace "distro>=1.5.0,<1.6.0" "distro" \
       --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
       --replace "wcwidth<0.2.0" "wcwidth"
-  '';
-
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-
-    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
-    export HOME=$TMP
   '';
 
   postInstall = ''
@@ -91,6 +91,30 @@ with py.pkgs; buildPythonApplication rec {
 
     rm $out/bin/aws.cmd
   '';
+
+  doCheck = true;
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
+
+    # Disable slow tests (only run unit tests)
+    "tests/backends"
+    "tests/functional"
+  ];
+
+  pythonImportsCheck = [
+    "awscli"
+  ];
 
   passthru = {
     python = py; # for aws_shell
