@@ -14889,6 +14889,8 @@ with pkgs;
 
   rocfft = callPackage ../development/libraries/rocfft { };
 
+  tensile = python3Packages.callPackage ../development/libraries/tensile { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
