@@ -22,6 +22,7 @@
 , shared-mime-info
 , wrapGAppsHook
 , librsvg
+, webp-pixbuf-loader
 , libexif
 , gobject-introspection
 , gi-docgen
@@ -77,6 +78,17 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

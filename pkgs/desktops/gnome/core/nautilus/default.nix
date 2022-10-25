@@ -21,6 +21,7 @@
 , libexif
 , libseccomp
 , librsvg
+, webp-pixbuf-loader
 , tracker
 , tracker-miners
 , gexiv2
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
