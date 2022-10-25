@@ -1,0 +1,65 @@
+diff --git a/bin/opensearch-env b/bin/opensearch-env
+index 6fe703a73b2..727cdb27524 100644
+--- a/bin/opensearch-env
++++ b/bin/opensearch-env
+@@ -28,46 +28,13 @@ while [ -h "$SCRIPT" ] ; do
+   fi
+ done
+ 
+-# determine OpenSearch home; to do this, we strip from the path until we find
+-# bin, and then strip bin (there is an assumption here that there is no nested
+-# directory under bin also named bin)
+-OPENSEARCH_HOME=`dirname "$SCRIPT"`
+-
+-# now make OPENSEARCH_HOME absolute
+-OPENSEARCH_HOME=`cd "$OPENSEARCH_HOME"; pwd`
+-
+-while [ "`basename "$OPENSEARCH_HOME"`" != "bin" ]; do
+-  OPENSEARCH_HOME=`dirname "$OPENSEARCH_HOME"`
+-done
+-OPENSEARCH_HOME=`dirname "$OPENSEARCH_HOME"`
+-
+-# now set the classpath
+-OPENSEARCH_CLASSPATH="$OPENSEARCH_HOME/lib/*"
+-
+-# now set the path to java: OPENSEARCH_JAVA_HOME -> JAVA_HOME -> bundled JDK
+-if [ ! -z "$OPENSEARCH_JAVA_HOME" ]; then
+-  JAVA="$OPENSEARCH_JAVA_HOME/bin/java"
+-  JAVA_TYPE="OPENSEARCH_JAVA_HOME"
+-elif [ ! -z "$JAVA_HOME" ]; then
+-  JAVA="$JAVA_HOME/bin/java"
+-  JAVA_TYPE="JAVA_HOME"
+-else
+-  if [ $OS = "darwin" ]; then
+-    # macOS bundled Java
+-    JAVA="$OPENSEARCH_HOME/jdk.app/Contents/Home/bin/java"
+-  elif [ $OS = "freebsd" ]; then
+-    # using FreeBSD default java from ports if JAVA_HOME is not set
+-    JAVA="/usr/local/bin/java"
+-  else
+-    JAVA="$OPENSEARCH_HOME/jdk/bin/java"
+-  fi
+-  JAVA_TYPE="bundled jdk"
++if [ -z "$OPENSEARCH_HOME" ]; then
++    echo "You must set the OPENSEARCH_HOME var" >&2
++    exit 1
+ fi
+ 
+-if [ ! -x "$JAVA" ]; then
+-    echo "could not find java in $JAVA_TYPE at $JAVA" >&2
+-    exit 1
+-  fi
++OPENSEARCH_CLASSPATH="@out@/lib/*"
++JAVA="@jre@/bin/java"
+ 
+ # do not let JAVA_TOOL_OPTIONS slip in (as the JVM does by default)
+ if [ ! -z "$JAVA_TOOL_OPTIONS" ]; then
+@@ -117,7 +84,7 @@ if [[ "$OPENSEARCH_DISTRIBUTION_TYPE" == "docker" ]]; then
+   # contents, and setting an environment variable with the suffix _FILE to
+   # point to it. This can be used to provide secrets to a container, without
+   # the values being specified explicitly when running the container.
+-  source "$OPENSEARCH_HOME/bin/opensearch-env-from-file"
++  source "@out@/bin/opensearch-env-from-file"
+ 
+   # Parse Docker env vars to customize OpenSearch
+   #
