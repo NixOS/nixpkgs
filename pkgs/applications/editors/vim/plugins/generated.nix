@@ -4893,6 +4893,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/neco-vim/";
   };
 
+  neo-tree-nvim = buildVimPluginFrom2Nix {
+    pname = "neo-tree.nvim";
+    version = "2022-10-22";
+    src = fetchFromGitHub {
+      owner = "nvim-neo-tree";
+      repo = "neo-tree.nvim";
+      rev = "ab8ca9fac52949d7a741b538c5d9c3898cd0f45a";
+      sha256 = "0ccrxj04md7lssfwy9lvw4sn99iwkpci9lddc577m6zs1nz00lw0";
+    };
+    meta.homepage = "https://github.com/nvim-neo-tree/neo-tree.nvim/";
+  };
+
   neocomplete-vim = buildVimPluginFrom2Nix {
     pname = "neocomplete.vim";
     version = "2021-02-18";

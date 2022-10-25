@@ -5,6 +5,7 @@
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
+, branch
 , common-updater-scripts, withOpenASAR ? false }:
 
 let
@@ -141,7 +142,7 @@ stdenv.mkDerivation rec {
       }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
       version=''${url##https://dl*.discordapp.net/apps/linux/}
       version=''${version%%/*.tar.gz}
-      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix
+      update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
 }
