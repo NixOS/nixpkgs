@@ -14859,6 +14859,8 @@ with pkgs;
 
   rocminfo = callPackage ../development/tools/rocminfo { };
 
+  tensile = python3Packages.callPackage ../development/libraries/tensile { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
