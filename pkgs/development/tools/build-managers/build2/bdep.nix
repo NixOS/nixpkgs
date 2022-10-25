@@ -1,6 +1,7 @@
 { lib, stdenv
 , build2
 , fetchurl
+, pkg-config
 , libbpkg
 , libbutl
 , libodb
@@ -11,17 +12,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bdep";
-  version = "0.14.0";
+  version = "0.15.0";
 
   outputs = [ "out" "doc" "man" ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
-    sha256 = "sha256-sizrGmSixkkJL9nocA4B1I5n9OySxyuZ2bNc1Z4zmPg=";
+    sha256 = "sha256-dZldNVeQJWim3INBtOaPYP8yQMH3sjBzCLEHemvdxnU=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [
-    build2
+    build2 pkg-config
   ];
   buildInputs = [
     libbpkg
