@@ -1,4 +1,4 @@
-{ gcc10Stdenv
+{ stdenv
 , git
 , lib
 , fetchFromGitHub
@@ -12,9 +12,7 @@
 , which
 }:
 
-# Arango 3.10.0 officially only supports gcc11+, but seems to compile
-# with 10
-gcc10Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "arangodb";
   version = "3.10.0";
 
@@ -48,8 +46,8 @@ gcc10Stdenv.mkDerivation rec {
     "-DUSE_MAINTAINER_MODE=OFF"
 
     # avoid using builder's /proc/cpuinfo
-    "-DHAVE_SSE42=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-    "-DASM_OPTIMIZATIONS=${if gcc10Stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DHAVE_SSE42=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
+    "-DASM_OPTIMIZATIONS=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
   ];
 
   meta = with lib; {
