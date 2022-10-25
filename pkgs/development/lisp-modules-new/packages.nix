@@ -332,6 +332,21 @@ let
     version = "f19162e76";
   });
 
+  coalton = build-asdf-system {
+    pname = "coalton";
+    version = "2022-10-17";
+    src = pkgs.fetchFromGitHub {
+      owner = "coalton-lang";
+      repo = "coalton";
+      rev = "d91d11d95d70a38d199bf1b4e68ff342f1815d94";
+      sha256 = "sha256-2kAxoAVu0lWealRc9sKTNjzi+7/ovazcefnwVnw8WkY=";
+    };
+    lispLibs = with ql; [ alexandria trivia fset float-features split-sequence uiop
+                          trivial-garbage fiasco yason trivial-benchmark
+                          html-entities ];
+
+  };
+
   };
 
 in packages
