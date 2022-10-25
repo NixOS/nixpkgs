@@ -506,13 +506,13 @@
     "version": "2.7.1"
   },
   "heroku": {
-    "hash": "sha256-V6jShbhVwsUTxj2tp2msIseZnckHgB7bBswqIRlrwjQ=",
+    "hash": "sha256-NabwjOTbBRlDNFBpCshxZMO9E958tfAIPPuyArvacFI=",
     "owner": "heroku",
     "provider-source-address": "registry.terraform.io/heroku/heroku",
     "repo": "terraform-provider-heroku",
-    "rev": "v5.1.5",
+    "rev": "v5.1.6",
     "vendorHash": null,
-    "version": "5.1.5"
+    "version": "5.1.6"
   },
   "hetznerdns": {
     "hash": "sha256-wmXZ6+5Ex3G2JUdw2is2VIo/X1X0V1Auw5KmYpGllug=",
