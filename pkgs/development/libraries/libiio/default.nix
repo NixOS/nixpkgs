@@ -11,6 +11,8 @@
 , runtimeShell
 , lib
 , pkg-config
+, CFNetwork
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
@@ -42,12 +44,17 @@ stdenv.mkDerivation rec {
     libxml2
     libusb1
     avahi
-    libaio
-  ] ++ lib.optional python.isPy3k python.pkgs.setuptools;
+  ] ++ lib.optional python.isPy3k python.pkgs.setuptools
+    ++ lib.optional stdenv.isLinux libaio
+    ++ lib.optionals stdenv.isDarwin [ CFNetwork CoreServices ];
 
   cmakeFlags = [
     "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
     "-DPYTHON_BINDINGS=on"
+    # osx framework is disabled,
+    # the linux-like directory structure is used for proper output splitting
+    "-DOSX_PACKAGE=off"
+    "-DOSX_FRAMEWORK=off"
   ];
 
   postPatch = ''
@@ -67,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
     homepage = "https://github.com/analogdevicesinc/libiio";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }
