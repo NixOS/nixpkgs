@@ -63,6 +63,7 @@ let
 
     report = [
         {
+            "attrPath": attr_path,
             "commitBody": f"https://gitlab.gnome.org/GNOME/{package_name}/-/compare/{package_version}...{latest_tag}",
         },
     ]
