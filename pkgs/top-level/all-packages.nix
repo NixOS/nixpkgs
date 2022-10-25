@@ -11075,6 +11075,8 @@ with pkgs;
 
   safeeyes = with python3.pkgs; toPythonApplication safeeyes;
 
+  sagoin = callPackage ../tools/misc/sagoin { };
+
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 
   saldl = callPackage ../tools/networking/saldl { };
