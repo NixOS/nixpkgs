@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "starkbank-ecdsa";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "starkbank";
     repo = "ecdsa-python";
-    rev = "v${version}";
-    sha256 = "sha256-N7TV4o7u4YRymFrRNtSPbjobEu+X2QtnkPHcnZW3zTY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
   };
 
   checkInputs = [
