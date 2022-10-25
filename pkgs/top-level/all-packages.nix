@@ -28266,7 +28266,7 @@ with pkgs;
       python = python3;
     };
   };
-  gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio.pkgs;
+  gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio3_9.pkgs;
   # A build without gui components and other utilites not needed for end user
   # libraries
   gnuradio3_9Minimal = gnuradio.override {
