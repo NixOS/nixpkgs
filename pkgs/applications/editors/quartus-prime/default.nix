@@ -1,11 +1,43 @@
-{ stdenv, lib, buildFHSUserEnv, callPackage, makeDesktopItem, writeScript
-, supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+{ stdenv
+, lib
+, buildFHSUserEnv
+, callPackage
+, makeDesktopItem
+, writeScript
+, version ? "20.1.1.720"
+, supportedDevices ? {
+  arria_lite = {
+    name = "Arria II";
+    hash = "140jqnb97vrxx6398cpgpw35zrrx3z5kv1x5gr9is1xdbnf4fqhy";
+  };
+  cyclonev = {
+    name = "Cyclone V";
+    hash = "11baa9zpmmfkmyv33w1r57ipf490gnd3dpi2daripf38wld8lgak";
+  };
+  cyclone = {
+    name = "Cyclone IV";
+    hash = "116kf69ryqcmlc2k8ra0v32jy7nrk7w4s5z3yll7h3c3r68xcsfr";
+  };
+  cyclone10lp = {
+    name = "Cyclone 10 LP";
+    hash = "07wpgx9bap6rlr5bcmr9lpsxi3cy4yar4n3pxfghazclzqfi2cyl";
+  };
+  max = {
+    name = "MAX II/V";
+    hash = "1zy2d42dqmn97fwmv4x6pmihh4m23jypv3nd830m1mj7jkjx9kcq";
+  };
+  max10 = {
+    name = "MAX 10 FPGA";
+    hash = "1hvi9cpcjgbih3l6nh8x1vsp0lky5ax85jb2yqmzla80n7dl9ahs";
+  };
+}
+, unwrapped ? callPackage ./quartus.nix { inherit version supportedDevices; }
 }:
 
 let
+  name = "quartus-prime-lite";
   desktopItem = makeDesktopItem {
-    name = "quartus-prime-lite";
+    inherit name;
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
@@ -13,8 +45,8 @@ let
     categories = [ "Development" ];
   };
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-in buildFHSUserEnv rec {
-  name = "quartus-prime-lite"; # wrapped
+in buildFHSUserEnv {
+  inherit name;
 
   targetPkgs = pkgs: with pkgs; [
     # quartus requirements
