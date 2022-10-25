@@ -33,6 +33,8 @@ buildGoModule rec {
       --zsh <($out/bin/cmctl completion zsh)
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A CLI tool for managing cert-manager service on Kubernetes clusters";
     longDescription = ''
