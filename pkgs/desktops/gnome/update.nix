@@ -25,6 +25,7 @@ let
     import os
     import subprocess
     import sys
+    from libversion import Version
 
     _, attr_path, package_name, package_version, version_policy, *remaining_args = sys.argv
 
@@ -51,6 +52,12 @@ let
         ],
         encoding="utf-8",
     )
+
+    if Version(latest_tag) <= Version(package_version):
+        # No newer updates found.
+        print(json.dumps([]))
+        sys.exit(0)
+
     latest_tag = latest_tag.strip()
     subprocess.run(
         [
