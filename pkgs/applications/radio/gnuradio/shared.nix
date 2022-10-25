@@ -129,6 +129,6 @@ rec {
     homepage = "https://www.gnuradio.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ doronbehar bjornfor fpletz ];
+    maintainers = with maintainers; [ doronbehar bjornfor fpletz jiegec ];
   };
 }
