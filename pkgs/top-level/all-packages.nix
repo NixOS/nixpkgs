@@ -14907,6 +14907,8 @@ with pkgs;
     inherit (llvmPackages_rocm) clang;
   };
 
+  rocthrust = callPackage ../development/libraries/rocthrust { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
