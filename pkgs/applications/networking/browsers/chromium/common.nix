@@ -296,6 +296,7 @@ let
     } // optionalAttrs (chromiumVersionAtLeast "107") {
       clang_base_path = "${llvmPackages.clang}";
       use_qt = false;
+      use_system_libwayland_server = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
