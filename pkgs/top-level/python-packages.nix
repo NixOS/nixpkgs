@@ -12044,6 +12044,13 @@ in {
     };
   };
 
+  wxPython_4_2 = callPackage ../development/python-modules/wxPython/4.2.nix {
+    wxGTK = pkgs.wxGTK32.override {
+      withWebKit = true;
+    };
+  };
+
+
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 
   x256 = callPackage ../development/python-modules/x256 { };
