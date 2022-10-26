@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "qownnotes";
-  version = "22.9.2";
+  version = "22.10.2";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Fetch the checksum of current version with curl:
     # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    sha256 = "sha256-9cHCFXVgg7fahbQsVUAxgznyMfx4O42D1qWverucpZ8=";
+    hash = "sha256-cHUkMrfVrdQXKrmK2jcNT6CHw0+VEWc1tp1XGuI0XcQ=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -20,8 +20,7 @@ mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   meta = with lib; {
-    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
-    longDescription = "QOwnNotes is a plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
+    description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";
     homepage = "https://www.qownnotes.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ totoroot ];

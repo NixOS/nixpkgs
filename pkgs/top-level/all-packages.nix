@@ -7269,13 +7269,15 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot = callPackage ../development/tools/godot {};
+  godot_4 = callPackage ../development/tools/godot/4 { };
 
-  godot-export-templates = callPackage ../development/tools/godot/export-templates.nix { };
+  godot = callPackage ../development/tools/godot/3 { };
 
-  godot-headless = callPackage ../development/tools/godot/headless.nix { };
+  godot-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
 
-  godot-server = callPackage ../development/tools/godot/server.nix { };
+  godot-headless = callPackage ../development/tools/godot/3/headless.nix { };
+
+  godot-server = callPackage ../development/tools/godot/3/server.nix { };
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -11072,6 +11074,8 @@ with pkgs;
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = with python3.pkgs; toPythonApplication safeeyes;
+
+  sagoin = callPackage ../tools/misc/sagoin { };
 
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 
@@ -16089,9 +16093,12 @@ with pkgs;
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_8;
-  apacheKafka_2_7 = callPackage ../servers/apache-kafka { majorVersion = "2.7"; };
+  apacheKafka = apacheKafka_3_3;
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
+  apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
+  apacheKafka_3_1 = callPackage ../servers/apache-kafka { majorVersion = "3.1"; };
+  apacheKafka_3_2 = callPackage ../servers/apache-kafka { majorVersion = "3.2"; };
+  apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -23879,10 +23886,7 @@ with pkgs;
     asio = asio_1_10;
   };
 
-  inherit (callPackage ../servers/sql/mariadb {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  })
+  inherit (import ../servers/sql/mariadb pkgs)
     mariadb_104
     mariadb_105
     mariadb_106
@@ -23891,6 +23895,7 @@ with pkgs;
     mariadb_109
   ;
   mariadb = mariadb_106;
+  mariadb-embedded = mariadb.override { withEmbedded = true; };
 
   mongodb = hiPrio mongodb-3_4;
 
@@ -23960,13 +23965,6 @@ with pkgs;
   # which bundled the server and CLI into the same derivation. Will be
   # removed in a few releases.
   influxdb2 = callPackage ../servers/nosql/influxdb2/combined.nix { };
-
-  mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
-    inherit (darwin) cctools developer_cmds;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost159;
-    openssl = openssl_1_1;
-  };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
     inherit (darwin) cctools developer_cmds DarwinTools;
@@ -29060,6 +29058,8 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
+  meerk40t = callPackage ../applications/misc/meerk40t { };
+
   musikcube = callPackage ../applications/audio/musikcube {
     inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
   };
@@ -34099,7 +34099,7 @@ with pkgs;
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
-  legendary-gl = python38Packages.callPackage ../games/legendary-gl { };
+  legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
   left4gore-bin = callPackage ../games/left4gore { };
 
@@ -36744,7 +36744,7 @@ with pkgs;
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
-  mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql57; in {
+  mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
     gdal = gdal.override {
       libmysqlclient = mysql // {
         lib = { dev = mysql; }

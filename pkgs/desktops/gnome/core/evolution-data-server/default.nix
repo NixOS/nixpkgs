@@ -32,6 +32,7 @@
 , ninja
 , libkrb5
 , openldap
+, enableOAuth2 ? stdenv.isLinux
 , webkitgtk_4_1
 , webkitgtk_5_0
 , libaccounts-glib
@@ -46,17 +47,18 @@
 , libgweather
 , boost
 , protobuf
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.46.0";
+  version = "3.46.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "5fooCVoYP3q1qSjjWoKDebSB3e+D7Ux7UaLjxK71zas=";
+    sha256 = "xV5yz/QZC0LmPdbqvG3OSKGh95BAUx8a9tUcHvpKpus=";
   };
 
   patches = [
@@ -90,7 +92,6 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     p11-kit
     libgweather
-    libaccounts-glib
     icu
     sqlite
     libkrb5
@@ -101,11 +102,17 @@ stdenv.mkDerivation rec {
     libphonenumber
     boost
     protobuf
+  ] ++ lib.optionals stdenv.isLinux [
+    libaccounts-glib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
   ] ++ lib.optionals withGtk3 [
     gtk3
+  ] ++ lib.optionals (withGtk3 && enableOAuth2) [
     webkitgtk_4_1
   ] ++ lib.optionals withGtk4 [
     gtk4
+  ] ++ lib.optionals (withGtk4 && enableOAuth2) [
     webkitgtk_5_0
   ];
 
@@ -130,7 +137,20 @@ stdenv.mkDerivation rec {
     "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
     "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
     "-DENABLE_GTK4=${lib.boolToString withGtk4}"
+    "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
+    "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
   ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cmake/modules/SetupBuildFlags.cmake \
+      --replace "-Wl,--no-undefined" ""
+    substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
+      --replace "G_OS_WIN32" "__APPLE__"
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s $out/lib/${pname}/*.dylib $out/lib/
+  '';
 
   passthru = {
     # In order for GNOME not to depend on OCaml through Coccinelle,
@@ -175,6 +195,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

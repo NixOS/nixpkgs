@@ -10,8 +10,6 @@ let
 
     # Libs
 
-    buildOcaml = callPackage ../build-support/ocaml { };
-
     buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
@@ -530,8 +528,6 @@ let
     happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
-
-    herelib = callPackage ../development/ocaml-modules/herelib { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
 
@@ -1273,8 +1269,6 @@ let
     ogg = callPackage ../development/ocaml-modules/ogg { };
 
     parany = callPackage ../development/ocaml-modules/parany { };
-
-    pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
     portaudio = callPackage ../development/ocaml-modules/portaudio {
       inherit (pkgs) portaudio;
