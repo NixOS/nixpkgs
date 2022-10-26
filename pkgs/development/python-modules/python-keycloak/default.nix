@@ -1,11 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
+, python-jose
+, pythonOlder
 , requests
 , requests-toolbelt
 , urllib3
-, python-jose
-, poetry-core
 }:
 
 buildPythonPackage rec {
@@ -13,11 +14,13 @@ buildPythonPackage rec {
   version = "2.6.0";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
     rev = "v${version}";
-    sha256 = "sha256-cuj0gJlZDkbJ2HRSMcQvO4nxpjw65CKGEpWCL5sucvg=";
+    hash = "sha256-cuj0gJlZDkbJ2HRSMcQvO4nxpjw65CKGEpWCL5sucvg=";
   };
 
   postPatch = ''
@@ -36,8 +39,12 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  doTest = false;  # test fixtures require a running keycloak instance
-  pythonImportsCheck = [ "keycloak" ];
+  # Test fixtures require a running keycloak instance
+  doTest = false;
+
+  pythonImportsCheck = [
+    "keycloak"
+  ];
 
   meta = with lib; {
     description = "Provides access to the Keycloak API";
