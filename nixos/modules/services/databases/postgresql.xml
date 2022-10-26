@@ -72,16 +72,17 @@ Type "help" for help.
 { config, pkgs, ... }:
 {
   <xref linkend="opt-environment.systemPackages" /> = [
-    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+    (let
+      # XXX specify the postgresql package you'd like to upgrade to.
+      newPostgres = pkgs.postgresql_13;
+    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux
       # XXX it's perhaps advisable to stop all services that depend on postgresql
       systemctl stop postgresql
 
-      # XXX replace `&lt;new version&gt;` with the psqlSchema here
-      export NEWDATA="/var/lib/postgresql/&lt;new version&gt;"
+      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
 
-      # XXX specify the postgresql package you'd like to upgrade to
-      export NEWBIN="${pkgs.postgresql_13}/bin"
+      export NEWBIN="${newPostgres}/bin"
 
       export OLDDATA="${config.<xref linkend="opt-services.postgresql.dataDir"/>}"
       export OLDBIN="${config.<xref linkend="opt-services.postgresql.package"/>}/bin"
