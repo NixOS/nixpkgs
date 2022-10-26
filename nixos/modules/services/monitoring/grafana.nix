@@ -852,7 +852,7 @@ in {
                 };
 
                 contactPoints = mkOption {
-                  description = lib.mdDoc "List of contact points to import or update.";
+                  description = lib.mdDoc "List of contact points to import or update. Please note that sensitive data will end up in world-readable Nix store.";
                   default = [];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
@@ -1158,17 +1158,23 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = flatten [
+    warnings = let
+      usesFileProvider = opt: defaultValue: builtins.match "^${defaultValue}$|^\\$__file\\{.*}$" opt != null;
+    in flatten [
       (optional (
-        cfg.settings.database.password != "" ||
-        cfg.settings.security.admin_password != "admin"
+        ! usesFileProvider cfg.settings.database.password "" ||
+        ! usesFileProvider cfg.settings.security.admin_password "admin"
       ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
       (optional (
         let
           checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
           datasourcesUsed = if (cfg.provision.datasources.settings == null) then [] else cfg.provision.datasources.settings.datasources;
         in if (builtins.isList cfg.provision.datasources) then checkOpts cfg.provision.datasources else checkOpts datasourcesUsed
-      ) "Datasource passwords will be stored as plaintext in the Nix store! Use file provider instead.")
+        ) ''
+          Datasource passwords will be stored as plaintext in the Nix store!
+          It is not possible to use file provider in provisioning; please provision
+          datasources via `services.grafana.provision.datasources.path` instead.
+        '')
       (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
       ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
