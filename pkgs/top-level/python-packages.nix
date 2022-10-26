@@ -9014,6 +9014,8 @@ in {
 
   python-box = callPackage ../development/python-modules/python-box { };
 
+  python-bsblan = callPackage ../development/python-modules/python-bsblan { };
+
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
