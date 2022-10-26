@@ -16386,6 +16386,8 @@ with pkgs;
   # until more issues are fixed default to libbpf 0.x
   libbpf = libbpf_0;
 
+  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
+
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
