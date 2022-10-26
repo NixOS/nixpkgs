@@ -79,29 +79,24 @@ stdenv.mkDerivation rec {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  # Not using patches option to make it easy to patch, for example, dmd and
-  # Phobos at same time if that's required
-  patchPhase = ''
-    runHook prePatch
-
-  '' + lib.optionalString (lib.versionOlder version "2.088.0") ''
+  patches = lib.optionals (lib.versionOlder version "2.088.0") [
     # Migrates D1-style operator overloads in DMD source, to allow building with
     # a newer DMD
-    patch -p1 -F3 --directory=dmd -i ${(fetchpatch {
+    (fetchpatch {
       url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
-      sha256 = "0rhl9h3hsi6d0qrz24f4zx960cirad1h8mm383q6n21jzcw71cp5";
-    })}
-  '' + lib.optionalString (lib.versionOlder version "2.092.2") ''
+      stripLen = 1;
+      extraPrefix = "dmd/";
+      sha256 = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
+    })
+  ] ++ lib.optionals (lib.versionOlder version "2.092.2") [
     # Fixes C++ tests that compiled on older C++ but not on the current one
-    patch -p1 -F3 --directory=druntime -i ${(fetchpatch {
+    (fetchpatch {
       url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
-      sha256 = "0nxzkrd1rzj44l83j7jj90yz2cv01na8vn9d116ijnm85jl007b4";
-    })}
-  '' + ''
-
-    runHook postPatch
-  '';
-
+      stripLen = 1;
+      extraPrefix = "druntime/";
+      sha256 = "sha256-/pPKK7ZK9E/mBrxm2MZyBNhYExE8p9jz8JqBdZSE6uY=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs dmd/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
@@ -187,7 +182,7 @@ stdenv.mkDerivation rec {
     make -C dmd -f posix.mak $buildFlags -j$buildJobs HOST_DMD=${HOST_DMD}
     make -C druntime -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd}
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
-    echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
+    echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
     make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
     runHook postBuild
