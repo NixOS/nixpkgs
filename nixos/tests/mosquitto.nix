@@ -4,7 +4,7 @@ let
   port = 1888;
   tlsPort = 1889;
   anonPort = 1890;
-  bindTestPort = 1891;
+  bindTestPort = 18910;
   password = "VERY_secret";
   hashedPassword = "$7$101$/WJc4Mp+I+uYE9sR$o7z9rD1EYXHPwEP5GqQj6A7k4W1yVbePlb8TqNcuOLV9WNCiDgwHOB0JHC1WCtdkssqTBduBNUnUGd6kmZvDSw==";
   topic = "test/foo";
@@ -165,6 +165,10 @@ in {
         for t in threads: t.start()
         for t in threads: t.join()
 
+    def wait_uuid(uuid):
+        server.wait_for_console_text(uuid)
+        return None
+
 
     start_all()
     server.wait_for_unit("mosquitto.service")
@@ -203,14 +207,14 @@ in {
         parallel(
             lambda: client1.succeed(subscribe("-i 3688cdd7-aa07-42a4-be22-cb9352917e40", "reader")),
             lambda: [
-                server.wait_for_console_text("3688cdd7-aa07-42a4-be22-cb9352917e40"),
+                wait_uuid("3688cdd7-aa07-42a4-be22-cb9352917e40"),
                 client2.succeed(publish("-m test", "writer"))
             ])
 
         parallel(
             lambda: client1.fail(subscribe("-i 24ff16a2-ae33-4a51-9098-1b417153c712", "reader")),
             lambda: [
-                server.wait_for_console_text("24ff16a2-ae33-4a51-9098-1b417153c712"),
+                wait_uuid("24ff16a2-ae33-4a51-9098-1b417153c712"),
                 client2.succeed(publish("-m test", "reader"))
             ])
 
@@ -229,7 +233,7 @@ in {
             lambda: client1.succeed(subscribe("-i fd56032c-d9cb-4813-a3b4-6be0e04c8fc3",
                 "anonReader", port=${toString anonPort})),
             lambda: [
-                server.wait_for_console_text("fd56032c-d9cb-4813-a3b4-6be0e04c8fc3"),
+                wait_uuid("fd56032c-d9cb-4813-a3b4-6be0e04c8fc3"),
                 client2.succeed(publish("-m test", "anonWriter", port=${toString anonPort}))
             ])
   '';
