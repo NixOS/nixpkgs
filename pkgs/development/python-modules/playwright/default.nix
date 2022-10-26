@@ -3,13 +3,14 @@
 , buildPythonPackage
 , chromium
 , ffmpeg
-, firefox
+, firefox-bin
 , git
 , greenlet
 , jq
 , nodejs
 , fetchFromGitHub
 , fetchurl
+, fetchzip
 , makeFontsConf
 , makeWrapper
 , pyee
@@ -21,7 +22,10 @@
 }:
 
 let
+  inherit (builtins) fromJSON readFile listToAttrs;
   inherit (stdenv.hostPlatform) system;
+  selectSystem = attrs:
+  attrs.${system} or (throw "Unsupported system: ${system}");
   throwSystem = throw "Unsupported system: ${system}";
 
   driverVersion = "1.27.1";
@@ -79,6 +83,22 @@ let
     };
   };
 
+    browser_revs =
+    let
+      file = fetchurl {
+        url =
+          "https://raw.githubusercontent.com/microsoft/playwright/v${driverVersion}/packages/playwright-core/browsers.json";
+        sha256 = "11a1n65l43nfyjn0qrsjjyjl7psvqa67k4kiv8x624faga4zl3mk";
+      };
+      raw_data = fromJSON (readFile file);
+    in
+    listToAttrs (map
+      ({ name, revision, ... }: {
+        inherit name;
+        value = revision;
+      })
+      raw_data.browsers);
+
   browsers-mac = stdenv.mkDerivation {
     pname = "playwright-browsers";
     version = driverVersion;
@@ -105,6 +125,20 @@ let
     fontconfig = makeFontsConf {
       fontDirectories = [];
     };
+  suffix = selectSystem {
+    # Not sure how other system compatibility is, needs trial & error
+    x86_64-linux = "ubuntu-20.04";
+    aarch64-linux = "ubuntu-20.04-arm64";
+    x86_64-darwin = "mac";
+    aarch64-darwin = "mac-arm64";
+  };
+
+  upstream_firefox = fetchzip {
+    url =
+      "https://playwright.azureedge.net/builds/firefox/${browser_revs.firefox}/firefox-${suffix}.zip";
+    sha256 = "sha256-r1cCXxkIABU5BLP1Q6TBoE5CrNhmHApAEZT3ta+GaAU=";
+    stripRoot = true;
+  };
   in runCommand ("playwright-browsers"
     + lib.optionalString (withFirefox && !withChromium) "-firefox"
     + lib.optionalString (!withFirefox && withChromium) "-chromium")
@@ -125,9 +159,29 @@ let
       --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
       --set FONTCONFIG_FILE ${fontconfig}
   '' + lib.optionalString withFirefox ''
-    FIREFOX_REVISION=$(jq -r '.browsers[] | select(.name == "firefox").revision' $BROWSERS_JSON)
-    mkdir -p $out/firefox-$FIREFOX_REVISION/firefox
-    ln -s ${firefox}/bin/firefox $out/firefox-$FIREFOX_REVISION/firefox/firefox
+    firefoxoutdir=$out/firefox-${browser_revs.firefox}/firefox
+    mkdir -p $firefoxoutdir
+    cp -r ${upstream_firefox}/* $firefoxoutdir/
+
+    # patchelf the binary
+    wrapper="${firefox-bin}/bin/firefox"
+    binary="$(readlink -f $(<"$wrapper" grep '^exec ' | grep -o -P '/nix/store/[^"]+' | head -n 1))"
+
+    interpreter="$(patchelf --print-interpreter "$binary")"
+    rpath="$(patchelf --print-rpath "$binary")"
+
+    find $firefoxoutdir/ -executable -type f | while read i; do
+      chmod u+w "$i"
+      [[ $i == *.so ]] || patchelf --set-interpreter "$interpreter" "$i"
+      patchelf --set-rpath "$rpath" "$i"
+      chmod u-w "$i"
+    done
+
+    # create the wrapper script
+    rm $firefoxoutdir/firefox
+    <"$wrapper" grep -vE '^exec ' > $firefoxoutdir/firefox
+    echo "exec \"$firefoxoutdir/firefox-bin\" \"\$@\"" >> $firefoxoutdir/firefox
+    chmod a+x $firefoxoutdir/firefox
   '' + ''
     FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
     mkdir -p $out/ffmpeg-$FFMPEG_REVISION
