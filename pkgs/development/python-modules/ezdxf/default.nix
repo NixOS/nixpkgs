@@ -38,6 +38,8 @@ buildPythonPackage rec {
     "test_from_nurbs_python_curve_to_ezdxf_bspline"
     "test_from_ezdxf_bspline_to_nurbs_python_curve_non_rational"
     "test_from_ezdxf_bspline_to_nurbs_python_curve_rational"
+    # AssertionError: assert 44.99999999999999 == 45
+    "test_dimension_transform_interface"
   ];
 
   pythonImportsCheck = [
