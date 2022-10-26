@@ -264,9 +264,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
+  gnome-desktop = throw "The ‘gnome.gnome-desktop’ alias was removed. Please use ‘pkgs.gnome-desktop’ directly."; # converted to throw on 2022-10-26
   gnome-todo = pkgs.endeavour; # added 2022-07-30
-  libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
+  libgnome-games-support = throw "The ‘gnome.libgnome-games-support’ alias was removed. Please use ‘pkgs.libgnome-games-support’ directly."; # converted to throw on 2022-10-26
 
   gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
 
