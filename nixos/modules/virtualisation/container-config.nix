@@ -8,7 +8,9 @@ with lib;
 
     # Disable some features that are not useful in a container.
 
+    # containers don't have a kernel
     boot.kernel.enable = false;
+    boot.modprobeConfig.enable = false;
 
     console.enable = mkDefault false;
 
