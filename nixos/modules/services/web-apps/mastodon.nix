@@ -475,7 +475,6 @@ in {
       } // cfgService;
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
@@ -500,16 +499,21 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
-      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
     };
 
     systemd.services.mastodon-streaming = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon streaming";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon streaming";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
         else { PORT = toString(cfg.streamingPort); }
@@ -529,11 +533,14 @@ in {
     };
 
     systemd.services.mastodon-web = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon web";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon web";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-web/web.socket"; }
         else { PORT = toString(cfg.webPort); }
@@ -554,11 +561,14 @@ in {
     };
 
     systemd.services.mastodon-sidekiq = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon sidekiq";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon sidekiq";
       environment = env // {
         PORT = toString(cfg.sidekiqPort);
         DB_POOL = toString cfg.sidekiqThreads;

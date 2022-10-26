@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.5.12";
+  version = "0.5.14";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Fm3D1VnudZhXpH7ymQNpViwwODvXYeO/e2xT3XXfclk=";
+    sha256 = "sha256-urbyWNbmj2qEO4JJ/waRXGRJ9L5KgwsRB5Wh9yib8zc=";
   };
 
-  cargoSha256 = "sha256-PiYonf+aD+Q3mWtP+7NDu9wu3vKrMRAlYh94fXLMWD8=";
+  cargoSha256 = "sha256-3OxO+j5UuPEg9xNmN+kIqpdq6fVnFpgx5xCaMNue52g=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
