@@ -192,8 +192,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   devhelp = callPackage ./devtools/devhelp { };
 
-  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
-
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
@@ -391,4 +389,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
 
   gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
+
+  gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
+
 }
