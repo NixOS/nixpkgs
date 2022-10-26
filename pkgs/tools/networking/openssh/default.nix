@@ -19,12 +19,12 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.0p1";
+    version = "9.1p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      sha256 = "12m2f9czvgmi7akp7xah6y7mrrpi280a3ksk47iwr7hy2q1475q3";
+      hash = "sha256-GfhQCcfj4jeH8CNvuxV4OSq01L+fjsX+a8HNfov90og=";
     };
 
     extraPatches = [
