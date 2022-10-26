@@ -75,6 +75,10 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin\/*
   '';
 
+  passthru = {
+    inherit jre; # Used by the NixOS module to select the supported jre
+  };
+
   meta = with lib; {
     homepage = "https://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
@@ -83,5 +87,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };
-  passthru = { inherit jdk17_headless; };
 }
