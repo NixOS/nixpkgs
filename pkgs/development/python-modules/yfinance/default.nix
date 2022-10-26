@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.77";
+  version = "0.1.84";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gg9wX3WWacS5BmbR1wgdicFxhPN5b45KH0+obWmJ65g=";
+    hash = "sha256-oa+vbaDYnk3ogRF8z3Ev1u2XNe6prf/54HSndigf1pQ=";
   };
 
   propagatedBuildInputs = [
