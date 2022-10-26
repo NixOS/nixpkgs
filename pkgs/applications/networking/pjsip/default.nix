@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-aarch64.patch
+    (fetchpatch {
+      name = "CVE-2022-39269.patch";
+      url = "https://github.com/pjsip/pjproject/commit/d2acb9af4e27b5ba75d658690406cec9c274c5cc.patch";
+      sha256 = "sha256-bKE/MrRAqN1FqD2ubhxIOOf5MgvZluHHeVXPjbR12iQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-39244.patch";
+      url = "https://github.com/pjsip/pjproject/commit/c4d34984ec92b3d5252a7d5cddd85a1d3a8001ae.patch";
+      sha256 = "sha256-hTUMh6bYAizn6GF+sRV1vjKVxSf9pnI+eQdPOqsdJI4=";
+    })
   ];
 
   buildInputs = [ openssl libsamplerate ]
