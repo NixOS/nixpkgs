@@ -4322,7 +4322,9 @@ with pkgs;
 
   karma = callPackage ../servers/monitoring/karma { };
 
-  kaldi = callPackage ../tools/audio/kaldi { };
+  kaldi = callPackage ../tools/audio/kaldi {
+    inherit (darwin.apple_sdk.frameworks) Accelerate;
+  };
 
   kalker = callPackage ../tools/misc/kalker { };
 
@@ -15531,6 +15533,8 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
+  luau = callPackage ../development/interpreters/luau { };
+
   toluapp = callPackage ../development/tools/toluapp {
     lua = lua5_1; # doesn't work with any other :(
   };
@@ -15962,6 +15966,8 @@ with pkgs;
   guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
+
+  guile-sqlite3 = callPackage ../development/guile-modules/guile-sqlite3 { };
 
   guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
 
@@ -25926,6 +25932,8 @@ with pkgs;
   carlito = callPackage ../data/fonts/carlito {};
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
+
+  catppuccin-cursors = callPackage ../data/icons/catppuccin-cursors { };
 
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
@@ -37379,7 +37387,10 @@ with pkgs;
 
   xzoom = callPackage ../tools/X11/xzoom {};
 
-  yabai = callPackage ../os-specific/darwin/yabai { };
+  yabai = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/yabai {
+    inherit (darwin.apple_sdk.frameworks) Cocoa Carbon ScriptingBridge;
+    inherit (darwin.apple_sdk_11_0.frameworks) SkyLight;
+  };
 
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
