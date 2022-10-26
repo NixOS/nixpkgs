@@ -16087,11 +16087,13 @@ with pkgs;
   };
   antlr3 = antlr3_5;
 
-  antlr4_8 = callPackage ../development/tools/parsing/antlr/4.8.nix {
+  inherit (callPackages ../development/tools/parsing/antlr/4.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  }) antlr4_8;
 
-  antlr4_9 = callPackage ../development/tools/parsing/antlr/4.9.nix { };
+  inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
+    antlr4_9
+    antlr4_11;
 
   antlr4 = antlr4_8;
 
