@@ -138,13 +138,13 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "hash": "sha256-9r9Y1iegVgaZk+2bKB0uHy6w0JotDuNUXemOqtJSAeg=",
+    "hash": "sha256-7dNFy3UJ20HbacmaZDxv3IRxsDHGgJdMJFa4/pJIYdw=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.16.0",
+    "rev": "v1.16.1",
     "vendorHash": null,
-    "version": "1.16.0"
+    "version": "1.16.1"
   },
   "bigip": {
     "hash": "sha256-uSe+J4AlW8Dt96BVF1ZI/yrgWUbZsl64b/D+k5ysHC0=",
@@ -349,13 +349,13 @@
     "version": "2.22.0"
   },
   "elasticsearch": {
-    "hash": "sha256-7sMF7LBM5tnOtERufh7LaJlfcJ5WHIynpzlTg/05u3I=",
+    "hash": "sha256-+cktPArBOysc4V+uR3KWsVlxtxSIbuVMCmPSU21xF/U=",
     "owner": "phillbaker",
     "provider-source-address": "registry.terraform.io/phillbaker/elasticsearch",
     "repo": "terraform-provider-elasticsearch",
-    "rev": "v2.0.5",
+    "rev": "v2.0.6",
     "vendorHash": "sha256-oVTanZpCWs05HwyIKW2ajiBPz1HXOFzBAt5Us+EtTRw=",
-    "version": "2.0.5"
+    "version": "2.0.6"
   },
   "equinix": {
     "hash": "sha256-gvI9awkKiWWnw6O/KvskFTHZfvajGfgYu8DGsT34Siw=",
