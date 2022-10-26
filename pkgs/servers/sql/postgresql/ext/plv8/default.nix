@@ -4,6 +4,7 @@
 , v8
 , perl
 , postgresql
+, libxcrypt
 # For test
 , runCommand
 , coreutils
@@ -34,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     v8
     postgresql
+  ] ++ lib.optionals (lib.versionOlder postgresql.version "14") [
+    libxcrypt
   ];
 
   buildFlags = [ "all" ];
