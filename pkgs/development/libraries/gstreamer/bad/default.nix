@@ -67,6 +67,7 @@
 , spandsp
 , srtp
 , zbar
+, usrsctp
 , wayland-protocols
 , wildmidi
 , fluidsynth
@@ -185,6 +186,7 @@ stdenv.mkDerivation rec {
     vo-aacenc
     libfreeaptx
     zxing-cpp
+    usrsctp
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -264,7 +266,6 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
