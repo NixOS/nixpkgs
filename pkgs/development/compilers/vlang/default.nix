@@ -2,29 +2,29 @@
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2022.20";
+  version = "weekly.2022.43";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
+    sha256 = "16pga2ww5sq93ld410yf4kmc8v5pmfg1g46qb71j1r7iw6avdz3w";
   };
 
   # Required for bootstrap.
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "167f262866090493650f58832d62d910999dd5a4";
-    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
+    rev = "2510de8ca11c798a5c5599dd7f35ce34cf2df8ae";
+    sha256 = "0bqrkjbiv3pii3axp70pr48y0prwv80lwzc8ffp74n2i18yzckki";
   };
 
   # Required for vdoc.
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
-    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
+    rev = "014724a2e35c0a7e46ea9cc91f5a303f2581b62c";
+    sha256 = "08gl20f0a4bbxf9gr1nqbcmhphcqzmv8c45l587h8dkkm2dzghlf";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
