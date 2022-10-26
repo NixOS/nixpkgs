@@ -8837,6 +8837,18 @@ final: prev:
     meta.homepage = "https://github.com/nathangrigg/vim-beancount/";
   };
 
+  vim-bepoptimist = buildVimPluginFrom2Nix {
+    pname = "vim-bepoptimist";
+    version = "2022-06-24";
+    src = fetchFromGitHub {
+      owner = "sheoak";
+      repo = "vim-bepoptimist";
+      rev = "7b1f01905112c9e0b25adc5b1cd2650a5eee5e88";
+      sha256 = "1650amv8q866ysxfm4xsf5hx1xx6ccg6xga2w0ziyf62s5frgbxd";
+    };
+    meta.homepage = "https://github.com/sheoak/vim-bepoptimist/";
+  };
+
   vim-better-whitespace = buildVimPluginFrom2Nix {
     pname = "vim-better-whitespace";
     version = "2022-06-30";
