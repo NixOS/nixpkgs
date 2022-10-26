@@ -3525,6 +3525,8 @@ in {
 
   flit-core = callPackage ../development/python-modules/flit-core { };
 
+  flit-scm = callPackage ../development/python-modules/flit-scm { };
+
   flow-record = callPackage ../development/python-modules/flow-record { };
 
   flower = callPackage ../development/python-modules/flower { };
