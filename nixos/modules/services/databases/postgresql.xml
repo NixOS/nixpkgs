@@ -74,7 +74,10 @@ Type "help" for help.
   <xref linkend="opt-environment.systemPackages" /> = [
     (let
       # XXX specify the postgresql package you'd like to upgrade to.
-      newPostgres = pkgs.postgresql_13;
+      # Do not forget to list the extensions you need.
+      newPostgres = pkgs.postgresql_13.withPackages (pp: [
+        # pp.plv8
+      ]);
     in pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux
       # XXX it's perhaps advisable to stop all services that depend on postgresql
