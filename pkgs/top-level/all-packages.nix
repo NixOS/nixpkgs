@@ -8277,6 +8277,8 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  kluctl = callPackage ../applications/networking/cluster/kluctl { };
+
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
   kibana = kibana7;
 
