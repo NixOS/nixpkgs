@@ -30465,6 +30465,8 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
+  onmetal-image = callPackage ../tools/virtualization/onmetal-image { };
+
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
