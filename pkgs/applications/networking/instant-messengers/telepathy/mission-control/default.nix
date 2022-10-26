@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "An account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
