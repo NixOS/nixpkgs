@@ -154,6 +154,11 @@ stdenv.mkDerivation rec {
     "-DHIP_COMMON_DIR=${hip}"
     "-DROCCLR_PATH=${rocclr}"
     "-DHIP_VERSION_BUILD_ID=0"
+    # Temporarily set variables to work around upstream CMakeLists issue
+    # Can be removed once https://github.com/ROCm-Developer-Tools/hipamd/issues/55 is fixed
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   postInstall = ''
