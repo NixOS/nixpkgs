@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "503";
+  version = "504";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nJn5EphbmVYAAOisV3fym/nHlJl/aPZ2Iyp+Z2/N3Jc=";
+    hash = "sha256-d9GxAUbdtKzyQI7ow8Cx0e0TCDchasSZL450+9GhJAU=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,7 @@ python3Packages.buildPythonPackage rec {
     -e TestHydrusServer \
     -e TestHydrusSessions \
     -e TestServer \
+    -e TestClientMetadataMigration \
   '';
 
   outputs = [ "out" "doc" ];
