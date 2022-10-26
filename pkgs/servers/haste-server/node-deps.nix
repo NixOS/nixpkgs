@@ -841,13 +841,13 @@ let
         sha512 = "AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==";
       };
     };
-    "pg-8.7.3" = {
+    "pg-8.8.0" = {
       name = "pg";
       packageName = "pg";
-      version = "8.7.3";
+      version = "8.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pg/-/pg-8.7.3.tgz";
-        sha512 = "HPmH4GH4H3AOprDJOazoIcpI49XFsHCe8xlrjHkWiapdbHK+HLtbm/GQzXYAZwmPju/kzKhjaSfMACG+8cgJcw==";
+        url = "https://registry.npmjs.org/pg/-/pg-8.8.0.tgz";
+        sha512 = "UXYN0ziKj+AeNNP7VDMwrehpACThH7LUl/p8TDFpEUuSejCUIwGSfxpHsPvtM6/WXFy6SU4E5RG4IJV/TZAGjw==";
       };
     };
     "pg-connection-string-2.5.0" = {
@@ -868,13 +868,13 @@ let
         sha512 = "WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==";
       };
     };
-    "pg-pool-3.5.1" = {
+    "pg-pool-3.5.2" = {
       name = "pg-pool";
       packageName = "pg-pool";
-      version = "3.5.1";
+      version = "3.5.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/pg-pool/-/pg-pool-3.5.1.tgz";
-        sha512 = "6iCR0wVrro6OOHFsyavV+i6KYL4lVNyYAB9RD18w66xSzN+d8b66HiwuP30Gp1SH5O9T82fckkzsRjlrhD0ioQ==";
+        url = "https://registry.npmjs.org/pg-pool/-/pg-pool-3.5.2.tgz";
+        sha512 = "His3Fh17Z4eg7oANLob6ZvH8xIVen3phEZh2QuyrIl4dQSDVEabNducv6ysROKpDNPSD+12tONZVWfSgMvDD9w==";
       };
     };
     "pg-protocol-1.5.0" = {
@@ -1198,7 +1198,7 @@ let
       version = "1.0.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz";
-        sha1 = "b2bf4ee8514aae6165b4817829d21b2ef49904ec";
+        sha512 = "pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==";
       };
     };
     "util-deprecate-1.0.2" = {
@@ -1207,7 +1207,7 @@ let
       version = "1.0.2";
       src = fetchurl {
         url = "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz";
-        sha1 = "450d4dc9fa70de732762fbd2d4a28981419a0ccf";
+        sha512 = "EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==";
       };
     };
     "utils-merge-1.0.1" = {
@@ -1216,7 +1216,7 @@ let
       version = "1.0.1";
       src = fetchurl {
         url = "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz";
-        sha1 = "9f95710f50a267947b2ccc124741c1028427e713";
+        sha512 = "pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==";
       };
     };
     "which-2.0.2" = {
@@ -1270,7 +1270,7 @@ let
       version = "1.0.2";
       src = fetchurl {
         url = "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz";
-        sha1 = "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f";
+        sha512 = "l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==";
       };
     };
     "xtend-4.0.2" = {
@@ -1297,7 +1297,7 @@ let
       version = "2.1.2";
       src = fetchurl {
         url = "https://registry.npmjs.org/yallist/-/yallist-2.1.2.tgz";
-        sha1 = "1c11f9218f076089a47dd512f93c6699a6a81d52";
+        sha512 = "ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==";
       };
     };
     "yargs-16.2.0" = {
@@ -1341,7 +1341,7 @@ let
     name = "haste";
     packageName = "haste";
     version = "0.1.0";
-    src = ../../../../../../../../../nix/store/sa8y38xfqrbklwvwb484fgx0lgks9wa1-source;
+    src = ../../../../../../../../../nix/store/ksl6h7h03ks119z1skfipjh4irc8x80c-source;
     dependencies = [
       sources."@ungap/promise-all-settled-1.1.2"
       sources."ansi-colors-4.1.1"
@@ -1456,10 +1456,10 @@ let
       sources."parseurl-1.3.3"
       sources."path-exists-4.0.0"
       sources."path-is-absolute-1.0.1"
-      sources."pg-8.7.3"
+      sources."pg-8.8.0"
       sources."pg-connection-string-2.5.0"
       sources."pg-int8-1.0.1"
-      sources."pg-pool-3.5.1"
+      sources."pg-pool-3.5.2"
       sources."pg-protocol-1.5.0"
       sources."pg-types-2.2.0"
       sources."pgpass-1.0.5"
