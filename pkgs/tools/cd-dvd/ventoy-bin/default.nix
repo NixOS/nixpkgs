@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.80";
+  version = "1.0.81";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-FmMpMUy8VqwbOiRWZdoY76ToSoWWbBGM5h/9VS8rYRY=";
+    hash = "sha256-15y05g+F+oEFYUUy7SE57GZ1RSHqdZnk2iOPsy1L0GI=";
   };
 
   patches = [
