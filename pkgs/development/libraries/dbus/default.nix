@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , pkg-config
 , expat
@@ -20,21 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.0";
+  version = "1.14.4";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-zNfM43WW4KGVWP1mSNEnKrQ/AR2AyGNa6o/QutWK69Q=";
+    sha256 = "sha256-fA+bjl7A/yR5OD5iwAhKOimvme3xUU6fZZuBsw1ONT4=";
   };
 
-  patches = [
-    # Fix dbus-daemon crashing when running tests due to long XDG_DATA_DIRS.
-    # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/302
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/b551b3e9737958216a1a9d359150a4110a9d0549.patch";
-      sha256 = "kOVjlklZzKvBZXmmrE1UiO4XWRoBLViGwdn6/eDH+DY=";
-    })
-  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
+  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
 
   postPatch = ''
     substituteInPlace bus/Makefile.am \
