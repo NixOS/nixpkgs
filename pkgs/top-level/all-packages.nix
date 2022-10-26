@@ -25929,6 +25929,8 @@ with pkgs;
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
 
+  catppuccin-cursors = callPackage ../data/icons/catppuccin-cursors { };
+
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
