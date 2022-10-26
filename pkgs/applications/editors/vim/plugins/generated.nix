@@ -7913,6 +7913,18 @@ final: prev:
     meta.homepage = "https://github.com/KeitaNakamura/tex-conceal.vim/";
   };
 
+  text-case-nvim = buildVimPluginFrom2Nix {
+    pname = "text-case.nvim";
+    version = "2022-10-08";
+    src = fetchFromGitHub {
+      owner = "johmsalas";
+      repo = "text-case.nvim";
+      rev = "2cbe6b6653b46d2ec23bb2ba808b5c1fc78e9382";
+      sha256 = "1fwrvsl4rdsrljb8y6g4zpv5vvlz8hxakcyz6f7zr4xxnr5rlb3c";
+    };
+    meta.homepage = "https://github.com/johmsalas/text-case.nvim/";
+  };
+
   thesaurus_query-vim = buildVimPluginFrom2Nix {
     pname = "thesaurus_query.vim";
     version = "2022-01-30";
