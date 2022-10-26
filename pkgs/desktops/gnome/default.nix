@@ -152,8 +152,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   ghex = callPackage ./apps/ghex { };
 
-  gnome-books = callPackage ./apps/gnome-books { };
-
   gnome-boxes = callPackage ./apps/gnome-boxes { };
 
   gnome-calendar = callPackage ./apps/gnome-calendar { };
@@ -268,6 +266,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-todo = pkgs.endeavour; # added 2022-07-30
   libgnome-games-support = throw "The ‘gnome.libgnome-games-support’ alias was removed. Please use ‘pkgs.libgnome-games-support’ directly."; # converted to throw on 2022-10-26
 
+  gnome-books = throw "The ‘gnome.gnome-books’ package was removed as it is broken and abandoned."; # added 2022-10-26
   gnome-devel-docs = throw "The ‘gnome.gnome-devel-docs’ package was removed as it is outdated and no longer relevant."; # added 2022-10-26
 
 }
