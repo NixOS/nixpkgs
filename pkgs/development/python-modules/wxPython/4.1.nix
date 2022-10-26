@@ -28,6 +28,7 @@
 , WebKit
 , pillow
 , numpy
+, six
 , libXinerama
 , libSM
 , libXxf86vm
@@ -108,7 +109,11 @@ buildPythonPackage rec {
     WebKit
   ];
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+    six
+  ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 

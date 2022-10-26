@@ -21,6 +21,7 @@
 , CoreFoundation
 , pillow
 , numpy
+, six
 }:
 
 buildPythonPackage rec {
@@ -46,7 +47,11 @@ buildPythonPackage rec {
     [ wxGTK.gtk ]
   );
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    numpy
+    pillow
+    six
+  ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
