@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  disabled = pythonAtLeast "3.10"; # cannot import name 'Mapping' from 'collections'
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +23,11 @@ buildPythonPackage rec {
     # https://sources.debian.org/src/python-boto/2.49.0-4/debian/patches/bug-953970_python3.8-compat.patch/
     ./bug-953970_python3.8-compat.patch
   ];
+
+  postPatch = ''
+    substituteInPlace boto/dynamodb/types.py --replace 'from collections import Mapping' 'from collections.abc import Mapping'
+    substituteInPlace boto/mws/connection.py --replace 'import collections' 'import collections.abc as collections'
+  '';
 
   checkPhase = ''
     ${python.interpreter} tests/test.py default
