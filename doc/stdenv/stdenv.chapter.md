@@ -1140,6 +1140,13 @@ Here are some more packages that provide a setup hook. Since the list of hooks i
 Many other packages provide hooks, that are not part of `stdenv`. You can find
 these in the [Hooks Reference](#chap-hooks).
 
+### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
+
+If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
+These hooks allow a user to inject code into the wrappers.
+As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.
+
 ## Purity in Nixpkgs {#sec-purity-in-nixpkgs}
 
 *Measures taken to prevent dependencies on packages outside the store, and what you can do to prevent them.*
