@@ -25,12 +25,13 @@
 , zlib
 
 , withKeePassBrowser ? true
-, withKeePassKeeShare ? true
-, withKeePassSSHAgent ? true
-, withKeePassNetworking ? true
-, withKeePassTouchID ? true
-, withKeePassYubiKey ? true
 , withKeePassFDOSecrets ? true
+, withKeePassKeeShare ? true
+, withKeePassNetworking ? true
+, withKeePassSSHAgent ? true
+, withKeePassTouchID ? true
+, withKeePassX11 ? true
+, withKeePassYubiKey ? true
 
 , nixosTests
 }:
@@ -39,13 +40,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.1";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "sha256-BOtehDzlWhhfXj8TOFvFN4f86Hl2EC3rO4qUIl9fqq4=";
+    sha256 = "sha256-mtOnUB6+iBBqgPT5KKhEX4M7UUM3s5fT0OTePE6THXw=";
   };
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang [
@@ -65,11 +66,12 @@ stdenv.mkDerivation rec {
     "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_UPDATECHECK=OFF"
   ]
+  ++ (optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
+  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
+  ++ (optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
   ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
-  ++ (optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
-  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
@@ -103,13 +105,13 @@ stdenv.mkDerivation rec {
     qrencode
     qtbase
     qtsvg
-    qtx11extras
     readline
     zlib
   ]
-  ++ optional stdenv.isLinux libusb1
+  ++ optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication
   ++ optional stdenv.isDarwin qtmacextras
-  ++ optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
+  ++ optional stdenv.isLinux libusb1
+  ++ optional withKeePassX11 qtx11extras;
 
   passthru.tests = nixosTests.keepassxc;
 
