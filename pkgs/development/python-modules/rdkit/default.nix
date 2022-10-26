@@ -19,10 +19,11 @@
 }:
 let
   external = {
-    avalon = fetchzip {
-      url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
-      sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
-      stripRoot = false;
+    avalon = fetchFromGitHub {
+      owner = "rohdebe1";
+      repo = "ava-formake";
+      rev = "AvalonToolkit_2.0.2";
+      sha256 = "1hbqras6c4s7vlb9vi1mayf0jcapsam49animj02r2f794xgv3b0";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
@@ -40,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.03.5";
+  version = "2022.09.1";
   format = "other";
 
   src =
@@ -51,13 +52,13 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "19idgilabh04cbr1qj6zgrgsfjm248mmfz6fsr0smrd68d0xnml9";
+      sha256 = "0jqbpf0hxq29y5112dpvy34yw67yzg6x3572r10jizgp5f6b19h1";
     };
 
   unpackPhase = ''
     mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
     cp -r ${src}/* source
-    cp -r ${external.avalon}/SourceDistribution/* source/External/AvalonTools/avalon
+    cp -r ${external.avalon}/* source/External/AvalonTools/avalon
     cp -r ${external.yaehmop}/* source/External/YAeHMOP/yaehmop
     cp -r ${external.freesasa}/* source/External/FreeSASA/freesasa
 
