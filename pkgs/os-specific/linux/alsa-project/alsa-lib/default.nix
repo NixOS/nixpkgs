@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-lib";
-  version = "1.2.7.2";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    hash = "sha256-ijW3IY5Q8qLHk0LQ3pje2BQ5zhnhKAk4Xsm+lZbefC8=";
+    hash = "sha256-GrAbdOM0JcqZwuNsCET9aIgnMZO9iYJA/o+TrMvL80c=";
   };
 
   patches = [
