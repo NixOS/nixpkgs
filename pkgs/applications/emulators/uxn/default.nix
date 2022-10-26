@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin/ $out/share/${pname}/
+    install -d $out/bin/ $out/share/uxn/
 
     cp bin/uxnasm bin/uxncli bin/uxnemu $out/bin/
     cp -r projects $out/share/uxn/
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "An assembler and emulator for the Uxn stack machine";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres kototama ];
     platforms = with platforms; unix;
   };
 }
