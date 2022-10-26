@@ -13597,6 +13597,11 @@ with pkgs;
 
   fasmg = callPackage ../development/compilers/fasmg { };
 
+  fbc = if stdenv.hostPlatform.isDarwin then
+    callPackage ../development/compilers/fbc/mac-bin.nix { }
+  else
+    callPackage ../development/compilers/fbc { };
+
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   firrtl = callPackage ../development/compilers/firrtl { };
