@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "telegraph";
-  version = "2.1.0";
+  version = "2.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    sha256 = "ChlQJu4kHkXUf4gOtW5HS+ThP3eQL7LsyANeS/10pLo=";
-    rev = "da629de7c00c3b8b0c7ab8ef4bf23caf419a3c6c";
+    sha256 = "xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
+    rev = "v${version}";
   };
 
   checkInputs = [ pytestCheckHook ];
