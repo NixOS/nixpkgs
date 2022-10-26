@@ -1074,6 +1074,8 @@ self: super: with self; {
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
+  pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
