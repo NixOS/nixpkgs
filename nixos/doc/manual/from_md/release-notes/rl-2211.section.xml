@@ -887,6 +887,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>bloat</literal> package has been updated from
+          unstable-2022-03-31 to unstable-2022-10-25, which brings a
+          breaking change. See
+          <link xlink:href="https://git.freesoftwareextremist.com/bloat/commit/?id=887ed241d64ba5db3fd3d87194fb5595e5ad7d73">this
+          upstream commit message</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.matrix-synapse</literal> systemd unit
           has been hardened.
         </para>

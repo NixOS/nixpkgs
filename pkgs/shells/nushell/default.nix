@@ -24,16 +24,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.69.1";
+  version = "0.70.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-aEEuzl3HRWNk2zJq+Vh5ZLyT26Qk7oI3bQKUr4SlDr8=";
+    sha256 = "sha256-krsycaqT+MmpWEVNVqQQO2zrO9ymZIskgGgrzEMFP1s=";
   };
 
-  cargoSha256 = "sha256-qaBiTZUe4RSYdXAEWPVv0ATWDN/+aOYiEpq+oztwNEc=";
+  cargoSha256 = "sha256-Etw8F5alUNMlH0cvREPk2LdBQKl70dj6JklFZWInvow=";
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
