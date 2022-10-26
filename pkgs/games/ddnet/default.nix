@@ -63,9 +63,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa OpenGL Security ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DAUTOUPDATE=OFF"
-    "-GNinja"
   ];
 
   postPatch = ''
