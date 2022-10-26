@@ -6381,8 +6381,6 @@ with pkgs;
     boost  = if stdenv.isDarwin then boost else boost15x;
   };
 
-  execline = skawarePackages.execline;
-
   executor = with python3Packages; toPythonApplication executor;
 
   exif = callPackage ../tools/graphics/exif { };
@@ -9448,10 +9446,6 @@ with pkgs;
 
   netselect = callPackage ../tools/networking/netselect { };
 
-  nettee = callPackage ../tools/networking/nettee {
-    inherit (skawarePackages) cleanPackaging;
-  };
-
   networkmanager = callPackage ../tools/networking/networkmanager { };
 
   networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
@@ -11044,16 +11038,6 @@ with pkgs;
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
-
-  s6-dns = skawarePackages.s6-dns;
-
-  s6-linux-init = skawarePackages.s6-linux-init;
-
-  s6-linux-utils = skawarePackages.s6-linux-utils;
-
-  s6-networking = skawarePackages.s6-networking;
-
-  s6-portable-utils = skawarePackages.s6-portable-utils;
 
   sacad = callPackage ../tools/misc/sacad { };
 
@@ -21286,8 +21270,6 @@ with pkgs;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
-  nsss = skawarePackages.nsss;
-
   ntbtls = callPackage ../development/libraries/ntbtls { };
 
   ntk = callPackage ../development/libraries/audio/ntk { };
@@ -22046,8 +22028,6 @@ with pkgs;
 
   SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
 
-  sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
-
   sdrplay = callPackage ../applications/radio/sdrplay {};
 
   sdrpp = callPackage ../applications/radio/sdrpp {
@@ -22117,9 +22097,6 @@ with pkgs;
 
   skjold = callPackage ../development/tools/skjold { };
 
-  skalibs = skawarePackages.skalibs;
-  skalibs_2_10 = skawarePackages.skalibs_2_10;
-
   skawarePackages = recurseIntoAttrs rec {
     cleanPackaging = callPackage ../build-support/skaware/clean-packaging.nix { };
     buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix {
@@ -22156,6 +22133,34 @@ with pkgs;
     nsss = callPackage ../development/libraries/nsss { };
     utmps = callPackage ../development/libraries/utmps { };
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
+  };
+
+  inherit (skawarePackages)
+    execline
+    execline-man-pages
+    mdevd
+    nsss
+    s6
+    s6-dns
+    s6-linux-init
+    s6-linux-utils
+    s6-man-pages
+    s6-networking
+    s6-networking-man-pages
+    s6-portable-utils
+    s6-portable-utils-man-pages
+    s6-rc
+    sdnotify-wrapper
+    skalibs
+    skalibs_2_10
+    utmps;
+
+  kgt = callPackage ../development/tools/kgt {
+    inherit (skawarePackages) cleanPackaging;
+  };
+
+  nettee = callPackage ../tools/networking/nettee {
+    inherit (skawarePackages) cleanPackaging;
   };
 
   slang = callPackage ../development/libraries/slang { };
@@ -22558,8 +22563,6 @@ with pkgs;
   uthash = callPackage ../development/libraries/uthash { };
 
   uthenticode = callPackage ../development/libraries/uthenticode { };
-
-  utmps = skawarePackages.utmps;
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
@@ -24239,10 +24242,6 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  s6 = skawarePackages.s6;
-
-  s6-rc = skawarePackages.s6-rc;
-
   supervise = callPackage ../tools/system/supervise { };
 
   spamassassin = callPackage ../servers/mail/spamassassin { };
@@ -25179,8 +25178,6 @@ with pkgs;
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
-  inherit (skawarePackages) mdevd;
-
   metastore = callPackage ../os-specific/linux/metastore { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -26083,8 +26080,6 @@ with pkgs;
 
   envypn-font = callPackage ../data/fonts/envypn-font { };
 
-  execline-man-pages = skawarePackages.execline-man-pages;
-
   ezra-sil = callPackage ../data/fonts/ezra-sil { };
 
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
@@ -26714,12 +26709,6 @@ with pkgs;
   inter = callPackage ../data/fonts/inter { };
 
   open-fonts = callPackage ../data/fonts/open-fonts { };
-
-  s6-man-pages = skawarePackages.s6-man-pages;
-
-  s6-networking-man-pages = skawarePackages.s6-networking-man-pages;
-
-  s6-portable-utils-man-pages = skawarePackages.s6-portable-utils-man-pages;
 
   scientifica = callPackage ../data/fonts/scientifica { };
 
@@ -29521,10 +29510,6 @@ with pkgs;
   kermit = callPackage ../tools/misc/kermit { };
 
   kexi = libsForQt514.callPackage ../applications/office/kexi { };
-
-  kgt = callPackage ../development/tools/kgt {
-    inherit (skawarePackages) cleanPackaging;
-  };
 
   khronos = callPackage ../applications/office/khronos { };
 
