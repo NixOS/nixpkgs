@@ -12076,7 +12076,7 @@ with pkgs;
   tracebox = callPackage ../tools/networking/tracebox { stdenv = gcc10StdenvCompat; };
 
   tracee = callPackage ../tools/security/tracee {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
+    libbpf = libbpf_1; # keep inline with their submodule
   };
 
   tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
@@ -17292,7 +17292,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pahole = callPackage ../development/tools/misc/pahole {};
+  pahole = callPackage ../development/tools/misc/pahole {
+    libbpf = libbpf_1;
+  };
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
@@ -20028,6 +20030,7 @@ with pkgs;
   libgxps = callPackage ../development/libraries/libgxps { };
 
   libiio = callPackage ../development/libraries/libiio {
+    inherit (darwin.apple_sdk.frameworks) CFNetwork CoreServices;
     python = python3;
   };
 
@@ -28263,7 +28266,7 @@ with pkgs;
       python = python3;
     };
   };
-  gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio.pkgs;
+  gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio3_9.pkgs;
   # A build without gui components and other utilites not needed for end user
   # libraries
   gnuradio3_9Minimal = gnuradio.override {

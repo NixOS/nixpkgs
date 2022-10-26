@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, setuptools
 , pythonOlder
 , fetchPypi
 , substituteAll
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     attrdict
     pkg-config
+    setuptools
     SDL
     sip
     which

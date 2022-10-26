@@ -1749,6 +1749,8 @@ in {
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
 
+  chacha20poly1305 = callPackage ../development/python-modules/chacha20poly1305 { };
+
   chacha20poly1305-reuseable = callPackage ../development/python-modules/chacha20poly1305-reuseable { };
 
   chai = callPackage ../development/python-modules/chai { };
@@ -9013,6 +9015,8 @@ in {
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-box = callPackage ../development/python-modules/python-box { };
+
+  python-bsblan = callPackage ../development/python-modules/python-bsblan { };
 
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
 

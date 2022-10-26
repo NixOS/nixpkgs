@@ -1958,17 +1958,17 @@ luafilesystem = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "luafilesystem";
-  version = "1.7.0-2";
+  version = "1.8.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luafilesystem-1.7.0-2.rockspec";
-    sha256 = "0xivgn8bbkx1g5a30jrjcv4hg5mpiiyrm3fhlz9lndgbh4cnjrq6";
+    url    = "mirror://luarocks/luafilesystem-1.8.0-1.rockspec";
+    sha256 = "18nkaks0b75dmycljg5vljap5w8d0ysdkg96yl5szgzr7nzrymfa";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/keplerproject/luafilesystem",
-  "rev": "de87218e9798c4dd1a40d65403d99e9e82e1cfa0",
-  "date": "2017-09-15T20:07:33-03:00",
-  "path": "/nix/store/20xm4942kvnb8kypg76jl7zrym5cz03c-luafilesystem",
-  "sha256": "0zmprgkm9zawdf9wnw0v3w6ibaj442wlc6alp39hmw610fl4vghi",
+  "rev": "7c6e1b013caec0602ca4796df3b1d7253a2dd258",
+  "date": "2020-04-22T22:16:42-03:00",
+  "path": "/nix/store/qzjav1cmn4zwclpfs0xzykpbv835d84z-luafilesystem",
+  "sha256": "16hpwhj6zgkjns3zilcg3lxfijm3cl71v39y9n5lbjk4b9kkwh54",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
