@@ -37,7 +37,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "121";
+  version = "122";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "polkit";
     repo = "polkit";
     rev = version;
-    sha256 = "Lj7KSGILc6CBsNqPO0G0PNt6ClikbRG45E8FZbb46yY=";
+    sha256 = "fLY8i8h4McAnwVt8dLOqbyHM7v3SkbWqATz69NkUudU=";
   };
 
   patches = [
@@ -56,14 +56,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
-    })
-    # Make netgroup support optional (musl does not have it)
-    # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
-    # NOTE: Remove after the next release
-    (fetchpatch {
-      name = "make-innetgr-optional.patch";
-      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/b57deee8178190a7ecc75290fa13cf7daabc2c66.patch";
-      sha256 = "8te6gatT9Fp+fIT05fQBym5mEwHeHfaUNUNEMfSbtLc=";
     })
   ];
 
@@ -119,7 +111,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
     "-Dtests=${lib.boolToString doCheck}"
