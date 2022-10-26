@@ -162,6 +162,7 @@ let
       icu
       libunwind
       libuuid
+      lttng-ust
       openssl
       zlib
 
