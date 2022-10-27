@@ -1,0 +1,5 @@
+{
+    "require": {
+        "svanderburg/composer2nix": "^0.0.6"
+    }
+}

@@ -163,6 +163,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     composer = callPackage ../development/php-packages/composer { };
 
+    composer2nix = pkgs.callPackage ../development/php-packages/composer2nix {
+      inherit php buildComposerEnv;
+    };
+
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
