@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.7.6";
+  version = "5.7.8";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PnIOoWPYLK30lMmLVctihCs7GBo0rTN8yetWAr21h9w=";
+    sha256 = "sha256-HP3IanL6g93a8JKthyOs2i4SsASrM4wDR/theG/+tDE=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config python3 qttools wrapQtAppsHook ];
