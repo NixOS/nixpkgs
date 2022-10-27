@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.9.1";
+  version = "1.9.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JtKMRokA5tX9s30oEqtG2wzNIsY7qglQV4cfqjpJi8k=";
+    sha256 = "sha256-+8XAXIXBoCvnex/1kQh8g7xEV5xtK9n7eYu2TqXhoCc=";
   };
 
   patches = [
