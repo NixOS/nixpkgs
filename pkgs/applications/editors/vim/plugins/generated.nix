@@ -5086,6 +5086,18 @@ final: prev:
     meta.homepage = "https://github.com/kassio/neoterm/";
   };
 
+  neotest-haskell = buildVimPluginFrom2Nix {
+    pname = "neotest-haskell";
+    version = "2022-10-15";
+    src = fetchFromGitHub {
+      owner = "MrcJkb";
+      repo = "neotest-haskell";
+      rev = "d89b5e3e676923e3a373965fd7b6bcd705e14e74";
+      sha256 = "1j13q6wz2ci58mzyyq4p5apn86xplywal96bnsm1dqwmn1bb1707";
+    };
+    meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
+  };
+
   neovim-ayu = buildVimPluginFrom2Nix {
     pname = "neovim-ayu";
     version = "2022-10-22";
