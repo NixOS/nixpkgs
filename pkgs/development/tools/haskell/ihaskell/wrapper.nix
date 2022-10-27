@@ -3,7 +3,9 @@ let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell
     self.ihaskell-blaze
-    self.ihaskell-diagrams
+    # Doesn't work with latest ihaskell versions missing an unrelated change
+    # https://github.com/IHaskell/IHaskell/issues/1378
+    # self.ihaskell-diagrams
   ] ++ packages self);
   ihaskellSh = writeScriptBin "ihaskell-notebook" ''
     #! ${stdenv.shell}
