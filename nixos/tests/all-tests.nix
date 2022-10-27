@@ -125,6 +125,7 @@ in {
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
+  cloud-init-hostname = handleTest ./cloud-init-hostname.nix {};
   cntr = handleTestOn ["aarch64-linux" "x86_64-linux"] ./cntr.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   collectd = handleTest ./collectd.nix {};
