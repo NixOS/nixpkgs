@@ -54,6 +54,12 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
   };
 
+  buildComposerEnv = import ../build-support/build-composer {
+    inherit php lib;
+    inherit (pkgs) stdenv makeWrapper writeTextFile fetchurl unzip;
+    inherit (pkgs.php81Packages) composer;
+  };
+
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
