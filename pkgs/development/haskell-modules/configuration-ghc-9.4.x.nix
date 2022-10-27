@@ -84,6 +84,8 @@ in {
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
   invariant = jailbreakForCurrentVersion super.invariant "0.5.6";
   implicit-hie-cradle = jailbreakForCurrentVersion super.implicit-hie-cradle "0.5.0.0";
+  # https://github.com/co-log/co-log-core/pull/22#issuecomment-1294040208
+  co-log-core = jailbreakForCurrentVersion super.co-log-core "0.3.1.0";
 
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
