@@ -182,6 +182,8 @@
 
   helm-words = callPackage ./helm-words { };
 
+  idris2-mode = callPackage ./idris2-mode { };
+
   isearch-plus = callPackage ./isearch-plus { };
 
   isearch-prop = callPackage ./isearch-prop { };
