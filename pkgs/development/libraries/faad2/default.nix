@@ -1,5 +1,14 @@
-{lib, stdenv, fetchFromGitHub, autoreconfHook
+{lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
 , drmSupport ? false # Digital Radio Mondiale
+
+# for passthru.tests
+, gst_all_1
+, mpd
+, ocamlPackages
+, vlc
 }:
 
 with lib;
@@ -18,6 +27,12 @@ stdenv.mkDerivation rec {
     ++ optional drmSupport "--with-drm";
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  passthru.tests = {
+    inherit mpd vlc;
+    inherit (gst_all_1) gst-plugins-bad;
+    ocaml-faad = ocamlPackages.faad;
+  };
 
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";

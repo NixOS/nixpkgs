@@ -15,13 +15,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "4.7";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Aqk8ukynXHXHieaI/5K5Wfh5ghpe1yfNtZHeXs7kn1I=";
+    sha256 = "sha256-k19Rbc7IPZemT6k5uTRXpoIV1n57aRSXQC276Xdc2EM=";
   };
 
   outputs = [ "out" "man" ];
