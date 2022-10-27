@@ -7494,6 +7494,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  sonic-server = callPackage ../servers/search/sonic-server { };
+
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
   gsmlib = callPackage ../development/libraries/gsmlib
@@ -8274,6 +8276,8 @@ with pkgs;
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
+
+  kluctl = callPackage ../applications/networking/cluster/kluctl { };
 
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
   kibana = kibana7;
@@ -16085,11 +16089,13 @@ with pkgs;
   };
   antlr3 = antlr3_5;
 
-  antlr4_8 = callPackage ../development/tools/parsing/antlr/4.8.nix {
+  inherit (callPackages ../development/tools/parsing/antlr/4.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  }) antlr4_8;
 
-  antlr4_9 = callPackage ../development/tools/parsing/antlr/4.9.nix { };
+  inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
+    antlr4_9
+    antlr4_11;
 
   antlr4 = antlr4_8;
 
@@ -22750,7 +22756,7 @@ with pkgs;
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
     withGtk2 = true;
     inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL AVFoundation Carbon Cocoa Kernel QTKit;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
   wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
@@ -34313,7 +34319,9 @@ with pkgs;
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
-  prismlauncher = libsForQt5.callPackage ../games/prismlauncher { };
+  prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher { };
+
+  prismlauncher = qt6Packages.callPackage ../games/prismlauncher { };
 
   pong3d = callPackage ../games/pong3d { };
 

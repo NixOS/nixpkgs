@@ -71,10 +71,14 @@ rec {
         sha256 = "sha256-ENRfQh/HCXqInTV0tu8tGQO7+vTbST6XXpptERXMACE=";
       };
 
-      patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
+
+      meta = {
+        knownVulnerabilities = [ "CVE-2022-39269" "CVE-2022-39244" ];
+      } // old.meta;
     });
 
   opendht-jami = opendht.override {

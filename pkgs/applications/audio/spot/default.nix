@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [ tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

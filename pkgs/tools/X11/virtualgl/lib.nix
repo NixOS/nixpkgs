@@ -6,12 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "virtualgl-lib";
-  version = "2.6.5";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
-    sha256 = "1giin3jmcs6y616bb44bpz30frsmj9f8pz2vg7jvb9vcfc9456rr";
+    sha256 = "sha256-OIEbwAQ71yOuHIzM+iaK7QkUJrKg6sXpGuFQOUPjM2w=";
   };
+
+  postPatch = ''
+    # the unit tests take significant hacks to build and can't run anyway due to the lack
+    # of a 3D X server in the build sandbox. so we just chop out their build instructions.
+    head -n $(grep -n 'UNIT TESTS' server/CMakeLists.txt | cut -d : -f 1) server/CMakeLists.txt > server/CMakeLists2.txt
+    mv server/CMakeLists2.txt server/CMakeLists.txt
+  '';
 
   cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];
 
