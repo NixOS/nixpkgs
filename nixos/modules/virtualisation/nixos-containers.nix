@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }@host:
 
 with lib;
 
@@ -284,7 +284,6 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-  inherit (config.nixpkgs) localSystem;
   kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
@@ -480,10 +479,13 @@ in
                 merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
                   modules =
                     let
-                      extraConfig = {
+                      extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = { inherit localSystem; };
+                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
+                                    then { inherit (host.config.nixpkgs) hostPlatform; }
+                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
