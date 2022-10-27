@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pdm-pep517";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OS+MK0fG7CBVDLjhniS529Jzc0E/BntW7Ndfl2f5MBU=";
+    sha256 = "sha256-dOzpaUxP9fkD+6AA7EPwdRQ4csQSSNrM7PdGT5jOaAw=";
   };
 
   preCheck = ''
