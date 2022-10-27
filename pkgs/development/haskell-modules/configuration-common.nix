@@ -1557,6 +1557,16 @@ self: super: {
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
     ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
+    # because some packages, like ormolu, need a newer Cabal version.
+    # ghc-paths is special because it depends on Cabal for building
+    # its Setup.hs, and therefor declares a Cabal dependency, but does
+    # not actually use it as a build dependency.
+    # That means ghc-paths can just use the ghc included Cabal version,
+    # without causing package-db incoherence and we should do that because
+    # otherwise we have different versions of ghc-paths
+    # around with have the same abi-hash, which can lead to confusions and conflicts.
+    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
   hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
