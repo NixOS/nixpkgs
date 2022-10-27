@@ -248,6 +248,29 @@ let
     }) (lib.range 1 cfg.streamingProcesses)
   );
 
+  nginxCommonHeaders =
+    ''
+      add_header Strict-Transport-Security 'max-age=31536000';
+    ''
+    # Upstream does not supported HTTP3 protocol.
+    +
+      lib.optionalString
+        (
+          config.services.nginx.virtualHosts.${cfg.localDomain}.quic
+          && config.services.nginx.virtualHosts.${cfg.localDomain}.http3
+        )
+        ''
+          add_header Alt-Svc 'h3=":$server_port"; ma=604800';
+        '';
+
+  nginxProxyHeaders = ''
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header Proxy "";
+  '';
+
 in
 {
 
@@ -1063,44 +1086,191 @@ in
 
         services.nginx = lib.mkIf cfg.configureNginx {
           enable = true;
-          recommendedProxySettings = true; # required for redirections to work
+
+          proxyCachePath = {
+            "mastodon" = {
+              enable = true;
+              keysZoneName = "mastodon";
+              inactive = "7d";
+            };
+          };
+
+          upstreams = {
+            "mastodon-streaming" = {
+              servers = builtins.listToAttrs (
+                map (i: {
+                  name = "unix:/run/mastodon-streaming/streaming-${toString i}.socket";
+                  value.fail_timeout = "0";
+                }) (lib.range 1 cfg.streamingProcesses)
+              );
+              extraConfig = ''
+                least_conn;
+              '';
+            };
+            "mastodon-web" = {
+              servers."${
+                if cfg.enableUnixSocket then
+                  "unix:/run/mastodon-web/web.socket"
+                else
+                  "127.0.0.1:${toString cfg.webPort}"
+              }".fail_timeout =
+                "0";
+            };
+          };
+
           virtualHosts."${cfg.localDomain}" = {
-            root = "${cfg.package}/public/";
+            root = "${cfg.package}/public";
             # mastodon only supports https, but you can override this if you offload tls elsewhere.
             forceSSL = lib.mkDefault true;
             enableACME = lib.mkDefault true;
 
-            locations."/system/".alias = "/var/lib/mastodon/public-system/";
-
             locations."/" = {
-              tryFiles = "$uri @proxy";
+              tryFiles = "$uri @mastodon";
+              priority = 1100;
+
+              extraConfig = nginxCommonHeaders;
             };
 
-            locations."@proxy" = {
-              proxyPass = (
-                if cfg.enableUnixSocket then
-                  "http://unix:/run/mastodon-web/web.socket"
-                else
-                  "http://127.0.0.1:${toString cfg.webPort}"
-              );
-              proxyWebsockets = true;
+            locations."^~ /assets/" = {
+              priority = 3110;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
             };
 
-            locations."/api/v1/streaming/" = {
-              proxyPass = "http://mastodon-streaming";
-              proxyWebsockets = true;
+            locations."^~ /avatars/" = {
+              priority = 3120;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
             };
-          };
-          upstreams.mastodon-streaming = {
+
+            locations."^~ /emoji/" = {
+              priority = 3130;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /headers/" = {
+              priority = 3140;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /ocr/" = {
+              priority = 3150;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /packs/" = {
+              priority = 3160;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /sounds/" = {
+              priority = 3170;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /system/" = {
+              alias = "/var/lib/mastodon/public-system/";
+              priority = 3180;
+
+              extraConfig = ''
+                add_header Cache-Control 'public, max-age=2419200, immutable';
+                add_header Content-Security-Policy "default-src 'none'; form-action 'none'";
+                add_header X-Content-Type-Options 'nosniff';
+                ${nginxCommonHeaders}
+              '';
+            };
+
+            locations."^~ /api/v1/streaming/" = {
+              proxyPass = "http://mastodon-streaming/";
+              proxyWebsockets = true;
+              priority = 3190;
+
+              extraConfig = ''
+                ${nginxProxyHeaders}
+                proxy_buffering off;
+                proxy_redirect off;
+
+                tcp_nodelay on;
+              '';
+            };
+
+            locations."@mastodon" = {
+              proxyPass = "http://mastodon-web";
+              proxyWebsockets = true;
+              priority = 4100;
+
+              extraConfig = ''
+                ${nginxProxyHeaders}
+                proxy_pass_header Server;
+
+                proxy_buffering on;
+                proxy_redirect off;
+
+                proxy_cache ${config.services.nginx.proxyCachePath.mastodon.keysZoneName};
+                proxy_cache_valid 200 7d;
+                proxy_cache_valid 410 24h;
+                proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+                add_header X-Cached $upstream_cache_status;
+
+                proxy_hide_header Strict-Transport-Security;
+                add_header Strict-Transport-Security 'max-age=31536000';
+                ${lib.optionalString
+                  (
+                    config.services.nginx.virtualHosts.${cfg.localDomain}.quic
+                    && config.services.nginx.virtualHosts.${cfg.localDomain}.http3
+                  )
+                  ''
+                    add_header Alt-Svc 'h3=":$server_port"; ma=604800';
+                  ''
+                }
+
+                tcp_nodelay on;
+              '';
+            };
+
             extraConfig = ''
-              least_conn;
+              error_page 404 500 501 502 503 504 /500.html;
             '';
-            servers = builtins.listToAttrs (
-              map (i: {
-                name = "unix:/run/mastodon-streaming/streaming-${toString i}.socket";
-                value = { };
-              }) (lib.range 1 cfg.streamingProcesses)
-            );
           };
         };
 
