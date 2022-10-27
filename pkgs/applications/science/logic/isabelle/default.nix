@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala_3, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg, srcRev ? null, srcSha256 ? null, srcUrl ? "https://isabelle.sketis.net/repos/isabelle" }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala_3, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg, fetchFromGitHub, srcRev ? null, srcSha256 ? null, srcHG ? "https://isabelle.sketis.net/repos/isabelle", srcGH ? null, }:
 # nettools needed for hostname
 
 let
@@ -27,12 +27,25 @@ let
       cp libsha1.so $out/lib/
     '';
   };
-  hgSrc = if srcRev != null then
+  vcSrc = if srcRev != null then (
+    if srcGH != null then
+      builtins.throw "only set srcGH or srcRev"
+      else
     fetchhg {
-      url = srcUrl;
+      url = srcHG;
       rev = srcRev;
       sha256 = srcSha256;
-    } else null;
+    })
+          else (
+      if srcGH != null then
+        fetchFromGitHub {
+          owner = srcGH.owner;
+          repo = srcGH.repo;
+          rev = srcGH.rev;
+          sha256 = srcGH.sha256;
+        } else null
+    );
+
 in stdenv.mkDerivation rec {
   pname = "isabelle";
   version = "2022";
@@ -63,9 +76,9 @@ in stdenv.mkDerivation rec {
     sourceRoot=${dirname}
   '' else null;
 
-  prePatch = if hgSrc == null then null else ''
+  prePatch = if vcSrc == null then null else ''
     rm -r src
-    cp -r ${hgSrc}/src ./
+    cp -r ${vcSrc}/src ./
     chmod -R +w ./src
   '';
 

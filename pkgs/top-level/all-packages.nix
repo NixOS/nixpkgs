@@ -35629,6 +35629,38 @@ with pkgs;
       };
     });
   };
+
+  isabelle-emacs = callPackage ../applications/science/logic/isabelle {
+    srcGH = {
+      owner = "m-fleury";
+      repo = "isabelle-emacs";
+      rev = "e29452ff674e2cd1f6467ba1949dd2401657e90f";
+      sha256="sha256-8w/+DWX7sKTYsRhTO1T9Z/RWykuj/BidnUETk/zm/5U=";
+    };
+    polyml = polyml.overrideAttrs (_: {
+      pname = "polyml-for-isabelle";
+      version = "2022";
+     configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
+      buildFlags = [ "compiler" ];
+      src = fetchFromGitHub {
+        owner = "polyml";
+        repo = "polyml";
+        rev = "bafe319bc3a65bf63bd98a4721a6f4dd9e0eabd6";
+        sha256 = "1ygs09zzq8icq1gc8qf4sb24lxx7sbcyd5hw3vw67a3ryaki0qw2";
+      };
+    });
+
+    java = openjdk17;
+    z3 = z3_4_4_0.overrideAttrs (_: {
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = "z3";
+        rev = "0482e7fe727c75e259ac55a932b28cf1842c530e";
+        sha256 = "1m53avlljxqd2p8w266ksmjywjycsd23h224yn786qsnf36dr63x";
+      };
+    });
+  };
+
   isabelle-components = recurseIntoAttrs (callPackage ../applications/science/logic/isabelle/components { });
 
   iprover = callPackage ../applications/science/logic/iprover { };
