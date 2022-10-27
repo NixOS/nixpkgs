@@ -11,6 +11,8 @@
     ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
+  # or doc/builders/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualContents
@@ -51,6 +53,8 @@
     fi
   '';
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
+  # or doc/builders/testers.chapter.md
   testVersion =
     { package,
       command ? "${package.meta.mainProgram or package.pname or package.name} --version",
