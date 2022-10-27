@@ -27,11 +27,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7WXs+faBgyKY4pMo4e8KNnbjcysuVvQVMtRfcKIt4Ps=";
+    sha256 = "sha256-UW5mIwOLgUMN0GKhol7NJPFz18Fc305IqeeLyH6Xruw=";
   };
 
   propagatedBuildInputs = [
