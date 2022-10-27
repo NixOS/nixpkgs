@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "arabic_reshaper";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a236fc6e9dde2a61cc6a5ca962b522e42694e1bb2a2d86894ed7a4eba4ce1890";
+    sha256 = "sha256-6Es7Ctjq45VkHJTTAQtTv+0sKxq4DyXrjNwBAZ3fZCY=";
   };
 
   propagatedBuildInputs = [ future ]
