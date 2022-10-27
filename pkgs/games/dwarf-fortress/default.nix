@@ -63,10 +63,7 @@ let
             inherit dwarf-fortress-unfuck;
           };
 
-          # unfuck is linux-only right now, we will only use it there.
-          dwarf-fortress-unfuck =
-            if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
-            else null;
+          dwarf-fortress-unfuck = callPackage ./unfuck.nix { inherit dfVersion; };
 
           twbt = callPackage ./twbt { inherit dfVersion; };
 
