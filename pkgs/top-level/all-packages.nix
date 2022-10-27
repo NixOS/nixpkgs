@@ -25569,6 +25569,8 @@ with pkgs;
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  shortcat = callPackage ../os-specific/darwin/shortcat { };
+
   sinit = callPackage ../os-specific/linux/sinit {
     rcinit = "/etc/rc.d/rc.init";
     rcshutdown = "/etc/rc.d/rc.shutdown";
