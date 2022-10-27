@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.6.4";
+  version = "5.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c6d04559f5e3bf75a18525cd46d213c0f3a8409363718978e6de691bdb551fb";
+    sha256 = "sha256-NDTZ4comjJY/dEvrTdxHR88fQ1lZU2zSWZ43f7YqvT8=";
   };
 
   disabled = !isPy3k;
