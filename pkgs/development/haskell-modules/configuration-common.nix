@@ -1604,7 +1604,7 @@ self: super: {
   hls-refactor-plugin = dontCheck super.hls-refactor-plugin;
 
   # 2022-10-27: implicit-hie 0.1.3.0 needs a newer version of Cabal-syntax.
-  implicit-hie = assert self.Cabal-syntax.version == "3.6.0.0"; super.implicit-hie.override {
+  implicit-hie = super.implicit-hie.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
   };
 
