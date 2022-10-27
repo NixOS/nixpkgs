@@ -19,7 +19,7 @@
 
 let
   pname = "astropy";
-  version = "5.1";
+  version = "5.1.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -29,7 +29,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HbGyx+3fx3PKZvozvQeyXVucO17uK5NODKJ3+lsbe34=";
+    sha256 = "sha256-ukvWlq9wkP05m0ZMcEvye1YzEh5GF4XtxwQyYGqUvYE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
