@@ -777,13 +777,13 @@
     "version": "0.6.12"
   },
   "newrelic": {
-    "hash": "sha256-tbjb+K2QP8+MFyJLQ3ewS6ALg7MGdpBjxZIaSKSxbiw=",
+    "hash": "sha256-pMHS8sS3qqsHjO0B3oFP/KInomYtmxRp2+4LLx9DI7M=",
     "owner": "newrelic",
     "provider-source-address": "registry.terraform.io/newrelic/newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.5.2",
+    "rev": "v3.6.0",
     "vendorHash": "sha256-lEFcR908CK4RSSO/3kbqQ/wse5HKaqveWUZbzUhUTMI=",
-    "version": "3.5.2"
+    "version": "3.6.0"
   },
   "nomad": {
     "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
