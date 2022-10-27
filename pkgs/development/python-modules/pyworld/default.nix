@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyworld";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e19b5d8445e0c4fc45ded71863aeaaf2680064b4626b0e7c90f72e9ace9f6b5b";
+    sha256 = "sha256-ewx3JLrR4Ml8WbWGSEwApAM5wmJU+luro/TXhnIaX3E=";
   };
 
   nativeBuildInputs = [
