@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchzip
-, ffmpeg_4
+, ffmpeg
 , pjsip
 , opendht
 , jack
@@ -12,11 +12,11 @@
 }:
 
 let
-  version = "20220726.1515.da8d1da";
+  version = "20220825.0828.c10f01f";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    hash = "sha256-yK+xo+YpNYmmWyNAE31hiL6HLvDdEFkm8FO6LQmPCL0=";
+    hash = "sha256-axQYU7+kOFE9SnI8fR4F6NFvD9ITZ85UJhg5OVniSlg=";
 
     stripRoot = false;
     postFetch = ''
@@ -40,7 +40,12 @@ let
   readLinesToList = with builtins; file: filter (s: isString s && stringLength s > 0) (split "\n" (readFile file));
 in
 rec {
-  ffmpeg-jami = ffmpeg_4.overrideAttrs (old:
+  ffmpeg-jami = (ffmpeg.override rec {
+    version = "5.0.1";
+    branch = version;
+    sha256 = "sha256-KN8z1AChwcGyDQepkZeAmjuI73ZfXwfcH/Bn+sZMWdY=";
+    doCheck = false;
+  }).overrideAttrs (old:
     let
       patch-src = src + "/daemon/contrib/src/ffmpeg/";
     in
@@ -51,10 +56,6 @@ rec {
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/ffmpeg_args_linux)
         ++ lib.optionals (stdenv.isx86_32 || stdenv.isx86_64) (readLinesToList ./config/ffmpeg_args_x86);
       outputs = [ "out" "doc" ];
-      meta = old.meta // {
-        # undefined reference to `ff_nlmeans_init_aarch64'
-        broken = stdenv.isAarch64;
-      };
     });
 
   pjsip-jami = pjsip.overrideAttrs (old:
@@ -62,23 +63,19 @@ rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "4af5d666d18837abaac94c8ec6bfc84984dcf1e2";
+      version = "513a3f14c44b2c2652f9219ec20dea64b236b713";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
-        sha256 = "sha256-ENRfQh/HCXqInTV0tu8tGQO7+vTbST6XXpptERXMACE=";
+        sha256 = "sha256-93AlJGMnlzJMrJquelpHQQKjhEgfpTFXTMqkBnm87u8=";
       };
 
       patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
-
-      meta = {
-        knownVulnerabilities = [ "CVE-2022-39269" "CVE-2022-39244" ];
-      } // old.meta;
     });
 
   opendht-jami = opendht.override {
