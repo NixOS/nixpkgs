@@ -41,7 +41,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "MPlayer front-end for KDE";
-    license = with licenses; [ gpl2 lgpl2 fdl12 ];
+    license = with licenses; [ gpl2Plus lgpl2Plus fdl12Plus ];
     homepage = "https://kmplayer.kde.org/";
     maintainers = with maintainers; [ sander zraexy ];
   };

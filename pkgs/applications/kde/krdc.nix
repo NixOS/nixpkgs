@@ -19,7 +19,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "http://www.kde.org";
     description = "Remote desktop client";
-    license = with licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
+    license = with licenses; [ gpl2Plus lgpl21Plus fdl12Plus bsd3 ];
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
     broken = lib.versionOlder qtbase.version "5.14";

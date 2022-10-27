@@ -61,7 +61,7 @@ Readonly::Hash my %LICENSE_MAP => (
 
     # GNU Free Documentation License, Version 1.2.
     gfdl_1_2 => {
-        licenses => [qw( fdl12 )]
+        licenses => [qw( fdl12Plus )]
     },
 
     # GNU Free Documentation License, Version 1.3.
