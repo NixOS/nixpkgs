@@ -1,4 +1,8 @@
-{ gcc10Stdenv
+{
+  # gcc 11.2 suggested on 3.10.0.
+  # gcc 11.3.0 unsupported yet, investigate gcc support when upgrading
+  # See https://github.com/arangodb/arangodb/issues/17454
+  gcc10Stdenv
 , git
 , lib
 , fetchFromGitHub
