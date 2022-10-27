@@ -9,27 +9,39 @@
 , wayland
 , xorg
 , vulkan-loader
+, jre_minimal
+, cairo
+, gtk3
+, wrapGAppsHook
+, gsettings-desktop-schemas
+, glib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2022-02-02";
+  version = "nightly-2022-09-26";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AV3zGfWacYdkyxHED1nGwTqRHhXpybaCVnudmHqWvqw=";
+    sha256 = "sha256-o0geKXODFRPKN4JgW+Sg16uPhBS5rrlMCmFSc9AcNPQ=";
   };
 
   nativeBuildInputs = [
+    glib
+    gsettings-desktop-schemas
+    jre_minimal
     makeWrapper
     pkg-config
     python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
     alsa-lib
+    cairo
+    gtk3
     openssl
     wayland
     xorg.libX11
@@ -41,14 +53,25 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
   ];
 
-  postInstall = ''
+  dontWrapGApps = true;
+
+  postFixup = ''
     # This name is too generic
     mv $out/bin/exporter $out/bin/ruffle_exporter
 
-    wrapProgram $out/bin/ruffle_desktop --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
+    vulkanWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
+    )
+
+    wrapProgram $out/bin/ruffle_exporter \
+      "''${vulkanWrapperArgs[@]}"
+
+    wrapProgram $out/bin/ruffle_desktop \
+      "''${vulkanWrapperArgs[@]}" \
+      "''${gappsWrapperArgs[@]}"
   '';
 
-  cargoSha256 = "sha256-LP9aHcey+e3fqtWdOkqF5k8dwjdAOKpP+mKGxFhTte0=";
+  cargoSha256 = "sha256-erqBuU66k7SGG9ueyYEINjeXbyC7A2I/r1bBqdsJemY=";
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

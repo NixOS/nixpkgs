@@ -3,12 +3,14 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, libepoxy
-, ffmpeg_4
+, copyDesktopItems
+, ffmpeg
 , imagemagick
 , libedit
 , libelf
+, libepoxy
 , libzip
+, lua
 , makeDesktopItem
 , minizip
 , pkg-config
@@ -18,31 +20,33 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
-    rev = version;
-    hash = "sha256-0ZtoyyoD+YjplJlPFpZgIg5119j/6X8ZaSZP+UpX5K0=";
+    rev = finalAttrs.version;
+    hash = "sha256-2thc2v3aD8t1PrREZIjzRuYfP7b3BA7uFb6R95zxsZI=";
   };
 
   nativeBuildInputs = [
     cmake
+    copyDesktopItems
     pkg-config
     wrapQtAppsHook
   ];
 
   buildInputs = [
     SDL2
-    libepoxy
-    ffmpeg_4
+    ffmpeg
     imagemagick
     libedit
     libelf
+    libepoxy
     libzip
+    lua
     minizip
     qtbase
     qtmultimedia
@@ -79,9 +83,9 @@ stdenv.mkDerivation rec {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
+    changelog = "https://github.com/mgba-emu/mgba/blob/${finalAttrs.version}/CHANGES";
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
   };
-}
-# TODO: use desktopItem functions
+})

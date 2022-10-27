@@ -3,6 +3,7 @@
 , lib
 , natsort
 , panflute
+, setuptools
 }:
 
 buildPythonApplication rec {
@@ -16,6 +17,10 @@ buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-kuxud7m+sWcNqE8A+Fwb8ATgiUwxQvHeYBTyw1UzX4U=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ natsort panflute ];
 

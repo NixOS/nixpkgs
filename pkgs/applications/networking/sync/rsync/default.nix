@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , perl
 , libiconv
 , zlib
@@ -16,27 +15,18 @@
 , xxHash
 , enableZstd ? true
 , zstd
-, enableCopyDevicesPatch ? false
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "rsync";
-  version = "3.2.4";
+  version = "3.2.6";
 
-  srcs = [
-    (fetchurl {
-      # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
-      url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
-      sha256 = "sha256-b3YYONCAUrC2V5z39nN9k+R/AfTaBMXSTTRHt/Kl+tE=";
-    })
-  ] ++ lib.optional enableCopyDevicesPatch (fetchurl {
+  src = fetchurl {
     # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
-    url = "mirror://samba/rsync/rsync-patches-${version}.tar.gz";
-    sha256 = "1wj21v57v135n6fnm2m2dxmb9lhrrg62jgkggldp1gb7d6s4arny";
-  });
-
-  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+    url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
+    sha256 = "sha256-+zNlurJ4N9Qf6vQulnxXvTpHvI8Qdlo2ce/Wo4NUVNM=";
+  };
 
   nativeBuildInputs = [ perl ];
 
@@ -53,14 +43,9 @@ stdenv.mkDerivation rec {
     # disable the included zlib explicitly as it otherwise still compiles and
     # links them even.
     "--with-included-zlib=no"
-  ]
-  # Work around issue with cross-compilation:
-  #     configure.sh: error: cannot run test program while cross compiling
-  # Remove once 3.2.4 or more recent is released.
-  # The following PR should fix the cross-compilation issue.
-  # Test using `nix-build -A pkgsCross.aarch64-multiplatform.rsync`.
-  # https://github.com/WayneD/rsync/commit/b7fab6f285ff0ff3816b109a8c3131b6ded0b484
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no";
+  ];
+
+  enableParallelBuilding = true;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
@@ -69,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ];
+    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
   };
 }

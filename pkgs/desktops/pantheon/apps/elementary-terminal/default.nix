@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -20,14 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "terminal";
     rev = version;
-    sha256 = "sha256-glcY47E9bGVI6k9gakItN6srzMtmA4hCEz/JVD5UUmI=";
+    sha256 = "sha256-qxjHrlpdJcfXEUan/JgU7HqBRdB36gxAb5xmd/ySsj0=";
   };
+
+  patches = [
+    # TerminalWidget: Fix terminal freeze when closing in GLib 2.73.2+
+    # https://github.com/elementary/terminal/pull/691
+    (fetchpatch {
+      url = "https://github.com/elementary/terminal/commit/3cabe328abb839f12cd21f4d3d474d1d1e42b907.patch";
+      sha256 = "sha256-wd36vOKqqPHCFPOok+Id9KqxbqjF0ohqsoxAU+jo4+Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -48,9 +58,6 @@ stdenv.mkDerivation rec {
     pcre2
     vte
   ];
-
-  # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
-  mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];
 
   postPatch = ''
     chmod +x meson/post_install.py

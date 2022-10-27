@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.11";
+  version = "4.12";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-+BTt4w174N7Ar7KujQNii5rjTISLaDEuTFre2UwQKxk=";
+    hash = "sha256-zIwFGla4u0M1ZtbiiQ31nz2JWjlcjPUkbBtygQLOEK4=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     gettext
     makeWrapper
     wrapGAppsHook
+    pkg-config
   ];
 
   buildInputs = [
@@ -55,7 +56,6 @@ stdenv.mkDerivation rec {
     libofx
     libxml2
     libxslt
-    pkg-config
     swig
     webkitgtk
   ]
@@ -154,8 +154,6 @@ stdenv.mkDerivation rec {
       test-xml-pricedb \
       test-xml-transaction \
       test-xml2-is-file
-
-      export LD_LIBRARY_PATH="$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$PWD/lib/gnucash/test/future"
   '';
 
   preFixup = ''

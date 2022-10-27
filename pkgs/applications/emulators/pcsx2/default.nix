@@ -32,14 +32,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.2731";
+  version = "1.7.3331";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-b3cK3ly9J44YMy/cNprlDCSsu8+DrlhRSLXv5xMouWo=";
+    hash = "sha256-0RcmBMxKj/gnkNEjn2AUSSO1DzyNSf1lOZWPSUq6764=";
   };
 
   cmakeFlags = [
@@ -78,13 +79,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  # Wayland doesn't seem to work right now (crashes when booting a game).
-  # Try removing `--prefix GDK_BACKEND : x11` on the next update.
-  # (This may be solved when the project finshes migrating to Qt)
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
-      --prefix GDK_BACKEND : x11
     )
   '';
 

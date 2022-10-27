@@ -132,10 +132,13 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
-    platforms = platforms.linux;
+    homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
+    # linking fails with multiple error of type:
+    # multiple definition of `bb_pm_method_string'; src/module.o:(.bss+0x0): first defined here
+    broken = true; # Added 03-08-2022
   };
 }

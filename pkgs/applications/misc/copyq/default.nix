@@ -8,7 +8,6 @@
 , libXfixes
 , libXtst
 , qtx11extras
-, git
 , knotifications
 , qtwayland
 , wayland
@@ -17,13 +16,13 @@
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "6.1.0";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "sha256-2BWyLVxH50G+S/Hp8E5hWG64DcIamtZPGm0nSMwEhY4=";
+    hash = "sha256-Ge/TD9Llq4YTAqaL9LBEsgNI9qrf2jLDt7q2ZTI9rmE=";
   };
 
   nativeBuildInputs = [

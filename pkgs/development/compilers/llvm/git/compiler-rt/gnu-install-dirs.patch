@@ -1,30 +1,8 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c5003b5efa1d..4fffb9721284 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -5,6 +5,8 @@
- 
- cmake_minimum_required(VERSION 3.13.4)
- 
-+include(GNUInstallDirs)
-+
- # Check if compiler-rt is built as a standalone project.
- if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR OR COMPILER_RT_STANDALONE_BUILD)
-   project(CompilerRT C CXX ASM)
 diff --git a/cmake/base-config-ix.cmake b/cmake/base-config-ix.cmake
-index 1ada0ab30ba0..b4be6c4a3c73 100644
+index 8a6219568b3f..30ee68a47ccf 100644
 --- a/cmake/base-config-ix.cmake
 +++ b/cmake/base-config-ix.cmake
-@@ -66,7 +66,7 @@ if (LLVM_TREE_AVAILABLE)
- else()
-     # Take output dir and install path from the user.
-   set(COMPILER_RT_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH
--    "Path where built compiler-rt libraries should be stored.")
-+    "Path where built compiler-rt build artifacts should be stored.")
-   set(COMPILER_RT_EXEC_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin CACHE PATH
-     "Path where built compiler-rt executables should be stored.")
-   set(COMPILER_RT_INSTALL_PATH "" CACHE PATH
-@@ -98,23 +98,23 @@ endif()
+@@ -100,13 +100,13 @@ endif()
  if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
    set(COMPILER_RT_OUTPUT_LIBRARY_DIR
      ${COMPILER_RT_OUTPUT_DIR}/lib)
@@ -40,16 +18,3 @@ index 1ada0ab30ba0..b4be6c4a3c73 100644
    set(COMPILER_RT_INSTALL_LIBRARY_DIR "${default_install_path}" CACHE PATH
      "Path where built compiler-rt libraries should be installed.")
  endif()
--extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" bin)
-+extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "${CMAKE_INSTALL_BINDIR}")
- set(COMPILER_RT_INSTALL_BINARY_DIR "${default_install_path}" CACHE PATH
-   "Path where built compiler-rt executables should be installed.")
--extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" include)
-+extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "${CMAKE_INSTALL_INCLUDEDIR}")
- set(COMPILER_RT_INSTALL_INCLUDE_DIR "${default_install_path}" CACHE PATH
-   "Path where compiler-rt headers should be installed.")
--extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" share)
-+extend_path(default_install_path "${COMPILER_RT_INSTALL_PATH}" "${CMAKE_INSTALL_DATADIR}")
- set(COMPILER_RT_INSTALL_DATA_DIR "${default_install_path}" CACHE PATH
-   "Path where compiler-rt data files should be installed.")
- 

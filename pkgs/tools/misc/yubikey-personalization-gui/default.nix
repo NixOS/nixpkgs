@@ -19,9 +19,9 @@ mkDerivation rec {
 
     # Desktop files
     install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/applications/yubikey-personalization-gui.desktop"
-    install -D -m0644 resources/lin/yubikey-personalization-gui.desktop "$out/share/pixmaps/yubikey-personalization-gui.xpm"
 
     # Icons
+    install -D -m0644 resources/lin/yubikey-personalization-gui.xpm "$out/share/pixmaps/yubikey-personalization-gui.xpm"
     install -D -m0644 resources/lin/yubikey-personalization-gui.png "$out/share/icons/hicolor/128x128/apps/yubikey-personalization-gui.png"
     for SIZE in 16 24 32 48 64 96; do
       # set modify/create for reproducible builds

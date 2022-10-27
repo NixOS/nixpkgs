@@ -27,48 +27,48 @@ in {
   options = {
     services.errbot.instances = mkOption {
       default = {};
-      description = "Errbot instance configs";
+      description = lib.mdDoc "Errbot instance configs";
       type = types.attrsOf (types.submodule {
         options = {
           dataDir = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = "Data directory for errbot instance.";
+            description = lib.mdDoc "Data directory for errbot instance.";
           };
 
           plugins = mkOption {
             type = types.listOf types.package;
             default = [];
-            description = "List of errbot plugin derivations.";
+            description = lib.mdDoc "List of errbot plugin derivations.";
           };
 
           logLevel = mkOption {
             type = types.str;
             default = "INFO";
-            description = "Errbot log level";
+            description = lib.mdDoc "Errbot log level";
           };
 
           admins = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = "List of identifiers of errbot admins.";
+            description = lib.mdDoc "List of identifiers of errbot admins.";
           };
 
           backend = mkOption {
             type = types.str;
             default = "XMPP";
-            description = "Errbot backend name.";
+            description = lib.mdDoc "Errbot backend name.";
           };
 
           identity = mkOption {
             type = types.attrs;
-            description = "Errbot identity configuration";
+            description = lib.mdDoc "Errbot identity configuration";
           };
 
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description = "String to be appended to the config verbatim";
+            description = lib.mdDoc "String to be appended to the config verbatim";
           };
         };
       });

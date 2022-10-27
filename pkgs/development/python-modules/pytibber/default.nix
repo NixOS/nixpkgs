@@ -6,14 +6,13 @@
 , async-timeout
 , graphql-subscription-manager
 , python-dateutil
-, pytz
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.23.0";
+  version = "0.25.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    rev = version;
-    hash = "sha256-DMYSv66PVBuOHuIio06OLrtGP0q7PeuDGKK+OznaLec=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-aGl43gxrnKwo3ZhN+EpSBMZw0wKWf5aIPFx3goo8Nog=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +29,6 @@ buildPythonPackage rec {
     async-timeout
     graphql-subscription-manager
     python-dateutil
-    pytz
   ];
 
   checkInputs = [

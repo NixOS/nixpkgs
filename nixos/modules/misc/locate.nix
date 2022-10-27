@@ -19,9 +19,9 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, NixOS will periodically update the database of
-        files used by the <command>locate</command> command.
+        files used by the {command}`locate` command.
       '';
     };
 
@@ -30,7 +30,7 @@ in
       default = pkgs.findutils.locate;
       defaultText = literalExpression "pkgs.findutils";
       example = literalExpression "pkgs.mlocate";
-      description = ''
+      description = lib.mdDoc ''
         The locate implementation to use
       '';
     };
@@ -39,31 +39,30 @@ in
       type = str;
       default = "02:15";
       example = "hourly";
-      description = ''
+      description = lib.mdDoc ''
         Update the locate database at this interval. Updates by
         default at 2:15 AM every day.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
 
-        To disable automatic updates, set to <literal>"never"</literal>
-        and run <command>updatedb</command> manually.
+        To disable automatic updates, set to `"never"`
+        and run {command}`updatedb` manually.
       '';
     };
 
     extraFlags = mkOption {
       type = listOf str;
       default = [ ];
-      description = ''
-        Extra flags to pass to <command>updatedb</command>.
+      description = lib.mdDoc ''
+        Extra flags to pass to {command}`updatedb`.
       '';
     };
 
     output = mkOption {
       type = path;
       default = "/var/cache/locatedb";
-      description = ''
+      description = lib.mdDoc ''
         The database file to build.
       '';
     };
@@ -71,9 +70,9 @@ in
     localuser = mkOption {
       type = nullOr str;
       default = "nobody";
-      description = ''
+      description = lib.mdDoc ''
         The user to search non-network directories as, using
-        <command>su</command>.
+        {command}`su`.
       '';
     };
 
@@ -159,7 +158,7 @@ in
         "vboxsf"
         "vperfctrfs"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Which filesystem types to exclude from indexing
       '';
     };
@@ -176,7 +175,7 @@ in
         "/nix/store"
         "/nix/var/log/nix"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Which paths to exclude from indexing
       '';
     };
@@ -184,11 +183,11 @@ in
     pruneNames = mkOption {
       type = listOf str;
       default = lib.optionals (!isFindutils) [ ".bzr" ".cache" ".git" ".hg" ".svn" ];
-      defaultText = literalDocBook ''
-        <literal>[ ".bzr" ".cache" ".git" ".hg" ".svn" ]</literal>, if
+      defaultText = literalMD ''
+        `[ ".bzr" ".cache" ".git" ".hg" ".svn" ]`, if
         supported by the locate implementation (i.e. mlocate or plocate).
       '';
-      description = ''
+      description = lib.mdDoc ''
         Directory components which should exclude paths containing them from indexing
       '';
     };
@@ -196,7 +195,7 @@ in
     pruneBindMounts = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether not to index bind mounts
       '';
     };

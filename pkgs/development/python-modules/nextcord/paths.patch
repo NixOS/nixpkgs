@@ -7,7 +7,7 @@ index 52e4ddbd..d8b8090b 100644
              _lib = libopus_loader(_filename)
          else:
 -            opus = ctypes.util.find_library("opus")
-+            opus = ctypes.util.find_library("@opus@")
++            opus = "@libopus@"
  
              if opus is None:
                  _lib = None

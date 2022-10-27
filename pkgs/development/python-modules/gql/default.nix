@@ -1,6 +1,7 @@
 { lib
 , aiofiles
 , aiohttp
+, backoff
 , botocore
 , buildPythonPackage
 , fetchFromGitHub
@@ -8,6 +9,7 @@
 , mock
 , parse
 , pytest-asyncio
+, pytest-console-scripts
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.1.0";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,12 +30,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ZtrT+zeoP9KXdaCDKOUrjEwe7dN0+IwA20FDe5ja7l8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yr8IyAwZ6y2MPTe6bHRW+CIp19R3ZJWHuqdN5qultnQ=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    backoff
     botocore
     graphql-core
     requests
@@ -48,8 +51,17 @@ buildPythonPackage rec {
     mock
     parse
     pytest-asyncio
+    pytest-console-scripts
     pytestCheckHook
     vcrpy
+  ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = [

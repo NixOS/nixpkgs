@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , python
 , bootstrapped-pip
 , lib
@@ -11,7 +10,7 @@
 
 let
   pname = "setuptools";
-  version = "61.2.0";
+  version = "65.3.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -20,22 +19,14 @@ let
     src = fetchFromGitHub {
       owner = "pypa";
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-Cgz3uA8U7A1lOZNuj1EYZVViZ3aL6VjcAno8GYQUufk=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-LPguGVWvwEMZpJFuXWLVFzIlzw+/QSMjVi2oYh0cI0s=";
       name = "${pname}-${version}-source";
     };
 
     patches = [
       ./tag-date.patch
       ./setuptools-distutils-C++.patch
-      # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
-      # https://github.com/pypa/distutils/pull/145
-      (fetchpatch {
-        url = "https://github.com/pypa/distutils/commit/aed7294b7b0c228cc0666a8b04f2959bf310ab57.patch";
-        hash = "sha256-/9+TKv0nllBfnj48zcXLrOgyBj52dBIVbrpnIaQ4O84=";
-        stripLen = 2;
-        extraPrefix = "setuptools/_distutils/";
-      })
     ];
 
     buildPhase = ''
@@ -86,5 +77,6 @@ in buildPythonPackage rec {
     license = with licenses; [ psfl zpl20 ];
     platforms = python.meta.platforms;
     priority = 10;
+    maintainers = teams.python.members;
   };
 }

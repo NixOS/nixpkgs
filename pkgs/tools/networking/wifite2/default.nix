@@ -42,8 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     pixiewps
   ];
 
-  checkInputs = propagatedBuildInputs;
-  checkPhase = "python -m unittest discover tests -v";
+  checkInputs = propagatedBuildInputs ++ [ python3.pkgs.unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/kimocoder/wifite2";

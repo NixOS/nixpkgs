@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.5.1";
+  version = "5.5.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "9bad1edfd6631446da2d2331bd869887d7fe502f6eeaf62b2e43e2c113f02b6d";
+    sha256 = "a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,6 +39,13 @@ unwrapped = stdenv.mkDerivation rec {
     # ExecStart can't be overwritten in overrides.
     # We need that to use wrapped executable and correct config file.
     sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+
+    # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
+    # Even though they should already be loaded and they're in RPATH, too.
+    for f in daemon/lua/{kres,zonefile}.lua; do
+      substituteInPlace "$f" \
+        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
+    done
   ''
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
@@ -67,7 +74,7 @@ unwrapped = stdenv.mkDerivation rec {
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
-  ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
+  ++ optional doInstallCheck "-Dconfig_tests=enabled"
   ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
@@ -91,6 +98,7 @@ unwrapped = stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    mainProgram = "kresd";
   };
 };
 
@@ -105,6 +113,7 @@ wrapped-full = runCommand unwrapped.name
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
+    inherit (unwrapped) meta;
   }
   ''
     mkdir -p "$out"/bin

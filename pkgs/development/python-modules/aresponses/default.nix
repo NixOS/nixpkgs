@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "2.1.5";
+  version = "2.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "CircleUp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9ZzIrj87TwxQi0YMlTHFPAp0V1oxfuL0+RMGXxUxFoE=";
+    sha256 = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
   };
 
   propagatedBuildInputs = [

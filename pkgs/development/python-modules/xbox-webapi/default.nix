@@ -44,6 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   meta = with lib; {
     description = "Library to authenticate with Windows Live/Xbox Live and use their API";
     homepage = "https://github.com/OpenXbox/xbox-webapi-python";

@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ intltool ];
   buildInputs = [
     aalib gsl libpng libX11 xorgproto libXext
-    libXt zlib gettext intltool perl
+    libXt zlib gettext perl
   ];
 
   preConfigure = ''

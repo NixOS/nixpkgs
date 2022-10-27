@@ -1,60 +1,74 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, attrs
 , buildPythonPackage
+, filelock
+, lxml
 , mypy-extensions
+, psutil
+, py
+, pytest-forked
+, pytest-xdist
+, pytestCheckHook
 , python
 , pythonOlder
+, setuptools
+, six
 , typed-ast
 , typing-extensions
 , tomli
+, types-setuptools
 , types-typed-ast
+, virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.941";
-  disabled = pythonOlder "3.6";
+  version = "0.981";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "v${version}";
-    hash = "sha256-H2SWJA0WWyKV7/5miFawv4JRXu/J7H6Wer1eBL+Tru0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CkRK/j5DRUZU2enpZtqX4l+89E7ODDG9MeRYFQp9kSs=";
   };
 
-  patches = [
-    # FIXME: Remove patch after upstream has decided the proper solution.
-    #        https://github.com/python/mypy/pull/11143
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/e7869f05751561958b946b562093397027f6d5fa.patch";
-      hash = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
-    })
-  ];
-
-  buildInputs = [
+  nativeBuildInputs = [
+    setuptools
     types-typed-ast
+    types-setuptools
   ];
 
   propagatedBuildInputs = [
     mypy-extensions
-    tomli
-    typed-ast
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typed-ast
   ];
 
-  # Tests not included in pip package.
+  passthru.optional-dependencies = {
+    dmypy = [ psutil ];
+    reports = [ lxml ];
+  };
+
+  # TODO: enable tests
   doCheck = false;
 
   pythonImportsCheck = [
     "mypy"
     "mypy.api"
     "mypy.fastparse"
-    "mypy.report"
     "mypy.types"
     "mypyc"
     "mypyc.analysis"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
   ];
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled

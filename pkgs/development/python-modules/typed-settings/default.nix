@@ -8,17 +8,18 @@
 , toml
 , pytestCheckHook
 , click
+, click-option-group
 }:
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "1.0.1";
+  version = "1.1.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xrIJgQiAaSXcANMnyXMnqEkLNUP+VyxjRoi9DkX+SLA=";
+    sha256 = "sha256-fbo4oj84j7Vkz2V6B/EqoyRl9OutSpm5Ko9Tctu2DYM=";
   };
 
   nativeBuildInputs = [
@@ -28,26 +29,20 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     cattrs
+    click-option-group
     toml
   ];
 
-  preCheck = ''
-    pushd tests
-  '';
+  pytestFlagsArray = [
+    "tests"
+  ];
 
   checkInputs = [
     click
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # mismatches in click help output
-    "test_help"
-  ];
-
-  postCheck = ''
-    popd
-  '';
+  pythonImportsCheck = [ "typed_settings" ];
 
   meta = {
     description = "Typed settings based on attrs classes";

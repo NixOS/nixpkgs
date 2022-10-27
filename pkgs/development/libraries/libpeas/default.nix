@@ -16,14 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.32.0";
+  version = "1.34.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1iVSD6AuiXcCmyRq5Dm8IYloll8egtYSIItxPx3MPQ4=";
+    sha256 = "QwX3Fdq0ta0+gAfa7DFmJecGWpTmPiXvVese+5ZKe/A=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     pkg-config

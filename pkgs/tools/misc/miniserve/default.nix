@@ -1,41 +1,37 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, zlib
-, libiconv
+, stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.19.4";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-vpLa0ipRV+JZoRa7jKn9ZNITvoQ8ABG2Qw1SyMZayK0=";
+    hash = "sha256-pi+dBJE+EqQpyZAkIV7duK1g378J6BgjIiFcjV5H1fQ=";
   };
 
-  cargoSha256 = "sha256-zBBU55VlXWYISMbKv07UfOPZ3vWRlpp4estuCcDBDDY=";
+  cargoSha256 = "sha256-nRTGKW33NO2vRkvpNVk4pT1DrHPEsSfhwf8y5pJ+n9U=";
 
   nativeBuildInputs = [
     installShellFiles
-    pkg-config
-    zlib
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
     Security
   ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
     "--skip=cant_navigate_up_the_root"
+    "--skip=qrcode_hidden_in_tty_when_disabled"
+    "--skip=qrcode_shown_in_tty_when_enabled"
   ];
 
   postInstall = ''
@@ -51,9 +47,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ figsoda ];
     # https://hydra.nixos.org/build/162650896/nixlog/1
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

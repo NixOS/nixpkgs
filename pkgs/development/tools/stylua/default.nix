@@ -1,25 +1,29 @@
-{ fetchFromGitHub
-, lib
+{ lib
 , rustPlatform
-, lua52Support ? true
-, luauSupport ? false
+, fetchFromGitHub
+  # lua54 implies lua52/lua53
+, features ? [ "lua54" "luau" ]
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.13.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0Pl8SogCSZcboLHVAI45JqCLojAqIWBFuoZAK4gTzrs=";
+    sha256 = "sha256-uxJsgTEvrwFfGrGv1VFoYGX9RnlqHBgUU75OlqSOEnc=";
   };
 
-  cargoSha256 = "sha256-VFgA5kOwUJG0GgKU4AUYCB/psAPM2GdTz5oRFgkrNi8=";
+  cargoSha256 = "sha256-FQgb9EcKEp29hl4n+A4hTdzmoEy8MfwUyt32jy1BxiY=";
 
-  buildFeatures = lib.optional lua52Support "lua52"
-    ++ lib.optional luauSupport "luau";
+  # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
+  buildFeatures = features;
 
   meta = with lib; {
     description = "An opinionated Lua code formatter";

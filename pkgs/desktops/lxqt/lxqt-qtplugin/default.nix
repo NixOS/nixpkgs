@@ -6,7 +6,7 @@
 , libfm-qt
 , libqtxdg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 , qtbase
 , qtsvg
 , qttools
@@ -44,7 +44,7 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-qtplugin";

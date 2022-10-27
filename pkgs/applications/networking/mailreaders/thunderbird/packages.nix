@@ -1,15 +1,17 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 rec {
-  thunderbird = (buildMozillaMach rec {
+  thunderbird = thunderbird-102;
+
+  thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "91.11.0";
+    version = "102.4.0";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "26b9242259b71eb14ddadffb34a59d07d515bbbc0cb806eed965a73b001ee81b3b1128d06cfdf3e50d5da4ef97be21d11193be34a582d3c9f27f27d2f97d90d2";
+      sha512 = "e2ce59eefb0c4df3eb20af01af2b7ad78a09e0fbac7bcc8800538d6655ca63a5d132c0700e2465654cc707a50aee01c62df0532f2c53b5f11c2d3a7ca881d8f0";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -28,6 +30,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
+      versionPrefix = "102";
     };
   }).override {
     geolocationSupport = false;

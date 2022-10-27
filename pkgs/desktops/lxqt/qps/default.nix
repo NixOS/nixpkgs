@@ -6,7 +6,7 @@
 , liblxqt
 , libqtxdg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 , qtbase
 , qttools
 , qtx11extras
@@ -37,7 +37,7 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qps";

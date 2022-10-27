@@ -9,16 +9,15 @@
 
 buildDunePackage rec {
   pname = "ppx_deriving_cmdliner";
-  version = "0.6.0";
+  version = "0.6.1";
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "hammerlab";
-    repo = "ppx_deriving_cmdliner";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "19l32y2wv64d1c7fvln07dg3bkf7wf5inzjxlff7lbabskdbbras";
+    sha256 = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +33,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/hammerlab/ppx_deriving_cmdliner";
     license = licenses.asl20;
     maintainers = [ maintainers.romildo ];
   };

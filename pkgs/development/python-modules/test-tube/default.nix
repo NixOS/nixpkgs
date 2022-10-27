@@ -7,7 +7,7 @@
 , imageio
 , numpy
 , pandas
-, pytorch
+, torch
 , tensorboard
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     imageio
     numpy
     pandas
-    pytorch
+    torch
     tensorboard
   ];
 

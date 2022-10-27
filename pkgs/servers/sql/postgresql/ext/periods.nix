@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "periods";
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "xocolatl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13aix61qzlb7cs042dz4x0z4sc2xayg4nzi2cks46zibxm5i4gzm";
+    sha256 = "sha256-XAqjP8Cih+HzqlI8XjgCNzSVQSbaetLRvJReiwHdaIc=";
   };
 
   buildInputs = [ postgresql ];

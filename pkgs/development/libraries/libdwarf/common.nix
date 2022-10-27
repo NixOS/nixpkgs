@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildInputs, sha512, version, libelf, url }:
+{ lib, stdenv, fetchurl, buildInputs, sha512, version, libelf, url, knownVulnerabilities }:
 
 stdenv.mkDerivation rec {
   pname = "libdwarf";
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.atry ];
+    inherit knownVulnerabilities;
   };
 }

@@ -20,14 +20,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K6YkkCMxc2lqxHIwyuLiwcp3m49sqbEtOlwZh4L1YJg=";
+    sha256 = "sha256-o25wOROkUm07JPdNTJQcJw6apeoysnjd+YBMHlPpAYI=";
   };
 
   propagatedBuildInputs = [ boost ];
@@ -65,6 +65,9 @@ stdenv.mkDerivation rec {
     "-Denable_compile_warnings=off"
     "-Denable_compile_optimizations=${optionOnOff optimize}"
     "-Denable_lto=${optionOnOff optimize}"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
   makeFlags = optional debug "VERBOSE=1";
 

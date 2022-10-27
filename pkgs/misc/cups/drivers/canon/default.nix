@@ -27,7 +27,6 @@
 }:
 
 let
-
   i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
   ld32 =
     if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
@@ -45,35 +44,35 @@ let
     sha256 = "sha256:069z6ijmql62mcdyxnzc9mf0dxa6z1107cd0ab4i1adk8kr3d75k";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 pkg-config gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
-
+  buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
 in
-
-
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
 
   postUnpack = ''
-    (cd $sourceRoot; tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz)
-    (cd $sourceRoot; sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_bindir=/usr/bin@_libdir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am)
-    (cd $sourceRoot; sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am)
-    (cd $sourceRoot; patchShebangs cnrdrvcups-common-${version})
+    (
+      cd $sourceRoot
+      tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
+      sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
+      patchShebangs cnrdrvcups-common-${version}
 
-    (cd $sourceRoot; sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_bindir=/usr/bin@_libdir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile)
-    (cd $sourceRoot; patchShebangs cnrdrvcups-lb-${version})
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
+      patchShebangs cnrdrvcups-lb-${version}
+    )
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 ];
+  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 pkg-config ];
 
   inherit buildInputs;
 

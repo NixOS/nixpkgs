@@ -36,8 +36,7 @@ stdenv.mkDerivation {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  # We need a native compiler to build perl XS extensions
-  # when cross-compiling.
+  # A native compiler is needed to build tools needed at build time
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
   buildInputs = [ xz.bin bash libintl ]
@@ -45,6 +44,9 @@ stdenv.mkDerivation {
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+    # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
+    # fallbacks.
+    ++ optional crossBuildTools "--enable-perl-xs=no"
     ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
@@ -56,11 +58,18 @@ stdenv.mkDerivation {
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
 
-  checkFlagsArray = [
+  checkFlags = lib.optionals (!stdenv.hostPlatform.isMusl) [
     # Test is known to fail on various locales on texinfo-6.8:
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
   ];
+
+  postFixup = optionalString crossBuildTools ''
+    for f in "$out"/bin/{pod2texi,texi2any}; do
+      substituteInPlace "$f" \
+        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+    done
+  '';
 
   meta = {
     homepage = "https://www.gnu.org/software/texinfo/";

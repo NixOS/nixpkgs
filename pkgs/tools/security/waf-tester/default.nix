@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "waf-tester";
-  version = "0.6.10";
+  version = "0.6.12";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fl0gcpcJr7yckfNcnt1C+i2iGdD2oiCq7gJIkiz2v7E=";
+    hash = "sha256-baj9JuC4PF5c50K2aY+xwdE9t4aTzOu+isqJ6r1pWuc=";
   };
 
   vendorSha256 = "sha256-qVzgZX4HVXZ3qgYAu3a46vcGl4Pk2D1Zx/giEmPEG88=";

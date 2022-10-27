@@ -9,23 +9,23 @@
 # extras: common
 , bcrypt
 , bleach
-, flask_mail
+, flask-mailman
+, qrcode
 
 # extras: fsqla
-, flask_sqlalchemy
+, flask-sqlalchemy
 , sqlalchemy
 , sqlalchemy-utils
 
 # extras: mfa
 , cryptography
 , phonenumbers
-, pyqrcode
 
 # propagates
 , blinker
 , email-validator
 , flask
-, flask_login
+, flask-login
 , flask_principal
 , flask-wtf
 , itsdangerous
@@ -39,24 +39,25 @@
 , peewee
 , pony
 , pytestCheckHook
+, python-dateutil
 , zxcvbn
 }:
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "4.1.4";
+  version = "5.0.2";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-j6My1CD+GY2InHlN0IXPcNqfq+ytdoDD3y+5s2o3WRI=";
+    sha256 = "sha256-Nv7g2l0bPSEcrydFU7d1NHjCCJl8Ykq7hOu6QmHeZcI=";
   };
 
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
-    flask_login
+    flask-login
     flask_principal
     flask-wtf
     itsdangerous
@@ -71,17 +72,17 @@ buildPythonPackage rec {
     common = [
       bcrypt
       bleach
-      flask_mail
+      flask-mailman
+      qrcode
     ];
     fsqla = [
-      flask_sqlalchemy
+      flask-sqlalchemy
       sqlalchemy
       sqlalchemy-utils
     ];
     mfa = [
       cryptography
       phonenumbers
-      pyqrcode
     ];
   };
 
@@ -93,6 +94,7 @@ buildPythonPackage rec {
     peewee
     pony
     pytestCheckHook
+    python-dateutil
     zxcvbn
   ]
   ++ passthru.optional-dependencies.babel

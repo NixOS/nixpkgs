@@ -453,7 +453,10 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   }
   ```
 
-  Find the value to put as `sha256` by running `nix run -f '<nixpkgs>' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix` or `nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz`.
+When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
+It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
+
+Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -477,15 +480,23 @@ Preferred source hash type is sha256. There are several ways to get it.
 
 4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
 
-5. Fake hash: set fake hash in package expression, perform build and extract correct hash from error Nix prints.
+5. Fake hash: set the hash to one of
 
-    For package updates it is enough to change one symbol to make hash fake. For new packages, you can use `lib.fakeSha256`, `lib.fakeSha512` or any other fake hash.
+   - `""`
+   - `lib.fakeHash`
+   - `lib.fakeSha256`
+   - `lib.fakeSha512`
+   
+   in the package expression, attempt build and extract correct hash from error messages.
+
+   :::{.warning}
+   You must use one of these four fake hashes and not some arbitrarily-chosen hash.
+   
+   See [](#sec-source-hashes-security).
+   :::
 
     This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
 
-::: {.warning}
-This method has security problems. Check below for details.
-:::
 
 ### Obtaining hashes securely {#sec-source-hashes-security}
 
@@ -497,7 +508,7 @@ Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of f
 
 - `https://` URLs are secure in methods 1, 2, 3;
 
-- `https://` URLs are not secure in method 5. When obtaining hashes with fake hash method, TLS checks are disabled. So refetch source hash from several different networks to exclude MITM scenario. Alternatively, use fake hash method to make Nix error, but instead of extracting hash from error, extract `https://` URL and prefetch it with method 1.
+- `https://` URLs are secure in method 5 *only if* you use one of the listed fake hashes. If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
 
 ## Patches {#sec-patches}
 

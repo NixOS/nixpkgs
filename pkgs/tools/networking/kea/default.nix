@@ -1,36 +1,51 @@
 { stdenv
 , lib
 , fetchurl
+
+# build time
 , autoreconfHook
 , pkg-config
+
+# runtime
 , boost
-, botan2
 , libmysqlclient
 , log4cplus
+, openssl
 , postgresql
 , python3
+
+# tests
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "2.0.2"; # only even minor versions are stable
+  version = "2.2.0"; # only even minor versions are stable
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jSghO9yOK7hwo4OzCsHlPVTh66Q9L4blFRsItmqmzzI=";
+    sha256 = "sha256-2n2QymKncmAtrG535QcxkDhCKJWtaO6xQvFIfWfVMdI=";
   };
 
-  patches = [ ./dont-create-var.patch ];
+  patches = [
+    ./dont-create-var.patch
+  ];
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
   '';
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   configureFlags = [
     "--enable-perfdhcp"
     "--enable-shell"
     "--localstatedir=/var"
+    "--with-openssl=${lib.getDev openssl}"
     "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
     "--with-pgsql=${postgresql}/bin/pg_config"
   ];
@@ -38,20 +53,31 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+  ] ++ (with python3.pkgs; [
+    sphinxHook
+    sphinx-rtd-theme
+  ]);
+
+  sphinxBuilders = [
+    "html"
+    "man"
   ];
+  sphinxRoot = "doc/sphinx";
 
   buildInputs = [
     boost
-    botan2
     libmysqlclient
     log4cplus
+    openssl
     python3
   ];
 
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit (nixosTests) kea;
+    kea = nixosTests.kea;
+    prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
+    prometheus-exporter = nixosTests.prometheus-exporters.kea;
   };
 
   meta = with lib; {

@@ -3,9 +3,9 @@
 , common-updater-scripts
 }:
 
-{ pname
-, version
-, attrPath ? pname
+{ pname ? null
+, version ? null
+, attrPath ? null
 , ignoredVersions ? ""
 , rev-prefix ? ""
 , odd-unstable ? false

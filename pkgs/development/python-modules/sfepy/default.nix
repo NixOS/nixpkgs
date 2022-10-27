@@ -68,7 +68,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
     license = licenses.bsd3;

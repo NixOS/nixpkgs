@@ -5,7 +5,11 @@
 , pythonOlder
 , substituteAll
 
+# build
+, setuptools
+
 # patched in
+, fetchpatch
 , geos
 , gdal
 , withGdal ? false
@@ -39,23 +43,33 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.0.5";
+  version = "4.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-90MaXecneWbzeFVXw5KEMzR9mYweZFkyRQE3iikeWqs=";
+    hash = "sha256-uNhDcUgQq4jVk0RQfURHvoss8SpJAxNjtu7Z8bmyKA8=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (substituteAll {
+      src = ./django_4_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;
       geos = geos;
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    });
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asgiref

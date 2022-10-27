@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bQMUkSaGSr0ycV1OkmfSdUzt4lppBSkBOZNWrTvF7P8=";
+    sha256 = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
@@ -41,6 +41,11 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "--cov=watchdog" "" \
       --replace "--cov-report=term-missing" ""
+  '' + lib.optionalString stdenv.hostPlatform.isMusl
+  # https://github.com/gorakhargosh/watchdog/issues/920
+  ''
+    substituteInPlace tests/test_inotify_c.py \
+      --replace "Unknown error -1" "No error information"
   '';
 
   disabledTests = [

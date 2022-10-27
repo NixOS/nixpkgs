@@ -151,6 +151,13 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/
@@ -243,12 +250,6 @@ in stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
-  ''
-  + optionalString enableSharedLibraries ''
-    mkdir -p $dev/lib
-    mv $lib/lib/*.a $dev/lib
-    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
-      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

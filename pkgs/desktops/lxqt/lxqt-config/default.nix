@@ -15,7 +15,7 @@
 , libqtxdg
 , xkeyboard_config
 , xorg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -64,7 +64,7 @@ mkDerivation rec {
                 '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-config";

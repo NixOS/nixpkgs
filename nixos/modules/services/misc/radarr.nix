@@ -9,10 +9,10 @@ in
 {
   options = {
     services.radarr = {
-      enable = mkEnableOption "Radarr";
+      enable = mkEnableOption (lib.mdDoc "Radarr");
 
       package = mkOption {
-        description = "Radarr package to use";
+        description = lib.mdDoc "Radarr package to use";
         default = pkgs.radarr;
         defaultText = literalExpression "pkgs.radarr";
         example = literalExpression "pkgs.radarr";
@@ -22,25 +22,25 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/radarr/.config/Radarr";
-        description = "The directory where Radarr stores its data files.";
+        description = lib.mdDoc "The directory where Radarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Radarr web interface.";
+        description = lib.mdDoc "Open ports in the firewall for the Radarr web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "radarr";
-        description = "User account under which Radarr runs.";
+        description = lib.mdDoc "User account under which Radarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "radarr";
-        description = "Group under which Radarr runs.";
+        description = lib.mdDoc "Group under which Radarr runs.";
       };
     };
   };

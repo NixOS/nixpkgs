@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libcap libseccomp libslirp ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
 

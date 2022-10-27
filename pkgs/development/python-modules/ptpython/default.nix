@@ -31,8 +31,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An advanced Python REPL";
+    homepage = "https://github.com/prompt-toolkit/ptpython";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mlieberman85 ];
-    platforms = platforms.all;
   };
 }

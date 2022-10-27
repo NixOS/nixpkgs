@@ -23,14 +23,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.34";
+  version = "6.1.40";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "9c3ce1829432e5b8374f950698587038f45fb0492147dc200e59edb9bb75eb49";
+    sha256 = "bc857555d3e836ad9350a8f7b03bb54d2fdc04dddb2043d09813f4634bca4814";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -97,11 +97,6 @@ in stdenv.mkDerivation {
     ./qtx11extras.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
-    # NOTE: both patches below should be removed when updating to 6.1.35
-    # https://www.virtualbox.org/ticket/20914#comment:6
-    ./linux518.patch
-    # https://www.virtualbox.org/ticket/20904#comment:22
-    ./ffreestanding.patch
   ];
 
   postPatch = ''

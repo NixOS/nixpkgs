@@ -3,25 +3,35 @@
 , nixosTests
 , python3
 , ghostscript
-, imagemagick
+, imagemagickBig
 , jbig2enc
 , optipng
 , pngquant
 , qpdf
-, tesseract4
+, tesseract5
 , unpaper
 , liberation_ttf
+, fetchFromGitHub
 }:
 
 let
   # Use specific package versions required by paperless-ngx
-  py = python3.override {
+  python = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
 
-      # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
-      django-extensions = super.django-extensions.overridePythonAttrs (_: {
-        doCheck = false;
+      # use paperless-ngx version of django-q
+      # see https://github.com/paperless-ngx/paperless-ngx/pull/1014
+      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
+        src = fetchFromGitHub {
+          owner = "paperless-ngx";
+          repo = "django-q";
+          hash = "sha256-alu7tZwUn77xhUF9c/aGmwRwO//mR/FucXjvXUl/6ek=";
+          rev = "8b5289d8caf36f67fb99448e76ead20d5b498c1b";
+        };
+        # due to paperless-ngx modification of the pyproject.toml file
+        # the patch is not needed any more
+        patches = [ ];
       });
 
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
@@ -31,24 +41,37 @@ let
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
+
+      eth-keys = super.eth-keys.overridePythonAttrs (_: {
+        doCheck = false;
+      });
     };
   };
 
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
+  path = lib.makeBinPath [
+    ghostscript
+    imagemagickBig
+    jbig2enc
+    optipng
+    pngquant
+    qpdf
+    tesseract5
+    unpaper
+  ];
 in
-py.pkgs.pythonPackages.buildPythonApplication rec {
+python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.7.1";
+  version = "1.9.2";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-8vx4hvbIqaChjPyS8Q0ar2bz/pLzEdxoF7P2gBEeFzc=";
+    hash = "sha256-fafjVXRfzFrINzI/Ivfm1VY4YpemHkHwThBP54XoXM4=";
   };
 
   format = "other";
 
-  propagatedBuildInputs = with py.pkgs.pythonPackages; [
+  propagatedBuildInputs = with python.pkgs.pythonPackages; [
     aioredis
     arrow
     asgiref
@@ -144,10 +167,17 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     zope_interface
   ];
 
+  # paperless-ngx includes the bundled django-q version. This will
+  # conflict with the tests and is not needed since we overrode the
+  # django-q version with the paperless-ngx version
+  postPatch = ''
+    rm -rf src/django-q
+  '';
+
   # Compile manually because `pythonRecompileBytecodeHook` only works for
   # files in `python.sitePackages`
   postBuild = ''
-    ${py.interpreter} -OO -m compileall src
+    ${python.interpreter} -OO -m compileall src
   '';
 
   installPhase = ''
@@ -159,7 +189,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  checkInputs = with py.pkgs.pythonPackages; [
+  checkInputs = with python.pkgs.pythonPackages; [
     pytest-django
     pytest-env
     pytest-sugar
@@ -185,10 +215,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
   '';
 
   passthru = {
-    # PYTHONPATH of all dependencies used by the package
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
-    inherit path;
-
+    inherit python path;
     tests = { inherit (nixosTests) paperless; };
   };
 

@@ -7,29 +7,42 @@ dotnetBuildHook() {
     runHook preBuild
 
     if [ "${enableParallelBuilding-}" ]; then
-        maxCpuFlag="$NIX_BUILD_CORES"
-        parallelBuildFlag="true"
+        local -r maxCpuFlag="$NIX_BUILD_CORES"
+        local -r parallelBuildFlag="true"
     else
-        maxCpuFlag="1"
-        parallelBuildFlag="false"
+        local -r maxCpuFlag="1"
+        local -r parallelBuildFlag="false"
+    fi
+
+    if [ "${selfContainedBuild-}" ]; then
+        dotnetBuildFlags+=("-p:SelfContained=true")
+    else
+        dotnetBuildFlags+=("-p:SelfContained=false")
     fi
 
     if [ "${version-}" ]; then
-        versionFlag="-p:Version=${version-}"
+        local -r versionFlag="-p:Version=${version-}"
     fi
 
-    for project in ${projectFile[@]} ${testProjectFile[@]}; do
-        env \
-            dotnet build "$project" \
-                -maxcpucount:$maxCpuFlag \
-                -p:BuildInParallel=$parallelBuildFlag \
-                -p:ContinuousIntegrationBuild=true \
-                -p:Deterministic=true \
-                --configuration "@buildType@" \
-                --no-restore \
-                ${versionFlag-} \
-                ${dotnetBuildFlags[@]}  \
-                ${dotnetFlags[@]}
+    dotnetBuild() {
+        local -r project="${1-}"
+        env dotnet build ${project-} \
+            -maxcpucount:$maxCpuFlag \
+            -p:BuildInParallel=$parallelBuildFlag \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            -p:UseAppHost=true \
+            --configuration "@buildType@" \
+            --no-restore \
+            ${versionFlag-} \
+            ${dotnetBuildFlags[@]}  \
+            ${dotnetFlags[@]}
+    }
+
+    (( "${#projectFile[@]}" == 0 )) && dotnetBuild
+
+    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
+        dotnetBuild "$project"
     done
 
     runHook postBuild

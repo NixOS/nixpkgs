@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, coq-ext-lib, version ? null }:
+{ lib, callPackage, mkCoqDerivation, coq, coq-ext-lib, version ? null }:
 
 with lib; mkCoqDerivation {
   pname = "simple-io";
@@ -13,10 +13,13 @@ with lib; mkCoqDerivation {
   release."1.3.0".sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
   mlPlugin = true;
   nativeBuildInputs = [ coq.ocamlPackages.cppo ];
-  propagatedBuildInputs = [ coq-ext-lib coq.ocamlPackages.ocamlbuild ];
+  propagatedBuildInputs = [ coq-ext-lib ]
+  ++ (with coq.ocamlPackages; [ ocaml findlib ocamlbuild ]);
 
   doCheck = true;
   checkTarget = "test";
+
+  passthru.tests.HelloWorld = callPackage ./test.nix {};
 
   meta = {
     description = "Purely functional IO for Coq";

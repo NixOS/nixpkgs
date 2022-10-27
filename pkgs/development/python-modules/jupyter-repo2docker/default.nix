@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, chardet
 , docker
 , entrypoints
 , escapism
@@ -16,8 +17,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "2022.02.0";
   pname = "jupyter-repo2docker";
+  version = "2022.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,11 +26,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "repo2docker";
-    rev = version;
-    sha256 = "sha256-L7jUaGRea5HJnb/SX2K2qfvtFwkq9jfhrpvsu+LHH3M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-n1Yhl3QC1YqdsCl6pI5NjzTiSEs6NrGq9jwT0uyS/p0=";
   };
 
   propagatedBuildInputs = [
+    chardet
     docker
     entrypoints
     escapism

@@ -1,16 +1,7 @@
-{ lib, buildGoModule, kubernetes }:
+{ lib, kubernetes }:
 
-buildGoModule rec {
+kubernetes.overrideAttrs (_: rec {
   pname = "kubectl";
-
-  inherit (kubernetes)
-    buildPhase
-    doCheck
-    nativeBuildInputs
-    src
-    vendorSha256
-    version
-    ;
 
   outputs = [ "out" "man" "convert" ];
 
@@ -38,4 +29,4 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes/kubectl";
     platforms = lib.platforms.unix;
   };
-}
+})

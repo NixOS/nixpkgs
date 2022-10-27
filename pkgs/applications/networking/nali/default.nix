@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "nali";
-  version = "0.4.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
     rev = "v${version}";
-    sha256 = "sha256-7NUUX4hDwvMBBQvxiB7P/lNHKgxwOFObdD6DUd0vX5c=";
+    sha256 = "sha256-NHTS9YajVjyAjSEQxMqyyY2Hwd30pjnIthZ+1jroqTE=";
   };
 
-  vendorSha256 = "sha256-Ld5HehK5MnPwl6KtIl0b4nQRiXO4DjKVPL1iti/WBIQ=";
+  vendorSha256 = "sha256-1sXG/xEzPVN1aRCsYqUee9aidT+ognZszOC7SR8YArw=";
   subPackages = [ "." ];
 
   meta = with lib; {

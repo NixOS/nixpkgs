@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , asgineer
+, bcrypt
 , itemdb
 , jinja2
 , markdown
@@ -15,17 +16,18 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "22.6.4";
+  version = "22.10.1";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wLbC7NlDNgAyCnGjawfrnRPN/4DOcHVd93pIWrILs68=";
+    sha256 = "sha256-+7PKYVZfX+zDBKpaFwEVftyp4yPL90X9HSQDvoNNFuA=";
   };
 
   propagatedBuildInputs = [
     asgineer
+    bcrypt
     itemdb
     jinja2
     markdown

@@ -12,18 +12,21 @@
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "5.2.6.3";
+  version = "5.3.1.2";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZsBOF3ZFZ0aicaAJ5j+6DQPwDyloxSafae8FTKSdwAI=";
+    sha256 = "sha256-plimvkMUjQWQ0Ewm1TXL5IB1xe62DFhwBlBc4UeCguU=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-  nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64-linux.nix else ./deps-x86_64-linux.nix;
+  nugetDeps = ./deps.nix;
+
+  # Without this dotnet attempts to restore for Windows targets, which it cannot find the dependencies for
+  dotnetRestoreFlags = [ "--runtime ${dotnetCorePackages.sdk_6_0.systemToDotnetRid stdenvNoCC.targetPlatform.system}" ];
 
   projectFile = "ArchiSteamFarm.sln";
   executables = [ "ArchiSteamFarm" ];

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.10.1";
+  version = "2.10.3";
 
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    sha256 = "sha256-mK6soIYTPvs+HiqtA5aYdJDIQlkp3bz+BVAYT9xUzRM=";
+    sha256 = "sha256-dhRVNxHul0kPcyEm3Ad/jQrghOvGqW4j2xSCr6vbLFE=";
   };
 
   propagatedBuildInputs = [ pytz ];

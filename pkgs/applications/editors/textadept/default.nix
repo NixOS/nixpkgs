@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
 
 stdenv.mkDerivation rec {
-  version = "11.3";
+  version = "11.4";
   pname = "textadept";
 
   nativeBuildInputs = [ pkg-config unzip zip ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "orbitalquark";
     repo = "textadept";
     rev = "textadept_${version}";
-    sha256 = "sha256-C7J/Qr/58hLbyw39R+GU4wot1gbAXf51Cv6KGk3kg30=";
+    sha256 = "sha256-1we2NC4N8oY4QmmqIIWGSpTBuLx3MEFkZK+BjmNEfD0=";
   };
 
   preConfigure =
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "WGET=true"
     "PIXMAPS_DIR=$(out)/share/pixmaps"
+    "GTK2=1"
   ];
 
   meta = with lib; {

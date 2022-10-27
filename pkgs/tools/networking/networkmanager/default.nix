@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , substituteAll
-, intltool
+, gettext
 , pkg-config
 , fetchpatch
 , dbus
@@ -24,6 +24,7 @@
 , libselinux
 , audit
 , gobject-introspection
+, perl
 , modemmanager
 , openresolv
 , libndp
@@ -34,6 +35,7 @@
 , iputils
 , kmod
 , jansson
+, elfutils
 , gtk-doc
 , libxslt
 , docbook_xsl
@@ -43,22 +45,24 @@
 , openconnect
 , curl
 , meson
+, mesonEmulatorHook
 , ninja
 , libpsl
 , mobile-broadband-provider-info
 , runtimeShell
+, buildPackages
 }:
 
 let
-  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.38.2";
+  version = "1.40.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-nP/SrcaGUTFt8tL4oJ4XF7sdDC6jic/HIaAQnbmzWCY=";
+    sha256 = "sha256-sSbnWiNJNsmcR7JZxVEg692b92rE79MMmBHlagSBwnM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -102,7 +106,9 @@ stdenv.mkDerivation rec {
     "-Ddhcpcanon=no"
 
     # Miscellaneous
-    "-Ddocs=true"
+    # almost cross-compiles, however fails with
+    # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
+    "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
     "-Dtests=no"
@@ -119,25 +125,10 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    (fetchpatch {
-      # Prevent downgrade to plain network on Enhanced Open profiles
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/b7946e50acc0d20d31b0c1098fdadc2f105ba799.patch";
-      hash = "sha256-CdZiubfqhJQ5w4+s9O8C5WI9Ls/paONzDX4rX6yEmS0=";
-    })
-    (fetchpatch {
-      # Treat OWE BSSIDs as valid candidates for open profiles
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/dd80cdcc1bd5e2535b8e4a1d1d0c62f1d3328a7c.patch";
-      hash = "sha256-QMZvWN3g8K+UH6y05+RkCmF+gHHU4pB+UXfU770AUis=";
-    })
-    (fetchpatch {
-      # Allow distinguishing pure OWE networks from those with transition mode enabled
-      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/13ea8d2e7dddd8279c82230594cea533ca349dd3.patch";
-      hash = "sha256-BiINGzX/Zp8pwdbMiDScrZvrHtH7coXkZm1HScFuFWA=";
-    })
   ];
 
   buildInputs = [
+    gobject-introspection
     systemd
     libselinux
     audit
@@ -150,12 +141,12 @@ stdenv.mkDerivation rec {
     mobile-broadband-provider-info
     bluez5
     dnsmasq
-    gobject-introspection
     modemmanager
     readline
     newt
     libsoup
     jansson
+    dbus # used to get directory paths with pkg-config during configuration
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
@@ -163,11 +154,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    intltool
+    gettext
     pkg-config
     vala
     gobject-introspection
-    dbus
+    perl
+    elfutils # used to find jansson soname
     # Docs
     gtk-doc
     libxslt
@@ -176,6 +168,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     pythonForDocs
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   doCheck = false; # requires /sys, the net
@@ -183,6 +177,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./tools
     patchShebangs libnm/generate-setting-docs.py
+
+    # TODO: submit upstream
+    substituteInPlace meson.build \
+      --replace "'vala', req" "'vala', native: false, req"
   '';
 
   preBuild = ''
@@ -192,6 +190,11 @@ stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+  '';
+
+  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp -r ${buildPackages.networkmanager.devdoc} $devdoc
+    cp -r ${buildPackages.networkmanager.man} $man
   '';
 
   passthru = {

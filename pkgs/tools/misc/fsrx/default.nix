@@ -1,23 +1,19 @@
-{ lib, fetchFromGitHub, rustPlatform, gitUpdater, testers, fsrx }:
+{ lib, fetchFromGitHub, rustPlatform, testers, fsrx }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fsrx";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "coloradocolby";
+    owner = "thatvegandev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pKdxYO8Rhck3UYxqiWHDlrlPS4cAPe5jLUu5Dajop/k=";
+    sha256 = "sha256-hzfpjunP20WCt3erYu7AO7A3nz+UMKdFzWUA5jASbVA=";
   };
 
-  cargoSha256 = "sha256-5h+ou9FLCG/WWMEQPsCTa1q+PovxUJs+6lzQ0L2bKIs=";
+  cargoSha256 = "sha256-bRStmz2sJnhCKpvoQfc/ZP9B2ZdNHYNEHd+wZErdS1Y=";
 
   passthru = {
-    updateScript = gitUpdater {
-      inherit pname version;
-      rev-prefix = "v";
-    };
     tests.version = testers.testVersion {
       package = fsrx;
     };
@@ -25,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A flow state reader in the terminal";
-    homepage = "https://github.com/coloradocolby/fsrx";
+    homepage = "https://github.com/thatvegandev/fsrx";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
   };

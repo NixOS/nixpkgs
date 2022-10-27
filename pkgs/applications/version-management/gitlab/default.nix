@@ -37,7 +37,7 @@ let
         railties = x.railties // {
           dontBuild = false;
           patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = "-p2";
+          patchFlags = [ "-p2" ];
         };
       };
     groups = [
@@ -46,16 +46,18 @@ let
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
-  };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarn_hash;
+    extraConfigPaths = lib.forEach data.vendored_gems (gem: "${src}/vendor/gems/${gem}");
   };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
@@ -89,7 +91,7 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
@@ -127,13 +129,17 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools makeWrapper
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
+
+    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
+    ./update-pg.patch
   ];
 
   postPatch = ''
@@ -203,7 +209,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
+    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

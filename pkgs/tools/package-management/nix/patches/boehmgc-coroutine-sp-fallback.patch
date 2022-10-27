@@ -1,17 +1,17 @@
 diff --git a/pthread_stop_world.c b/pthread_stop_world.c
-index 4b2c429..1fb4c52 100644
+index b5d71e62..aed7b0bf 100644
 --- a/pthread_stop_world.c
 +++ b/pthread_stop_world.c
-@@ -673,6 +673,8 @@ GC_INNER void GC_push_all_stacks(void)
-     struct GC_traced_stack_sect_s *traced_stack_sect;
-     pthread_t self = pthread_self();
-     word total_size = 0;
+@@ -768,6 +768,8 @@ STATIC void GC_restart_handler(int sig)
+ /* world is stopped.  Should not fail if it isn't.                      */
+ GC_INNER void GC_push_all_stacks(void)
+ {
 +    size_t stack_limit;
 +    pthread_attr_t pattr;
- 
-     if (!EXPECT(GC_thr_initialized, TRUE))
-       GC_thr_init();
-@@ -722,6 +724,31 @@ GC_INNER void GC_push_all_stacks(void)
+     GC_bool found_me = FALSE;
+     size_t nthreads = 0;
+     int i;
+@@ -851,6 +853,31 @@ GC_INNER void GC_push_all_stacks(void)
            hi = p->altstack + p->altstack_size;
            /* FIXME: Need to scan the normal stack too, but how ? */
            /* FIXME: Assume stack grows down */

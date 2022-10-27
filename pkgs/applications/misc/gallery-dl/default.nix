@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.22.3";
+  version = "1.23.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6nveSEpi5fdlf6ooUXFrX1WaVDOQi6mvgDGAGgwi1zc=";
+    sha256 = "sha256-CoZN0cLXSujZRSGFX3dsNGuvgupa4t1VrEoW+Zu41yw=";
   };
 
   propagatedBuildInputs = [ requests yt-dlp ];
@@ -21,6 +21,8 @@ buildPythonApplication rec {
     # incompatible with pytestCheckHook
     "--ignore=test/test_ytdl.py"
   ];
+
+  pythonImportsCheck = [ "gallery_dl" ];
 
   meta = with lib; {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";

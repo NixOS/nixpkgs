@@ -1,63 +1,63 @@
 {
   "stable": {
-    "version": "103.0.5060.53",
-    "sha256": "00di0nw6h3kb0qp2wp3ny3zsar1ayn1lyx5zr28dl1h5cwaaxjqf",
-    "sha256bin64": "19wxd4jl6fyjpcpy2331ckz6dgzrfj52wvdkp0kb18n0sym17fyn",
+    "version": "107.0.5304.68",
+    "sha256": "0k5qrmby1k2gw3lj96x3qag20kka61my578pv0zyrqqj5sdz3i5a",
+    "sha256bin64": "1x9svz5s8fm2zhnpzjpqckzfp37hjni3nf3pm63rwnvbd06y48ja",
     "deps": {
       "gn": {
-        "version": "2022-05-11",
+        "version": "2022-09-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "578a7fe4c3c6b0bc2ae1fd2e37f14857d09895bf",
-        "sha256": "03dqfrdpf5xxl64dby3qmbwpzdq2gsa8g7xl438py3a629rgxg63"
+        "rev": "fff29c1b3f9703ea449f720fe70fa73575ef24e5",
+        "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
       }
     },
     "chromedriver": {
-      "version": "103.0.5060.24",
-      "sha256_linux": "0snsv9n9db314adrr7hhcf49mgrkak6bvq84q9l5yvpl8ihvd0xr",
-      "sha256_darwin": "1rdai2vvnj7156lbbg0zambcz638hq7a3i9npbmlsl826l61m8wm",
-      "sha256_darwin_aarch64": "15f5q9fdqa63mb9yjm4dql69fh6w85f0xj428sv4grfhrn8w0bh3"
+      "version": "107.0.5304.62",
+      "sha256_linux": "13s0kl0k8c6q6h548ay2qssv8j4bmm5b4p3h8bgby30nj9014bsh",
+      "sha256_darwin": "0awd59xz4cllkbd9r5hhk6sinf291ii81chi361nw67aj5vmj7is",
+      "sha256_darwin_aarch64": "01fr6518qycwsn6js64k7727jmp3hxmj70jcghmw1cgxam59nh7w"
     }
   },
   "beta": {
-    "version": "104.0.5112.20",
-    "sha256": "0adzdk3m2l4pjlk82sqavwgxf6a5darbiwchmlrsxc58p9xxag4s",
-    "sha256bin64": "1cm5k4gpxc0dn0vdqf3qwwf36pc77va9pnci84zcpaxx0jih7l9b",
+    "version": "107.0.5304.62",
+    "sha256": "1w77id89gszichqxsrqgkb3v0kf26fic5p3y1ndgrw86d8kilgpj",
+    "sha256bin64": "0lc08mc1540w4chscq813pmiavvx32qfb581w7lh9ayby15j2nkk",
     "deps": {
       "gn": {
-        "version": "2022-06-08",
+        "version": "2022-09-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "2ecd43a10266bd091c98e6dcde507c64f6a0dad3",
-        "sha256": "1q06vsz9b4bb764wy1wy8n177z2pgpm97kq3rl1hmq185mz5fhra"
+        "rev": "fff29c1b3f9703ea449f720fe70fa73575ef24e5",
+        "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
       }
     }
   },
   "dev": {
-    "version": "104.0.5112.20",
-    "sha256": "0adzdk3m2l4pjlk82sqavwgxf6a5darbiwchmlrsxc58p9xxag4s",
-    "sha256bin64": "13p2w4wwd8ji5ydgz4x7w2q4rmn74w3z2fl999q7zaq1cra21pzd",
+    "version": "108.0.5359.10",
+    "sha256": "1wmb3qxd126j3466h8wb2fsfy92218rv812sxxqdbpyf2z66m8pj",
+    "sha256bin64": "0vv64hqx5wf8qsm3z518wv9phipb7nbg6kj5mghx55rn20qmfpbr",
     "deps": {
       "gn": {
-        "version": "2022-06-08",
+        "version": "2022-10-05",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "2ecd43a10266bd091c98e6dcde507c64f6a0dad3",
-        "sha256": "1q06vsz9b4bb764wy1wy8n177z2pgpm97kq3rl1hmq185mz5fhra"
+        "rev": "b9c6c19be95a3863e02f00f1fe403b2502e345b6",
+        "sha256": "1rhadb6qk867jafr85x2m3asis3jv7x06blhmad2d296p26d5w6x"
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "103.0.5060.53",
-    "sha256": "00di0nw6h3kb0qp2wp3ny3zsar1ayn1lyx5zr28dl1h5cwaaxjqf",
-    "sha256bin64": "19wxd4jl6fyjpcpy2331ckz6dgzrfj52wvdkp0kb18n0sym17fyn",
+    "version": "106.0.5249.119",
+    "sha256": "14niglj8q6mfkmgbbjhaipmyhv6vryx93crswb1xa871a14in28g",
+    "sha256bin64": "1kcf8l6ivqzx6qaiy7vx2l6mhfqn4lq93dkgcx1bdadikwcpq0dd",
     "deps": {
       "gn": {
-        "version": "2022-05-11",
+        "version": "2022-08-11",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "578a7fe4c3c6b0bc2ae1fd2e37f14857d09895bf",
-        "sha256": "03dqfrdpf5xxl64dby3qmbwpzdq2gsa8g7xl438py3a629rgxg63"
+        "rev": "0bcd37bd2b83f1a9ee17088037ebdfe6eab6d31a",
+        "sha256": "13zks2z65kg7fzzsysq4mswd4bhhy3h7ycdrpxfilcvixx2n2gac"
       },
       "ungoogled-patches": {
-        "rev": "103.0.5060.53-1",
-        "sha256": "1g5ciwzrhg9g13gvhrwqf19djk9jhj1d6nx2f6a8d5ch1mhi2z8s"
+        "rev": "106.0.5249.119-1",
+        "sha256": "0mgyakq0g3v24b1qn76zblhjf9zzbiv1fq95w7w42nv3fvxfrxr2"
       }
     }
   }

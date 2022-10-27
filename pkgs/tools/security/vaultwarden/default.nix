@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.24.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zeMVdsTSp1z8cwebU2N6w7436N8CcI7PzNedDOSvEx4=";
+    sha256 = "sha256-LPIc1odUBvjVJty3GYYFNhile4XBWMisLUeVtWH6xgE=";
   };
 
-  cargoSha256 = "sha256-Sn6DuzV2OfaywE0W2afRG0h8PfOprqMtZtYM/exGEww=";
+  cargoSha256 = "sha256-IfseODaoqlPNBlVjS+9+rKXAOq29TgULMA/ogmqg0NA=";
 
   postPatch = ''
     # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working

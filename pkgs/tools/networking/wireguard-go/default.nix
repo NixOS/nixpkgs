@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym kirelagin yana zx2c4 ];
+    maintainers = with maintainers; [ kirelagin yana zx2c4 ];
   };
 }

@@ -7,11 +7,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tortoisehg";
-  version = "6.1";
+  version = "6.2.2";
 
   src = fetchurl {
     url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
-    sha256 = "sha256-UG13BlFY9DcsCPWaBiYa6r2oA3ieJtTYfXknDoKNkYI=";
+    sha256 = "sha256-Xbvg/FcuX/AL2reWsaM2oaFyLby3+HDCfYtRyswE7DA=";
   };
 
   # Extension point for when thg's mercurial is lagging behind mainline.
@@ -54,6 +54,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tortoisehg.bitbucket.io/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = with lib.maintainers; [ danbst gbtb ];
   };
 }

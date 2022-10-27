@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -36,15 +37,20 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "3.1.11";
+  version = "4.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GwxHL0t0AXdakuY/vPomESoA4Ie59u3aEiAqOcYsYYE=";
+    sha256 = "sha256-iutWdX5oavPkpj+Qr7yXPLIxrarYfFzonmiTbBCbC+k=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "werkzeug>=0.5,<2.2.0" "werkzeug>=0.5"
+  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -96,8 +102,9 @@ buildPythonPackage rec {
     "--deselect=tests/test_iotdata/test_iotdata.py::test_delete_field_from_device_shadow"
     "--deselect=tests/test_iotdata/test_iotdata.py::test_publish"
     "--deselect=tests/test_s3/test_server.py::test_s3_server_bucket_versioning"
+    "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
 
-    # Disalbe test that require docker daemon
+    # Disable tests that require docker daemon
     "--deselect=tests/test_events/test_events_lambdatriggers_integration.py::test_creating_bucket__invokes_lambda"
     "--deselect=tests/test_s3/test_s3_lambda_integration.py::test_objectcreated_put__invokes_lambda"
 
@@ -113,6 +120,13 @@ buildPythonPackage rec {
 
     # Blocks test execution
     "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_load_data_from_inmemory_client"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "--deselect=tests/test_utilities/test_threaded_server.py::test_threaded_moto_server__different_port"
+    "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_server_can_handle_multiple_services"
+    "--deselect=tests/test_utilities/test_threaded_server.py::TestThreadedMotoServer::test_server_is_reachable"
+
+    # AssertionError: expected `{0}` to be greater than `{1}`
+    "--deselect=tests/test_databrew/test_databrew_recipes.py::test_publish_recipe"
   ];
 
   disabledTestPaths = [
@@ -130,6 +144,9 @@ buildPythonPackage rec {
   disabledTests = [
     # only appears in aarch64 currently, but best to be safe
     "test_state_machine_list_executions_with_filter"
+    # tests fail with 404 after Werkzeug 2.2 upgrade, see https://github.com/spulec/moto/issues/5341#issuecomment-1206995825
+    "test_appsync_list_tags_for_resource"
+    "test_s3_server_post_to_bucket_redirect"
   ];
 
   meta = with lib; {

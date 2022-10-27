@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.17";
+  version = "8.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BCxRiqeZo4vsIqegvyjfgM5hfrfeMrwEl5hwfAo2Fn8=";
+    sha256 = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
   };
 
   postPatch = ''
@@ -66,9 +66,9 @@ buildPythonPackage rec {
     tqdm
     pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     contextvars
     dataclasses
   ];

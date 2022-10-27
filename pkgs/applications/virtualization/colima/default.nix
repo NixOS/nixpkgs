@@ -1,43 +1,47 @@
 { lib
-, buildGo118Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
 , makeWrapper
+, qemu
+, testers
+, colima
 }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "colima";
-  version = "0.4.2";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-66nKH5jxTzLB9bg2lH1E8Cc0GZ6C/N/+yPYhCVEKOBY=";
-
+    sha256 = "sha256-mVEp/4iL23rrw6HSl/7qMGK4YCJ6I+9gcSIhyPsAWzc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
-      git -C $out rev-parse HEAD > $out/.git-revision
+      git -C $out rev-parse --short HEAD > $out/.git-revision
       rm -rf $out/.git
     '';
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "sha256-91Ex3RPWxOHyZcR3Bo+bRdDAFw2mEGiC/uNKjdX2kuw=";
+  vendorSha256 = "sha256-tsMQMWEkTE1NhevcqBETGWiboqL6QTepgnIo4B5Y4wQ=";
 
-  doCheck = false;
+  CGO_ENABLED = 1;
 
   preConfigure = ''
-    ldflags="-X github.com/abiosoft/colima/config.appVersion=${version}
-              -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
+
+  subPackages = [ "cmd/colima" ];
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima ]}
+      --prefix PATH : ${lib.makeBinPath [ lima qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
@@ -45,10 +49,15 @@ buildGo118Module rec {
       --zsh <($out/bin/colima completion zsh)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = colima;
+    command = "HOME=$(mktemp -d) colima version";
+  };
+
   meta = with lib; {
-    description = "Container runtimes on MacOS with minimal setup";
+    description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaschmid ];
+    maintainers = with maintainers; [ aaschmid tricktron ];
   };
 }

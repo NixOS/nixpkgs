@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.03";
+  version = "6.04";
   pname = "xscreensaver";
 
   src = fetchurl {
     url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Mo1ReXNSrPWMpbq0nnb78mA058rXhfZR6hHOe0P7olo=";
+    sha256 = "sha256-eHAUsp8MV5Pswtk+EQmgSf9IqwwpuFHas09oPO72sVI=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # "marbling" has NEON code that mixes signed and unsigned vector types
-  NIX_CFLAGS_COMPILE = lib.optional (with stdenv.hostPlatform; isAarch64 || isAarch32) "-flax-vector-conversions";
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
   postInstall = ''
     for bin in $out/bin/*; do

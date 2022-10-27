@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "nuweb";
-  version = "1.60";
+  version = "1.62";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/nuweb/${pname}-${version}.tar.gz";
-    sha256 = "08xmwq48biy2c1fr8wnyknyvqs9jfsj42cb7fw638xqv35f0xxvl";
+    sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 
   buildInputs = [ tex ];
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
-  #   ld: global.o:/build/nuweb-1.60/global.h:91: multiple definition of
-  #     `current_sector'; main.o:/build/nuweb-1.60/global.h:91: first defined here
+  #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
+  #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
   NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''

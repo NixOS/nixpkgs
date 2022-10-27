@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz";
-    hash = "sha256-ZRJK1fzIF36BdUlVhLwdFdfgQvN2ashzjgpCxoOIbK8=";
+    hash = "sha256-un5T56zzN2vRVp42RHczDEKwrweSeygASkFJU5LXCDo=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
       -e s,DMZ-White,Vanilla-DMZ,g \
       -e s,DMZ-Black,Vanilla-DMZ-AA,g \
       -e s,linuxmint-logo-5,cinnamon-symbolic,g \
-      -e s,^theme-name=Mint-X$,theme-name=Mint-X-Dark,g \
       {} +
 
     # fixup broken symlink

@@ -4,18 +4,18 @@
 
 let
   pname = "signald";
-  version = "0.18.5";
+  version = "0.19.1";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-2cb1pyBOoOlFqJsNKXA0Q9x4wCE4yzzcfrDDtTp7HMk=";
+    sha256 = "sha256-Ma6kIKRVM8UUU/TvfVp2RVl/FLxFgBQU3mEypnujJ+c=";
   };
 
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
-    # from https://gitlab.com/signald/signald/-/blob/0.18.5/build.gradle#L173
+    # from https://gitlab.com/signald/signald/-/blob/0.19.1/build.gradle#L173
     modules = [
       "java.base"
       "java.management"

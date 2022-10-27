@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "matrix-nio";
-  version = "0.19.0";
+  version = "0.20.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    hash = "sha256-+WZk2m05y/bYj8zSuWTzm+rnCC0L9H9WNQ2RLXv7hDk=";
+    hash = "sha256-7bYGMbNLAN48kfckCcNtnymvQHm9CSNsgy/soe14SII=";
   };
 
   postPatch = ''
@@ -78,7 +78,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+    "--benchmark-disable"
+  ];
 
   disabledTests = [
     # touches network

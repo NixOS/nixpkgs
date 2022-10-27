@@ -7,10 +7,10 @@ in
 {
   options = {
     hardware.brillo = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         Enable brillo in userspace.
         This will allow brightness control from users in the video group.
-      '';
+      '');
     };
   };
 

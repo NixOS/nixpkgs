@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.30.0";
+  version = "0.34.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-epsE/VKK6LwMVbkx5PWgAxZ62PO4udCFr3jYi0MrUpI=";
+    sha256 = "sha256-78LUQBFV4TFPDLiSHBG+RLnQLaCPX4LZpow9aszQAQA=";
   };
 
   propagatedBuildInputs = [
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python module to implement EZSP for EmberZNet devices";
     homepage = "https://github.com/zigpy/bellows";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
   };
 }

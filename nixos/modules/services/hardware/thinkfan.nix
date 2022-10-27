@@ -29,45 +29,47 @@ let
     options = {
       type = mkOption {
         type = types.enum [ "hwmon" "atasmart" "tpacpi" "nvml" ];
-        description = ''
+        description = lib.mdDoc ''
           The ${name} type, can be
-          <literal>hwmon</literal> for standard ${name}s,
+          `hwmon` for standard ${name}s,
 
-          <literal>atasmart</literal> to read the temperature via
+          `atasmart` to read the temperature via
           S.M.A.R.T (requires smartSupport to be enabled),
 
-          <literal>tpacpi</literal> for the legacy thinkpac_acpi driver, or
+          `tpacpi` for the legacy thinkpac_acpi driver, or
 
-          <literal>nvml</literal> for the (proprietary) nVidia driver.
+          `nvml` for the (proprietary) nVidia driver.
         '';
       };
       query = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The query string used to match one or more ${name}s: can be
           a fullpath to the temperature file (single ${name}) or a fullpath
           to a driver directory (multiple ${name}s).
 
-          <note><para>
-            When multiple ${name}s match, the query can be restricted using the
-            <option>name</option> or <option>indices</option> options.
-          </para></note>
+          ::: {.note}
+          When multiple ${name}s match, the query can be restricted using the
+          {option}`name` or {option}`indices` options.
+          :::
         '';
       };
       indices = mkOption {
         type = with types; nullOr (listOf ints.unsigned);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A list of ${name}s to pick in case multiple ${name}s match the query.
 
-          <note><para>Indices start from 0.</para></note>
+          ::: {.note}
+          Indices start from 0.
+          :::
         '';
       };
     } // optionalAttrs (name == "sensor") {
       correction = mkOption {
         type = with types; nullOr (listOf int);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A list of values to be added to the temperature of each sensor,
           can be used to equalize small discrepancies in temperature ratings.
         '';
@@ -81,18 +83,18 @@ let
     // { "${type}" = query; };
 
   syntaxNote = name: ''
-    <note><para>
-      This section slightly departs from the thinkfan.conf syntax.
-      The type and path must be specified like this:
-      <literal>
-        type = "tpacpi";
-        query = "/proc/acpi/ibm/${name}";
-      </literal>
-      instead of a single declaration like:
-      <literal>
-        - tpacpi: /proc/acpi/ibm/${name}
-      </literal>
-    </para></note>
+    ::: {.note}
+    This section slightly departs from the thinkfan.conf syntax.
+    The type and path must be specified like this:
+    ```
+      type = "tpacpi";
+      query = "/proc/acpi/ibm/${name}";
+    ```
+    instead of a single declaration like:
+    ```
+      - tpacpi: /proc/acpi/ibm/${name}
+    ```
+    :::
   '';
 
 in {
@@ -104,13 +106,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable thinkfan, a fan control program.
 
-          <note><para>
-            This module targets IBM/Lenovo thinkpads by default, for
-            other hardware you will have configure it more carefully.
-          </para></note>
+          ::: {.note}
+          This module targets IBM/Lenovo thinkpads by default, for
+          other hardware you will have configure it more carefully.
+          :::
         '';
         relatedPackages = [ "thinkfan" ];
       };
@@ -118,7 +120,7 @@ in {
       smartSupport = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to build thinkfan with S.M.A.R.T. support to read temperatures
           directly from hard disks.
         '';
@@ -131,9 +133,11 @@ in {
             query = "/proc/acpi/ibm/thermal";
           }
         ];
-        description = ''
+        description = lib.mdDoc ''
           List of temperature sensors thinkfan will monitor.
-        '' + syntaxNote "thermal";
+
+          ${syntaxNote "thermal"}
+        '';
       };
 
       fans = mkOption {
@@ -143,9 +147,11 @@ in {
             query = "/proc/acpi/ibm/fan";
           }
         ];
-        description = ''
+        description = lib.mdDoc ''
           List of fans thinkfan will control.
-        '' + syntaxNote "fan";
+
+          ${syntaxNote "fan"}
+        '';
       };
 
       levels = mkOption {
@@ -159,7 +165,7 @@ in {
           [7  60  85]
           ["level auto" 80 32767]
         ];
-        description = ''
+        description = lib.mdDoc ''
           [LEVEL LOW HIGH]
 
           LEVEL is the fan level to use: it can be an integer (0-7 with thinkpad_acpi),
@@ -175,7 +181,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         example = [ "-b" "0" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of extra command line arguments to pass to thinkfan.
           Check the thinkfan(1) manpage for available arguments.
         '';
@@ -184,12 +190,12 @@ in {
       settings = mkOption {
         type = types.attrsOf settingsFormat.type;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Thinkfan settings. Use this option to configure thinkfan
           settings not exposed in a NixOS option or to bypass one.
-          Before changing this, read the <literal>thinkfan.conf(5)</literal>
+          Before changing this, read the `thinkfan.conf(5)`
           manpage and take a look at the example config file at
-          <link xlink:href="https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml"/>
+          <https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml>
         '';
       };
 

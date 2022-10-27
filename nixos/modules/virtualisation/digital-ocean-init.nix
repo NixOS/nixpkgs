@@ -15,18 +15,18 @@ in {
     type = types.bool;
     default = true;
     example = true;
-    description = "Whether to reconfigure the system from Digital Ocean user data";
+    description = lib.mdDoc "Whether to reconfigure the system from Digital Ocean user data";
   };
   options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
     type = types.path;
     default = defaultConfigFile;
-    defaultText = literalDocBook ''
+    defaultText = literalMD ''
       The default configuration imports user-data if applicable and
-      <literal>(modulesPath + "/virtualisation/digital-ocean-config.nix")</literal>.
+      `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
     '';
-    description = ''
+    description = lib.mdDoc ''
       A path to a configuration file which will be placed at
-      <literal>/etc/nixos/configuration.nix</literal> and be used when switching to
+      `/etc/nixos/configuration.nix` and be used when switching to
       a new configuration.
     '';
   };

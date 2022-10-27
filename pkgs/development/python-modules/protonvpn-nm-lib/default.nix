@@ -14,19 +14,21 @@
 , ncurses
 , networkmanager
 , pkgs-systemd
+, python
 , xdg-utils
+, makeWrapper
 }:
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
-  version = "3.10.0";
+  version = "3.13.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-WVIQ43J01BQzYhEPDHcoAmUvlsaDw0Z7yLQGajVdedU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-i6Y+ardptWCVO2SzzluAOQp6MDO6Xzm0NneiqzkhHrw=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +52,17 @@ buildPythonPackage rec {
       networkmanager_path = "${networkmanager}/lib/girepository-1.0";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace protonvpn_nm_lib/core/dbus/dbus_reconnect.py \
+      --replace "exec_start = python_interpreter_path + \" \" + python_service_path" "exec_start = \"$out/bin/protonvpn_reconnector.py\""
+  '';
+
+  postInstall = ''
+    makeWrapper ${python.interpreter} $out/bin/protonvpn_reconnector.py \
+      --add-flags $out/${python.sitePackages}/protonvpn_nm_lib/daemon/dbus_daemon_reconnector.py \
+      --prefix PYTHONPATH : "$PYTHONPATH"
+  '';
 
   # Checks cannot be run in the sandbox
   # "Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory"

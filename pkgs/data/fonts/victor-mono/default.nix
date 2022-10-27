@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.5.3";
+  version = "1.5.4";
 in
 fetchzip {
   name = "victor-mono-${version}";
@@ -25,7 +25,7 @@ fetchzip {
     rm -r $out/{EOT,WOFF,WOFF2}
   '';
 
-  sha256 = "sha256-3TGpUDBJ24NEJb00oaJAHEbjC58bSthohzqM1klVDGA=";
+  sha256 = "sha256-1si0d2lpuXaDcSc3giVMMMbZc/eKbHKU3wmwfYHZ8o0=";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";

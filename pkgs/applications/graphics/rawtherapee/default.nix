@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, pixman, libpthreadstubs, gtkmm3, libXau
 , libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
-, lensfun, librsvg
+, lensfun, librsvg, gtk-mac-integration
 }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +17,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
   # This patch is upstream; remove it in 5.9.
-  patches = [ ./fix-6324.patch ];
+  patches = [ ./fix-6324.patch ]
+  # Disable upstream-enforced bundling on macOS.
+  ++ lib.optionals stdenv.isDarwin [ ./do-not-bundle.patch ];
 
   buildInputs = [
     pixman libpthreadstubs gtkmm3 libXau libXdmcp
-    lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun librsvg
+    lcms2 libiptcdata fftw expat pcre libsigcxx lensfun librsvg
+  ] ++ lib.optionals stdenv.isLinux [
+    libcanberra-gtk3
+  ] ++ lib.optionals stdenv.isDarwin [
+    gtk-mac-integration
   ];
 
   cmakeFlags = [
@@ -40,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.rawtherapee.com/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ jcumming mahe ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }

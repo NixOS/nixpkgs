@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.14.9";
+  version = "1.15.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mRI5CqJ58/vb5N81UYsS6Hy+zNeRXnIZEd7lVW22MGo=";
+    hash = "sha256-bQpOXKK/piX1+243BS8BCEX/0FEl5YnOvegvAR53az4=";
   };
 
   propagatedBuildInputs = [

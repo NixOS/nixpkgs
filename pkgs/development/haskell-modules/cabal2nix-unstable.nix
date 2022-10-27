@@ -8,11 +8,12 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "unstable-2022-06-20";
+  version = "unstable-2022-10-10";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/9d18320d76e3f29f1787a8377125812150c59021.tar.gz";
-    sha256 = "1gykznb1fl9d9cqksbxc4qsyspp9xazamv57hmv3jpljzl8lq2aq";
+    url = "https://github.com/NixOS/cabal2nix/archive/b3ae6f9240d07ba103f1eb7ab22f6055e9cdb7dc.tar.gz";
+    sha256 = "0ym6lyp4br57442b6a9cg9bczbjqz8nz984rxwiacldqzndk8jbr";
   };
+  postUnpack = "sourceRoot+=/cabal2nix; echo source root reset to $sourceRoot";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [

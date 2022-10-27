@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, openssl
+{ lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
 , enableSystemd ? stdenv.isLinux, nixosTests
 , enableRedis ? true
 , callPackage
@@ -11,12 +11,30 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.61.1";
+  version = "1.69.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-IB7YIqmWIJMxZVFWIF6HggVgjkCSok3YYMykV72p4us=";
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "synapse";
+    rev = "v${version}";
+    hash = "sha256-Epzvxy3w8Xdj8xz8GEry97J7zGudIgjUH51NcibKDvQ=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-RJq4mdPtnAR45rAycGDSSuvZwkJPOiqFBp+8mnBTKvU=";
+  };
+
+  nativeBuildInputs = [
+    poetry-core
+    rustPlatform.cargoSetupHook
+    setuptools-rust
+  ] ++ (with rustPlatform.rust; [
+    cargo
+    rustc
+  ]);
 
   buildInputs = [ openssl ];
 
@@ -40,6 +58,7 @@ buildPythonApplication rec {
     psutil
     psycopg2
     pyasn1
+    pydantic
     pyjwt
     pymacaroons
     pynacl
@@ -62,7 +81,14 @@ buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
+    runHook preCheck
+
+    # remove src module, so tests use the installed module instead
+    rm -rf ./synapse
+
     PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+
+    runHook postCheck
   '';
 
   passthru.tests = { inherit (nixosTests) matrix-synapse; };

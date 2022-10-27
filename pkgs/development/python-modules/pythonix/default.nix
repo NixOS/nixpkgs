@@ -30,7 +30,7 @@ buildPythonPackage rec {
     description = ''
        Eval nix code from python.
     '';
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

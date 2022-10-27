@@ -27,11 +27,12 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.17.0";
+  version = "0.21.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
+    sha256 = "sha256-I0BWwEKvOYQ1s2IpvV70GWxhARdX6AZ+B4ypnTlLlDw=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
@@ -82,7 +84,12 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -113,7 +120,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 
@@ -121,7 +128,7 @@ stdenv.mkDerivation rec {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

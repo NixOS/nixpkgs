@@ -8,7 +8,7 @@ let
   nullOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    inherit description;
+    description = lib.mdDoc description;
   };
 
   optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
@@ -18,8 +18,8 @@ let
 
   mkParamDef = type: default: description: mkParam type (description + ''
 
-    Defaults to <literal>${toString default}</literal> in Thanos
-    when set to <literal>null</literal>.
+    Defaults to `${toString default}` in Thanos
+    when set to `null`.
   '');
 
   mkParam = type: description: {
@@ -32,7 +32,7 @@ let
     option = mkOption {
       type = types.bool;
       default = false;
-      inherit description;
+      description = lib.mdDoc description;
     };
   };
 
@@ -41,7 +41,7 @@ let
     option = mkOption {
       type = types.listOf types.str;
       default = [];
-      inherit description;
+      description = lib.mdDoc description;
     };
   };
 
@@ -50,7 +50,7 @@ let
     option = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      inherit description;
+      description = lib.mdDoc description;
     };
   };
 
@@ -59,7 +59,7 @@ let
     option = mkOption {
       type = types.str;
       inherit default;
-      inherit description;
+      description = lib.mdDoc description;
     };
   };
 
@@ -83,14 +83,14 @@ let
   mkArgumentsOption = cmd: mkOption {
     type = types.listOf types.str;
     default = argumentsOf cmd;
-    defaultText = literalDocBook ''
-      calculated from <literal>config.services.thanos.${cmd}</literal>
+    defaultText = literalMD ''
+      calculated from `config.services.thanos.${cmd}`
     '';
-    description = ''
-      Arguments to the <literal>thanos ${cmd}</literal> command.
+    description = lib.mdDoc ''
+      Arguments to the `thanos ${cmd}` command.
 
       Defaults to a list of arguments formed by converting the structured
-      options of <option>services.thanos.${cmd}</option> to a list of arguments.
+      options of {option}`services.thanos.${cmd}` to a list of arguments.
 
       Overriding this option will cause none of the structured options to have
       any effect. So only set this if you know what you're doing!
@@ -127,10 +127,10 @@ let
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
-          description = ''
+          description = lib.mdDoc ''
             Path to YAML file that contains tracing configuration.
 
-            See format details: <link xlink:href="https://thanos.io/tracing.md/#configuration"/>
+            See format details: <https://thanos.io/tracing.md/#configuration>
           '';
         };
       };
@@ -141,13 +141,13 @@ let
           option = nullOpt types.attrs ''
             Tracing configuration.
 
-            When not <literal>null</literal> the attribute set gets converted to
+            When not `null` the attribute set gets converted to
             a YAML file and stored in the Nix store. The option
-            <option>tracing.config-file</option> will default to its path.
+            {option}`tracing.config-file` will default to its path.
 
-            If <option>tracing.config-file</option> is set this option has no effect.
+            If {option}`tracing.config-file` is set this option has no effect.
 
-            See format details: <link xlink:href="https://thanos.io/tracing.md/#configuration"/>
+            See format details: <https://thanos.io/tracing.md/#configuration>
           '';
         };
     };
@@ -155,11 +155,11 @@ let
     common = cfg: params.log // params.tracing cfg // {
 
       http-address = mkParamDef types.str "0.0.0.0:10902" ''
-        Listen <literal>host:port</literal> for HTTP endpoints.
+        Listen `host:port` for HTTP endpoints.
       '';
 
       grpc-address = mkParamDef types.str "0.0.0.0:10901" ''
-        Listen <literal>ip:port</literal> address for gRPC endpoints (StoreAPI).
+        Listen `ip:port` address for gRPC endpoints (StoreAPI).
 
         Make sure this address is routable from other components.
       '';
@@ -192,10 +192,10 @@ let
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
-          description = ''
+          description = lib.mdDoc ''
             Path to YAML file that contains object store configuration.
 
-            See format details: <link xlink:href="https://thanos.io/storage.md/#configuration"/>
+            See format details: <https://thanos.io/storage.md/#configuration>
           '';
         };
       };
@@ -206,13 +206,13 @@ let
           option = nullOpt types.attrs ''
             Object store configuration.
 
-            When not <literal>null</literal> the attribute set gets converted to
+            When not `null` the attribute set gets converted to
             a YAML file and stored in the Nix store. The option
-            <option>objstore.config-file</option> will default to its path.
+            {option}`objstore.config-file` will default to its path.
 
-            If <option>objstore.config-file</option> is set this option has no effect.
+            If {option}`objstore.config-file` is set this option has no effect.
 
-            See format details: <link xlink:href="https://thanos.io/storage.md/#configuration"/>
+            See format details: <https://thanos.io/storage.md/#configuration>
           '';
         };
     };
@@ -231,7 +231,7 @@ let
           type = types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
           defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
-          description = ''
+          description = lib.mdDoc ''
             Data directory of TSDB.
           '';
         };
@@ -254,7 +254,7 @@ let
     store = params.common cfg.store // params.objstore cfg.store // {
 
       stateDir = mkStateDirParam "data-dir" "thanos-store" ''
-        Data directory relative to <literal>/var/lib</literal>
+        Data directory relative to `/var/lib`
         in which to cache remote blocks.
       '';
 
@@ -269,7 +269,7 @@ let
       store.grpc.series-sample-limit = mkParamDef types.int 0 ''
         Maximum amount of samples returned via a single Series call.
 
-        <literal>0</literal> means no limit.
+        `0` means no limit.
 
         NOTE: for efficiency we take 120 as the number of samples in chunk (it
         cannot be bigger than that), so the actual number of samples might be
@@ -327,14 +327,14 @@ let
 
       grpc-client-server-name = mkParam types.str ''
         Server name to verify the hostname on the returned gRPC certificates.
-        See <link xlink:href="https://tools.ietf.org/html/rfc4366#section-3.1"/>
+        See <https://tools.ietf.org/html/rfc4366#section-3.1>
       '';
 
       web.route-prefix = mkParam types.str ''
         Prefix for API and UI endpoints.
 
         This allows thanos UI to be served on a sub-path. This option is
-        analogous to <option>web.route-prefix</option> of Promethus.
+        analogous to {option}`web.route-prefix` of Promethus.
       '';
 
       web.external-prefix = mkParam types.str ''
@@ -342,7 +342,7 @@ let
         interface.
 
         Actual endpoints are still served on / or the
-        <option>web.route-prefix</option>. This allows thanos UI to be served
+        {option}`web.route-prefix`. This allows thanos UI to be served
         behind a reverse proxy that strips a URL sub-path.
       '';
 
@@ -351,15 +351,15 @@ let
         redirects.
 
         This option is ignored if the option
-        <literal>web.external-prefix</literal> is set.
+        `web.external-prefix` is set.
 
         Security risk: enable this option only if a reverse proxy in front of
         thanos is resetting the header.
 
-        The setting <literal>web.prefix-header="X-Forwarded-Prefix"</literal>
+        The setting `web.prefix-header="X-Forwarded-Prefix"`
         can be useful, for example, if Thanos UI is served via Traefik reverse
-        proxy with <literal>PathPrefixStrip</literal> option enabled, which
-        sends the stripped prefix value in <literal>X-Forwarded-Prefix</literal>
+        proxy with `PathPrefixStrip` option enabled, which
+        sends the stripped prefix value in `X-Forwarded-Prefix`
         header. This allows thanos UI to be served on a sub-path.
       '';
 
@@ -376,7 +376,7 @@ let
         deduplicated.
 
         Still you will be able to query without deduplication using
-        <literal>dedup=false</literal> parameter.
+        `dedup=false` parameter.
       '';
 
       selector-labels = mkAttrsParam "selector-label" ''
@@ -386,8 +386,8 @@ let
       store.addresses = mkListParam "store" ''
         Addresses of statically configured store API servers.
 
-        The scheme may be prefixed with <literal>dns+</literal> or
-        <literal>dnssrv+</literal> to detect store API servers through
+        The scheme may be prefixed with `dns+` or
+        `dnssrv+` to detect store API servers through
         respective DNS lookups.
       '';
 
@@ -411,12 +411,12 @@ let
       query.auto-downsampling = mkFlagParam ''
         Enable automatic adjustment (step / 5) to what source of data should
         be used in store gateways if no
-        <literal>max_source_resolution</literal> param is specified.
+        `max_source_resolution` param is specified.
       '';
 
       query.partial-response = mkFlagParam ''
         Enable partial response for queries if no
-        <literal>partial_response</literal> param is specified.
+        `partial_response` param is specified.
       '';
 
       query.default-evaluation-interval = mkParamDef types.str "1m" ''
@@ -426,7 +426,7 @@ let
       store.response-timeout = mkParamDef types.str "0ms" ''
         If a Store doesn't send any data in this specified duration then a
         Store will be ignored and partial data will be returned if it's
-        enabled. <literal>0</literal> disables timeout.
+        enabled. `0` disables timeout.
       '';
     };
 
@@ -440,7 +440,7 @@ let
       '';
 
       stateDir = mkStateDirParam "data-dir" "thanos-rule" ''
-        Data directory relative to <literal>/var/lib</literal>.
+        Data directory relative to `/var/lib`.
       '';
 
       rule-files = mkListParam "rule-file" ''
@@ -464,9 +464,9 @@ let
 
         Ruler claims success if push to at least one alertmanager from
         discovered succeeds. The scheme may be prefixed with
-        <literal>dns+</literal> or <literal>dnssrv+</literal> to detect
+        `dns+` or `dnssrv+` to detect
         Alertmanager IPs through respective DNS lookups. The port defaults to
-        <literal>9093</literal> or the SRV record's value. The URL path is
+        `9093` or the SRV record's value. The URL path is
         used as a prefix for the regular Alertmanager API path.
       '';
 
@@ -491,7 +491,7 @@ let
 
         This allows thanos UI to be served on a sub-path.
 
-        This option is analogous to <literal>--web.route-prefix</literal> of Promethus.
+        This option is analogous to `--web.route-prefix` of Promethus.
       '';
 
       web.external-prefix = mkParam types.str ''
@@ -499,7 +499,7 @@ let
         interface.
 
         Actual endpoints are still served on / or the
-        <option>web.route-prefix</option>. This allows thanos UI to be served
+        {option}`web.route-prefix`. This allows thanos UI to be served
         behind a reverse proxy that strips a URL sub-path.
       '';
 
@@ -508,23 +508,23 @@ let
         redirects.
 
         This option is ignored if the option
-        <option>web.external-prefix</option> is set.
+        {option}`web.external-prefix` is set.
 
         Security risk: enable this option only if a reverse proxy in front of
         thanos is resetting the header.
 
-        The header <literal>X-Forwarded-Prefix</literal> can be useful, for
+        The header `X-Forwarded-Prefix` can be useful, for
         example, if Thanos UI is served via Traefik reverse proxy with
-        <literal>PathPrefixStrip</literal> option enabled, which sends the
-        stripped prefix value in <literal>X-Forwarded-Prefix</literal>
+        `PathPrefixStrip` option enabled, which sends the
+        stripped prefix value in `X-Forwarded-Prefix`
         header. This allows thanos UI to be served on a sub-path.
       '';
 
       query.addresses = mkListParam "query" ''
         Addresses of statically configured query API servers.
 
-        The scheme may be prefixed with <literal>dns+</literal> or
-        <literal>dnssrv+</literal> to detect query API servers through
+        The scheme may be prefixed with `dns+` or
+        `dnssrv+` to detect query API servers through
         respective DNS lookups.
       '';
 
@@ -545,11 +545,11 @@ let
     compact = params.log // params.tracing cfg.compact // params.objstore cfg.compact // {
 
       http-address = mkParamDef types.str "0.0.0.0:10902" ''
-        Listen <literal>host:port</literal> for HTTP endpoints.
+        Listen `host:port` for HTTP endpoints.
       '';
 
       stateDir = mkStateDirParam "data-dir" "thanos-compact" ''
-        Data directory relative to <literal>/var/lib</literal>
+        Data directory relative to `/var/lib`
         in which to cache blocks and process compactions.
       '';
 
@@ -562,28 +562,28 @@ let
       retention.resolution-raw = mkParamDef types.str "0d" ''
         How long to retain raw samples in bucket.
 
-        <literal>0d</literal> - disables this retention
+        `0d` - disables this retention
       '';
 
       retention.resolution-5m = mkParamDef types.str "0d" ''
         How long to retain samples of resolution 1 (5 minutes) in bucket.
 
-        <literal>0d</literal> - disables this retention
+        `0d` - disables this retention
       '';
 
       retention.resolution-1h = mkParamDef types.str "0d" ''
         How long to retain samples of resolution 2 (1 hour) in bucket.
 
-        <literal>0d</literal> - disables this retention
+        `0d` - disables this retention
       '';
 
       startAt = {
         toArgs = _opt: startAt: flagToArgs "wait" (startAt == null);
         option = nullOpt types.str ''
-          When this option is set to a <literal>systemd.time</literal>
+          When this option is set to a `systemd.time`
           specification the Thanos compactor will run at the specified period.
 
-          When this option is <literal>null</literal> the Thanos compactor service
+          When this option is `null` the Thanos compactor service
           will run continuously. So it will not exit after all compactions have
           been processed but wait for new work.
         '';
@@ -609,7 +609,7 @@ let
     downsample = params.log // params.tracing cfg.downsample // params.objstore cfg.downsample // {
 
       stateDir = mkStateDirParam "data-dir" "thanos-downsample" ''
-        Data directory relative to <literal>/var/lib</literal>
+        Data directory relative to `/var/lib`
         in which to cache blocks and process downsamplings.
       '';
 
@@ -622,7 +622,7 @@ let
       '';
 
       stateDir = mkStateDirParam "tsdb.path" "thanos-receive" ''
-        Data directory relative to <literal>/var/lib</literal> of TSDB.
+        Data directory relative to `/var/lib` of TSDB.
       '';
 
       labels = mkAttrsParam "labels" ''
@@ -635,7 +635,7 @@ let
       tsdb.retention = mkParamDef types.str "15d" ''
         How long to retain raw samples on local storage.
 
-        <literal>0d</literal> - disables this retention
+        `0d` - disables this retention
       '';
     };
 
@@ -660,53 +660,53 @@ in {
       type = types.package;
       default = pkgs.thanos;
       defaultText = literalExpression "pkgs.thanos";
-      description = ''
+      description = lib.mdDoc ''
         The thanos package that should be used.
       '';
     };
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
-        "the Thanos sidecar for Prometheus server";
+        (lib.mdDoc "the Thanos sidecar for Prometheus server");
       arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
       enable = mkEnableOption
-        "the Thanos store node giving access to blocks in a bucket provider.";
+        (lib.mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
       arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
       enable = mkEnableOption
-        ("the Thanos query node exposing PromQL enabled Query API " +
-         "with data retrieved from multiple store nodes");
+        (lib.mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
+         "with data retrieved from multiple store nodes"));
       arguments = mkArgumentsOption "query";
     };
 
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
-        ("the Thanos ruler service which evaluates Prometheus rules against" +
-        " given Query nodes, exposing Store API and storing old blocks in bucket");
+        (lib.mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
+        " given Query nodes, exposing Store API and storing old blocks in bucket"));
       arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
       enable = mkEnableOption
-        "the Thanos compactor which continuously compacts blocks in an object store bucket";
+        (lib.mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
       arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
       enable = mkEnableOption
-        "the Thanos downsampler which continuously downsamples blocks in an object store bucket";
+        (lib.mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
       arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
-        ("the Thanos receiver which accept Prometheus remote write API requests " +
-         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)");
+        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests " +
+         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)"));
       arguments = mkArgumentsOption "receive";
     };
   };

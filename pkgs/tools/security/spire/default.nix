@@ -1,8 +1,8 @@
-{ lib, buildGo118Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "spire";
-  version = "1.3.1";
+  version = "1.4.1";
 
   outputs = [ "out" "agent" "server" ];
 
@@ -10,10 +10,10 @@ buildGo118Module rec {
     owner = "spiffe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8LDdHChCTSpepwTMg2hUvQ6ZDoqaZt9QeKrBgfIOLx8=";
+    sha256 = "sha256-YUsam6dIm5jDjUQ8U9puG3jvrNWCS0epaOvwo4hjixc=";
   };
 
-  vendorSha256 = "sha256-QgPDhUu5uCkmC6L5UKtnz/wt/M1rERxc5nXmVVPtRKY=";
+  vendorSha256 = "sha256-EZWoMSBxdvnrdBmSrRYf4+2d1LCka7oUIhRAW+2n7CU=";
 
   subPackages = [ "cmd/spire-agent" "cmd/spire-server" ];
 

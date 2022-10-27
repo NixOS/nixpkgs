@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs configure";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     license = licenses.mit;
     homepage = "https://www.gecode.org";
     description = "Toolkit for developing constraint-based systems";

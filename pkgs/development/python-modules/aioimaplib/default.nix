@@ -5,7 +5,6 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
-, fetchpatch
 , imaplib2
 , mock
 , nose
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.9.0";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -26,16 +25,8 @@ buildPythonPackage rec {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xxZAeJDuqrPv4kGgDr0ypFuZJk1zcs/bmgeEzI0jpqY=";
+    hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
-
-  patches = [
-    # https://github.com/bamthomas/aioimaplib/pull/76
-    (fetchpatch {
-      url = "https://github.com/bamthomas/aioimaplib/commit/03f796f45b60a163ad0f3d52166d58f280de7065.patch";
-      hash = "sha256-9staxkw/EfGoBz/uyrNKBvQ0KfN+za4rTGRyqrAJSd8=";
-    })
-  ];
 
   checkInputs = [
     asynctest
@@ -49,7 +40,16 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  pythonImportsCheck = [ "aioimaplib" ];
+  disabledTests = [
+    # https://github.com/bamthomas/aioimaplib/issues/77
+    "test_get_quotaroot"
+    # asyncio.exceptions.TimeoutError
+    "test_idle"
+  ];
+
+  pythonImportsCheck = [
+    "aioimaplib"
+  ];
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";

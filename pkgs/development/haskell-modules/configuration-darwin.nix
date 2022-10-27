@@ -18,6 +18,10 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  streaming-commons = super.streaming-commons.overrideAttrs (_: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   halive = addBuildDepend darwin.apple_sdk.frameworks.AppKit super.halive;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux
@@ -281,10 +285,28 @@ self: super: ({
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
-
+  # This is the same issue as above; the rio tests call functions in unliftio
+  # that have issues as tracked in the GitHub issue above. Once the unliftio
+  # tests are fixed, we can remove this as well.
+  #
+  # We skip just the problematic tests by replacing 'it' with 'xit'.
+  rio = overrideCabal (drv: {
+    preConfigure = ''
+      sed -i 's/\bit /xit /g' test/RIO/FileSpec.hs
+    '';
+  }) super.rio;
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+  # Build segfaults unless `fixity-th` is disabled.
+  # https://github.com/tweag/ormolu/issues/927
+  ormolu_0_5_0_1 = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu_0_5_0_1);
+  fourmolu_0_8_2_0 = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu_0_8_2_0);
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

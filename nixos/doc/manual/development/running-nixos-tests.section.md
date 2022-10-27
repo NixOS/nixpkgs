@@ -2,22 +2,11 @@
 
 You can run tests using `nix-build`. For example, to run the test
 [`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix),
-you just do:
+you do:
 
 ```ShellSession
-$ nix-build '<nixpkgs/nixos/tests/login.nix>'
-```
-
-or, if you don't want to rely on `NIX_PATH`:
-
-```ShellSession
-$ cd /my/nixpkgs/nixos/tests
-$ nix-build login.nix
-…
-running the VM test script
-machine: QEMU running (pid 8841)
-…
-6 out of 6 tests succeeded
+$ cd /my/git/clone/of/nixpkgs
+$ nix-build -A nixosTests.login
 ```
 
 After building/downloading all required dependencies, this will perform

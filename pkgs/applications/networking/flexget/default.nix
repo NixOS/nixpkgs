@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.3.18";
+  version = "3.4.1";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vZOeWxCcrTRT28Bn2r/I7/ojQ6uUV3xZlAZLbrAH5tc=";
+    hash = "sha256-OfRbkMIqusfiHyBPnPnbOPwYo7lF5bg46MEM8V5nGq4=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     jsonschema
     loguru
     more-itertools
+    packaging
     psutil
     pynzb
     PyRSS2Gen
@@ -59,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     cherrypy
     flask-compress
     flask-cors
-    flask_login
+    flask-login
     flask-restful
     flask-restx
     flask

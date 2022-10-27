@@ -24,7 +24,11 @@ let
   hello1 = remoteCrossPkgs.dockerTools.buildImage {
     name = "hello1";
     tag = "latest";
-    contents = remoteCrossPkgs.hello;
+    copyToRoot = remoteCrossPkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ remoteCrossPkgs.hello ];
+    };
   };
 
   hello2 = remoteCrossPkgs.dockerTools.buildLayeredImage {

@@ -20,7 +20,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
-, extraGrammars ? {}
+, extraGrammars ? { }
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -30,9 +30,9 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.6";
-  sha256 = "sha256-zaxy8VCfJKK8NtfuFFojmmP5a19FP1zO/eB5q1EoQPw=";
-  cargoSha256 = "sha256-sOOhzm2nz+HC6dvT+8hj/wh19o+OB2zQ6Uz+H89txSA=";
+  version = "0.20.7";
+  sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
+  cargoSha256 = "sha256-V4frCaU5QzTx3ujdaplw7vNkosbzyXHQvE+T7ntVOtU=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -69,9 +69,11 @@ let
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
+        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-      lib.mapAttrs change (grammars);
+    lib.mapAttrs change (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])

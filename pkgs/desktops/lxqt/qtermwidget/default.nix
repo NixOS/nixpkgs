@@ -6,7 +6,7 @@
 , qtbase
 , qttools
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -30,7 +30,7 @@ mkDerivation rec {
     qttools
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

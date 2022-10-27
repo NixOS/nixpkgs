@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://m11-assets.unigine.com/d/Unigine_Valley-${version}.run";
-    sha256 = "5f0c8bd2431118551182babbf5f1c20fb14e7a40789697240dcaf546443660f4";
+    url = "https://assets.unigine.com/d/Unigine_Valley-${version}.run";
+    sha256 = "sha256-XwyL0kMRGFURgrq79fHCD7FOekB4lpckDcr1RkQ2YPQ=";
   };
 
   sourceRoot = "Unigine_Valley-${version}";
@@ -132,6 +132,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
     maintainers = [ lib.maintainers.kierdavis ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    mainProgram = "valley";
   };
 }
 

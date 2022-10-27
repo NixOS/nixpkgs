@@ -1,43 +1,51 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
-
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
-, adns ? null, bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, tpm2-tss ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ? null
+, adns, bzip2, gnutls, libusb1, openldap
+, pinentry, readline, sqlite, zlib
+, withPcsc ? !enableMinimal, pcsclite
+, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
 }:
 
-with lib;
-
-assert guiSupport -> pinentry != null && enableMinimal == false;
+assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.3.4";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-80aOyvsdf5rXtR/R23rr8XzridLvqKBc8vObTUBUAq4=";
+    sha256 = "sha256-7hY6X7nsmf/BsY5l+u+NCGgAxXE9FaZyq1fTeZ2oNmk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
+  ] ++ lib.optionals (!enableMinimal) ([
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ optional (!stdenv.isDarwin) tpm2-tss ;
+  ] ++ lib.optional withTpm2Tss tpm2-tss);
 
   patches = [
     ./fix-libusb-include-path.patch
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+
+    # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
+    ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
+
+    # Fix regression when using YubiKey devices as smart cards.
+    # See https://dev.gnupg.org/T6070 for details.
+    # Committed upstream, remove this patch when updating to the next release.
+    (fetchpatch {
+      url = "https://dev.gnupg.org/rGf34b9147eb3070bce80d53febaa564164cd6c977?diff=1";
+      sha256 = "sha256-J/PLSz8yiEgtGv+r3BTGTHrikV70AbbHQPo9xbjaHFE=";
+    })
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-  '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
+  '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
@@ -48,8 +56,8 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ optional ( (!stdenv.isDarwin) && (tpm2-tss != null) ) "--with-tss=intel";
+  ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ++ lib.optional withTpm2Tss "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}

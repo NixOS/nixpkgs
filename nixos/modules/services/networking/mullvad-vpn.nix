@@ -7,9 +7,9 @@ with lib;
   options.services.mullvad-vpn.enable = mkOption {
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       This option enables Mullvad VPN daemon.
-      This sets <option>networking.firewall.checkReversePath</option> to "loose", which might be undesirable for security.
+      This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
     '';
   };
 
@@ -39,7 +39,7 @@ with lib;
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {
-        ExecStart = "${pkgs.mullvad-vpn}/bin/mullvad-daemon -v --disable-stdout-timestamps";
+        ExecStart = "${pkgs.mullvad}/bin/mullvad-daemon -v --disable-stdout-timestamps";
         Restart = "always";
         RestartSec = 1;
       };

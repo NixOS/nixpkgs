@@ -1,6 +1,7 @@
 { lib
 , python3
 , openssl
+, fetchpatch
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
@@ -8,16 +9,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004.2";
+  version = "3005.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-L6ZE9iANTja1WEbLNytuZ7bKD77AaX8djXPncbZl7XA=";
+    hash = "sha256-+hTF2HP4Y7UJUBIdfiOiRJUCdFSQx8SMDPBFQGz+V8E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
+    jmespath
     markupsafe
     msgpack
     psutil
@@ -40,14 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     # Don't require optional dependencies on Darwin, let's use
     # `extraInputs` like on any other platform
     echo -n > "requirements/darwin.txt"
-
-    # Bug in 3004.1: https://github.com/saltstack/salt/pull/61839
-    substituteInPlace "salt/utils/entrypoints.py" \
-      --replace 'if sys.version_info >= (3, 10):' 'if False:'
-
-    # Bug in 3004.1: https://github.com/saltstack/salt/issues/61865
-    substituteInPlace "salt/transport/tcp.py" \
-      --replace 'payload = self.pack_publish(package)' 'package = self.pack_publish(package)'
 
     # 3004.1: requirement of pyzmq was restricted to <22.0.0; looks like that req was incorrect
     # https://github.com/saltstack/salt/commit/070597e525bb7d56ffadede1aede325dfb1b73a4

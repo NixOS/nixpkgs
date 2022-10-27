@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = cmakeCommonFlags ++ [
     "-DGIT_ARCHETYPE=1" # https://bugs.gentoo.org/814116
-    "-DENABLE_SHARED=ON"
+    "-DENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=ON"
   ] ++ [

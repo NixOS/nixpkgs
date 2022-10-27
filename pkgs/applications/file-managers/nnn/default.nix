@@ -8,6 +8,7 @@
 , ncurses
 , readline
 , which
+, musl-fts
 # options
 , conf ? null
 , withIcons ? false
@@ -20,24 +21,27 @@ assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uToAgWpGaTPTMYJh1D0xgvE23GSIshv1OBlWxXI07Mk=";
+    sha256 = "sha256-+EAKOXZp1kxA2X3e16ItjPT7Sa3WZuP2oxOdXkceTIY=";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
   nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
-  buildInputs = [ readline ncurses ];
+  buildInputs = [ readline ncurses ] ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optional withIcons [ "O_ICONS=1" ]
-    ++ lib.optional withNerdIcons [ "O_NERD=1" ];
+    ++ lib.optionals withIcons [ "O_ICONS=1" ]
+    ++ lib.optionals withNerdIcons [ "O_NERD=1" ];
 
   binPath = lib.makeBinPath [ file which ];
 

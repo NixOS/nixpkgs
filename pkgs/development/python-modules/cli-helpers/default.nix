@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "cli_helpers";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DMwc/Noaxk3H7YPXATBVzxnll50p5Wwh87aS3gFVWq4=";
+    sha256 = "sha256-5xdNADorWP0+Mac/u8RdWqUT3mLL1C1Df3i5ZYvV+Wc=";
   };
 
   propagatedBuildInputs = [

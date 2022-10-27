@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "chart-testing";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WGoLj6IuhxARSB3vAnprW1UO2g142uKZVHI3ubJepRs=";
+    sha256 = "sha256-b8U7zVvzewSxqX7RG7+FMAVytW4s2apNxR3krNJuiro=";
   };
 
-  vendorSha256 = "sha256-gXW1NarCo42d/awg22wr6bIQQFRVTVnRUUAtQU8zY4M=";
+  vendorSha256 = "sha256-z4hNGswxRMU40qkgwY3n516FiyaoeDaAE+CCla3TMkk=";
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \

@@ -30,12 +30,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_server";
-  version = "1.17.1";
+  version = "1.19.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a36781656645ae17b12819a49ace377c045bf633823b3e4cd4b0c88c01e7711b";
+    sha256 = "sha256-0cw1lpRYSXQrw+7fBpn+61CtbGBF6+8CqSmLfxPCfp8=";
   };
 
   propagatedBuildInputs = [
@@ -77,11 +77,16 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
   ];
 
   disabledTestPaths = [
     "tests/services/kernels/test_api.py"
     "tests/services/sessions/test_api.py"
+    # nbconvert failed: `relax_add_props` kwargs of validate has been
+    # deprecated for security reasons, and will be removed soon.
+    "tests/nbconvert/test_handlers.py"
   ];
 
   __darwinAllowLocalNetworking = true;

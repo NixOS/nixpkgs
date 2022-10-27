@@ -3,7 +3,7 @@
 , buildPackages, splicePackages, newScope
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
-, writeText, symlinkJoin
+, writeShellScript, writeText, runtimeShell, symlinkJoin
 }:
 
 let
@@ -94,7 +94,7 @@ in lib.makeScopeWithSplicing
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
-    BSD_PATH = attrs.path;
+    COMPONENT_PATH = attrs.path;
 
     makeFlags = defaultMakeFlags;
 
@@ -121,12 +121,12 @@ in lib.makeScopeWithSplicing
     installPhase = "includesPhase";
     dontBuild = true;
   } // attrs // {
+    # Files that use NetBSD-specific macros need to have nbtool_config.h
+    # included ahead of them on non-NetBSD platforms.
     postPatch = lib.optionalString (!stdenv'.hostPlatform.isNetBSD) ''
-      # Files that use NetBSD-specific macros need to have nbtool_config.h
-      # included ahead of them on non-NetBSD platforms.
       set +e
       grep -Zlr "^__RCSID
-      ^__BEGIN_DECLS" | xargs -0r grep -FLZ nbtool_config.h |
+      ^__BEGIN_DECLS" $COMPONENT_PATH | xargs -0r grep -FLZ nbtool_config.h |
           xargs -0tr sed -i '0,/^#/s//#include <nbtool_config.h>\n\0/'
       set -e
     '' + attrs.postPatch or "";
@@ -146,7 +146,7 @@ in lib.makeScopeWithSplicing
     skipIncludesPhase = true;
 
     postPatch = ''
-      patchShebangs configure
+      patchShebangs $COMPONENT_PATH/configure
       ${self.make.postPatch}
     '';
 
@@ -281,11 +281,11 @@ in lib.makeScopeWithSplicing
 
   # HACK: to ensure parent directories exist. This emulates GNU
   # install’s -D option. No alternative seems to exist in BSD install.
-  install = let binstall = writeText "binstall" ''
-    #!${stdenv.shell}
-    for last in $@; do true; done
+  install = let binstall = writeShellScript "binstall" ''
+    set -eu
+    for last in "$@"; do true; done
     mkdir -p $(dirname $last)
-    xinstall "$@"
+    @out@/bin/xinstall "$@"
   ''; in mkDerivation {
     path = "usr.bin/xinstall";
     version = "9.2";
@@ -297,13 +297,18 @@ in lib.makeScopeWithSplicing
       mandoc groff rsync
     ];
     skipIncludesPhase = true;
-    buildInputs = with self; compatIfNeeded ++ [ fts ];
+    buildInputs = with self; compatIfNeeded
+      # fts header is needed. glibc already has this header, but musl doesn't,
+      # so make sure pkgsMusl.netbsd.install still builds in case you want to
+      # remove it!
+      ++ [ fts ];
     installPhase = ''
       runHook preInstall
 
       install -D install.1 $out/share/man/man1/install.1
       install -D xinstall $out/bin/xinstall
       install -D -m 0550 ${binstall} $out/bin/binstall
+      substituteInPlace $out/bin/binstall --subst-var out
       ln -s $out/bin/binstall $out/bin/install
 
       runHook postInstall
@@ -391,6 +396,7 @@ in lib.makeScopeWithSplicing
       install mandoc groff rsync
     ];
   };
+
   ##
   ## END BOOTSTRAPPING
   ##
@@ -539,6 +545,7 @@ in lib.makeScopeWithSplicing
     version = "9.2";
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
     NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
+    NIX_LDFLAGS = lib.optional stdenv.isDarwin "-lresolv";
   };
 
   cksum = mkDerivation {
@@ -705,10 +712,10 @@ in lib.makeScopeWithSplicing
     SHLIBINSTALLDIR = "$(out)/lib";
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = ''
-      sed -i '1i #undef bool_t' el.h
-      substituteInPlace config.h \
+      sed -i '1i #undef bool_t' $COMPONENT_PATH/el.h
+      substituteInPlace $COMPONENT_PATH/config.h \
         --replace "#define HAVE_STRUCT_DIRENT_D_NAMLEN 1" ""
-      substituteInPlace readline/Makefile --replace /usr/include "$out/include"
+      substituteInPlace $COMPONENT_PATH/readline/Makefile --replace /usr/include "$out/include"
     '';
     NIX_CFLAGS_COMPILE = [
       "-D__noinline="
@@ -728,8 +735,8 @@ in lib.makeScopeWithSplicing
     buildInputs = with self; compatIfNeeded;
     SHLIBINSTALLDIR = "$(out)/lib";
     postPatch = ''
-      substituteInPlace term.c --replace /usr/share $out/share
-      substituteInPlace setupterm.c \
+      substituteInPlace $COMPONENT_PATH/term.c --replace /usr/share $out/share
+      substituteInPlace $COMPONENT_PATH/setupterm.c \
         --replace '#include <curses.h>' 'void use_env(bool);'
     '';
     postBuild = ''
@@ -757,10 +764,10 @@ in lib.makeScopeWithSplicing
     MKDOC = "no"; # missing vfontedpr
     makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${self.libterminfo}/lib" ];
     postPatch = lib.optionalString (!stdenv.isDarwin) ''
-      substituteInPlace printw.c \
+      substituteInPlace $COMPONENT_PATH/printw.c \
         --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
         --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
-      substituteInPlace scanw.c \
+      substituteInPlace $COMPONENT_PATH/scanw.c \
         --replace "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
     '';
   };
@@ -907,7 +914,7 @@ in lib.makeScopeWithSplicing
       byacc genassym gencat lorder tsort statHook rsync rpcgen
     ];
     buildInputs = with self; [ headers csu ];
-    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib";
+    NIX_CFLAGS_COMPILE = "-B${self.csu}/lib -fcommon";
     meta.platforms = lib.platforms.netbsd;
     SHLIBINSTALLDIR = "$(out)/lib";
     MKPICINSTALL = "yes";
@@ -985,7 +992,7 @@ in lib.makeScopeWithSplicing
     # man0 generates a man.pdf using ps2pdf, but doesn't install it later,
     # so we can avoid the dependency on ghostscript
     postPatch = ''
-      substituteInPlace man0/Makefile --replace "ps2pdf" "echo noop "
+      substituteInPlace $COMPONENT_PATH/man0/Makefile --replace "ps2pdf" "echo noop "
     '';
     makeFlags = defaultMakeFlags ++ [
       "FILESDIR=$(out)/share"

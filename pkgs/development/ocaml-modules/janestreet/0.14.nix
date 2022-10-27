@@ -354,9 +354,9 @@ with self;
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
-    version = "0.12.3";
+    version = "0.12.4";
     minimumOCamlVersion = "4.04.1";
-    hash = "00nrar7h2pyflbdiq6wwwrb4k5jh9iff0jllihzm6ms8d5pspsg5";
+    hash = "sha256-W+KUguz55yYAriHRMcQy8gRPzh2TZSJnexG1JI8TLgI=";
     meta.description = "OCaml compiler libraries repackaged";
   };
 

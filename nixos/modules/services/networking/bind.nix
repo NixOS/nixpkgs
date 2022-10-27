@@ -17,28 +17,28 @@ let
       name = mkOption {
         type = types.str;
         default = name;
-        description = "Name of the zone.";
+        description = lib.mdDoc "Name of the zone.";
       };
       master = mkOption {
-        description = "Master=false means slave server";
+        description = lib.mdDoc "Master=false means slave server";
         type = types.bool;
       };
       file = mkOption {
         type = types.either types.str types.path;
-        description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
+        description = lib.mdDoc "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
       };
       masters = mkOption {
         type = types.listOf types.str;
-        description = "List of servers for inclusion in stub and secondary zones.";
+        description = lib.mdDoc "List of servers for inclusion in stub and secondary zones.";
       };
       slaves = mkOption {
         type = types.listOf types.str;
-        description = "Addresses who may request zone transfers.";
+        description = lib.mdDoc "Addresses who may request zone transfers.";
         default = [ ];
       };
       extraConfig = mkOption {
         type = types.str;
-        description = "Extra zone config to be appended at the end of the zone section.";
+        description = lib.mdDoc "Extra zone config to be appended at the end of the zone section.";
         default = "";
       };
     };
@@ -104,89 +104,89 @@ in
 
     services.bind = {
 
-      enable = mkEnableOption "BIND domain name server";
+      enable = mkEnableOption (lib.mdDoc "BIND domain name server");
 
 
       package = mkOption {
         type = types.package;
         default = pkgs.bind;
         defaultText = literalExpression "pkgs.bind";
-        description = "The BIND package to use.";
+        description = lib.mdDoc "The BIND package to use.";
       };
 
       cacheNetworks = mkOption {
         default = [ "127.0.0.0/24" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
           allowed to query zones configured with the `zones` option.
           It is recommended that you limit cacheNetworks to avoid your
           server being used for DNS amplification attacks.
-        ";
+        '';
       };
 
       blockedNetworks = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           What networks are just blocked.
-        ";
+        '';
       };
 
       ipv4Only = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = lib.mdDoc ''
           Only use ipv4, even if the host supports ipv6.
-        ";
+        '';
       };
 
       forwarders = mkOption {
         default = config.networking.nameservers;
         defaultText = literalExpression "config.networking.nameservers";
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           List of servers we should forward requests to.
-        ";
+        '';
       };
 
       forward = mkOption {
         default = "first";
         type = types.enum ["first" "only"];
-        description = "
+        description = lib.mdDoc ''
           Whether to forward 'first' (try forwarding but lookup directly if forwarding fails) or 'only'.
-        ";
+        '';
       };
 
       listenOn = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           Interfaces to listen on.
-        ";
+        '';
       };
 
       listenOnIpv6 = mkOption {
         default = [ "any" ];
         type = types.listOf types.str;
-        description = "
+        description = lib.mdDoc ''
           Ipv6 interfaces to listen on.
-        ";
+        '';
       };
 
       directory = mkOption {
         type = types.str;
         default = "/run/named";
-        description = "Working directory of BIND.";
+        description = lib.mdDoc "Working directory of BIND.";
       };
 
       zones = mkOption {
         default = [ ];
         type = with types; coercedTo (listOf attrs) bindZoneCoerce (attrsOf (types.submodule bindZoneOptions));
-        description = "
+        description = lib.mdDoc ''
           List of zones we claim authority over.
-        ";
+        '';
         example = {
           "example.com" = {
             master = false;
@@ -201,15 +201,15 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the generated named configuration file.
-        ";
+        '';
       };
 
       extraOptions = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the options section of the
           generated named configuration file.
         '';
@@ -219,10 +219,10 @@ in
         type = types.path;
         default = confFile;
         defaultText = literalExpression "confFile";
-        description = "
+        description = lib.mdDoc ''
           Overridable config file to use for named. By default, that
           generated by nixos.
-        ";
+        '';
       };
 
     };

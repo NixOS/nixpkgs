@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , cmake
 , boost
@@ -9,20 +10,26 @@
 , catch
 , numpy
 , pytestCheckHook
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.9.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-O3bkexUBa+gfiJEM6KSR8y/iVqHqlCFmz/9EghxdIpw=";
+    hash = "sha256-/X8DZPFsNrKGbhjZ1GFOj17/NU6p4R+saCW3pLKVNeA=";
   };
 
+  postPatch = ''
+    sed -i "/^timeout/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dontUseCmakeBuildDir = true;
 
@@ -30,13 +37,14 @@ buildPythonPackage rec {
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
     "-DBUILD_TESTING=on"
+    "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
 
   postBuild = ''
     # build tests
-    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES
   '';
 
   postInstall = ''

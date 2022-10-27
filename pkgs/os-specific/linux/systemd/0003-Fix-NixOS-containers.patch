@@ -1,7 +1,7 @@
-From d33f3461fa2202ef9b0d6cdf2137c510c59fb052 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Wed, 16 Apr 2014 10:59:28 +0200
-Subject: [PATCH 03/19] Fix NixOS containers
+Subject: [PATCH] Fix NixOS containers
 
 In NixOS containers, the init script is bind-mounted into the
 container, so checking early whether it exists will fail.
@@ -10,25 +10,22 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 8f17ab8810..197e5aa252 100644
+index 4ce80bba70..bb149192bd 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -5625,6 +5625,7 @@ static int run(int argc, char *argv[]) {
+@@ -5651,6 +5651,7 @@ static int run(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
 +#if 0
-                         const char *p, *q;
+                         _cleanup_free_ char *p = NULL;
  
                          if (arg_pivot_root_new)
-@@ -5639,6 +5640,7 @@ static int run(int argc, char *argv[]) {
-                                 r = -EINVAL;
+@@ -5665,6 +5666,7 @@ static int run(int argc, char *argv[]) {
+                                                     "Directory %s doesn't look like it has an OS tree (/usr/ directory is missing). Refusing.", arg_directory);
                                  goto finish;
                          }
 +#endif
                  }
  
          } else {
--- 
-2.34.0
-

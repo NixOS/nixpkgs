@@ -6,22 +6,20 @@
 , astroid
 , pytestCheckHook
 , docstring-parser
-, isort
 , marshmallow
-, pytest-cov
 , sphinx
 , hypothesis
 , vaa
 , deal-solver
 , pygments
 , typeguard
-, coverage
 , urllib3
+, flake8
 }:
 
 buildPythonPackage rec {
   pname = "deal";
-  version = "4.23.3";
+  version = "4.23.4";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -29,7 +27,7 @@ buildPythonPackage rec {
     owner = "life4";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-duFxe2KSQQb7HB5KrrE32xzTb6QkQcrQssiuXLKao50=";
+    hash = "sha256-YwozwoTb1JsvrwcTntlpWpQJ9DszH2lmtuKkK8qZiG0=";
   };
 
   postPatch = ''
@@ -61,6 +59,7 @@ buildPythonPackage rec {
     hypothesis
     vaa
     urllib3
+    flake8
   ];
 
   disabledTests = [

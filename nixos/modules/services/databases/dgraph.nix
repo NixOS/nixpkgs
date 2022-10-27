@@ -53,14 +53,14 @@ in
 {
   options = {
     services.dgraph = {
-      enable = mkEnableOption "Dgraph native GraphQL database with a graph backend";
+      enable = mkEnableOption (lib.mdDoc "Dgraph native GraphQL database with a graph backend");
 
       package = lib.mkPackageOption pkgs "dgraph" { };
 
       settings = mkOption {
         type = settingsFormat.type;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Contents of the dgraph config. For more details see https://dgraph.io/docs/deploy/config
         '';
       };
@@ -69,14 +69,14 @@ in
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             The host which dgraph alpha will be run on.
           '';
         };
         port = mkOption {
           type = types.port;
           default = 7080;
-          description = ''
+          description = lib.mdDoc ''
             The port which to run dgraph alpha on.
           '';
         };
@@ -87,14 +87,14 @@ in
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             The host which dgraph zero will be run on.
           '';
         };
         port = mkOption {
           type = types.port;
           default = 5080;
-          description = ''
+          description = lib.mdDoc ''
             The port which to run dgraph zero on.
           '';
         };

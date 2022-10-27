@@ -2,7 +2,9 @@
 , python
 , fetchPypi
 , buildPythonPackage
-, postgresql }:
+, postgresql
+, unittestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pgsanity";
@@ -13,11 +15,7 @@ buildPythonPackage rec {
     sha256 = "de0bbd6fe4f98bf5139cb5f466eac2e2abaf5a7b050b9e4867b87bf360873173";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s test
-  '';
-
-  checkInputs = [ postgresql ];
+  checkInputs = [ unittestCheckHook postgresql ];
   propagatedBuildInputs = [ postgresql ];
 
   meta = with lib; {

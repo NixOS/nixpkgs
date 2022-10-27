@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.12.49";
+  version = "8.12.56";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xpFmFhXr3JC+/0WPj798C/t48hoKpAolbMK6baQeOTs=";
+    hash = "sha256-gqTyJskw0C3N9tSynkz9hniZH+ZcLv1f3RQ1VxhvCGg=";
   };
 
   checkInputs = [

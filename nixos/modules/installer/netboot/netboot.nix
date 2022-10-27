@@ -10,7 +10,7 @@ with lib;
 
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = ''
+      description = lib.mdDoc ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';
@@ -81,7 +81,7 @@ with lib;
 
 
     # Create the initrd
-    system.build.netbootRamdisk = pkgs.makeInitrd {
+    system.build.netbootRamdisk = pkgs.makeInitrdNG {
       inherit (config.boot.initrd) compressor;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 

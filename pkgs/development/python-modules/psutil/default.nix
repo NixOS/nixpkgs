@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
-, IOKit
+, CoreFoundation, IOKit
 , pytestCheckHook
 , mock
 , unittest2
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.1";
+  version = "5.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V/GBm12elc37DIgailt9VC7Qt8Ui1XVwaoC+3ISMiVQ=";
+    sha256 = "sha256-/rhhoQtsO7AHAQY7N+Svx1T4IX8PCcQigFhr1qxxK1w=";
   };
 
   # We have many test failures on various parts of the package:
@@ -41,7 +41,10 @@ buildPythonPackage rec {
     "cpu_freq"
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs =
+    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
+    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ CoreFoundation ] ++
+    lib.optionals stdenv.isDarwin [ IOKit ];
 
   pythonImportsCheck = [ "psutil" ];
 

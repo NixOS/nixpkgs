@@ -8,9 +8,12 @@ in fetchzip rec {
 
   url = "https://pcaro.es/d/otf-${name}.tar.gz";
 
+  stripRoot = false;
   postFetch = ''
-    tar xf $downloadedFile
-    install -m444 -Dt $out/share/fonts/opentype *.otf
+    install -m444 -Dt $out/share/fonts/opentype $out/*.otf
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
   sha256 = "127hnpxicqya7v1wmzxxqafq3aj1n33i4j5ncflbw6gj5g3bizwl";
 

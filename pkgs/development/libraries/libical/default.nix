@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , buildPackages
 , cmake
 , glib
@@ -13,14 +14,13 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 , vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.14";
+  version = "3.0.15";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-gZ6IBjG5pNKJ+hWcTzXMP7yxL4he4LTklZGoC9vXra8=";
+    sha256 = "sha256-7M5GBteFKmKCB6556XXV4s6iIC/+3c3Ck17s/QX3Jus=";
   };
 
   strictDeps = true;
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     ninja
     perl
     pkg-config
+    gobject-introspection
+    vala
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
@@ -44,15 +46,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # provides ical-glib-src-generator that runs during build
     libical
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
   installCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
+    (python3.pythonForBuild.withPackages (pkgs: with pkgs; [
       pygobject3
     ]))
   ];
@@ -61,14 +60,13 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
-    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
-    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
+    "-DGOBJECT_INTROSPECTION=True"
+    "-DICAL_GLIB_VAPI=True"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
@@ -77,6 +75,17 @@ stdenv.mkDerivation rec {
     # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
+
+    # Fixes tests with 32-bit time_t
+    # Remove with next version update (v3.0.16+)
+    (fetchurl {
+      url = "https://github.com/libical/libical/commit/4adc6f1d2b39a1cc3363b57215e12fa81076498b.patch";
+      sha256 = "1k3hav0z86kc1xd1sk23b57aqqjk4gf73574w7f1m66cyz98bxr3";
+    })
+    (fetchurl {
+      url = "https://github.com/libical/libical/commit/cce20bd051408b00521385c0bfb616ba068450d3.patch";
+      sha256 = "097hqmagl0q5p38r1kvx0592cfac2y7jbdqlis6m8gbs812pbqfc";
+    })
   ];
 
   # Using install check so we do not have to manually set
@@ -101,7 +110,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

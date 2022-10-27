@@ -4,7 +4,7 @@
 
 buildPythonApplication rec {
   pname = "opentimestamps-client";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = (!isPy3k);
 
   # We can't use the pypi source because it doesn't include README.md which is
@@ -12,8 +12,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "opentimestamps";
     repo = "opentimestamps-client";
-    rev = "opentimestamps-client-v${version}";
-    sha256 = "1aiq9cwr40md54swzm7wkwj0h65psxmvj2japvw79s9x0pp8iwqs";
+    rev = "refs/tags/opentimestamps-client-v${version}";
+    sha256 = "sha256-0dWaXetRlF1MveBdJ0sAdqJ5HCdn08gkbX+nen/ygsQ=";
   };
 
   propagatedBuildInputs = [ opentimestamps appdirs GitPython pysocks ];

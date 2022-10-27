@@ -602,10 +602,10 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
 `pytestCheckHook` is a convenient hook which will substitute the setuptools
-`test` command for a checkPhase which runs `pytest`. This is also beneficial
+`test` command for a `checkPhase` which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous pytestCheckHook usage would be:
+Using the example above, the analagous `pytestCheckHook` usage would be:
 
 ```
   checkInputs = [ pytestCheckHook ];
@@ -624,7 +624,7 @@ Using the example above, the analagous pytestCheckHook usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionallydisabled,
+This is expecially useful when tests need to be conditionally disabled,
 for example:
 
 ```
@@ -640,31 +640,35 @@ for example:
     "socket"
   ];
 ```
-Trying to concatenate the related strings to disable tests in a regular checkPhase
-would be much harder to read. This also enables us to comment on why specific tests
-are disabled.
+
+Trying to concatenate the related strings to disable tests in a regular
+`checkPhase` would be much harder to read. This also enables us to comment on
+why specific tests are disabled.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
 
-Although unit tests are highly prefered to validate correctness of a package, not
-all packages have test suites that can be ran easily, and some have none at all.
+Although unit tests are highly preferred to validate correctness of a package, not
+all packages have test suites that can be run easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
 
 ```
   pythonImportsCheck = [ "requests" "urllib" ];
 ```
+
 roughly translates to:
+
 ```
   postCheck = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
     python -c "import requests; import urllib"
   '';
 ```
-However, this is done in it's own phase, and not dependent on whether `doCheck = true;`
+
+However, this is done in its own phase, and not dependent on whether `doCheck = true;`.
 
 This can also be useful in verifying that the package doesn't assume commonly
-present packages (e.g. `setuptools`)
+present packages (e.g. `setuptools`).
 
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
@@ -719,7 +723,7 @@ pkg3
 ```
 
 In general you should always use `pythonRelaxDeps`, because `pythonRemoveDeps`
-will convert build errors in runtime errors. However `pythonRemoveDeps` may
+will convert build errors into runtime errors. However `pythonRemoveDeps` may
 still be useful in exceptional cases, and also to remove dependencies wrongly
 declared by upstream (for example, declaring `black` as a runtime dependency
 instead of a dev dependency).
@@ -730,6 +734,63 @@ work in any of the formats supported by `buildPythonPackage` currently,
 with the exception of `other` (see `format` in
 [`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
 
+### Using unittestCheckHook {#using-unittestcheckhook}
+
+`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
+
+```
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlags = [ "-s" "tests" "-v" ];
+```
+
+##### Using sphinxHook {#using-sphinxhook}
+
+The `sphinxHook` is a helpful tool to build documentation and manpages
+using the popular Sphinx documentation generator.
+It is setup to automatically find common documentation source paths and
+render them using the default `html` style.
+
+```
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+```
+
+The hook will automatically build and install the artifact into the
+`doc` output, if it exists. It also provides an automatic diversion
+for the artifacts of the `man` builder into the `man` target.
+
+```
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  # Use multiple builders
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+```
+
+Overwrite `sphinxRoot` when the hook is unable to find your
+documentation source root.
+
+```
+  # Configure sphinxRoot for uncommon paths
+  sphinxRoot = "weird/docs/path";
+```
+
+The hook is also available to packages outside the python ecosystem by
+referencing it using `python3.pkgs.sphinxHook`.
+
 ### Develop local package {#develop-local-package}
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
@@ -738,14 +799,14 @@ creates a special link to the project code. That way, you can run updated code
 without having to reinstall after each and every change you make. Development
 mode is also available. Let's see how you can use it.
 
-In the previous Nix expression the source was fetched from an url. We can also
+In the previous Nix expression the source was fetched from a url. We can also
 refer to a local source instead using `src = ./path/to/source/tree;`
 
 If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
 mode is activated.
 
-In the following example we create a simple environment that has a Python 3.9
+In the following example, we create a simple environment that has a Python 3.9
 version of our package in it, as well as its dependencies and other packages we
 like to have in the environment, all specified with `propagatedBuildInputs`.
 Indeed, we can just add any package we like to have in our environment to
@@ -862,7 +923,7 @@ Each interpreter has the following attributes:
 
 ### Optimizations {#optimizations}
 
-The Python interpreters are by default not build with optimizations enabled, because
+The Python interpreters are by default not built with optimizations enabled, because
 the builds are in that case not reproducible. To enable optimizations, override the
 interpreter of interest, e.g using
 
@@ -913,7 +974,7 @@ and the aliases
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/mk-python-derivation`
+`pkgs/development/interpreters/python/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
@@ -954,7 +1015,7 @@ The `buildPythonPackage` mainly does four things:
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
+* In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
 e.g. the test runner, should be added to `checkInputs`.
@@ -969,7 +1030,7 @@ following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name
   appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not built for the particular Python
+* `disabled ? false`: If `true`, package is not built for the particular Python
   interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
@@ -1256,16 +1317,18 @@ are used in `buildPythonPackage`.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
-- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
-  See [example usage](#using-pythonrelaxdepshook).
+- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 
@@ -1421,7 +1484,8 @@ in newpkgs.inkscape
 
 ### `python setup.py bdist_wheel` cannot create .whl {#python-setup.py-bdist_wheel-cannot-create-.whl}
 
-Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
+Executing `python setup.py bdist_wheel` in a `nix-shell`fails with
+
 ```
 ValueError: ZIP does not support timestamps before 1980
 ```
@@ -1513,7 +1577,7 @@ in pkgs.mkShell rec {
     # the environment.
     pythonPackages.python
 
-    # This execute some shell code to initialize a venv in $venvDir before
+    # This executes some shell code to initialize a venv in $venvDir before
     # dropping into the shell
     pythonPackages.venvShellHook
 
@@ -1659,6 +1723,26 @@ self: super: {
 }
 ```
 
+### How to override a Python package for all Python versions using extensions? {#how-to-override-a-python-package-for-all-python-versions-using-extensions}
+
+The following overlay overrides the call to `buildPythonPackage` for the
+`foo` package for all interpreters by appending a Python extension to the
+`pythonPackagesExtensions` list of extensions.
+
+```nix
+final: prev: {
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (
+      python-final: python-prev: {
+        foo = python-prev.foo.overridePythonAttrs (oldAttrs: {
+          ...
+        });
+      }
+    )
+  ];
+}
+```
+
 ### How to use Intel’s MKL with numpy and scipy? {#how-to-use-intels-mkl-with-numpy-and-scipy}
 
 MKL can be configured using an overlay. See the section "[Using overlays to
@@ -1696,6 +1780,10 @@ The following rules are desired to be respected:
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Packages from sources such as GitHub and GitLab that do not exist on PyPI
+  should not use a name that is already used on PyPI. When possible, they should
+  use the package repository name prefixed with the owner (e.g. organization) name
+  and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 

@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -29,7 +30,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -43,7 +44,7 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
 , libadwaita
@@ -67,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "42.2";
+  version = "43.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Z+sTzRdeIDGoOMzqkukDdK4OnMumFoP7rNZ/9q/dWQ4=";
+    sha256 = "9u7JdwP588xv5ua0H23IIbGOyE34NRxN+XsXroJ0G0E=";
   };
 
   patches = [
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
@@ -138,7 +139,7 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
@@ -184,6 +185,18 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
+    rm data/theme/gnome-shell.css
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -200,6 +213,8 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

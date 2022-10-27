@@ -8,6 +8,7 @@
 , pkg-config
 , gst_all_1
 , cairo
+, gtk3
 , mpg123
 , alsa-lib
 , SDL2
@@ -24,17 +25,14 @@
 , libvpx
 }:
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "2.8.2";
   pname = "baresip";
   src = fetchFromGitHub {
     owner = "baresip";
     repo = "baresip";
     rev = "v${version}";
-    sha256 = "sha256-9mc1Beo7/iNhDXSDC/jiTL+lJRt8ah/1xF1heoHTE+g=";
+    sha256 = "sha256-+hkV9s4ORm4Kqu9zBmxtFZJFG3gh70OOxpjix052bM0=";
   };
-  postPatch = ''
-    patchShebangs modules/ctrl_dbus/gen.sh
-  '';
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     zlib
@@ -42,6 +40,7 @@ stdenv.mkDerivation rec {
     libre
     librem
     cairo
+    gtk3
     mpg123
     alsa-lib
     SDL2
@@ -75,6 +74,7 @@ stdenv.mkDerivation rec {
     "USE_FFMPEG=1"
     "USE_GSM=1"
     "USE_GST1=1"
+    "USE_GTK=1"
     "USE_L16=1"
     "USE_MPG123=1"
     "USE_OSS=1"
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/baresip/baresip";
     maintainers = with lib.maintainers; [ elohmeier raskin ];
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

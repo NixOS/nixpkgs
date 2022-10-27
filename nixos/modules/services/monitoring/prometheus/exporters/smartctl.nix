@@ -24,7 +24,7 @@ in {
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         Paths to the disks that will be monitored. Will autodiscover
         all disks if none given.
       '';
@@ -33,7 +33,7 @@ in {
       type = types.str;
       default = "60s";
       example = "2m";
-      description = ''
+      description = lib.mdDoc ''
         Interval that limits how often a disk can be queried.
       '';
     };
@@ -50,7 +50,7 @@ in {
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkOverride 100 (
+      DeviceAllow = lib.mkOverride 50 (
         if cfg.devices != [] then
           cfg.devices
         else [
@@ -66,10 +66,7 @@ in {
       ProtectProc = "invisible";
       ProcSubset = "pid";
       SupplementaryGroups = [ "disk" ];
-      SystemCallFilter = [
-        "@system-service"
-        "~@privileged @resources"
-      ];
+      SystemCallFilter = [ "@system-service" "~@privileged" ];
     };
   };
 }

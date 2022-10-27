@@ -2,10 +2,11 @@
 , absl-py
 , blas
 , buildPythonPackage
+, etils
 , fetchFromGitHub
-, fetchpatch
 , jaxlib
 , lapack
+, matplotlib
 , numpy
 , opt-einsum
 , pytestCheckHook
@@ -20,7 +21,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.3.6";
+  version = "0.3.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,19 +30,8 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "jax-v${version}";
-    hash = "sha256-eGdAEZFHadNTHgciP4KMYHdwksz9g6un0Ar+A/KV5TE=";
+    hash = "sha256-ruXOwpBwpi1G8jgH9nhbWbs14JupwWkjh+Wzrj8HVU4=";
   };
-
-  patches = [
-    # See https://github.com/google/jax/issues/7944
-    ./cache-fix.patch
-
-    # See https://github.com/google/jax/issues/10292
-    (fetchpatch {
-      url = "https://github.com/google/jax/commit/cadc8046d56e0c1433cf48a2f106947d5f4ecbfd.patch";
-      hash = "sha256-jrpIqt4LzWAswt/Cpwtfa5d1Yn31HcXkVH3ETmaigA0=";
-    })
-  ];
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
@@ -49,14 +39,16 @@ buildPythonPackage rec {
   # CPU wheel is packaged.
   propagatedBuildInputs = [
     absl-py
+    etils
     numpy
     opt-einsum
     scipy
     typing-extensions
-  ];
+  ] ++ etils.optional-dependencies.epath;
 
   checkInputs = [
     jaxlib
+    matplotlib
     pytestCheckHook
     pytest-xdist
   ];
@@ -87,9 +79,21 @@ buildPythonPackage rec {
     "testEigvalsGrad_shape"
   ];
 
-  pythonImportsCheck = [
-    "jax"
+  # See https://github.com/google/jax/issues/11722. This is a temporary fix in
+  # order to unblock etils, and upgrading jax/jaxlib to the latest version. See
+  # https://github.com/NixOS/nixpkgs/issues/183173#issuecomment-1204074993.
+  disabledTestPaths = [
+    "tests/api_test.py"
+    "tests/core_test.py"
+    "tests/lax_numpy_indexing_test.py"
+    "tests/lax_numpy_test.py"
+    "tests/nn_test.py"
+    "tests/random_test.py"
+    "tests/sparse_test.py"
   ];
+
+  # As of 0.3.22, `import jax` does not work without jaxlib being installed.
+  pythonImportsCheck = [ ];
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

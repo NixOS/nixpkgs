@@ -1,11 +1,11 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchzip
 , xorg
 , hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "vanilla-dmz";
   version = "0.4.5";
 

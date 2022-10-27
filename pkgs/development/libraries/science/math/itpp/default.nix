@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/itpp
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/itpp
     ./gtests/itpp_gtests
   '';
 

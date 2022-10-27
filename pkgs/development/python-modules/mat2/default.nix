@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, python
+, unittestCheckHook
 , pythonOlder
 , fetchFromGitLab
 , substituteAll
@@ -17,12 +17,13 @@
 , mutagen
 , pygobject3
 , pycairo
-, dolphinIntegration ? false, plasma5Packages
+, dolphinIntegration ? false
+, plasma5Packages
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.4";
+  version = "0.13.0";
 
   disabled = pythonOlder "3.5";
 
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-HjPr4pb0x2Sdq8ALaZeQRnGHmNAoEV8XUGbhOjY00jc=";
+    hash = "sha256-H3l8w2F+ZcJ1P/Dg0ZVBJPUK0itLocL7a0jeSrG3Ws8=";
   };
 
   patches = [
@@ -66,12 +67,12 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
     gdk-pixbuf
-    gobject-introspection
     librsvg
     poppler_gi
   ];
@@ -92,9 +93,9 @@ buildPythonPackage rec {
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -v
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";

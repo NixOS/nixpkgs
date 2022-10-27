@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "clash";
-  version = "1.11.0";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "Dreamacro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8g5rrkRA31wHvwY3JDFIU+slU0cLHFpADyd897hVyw0=";
+    sha256 = "sha256-NLGX72eZCfyh6y3mud/btMh15rNXnss7S0P7ujCX1ms=";
   };
 
-  vendorSha256 = "sha256-iW14KxtUY2nhpShcdrHLiCRZxsoXyLSPt01dB0Ds28Y=";
+  vendorSha256 = "sha256-zaWN/zI4WhHnEK12k1tWZ/qjLGvaZbJ4WfEvCZJ0+ms=";
 
   # Do not build testing suit
   excludedPackages = [ "./test" ];

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , python
 , appdirs
 , attrs
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.4.0";
+  version = "22.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -53,8 +54,18 @@ buildPythonPackage rec {
     pname = "Twisted";
     inherit version;
     extension = "tar.gz";
-    sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
+    hash = "sha256-5bYN458tHaFT++GHTYhf4/y9sh/MRG+nWaU+j8NRO+0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test_openFileDescriptors.patch";
+      url = "https://github.com/twisted/twisted/commit/47f47634940141466177261b20bb43c300531e38.patch";
+      hash = "sha256-wacnF166PnZHXJEqTlPZUdDILJIVHOcnC2a34SQumvs=";
+    })
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [
     attrs
@@ -74,9 +85,6 @@ buildPythonPackage rec {
     echo 'ListingTests.test_oldFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
 
-    echo 'PTYProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-    echo 'PTYProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
-
     echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
     echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
 
@@ -89,7 +97,8 @@ buildPythonPackage rec {
     echo 'MulticastTests.test_multicast.skip = "Reactor was unclean"'>> src/twisted/test/test_udp.py
     echo 'MulticastTests.test_multiListen.skip = "No such device"'>> src/twisted/test/test_udp.py
 
-    echo 'DomishExpatStreamTests.test_namespaceWithWhitespace.skip = "syntax error: line 1, column 0"'>> src/twisted/words/test/test_domish.py
+    # fails since migrating to libxcrypt
+    echo 'HelperTests.test_refuteCryptedPassword.skip = "OSError: Invalid argument"' >> src/twisted/conch/test/test_checkers.py
 
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
@@ -104,6 +113,9 @@ buildPythonPackage rec {
     # twisted.python.runtime.platform.supportsINotify() == False
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
+  '' + lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) ''
+    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
+    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See
@@ -119,7 +131,8 @@ buildPythonPackage rec {
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch
-  ++ passthru.optional-dependencies.tls;
+  # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
+  ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) passthru.optional-dependencies.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800

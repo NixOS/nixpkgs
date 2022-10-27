@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
-    service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
+    service-identity simplejson sphinx-rtd-theme testtools treq twisted zfec
     zope_interface
   ] ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;

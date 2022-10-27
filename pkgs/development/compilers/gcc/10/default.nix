@@ -14,7 +14,6 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
-, libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , gnatboot ? null
@@ -24,19 +23,14 @@
 , libcCross ? null
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
-, # Strip kills static libs of other archs (hence no cross)
-  stripped ? stdenv.hostPlatform.system == stdenv.buildPlatform.system
-          && stdenv.targetPlatform.system == stdenv.hostPlatform.system
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, libxcrypt
 }:
 
-# LTO needs libelf and zlib.
-assert libelf != null -> zlib != null;
-
 # Make sure we get GNU sed.
-assert stdenv.hostPlatform.isDarwin -> gnused != null;
+assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -53,11 +47,11 @@ with lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.4.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches = [ ./gcc10-asan-glibc-2.34.patch ]
+    patches = [ ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
@@ -73,8 +67,6 @@ let majorVersion = "10";
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
-      ++ [ ../libsanitizer-no-cyclades.patch ]
-
       ++ optional (buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
         url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
         sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
@@ -88,14 +80,14 @@ let majorVersion = "10";
 in
 
 stdenv.mkDerivation ({
-  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  pname = "${crossNameAddon}${name}";
   inherit version;
 
   builder = ../builder.sh;
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0i6378ig6h397zkhd7m4ccwjx5alvzrf2hm27p1pzwjhlv0h9x34";
+    sha256 = "1wg4xdizkksmwi66mvv2v4pk3ja8x64m7v9gzhykzd3wrmdpsaf9";
   };
 
   inherit patches;
@@ -164,6 +156,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional langAda gnatboot)
+    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
+    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
+    ++ (optional buildPlatform.isDarwin gnused)
     ;
 
   # For building runtime libs
@@ -178,23 +173,22 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc libelf
+    gmp mpfr libmpc libxcrypt
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional hostPlatform.isDarwin gnused)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
-  preConfigure = import ../common/pre-configure.nix {
+  preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit;
-  };
+    inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
+  }) + ''
+    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+  '';
 
   dontDisableStatic = true;
 
@@ -208,7 +202,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross
       version
 
-      gmp mpfr libmpc libelf isl
+      gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib
@@ -233,9 +227,11 @@ stdenv.mkDerivation ({
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
-  dontStrip = !stripped;
-
-  installTargets = optional stripped "install-strip";
+  inherit
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
+    stripDebugList
+    stripDebugListTarget
+    preFixup;
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
@@ -271,13 +267,10 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   inherit enableMultilib enableShared;
 
-  inherit (stdenv) is64bit;
-
   meta = {
     homepage = "https://gcc.gnu.org/";
     license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}"
-      + (if stripped then "" else " (with debugging info)");
+    description = "GNU Compiler Collection, version ${version}";
 
     longDescription = ''
       The GNU Compiler Collection includes compiler front ends for C, C++,

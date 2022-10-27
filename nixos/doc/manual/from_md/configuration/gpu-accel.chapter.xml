@@ -194,7 +194,7 @@ environment.variables.VK_ICD_FILENAMES =
         devices with the <literal>uaccess</literal> tag will be updated
         automatically when a user logs in through
         <literal>systemd-logind</literal>. For example, if the user
-        <emphasis>jane</emphasis> is logged in, the access control list
+        <emphasis>alice</emphasis> is logged in, the access control list
         should look as follows:
       </para>
       <programlisting>
@@ -203,7 +203,7 @@ $ getfacl /dev/dri/card0
 # owner: root
 # group: video
 user::rw-
-user:jane:rw-
+user:alice:rw-
 group::rw-
 mask::rw-
 other::---

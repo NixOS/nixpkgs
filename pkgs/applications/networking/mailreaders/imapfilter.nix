@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imapfilter";
-  version = "2.7.5";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${version}";
-    sha256 = "nbVwbPkNbJz4GHhvOp+QVgiBqKA/HR34p4x3NXJB7ig=";
+    sha256 = "sha256-7B3ebY2QAk+64NycptoMmAo7GxUFOo3a7CH7txV/KTY=";
   };
   makeFlags = [
     "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"

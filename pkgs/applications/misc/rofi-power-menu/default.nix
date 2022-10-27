@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rofi }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-power-menu";

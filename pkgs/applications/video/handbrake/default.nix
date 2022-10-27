@@ -57,10 +57,10 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox ? null
-, Foundation ? null
-, libobjc ? null
-, VideoToolbox ? null
+, AudioToolbox
+, Foundation
+, libobjc
+, VideoToolbox
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -206,7 +206,7 @@ let self = stdenv.mkDerivation rec {
   ++ optional (!useGtk) "--disable-gtk"
   ++ optional useFdk "--enable-fdk-aac"
   ++ optional stdenv.isDarwin "--disable-xcode"
-  ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
+  ++ optional stdenv.hostPlatform.isx86 "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];

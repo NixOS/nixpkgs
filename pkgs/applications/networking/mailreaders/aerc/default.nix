@@ -11,17 +11,17 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
-    repo = pname;
+    repo = "aerc";
     rev = version;
-    sha256 = "sha256-v1+12UCgBbH/2PxZ9QdDN30LmyzVcfGlYiVNVPYO3zs=";
+    hash = "sha256-pUp/hW4Kk3pixGfbQvphLJM9Dc/w01T1KPRewOicPqM=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-fGQ15i3mWNmmfypRt5A7SAVYSEg9m4so4FYlUY+7mW8=";
+  vendorHash = "sha256-Nx+k0PLPIx7Ia0LobXUOw7oOFVz1FXV49haAkRAVOcM=";
 
   doCheck = false;
 
@@ -58,7 +58,7 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
+      "${lib.makeBinPath [ ncurses ]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
       ${lib.makeBinPath [ w3m dante ]}
   '';

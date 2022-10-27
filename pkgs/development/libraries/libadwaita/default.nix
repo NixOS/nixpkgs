@@ -1,10 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, docbook-xsl-nons
 , gi-docgen
-, gtk-doc
-, libxml2
 , meson
 , ninja
 , pkg-config
@@ -17,11 +14,13 @@
 , gnome
 , gsettings-desktop-schemas
 , xvfb-run
+, AppKit
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.1.2";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,28 +30,34 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-OyjuUWfKE8GoGFCmaCS7YAf5GAS0VwMPht7cvFtkA/Y=";
+    hash = "sha256-3lH7Vi9M8k+GSrCpvruRpLrIpMoOakKbcJlaAc/FK+U=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    docbook-xsl-nons
     gi-docgen
-    gtk-doc
-    libxml2 # for xmllint
     meson
     ninja
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
+  ] ++ lib.optionals (!doCheck) [
+    "-Dtests=false"
   ];
 
   buildInputs = [
     fribidi
-    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
   ];
 
   propagatedBuildInputs = [
@@ -61,10 +66,15 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     gnome.adwaita-icon-theme
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  doCheck = true;
+  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  #
+  # In file included from ../tests/test-style-manager.c:10:
+  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -81,14 +91,15 @@ stdenv.mkDerivation rec {
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" xvfb-run \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck
   '';
 
-  postInstall = ''
-    mv $out/share/{doc,gtk-doc}
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -102,6 +113,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -41,17 +41,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.16";
+  version = "5.0.19";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aSuvYt9UjG6/uVpLRZueq+qFvMQHdIcnO3G/LIE+3pk=";
+    sha256 = "sha256-hgg7Sbe5/tAWWq2to9PceBQeUdV3UWENFgvuY0qCksM=";
   };
 
   prePatch = ''
-    ln -s ${enDict} src/modules/spell/dict/$(stripHash ${enDict})
+    ln -s ${enDict} src/modules/spell/$(stripHash ${enDict})
   '';
 
   nativeBuildInputs = [

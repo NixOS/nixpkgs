@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     "-DNGRAPH_UNIT_TEST_ENABLE:BOOL=OFF"
     "-DENABLE_SAMPLES:BOOL=OFF"
     "-DENABLE_CPPLINT:BOOL=OFF"
-  ] ++ lib.optional enablePython [
+  ] ++ lib.optionals enablePython [
     "-DENABLE_PYTHON:BOOL=ON"
   ];
 
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     python
     tbb
     shellcheck
-  ] ++ lib.optional enablePython (with python.pkgs; [
+  ] ++ lib.optionals enablePython (with python.pkgs; [
     cython
     pybind11
   ]);
@@ -130,7 +130,8 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
+    broken = (stdenv.isLinux && stdenv.isx86_64) # at 2022-09-23
+             || stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

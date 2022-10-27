@@ -26,6 +26,7 @@
 , tdb
 , cmocka
 , rpcsvc-proto
+, bash
 , python3Packages
 , nixosTests
 
@@ -45,11 +46,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.5";
+  version = "4.15.9";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aRFeM4MZN7pRUb4CR5QxR3Za7OZYunQ/RHQWcq1o0X8=";
+    sha256 = "sha256-loKixxwv8lOqJ8uwEmDqyJf/YlzznbIO4yBz5Thv4hk=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -82,8 +83,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python3Packages.python
+    bash
     python3Packages.wrapPython
+    python3Packages.python
     readline
     popt
     dbus
@@ -139,7 +141,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optional stdenv.isAarch32 [
+  ] ++ optionals stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148
     "--jobs 1"
   ];
@@ -170,13 +172,19 @@ stdenv.mkDerivation rec {
     EOF
     find $out -type f -regex '.*\.so\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
 
-    # Samba does its own shebang patching, but uses build Python
-    find "$out/bin" -type f -executable -exec \
-      sed -i '1 s^#!${python3Packages.python.pythonForBuild}/bin/python.*^#!${python3Packages.python.interpreter}^' {} \;
-
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
+
+    # Samba does its own shebang patching, but uses build Python
+    find $out/bin -type f -executable | while read file; do
+      isScript "$file" || continue
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}/bin^${lib.getBin python3Packages.python}/bin^' "$file"
+    done
   '';
+
+  disallowedReferences =
+    lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
+      [ buildPackages.python3Packages.python ];
 
   passthru = {
     tests.samba = nixosTests.samba;

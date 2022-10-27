@@ -8,7 +8,6 @@ let
     concatLists
     concatMap
     concatMapStringsSep
-    elemAt
     filter
     foldl'
     head
@@ -95,7 +94,10 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}.";
+    description =
+      if name ? _type && name._type == "mdDoc"
+      then lib.mdDoc "Whether to enable ${name.text}."
+      else "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -121,7 +123,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -134,7 +136,7 @@ rec {
       let default' = if !isList default then [ default ] else default;
       in mkOption {
         type = lib.types.package;
-        description = "The ${name} package to use.";
+        description = lib.mdDoc "The ${name} package to use.";
         default = attrByPath default'
           (throw "${concatStringsSep "." default'} cannot be found in pkgs") pkgs;
         defaultText = literalExpression ("pkgs." + concatStringsSep "." default');
@@ -281,7 +283,10 @@ rec {
   */
   literalDocBook = text:
     if ! isString text then throw "literalDocBook expects a string."
-    else { _type = "literalDocBook"; inherit text; };
+    else
+      lib.warnIf (lib.isInOldestRelease 2211)
+        "literalDocBook is deprecated, use literalMD instead"
+        { _type = "literalDocBook"; inherit text; };
 
   /* Transition marker for documentation that's already migrated to markdown
      syntax.
@@ -317,10 +322,16 @@ rec {
   showOption = parts: let
     escapeOptionPart = part:
       let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
+        # We assume that these are "special values" and not real configuration data.
+        # If it is real configuration data, it is rendered incorrectly.
+        specialIdentifiers = [
+          "<name>"          # attrsOf (submodule {})
+          "*"               # listOf (submodule {})
+          "<function body>" # functionTo
+        ];
+      in if builtins.elem part specialIdentifiers
          then part
-         else escaped;
+         else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 

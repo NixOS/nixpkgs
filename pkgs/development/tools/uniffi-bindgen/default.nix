@@ -1,45 +1,40 @@
 { lib
-, stdenv
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
+, makeWrapper
 , ktlint
 , yapf
 , rubocop
 , rustfmt
-, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uniffi-bindgen";
-  version = "0.17.0";
+  version = "0.20.0";
 
-  src = fetchFromGitHub {
-    owner = "mozilla";
-    repo = "uniffi-rs";
-    rev = "v${version}";
-    hash = "sha256-EGyJrW0U/dnKT7OWgd8LehCyvj6mxud3QWbBVyhoK4Y=";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-E0OMMg9GuZCwPuJKzMpN0PNxZicGW1blD322Jl01qQE=";
   };
 
-  cargoLock.lockFileContents = builtins.readFile ./Cargo.lock;
-  cargoHash = "sha256-Fw+yCAI32NdFKJGPuNU6t0FiEfohoVD3VQfInNJuooI=";
+  cargoSha256 = "sha256-REY88irDm45JOBwdb79JVrIyfuOB6HcAgIzYO65O0uE=";
 
-  cargoBuildFlags = [ "-p uniffi_bindgen" ];
-  cargoTestFlags = [ "-p uniffi_bindgen" ];
   nativeBuildInputs = [ makeWrapper ];
 
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  checkFlags = [
+    # this test assumes it is run from the repository
+    "--skip=test::test_guessing_of_crate_root_directory_from_udl_file"
+  ];
 
   postFixup = ''
     wrapProgram "$out/bin/uniffi-bindgen" \
-      --suffix PATH : ${lib.strings.makeBinPath [ rustfmt ktlint yapf rubocop ] }
+      --suffix PATH : ${lib.strings.makeBinPath [ ktlint yapf rubocop rustfmt ] }
   '';
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";
     homepage = "https://mozilla.github.io/uniffi-rs/";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ vtuan10 ];
+    maintainers = with maintainers; [ figsoda vtuan10 ];
   };
 }

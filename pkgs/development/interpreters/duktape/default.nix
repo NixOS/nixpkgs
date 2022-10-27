@@ -8,20 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kPjS+otVZ8aJmDDd7ywD88J5YLEayiIvoXqnrGE8KJA=";
   };
 
+  # https://github.com/svaarala/duktape/issues/2464
+  LDFLAGS = [ "-lm" ];
+
   nativeBuildInputs = [ validatePkgConfig ];
 
-  postPatch = ''
-    substituteInPlace Makefile.sharedlibrary \
-      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
-      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
-    substituteInPlace Makefile.cmdline \
-      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
-      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
-  '';
   buildPhase = ''
     make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
   '';
+
   installPhase = ''
     install -d $out/bin
     install -m755 duk $out/bin/
@@ -30,6 +26,7 @@ stdenv.mkDerivation rec {
     make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
     substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
   '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {

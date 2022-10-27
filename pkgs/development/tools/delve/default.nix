@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv }:
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.8.3";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-6hiUQNUXpLgvYl/MH+AopIzwqvX+vtvp9GDEDmwlqek=";
+    sha256 = "sha256-Ga+1xz7gsLoHA0G4UOiJf331hrBVoeB93Pjd0PyATB4=";
   };
 
   vendorSha256 = null;
@@ -17,7 +17,19 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  checkFlags = [ "-short" ];
+  hardeningDisable = [ "fortify" ];
+
+  preCheck = ''
+    XDG_CONFIG_HOME=$(mktemp -d)
+  '';
+
+  # Disable tests on Darwin as they require various workarounds.
+  #
+  # - Tests requiring local networking fail with or without sandbox,
+  #   even with __darwinAllowLocalNetworking allowed.
+  # - CGO_FLAGS warnings break tests' expected stdout/stderr outputs.
+  # - DAP test binaries exit prematurely.
+  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0

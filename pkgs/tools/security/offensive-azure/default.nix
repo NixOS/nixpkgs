@@ -38,7 +38,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Use default Python module
     substituteInPlace pyproject.toml \
-      --replace 'uuid = "^1.30"' ""
+      --replace 'uuid = "^1.30"' "" \
+      --replace 'python-whois = "^0.7.3"' 'python-whois = "*"'
   '';
 
   pythonImportsCheck = [

@@ -1,7 +1,7 @@
-From a845786195182c376b72a85433e278c35243676d Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
-Subject: [PATCH 02/19] Don't try to unmount /nix or /nix/store
+Subject: [PATCH] Don't try to unmount /nix or /nix/store
 
 They'll still be remounted read-only.
 
@@ -25,10 +25,10 @@ index f683f05981..5a04c2c2a6 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index f5a2cb20c1..51608d24c0 100644
+index 820aa8e286..653e43053d 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -502,6 +502,8 @@ static int delete_md(MountPoint *m) {
+@@ -518,6 +518,8 @@ static int delete_md(MountPoint *m) {
  
  static bool nonunmountable_path(const char *path) {
          return path_equal(path, "/")
@@ -37,6 +37,3 @@ index f5a2cb20c1..51608d24c0 100644
  #if ! HAVE_SPLIT_USR
                  || path_equal(path, "/usr")
  #endif
--- 
-2.34.0
-

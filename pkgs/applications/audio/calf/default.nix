@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
-    libglade lv2 pkg-config
+    libglade lv2
   ];
 
   meta = with lib; {

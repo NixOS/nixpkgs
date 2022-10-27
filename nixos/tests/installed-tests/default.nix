@@ -28,7 +28,7 @@ let
     , withX11 ? false
 
       # Extra flags to pass to gnome-desktop-testing-runner.
-    , testRunnerFlags ? ""
+    , testRunnerFlags ? []
 
       # Extra attributes to pass to makeTest.
       # They will be recursively merged into the attrset created by this function.
@@ -40,7 +40,7 @@ let
           name = tested.name;
 
           meta = {
-            maintainers = tested.meta.maintainers;
+            maintainers = tested.meta.maintainers or [];
           };
 
           nodes.machine = { ... }: {
@@ -67,7 +67,7 @@ let
             '' +
             ''
               machine.succeed(
-                  "gnome-desktop-testing-runner ${testRunnerFlags} -d '${tested.installedTests}/share'"
+                  "gnome-desktop-testing-runner ${escapeShellArgs testRunnerFlags} -d '${tested.installedTests}/share'"
               )
             '';
         }
@@ -92,14 +92,15 @@ in
   fwupd = callInstalledTest ./fwupd.nix {};
   gcab = callInstalledTest ./gcab.nix {};
   gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
+  geocode-glib = callInstalledTest ./geocode-glib.nix {};
   gjs = callInstalledTest ./gjs.nix {};
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
   gsconnect = callInstalledTest ./gsconnect.nix {};
+  json-glib = callInstalledTest ./json-glib.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
-  librsvg = callInstalledTest ./librsvg.nix {};
   glib-testing = callInstalledTest ./glib-testing.nix {};
   libjcat = callInstalledTest ./libjcat.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};

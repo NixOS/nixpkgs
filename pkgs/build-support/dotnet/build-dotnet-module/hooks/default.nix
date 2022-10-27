@@ -11,6 +11,9 @@
 , buildType
 }:
 
+let
+  libraryPath = lib.makeLibraryPath runtimeDeps;
+in
 {
   dotnetConfigureHook = callPackage ({ }:
     makeSetupHook {
@@ -35,7 +38,7 @@
       name = "dotnet-check-hook";
       deps = [ dotnet-test-sdk ];
       substitutions = {
-        inherit buildType;
+        inherit buildType libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
           (lib.concatStringsSep "&FullyQualifiedName!=" disabledTests);
       };
@@ -53,10 +56,10 @@
   dotnetFixupHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      deps = [ dotnet-runtime makeWrapper ];
+      deps = [ dotnet-runtime ];
       substitutions = {
         dotnetRuntime = dotnet-runtime;
-        runtimeDeps = lib.makeLibraryPath runtimeDeps;
+        runtimeDeps = libraryPath;
       };
     } ./dotnet-fixup-hook.sh) { };
 }

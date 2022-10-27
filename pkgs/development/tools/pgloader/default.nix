@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, makeWrapper, sbcl_2_0_8, sqlite, freetds, libzip, curl, git, cacert, openssl }:
+{ lib, stdenv, fetchurl, makeWrapper, sbcl_2_2_6, sqlite, freetds, libzip, curl, git, cacert, openssl }:
 stdenv.mkDerivation rec {
   pname = "pgloader";
-  version = "3.6.2";
+  version = "3.6.8";
 
   src = fetchurl {
-    url = "https://github.com/dimitri/pgloader/releases/download/v3.6.2/pgloader-bundle-3.6.2.tgz";
-    sha256 = "1jqnw6pw11kwyy8zm2g7g85r8197fy0q4l70yybw9wr87wnqqnz3";
+    url = "https://github.com/dimitri/pgloader/releases/download/v3.6.8/pgloader-bundle-3.6.8.tgz";
+    sha256 = "sha256-h5vB+KOapbXsSVNIVWEsaanyczaCfl81+SXdiNmNboE=";
   };
 
   nativeBuildInputs = [ git makeWrapper ];
-  buildInputs = [ sbcl_2_0_8 cacert sqlite freetds libzip curl openssl ];
+  buildInputs = [ sbcl_2_2_6 cacert sqlite freetds libzip curl openssl ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite libzip curl git openssl freetds ];
 

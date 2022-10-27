@@ -6,6 +6,7 @@
 , pythonOlder
 , importlib-metadata
 , jbig2dec
+, deprecation
 , lxml
 , mupdf
 , packaging
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "5.1.5";
+  version = "6.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-DEgxdMVX5gQOsV9EyJtO/MO7padYMZrekanpp+nNvek=";
+    hash = "sha256-rwMSmARUrScG2nmiYBSkcq0NuUMhn0pHOPvgdKZbH7w=";
   };
 
   patches = [
@@ -50,10 +51,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    sed -i 's|\S*/opt/homebrew.*|pass|' setup.py
-
     substituteInPlace setup.py \
-      --replace setuptools_scm_git_archive ""
+      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -78,6 +77,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    deprecation
     lxml
     packaging
     pillow

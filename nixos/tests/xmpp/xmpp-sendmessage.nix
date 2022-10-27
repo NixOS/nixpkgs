@@ -6,7 +6,7 @@ let
     Please find this *really* important attachment.
 
     Yours truly,
-    John
+    Bob
   '';
 in writeScriptBin "send-message" ''
 #!${(python3.withPackages (ps: [ ps.slixmpp ])).interpreter}

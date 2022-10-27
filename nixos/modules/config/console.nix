@@ -58,21 +58,21 @@ in
       type = with types; either str path;
       default = "us";
       example = "fr";
-      description = ''
+      description = lib.mdDoc ''
         The keyboard mapping table for the virtual consoles.
       '';
     };
 
     colors = mkOption {
-      type = types.listOf types.str;
-      default = [];
+      type = with types; listOf (strMatching "[[:xdigit:]]{6}");
+      default = [ ];
       example = [
         "002b36" "dc322f" "859900" "b58900"
         "268bd2" "d33682" "2aa198" "eee8d5"
         "002b36" "cb4b16" "586e75" "657b83"
         "839496" "6c71c4" "93a1a1" "fdf6e3"
       ];
-      description = ''
+      description = lib.mdDoc ''
         The 16 colors palette used by the virtual consoles.
         Leave empty to use the default colors.
         Colors must be in hexadecimal format and listed in
@@ -84,7 +84,7 @@ in
     packages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
       '';
@@ -93,7 +93,7 @@ in
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If set, configure the virtual console keymap from the xserver
         keyboard settings.
       '';
@@ -102,7 +102,7 @@ in
     earlySetup = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
@@ -159,7 +159,11 @@ in
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
           "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # keyboard layouts are compressed
+          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
+        ] ++ optionals (hasPrefix builtins.storeDir cfg.font) [
+          "${cfg.font}"
+        ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
+          "${cfg.keyMap}"
         ];
 
         systemd.services.reload-systemd-vconsole-setup =

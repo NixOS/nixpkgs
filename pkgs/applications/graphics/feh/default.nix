@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , xorg, imlib2, libjpeg, libpng
 , curl, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.8";
+  version = "3.9";
 
-  src = fetchurl {
-    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "1a9bsq5j9sl2drzkab0hdhnamalpaszw9mz2prz6scrr5dak8g3z";
+  src = fetchFromGitHub {
+    owner = "derf";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
   };
+
+  postPatch = ''
+    substituteInPlace test/feh.t \
+      --replace "WARNING:" "WARNING: While loading" \
+      --replace "Does not look like an image \(magic bytes missing\)" "Unknown error \(15\)"
+  '';
 
   outputs = [ "out" "man" "doc" ];
 

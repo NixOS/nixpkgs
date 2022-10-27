@@ -41,5 +41,14 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
     platforms = platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2022-1035"
+      "CVE-2022-1172"
+      "CVE-2022-1222"
+      "CVE-2022-1795"
+      "CVE-2022-2453"
+      "CVE-2022-2454"
+      "CVE-2022-2549"
+    ];
   };
 }

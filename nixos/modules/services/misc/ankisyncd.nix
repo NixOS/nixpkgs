@@ -28,31 +28,31 @@ let
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption "ankisyncd";
+      enable = mkEnableOption (lib.mdDoc "ankisyncd");
 
       package = mkOption {
         type = types.package;
         default = pkgs.ankisyncd;
         defaultText = literalExpression "pkgs.ankisyncd";
-        description = "The package to use for the ankisyncd command.";
+        description = lib.mdDoc "The package to use for the ankisyncd command.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "ankisyncd host";
+        description = lib.mdDoc "ankisyncd host";
       };
 
       port = mkOption {
         type = types.int;
         default = 27701;
-        description = "ankisyncd port";
+        description = lib.mdDoc "ankisyncd port";
       };
 
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to open the firewall for the specified port.";
+        description = lib.mdDoc "Whether to open the firewall for the specified port.";
       };
     };
 

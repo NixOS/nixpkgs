@@ -13,13 +13,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "sha256-bohc/0hUr1mcV2JbFy71TjY8MXOU3oBBPCcupgkWsWY=";
+    sha256 = "sha256-Dp3O41nzo7j5rqxDEkR4bFPv0CNGOO4kWXAf8iy+jDg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.oxij maintainers.lheckemann ];
+    maintainers = [ maintainers.oxij ];
   };
 
 }

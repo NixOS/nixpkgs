@@ -12,6 +12,7 @@
 , readline
 , shared-mime-info
 , xine-lib
+, xlibsWrapper
 , xorg
 }:
 
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     xine-lib
+    xlibsWrapper
   ] ++ (with xorg; [
     libXext
     libXft
@@ -54,7 +56,6 @@ stdenv.mkDerivation rec {
     libXtst
     libXv
     libXxf86vm
-    xlibsWrapper
     xorgproto
   ]);
 

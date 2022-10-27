@@ -1,21 +1,35 @@
-{ lib, stdenv
-, fetchurl
-, qmake4Hook
-, qt4
+{ lib
+, stdenv
+, fetchgit
+, qmake
+, wrapQtAppsHook
+, qtbase
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "qremotecontrol-server";
-  version = "2.4.1";
+  version = "unstable-2014-11-05"; # basically 2.4.2 + qt5
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/qrc/${version}/qremotecontrol-${version}.tar.bz2";
-    sha256 = "07hzc9959a56b49jgmcv8ry8b9sppklvqs9kns3qjj3v9d22nbrp";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/qrc/gitcode";
+    rev = "8f1c55eac10ac8af974c3c20157d90ef57f7308a";
+    sha256 = "sha256-AfFScec5/emG/f+yc5Zn37USIEWzGP/sBifE6Kx8d0E=";
   };
 
-  nativeBuildInputs = [ qmake4Hook ];
-  buildInputs = [ qt4 xorg.libXtst ];
+  patches = [
+    ./0001-fix-qt5-build-include-QDataStream.patch
+  ];
+
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtbase
+    xorg.libXtst
+  ];
 
   postPatch = ''
     substituteInPlace QRemoteControl-Server.pro \
@@ -26,8 +40,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
-    homepage = "https://qremote.org/";
-    downloadPage = "https://qremote.org/download.php#Download";
+    homepage = "https://sourceforge.net/projects/qrc/";
     description = "Remote control your desktop from your mobile";
     longDescription = ''
       With QRemoteControl installed on your desktop you can easily control
@@ -43,4 +56,3 @@ stdenv.mkDerivation rec {
     '';
   };
 }
-

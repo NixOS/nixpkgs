@@ -6,6 +6,7 @@
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -27,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-k78LL1urcQWxnF1lSoSi3CH3Ylhzo2Bk2Yvq5zbTYEo=";
+    hash = "sha256-IsUaTmY4XLFIGKpNdtz3+m1uEDr7DTaRbhLqFZiNIfA=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -76,9 +77,7 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
+                  '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
@@ -88,7 +87,11 @@ stdenv.mkDerivation rec {
                   '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+    '') +
+    (if hipSupport then ''
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+    '' else "");
 
   cmakeFlags =
     [
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport [
+    ++ optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"
@@ -159,8 +162,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # darwin.patch doesn't apply anymore, needs update
-    broken = stdenv.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they

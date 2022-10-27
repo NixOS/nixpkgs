@@ -3,7 +3,10 @@
 , langAda ? false
 , langJava ? false
 , langJit ? false
-, langGo }:
+, langGo
+, crossStageStatic
+, enableMultilib
+}:
 
 assert langJava -> lib.versionOlder version "7";
 assert langAda -> gnatboot != null; let
@@ -66,4 +69,27 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # is in fact building a cross compiler although it doesn't believe it.
 + lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
   substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
+''
+
+# Normally (for host != target case) --without-headers automatically
+# enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
+# gcc->clang "cross"-compilation manages to evade it: there
+# hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
+# We explicitly inhibit libc headers use in this case as well.
++ lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
+  export inhibit_libc=true
+''
+
++ lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
+  export linkLib64toLib=1
+''
+
+# On mips platforms, gcc follows the IRIX naming convention:
+#
+#  $PREFIX/lib   = mips32
+#  $PREFIX/lib32 = mips64n32
+#  $PREFIX/lib64 = mips64
+#
++ lib.optionalString (!enableMultilib && targetPlatform.isMips64n32) ''
+  export linkLib32toLib=1
 ''

@@ -16,11 +16,12 @@
 
 # tests
 , python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.46.3"; # N.B: if you change this, please update:
+  version = "1.48.1"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "sha256-RiXtKlRtlbqwrSxI904dgSu3da0A6Fwk+/hWHIG7A5E=";
+    hash = "sha256-It9oFenKoPDCOVxiKCGJc8i18zdDZCceR22HR5Tu1sw=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+  buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags = [
@@ -61,7 +62,6 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
   ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
   };
 
   meta = with lib; {

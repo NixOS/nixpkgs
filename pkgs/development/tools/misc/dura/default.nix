@@ -1,22 +1,28 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dura";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tkellogg";
     repo = "dura";
-    rev = "v0.1.0";
-    sha256 = "sha256-XnsR1oL9iImtj0X7wJ8Pp/An0/AVF5y+sD551yX4IGo=";
+    rev = "v${version}";
+    sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  cargoSha256 = "sha256-+Tq0a5cs2XZoT7yzTf1oIPd3kgD6SyrQqxQ1neTcMwk=";
+  cargoSha256 = "sha256-XOtPtOEKZMJzNeBZBT3Mc/KOjMOcz71byIv/ftcRP48=";
+
+  cargoPatches = [
+    ./Cargo.lock.patch
+  ];
 
   doCheck = false;
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   nativeBuildInputs = [
@@ -34,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/tkellogg/dura";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ drupol ];
   };
 }

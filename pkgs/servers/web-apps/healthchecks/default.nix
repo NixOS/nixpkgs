@@ -38,7 +38,7 @@ py.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     django
-    django_compressor
+    django-compressor
     fido2
     minio
     psycopg2

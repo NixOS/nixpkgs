@@ -25,9 +25,9 @@ in
 {
   options = {
     services.freeciv = {
-      enable = mkEnableOption ''freeciv'';
+      enable = mkEnableOption (lib.mdDoc ''freeciv'');
       settings = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Parameters of freeciv-server.
         '';
         default = {};
@@ -36,9 +36,9 @@ in
           options.Announce = mkOption {
             type = types.enum ["IPv4" "IPv6" "none"];
             default = "none";
-            description = "Announce game in LAN using given protocol.";
+            description = lib.mdDoc "Announce game in LAN using given protocol.";
           };
-          options.auth = mkEnableOption "server authentication";
+          options.auth = mkEnableOption (lib.mdDoc "server authentication");
           options.Database = mkOption {
             type = types.nullOr types.str;
             apply = pkgs.writeText "auth.conf";
@@ -47,25 +47,25 @@ in
                 backend="sqlite"
                 database="/var/lib/freeciv/auth.sqlite"
             '';
-            description = "Enable database connection with given configuration.";
+            description = lib.mdDoc "Enable database connection with given configuration.";
           };
           options.debug = mkOption {
             type = types.ints.between 0 3;
             default = 0;
-            description = "Set debug log level.";
+            description = lib.mdDoc "Set debug log level.";
           };
-          options.exit-on-end = mkEnableOption "exit instead of restarting when a game ends.";
-          options.Guests = mkEnableOption "guests to login if auth is enabled";
-          options.Newusers = mkEnableOption "new users to login if auth is enabled";
+          options.exit-on-end = mkEnableOption (lib.mdDoc "exit instead of restarting when a game ends.");
+          options.Guests = mkEnableOption (lib.mdDoc "guests to login if auth is enabled");
+          options.Newusers = mkEnableOption (lib.mdDoc "new users to login if auth is enabled");
           options.port = mkOption {
             type = types.port;
             default = 5556;
-            description = "Listen for clients on given port";
+            description = lib.mdDoc "Listen for clients on given port";
           };
           options.quitidle = mkOption {
             type = types.nullOr types.int;
             default = null;
-            description = "Quit if no players for given time in seconds.";
+            description = lib.mdDoc "Quit if no players for given time in seconds.";
           };
           options.read = mkOption {
             type = types.lines;
@@ -73,12 +73,12 @@ in
             default = ''
               /fcdb lua sqlite_createdb()
             '';
-            description = "Startup script.";
+            description = lib.mdDoc "Startup script.";
           };
           options.saves = mkOption {
             type = types.nullOr types.str;
             default = "/var/lib/freeciv/saves/";
-            description = ''
+            description = lib.mdDoc ''
               Save games to given directory,
               a sub-directory named after the starting date of the service
               will me inserted to preserve older saves.
@@ -86,7 +86,7 @@ in
           };
         };
       };
-      openFirewall = mkEnableOption "opening the firewall for the port listening for clients";
+      openFirewall = mkEnableOption (lib.mdDoc "opening the firewall for the port listening for clients");
     };
   };
   config = mkIf cfg.enable {

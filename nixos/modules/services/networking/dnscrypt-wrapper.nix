@@ -124,12 +124,12 @@ in {
   ###### interface
 
   options.services.dnscrypt-wrapper = {
-    enable = mkEnableOption "DNSCrypt wrapper";
+    enable = mkEnableOption (lib.mdDoc "DNSCrypt wrapper");
 
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will bind to this IP address.
       '';
     };
@@ -137,7 +137,7 @@ in {
     port = mkOption {
       type = types.int;
       default = 5353;
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will listen for DNS queries on this port.
       '';
     };
@@ -147,9 +147,9 @@ in {
       default = "2.dnscrypt-cert.${config.networking.hostName}";
       defaultText = literalExpression ''"2.dnscrypt-cert.''${config.networking.hostName}"'';
       example = "2.dnscrypt-cert.myresolver";
-      description = ''
+      description = lib.mdDoc ''
         The name that will be given to this DNSCrypt resolver.
-        Note: the resolver name must start with <literal>2.dnscrypt-cert.</literal>.
+        Note: the resolver name must start with `2.dnscrypt-cert.`.
       '';
     };
 
@@ -157,7 +157,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/public.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider public key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -167,7 +167,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/secret.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider secret key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -176,7 +176,7 @@ in {
     upstream.address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The IP address of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
@@ -184,7 +184,7 @@ in {
     upstream.port = mkOption {
       type = types.int;
       default = 53;
-      description = ''
+      description = lib.mdDoc ''
         The port of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
@@ -192,7 +192,7 @@ in {
     keys.expiration = mkOption {
       type = types.int;
       default = 30;
-      description = ''
+      description = lib.mdDoc ''
         The duration (in days) of the time-limited secret key.
         This will be automatically rotated before expiration.
       '';
@@ -201,7 +201,7 @@ in {
     keys.checkInterval = mkOption {
       type = types.int;
       default = 1440;
-      description = ''
+      description = lib.mdDoc ''
         The time interval (in minutes) between key expiration checks.
       '';
     };

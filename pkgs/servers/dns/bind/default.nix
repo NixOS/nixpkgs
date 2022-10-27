@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.4";
+  version = "9.18.8";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8neuUBWaAMMA65JqnF1RlTA4qTa9gkLWkT37bqxCdh0=";
+    sha256 = "sha256-Djw6uTeNuEug83Bz1nuhJa5PL/ja82bJ2yh+PxssNfA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -48,11 +48,25 @@ stdenv.mkDerivation rec {
     for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
+
+    cat <<EOF >$out/etc/rndc.conf
+    include "/etc/bind/rndc.key";
+    options {
+        default-key "rndc-key";
+        default-server 127.0.0.1;
+        default-port 953;
+    };
+    EOF
   '';
 
   doCheck = false; # requires root and the net
 
-  passthru.tests = { inherit (nixosTests) bind; };
+  passthru.tests = {
+    inherit (nixosTests) bind;
+    prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+    kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+  };
 
   meta = with lib; {
     homepage = "https://www.isc.org/bind/";

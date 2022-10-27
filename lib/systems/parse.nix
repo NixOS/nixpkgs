@@ -88,6 +88,9 @@ rec {
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
 
+    microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
+    microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
+
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
     mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
@@ -350,6 +353,11 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
+        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+          message = ''
+            The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
+          '';
+        }
       ];
     };
     gnuabi64     = { abi = "64"; };
@@ -360,6 +368,9 @@ rec {
     # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
     gnuabin32    = { abi = "n32"; };
     muslabin32   = { abi = "n32"; };
+
+    gnuabielfv2  = { abi = "elfv2"; };
+    gnuabielfv1  = { abi = "elfv1"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
@@ -464,6 +475,8 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
+          # Default ppc64 BE to ELFv2
+          else if isPower64 parsed && isBigEndian parsed then abis.gnuabielfv2
           else abis.gnu
         else                     abis.unknown;
     };

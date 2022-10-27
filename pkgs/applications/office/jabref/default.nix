@@ -1,74 +1,148 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
-, zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsa-lib, cairo, freetype, pango, gdk-pixbuf, glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook
+, makeDesktopItem
+, copyDesktopItems
+, unzip
+, xdg-utils
+, gtk3
+, jdk
+, gradle
+, perl
+}:
 
 stdenv.mkDerivation rec {
-  version = "5.5";
+  version = "5.7";
   pname = "jabref";
 
-  src = fetchurl {
-    url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}-portable_linux.tar.gz";
-    sha256 = "sha256-9MHNehyAmu7CiBp1rgb4zTkSqmjXm2tcmiGKFBFapKI=";
+  src = fetchFromGitHub {
+    owner = "JabRef";
+    repo = "jabref";
+    rev = "v${version}";
+    hash = "sha256-wzBaAaxGsMPh64uW+bBOiycYfVCW9H5FCn06r6XdxeE=";
   };
 
-  preferLocalBuild = true;
+  desktopItems = [
+    (makeDesktopItem {
+      comment = meta.description;
+      name = "JabRef %U";
+      desktopName = "JabRef";
+      genericName = "Bibliography manager";
+      categories = [ "Office" ];
+      icon = "jabref";
+      exec = "JabRef";
+      startupWMClass = "org.jabref.gui.JabRefMain";
+      mimeTypes = [ "text/x-bibtex" ];
+    })
+  ];
 
-  desktopItem = makeDesktopItem {
-    comment =  meta.description;
-    name = "jabref";
-    desktopName = "JabRef";
-    genericName = "Bibliography manager";
-    categories = [ "Office" ];
-    icon = "jabref";
-    exec = "jabref";
+  deps = stdenv.mkDerivation {
+    pname = "${pname}-deps";
+    inherit src version;
+
+    nativeBuildInputs = [ gradle perl ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      gradle --no-daemon downloadDependencies
+    '';
+    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
+    installPhase = ''
+      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
+        | sh
+    '';
+    # Don't move info to share/
+    forceShare = [ "dummy" ];
+    outputHashMode = "recursive";
+    outputHash = {
+      x86_64-linux = "sha256-OicHJVFxHGPE76bEDoLhkEhVcAJmplqjoh2I3nnVaLA=";
+      aarch64-linux = "sha256-8QWmweptL/+pSO6DhfBLaLcBrfKd4TDsDoXs4TgXvew=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
+  preBuild = ''
+    # Include CSL styles and locales in our build
+    cp -r buildres/csl/* src/main/resources/
 
-  systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsa-lib cairo freetype pango gdk-pixbuf glib ];
-  systemLibPaths = lib.makeLibraryPath systemLibs;
+    # Use the local packages from -deps
+    sed -i -e '/repositories {/a maven { url uri("${deps}") }' \
+      build.gradle \
+      buildSrc/build.gradle \
+      settings.gradle
+  '';
+
+  nativeBuildInputs = [
+    jdk
+    gradle
+    wrapGAppsHook
+    copyDesktopItems
+    unzip
+  ];
+
+  buildInputs = [ gtk3 ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    export GRADLE_USER_HOME=$(mktemp -d)
+    gradle \
+      --offline \
+      --no-daemon \
+      -PprojVersion="${version}" \
+      -PprojVersionInfo="${version} NixOS" \
+      -Dorg.gradle.java.home=${jdk} \
+      assemble
+
+    runHook postBuild
+  '';
+
+  dontWrapGApps = true;
 
   installPhase = ''
-    mkdir -p $out/share/java $out/share/icons
+    runHook preInstall
 
-    cp -r lib $out/lib
+    install -dm755 $out/share/java/jabref
+    install -Dm644 LICENSE.md $out/share/licenses/jabref/LICENSE.md
+    install -Dm644 src/main/resources/icons/jabref.svg $out/share/pixmaps/jabref.svg
 
-    for f in $out/lib/runtime/bin/j*; do
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${ lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
-    done
+    # script to support browser extensions
+    install -Dm755 buildres/linux/jabrefHost.py $out/lib/jabrefHost.py
+    install -Dm644 buildres/linux/native-messaging-host/firefox/org.jabref.jabref.json $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
+    sed -i -e "s|/opt/jabref|$out|" $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
 
-    for f in $out/lib/runtime/lib/*.so; do
-      patchelf \
-        --set-rpath "${systemLibPaths}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
-    done
+    # Resources in the jar can't be found, workaround copied from AUR
+    cp -r build/resources $out/share/java/jabref
 
-    # patching the libs in the JImage runtime image is quite impossible as there is no documented way
-    # of rebuilding the image after it has been extracted
-    # the image format itself is "intendedly not documented" - maybe one of the reasons the
-    # devolpers constantly broke "jimage recreate" and dropped it in OpenJDK 9 Build 116 Early Access
-    # so, for now just copy the image and provide our lib paths through the wrapper
+    # workaround for https://github.com/NixOS/nixpkgs/issues/162064
+    tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
+    unzip $out/lib/javafx-web-*-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
 
-    makeWrapper $out/lib/runtime/bin/java $out/bin/jabref \
-      --add-flags '-Djava.library.path=${systemLibPaths}' --add-flags "-p $out/lib/app -m org.jabref/org.jabref.JabRefLauncher" \
-      --prefix LD_LIBRARY_PATH : '${systemLibPaths}'
+    DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
+    rm $out/bin/*
 
-    cp -r ${desktopItem}/share/applications $out/share/
+    makeWrapper ${jdk}/bin/java $out/bin/JabRef \
+      "''${gappsWrapperArgs[@]}" \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --add-flags "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main" \
+      --add-flags "$DEFAULT_JVM_OPTS"
 
-    # we still need to unpack the runtime image to get the icon
-    mkdir unpacked
-    $out/lib/runtime/bin/jimage extract --dir=./unpacked lib/runtime/lib/modules
-    cp unpacked/org.jabref/icons/jabref.svg $out/share/icons/jabref.svg
+    # lowercase alias (for convenience and required for browser extensions)
+    ln -sf $out/bin/JabRef $out/bin/jabref
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+      binaryNativeCode # source bundles dependencies as jars
+    ];
     license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.gebner ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ gebner linsui ];
   };
 }

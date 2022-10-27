@@ -2,25 +2,29 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+, importlib-metadata
 , poetry-core
+, pydantic
 , pytestCheckHook
 , pythonOlder
+, rstcheck-core
+, typer
 , types-docutils
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "5.0.0";
+  version = "6.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "myint";
+    owner = "rstcheck";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vTUa/eP6/flxRLBuzdHoNoPoGAg6XWwu922az8tLgJM=";
+    hash = "sha256-dw/KggiZpKaFZMcTIaSBUhR4oQsZI3iSmEj9Sy80wTs=";
   };
 
   nativeBuildInputs = [
@@ -29,13 +33,25 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     docutils
+    rstcheck-core
     types-docutils
     typing-extensions
-  ];
+    pydantic
+    typer
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+    importlib-metadata
+  ] ++ typer.optional-dependencies.all;
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"' \
+      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"'
+  '';
 
   pythonImportsCheck = [
     "rstcheck"

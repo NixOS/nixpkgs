@@ -8,9 +8,9 @@
 , moto
 , numpy
 , pillow
-, protobuf3_8
+, protobuf
 , pytestCheckHook
-, pytorch
+, torch
 , six
 , soundfile
 , tensorboard
@@ -19,13 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.4";
+  version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    rev = "v${version}";
-    sha256 = "sha256-1jWpC64Ubl07Bday4h5ue0wuDj4yPTWL2nhjtoQBnM0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Np0Ibn51qL0ORwq1IY8lUle05MQDdb5XkI1uzGOKJno=";
   };
 
   # apparently torch API changed a bit at 1.6
@@ -33,11 +34,16 @@ buildPythonPackage rec {
     substituteInPlace tensorboardX/pytorch_graph.py --replace \
       "torch.onnx.set_training(model, False)" \
       "torch.onnx.select_model_mode_for_export(model, torch.onnx.TrainingMode.EVAL)"
+
+    # Version detection seems broken here, the version reported by python is
+    # newer than the protobuf package itself.
+    sed -i -e "s/'protobuf[^']*'/'protobuf'/" setup.py
   '';
 
-  # Wanted protobuf version is mentioned here:
-  # https://github.com/lanpa/tensorboardX/blob/0d08112618a2bbda4c028a15a137fed3afe77401/compile.sh#L6
-  nativeBuildInputs = [ which protobuf3_8 ];
+  nativeBuildInputs = [
+    which
+    protobuf
+  ];
 
   # required to make tests deterministic
   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
@@ -55,7 +61,7 @@ buildPythonPackage rec {
     moto
     pillow
     pytestCheckHook
-    pytorch
+    torch
     tensorboard
     torchvision
   ];
@@ -70,8 +76,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # we are not interested in linting errors
     "tests/test_lint.py"
-    # missing caffe2 dependency
-    "tests/test_caffe2.py"
   ];
 
   meta = with lib; {

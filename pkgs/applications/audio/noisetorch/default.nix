@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, copyDesktopItems }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "NoiseTorch";
@@ -12,15 +12,13 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.distribution=nix" ];
 
   subPackages = [ "." ];
-
-  nativeBuildInputs = [ copyDesktopItems ];
 
   preBuild = ''
     make -C c/ladspa/
@@ -30,7 +28,7 @@ buildGoModule rec {
 
   postInstall = ''
     install -D ./assets/icon/noisetorch.png $out/share/icons/hicolor/256x256/apps/noisetorch.png
-    copyDesktopItems assets/noisetorch.desktop $out/share/applications/
+    install -Dm444 ./assets/noisetorch.desktop $out/share/applications/noisetorch.desktop
   '';
 
   meta = with lib; {

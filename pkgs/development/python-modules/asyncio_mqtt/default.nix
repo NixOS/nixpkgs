@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     paho-mqtt
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     async_generator
   ];
 

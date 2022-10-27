@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, mkfontscale }:
+{ lib, stdenv, fetchzip, xorg }:
 
 stdenv.mkDerivation {
   pname = "profont";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
     mkdir -p "$out/share/fonts/misc"

@@ -5,10 +5,10 @@
 , ninja
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , itstool
 , desktop-file-utils
-, vala_0_56
+, vala
 , gobject-introspection
 , libxml2
 , gtk4
@@ -17,7 +17,7 @@
 , sound-theme-freedesktop
 , gsettings-desktop-schemas
 , gnome-desktop
-, geocode-glib
+, geocode-glib_2
 , gnome
 , gdk-pixbuf
 , geoclue2
@@ -27,24 +27,27 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "DnEY20oDLjzqMhLZjLuCjWt88i/gXgxfyLORxqPdb+A=";
+    sha256 = "sHQ7cNAIgKo7zcx/fzTIwihiV7XIFzfU+YG8jE9PmB0=";
   };
 
   nativeBuildInputs = [
-    vala_0_56
+    vala
     meson
     ninja
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
+    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
+    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
+    gsound
   ];
 
   buildInputs = [
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gdk-pixbuf
     gnome-desktop
-    geocode-glib
+    geocode-glib_2
     geoclue2
     libgweather
     gsound

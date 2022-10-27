@@ -2,7 +2,7 @@
   "url": "https://github.com/omertuc/tree-sitter-go-work",
   "rev": "6dd9dd79fb51e9f2abc829d5e97b15015b6a8ae2",
   "date": "2021-12-18T20:13:22+01:00",
-  "path": "/nix/store/7a4raw2gi4xgbg858cs0davbplj7m8rq-tree-sitter-gowork",
+  "path": "/nix/store/7a4raw2gi4xgbg858cs0davbplj7m8rq-tree-sitter-go-work",
   "sha256": "1kzrs4rpby3b0h87rbr02k55k3mmkmdy7rvl11q95b3ym0smmyqb",
   "fetchLFS": false,
   "fetchSubmodules": false,

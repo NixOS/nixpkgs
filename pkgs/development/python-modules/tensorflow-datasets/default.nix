@@ -37,17 +37,18 @@
 , termcolor
 , tifffile
 , tqdm
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.5.2";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "v${version}";
-    sha256 = "sha256-OZpaY/6BMISq5IeDXyuyu5L/yG+DwlFliw4BsipPOLg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-z52UZz9d1AaZklLOPbWuzByEl1hJ6ra4Hoz6eNGD+hg=";
   };
 
   patches = [
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     scipy
     tensorflow
     tifffile
+    zarr
   ];
 
   disabledTestPaths = [
@@ -123,6 +125,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/image/lsun_test.py"
 
     # Requires `envlogger` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
     "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`

@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";
 
   outputs = [ "out" "lib" "dev" ];
 

@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.3";
+  version = "1.12.3";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "sha256-GRPn0xPWtCayOdmA6M+KQrObAHtZIJLEydXaKhhO5IU=";
+    sha256 = "sha256-Aejm3VR4f69jDdG16vud2sj/9jQ8n5f34oed1SGEcXo=";
   };
 
   nativeBuildInputs = [ autoconf

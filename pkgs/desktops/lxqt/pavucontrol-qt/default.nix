@@ -9,6 +9,7 @@
 , qtbase
 , qttools
 , qtx11extras
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -36,7 +37,7 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/pavucontrol-qt";

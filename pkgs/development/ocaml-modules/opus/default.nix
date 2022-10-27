@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "opus";
-  version = "0.2.1";
+  version = "0.2.2";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-opus";
     rev = "v${version}";
-    sha256 = "09mgnprhhs1adqm25c0qjhknswbh6va3jknq06fnp1jszszcjf4s";
+    sha256 = "sha256-Ghfqw/J1oLbTJpYJaiB5M79jaA6DACvyxBVE+NjnPkg=";
   };
 
   nativeBuildInputs = [ pkg-config ];

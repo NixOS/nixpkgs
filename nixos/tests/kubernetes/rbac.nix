@@ -84,7 +84,11 @@ let
   kubectlImage = pkgs.dockerTools.buildImage {
     name = "kubectl";
     tag = "latest";
-    contents = [ copyKubectl pkgs.busybox kubectlPod2 ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ copyKubectl pkgs.busybox kubectlPod2 ];
+    };
     config.Entrypoint = ["/bin/sh"];
   };
 

@@ -5,11 +5,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
-  version = "3.0.14";
+  version = "3.0.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
-    sha256 = "tztkOg1Wl9HzltdDFEjoht2AVmh4lXjj4aKCd8lShDU=";
+    sha256 = "sha256-kxole5xcG6Zf9Rnxg3PEOKJoJfLbeGaxY+ltGxaPIOo=";
   };
 
   buildInputs = [ pciutils ];
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://git.code.sf.net/p/gnu-efi/code";
   };

@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/WebAssembly/binaryen/commit/93b8849d9f98ef7ed812938ff0b3219819c2be77.patch";
       sha256 = "sha256-Duan/B9A+occ5Lj2SbRX793xIfhzHbdYPI5PyTNCZoU=";
     })
+    # https://github.com/WebAssembly/binaryen/pull/4913
+    (fetchpatch {
+      url = "https://github.com/WebAssembly/binaryen/commit/b70fe755aa4c90727edfd91dc0a9a51febf0239d.patch";
+      sha256 = "sha256-kjPLbdiMVQepSJ7J1gK6dRSMI/2SsH39k7W5AMOIrkM=";
+    })
   ];
 
   nativeBuildInputs = [ cmake python3 ];

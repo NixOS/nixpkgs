@@ -180,18 +180,27 @@ See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
 
 #### Preparation {#javascript-yarn2nix-preparation}
 
-You will need at least a yarn.lock and yarn.nix file.
+You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
 
-- Generate a yarn.lock in upstream if it is not already there.
-- `yarn2nix > yarn.nix` will generate the dependencies in a Nix format.
+If the downloaded files contain the `package.json` and `yarn.lock` files they can be used like this:
+
+```nix
+offlineCache = fetchYarnDeps {
+  yarnLock = src + "/yarn.lock";
+  sha256 = "....";
+};
+```
 
 #### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
 
-This will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React...), you will need to explicitly override the build step with your instructions. It's important to use the `--offline` flag. For example if you script is `"build": "something"` in package.json use:
+`mkYarnPackage` will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.
+
+It's important to use the `--offline` flag. For example if you script is `"build": "something"` in `package.json` use:
 
 ```nix
 buildPhase = ''
-  yarn build --offline
+  export HOME=$(mktemp -d)
+  yarn --offline build
 '';
 ```
 
@@ -201,15 +210,27 @@ The dist phase is also trying to build a binary, the only way to override it is 
 distPhase = "true";
 ```
 
-The configure phase can sometimes fail because it tries to be too clever. One common override is:
+The configure phase can sometimes fail because it makes many assumptions which may not always apply. One common override is:
 
 ```nix
-configurePhase = "ln -s $node_modules node_modules";
+configurePhase = ''
+  ln -s $node_modules node_modules
+'';
+```
+
+or if you need a writeable node_modules directory:
+
+```nix
+configurePhase = ''
+  cp -r $node_modules node_modules
+  chmod +w node_modules
+'';
 ```
 
 #### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
 
-This will generate a derivation including the node_modules. If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way. [Plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39) offers a good example of how to do this.
+This will generate a derivation including the `node_modules` directory.
+If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
 
 #### Overriding dependency behavior
 

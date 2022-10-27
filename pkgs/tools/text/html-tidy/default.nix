@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "htacg";
     repo = "tidy-html5";
     rev = version;
-    sha256 = "sha256-ZMz0NySxzX2XHiqB8f5asvwjIG6kdIcq8Gb3EbAxBaU=";
+    hash = "sha256-vzVWQodwzi3GvC9IcSQniYBsbkJV20iZanF33A0Gpe0=";
   };
 
   # https://github.com/htacg/tidy-html5/pull/1036

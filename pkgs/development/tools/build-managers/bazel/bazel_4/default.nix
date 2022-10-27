@@ -135,7 +135,9 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  arch = stdenv.hostPlatform.parsed.cpu.name;
+
+  # on aarch64 Darwin, `uname -m` returns "arm64"
+  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
@@ -244,6 +246,10 @@ stdenv.mkDerivation rec {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
+
+    # disable suspend detection during a build inside Nix as this is
+    # not available inside the darwin sandbox
+    ../bazel_darwin_sandbox.patch
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
 

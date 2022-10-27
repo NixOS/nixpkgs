@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -116,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.6";
+      version = "0.23.9";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-pVIbaCg3qDw7bjhLQHz6Rr3m498LeKNQVhRk4m5tpVQ=";
+        sha256 = "sha256-eYP4+WDYwAw7TboS9V8ncdQoAC0vbjSaZxmru1Unejw=";
       };
 
       buildInputs = [
@@ -144,6 +144,14 @@ let
         pkg-config
       ]
         ++ concatAttrVals features_ nativeFeatureDependencies;
+
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
+        substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
+          --replace kAudioObjectPropertyElement{Main,Master} \
+          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+      '';
 
       # Otherwise, the meson log says:
       #
@@ -179,7 +187,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2Only;
-        maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
+        maintainers = with maintainers; [ astsmtl ehmry tobim ];
         platforms   = platforms.unix;
 
         longDescription = ''

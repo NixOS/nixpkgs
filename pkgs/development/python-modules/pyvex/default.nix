@@ -8,19 +8,24 @@
 , future
 , pycparser
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.7";
+  version = "9.2.24";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vSVkredOekqUAre38jDCE8f8OXd0cNmZ2SmpEQ7+I28=";
+    hash = "sha256-PRrr/ry4OEdn45y5AiW6uwcKfxvDUwt1ylfgsOR47HI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     archinfo

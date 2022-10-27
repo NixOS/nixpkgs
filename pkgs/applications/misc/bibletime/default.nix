@@ -1,4 +1,5 @@
-{ lib, mkDerivation
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , docbook_xml_dtd_45
@@ -14,15 +15,15 @@
 , sword
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibletime";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "bibletime";
-    repo = "bibletime";
-    rev = "v${version}";
-    hash = "sha256-8X5LkquALFnG0yRayZYjeymHDcOzINBv0MXeVBsOnfI=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4O8F5/EyoJFJBEWOAs9lzN3TKuu/CEdKfPaOF8gNqps=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +56,10 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A powerful cross platform Bible study tool";
     homepage = "http://www.bibletime.info/";
-    platforms = platforms.linux;
+    description = "A powerful cross platform Bible study tool";
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
-}
+})

@@ -26,27 +26,23 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.12.4";
+  version = "3.15.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
-    rev = "v${version}";
-    sha256 = "sha256-TAu2Ls553t7wJ/Jhgu+Ff+H4P6az0Du8OL00JjZyCDs=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sCpV4pmBIBFxFpDK7H9riQ+0174xCn6uVztGDAEeoII=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test" \
-      --replace "python setup.py --quiet install" ""
+      --replace "test flaketest" "test"
     substituteInPlace setup.py \
       --replace "'tox'," ""
-    substituteInPlace requirements.txt \
-      --replace "jinja2>=2.11,<3.0" "jinja2" \
-      --replace "markupsafe==2.0.1" "markupsafe"
   '';
 
   propagatedBuildInputs = [

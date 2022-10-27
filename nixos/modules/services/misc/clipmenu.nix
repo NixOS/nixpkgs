@@ -7,13 +7,13 @@ let
 in {
 
   options.services.clipmenu = {
-    enable = mkEnableOption "clipmenu, the clipboard management daemon";
+    enable = mkEnableOption (lib.mdDoc "clipmenu, the clipboard management daemon");
 
     package = mkOption {
       type = types.package;
       default = pkgs.clipmenu;
       defaultText = literalExpression "pkgs.clipmenu";
-      description = "clipmenu derivation to use.";
+      description = lib.mdDoc "clipmenu derivation to use.";
     };
   };
 

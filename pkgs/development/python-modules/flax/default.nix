@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, jax
 , keras
 , lib
 , matplotlib
@@ -10,26 +11,30 @@
 , pytest-xdist
 , pytestCheckHook
 , tensorflow
+, fetchpatch
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.4.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0j5ngdndm9nm49gcda7m36qzwk5lcbi4jnij9fi96vld54ip6f6v";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-fZiODo+izOwGjCCTvi11GvUG/VQL1DV9bNXKjvIIw4A=";
   };
 
   buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
+    jax
     matplotlib
     msgpack
     numpy
     optax
+    rich
   ];
 
   pythonImportsCheck = [
@@ -59,6 +64,22 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+  ];
+
+  disabledTests = [
+    # See https://github.com/google/flax/issues/2554.
+    "test_async_save_checkpoints"
+    "test_jax_array0"
+    "test_jax_array1"
+    "test_keep0"
+    "test_keep1"
+    "test_optimized_lstm_cell_matches_regular"
+    "test_overwrite_checkpoints"
+    "test_save_restore_checkpoints_target_empty"
+    "test_save_restore_checkpoints_target_none"
+    "test_save_restore_checkpoints_target_singular"
+    "test_save_restore_checkpoints_w_float_steps"
+    "test_save_restore_checkpoints"
   ];
 
   meta = with lib; {

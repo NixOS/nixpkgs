@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                 "@CMAKE_INSTALL_LIBDIR@"
   '';
 
-  checkPhase = "LD_LIBRARY_PATH=$(pwd) python ./run_tests";
+  checkPhase = "python ./run_tests";
 
   meta = with lib; {
     description = "C++11 port of docopt";

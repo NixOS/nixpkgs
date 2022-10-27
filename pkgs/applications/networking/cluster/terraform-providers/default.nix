@@ -1,10 +1,10 @@
 { lib
 , stdenv
 , buildGoModule
-, buildGo118Module
 , fetchFromGitHub
 , callPackage
 , config
+, writeShellScript
 
 , cdrtools # libvirt
 }:
@@ -17,17 +17,18 @@ let
      , repo
      , rev
      , version
-     , sha256
-     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
+     , hash ? throw "use hash instead of sha256" # added 2202/09
+     , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderGoModule ? buildGoModule
-     , # Looks like "registry.terraform.io/vancluever/acme"
-       provider-source-address
+       # Looks like "registry.terraform.io/vancluever/acme"
+     , provider-source-address
+     , ...
      }@attrs:
       mkProviderGoModule {
         pname = repo;
-        inherit vendorSha256 version deleteVendor proxyVendor;
+        inherit vendorHash version deleteVendor proxyVendor;
         subPackages = [ "." ];
         doCheck = false;
         # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
@@ -36,7 +37,7 @@ let
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
         src = fetchFromGitHub {
           name = "source-${rev}";
-          inherit owner repo rev sha256;
+          inherit owner repo rev hash;
         };
 
         # Move the provider to libexec
@@ -48,7 +49,12 @@ let
         '';
 
         # Keep the attributes around for later consumption
-        passthru = attrs;
+        passthru = attrs // {
+          updateScript = writeShellScript "update" ''
+            provider="$(basename ${provider-source-address})"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
+          '';
+        };
       });
 
   list = lib.importJSON ./providers.json;
@@ -59,20 +65,8 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      brightbox = automated-providers.brightbox.override { mkProviderGoModule = buildGo118Module; };
-      # remove with >= 1.6.0
-      # https://github.com/equinix/terraform-provider-equinix/commit/5b4d6415d23dc2ee56988c4b1458fbb51c8cc750
-      equinix = automated-providers.equinix.overrideAttrs (a: {
-        src = a.src.overrideAttrs (a: {
-          postFetch = (a.postFetch or "") + lib.optionalString (!stdenv.isDarwin) ''
-            rm $out/cmd/migration-tool/README.md
-          '';
-        });
-      });
-      # mkisofs needed to create ISOs holding cloud-init data,
-      # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+      # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
-      linode = automated-providers.linode.override { mkProviderGoModule = buildGo118Module; };
     };
 
   # Put all the providers we not longer support in this list.
@@ -83,6 +77,8 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       b2 = removed "b2" "2022/06";
+      dome9 = removed "dome9" "2022/08";
+      ncloud = removed "ncloud" "2022/08";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
       template = archived "template" "2022/05";

@@ -27,24 +27,22 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "37.0.2"; # Also update the hash in vectors.nix
+  version = "38.0.1"; # Also update the hash in vectors.nix
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8iStJTzJzqdWj0kHcAfSJj76VzlqLy94EUBm/VS1xo4=";
+    hash = "sha256-HbPYB6FJMfoxf5ZDVpXZ7Dhr57hLYYzGHPpdCLCuM9c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    sha256 = "sha256-qvrxvneoBXjP96AnUPyrtfmCnZo+IriHR5HbtWQ5Gk8=";
+    hash = "sha256-o8l13fnfEUvUdDasq3LxSPArozRHKVsZfQg9DNR6M6Q=";
   };
 
   cargoRoot = "src/rust";
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi

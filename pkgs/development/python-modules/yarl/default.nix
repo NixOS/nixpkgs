@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RTmbRtYMJTMnpGDpmFZ1IAn87l9dPICy98DK4cONVt0=";
+    sha256 = "sha256-r4h4RbjC4GDrVgX/crby3SqrenYTeTc/2J0xT0dSq78=";
   };
 
   postPatch = ''

@@ -5,7 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
-, vulkan-loader
+, vulkan-loader, glslang
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
@@ -14,6 +14,7 @@
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, enablePatentEncumberedCodecs ? true
 , libclc
 , jdupes
 }:
@@ -34,8 +35,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  # 22.1 on darwin won't build: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6519
-  version = if stdenv.isDarwin then "22.0.4" else "22.1.1";
+  version = "22.2.1";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -44,15 +44,13 @@ self = stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
+      "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = {
-      "22.1.1" = "1w8fpki67238l4yc92hsnsh4402py9zspirbmirxp577zxjhi526";
-      "22.0.4" = "1m0y8wgy48hmcidsr7sbk5hcw3v0qr8359fd2x34fvl2z9c1z5y7";
-    }.${version};
+    sha256 = "0079beac0a33f45e7e0aec59e6913eafbc4268a3f1e2e330017440494f91b13c";
   };
 
   # TODO:
@@ -61,39 +59,21 @@ self = stdenv.mkDerivation {
   patches = [
     # fixes pkgsMusl.mesa build
     ./musl.patch
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-endian.patch";
-      sha256 = "sha256-eRc91qCaFlVzrxFrNUPpAHd1gsqKsLCCN0IW8pBQcqk=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9f58f303ae23754c95d5d1fe87a98b5a2d8f271/srcpkgs/mesa/patches/musl-stacksize.patch";
-      sha256 = "sha256-bEp0AWddsw1Pc3rxdKN8fsrX4x2TQEzMUa5afhLXGsg=";
-    })
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Fix aarch64-darwin build, remove when upstreaam supports it out of the box.
-    # See: https://gitlab.freedesktop.org/mesa/mesa/-/issues/1020
-    ./aarch64-darwin.patch
   ];
 
   postPatch = ''
     patchShebangs .
-
-    substituteInPlace meson.build --replace \
-      "find_program('pkg-config')" \
-      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
 
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace meson.build --replace \
-      "find_program('nm')" \
-      "find_program('${stdenv.cc.targetPrefix}nm')"
+    substituteInPlace src/amd/vulkan/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}/share'"
   '';
 
   outputs = [ "out" "dev" "drivers" ]
@@ -138,7 +118,8 @@ self = stdenv.mkDerivation {
   ] ++ optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ];
+  ] ++ optional enablePatentEncumberedCodecs
+    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
@@ -159,7 +140,7 @@ self = stdenv.mkDerivation {
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
-    jdupes
+    jdupes glslang
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
     wayland-scanner
   ];

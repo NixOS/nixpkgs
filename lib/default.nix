@@ -23,6 +23,7 @@ let
 
     # packaging
     customisation = callLibs ./customisation.nix;
+    derivations = callLibs ./derivations.nix;
     maintainers = import ../maintainers/maintainer-list.nix;
     teams = callLibs ../maintainers/team-list.nix;
     meta = callLibs ./meta.nix;
@@ -102,12 +103,13 @@ let
       getName getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
-      toInt readPathsFromFile fileContents;
+      toInt toIntBase10 readPathsFromFile fileContents;
     inherit (self.stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing;
+    inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe;

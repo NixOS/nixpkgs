@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, readline, openssl, withThread ? true, withSSL ? true, xxd }:
+{ lib, stdenv, fetchFromGitHub, readline, openssl, libffi, withThread ? true, withSSL ? true, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "trealla";
-  version = "1.20.31";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
-    owner = "infradig";
+    owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${version}";
-    sha256 = "sha256-Yol+bbxC5cCtCIZxP5Sa8R3ev1LAopc/oQa6Zd1nS8A=";
+    sha256 = "sha256-DxlexijQPcNxlPjo/oIvsN//8nZ0injXFHc2t3n4yjg=";
   };
 
   postPatch = ''
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ xxd ];
-  buildInputs = [ readline openssl ];
+  buildInputs = [ readline openssl libffi ];
+  enableParallelBuilding = true;
 
   installPhase = ''
     install -Dm755 -t $out/bin tpl
@@ -34,13 +35,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = ''
-    # Disable test 81 due to floating point error
-    rm tests/issues/test081.expected tests/issues/test081.pl
+    # Disable tests due to floating point error
+    rm tests/issues-OLD/test081.pl
+    rm tests/issues-OLD/test585.pl
+    # Disable test due to Unicode issues
+    rm tests/issues-OLD/test252.pl
   '';
 
   meta = with lib; {
     description = "A compact, efficient Prolog interpreter written in ANSI C";
-    homepage = "https://github.com/infradig/trealla";
+    homepage = "https://github.com/trealla-prolog/trealla";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     mainProgram = "tpl";

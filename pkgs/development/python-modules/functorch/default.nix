@@ -5,28 +5,28 @@
 , ninja
 , pytestCheckHook
 , python
-, pytorch
+, torch
 , pybind11
 , which
 }:
 
 buildPythonPackage rec {
   pname = "functorch";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FidM04Q3hkGEDr4dthJv0MWtGiRfnWxJoyzu7Wl3SD8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-33skKk5aAIHn+1149ifolXPA+tpQ+WROAZvwPeGBbrA=";
   };
 
   # Somewhat surprisingly pytorch is actually necessary for the build process.
   # `setup.py` imports `torch.utils.cpp_extension`.
   nativeBuildInputs = [
     ninja
-    pytorch
+    torch
     which
   ];
 

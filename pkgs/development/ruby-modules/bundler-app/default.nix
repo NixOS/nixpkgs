@@ -27,6 +27,7 @@
 , allowSubstitutes ? false
 , installManpages ? true
 , meta ? {}
+, nativeBuildInputs ? []
 , buildInputs ? []
 , postBuild ? ""
 , gemConfig ? null
@@ -34,14 +35,19 @@
 }@args:
 
 let
-  basicEnv = (callPackage ../bundled-common {}) args;
+  basicEnv = (callPackage ../bundled-common {
+    inherit ruby;
+  }) args;
 
   cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
-    buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+    nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != []) [ makeWrapper ];
 
-    meta = { platforms = ruby.meta.platforms; } // meta;
+    meta = {
+      mainProgram = pname;
+      inherit (ruby.meta) platforms;
+    } // meta;
     passthru = basicEnv.passthru // {
       inherit basicEnv;
       inherit (basicEnv) env;

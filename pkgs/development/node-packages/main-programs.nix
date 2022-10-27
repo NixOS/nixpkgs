@@ -5,10 +5,11 @@
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
   "@squoosh/cli" = "squoosh-cli";
-  "@webassemblyjs/cli" = "wasm2wast";
+  "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
   typescript = "tsc";
   vue-cli = "vue";
+  "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable whose name differs from the package's `name`.
   "@angular/cli" = "ng";
@@ -19,7 +20,6 @@
   "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@google/clasp" = "clasp";
-  "@hyperspace/cli" = "hyp";
   "@medable/mdctl-cli" = "mdctl";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";
@@ -28,10 +28,10 @@
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
-  "@webassemblyjs/repl" = "wasm";
+  "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
-  "@webassemblyjs/wasm-text-gen" = "wasmgen";
-  "@webassemblyjs/wast-refmt" = "wast-refmt";
+  "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
+  "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
   balanceofsatoshis = "bos";
   carbon-now-cli = "carbon-now";
@@ -80,4 +80,5 @@
   vscode-json-languageserver-bin = "json-languageserver";
   vue-language-server = "vls";
   webtorrent-cli = "webtorrent";
+  "@zwave-js/server" = "zwave-server";
 }

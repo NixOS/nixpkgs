@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.4.19";
+  version = "2.4.21";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7kX7gC/1jSZGgV3ZhfebMIn/Y5gXkz22GDP2zpiwUZ4=";
+    hash = "sha256-KZVRLXXaJYMqHzjxTfQaD0u7n3ACBEk3fLOmqwybNhM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
@@ -43,13 +43,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --bash --name ${pname}  contrib/completions/complete.bash
     installShellCompletion --zsh  --name _${pname} contrib/completions/complete.zsh
+    installShellCompletion --fish --name ${pname}  contrib/completions/complete.fish
   '';
 
   meta = with lib; {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ srgom peterhoeg ];
+    maintainers = with maintainers; [ srgom peterhoeg bertof ];
     platforms = platforms.linux;
   };
 }

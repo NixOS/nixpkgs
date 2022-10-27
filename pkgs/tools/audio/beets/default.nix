@@ -31,12 +31,12 @@ lib.makeExtensible (self: {
   beets-minimal = self.beets.override { disableAllPlugins = true; };
 
   beets-unstable = callPackage ./common.nix {
-    version = "unstable-2022-05-08";
+    version = "unstable-2022-08-27";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "e06cf7969bfdfa4773049699320471be45d56054";
-      hash = "sha256-yWwxYSzSSmx2UfCn0EBH23hQGZKSRn/c8ryvxLUeHdM=";
+      rev = "50bd693057de472470ab5175fae0cdb5b75811c6";
+      hash = "sha256-91v1StaByG60ryhQqByBXu6sFCjk0qT0nsUPnocSEE4=";
     };
     pluginOverrides = {
       # unstable has a new plugin, so we register it here.

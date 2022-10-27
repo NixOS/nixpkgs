@@ -43,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2022.1";
+  version = "2022.4";
 
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
-    sha256 = "0s12y9j75k59kqkcvfflb1v5p3ny7xgc1m5bd635lvql1bv46c3i";
+    sha256 = "sha256-OwTtWzlZjHNFSN5/UjFJbcrPCv9+ucWYEL2idYjeozU=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

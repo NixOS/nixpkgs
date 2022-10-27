@@ -1,6 +1,7 @@
 { lib, stdenv, fetchzip
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
-, ocamlPackages_4_10, ocamlPackages_4_12, fetchpatch, makeWrapper, coq2html
+, ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
+, fetchpatch, makeWrapper, coq2html
 }@args:
 let lib = import ../build-support/coq/extra-lib.nix {inherit (args) lib;}; in
 let
@@ -11,7 +12,7 @@ let
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix
         {inherit lib stdenv fetchzip; };
-      mkCoqDerivation = callPackage ../build-support/coq {};
+      mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq {});
 
       contribs = recurseIntoAttrs
         (callPackage ../development/coq-modules/contribs {});
@@ -36,6 +37,7 @@ let
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coqeal = callPackage ../development/coq-modules/coqeal {};
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
+      coqide = callPackage ../development/coq-modules/coqide {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
@@ -74,6 +76,7 @@ let
       mathcomp-character = self.mathcomp.character;
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
@@ -81,6 +84,10 @@ let
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
+      metacoq-template-coq = self.metacoq.template-coq;
+      metacoq-pcuic        = self.metacoq.pcuic;
+      metacoq-safechecker  = self.metacoq.safechecker;
+      metacoq-erasure      = self.metacoq.erasure;
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -124,6 +131,7 @@ let
       ocamlPackages_4_09
       ocamlPackages_4_10
       ocamlPackages_4_12
+      ocamlPackages_4_14
     ;
   };
 in rec {
@@ -165,7 +173,7 @@ in rec {
   coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages_8_15 = mkCoqPackages coq_8_15;
   coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages = recurseIntoAttrs coqPackages_8_15;
+  coqPackages = recurseIntoAttrs coqPackages_8_16;
   coq = coqPackages.coq;
 
 }

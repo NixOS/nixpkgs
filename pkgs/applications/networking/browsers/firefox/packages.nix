@@ -3,11 +3,20 @@
 rec {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "102.0";
+    version = "106.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "c7dd6d8d74c46573b16d097a5e5d230669e5778cd680b3b6f30510e989d21543138ced3bb013998b76614aa380b28efd8542450c591d8b724e03bd163d012057";
+      sha512 = "2aad75c05c3398c19842be46dcde275581344b09f0c65b51a630cef201545996ee00f8020f52a0d7b6416d9ad52cbd5c71b8f1cdf47cd18e4abf1ba21f7cdb93";
     };
+
+    # This patch could be applied anywhere (just rebuild, no effect)
+    extraPatches = lib.optionals stdenv.isAarch64 [
+      (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1791275
+        name = "no-sysctl-aarch64.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/0efaf5a00aaceeed679885e4cd393bd9a5fcd0ff";
+        hash = "sha256-wS/KufeLFxCexQalGGNg8+vnQhzDiL79OLt8FtL/JJ8=";
+      })
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -27,12 +36,12 @@ rec {
   };
 
   firefox-esr-102 = buildMozillaMach rec {
-    pname = "firefox-esr";
-    version = "102.0esr";
+    pname = "firefox-esr-102";
+    version = "102.4.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "76494363ffdbd33b61912ac72b5cc15450e4b2936898c84fcf3980ccfa6d7ecc05524a63a60827d6caba999ada5cfd6f121e893ba0587778ce11654d0daf21d7";
+      sha512 = "30d9e6ef04fd86516e2cea3c797ec99af4c96b08576bb3409c0026da4fd1218167f89a007109e1fa4e2571f98f2dbe5ab58a26473533d45301f75b90ec3dbf28";
     };
 
     meta = {
@@ -48,32 +57,7 @@ rec {
     tests = [ nixosTests.firefox-esr-102 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-102-unwrapped";
-      versionSuffix = "esr";
-    };
-  };
-
-  firefox-esr-91 = buildMozillaMach rec {
-    pname = "firefox-esr";
-    version = "91.11.0esr";
-    applicationName = "Mozilla Firefox ESR";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "bff3a399c03bd1cdaaec0b6963b1558aa35b6338b6c02042ffd65fec0aedd344d01718692e881332f5f352c32da15ba09a20a09ee072200b47ae840bc0585a96";
-    };
-
-    meta = {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-      homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ hexa ];
-      platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-      license = lib.licenses.mpl20;
-    };
-    tests = [ nixosTests.firefox-esr-91 ];
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-91-unwrapped";
+      versionPrefix = "102";
       versionSuffix = "esr";
     };
   };

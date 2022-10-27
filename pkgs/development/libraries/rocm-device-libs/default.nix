@@ -3,31 +3,31 @@
 , writeScript
 , cmake
 , clang
-, clang-unwrapped
-, lld
 , llvm
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";
-  version = "5.1.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${version}";
-    hash = "sha256-kmCk+BpM1QCJzEAkru2LK3CGwVXNUEZBFicmwnrPcx8=";
+    hash = "sha256-rKMe0B/pkDek/ZU37trnJNa8aqvlwxobPb1+VTx/bJU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang lld llvm ];
+  buildInputs = [ clang llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${clang-unwrapped}/lib/cmake/clang"
+    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${llvm}/lib/cmake/clang"
     "-DLLVM_TARGETS_TO_BUILD='AMDGPU;X86'"
     "-DCLANG=${clang}/bin/clang"
   ];
+
+  patches = [ ./cmake.patch ];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-Device-Libs";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     platforms = platforms.linux;
   };
 }

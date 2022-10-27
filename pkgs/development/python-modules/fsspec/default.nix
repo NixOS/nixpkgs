@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.5.0";
+  version = "2022.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-WOzw9UPF8LZuOhp5p/CJUUJcYpAfixV6GiI8tfnoklc=";
+    hash = "sha256-eT1zqTbU5kfQ7bvzigT9579HfXU6VaOEjRg8VG/DHMI=";
   };
 
   propagatedBuildInputs = [

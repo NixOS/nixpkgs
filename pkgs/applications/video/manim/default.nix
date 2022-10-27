@@ -45,14 +45,14 @@ let
 in python3.pkgs.buildPythonApplication rec {
   pname = "manim";
   format = "pyproject";
-  version = "0.15.2";
+  version = "0.16.0.post0";
   disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "l5JiFWCMQbGnwRRtYzCHBXdVzWBrTNPdcIYaAt/wRNA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
   };
 
   nativeBuildInputs = [

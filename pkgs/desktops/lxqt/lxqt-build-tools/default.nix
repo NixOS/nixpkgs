@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , mkDerivation
+, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -8,7 +9,7 @@
 , qtbase
 , glib
 , perl
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -21,6 +22,21 @@ mkDerivation rec {
     rev = version;
     sha256 = "vzppKTDwADBG5pOaluT858cWCKFFRaSbHz2Qhe6799E=";
   };
+
+  patches = [
+    # in master post 0.11.0, see https://github.com/lxqt/lxqt-build-tools/pull/76
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/lxqt/lxqt-build-tools/pull/76/commits/fa9672b671ede3f46b004f81580f9afb50fedf00.patch";
+      sha256 = "0dl7n1afcc6ky9vd9lpc65p9grpszpql7lfjq2vlzlilixnv8xv1";
+    })
+    # Fix build failure of libqtxdg with GLib 2.73.1+
+    # https://github.com/lxqt/lxqt-build-tools/pull/79
+    (fetchpatch {
+      url = "https://github.com/lxqt/lxqt-build-tools/commit/4991811d9212ec1176af6d1cbe88aa37efad4836.patch";
+      sha256 = "sha256-PsYJKonMG6A9O4Li+RC1qBjFUzYgxVAwzSqHq/phmPc=";
+    })
+  ];
 
   postPatch = ''
     # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
@@ -59,7 +75,7 @@ mkDerivation rec {
     cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";

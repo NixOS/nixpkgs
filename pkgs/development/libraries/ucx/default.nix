@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, doxygen
 , numactl, rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin
 , enableCuda ? false
 , cudatoolkit
@@ -13,14 +13,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.12.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "08ajhbhzwkfzhkhswk56zx17q18ii67dg1ca1f5grl9qjgj3mmyw";
+    sha256 = "sha256-NhtN8xrHc6UnUrMbq9LHpb25JO+/LDGcLLGebCfGnv4=";
   };
+
+  patches = [
+    # Pull upstream fix for binutils-2.39:
+    #   https://github.com/openucx/ucx/pull/8450
+    (fetchpatch {
+      name = "binutils-2.39.patch";
+      url = "https://github.com/openucx/ucx/commit/6b6128efd416831cec3a1820f7d1c8e648b79448.patch";
+      sha256 = "sha256-ci00nZG8iOUEFXbmgr/5XkIfiw4eAAdG1wcEYjQSiT8=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
 

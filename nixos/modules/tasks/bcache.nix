@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.boot.initrd.services.bcache.enable = (lib.mkEnableOption "bcache support in the initrd") // {
+  options.boot.initrd.services.bcache.enable = (lib.mkEnableOption (lib.mdDoc "bcache support in the initrd")) // {
     visible = false; # only works with systemd stage 1
   };
 

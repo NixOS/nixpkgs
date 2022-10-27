@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.6.1.0";
+  version = "0.6.4.1";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    sha256 = "sha256-zkDMZT1kKCLqNvvxZFKVuXFqZptX/LG/R9kRUcNJphw=";
+    sha256 = "sha256-/Z0UDxZtVnGKVmscNCZAvTGMALq/uMd7/h3r/QvUs0M=";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];

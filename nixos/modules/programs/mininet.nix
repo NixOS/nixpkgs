@@ -14,7 +14,7 @@ let
   pyEnv = pkgs.python.withPackages(ps: [ ps.mininet-python ]);
 
   mnexecWrapped = pkgs.runCommand "mnexec-wrapper"
-    { buildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
+    { nativeBuildInputs = [ pkgs.makeWrapper pkgs.pythonPackages.wrapPython ]; }
     ''
       makeWrapper ${pkgs.mininet}/bin/mnexec \
         $out/bin/mnexec \
@@ -28,7 +28,7 @@ let
     '';
 in
 {
-  options.programs.mininet.enable = mkEnableOption "Mininet";
+  options.programs.mininet.enable = mkEnableOption (lib.mdDoc "Mininet");
 
   config = mkIf cfg.enable {
 

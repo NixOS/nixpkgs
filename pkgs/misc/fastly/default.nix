@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, installShellFiles, buildGoModule }:
+{ lib, fetchFromGitHub, installShellFiles, buildGoModule, go }:
 
 buildGoModule rec {
   pname = "fastly";
-  version = "3.1.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Su4ZwiuI+pMoLAGhc3dWcwgcfwe5cZGTg8kEnpM4JbA=";
+    sha256 = "sha256-eIqdDBU4NWNMyRs+h30ufg4QwEEGid+wCjATZYXDGm8=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/fastly" ];
 
-  vendorSha256 = "sha256-5MvJS10f7YLvO+wCmUJleU27hCJbsNrOIfUZnniGw+E=";
+  vendorSha256 = "sha256-glztVmAAdkEccJEFIHGWjNzz/+MjExSX18GDX66sdxA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,10 +34,11 @@ buildGoModule rec {
     "-w"
     "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
+    "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
+    "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
   ];
   preBuild = ''
     ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
-    ldflags+=" -X 'github.com/fastly/cli/pkg/revision.GoVersion=$(go version)'"
   '';
 
   postInstall = ''

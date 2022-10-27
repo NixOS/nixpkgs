@@ -9,12 +9,16 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "5.7.37";
+  version = "5.7.39";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qZqaqGNdJWbat2Sy3la+0XMDZdNg4guyf1Y5LOVOGL0=";
+    sha256 = "sha256-ERw6ypGJfkUwOds5GkdSZeAg/ZIcuXMHwACEqI5NYQQ=";
   };
+
+  patches = [
+    ./mysql-5.7-add-protobuf-3.8+-support.patch
+  ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
@@ -31,7 +35,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"

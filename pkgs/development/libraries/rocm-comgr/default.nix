@@ -1,31 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, lld, llvm }:
+{ lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, llvm }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-comgr";
-  version = "5.1.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${version}";
-    hash = "sha256-zlCM3Zue7MEhL1c0gUPwRNgdjzyyF9BEP3UxE8RYkKk=";
+    hash = "sha256-LQyMhqcWm8zqt6138fnT7EOq/F8bG3Iuf04PTemVQmg=";
   };
 
   sourceRoot = "source/lib/comgr";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang rocm-device-libs lld llvm ];
+  buildInputs = [ clang rocm-device-libs llvm ];
 
   cmakeFlags = [
-    "-DCLANG=${clang}/bin/clang"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_C_COMPILER=${clang}/bin/clang"
     "-DCMAKE_CXX_COMPILER=${clang}/bin/clang++"
     "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm"
-    "-DLLD_INCLUDE_DIRS=${lld.src}/include"
+    "-DLLD_INCLUDE_DIRS=${llvm}/include"
     "-DLLVM_TARGETS_TO_BUILD=\"AMDGPU;X86\""
   ];
+
+  patches = [ ./cmake.patch ];
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "APIs for compiling and inspecting AMDGPU code objects";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault Flakebi ];
     platforms = platforms.linux;
   };
 }

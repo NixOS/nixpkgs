@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libvori";
-  version = "210412";
+  version = "220621";
 
   src = fetchurl {
     url = "https://brehm-research.de/files/${pname}-${version}.tar.gz";
-    sha256 = "1b4hpwibf3k7gl6n984l3wdi0zyl2fmpz84m9g2di4yhm6p8c61k";
+    hash = "sha256-HPqYxWSBS92s8cDn8RWCE311hmj2MH5us5LHIxeYTBQ=";
   };
 
   nativeBuildInputs = [ cmake ];

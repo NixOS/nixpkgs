@@ -1,7 +1,7 @@
 { lib, stdenv, pkgsHostHost
 , file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, cacert, rustPlatform, rustc
-, CoreFoundation, Security
+, libiconv, CoreFoundation, Security
 }:
 
 rustPlatform.buildRustPackage {
@@ -12,7 +12,10 @@ rustPlatform.buildRustPackage {
   cargoVendorDir = "vendor";
   buildAndTestSubdir = "src/tools/cargo";
 
-  passthru.rustc = rustc;
+  passthru = {
+    rustc = rustc;
+    inherit (rustc) tests;
+  };
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
@@ -22,7 +25,7 @@ rustPlatform.buildRustPackage {
     (lib.getDev pkgsHostHost.curl)
   ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.
@@ -72,5 +75,7 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
+    # weird segfault in a build script
+    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

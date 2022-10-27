@@ -38,8 +38,11 @@ stdenv.mkDerivation rec {
   checkInputs = [ openssh ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  doCheck = true;
+  # xslu and xsllt tests seem to time out on x86_64-darwin.
+  # this line is left so those who force installation on x86_64-darwin can still build
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -67,15 +70,15 @@ stdenv.mkDerivation rec {
 
     # Run single threaded
     export OMP_NUM_THREADS=1
-
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ costrouc markuskowa ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ costrouc markuskowa gdinh ];
+    # xslu and xsllt tests fail on x86 darwin
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

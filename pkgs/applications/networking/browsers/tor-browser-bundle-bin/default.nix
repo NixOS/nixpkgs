@@ -87,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.0.14";
+  version = "11.5.5";
 
   lang = "en-US";
 
@@ -95,19 +95,21 @@ let
     x86_64-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "19lsxdxbdismjrv2kmvm10cmr1x5klc2khlmrybycdw2vx7r41mn";
+      sha256 = "sha256-AOt0PFot6Qh9voqvi5bagW0HLk2kP8b6A2c8Jdv5vkQ=";
     };
 
     i686-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0hkj4vn5jk3z32mdgzzwmhj5xa4mv5p1nnwqhlsbc3g5b5q8bc7q";
+      sha256 = "sha256-MQrJgdAsNvG+WCx4eeb2UHZp/0LoOIhZZQUKESNIGZY=";
     };
   };
 in
@@ -429,7 +431,6 @@ stdenv.mkDerivation rec {
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
     mainProgram = "tor-browser";
-    hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "yalesmartalarmclient";
-  version = "0.3.8";
+  version = "0.3.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
-    rev = "v${version}";
-    sha256 = "sha256-CWL1uvmUGLaa2Ho0Ka4wTWstebhe1nQr9R821mweE60=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Zpj1lLaxiTaYpcj1R/ktuVldl/r19r7fzNKvnSIDq80=";
   };
 
   propagatedBuildInputs = [

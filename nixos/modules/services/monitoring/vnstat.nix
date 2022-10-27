@@ -6,7 +6,7 @@ let
   cfg = config.services.vnstat;
 in {
   options.services.vnstat = {
-    enable = mkEnableOption "update of network usage statistics via vnstatd";
+    enable = mkEnableOption (lib.mdDoc "update of network usage statistics via vnstatd");
   };
 
   config = mkIf cfg.enable {

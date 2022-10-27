@@ -1,13 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook, mateUpdateScript
-, glib, substituteAll }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gupnp
+, mate
+, imagemagick
+, wrapGAppsHook
+, mateUpdateScript
+, glib
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03zwv3yl5553cnp6jjn7vr4l28dcdhsap7qimlrbvy20119kj5gh";
+    sha256 = "WJwZ4/oQJC1iOaXMuVhVmENqVuvpTS6ypQtZUMzh1SA=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +61,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Set of extensions for Caja file manager";

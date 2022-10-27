@@ -16,6 +16,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ioSNd0Fjk2Fp05lk3HeokIjNYGU0jQEaIDfcFB18mV0=";
   };
 
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
+
   postPatch = ''
     substituteInPlace tests/pty_test.py \
       --replace "python3" "${python3Packages.python}/bin/python"

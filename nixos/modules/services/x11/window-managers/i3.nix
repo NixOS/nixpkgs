@@ -8,12 +8,12 @@ in
 
 {
   options.services.xserver.windowManager.i3 = {
-    enable = mkEnableOption "i3 window manager";
+    enable = mkEnableOption (lib.mdDoc "i3 window manager");
 
     configFile = mkOption {
       default     = null;
       type        = with types; nullOr path;
-      description = ''
+      description = lib.mdDoc ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
       '';
@@ -22,7 +22,7 @@ in
     extraSessionCommands = mkOption {
       default     = "";
       type        = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands executed just before i3 is started.
       '';
     };
@@ -32,7 +32,7 @@ in
       default     = pkgs.i3;
       defaultText = literalExpression "pkgs.i3";
       example     = literalExpression "pkgs.i3-gaps";
-      description = ''
+      description = lib.mdDoc ''
         i3 package to use.
       '';
     };
@@ -47,7 +47,7 @@ in
           i3lock
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed system wide.
       '';
     };

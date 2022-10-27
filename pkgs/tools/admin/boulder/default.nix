@@ -1,31 +1,77 @@
-{ stdenv
-, lib
-, buildGoModule
+{ lib
 , fetchFromGitHub
+, buildGoModule
+, testers
+, boulder
 }:
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2022-06-21";
-  rev = "09f87bb31a57f9a04932b7175fab1e3cabffd86f";
+  version = "2022-09-29";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
     rev = "release-${version}";
-    sha256 = "sha256-Q5fMM3UXMFqmpJks1xnINeKBA7dDam4bfczO3D43Yoo=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse --short=8 HEAD 2>/dev/null >$out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+    hash = "sha256-MyJHTkt4qEHwD1UOkOfDNhNddcyFHPJvDzoT7kJ2qi4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/boulder" ];
 
-  ldflags = with lib;
-    mapAttrsToList (n: v: ''"-X github.com/letsencrypt/boulder/core.Build${n}=${v}"'') {
-      ID = substring 0 8 rev;
-      Host = "nixbld@localhost";
-      Time = "Thu  1 Jan 00:00:00 UTC 1970";
-    };
+  patches = [ ./no-build-id-test.patch ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/letsencrypt/boulder/core.BuildHost=nixbld@localhost"
+  ];
+
+  preBuild = ''
+    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildID=${src.rev} +$(cat COMMIT)\""
+    ldflags+=" -X \"github.com/letsencrypt/boulder/core.BuildTime=$(date -u -d @0)\""
+  '';
+
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Disable tests that require additional services.
+    rm -rf \
+      cmd/admin-revoker/main_test.go \
+      cmd/bad-key-revoker/main_test.go \
+      cmd/cert-checker/main_test.go \
+      cmd/contact-auditor/main_test.go \
+      cmd/expiration-mailer/main_test.go \
+      cmd/expiration-mailer/send_test.go \
+      cmd/id-exporter/main_test.go \
+      cmd/rocsp-tool/client_test.go \
+      db/map_test.go \
+      db/multi_test.go \
+      db/rollback_test.go \
+      log/log_test.go \
+      ocsp/updater/updater_test.go \
+      ra/ra_test.go \
+      rocsp/rocsp_test.go \
+      sa/database_test.go \
+      sa/model_test.go \
+      sa/precertificates_test.go \
+      sa/rate_limits_test.go \
+      sa/sa_test.go \
+      test/load-generator/acme/directory_test.go \
+      va/caa_test.go \
+      va/dns_test.go \
+      va/http_test.go \
+      va/tlsalpn_test.go \
+      va/va_test.go
+  '';
 
   postInstall = ''
     for i in $($out/bin/boulder --list); do
@@ -33,8 +79,11 @@ buildGoModule rec {
     done
   '';
 
-  # There are no tests for cmd/boulder.
-  doCheck = false;
+  passthru.tests.version = testers.testVersion {
+    package = boulder;
+    command = "boulder --version";
+    inherit version;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/letsencrypt/boulder";
@@ -48,6 +97,5 @@ buildGoModule rec {
     '';
     license = licenses.mpl20;
     maintainers = with maintainers; [ azahi ];
-    broken = stdenv.isDarwin;
   };
 }

@@ -25,14 +25,25 @@
 , nixosTests
 }:
 
+let
+  runtimePath = lib.makeBinPath ([
+    erlang
+    getconf # for getting memory limits
+    socat
+    procps
+    gnused
+    coreutils # used by helper scripts
+  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+in
+
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-  version = "3.9.14";
+  version = "3.10.8";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-c6GpB6CSCHiU9hTC9FkxyTc1UpNWxx5iP3y2dbTUfS0=";
+    sha256 = "sha256-kDt2HuVBw88zdFBsDXHNgCVDkvWMVeAzrIzj68+NOyk=";
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
@@ -47,15 +58,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
-
-  runtimePath = lib.makeBinPath ([
-    erlang
-    getconf # for getting memory limits
-    socat
-    procps
-    gnused
-    coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
 
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early

@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     markdown2
     matrix-client
     minidb
-    pushbullet
+    pushbullet-py
     pycodestyle
     pyppeteer
     pyyaml

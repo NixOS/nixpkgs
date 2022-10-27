@@ -5,6 +5,7 @@
 , perl
 , python3
 , ruby
+, gi-docgen
 , bison
 , gperf
 , cmake
@@ -12,12 +13,12 @@
 , pkg-config
 , gettext
 , gobject-introspection
-, libnotify
 , gnutls
 , libgcrypt
 , libgpg-error
 , gtk3
 , wayland
+, wayland-protocols
 , libwebp
 , libwpe
 , libwpe-fdo
@@ -65,17 +66,18 @@
 , systemdSupport ? stdenv.isLinux
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.36.3";
+  version = "2.38.1";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   separateDebugInfo = stdenv.isLinux;
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-cy/PjE7GRLjtKLRuu9fB66udngr+qb315dEnhq/EeNE=";
+    url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
+    sha256 = "AuGVs/ueBXdDszZO5/HuwT9xYUImhJVEwHwypzuPGEg=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -115,6 +117,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     ruby
+    gi-docgen
     glib # for gdbus-codegen
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -136,7 +139,6 @@ stdenv.mkDerivation rec {
     libidn
     libintl
     lcms2
-    libnotify
     libpthreadstubs
     libtasn1
     libwebp
@@ -162,7 +164,7 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" { } ''
+    runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
@@ -179,6 +181,9 @@ stdenv.mkDerivation rec {
     geoclue2
   ] ++ lib.optionals withLibsecret [
     libsecret
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    xorg.libXcomposite
+    wayland-protocols
   ];
 
   propagatedBuildInputs = [
@@ -206,8 +211,10 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
-    "-DUSE_SYSTEMD=OFF"
+    "-DENABLE_JOURNALD_LOG=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
     "-DENABLE_GLES2=ON"
   ];
@@ -221,6 +228,11 @@ stdenv.mkDerivation rec {
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
@@ -231,4 +243,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;
   };
-}
+})

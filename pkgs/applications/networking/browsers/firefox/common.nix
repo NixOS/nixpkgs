@@ -202,7 +202,7 @@ let
 in
 
 buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${version}";
+  pname = "${pname}-unwrapped";
   inherit version;
 
   inherit src unpackPhase meta;
@@ -219,7 +219,7 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "103") [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
       name = "rust-cbindgen-0.24.2-compat.patch";
@@ -228,7 +228,6 @@ buildStdenv.mkDerivation ({
     })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
@@ -294,9 +293,6 @@ buildStdenv.mkDerivation ({
   '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
     # Use our own python
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
-  '' + lib.optionalString (lib.versionOlder version "100.0") ''
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
@@ -434,7 +430,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -531,7 +527,6 @@ buildStdenv.mkDerivation ({
             header "separating debug info from $i (build ID $id)"
             mkdir -p "$dst/''${id:0:2}"
             $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-            $STRIP --strip-debug "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"

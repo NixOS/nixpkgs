@@ -56,6 +56,9 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
   checkInputs = [
     curio
     hypothesis

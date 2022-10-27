@@ -11,7 +11,7 @@
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? enableShared
 , icuSupport ? false
 , icu
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
@@ -19,17 +19,29 @@
 , gnome
 }:
 
+let
+  # Newer versions fail with minimal python, probably because
+  # https://gitlab.gnome.org/GNOME/libxml2/-/commit/b706824b612adb2c8255819c9a55e78b52774a3c
+  # This case is encountered "temporarily" during stdenv bootstrapping on darwin.
+  # Beware that the old version has known security issues, so the final set shouldn't use it.
+  oldVer = python.pname == "python3-minimal";
+in
+  assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
+
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.14";
+  version = if oldVer then "2.10.1" else
+    "2.10.2";
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ]
+  outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
+  outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vnzk33wfms348lgz9pvkq9li7jm44pvm73lbr3w1khwgljlmmv0";
+    sha256 = if oldVer then "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8" else
+      "0kCr5tqcZcsZAN2b86NQHM+Is8Khy5gxfQPyct2lsmU=";
   };
 
   patches = [
@@ -83,19 +95,23 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
-    (lib.withFeatureAs pythonSupport "python" python)
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
+    "pyexecdir=\"${placeholder "py"}/${python.sitePackages}\""
   ];
 
   enableParallelBuilding = true;
 
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    !stdenv.isDarwin &&
     stdenv.hostPlatform.libc != "musl";
+  preCheck = lib.optional stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
+  '';
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -108,7 +124,6 @@ stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
   '' + lib.optionalString (enableStatic && enableShared) ''
     moveToOutput lib/libxml2.a "$static"
   '';

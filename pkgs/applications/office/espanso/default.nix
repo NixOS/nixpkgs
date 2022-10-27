@@ -11,6 +11,10 @@
 , xclip
 , xdotool
 , makeWrapper
+, stdenv
+, AppKit
+, Cocoa
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +43,12 @@ rustPlatform.buildRustPackage rec {
     libnotify
     xclip
     openssl
+  ] ++ lib.optionals stdenv.isLinux [
     xdotool
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Cocoa
+    Foundation
   ];
 
   # Some tests require networking
@@ -55,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.

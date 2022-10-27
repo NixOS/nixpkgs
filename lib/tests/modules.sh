@@ -58,6 +58,9 @@ checkConfigError() {
     fi
 }
 
+# Shorthand meta attribute does not duplicate the config
+checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
@@ -130,6 +133,7 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enab
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
 checkConfigOutput '^false$' "$@" ./disable-define-enable.nix
+checkConfigOutput '^false$' "$@" ./disable-define-enable-string-path.nix
 checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*- In .*: true" "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
@@ -158,7 +162,7 @@ checkConfigError 'A definition for option .* is not.*string or signed integer co
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
-checkConfigError 'json.exception.parse_error' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix
@@ -298,11 +302,11 @@ checkConfigOutput '^"baz"$' config.value.nested.bar.baz ./types-anything/mk-mods
 ## types.functionTo
 checkConfigOutput '^"input is input"$' config.result ./functionTo/trivial.nix
 checkConfigOutput '^"a b"$' config.result ./functionTo/merging-list.nix
-checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
+checkConfigError 'A definition for option .fun.<function body>. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
 checkConfigOutput '^"b a"$' config.result ./functionTo/list-order.nix
 checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 checkConfigOutput '^"a bee"$' config.result ./functionTo/submodule-options.nix
-checkConfigOutput '^"fun.\[function body\].a fun.\[function body\].b"$' config.optionsResult ./functionTo/submodule-options.nix
+checkConfigOutput '^"fun.<function body>.a fun.<function body>.b"$' config.optionsResult ./functionTo/submodule-options.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix

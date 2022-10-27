@@ -94,5 +94,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
+    broken = true; # at 2022-09-30, errors with changing hash.
   };
 }

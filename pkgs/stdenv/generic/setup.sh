@@ -2,13 +2,14 @@
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
-shopt -s inherit_errexit
 
 if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
     echo "Please install Bash 4 or greater to continue."
     exit 1
 fi
+
+shopt -s inherit_errexit
 
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
@@ -771,9 +772,18 @@ substitute() {
 }
 
 substituteInPlace() {
-    local fileName="$1"
-    shift
-    substitute "$fileName" "$fileName" "$@"
+    local -a fileNames=()
+    for arg in "$@"; do
+        if [[ "$arg" = "--"* ]]; then
+            break
+        fi
+        fileNames+=("$arg")
+        shift
+    done
+
+    for file in "${fileNames[@]}"; do
+        substitute "$file" "$file" "$@"
+    done
 }
 
 _allFlags() {
@@ -1090,7 +1100,7 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $buildFlags "${buildFlagsArray[@]}"
@@ -1129,7 +1139,7 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
@@ -1263,7 +1273,7 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $installCheckFlags "${installCheckFlagsArray[@]}"

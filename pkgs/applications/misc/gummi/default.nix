@@ -1,17 +1,17 @@
 { lib, stdenv, pkgs
-, glib, gnome, gtk3, gtksourceview3, gtkspell3, poppler, texlive
+, glib, gtk3, gtksourceview3, gtkspell3, poppler, texlive
 , pkg-config, intltool, autoreconfHook, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.2";
+  version = "0.8.3";
   pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
     rev = version;
-    sha256 = "sha256-7txAyzJrEoGPjchXstMWIF1Vy+aoba6aa6+JNUYnKQs=";
+    sha256 = "sha256-71n71KjLmICp4gznd27NlbyA3kayje3hYk/cwkOXEO0=";
   };
 
   nativeBuildInputs = [

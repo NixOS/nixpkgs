@@ -15,25 +15,23 @@ in
     boot.initrd.network.openvpn.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Starts an OpenVPN client during initrd boot. It can be used to e.g.
         remotely accessing the SSH service controlled by
-        <option>boot.initrd.network.ssh</option> or other network services
+        {option}`boot.initrd.network.ssh` or other network services
         included. Service is killed when stage-1 boot is finished.
       '';
     };
 
     boot.initrd.network.openvpn.configuration = mkOption {
       type = types.path; # Same type as boot.initrd.secrets
-      description = ''
+      description = lib.mdDoc ''
         The configuration file for OpenVPN.
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, this configuration
-            is stored insecurely in the global Nix store.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, this configuration
+        is stored insecurely in the global Nix store.
+        :::
       '';
       example = literalExpression "./configuration.ovpn";
     };

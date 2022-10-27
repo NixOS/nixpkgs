@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05jaxbnlw5wck0hl124py364jqrx7a4mmv0hy3d2jzvmp0012sk5";
+    sha256 = "sha256-3TNtNRfqzip2iUBtt7uWraPF50MnQjFRru4+ZCJfYiA=";
   };
 
   propagatedBuildInputs = [ future ];

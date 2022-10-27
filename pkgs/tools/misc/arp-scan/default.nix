@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
-  version = "1.9.7";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "royhills";
     repo = "arp-scan";
     rev = version;
-    sha256 = "1mf7a4f9vzvnkiavc87aqyciswggsb4fpy7j05jxnvjyyxv3l7gp";
+    sha256 = "sha256-zSihemqGaQ5z6XjA/dALoSJOuAkxF5/nnV6xE+GY7KI=";
   };
 
   perlModules = with perlPackages; [

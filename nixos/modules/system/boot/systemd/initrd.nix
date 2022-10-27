@@ -100,11 +100,6 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
-  fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
-    ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
-        opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
-      in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
-
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
   needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
 
@@ -129,6 +124,7 @@ let
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
+    inherit (cfg) strip;
 
     contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
       ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
@@ -136,12 +132,15 @@ let
 
 in {
   options.boot.initrd.systemd = {
-    enable = mkEnableOption ''systemd in initrd.
+    enable = mkEnableOption (lib.mdDoc "systemd in initrd") // {
+      description = lib.mdDoc ''
+        Whether to enable systemd in initrd.
 
-      Note: This is in very early development and is highly
-      experimental. Most of the features NixOS supports in initrd are
-      not yet supported by the intrd generated with this option.
-    '';
+        Note: This is in very early development and is highly
+        experimental. Most of the features NixOS supports in initrd are
+        not yet supported by the intrd generated with this option.
+      '';
+    };
 
     package = (mkPackageOption pkgs "systemd" {
       default = "systemdStage1";
@@ -150,7 +149,7 @@ in {
     };
 
     contents = mkOption {
-      description = "Set of files that have to be linked into the initrd";
+      description = lib.mdDoc "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
           "/etc/hostname".text = "mymachine";
@@ -162,15 +161,28 @@ in {
     };
 
     storePaths = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Store paths to copy into the initrd as well.
       '';
       type = with types; listOf (oneOf [ singleLineStr package ]);
       default = [];
     };
 
+    strip = mkOption {
+      description = lib.mdDoc ''
+        Whether to completely strip executables and libraries copied to the initramfs.
+
+        Setting this to false may save on the order of 30MiB on the
+        machine building the system (by avoiding a binutils
+        reference), at the cost of ~1MiB of initramfs size. This puts
+        this option firmly in the territory of micro-optimisation.
+      '';
+      type = types.bool;
+      default = true;
+    };
+
     extraBin = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Tools to add to /bin
       '';
       example = literalExpression ''
@@ -183,7 +195,7 @@ in {
     };
 
     suppressedStorePaths = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Store paths specified in the storePaths option that
         should not be copied.
       '';
@@ -192,9 +204,9 @@ in {
     };
 
     emergencyAccess = mkOption {
-      type = with types; oneOf [ bool singleLineStr ];
+      type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Set to true for unauthenticated emergency access, and false for
         no emergency access.
 
@@ -208,7 +220,7 @@ in {
       type = types.listOf types.package;
       default = [];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
     };
@@ -218,7 +230,7 @@ in {
       type = types.listOf types.str;
       visible = false;
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
-      description = ''
+      description = lib.mdDoc ''
         Additional units shipped with systemd that shall be enabled.
       '';
     };
@@ -228,17 +240,17 @@ in {
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         A list of units to skip when generating system systemd configuration directory. This has
-        priority over upstream units, <option>boot.initrd.systemd.units</option>, and
-        <option>boot.initrd.systemd.additionalUpstreamUnits</option>. The main purpose of this is to
+        priority over upstream units, {option}`boot.initrd.systemd.units`, and
+        {option}`boot.initrd.systemd.additionalUpstreamUnits`. The main purpose of this is to
         prevent a upstream systemd unit from being added to the initrd with any modifications made to it
         by other NixOS modules.
       '';
     };
 
     units = mkOption {
-      description = "Definition of systemd units.";
+      description = lib.mdDoc "Definition of systemd units.";
       default = {};
       visible = false;
       type = systemdUtils.types.units;
@@ -249,49 +261,49 @@ in {
       visible = false;
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd units and hooks.";
+      description = lib.mdDoc "Packages providing systemd units and hooks.";
     };
 
     targets = mkOption {
       default = {};
       visible = false;
       type = systemdUtils.types.initrdTargets;
-      description = "Definition of systemd target units.";
+      description = lib.mdDoc "Definition of systemd target units.";
     };
 
     services = mkOption {
       default = {};
       type = systemdUtils.types.initrdServices;
       visible = false;
-      description = "Definition of systemd service units.";
+      description = lib.mdDoc "Definition of systemd service units.";
     };
 
     sockets = mkOption {
       default = {};
       type = systemdUtils.types.initrdSockets;
       visible = false;
-      description = "Definition of systemd socket units.";
+      description = lib.mdDoc "Definition of systemd socket units.";
     };
 
     timers = mkOption {
       default = {};
       type = systemdUtils.types.initrdTimers;
       visible = false;
-      description = "Definition of systemd timer units.";
+      description = lib.mdDoc "Definition of systemd timer units.";
     };
 
     paths = mkOption {
       default = {};
       type = systemdUtils.types.initrdPaths;
       visible = false;
-      description = "Definition of systemd path units.";
+      description = lib.mdDoc "Definition of systemd path units.";
     };
 
     mounts = mkOption {
       default = [];
       type = systemdUtils.types.initrdMounts;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -302,7 +314,7 @@ in {
       default = [];
       type = systemdUtils.types.automounts;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -313,14 +325,17 @@ in {
       default = {};
       type = systemdUtils.types.slices;
       visible = false;
-      description = "Definition of slice configurations.";
+      description = lib.mdDoc "Definition of slice configurations.";
     };
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
     system.build = { inherit initialRamdisk; };
 
-    boot.initrd.availableKernelModules = [ "autofs4" ]; # systemd needs this for some features
+    boot.initrd.availableKernelModules = [
+      "autofs4"           # systemd needs this for some features
+      "tpm-tis" "tpm-crb" # systemd-cryptenroll
+    ];
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -338,8 +353,6 @@ in {
           [Manager]
           DefaultEnvironment=PATH=/bin:/sbin ${optionalString (isBool cfg.emergencyAccess && cfg.emergencyAccess) "SYSTEMD_SULOGIN_FORCE=1"}
         '';
-
-        "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
         "/lib/firmware".source = "${modulesClosure}/lib/firmware";
@@ -359,6 +372,11 @@ in {
         '';
         "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
+        "/etc/os-release".source = config.boot.initrd.osRelease;
+        "/etc/initrd-release".source = config.boot.initrd.osRelease;
+
+      } // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
+        "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
       };
 
       storePaths = [
@@ -388,6 +406,17 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+      ] ++ optionals cfg.package.withCryptsetup [
+        # tpm2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+        pkgs.tpm2-tss
+
+        # fido2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
+        "${pkgs.libfido2}/lib/libfido2.so.1"
+
+        # the unwrapped systemd-cryptsetup executable
+        "${cfg.package}/lib/systemd/.systemd-cryptsetup-wrapped"
       ] ++ jobScripts;
 
       targets.initrd.aliases = ["default.target"];
@@ -419,6 +448,9 @@ in {
       '')];
       services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
       services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
+
+      # make sure all the /dev nodes are set up
+      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];

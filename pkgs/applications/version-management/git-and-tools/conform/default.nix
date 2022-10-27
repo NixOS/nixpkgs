@@ -2,21 +2,20 @@
 
 buildGoModule rec {
   pname = "conform";
-  version = "0.1.0-alpha.25";
+  version = "0.1.0-alpha.26";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${version}";
-    sha256 = "sha256-WgWgigpqPoEBY4tLjbzK02WFwrCWPGQWJ5eakLv5IWw=";
+    sha256 = "sha256-+VOwQE2uhoQ4sSXa/SVbyjLn9An08D4GQHxxDRRuXks=";
   };
-
   vendorSha256 = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/talos-systems/conform/internal/version.Tag=v${version}"
+    "-X github.com/siderolabs/conform/internal/version.Tag=v${version}"
   ];
 
   checkInputs = [ git ];

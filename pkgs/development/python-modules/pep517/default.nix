@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pep517";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0";
+    sha256 = "sha256-rmmSfFwXK+Gt2SA3JtS4TPPrrR7c1fcfzcdG5m6Cn1k=";
   };
 
   nativeBuildInputs = [

@@ -31,6 +31,9 @@ mkDerivation rec {
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {

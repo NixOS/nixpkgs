@@ -29,7 +29,7 @@ let
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enables nylon as a running service upon activation.
         '';
       };
@@ -37,13 +37,13 @@ let
       name = mkOption {
         type = types.str;
         default = "";
-        description = "The name of this nylon instance.";
+        description = lib.mdDoc "The name of this nylon instance.";
       };
 
       nrConnections = mkOption {
         type = types.int;
         default = 10;
-        description = ''
+        description = lib.mdDoc ''
           The number of allowed simultaneous connections to the daemon, default 10.
         '';
       };
@@ -51,7 +51,7 @@ let
       logging = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable logging, default is no logging.
         '';
       };
@@ -59,7 +59,7 @@ let
       verbosity = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable verbose output, default is to not be verbose.
         '';
       };
@@ -67,7 +67,7 @@ let
       acceptInterface = mkOption {
         type = types.str;
         default = "lo";
-        description = ''
+        description = lib.mdDoc ''
           Tell nylon which interface to listen for client requests on, default is "lo".
         '';
       };
@@ -75,7 +75,7 @@ let
       bindInterface = mkOption {
         type = types.str;
         default = "enp3s0f0";
-        description = ''
+        description = lib.mdDoc ''
           Tell nylon which interface to use as an uplink, default is "enp3s0f0".
         '';
       };
@@ -83,7 +83,7 @@ let
       port = mkOption {
         type = types.int;
         default = 1080;
-        description = ''
+        description = lib.mdDoc ''
           What port to listen for client requests, default is 1080.
         '';
       };
@@ -91,7 +91,7 @@ let
       allowedIPRanges = mkOption {
         type = with types; listOf str;
         default = [ "192.168.0.0/16" "127.0.0.1/8" "172.16.0.1/12" "10.0.0.0/8" ];
-        description = ''
+        description = lib.mdDoc ''
            Allowed client IP ranges are evaluated first, defaults to ARIN IPv4 private ranges:
              [ "192.168.0.0/16" "127.0.0.0/8" "172.16.0.0/12" "10.0.0.0/8" ]
         '';
@@ -100,7 +100,7 @@ let
       deniedIPRanges = mkOption {
         type = with types; listOf str;
         default = [ "0.0.0.0/0" ];
-        description = ''
+        description = lib.mdDoc ''
           Denied client IP ranges, these gets evaluated after the allowed IP ranges, defaults to all IPv4 addresses:
             [ "0.0.0.0/0" ]
           To block all other access than the allowed.
@@ -139,7 +139,7 @@ in
 
     services.nylon = mkOption {
       default = {};
-      description = "Collection of named nylon instances";
+      description = lib.mdDoc "Collection of named nylon instances";
       type = with types; attrsOf (submodule nylonOpts);
       internal = true;
     };

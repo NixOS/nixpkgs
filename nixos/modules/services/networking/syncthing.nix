@@ -30,15 +30,22 @@ let
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
 
+    # be careful not to leak secrets in the filesystem or in process listings
+
+    umask 0077
+
     # get the api key by parsing the config.xml
     while
-        ! api_key=$(${pkgs.libxml2}/bin/xmllint \
+        ! ${pkgs.libxml2}/bin/xmllint \
             --xpath 'string(configuration/gui/apikey)' \
-            ${cfg.configDir}/config.xml)
+            ${cfg.configDir}/config.xml \
+            >"$RUNTIME_DIRECTORY/api_key"
     do sleep 1; done
 
+    (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+
     curl() {
-        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -67,7 +74,7 @@ in {
     services.syncthing = {
 
       enable = mkEnableOption
-        "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync";
+        (lib.mdDoc "Syncthing, a self-hosted open-source alternative to Dropbox and Bittorrent Sync");
 
       cert = mkOption {
         type = types.nullOr types.str;
@@ -119,7 +126,7 @@ in {
             name = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the device.
               '';
             };
@@ -127,7 +134,7 @@ in {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = ''
+              description = lib.mdDoc ''
                 The addresses used to connect to the device.
                 If this is left empty, dynamic configuration is attempted.
               '';
@@ -197,7 +204,7 @@ in {
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to share this folder.
                 This option is useful when you want to define all folders
                 in one place, but not every machine should share all folders.
@@ -207,7 +214,7 @@ in {
             path = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The path to the folder which should be shared.
               '';
             };
@@ -215,7 +222,7 @@ in {
             id = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The ID of the folder. Must be the same on all devices.
               '';
             };
@@ -223,7 +230,7 @@ in {
             label = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The label of the folder.
               '';
             };
@@ -261,10 +268,10 @@ in {
                   {
                     versioning = {
                       type = "staggered";
+                      fsPath = "/syncthing/backup";
                       params = {
                         cleanInterval = "3600";
                         maxAge = "31536000";
-                        versionsPath = "/syncthing/backup";
                       };
                     };
                   }
@@ -289,6 +296,14 @@ in {
                       See <https://docs.syncthing.net/users/versioning.html>.
                     '';
                   };
+                  fsPath = mkOption {
+                    default = "";
+                    type = either str path;
+                    description = mdDoc ''
+                      Path to the versioning folder.
+                      See <https://docs.syncthing.net/users/versioning.html>.
+                    '';
+                  };
                   params = mkOption {
                     type = attrsOf (either str path);
                     description = mdDoc ''
@@ -304,24 +319,25 @@ in {
             rescanInterval = mkOption {
               type = types.int;
               default = 3600;
-              description = ''
+              description = lib.mdDoc ''
                 How often the folder should be rescanned for changes.
               '';
             };
 
             type = mkOption {
-              type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
+              type = types.enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
               default = "sendreceive";
-              description = ''
+              description = lib.mdDoc ''
                 Whether to only send changes for this folder, only receive them
-                or both.
+                or both. `receiveencrypted` can be used for untrusted devices. See
+                <https://docs.syncthing.net/users/untrusted.html> for reference.
               '';
             };
 
             watch = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether the folder should be watched for changes by inotify.
               '';
             };
@@ -329,7 +345,7 @@ in {
             watchDelay = mkOption {
               type = types.int;
               default = 10;
-              description = ''
+              description = lib.mdDoc ''
                 The delay after an inotify event is triggered.
               '';
             };
@@ -337,7 +353,7 @@ in {
             ignorePerms = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to ignore permission changes.
               '';
             };
@@ -370,7 +386,7 @@ in {
       guiAddress = mkOption {
         type = types.str;
         default = "127.0.0.1:8384";
-        description = ''
+        description = lib.mdDoc ''
           The address to serve the web interface at.
         '';
       };
@@ -378,7 +394,7 @@ in {
       systemService = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to auto-launch Syncthing as a system service.
         '';
       };
@@ -419,7 +435,7 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         example = "/home/yourUser";
-        description = ''
+        description = lib.mdDoc ''
           The path where synchronised directories will exist.
         '';
       };
@@ -428,7 +444,7 @@ in {
         cond = versionAtLeast config.system.stateVersion "19.03";
       in mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path where the settings and keys will exist.
         '';
         default = cfg.dataDir + optionalString cond "/.config/syncthing";
@@ -446,7 +462,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "--reset-deltas" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags passed to the syncthing command in the service definition.
         '';
       };
@@ -455,7 +471,7 @@ in {
         type = types.bool;
         default = false;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
@@ -470,7 +486,7 @@ in {
         type = types.package;
         default = pkgs.syncthing;
         defaultText = literalExpression "pkgs.syncthing";
-        description = ''
+        description = lib.mdDoc ''
           The Syncthing package to use.
         '';
       };
@@ -513,6 +529,8 @@ in {
     };
 
     systemd.services = {
+      # upstream reference:
+      # https://github.com/syncthing/syncthing/blob/main/etc/linux-systemd/system/syncthing%40.service
       syncthing = mkIf cfg.systemService {
         description = "Syncthing service";
         after = [ "network.target" ];
@@ -524,7 +542,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
-          SuccessExitStatus = "2 3 4";
+          SuccessExitStatus = "3 4";
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;
@@ -576,6 +594,7 @@ in {
         serviceConfig = {
           User = cfg.user;
           RemainAfterExit = true;
+          RuntimeDirectory = "syncthing-init";
           Type = "oneshot";
           ExecStart = updateConfig;
         };

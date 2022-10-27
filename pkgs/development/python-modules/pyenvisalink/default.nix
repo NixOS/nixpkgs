@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyenvisalink";
-  version = "4.5";
+  version = "4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WS1DCnuVmFAKsFVOb6HeKoNn2ZWHoLupg2VOZkzVsBU=";
+    sha256 = "sha256-CQvomHYNMrf0oQjNCcLyisxIV2+3TOgEPzA9seZYsOs=";
   };
 
   propagatedBuildInputs = [

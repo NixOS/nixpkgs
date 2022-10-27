@@ -13,7 +13,7 @@
 with python3Packages;
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.19.0";
+  version = "2.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    rev = "v${version}";
-    sha256 = "sha256-5YV0FJhHiq/NJFKYvwddIWUQVxKJpnIJLLNmyY0NX4A=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+JrnJz+wFbzVw9ysPX85DDE6suF3VU7gQZdp66x5TKY=";
   };
 
   patches = [
@@ -37,9 +37,9 @@ buildPythonPackage rec {
     pyyaml
     toml
     virtualenv
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 
@@ -142,6 +142,10 @@ buildPythonPackage rec {
     "test_install_existing_hooks_no_overwrite"
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
+
+    # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
+    # but we use an absolute path so it's not an issue.
+    "test_environment_not_sourced"
   ];
 
   pythonImportsCheck = [

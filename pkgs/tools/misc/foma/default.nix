@@ -11,20 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "1vf01l18j8cksnavbabcckp9gg692w6v5lg81xrzv6f5v14zp4nr";
   };
 
-  sourceRoot = "source/foma";
+  sourceRoot = "${src.name}/foma";
 
   nativeBuildInputs = [ flex bison ]
     ++ lib.optional stdenv.isDarwin darwin.cctools;
   buildInputs = [ zlib readline ];
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC:=$(CC)"
+    "RANLIB:=$(RANLIB)"
+    "prefix=$(out)"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "AR:=$(AR)" # libtool is used for darwin
   ];
 
   patchPhase = ''
     substituteInPlace Makefile \
-      --replace '-ltermcap' ' ' \
-      --replace '/usr/local' '$(out)'
+      --replace '-ltermcap' ' '
   '';
 
   meta = with lib; {

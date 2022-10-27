@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
-  version = "1.1.0";
+  version = "1.1.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6UzMAKrK2fp4XKoi42Uo6dfPQB17p/w+b3nXa3JVdV4=";
+    hash = "sha256-BCAsCwQCKMtmjISMVKDblRdev87K4EfX5D2Ot0L5PoQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -1,6 +1,7 @@
 { buildPythonApplication
 , fetchFromGitHub
 , lib
+, python3
 
 , waylandSupport ? true
 , x11Support ? true
@@ -15,15 +16,19 @@
 
 buildPythonApplication rec {
   pname = "rofimoji";
-  version = "5.4.0";
+  version = "5.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    rev = version;
-    sha256 = "sha256-D45XGnKWHUsE0DQThITBcgpghelsfGkSEIdg9jvOJlw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-6W/59DjxrgejHSkNxpruDAws812Vjyf+GePDPbXzVbc=";
   };
+
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+  ];
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.

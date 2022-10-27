@@ -13,19 +13,19 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "3.15.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-p636B8NUu/XncHLTQTiAYfvBaMbiopLVRwGrFf45BW8=";
+    sha256 = "sha256-/5X1t9ZVGoZRFNTfsv663QWIBE1eME/KiPuyc+L4D10=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-miDdP4kokRwhR9tif6llI1PI+F4O6tC4pAWucRRyLNQ=";
+  cargoSha256 = "sha256-tKdLTa/Tl98hDGtOPMxluIUgLoWkyOhnmGuxvq4AhfU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -45,7 +45,13 @@ rustPlatform.buildRustPackage rec {
     export SQLITE_MAX_EXPR_DEPTH=10000
   '';
 
-  cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
+  cargoBuildFlags = [
+    "-p" "query-engine"
+    "-p" "query-engine-node-api"
+    "-p" "migration-engine-cli"
+    "-p" "introspection-core"
+    "-p" "prisma-fmt"
+  ];
 
   postInstall = ''
     mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
@@ -59,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys superherointj ];
+    maintainers = with maintainers; [ pamplemousse pimeys tomhoule ];
   };
 }
 

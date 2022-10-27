@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "erosmb";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "viktor02";
     repo = "EroSmb";
-    rev = "v${version}";
-    hash = "sha256-d7iSl7weIHWXDnMYQKxafVd5JrZ0fnuWRDpEirBVdcg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H3ozc1DXBdXlqEg53eVGGTqK6m2eiY+Qtl0Ul3lUByk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

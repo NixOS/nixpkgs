@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.7";
+  version = "3.3.8";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "sha256-aWwt6FRq/ofQmZAeavDa8inrJfrPxb8iyo1XYdQsrKc=";
+    sha256 = "sha256-4+H0IXjAwbL5mAWfsIVhW0BSJhcWjkQx4j2TrzZ3aIo=";
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)

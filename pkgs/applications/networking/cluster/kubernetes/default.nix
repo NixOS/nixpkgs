@@ -15,19 +15,18 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-    "test/e2e/e2e.test"
   ]
 }:
 
 buildGoModule rec {
   pname = "kubernetes";
-  version = "1.23.8";
+  version = "1.25.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-mu+jBSypoMNxOugLbS3foH4C4AqSZnlic4Bf1v9dYc8=";
+    sha256 = "sha256-UDulyX1PXyAe4cqtekOY1nmQnmMqVLFuHnCswFfE6v0=";
   };
 
   vendorSha256 = null;
@@ -91,5 +90,5 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes;
+  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
 }

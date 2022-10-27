@@ -1,17 +1,17 @@
-{ stdenv, lib, buildGo118Module, fetchFromGitHub, fetchzip }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchzip }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "mutagen-compose";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FNV4X9/BdnfFGKVJXNpCJLdr3Y29LrGi+zUuQ07xUbE=";
+    sha256 = "sha256-fr4Emw8S7Uu0I08Yxha+hzZF54cJZ8UQgWF4GGvWDu0=";
   };
 
-  vendorSha256 = "sha256-5nt9YHMgaRpkFdOnBTU4gSdOtB3h9Cj5CCUjx9PJ/m8=";
+  vendorSha256 = "sha256-P6FnDp+nEEZM/7uvSb9Zkrn2zLha816A82xN2AFNgWc=";
 
   doCheck = false;
 

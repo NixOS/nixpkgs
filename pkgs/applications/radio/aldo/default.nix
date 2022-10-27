@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     description = "Morse code training program";
     homepage = "http://aldo.nongnu.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

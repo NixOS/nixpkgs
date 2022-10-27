@@ -11,17 +11,17 @@ in
   };
 
   options.services.grafana-agent = {
-    enable = mkEnableOption "grafana-agent";
+    enable = mkEnableOption (lib.mdDoc "grafana-agent");
 
     package = mkOption {
       type = types.package;
       default = pkgs.grafana-agent;
       defaultText = "pkgs.grafana-agent";
-      description = "The grafana-agent package to use.";
+      description = lib.mdDoc "The grafana-agent package to use.";
     };
 
     credentials = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Credentials to load at service startup. Keys that are UPPER_SNAKE will be loaded as env vars. Values are absolute paths to the credentials.
       '';
       type = types.attrsOf types.str;
@@ -38,8 +38,8 @@ in
     };
 
     settings = mkOption {
-      description = ''
-        Configuration for <package>grafana-agent</package>.
+      description = lib.mdDoc ''
+        Configuration for `grafana-agent`.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';
@@ -48,9 +48,10 @@ in
         freeformType = settingsFormat.type;
       };
 
-      default = {
+      default = { };
+      defaultText = ''
         metrics = {
-          wal_directory = "\${STATE_DIRECTORY}";
+          wal_directory = "\''${STATE_DIRECTORY}";
           global.scrape_interval = "5s";
         };
         integrations = {
@@ -59,8 +60,7 @@ in
           node_exporter.enabled = true;
           replace_instance_label = true;
         };
-      };
-
+      '';
       example = {
         metrics.global.remote_write = [{
           url = "\${METRICS_REMOTE_WRITE_URL}";
@@ -104,6 +104,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.grafana-agent.settings = {
+      # keep this in sync with config.services.grafana-agent.settings.defaultText.
+      metrics = {
+        wal_directory = mkDefault "\${STATE_DIRECTORY}";
+        global.scrape_interval = mkDefault "5s";
+      };
+      integrations = {
+        agent.enabled = mkDefault true;
+        agent.scrape_integration = mkDefault true;
+        node_exporter.enabled = mkDefault true;
+        replace_instance_label = mkDefault true;
+      };
+    };
+
     systemd.services.grafana-agent = {
       wantedBy = [ "multi-user.target" ];
       script = ''

@@ -5,22 +5,27 @@
 , pytest-subtests
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "tzdata";
-  version = "2022.1";
+  version = "2022.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i1NqjsY9wHUTQrOYQZOjEY+Pyir+JXUrubf//TmFUtM=";
+    hash = "sha256-IfTw1yQVcu+n96T9q7BS5htV3EgnTmhCaXzN9SU+VFE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     pytestCheckHook
     pytest-subtests
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 

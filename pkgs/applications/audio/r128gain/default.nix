@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   # sandbox to be disabled.
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";

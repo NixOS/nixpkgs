@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , markdown
 , python
 }:
 
 buildPythonPackage rec {
   pname = "mdx_truly_sane_lists";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "radude";
     repo = "mdx_truly_sane_lists";
-    rev = version;
-    sha256 = "1h8403ch016cwdy5zklzp7c6xrdyyhl4z07h97qzbafrbq07jyss";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hPnqF1UA4peW8hzeFiMlsBPfodC1qJXETGoq2yUm7d4=";
   };
 
   propagatedBuildInputs = [ markdown ];
@@ -21,7 +22,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mdx_truly_sane_lists" ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} mdx_truly_sane_lists/tests.py
+    runHook postCheck
   '';
 
   meta = with lib; {

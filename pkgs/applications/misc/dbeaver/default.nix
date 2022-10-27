@@ -23,16 +23,16 @@
   inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
 }) rec {
   pname = "dbeaver";
-  version = "22.1.1"; # When updating also update mvnSha256
+  version = "22.2.2"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-+MFULieuwfvuAP0HjJ+C0hb/uqhHtnP/nOoIfWwjtoI=";
+    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnSha256 = "pSZL+GDSXSm+sLymlSlq2ZIRdYJY1B3PCmCpjtosdGY=";
+  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [

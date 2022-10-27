@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bugdom";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rhbsVgAkDdRJxbCCzJbsy5TbVdmP7MFqz+7nELiN4Yw=";
+    sha256 = "sha256-pgms2mipW1zol35LVCuU5+7mN7CBiVGFvu1CJ3CrGU0=";
     fetchSubmodules = true;
   };
 

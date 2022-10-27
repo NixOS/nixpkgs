@@ -20,7 +20,7 @@ origArgs=("$@")
 copyClosureFlags=()
 extraBuildFlags=()
 lockFlags=()
-flakeFlags=()
+flakeFlags=(--extra-experimental-features 'nix-command flakes')
 action=
 buildNix=1
 fast=
@@ -120,7 +120,6 @@ while [ "$#" -gt 0 ]; do
         ;;
       --flake)
         flake="$1"
-        flakeFlags=(--extra-experimental-features 'nix-command flakes')
         shift 1
         ;;
       --no-flake)
@@ -254,7 +253,7 @@ nixBuild() {
 
 nixFlakeBuild() {
     logVerbose "Building in flake mode."
-    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot ]]
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]
     then
         runCmd nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result

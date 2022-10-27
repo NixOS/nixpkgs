@@ -4,12 +4,13 @@
 , glib
 , meson
 , ninja
+, nixosTests
 , pkg-config
 , gettext
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
-, fixDarwinDylibNames
 , gi-docgen
+, libxslt
+, fixDarwinDylibNames
 , gnome
 }:
 
@@ -17,13 +18,17 @@ stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optional withIntrospection "devdoc";
+  outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "luyYvnqR9t3jNjZyDj2i/27LuQ52zKpJSX8xpoVaSQ4=";
   };
+
+  patches = [
+    # Add option for changing installation path of installed tests.
+    ./meson-add-installed-tests-prefix-option.patch
+  ];
 
   strictDeps = true;
 
@@ -37,22 +42,31 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
+    libxslt
     gobject-introspection
     gi-docgen
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
+
+  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = lib.optionals (!withIntrospection) [
-    "-Dintrospection=disabled"
-    # gi-docgen relies on introspection data
-    "-Dgtk_doc=disabled"
+  mesonFlags = [
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
+
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace doc/meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
 
   doCheck = true;
 
@@ -68,6 +82,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.json-glib;
+    };
+
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";

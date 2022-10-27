@@ -1,7 +1,7 @@
-From 8fd5968163f3a1cb5f196d934756ba08ccaa5b1e Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Thu, 1 May 2014 14:10:10 +0200
-Subject: [PATCH 04/19] Look for fsck in the right place
+Subject: [PATCH] Look for fsck in the right place
 
 ---
  src/fsck/fsck.c | 2 +-
@@ -20,6 +20,3 @@ index 745d01ff50..dd4eef45c3 100644
                  cmdline[i++] =  arg_repair;
                  cmdline[i++] = "-T";
  
--- 
-2.34.0
-

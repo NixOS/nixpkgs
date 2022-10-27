@@ -1,7 +1,11 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl
+, isInsiders ? false
+, commandLineArgs ? ""
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
 
   plat = {
     x86_64-linux = "linux-x64";
@@ -9,27 +13,28 @@ let
     aarch64-linux = "linux-arm64";
     aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
-  }.${system};
+  }.${system} or throwSystem;
 
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0rq0bc99hsji4ni5mqw1rhzn2rng9rldm4xbdxlkrjyprc6qvffz";
-    x86_64-darwin = "1yjcb65w0anxyjc1nd9kbwr4hwnrlk9c6kp1a2ncy1g181klzarl";
-    aarch64-linux = "1fk7887clz9sd7fmz7lkxql7bnsvnbjd9fjixym2746x9if5ds42";
-    aarch64-darwin = "1bfgsjnm5r1wpss69ncx310j23mbwhixdxmg07m3kpcfqrmznvgc";
-    armv7l-linux = "0131i5cx2737wmngybvlw7d9c4gnilmla33nlrhf74ihic98jwlc";
-  }.${system};
+    x86_64-linux = "0cf6zlwslii30877p5vb0varxs6ai5r1g9wxx1b45yrmp7rvda91";
+    x86_64-darwin = "0j9kb7j2rvrgc2dzxhi1nzs78lzhpkfk3gcqcq84hcsga0n59y03";
+    aarch64-linux = "1bf2kvnd2pz2sk26bq1wm868bvvmrg338ipysmryilhk0l490vcx";
+    aarch64-darwin = "1rwwrzabxgw2wryi6rp8sc1jqps54p7a3cjpn4q94kds8rk5j0qn";
+    armv7l-linux = "0p2kwfq74lz43vpfh90xfrqsz7nwgcjsvqwkifkchp1m3xnil742";
+  }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.68.1";
+    version = "1.72.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+    inherit commandLineArgs;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -40,6 +45,11 @@ in
     sourceRoot = "";
 
     updateScript = ./update-vscode.sh;
+
+    # Editing the `code` binary within the app bundle causes the bundle's signature
+    # to be invalidated, which prevents launching starting with macOS Ventura, because VS Code is notarized.
+    # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+    dontFixup = stdenv.isDarwin;
 
     meta = with lib; {
       description = ''

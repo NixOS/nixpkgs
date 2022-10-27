@@ -160,9 +160,9 @@
 
   urweb-mode = callPackage ./urweb-mode { };
 
-  # Packages made the classical callPackage way
+  voicemacs = callPackage ./voicemacs { };
 
-  apheleia = callPackage ./apheleia { };
+  # Packages made the classical callPackage way
 
   ebuild-mode = callPackage ./ebuild-mode { };
 
@@ -233,6 +233,8 @@
 
   tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
   tsc = callPackage ./tsc { };
+
+  yes-no = callPackage ./yes-no { };
 
   youtube-dl = callPackage ./youtube-dl { };
 

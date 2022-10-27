@@ -1,9 +1,10 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
+, zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
 , makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
+, openssl, openssl_1_1
 } @ args:
 
 let
@@ -19,7 +20,6 @@ let
 
   generic = { version, sha256 }: let
     ver = version;
-    tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -27,7 +27,7 @@ let
       , useRailsExpress ? true
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, opensslSupport ? true
+      , openssl, openssl_1_1, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -48,7 +48,7 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
-      , baseRuby ? buildPackages.ruby.override {
+      , baseRuby ? buildPackages.ruby_3_1.override {
           useRailsExpress = false;
           docSupport = false;
           rubygemsSupport = false;
@@ -76,7 +76,8 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op opensslSupport openssl)
+          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
+          ++ (op (atLeast30 && opensslSupport) openssl_1_1)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
@@ -225,8 +226,8 @@ let
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
-          description = "The Ruby language";
-          homepage    = "http://www.ruby-lang.org/en/";
+          description = "An object-oriented language for quick and easy programming";
+          homepage    = "https://www.ruby-lang.org/";
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
@@ -248,11 +249,6 @@ let
             ruby = self;
           }) withPackages gems;
 
-          # deprecated 2016-09-21
-          majorVersion = ver.major;
-          minorVersion = ver.minor;
-          teenyVersion = ver.tiny;
-          patchLevel = ver.patchLevel;
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
@@ -260,6 +256,9 @@ let
     ) args; in self;
 
 in {
+  mkRubyVersion = rubyVersion;
+  mkRuby = generic;
+
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "6" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";

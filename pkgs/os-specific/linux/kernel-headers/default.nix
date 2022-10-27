@@ -27,7 +27,7 @@ let
       flex bison python rsync
     ];
 
-    extraIncludeDirs = lib.optional (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
+    extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
 
     inherit patches;
 
@@ -84,18 +84,15 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.18"; in
+  linuxHeaders = let version = "6.0"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "1vjwhl4s8qxfg1aabn8xnpjza3qzrjcp5450h9qpjvl999lg3wsi";
+        url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+        sha256 = "sha256-XCRDpVON5SaI77VcJ6sFOcH161jAz9FqK5+7CP2BeI4=";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
-
-         # 5.19 backport. Can be removed on update.
-         ./restore-__bitwise__.patch
       ];
     };
 }

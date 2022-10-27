@@ -20,7 +20,9 @@
 , meta ? {}
 , groups ? null
 , ignoreCollisions ? false
+, nativeBuildInputs ? []
 , buildInputs ? []
+, extraConfigPaths ? []
 , ...
 }@args:
 
@@ -83,6 +85,8 @@ let
     ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
+
+    ${lib.concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
   '';
 
   buildGem = name: attrs: (
@@ -99,7 +103,7 @@ let
 
 
   basicEnvArgs = {
-    inherit buildInputs ignoreCollisions;
+    inherit nativeBuildInputs buildInputs ignoreCollisions;
 
     name = name';
 

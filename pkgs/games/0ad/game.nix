@@ -1,8 +1,8 @@
-{ stdenv, lib, perl, fetchurl, python3, fmt, libidn
+{ stdenv, lib, fetchpatch, perl, fetchurl, python3, fmt, libidn
 , pkg-config, spidermonkey_78, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
-, gloox, nvidia-texture-tools
+, gloox, nvidia-texture-tools, freetype
 , withEditor ? true, wxGTK
 }:
 
@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.25b";
+  version = "0.0.26";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1p9fa8f7sjb9c5wl3mawzyfqvgr614kdkhrj2k4db9vkyisws3fp";
+    sha256 = "Lhxt9+MxLnfF+CeIZkz/w6eNO/YGBsAAOSdeHRPA7ks=";
   };
 
   nativeBuildInputs = [ python3 perl pkg-config ];
@@ -39,15 +39,20 @@ stdenv.mkDerivation rec {
     spidermonkey_78_6 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal libidn
     libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools libsodium fmt
+    nvidia-texture-tools libsodium fmt freetype
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = toString [
-    "-I${xorgproto}/include/X11"
-    "-I${libX11.dev}/include/X11"
-    "-I${libXcursor.dev}/include/X11"
+    "-I${xorgproto}/include"
+    "-I${libX11.dev}/include"
+    "-I${libXcursor.dev}/include"
     "-I${SDL2}/include/SDL2"
     "-I${fmt.dev}/include"
+    "-I${nvidia-texture-tools.dev}/include"
+  ];
+
+  NIX_CFLAGS_LINK = toString [
+    "-L${nvidia-texture-tools.lib}/lib/static"
   ];
 
   patches = [ ./rootdir_env.patch ];

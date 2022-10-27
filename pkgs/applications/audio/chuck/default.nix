@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsndfile ]
     ++ lib.optional (!stdenv.isDarwin) alsa-lib
-    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./darwin-limits.patch ];
 

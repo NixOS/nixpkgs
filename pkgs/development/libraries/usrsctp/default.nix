@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/sctplab/usrsctp/issues/662
+  postPatch = ''
+    substituteInPlace usrsctplib/CMakeLists.txt \
+      --replace '$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/sctplab/usrsctp";
     description = "A portable SCTP userland stack";

@@ -3,36 +3,82 @@
 set -euo pipefail
 
 export PATH="@binPath@"
+# used for glob ordering of package names
+export LC_ALL=C
 
 if [ $# -eq 0 ]; then
-  >&2 echo "Usage: $0 [packages directory] > deps.nix"
+  >&2 echo "Usage: $0 <packages directory> [path to excluded package source] > deps.nix"
   exit 1
 fi
 
 pkgs=$1
-tmpfile=$(mktemp /tmp/nuget-to-nix.XXXXXX)
-trap "rm -f ${tmpfile}" EXIT
+tmp=$(realpath "$(mktemp -td nuget-to-nix.XXXXXX)")
+trap 'rm -r "$tmp"' EXIT
+excluded_source=$(realpath "${2:-$tmp/empty}")
 
-declare -A nuget_sources_cache
+export DOTNET_NOLOGO=1
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
+
+declare -A base_addresses
+
+for index in "${sources[@]}"; do
+  base_addresses[$index]=$(
+    curl --compressed --netrc -fsL "$index" | \
+      jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
+done
 
 echo "{ fetchNuGet }: ["
 
-while read pkg_spec; do
-  { read pkg_name; read pkg_version; } < <(
-    # Build version part should be ignored: `3.0.0-beta2.20059.3+77df2220` -> `3.0.0-beta2.20059.3`
-    sed -nE 's/.*<id>([^<]*).*/\1/p; s/.*<version>([^<+]*).*/\1/p' "$pkg_spec")
-  pkg_sha256="$(nix-hash --type sha256 --flat --base32 "$(dirname "$pkg_spec")"/*.nupkg)"
+cd "$pkgs"
+for package in *; do
+  cd "$package"
+  for version in *; do
+    id=$(xq -r .package.metadata.id "$version/$package".nuspec)
 
-  pkg_src="$(jq --raw-output '.source' "$(dirname "$pkg_spec")/.nupkg.metadata")"
-  if [[ $pkg_src != https://api.nuget.org/* ]]; then
-    pkg_source_url="${nuget_sources_cache[$pkg_src]:=$(curl --fail "$pkg_src" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')}"
-    pkg_url="$pkg_source_url${pkg_name,,}/${pkg_version,,}/${pkg_name,,}.${pkg_version,,}.nupkg"
-    echo "  (fetchNuGet { pname = \"$pkg_name\"; version = \"$pkg_version\"; sha256 = \"$pkg_sha256\"; url = \"$pkg_url\"; })" >> ${tmpfile}
-  else
-    echo "  (fetchNuGet { pname = \"$pkg_name\"; version = \"$pkg_version\"; sha256 = \"$pkg_sha256\"; })" >> ${tmpfile}
-  fi
-done < <(find $1 -name '*.nuspec')
+    if [[ -e "$excluded_source/$id.$version".nupkg ]]; then
+      continue
+    fi
 
-LC_ALL=C sort --ignore-case ${tmpfile}
+    used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
+    for source in "${sources[@]}"; do
+      url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
+      if [[ "$source" == "$used_source" ]]; then
+        sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
+        found=true
+        break
+      else
+        if sha256=$(nix-prefetch-url "$url" 2>"$tmp"/error); then
+          # If multiple remote sources are enabled, nuget will try them all
+          # concurrently and use the one that responds first. We always use the
+          # first source that has the package.
+          echo "$package $version is available at $url, but was restored from $used_source" 1>&2
+          found=true
+          break
+        else
+          if ! grep -q 'HTTP error 404' "$tmp/error"; then
+            cat "$tmp/error" 1>&2
+            exit 1
+          fi
+        fi
+      fi
+    done
 
-echo "]"
+    if ! ${found-false}; then
+      echo "couldn't find $package $version" >&2
+      exit 1
+    fi
+
+    if [[ "$source" != https://api.nuget.org/v3/index.json ]]; then
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; url = \"$url\"; })"
+    else
+      echo "  (fetchNuGet { pname = \"$id\"; version = \"$version\"; sha256 = \"$sha256\"; })"
+    fi
+  done
+  cd ..
+done
+
+cat << EOL
+]
+EOL

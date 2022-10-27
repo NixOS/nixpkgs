@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kamid";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchurl {
     url = "https://github.com/omar-polo/kamid/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "16gi82dgaxwy8fgg05hbam796pk51i6xlyrx8qhghi7ikxr5jd19";
+    sha256 = "sha256-23LgcZ+R6wcUz1fZA+IbhyshfQOTyiFPZ+uKVwOh680=";
   };
 
   nativeBuildInputs = [

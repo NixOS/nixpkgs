@@ -13,6 +13,9 @@ import tempfile
 class CalledProcessError(Exception):
     process: asyncio.subprocess.Process
 
+class UpdateFailedException(Exception):
+    pass
+
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
@@ -49,7 +52,17 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
     eprint(f" - {package['name']}: UPDATING ...")
 
     try:
-        update_process = await check_subprocess('env', f"UPDATE_NIX_ATTR_PATH={package['attrPath']}", *update_script_command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+        update_process = await check_subprocess(
+            'env',
+            f"UPDATE_NIX_NAME={package['name']}",
+            f"UPDATE_NIX_PNAME={package['pname']}",
+            f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
+            f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
+            *update_script_command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            cwd=worktree,
+        )
         update_info = await update_process.stdout.read()
 
         await merge_changes(merge_lock, package, update_info, temp_dir)
@@ -69,7 +82,7 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
         eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
 
         if not keep_going:
-            raise asyncio.exceptions.CancelledError()
+            raise UpdateFailedException(f"The update script for {package['name']} failed with exit code {e.process.returncode}")
 
 @contextlib.contextmanager
 def make_worktree() -> Generator[Tuple[str, str], None, None]:
@@ -185,9 +198,14 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
         try:
             # Start updater workers.
             await updaters
-        except asyncio.exceptions.CancelledError as e:
+        except asyncio.exceptions.CancelledError:
             # When one worker is cancelled, cancel the others too.
             updaters.cancel()
+        except UpdateFailedException as e:
+            # When one worker fails, cancel the others, as this exception is only thrown when keep_going is false.
+            updaters.cancel()
+            eprint(e)
+            sys.exit(1)
 
 def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
     with open(packages_path) as f:

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jarowinkler";
-  version = "1.0.4";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "JaroWinkler";
-    rev = "v${version}";
-    hash = "sha256-2bhKl7l3ByfrtkXnXifQd/AhWVFGSMzULkzJftd1mVE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j+ZabVsiVitNkTPhGjDg72XogjvPaL453lTW45ITm90=";
   };
 
   nativeBuildInputs = [
@@ -41,17 +41,16 @@ buildPythonPackage rec {
     jarowinkler-cpp
   ];
 
+  preBuild = ''
+    export JAROWINKLER_BUILD_EXTENSION=1
+  '';
+
   dontUseCmakeConfigure = true;
 
   checkInputs = [
     hypothesis
     pytestCheckHook
   ];
-
-  preCheck = ''
-    # import from $out
-    rm -r jarowinkler
-  '';
 
   pythonImportsCheck = [ "jarowinkler" ];
 

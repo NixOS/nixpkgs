@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "dynalite-devices";
-  version = "0.46";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "ziv1234";
     repo = "python-dynalite-devices";
-    rev = "v${version}"; # https://github.com/ziv1234/python-dynalite-devices/issues/2
-    hash = "sha256-Fju2JpFkQBCbOln7r3L+crv82TI2SkdPJ1oaK7PEifo=";
+    rev = "refs/tags/v${version}"; # https://github.com/ziv1234/python-dynalite-devices/issues/2
+    hash = "sha256-kJo4e5vhgWzijLUhQd9VBVk1URpg9SXhOA60dJYashM=";
   };
 
   postPatch = ''
@@ -25,6 +25,10 @@ buildPythonPackage rec {
     asynctest
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [ "dynalite_devices_lib" ];

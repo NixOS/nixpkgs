@@ -220,7 +220,7 @@ in stdenv.mkDerivation rec {
       * gpg-key2latex: generate LaTeX file with fingerprint paper slips
     '';
     license = with licenses; [ bsd2 bsd3 gpl2 gpl2Plus gpl3Plus ];
-    maintainers = with maintainers; [ fpletz primeos ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;
   };
 }

@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     # TODO: Add OS X
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

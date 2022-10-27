@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -27,6 +28,7 @@
 , util-linux
 , kbd
 , kmod
+, libxcrypt
 
   # Optional dependencies
 , pam
@@ -83,23 +85,24 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? false # currently fails while generating BPF objects
+, withLibBPF ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
 , withNetworkd ? true
 , withNss ? !stdenv.hostPlatform.isMusl
-, withOomd ? false
+, withOomd ? true
 , withPCRE2 ? true
 , withPolkit ? true
-, withPortabled ? false
+, withPortabled ? !stdenv.hostPlatform.isMusl
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
-, withTpm2Tss ? !stdenv.hostPlatform.isMusl
-, withUserDb ? !stdenv.hostPlatform.isMusl
+, withTpm2Tss ? true
+, withUserDb ? true
+, withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
 
@@ -112,28 +115,20 @@
 , docbook_xml_dtd_45
 }:
 
-assert withResolved -> (libgcrypt != null && libgpg-error != null);
-assert withImportd ->
-(curl.dev != null && zlib != null && xz != null && libgcrypt != null
-  && gnutar != null && gnupg != null && withCompression);
-
-assert withEfi -> (gnu-efi != null);
-assert withRemote -> lib.getDev curl != null;
+assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
-
 assert withHomed -> withCryptsetup;
 
-assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "250.4";
+  version = "251.5";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1640290180";
+  releaseTimestamp = "1653143108";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -144,12 +139,13 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-AdzPh7dGVrGbbjL9+PqytQOpRzNDUUEftmKZAbFH3L4=";
+    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
   # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
-  # systemd version, and export the patches again via `git -c format.signoff=false format-patch v${version}`.
+  # systemd version, and export the patches again via
+  # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -163,55 +159,34 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-inherit-systemd-environment-when-calling-generators.patch
-    ./0013-add-rootprefix-to-lookup-dir-paths.patch
-    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-pkg-config-derive-prefix-from-prefix.patch
-
-    # In v248 or v249 we started to get in trouble due to our
-    # /etc/systemd/system being a symlink and thus being treated differently by
-    # systemd. With the below patch we mitigate that effect by special casing
-    # all our root unit dirs if they are symlinks. This does exactly what we
-    # need (AFAICT).
-    # See https://github.com/systemd/systemd/pull/20479 for upstream discussion.
-    ./0019-core-handle-lookup-paths-being-symlinks.patch
-
-    # fixes reproducability of dbus xml files
-    # Should no longer be necessary with v251.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/pull/22174.patch";
-      sha256 = "sha256-RVhxUEUiISgRlIP/AhU+w1VHfDQw2W16cFl2TXXyxno=";
-    })
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0016-pkg-config-derive-prefix-from-prefix.patch
+    ./0017-inherit-systemd-environment-when-calling-generators.patch
+    ./0018-core-don-t-taint-on-unmerged-usr.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-7e35a575ef09a85e625a81e0b4d80b020e3e3a92.tar.bz2";
-        sha256 = "0dvz4685nk0y7nnq3sr2q8ab3wfx0bi8ilwcgn0h6kagwcnav2n8";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86a33f98a7c0d6f2c2b51d02ba9e01b63062cf98.tar.bz2";
+        sha256 = "081j01sw21hl405l7g9z4bavvq0q0k4g80365677m0ykhiqlx3am";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
-      (musl-patches + "/0002-don-t-use-glibc-specific-qsort_r.patch")
-      (musl-patches + "/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch")
+      (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
       (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
       (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
       (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
-      (musl-patches + "/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch")
       (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
       (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
       (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-      (musl-patches + "/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch")
-      (musl-patches + "/0017-missing_type.h-add-__compar_d_fn_t-definition.patch")
       (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
-      (musl-patches + "/0019-Handle-missing-LOCK_EX.patch")
-      (musl-patches + "/0021-test-json.c-define-M_PIl.patch")
       (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
       (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0026-Handle-missing-gshadow.patch")
@@ -226,8 +201,14 @@ stdenv.mkDerivation {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('objcopy'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
+      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + lib.optionalString withLibBPF ''
+    substituteInPlace meson.build \
+      --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
+    # BPF does not work with stack protector
+    substituteInPlace src/core/bpf/meson.build \
+      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -353,6 +334,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -369,7 +351,7 @@ stdenv.mkDerivation {
       docbook_xml_dtd_45
       (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
     ]
-    ++ lib.optional withLibBPF [
+    ++ lib.optionals withLibBPF [
       bpftools
       llvmPackages.clang
       llvmPackages.libllvm
@@ -381,6 +363,7 @@ stdenv.mkDerivation {
       acl
       audit
       kmod
+      libxcrypt
       libcap
       libidn2
       libuuid
@@ -517,9 +500,10 @@ stdenv.mkDerivation {
     "-Dbpf-framework=true"
   ] ++ lib.optionals withTpm2Tss [
     "-Dtpm2=true"
+  ] ++ lib.optionals (!withUtmp) [
+    "-Dutmp=false"
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dgshadow=false"
-    "-Dutmp=false"
     "-Didn=false"
   ];
   preConfigure =
@@ -547,6 +531,7 @@ stdenv.mkDerivation {
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
+            "src/test/test-load-fragment.c"
           ];
         }
         {
@@ -573,29 +558,40 @@ stdenv.mkDerivation {
           replacement = "\\\"${gnutar}/bin/tar\\\"";
           where = [
             "src/import/export-tar.c"
-            "src/import/export.c"
             "src/import/import-common.c"
             "src/import/import-tar.c"
+          ];
+          ignore = [
+            # occurences here refer to the tar sub command
+            "src/sysupdate/sysupdate-resource.c"
+            "src/sysupdate/sysupdate-transfer.c"
+            "src/import/pull.c"
+            "src/import/export.c"
             "src/import/import.c"
             "src/import/importd.c"
+            # runs `tar` but also also creates a temporary directory with the string
             "src/import/pull-tar.c"
-            "src/import/pull.c"
           ];
         }
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where }:
+      mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where }:
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
+        let
+          ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
+        in
         ''
-          if [[ $(grep -r '${search}' | grep -v "${replacement}" | grep -Ev 'NEWS|^test/' | wc -l) -gt 0 ]]; then
+          set +e
+          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+          set -e
+          if [[ -n "$search" ]]; then
             echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            grep '${search}' -r | grep -v "${replacement}" | grep -Ev 'NEWS|^test/'
+            echo "$search"
             exit 1
           fi
         '';
-
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -606,6 +602,9 @@ stdenv.mkDerivation {
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+
+      substituteInPlace src/import/pull-tar.c \
+        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
@@ -671,7 +670,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup = lib.optionalString withCryptsetup ''
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
@@ -684,7 +690,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;

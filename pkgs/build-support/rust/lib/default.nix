@@ -3,12 +3,16 @@
 rec {
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
   toTargetArch = platform:
-    if platform.isAarch32 then "arm"
+    /**/ if platform ? rustc.platform then platform.rustc.platform.arch
+    else if platform.isAarch32 then "arm"
+    else if platform.isMips64  then "mips64"     # never add "el" suffix
+    else if platform.isPower64 then "powerpc64"  # never add "le" suffix
     else platform.parsed.cpu.name;
 
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
   toTargetOs = platform:
-    if platform.isDarwin then "macos"
+    /**/ if platform ? rustc.platform then platform.rustc.platform.os or "none"
+    else if platform.isDarwin then "macos"
     else platform.parsed.kernel.name;
 
   # Returns the name of the rust target, even if it is custom. Adjustments are
@@ -31,7 +35,12 @@ rec {
   # Returns the name of the rust target if it is standard, or the json file
   # containing the custom target spec.
   toRustTargetSpec = platform:
-    if (platform.rustc or {}) ? platform
+    if platform ? rustc.platform
     then builtins.toFile (toRustTarget platform + ".json") (builtins.toJSON platform.rustc.platform)
     else toRustTarget platform;
+
+  # Returns true if the target is no_std
+  # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
+  IsNoStdTarget = platform: let rustTarget = toRustTarget platform; in
+    builtins.any (t: lib.hasInfix t rustTarget) ["-none" "nvptx" "switch" "-uefi"];
 }

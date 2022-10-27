@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "starfetch";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "Haruno19";
     repo = "starfetch";
     rev = version;
-    sha256 = "sha256-waJ1DbOqhZ3hHtqcODSXBC+O46S8RSxuBuoEqs8OfgI=";
+    sha256 = "sha256-2npevr3eSFhB58gRB2IuG4nwzPEGr0xcoSa/4VS0DNg=";
   };
 
   postPatch = ''
     substituteInPlace src/starfetch.cpp --replace /usr/local/ $out/
+  '' + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile --replace g++ clang++
   '';
 
   installPhase = ''
@@ -31,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Haruno19/starfetch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

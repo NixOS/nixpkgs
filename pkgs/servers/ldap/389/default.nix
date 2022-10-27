@@ -1,144 +1,121 @@
-{ stdenv
-, autoreconfHook
+{ lib
+, stdenv
 , fetchFromGitHub
-, lib
-
-, bzip2
-, cmocka
+, autoconf
+, automake
+, libtool
+, pkg-config
 , cracklib
-, cyrus_sasl
-, db
-, doxygen
-, icu
+, lmdb
+, json_c
+, linux-pam
 , libevent
-, libkrb5
-, lm_sensors
-, net-snmp
 , nspr
 , nss
 , openldap
-, openssl
-, pcre
-, perl
-, perlPackages
-, pkg-config
+, withOpenldap ? true
+, db
+, withBdb ? true
+, cyrus_sasl
+, icu
+, net-snmp
+, withNetSnmp ? true
+, krb5
+, pcre2
 , python3
-, svrcore
+, rustPlatform
+, openssl
+, systemd
+, withSystemd ? stdenv.isLinux
 , zlib
-
-, enablePamPassthru ? true
-, pam
-
-, enableCockpit ? true
 , rsync
-
-, enableDna ? true
-, enableLdapi ? true
-, enableAutobind ? false
-, enableAutoDnSuffix ? false
-, enableBitwise ? true
-, enableAcctPolicy ? true
-, enablePosixWinsync ? true
+, withCockpit ? true
+, withAsan ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.0.7";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
+    sha256 = "sha256-GnntF0UaufDrgcM6FFFdwxwVoU9Hu2NXTW1A2lTb6T4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "source/src";
+    name = "${pname}-${version}";
+    hash = "sha256-OJXvNL7STNwvt6EiV2r8zv2ZoUGgNUj7UssAQNLN4KI=";
+  };
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    python3
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+  ]
+  ++ lib.optional withCockpit rsync;
 
   buildInputs = [
-    bzip2
     cracklib
-    cyrus_sasl
-    db
-    icu
+    lmdb
+    json_c
+    linux-pam
     libevent
-    libkrb5
-    lm_sensors
-    net-snmp
     nspr
     nss
-    openldap
+    cyrus_sasl
+    icu
+    krb5
+    pcre2
     openssl
-    pcre
-    perl
-    python3
-    svrcore
     zlib
-
-    # tests
-    cmocka
-    libevent
-
-    # lib389
-    (python3.withPackages (ps: with ps; [
-      setuptools
-      ldap
-      six
-      pyasn1
-      pyasn1-modules
-      python-dateutil
-      argcomplete
-      libselinux
-    ]))
-
-    # logconv.pl
-    perlPackages.DBFile
-    perlPackages.ArchiveTar
   ]
-  ++ lib.optional enableCockpit rsync
-  ++ lib.optional enablePamPassthru pam;
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withOpenldap openldap
+  ++ lib.optional withBdb db
+  ++ lib.optional withNetSnmp net-snmp;
 
   postPatch = ''
-    substituteInPlace Makefile.am \
-      --replace 's,@perlpath\@,$(perldir),g' 's,@perlpath\@,$(perldir) $(PERLPATH),g'
-
     patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
   '';
 
   preConfigure = ''
-    # Create perl paths for library imports in perl scripts
-    PERLPATH=""
-    for P in $(echo $PERL5LIB | sed 's/:/ /g'); do
-      PERLPATH="$PERLPATH $(echo $P/*/*)"
-    done
-    export PERLPATH
+    ./autogen.sh --prefix="$out"
   '';
 
-  configureFlags =
-    let
-      mkEnable = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
-    in
-    [
-      "--enable-cmocka"
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--with-db-inc=${db.dev}/include"
-      "--with-db-lib=${db.out}/lib"
-      "--with-db=yes"
-      "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
-      "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
-      "--with-netsnmp=yes"
-      "--with-openldap"
+  preBuild = ''
+    mkdir -p ./vendor
+    tar -xzf ${cargoDeps} -C ./vendor --strip-components=1
+  '';
 
-      "${mkEnable enableCockpit "cockpit"}"
-      "${mkEnable enablePamPassthru "pam-passthru"}"
-      "${mkEnable enableDna "dna"}"
-      "${mkEnable enableLdapi "ldapi"}"
-      "${mkEnable enableAutobind "autobind"}"
-      "${mkEnable enableAutoDnSuffix "auto-dn-suffix"}"
-      "${mkEnable enableBitwise "bitwise"}"
-      "${mkEnable enableAcctPolicy "acctpolicy"}"
-      "${mkEnable enablePosixWinsync "posix-winsync"}"
-    ];
+  configureFlags = [
+    "--enable-rust-offline"
+    "--enable-autobind"
+  ]
+  ++ lib.optionals withSystemd [
+    "--with-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ] ++ lib.optionals withOpenldap [
+    "--with-openldap"
+  ] ++ lib.optionals withBdb [
+    "--with-db-inc=${lib.getDev db}/include"
+    "--with-db-lib=${lib.getLib db}/lib"
+  ] ++ lib.optionals withNetSnmp [
+    "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+  ] ++ lib.optionals (!withCockpit) [
+    "--disable-cockpit"
+  ] ++ lib.optionals withAsan [
+    "--enable-asan"
+    "--enable-debug"
+  ];
 
   enableParallelBuilding = true;
 
@@ -156,5 +133,6 @@ stdenv.mkDerivation rec {
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.ners ];
   };
 }

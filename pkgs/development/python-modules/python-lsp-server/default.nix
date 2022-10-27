@@ -23,6 +23,7 @@
 , setuptools-scm
 , stdenv
 , ujson
+, whatthepatch
 , yapf
 , withAutopep8 ? true
 , withFlake8 ? true
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -45,12 +46,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-rEfjxHw2NIVIa8RepxLPiXkRFhcGWLzm6w43n60zkFE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-tW2w94HI6iy8vcDb5pIL79bAO6BJp9q6SMAXgiVobm0=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
       --replace "mccabe>=0.6.0,<0.7.0" "mccabe"
@@ -75,7 +76,7 @@ buildPythonPackage rec {
   ++ lib.optional withPyflakes pyflakes
   ++ lib.optional withPylint pylint
   ++ lib.optional withRope rope
-  ++ lib.optional withYapf yapf;
+  ++ lib.optionals withYapf [ whatthepatch yapf ];
 
   checkInputs = [
     flaky
@@ -87,7 +88,9 @@ buildPythonPackage rec {
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
 
-  disabledTests = lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
+  disabledTests = [
+    "test_numpy_completions" # https://github.com/python-lsp/python-lsp-server/issues/243
+  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "test_pyqt_completion";
 

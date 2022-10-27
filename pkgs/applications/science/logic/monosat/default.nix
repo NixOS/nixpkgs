@@ -47,6 +47,9 @@ let
       "-DBUILD_STATIC=OFF"
       "-DJAVA=${boolToCmake includeJava}"
       "-DGPL=${boolToCmake includeGplCode}"
+
+      # file RPATH_CHANGE could not write new RPATH
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
 
     postInstall = optionalString includeJava ''

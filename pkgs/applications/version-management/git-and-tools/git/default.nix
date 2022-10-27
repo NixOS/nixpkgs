@@ -19,6 +19,8 @@
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, tests
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -26,12 +28,12 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.36.1";
+  version = "2.38.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git"
     + lib.optionalString svnSupport "-with-svn"
     + lib.optionalString (!svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2) "-minimal";
@@ -39,7 +41,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0w43a35mhc2qf2gjkxjlnkf2lq8g0snf34iy5gqx2678yq7llpa0";
+    sha256 = "sha256-kj6t4msYFN540GvajgqfXai3xLMEs/kFD/tGTwMQMgo=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -72,7 +74,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
@@ -80,7 +82,7 @@ stdenv.mkDerivation {
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
     ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
-    ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
+    ++ lib.optionals withLibsecret [ glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
@@ -250,7 +252,7 @@ stdenv.mkDerivation {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -280,7 +282,7 @@ stdenv.mkDerivation {
   ## InstallCheck
 
   doCheck = false;
-  doInstallCheck = true;
+  inherit doInstallCheck;
 
   installCheckTarget = "test";
 
@@ -337,6 +339,10 @@ stdenv.mkDerivation {
     disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
 
+    # Fails reproducibly on ZFS on Linux with formD normalization
+    disable_test t0021-conversion
+    disable_test t3910-mac-os-precompose
+
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
       # when NO_PERL=1, and the test should be skipped, but the test suite does
@@ -369,8 +375,11 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/git-shell";
     tests = {
+      withInstallCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+        doInstallCheck = true;
+      });
       buildbot-integration = nixosTests.buildbot;
-    };
+    } // tests.fetchgit;
   };
 
   meta = {
@@ -387,4 +396,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
-}
+})

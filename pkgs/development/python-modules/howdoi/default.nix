@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "test_multiple_answers"
     "test_position"
     "test_unicode_answer"
+    "test_answer_links_using_l_option"
   ];
 
   pythonImportsCheck = [

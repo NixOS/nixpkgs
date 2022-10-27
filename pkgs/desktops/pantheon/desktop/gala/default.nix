@@ -46,6 +46,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/gala/commit/1f94db16c627f73af5dc69714611815e4691b5e8.patch";
       sha256 = "sha256-PLNbAXyOG0TMn1y2QIBnL6BOQVqBA+DBgPOVJo4nDr8=";
     })
+
+    # WindowSwitcher: fix initial alt-tab switcher indicator visibility
+    # https://github.com/elementary/gala/pull/1417
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/e0095415cdbfc369e6482e84b8aaffc6a04cafe7.patch";
+      sha256 = "sha256-n/BJPIrUaCQtBgDotOLq/bCAAccdbL6OwciXY115HsM=";
+    })
+
+    # MultitaskingView: fix allocation assertions
+    # https://github.com/elementary/gala/pull/1463
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/23c7edeb0ee9b0ff0aa48c1d19fbd1739df7af78.patch";
+      sha256 = "sha256-OfIDBfVEZoY8vMu9F8gtfRg4TYA1MUAG94BSOBKVGcI=";
+    })
   ];
 
   nativeBuildInputs = [

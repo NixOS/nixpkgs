@@ -1,9 +1,9 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , cmake
 , pkg-config
+, wrapQtAppsHook
 , alsa-lib
 , boost
 , chromaprint
@@ -20,13 +20,14 @@
 , sqlite
 , taglib
 , libgpod
+, libidn2
 , libpulseaudio
 , libselinux
 , libsepol
 , p11-kit
 , util-linux
 , qtbase
-, qtx11extras
+, qtx11extras ? null # doesn't exist in qt6
 , qttools
 , withGstreamer ? true
 , glib-networking
@@ -35,15 +36,19 @@
 , libvlc
 }:
 
-mkDerivation rec {
+let
+  inherit (lib) optionals;
+
+in
+stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.5";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-6d7oB54IPI+G5Mhkj+PdQQY93r1SBE2R06qSGIacj8Q=";
+    hash = "sha256-N3jLw2UXLXLpTmFIHihzcMXrxJY0gmvwoawTQ0vRR+w=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -59,6 +64,7 @@ mkDerivation rec {
     fftw
     gnutls
     libcdio
+    libidn2
     libmtp
     libpthreadstubs
     libtasn1
@@ -69,13 +75,13 @@ mkDerivation rec {
     taglib
     qtbase
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     libgpod
     libpulseaudio
     libselinux
     libsepol
     p11-kit
-  ] ++ lib.optionals withGstreamer (with gst_all_1; [
+  ] ++ optionals withGstreamer (with gst_all_1; [
     glib-networking
     gstreamer
     gst-libav
@@ -90,7 +96,8 @@ mkDerivation rec {
     ninja
     pkg-config
     qttools
-  ] ++ lib.optionals stdenv.isLinux [
+    wrapQtAppsHook
+  ] ++ optionals stdenv.isLinux [
     util-linux
   ];
 

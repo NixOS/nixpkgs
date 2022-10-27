@@ -10,10 +10,16 @@
 , kcoreaddons
 , kdbusaddons
 , ki18n
+, kirigami-addons
+, kirigami2
 , kitemmodels
+, libselinux
+, libsepol
 , modemmanager-qt
 , networkmanager-qt
+, pcre
 , plasma-framework
+, util-linux
 }:
 
 mkDerivation rec {
@@ -30,10 +36,16 @@ mkDerivation rec {
     kcoreaddons
     kdbusaddons
     ki18n
+    kirigami-addons
+    kirigami2
     kitemmodels
+    libselinux
+    libsepol
     modemmanager-qt
     networkmanager-qt
+    pcre
     plasma-framework
+    util-linux
   ];
 
   meta = with lib; {

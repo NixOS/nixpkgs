@@ -8,18 +8,19 @@
 , aws-c-io
 , aws-checksums
 , cmake
+, nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-s3";
-  version = "0.1.39";
+  version = "0.1.50";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
     rev = "v${version}";
-    sha256 = "sha256-UbYh3awI7Y3mJnVQrltU+rZ1TI1TDaMF5TOcvxbzNa8=";
+    sha256 = "sha256-LFp7GkqdVXjOeeVD/4gOUK5chWcUMiepGoDLoN2XUok=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +39,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 library implementation for communicating with the S3 service";

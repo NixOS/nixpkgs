@@ -8,7 +8,6 @@
 , fetchFromGitHub
 , ffmpeg
 , fluidsynth
-, gcc10Stdenv
 , gettext
 , hexdump
 , hidapi
@@ -31,7 +30,6 @@
 , portaudio
 , python3
 , retroarch
-, SDL
 , sfml
 , snappy
 , udev
@@ -40,6 +38,7 @@
 , xxd
 , xz
 , zlib
+, fetchpatch
 }:
 
 let
@@ -56,7 +55,7 @@ let
     , stdenvOverride ? stdenv
     , src ? (getCoreSrc core)
     , broken ? false
-    , version ? "unstable-2022-04-21"
+    , version ? "unstable-2022-10-18"
     , platforms ? retroarch.meta.platforms
       # The resulting core file is based on core name
       # Setting `normalizeCore` to `true` will convert `-` to `_` on the core filename
@@ -113,7 +112,7 @@ let
         meta = with lib; {
           inherit broken description license platforms;
           homepage = "https://www.libretro.com/";
-          maintainers = with maintainers; [ edwtjo hrdinka MP2E thiagokokada ];
+          maintainers = with maintainers; teams.libretro.members ++ [ hrdinka ];
         };
       }) // builtins.removeAttrs args [ "core" "src" "description" "license" "makeFlags" ]
     );
@@ -205,6 +204,14 @@ in
     makefile = "Makefile";
   };
 
+  beetle-supafaust = mkLibRetroCore {
+    core = "mednafen-supafaust";
+    src = getCoreSrc "beetle-supafaust";
+    description = "Port of Mednafen's experimental snes_faust core to libretro";
+    license = lib.licenses.gpl2Plus;
+    makefile = "Makefile";
+  };
+
   beetle-supergrafx = mkLibRetroCore {
     core = "mednafen-supergrafx";
     src = getCoreSrc "beetle-supergrafx";
@@ -233,6 +240,7 @@ in
     core = "blastem";
     description = "Port of BlastEm to libretro";
     license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.x86;
   };
 
   bluemsx = mkLibRetroCore {
@@ -300,7 +308,6 @@ in
   citra = mkLibRetroCore {
     core = "citra";
     description = "Port of Citra to libretro";
-    stdenvOverride = gcc10Stdenv;
     license = lib.licenses.gpl2Plus;
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
@@ -331,7 +338,6 @@ in
     core = "dolphin";
     description = "Port of Dolphin to libretro";
     license = lib.licenses.gpl2Plus;
-
     extraNativeBuildInputs = [ cmake curl pkg-config ];
     extraBuildInputs = [
       libGLU
@@ -359,7 +365,7 @@ in
     core = "dosbox";
     description = "Port of DOSBox to libretro";
     license = lib.licenses.gpl2Only;
-    stdenvOverride = gcc10Stdenv;
+    CXXFLAGS = "-std=gnu++11";
   };
 
   eightyone = mkLibRetroCore {
@@ -397,7 +403,8 @@ in
     license = lib.licenses.gpl2Only;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
+    patches = [ ./fix-flycast-makefile.patch ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
@@ -452,9 +459,9 @@ in
     core = "hatari";
     description = "Port of Hatari to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ SDL zlib ];
     extraNativeBuildInputs = [ which ];
     dontConfigure = true;
+    # zlib is already included in mkLibRetroCore as buildInputs
     makeFlags = [ "EXTERNAL_ZLIB=1" ];
   };
 
@@ -467,41 +474,37 @@ in
 
   mame2000 = mkLibRetroCore {
     core = "mame2000";
-    description = "Port of MAME ~2000 to libretro";
+    description = "Port of MAME ~2000 to libretro, compatible with MAME 0.37b5 sets";
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
-    enableParallelBuilding = false;
   };
 
   mame2003 = mkLibRetroCore {
     core = "mame2003";
-    description = "Port of MAME ~2003 to libretro";
+    description = "Port of MAME ~2003 to libretro, compatible with MAME 0.78 sets";
     license = "MAME";
     makefile = "Makefile";
-    enableParallelBuilding = false;
   };
 
   mame2003-plus = mkLibRetroCore {
     core = "mame2003-plus";
-    description = "Port of MAME ~2003+ to libretro";
+    description = "Port of MAME ~2003+ to libretro, compatible with MAME 0.78 sets";
     license = "MAME";
     makefile = "Makefile";
-    enableParallelBuilding = false;
   };
 
   mame2010 = mkLibRetroCore {
     core = "mame2010";
-    description = "Port of MAME ~2010 to libretro";
+    description = "Port of MAME ~2010 to libretro, compatible with MAME 0.139 sets";
     license = "MAME";
     makefile = "Makefile";
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
-    enableParallelBuilding = false;
   };
 
   mame2015 = mkLibRetroCore {
     core = "mame2015";
-    description = "Port of MAME ~2015 to libretro";
+    description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
     license = "MAME";
     makeFlags = [ "PYTHON=python3" ];
     extraNativeBuildInputs = [ python3 ];
@@ -512,16 +515,11 @@ in
 
   mame2016 = mkLibRetroCore {
     core = "mame2016";
-    description = "Port of MAME ~2016 to libretro";
+    description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
     license = with lib.licenses; [ bsd3 gpl2Plus ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    postPatch = ''
-      # Prevent the failure during the parallel building of:
-      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
-      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
-    '';
     enableParallelBuilding = false;
   };
 
@@ -586,6 +584,13 @@ in
     license = lib.licenses.gpl2Only;
     makefile = "Makefile";
     preBuild = "cd libretro";
+  };
+
+  nxengine = mkLibRetroCore {
+    core = "nxengine";
+    description = "NXEngine libretro port";
+    license = lib.licenses.gpl3Only;
+    makefile = "Makefile";
   };
 
   np2kai = mkLibRetroCore rec {
@@ -659,7 +664,7 @@ in
     platforms = lib.platforms.x86;
   };
 
-  pcsx_rearmed = mkLibRetroCore {
+  pcsx-rearmed = mkLibRetroCore {
     core = "pcsx_rearmed";
     description = "Port of PCSX ReARMed with GNU lightning to libretro";
     license = lib.licenses.gpl2Only;
@@ -670,12 +675,8 @@ in
     core = "picodrive";
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
-
-    extraBuildInputs = [ libpng SDL ];
-    SDL_CONFIG = "${lib.getDev SDL}/bin/sdl-config";
-    dontAddPrefix = true;
-    configurePlatforms = [ ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
+    dontConfigure = true;
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
   play = mkLibRetroCore {
@@ -720,6 +721,17 @@ in
     makefile = "Makefile";
   };
 
+  puae = mkLibRetroCore {
+    core = "puae";
+    description = "Amiga emulator based on WinUAE";
+    license = lib.licenses.gpl2Only;
+    makefile = "Makefile";
+    patches = fetchpatch {
+        url = "https://github.com/libretro/libretro-uae/commit/90ba4c9bb940e566781c3590553270ad69cf212e.patch";
+        sha256 = "sha256-9xkRravvyFZc0xsIj0OSm2ux5BqYogfQ1TDnH9l6jKw=";
+    };
+  };
+
   quicknes = mkLibRetroCore {
     core = "quicknes";
     description = "QuickNES libretro port";
@@ -740,7 +752,7 @@ in
     core = "scummvm";
     description = "Libretro port of ScummVM";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL SDL ];
+    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
   };
@@ -793,9 +805,8 @@ in
     core = "stella";
     description = "Port of Stella to libretro";
     license = lib.licenses.gpl2Only;
-    extraBuildInputs = [ libpng pkg-config SDL ];
     makefile = "Makefile";
-    preBuild = "cd src/libretro";
+    preBuild = "cd src/os/libretro";
     dontConfigure = true;
   };
 
@@ -837,7 +848,7 @@ in
     core = "tic80";
     description = "Port of TIC-80 to libretro";
     license = lib.licenses.mit;
-    extraNativeBuildInputs = [ cmake pkg-config libGL libGLU ];
+    extraNativeBuildInputs = [ cmake pkg-config ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO=ON"

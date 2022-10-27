@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.05.2";
+  version = "2022.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-8M70Pf31PhYnBPRhSG55eWg6gK0lxsIFKF+cRCsf0/U=";
+    hash = "sha256-4Tok9eYhi2FF+8bpKnwKT3KIRGHIMtxczTkZ6qD8x7g=";
   };
 
   propagatedBuildInputs = [
@@ -97,9 +97,8 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # Ignore warning about pyarrow 5.0.0 feautres
-    "-W"
-    "ignore::FutureWarning"
+    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
+    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

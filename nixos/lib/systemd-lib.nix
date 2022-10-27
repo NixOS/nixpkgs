@@ -214,7 +214,7 @@ in rec {
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             ln -sfn '${name}' $out/'${name2}'
-          '') unit.aliases) units)}
+          '') (unit.aliases or [])) units)}
 
       # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
@@ -222,13 +222,13 @@ in rec {
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) units)}
+          '') (unit.wantedBy or [])) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) units)}
+          '') (unit.requiredBy or [])) units)}
 
       ${optionalString (type == "system") ''
         # Stupid misc. symlinks.
@@ -285,6 +285,8 @@ in rec {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure; }
+        // optionalAttrs (config.onSuccess != []) {
+          OnSuccess = toString config.onSuccess; }
         // optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
         } // optionalAttrs (options.startLimitBurst.isDefined) {

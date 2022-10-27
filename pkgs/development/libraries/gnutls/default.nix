@@ -22,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.6";
+  version = "3.7.8";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "1zv2097v9f6f4c66q7yn3c6gggjk9jz38095ma7v3gs5lccmf1kp";
+    sha256 = "sha256-xYrTmvBnDv5qiu5eOosjMaEgBBi2S3xRl3+zltRhcRQ=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
     (lib.withFeature withP11-kit "p11-kit")
     (lib.enableFeature cxxBindings "cxx")
-  ] ++ lib.optional guileBindings [
+  ] ++ lib.optionals guileBindings [
     "--enable-guile"
     "--with-guile-site-dir=\${out}/share/guile/site"
     "--with-guile-site-ccache-dir=\${out}/share/guile/site"
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnutls.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ vcunat ];
     platforms = platforms.all;
   };
 }

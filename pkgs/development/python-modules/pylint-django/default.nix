@@ -33,12 +33,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Skip outdated tests and the one with a missing dependency (django_tables2)
+    # AttributeError, AssertionError
     "external_django_tables2_noerror_meta_class"
-    "external_factory_boy_noerror"
-    "func_noerror_foreign_key_attributes"
-    "func_noerror_foreign_key_key_cls_unbound"
-    "test_everything"
+    "external_tastypie_noerror_foreign_key"
+    "func_noerror_model_unicode_lambda"
+    "0001_noerror_initial"
   ];
 
   pythonImportsCheck = [

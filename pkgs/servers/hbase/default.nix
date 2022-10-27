@@ -21,7 +21,9 @@ let common = { version, hash, jdk ? jdk11_headless, tests }:
     installPhase = ''
       mkdir -p $out
       cp -R * $out
-      wrapProgram $out/bin/hbase --set-default JAVA_HOME ${jdk.home}
+      wrapProgram $out/bin/hbase --set-default JAVA_HOME ${jdk.home} \
+        --run "test -d /etc/hadoop-conf && export HBASE_CONF_DIR=\''${HBASE_CONF_DIR-'/etc/hadoop-conf/'}" \
+        --set-default HBASE_CONF_DIR "$out/conf/"
     '';
 
     passthru = { inherit tests; };

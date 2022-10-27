@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "2.1.0";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Yrrhu1wgZj1e4b/sBPBzwIvnIQQK+e9b3ceQTmZ40YQ=";
+    sha256 = "sha256-egEnU6CgLasvIrDldOPnsAOZ9mBgYVRHT/4lYh+oDTs=";
   };
 
   nativeBuildInputs = [

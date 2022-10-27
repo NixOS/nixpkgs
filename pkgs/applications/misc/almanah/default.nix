@@ -5,15 +5,15 @@
 , atk
 , cairo
 , desktop-file-utils
-, evolution-data-server
+, evolution-data-server-gtk4
 , evolution
-, gcr
+, gcr_4
 , gettext
 , glib
 , gnome
 , gpgme
 , gtk3
-, gtksourceview3
+, gtksourceview4
 , gtkspell3
 , libcryptui
 , libxml2
@@ -42,6 +42,20 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/8c42a67695621d1e30cec933a04e633e6030bbaf.patch";
       sha256 = "qyqFgYSu4emFDG/Mjwz1bZb3v3/4gwQSKmGCoPPNYCQ=";
     })
+
+    # Port to Gcr 4
+    # https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/14
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/cd44b476f4ffbf37c5d5f5b996ecd711db925576.patch";
+      sha256 = "wJ1035NxgeTwUa0LoNcB6TSLxffoXBR3WbGAGkfggYY=";
+    })
+
+    # Port to GtkSourceView 4
+    # https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/15
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/0ba7f05cba7feaf2ae2c220596aead5dfc676675.patch";
+      sha256 = "5uvHTPzQloEq8SVt3EnZ+8mziBdXsDmu/e92/RtyFzE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -58,13 +72,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     atk
     cairo
-    evolution-data-server
-    gcr
+    evolution-data-server-gtk4
+    gcr_4
     glib
     evolution
     gpgme
     gtk3
-    gtksourceview3
+    gtksourceview4
     gtkspell3
     libcryptui
     sqlite

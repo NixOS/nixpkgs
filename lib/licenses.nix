@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -70,6 +76,12 @@ in mkLicense lset) ({
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
+  };
+
+  apsl10 = {
+    spdxId = "APSL-1.0";
+    fullName = "Apple Public Source License 1.0";
+    url = "https://web.archive.org/web/20040701000000*/http://www.opensource.apple.com/apsl/1.0.txt";
   };
 
   apsl20 = {
@@ -95,6 +107,11 @@ in mkLicense lset) ({
   asl20 = {
     spdxId = "Apache-2.0";
     fullName = "Apache License 2.0";
+  };
+
+  bola11 = {
+    url = "https://blitiri.com.ar/p/bola/";
+    fullName = "Buena Onda License Agreement 1.1";
   };
 
   boost = {
@@ -142,6 +159,11 @@ in mkLicense lset) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
+  };
+
   bsdOriginalUC = {
     spdxId = "BSD-4-Clause-UC";
     fullName = "BSD 4-Clause University of California-Specific";
@@ -156,6 +178,11 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+  };
+
+  cal10 = {
+    fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    url = "https://opensource.org/licenses/CAL-1.0";
   };
 
   capec = {
@@ -514,10 +541,27 @@ in mkLicense lset) ({
     free = false;
   };
 
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
     free = false;
+  };
+
+  lal12 = {
+    spdxId = "LAL-1.2";
+    fullName = "Licence Art Libre 1.2";
+  };
+
+  lal13 = {
+    spdxId = "LAL-1.3";
+    fullName = "Licence Art Libre 1.3";
   };
 
   lgpl2Only = {
@@ -563,6 +607,11 @@ in mkLicense lset) ({
   libpng2 = {
     spdxId = "libpng-2.0"; # Used since libpng 1.6.36.
     fullName = "PNG Reference Library version 2";
+  };
+
+  libssh2 = {
+    fullName = "libssh2 License";
+    url = "https://www.libssh2.org/license.html";
   };
 
   libtiff = {
@@ -678,6 +727,11 @@ in mkLicense lset) ({
   ofl = {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
+  };
+
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
   };
 
   openldap = {
@@ -811,6 +865,11 @@ in mkLicense lset) ({
     fullName = "TCL/TK License";
   };
 
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
+  };
+
   ufl = {
     fullName = "Ubuntu Font License 1.0";
     url = "https://ubuntu.com/legal/font-licence";
@@ -863,6 +922,11 @@ in mkLicense lset) ({
     fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
     url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
     free = false;
+  };
+
+  vol-sl = {
+    fullName = "Volatility Software License, Version 1.0";
+    url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
   };
 
   vsl10 = {
@@ -934,11 +998,6 @@ in mkLicense lset) ({
   fdl13 = {
     spdxId = "GFDL-1.3";
     fullName = "GNU Free Documentation License v1.3";
-    deprecated = true;
-  };
-  gpl1 = {
-    spdxId = "GPL-1.0";
-    fullName = "GNU General Public License v1.0";
     deprecated = true;
   };
   gpl2 = {

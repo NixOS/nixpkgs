@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , diskcache
 , more-itertools
 , pytestCheckHook
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-FVhHp8BZ/wQQyr5AcuDo94LlflixhjZ0SnheSdHuDVQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   checkInputs = [
     diskcache

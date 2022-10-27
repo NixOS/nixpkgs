@@ -7,15 +7,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pokete";
-  version = "0.7.3";
+  version = "0.9.0";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "lxgr-linux";
     repo = "pokete";
-    rev = version;
-    sha256 = "sha256-sP6fI3F/dQHei1ZJU6gChKxft9fGpTct4EyU3OdBtr4=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-55BqUSZJPDz5g1FTdkuWa9wcsrLwh6YagD5bQ9ZpQv4=";
   };
 
   pythonPath = with python3.pkgs; [

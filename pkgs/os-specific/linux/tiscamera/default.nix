@@ -108,10 +108,6 @@ stdenv.mkDerivation rec {
     "-DTCAM_INTERNAL_ARAVIS=OFF"
     "-DTCAM_ARAVIS_USB_VISION=${if withAravis && withAravisUsbVision then "ON" else "OFF"}"
     "-DTCAM_INSTALL_FORCE_PREFIX=ON"
-    # There are gobject introspection commands launched as part of the build. Those have a runtime
-    # dependency on `libtcam` (which itself is built as part of this build). In order to allow
-    # that, we set the dynamic linker's path to point on the build time location of the library.
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   doCheck = true;

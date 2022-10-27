@@ -28,19 +28,19 @@ in
 
   options = {
     services.zammad = {
-      enable = mkEnableOption "Zammad, a web-based, open source user support/ticketing solution.";
+      enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution.");
 
       package = mkOption {
         type = types.package;
         default = pkgs.zammad;
         defaultText = literalExpression "pkgs.zammad";
-        description = "Zammad package to use.";
+        description = lib.mdDoc "Zammad package to use.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/zammad";
-        description = ''
+        description = lib.mdDoc ''
           Path to a folder that will contain Zammad working directory.
         '';
       };
@@ -49,25 +49,25 @@ in
         type = types.str;
         default = "127.0.0.1";
         example = "192.168.23.42";
-        description = "Host address.";
+        description = lib.mdDoc "Host address.";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to open firewall ports for Zammad";
+        description = lib.mdDoc "Whether to open firewall ports for Zammad";
       };
 
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = "Web service port.";
+        description = lib.mdDoc "Web service port.";
       };
 
       websocketPort = mkOption {
         type = types.port;
         default = 6042;
-        description = "Websocket service port.";
+        description = lib.mdDoc "Websocket service port.";
       };
 
       database = {
@@ -75,7 +75,7 @@ in
           type = types.enum [ "PostgreSQL" "MySQL" ];
           default = "PostgreSQL";
           example = "MySQL";
-          description = "Database engine to use.";
+          description = lib.mdDoc "Database engine to use.";
         };
 
         host = mkOption {
@@ -90,7 +90,7 @@ in
               MySQL = "localhost";
             }.''${config.services.zammad.database.type};
           '';
-          description = ''
+          description = lib.mdDoc ''
             Database host address.
           '';
         };
@@ -98,13 +98,13 @@ in
         port = mkOption {
           type = types.nullOr types.port;
           default = null;
-          description = "Database port. Use <literal>null</literal> for default port.";
+          description = lib.mdDoc "Database port. Use `null` for default port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "zammad";
-          description = ''
+          description = lib.mdDoc ''
             Database name.
           '';
         };
@@ -112,22 +112,22 @@ in
         user = mkOption {
           type = types.nullOr types.str;
           default = "zammad";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zammad-dbpassword";
-          description = ''
-            A file containing the password for <option>services.zammad.database.user</option>.
+          description = lib.mdDoc ''
+            A file containing the password for {option}`services.zammad.database.user`.
           '';
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to create a local database automatically.";
+          description = lib.mdDoc "Whether to create a local database automatically.";
         };
 
         settings = mkOption {
@@ -137,9 +137,9 @@ in
             {
             }
           '';
-          description = ''
-            The <filename>database.yml</filename> configuration file as key value set.
-            See <link xlink:href='TODO' />
+          description = lib.mdDoc ''
+            The {file}`database.yml` configuration file as key value set.
+            See \<TODO\>
             for list of configuration parameters.
           '';
         };
@@ -149,20 +149,20 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/secret_key_base";
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the
-          <literal>secret_key_base</literal> secret.
+          `secret_key_base` secret.
 
-          Zammad uses <literal>secret_key_base</literal> to encrypt
+          Zammad uses `secret_key_base` to encrypt
           the cookie store, which contains session data, and to digest
           user auth tokens.
 
           Needs to be a 64 byte long string of hexadecimal
           characters. You can generate one by running
 
-          <screen>
-          <prompt>$ </prompt>openssl rand -hex 64 >/path/to/secret_key_base_file
-          </screen>
+          ```
+          openssl rand -hex 64 >/path/to/secret_key_base_file
+          ```
 
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.

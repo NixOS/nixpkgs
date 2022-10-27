@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsurvive";
-  version = "1.0";
+  version = "1.01";
 
   src = fetchFromGitHub {
     owner = "cntools";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
-    sha256 = "sha256-I8Wx9avfMyDic+Bk/1IjzZiiHj+l3XqpRwxYbWlsG/Q=";
+    sha256 = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
     zlib
     eigen
   ];
+
+  # https://github.com/cntools/libsurvive/issues/272
+  postPatch = ''
+    substituteInPlace survive.pc.in \
+      libs/cnkalman/cnkalman.pc.in libs/cnkalman/libs/cnmatrix/cnmatrix.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   meta = with lib; {
     description = "Open Source Lighthouse Tracking System";

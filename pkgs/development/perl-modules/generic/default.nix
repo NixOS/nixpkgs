@@ -27,27 +27,16 @@
 , ...
 }@attrs:
 
-assert attrs?pname -> attrs?version;
-assert attrs?pname -> !(attrs?name);
-
-lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is deprecated, use `pname` and `version` instead"
 
 (let
   defaultMeta = {
-    homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    mainProgram = attrs.pname or (builtins.parseDrvName attrs.name).name;
-    platforms = perl.meta.platforms;
+    homepage = "https://metacpan.org/dist/${attrs.pname}";
+    inherit (perl.meta) platforms;
   };
 
-  cleanedAttrs = builtins.removeAttrs attrs [
-    "meta" "builder" "version" "pname" "fullperl"
-    "buildInputs" "nativeBuildInputs" "buildInputs"
-    "PERL_AUTOINSTALL" "AUTOMATED_TESTING" "PERL_USE_UNSAFE_INC"
-    ];
-
-  package = stdenv.mkDerivation ({
-    pname = "perl${perl.version}-${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    version = lib.getVersion attrs;                     # TODO: phase-out `attrs.name`
+  package = stdenv.mkDerivation (attrs // {
+    name = "perl${perl.version}-${attrs.pname}-${attrs.version}";
 
     builder = ./builder.sh;
 
@@ -60,6 +49,6 @@ lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is depre
     inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
 
     meta = defaultMeta // (attrs.meta or { });
-  } // cleanedAttrs);
+  });
 
 in toPerlModule package)

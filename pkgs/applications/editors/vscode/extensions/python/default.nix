@@ -1,137 +1,84 @@
-{ lib, stdenv, fetchurl, fetchpatch, vscode-utils, extractNuGet
-, icu, curl, openssl, liburcu, lttng-ust, autoPatchelfHook
-, python3, musl
-, pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
-                               # Use version from `PATH` for default setting otherwise.
-                               # Defaults to `false` as we expect it to be project specific most of the time.
-, ctagsUseFixed ? true, ctags  # When `true`, the ctags default setting will be fixed to specified.
-                               # Use version from `PATH` for default setting otherwise.
-                               # Defaults to `true` as usually not defined on a per projet basis.
+{ lib
+, vscode-utils
+, icu
+, python3
+  # When `true`, the python default setting will be fixed to specified.
+  # Use version from `PATH` for default setting otherwise.
+  # Defaults to `false` as we expect it to be project specific most of the time.
+, pythonUseFixed ? false
+  # For updateScript
+, writeScript
+, bash
+, curl
+, coreutils
+, gnused
+, nix
 }:
 
-assert ctagsUseFixed -> null != ctags;
-
-let
-  liburcu-0-12 = liburcu.overrideAttrs (oldAttrs: rec {
-    version = "0.12.2";
-    src = fetchurl {
-      url = "https://lttng.org/files/urcu/userspace-rcu-${version}.tar.bz2";
-      sha256 = "0yx69kbx9zd6ayjzvwvglilhdnirq4f1x1sdv33jy8bc9wgc3vsf";
-    };
-  });
-
-  lttng-ust-2-10 = (lttng-ust.override {
-    liburcu = liburcu-0-12;
-  }).overrideAttrs (oldAttrs: rec {
-    version = "2.10.5";
-    src = fetchurl {
-      url = "https://lttng.org/files/lttng-ust/lttng-ust-${version}.tar.bz2";
-      sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
-    };
-    patches = (oldAttrs.patches or []) ++ [
-      # Pull upstream fix for -fno-common toolchain. Without it build fails on
-      # upstream gcc-10 as:
-      #   ld: libustsnprintf.a(libustsnprintf_la-core.o):snprintf/core.c:23: multiple definition of
-      #     `ust_loglevel'; ustctl.o:liblttng-ust-ctl/ustctl.c:80: first defined here
-      (fetchpatch {
-        name = "fno-common.patch";
-        url = "https://github.com/lttng/lttng-ust/commit/21a934df4c683e73e0a66a9afca33573fcf9d789.patch";
-        sha256 = "122lw9rdmr80gmz7814235ibqs47c6pzvg0ryh01805x0cymx74z";
-      })
-    ];
-  });
-
-  pythonDefaultsTo = if pythonUseFixed then "${python3}/bin/python" else "python";
-  ctagsDefaultsTo = if ctagsUseFixed then "${ctags}/bin/ctags" else "ctags";
-
-  # The arch tag comes from 'PlatformName' defined here:
-  # https://github.com/Microsoft/vscode-python/blob/master/src/client/activation/types.ts
-  arch =
-    if stdenv.isLinux && stdenv.isx86_64 then "linux-x64"
-    else if stdenv.isDarwin then "osx-x64"
-    else throw "Only x86_64 Linux and Darwin are supported.";
-
-  languageServerSha256 = {
-    linux-x64 = "1pmj5pb4xylx4gdx4zgmisn0si59qx51n2m1bh7clv29q6biw05n";
-    osx-x64 = "0ishiy1z9dghj4ryh95vy8rw0v7q4birdga2zdb4a8am31wmp94b";
-  }.${arch};
-
-  # version is languageServerVersion in the package.json
-  languageServer = extractNuGet rec {
-    name = "Python-Language-Server";
-    version = "0.5.30";
-
-    src = fetchurl {
-      url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";
-      sha256 = languageServerSha256;
-    };
-  };
-in vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2022.0.1814523869";
+    version = "2022.15.12711056";
+    sha256 = "sha256-bksUMN+ZdkmElVD8BC4ihklQyWlKkcpep2VOwUzISnQ=";
   };
 
-  vsix = fetchurl {
-    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
-    url = "https://github.com/microsoft/vscode-python/releases/download/${mktplcRef.version}/ms-python-release.vsix";
-    sha256 = "sha256-JDaimcOUDo9GuFA3mhbbGLwqZE9ejk8pWYc+9PrRhVk=";
-  };
+  buildInputs = [ icu ];
 
-  buildInputs = [
-    icu
-    curl
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    lttng-ust-2-10
-    musl
-  ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
 
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
-
-  pythonPath = with python3.pkgs; [
-    setuptools
+  propagatedBuildInputs = with python3.pkgs; [
+    debugpy
+    isort
+    jedi-language-server
   ];
 
   postPatch = ''
+    # remove bundled python deps and use libs from nixpkgs
+    rm -r pythonFiles/lib
+    mkdir -p pythonFiles/lib/python/
+    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy pythonFiles/lib/python/
+    buildPythonPath "$propagatedBuildInputs"
+    for i in pythonFiles/*.py; do
+      patchPythonScript "$i"
+    done
+  '' + lib.optionalString pythonUseFixed ''
     # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
     substituteInPlace "./package.json" \
-      --replace "\"default\": \"python\"" "\"default\": \"${pythonDefaultsTo}\""
-
-    # Patch `packages.json` so that nix's *ctags* is used as default value for `python.workspaceSymbols.ctagsPath`.
-    substituteInPlace "./package.json" \
-      --replace "\"default\": \"ctags\"" "\"default\": \"${ctagsDefaultsTo}\""
-
-    # Similar cleanup to what's done in the `debugpy` python package.
-    # This prevent our autopatchelf logic to bark on unsupported binaries (`attach_x86.so`
-    # was problematic) but also should make our derivation less heavy.
-    (
-      cd pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_attach_to_process
-      declare kept_aside="${{
-        "x86_64-linux" = "attach_linux_amd64.so";
-        "aarch64-darwin" = "attach_x86_64.dylib";
-        "x86_64-darwin" = "attach_x86_64.dylib";
-      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}"
-      mv "$kept_aside" "$kept_aside.hidden"
-      rm *.so *.dylib *.dll *.exe *.pdb
-      mv "$kept_aside.hidden" "$kept_aside"
-    )
+      --replace "\"default\": \"python\"" "\"default\": \"${python3.interpreter}\""
   '';
 
-  postInstall = ''
-    mkdir -p "$out/$installPrefix/languageServer.${languageServer.version}"
-    cp -R --no-preserve=ownership ${languageServer}/* "$out/$installPrefix/languageServer.${languageServer.version}"
-    chmod -R +wx "$out/$installPrefix/languageServer.${languageServer.version}"
+  passthru.updateScript = writeScript "update" ''
+    #! ${bash}/bin/bash
 
-    patchPythonScript "$out/$installPrefix/pythonFiles/lib/python/isort/main.py"
+    set -eu -o pipefail
+
+    export PATH=${lib.makeBinPath [
+      curl
+      coreutils
+      gnused
+      nix
+    ]}
+
+    api=$(curl -s 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
+      -H 'accept: application/json;api-version=3.0-preview.1' \
+      -H 'content-type: application/json' \
+      --data-raw '{"filters":[{"criteria":[{"filterType":7,"value":"${mktplcRef.publisher}.${mktplcRef.name}"}]}],"flags":512}')
+    version=$(echo $api | sed -n -E 's|^.*"version":"([0-9.]+)".*$|\1|p')
+
+    if [[ $version != ${mktplcRef.version} ]]; then
+      tmp=$(mktemp)
+      curl -sLo $tmp $(echo ${(import ../mktplcExtRefToFetchArgs.nix mktplcRef).url} | sed "s|${mktplcRef.version}|$version|")
+      hash=$(nix hash file --type sha256 --base32 --sri $tmp)
+      sed -i -e "s|${mktplcRef.sha256}|$hash|" -e "s|${mktplcRef.version}|$version|" pkgs/applications/editors/vscode/extensions/python/default.nix
+    fi
   '';
 
   meta = with lib; {
+    description = "A Visual Studio Code extension with rich support for the Python language";
+    downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.python";
+    homepage = "https://github.com/Microsoft/vscode-python";
+    changelog = "https://github.com/microsoft/vscode-python/releases";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     maintainers = with maintainers; [ jraygauthier jfchevrette ];

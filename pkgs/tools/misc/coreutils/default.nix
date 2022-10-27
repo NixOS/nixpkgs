@@ -39,10 +39,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YaH0ENeLp+fzelpPUObRMgrKMzdUhKMlXt3xejhYBCM=";
   };
 
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
+    ./disable-seek-hole.patch
+  ];
+
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
     sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
+    sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
     sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
@@ -118,7 +124,12 @@ stdenv.mkDerivation rec {
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
       "fu_cv_sys_stat_statfs2_bsize=yes"
-    ];
+    ]
+    # /proc/uptime is available on Linux and produces accurate results even if
+    # the boot time is set to the epoch because the system has no RTC. We
+    # explicitly enable it for cases where it can't be detected automatically,
+    # such as when cross-compiling.
+    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),

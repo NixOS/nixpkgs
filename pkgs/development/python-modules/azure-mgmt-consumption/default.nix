@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-consumption";
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "76f9566390721226add96c9d3020ab986d3e5fd81e3143c098f57262c6ce4a51";
+    sha256 = "sha256-BqCGQ2wXN/d6uGiU1R9Zc7bg+l7fVlWOTCllieurkTA=";
   };
 
   propagatedBuildInputs = [

@@ -71,39 +71,16 @@ let
 
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
-
-  bootstrapCompiler = let
-    revision = "561b417c65791cd8356b5f73620914ceff845d10";
-  in stdenv.mkDerivation {
-    pname = "nim-bootstrap";
-    version = "g${lib.substring 0 7 revision}";
-
-    src = fetchFromGitHub {
-      owner = "nim-lang";
-      repo = "csources_v1";
-      rev = revision;
-      sha256 = "sha256-gwBFuR7lzO4zttR/6rgdjXMRxVhwKeLqDwpmOwMyU7A=";
-    };
-
-    enableParallelBuilding = true;
-
-    installPhase = ''
-      runHook preInstall
-      install -Dt $out/bin bin/nim
-      runHook postInstall
-    '';
-  };
-
 in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.6";
+    version = "1.6.8";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-Z7ERzm84YVA7n8wcrln8NNASJWbT7P7zoGSiF0EhpFI=";
+      hash = "sha256-D1tlzbYPeK9BywdcI4mDaJoeH34lyBnxeYYsGKSEz1c=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -118,7 +95,6 @@ in {
 
     configurePhase = ''
       runHook preConfigure
-      cp ${bootstrapCompiler}/bin/nim bin/
       echo 'define:nixbuild' >> config/nim.cfg
       runHook postConfigure
     '';
@@ -133,9 +109,14 @@ in {
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
-      ./bin/nim c koch
+    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      sed -i "s/aarch64/arm64/g" makefile
+    '' + ''
+      make -j$NIX_BUILD_CORES
+      ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
+      ./bin/nim js -d:release tools/dochack/dochack.nim
       runHook postBuild
     '';
 
@@ -143,7 +124,9 @@ in {
       runHook preInstall
       install -Dt $out/bin bin/*
       ln -sf $out/nim/bin/nim $out/bin/nim
+      ln -sf $out/nim/lib $out/lib
       ./install.sh $out
+      cp -a tools $out/nim/
       runHook postInstall
     '';
 

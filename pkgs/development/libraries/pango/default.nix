@@ -16,25 +16,20 @@
 , ninja
 , glib
 , python3
-, x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, x11Support? !stdenv.isDarwin, libXft
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.7";
+  version = "1.50.11";
 
-  outputs = [ "bin" "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "BHfzaaPUxpXfcpmmmJ3ABHVqf03ifuysQFxnkLfjrTM=";
+    sha256 = "iAD4Etie5hOIGIcDID86eHiWPCL4aVqvH6ChoUKNF64=";
   };
-
-  strictDeps = !withIntrospection;
 
   depsBuildBuild = [
     pkg-config
@@ -44,9 +39,7 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals withDocs [
     gi-docgen
     python3
   ];
@@ -54,6 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fribidi
     libthai
+    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
@@ -71,8 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withDocs}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dgtk_doc=true"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
   ];
@@ -82,9 +75,20 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
+
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
   doCheck = false; # test-font: FAIL
 
-  postFixup = lib.optionalString withDocs ''
+  postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
@@ -93,6 +97,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # 1.90 is alpha for API 2.
+      freeze = true;
     };
   };
 

@@ -13,17 +13,18 @@
 , systemd
 , go-md2man
 , nixosTests
+, python3
 }:
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-+lwq4WTPeELjugTg9l1wvoe0VTqRK2lC1jaFIwXMrL0=";
+    sha256 = "sha256-wp3Dd5bhLd/eq926C+MpzMWoxieJRAslt1beZU/WbeU=";
   };
 
   vendorSha256 = null;
@@ -32,7 +33,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
@@ -97,8 +98,5 @@ buildGoModule rec {
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
-    # requires >= 10.13 SDK https://github.com/NixOS/nixpkgs/issues/101229
-    # Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

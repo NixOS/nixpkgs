@@ -20,7 +20,12 @@ buildImage {
   fromImageName = null;
   fromImageTag = "latest";
 
-  contents = pkgs.redis;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.redis ];
+    pathsToLink = [ "/bin" ];
+  };
+
   runAsRoot = ''
     #!${pkgs.runtimeShell}
     mkdir -p /data
@@ -31,6 +36,9 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
+
+  diskSize = 1024;
+  buildVMMemorySize = 512;
 }
 ```
 
@@ -46,13 +54,17 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
 
-- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
+- `copyToRoot` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
 > **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+
+- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
+
+- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
 
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 
@@ -81,7 +93,11 @@ pkgs.dockerTools.buildImage {
   name = "hello";
   tag = "latest";
   created = "now";
-  contents = pkgs.hello;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.hello ];
+    pathsToLink = [ "/bin" ];
+  };
 
   config.Cmd = [ "/bin/hello" ];
 }
@@ -292,7 +308,44 @@ The parameters relative to the base image have the same synopsis as described in
 
 The `name` argument is the name of the derivation output, which defaults to `fromImage.name`.
 
-## shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
+## Environment Helpers {#ssec-pkgs-dockerTools-helpers}
+
+Some packages expect certain files to be available globally.
+When building an image from scratch (i.e. without `fromImage`), these files are missing.
+`pkgs.dockerTools` provides some helpers to set up an environment with the necessary files.
+You can include them in `copyToRoot` like this:
+
+```nix
+buildImage {
+  name = "environment-example";
+  copyToRoot = with pkgs.dockerTools; [
+    usrBinEnv
+    binSh
+    caCertificates
+    fakeNss
+  ];
+}
+```
+
+### usrBinEnv {#sssec-pkgs-dockerTools-helpers-usrBinEnv}
+
+This provides the `env` utility at `/usr/bin/env`.
+
+### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
+
+This provides `bashInteractive` at `/bin/sh`.
+
+### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
+
+This sets up `/etc/ssl/certs/ca-certificates.crt`.
+
+### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
+
+Provides `/etc/passwd` and `/etc/group` that contain root and nobody.
+Useful when packaging binaries that insist on using nss to look up
+username/groups (like nginx).
+
+### shadowSetup {#ssec-pkgs-dockerTools-shadowSetup}
 
 This constant string is a helper for setting up the base files for managing users and groups, only if such files don't exist already. It is suitable for being used in a [`buildImage` `runAsRoot`](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 
@@ -312,3 +365,32 @@ buildImage {
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+
+## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
+
+If your primary goal is providing a basic skeleton for user lookups to work,
+and/or a lesser privileged user, adding `pkgs.fakeNss` to
+the container image root might be the better choice than a custom script
+running `useradd` and friends.
+
+It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
+users and groups.
+
+It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
+first check `/etc/hosts`, before checking DNS, as the default in the absence of
+a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
+
+You can pair it with `binSh`, which provides `bin/sh` as a symlink
+to `bashInteractive` (as `/bin/sh` is configured as a shell).
+
+```nix
+buildImage {
+  name = "shadow-basic";
+
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ binSh pkgs.fakeNss ];
+    pathsToLink = [ "/bin" "/etc" "/var" ];
+  };
+}
+```

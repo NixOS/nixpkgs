@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mqttui";
-  version = "0.16.2";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-u2KuB0cw0xCAc5uRgHNsQknTfLwQmO9CZjSJTdycEnc=";
+    sha256 = "sha256-XREY86CcxH+YqzOpu5vXiP6lIZaj+twKQgGmn7MR1As=";
   };
 
-  cargoSha256 = "sha256-asJvunklc0zcrkgirC6wznwKNKLFQ6sN/B1GukI/NCo=";
+  cargoSha256 = "sha256-V5jVgNIV+Bl1nYKy2RYFbKYo/x65gG3RmB+XjFATxN8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

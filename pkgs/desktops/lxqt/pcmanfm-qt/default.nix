@@ -3,14 +3,16 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, libexif
 , lxqt
 , qtbase
 , qttools
 , qtx11extras
+, qtimageformats
 , libfm-qt
 , menu-cache
 , lxmenu-data
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -31,16 +33,18 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libexif
     qtbase
     qttools
     qtx11extras
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     libfm-qt
     menu-cache
     lxmenu-data
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   postPatch = ''
     substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt

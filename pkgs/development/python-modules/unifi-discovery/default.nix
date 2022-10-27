@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "unifi-discovery";
-  version = "1.1.4";
+  version = "1.1.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+af1boeJtTI89ZJqgXXsxXQXGDhG4ewgukfKDdhWl9g=";
+    hash = "sha256-EQFk3kRY/JL1ZTDdHKzl0KbMUuhZSFc4tYqAYvsNSj0=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,10 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   postPatch = ''

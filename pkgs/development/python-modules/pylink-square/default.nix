@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "0.13.0";
+  version = "0.14.2";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    rev = "v${version}";
-    hash = "sha256-SH2oxOlsX5dE8wMXpWPA/rEVrJwxJzizsOiYbwaGjLw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4jmFU8jlrEAYTAQH+uQCWrzqwKX4onb7Xk4iTYzx9dI=";
   };
 
   propagatedBuildInputs = [ psutil six future ];

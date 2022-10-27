@@ -44,26 +44,23 @@ The function `mkOption` accepts the following arguments.
 :   A textual representation of the default value to be rendered verbatim in
     the manual. Useful if the default value is a complex expression or depends
     on other values or packages.
-    Use `lib.literalExpression` for a Nix expression, `lib.literalDocBook` for
-    a plain English description in DocBook format.
+    Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
+    a plain English description in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
 
 `example`
 
 :   An example value that will be shown in the NixOS manual.
-    You can use `lib.literalExpression` and `lib.literalDocBook` in the same way
+    You can use `lib.literalExpression` and `lib.literalMD` in the same way
     as in `defaultText`.
 
 `description`
 
-:   A textual description of the option, in DocBook format, that will be
+:   A textual description of the option, in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format, that will be
     included in the NixOS manual. During the migration process from DocBook
-    to CommonMark the description may also be written in CommonMark, but has
-    to be wrapped in `lib.mdDoc` to differentiate it from DocBook. See
-    the nixpkgs manual for [the list of CommonMark extensions](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup)
-    supported by NixOS documentation.
-
-    New documentation should preferably be written as CommonMark.
+    to CommonMark the description may also be written in DocBook, but this is
+    discouraged.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -127,14 +124,14 @@ lib.mkOption {
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
-  example = "pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
   description = "The GHC package to use.";
 }
 ```

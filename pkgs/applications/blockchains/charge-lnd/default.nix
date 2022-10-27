@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charge-lnd";
-  version = "0.2.4";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "accumulator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1d1cbpmpppp7z1bmsarwfs314c7ypchlyr4calx0fzxfpxzfks5k";
+    sha256 = "uiXmLdQAglgLxOX6IoF1iNZvje4EM7Tr25Okx9TPyzI=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    install README.md charge.config.example -Dt $out/share/doc/charge-lnd
+    install README.md -Dt $out/share/doc/charge-lnd
   '';
 
   doInstallCheck = true;
@@ -34,6 +34,6 @@ python3Packages.buildPythonApplication rec {
     description = "Simple policy-based fee manager for lightning network daemon";
     homepage = "https://github.com/accumulator/charge-lnd";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mmilata ];
+    maintainers = with maintainers; [ mmilata mariaa144 ];
   };
 }

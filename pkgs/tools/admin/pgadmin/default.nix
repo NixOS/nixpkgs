@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.10";
+  version = "6.14";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-wl7qC0p1NLX4+ulb4AGNPU6D0r838t6t/IYwJZcDnVQ=";
+    sha256 = "sha256-M3Tu+69Gmc0FfqtGTtJ6j014QARd2efJ4dq0vK2IMr8=";
   };
 
   yarnDeps = mkYarnModules {
@@ -29,10 +29,10 @@ let
   buildDeps = with pythonPackages; [
     flask
     flask-gravatar
-    flask_login
+    flask-login
     flask_mail
     flask_migrate
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-wtf
     flask-compress
     passlib
@@ -66,30 +66,35 @@ let
     pyotp
     botocore
     boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
   ];
 
-  # override necessary on pgadmin4 6.10
+  # keep the scope, as it is used throughout the derivation and tests
+  # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
+    # flask 2.2 is incompatible with pgadmin 6.14
+    # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
+      version = "2.1.3";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
+        sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
-      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-        "test_aborting"
+    });
+    # pgadmin 6.14 is incompatible with the major flask-security-too update to 5.0.x
+    flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
+      version = "4.1.5";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+      };
+      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        final.pythonPackages.flask_mail
+        final.pythonPackages.pyqrcode
       ];
-    });
-    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # tests fail due to downgrades here
-      doCheck = false;
-    });
-    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
-      };
     });
   });
 
@@ -120,15 +125,7 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs .
 
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "eventlet==0.33.0" "eventlet>=0.33.0" \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*"
+    sed 's|==|>=|g' -i requirements.txt
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
@@ -142,7 +139,7 @@ pythonPackages.buildPythonApplication rec {
 
     # build the documentation
     cd docs/en_US
-    ${sphinx}/bin/sphinx-build -W -b html -d _build/doctrees . _build/html
+    sphinx-build -W -b html -d _build/doctrees . _build/html
 
     # Build the clean tree
     cd ../../web
@@ -174,7 +171,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx ];
   buildInputs = [
     zlib
     pythonPackages.wheel

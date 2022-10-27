@@ -16,7 +16,7 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_18 ? pkgs.linuxKernel.packages.linux_5_18
+, linuxPackages_5_19 ? pkgs.linuxKernel.packages.linux_5_19
 }:
 
 let
@@ -203,7 +203,7 @@ let
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
         license = lib.licenses.cddl;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
+        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -216,28 +216,28 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "5.19";
-    latestCompatibleLinuxPackages = linuxPackages_5_18;
+    kernelCompatible = kernel.kernelOlder "5.20";
+    latestCompatibleLinuxPackages = linuxPackages_5_19;
 
     # this package should point to the latest release.
-    version = "2.1.5";
+    version = "2.1.6";
 
-    sha256 = "sha256-a9rmuPO8R8UfxdHvwjfFuYRGn97a1MPmLZRvr3l0swE=";
+    sha256 = "sha256-gd5WlNtnoSiVj4sKUGf0WhR7Z1GPebwu3Z1mkNsoC/I=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "5.19";
-    latestCompatibleLinuxPackages = linuxPackages_5_18;
+    kernelCompatible = kernel.kernelOlder "5.20";
+    latestCompatibleLinuxPackages = linuxPackages_5_19;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.5";
+    version = "2.1.6";
     # rev = "0000000000000000000000000000000000000000";
 
-    sha256 = "sha256-a9rmuPO8R8UfxdHvwjfFuYRGn97a1MPmLZRvr3l0swE=";
+    sha256 = "sha256-gd5WlNtnoSiVj4sKUGf0WhR7Z1GPebwu3Z1mkNsoC/I=";
 
     isUnstable = true;
   };

@@ -7,22 +7,24 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2022.05.18.1";
+  version = "2022.09.24";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python-certifi";
     rev = version;
-    sha256 = "sha256-uDNVzKcT45mz0zXBwPkttKV21fEcgbRamE3+QutNLjA=";
+    hash = "sha256-B6LO6AfG9cfpyNI7hj3VjmGTFsrrIkDYO4gPMkZY74w=";
   };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "certifi" ];
+  pythonImportsCheck = [
+    "certifi"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/certifi/python-certifi";

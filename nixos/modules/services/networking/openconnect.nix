@@ -11,25 +11,25 @@ let
     options = {
       autoStart = mkOption {
         default = true;
-        description = "Whether this VPN connection should be started automatically.";
+        description = lib.mdDoc "Whether this VPN connection should be started automatically.";
         type = types.bool;
       };
 
       gateway = mkOption {
-        description = "Gateway server to connect to.";
+        description = lib.mdDoc "Gateway server to connect to.";
         example = "gateway.example.com";
         type = types.str;
       };
 
       protocol = mkOption {
-        description = "Protocol to use.";
+        description = lib.mdDoc "Protocol to use.";
         example = "anyconnect";
         type =
           types.enum [ "anyconnect" "array" "nc" "pulse" "gp" "f5" "fortinet" ];
       };
 
       user = mkOption {
-        description = "Username to authenticate with.";
+        description = lib.mdDoc "Username to authenticate with.";
         example = "example-user";
         type = types.nullOr types.str;
       };
@@ -38,10 +38,10 @@ let
       # set an authentication cookie, because they have to be requested
       # for every new connection and would only work once.
       passwordFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           File containing the password to authenticate with. This
-          is passed to <code>openconnect</code> via the
-          <code>--passwd-on-stdin</code> option.
+          is passed to `openconnect` via the
+          `--passwd-on-stdin` option.
         '';
         default = null;
         example = "/var/lib/secrets/openconnect-passwd";
@@ -49,27 +49,27 @@ let
       };
 
       certificate = mkOption {
-        description = "Certificate to authenticate with.";
+        description = lib.mdDoc "Certificate to authenticate with.";
         default = null;
         example = "/var/lib/secrets/openconnect_certificate.pem";
         type = with types; nullOr (either path pkcs11);
       };
 
       privateKey = mkOption {
-        description = "Private key to authenticate with.";
+        description = lib.mdDoc "Private key to authenticate with.";
         example = "/var/lib/secrets/openconnect_private_key.pem";
         default = null;
         type = with types; nullOr (either path pkcs11);
       };
 
       extraOptions = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Extra config to be appended to the interface config. It should
           contain long-format options as would be accepted on the command
-          line by <code>openconnect</code>
+          line by `openconnect`
           (see https://www.infradead.org/openconnect/manual.html).
-          Non-key-value options like <code>deflate</code> can be used by
-          declaring them as booleans, i. e. <code>deflate = true;</code>.
+          Non-key-value options like `deflate` can be used by
+          declaring them as booleans, i. e. `deflate = true;`.
         '';
         default = { };
         example = {
@@ -118,7 +118,7 @@ in {
     package = mkPackageOption pkgs "openconnect" { };
 
     interfaces = mkOption {
-      description = "OpenConnect interfaces.";
+      description = lib.mdDoc "OpenConnect interfaces.";
       default = { };
       example = {
         openconnect0 = {

@@ -106,12 +106,13 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
            && sed -i 's|driver_local.maximize_window()||' web/regression/runtests.py"
       )
 
-      # don't bother to test LDAP authentification
+      # Don't bother to test LDAP or kerberos authentification
       with subtest("run browser test"):
           machine.succeed(
                'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
-               && python regression/runtests.py --pkg browser --exclude \
-               browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login'
+               && python regression/runtests.py \
+               --pkg browser \
+               --exclude browser.tests.test_ldap_login.LDAPLoginTestCase,browser.tests.test_ldap_login,browser.tests.test_kerberos_with_mocking'
           )
 
       # fontconfig is necessary for chromium to run
@@ -124,9 +125,9 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
           )
 
       with subtest("run resql test"):
-          machine.succeed(
-               'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
-               && python regression/runtests.py --pkg resql'
-          )
+         machine.succeed(
+              'cd ${pgadmin4SrcDir}/pgadmin4-${pkgs.pgadmin4.version}/web \
+              && python regression/runtests.py --pkg resql'
+         )
     '';
   })

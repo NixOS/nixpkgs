@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.1.5";
+  version = "2.1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kl5yOJTMobccZoaIoWwQubCrswPa69I5Kmuox7JqAXs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kZqJVJ6XrCC3iDSTJP8AmIs4WkxiAFimFIexl0L/HT0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

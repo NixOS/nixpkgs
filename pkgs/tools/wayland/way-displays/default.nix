@@ -9,18 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "way-displays";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = "${version}";
-    sha256 = "sha256-5A0qZRpWw3Deo9cGqGULpQMoPCVh85cWE/wJ5XSbVJk=";
+    sha256 = "sha256-wrfRSJaVz0GjYxuIDvJ+16aaz+kRTtv0q5jN2IG4Uco=";
   };
-
-  postPatch = ''
-    substituteInPlace src/cfg.cpp --replace "\"/etc" "\"$out/etc"
-  '';
 
   strictDeps = true;
 
@@ -35,7 +31,7 @@ stdenv.mkDerivation rec {
     libinput
   ];
 
-  makeFlags = [ "DESTDIR=$(out) PREFIX= PREFIX_ETC="];
+  makeFlags = [ "DESTDIR=$(out) PREFIX= PREFIX_ETC= ROOT_ETC=$(out)/etc"];
 
   meta = with lib; {
     homepage = "https://github.com/alex-courtis/way-displays";

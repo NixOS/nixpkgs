@@ -16,7 +16,7 @@
 , openssl
 , alsa-lib
 , libpulseaudio
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rustPlatform.rust.cargo
     rustPlatform.cargoSetupHook
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/cargo.sh
     patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [ tomfitzhenry ];
+    platforms = platforms.linux;
   };
 }

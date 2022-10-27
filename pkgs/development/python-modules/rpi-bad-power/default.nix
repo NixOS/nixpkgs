@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage {
     rev = "v${version}";
     hash = "sha256:1yvfz28blq4fdnn614n985vbs5hcw1gm3i9am53k410sfs7ilvkk";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [
     "rpi_bad_power"

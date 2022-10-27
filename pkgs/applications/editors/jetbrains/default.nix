@@ -1,5 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3
+, jdk, cmake, gdb, zlib, python3, icu
+, lldb
 , dotnet-sdk_6
 , maven
 , autoPatchelfHook
@@ -45,6 +46,7 @@ let
         python3
         stdenv.cc.cc
         libdbusmenu
+        lldb
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
@@ -56,6 +58,9 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
+          # bundled lldb does not find libssl
+          rm -rf bin/lldb/linux
+          ln -s ${lldb} bin/lldb/linux
 
           autoPatchelf $PWD/bin
 
@@ -78,6 +83,22 @@ let
           construct efficient, statically checked SQL queries and much more.
         '';
         maintainers = with maintainers; [ ];
+      };
+    });
+
+  buildGateway = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+      product = "Gateway";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/remote-development/gateway/";
+        inherit description license platforms;
+        longDescription = ''
+          JetBrains Gateway is a lightweight launcher that connects a remote
+          server with your local machine, downloads necessary components on the
+          backend, and opens your project in JetBrains Client.
+        '';
+        maintainers = with maintainers; [ kouyk ];
       };
     });
 
@@ -162,11 +183,11 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ ];
+        maintainers = with maintainers; [ dritter ];
       };
     });
 
-  buildPycharm = { pname, version, src, license, description, wmClass, product, ... }:
+  buildPycharm = { pname, version, src, license, description, wmClass, product, cythonSpeedup ? stdenv.isLinux, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk product;
       productShort = "PyCharm";
@@ -189,12 +210,25 @@ let
         '';
         maintainers = with maintainers; [ ];
       };
+    }).overrideAttrs (finalAttrs: previousAttrs: optionalAttrs cythonSpeedup {
+      buildInputs = with python3.pkgs; [ python3 setuptools ];
+      preInstall = ''
+      echo "compiling cython debug speedups"
+      if [[ -d plugins/python-ce ]]; then
+          ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
+      else
+          ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
+      fi
+      '';
+      # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
     });
 
   buildRider = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk;
       product = "Rider";
+      # icu is required by Rider.Backend
+      extraLdPath = [ icu ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license platforms;
@@ -206,13 +240,15 @@ let
           apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
-        maintainers = [ ];
+        maintainers = with maintainers; [ raphaelr ];
       };
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
+        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        patchelf --set-interpreter $interp lib/ReSharperHost/linux-x64/Rider.Backend
+
         rm -rf lib/ReSharperHost/linux-x64/dotnet
-        mkdir -p lib/ReSharperHost/linux-x64/dotnet/
-        ln -s ${dotnet-sdk_6}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
+        ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
       '');
     });
 
@@ -279,6 +315,19 @@ in
     };
     wmClass = "jetbrains-datagrip";
     update-channel = products.datagrip.update-channel;
+  };
+
+  gateway = buildGateway rec {
+    pname = "gateway";
+    version = products.gateway.version;
+    description = "Your single entry point to all remote development environments";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.gateway.url;
+      sha256 = products.gateway.sha256;
+    };
+    wmClass = "jetbrains-gateway";
+    update-channel = products.gateway.update-channel;
   };
 
   goland = buildGoland rec {

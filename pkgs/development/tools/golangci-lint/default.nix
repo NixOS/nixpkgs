@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.46.2";
+  version = "1.50.1";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "sha256-7sDAwWz+qoB/ngeH35tsJ5FZUfAQvQsU6kU9rUHIHMk=";
+    sha256 = "sha256-7HoneQtKxjQVvaTdkjPeu+vJWVOZG3AOiRD87/Ntgn8=";
   };
 
-  vendorSha256 = "sha256-w38OKN6HPoz37utG/2QSPMai55IRDXCIIymeMe6ogIU=";
+  vendorSha256 = "sha256-6ttRd2E8Zsf/2StNYt6JSC64A57QIv6EbwAwJfhTDaY=";
 
   doCheck = false;
 
@@ -20,7 +20,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" "-X main.date=19700101-00:00:00"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=v${version}"
+    "-X main.date=19700101-00:00:00"
   ];
 
   postInstall = ''
@@ -35,6 +39,5 @@ buildGoModule rec {
     homepage = "https://golangci-lint.run/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ anpryl manveru mic92 ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

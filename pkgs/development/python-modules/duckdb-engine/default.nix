@@ -8,10 +8,12 @@
 , ipython-sql
 , poetry-core
 , sqlalchemy
+, typing-extensions
 }:
+
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.1.11";
+  version = "0.6.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,20 +21,41 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tjyaV9DmiP2XrKxSCX2qKo7T7GNZtT3y5d1yQLdVuSE=";
+    rev = "v${version}";
+    hash = "sha256-7PfrI4bNz0XtBa/cb8T43j06BJ3B2S5zIyBZsEusyXc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ duckdb sqlalchemy ];
+  propagatedBuildInputs = [
+    duckdb
+    sqlalchemy
+  ];
 
-  checkInputs = [ pytestCheckHook hypothesis ipython-sql ];
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
-  pythonImportsCheck = [ "duckdb_engine" ];
+  # this test tries to download the httpfs extension
+  disabledTests = [
+    "test_preload_extension"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+    ipython-sql
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [
+    "duckdb_engine"
+  ];
 
   meta = with lib; {
-    description = "Very very very basic sqlalchemy driver for duckdb";
+    description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

@@ -1,17 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, python, cython }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
+, cython
+}:
 
 buildPythonPackage rec {
   pname = "fastbencode";
-  version = "0.0.7";
+  version = "0.0.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tryavlQtBmN5NSlXb0m6iJFQhVT4XQm11tXtevfgxuQ=";
+    hash = "sha256-A1XfgjNV9k4iA3HYf0HlA1CvpwzFh52OaN7f6YLgU+I=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  pythonImportsCheck = [ "fastbencode" ];
+  pythonImportsCheck = [
+    "fastbencode"
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest fastbencode.tests.test_suite
@@ -20,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.marsam ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ marsam ];
   };
 }

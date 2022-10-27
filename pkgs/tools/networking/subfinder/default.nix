@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "subfinder";
-  version = "2.5.1";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t5bIIb31gb6f7hVeiTmMut0wXl40/Du4W9lnB49jlFA=";
+    sha256 = "sha256-I8VC/fwcDXqdT7U1WrptqVWufCLbk+3Zc2iXsBj6Fno=";
   };
 
-  vendorSha256 = "sha256-lyqjODNk7R6mvSl/I1zFgXvs4m60D4gwfgJ6ocoOHhc=";
+  vendorSha256 = "sha256-3K2jZRJksY/rzRiFjgU06fkXpySkJI0JTTGvvEDwS6s=";
 
   modRoot = "./v2";
 

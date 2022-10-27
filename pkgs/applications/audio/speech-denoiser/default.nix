@@ -27,7 +27,7 @@ stdenv.mkDerivation  {
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
 
-  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
+  mesonFlags = [ "--prefix=${placeholder "out"}/lib/lv2" ];
 
   postPatch = ''
     substituteInPlace meson.build \

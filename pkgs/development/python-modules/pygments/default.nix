@@ -10,12 +10,12 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.12.0";
+    version = "2.13.0";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      sha256 = "sha256-XrEWEY+WEv8e6JrJZDe7a0no8E2KE7UUuib2ICCOJus=";
+      sha256 = "sha256-VqhQiulfmOK5vfk6a+WuP32K+Fi0PgLFov8INya+QME=";
     };
 
     propagatedBuildInputs = [

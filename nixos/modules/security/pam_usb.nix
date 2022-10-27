@@ -17,10 +17,9 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable USB login for all login systems that support it.  For
-          more information, visit <link
-          xlink:href="https://github.com/aluzzardi/pam_usb/wiki/Getting-Started#setting-up-devices-and-users" />.
+          more information, visit <https://github.com/aluzzardi/pam_usb/wiki/Getting-Started#setting-up-devices-and-users>.
         '';
       };
 

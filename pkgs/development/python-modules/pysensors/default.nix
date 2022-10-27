@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, lm_sensors }:
+{ lib, buildPythonPackage, unittestCheckHook, fetchFromGitHub, lm_sensors }:
 buildPythonPackage {
   version = "2017-07-13";
   pname = "pysensors";
@@ -17,10 +17,9 @@ buildPythonPackage {
   # due to sandboxing
   doCheck = false;
 
-  checkPhase = ''
-    cd tests
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ guibou ];

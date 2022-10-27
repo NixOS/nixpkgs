@@ -16,25 +16,25 @@ in
 
     services.saslauthd = {
 
-      enable = mkEnableOption "saslauthd, the Cyrus SASL authentication daemon";
+      enable = mkEnableOption (lib.mdDoc "saslauthd, the Cyrus SASL authentication daemon");
 
       package = mkOption {
         default = pkgs.cyrus_sasl.bin;
         defaultText = literalExpression "pkgs.cyrus_sasl.bin";
         type = types.package;
-        description = "Cyrus SASL package to use.";
+        description = lib.mdDoc "Cyrus SASL package to use.";
       };
 
       mechanism = mkOption {
         type = types.str;
         default = "pam";
-        description = "Auth mechanism to use";
+        description = lib.mdDoc "Auth mechanism to use";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = "Configuration to use for Cyrus SASL authentication daemon.";
+        description = lib.mdDoc "Configuration to use for Cyrus SASL authentication daemon.";
       };
 
     };

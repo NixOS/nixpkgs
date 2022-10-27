@@ -64,7 +64,7 @@ let
       # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
       paths = [ mpv.all ];
 
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
 
       passthru.unwrapped = mpv;
 

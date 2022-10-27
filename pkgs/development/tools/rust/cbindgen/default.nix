@@ -27,10 +27,13 @@ rustPlatform.buildRustPackage rec {
     "--skip lib_default_uses_debug_build"
     "--skip lib_explicit_debug_build"
     "--skip lib_explicit_release_build"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # WORKAROUND: test_body fails when using clang
+    # https://github.com/eqrion/cbindgen/issues/628
+    "--skip test_body"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A project for generating C bindings from Rust code";
     homepage = "https://github.com/eqrion/cbindgen";
     license = licenses.mpl20;

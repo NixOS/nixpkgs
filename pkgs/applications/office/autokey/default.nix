@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [
     gobject-introspection
@@ -38,19 +38,9 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
-  dontWrapGapps = true;
-
-  pythonPath = with python3Packages; requiredPythonModules [ dbus-python xlib pygobject3 ];
-
   postInstall = ''
-    rm $out/bin/autokey-qt
-    buildPythonPath "$out $pythonPath"
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-      # for autokey-shell ModuleNotFoundError: No module named 'autokey'
-      --prefix "PYTHONPATH" ":" "$out/lib/${python3Packages.python.libPrefix}/site-packages"
-      --prefix "PYTHONPATH" ":" "$program_PYTHONPATH"
-    )
+    # remove Qt version which we currently do not support
+    rm $out/bin/autokey-qt $out/share/applications/autokey-qt.desktop
   '';
 
   meta = {

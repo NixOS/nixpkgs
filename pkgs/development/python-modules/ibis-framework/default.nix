@@ -5,7 +5,6 @@
 , pythonOlder
 , pytestCheckHook
 , atpublic
-, cached-property
 , click
 , clickhouse-cityhash
 , clickhouse-driver
@@ -13,10 +12,10 @@
 , datafusion
 , duckdb
 , duckdb-engine
+, filelock
 , geoalchemy2
 , geopandas
 , graphviz-nox
-, importlib-metadata
 , lz4
 , multipledispatch
 , numpy
@@ -37,10 +36,12 @@
 , python
 , pytz
 , regex
+, rich
+, rsync
 , shapely
 , sqlalchemy
+, sqlglot
 , sqlite
-, tabulate
 , toolz
 }:
 let
@@ -55,14 +56,14 @@ let
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "a88a4b3c3b54a88e7f77e59de70f5bf20fb62f19";
-    sha256 = "sha256-BnRhVwPcWFwiBJ2ySgiiuUdnF4gesnTq1/dLcuvc868=";
+    rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
+    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.0.2";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -71,23 +72,13 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = version;
-    hash = "sha256-7ywDMAHQAl39kiHfxVkq7voUEKqbb9Zq8qlaug7+ukI=";
+    hash = "sha256-YRP1nGJs4btqXQirm0GfEDKNPCVXexVrwQ6sE8JtD2o=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ibis-project/ibis/commit/a6f64c6c32b49098d39bb205952cbce4bdfea657.patch";
-      sha256 = "sha256-puVMjiJXWk8C9yhuXPD9HKrgUBYcYmUPacQz5YO5xYQ=";
-      includes = [ "pyproject.toml" ];
-    })
-  ];
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     atpublic
-    cached-property
-    importlib-metadata
     multipledispatch
     numpy
     packaging
@@ -97,21 +88,24 @@ buildPythonPackage rec {
     pydantic
     pytz
     regex
-    tabulate
+    rich
     toolz
   ];
 
   checkInputs = [
     pytestCheckHook
     click
+    filelock
     pytest-benchmark
     pytest-mock
     pytest-randomly
     pytest-xdist
+    rsync
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
 
   preBuild = ''
     # setup.py exists only for developer convenience and is automatically generated
+    # it gets in the way in nixpkgs so we remove it
     rm setup.py
   '';
 
@@ -119,24 +113,22 @@ buildPythonPackage rec {
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
+    # this test fails on nixpkgs datafusion version (0.4.0), but works on
+    # datafusion 0.6.0
+    "-k"
+    "'not datafusion-no_op'"
   ];
 
   preCheck = ''
     set -eo pipefail
 
     export IBIS_TEST_DATA_DIRECTORY
-    IBIS_TEST_DATA_DIRECTORY="$(mktemp -d)"
+    IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
 
-    # copy the test data to a writable directory
-    cp -r ${ibisTestingData}/* "$IBIS_TEST_DATA_DIRECTORY"
+    mkdir -p "$IBIS_TEST_DATA_DIRECTORY"
 
-    find "$IBIS_TEST_DATA_DIRECTORY" -type d -exec chmod u+rwx {} +
-    find "$IBIS_TEST_DATA_DIRECTORY" -type f -exec chmod u+rw {} +
-
-    # load data
-    for backend in ${lib.concatStringsSep " " testBackends}; do
-      ${python.interpreter} ci/datamgr.py load "$backend"
-    done
+    # copy the test data to a directory
+    rsync --chmod=Du+rwx,Fu+rw --archive "${ibisTestingData}/" "$IBIS_TEST_DATA_DIRECTORY"
   '';
 
   postCheck = ''
@@ -149,16 +141,16 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 ];
+      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlglot ];
       dask = [ dask pyarrow ];
       datafusion = [ datafusion ];
-      duckdb = [ duckdb duckdb-engine sqlalchemy ];
+      duckdb = [ duckdb duckdb-engine pyarrow sqlalchemy sqlglot ];
       geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ pymysql sqlalchemy ];
+      mysql = [ sqlalchemy pymysql sqlglot ];
       pandas = [ ];
-      postgres = [ psycopg2 sqlalchemy ];
+      postgres = [ psycopg2 sqlalchemy sqlglot ];
       pyspark = [ pyarrow pyspark ];
-      sqlite = [ sqlalchemy sqlite ];
+      sqlite = [ sqlalchemy sqlite sqlglot ];
       visualization = [ graphviz-nox ];
     };
   };

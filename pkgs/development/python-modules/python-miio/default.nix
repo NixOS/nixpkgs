@@ -10,6 +10,7 @@
 , defusedxml
 , fetchPypi
 , importlib-metadata
+, micloud
 , netifaces
 , poetry-core
 , pytest-mock
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.11";
+  version = "0.5.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1hC7yE/hGLx9g3NXqU45yC/6dcW6/0oZwgYW5bj/37c=";
+    hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
   nativeBuildInputs = [
@@ -47,12 +48,13 @@ buildPythonPackage rec {
     croniter
     cryptography
     defusedxml
+    micloud
     netifaces
     pytz
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 

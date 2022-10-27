@@ -48,7 +48,7 @@ let
     ];
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
-    postInstall = ''
+    postRebuild = ''
       jq '
         .version = $ENV.version |
         .releaseTag = $ENV.releaseTag |

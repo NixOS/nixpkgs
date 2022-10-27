@@ -19,14 +19,14 @@
 , pipewire
 , # options
   enableDocs ? true
-, enableGI ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableGI ? true
 }:
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.10";
+  version = "0.4.12";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-Z5Uqjw05SdEU9bGLuhdS+hDv7Fgqx4oW92k4AG1p3Ug=";
+    sha256 = "sha256-2qM6sX807v/3DZXTuBvUSGV8+cPB87rWYb+HTDCm3kw=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
-    (python3.withPackages (ps: with ps;
-    lib.optionals enableDocs [ sphinx sphinx_rtd_theme breathe ] ++
+    (python3.pythonForBuild.withPackages (ps: with ps;
+    lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
       lib.optionals enableGI [ lxml ]
     ))
   ];

@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch, python3, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
 , attr, libcap, libcap_ng, socat
-, CoreServices, Cocoa, Hypervisor, rez, setfile
+, CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
@@ -26,6 +26,7 @@
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
+, canokeySupport ? false, canokey-qemu
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -41,16 +42,16 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "1rmvrgqjhrvcmchnz170dxvrrf14n6nm39y8ivrprmfydd9lwqx0";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3.pkgs.sphinx python3.pkgs.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     gnutls nettle curl
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -79,7 +80,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+    ++ lib.optionals uringSupport [ liburing ]
+    ++ lib.optionals canokeySupport [ canokey-qemu ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -109,31 +111,19 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
-    # make nixos tests that boot from USB more stable
-    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
+    ./9pfs-use-GHashTable-for-fid-table.patch
     (fetchpatch {
-      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
-      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
+      name = "CVE-2022-3165.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
+      sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
     })
   ]
-    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
     sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
         qga/meson.build
-
-    # glibc 2.33 compat fix: if `has_statx = true` is set, `tools/virtiofsd/passthrough_ll.c` will
-    # rely on `stx_mnt_id`[1] which is not part of glibc's `statx`-struct definition.
-    #
-    # `has_statx` will be set to `true` if a simple C program which uses a few `statx`
-    # consts & struct fields successfully compiles. It seems as this only builds on glibc-2.33
-    # since most likely[2] and because of that, the problematic code-path will be used.
-    #
-    # [1] https://github.com/torvalds/linux/commit/fa2fcf4f1df1559a0a4ee0f46915b496cc2ebf60#diff-64bab5a0a3fcb55e1a6ad77b1dfab89d2c9c71a770a07ecf44e6b82aae76a03a
-    # [2] https://sourceware.org/git/?p=glibc.git;a=blobdiff;f=io/bits/statx-generic.h;h=c34697e3c1fd79cddd60db294302e461ed8db6e2;hp=7a09e94be2abb92d2df612090c132e686a24d764;hb=88a2cf6c4bab6e94a65e9c0db8813709372e9180;hpb=c4e4b2e149705559d28b16a9b47ba2f6142d6a6c
-    substituteInPlace meson.build \
-      --replace 'has_statx = cc.links(statx_test)' 'has_statx = false'
   '';
 
   preConfigure = ''
@@ -167,8 +157,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
-    ++ lib.optional stdenv.isDarwin "--enable-hvf"
+    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
     ++ lib.optional stdenv.isLinux "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
@@ -179,7 +168,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional tpmSupport "--enable-tpm"
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring";
+    ++ lib.optional uringSupport "--enable-linux-io-uring"
+    ++ lib.optional canokeySupport "--enable-canokey";
 
   dontWrapGApps = true;
 

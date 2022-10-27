@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
         glib nss nspr
       ];
       libGLESv2 = lib.makeLibraryPath [
-        xorg.libX11 xorg.libXext xorg.libxcb
+        xorg.libX11 xorg.libXext xorg.libxcb wayland
       ];
       libsmartscreen = lib.makeLibraryPath [
         libuuid stdenv.cc.cc.lib

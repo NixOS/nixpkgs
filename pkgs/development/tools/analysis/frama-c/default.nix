@@ -4,15 +4,6 @@
 , gdk-pixbuf, wrapGAppsHook
 }:
 
-let why3_1_5 = why3; in
-let why3 = why3_1_5.overrideAttrs (o: rec {
-  version = "1.4.1";
-  src = fetchurl {
-    url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
-    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
-  };
-}); in
-
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
@@ -24,9 +15,12 @@ let
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_import
     stdlib-shims
     why3
     re
+    result
     seq
     sexplib
     sexplib0
@@ -40,21 +34,24 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "24.0";
-  slang   = "Chromium";
+  version = "25.0";
+  slang   = "Manganese";
 
   src = fetchurl {
     url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "sha256:0x1xgip50jdz1phsb9rzwf2ra8lshn1hmd9g967xia402wrg3sjf";
+    sha256 = "sha256-Ii3O/NJyBTVAv1ts/zae/Ee4HCjzYOthZmnD8wqLwp8=";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+
+  postConfigure = "patchShebangs src/plugins/value/gen-api.sh";
 
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
     ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import
     gdk-pixbuf
   ];
 

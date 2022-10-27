@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.10.1";
+  version = "0.12.6";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "sha256-jI+QQ+jE3Qzd0b9VishVwBzDlFHCVKv8cZ0BsHnkd0Q=";
+    hash = "sha256-jlNmrpze02g4FL4EFlKoZC7X/YOr3xhJWnMTPga3Bas=";
   };
 
   postPatch = ''

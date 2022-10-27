@@ -46,7 +46,9 @@
 , sbc
 , libfreeaptx
 , ldacbt
+, liblc3
 , fdk_aac
+, libopus
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
@@ -70,7 +72,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.52";
+    version = "0.3.59";
 
     outputs = [
       "out"
@@ -88,7 +90,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-JWmO36+OF2O9sLB+Z0znwm3TH+O+pEv3cXnuwP6Wy1E=";
+      sha256 = "sha256-4wDtdgkjBRlthhwbI3cSQFnbr+gxPQP5j5YnrWiQVp4=";
     };
 
     patches = [
@@ -104,11 +106,11 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Remove 44.1KHz from allowed rates (multiple regressions reported)
-      # To be removed when 0.3.53 is released
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/16a7c274989f47b0c0d8ba192a30316b545bd26a.patch";
-        sha256 = "sha256-VZ7ChjcR/PGfmH2DmLxfIhd3mj9668l9zLO4k2KBoqg=";
+
+      # remove when updating to 0.3.60
+      (fetchpatch { # filter-chain: iterate the port correctly
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/94a64268613adac8ef6f3e6c1f04468220540d00.patch";
+        sha256 = "sha256-IDTB7NgadgR3vKv97Nvd9pBfnOnMi21YsvLdD1Ew7HE=";
       })
     ];
 
@@ -140,7 +142,7 @@ let
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
@@ -157,6 +159,7 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
@@ -172,6 +175,7 @@ let
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
       "-Dbluez5-codec-lc3plus=disabled"
+      "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"

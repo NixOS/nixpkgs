@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt, alsa-lib }:
 
 stdenv.mkDerivation {
   pname = "nano-tts";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ popt alsaLib ];
+  buildInputs = [ popt alsa-lib ];
 
   patchPhase = ''
     substituteInPlace "src/main.cpp" --replace "/usr/share/pico/lang" "$out/share/lang"

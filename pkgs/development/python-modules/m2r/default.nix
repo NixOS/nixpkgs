@@ -22,6 +22,7 @@ buildPythonPackage rec {
       url = "https://github.com/miyakogi/m2r/commit/58ee9cabdadf5e3deb13037f3052238f0f2bffcd.patch";
       sha256 = "sha256-CN3PWmnk7xsn1wngRHuEWmDTP3HtVNxkFv0xzD2Zjlo=";
     })
+    ./docutils-0.19-compat.patch
   ];
 
   postPatch = ''
@@ -37,6 +38,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown to reStructuredText converter";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ AndersonTorres SuperSandro2000 ];
+    # https://github.com/miyakogi/m2r/issues/66
+    broken = versionAtLeast mistune.version "2";
   };
 }

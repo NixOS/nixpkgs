@@ -1,16 +1,20 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse }:
+{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     rev = "refs/tags/${version}";
-    hash = "sha256-BL7aLHKhLAGAT5+NXqzAW2g17XB1PjgRgJuxLh8fFk8=";
+    hash = "sha256-YDL0pMl3BX59kzjuykn0lQHu2RMvPhsBrlSiqdcZAXs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ configargparse ];
 

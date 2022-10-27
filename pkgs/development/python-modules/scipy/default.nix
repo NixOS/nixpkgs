@@ -5,7 +5,10 @@
 , buildPythonPackage
 , cython
 , gfortran
+, meson-python
+, pkg-config
 , pythran
+, wheel
 , nose
 , pytest
 , pytest-xdist
@@ -15,14 +18,15 @@
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.8.0";
+  version = "1.9.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MdTy1rckvJqY5Se1hJuKflib8epjDDOqVj7akSyf8L0=";
+    sha256 = "sha256-JtKMRokA5tX9s30oEqtG2wzNIsY7qglQV4cfqjpJi8k=";
   };
 
-  nativeBuildInputs = [ cython gfortran pythran ];
+  nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
   buildInputs = [ numpy.blas pybind11 ];
 
@@ -30,20 +34,11 @@ buildPythonPackage rec {
 
   checkInputs = [ nose pytest pytest-xdist ];
 
-  # Remove tests because of broken wrapper
-  prePatch = ''
-    rm scipy/linalg/tests/test_lapack.py
-  '';
-
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
-  '';
-
-  preBuild = ''
-    ln -s ${numpy.cfg} site.cfg
   '';
 
   # disable stackprotector on aarch64-darwin for now
@@ -58,7 +53,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
+    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
     ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck

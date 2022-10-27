@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , meson
 , pkg-config
@@ -30,19 +29,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "09c7rpbwavjg4y16mrfa57gk5ix6rnzpvlnv1wp7fnbh9hak985q";
+    url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./0001-add-placeholder-for-nm.patch;
-      nm = "${stdenv.cc.targetPrefix}nm";
-    })
-  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py

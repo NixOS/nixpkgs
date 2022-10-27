@@ -15,7 +15,6 @@
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf
-, libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , gnatboot ? null
@@ -31,9 +30,6 @@
 , libcCross ? null
 , threadsCross ? null # for MinGW
 , crossStageStatic ? false
-, # Strip kills static libs of other archs (hence no cross)
-  stripped ? stdenv.hostPlatform.system == stdenv.buildPlatform.system
-          && stdenv.targetPlatform.system == stdenv.hostPlatform.system
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
@@ -43,11 +39,8 @@ assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
 
-# LTO needs libelf and zlib.
-assert libelf != null -> zlib != null;
-
 # Make sure we get GNU sed.
-assert stdenv.hostPlatform.isDarwin -> gnused != null;
+assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -121,7 +114,7 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  pname = "${crossNameAddon}${name}";
   inherit version;
 
   builder = ../builder.sh;
@@ -199,6 +192,9 @@ stdenv.mkDerivation ({
     ++ (optional javaAwtGtk pkg-config)
     ++ (optional (with stdenv.targetPlatform; isVc4 || isRedox) flex)
     ++ (optional langAda gnatboot)
+    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
+    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
+    ++ (optional buildPlatform.isDarwin gnused)
     ;
 
   # For building runtime libs
@@ -213,15 +209,12 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc libelf
+    gmp mpfr libmpc
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
-    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
-    ++ (optional hostPlatform.isDarwin gnused)
     ;
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
@@ -230,7 +223,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo;
+    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -245,7 +238,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross
       version
 
-      gmp mpfr libmpc libelf isl
+      gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib
@@ -270,11 +263,13 @@ stdenv.mkDerivation ({
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
-  dontStrip = !stripped;
+  inherit
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
+    stripDebugList
+    stripDebugListTarget
+    preFixup;
 
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
-
-  installTargets = optional stripped "install-strip";
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
@@ -323,13 +318,10 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
 
-  inherit (stdenv) is64bit;
-
   meta = {
     homepage = "https://gcc.gnu.org/";
     license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
-    description = "GNU Compiler Collection, version ${version}"
-      + (if stripped then "" else " (with debugging info)");
+    description = "GNU Compiler Collection, version ${version}";
 
     longDescription = ''
       The GNU Compiler Collection includes compiler front ends for C, C++,

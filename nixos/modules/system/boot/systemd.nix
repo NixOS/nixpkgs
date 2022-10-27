@@ -121,7 +121,7 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-      "systemd-update-utmp.service"
+    ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
 
       # Password entry.
       "systemd-ask-password-console.path"
@@ -151,6 +151,9 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ optionals cfg.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+      "systemd-portabled.service"
     ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
@@ -177,11 +180,11 @@ in
       default = pkgs.systemd;
       defaultText = literalExpression "pkgs.systemd";
       type = types.package;
-      description = "The systemd package.";
+      description = lib.mdDoc "The systemd package.";
     };
 
     systemd.units = mkOption {
-      description = "Definition of systemd units.";
+      description = lib.mdDoc "Definition of systemd units.";
       default = {};
       type = systemdUtils.types.units;
     };
@@ -190,43 +193,43 @@ in
       default = [];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd units and hooks.";
+      description = lib.mdDoc "Packages providing systemd units and hooks.";
     };
 
     systemd.targets = mkOption {
       default = {};
       type = systemdUtils.types.targets;
-      description = "Definition of systemd target units.";
+      description = lib.mdDoc "Definition of systemd target units.";
     };
 
     systemd.services = mkOption {
       default = {};
       type = systemdUtils.types.services;
-      description = "Definition of systemd service units.";
+      description = lib.mdDoc "Definition of systemd service units.";
     };
 
     systemd.sockets = mkOption {
       default = {};
       type = systemdUtils.types.sockets;
-      description = "Definition of systemd socket units.";
+      description = lib.mdDoc "Definition of systemd socket units.";
     };
 
     systemd.timers = mkOption {
       default = {};
       type = systemdUtils.types.timers;
-      description = "Definition of systemd timer units.";
+      description = lib.mdDoc "Definition of systemd timer units.";
     };
 
     systemd.paths = mkOption {
       default = {};
       type = systemdUtils.types.paths;
-      description = "Definition of systemd path units.";
+      description = lib.mdDoc "Definition of systemd path units.";
     };
 
     systemd.mounts = mkOption {
       default = [];
       type = systemdUtils.types.mounts;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -236,7 +239,7 @@ in
     systemd.automounts = mkOption {
       default = [];
       type = systemdUtils.types.automounts;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -246,41 +249,41 @@ in
     systemd.slices = mkOption {
       default = {};
       type = systemdUtils.types.slices;
-      description = "Definition of slice configurations.";
+      description = lib.mdDoc "Definition of slice configurations.";
     };
 
     systemd.generators = mkOption {
       type = types.attrsOf types.path;
       default = {};
       example = { systemd-gpt-auto-generator = "/dev/null"; };
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd generators.
-        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
-        <literal>/etc/systemd/system-generators/NAME</literal> to <literal>VALUE</literal>.
+        For each `NAME = VALUE` pair of the attrSet, a link is generated from
+        `/etc/systemd/system-generators/NAME` to `VALUE`.
       '';
     };
 
     systemd.shutdown = mkOption {
       type = types.attrsOf types.path;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd shutdown executables.
-        For each <literal>NAME = VALUE</literal> pair of the attrSet, a link is generated from
-        <literal>/etc/systemd/system-shutdown/NAME</literal> to <literal>VALUE</literal>.
+        For each `NAME = VALUE` pair of the attrSet, a link is generated from
+        `/etc/systemd/system-shutdown/NAME` to `VALUE`.
       '';
     };
 
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
-      description = "Default unit started when the system boots.";
+      description = lib.mdDoc "Default unit started when the system boots.";
     };
 
     systemd.ctrlAltDelUnit = mkOption {
       default = "reboot.target";
       type = types.str;
       example = "poweroff.target";
-      description = ''
+      description = lib.mdDoc ''
         Target that should be started when Ctrl-Alt-Delete is pressed.
       '';
     };
@@ -289,8 +292,8 @@ in
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
       example = { TZ = "CET"; };
-      description = ''
-        Environment variables passed to <emphasis>all</emphasis> systemd units.
+      description = lib.mdDoc ''
+        Environment variables passed to *all* systemd units.
       '';
     };
 
@@ -298,16 +301,16 @@ in
       type = with types; attrsOf (nullOr (oneOf [ str path package ]));
       default = {};
       example = { SYSTEMD_LOG_LEVEL = "debug"; };
-      description = ''
+      description = lib.mdDoc ''
         Environment variables of PID 1. These variables are
-        <emphasis>not</emphasis> passed to started units.
+        *not* passed to started units.
       '';
     };
 
     systemd.enableCgroupAccounting = mkOption {
       default = true;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable cgroup accounting.
       '';
     };
@@ -315,7 +318,7 @@ in
     systemd.enableUnifiedCgroupHierarchy = mkOption {
       default = true;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the unified cgroup hierarchy (cgroupsv2).
       '';
     };
@@ -324,9 +327,9 @@ in
       default = "";
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
-      description = ''
-        Extra config options for systemd. See man systemd-system.conf for
-        available options.
+      description = lib.mdDoc ''
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
       '';
     };
 
@@ -334,7 +337,7 @@ in
       default = "";
       type = types.lines;
       example = "HibernateDelaySec=1h";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd sleep state logic.
         See sleep.conf.d(5) man page for available options.
       '';
@@ -344,7 +347,7 @@ in
       default = [ ];
       type = types.listOf types.str;
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
-      description = ''
+      description = lib.mdDoc ''
         Additional units shipped with systemd that shall be enabled.
       '';
     };
@@ -353,10 +356,10 @@ in
       default = [ ];
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
-      description = ''
+      description = lib.mdDoc ''
         A list of units to skip when generating system systemd configuration directory. This has
-        priority over upstream units, <option>systemd.units</option>, and
-        <option>systemd.additionalUpstreamSystemUnits</option>. The main purpose of this is to
+        priority over upstream units, {option}`systemd.units`, and
+        {option}`systemd.additionalUpstreamSystemUnits`. The main purpose of this is to
         prevent a upstream systemd unit from being added to the initrd with any modifications made to it
         by other NixOS modules.
       '';
@@ -366,7 +369,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/dev/watchdog";
-      description = ''
+      description = lib.mdDoc ''
         The path to a hardware watchdog device which will be managed by systemd.
         If not specified, systemd will default to /dev/watchdog.
       '';
@@ -376,7 +379,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "30s";
-      description = ''
+      description = lib.mdDoc ''
         The amount of time which can elapse before a watchdog hardware device
         will automatically reboot the system. Valid time units include "ms",
         "s", "min", "h", "d", and "w".
@@ -387,7 +390,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "10m";
-      description = ''
+      description = lib.mdDoc ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
         Valid time units include "ms", "s", "min", "h", "d", and "w".
@@ -398,7 +401,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "10m";
-      description = ''
+      description = lib.mdDoc ''
         The amount of time which can elapse when kexec is being executed before
         a watchdog hardware device will automatically reboot the system. This
         option should only be enabled if reloadTime is also enabled. Valid
@@ -591,6 +594,12 @@ in
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
+
+    # NixOS has kernel modules in a different location, so override that here.
+    systemd.services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = [
+      ""  # required to unset the previous value!
+      "/run/booted-system/kernel-modules/lib/modules/%v/modules.devname"
+    ];
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "semantic-version";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "semantic_version";
     inherit version;
-    sha256 = "sha256-q/VIc1U+Xgem/U1fZTt4H1rkEpekk2ZrWdzyFABqErI=";
+    sha256 = "sha256-vau20zaZjLs3jUuds6S1ah4yNXAdwF6iaQ2amX7VBBw=";
   };
 
   checkInputs = [

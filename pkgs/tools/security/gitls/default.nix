@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gitls";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-snoWnq+xmaxWzFthhO/gOYQDUMbpIZR9VkqcPaHzS6g=";
+    hash = "sha256-kLkH/nNidd1QNPKvo7fxZwMhTgd4AVB8Ofw0Wo0z6c0=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   passthru.tests.version = testers.testVersion {
     package = gitls;

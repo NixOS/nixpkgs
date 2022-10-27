@@ -1,11 +1,11 @@
 { lib
 , buildPythonPackage
 , base36
+, chacha20poly1305-reuseable
 , cryptography
-, curve25519-donna
-, ecdsa
 , fetchFromGitHub
 , h11
+, orjson
 , pyqrcode
 , pytest-asyncio
 , pytest-timeout
@@ -16,31 +16,36 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.4.0";
+  version = "4.5.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
-    rev = "v${version}";
-    sha256 = "sha256-dSiI2W4U4FYwMRBInpxb/wkQLKxPzLHIkLPNgiZEhUA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-/XJvCL9hMIrOUwGPcrvSrJ6SZ/E6BQy+isFFlAniIM4=";
   };
 
   propagatedBuildInputs = [
-    base36
+    chacha20poly1305-reuseable
     cryptography
-    curve25519-donna
-    ecdsa
     h11
-    pyqrcode
+    orjson
     zeroconf
+  ];
+
+  passthru.optional-dependencies.QRCode = [
+    base36
+    pyqrcode
   ];
 
   checkInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.optional-dependencies.QRCode;
 
   disabledTestPaths = [
     # Disable tests requiring network access

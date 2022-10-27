@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "goflow";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dUoiuoM87Bh3ndzHG/YnwnRWnVbtPDuVdICEXcezCp8=";
+    sha256 = "sha256-nMWAvvJj1S5W4ItOT212bn9CPG5Lpdd+k8ciwGmeu0w=";
   };
 
   vendorSha256 = "sha256-fOlfVI8v7KqNSRhAPlZBSHKfZRlCbCgjnMV/6bsqDhg=";

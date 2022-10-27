@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, build
 , click
 , fetchPypi
 , pep517
@@ -15,21 +16,24 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.6.2";
+  version = "6.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9jhQOp932Y2afXJYSxUI0/gu0Bm4+rJPTlrQeMG4yV4=";
+    hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
+
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    build
     click
     pep517
     pip
@@ -51,6 +55,8 @@ buildPythonPackage rec {
     # Tests require network access
     "network"
     "test_direct_reference_with_extras"
+    "test_local_duplicate_subdependency_combined"
+    "test_bad_setup_file"
   ];
 
   pythonImportsCheck = [

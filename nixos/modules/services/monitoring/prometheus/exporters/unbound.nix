@@ -12,7 +12,7 @@ in
       # TODO: add shm when upstream implemented it
       type = types.enum [ "tcp" "uds" ];
       default = "uds";
-      description = ''
+      description = lib.mdDoc ''
         Which methods the exporter uses to get the information from unbound.
       '';
     };
@@ -20,7 +20,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };
@@ -29,7 +29,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "/run/unbound/unbound.socket";
-      description = ''
+      description = lib.mdDoc ''
         Path to the unbound socket for uds mode or the control interface port for tcp mode.
 
         Example:

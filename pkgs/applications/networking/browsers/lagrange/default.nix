@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lagrange";
-  version = "1.13.6";
+  version = "1.13.7";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${version}";
-    sha256 = "sha256-5EIXbdVBFkmftD8xK1VJmZH3Ul99fhFSpFLOQNqSXoU=";
+    sha256 = "sha256-WUNDkLKT/AgS5WkBKbVSM5/1zSjQuE8Aq68JLSOHFEs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config zip ];

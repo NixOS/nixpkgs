@@ -23,17 +23,18 @@
 , qtwebengine
 , qtx11extras
 , jellyfin-web
+, withDbus ? stdenv.isLinux, dbus
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-eDCfqSNkKVm8MC4XA1NhQSByy9zhfyQRPM8OlSKcIvc=";
+    sha256 = "sha256-piMqI4qxcNUSNC+0JE2KZ/cvlNgtxUOnSfrcWnBVzC0=";
   };
 
   patches = [
@@ -74,6 +75,8 @@ mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DQTROOT=${qtbase}"
     "-GNinja"
+  ] ++ lib.optionals (!withDbus) [
+    "-DLINUX_X11POWER=ON"
   ];
 
   preBuild = ''

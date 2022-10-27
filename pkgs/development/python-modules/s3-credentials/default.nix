@@ -8,11 +8,12 @@
 , pytestCheckHook
 , hypothesis
 , pytest-mock
+, moto
 }:
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.11";
+  version = "0.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    hash = "sha256-t6Q+/2k93cEk+eeFm9aOvZNb1IcUzt66iApfH2FvHbw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vKOcOSt9vscj5ixrHZGL6PRun/x38JLbni75nw2YAbg=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
     hypothesis
     pytest-mock
+    moto
   ];
 
   pythonImportsCheck = [

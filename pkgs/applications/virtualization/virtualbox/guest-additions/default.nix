@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "88f86fa0e6970b6a7c80d714b7a91a8c425ff8ef53a3e73fc80781191a87257b";
+    sha256 = "d456c559926f1a8fdd7259056e0a50f12339fd494122cf30db7736e2032970c6";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -148,6 +148,6 @@ in stdenv.mkDerivation rec {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = [ "i686-linux" "x86_64-linux" ];
-    broken = kernel.kernelAtLeast (if stdenv.hostPlatform.is32bit then "5.10" else "5.17");
+    broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };
 }

@@ -4,8 +4,9 @@
 buildPythonPackage rec {
   pname = "dbus-python";
   version = "1.2.18";
-  format = "other";
 
+  disabled = isPyPy;
+  format = "other";
   outputs = [ "out" "dev" ];
 
   src = fetchPypi {
@@ -17,11 +18,9 @@ buildPythonPackage rec {
     ./fix-includedir.patch
   ];
 
-  disabled = isPyPy;
-
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
     MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  '';
 
   configureFlags = [
     "PYTHON=${python.pythonForBuild.interpreter}"
@@ -36,9 +35,14 @@ buildPythonPackage rec {
   doCheck = isPy3k;
   checkInputs = [ dbus.out pygobject3 ];
 
-  meta = {
+  postInstall = ''
+    cp -r dbus_python.egg-info $out/${python.sitePackages}/
+  '';
+
+  meta = with lib; {
     description = "Python DBus bindings";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = dbus.meta.platforms;
+    maintainers = with maintainers; [ ];
   };
 }

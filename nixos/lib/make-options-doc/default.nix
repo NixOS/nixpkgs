@@ -26,6 +26,8 @@
   # If you include more than one option list into a document, you need to
   # provide different ids.
 , variablelistId ? "configuration-variable-list"
+  # Strig to prefix to the option XML/HTML id attributes.
+, optionIdPrefix ? "opt-"
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -34,6 +36,10 @@
 # instead of printing warnings for eg options with missing descriptions (which may be lost
 # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
+# allow docbook option docs if `true`. only markdown documentation is allowed when set to
+# `false`, and a different renderer may be used with different bugs and performance
+# characteristics but (hopefully) indistinguishable output.
+, allowDocBook ? true
 }:
 
 let
@@ -116,37 +122,38 @@ in rec {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
-      buildInputs = [
+      nativeBuildInputs = [
         pkgs.brotli
         (let
-          self = (pkgs.python3Minimal.override {
+          # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
+          # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
+          # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
+          python = if pkgs.stdenv.isDarwin then pkgs.python3 else pkgs.python3Minimal;
+          self = (python.override {
             inherit self;
             includeSiteCustomize = true;
            });
-         in self.withPackages (p: [ p.mistune_2_0 ]))
+         in self.withPackages (p: [ p.mistune ]))
       ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
+      # merge with an empty set if baseOptionsJSON is null to run markdown
+      # processing on the input options
+      baseJSON =
+        if baseOptionsJSON == null
+        then builtins.toFile "base.json" "{}"
+        else baseOptionsJSON;
     }
     ''
       # Export list of options in different format.
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      ${
-        if baseOptionsJSON == null
-          then ''
-            # `cp $options $dst/options.json`, but with temporary
-            # markdown processing
-            python ${./mergeJSON.py} $options <(echo '{}') > $dst/options.json
-          ''
-          else ''
-            python ${./mergeJSON.py} \
-              ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-              ${baseOptionsJSON} $options \
-              > $dst/options.json
-          ''
-      }
+      python ${./mergeJSON.py} \
+        ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
+        ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
+        $baseJSON $options \
+        > $dst/options.json
 
       brotli -9 < $dst/options.json > $dst/options.json.br
 
@@ -182,6 +189,7 @@ in rec {
       --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
       --stringparam variablelistId '${variablelistId}' \
+      --stringparam optionIdPrefix '${optionIdPrefix}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml

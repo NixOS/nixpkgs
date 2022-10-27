@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "blackmagic";
-  version = "unstable-2022-04-16";
+  version = "1.8.2";
   # `git describe --always`
-  firmwareVersion = "v1.7.1-415-gc4869a5";
+  firmwareVersion = "v${version}";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "c4869a54733ae92099a7316954e34d1ab7b6097c";
-    hash = "sha256-0MC1v/5u/txSshxkOI5TErMRRrYCcHly3qbVTAk9Vc0=";
+    rev = firmwareVersion;
+    hash = "sha256-NGzoohmpVwGOncr9AvHYANMf/oEskjmTXYj/Kdx2RwM=";
     fetchSubmodules = true;
   };
 

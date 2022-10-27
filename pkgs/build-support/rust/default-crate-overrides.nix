@@ -27,6 +27,7 @@
 , freetype
 , rdkafka
 , udev
+, libevdev
 , ...
 }:
 
@@ -63,6 +64,12 @@ in
   dbus = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
+  };
+
+  evdev-sys = attrs: {
+    LIBGIT2_SYS_USE_PKG_CONFIG = true;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libevdev ];
   };
 
   expat-sys = attrs: {

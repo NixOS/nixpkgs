@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles git ];
   buildInputs = [ libX11 libXdamage libXrender libXcomposite libXext ];
   preInstall = "mkdir -p $out/share/man/man1";
-  installFlags = "PREFIX=${placeholder "out"}";
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "Simple XLib program to highlight the cursor position";

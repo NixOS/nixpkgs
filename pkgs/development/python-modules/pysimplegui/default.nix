@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pysimplegui";
-  version = "4.59.0";
+  version = "4.60.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PySimpleGUI";
     inherit version;
-    sha256 = "sha256-GW6BwKQ36sSJNZXy7mlRW5hB5gjTUb08V33XqRNFT1E=";
+    sha256 = "sha256-+IyCwwGlGuo1vmBdwGC8zrDctmguFigFRIhHAatLI7o=";
   };
 
   propagatedBuildInputs = [

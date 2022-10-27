@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
 , cmake
+, python3
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -19,19 +20,32 @@ stdenv.mkDerivation rec {
     cp -r ${monorepoSrc}/libcxx/utils "$out/libcxx"
     mkdir -p "$out/llvm"
     cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    cp -r ${monorepoSrc}/runtimes "$out"
   '';
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${src.name}/runtimes";
+
+  prePatch = ''
+    cd ../${pname}
+    chmod -R u+w .
+  '';
 
   patches = [
     ./gnu-install-dirs.patch
   ];
 
+  postPatch = ''
+    cd ../runtimes
+  '';
+
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
 
-  cmakeFlags = lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
+  cmakeFlags = [
+    "-DLLVM_ENABLE_RUNTIMES=libunwind"
+  ] ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmysqlconnectorcpp";
-  version = "8.0.28";
+  version = "8.0.30";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
-    sha256 = "sha256-yyb+neBaO18e0ioZlCm2eR7OGEM+sEZeKnP89EWGQgs=";
+    sha256 = "sha256-WyzuvjmG/m1rDG8ptpEss6HKv5mNLExBJ0UnaN51qws=";
   };
 
   nativeBuildInputs = [

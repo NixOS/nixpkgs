@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.40.1";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-op0oNtHljAjEmWCjvWHk/jGf8De6IdX7Y0dfPl7dkN0=";
+    sha256 = "sha256-MShlKtrorqXRInQ01dEzVeLDRDua9PISkficF02PrBI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,7 +26,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorSha256 = "sha256-5huViLIs6SZoO0cAIf2sI20qlQUsFi+Rv68PvfbVgBw=";
+  vendorSha256 = "sha256-MusEvYNaMM0kqHSDdenPKo4IrIFmvPHSCRzciKMFiew=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -69,8 +69,5 @@ buildGoModule rec {
     '';
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab jk ];
-    # Need updated macOS SDK
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
       pygobject3
     ]))
   ];
+  patches = [
+    # Compiles, but doesn't launch without this, see:
+    # https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/83
+    ./fix-launch.diff
+  ];
 
   enginesPath = lib.makeBinPath ([
     tesseract4
@@ -64,7 +69,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    # Compiles, but doesn't launch, see: https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/83
-    broken = true;
   };
 }

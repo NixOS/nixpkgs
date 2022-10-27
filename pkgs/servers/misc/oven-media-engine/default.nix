@@ -5,7 +5,7 @@
 , bc
 , pkg-config
 , perl
-, openssl_3
+, openssl
 , zlib
 , ffmpeg
 , libvpx
@@ -14,31 +14,36 @@
 , srtp
 , jemalloc
 , pcre2
+, hiredis
 }:
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
-  version = "0.13.2";
+  version = "0.14.10";
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "0lkpidx4r890mcdk9m69j4iahm7qr7w34h11w1nmi132v0rqm0h8";
+    sha256 = "09diqgv5pbv8igb4x9lzrmaf5ic1fd3m8y7rlpwh4w145qwjxc8y";
   };
 
   sourceRoot = "source/src";
-  makeFlags = "release CONFIG_LIBRARY_PATHS= CONFIG_PKG_PATHS= GLOBAL_CC=$(CC) GLOBAL_CXX=$(CXX) GLOBAL_LD=$(CXX) SHELL=${stdenv.shell}";
+  makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl_3 srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid ];
+  buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
 
   preBuild = ''
     patchShebangs core/colorg++
     patchShebangs core/colorgcc
     patchShebangs projects/main/update_git_info.sh
 
+    sed -i -e 's/const AVOutputFormat /AVOutputFormat /g' \
+      projects/modules/mpegts/mpegts_writer.cpp \
+      projects/modules/file/file_writer.cpp \
+      projects/modules/rtmp/rtmp_writer.cpp
     sed -i -e '/^CC =/d' -e '/^CXX =/d' -e '/^AR =/d' projects/third_party/pugixml-1.9/scripts/pugixml.make
   '';
 

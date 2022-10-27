@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "6.4.3";
+  version = "6.4.4";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VfMmJrC+ZHqF4yF93Nsi22nvx56LQDuXceuezGlgGbU=";
+    sha256 = "sha256-Fy9TNeMdYA32FhOpe38DUvLIJQu9EJLvLWWPdySfifs=";
   };
 
   propagatedBuildInputs = [

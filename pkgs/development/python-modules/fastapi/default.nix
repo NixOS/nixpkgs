@@ -9,6 +9,8 @@
 , databases
 , flask
 , httpx
+, hatchling
+, orjson
 , passlib
 , peewee
 , python-jose
@@ -19,17 +21,21 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.78.0";
-  format = "flit";
+  version = "0.85.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
     repo = pname;
-    rev = version;
-    hash = "sha256-4JS0VLVg67O7VdcDw2k2u+98kiCdCHvCAEGHYGWEIOA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pMKWaj81rDX+zPHGvHakMDWN8+SU2qBAStk7HqENaig=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -46,6 +52,7 @@ buildPythonPackage rec {
     databases
     flask
     httpx
+    orjson
     passlib
     peewee
     python-jose

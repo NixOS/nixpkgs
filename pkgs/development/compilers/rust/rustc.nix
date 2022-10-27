@@ -10,6 +10,9 @@
 , version
 , sha256
 , patches ? []
+, fd
+, firefox
+, thunderbird
 }:
 
 let
@@ -87,6 +90,10 @@ in stdenv.mkDerivation rec {
     "${setBuild}.cxx=${cxxForBuild}"
     "${setHost}.cxx=${cxxForHost}"
     "${setTarget}.cxx=${cxxForTarget}"
+
+    "${setBuild}.crt-static=${lib.boolToString stdenv.buildPlatform.isStatic}"
+    "${setHost}.crt-static=${lib.boolToString stdenv.hostPlatform.isStatic}"
+    "${setTarget}.crt-static=${lib.boolToString stdenv.targetPlatform.isStatic}"
   ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
@@ -100,6 +107,8 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+    "--disable-docs"
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
@@ -129,6 +138,10 @@ in stdenv.mkDerivation rec {
 
     # Useful debugging parameter
     # export VERBOSE=1
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    export JEMALLOC_SYS_WITH_LG_VADDR=48
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -141,8 +154,10 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security ]
+    ++ optionals stdenv.isDarwin [ Security ]
     ++ optional (!withBundledLLVM) llvmShared;
+
+  depsTargetTargetPropagated = optionals stdenv.isDarwin [ libiconv ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
@@ -180,6 +195,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
+    tests = { inherit fd; } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
   };
 
   meta = with lib; {

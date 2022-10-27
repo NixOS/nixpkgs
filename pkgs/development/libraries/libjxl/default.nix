@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   pname = "libjxl";
   version = "0.6.1";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
@@ -33,6 +35,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # present in master, see https://github.com/libjxl/libjxl/pull/1403
+    (fetchpatch {
+      name = "prefixless-pkg-config.patch";
+      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
+      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
+    })
+
     # present in master, remove after 0.7?
     (fetchpatch {
       name = "fix-link-lld-macho.patch";
@@ -48,6 +57,17 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
       sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
     })
+
+    # fix build with asciidoc wrapped in shell script
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
+      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
+      excludes = [ "AUTHORS" ];
+      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -56,9 +76,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ] ++ lib.optionals buildDocs [
     asciidoc
-    graphviz
     doxygen
     python3
+  ];
+
+  depsBuildBuild = lib.optionals buildDocs [
+    graphviz
   ];
 
   # Functionality not currently provided by this package
@@ -112,21 +135,13 @@ stdenv.mkDerivation rec {
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+   "-DJPEGXL_STATIC=ON"
   ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   doCheck = !stdenv.hostPlatform.isi686;
-
-  # The test driver runs a test `LibraryCLinkageTest` which without
-  # LD_LIBRARY_PATH setting errors with:
-  #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
-  # The required file is in the build directory (`$PWD`).
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

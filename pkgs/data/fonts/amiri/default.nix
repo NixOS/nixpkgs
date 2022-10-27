@@ -1,19 +1,21 @@
 { lib, fetchzip }:
 
 let
-  version = "0.114";
+  version = "0.900";
 
 in fetchzip rec {
   name = "Amiri-${version}";
 
   url = "https://github.com/alif-type/amiri/releases/download/${version}/${name}.zip";
 
-  sha256 = "sha256-6FA46j1shP0R8iEi/Xop2kXS0OKW1jaGUEOthT3Z5b4=";
+  sha256 = "sha256-FjuzWW9xVWDOxHBwYL4pmopQVc9KYHGHhye5tPdw68s=";
 
   postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/truetype ${name}/*.ttf
-    install -m444 -Dt $out/share/doc/${name}    ${name}/{*.txt,*.pdf}
+    rm -rf $out/otf
+    mkdir -p $out/share/fonts/truetype
+    mv $out/*.ttf $out/share/fonts/truetype/
+    mkdir -p $out/share/doc/${name}
+    mv $out/{*.html,*.txt,*.md} $out/share/doc/${name}/
   '';
 
   meta = with lib; {

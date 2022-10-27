@@ -283,6 +283,7 @@ def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
         {'name': 'discourse-assign'},
+        {'name': 'discourse-bbcode-color'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
         {'name': 'discourse-chat-integration'},
@@ -407,6 +408,7 @@ def update_plugins():
         gemfile_text = ''
         for line in repo.get_file('plugin.rb', rev).splitlines():
             if 'gem ' in line:
+                line = ','.join(filter(lambda x: ":require_name" not in x, line.split(',')))
                 gemfile_text = gemfile_text + line + os.linesep
 
                 version_file_match = version_file_regex.match(line)

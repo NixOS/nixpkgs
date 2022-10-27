@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "slither";
-    rev = version;
-    sha256 = "sha256-Kh5owlkRB9hDlfIRiS+aNFe4YtZj38CLeE3Fe+R7diM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Td7WBPpc+ZYlFroZNzvUqQZJag0lbkCgj8TVOPrAAPY=";
   };
 
   nativeBuildInputs = [

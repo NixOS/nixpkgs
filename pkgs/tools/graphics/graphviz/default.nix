@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , cairo
@@ -27,17 +28,24 @@
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "3.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "24cf7232bb8728823466e0ef536862013893e567";
-    sha256 = "sha256-qqrpCJ9WP8wadupp4YRJMMaSCeFIDuFDQvEOpbG/wGM=";
+    rev = version;
+    sha256 = "sha256-lcU6Pb45kg7AxXQ9lmqwAazT2JpGjBz4PzK+S5lpYa0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/graphviz/graphviz/-/commit/8d662734b6a34709d9475b120e7ce3de872339e2.diff";
+      includes = [ "lib/*" ];
+      sha256 = "sha256-cqzUpK//2TnzWb7oSa/g8LJ61yr3O+Wiq5LsZzw34NE=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -88,7 +96,6 @@ stdenv.mkDerivation {
   preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
       --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
       --replace '"/usr/bin/vim"' '"$(command -v vim)"' \

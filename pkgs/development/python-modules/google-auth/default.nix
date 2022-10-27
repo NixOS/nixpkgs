@@ -2,67 +2,91 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , cachetools
+, pyasn1-modules
+, rsa
+, six
+, aiohttp
+, cryptography
+, pyopenssl
+, pyu2f
+, requests
+, aioresponses
+, asynctest
 , flask
 , freezegun
+, grpcio
 , mock
 , oauth2client
-, pyasn1-modules
-, pyu2f
+, pytest-asyncio
 , pytest-localserver
+, pytestCheckHook
 , responses
-, rsa
-, pyopenssl
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.6.6";
+  version = "2.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-G6STjgMrc961HlnEZWoA4JOc8LERJXUJnxNrq7RWMxI=";
+    sha256 = "sha256-7WXs+faBgyKY4pMo4e8KNnbjcysuVvQVMtRfcKIt4Ps=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    pyopenssl
-    pyu2f
+    six
   ];
 
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      requests
+    ];
+    enterprise_cert = [
+      cryptography
+      pyopenssl
+    ];
+    pyopenssl = [
+      pyopenssl
+    ];
+    reauth = [
+      pyu2f
+    ];
+  };
+
   checkInputs = [
+    aioresponses
+    asynctest
     flask
     freezegun
+    grpcio
     mock
     oauth2client
-    pytestCheckHook
+    pytest-asyncio
     pytest-localserver
+    pytestCheckHook
     responses
-  ];
+    urllib3
+  ] ++ passthru.optional-dependencies.aiohttp
+  # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
+  ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
+  ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_request_with_timeout_success"
-    "test_request_with_timeout_failure"
-    "test_request_headers"
-    "test_request_error"
-    "test_request_basic"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # E MemoryError: Cannot allocate write+execute memory for ffi.callback().
-    # You might be running on a system that prevents this.
-    # For more information, see https://cffi.readthedocs.io/en/latest/using.html#callbacks
-    "test_configure_mtls_channel_with_callback"
-    "test_configure_mtls_channel_with_metadata"
-    "TestDecryptPrivateKey"
-    "TestMakeMutualTlsHttp"
-    "TestMutualTlsAdapter"
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Disable tests using pyOpenSSL as it does not build on M1 Macs
+    "tests/transport/test__mtls_helper.py"
+    "tests/transport/test_requests.py"
+    "tests/transport/test_urllib3.py"
+    "tests/transport/test__custom_tls_signer.py"
   ];
 
   meta = with lib; {

@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "flameshot";
-  version = "12.0.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "sha256-ByW+XYTaeBTTbOaxNeF367nqgnBM+EC8jm+PmwHcVGQ=";
+    sha256 = "sha256-omyMN8d+g1uYsEw41KmpJCwOmVWLokEfbW19vIvG79w=";
   };
 
   passthru = {

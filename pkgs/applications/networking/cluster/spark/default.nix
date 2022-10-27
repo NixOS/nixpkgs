@@ -74,8 +74,8 @@ in
 {
   spark_3_2 = spark rec {
     pname = "spark";
-    version = "3.2.1";
-    sha256 = "0kxdqczwmj6pray0h8h1qhygni9m82jzznw5fbv9hrxrkq1v182d";
+    version = "3.2.2";
+    sha256 = "sha256-yKoTyD/IqvsJQs0jB67h1zqwYaLuikdoa5fYIXtvhz0=";
   };
   spark_3_1 = spark rec {
     pname = "spark";

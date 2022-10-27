@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, gtk3, libxml2, libgtop, libcanberra-gtk3
-, inkscape, udisks2, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, glib
+, gtk3
+, libxml2
+, libgtop
+, libcanberra-gtk3
+, inkscape
+, udisks2
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-utils";
@@ -32,7 +48,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Utilities for the MATE desktop";

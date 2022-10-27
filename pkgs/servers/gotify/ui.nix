@@ -29,6 +29,7 @@ yarn2nix-moretea.mkYarnPackage rec {
   buildPhase = ''
     export HOME=$(mktemp -d)
     export WRITABLE_NODE_MODULES="$(pwd)/tmp"
+    export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p "$WRITABLE_NODE_MODULES"
 
     # react-scripts requires a writable node_modules/.cache, so we have to copy the symlink's contents back

@@ -2,9 +2,13 @@
 
 lib.makeScope newScope (self: with self; {
 
+  autopair-fish = callPackage ./autopair-fish.nix { };
+
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
   clownfish = callPackage ./clownfish.nix { };
+
+  bass = callPackage ./bass.nix { };
 
   done = callPackage ./done.nix { };
 

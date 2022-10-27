@@ -1,16 +1,20 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "ytt";
-  version = "0.41.1";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-ytt";
     rev = "v${version}";
-    sha256 = "sha256-JOmDEhisJh4sezxf/Whsf1W7rn4q7C3GqmINQ/A13J0=";
+    sha256 = "sha256-oxN4IfJ6ATw92Yri2l1R0EF1CKsGrXikaaEPpnU9qqc=";
   };
 
   vendorSha256 = null;
+
+  ldflags = [
+    "-X github.com/vmware-tanzu/carvel-ytt/pkg/version.Version=${version}"
+  ];
 
   subPackages = [ "cmd/ytt" ];
 

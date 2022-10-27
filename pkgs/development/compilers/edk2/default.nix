@@ -34,7 +34,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202202";
+  version = "202205";
 
   patches = [
     # pass targetPrefix as an env var
@@ -50,7 +50,7 @@ edk2 = buildStdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    sha256 = "0srmhi6c27n5vyl01nhh0fq8k4vngbwn79siyjvcacjbj2ivhh8d";
+    sha256 = "sha256-5V3gXZoePxRVL0miV/ku/HILT7d06E8UI28XRx8vZjA=";
   };
 
   nativeBuildInputs = [ pythonEnv ];
@@ -61,7 +61,7 @@ edk2 = buildStdenv.mkDerivation {
   ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
   makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+    ++ lib.optionals (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
@@ -87,7 +87,11 @@ edk2 = buildStdenv.mkDerivation {
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrsOrFun: buildStdenv.mkDerivation (finalAttrs:
+    let
+      attrs = lib.toFunction attrsOrFun finalAttrs;
+    in
+    {
       inherit (edk2) src;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ] ++ attrs.depsBuildBuild or [];

@@ -167,7 +167,8 @@ rec {
       */
       unresholved = (stdenv.mkDerivation ((removeAttrs attrs [ "solutions" ])
         // {
-        inherit pname version src;
+        inherit version src;
+        pname = "${pname}-unresholved";
       }));
     in
     /*
@@ -178,13 +179,14 @@ rec {
     */
     lib.extendDerivation true passthru (stdenv.mkDerivation {
       src = unresholved;
-      version = unresholved.version;
-      pname = "resholved-${unresholved.pname}";
+      inherit version pname;
       buildInputs = [ resholve ];
 
       # retain a reference to the base
       passthru = unresholved.passthru // {
         unresholved = unresholved;
+        # fallback attr for update bot to query our src
+        originalSrc = unresholved.src;
       };
 
       # do these imply that we should use NoCC or something?
@@ -199,5 +201,8 @@ rec {
       # supports default python.logging levels
       # LOGLEVEL="INFO";
       preFixup = phraseSolutions solutions unresholved;
+
+      # don't break the metadata...
+      meta = unresholved.meta;
     });
 }

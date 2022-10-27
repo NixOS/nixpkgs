@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libbfd, SDL2, obs-studio
+{ lib, stdenv, cmake, libbfd, SDL2, obs-studio
 , looking-glass-client }:
 
 stdenv.mkDerivation {

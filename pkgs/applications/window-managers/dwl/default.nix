@@ -21,13 +21,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "dwl";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-T2GqDehBNO8eublqZUmA5WADjnwElzT+bp9Dp1bqSgg=";
+    hash = "sha256-VHxBjjnzJNmtJxrm3ywJzvt2bNHGk/Cx8TICw6SaoiQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

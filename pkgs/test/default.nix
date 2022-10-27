@@ -29,6 +29,7 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
@@ -73,6 +74,8 @@ with pkgs;
   testers = callPackage ../build-support/testers/test/default.nix {};
 
   dhall = callPackage ./dhall { };
+
+  coq = callPackage ./coq {};
 
   makeWrapper = callPackage ./make-wrapper { };
   makeBinaryWrapper = callPackage ./make-binary-wrapper {

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "realvnc-vnc-viewer";
-  version = "6.22.207";
+  version = "6.22.515";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "0jybfqj1svkb297ahyp07xf4b8qyb5h1l2kp50a50ivb6flqd3jr";
+      sha256 = "1l9kfmb1695pv2v9hm8z5yr7y5yhadbbs61s4yf9ksvvfypzwrpn";
     };
     "i686-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
-      sha256 = "06jmkd474nql6p3hnqwnwj5ac29m2021flnvf44mfhrhaa5wnpz6";
+      sha256 = "15fi1siwbsxmy7qi6f8r8ym346a8mx3kqcp9mvwvx39wm3ija6dh";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "VNC remote desktop client software by RealVNC";
     homepage = "https://www.realvnc.com/en/connect/download/viewer/";
+    mainProgram = "vncviewer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "VNC Connect End User License Agreement";

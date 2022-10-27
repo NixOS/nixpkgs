@@ -4,13 +4,13 @@ with lib;
 
 buildGoModule rec {
   pname = "butane";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    sha256 = "sha256-rS1/LQ5R3WY9ot1pgtN+6t/ZChr9SxPzrsNio7WWNqQ=";
+    sha256 = "sha256-PjuQ5eEW/CdghkVHozxrG9WPNKJZwUcf7/ZRIcUAtJY=";
   };
 
   vendorSha256 = null;

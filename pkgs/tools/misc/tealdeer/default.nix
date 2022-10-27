@@ -2,40 +2,45 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
 , installShellFiles
-, openssl
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "sha256-yF46jCdC4UDswKa/83ZrM9VkZXQqzua2/S7y2bqYa+c=";
+    sha256 = "sha256-c7HYQtNT3e/GRyhS6sVGBw91cIusWmOqQ3i+Gglc/Ks=";
   };
 
-  cargoSha256 = "sha256-BIMaVeNSdKl2A9613S+wgmb6YmiF5YJU8pTMVQfjDwI=";
+  cargoSha256 = "sha256-CLCY4rKdYX3QZvk18Ty9B3kcC6hXsDTpAFG0S5xusEQ=";
 
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd tldr \
-      --bash bash_tealdeer \
-      --fish fish_tealdeer \
-      --zsh zsh_tealdeer
+      --bash completion/bash_tealdeer \
+      --fish completion/fish_tealdeer \
+      --zsh completion/zsh_tealdeer
   '';
 
-  # disable tests for now since one needs network
-  # what is unavailable in sandbox build
-  # and i can't disable just this one
-  doCheck = false;
+  # Disable tests that require Internet access:
+  checkFlags = [
+    "--skip test_autoupdate_cache"
+    "--skip test_create_cache_directory_path"
+    "--skip test_pager_flag_enable"
+    "--skip test_quiet_cache"
+    "--skip test_quiet_failures"
+    "--skip test_quiet_old_cache"
+    "--skip test_spaces_find_command"
+    "--skip test_update_cache"
+  ];
 
   meta = with lib; {
     description = "A very fast implementation of tldr in Rust";

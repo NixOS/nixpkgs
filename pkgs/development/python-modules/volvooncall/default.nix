@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "volvooncall";
-  version = "0.10.0";
+  version = "0.10.1";
 
   disabled = pythonOlder "3.8";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = "volvooncall";
     rev = "v${version}";
-    hash = "sha256-HLSanXJs1yPSgYo4oX0zJtrV5sKkxV2yLPhc2dVRHY8=";
+    hash = "sha256-udYvgKj7Rlc/hA86bbeBfnoVRjKkXT4TwpceWz226cU=";
   };
 
   propagatedBuildInputs = [

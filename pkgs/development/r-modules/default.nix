@@ -360,7 +360,7 @@ let
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
     mwaved = [ pkgs.fftw.dev ];
-    mzR = with pkgs; [ zlib boost159.dev netcdf ];
+    mzR = with pkgs; [ zlib netcdf ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = with pkgs; [ nlopt pkg-config libiconv ];
     n1qn1 = [ pkgs.gfortran ];
@@ -498,7 +498,9 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    deldir = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    interp = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     RcppArmadillo = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
@@ -622,6 +624,7 @@ let
     ncdfFlow = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj.dev ];
     rtmpt = [ pkgs.gsl ];
+    rmarkdown = [ pkgs.pandoc ];
     mixcat = [ pkgs.gsl ];
     libstableR = [ pkgs.gsl ];
     landsepi = [ pkgs.gsl ];
@@ -1039,6 +1042,11 @@ let
             sed -i 's#system("which \(\w\+\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
         done
       '';
+    });
+
+    s2 = old.s2.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     Rmpi = old.Rmpi.overrideDerivation (attrs: {

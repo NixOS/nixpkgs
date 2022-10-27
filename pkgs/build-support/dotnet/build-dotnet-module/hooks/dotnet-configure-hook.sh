@@ -1,6 +1,6 @@
 declare -a projectFile testProjectFile
 
-# inherit arguments from derivation
+# Inherit arguments from derivation
 dotnetFlags=( ${dotnetFlags[@]-} )
 dotnetRestoreFlags=( ${dotnetRestoreFlags[@]-} )
 
@@ -10,18 +10,24 @@ dotnetConfigureHook() {
     runHook preConfigure
 
     if [ -z "${enableParallelBuilding-}" ]; then
-        parallelFlag="--disable-parallel"
+        local -r parallelFlag="--disable-parallel"
     fi
 
-    for project in ${projectFile[@]} ${testProjectFile[@]}; do
-        env \
-            dotnet restore "$project" \
-                -p:ContinuousIntegrationBuild=true \
-                -p:Deterministic=true \
-                --source "@nugetSource@/lib" \
-                ${parallelFlag-} \
-                ${dotnetRestoreFlags[@]} \
-                ${dotnetFlags[@]}
+    dotnetRestore() {
+        local -r project="${1-}"
+        env dotnet restore ${project-} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --source "@nugetSource@/lib" \
+            ${parallelFlag-} \
+            ${dotnetRestoreFlags[@]} \
+            ${dotnetFlags[@]}
+    }
+
+    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
+
+    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
+        dotnetRestore "$project"
     done
 
     runHook postConfigure

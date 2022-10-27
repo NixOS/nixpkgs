@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     himitsu
   ];
 
+  preConfigure = ''
+    export HARECACHE=$(mktemp -d)
+  '';
+
   buildFlags = [ "LIBEXECDIR=$(out)/libexec" ];
 
   # Only install the native component; per the docs:

@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gtk3
 , hicolor-icon-theme
@@ -13,7 +13,7 @@ let
 in
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "Amethyst" "Beryl" "Doder" "Ruby" "Black" "White" ] colorVariants
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit pname;
   version = "2021-11-09";
 

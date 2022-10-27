@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.20.1";
+  version = "0.20.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-PUZ9joOhXkL1K2yi0baiuY74PIi71V/epX8zdcUv1DA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 

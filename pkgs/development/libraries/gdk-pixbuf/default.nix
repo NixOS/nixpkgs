@@ -7,36 +7,30 @@
 , pkg-config
 , gettext
 , python3
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, docutils
 , gi-docgen
 , glib
 , libtiff
 , libjpeg
 , libpng
 , gnome
+, gobject-introspection
+, buildPackages
 , doCheck ? false
 , makeWrapper
 , lib
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
 }:
 
-let
-  withGtkDoc = stdenv.buildPlatform == stdenv.hostPlatform;
-in
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.8";
+  version = "2.42.9";
 
-  outputs = [ "out" "dev" "man" ]
-    ++ lib.optional withGtkDoc "devdoc"
+  outputs = [ "out" "dev" "man" "devdoc" ]
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hKzqOsskEbKRNLMgFaWxqqYoRLGcSx74uJccawdZ9MY=";
+    sha256 = "KPeVjnvymjLU6WNVbSQdCkGmeGWC/2pa0RZl4DR/yWI=";
   };
 
   patches = [
@@ -60,16 +54,15 @@ stdenv.mkDerivation rec {
     makeWrapper
     glib
     gi-docgen
+    gobject-introspection
 
     # for man pages
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_43
+    docutils
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ];
+
+  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
@@ -79,9 +72,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgio_sniffing=false"
+    "-Dgtk_doc=true"
   ];
 
   postPatch = ''
@@ -89,10 +81,13 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux
 
     substituteInPlace tests/meson.build --subst-var-by installedtestsprefix "$installedTests"
-  '';
 
-  preInstall = ''
-    PATH=$PATH:$out/bin # for install script
+    # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+    # it should be a build-time dep for build
+    # TODO: send upstream
+    substituteInPlace docs/meson.build \
+      --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
 
   postInstall =
@@ -108,9 +103,9 @@ stdenv.mkDerivation rec {
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
       done
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    '' + ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
-      $dev/bin/gdk-pixbuf-query-loaders --update-cache
+      ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
@@ -120,7 +115,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = lib.optionalString withGtkDoc ''
+  postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';

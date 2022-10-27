@@ -6,6 +6,7 @@
 , eventlet
 , greenlet
 , iana-etc
+, installShellFiles
 , libredirect
 , lxml
 , mock
@@ -23,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "swift";
-  version = "2.29.1";
+  version = "2.30.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PoTob/Qz/XxEv/A271RQWT11rIIJBejVGjpAT14iKUg=";
+    sha256 = "sha256-Ytxs7hWQa7iaBinO2nhiXhNvo7lsuhmDPnqE1K62C5k=";
   };
 
   postPatch = ''
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     rm test/functional/s3api/{__init__.py,s3_test_client.py}
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    installShellFiles
+    pbr
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -50,6 +54,10 @@ buildPythonPackage rec {
     six
     xattr
   ];
+
+  postInstall = ''
+    installManPage doc/manpages/*
+  '';
 
   checkInputs = [
     boto3

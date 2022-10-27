@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, kdepimTeam, fetchpatch,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-search, grantlee, grantleetheme, kcmutils, kcompletion,
   kcrash, kdbusaddons, ki18n, kontactinterface, kparts,

@@ -27,8 +27,9 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ]
-      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
+      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
+      ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     knownVulnerabilities = optional (versionOlder version "15.0.0") "Electron version ${version} is EOL";
   };
@@ -39,21 +40,22 @@ let
   };
 
   headersFetcher = vers: hash: fetchurl {
-    url = "https://atom.io/download/electron/v${vers}/node-v${vers}-headers.tar.gz";
+    url = "https://artifacts.electronjs.org/headers/dist/v${vers}/node-v${vers}-headers.tar.gz";
     sha256 = hash;
   };
 
   tags = {
-    i686-linux = "linux-ia32";
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin-x64";
-    aarch64-darwin = "darwin-arm64";
+  } // lib.optionalAttrs (lib.versionAtLeast version "11.0.0") {
+     aarch64-darwin = "darwin-arm64";
+  } // lib.optionalAttrs (lib.versionOlder version "19.0.0") {
+    i686-linux = "linux-ia32";
   };
 
-  get = as: platform: as.${platform.system} or
-    "Unsupported system: ${platform.system}";
+  get = as: platform: as.${platform.system} or (throw "Unsupported system: ${platform.system}");
 
   common = platform: {
     inherit pname version meta;
@@ -102,14 +104,17 @@ let
   };
 
   darwin = {
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [
+      makeWrapper
+      unzip
+    ];
 
     buildCommand = ''
       mkdir -p $out/Applications
       unzip $src
       mv Electron.app $out/Applications
       mkdir -p $out/bin
-      ln -s $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
+      makeWrapper $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
   };
 in

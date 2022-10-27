@@ -23,16 +23,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  checkInputs = [ gtest ];
-
   # Required for case-insensitive filesystems ("BUILD" exists)
   dontUseCmakeBuildDir = true;
 
-  cmakeFlags = [
+  cmakeFlags = let
+    libExt = stdenv.hostPlatform.extensions.library;
+  in [
     "-GNinja"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optional doCheck "-DHWY_SYSTEM_GTEST:BOOL=ON";
+  ] ++ lib.optionals doCheck [
+    "-DHWY_SYSTEM_GTEST:BOOL=ON"
+    "-DGTEST_INCLUDE_DIR=${lib.getDev gtest}/include"
+    "-DGTEST_LIBRARY=${lib.getLib gtest}/lib/libgtest${libExt}"
+    "-DGTEST_MAIN_LIBRARY=${lib.getLib gtest}/lib/libgtest_main${libExt}"
+  ];
 
   # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
   doCheck = !stdenv.hostPlatform.isDarwin;

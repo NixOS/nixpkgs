@@ -15,14 +15,10 @@
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
+, nixosTests
 }:
 
 let
-  nssPEM = fetchurl {
-    url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
-    sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
-  };
-
   underscoreVersion = lib.replaceStrings [ "." ] [ "_" ] version;
 in
 stdenv.mkDerivation rec {
@@ -43,23 +39,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  prePatch = ''
-    # strip the trailing whitespace from the patch line and the renamed CKO_NETSCAPE_ enum to CKO_NSS_
-    xz -d < ${nssPEM} | sed \
-       -e 's/-DIRS = builtins $/-DIRS = . builtins/g' \
-       -e 's/CKO_NETSCAPE_/CKO_NSS_/g' \
-       -e 's/CKT_NETSCAPE_/CKT_NSS_/g' \
-       | patch -p1
-
-    patchShebangs nss
-
-    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
-      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
-    done
-
-    substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
-  '';
-
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
     (if (lib.versionOlder version "3.77") then
@@ -67,13 +46,20 @@ stdenv.mkDerivation rec {
     else
       ./85_security_load_3.77+.patch
     )
-    ./ckpem.patch
     ./fix-cross-compilation.patch
   ];
 
   patchFlags = [ "-p0" ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    patchShebangs nss
+
+    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
+      substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
+    done
+
+    substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
     substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
   '';
@@ -185,6 +171,12 @@ stdenv.mkDerivation rec {
     '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
+    inherit (nixosTests) firefox-esr-91;
+  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
+    inherit (nixosTests) firefox firefox-esr-102;
+  };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";

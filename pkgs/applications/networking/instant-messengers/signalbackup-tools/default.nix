@@ -2,37 +2,38 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20220526";
+  version = "20221025";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vFq9NvQboqGVzwiH2KPhT6jsdY5i2oKIgEaZKfBsb/o=";
+    sha256 = "sha256-icUyuohJ+nUrmFx/q5+hvjY1My25TwIqh6W6hq1pG4k=";
   };
 
-  # Remove when Apple SDK is >= 10.13
-  patches = lib.optional (stdenv.system == "x86_64-darwin") ./apple-sdk-missing-utimensat.patch;
+  postPatch = ''
+    patchShebangs BUILDSCRIPT_MULTIPROC.bash44
+  '';
 
   buildInputs = [ openssl sqlite ];
-  buildFlags = [
-    "-Wall"
-    "-Wextra"
-    "-Wshadow"
-    "-Wold-style-cast"
-    "-Woverloaded-virtual"
-    "-pedantic"
-    "-std=c++2a"
-    "-O3"
-    "-march=native"
-  ];
+
+  # Manually define `CXXFLAGS` and `LDFLAGS` on Darwin since the build scripts includes flags
+  # that don't work on Darwin.
   buildPhase = ''
-    $CXX $buildFlags */*.cc *.cc -lcrypto -lsqlite3 -o signalbackup-tools
+    runHook preBuild
+  '' + lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="-Wall -Wextra -Wshadow -Wold-style-cast -Woverloaded-virtual -pedantic -O3"
+    export LDFLAGS="-Wall -Wextra -O3"
+  '' + ''
+    ./BUILDSCRIPT_MULTIPROC.bash44
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp signalbackup-tools $out/bin/
+    runHook postInstall
   '';
 
   meta = with lib; {

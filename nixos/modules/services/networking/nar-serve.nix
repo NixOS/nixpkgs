@@ -10,12 +10,12 @@ in
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption "Serve NAR file contents via HTTP";
+      enable = mkEnableOption (lib.mdDoc "Serve NAR file contents via HTTP");
 
       port = mkOption {
         type = types.port;
         default = 8383;
-        description = ''
+        description = lib.mdDoc ''
           Port number where nar-serve will listen on.
         '';
       };
@@ -23,7 +23,7 @@ in
       cacheURL = mkOption {
         type = types.str;
         default = "https://cache.nixos.org/";
-        description = ''
+        description = lib.mdDoc ''
           Binary cache URL to connect to.
 
           The URL format is compatible with the nix remote url style, such as:

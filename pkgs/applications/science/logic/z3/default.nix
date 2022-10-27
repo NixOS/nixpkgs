@@ -84,6 +84,10 @@ let common = { version, sha256, patches ? [ ] }:
   };
 in
 {
+  z3_4_11 = common {
+    version = "4.11.0";
+    sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
+  };
   z3_4_8 = common {
     version = "4.8.15";
     sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";

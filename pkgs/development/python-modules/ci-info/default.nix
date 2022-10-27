@@ -1,14 +1,14 @@
 { lib, buildPythonPackage, isPy27, fetchPypi, pytest, pytestCheckHook }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.3.0";
   pname = "ci-info";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05j6pamk8sd51qmvpkl3f7sxajmncrqm0cz6n6bqgsvzjwn66w6x";
+    sha256 = "sha256-H9UMvUAfKa3/7rGLBIniMtFqwadFisa8MW3qtq5TX7A=";
   };
 
   checkInputs = [ pytest pytestCheckHook ];

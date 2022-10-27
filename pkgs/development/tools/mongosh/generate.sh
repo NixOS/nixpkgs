@@ -16,6 +16,6 @@ node2nix \
     --output gen/packages.nix \
     --composition gen/composition.nix \
     --strip-optional-dependencies \
-    --nodejs-14
+    --nodejs-16
 
 popd 1>/dev/null

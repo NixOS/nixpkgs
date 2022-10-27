@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, file
+, cmake
 , libev, nghttp3, quictls
 , cunit, ncurses
 , withJemalloc ? false, jemalloc
@@ -7,24 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1cbbH411kn2OnxLWXQvmae0JW4HzXnEHYnucQEVAslk=";
+    sha256 = "sha256-nfXEX1GxtmOcb0reRyO0OyQkSHeUWtQW+SZ8thxor+s=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
   checkInputs = [ cunit ncurses ];
 
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+  cmakeFlags = [
+    "-DENABLE_STATIC_LIB=OFF"
+  ];
 
   doCheck = true;
   enableParallelBuilding = true;

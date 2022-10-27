@@ -19,7 +19,10 @@ ac_add_options --enable-jemalloc
 ac_add_options --enable-strip
 ac_add_options --enable-devtools
 ac_add_options --enable-av1
+ac_add_options --enable-phoenix-extensions
 
+ac_add_options --disable-eme
+ac_add_options --disable-webrtc
 ac_add_options --disable-gamepad
 ac_add_options --disable-tests
 ac_add_options --disable-debug
@@ -34,8 +37,10 @@ export MOZILLA_OFFICIAL=1
 
 ac_add_options --x-libraries=@xlibs@
 
+# MOZ_PKG_SPECIAL is only relevant for upstream's packaging
+
 #
-# NixOS-specific adjustments
+# NixOS-specific additions
 #
 
 ac_add_options --prefix=@prefix@

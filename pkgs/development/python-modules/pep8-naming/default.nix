@@ -1,18 +1,30 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
 , flake8
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pep8-naming";
-  version = "0.13.0";
+  version = "0.13.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-nzjm3Phnoft61H9f9ywN2uVEps9k6592ALezwLtZgLU=";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-NG4hLZcOMKprUyMnzkHRmUCFGyYgvT6ydBQNpgWE9h0=";
   };
+
+  patches = [
+    # Fixes tests for flake8 => 5
+    # Remove on next release
+    (fetchpatch {
+      url = "https://github.com/PyCQA/pep8-naming/commit/c8808a0907f64b5d081cff8d3f9443e5ced1474e.patch";
+      sha256 = "sha256-4c+a0viS0rXuxj+TuIfgrKZjnrjiJjDoYBbNp3+6Ed0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flake8

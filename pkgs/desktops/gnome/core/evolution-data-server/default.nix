@@ -2,19 +2,22 @@
 , lib
 , fetchurl
 , substituteAll
+, runCommand
+, git
+, coccinelle
 , pkg-config
 , gnome
+, _experimental-update-script-combinators
 , python3
 , gobject-introspection
 , gettext
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , icu
 , sqlite
 , tzdata
 , libcanberra-gtk3
-, gcr
 , p11-kit
 , db
 , nspr
@@ -29,29 +32,33 @@
 , ninja
 , libkrb5
 , openldap
-, webkitgtk
+, enableOAuth2 ? stdenv.isLinux
+, webkitgtk_4_1
+, webkitgtk_5_0
 , libaccounts-glib
 , json-glib
 , glib
 , gtk3
+, gtk4
+, withGtk3 ? true
+, withGtk4 ? false
 , libphonenumber
 , gnome-online-accounts
 , libgweather
-, libgdata
-, gsettings-desktop-schemas
 , boost
 , protobuf
+, libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.44.2";
+  version = "3.46.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ltcq/k1rsXD4co+uoJB/7hAhLf3nqfq4L7zIPQ8i8Cg=";
+    sha256 = "xV5yz/QZC0LmPdbqvG3OSKGh95BAUx8a9tUcHvpKpus=";
   };
 
   patches = [
@@ -63,8 +70,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
-      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
+      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -82,27 +88,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
-    libxml2
-    gtk3
+    libsoup_3
     gnome-online-accounts
-    gcr
     p11-kit
     libgweather
-    libgdata
-    libaccounts-glib
-    json-glib
     icu
     sqlite
     libkrb5
     openldap
-    webkitgtk
     glib-networking
     libcanberra-gtk3
     pcre
     libphonenumber
     boost
     protobuf
+  ] ++ lib.optionals stdenv.isLinux [
+    libaccounts-glib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ] ++ lib.optionals withGtk3 [
+    gtk3
+  ] ++ lib.optionals (withGtk3 && enableOAuth2) [
+    webkitgtk_4_1
+  ] ++ lib.optionals withGtk4 [
+    gtk4
+  ] ++ lib.optionals (withGtk4 && enableOAuth2) [
+    webkitgtk_5_0
   ];
 
   propagatedBuildInputs = [
@@ -111,25 +122,72 @@ stdenv.mkDerivation rec {
     nss
     nspr
     libical
-    libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
-    libsoup
+    libsoup_3
+    libxml2
+    json-glib
   ];
 
   cmakeFlags = [
     "-DENABLE_UOA=OFF"
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
-    "-DWITH_GWEATHER4=ON"
+    "-DENABLE_GTK=${lib.boolToString withGtk3}"
+    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
+    "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
+    "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cmake/modules/SetupBuildFlags.cmake \
+      --replace "-Wl,--no-undefined" ""
+    substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
+      --replace "G_OS_WIN32" "__APPLE__"
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s $out/lib/${pname}/*.dylib $out/lib/
+  '';
+
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "evolution-data-server";
-      versionPolicy = "odd-unstable";
-    };
+    # In order for GNOME not to depend on OCaml through Coccinelle,
+    # we materialize the SmPL patch into a unified diff-style patch.
+    hardcodeGsettingsPatch =
+      runCommand
+        "hardcode-gsettings.patch"
+        {
+          inherit src;
+          nativeBuildInputs = [
+            git
+            coccinelle
+            python3 # For patch script
+          ];
+        }
+        ''
+          unpackPhase
+          cd "''${sourceRoot:-.}"
+          git init
+          git add -A
+          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
+          git diff > "$out"
+        '';
+
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "evolution-data-server";
+          versionPolicy = "odd-unstable";
+        };
+
+        updateGsettingsPatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-data-server.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateGsettingsPatch
+      ];
   };
 
   meta = with lib; {
@@ -137,6 +195,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

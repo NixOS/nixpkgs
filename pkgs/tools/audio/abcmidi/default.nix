@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "abcMIDI";
-  version = "2022.06.14";
+  version = "2022.08.23";
 
   src = fetchzip {
     url = "https://ifdo.ca/~seymour/runabc/${pname}-${version}.zip";
-    hash = "sha256-dmd0iPRKm5/GNz3VJ9pJgYiCSTENB0ZAOt3rLjujlYs=";
+    hash = "sha256-YVi8c5c8lYpctXmOp478hVRp3wXegNxfBcrB0fTvBxE=";
   };
 
   meta = with lib; {

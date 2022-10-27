@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.3.5";
+  version = "4.3.8";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B0O3Vcb+aM1qSQNrTFV9dY7j4CGOYFkGKfyMgt7PwIM=";
+    hash = "sha256-lJI7TPzV1beZFN6SinjdJ1HqlVX61aWZ281rf3AFpNk=";
   };
 
   passthru = {

@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.17.0"
+, version ? "2.18.0"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
@@ -10,28 +10,28 @@
     aarch64 = "arm64";
     # Make sure that if the user overrides version parameter they're
     # also need to override sources, to avoid mistakes
-    version = "2.17.0";
+    version = "2.18.0";
   in
   {
     "${version}-aarch64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${aarch64}-release.zip";
-      sha256 = "sha256-WXf0SdSEHMaJRfVFgKzb9SY4LBjf1xO5Oki/dzKMEMY=";
+      sha256 = "sha256-wfUh6rXy8jAC0TVQJzXh4SrV2DQs9SvY8PGtNgZx+cA=";
     };
     "${version}-x86_64-darwin" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "sha256-PwaxUQHIUhRWCOy3IVdGtRyP9LtscqoUJPOZfevN7xs=";
+      sha256 = "sha256-zyu6r8akId/AHpBKH95wJXXu1LD9CKShWYKfppnSRx4=";
     };
     "${version}-x86_64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "sha256-V7j9lk5HyB1GeuuVsJmmcKt+j1ShzXTUW80f3HeRPYY=";
+      sha256 = "sha256-45HE7Y9iO5dI+JfLWF1ikFfBFB+er46bK+EYkyuhFjI=";
     };
     "${version}-i686-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "sha256-YWxFwbcGvssOSL4S5O4jqLzxdUHvbVd9i4cLNyFn/cs=";
+      sha256 = "sha256-IkSJWfAocT1l8F2igAkR+Y5PNYD5PZ0j21D8aJk9JCY=";
     };
     "${version}-aarch64-linux" = fetchurl {
       url = "${base}/stable/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "sha256-BaHbD9hFhYd9YYCFg0bXxTx++JQzZn2zuF8/Ll+nA2s=";
+      sha256 = "sha256-Bt18brbJA/XfiyP5o197HDXMuGm+a1AZx92Thoriv78=";
     };
   }
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-  '' + lib.optionalString(stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.dartlang.org/";
-    maintainers = with maintainers; [ grburst flexagoon ];
+    maintainers = with maintainers; [ grburst ];
     description = "Scalable programming language, with robust libraries and runtimes, for building web, server, and mobile apps";
     longDescription = ''
       Dart is a class-based, single inheritance, object-oriented language
@@ -69,6 +69,7 @@ stdenv.mkDerivation {
       mixins, abstract classes, reified generics, and optional typing.
     '';
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };
 }

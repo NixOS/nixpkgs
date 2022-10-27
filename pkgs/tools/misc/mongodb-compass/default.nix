@@ -33,7 +33,7 @@ xorg,
 }:
 
 let
-  version = "1.32.2";
+  version = "1.33.1";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -82,10 +82,12 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-ceQp4EiLEWy8niGC0uUdWJrvmdt9Ijt29YdLt7vtcyY=";
+        sha256 = "sha256-Db3Xv6kNAPWqeM+vZeG7GieweaThJO0CCuwm6/v4l2s=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
+      # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
+      # Feel free to make a PR adding support if desired
 
 in stdenv.mkDerivation {
   pname = "mongodb-compass";
@@ -128,7 +130,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "The GUI for MongoDB";
     maintainers = with maintainers; [ bryanasdev000 ];
-    homepage = "https://www.mongodb.com/products/compass";
+    homepage = "https://github.com/mongodb-js/compass";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.sspl;
     platforms = [ "x86_64-linux" ];

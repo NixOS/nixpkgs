@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oh-my-git";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "git-learning-game";
     repo = "oh-my-git";
     rev = version;
-    sha256 = "sha256-GQLHyBUXF+yqEZ/LYutAn6TBCXFX8ViOaERQEm2J6CY=";
+    sha256 = "sha256-XqxliMVU55D5JSt7Yo5btvZnnTlagSukyhXv6Akgklo=";
   };
 
   nativeBuildInputs = [

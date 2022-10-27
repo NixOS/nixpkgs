@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "scrap_engine";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dn/9wxK1UHd3cc3Jo1Cp9tynOFUlndH+cZfIc244ysE=";
+    sha256 = "sha256-5OlnBRFhjFAcVkuuKM5hpeRxi+uvjpzfdhp1+5Nx1IU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

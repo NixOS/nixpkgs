@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.21.2";
+  version = "0.21.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JWzeBdCPXLYMmKkvCqQQF/mHoRbdRvj0vKVF4+D8LSI=";
+    sha256 = "sha256-KLsm1GFsfDgaFUMoH5hwUbjS0dW/rwI9nn4sIQXFG7k=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +31,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trustme
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [

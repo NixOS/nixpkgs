@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pbr
 , cliff
@@ -26,13 +26,13 @@
 , python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
-  version = "31.0.0";
+  version = "32.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-g/fpVDGa2TFAzMVvC/370bStPJvhWSZ2tkbmP54nzc4=";
+    sha256 = "sha256-MPaGhT2H8Hzk29qylQru9Z6QaRrHM+9I7N5qhe9Wts4=";
   };
 
   propagatedBuildInputs = [

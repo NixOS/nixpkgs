@@ -1,5 +1,5 @@
 { lib, stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
-, libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
+, libjpeg, wxGTK30-gtk3, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome, libGLU, glib
 , fetchFromGitHub, fetchpatch
 }:
@@ -9,7 +9,7 @@ let
     name = "megaglest-lib-env";
     paths = [ SDL2 xorg.libSM xorg.libICE xorg.libX11 xorg.libXext
       xercesc openal libvorbis lua libjpeg libpng curl fontconfig ftgl freetype
-      stdenv.cc.cc glew libGLU wxGTK ];
+      stdenv.cc.cc glew libGLU wxGTK30-gtk3 ];
   };
   path-env = buildEnv {
     name = "megaglest-path-env";
@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
-    glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper git ];
+  buildInputs = [ curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK30-gtk3
+    glib cppunit fontconfig freetype ftgl glew libogg libvorbis libGLU ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=$out"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DBUILD_MEGAGLEST=On"
     "-DBUILD_MEGAGLEST_MAP_EDITOR=On"
     "-DBUILD_MEGAGLEST_MODEL_IMPORT_EXPORT_TOOLS=On"

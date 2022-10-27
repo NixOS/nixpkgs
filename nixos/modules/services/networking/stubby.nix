@@ -23,7 +23,7 @@ in {
   options = {
     services.stubby = {
 
-      enable = mkEnableOption "Stubby DNS resolver";
+      enable = mkEnableOption (lib.mdDoc "Stubby DNS resolver");
 
       settings = mkOption {
         type = types.attrsOf settingsFormat.type;
@@ -39,20 +39,20 @@ in {
             }];
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Content of the Stubby configuration file. All Stubby settings may be set or queried
           here. The default settings are available at
-          <literal>pkgs.stubby.passthru.settingsExample</literal>. See
-          <link xlink:href="https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby"/>.
+          `pkgs.stubby.passthru.settingsExample`. See
+          <https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby>.
           A list of the public recursive servers can be found here:
-          <link xlink:href="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers"/>.
+          <https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers>.
         '';
       };
 
       debugLogging = mkOption {
         default = false;
         type = types.bool;
-        description = "Enable or disable debug level logging.";
+        description = lib.mdDoc "Enable or disable debug level logging.";
       };
 
     };

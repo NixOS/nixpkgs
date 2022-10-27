@@ -31,13 +31,13 @@ in
 
 mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.0.12";
+  version = "5.0.15";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0+jKBA1IaeqV6epnJBgGwnDdAUxdMH6RyOKGmsw0M/o=";
+    sha256 = "sha256-9AGL0eAkaA2N/aE8VlgRCnW2lAl55SroBumeU5xkW5M=";
   };
 
   cmakeFlags = [

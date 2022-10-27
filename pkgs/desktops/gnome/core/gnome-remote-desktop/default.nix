@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , python3
+, asciidoc
 , wrapGAppsHook
 , glib
 , libepoxy
@@ -12,12 +13,13 @@
 , nv-codec-headers-11
 , pipewire
 , systemd
-, libvncserver
 , libsecret
 , libnotify
 , libxkbcommon
 , gdk-pixbuf
 , freerdp
+, fdk_aac
+, tpm2-tss
 , fuse3
 , mesa
 , libgudev
@@ -28,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "42.2";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-wcy82MpwN+9ttz9r8rXdOKM2t9gKKpyY32/4g4eP+dU=";
+    hash = "sha256-vYR8PKdzYJlTNEYs1GnkWhJHnxHAxI6WUCjtXLgHpbI=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +42,15 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    asciidoc
     wrapGAppsHook
   ];
 
   buildInputs = [
     cairo
     freerdp
+    fdk_aac
+    tpm2-tss
     fuse3
     gdk-pixbuf # For libnotify
     glib
@@ -54,7 +59,6 @@ stdenv.mkDerivation rec {
     nv-codec-headers-11
     libnotify
     libsecret
-    libvncserver
     libxkbcommon
     pipewire
     systemd
@@ -77,11 +81,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs \
       tests/vnc-test-runner.sh \
-      tests/run-vnc-tests.py \
-      meson_post_install.py
+      tests/run-vnc-tests.py
 
     substituteInPlace tests/vnc-test-runner.sh \
       --replace "dbus-run-session" "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"

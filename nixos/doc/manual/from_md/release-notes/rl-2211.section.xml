@@ -13,6 +13,13 @@
     <itemizedlist>
       <listitem>
         <para>
+          GNOME has been upgraded to 43. Please take a look at their
+          <link xlink:href="https://release.gnome.org/43/">Release
+          Notes</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           During cross-compilation, tests are now executed if the test
           suite can be executed by the build platform. This is the case
           when doing “native” cross-compilation where the build and host
@@ -72,6 +79,34 @@
       </listitem>
       <listitem>
         <para>
+          <literal>emacs</literal> enables native compilation which
+          means:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              emacs packages from nixpkgs, builtin or not, will do
+              native compilation ahead of time so you can enjoy the
+              benefit of native compilation without compiling them on
+              you machine;
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              emacs packages from somewhere else, e.g.
+              <literal>package-install</literal>, will do asynchronously
+              deferred native compilation. If you do not want this,
+              maybe to avoid CPU consumption for compilation, you can
+              use
+              <literal>(setq native-comp-deferred-compilation nil)</literal>
+              to disable it while still enjoy the benefit of native
+              compilation for packages from nixpkgs.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos-generate-config</literal> now generates
           configurations that can be built in pure mode. This is
           achieved by setting the new
@@ -93,6 +128,41 @@
       <listitem>
         <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Perl has been updated to 5.36, and its core module
+          <literal>HTTP::Tiny</literal> was patched to verify SSL/TLS
+          certificates by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Improved performances of
+          <literal>lib.closePropagation</literal> which was previously
+          quadratic. This is used in e.g.
+          <literal>ghcWithPackages</literal>. Please see backward
+          incompatibilities notes below.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Cinnamon has been updated to 5.4. While at it, the cinnamon
+          module now defaults to blueman as bluetooth manager and
+          slick-greeter as lightdm greeter to match upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          An image configuration and generator has been added for Linode
+          images, largely based on the present GCE configuration and
+          image.
         </para>
       </listitem>
       <listitem>
@@ -121,6 +191,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
@@ -128,9 +205,126 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/edneville/please">Please</link>,
+          a Sudo clone written in Rust. Available as
+          <link linkend="opt-security.please.enable">security.please</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
+          an alert acknowledgement management daemon for Prometheus
+          Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
+          a tool to improve keyboard comfort and usability with advanced
+          customization. Available as
+          <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prymitive/karma">karma</link>,
+          an alert dashboard for Prometheus Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.karma.enable">services.karma</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://gitlab.com/CalcProgrammer1/OpenRGB/-/tree/master">OpenRGB</link>,
+          a FOSS tool for controlling RGB lighting. Available as
+          <link xlink:href="options.html#opt-services-hardware-openrgb-enable">services.hardware.openrgb.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.getoutline.com/">Outline</link>,
+          a wiki and knowledge base similar to Notion. Available as
+          <link linkend="opt-services.outline.enable">services.outline</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
+          notification service. Available as
+          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
+          a simple and extensible webmail. Available as
+          <link linkend="opt-services.alps.enable">services.alps</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
         </para>
       </listitem>
       <listitem>
@@ -151,9 +345,93 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
+          free, self-hostable RSS feed aggregator. Available as
+          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
+          IMAP/SMTP autodiscover server. Available as
+          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
+          Tempo</link>, a distributed tracing store. Available as
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
+          the authentication software for the German ID card. Available
+          as
+          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
+          IPMI exporter</link>, an IPMI exporter for Prometheus.
+          Available as
+          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://writefreely.org">WriteFreely</link>,
+          a simple blogging platform with ActivityPub support. Available
+          as
+          <link xlink:href="options.html#opt-services.writefreely.enable">services.writefreely</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://listmonk.app">Listmonk</link>, a
+          self-hosted newsletter manager. Enable using
+          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -161,6 +439,11 @@
   <section xml:id="sec-release-22.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          Nixpkgs now requires Nix 2.3 or newer.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>isCompatible</literal> predicate checking CPU
@@ -218,6 +501,28 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>fetchgit</literal> fetcher now uses
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalscone_mode_handling">cone
+          mode</link> by default for sparse checkouts.
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalsnon_cone_problems">Non-cone
+          mode</link> can be enabled by passing
+          <literal>nonConeMode = true</literal>, but note that non-cone
+          mode is deprecated and this option may be removed alongside a
+          future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openssh</literal> was updated to version 9.1,
+          disabling the generation of DSA keys when using
+          <literal>ssh-keygen -A</literal> as they are insecure. Also,
+          <literal>SetEnv</literal> directives in
+          <literal>ssh_config</literal> and
+          <literal>sshd_config</literal> are now first-match-wins
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
@@ -239,8 +544,53 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.hbase</literal> has been renamed to
+          <literal>services.hbase-standalone</literal>. For production
+          HBase clusters, use <literal>services.hadoop.hbase</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>p4</literal> package now only includes the
+          open-source Perforce Helix Core command-line client and APIs.
+          It no longer installs the unfree Helix Core Server binaries
+          <literal>p4d</literal>, <literal>p4broker</literal>, and
+          <literal>p4p</literal>. To install the Helix Core Server
+          binaries, use the <literal>p4d</literal> package instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>coq</literal> package and versioned variants
+          starting at <literal>coq_8_14</literal> no longer include
+          CoqIDE, which is now available through
+          <literal>coqPackages.coqide</literal>. It is still possible to
+          get CoqIDE as part of the <literal>coq</literal> package by
+          overriding the <literal>buildIde</literal> argument of the
+          derivation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosign</literal> does not provide the
+          <literal>cosigned</literal> binary anymore. The
+          <literal>sget</literal> binary has been moved into its own
+          package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Emacs now uses the Lucid toolkit by default instead of GTK
+          because of stability and compatibility issues. Users who still
+          wish to remain using GTK can do so by using
+          <literal>emacs-gtk</literal>.
         </para>
       </listitem>
       <listitem>
@@ -248,6 +598,161 @@
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          xow package removed along with the
+          <literal>hardware.xow</literal> module, due to the project
+          being deprecated in favor of <literal>xone</literal>, which is
+          available via the <literal>hardware.xone</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          dd-agent package removed along with the
+          <literal>services.dd-agent</literal> module, due to the
+          project being deprecated in favor of
+          <literal>datadog-agent</literal>, which is available via the
+          <literal>services.datadog-agent</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>teleport</literal> has been upgraded to major version
+          10. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/management/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/ver/10.0/changelog/#1000">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.closePropagation</literal> now needs that all
+          gathered sets have an <literal>outPath</literal> attribute.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          lemmy module option
+          <literal>services.lemmy.settings.database.createLocally</literal>
+          moved to
+          <literal>services.lemmy.database.createLocally</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          virtlyst package and <literal>services.virtlyst</literal>
+          module removed, due to lack of maintainers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nix.checkConfig</literal> option now fully
+          disables the config check. The new
+          <literal>nix.checkAllErrors</literal> option behaves like
+          <literal>nix.checkConfig</literal> previously did.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>generateOptparseApplicativeCompletions</literal> and
+          <literal>generateOptparseApplicativeCompletion</literal> from
+          <literal>haskell.lib.compose</literal> (and
+          <literal>haskell.lib</literal>) have been deprecated in favor
+          of <literal>generateOptparseApplicativeCompletions</literal>
+          (plural!) as provided by the haskell package sets (so
+          <literal>haskellPackages.generateOptparseApplicativeCompletions</literal>
+          etc.). The latter allows for cross-compilation (by
+          automatically disabling generation of completion in the cross
+          case). For it to work properly you need to make sure that the
+          function comes from the same context as the package you are
+          trying to override, i.e. always use the same package set as
+          your package is coming from or – even better – use
+          <literal>self.generateOptparseApplicativeCompletions</literal>
+          if you are overriding a haskell package set. The old functions
+          are retained for backwards compatibility, but yield are
+          warning.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.graphite.api</literal> and
+          <literal>services.graphite.beacon</literal> NixOS options, and
+          the <literal>python3.pkgs.graphite_api</literal>,
+          <literal>python3.pkgs.graphite_beacon</literal> and
+          <literal>python3.pkgs.influxgraph</literal> packages, have
+          been removed due to lack of upstream maintenance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>aws</literal> package has been removed due to
+          being abandoned by the upstream. It is recommended to use
+          <literal>awscli</literal> or <literal>awscli2</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>systemd-networkd</literal> v250 deprecated, renamed,
+          and moved some sections and settings which leads to the
+          following breaking module changes:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6PrefixDelegationConfig</literal>
+              is renamed to
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpPrefixDelegationConfig</literal>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              no longer accepts the
+              <literal>ForceDHCPv6PDOtherInformation=</literal> setting.
+              Please use the <literal>WithoutRA=</literal> and
+              <literal>UseDelegatedPrefix=</literal> settings in your
+              <literal>systemd.network.networks.&lt;name&gt;.dhcpV6Config</literal>
+              and the <literal>DHCPv6Client=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              to control when the DHCPv6 client is started and how the
+              delegated prefixes are handled by the DHCPv6 client.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>systemd.network.networks.&lt;name&gt;.networkConfig</literal>
+              no longer accepts the <literal>IPv6Token=</literal>
+              setting. Use the <literal>Token=</literal> setting in your
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6AcceptRAConfig</literal>
+              instead. The
+              <literal>systemd.network.networks.&lt;name&gt;.ipv6Prefixes.*.ipv6PrefixConfig</literal>
+              now also accepts the <literal>Token=</literal> setting.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>meta.mainProgram</literal> attribute of packages
+          in <literal>wineWowPackages</literal> now defaults to
+          <literal>&quot;wine64&quot;</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>paperless</literal> module now defaults
+          <literal>PAPERLESS_TIME_ZONE</literal> to your configured
+          system timezone.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The top-level <literal>termonad-with-packages</literal> alias
+          for <literal>termonad</literal> has been removed.
         </para>
       </listitem>
       <listitem>
@@ -260,8 +765,71 @@
       </listitem>
       <listitem>
         <para>
+          Neovim can not be configured with plug anymore (still works
+          for vim).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>adguardhome</literal> module no longer uses
+          <literal>host</literal> and <literal>port</literal> options,
+          use <literal>settings.bind_host</literal> and
+          <literal>settings.bind_port</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default <literal>kops</literal> version is now 1.25.1 and
+          support for 1.22 and older has been dropped.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>mysql57</literal> has been removed. Please update to
+          <literal>mysql80</literal> or <literal>mariadb</literal>. See
+          the
+          <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mysql-to-mariadb/">upgrade
+          guide</link> for more information.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Consequently, <literal>cqrlog</literal> and
+          <literal>amorok</literal> now use <literal>mariadb</literal>
+          instead of <literal>mysql57</literal> for their embedded
+          databases. Running <literal>mysql_upgrade</literal> may be
+          neccesary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> supports <literal>clusterInit</literal>
+          option, and it is enabled by default, for servers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>stylua</literal> no longer accepts
+          <literal>lua52Support</literal> and
+          <literal>luauSupport</literal> overrides, use
+          <literal>features</literal> instead, which defaults to
+          <literal>[ &quot;lua54&quot; &quot;luau&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.fetchNextcloudApp</literal> has been rewritten
+          to circumvent impurities in e.g. tarballs from GitHub and to
+          make it easier to apply patches. This means that your hashes
+          are out-of-date and the (previously required) attributes
+          <literal>name</literal> and <literal>version</literal> are no
+          longer accepted.
         </para>
       </listitem>
     </itemizedlist>
@@ -279,10 +847,101 @@
       </listitem>
       <listitem>
         <para>
+          <literal>github-runner</literal> gained support for ephemeral
+          runners and registrations using a personal access token (PAT)
+          instead of a registration token. See
+          <literal>services.github-runner.ephemeral</literal> and
+          <literal>services.github-runner.tokenFile</literal> for
+          details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and
           <literal>hardware.saleae-logic.package</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Redis module now disables RDB persistence when
+          <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
+          instead of using the Redis default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Neo4j was updated from version 3 to version 4. See this
+          <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
+          guide</link> on how to migrate your Neo4j instance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>networking.wireguard</literal> module now can set
+          the mtu on interfaces and tag its packets with an fwmark.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>polymc</literal> package has been removed due to
+          a rogue maintainer. It has been replaced by
+          <literal>prismlauncher</literal>, a fork by the rest of the
+          maintainers. For more details, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/196624">the
+          pull request that made this change</link> and
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/196460">this
+          issue detailing the vulnerability</link>. Users with existing
+          installations should rename
+          <literal>~/.local/share/polymc</literal> to
+          <literal>~/.local/share/PrismLauncher</literal>. The main
+          config file’s path has also moved from
+          <literal>~/.local/share/polymc/polymc.cfg</literal> to
+          <literal>~/.local/share/PrismLauncher/prismlauncher.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>bloat</literal> package has been updated from
+          unstable-2022-03-31 to unstable-2022-10-25, which brings a
+          breaking change. See
+          <link xlink:href="https://git.freesoftwareextremist.com/bloat/commit/?id=887ed241d64ba5db3fd3d87194fb5595e5ad7d73">this
+          upstream commit message</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.matrix-synapse</literal> systemd unit
+          has been hardened.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana</literal> options were converted
+          to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.datasources</literal>
+          and <literal>services.grafana.provision.dashboards</literal>
+          options were converted to a
+          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
+          0042</link> configuration. They also now support specifying
+          the provisioning YAML file with <literal>path</literal>
+          option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.grafana.provision.alerting</literal>
+          option was added. It includes suboptions for every
+          alerting-related objects (with the exception of
+          <literal>notifiers</literal>), which means it’s now possible
+          to configure modern Grafana alerting declaratively.
         </para>
       </listitem>
       <listitem>
@@ -298,9 +957,149 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>diamond</literal> package has been update from
+          0.8.36 to 2.0.15. See the
+          <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>guake</literal> package has been updated from
+          3.6.3 to 3.9.0, see the
+          <link xlink:href="https://github.com/Guake/guake/releases">changelog</link>
+          for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>dockerTools.buildImage</literal> deprecates the
+          misunderstood <literal>contents</literal> parameter, in favor
+          of <literal>copyToRoot</literal>. Use
+          <literal>copyToRoot = buildEnv { ... };</literal> or similar
+          if you intend to add packages to <literal>/bin</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Option descriptions, examples, and defaults writting in
+          DocBook are now deprecated. Using CommonMark is preferred and
+          will become the default in a future release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <literal>documentation.nixos.options.allowDocBook</literal>
+          option was added to ease the transition to CommonMark option
+          documentation. Setting this option to <literal>false</literal>
+          causes an error for every option included in the manual that
+          uses DocBook documentation; it defaults to
+          <literal>true</literal> to preserve the previous behavior and
+          will be removed once the transition to CommonMark is complete.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Nextcloud has been updated to version
+          <emphasis role="strong">25</emphasis>. Additionally the
+          following things have changed for Nextcloud in NixOS:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Nextcloud <emphasis role="strong">&gt;=24</emphasis>,
+              the default PHP version is 8.1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Nextcloud <emphasis role="strong">23</emphasis> has been
+              removed since it will reach its
+              <link xlink:href="https://github.com/nextcloud/server/wiki/Maintenance-and-Release-Schedule/d76576a12a626d53305d480a6065b57cab705d3d">end
+              of life in December 2022</link>.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              For <literal>system.stateVersion</literal> being
+              <emphasis role="strong">&gt;=22.11</emphasis>, Nextcloud
+              25 will be installed by default. For older versions,
+              Nextcloud 24 will be installed.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Please ensure that you only upgrade on major release at a
+              time! Nextcloud doesn’t support upgrades across multiple
+              versions, i.e. an upgrade from
+              <emphasis role="strong">23</emphasis> to
+              <emphasis role="strong">25</emphasis> is only possible
+              when upgrading to <emphasis role="strong">24</emphasis>
+              first.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          Add udev rules for the Teensy family of microcontrollers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          systemd-oomd is enabled by default. Depending on which systemd
+          units have <literal>ManagedOOMSwap=kill</literal> or
+          <literal>ManagedOOMMemoryPressure=kill</literal>, systemd-oomd
+          will SIGKILL all the processes under the appropriate
+          descendant cgroups when the configured limits are exceeded.
+          NixOS does currently not configure cgroups with oomd by
+          default, this can be enabled using
+          <link xlink:href="options.html#opt-systemd.oomd.enableRootSlice">systemd.oomd.enableRootSlice</link>,
+          <link xlink:href="options.html#opt-systemd.oomd.enableSystemSlice">systemd.oomd.enableSystemSlice</link>,
+          and
+          <link xlink:href="options.html#opt-systemd.oomd.enableUserServices">systemd.oomd.enableUserServices</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>pass-secret-service</literal> package now
+          includes systemd units from upstream, so adding it to the
+          NixOS <literal>services.dbus.packages</literal> option will
+          make it start automatically as a systemd user service when an
+          application tries to talk to the libsecret D-Bus API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for AMD SEV CPU functionality, which
+          grants access to the hardware.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Wordpress module got support for installing language packs
+          through
+          <literal>services.wordpress.sites.&lt;site&gt;.languages</literal>.
         </para>
       </listitem>
       <listitem>
@@ -313,6 +1112,31 @@
           has been renamed to
           <literal>programs.thunar.plugins</literal>, and in a future
           release it may be removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>xfconf</literal>
+          program (the Xfce configuration storage system), which has a
+          dbus service.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to 1.3,
+          which no longer has a downgrade path to releases 1.2 or older.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nodePackages</literal> package set now defaults
+          to the LTS release in the <literal>nodejs</literal> package
+          again, instead of being pinned to
+          <literal>nodejs-14_x</literal>. Several updates to node2nix
+          have been made for compatibility with newer Node.js and npm
+          versions and a new <literal>postRebuild</literal> hook has
+          been added for packages to perform extra build steps before
+          the npm install step prunes dev dependencies.
         </para>
       </listitem>
     </itemizedlist>

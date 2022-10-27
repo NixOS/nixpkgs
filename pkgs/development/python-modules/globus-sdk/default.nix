@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.10.0";
+  version = "3.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-zHuhhvAAxQnu0GpdbZoLXTwMQPJT4hQHtVr7R1yoNWg=";
+    hash = "sha256-d8c/kMfDMz5Z9O7OtAz2hAXQHqTlJ8oKcL9Yk+6MsA4=";
   };
 
   propagatedBuildInputs = [

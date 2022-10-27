@@ -23,17 +23,10 @@
 }:
 let
   pname = "qFlipper";
-  version = "1.0.2";
-  sha256 = "sha256-CJQOEUwYPNd4x+uBINrxeYVITtYrsEFaYLHQh2l12kA=";
+  version = "1.2.1";
+  sha256 = "sha256-6pfkZfT/8DNZGIdc8YvHN2TPyhDqHU6e3mqtAZOpHLo=";
   timestamp = "99999999999";
   commit = "nix-${version}";
-
-  udev_rules = ''
-    #Flipper Zero serial port
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{manufacturer}=="Flipper Devices Inc.", TAG+="uaccess"
-    #Flipper Zero DFU
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", ATTRS{manufacturer}=="STMicroelectronics", TAG+="uaccess"
-  '';
 
 in
 mkDerivation {
@@ -92,9 +85,7 @@ mkDerivation {
     cp qFlipper-cli $out/bin
 
     mkdir -p $out/etc/udev/rules.d
-    tee $out/etc/udev/rules.d/42-flipperzero.rules << EOF
-    ${udev_rules}
-    EOF
+    cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
   passthru.updateScript = nix-update-script {

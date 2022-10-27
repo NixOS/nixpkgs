@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cmake
+, zlib
+, openssl
+, libsodium
+
+# for passthru.tests
+, ffmpeg
+, sshping
+, wireshark
+}:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hrz4hb2bgEZv4OBUU8WLh332GvqLqUeljDVtfw+rgps=";
+    sha256 = "sha256-DcFYxTTNg4rQt4WoLexYbeQNp+CWUjrmwIybe9KvC1c=";
   };
 
   postPatch = ''
@@ -20,6 +33,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libsodium ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  passthru.tests = {
+    inherit ffmpeg sshping wireshark;
+  };
 
   meta = with lib; {
     description = "SSH client library";

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "0.1.6";
+  version = "0.1.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
-    rev = "v${version}";
-    hash = "sha256-5xX7NwM+Us0ToJa2miAw9KsCt2T+TqBnqHtwphZNxJI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZSTnQmdLcMa1XwbQxGpE734yN92zDy72SX9feTL9wjI=";
   };
 
   nativeBuildInputs = [

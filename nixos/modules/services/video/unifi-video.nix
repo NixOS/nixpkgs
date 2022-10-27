@@ -98,7 +98,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable the unifi-video service.
       '';
     };
@@ -107,7 +107,7 @@ in
       type = types.package;
       default = pkgs.jre8;
       defaultText = literalExpression "pkgs.jre8";
-      description = ''
+      description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
     };
@@ -116,7 +116,7 @@ in
       type = types.package;
       default = pkgs.unifi-video;
       defaultText = literalExpression "pkgs.unifi-video";
-      description = ''
+      description = lib.mdDoc ''
         The unifi-video package to use.
       '';
     };
@@ -125,7 +125,7 @@ in
       type = types.package;
       default = pkgs.mongodb-4_0;
       defaultText = literalExpression "pkgs.mongodb";
-      description = ''
+      description = lib.mdDoc ''
         The mongodb package to use.
       '';
     };
@@ -133,7 +133,7 @@ in
     logDir = mkOption {
       type = types.str;
       default = "${stateDir}/logs";
-      description = ''
+      description = lib.mdDoc ''
         Where to store the logs.
       '';
     };
@@ -141,7 +141,7 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "${stateDir}/data";
-      description = ''
+      description = lib.mdDoc ''
         Where to store the database and other data.
       '';
     };
@@ -149,7 +149,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to open the required ports on the firewall.
       '';
     };
@@ -158,7 +158,7 @@ in
       type = types.nullOr types.int;
       default = 1024;
       example = 4096;
-      description = ''
+      description = lib.mdDoc ''
         Set the maximimum heap size for the JVM in MB.
       '';
     };
@@ -167,7 +167,7 @@ in
       type = types.path;
       default = "${cfg.dataDir}/unifi-video.pid";
       defaultText = literalExpression ''"''${config.${opt.dataDir}}/unifi-video.pid"'';
-      description = "Location of unifi-video pid file.";
+      description = lib.mdDoc "Location of unifi-video pid file.";
     };
 
   };

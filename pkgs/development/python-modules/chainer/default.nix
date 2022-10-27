@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "7.8.1";
+  version = "7.8.1.post1";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
   src = fetchFromGitHub {
     owner = "chainer";
     repo = "chainer";
-    rev = "v${version}";
-    sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-epwnExmyCWmwaOz+mJnAl1peEeHLBdQGC62BlLfSTQQ=";
   };
 
   propagatedBuildInputs = [

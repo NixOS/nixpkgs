@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, fetchFromGitHub
 , meson, ninja, pkg-config
 , python3
 , curl
@@ -10,7 +10,6 @@
 , mustache-hpp
 , gtest
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "kiwix-lib";

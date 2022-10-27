@@ -36,6 +36,10 @@ buildPythonPackage rec {
     hash = "sha256-4zdPp3X22dfZ5YlW3G5/OqeUxrt+NiFO9dk2XjEKXEg=";
   };
 
+  patches = [
+    ./22.3.2-CVE-2022-35920.patch
+  ];
+
   postPatch = ''
     # Loosen dependency requirements.
     substituteInPlace setup.py \
@@ -107,6 +111,9 @@ buildPythonPackage rec {
     "test_keep_alive_client_timeout"
     "test_keep_alive_server_timeout"
     "test_zero_downtime"
+    # broke with ujson 5.4 upgrade
+    # https://github.com/sanic-org/sanic/pull/2504
+    "test_json_response_json"
   ];
 
   disabledTestPaths = [

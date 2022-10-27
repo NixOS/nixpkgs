@@ -25,8 +25,8 @@ stdenvNoCC.mkDerivation (finalAttrs:
       darwin = { inherit (default) rev hash version; };
       default = {
         rev = "v${finalAttrs.version}";
-        hash = "sha256-+6PkrkamSvhCaGj2tq+RXri/yQ7vs0cAqgdRAFtU8UA=";
-        version = "1.10.1";
+        hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
+        version = "1.10.3";
       };
     };
   in

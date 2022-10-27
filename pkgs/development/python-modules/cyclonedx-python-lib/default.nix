@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
+, ddt
 , fetchFromGitHub
 , importlib-metadata
 , jsonschema
 , lxml
 , packageurl-python
 , poetry-core
+, pytestCheckHook
 , python
 , pythonOlder
 , requirements-parser
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "2.6.0";
+  version = "3.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UM5z8FEu+Pua/LToraGh8N6V3ujUnu4F6lJec+4cUg4=";
+    hash = "sha256-pbwhjxlEdne426CiUORSM8w6MXpgpjMWoH37TnXxA5s=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +49,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    ddt
     jsonschema
     lxml
+    pytestCheckHook
     xmldiff
   ];
 
@@ -56,13 +60,17 @@ buildPythonPackage rec {
     "cyclonedx"
   ];
 
- checkPhase = ''
-   runHook preCheck
-   # Tests require network access
-   rm tests/test_output_json.py
-   ${python.interpreter} -m unittest discover -s tests -v
-   runHook postCheck
- '';
+  preCheck = ''
+    export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
+  '';
+
+  pytestFlagsArray = [ "tests/" ];
+
+  disabledTests = [
+    # These tests require network access.
+    "test_bom_v1_3_with_metadata_component"
+    "test_bom_v1_4_with_metadata_component"
+  ];
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

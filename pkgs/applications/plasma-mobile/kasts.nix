@@ -16,6 +16,7 @@
 , qtquickcontrols2
 , syndication
 , taglib
+, threadweaver
 }:
 
 let
@@ -46,6 +47,7 @@ mkDerivation rec {
     qtquickcontrols2
     syndication
     taglib
+    threadweaver
   ];
 
   preFixup = ''

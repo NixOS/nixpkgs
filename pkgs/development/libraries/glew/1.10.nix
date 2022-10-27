@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = if stdenv.isDarwin then [ AGL ] else [ xlibsWrapper libXmu libXi ];
   propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
+  outputs = [ "out" "dev" ];
+
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
     ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -32,8 +34,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -pv $out/share/doc/glew
-    mkdir -p $out/lib/pkgconfig
-    cp glew*.pc $out/lib/pkgconfig
+    mkdir -p $dev/lib/pkgconfig
+    cp glew*.pc $dev/lib/pkgconfig
     cp -r README.txt LICENSE.txt doc $out/share/doc/glew
   '';
 

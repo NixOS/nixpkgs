@@ -23,7 +23,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable PAM mount system to mount fileystems on user login.
         '';
       };
@@ -31,10 +31,9 @@ in
       extraVolumes = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of volume definitions for pam_mount.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
@@ -42,7 +41,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.bindfs ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional programs to include in the search path of pam_mount.
           Useful for example if you want to use some FUSE filesystems like bindfs.
         '';
@@ -54,7 +53,7 @@ in
         example = literalExpression ''
           [ "nodev" "nosuid" "force-user=%(USER)" "gid=%(USERGID)" "perms=0700" "chmod-deny" "chown-deny" "chgrp-deny" ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Global mount options that apply to every FUSE volume.
           You can define volume-specific options in the volume definitions.
         '';
@@ -64,29 +63,27 @@ in
         type = types.int;
         default = 0;
         example = 1;
-        description = ''
+        description = lib.mdDoc ''
           Sets the Debug-Level. 0 disables debugging, 1 enables pam_mount tracing,
           and 2 additionally enables tracing in mount.crypt. The default is 0.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
       logoutWait = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Amount of microseconds to wait until killing remaining processes after
           final logout.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
       logoutHup = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Kill remaining processes after logout by sending a SIGHUP.
         '';
       };
@@ -94,7 +91,7 @@ in
       logoutTerm = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Kill remaining processes after logout by sending a SIGTERM.
         '';
       };
@@ -102,7 +99,7 @@ in
       logoutKill = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Kill remaining processes after logout by sending a SIGKILL.
         '';
       };
@@ -110,7 +107,7 @@ in
       createMountPoints = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Create mountpoints for volumes if they do not exist.
         '';
       };
@@ -118,7 +115,7 @@ in
       removeCreatedMountPoints = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Remove mountpoints created by pam_mount after logout. This
           only affects mountpoints that have been created by pam_mount
           in the same session.

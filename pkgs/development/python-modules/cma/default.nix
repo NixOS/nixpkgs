@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "cma";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
-    rev = "r${version}";
-    sha256 = "sha256-wLUD8HMJusUeCwwp37D/W7yJuJQcDfRwVGVKwBS6sR8=";
+    rev = "refs/tags/r${version}";
+    sha256 = "sha256-STF7jtLqI2KiWvvI9/reRjP1XyW8l4/qy9uAPpE9mTs=";
   };
 
   propagatedBuildInputs = [

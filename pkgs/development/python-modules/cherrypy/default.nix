@@ -8,7 +8,6 @@
 , objgraph
 , path
 , portend
-, pyopenssl
 , pytest-forked
 , pytest-services
 , pytestCheckHook
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.6.1";
+  version = "18.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,8 +31,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    hash = "sha256-8z6HKG57PjCeBOciXY5JOC2dd3PmCSJB1/YTiTxWNJU=";
+    hash = "sha256-m0jPuoovFtW2QZzGV+bVHbAFujXF44JORyi7A7vH75s=";
   };
+
+  postPatch = ''
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv" \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -56,13 +64,6 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  preCheck = ''
-    # Disable doctest plugin because times out
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" "-vvv"
-    sed -i "/--cov/d" pytest.ini
-  '';
-
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
@@ -74,6 +75,9 @@ buildPythonPackage rec {
     # daemonize and autoreload tests have issue with sockets within sandbox
     "daemonize"
     "Autoreload"
+
+    "test_antistampede"
+    "test_file_stream"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];
@@ -92,7 +96,6 @@ buildPythonPackage rec {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];
-    ssl = [ pyopenssl ];
     # not packaged yet
     xcgi = [ /* flup */ ];
   };

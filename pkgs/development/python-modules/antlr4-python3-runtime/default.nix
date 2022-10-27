@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, isPy3k, python
-, antlr4
-}:
+{ lib
+, buildPythonPackage
+, isPy3k
+, python
+, antlr4 }:
 
 buildPythonPackage rec {
   pname = "antlr4-python3-runtime";
   inherit (antlr4.runtime.cpp) version src;
-  disabled = !isPy3k;
+  disabled = python.pythonOlder "3.6";
 
   sourceRoot = "source/runtime/Python3";
 

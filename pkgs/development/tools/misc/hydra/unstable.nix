@@ -84,6 +84,7 @@ let
         DigestSHA1
         EmailMIME
         EmailSender
+        FileLibMagic
         FileSlurper
         FileWhich
         IOCompress
@@ -126,13 +127,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-06-16";
+  version = "2022-09-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "fb26435fe9a54f13143e69a545b8f3cecffaed96";
-    sha256 = "sha256-kmgN7D7tUC3Ki70D+rdS19PW/lrANlU3tc8gu5gsld0=";
+    rev = "d6cbf227cba90cf281f72f464393d75a45f2f3a8";
+    sha256 = "sha256-eMStY0/cS/blRGyyp1DUpP3N0SxYZrxah+hNJeKwDSw=";
   };
 
   patches = [
@@ -216,6 +217,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    # Change 5s timeout for init to 30s
+    substituteInPlace t/lib/HydraTestContext.pm \
+      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+  '';
 
   preCheck = ''
     patchShebangs .

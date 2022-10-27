@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , exiv2
@@ -35,13 +36,13 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
     glib
-    # Python binding overrides
-    python3
-    python3.pkgs.pygobject3
   ];
 
   propagatedBuildInputs = [

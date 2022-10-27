@@ -2,27 +2,27 @@
 
 buildGoModule rec {
   pname = "dagger";
-  version = "0.2.20";
+  version = "0.2.36";
 
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "dagger";
     rev = "v${version}";
-    sha256 = "sha256-TlysP5xf8LJoB9MU/sdQIM6yMfsaI8SP+drRlfG+tQ4=";
+    sha256 = "sha256-U+MdX/7RIrhnPjUjzYAQEVeHQUpgMtKanvjPLBjCNSY=";
   };
 
-  vendorSha256 = "sha256-pE6g5z4rOQlqmI9LZQXoI6fRmSTXDv5H8Y+pNXVIcOU=";
+  vendorSha256 = "sha256-ArdqEHECnGTMs3sJrPIAfmTT0D2V8SHyTYXmDODVtuo=";
 
   subPackages = [
     "cmd/dagger"
   ];
 
-  ldflags = [ "-s" "-w" "-X go.dagger.io/dagger/version.Revision=${version}" ];
+  ldflags = [ "-s" "-w" "-X go.dagger.io/dagger/version.Version=${version}" ];
 
   meta = with lib; {
     description = "A portable devkit for CICD pipelines";
     homepage = "https://dagger.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jfroche ];
+    maintainers = with maintainers; [ jfroche sagikazarmark ];
   };
 }

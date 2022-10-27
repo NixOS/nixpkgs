@@ -105,16 +105,16 @@ in rec {
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
 
+      # copy .tbd assembly utils
+      cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+      cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+
+      # copy package extraction tools
+      cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
+      cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
+      cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
+
       ${lib.optionalString targetPlatform.isAarch64 ''
-        # copy .tbd assembly utils
-        cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-        cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
-
-        # copy package extraction tools
-        cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
-        cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
-        cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
-
         # copy sigtool
         cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
         cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin

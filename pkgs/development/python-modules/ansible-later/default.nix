@@ -1,4 +1,6 @@
 { lib
+, ansible
+, ansible-core
 , anyconfig
 , appdirs
 , buildPythonPackage
@@ -21,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.14";
+  version = "2.0.22";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -30,14 +32,28 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iY+5p6LNrlCTGi61cm2DJdyt8SmAwYqKmXNXescjAVQ=";
+    hash = "sha256-RFyQvg7CF5Fa+DnOo0PoDtGPJMOx0Md8I+gshMH2Fvs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
+      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
+      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
+      --replace 'jsonschema = "' 'jsonschema = "^' \
+      --replace 'python-json-logger = "' 'python-json-logger = "^' \
+      --replace 'toolz = "0.11.2' 'toolz = "*' \
+      --replace 'yamllint = "' 'yamllint = "^'
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
+    ansible
+    ansible-core
     anyconfig
     appdirs
     colorama
@@ -56,15 +72,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
-      --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
-      --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
-      --replace 'jsonschema = "' 'jsonschema = "^'
-  '';
 
   postInstall = ''
     rm $out/lib/python*/site-packages/LICENSE

@@ -40,7 +40,8 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.03.3";
+  version = "2022.03.5";
+  format = "other";
 
   src =
     let
@@ -50,7 +51,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "sha256-YZq1JKDlCQVvjv7+XpEhD/wfFcQ5m3i5VO4rNQ3ONRQ=";
+      sha256 = "19idgilabh04cbr1qj6zgrgsfjm248mmfz6fsr0smrd68d0xnml9";
     };
 
   unpackPhase = ''
@@ -133,6 +134,7 @@ buildPythonPackage rec {
     "-DBOOST_ROOT=${boost}"
     "-DBoost_NO_SYSTEM_PATHS=ON"
     "-DBoost_NO_BOOST_CMAKE=TRUE"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
   ];
 
   checkPhase = ''

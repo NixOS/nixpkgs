@@ -14,14 +14,14 @@ in
         type = lib.types.bool;
         default = config.services.pipewire.enable;
         defaultText = lib.literalExpression "config.services.pipewire.enable";
-        description = "Whether to enable Wireplumber, a modular session / policy manager for PipeWire";
+        description = lib.mdDoc "Whether to enable Wireplumber, a modular session / policy manager for PipeWire";
       };
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.wireplumber;
         defaultText = lib.literalExpression "pkgs.wireplumber";
-        description = "The wireplumber derivation to use.";
+        description = lib.mdDoc "The wireplumber derivation to use.";
       };
     };
   };
@@ -48,6 +48,12 @@ in
         -- use functions that aren't available on the system dbus).
         alsa_monitor.properties["alsa.reserve"] = false
         default_access.properties["enable-flatpak-portal"] = false
+      '';
+    };
+    environment.etc."wireplumber/bluetooth.lua.d/80-systemwide.lua" = lib.mkIf config.services.pipewire.systemWide {
+      text = ''
+        -- When running system-wide, logind-integration needs to be disabled.
+        bluez_monitor.properties["with-logind"] = false
       '';
     };
 

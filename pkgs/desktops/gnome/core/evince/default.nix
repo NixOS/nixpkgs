@@ -31,7 +31,6 @@
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
-, python3
 , texlive
 , gst_all_1
 , gi-docgen
@@ -43,19 +42,14 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "42.3";
+  version = "43.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Sa7PhFyUbJbbF7qJ11yAAsWuiWP1BKmwYm0SZ1kUZF4=";
+    sha256 = "bXXKYrc7+7YA9xigmBA9xrgT+QULlZS+kp4ptFidIzU=";
   };
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   nativeBuildInputs = [
     appstream
@@ -66,7 +60,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook
     yelp-tools
   ];

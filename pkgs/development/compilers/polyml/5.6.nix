@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 
   src = fetchurl {
     url = "mirror://sourceforge/polyml/polyml.${version}.tar.gz";

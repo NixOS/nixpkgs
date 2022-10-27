@@ -24,10 +24,6 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;  # usual dynamic linker issues
 
-  preCheck = "
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  ";
-
   meta = with lib; {
     homepage = "https://elastix.lumc.nl";
     description = "Image registration toolkit based on ITK";

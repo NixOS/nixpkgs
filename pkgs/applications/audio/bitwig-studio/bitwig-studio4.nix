@@ -1,16 +1,16 @@
 { stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
 , gdk-pixbuf, glib, gtk3, lib, xorg
 , libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pulseaudio
+, libxkbcommon, xdg-utils, zlib, pipewire, pulseaudio
 , wrapGAppsHook, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "4.2.3";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-UCafrjrEwwHkhPum7sTOjtXzy7PNeK5/aeKg+b3CGJU=";
+    sha256 = "sha256-+NvQ7TA8WLnZKbzsB+jLl/CIg7tayKd+W2svtXtDsT4=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pipewire pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
   ];
 
   installPhase = ''
@@ -53,9 +53,11 @@ stdenv.mkDerivation rec {
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
+      # make xdg-open overrideable at runtime
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix PATH : "${lib.makeBinPath [ xdg-utils ffmpeg ]}" \
+        --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
+        --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 

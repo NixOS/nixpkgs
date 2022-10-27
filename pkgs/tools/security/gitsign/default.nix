@@ -1,18 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, makeWrapper, gitMinimal }:
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.1.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0cu5uJVFiqkvfVxCbrruHLa4Zj0EU75cbgrTrwzo7+U=";
+    sha256 = "sha256-hDVn7ZiZoY0FSgIsApZliMIq1xjuNdg+DMvKzP5kET0=";
   };
-  vendorSha256 = "sha256-JMS/OFL2oxQFWa+wNhxS7fXSYQbCSEV3Sakq4rmsolI=";
+  vendorSha256 = "sha256-5hVcul5DlHZ0Gtw1LdBmxGpsmuD2bTtwPGysOUwe2k0=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [ "-s" "-w" "-buildid=" "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}" ];
+
+  postInstall = ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
+    done
+  '';
 
   meta = {
     homepage = "https://github.com/sigstore/gitsign";
@@ -20,8 +28,5 @@ buildGoModule rec {
     description = "Keyless Git signing using Sigstore";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lesuisse ];
-    # Need updated macOS SDK
-    # https://github.com/NixOS/nixpkgs/issues/101229
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

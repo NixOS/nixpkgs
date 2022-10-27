@@ -8,7 +8,6 @@
 , monotonic
 , six
 , nose
-, pyopenssl
 , iana-etc
 , pytestCheckHook
 , libredirect
@@ -29,9 +28,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dnspython
     greenlet
-    pyopenssl
     six
-  ] ++ lib.optional (pythonOlder "3.5") [
+  ] ++ lib.optionals (pythonOlder "3.5") [
     monotonic
   ];
 
@@ -53,6 +51,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests requires network access
     "test_017_ssl_zeroreturnerror"
+    "test_018b_http_10_keepalive_framing"
     "test_getaddrinfo"
     "test_hosts_no_network"
     "test_leakage_from_tracebacks"

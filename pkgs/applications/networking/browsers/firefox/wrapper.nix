@@ -1,10 +1,10 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
-, fetchurl, zip, unzip, jq, xdg-utils, writeText
+, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
+, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
@@ -65,7 +65,7 @@ let
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
-          ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
+          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome-browser-connector
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
@@ -73,7 +73,7 @@ let
         );
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg
+            ++ lib.optional ffmpegSupport ffmpeg_5
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
@@ -85,6 +85,8 @@ let
             ++ lib.optional smartcardSupport opensc
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
+
+      launcherName = "${applicationName}${nameSuffix}";
 
       #########################
       #                       #
@@ -145,7 +147,7 @@ let
         // extraPolicies;
       };
 
-      mozillaCfg =  writeText "mozilla.cfg" ''
+      mozillaCfg = ''
         // First line must be a comment
 
         // Disables addon signature checking
@@ -153,7 +155,6 @@ let
         // Security is maintained because only user whitelisted addons
         // with a checksum can be installed
         ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
-        ${extraPrefs}
       '';
 
       #############################
@@ -167,7 +168,7 @@ let
 
       desktopItem = makeDesktopItem {
         name = applicationName;
-        exec = "${applicationName}${nameSuffix} %U";
+        exec = "${launcherName} %U";
         inherit icon;
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
@@ -182,6 +183,20 @@ let
           "x-scheme-handler/ftp"
         ];
         startupWMClass = wmClass;
+        actions = {
+          new-window = {
+            name = "New Window";
+            exec = "${launcherName} --new-window %U";
+          };
+          new-private-window = {
+            name = "New Private Window";
+            exec = "${launcherName} --private-window %U";
+          };
+          profile-manager-window = {
+            name = "Profile Manager";
+            exec = "${launcherName} --ProfileManger";
+          };
+        };
       };
 
       nativeBuildInputs = [ makeWrapper lndir jq ];
@@ -255,13 +270,14 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
+        # make xdg-open overrideable at runtime
         makeWrapper "$oldExe" \
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --prefix PATH ':' "${xdg-utils}/bin" \
+            --suffix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
+            --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
@@ -328,12 +344,18 @@ let
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$out/lib/${libName}/defaults/pref/autoconfig.js"
         echo 'pref("general.config.obscure_value", 0);' >> "$out/lib/${libName}/defaults/pref/autoconfig.js"
 
-        cat > "$out/lib/${libName}/mozilla.cfg" < ${mozillaCfg}
+        cat > "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${mozillaCfg}
+        EOF
 
         extraPrefsFiles=(${builtins.toString extraPrefsFiles})
         for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
           cat "$extraPrefsFile" >> "$out/lib/${libName}/mozilla.cfg"
         done
+
+        cat >> "$out/lib/${libName}/mozilla.cfg" << EOF
+        ${extraPrefs}
+        EOF
 
         mkdir -p $out/lib/${libName}/distribution/extensions
 

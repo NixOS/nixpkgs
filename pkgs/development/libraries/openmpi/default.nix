@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
-    ++ lib.optional fabricSupport [ libpsm2 libfabric ];
+    ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
   nativeBuildInputs = [ perl ]
     ++ lib.optionals fortranSupport [ gfortran ];
@@ -72,16 +72,6 @@ in stdenv.mkDerivation rec {
     ;
 
   enableParallelBuilding = true;
-
-  # disable stackprotector on aarch64-darwin for now
-  # https://github.com/NixOS/nixpkgs/issues/127608
-  #
-  # build error:
-  #
-  # /private/tmp/nix-build-openmpi-4.1.1.drv-0/ccg7QqR8.s:13:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x2, [x2, ___stack_chk_guard];momd
-  #
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   postInstall = ''
     rm -f $out/lib/*.la

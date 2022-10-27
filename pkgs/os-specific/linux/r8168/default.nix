@@ -54,6 +54,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ timokau ];
-    broken = kernel.kernelAtLeast "5.17";
+    broken = (lib.versions.majorMinor kernel.modDirVersion) != "5.15";
   };
 }

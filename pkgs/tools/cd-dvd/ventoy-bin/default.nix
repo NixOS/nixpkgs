@@ -4,6 +4,7 @@
 , fetchpatch
 , autoPatchelfHook
 , bash
+, copyDesktopItems
 , coreutils
 , cryptsetup
 , dosfstools
@@ -14,13 +15,15 @@
 , gnused
 , gtk3
 , hexdump
+, makeDesktopItem
 , makeWrapper
 , ntfs3g
 , parted
 , procps
-, qt5
+, qtbase
 , util-linux
 , which
+, wrapQtAppsHook
 , xfsprogs
 , xz
 , defaultGuiType ? ""
@@ -45,21 +48,18 @@ let
   }.${stdenv.hostPlatform.system}
     or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy-bin";
-  version = "1.0.77";
+  version = "1.0.81";
 
   src = fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-DmDWt06gjrAEZ9Qvb7qbKbfJr/u84qmQ44kfDA3HDp0=";
+    url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
+    hash = "sha256-15y05g+F+oEFYUUy7SE57GZ1RSHqdZnk2iOPsy1L0GI=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "sanitize.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/sanitize.patch?h=057f2d1eb496c7a3aaa8229e99a7f709428fa4c5";
-      sha256 = "sha256-iAtLtM+Q4OsXDK83eCnPNomeNSEqdRLFfK2x7ybPSpk=";
-    })
+    ./000-sanitize.patch
     ./001-add-mips64.diff
     ./002-fix-for-read-only-file-system.diff
   ];
@@ -79,7 +79,8 @@ in stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ]
-  ++ lib.optional withQt5 qt5.wrapQtAppsHook;
+  ++ lib.optional (withQt5 || withGtk3) copyDesktopItems
+  ++ lib.optional withQt5 wrapQtAppsHook;
 
   buildInputs = [
     bash
@@ -101,7 +102,22 @@ in stdenv.mkDerivation rec {
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional withNtfs ntfs3g
   ++ lib.optional withXfs xfsprogs
-  ++ lib.optional withQt5 qt5.qtbase;
+  ++ lib.optional withQt5 qtbase;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Ventoy";
+      desktopName = "Ventoy";
+      comment = "Tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
+      icon = "VentoyLogo";
+      exec = "ventoy-gui";
+      terminal = false;
+      categories = [ "Utility" ];
+      startupNotify = true;
+    })];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -141,20 +157,19 @@ in stdenv.mkDerivation rec {
              VentoyPlugson.sh_ventoy-plugson; do
         local bin="''${f%_*}" wrapper="''${f#*_}"
         makeWrapper "$VENTOY_PATH/$bin" "$out/bin/$wrapper" \
-                    --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                    --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                     --chdir "$VENTOY_PATH"
     done
   ''
   # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
-  # See <https://github.com/ventoy/Ventoy/blob/471432fc50ffad80bde5de0b22e4c30fa3aac41b/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1044>.
+  # See: https://github.com/ventoy/Ventoy/blob/v1.0.78/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1096
   + lib.optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
-                --prefix PATH : "${lib.makeBinPath buildInputs}" \
+                --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}" \
                 --chdir "$VENTOY_PATH"
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
-    cp ${./ventoy-gui.desktop} "$out"/share/applications/
   ''
   + lib.optionalString (!withGtk3) ''
     rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
@@ -188,7 +203,9 @@ in stdenv.mkDerivation rec {
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
-    maintainers = with maintainers; [ k4leg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "ventoy";
   };
-}
+})

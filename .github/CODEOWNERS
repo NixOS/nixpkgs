@@ -37,6 +37,7 @@
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
 /pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
 /pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
@@ -48,6 +49,7 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs documentation
+/doc @fricklerhandwerk
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 /doc/build-aux/pandoc-filters @jtojnar
@@ -107,9 +109,9 @@
 /pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame
-/pkgs/development/perl-modules      @stigtsp @zakame
+/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
+/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -121,8 +123,6 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @zowoq
-/doc/languages-frameworks/rust.section.md @zowoq
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer
@@ -187,6 +187,7 @@
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
+/nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
@@ -251,13 +252,12 @@
 
 # Go
 /doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @Mic92 @zowoq
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
-/pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
-/pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
 
 # GNOME
-/pkgs/desktops/gnome                              @jtojnar @hedning
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar @hedning
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001

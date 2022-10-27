@@ -1,39 +1,40 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
 , libxml2
 , libpeas
 , glib
 , gtk3
 , gtksourceview4
 , gspell
-, xapps
+, xapp
 , pkg-config
+, python3
 , meson
 , ninja
 , wrapGAppsHook
 , intltool
-, itstool }:
+, itstool
+}:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.2.2";
+  version = "3.2.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-PW7y3+Sa9FH5r5xvziysvxM08RJCPvnLs3wsm5IqToQ=";
+    sha256 = "sha256-aO5ilmlkSAxlkWYdSLmrcm7pC8GbITpCitd4TXp5tfY=";
   };
 
   nativeBuildInputs = [
     meson
-    cmake
     pkg-config
     intltool
     itstool
     ninja
+    python3
     wrapGAppsHook
   ];
 
@@ -44,12 +45,8 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
-    xapps
+    xapp
   ];
-
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

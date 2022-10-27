@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spr";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-ozirfRyJWgs5+CWZrXkIHzlNQcUOEAuX/XV+VrUnJC8=";
+    sha256 = "sha256-lsdWInJWcofwU3P4vAWcLQeZuV3Xn1z30B7mhODJ4Vc=";
   };
 
-  cargoSha256 = "sha256-Khua8g/vk0KTBmca37VhiBSHvfi8tKVhqxDYeJ594Qg=";
+  cargoSha256 = "sha256-VQg3HDNw+L1FsFtHXnIw6dMVUxV63ZWHCxiknzsqXW8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

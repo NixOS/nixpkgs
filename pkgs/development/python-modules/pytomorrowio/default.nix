@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pytomorrowio";
-  version = "0.3.3";
+  version = "0.3.5";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d4f81dc90aefa26da18b927473cb7b08b093f7732301983ef5f0b1ca1181c62";
+    hash = "sha256-LFIQJJPqKlqLzEoX9ShfoASigPC5R+OWiW81VmjONe8=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytomorrowio" ];
+  pythonImportsCheck = [
+    "pytomorrowio"
+  ];
 
   meta = {
     description = "Async Python package to access the Tomorrow.io API";

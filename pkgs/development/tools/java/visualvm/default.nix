@@ -1,12 +1,12 @@
 { stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.2";
+  version = "2.1.5";
   pname = "visualvm";
 
   src = fetchzip {
     url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
-    sha256 = "sha256-khbXzdsC0PA10HEu/dIFQ87+QbKpctmTUTt/zEuxV6c=";
+    sha256 = "sha256-OUGuaI3AcdfscfLRULz3uS8gOCVBseC/6aDsPoHRRTY=";
   };
 
   desktopItem = makeDesktopItem {

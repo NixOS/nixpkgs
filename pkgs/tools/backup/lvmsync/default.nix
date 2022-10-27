@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "lvmsync";
   version = (import ./gemset.nix).${pname}.version;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
 

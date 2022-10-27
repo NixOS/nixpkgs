@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
-  version = "3.4";
+  version = "3.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JM4NE77LpgsdWhzPe/8K0sQhOSpzDu9usuH7pfQ6dR0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3UCHTgIW7ArXQD0Kj5XwE1I5VszsueXDJ68QWdQrAho=";
   };
 
   # Project has no tests

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
+{ lib, stdenv, fetchFromGitHub, ncurses, libX11, bzip2, zlib
 , brotli, zstd, xz, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
@@ -13,17 +13,17 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "felinks";
     rev = "v${version}";
-    sha256 = "sha256-2TF0rbmjwhwV2AVUXjfzoprzpeqrETis3AFhMftpaZQ=";
+    sha256 = "sha256-9OEi4UF/4/IRtccJou3QuevQzWjA6PuU5IVlT7qqGZ0=";
   };
 
   buildInputs = [
-    ncurses xlibsWrapper bzip2 zlib brotli zstd xz
+    ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
   ]
     ++ lib.optional stdenv.isLinux gpm

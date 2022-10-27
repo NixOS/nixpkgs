@@ -19,7 +19,7 @@
 , setuptools-scm
 , setuptools-scm-git-archive
 , substituteAll
-, tesseract4
+, tesseract
 , tqdm
 , unpaper
 , installShellFiles
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.5.0";
+  version = "13.7.0";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-jGVqH2z8NRnQcm4hv4OufCm26o6Qr8/mBRIScvcUpkE=";
+    hash = "sha256-cw2wZMPhWzxRpeM90g9NmuYBYpU13R2iDzs7a8SS/CY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract4}/bin/tesseract";
+      tesseract = "${lib.getBin tesseract}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
     })
   ];

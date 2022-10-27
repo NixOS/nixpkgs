@@ -89,6 +89,7 @@ in buildPythonApplication rec {
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
+    gobject-introspection
     pkg-config
     wrapGAppsHook
     pandoc
@@ -119,7 +120,6 @@ in buildPythonApplication rec {
     ffmpeg
     gdk-pixbuf
     glib
-    gobject-introspection
     gtk3
     librsvg
     libvpx

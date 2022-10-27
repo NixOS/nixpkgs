@@ -1,10 +1,11 @@
-{ lib, fetchFromGitHub
+{ lib, fetchFromGitHub, gitUpdater
 , meson, ninja, pkg-config, wrapGAppsHook
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
 , python3Packages, gettext
 , appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gtksourceview4, gnome
-, steam, xdg-utils, pciutils, cabextract, wineWowPackages
+, steam, xdg-utils, pciutils, cabextract
 , freetype, p7zip, gamemode, mangohud
+, wine
 , bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
 , bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
 }:
@@ -80,7 +81,7 @@ python3Packages.buildPythonApplication rec {
     xdg-utils
     pciutils
     cabextract
-    wineWowPackages.minimal
+    wine
     freetype
     p7zip
     gamemode # programs.gamemode.enable
@@ -94,6 +95,8 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";

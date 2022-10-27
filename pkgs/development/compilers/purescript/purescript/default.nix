@@ -18,7 +18,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.15.2";
+  version = "0.15.6";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -26,12 +26,12 @@ in stdenv.mkDerivation rec {
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "06fsq9ynfvfqn3ac5jxdj81lmzd6bh84p7jz5qib31h27iy5aq4h";
+      sha256 = "14l4m9xgp9slg4hfaqkwvzdvmg26qj2livldni3lmivvcagjgb2x";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1p37k6briczw6gvw04idkx734ms1swgrx9sl4hi6xwvxkfp1nm0m";
+      sha256 = "1vw3igxv4zr5gf1ml5ls17w9cc9shdn8fvbk6dkfnxrs93cwrq0k";
     };
 
 
@@ -61,6 +61,7 @@ in stdenv.mkDerivation rec {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";

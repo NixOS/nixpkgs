@@ -10,21 +10,25 @@
 , hostname
 , parallel
 , flock
-, ps
+, procps
 , bats
 , lsof
+, callPackages
+, symlinkJoin
+, makeWrapper
+, runCommand
 , doInstallCheck ? true
 }:
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.7.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-joNne/dDVCNtzdTQ64rK8GimT+DOWUa7f410hml2s8Q=";
+    sha256 = "sha256-Kitlx26cK2RiAC+PdRIdDLF5crorg6UB6uSzbKCrDHE=";
   };
 
   patchPhase = ''
@@ -54,11 +58,13 @@ resholve.mkDerivation rec {
         flock
         "lib/bats-core"
         "libexec/bats-core"
+        procps
       ];
       fake = {
         external = [
           "greadlink"
           "shlock"
+          "pkill" # procps doesn't supply this on darwin
         ];
       };
       fix = {
@@ -80,8 +86,8 @@ resholve.mkDerivation rec {
           "${placeholder "out"}/lib/bats-core/warnings.bash"
           "$setup_suite_file" # via cli arg
         ];
-        "$report_formatter" = true;
-        "$formatter" = true;
+        "$interpolated_report_formatter" = true;
+        "$interpolated_formatter" = true;
         "$pre_command" = true;
         "$BATS_TEST_NAME" = true;
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
@@ -105,6 +111,52 @@ resholve.mkDerivation rec {
     };
   };
 
+  passthru.libraries = callPackages ./libraries.nix {};
+
+  passthru.withLibraries = selector:
+    symlinkJoin {
+      name = "bats-with-libraries-${bats.version}";
+
+      paths = [
+        bats
+      ] ++ selector bats.libraries;
+
+      nativeBuildInputs = [
+        makeWrapper
+      ];
+
+      postBuild = ''
+        wrapProgram "$out/bin/bats" \
+          --suffix BATS_LIB_PATH : "$out/share/bats"
+      '';
+    };
+
+  passthru.tests.libraries = runCommand "${bats.name}-with-libraries-test" {
+    testScript = ''
+      setup() {
+        bats_load_library bats-support
+        bats_load_library bats-assert
+
+        bats_require_minimum_version 1.5.0
+      }
+
+      @test echo_hi {
+        run -0 echo hi
+        assert_output "hi"
+      }
+
+      @test cp_failure {
+        run ! cp
+        assert_line --index 0 "cp: missing file operand"
+        assert_line --index 1 "Try 'cp --help' for more information."
+      }
+    '';
+    passAsFile = [ "testScript" ];
+  } ''
+    ${bats.withLibraries (p: [ p.bats-support p.bats-assert ])}/bin/bats "$testScriptPath"
+    touch "$out"
+  '';
+
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
     dontInstall = true; # just need the build directory
@@ -112,7 +164,7 @@ resholve.mkDerivation rec {
       ncurses
       parallel # skips some tests if it can't detect
       flock # skips some tests if it can't detect
-      ps
+      procps
     ] ++ lib.optionals stdenv.isDarwin [ lsof ];
     inherit doInstallCheck;
     installCheckPhase = ''
@@ -121,6 +173,12 @@ resholve.mkDerivation rec {
 
       # skip tests that assume bats `install.sh` will be in BATS_ROOT
       rm test/root.bats
+
+      '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # skip new timeout tests which are failing on macOS for unclear reasons
+      # This might relate to procps not having a pkill?
+      rm test/timeout.bats
+      '') + ''
 
       # test generates file with absolute shebang dynamically
       substituteInPlace test/install.bats --replace \

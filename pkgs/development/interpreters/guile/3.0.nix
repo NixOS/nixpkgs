@@ -61,13 +61,11 @@ builder rec {
     libunistring
   ];
 
-  # According to Bernhard M. Wiedemann <bwiedemann suse de> on
-  # #reproducible-builds on irc.oftc.net, (2020-01-29): they had to build
-  # Guile without parallel builds to make it reproducible.
-  #
-  # re: https://issues.guix.gnu.org/issue/20272
-  # re: https://build.opensuse.org/request/show/732638
-  enableParallelBuilding = false;
+  # According to
+  # https://git.savannah.gnu.org/cgit/guix.git/tree/gnu/packages/guile.scm?h=a39207f7afd977e4e4299c6f0bb34bcb6d153818#n405
+  # starting with Guile 3.0.8, parallel builds can be done
+  # bit-reproducibly as long as we're not cross-compiling
+  enableParallelBuilding = stdenv.buildPlatform == stdenv.hostPlatform;
 
   patches = [
     ./eai_system.patch

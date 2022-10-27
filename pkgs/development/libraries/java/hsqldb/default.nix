@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hsqldb";
-  version = "2.6.1";
+  version = "2.7.0";
   underscoreMajMin = lib.strings.replaceChars ["."] ["_"] (lib.versions.majorMinor version);
 
   src = fetchurl {
     url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
-    sha256 = "sha256-cixyEwjEt68UOotd1TcJNyVUxTRDx4XyfyYg9k6kRtQ=";
+    sha256 = "sha256-nLBCigQMPF6QbjrUuSDjP2ir38TmzC5Pa8Rjpk1BkcQ=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

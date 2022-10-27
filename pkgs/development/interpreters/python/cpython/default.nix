@@ -7,12 +7,14 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
+, openssl_1_1
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
 , tzdata ? null
+, libxcrypt
 , self
 , configd
 , autoreconfHook
@@ -75,6 +77,10 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
+  # cpython does support/build with openssl 3.0, but some libraries using the ssl module seem to have issues with it
+  # null check for Minimal
+  openssl' = if openssl != null then openssl_1_1 else null;
+
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
 
@@ -91,7 +97,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch;
+    inherit hasDistutilsCxxPatch pythonAttr;
     pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
@@ -110,12 +116,12 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
-  ] ++ optionals (stdenv.cc.isClang && (enableLTO || enableOptimizations)) [
+  ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
 
   buildInputs = filter (p: p != null) ([
-    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl ]
+    zlib bzip2 expat xz libffi gdbm sqlite readline ncurses openssl' ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
@@ -321,8 +327,8 @@ in with passthru; stdenv.mkDerivation {
     "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
-  ] ++ optionals (openssl != null) [
-    "--with-openssl=${openssl.dev}"
+  ] ++ optionals (openssl' != null) [
+    "--with-openssl=${openssl'.dev}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -348,6 +354,9 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
+  ] ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optional static "LDFLAGS=-static";
@@ -383,7 +392,7 @@ in with passthru; stdenv.mkDerivation {
   postInstall = let
     # References *not* to nuke from (sys)config files
     keep-references = concatMapStringsSep " " (val: "-e ${val}") ([
-      (placeholder "out")
+      (placeholder "out") libxcrypt
     ] ++ optionals tzdataSupport [
       tzdata
     ]);
@@ -430,11 +439,6 @@ in with passthru; stdenv.mkDerivation {
     # This allows build Python to import host Python's sysconfigdata
     mkdir -p "$out/${sitePackages}"
     ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
-
-    # debug info can't be separated from a static library and would otherwise be
-    # left in place by a separateDebugInfo build. force its removal here to save
-    # space in output.
-    $STRIP -S $out/lib/${libPrefix}/config-*/libpython*.a || true
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -489,7 +493,7 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    lib.optionals (openssl' != null && !static) [ openssl'.dev ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.

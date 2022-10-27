@@ -7,15 +7,19 @@
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
-  version = "1.0.3";
+  version = "1.0.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hIwKcQNPG6AHudqjy2dotACk51IeivwRbJZZaiFweqs=";
+    hash = "sha256-F8PP/Vs+sOVDEwIUvWnO6C4+rQvVTtWKMPnREwKEQ0I=";
   };
 
   propagatedBuildInputs = [

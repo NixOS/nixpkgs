@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 
 # propagates
 , django
@@ -37,6 +38,11 @@ buildPythonPackage rec {
     jwcrypto
     oauthlib
     requests
+  ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "django"
   ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";

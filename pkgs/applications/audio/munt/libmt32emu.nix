@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmt32emu";
-  version = "2.6.3";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "${pname}_${lib.replaceChars [ "." ] [ "_" ] version}";
-    sha256 = "0ncy55fj9l2s750clxjpv102hrgcndz4qba9w2sf8lwzgy6d1xmp";
+    sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
   outputs = [ "out" "dev" ];
@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     "-Dmunt_WITH_MT32EMU_SMF2WAV=OFF"
     "-Dmunt_WITH_MT32EMU_QT=OFF"
   ];
+
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mt32emu.pc \
+      --replace '=''${exec_prefix}//' '=/' \
+      --replace "$dev/$dev/" "$dev/"
+  '';
 
   meta = with lib; {
     homepage = "http://munt.sourceforge.net/";

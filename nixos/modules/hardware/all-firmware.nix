@@ -21,7 +21,7 @@ in {
     hardware.enableAllFirmware = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Turn on this option if you want to enable all the firmware.
       '';
     };
@@ -30,7 +30,7 @@ in {
       default = config.hardware.enableAllFirmware;
       defaultText = lib.literalExpression "config.hardware.enableAllFirmware";
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Turn on this option if you want to enable all the firmware with a license allowing redistribution.
       '';
     };
@@ -38,7 +38,7 @@ in {
     hardware.wirelessRegulatoryDatabase = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Load the wireless regulatory database at boot.
       '';
     };
@@ -62,7 +62,7 @@ in {
         alsa-firmware
         sof-firmware
         libreelec-dvb-firmware
-      ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
+      ] ++ optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "5.16") [

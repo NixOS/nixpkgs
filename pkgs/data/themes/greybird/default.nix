@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "greybird";
-  version = "3.23.1";
+  version = "3.23.2";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "hfi2TBRrZTSN43tYKMPvb/dWwwUE7RakKTMBziHnCWA=";
+    sha256 = "h4sPjKpTufaunVP0d4Z5x/K+vRW1FpuLrMJjydx/a6w=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
-  passthru.updateScript = gitUpdater { inherit pname version; rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Grey and blue theme from the Shimmer Project for GTK-based environments";

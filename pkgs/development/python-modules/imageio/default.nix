@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
 , substituteAll
 , imageio-ffmpeg
@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.19.2";
-  disabled = isPy27;
+  version = "2.22.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "sha256-RuHnQSiDfSoevIdHa39zl4tpoSj6I4vJibYlqYGb2bM=";
+    sha256 = "sha256-Rl7DX5GdU4kG0wI7Yczsdm2OdXX+Vfy9dmns5Vr7l8o=";
     inherit pname version;
   };
 
@@ -65,6 +65,6 @@ buildPythonPackage rec {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

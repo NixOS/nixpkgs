@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kbknapp/cargo-outdated";
     changelog = "https://github.com/kbknapp/cargo-outdated/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ sondr3 ivan ];
+    maintainers = with maintainers; [ ivan ];
   };
 }

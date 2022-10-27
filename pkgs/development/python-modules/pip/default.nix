@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "22.1.2";
+  version = "22.2.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Id/oz0e59WWpafR1cIYIogvOgxKGKVqrwNON32BU9zU=";
+    sha256 = "sha256-SLjmxFUFmvgy8E8kxfc6lxxCRo+GN4L77pqkWkRR8aE=";
     name = "${pname}-${version}-source";
   };
 

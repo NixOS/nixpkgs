@@ -10,6 +10,7 @@
 , click-repl
 , dnspython
 , fetchPypi
+, fetchpatch
 , kombu
 , moto
 , pymongo
@@ -34,6 +35,19 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-+vvYKTTTD4oAT4Ho96Bi4xQToj1ES+juMyZVORWVjG0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "billiard-4.0-comat.patch";
+      url = "https://github.com/celery/celery/commit/b260860988469ef8ad74f2d4225839c2fa91d590.patch";
+      hash = "sha256-NWB/UB0fE7A/vgMRYz6QGmqLmyN1ninAMyL4V2tpzto=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements/default.txt \
+      --replace "billiard>=3.6.4.0,<4.0" "billiard>=3.6.4.0"
+  '';
 
   propagatedBuildInputs = [
     billiard

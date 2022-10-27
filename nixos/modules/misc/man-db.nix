@@ -7,7 +7,7 @@ in
 {
   options = {
     documentation.man.man-db = {
-      enable = lib.mkEnableOption "man-db as the default man page viewer" // {
+      enable = lib.mkEnableOption (lib.mdDoc "man-db as the default man page viewer") // {
         default = config.documentation.man.enable;
         defaultText = lib.literalExpression "config.documentation.man.enable";
         example = false;
@@ -36,8 +36,8 @@ in
         type = lib.types.package;
         default = pkgs.man-db;
         defaultText = lib.literalExpression "pkgs.man-db";
-        description = ''
-          The <literal>man-db</literal> derivation to use. Useful to override
+        description = lib.mdDoc ''
+          The `man-db` derivation to use. Useful to override
           configuration options used for the package.
         '';
       };

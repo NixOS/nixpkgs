@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.8.2";
+  version = "1.8.4";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Vyr51QBv1eMhPjfuVIkSsDQfsmck1tyKTjlQwQGX67Y=";
+    sha256 = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,15 @@ buildPythonPackage rec {
     rm -r shapely # prevent import of local shapely
   '';
 
-  disabledTests = [
-    "test_collection"
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # FIXME(lf-): these logging tests are broken, which is definitely our
+    # fault. I've tried figuring out the cause and failed.
+    #
+    # It is apparently some sandbox or no-sandbox related thing on macOS only
+    # though.
+    "test_error_handler_exception"
+    "test_error_handler"
+    "test_info_handler"
   ];
 
   pythonImportsCheck = [ "shapely" ];

@@ -6,6 +6,7 @@
 , setuptools-scm
 , importlib-metadata
 , dbus-python
+, jaraco_classes
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -13,26 +14,28 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.6.0";
-  disabled = pythonOlder "3.7";
-
+  version = "23.9.3";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OsAMJuTJNznhkQMJGpmGqfeWZaeM8VpN8dun6prI2i8=";
+    hash = "sha256-abAd2DxC9ZAlD+eh9QP8IpsU3oOFcxSxkzo92/WVxKU=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
+  propagatedBuildInputs = [
+    jaraco_classes
   ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
+
 
   pythonImportsCheck = [
     "keyring"

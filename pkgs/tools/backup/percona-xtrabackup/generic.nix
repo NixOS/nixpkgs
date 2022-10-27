@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
-    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
+    (curl.override { inherit openssl; }) cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
     ncurses numactl openssl protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''

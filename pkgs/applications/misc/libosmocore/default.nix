@@ -13,14 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-AjOyZiLlXhsetbyMBuUssoNxk22LzGOkZpeLt4vKli4=";
+    hash = "sha256-Dkud3ZA9m/UVbPugbQztUJXFpkQYTWjK2mamxfto9JA=";
   };
+
+  postPatch = ''
+    echo "${version}" > .tarball-version
+  '';
 
   propagatedBuildInputs = [
     talloc

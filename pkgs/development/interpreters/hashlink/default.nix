@@ -12,6 +12,7 @@
 , pcre
 , SDL2
 , sqlite
+, getconf
 }:
 
 stdenv.mkDerivation rec {
@@ -43,11 +44,17 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
+  nativeBuildInputs = [ getconf ];
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
+  '';
+
   meta = with lib; {
     description = "A virtual machine for Haxe";
     homepage = "https://hashlink.haxe.org/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ iblech locallycompact ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ iblech locallycompact logo ];
   };
 }

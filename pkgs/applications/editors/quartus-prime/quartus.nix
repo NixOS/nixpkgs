@@ -1,4 +1,4 @@
-{ stdenv, lib, unstick, requireFile
+{ stdenv, lib, unstick, fetchurl
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 }:
 
@@ -34,18 +34,18 @@ let
   };
 
   version = "20.1.1.720";
-  homepage = "https://fpgasoftware.intel.com";
 
-  require = {name, sha256}: requireFile {
+  download = {name, sha256}: fetchurl {
     inherit name sha256;
-    url = "${homepage}/${lib.versions.majorMinor version}/?edition=lite&platform=linux";
+    # e.g. "20.1.1.720" -> "20.1std.1/720"
+    url = "https://downloads.intel.com/akdlm/software/acdsinst/${lib.versions.majorMinor version}std.${lib.versions.patch version}/${lib.elemAt (lib.splitVersion version) 3}/ib_installers/${name}";
   };
 
 in stdenv.mkDerivation rec {
   inherit version;
   pname = "quartus-prime-lite-unwrapped";
 
-  src = map require ([{
+  src = map download ([{
     name = "QuartusLiteSetup-${version}-linux.run";
     sha256 = "0mjp1rg312dipr7q95pb4nf4b8fwvxgflnd1vafi3g9cshbb1c3k";
   } {
@@ -87,12 +87,11 @@ in stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    inherit homepage;
+    homepage = "https://fpgasoftware.intel.com";
     description = "FPGA design and simulation software";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = platforms.linux;
-    hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kwohlfahrt ];
   };
 }
