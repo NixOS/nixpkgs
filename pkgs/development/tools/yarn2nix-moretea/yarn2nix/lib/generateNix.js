@@ -1,4 +1,5 @@
 const R = require('ramda')
+const ssri = require("ssri");
 
 const urlToName = require('./urlToName')
 const { execFileSync } = require('child_process')
@@ -103,7 +104,14 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const [algo, hash] = integrity ? integrity.split('-') : ['sha1', sha1OrRev]
+    // Pull out integrity hash, providing a default and using the "best" algorithm if there are multiple.
+    let algo = "sha1";
+    let hash = sha1OrRev;
+    if (integrity) {
+      const integrities = ssri.parse(integrity);
+      algo = integrities.pickAlgorithm();
+      hash = integrities[algo][0].hexDigest();
+    }
 
     return `    {
       name = "${fileName}";
