@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LDG3ShCFbszyWNc8TQjlysTWBgo0uYNIkL/UK8sTg1A=";
+    sha256 = "sha256-DUVo0L2Lwm080S6rslUBQb3VGN+1qHTG3Xsz4XPwM9I=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
