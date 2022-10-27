@@ -94,7 +94,7 @@ let
           (ops useRailsExpress
             (import ./patchsets.nix {
               inherit patchSet;
-              version = ver.majMinTiny;
+              version = ver.majMin;
             })
           )
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
