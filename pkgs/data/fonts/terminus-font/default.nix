@@ -1,25 +1,31 @@
-{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, python3
+, bdftopcf, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminus-font";
-  version = "4.48"; # set here for use in URL below
+  version = "4.49.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
+    url = "mirror://sourceforge/project/${pname}/${pname}-${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    sha256 = "0yggffiplk22lgqklfmd2c0rw8gwchynjh5kz4bz8yv2h6vw2qfr";
   };
 
-  nativeBuildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
+  patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
 
-  patchPhase = ''
-    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
-  '';
+  nativeBuildInputs =
+    [ python3 bdftopcf xorg.mkfontscale ];
 
   enableParallelBuilding = true;
 
-  installTargets = [ "install" "fontdir" ];
+  postPatch = ''
+    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
+    substituteInPlace Makefile --replace 'gzip'     'gzip -n'
+  '';
 
-  meta = with stdenv.lib; {
+  installTargets = [ "install" "install-otb" "fontdir" ];
+
+  meta = with lib; {
     description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = http://terminus-font.sourceforge.net/;
+    homepage = "http://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
   };

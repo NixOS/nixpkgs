@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchPypi, requests, beautifulsoup4, pytest, requests-mock,
-  pytestrunner }:
+  pytest-runner }:
 
 buildPythonPackage rec {
   pname = "favicon";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01jhb66nrqbf22z6ybpi8ndw6zifgysdmnh547027g96nz51669y";
+    sha256 = "6d6b5a78de2a0d0084589f687f384b2ecd6a6527093fec564403b1a30605d7a8";
   };
 
-  buildInputs = [ pytestrunner ];
+  buildInputs = [ pytest-runner ];
   checkInputs = [ pytest requests-mock ];
   propagatedBuildInputs = [ requests beautifulsoup4 ];
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Find a website's favicon";
-    homepage = https://github.com/scottwernervt/favicon;
+    homepage = "https://github.com/scottwernervt/favicon";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

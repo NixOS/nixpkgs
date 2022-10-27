@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , mock
 , bokeh
@@ -9,10 +9,11 @@
 , xgboost
 , mpi4py
 , lightgbm
-, Keras
+, keras
 , mxnet
 , scikit-optimize
 , tensorflow
+, cma
 , sqlalchemy
 , numpy
 , scipy
@@ -21,6 +22,7 @@
 , colorlog
 , pandas
 , alembic
+, tqdm
 , typing
 , pythonOlder
 , isPy27
@@ -28,12 +30,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "0.13.0";
+  version = "2.10.1";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "915b9d7b28f7f7cdf015d8617c689ca90eda7a5bbd59c5fc232c9eccc9a91585";
+  src = fetchFromGitHub {
+    owner = "optuna";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-HHVEoLCZtEJEfc4xYobQrzRcDDxxeQjgL2Rw2KeVbi0=";
   };
 
   checkInputs = [
@@ -45,10 +49,11 @@ buildPythonPackage rec {
     xgboost
     mpi4py
     lightgbm
-    Keras
+    keras
     mxnet
     scikit-optimize
     tensorflow
+    cma
   ];
 
   propagatedBuildInputs = [
@@ -60,21 +65,28 @@ buildPythonPackage rec {
     colorlog
     pandas
     alembic
-  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+    tqdm
+  ] ++ lib.optionals (pythonOlder "3.5") [
+    typing
+  ];
 
   configurePhase = if !(pythonOlder "3.5") then ''
     substituteInPlace setup.py \
-      --replace "'typing'" ""
+      --replace "'typing'," ""
   '' else "";
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \
-           --ignore tests/integration_tests/test_chainermn.py
+           --ignore tests/integration_tests/test_chainermn.py \
+           --ignore tests/integration_tests/test_pytorch_lightning.py \
+           --ignore tests/integration_tests/test_pytorch_ignite.py \
+           --ignore tests/integration_tests/test_fastai.py
   '';
 
   meta = with lib; {
+    broken = true;  # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
-    homepage = https://optuna.org/;
+    homepage = "https://optuna.org/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

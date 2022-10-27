@@ -1,32 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchurl
-, isPy34
-, isPy35
-, mock
+, fetchFromGitHub
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "IMAPClient";
-  version = "0.13";
-  disabled = isPy34 || isPy35;
+  pname = "imapclient";
+  version = "2.3.1";
 
-  src = fetchurl {
-    url = "https://freshfoo.com/projects/IMAPClient/${pname}-${version}.tar.gz";
-    sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "mjs";
+    repo = "imapclient";
+    rev = version;
+    hash = "sha256-aHWRhQOEjYiLlWTiuYo/a4pOhfLF7jz+ltG+yOqgfKI=";
   };
 
-  buildInputs = [ mock ];
+  propagatedBuildInputs = [ six ];
 
-  preConfigure = ''
-    sed -i '/distribute_setup/d' setup.py
-    substituteInPlace setup.py --replace "mock==0.8.0" "mock"
-  '';
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://imapclient.readthedocs.io/en/2.1.0/;
+  pythonImportsCheck = [
+    "imapclient"
+    "imapclient.response_types"
+    "imapclient.exceptions"
+    "imapclient.testable_imapclient"
+    "imapclient.tls"
+  ];
+
+  meta = with lib; {
+    homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ almac dotlambda ];
   };
-
 }

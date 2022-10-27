@@ -1,51 +1,53 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
-, sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages
+{ stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
+, sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
+, python3, buildPackages, nixosTests, rpcsvc-proto
+, enablePython ? true
 }:
 
 let
-  statdPath = lib.makeBinPath [ systemd utillinux coreutils ];
+  statdPath = lib.makeBinPath [ systemd util-linux coreutils ];
 in
 
 stdenv.mkDerivation rec {
   pname = "nfs-utils";
-  version = "2.4.1";
+  version = "2.6.2";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0dkp11a7i01c378ri68bf6k56z27kz8zzvpqm7mip6s7jkd4l9w5";
+    url = "mirror://kernel/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-UgCHPoHE1hDiRi/CYv4YE18tvni3l5+VrM0VmuZNUBE=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ pkg-config buildPackages.stdenv.cc rpcsvc-proto ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
-    libuuid keyutils kerberos tcp_wrappers
-    python3
-  ];
+    libuuid keyutils libkrb5 tcp_wrappers
+  ] ++ lib.optional enablePython python3;
 
   enableParallelBuilding = true;
 
   preConfigure =
     ''
       substituteInPlace configure \
-        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
-        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
+        --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
     '';
 
   configureFlags =
     [ "--enable-gss"
+      "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${lib.getLib kerberos}"
+      "--with-krb5=${lib.getLib libkrb5}"
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
-    ]
-    ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
+      "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
+      "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
+    ];
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -69,6 +71,9 @@ stdenv.mkDerivation rec {
 
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
+
+      substituteInPlace tools/nfsrahead/Makefile.in \
+        --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
       substituteInPlace utils/mount/Makefile.in \
         --replace "chmod 4511" "chmod 0511"
@@ -95,6 +100,9 @@ stdenv.mkDerivation rec {
         -e "s,/sbin/modprobe,${kmod}/bin/modprobe,g" \
         -e "s,/usr/sbin,$out/bin,g" \
         $out/etc/systemd/system/*
+    '' + lib.optionalString (!enablePython) ''
+      # Remove all scripts that require python (currently mountstats and nfsiostat)
+      grep -l /usr/bin/python $out/bin/* | xargs -I {} rm -v {}
     '';
 
   # One test fails on mips.
@@ -102,9 +110,15 @@ stdenv.mkDerivation rec {
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 
-  disallowedReferences = [ (lib.getDev kerberos) ];
+  disallowedReferences = [ (lib.getDev libkrb5) ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    nfs3-simple = nixosTests.nfs3.simple;
+    nfs4-simple = nixosTests.nfs4.simple;
+    nfs4-kerberos = nixosTests.nfs4.kerberos;
+  };
+
+  meta = with lib; {
     description = "Linux user-space NFS utilities";
 
     longDescription = ''
@@ -113,7 +127,7 @@ stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = https://linux-nfs.org/;
+    homepage = "https://linux-nfs.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

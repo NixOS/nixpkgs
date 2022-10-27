@@ -1,31 +1,80 @@
-{ stdenv, fetchurl, cmake, pkgconfig, openssl, libxml2, boost, python3, libuuid }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, openssl
+, libxml2
+, boost
+, python3
+, libuuid
+, curl
+, gsoap
+, enableTools ? true
+  # Build the bundled libcurl
+  # and, if defaultToLibCurl,
+  # use instead of an external one
+, useEmbeddedLibcurl ? true
+  # Use libcurl instead of libneon
+  # Note that the libneon used is bundled in the project
+  # See https://github.com/cern-fts/davix/issues/23
+, defaultToLibcurl ? false
+, enableIpv6 ? true
+, enableTcpNodelay ? true
+  # Build davix_copy.so
+, enableThirdPartyCopy ? false
+}:
 
+let
+  boolToUpper = b: lib.toUpper (lib.boolToString b);
+in
 stdenv.mkDerivation rec {
-  version = "0.7.5";
-  pname = "davix";
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
-  buildInputs = [ openssl libxml2 boost libuuid ];
+  version = "0.8.3";
+  pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
+  nativeBuildInputs = [ cmake pkg-config python3 ];
+  buildInputs = [
+    openssl
+    libxml2
+    boost
+    libuuid
+  ] ++ lib.optional (defaultToLibcurl && !useEmbeddedLibcurl) curl
+  ++ lib.optional (enableThirdPartyCopy) gsoap;
 
-  # using the url below since the 0.7.5 release did carry a broken CMake file,
-  # supposedly fixed in the next release
-  # https://github.com/cern-fts/davix/issues/40
+  # using the url below since the github release page states
+  # "please ignore the GitHub-generated tarballs, as they are incomplete"
+  # https://github.com/cern-fts/davix/releases/tag/R_0_8_0
   src = fetchurl {
-    url = "http://grid-deployment.web.cern.ch/grid-deployment/dms/lcgutil/tar/davix/${version}/davix-${version}.tar.gz";
-    sha256 = "1j3gzsjhzrsk6irxalc3rwgp9cqb52chriadmy1mv1s6d2bwl86r";
+    url = "https://github.com/cern-fts/davix/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/davix-${version}.tar.gz";
+    sha256 = "sha256-fjC1VB4I0y2/WuA8a8q+rsBjrsEKZkd4eCIie0VBrj4=";
   };
 
+  preConfigure = ''
+    find . -mindepth 1 -maxdepth 1 -type f -name "patch*.sh" -print0 | while IFS= read -r -d ''' file; do
+      patchShebangs "$file"
+    done
+  '';
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DENABLE_TOOLS=${boolToUpper enableTools}"
+    "-DEMBEDDED_LIBCURL=${boolToUpper useEmbeddedLibcurl}"
+    "-DLIBCURL_BACKEND_BY_DEFAULT=${boolToUpper defaultToLibcurl}"
+    "-DENABLE_IPV6=${boolToUpper enableIpv6}"
+    "-DENABLE_TCP_NODELAY=${boolToUpper enableTcpNodelay}"
+    "-DENABLE_THIRD_PARTY_COPY=${boolToUpper enableThirdPartyCopy}"
+  ];
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
     operations with Http based protocols (WebDav, Amazon S3, ...).
     Davix provides an API and a set of command line tools";
 
-    license     = licenses.lgpl2Plus;
-    homepage    = http://dmc.web.cern.ch/projects/davix/home;
-    maintainers = [ maintainers.adev ];
-    platforms   = platforms.all;
+    license = licenses.lgpl2Plus;
+    homepage = "https://github.com/cern-fts/davix";
+    changelog = "https://github.com/cern-fts/davix/blob/R_${lib.replaceStrings ["."] ["_"] version}/RELEASE-NOTES.md";
+    maintainers = with maintainers; [ adev ];
+    platforms = platforms.all;
   };
 }
-

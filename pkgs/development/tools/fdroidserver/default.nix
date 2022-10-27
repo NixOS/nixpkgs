@@ -1,39 +1,38 @@
-{ docker
-, fetchFromGitLab
+{ fetchFromGitLab
 , python
-, lib }:
+, lib
+, apksigner
+}:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.1.5";
+  version = "2.1";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "1wpwv5gbwrjs03fmr6d81268k6gzjgr86swzgb8nfj48955iw193";
+    sha256 = "0xmmjj7f05p4q8xbbkxqns2vvk2rsvb9n43vjdv0wbydmgpa34k7";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace fdroidserver/common.py --replace "FDROID_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))" "FDROID_PATH = '$out/bin'"
-    substituteInPlace setup.py --replace "pyasn1-modules == 0.2.1" "pyasn1-modules"
   '';
 
   preConfigure = ''
     ${python.interpreter} setup.py compile_catalog
   '';
   postInstall = ''
+    patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  buildInputs = [ python.pkgs.Babel ];
+  buildInputs = [ python.pkgs.babel ];
 
   propagatedBuildInputs = with python.pkgs; [
     androguard
     clint
     defusedxml
-    docker
-    docker-py
     GitPython
     libcloud
     mwclient
@@ -45,14 +44,22 @@ python.pkgs.buildPythonApplication rec {
     pyyaml
     qrcode
     requests
-    ruamel_yaml
+    ruamel-yaml
+    yamllint
   ];
 
+  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ apksigner ]}" ];
+
+  # no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "fdroidserver" ];
+
   meta = with lib; {
-    homepage = https://f-droid.org;
+    homepage = "https://f-droid.org";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3;
-    maintainers = [ lib.maintainers.pmiddend ];
+    maintainers = [ lib.maintainers.obfusk ];
   };
 
 }

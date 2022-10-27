@@ -1,37 +1,72 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gettext
+, gtk-doc
+, docbook-xsl-nons
+, gobject-introspection
+, gnome
+, libsoup
+, json-glib
+, glib
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
-  version = "3.26.1";
+  version = "3.26.4";
 
   outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "076ydfpyc4n5c9dbqmf26i4pilfi5jpw6cjcgrbgrjbndavnmajv";
+    url = "mirror://gnome/sources/geocode-glib/${lib.versions.majorMinor version}/geocode-glib-${version}.tar.xz";
+    sha256 = "LZpoJtFYRwRJoXOHEiFZbaD4Pr3P+YuQxwSQiQVqN6o=";
   };
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];
-  buildInputs = [ glib libsoup json-glib ];
 
   patches = [
     ./installed-tests-path.patch
   ];
 
-  postPatch = ''
-    substituteInPlace geocode-glib/tests/meson.build --subst-var-by "installedTests" "$installedTests"
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gtk-doc
+    docbook-xsl-nons
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    glib
+    libsoup
+    json-glib
+  ];
+
+  mesonFlags = [
+    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup.version "2.99")}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+    };
+    tests = {
+      installed-tests = nixosTests.installed-tests.geocode-glib;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A convenience library for the geocoding and reverse geocoding using Nominatim service";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

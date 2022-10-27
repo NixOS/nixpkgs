@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, unzip, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  name = "subgit-3.3.8";
+  pname = "subgit";
+  version = "3.3.15";
 
   meta = {
     description = "A tool for a smooth, stress-free SVN to Git migration";
     longDescription = "Create writable Git mirror of a local or remote Subversion repository and use both Subversion and Git as long as you like. You may also do a fast one-time import from Subversion to Git.";
-    homepage = http://subgit.com;
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://subgit.com";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.all;
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://subgit.com/download/${name}.zip";
-    sha256 = "0gvyyr4prx1v06f9j9fmmr8br1gjd45bnncl40c9agiqsyy0q06n";
+    url = "https://subgit.com/download/subgit-${version}.zip";
+    sha256 = "sha256-2/J/d4GrlLXR/7QBxgIMepzP+xxkeLvrCBwLl7Ke8wI=";
   };
 }

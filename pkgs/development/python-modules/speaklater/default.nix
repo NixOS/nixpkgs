@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,9 +12,9 @@ buildPythonPackage rec {
     sha256 = "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implements a lazy string for python useful for use with gettext";
-    homepage = https://github.com/mitsuhiko/speaklater;
+    homepage = "https://github.com/mitsuhiko/speaklater";
     license = licenses.bsd0;
     maintainers = with maintainers; [ matejc ];
   };

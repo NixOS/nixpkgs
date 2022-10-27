@@ -1,29 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
+{ lib, buildPythonPackage, fetchPypi, setuptools-scm
 , inflect, more-itertools, six, pytest
 }:
 
 buildPythonPackage rec {
   pname = "jaraco.itertools";
-  version = "4.4.2";
+  version = "6.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zxx8ffk5ycapy2d41dfgzskl5jfwjc10hsd91jsrax5alkhrh7x";
+    sha256 = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
   };
 
-  patches = [ ./0001-Don-t-run-flake8-checks-during-the-build.patch ];
+  pythonNamespaces = [ "jaraco" ];
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [ inflect more-itertools six ];
   checkInputs = [ pytest ];
 
+  # tests no longer available through pypi
+  doCheck = false;
   checkPhase = ''
     pytest
   '';
 
+  pythonImportsCheck = [ "jaraco.itertools" ];
+
   meta = with lib; {
     description = "Tools for working with iterables";
-    homepage = https://github.com/jaraco/jaraco.itertools;
+    homepage = "https://github.com/jaraco/jaraco.itertools";
     license = licenses.mit;
   };
 }

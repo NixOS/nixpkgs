@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, b43FirmwareCutter }:
+{ lib, stdenvNoCC, fetchurl, b43FirmwareCutter }:
 
 let version = "5.100.138"; in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "b43-firmware";
   inherit version;
 
@@ -11,9 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0vz4ka8gycf72gmnaq61k8rh8y17j1wm2k3fidxvcqjvmix0drzi";
   };
 
-  buildInputs = [ b43FirmwareCutter ];
-
-  phases = [ "unpackPhase" "installPhase" ];
+  nativeBuildInputs = [ b43FirmwareCutter ];
 
   installPhase = ''
     mkdir -p $out/lib/firmware
@@ -22,8 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = http://wireless.kernel.org/en/users/Drivers/b43;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
+    license = lib.licenses.unfree;
   };
 }
-

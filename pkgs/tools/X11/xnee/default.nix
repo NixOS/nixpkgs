@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, libX11, xorgproto, libXext, libXtst
-, gtk2, libXi, pkgconfig, texinfo }:
+{ fetchurl, fetchpatch, lib, stdenv, libX11, xorgproto, libXext, libXtst
+, gtk2, libXi, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   version = "3.19";
@@ -10,16 +10,33 @@ stdenv.mkDerivation rec {
     sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
-  patchPhase =
+  patches = [
+    # Pull fix pending upstream inclusion for -fno-common
+    # toolchain support: https://savannah.gnu.org/bugs/?58810
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://savannah.gnu.org/bugs/download.php?file_id=49534";
+      sha256 = "04j2cjy2yaiigg31a6k01vw0fq19yj3zpriikkjcz9q4ab4m5gh2";
+    })
+  ];
+
+  postPatch =
     '' for i in `find cnee/test -name \*.sh`
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
+
+       # Fix for glibc-2.34. For some reason, `LIBSEMA="CCC"` is added
+       # if `sem_init` is part of libc which causes errors like
+       # `gcc: error: CCC: No such file or directory` during the build.
+       substituteInPlace configure \
+        --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
     '';
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ libX11 xorgproto libXext libXtst gtk2
-      libXi pkgconfig
+      libXi
       texinfo
     ];
 
@@ -29,7 +46,7 @@ stdenv.mkDerivation rec {
 
   # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
   # lacks libXi.
-  makeFlags = "LDFLAGS=-lXi";
+  makeFlags = [ "LDFLAGS=-lXi" ];
 
   # XXX: Actually tests require an X server.
   doCheck = true;
@@ -45,11 +62,11 @@ stdenv.mkDerivation rec {
          "macros", retype a file.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/xnee/;
+    homepage = "https://www.gnu.org/software/xnee/";
 
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

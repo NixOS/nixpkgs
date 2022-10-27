@@ -1,5 +1,6 @@
 { buildPythonPackage
 , lib
+, isPy27
 , six
 , fetchPypi
 , pyyaml
@@ -15,11 +16,13 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "2.0.1";
+  version = "4.2.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kws7l3hci1dvjv01nxw3805q9v2mwldw58bgl8s90wqism69gjp";
+    sha256 = "sha256-fNPoGixJLgHCgfGAvMKoa1ILFz0rZWy12J2ZR1Qj4BM=";
   };
 
   checkInputs = [
@@ -41,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatically mock your HTTP interactions to simplify and speed up testing";
-    homepage = https://github.com/kevin1024/vcrpy;
+    homepage = "https://github.com/kevin1024/vcrpy";
     license = licenses.mit;
   };
 }

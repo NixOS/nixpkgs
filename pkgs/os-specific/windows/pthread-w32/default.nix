@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation {
   pname = "pthreads-w32";
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "POSIX threads library for Windows";
     homepage = "https://sourceware.org/pthreads-win32";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.windows;
   };
 }

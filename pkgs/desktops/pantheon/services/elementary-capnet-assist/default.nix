@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , python3
 , ninja
@@ -10,6 +11,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , gcr
 , webkitgtk
 , wrapGAppsHook
@@ -17,29 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.2.3";
-
-  repoName = "capnet-assist";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "capnet-assist";
     rev = version;
-    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
+    sha256 = "sha256-aA71kxu4/dwODZt+DSp3vvely3P0dL23Ykqhd84hrZw=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -50,12 +43,8 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     webkitgtk
-  ];
-
-  # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [
-    ./remove-capnet-test.patch
   ];
 
   postPatch = ''
@@ -63,11 +52,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
-    homepage = https://github.com/elementary/capnet-assist;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/capnet-assist";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.capnet-assist";
   };
 }

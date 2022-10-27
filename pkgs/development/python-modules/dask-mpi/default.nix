@@ -1,36 +1,41 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , dask
 , distributed
 , mpi4py
-, pytest
-, requests
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
   pname = "dask-mpi";
+  version = "2022.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1apzzh90gl9jx43z0gjmgpniplhvqziafi2l8688a0g01vw7ibjv";
+    hash = "sha256-CgTx19NaBs3/UGWTMw1EFOokLJFySYzhkfV0LqxJnhc=";
   };
 
-  checkInputs = [ pytest requests ];
-  propagatedBuildInputs = [ dask distributed mpi4py ];
+  propagatedBuildInputs = [
+    dask
+    distributed
+    mpi4py
+  ];
 
-  checkPhase = ''
-    py.test dask_mpi
-  '';
-
-  # hardcoded mpirun path in tests
+  # Hardcoded mpirun path in tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-mpi;
+  pythonImportsCheck = [
+    "dask_mpi"
+  ];
+
+  meta = with lib; {
     description = "Deploy Dask using mpi4py";
+    homepage = "https://github.com/dask/dask-mpi";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

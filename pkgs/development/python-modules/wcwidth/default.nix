@@ -1,22 +1,26 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pytestCheckHook
+, isPy3k
+, backports_functools_lru_cache
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "wcwidth";
-  version = "0.1.7";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pn6dflzm609m4r3i8ik5ni9ijjbb5fa3vg1n7hn6vkd49r77wrx";
+    sha256 = "c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
+
+  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
+    backports_functools_lru_cache
+  ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Measures number of Terminal column cells of wide-character codes";
@@ -26,7 +30,7 @@ buildPythonPackage rec {
       a Terminal. It is implemented in python (no C library calls) and has
       no 3rd-party dependencies.
     '';
-    homepage = https://github.com/jquast/wcwidth;
+    homepage = "https://github.com/jquast/wcwidth";
     license = licenses.mit;
   };
 }

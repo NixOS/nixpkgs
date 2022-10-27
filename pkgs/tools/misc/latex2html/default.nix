@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , ghostscript, netpbm, perl }:
 # TODO: withTex
 
-# Ported from Homebrew.
-# https://github.com/Homebrew/homebrew-core/blob/21834573f690407d34b0bbf4250b82ec38dda4d6/Formula/latex2html.rb
-
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2018";
+  version = "2022.2";
 
-  src = fetchurl {
-    url = "http://mirrors.ctan.org/support/latex2html/latex2html-${version}.tar.gz";
-    sha256 = "1qnlg8ajh0amy9gy8rh8sp1l224ak54264i3dhk7rrv9s4k7bqq9";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Vl7ozawd4Ra+yDarRpmPhjF7deJELaxo07L4/qVV4fw=";
   };
 
   buildInputs = [ ghostscript netpbm perl ];
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LaTeX-to-HTML translator";
     longDescription = ''
       A Perl program that translates LaTeX into HTML (HyperText Markup
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
       commands.
     '';
 
-    homepage = https://www.ctan.org/pkg/latex2html;
+    homepage = "https://www.ctan.org/pkg/latex2html";
 
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;

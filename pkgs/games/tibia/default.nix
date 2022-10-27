@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, glibc, libX11, runtimeShell, libGLU_combined }:
+{ lib, stdenv, fetchurl, glibc, libX11, runtimeShell, libGLU, libGL }:
 
-with stdenv.lib;
-stdenv.mkDerivation {
-  name = "tibia-10.90";
+stdenv.mkDerivation rec {
+  pname = "tibia";
+  version = "10.90";
 
   src = fetchurl {
-    url = http://static.tibia.com/download/tibia1090.tgz;
+    url = "http://static.tibia.com/download/tibia${lib.replaceStrings ["."] [""] version}.tgz";
     sha256 = "11mkh2dynmbpay51yfaxm5dmcys3rnpk579s9ypfkhblsrchbkhx";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp -r * $out/res
 
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
-             --set-rpath ${stdenv.lib.makeLibraryPath [ stdenv.cc.cc libX11 libGLU_combined ]} \
+             --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc libX11 libGLU libGL ]} \
              "$out/res/Tibia"
 
     # We've patchelf'd the files. The main ‘Tibia’ binary is a bit
@@ -49,9 +49,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Top-down MMORPG set in a fantasy world";
-    homepage = http://tibia.com;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "http://tibia.com";
+    license = lib.licenses.unfree;
     platforms = ["i686-linux"];
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,45 +1,48 @@
-{ stdenv, fetchFromGitHub
-, alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
-, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub
+, alsa-lib, freetype, xorg, curl, libGL, libjack2, gnome
+, pkg-config, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "2.2";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "16iwj4mjs1nm8dlk70q97svp3vkcgs7hdj9hfda9h67acn4a8vvk";
+    sha256 = "sha256-TqwebaFZXUto+azVJQlggqAc7WKDxAaXxyXcG8x5S/w=";
   };
 
   buildInputs = [
-    alsaLib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
-    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome3.zenity
+    alsa-lib freetype xorg.libX11 xorg.libXext xorg.libXinerama xorg.libXrandr
+    xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome.zenity
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  preBuild = "cd Projects/LinuxMakefile";
+  preBuild = ''
+    cd Projects/LinuxMakefile
+    substituteInPlace Makefile --replace alsa "alsa jack"
+  '';
   buildFlags = [ "CONFIG=Release64" ];
 
   installPhase = ''
     mkdir -p $out/bin
-    install -Dm755 build/Helio $out/bin
-    wrapProgram $out/bin/Helio --prefix PATH ":" ${gnome3.zenity}/bin
+    install -Dm755 build/helio $out/bin
+    wrapProgram $out/bin/helio --prefix PATH ":" ${gnome.zenity}/bin
 
     mkdir -p $out/share
     cp -r ../Deployment/Linux/Debian/x64/usr/share/* $out/share
     substituteInPlace $out/share/applications/Helio.desktop \
-      --replace "/usr/bin/helio" "$out/bin/Helio"
+      --replace "/usr/bin/helio" "$out/bin/helio"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
-    homepage = https://helio.fm/;
-    license = licenses.gpl3;
+    homepage = "https://helio.fm/";
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.suhr ];
     platforms = [ "x86_64-linux" ];
   };

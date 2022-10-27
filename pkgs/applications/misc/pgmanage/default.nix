@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql, openssl } :
+{ lib, stdenv, fetchFromGitHub, postgresql, openssl } :
 
 stdenv.mkDerivation rec {
   pname = "pgmanage";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ postgresql openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast replacement for PGAdmin";
     longDescription = ''
       At the heart of pgManage is a modern, fast, event-based C-binary, built in
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       PostgreSQL interface can hope to be. (Note: pgManage replaces Postage,
       which is no longer maintained.)
     '';
-    homepage = https://github.com/pgManage/pgManage;
+    homepage = "https://github.com/pgManage/pgManage";
     license = licenses.postgresql;
     maintainers = [ maintainers.basvandijk ];
   };

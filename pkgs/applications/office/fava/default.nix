@@ -1,41 +1,50 @@
-{ stdenv, python3, beancount }:
+{ lib, python3 }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.11";
+  version = "1.23";
+  format = "pyproject";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0gyrxqmfr8igfjnp9lcsl4km17yakj556xns3jp4m9l2407b5zhc";
+    sha256 = "sha256-dwJKSQiuggnseEbALSrT051Me/z1jpj/BjuxN0v5dpU=";
   };
 
-  checkInputs = [ python3.pkgs.pytest ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ 
-      Babel
-      cheroot
-      flaskbabel
-      flask
-      jinja2
-      beancount
-      click
-      markdown2
-      ply
-      simplejson
-    ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
-  # CLI test expects fava on $PATH.  Not sure why static_url fails.
-  checkPhase = ''
-    py.test tests -k 'not cli and not static_url'
+  propagatedBuildInputs = with python3.pkgs; [
+    babel
+    beancount
+    cheroot
+    click
+    flask
+    flaskbabel
+    jaraco_functools
+    jinja2
+    markdown2
+    ply
+    simplejson
+    werkzeug
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TEMPDIR
   '';
 
-  meta = {
-    homepage = https://beancount.github.io/fava;
+  disabledTests = [
+    # runs fava in debug mode, which tries to interpret bash wrapper as Python
+    "test_cli"
+  ];
+
+  meta = with lib; {
     description = "Web interface for beancount";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    homepage = "https://beancount.github.io/fava";
+    changelog = "https://beancount.github.io/fava/changelog.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

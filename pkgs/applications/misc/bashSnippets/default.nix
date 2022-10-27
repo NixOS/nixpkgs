@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, curl, python, bind, iproute, bc, gitMinimal }:
+, curl, python3, bind, iproute2, bc, gitMinimal }:
 let
-  version = "1.17.3";
+  version = "1.23.0";
   deps = lib.makeBinPath [
     curl
-    python
+    python3
     bind.dnsutils
-    iproute
+    iproute2
     bc
     gitMinimal
   ];
@@ -19,15 +19,17 @@ stdenv.mkDerivation {
     owner = "alexanderepstein";
     repo = "Bash-Snippets";
     rev = "v${version}";
-    sha256 = "1xdjk8bjh7l6h7gdqrra1dh4wdq89wmd0jsirsvqa3bmcsb2wz1r";
+    sha256 = "044nxgd3ic2qr6hgq5nymn3dyf5i4s8mv5z4az6jvwlrjnvbg8cp";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs install.sh
     substituteInPlace install.sh --replace /usr/local "$out"
   '';
+
+  strictDeps = true;
 
   dontBuild = true;
 
@@ -41,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A collection of small bash scripts for heavy terminal users";
-    homepage = https://github.com/alexanderepstein/Bash-Snippets;
+    homepage = "https://github.com/alexanderepstein/Bash-Snippets";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.unix;

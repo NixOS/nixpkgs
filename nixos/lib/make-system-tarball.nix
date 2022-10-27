@@ -22,7 +22,7 @@
   # Extra tar arguments
 , extraArgs ? ""
   # Command used for compression
-, compressCommand ? "pixz"
+, compressCommand ? "pixz -t"
   # Extension for the compressed tarball
 , compressionExtension ? ".xz"
   # extra inputs, like the compressor to use
@@ -37,7 +37,7 @@ in
 stdenv.mkDerivation {
   name = "tarball";
   builder = ./make-system-tarball.sh;
-  buildInputs = extraInputs;
+  nativeBuildInputs = extraInputs;
 
   inherit fileName extraArgs extraCommands compressCommand;
 

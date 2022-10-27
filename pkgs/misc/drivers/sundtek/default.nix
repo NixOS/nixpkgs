@@ -1,6 +1,6 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "2016-01-26";
@@ -10,17 +10,18 @@ let
     else
     if isi686 then "32bit"
     else throw "${system} not considered in build derivation. Might still be supported.";
+  sha256 = with stdenv;
+    if isx86_64 then "1jfsng5n3phw5rqpkid9m5j7m7zgj5bifh7swvba7f97y6imdaax"
+    else "15y6r5w306pcq4g1rn9f7vf70f3a7qhq237ngaf0wxh2nr0aamxp";
 
 in
   stdenv.mkDerivation {
     src = fetchurl {
       url = "http://www.sundtek.de/media/netinst/${platform}/installer.tar.gz";
-      sha256 = "15y6r5w306pcq4g1rn9f7vf70f3a7qhq237ngaf0wxh2nr0aamxp";
+      sha256 = sha256;
     };
     pname = "sundtek";
     inherit version;
-
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
     sourceRoot = ".";
 
@@ -44,8 +45,9 @@ in
     meta = {
       description = "Sundtek MediaTV driver";
       maintainers = [ maintainers.simonvandel ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = platforms.unix;
       license = licenses.unfree;
-      homepage = http://support.sundtek.com/index.php/topic,1573.0.html;
+      homepage = "https://support.sundtek.com/index.php/topic,1573.0.html";
     };
   }

@@ -1,15 +1,25 @@
-{ stdenv, lib, fetchurl
+{ stdenvNoCC, lib, fetchurl, mysql_jdbc ? null
 , enableSSO ? false
 , crowdProperties ? null
+, withMysql ? true
 }:
 
-stdenv.mkDerivation rec {
+assert withMysql -> (mysql_jdbc != null);
+
+let
+  optionalWarning = cond: msg:
+    if cond then lib.warn msg
+    else lib.id;
+in
+
+optionalWarning (crowdProperties != null) "Using `crowdProperties` is deprecated!"
+(stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
-  version = "7.0.2";
+  version = "7.18.1";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "00ma2l6gknlpaf2k26md9fskgzcllky3vv89sb1izsrxl8la1dhq";
+    sha256 = "sha256-MEq1ASnJUYWPvt7Z30+fUTv+QrDI+Xsb5e9K0c8ZtdQ=";
   };
 
   buildPhase = ''
@@ -28,6 +38,8 @@ stdenv.mkDerivation rec {
     cat <<EOF > confluence/WEB-INF/classes/crowd.properties
     ${crowdProperties}
     EOF
+  '' + lib.optionalString withMysql ''
+    cp -v ${mysql_jdbc}/share/java/*jar confluence/WEB-INF/lib/
   '';
 
   installPhase = ''
@@ -35,10 +47,11 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Team collaboration software written in Java and mainly used in corporate environments";
-    homepage = https://www.atlassian.com/software/confluence;
+    homepage = "https://www.atlassian.com/software/confluence";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ globin willibutz ciil techknowlogick ma27 ];
   };
-}
+})

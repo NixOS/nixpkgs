@@ -1,56 +1,86 @@
-{ stdenv, fetchurl, fetchsvn, jdk, jre, ant, makeWrapper }:
-
+{ lib, stdenv
+, fetchurl
+, fetchsvn
+, substituteAll
+, jdk
+, jre
+, ant
+, makeWrapper
+, doCheck ? true
+, withExamples ? false
+}:
 let
-  fastutil = fetchurl {
-    url = "http://ivy.mkgmap.org.uk/repo/it.unimi.dsi/fastutil/6.5.15-mkg.1b/jars/fastutil.jar";
-    sha256 = "0d88m0rpi69wgxhnj5zh924q4zsvxq8m4ybk7m9mr3gz1hx0yx8c";
-  };
-  osmpbf = fetchurl {
-    url = "http://ivy.mkgmap.org.uk/repo/crosby/osmpbf/1.3.3/jars/osmpbf.jar";
-    sha256 = "0zb4pqkwly5z30ww66qhhasdhdrzwmrw00347yrbgyk2ii4wjad3";
-  };
-  protobuf = fetchurl {
-    url = "https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar";
-    sha256 = "0x6c4pbsizvk3lm6nxcgi1g2iqgrxcna1ip74lbn01f0fm2wdhg0";
-  };
+  deps = import ./deps.nix { inherit fetchurl; };
+  testInputs = import ./testinputs.nix { inherit fetchurl; };
 in
-
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4289";
+  version = "4905";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "1sm1pw71q7z0jrxm8bcgm6xjl2mcidyibcf0a3m8fv2andidxrb4";
+    sha256 = "sha256-EYUysLit/bO/IjVmAbxqIvVFm9Ub50+RKFn7ZdspapU=";
   };
 
-  # This patch removes from the build process
-  # the automatic download of dependencies (see configurePhase)
-  patches = [ ./build.xml.patch ];
+  patches = [
+    (substituteAll {
+      # Disable automatic download of dependencies
+      src = ./build.xml.patch;
+      inherit version;
+    })
+  ];
+
+  postPatch = with deps; ''
+    mkdir -p lib/compile
+    cp ${fastutil} lib/compile/${fastutil.name}
+    cp ${osmpbf} lib/compile/${osmpbf.name}
+    cp ${protobuf} lib/compile/${protobuf.name}
+  '' + lib.optionalString doCheck ''
+    mkdir -p lib/test
+    cp ${fastutil} lib/test/${fastutil.name}
+    cp ${osmpbf} lib/test/${osmpbf.name}
+    cp ${protobuf} lib/test/${protobuf.name}
+    cp ${jaxb-api} lib/test/${jaxb-api.name}
+    cp ${junit} lib/test/${junit.name}
+    cp ${hamcrest-core} lib/test/${hamcrest-core.name}
+
+    mkdir -p test/resources/in/img
+    ${lib.concatMapStringsSep "\n" (res: ''
+      cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
+    '') testInputs}
+  '';
 
   nativeBuildInputs = [ jdk ant makeWrapper ];
 
-  configurePhase = ''
-    mkdir -p lib/compile
-    cp ${fastutil} ${osmpbf} ${protobuf} lib/compile/
-  '';
-
   buildPhase = "ant";
 
+  inherit doCheck;
+
+  checkPhase = "ant test";
+
   installPhase = ''
-    cd dist
-    install -Dm644 mkgmap.jar $out/share/java/mkgmap/mkgmap.jar
-    install -Dm644 doc/mkgmap.1 $out/share/man/man1/mkgmap.1
-    cp -r lib/ $out/share/java/mkgmap/
+    install -Dm644 dist/mkgmap.jar -t $out/share/java/mkgmap
+    install -Dm644 dist/doc/mkgmap.1 -t $out/share/man/man1
+    cp -r dist/lib/ $out/share/java/mkgmap/
     makeWrapper ${jre}/bin/java $out/bin/mkgmap \
       --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
+  '' + lib.optionalString withExamples ''
+    mkdir -p $out/share/mkgmap
+    cp -r dist/examples $out/share/mkgmap/
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = [ ./update.sh "mkgmap" meta.downloadPage ];
+
+  meta = with lib; {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
-    homepage = "http://www.mkgmap.org.uk";
-    license = licenses.gpl2;
+    homepage = "https://www.mkgmap.org.uk/";
+    downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;
   };

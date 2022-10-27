@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, php }: with lib; stdenv.mkDerivation rec {
+{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php }:
+
+stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.7.3";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    sha256 = "1qdsrpk6jbq9b4v4f2lfpdqs1yh3irbsm5fx02wxnnwvad05bcfv";
+    hash = "sha256-MRk+ZshdOUg311+FNuEM+jspYM4ZqqQLx5dRBM1KNpI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -16,18 +18,19 @@
     cp -ra application bin etc library modules public $out
     cp -ra doc $out/share
 
-    wrapProgram $out/bin/icingacli --prefix PATH : "${makeBinPath [ php ]}"
+    wrapProgram $out/bin/icingacli --prefix PATH : "${lib.makeBinPath [ php ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Webinterface for Icinga 2";
     longDescription = ''
       A lightweight and extensible web interface to keep an eye on your environment.
       Analyse problems and act on them.
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ das_j ];
+    mainProgram = "icingacli";
+    platforms = platforms.all;
   };
 }

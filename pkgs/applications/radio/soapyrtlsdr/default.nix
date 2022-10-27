@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, rtl-sdr, soapysdr
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, rtl-sdr
+, soapysdr
+, libobjc
+, IOKit
+, Security
+}:
 
-let
-  version = "0.3.0";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyrtlsdr";
-  inherit version;
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyRTLSDR";
-    rev = "soapy-rtlsdr-${version}";
-    sha256 = "15j0s7apbg9cjr6rcbr058kl0r3szwzf00ixcbykxb77fh7c6r9w";
+    rev = "soapy-rtl-sdr-${finalAttrs.version}";
+    sha256 = "sha256-IapdrBE8HhibY52Anm76/mVAoA0GghwnRCxxfGkyLTw=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ rtl-sdr soapysdr ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ rtl-sdr soapysdr ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyRTLSDR;
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapyRTLSDR";
     description = "SoapySDR plugin for RTL-SDR devices";
     license = licenses.mit;
-    maintainers = with maintainers; [ ragge ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ragge luizribeiro ];
+    platforms = platforms.unix;
   };
-}
+})

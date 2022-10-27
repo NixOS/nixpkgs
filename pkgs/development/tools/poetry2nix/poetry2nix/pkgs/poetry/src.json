@@ -1,0 +1,8 @@
+{
+  "owner": "python-poetry",
+  "repo": "poetry",
+  "rev": "1.2.2",
+  "sha256": "04cdrq9mjdnp28jx63vjlwj72wrad7941hp3k7263qskzlp27ql6",
+  "fetchSubmodules": true
+}
+

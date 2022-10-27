@@ -1,31 +1,65 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, isPyPy
+, lazy-object-proxy
+, setuptools
+, setuptools-scm
+, typing-extensions
+, typed-ast
+, pylint
+, pytestCheckHook
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.2.5";
+  version = "2.11.7"; # Check whether the version is compatible with pylint
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.6.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1x5c8fiqa18frwwfdsw41lpqsyff3w4lxvjx9d5ccs4zfkhy2q35";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-HpniGxKf+daMh/sxP9T9UriYRrUFWqk7kDa8r+EqtVI=";
   };
 
-  # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (!isPyPy) typed-ast;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  checkInputs = [ pytestrunner pytest ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    lazy-object-proxy
+    setuptools
+    wrapt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
+    typed-ast
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
+    "test_mro_typing_extensions"
+  ];
+
+  passthru.tests = {
+    inherit pylint;
+  };
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";
-    homepage = https://github.com/PyCQA/astroid;
-    license = licenses.lgpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nand0p ];
+    homepage = "https://github.com/PyCQA/astroid";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

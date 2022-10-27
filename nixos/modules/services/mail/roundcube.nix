@@ -5,36 +5,40 @@ with lib;
 let
   cfg = config.services.roundcube;
   fpm = config.services.phpfpm.pools.roundcube;
+  localDB = cfg.database.host == "localhost";
+  user = cfg.database.username;
+  phpWithPspell = pkgs.php80.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable roundcube.
 
         Also enables nginx virtual host management.
-        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
       '';
     };
 
     hostName = mkOption {
       type = types.str;
       example = "webmail.example.com";
-      description = "Hostname to use for the nginx vhost";
+      description = lib.mdDoc "Hostname to use for the nginx vhost";
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.roundcube;
+      defaultText = literalExpression "pkgs.roundcube";
 
-      example = literalExample ''
+      example = literalExpression ''
         roundcube.withPlugins (plugins: [ plugins.persistent_login ])
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         The package which contains roundcube's sources. Can be overriden to create
         an environment which contains roundcube and third-party plugins.
       '';
@@ -44,53 +48,95 @@ in
       username = mkOption {
         type = types.str;
         default = "roundcube";
-        description = "Username for the postgresql connection";
+        description = lib.mdDoc ''
+          Username for the postgresql connection.
+          If `database.host` is set to `localhost`, a unix user and group of the same name will be created as well.
+        '';
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Host of the postgresql server. If this is not set to
-          <literal>localhost</literal>, you have to create the
+          `localhost`, you have to create the
           postgresql user and database yourself, with appropriate
           permissions.
         '';
       };
       password = mkOption {
         type = types.str;
-        description = "Password for the postgresql connection";
+        description = lib.mdDoc "Password for the postgresql connection. Do not use: the password will be stored world readable in the store; use `passwordFile` instead.";
+        default = "";
+      };
+      passwordFile = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Password file for the postgresql connection. Must be readable by user `nginx`. Ignored if `database.host` is set to `localhost`, as peer authentication will be used.";
       };
       dbname = mkOption {
         type = types.str;
         default = "roundcube";
-        description = "Name of the postgresql database";
+        description = lib.mdDoc "Name of the postgresql database";
       };
     };
 
     plugins = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';
+    };
+
+    dicts = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression "with pkgs.aspellDicts; [ en fr de ]";
+      description = lib.mdDoc ''
+        List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
+      '';
+    };
+
+    maxAttachmentSize = mkOption {
+      type = types.int;
+      default = 18;
+      description = lib.mdDoc ''
+        The maximum attachment size in MB.
+
+        Note: Since roundcube only uses 70% of max upload values configured in php
+        30% is added automatically to [](#opt-services.roundcube.maxAttachmentSize).
+      '';
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Extra configuration for roundcube webmail instance";
+      description = lib.mdDoc "Extra configuration for roundcube webmail instance";
     };
   };
 
   config = mkIf cfg.enable {
+    # backward compatibility: if password is set but not passwordFile, make one.
+    services.roundcube.database.passwordFile = mkIf (!localDB && cfg.database.password != "") (mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}"));
+    warnings = lib.optional (!localDB && cfg.database.password != "") "services.roundcube.database.password is deprecated and insecure; use services.roundcube.database.passwordFile instead";
+
     environment.etc."roundcube/config.inc.php".text = ''
       <?php
 
+      ${lib.optionalString (!localDB) "$password = file_get_contents('${cfg.database.passwordFile}');"}
+
       $config = array();
-      $config['db_dsnw'] = 'pgsql://${cfg.database.username}:${cfg.database.password}@${cfg.database.host}/${cfg.database.dbname}';
+      $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
-      $config['max_message_size'] = '25M';
+      $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+      $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
+      $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
+      $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
+      # by default, spellchecking uses a third-party cloud services
+      $config['spellcheck_engine'] = 'pspell';
+      $config['spellcheck_languages'] = array(${lib.concatMapStringsSep ", " (dict: let p = builtins.parseDrvName dict.shortName; in "'${p.name}' => '${dict.fullName}'") cfg.dicts});
+
       ${cfg.extraConfig}
     '';
 
@@ -107,7 +153,7 @@ in
               location ~* \.php$ {
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass unix:${fpm.socket};
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 include ${pkgs.nginx}/conf/fastcgi.conf;
               }
             '';
@@ -116,17 +162,31 @@ in
       };
     };
 
-    services.postgresql = mkIf (cfg.database.host == "localhost") {
+    services.postgresql = mkIf localDB {
       enable = true;
+      ensureDatabases = [ cfg.database.dbname ];
+      ensureUsers = [ {
+        name = cfg.database.username;
+        ensurePermissions = {
+          "DATABASE ${cfg.database.username}" = "ALL PRIVILEGES";
+        };
+      } ];
     };
 
+    users.users.${user} = mkIf localDB {
+      group = user;
+      isSystemUser = true;
+      createHome = false;
+    };
+    users.groups.${user} = mkIf localDB {};
+
     services.phpfpm.pools.roundcube = {
-      user = "nginx";
+      user = if localDB then user else "nginx";
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on
-        post_max_size = 25M
-        upload_max_filesize = 25M
+        post_max_size = ${cfg.maxAttachmentSize}
+        upload_max_filesize = ${cfg.maxAttachmentSize}
       '';
       settings = mapAttrs (name: mkDefault) {
         "listen.owner" = "nginx";
@@ -140,12 +200,17 @@ in
         "pm.max_requests" = 500;
         "catch_workers_output" = true;
       };
+      phpPackage = phpWithPspell;
+      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
-    systemd.services.roundcube-setup = let
-      pgSuperUser = config.services.postgresql.superUser;
-    in mkMerge [
+    # Restart on config changes.
+    systemd.services.phpfpm-roundcube.restartTriggers = [
+      config.environment.etc."roundcube/config.inc.php".source
+    ];
+
+    systemd.services.roundcube-setup = mkMerge [
       (mkIf (cfg.database.host == "localhost") {
         requires = [ "postgresql.service" ];
         after = [ "postgresql.service" ];
@@ -153,22 +218,31 @@ in
       })
       {
         wantedBy = [ "multi-user.target" ];
-        script = ''
-          mkdir -p /var/lib/roundcube
-          if [ ! -f /var/lib/roundcube/db-created ]; then
-            if [ "${cfg.database.host}" = "localhost" ]; then
-              ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create role ${cfg.database.username} with login password '${cfg.database.password}'";
-              ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create database ${cfg.database.dbname} with owner ${cfg.database.username}";
-            fi
-            PGPASSWORD=${cfg.database.password} ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
-              -f ${cfg.package}/SQL/postgres.initial.sql \
-              -h ${cfg.database.host} ${cfg.database.dbname}
-            touch /var/lib/roundcube/db-created
+        script = let
+          psql = "${lib.optionalString (!localDB) "PGPASSFILE=${cfg.database.passwordFile}"} ${pkgs.postgresql}/bin/psql ${lib.optionalString (!localDB) "-h ${cfg.database.host} -U ${cfg.database.username} "} ${cfg.database.dbname}";
+        in
+        ''
+          version="$(${psql} -t <<< "select value from system where name = 'roundcube-version';" || true)"
+          if ! (grep -E '[a-zA-Z0-9]' <<< "$version"); then
+            ${psql} -f ${cfg.package}/SQL/postgres.initial.sql
           fi
 
-          ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
+          if [ ! -f /var/lib/roundcube/des_key ]; then
+            base64 /dev/urandom | head -c 24 > /var/lib/roundcube/des_key;
+            # we need to log out everyone in case change the des_key
+            # from the default when upgrading from nixos 19.09
+            ${psql} <<< 'TRUNCATE TABLE session;'
+          fi
+
+          ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
         '';
-        serviceConfig.Type = "oneshot";
+        serviceConfig = {
+          Type = "oneshot";
+          StateDirectory = "roundcube";
+          User = if localDB then user else "nginx";
+          # so that the des_key is not world readable
+          StateDirectoryMode = "0700";
+        };
       }
     ];
   };

@@ -1,35 +1,64 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch
-, six, twisted, werkzeug, incremental
-, mock }:
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, hyperlink
+, hypothesis
+, incremental
+, python
+, pythonOlder
+, treq
+, tubes
+, twisted
+, typing-extensions
+, werkzeug
+, zope_interface
+}:
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "17.10.0";
+  version = "unstable-2022-06-26";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "30aaf0d78a987d5dbfe0968a07367ad0c73e02823cc8eef4c54f80ab848370d0";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "twisted";
+    repo = pname;
+    rev = "d8c2b92a3c77aa64c596696fb6f07172ecf94a74";
+    hash = "sha256-RDZqavkteUbARV78OctZtLIrE4RoYDVAanjwE5i/ZeM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests-expect-werkzeug-308.patch";
-      url = https://github.com/twisted/klein/commit/e2a5835b83e37a2bc5faefbfe1890c529b18b9c6.patch;
-      sha256 = "03j0bj3l3hnf7f96rb27i4bzy1iih79ll5bcah7gybdi1wpznh8w";
-    })
+  propagatedBuildInputs = [
+    attrs
+    hyperlink
+    incremental
+    twisted
+    tubes
+    werkzeug
+    zope_interface
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  propagatedBuildInputs = [ six twisted werkzeug incremental ];
-
-  checkInputs = [ mock twisted ];
+  checkInputs = [
+    hypothesis
+    treq
+  ];
 
   checkPhase = ''
-    trial klein
+    ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES klein
   '';
+
+  pythonImportsCheck = [
+    "klein"
+  ];
 
   meta = with lib; {
     description = "Klein Web Micro-Framework";
-    homepage    = "https://github.com/twisted/klein";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/klein";
+    license = licenses.mit;
+    maintainers = with maintainers; [ exarkun ];
   };
 }

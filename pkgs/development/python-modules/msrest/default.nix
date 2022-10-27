@@ -1,53 +1,71 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, requests
-, requests_oauthlib
-, isodate
-, certifi
-, enum34
-, typing
-, aiohttp
 , aiodns
-, pytest
+, aiohttp
+, azure-core
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
 , httpretty
-, mock
-, futures
+, isodate
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
 , trio
 }:
 
 buildPythonPackage rec {
-  version = "0.6.9";
   pname = "msrest";
+  version = "0.7.1";
+  format = "setuptools";
 
-  # no tests in PyPI tarball
-  # see https://github.com/Azure/msrest-for-python/pull/152
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "msrest-for-python";
-    rev = "v${version}";
-    sha256 = "0540dmxz90jsmwvd4q06cr1ficixknjk8q06f2dqcp06w92vnl8r";
+    # no tag for 0.7.1
+    rev = "2d8fd04f68a124d0f3df7b81584accc3270b1afc";
+    hash = "sha256-1EXXXflhDeU+erdI+NsWxSX76ooDTl3+MyQwRzm2xV0=";
   };
 
   propagatedBuildInputs = [
-    requests requests_oauthlib isodate certifi
-  ] ++ lib.optionals (!isPy3k) [ enum34 typing ]
-    ++ lib.optionals isPy3k [ aiohttp aiodns ];
+    azure-core
+    aiodns
+    aiohttp
+    certifi
+    isodate
+    requests
+    requests-oauthlib
+  ];
 
-  checkInputs = [ pytest httpretty ]
-    ++ lib.optionals (!isPy3k) [ mock futures ]
-    ++ lib.optional isPy3k trio;
+  checkInputs = [
+    httpretty
+    pytest-aiohttp
+    pytestCheckHook
+    trio
+  ];
 
-  # Deselected tests require network access
-  checkPhase = ''
-    pytest tests/ -k "not test_conf_async_trio_requests"
-  '';
+  disabledTests = [
+    # Test require network access
+    "test_basic_aiohttp"
+    "test_basic_aiohttp"
+    "test_basic_async_requests"
+    "test_basic_async_requests"
+    "test_conf_async_requests"
+    "test_conf_async_requests"
+    "test_conf_async_trio_requests"
+  ];
+
+  pythonImportsCheck = [
+    "msrest"
+  ];
 
   meta = with lib; {
-    description = "The runtime library 'msrest' for AutoRest generated Python clients.";
-    homepage = https://github.com/Azure/msrest-for-python;
+    description = "The runtime library for AutoRest generated Python clients";
+    homepage = "https://github.com/Azure/msrest-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ bendlas jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ bendlas jonringer maxwilson ];
   };
 }

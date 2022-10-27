@@ -1,28 +1,48 @@
-{ stdenv, buildPythonPackage, fetchPypi, gnupg }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, gnupg
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname   = "python-gnupg";
-  version = "0.4.5";
+  pname = "python-gnupg";
+  version = "0.5.0";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01gckjhvsmr6kfwfk4qdxm5jz8nq8zilbjhzpzpiab6d96cyalrk";
+    sha256 = "sha256-cHWOOH/A4MS628s5T2GsvmizSXCo/tfg98iUaf4XkSo=";
   };
 
-  # Let's make the library default to our gpg binary
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace gnupg.py \
-    --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
+      --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
     substituteInPlace test_gnupg.py \
-    --replace "gpgbinary=GPGBINARY" "gpgbinary='${gnupg}/bin/gpg'" \
-    --replace "test_search_keys" "disabled__test_search_keys"
+      --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg}/bin/gpg')"
   '';
 
-  meta = with stdenv.lib; {
-    description = "A wrapper for the Gnu Privacy Guard";
-    homepage    = https://pypi.python.org/pypi/python-gnupg;
-    license     = licenses.bsd3;
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # network access
+    "test_search_keys"
+  ];
+
+  pythonImportsCheck = [ "gnupg" ];
+
+  meta = with lib; {
+    description = "API for the GNU Privacy Guard (GnuPG)";
+    homepage = "https://github.com/vsajip/python-gnupg";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.unix;
   };
 }

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkgconfig, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkg-config, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
-  version = "git-2014-06-08";
+  version = "unstable-2014-06-08";
 
   src = fetchFromGitHub {
     owner = "kedazo";
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "17v1gcmg5q661b047zxjar735i4d3508dimw1x3z1pk4d1zjhp3x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse autoconf automake makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoconf automake ];
+  buildInputs = [ fuse ];
 
   preConfigure = "./autogen.sh";
 
-  libs = stdenv.lib.makeLibraryPath [ p7zip ]; # 'cause 7z.so is loaded manually
+  libs = lib.makeLibraryPath [ p7zip ]; # 'cause 7z.so is loaded manually
   postInstall = ''
     wrapProgram $out/bin/${pname} --suffix LD_LIBRARY_PATH : "${libs}/p7zip"
 
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     cp TODO README NEWS COPYING ChangeLog AUTHORS $out/share/doc/${pname}/
   '';
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     inherit (src.homepage);
     description = "A FUSE-based filesystem that uses the p7zip library";
     longDescription = ''

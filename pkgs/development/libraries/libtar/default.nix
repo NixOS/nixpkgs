@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchgit, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.2.20";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for manipulating POSIX tar files";
-    homepage = https://repo.or.cz/libtar;
+    homepage = "https://repo.or.cz/libtar";
     license = licenses.bsd3;
     platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];

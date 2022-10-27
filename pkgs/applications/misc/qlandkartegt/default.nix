@@ -7,7 +7,7 @@ mkDerivation rec {
   version = "1.8.1";
 
   src = fetchurl {
-    url = "https://bitbucket.org/maproom/qlandkarte-gt/downloads/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1rwv5ar5jv15g1cc6pp0lk69q3ip10pjazsh3ds2ggaciymha1ly";
   };
 
@@ -31,6 +31,10 @@ mkDerivation rec {
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-qtgui-include.patch?h=qlandkartegt";
       sha256 = "16hql8ignzw4n1hlp4icbvaddqcadh2rjns0bvis720535112sc8";
+    })
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-timespec.patch?h=qlandkartegt";
+      sha256 = "1yzdwfsgjn7q04r9f7s5qk50y25hdl384dxrmpfmkm97fmpgyr7w";
     })
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-ver_str.patch?h=qlandkartegt";
@@ -59,8 +63,6 @@ mkDerivation rec {
     "-DEXIF_INCLUDE_DIRS=${libexif}/include"
   ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     substituteInPlace ConfigureChecks.cmake \
       --replace \$\{PLUGIN_INSTALL_DIR\} "${garmindev}/lib/qlandkartegt"
@@ -79,7 +81,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://www.qlandkarte.org/;
+    homepage = "http://www.qlandkarte.org/";
     description = ''
       QLandkarte GT is the ultimate outdoor aficionado's tool.
       It supports GPS maps in GeoTiff format as well as Garmin's img vector map format.

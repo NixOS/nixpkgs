@@ -1,31 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, mock
-, future, six, setuptools_scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytestCheckHook
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "sievelib";
-  version = "1.1.1";
+  version = "1.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sl1fnwr5jdacrrnq2rvzh4vv1dyxd3x31vnqga36gj8h546h7mz";
+    sha256 = "sha256-7cubQWqYWjzFt9f01+wBPjcuv5DmTJ2eAOIDEpmvOP0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tonioo/sievelib/commit/1deef0e2bf039a0e817ea6f19aaf1947dc9fafbc.patch";
-      sha256 = "0vaj73mcij9dism8vfaai82irh8j1b2n8gf9jl1a19d2l26jrflk";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ future six ];
-  checkInputs = [ mock ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "sievelib"
+  ];
+
+  meta = with lib; {
     description = "Client-side Sieve and Managesieve library written in Python";
-    homepage    = https://github.com/tonioo/sievelib;
-    license     = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ leenaars ];
     longDescription = ''
       A library written in Python that implements RFC 5228 (Sieve: An Email
       Filtering Language) and RFC 5804 (ManageSieve: A Protocol for
@@ -37,5 +42,8 @@ buildPythonPackage rec {
        * Vacation (RFC 5230)
        * Imap4flags (RFC 5232)
     '';
+    homepage = "https://github.com/tonioo/sievelib";
+    license = licenses.mit;
+    maintainers = with maintainers; [ leenaars ];
   };
 }

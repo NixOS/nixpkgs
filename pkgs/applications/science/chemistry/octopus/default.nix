@@ -1,29 +1,56 @@
-{ stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack, autoreconfHook
+{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
+, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
+, python3
+, enableFma ? stdenv.hostPlatform.fmaSupport
+, enableFma4 ? stdenv.hostPlatform.fma4Support
+, enableAvx ? stdenv.hostPlatform.avx2Support
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "9.1";
+  version = "12.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "1l5fqgllk7rij16q7a3la7qq6isy8a5n37vk400qcscw1v32s90h";
+    sha256 = "sha256-dQdb4wGKOQefrgtQVorq6EH9IiAh1tMmj3GiZOXgTBY=";
   };
 
-  nativeBuildInputs = [ perl procps autoreconfHook ];
-  buildInputs = [ libyaml gfortran libxc openblas gsl fftw netcdf arpack ];
+  nativeBuildInputs = [
+    perl
+    procps
+    autoreconfHook
+    gfortran
+  ];
 
-  configureFlags = [
+  buildInputs = [
+    libyaml
+    libxc
+    blas
+    lapack
+    gsl
+    fftw
+    netcdf
+    arpack
+    (python3.withPackages (ps: [ ps.pyyaml ]))
+  ];
+
+  configureFlags = with lib; [
     "--with-yaml-prefix=${libyaml}"
-    "--with-blas=-lopenblas"
-    "--with-lapack=-lopenblas"
+    "--with-blas=-lblas"
+    "--with-lapack=-llapack"
     "--with-fftw-prefix=${fftw.dev}"
     "--with-gsl-prefix=${gsl}"
     "--with-libxc-prefix=${libxc}"
-  ];
+    "--enable-openmp"
+  ] ++ optional enableFma "--enable-fma3"
+    ++ optional enableFma4 "--enable-fma4"
+    ++ optional enableAvx "--enable-avx"
+    ++ optional enableAvx512 "--enable-avx512";
 
   doCheck = false;
   checkTarget = "check-short";
@@ -38,11 +65,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-space time dependent density-functional theory code";
-    homepage = http://octopus-code.org;
+    homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only asl20 lgpl3Plus bsd3 ];
     platforms = [ "x86_64-linux" ];
   };
 }

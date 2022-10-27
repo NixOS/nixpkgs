@@ -1,33 +1,30 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "2048-in-terminal";
-  version = "2017-11-29";
+  version = "unstable-2022-06-13";
 
   src = fetchFromGitHub {
-    sha256 = "1cqv5z1i5zcrvj0w6pdfnnff8m6kjndqxwkwsw5ma9jz503bmyc6";
-    rev = "4e525066b0ef3442e92d2ba8dd373bdc205ece28";
-    repo = "2048-in-terminal";
     owner = "alewmoose";
+    repo = "2048-in-terminal";
+    rev = "bf22f868a2e0e572f22153468585ec0226a4b8b2";
+    sha256 = "sha256-Y5ZQYWOiG3QZZsr+d7olUDGAQ1LhRG9X2hBNQDx+Ztw=";
   };
 
   buildInputs = [ ncurses ];
-
-  prePatch = ''
-    sed -i '1i#include <fcntl.h>\n' save.c
-  '';
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/bin
   '';
-  installFlags = [ "DESTDIR=$(out)/bin" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Animated console version of the 2048 game";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

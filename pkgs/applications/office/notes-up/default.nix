@@ -1,37 +1,43 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
-, vala
-, cmake
+, nix-update-script
+, desktop-file-utils
+, meson
 , ninja
-, gtk3
-, gtksourceview3
-, webkitgtk
-, gtkspell3
-, glib
-, libgee
-, sqlite
-, discount
+, pkg-config
+, python3
+, vala
 , wrapGAppsHook
-, withPantheon ? false }:
+, discount
+, glib
+, gtk3
+, gtksourceview4
+, gtkspell3
+, libgee
+, pantheon
+, sqlite
+, webkitgtk
+}:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
-  version = "2.0.2";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Notes-up";
     rev = version;
-    sha256 = "0bklgp8qrrj9y5m77xqbpy1ld2d9ya3rlxklgzx3alffq5312i4s";
+    sha256 = "sha256-t9BCtdWd2JLrKTcmri1Lgl5RLBYD2xWCtMxoVXz0XPk=";
   };
 
   nativeBuildInputs = [
-    cmake
+    desktop-file-utils
+    meson
     ninja
+    pkg-config
+    python3
     vala
-    pkgconfig
     wrapGAppsHook
   ];
 
@@ -39,7 +45,7 @@ stdenv.mkDerivation rec {
     discount
     glib
     gtk3
-    gtksourceview3
+    gtksourceview4
     gtkspell3
     libgee
     pantheon.granite
@@ -47,15 +53,23 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  # Whether to build with contractor support (Pantheon specific)
-  cmakeFlags = if withPantheon then null else [ "-Dnoele=yes" ];
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Markdown notes editor and manager designed for elementary OS"
-    + stdenv.lib.optionalString withPantheon " - built with Contractor support";
-    homepage = https://github.com/Philip-Scott/Notes-up;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak worldofpeace ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
+    description = "Markdown notes editor and manager designed for elementary OS";
+    homepage = "https://github.com/Philip-Scott/Notes-up";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.philip_scott.notes-up";
   };
 }

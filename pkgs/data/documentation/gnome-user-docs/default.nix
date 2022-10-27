@@ -1,27 +1,41 @@
-{ stdenv, fetchurl, itstool, libxml2, gettext, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, gettext
+, gnome
+, itstool
+, libxml2
+, yelp-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-docs";
-  version = "3.2.2";
+  version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ka0nw2kc85p10y8x31v0wv06a88k7qrgafp4ys04y9fzz0rkcjj";
+    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "NgcWDv/W+R4lqHmLV977IJndcLj+5Ofi8g8mN6woyu4=";
   };
 
-  nativeBuildInputs = [ itstool libxml2 gettext ];
+  nativeBuildInputs = [
+    gettext
+    itstool
+    libxml2
+    yelp-tools
+  ];
+
+  enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.gnome-user-docs";
     };
   };
 
-  meta = {
-    homepage = "https://gitlab.gnome.org/GNOME/gnome-user-docs";
-    description = "GNOME User Documentation";
-    license = stdenv.lib.licenses.cc-by-30;
-    maintainers = gnome3.maintainers;
+  meta = with lib; {
+    description = "User and system administration help for the GNOME desktop";
+    homepage = "https://help.gnome.org/users/gnome-help/";
+    license = licenses.cc-by-30;
+    maintainers = teams.gnome.members;
+    platforms = platforms.all;
   };
 }

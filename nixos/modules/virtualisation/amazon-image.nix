@@ -11,13 +11,22 @@ with lib;
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    inherit (pkgs) curl;
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
 in
 
 {
-  imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
+  imports = [
+    ../profiles/headless.nix
+    # Note: While we do use the headless profile, we also explicitly
+    # turn on the serial console on ttyS0 below. This is because
+    # AWS does support accessing the serial console:
+    # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configure-access-to-serial-console.html
+    ./ec2-data.nix
+    ./amazon-init.nix
+  ];
 
   config = {
 
@@ -28,27 +37,36 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
+      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
+        message = "ENA driver fails to build with kernel >= 5.17";
+      }
     ];
 
     boot.growPartition = cfg.hvm;
 
-    fileSystems."/" = {
+    fileSystems."/" = mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf cfg.efi {
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+      # The ZFS image uses a partition labeled ESP whether or not we're
+      # booting with EFI.
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
+
+    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
+
+    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
+    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -62,7 +80,12 @@ in
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
-    boot.loader.timeout = 0;
+    boot.loader.timeout = 1;
+    boot.loader.grub.extraConfig = ''
+      serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+      terminal_output console serial
+      terminal_input console serial
+    '';
 
     boot.initrd.network.enable = true;
 
@@ -123,17 +146,19 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        copy_bin_and_libs ${pkgs.utillinux}/sbin/swapon
+        copy_bin_and_libs ${pkgs.util-linux}/sbin/swapon
       '';
-
-    # Don't put old configurations in the GRUB menu.  The user has no
-    # way to select them anyway.
-    boot.loader.grub.configurationLimit = 0;
 
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
     services.openssh.enable = true;
     services.openssh.permitRootLogin = "prohibit-password";
+
+    # Enable the serial console on ttyS0
+    systemd.services."serial-getty@ttyS0".enable = true;
+
+    # Creates symlinks for block device names.
+    services.udev.packages = [ pkgs.amazon-ec2-utils ];
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

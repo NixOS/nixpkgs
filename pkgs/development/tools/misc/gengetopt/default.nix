@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, texinfo, help2man }:
+{ fetchurl, lib, stdenv, texinfo, help2man }:
 
 stdenv.mkDerivation rec {
   pname = "gengetopt";
@@ -10,8 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+  # attempts to open non-existent file
+  preCheck = ''
+    rm tests/test_conf_parser_save.sh
+  '';
 
-  enableParallelBuilding = true;
+  # test suite is not thread safe
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [ texinfo help2man ];
 
@@ -31,11 +36,11 @@ stdenv.mkDerivation rec {
          fills a struct
       '';
 
-    homepage = https://www.gnu.org/software/gengetopt/;
+    homepage = "https://www.gnu.org/software/gengetopt/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

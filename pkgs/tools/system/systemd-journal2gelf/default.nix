@@ -1,21 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "SystemdJournal2Gelf-unstable";
-  version = "20190702";
+buildGoModule rec {
+  pname = "SystemdJournal2Gelf";
+  version = "unstable-2022-02-15";
 
   src = fetchFromGitHub {
-    rev = "b1aa5ff31307d11a3c9b4dd08c3cd6230d935ec5";
     owner = "parse-nl";
     repo = "SystemdJournal2Gelf";
-    sha256 = "13jyh34wprjixinmh6l7wj7lr1f6qy6nrjcf8l29a74mczbphnvv";
-    fetchSubmodules = true;
+    rev = "86f9f41b26b6848345c2424fbf1ff907b876bb5b";
+    sha256 = "sha256-xsrKuZVN6Eb0vG98LbQnFqNxHthv+uL/h2HCDiFY0Oo=";
   };
 
-  goPackagePath = "github.com/parse-nl/SystemdJournal2Gelf";
+  vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
+  meta = with lib; {
     description = "Export entries from systemd's journal and send them to a graylog server using gelf";
+    homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz ];
     platforms = platforms.unix;

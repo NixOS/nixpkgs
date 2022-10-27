@@ -1,19 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.0.1";
+  version = "2.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1g6cpicybvbananpjikmjk8npmjk4xvak1wjzji62wc600wkwkb4";
+    sha256 = "588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae";
   };
 
-  meta = with stdenv.lib; {
+  # tests need to be able to set locale
+  LC_ALL = "en_US.UTF-8";
+  checkInputs = [ glibcLocales ];
+
+  # tests which assert on strings don't decode results correctly
+  doCheck = isPy3k;
+
+  pythonImportsCheck = [
+    "urwid"
+  ];
+
+  meta = with lib; {
     description = "A full-featured console (xterm et al.) user interface library";
-    homepage = http://excess.org/urwid;
-    repositories.git = git://github.com/wardi/urwid.git;
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    homepage = "https://urwid.org/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

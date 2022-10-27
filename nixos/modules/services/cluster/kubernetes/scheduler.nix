@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.scheduler;
 in
 {
@@ -11,43 +12,44 @@ in
   options.services.kubernetes.scheduler = with lib.types; {
 
     address = mkOption {
-      description = "Kubernetes scheduler listening address.";
+      description = lib.mdDoc "Kubernetes scheduler listening address.";
       default = "127.0.0.1";
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes scheduler";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
 
     extraOpts = mkOption {
-      description = "Kubernetes scheduler extra command line options.";
+      description = lib.mdDoc "Kubernetes scheduler extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = lib.mdDoc "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler";
 
     leaderElect = mkOption {
-      description = "Whether to start leader election before executing main loop.";
+      description = lib.mdDoc "Whether to start leader election before executing main loop.";
       type = bool;
       default = true;
     };
 
     port = mkOption {
-      description = "Kubernetes scheduler listening port.";
+      description = lib.mdDoc "Kubernetes scheduler listening port.";
       default = 10251;
       type = int;
     };
 
     verbosity = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Optional glog verbosity level for logging statements. See
-        <link xlink:href="https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md"/>
+        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
       type = nullOr int;
@@ -64,12 +66,12 @@ in
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-scheduler \
-          --address=${cfg.address} \
+          --bind-address=${cfg.address} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
-          --port=${toString cfg.port} \
+          --secure-port=${toString cfg.port} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
@@ -78,6 +80,9 @@ in
         Group = "kubernetes";
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 
@@ -91,4 +96,6 @@ in
 
     services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

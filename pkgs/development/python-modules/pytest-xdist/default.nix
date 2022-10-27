@@ -1,35 +1,57 @@
-{ stdenv, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools_scm, pytest-forked, filelock, six, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, pytestCheckHook
+, filelock
+, execnet
+, pytest
+, pytest-forked
+, psutil
+, pexpect
+}:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.28.0";
+  version = "2.5.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f83a485293e81fd57c8a5a85a3f12473a532c5ca7dec518857cbb72766bb526c";
+    sha256 = "sha256-RYDeyj/wTdsqxT66Oddstd1e3qwFDLb7x2iw3XErTt8=";
   };
 
-  nativeBuildInputs = [ setuptools_scm pytest ];
-  checkInputs = [ pytest filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked six ];
+  nativeBuildInputs = [ setuptools-scm ];
+  buildInputs = [
+    pytest
+  ];
+  checkInputs = [ pytestCheckHook filelock pexpect ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil ];
 
-  # Encountered a memory leak
-  # https://github.com/pytest-dev/pytest-xdist/issues/462
-  doCheck = !isPy3k;
+  pytestFlagsArray = [
+    # pytest can already use xdist at this point
+    "--numprocesses=$NIX_BUILD_CORES"
+    "--forked"
+  ];
 
-  checkPhase = ''
-    # Excluded tests access file system
-    py.test testing -k "not test_distribution_rsyncdirs_example \
-                    and not test_rsync_popen_with_path \
-                    and not test_popen_rsync_subdir \
-                    and not test_init_rsync_roots \
-                    and not test_rsyncignore"
-  '';
+  # access file system
+  disabledTests = [
+    "test_distribution_rsyncdirs_example"
+    "test_rsync_popen_with_path"
+    "test_popen_rsync_subdir"
+    "test_rsync_report"
+    "test_init_rsync_roots"
+    "test_rsyncignore"
+    # flakey
+    "test_internal_errors_propagate_to_controller"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
-    homepage = https://github.com/pytest-dev/pytest-xdist;
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
+    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
+    homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

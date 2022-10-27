@@ -1,44 +1,56 @@
-{ stdenv, fetchFromGitHub, python27Packages, geoip }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook
+, gdk-pixbuf
+, gettext
+, gobject-introspection
+, gtk3
+, python3Packages
+}:
 
-with stdenv.lib;
-
-python27Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "1.4.1";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
-    owner = "Nicotine-Plus";
+    owner = "nicotine-plus";
     repo = "nicotine-plus";
-    rev = "4e057d64184885c63488d4213ade3233bd33e67b";
-    sha256 = "11j2qm67sszfqq730czsr2zmpgkghsb50556ax1vlpm7rw3gm33c";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-swFNFw2a5PXwBkh0FBrCy5u3m5gErq29ZmWhMP7MpmQ=";
   };
 
-  propagatedBuildInputs = with python27Packages; [
-    pygtk
-    miniupnpc
-    mutagen
-    notify
-    (GeoIP.override { inherit geoip; })
+  nativeBuildInputs = [ gettext wrapGAppsHook ];
+
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    gobject-introspection
+    gtk3
+    python3Packages.pygobject3
   ];
 
-  # Insert real docs directory.
-  # os.getcwd() is not needed
-  postPatch = ''
-    substituteInPlace ./pynicotine/gtkgui/frame.py \
-      --replace "paths.append(os.getcwd())" "paths.append('"$out"/doc')"
+  postInstall = ''
+    ln -s $out/bin/nicotine $out/bin/nicotine-plus
   '';
 
-  postFixup = ''
-    mkdir -p $out/doc/
-    mv ./doc/NicotinePlusGuide $out/doc/
-    mv $out/bin/nicotine $out/bin/nicotine-plus
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
   '';
 
-  meta = {
+  doCheck = false;
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A graphical client for the SoulSeek peer-to-peer system";
-    homepage = https://www.nicotine-plus.org;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ klntsky ];
-    platforms = platforms.unix;
+    longDescription = ''
+      Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
+      to the official Soulseek client, providing additional functionality while
+      keeping current with the Soulseek protocol.
+    '';
+    homepage = "https://www.nicotine-plus.org";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ehmry klntsky ];
   };
 }

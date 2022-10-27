@@ -2,11 +2,20 @@
 
 targetRoot=/mnt-root
 console=tty1
+verbose="@verbose@"
+
+info() {
+    if [[ -n "$verbose" ]]; then
+        echo "$@"
+    fi
+}
 
 extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
+# hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
+ln -s @extraUtils@/bin /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
@@ -55,7 +64,7 @@ EOF
         echo "Rebooting..."
         reboot -f
     else
-        echo "Continuing..."
+        info "Continuing..."
     fi
 }
 
@@ -63,9 +72,9 @@ trap 'fail' 0
 
 
 # Print a greeting.
-echo
-echo "[1;32m<<< NixOS Stage 1 >>>[0m"
-echo
+info
+info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info
 
 # Make several required directories.
 mkdir -p /etc/udev
@@ -74,30 +83,35 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
-# Function for waiting a device to appear.
+# Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
+    # Split device string using ':' as a delimiter as bcachefs
+    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        [ $try -ne 0 ]
-    fi
+    for dev in $device; do
+        if test ! -e $dev; then
+            echo -n "waiting for device $dev to appear..."
+            try=20
+            while [ $try -gt 0 ]; do
+                sleep 1
+                # also re-try lvm activation now that new block devices might have appeared
+                lvm vgchange -ay
+                # and tell udev to create nodes for the new LVs
+                udevadm trigger --action=add
+                if test -e $dev; then break; fi
+                echo -n "."
+                try=$((try - 1))
+            done
+            echo
+            [ $try -ne 0 ]
+        fi
+    done
 }
 
 # Mount special file systems.
@@ -112,6 +126,18 @@ specialMount() {
 }
 source @earlyMountScript@
 
+# Copy initrd secrets from /.initrd-secrets to their actual destinations
+if [ -d "/.initrd-secrets" ]; then
+    #
+    # Secrets are named by their full destination pathname and stored
+    # under /.initrd-secrets/
+    #
+    for secret in $(cd "/.initrd-secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        cp "/.initrd-secrets/$secret" "$secret"
+    done
+fi
+
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
 mkfifo /tmp/stage-1-init.log.fifo
@@ -120,7 +146,7 @@ eval "exec $logOutFd>&1 $logErrFd>&2"
 if test -w /dev/kmsg; then
     tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
         if test -n "$line"; then
-            echo "<7>stage-1-init: $line" > /dev/kmsg
+            echo "<7>stage-1-init: [$(date)] $line" > /dev/kmsg
         fi
     done &
 else
@@ -143,6 +169,14 @@ for o in $(cat /proc/cmdline); do
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
+            ;;
+        boot.persistence=*)
+            set -- $(IFS==; echo $o)
+            persistence=$2
+            ;;
+        boot.persistence.opt=*)
+            set -- $(IFS==; echo $o)
+            persistence_opt=$2
             ;;
         boot.trace|debugtrace)
             # Show each command.
@@ -200,16 +234,23 @@ done
 mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
-echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+# see comment in stage-1.nix for explanation
+echo @extraUtils@/bin/modprobe-kernel > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
-    echo "loading module $(basename $i)..."
+    info "loading module $(basename $i)..."
     modprobe $i
 done
 
 
 # Create device nodes in /dev.
 @preDeviceCommands@
-echo "running udev..."
+info "running udev..."
+ln -sfn /proc/self/fd /dev/fd
+ln -sfn /proc/self/fd/0 /dev/stdin
+ln -sfn /proc/self/fd/1 /dev/stdout
+ln -sfn /proc/self/fd/2 /dev/stderr
+mkdir -p /etc/systemd
+ln -sfn @linkUnits@ /etc/systemd/network
 mkdir -p /etc/udev
 ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
@@ -221,23 +262,13 @@ udevadm settle
 # XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
 @preLVMCommands@
 
-
-echo "starting device mapper and LVM..."
+info "starting device mapper and LVM..."
 lvm vgchange -ay
 
 if test -n "$debug1devices"; then fail; fi
 
 
 @postDeviceCommands@
-
-
-# Return true if the machine is on AC power, or if we can't determine
-# whether it's on AC power.
-onACPower() {
-    ! test -d "/proc/acpi/battery" ||
-    ! ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1 ||
-    ! cat /proc/acpi/battery/BAT*/state | grep "^charging state" | grep -q "discharg"
-}
 
 
 # Check the specified file system, if appropriate.
@@ -254,6 +285,9 @@ checkFS() {
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
+    # Skip fsck for apfs as the fsck utility does not support repairing the filesystem (no -a option)
+    if [ "$fsType" = apfs ]; then return 0; fi
+
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
 
@@ -266,7 +300,7 @@ checkFS() {
         return 0
     fi
 
-    # Device might be already mounted manually 
+    # Device might be already mounted manually
     # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
     if mount | grep -q "^$device on "; then
         echo "skip checking already mounted $device"
@@ -284,20 +318,9 @@ checkFS() {
         return 0
     fi
 
-    # Don't run `fsck' if the machine is on battery power.  !!! Is
-    # this a good idea?
-    if ! onACPower; then
-        echo "on battery power, so no \`fsck' will be performed on \`$device'"
-        return 0
-    fi
-
     echo "checking $device..."
 
-    fsckFlags=
-    if test "$fsType" != "btrfs"; then
-        fsckFlags="-V -a"
-    fi
-    fsck $fsckFlags "$device"
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then
@@ -334,8 +357,10 @@ mountFS() {
 
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+    # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
+    local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
-    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
+    echo "$device /mnt-root$mountPoint $fsType $optionsPrefixed" >> /etc/fstab
 
     checkFS "$device" "$fsType"
 
@@ -343,34 +368,38 @@ mountFS() {
     case $options in
         *x-nixos.autoresize*)
             if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
                 echo "resizing $device..."
                 e2fsck -fp "$device"
                 resize2fs "$device"
             elif [ "$fsType" = f2fs ]; then
                 echo "resizing $device..."
                 fsck.f2fs -fp "$device"
-                resize.f2fs "$device" 
+                resize.f2fs "$device"
             fi
             ;;
     esac
 
-    # Create backing directories for unionfs-fuse.
-    if [ "$fsType" = unionfs-fuse ]; then
-        for i in $(IFS=:; echo ${options##*,dirs=}); do
-            mkdir -m 0700 -p /mnt-root"${i%=*}"
+    # Create backing directories for overlayfs
+    if [ "$fsType" = overlay ]; then
+        for i in upper work; do
+             dir="$( echo "$optionsPrefixed" | grep -o "${i}dir=[^,]*" )"
+             mkdir -m 0700 -p "${dir##*=}"
         done
     fi
 
-    echo "mounting $device on $mountPoint..."
+    info "mounting $device on $mountPoint..."
 
     mkdir -p "/mnt-root$mountPoint"
 
-    # For CIFS mounts, retry a few times before giving up.
+    # For ZFS and CIFS mounts, retry a few times before giving up.
+    # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
     local n=0
     while true; do
         mount "/mnt-root$mountPoint" && break
-        if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
+        if [ \( "$fsType" != cifs -a "$fsType" != zfs \) -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
+        sleep 1
         n=$((n + 1))
     done
 
@@ -516,7 +545,7 @@ while read -u 3 mountPoint; do
     # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
     if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
       fsType=$(blkid -o value -s TYPE "$device")
-      fsSize=$(blockdev --getsize64 "$device")
+      fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
 
       mkdir -p /tmp-iso
       mount -t "$fsType" /dev/root /tmp-iso
@@ -526,7 +555,18 @@ while read -u 3 mountPoint; do
 
       umount /tmp-iso
       rmdir /tmp-iso
+      if [ -n "$isoPath" ] && [ $fsType = "iso9660" ] && mountpoint -q /findiso; then
+       umount /findiso
+      fi
       continue
+    fi
+
+    if [ "$mountPoint" = / ] && [ "$device" = tmpfs ] && [ ! -z "$persistence" ]; then
+        echo persistence...
+        waitDevice "$persistence"
+        echo enabling persistence...
+        mountFS "$persistence" "$mountPoint" "$persistence_opt" "auto"
+        continue
     fi
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"
@@ -580,11 +620,16 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 
 
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
-# current root.  Note that $stage2Init might be an absolute symlink,
-# in which case "-e" won't work because we're not in the chroot yet.
-if [ ! -e "$targetRoot/$stage2Init" ] && [ ! -L "$targetRoot/$stage2Init" ] ; then
-    echo "stage 2 init script ($targetRoot/$stage2Init) not found"
-    fail
+# current root.  The path has to be valid in the chroot not outside.
+if [ ! -e "$targetRoot/$stage2Init" ]; then
+    stage2Check=${stage2Init}
+    while [ "$stage2Check" != "${stage2Check%/*}" ] && [ ! -L "$targetRoot/$stage2Check" ]; do
+        stage2Check=${stage2Check%/*}
+    done
+    if [ ! -L "$targetRoot/$stage2Check" ]; then
+        echo "stage 2 init script ($targetRoot/$stage2Init) not found"
+        fail
+    fi
 fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run

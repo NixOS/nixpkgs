@@ -1,14 +1,14 @@
-{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
-  version = "unstable-2019-05-09";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "z88dk";
-    repo  = "z88dk";
-    rev = "826d68632c3a7c17df88dd2ec54571a6041da69c";
-    sha256 = "104qgb01sdb97mkcxnq1cdlqi5qvjm4rd9bg5r42pdfz81ss49xj";
+    repo = "z88dk";
+    rev = "v${version}";
+    sha256 = "sha256-vf/hEmcl6R3nsc66G6eETNeW0SV/odk14XIpEPPAbKo=";
     fetchSubmodules = true;
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # we test in checkPhase
     substituteInPlace Makefile \
       --replace 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
-      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='   
+      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
   '';
 
   checkPhase = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"
-    "prefix=$(out)"
+    "DESTDIR=$(out)"
     "git_count=0"
   ];
 
@@ -47,13 +47,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = "libs install";
+  installTargets = [ "libs" "install" ];
 
-  meta = with stdenv.lib; {
-    homepage    = "https://www.z88dk.org";
+  meta = with lib; {
+    homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license     = licenses.clArtistic;
-    maintainers = [ maintainers.genesis ];
-    platforms = platforms.linux;
+    license = licenses.clArtistic;
+    maintainers = [ maintainers.siraben ];
+    platforms = platforms.unix;
   };
 }

@@ -1,32 +1,26 @@
-{stdenv, fetchurl, ocaml, perl}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="ekrhyper";
-    version="1_4_21022014";
-    name="${baseName}-${version}";
-    hash="14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
-    url="http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/ekrh_1_4_21022014.tar.gz";
-    sha256="14xaaxyvfli1nd4vd9fp4j1s8k76z2bhazxzzc7br3q6hc6b8ivw";
-  };
-  buildInputs = [
-    ocaml perl
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ lib, stdenv, fetchurl, ocaml, perl }:
+
+stdenv.mkDerivation rec {
+  pname = "ekrhyper";
+  version = "1_4_21022014";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/ekrh_${version}.tar.gz";
+    sha256 = "sha256-fEe0DIMGj7wO+79/BZf45kykgyTXpbZJsyFSt31XqpM=";
   };
+
+  buildInputs = [
+    ocaml
+    perl
+  ];
   setSourceRoot = "export sourceRoot=$(echo */ekrh/src/)";
   preInstall = "export INSTALLDIR=$out";
   postInstall = ''for i in "$out/casc"/*; do ln -s "$i" "$out/bin/ekrh-casc-$(basename $i)"; done '';
-  meta = {
-    inherit (s) version;
+
+  meta = with lib; {
     description = "Automated first-order theorem prover";
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

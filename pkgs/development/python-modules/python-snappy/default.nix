@@ -4,35 +4,29 @@
 , isPyPy
 , snappy
 , cffi
-, nose
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-snappy";
-  version = "0.5.4";
+  version = "0.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9c26532cfa510f45e8d135cde140e8a5603d3fb254cfec273ebc0ecf9f668e2";
+    sha256 = "sha256-tqEHqwYgasxTWdTFYyvZsi1EhwKnmzFpsMYuD7gIuyo=";
   };
 
   buildInputs = [ snappy ];
 
   propagatedBuildInputs = lib.optional isPyPy cffi;
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    rm -r snappy # prevent local snappy from being picked up
-    nosetests test_snappy.py
-  '' + lib.optionalString isPyPy ''
-    nosetests test_snappy_cffi.py
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";
-    homepage = https://github.com/andrix/python-snappy;
+    homepage = "https://github.com/andrix/python-snappy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

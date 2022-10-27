@@ -1,14 +1,16 @@
-{ stdenv, fetchzip, openmp ? null }:
+{ lib, stdenv, fetchFromGitHub, openmp ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "b2sum";
   version = "unstable-2018-06-11";
 
-  src = fetchzip {
-    url = "https://github.com/BLAKE2/BLAKE2/archive/320c325437539ae91091ce62efec1913cd8093c2.tar.gz";
-    sha256 = "0agmc515avdpr64bsgv87wby2idm0d3wbndxzkhdfjgzhgv0rb8k";
+  src = fetchFromGitHub {
+    owner = "BLAKE2";
+    repo = "BLAKE2";
+    rev = "320c325437539ae91091ce62efec1913cd8093c2";
+    sha256 = "E60M9oP/Sdfg/L3ZxUcDtUXhFz9oP72IybdtVUJh9Sk=";
   };
 
   sourceRoot = "source/b2sum";
@@ -24,6 +26,6 @@ stdenv.mkDerivation {
     license = with licenses; [ asl20 cc0 openssl ];
     maintainers = with maintainers; [ kirelagin ];
     # "This code requires at least SSE2."
-    platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;
+    platforms = [ "x86_64-linux" "i686-linux" ] ++ platforms.darwin;
   };
 }

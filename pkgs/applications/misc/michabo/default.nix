@@ -10,7 +10,6 @@
 
 let
   desktopItem = makeDesktopItem {
-    type = "Application";
     name = "Michabo";
     desktopName = "Michabo";
     exec = "Michabo";

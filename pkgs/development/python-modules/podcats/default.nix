@@ -20,8 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Application that generates RSS feeds for podcast episodes from local audio files";
-    homepage = https://github.com/jakubroztocil/podcats;
+    homepage = "https://github.com/jakubroztocil/podcats";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ the-kenny ];
   };
 }

@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , automake, autoconf, readline
 , libX11, bluez, SDL2
 }:
 
 stdenv.mkDerivation rec {
   pname = "X11basic";
-  version = "1.26";
+  version = "1.27";
 
   src = fetchFromGitHub {
     owner = "kollokollo";
     repo = pname;
     rev = version;
-    sha256 = "0rwj9cf496xailply0rgw695bzdladh2dhy7vdqac1pwbkl53nvd";
+    sha256 = "1hpxzdqnjl1fiwgs2vrjg4kxm29c7pqwk3g1m4p5pm4x33a3d1q2";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf automake readline libX11 SDL2 bluez
+    readline libX11 SDL2 bluez
   ];
 
   preConfigure = "cd src;autoconf";
@@ -36,9 +37,9 @@ stdenv.mkDerivation rec {
     cp -r ../examples $out/share/.
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://x11-basic.sourceforge.net/;
-    description = "A Basic interpreter and compiler with graphics capabilities.";
+  meta = with lib; {
+    homepage = "http://x11-basic.sourceforge.net/";
+    description = "A Basic interpreter and compiler with graphics capabilities";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;

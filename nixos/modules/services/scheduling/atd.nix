@@ -19,19 +19,19 @@ in
     services.atd.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to enable the <command>at</command> daemon, a command scheduler.
+      description = lib.mdDoc ''
+        Whether to enable the {command}`at` daemon, a command scheduler.
       '';
     };
 
     services.atd.allowEveryone = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to make <filename>/var/spool/at{jobs,spool}</filename>
+      description = lib.mdDoc ''
+        Whether to make {file}`/var/spool/at{jobs,spool}`
         writeable by everyone (and sticky).  This is normally not
-        needed since the <command>at</command> commands are
-        setuid/setgid <literal>atd</literal>.
+        needed since the {command}`at` commands are
+        setuid/setgid `atd`.
      '';
     };
 
@@ -57,22 +57,18 @@ in
 
     security.pam.services.atd = {};
 
-    users.users = singleton
-      { name = "atd";
+    users.users.atd =
+      {
         uid = config.ids.uids.atd;
+        group = "atd";
         description = "atd user";
         home = "/var/empty";
       };
 
-    users.groups = singleton
-      { name = "atd";
-        gid = config.ids.gids.atd;
-      };
+    users.groups.atd.gid = config.ids.gids.atd;
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      after = [ "systemd-udev-settle.service" ];
-      wants = [ "systemd-udev-settle.service" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ at ];
@@ -87,14 +83,9 @@ in
         jobdir=/var/spool/atjobs
         etcdir=/etc/at
 
-        for dir in "$spooldir" "$jobdir" "$etcdir"; do
-          if [ ! -d "$dir" ]; then
-              mkdir -p "$dir"
-              chown atd:atd "$dir"
-          fi
-        done
-        chmod 1770 "$spooldir" "$jobdir"
-        ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
+        install -dm755 -o atd -g atd "$etcdir"
+        spool_and_job_dir_perms=${if cfg.allowEveryone then "1777" else "1770"}
+        install -dm"$spool_and_job_dir_perms" -o atd -g atd "$spooldir" "$jobdir"
         if [ ! -f "$etcdir"/at.deny ]; then
             touch "$etcdir"/at.deny
             chown root:atd "$etcdir"/at.deny

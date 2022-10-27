@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, openssl, flex, bison, pkgconfig, groff, libxml2, utillinux
-, file, libtool, which, boost, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, openssl, flex, bison, pkg-config, groff, libxml2, util-linux
+, coreutils, file, libtool, which, boost, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -16,24 +16,26 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkgconfig flex bison libxml2 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config flex bison libxml2 ];
   buildInputs = [
-    openssl groff libxml2 utillinux libtool
+    openssl groff libxml2 util-linux libtool
     which boost
   ];
 
   enableParallelBuilding = true;
 
   # added to fix build with gcc7
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error" "-fpermissive"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
 
   postPatch = ''
     substituteInPlace Makefile.am \
       --replace "contrib/init.d contrib/systemd" ""
     substituteInPlace src/cmds/Makefile.am \
       --replace "/etc/" "$out/etc/"
+    substituteInPlace src/mom_rcp/pathnames.h \
+      --replace /bin/cp ${coreutils}/bin/cp
+    substituteInPlace src/resmom/requests.c \
+      --replace /bin/cp ${coreutils}/bin/cp
   '';
 
   preConfigure = ''
@@ -62,8 +64,8 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/pbs_mkdirs $out/bin/torque.setup
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.adaptivecomputing.com/products/open-source/torque;
+  meta = with lib; {
+    homepage = "http://www.adaptivecomputing.com/products/open-source/torque";
     description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = platforms.linux;
     license = "TORQUEv1.1";

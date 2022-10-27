@@ -1,40 +1,66 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, nose
-, dateutil
-, ipython_genutils
 , decorator
-, pyzmq
-, ipython
-, jupyter_client
+, entrypoints
+, fetchPypi
+, hatchling
 , ipykernel
+, ipython
+, ipython_genutils
+, jupyter-client
+, packaging
+, psutil
+, python-dateutil
+, pythonOlder
+, pyzmq
 , tornado
-, isPy3k
-, futures
+, tqdm
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "6.2.4";
+  version = "8.4.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rf0dbpxf5z82bw8lsjj45r3wdd4wc74anz4wiiaf2rbjqlb1ivn";
+    hash = "sha256-Zwu+BXVTgXQuHqARd9xCj/jz6Urx8NVkLJ0Z83yoKJs=";
   };
 
-  buildInputs = [ nose ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
-  ] ++ lib.optionals (!isPy3k) [ futures ];
+  propagatedBuildInputs = [
+    decorator
+    entrypoints
+    ipykernel
+    ipython
+    ipython_genutils
+    jupyter-client
+    packaging
+    psutil
+    python-dateutil
+    pyzmq
+    tornado
+    tqdm
+    traitlets
+  ];
 
   # Requires access to cluster
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "ipyparallel"
+  ];
+
+  meta = with lib;{
     description = "Interactive Parallel Computing with IPython";
-    homepage = http://ipython.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://ipyparallel.readthedocs.io/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

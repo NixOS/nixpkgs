@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "potrace";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://potrace.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://potrace.sourceforge.net/";
     description = "A tool for tracing a bitmap, which means, transforming a bitmap into a smooth, scalable image";
     platforms = platforms.unix;
     maintainers = [ maintainers.pSub ];

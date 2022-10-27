@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -6,26 +6,25 @@
 , imutils
 , progress
 , matplotlib
-, pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.5.6";
+  version = "1.7.4";
   pname = "vidstab";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b488aed337855ac8b3730f7c6964c2ad41111a8f61ab0b457197696feefa593";
+    sha256 = "865c4a097e2a8527aa8bfc96ab0bcc0d280a88cc93eabcc36531268f5d343ce1";
   };
 
-  checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy pandas imutils progress matplotlib ];
 
   # tests not packaged with pypi
   doCheck = false;
+  pythonImportsCheck = [ "vidstab" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/AdamSpannbauer/python_video_stab;
+  meta = with lib; {
+    homepage = "https://github.com/AdamSpannbauer/python_video_stab";
     description = "Video Stabilization using OpenCV";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

@@ -1,52 +1,136 @@
-{ stdenv, mkDerivation,  fetchurl, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
-, xdg_utils, makeDesktopItem, wrapGAppsHook, removeReferencesTo, qt5
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, fetchpatch
+, fontconfig
+, hunspell
+, hyphen
+, icu
+, imagemagick
+, libjpeg
+, libmtp
+, libpng
+, libstemmer
+, libuchardet
+, libusb1
+, pkg-config
+, podofo
+, poppler_utils
+, python3Packages
+, qmake
+, qtbase
+, qtwayland
+, removeReferencesTo
+, sqlite
+, wrapQtAppsHook
+, xdg-utils
+, unrarSupport ? false
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "calibre";
-  version = "3.47.1";
+  version = "6.7.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "17lz6rawlv268vv8i5kj59rswsipq3c14066adaz1paw54zr62dk";
+    hash = "sha256-B//rBsvOXA5UqGjd2MLcAhDFCvreI7UmtfEpuxaIsa0=";
   };
 
+  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
   patches = [
-    # Patches from Debian that:
-    # - disable plugin installation (very insecure)
-    ./disable_plugins.patch
-    # - switches the version update from enabled to disabled by default
-    ./no_updates_dialog.patch
-    # the unrar patch is not from debian
-  ] ++ stdenv.lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+    #  allow for plugin update check, but no calibre version check
+    (fetchpatch {
+      name = "0001-only-plugin-update.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
+      hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
+    })
+    (fetchpatch {
+      name = "0006-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0006-Hardening-Qt-code.patch";
+      hash = "sha256-CutVTb7K4tjewq1xAjHEGUHFcuuP/Z4FFtj4xQb4zKQ=";
+    })
+  ]
+  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${python2Packages.pyqt5_with_qtwebkit}/share/sip/PyQt5':"  \
-      setup/build_environment.py
+    sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
+      setup/build.py
+    sed -i "s/\[tool.sip.bindings.pictureflow\]/[tool.sip.bindings.pictureflow]\ntags = [\"${python3Packages.sip.platform_tag}\"]/g" \
+      setup/build.py
 
     # Remove unneeded files and libs
-    rm -rf resources/calibre-portable.* \
-           src/odf
+    rm -rf src/odf resources/calibre-portable.*
   '';
 
   dontUseQmakeConfigure = true;
+  dontUseCmakeConfigure = true;
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qmake
+    removeReferencesTo
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
-  ] ++ (with python2Packages; [
-    apsw cssselect css-parser dateutil dnspython html5-parser lxml mechanize netifaces pillow
-    python pyqt5_with_qtwebkit sip
-    regex msgpack beautifulsoup4
-    # the following are distributed with calibre, but we use upstream instead
-    odfpy
-  ]);
+    fontconfig
+    hunspell
+    hyphen
+    icu
+    imagemagick
+    libjpeg
+    libmtp
+    libpng
+    libstemmer
+    libuchardet
+    libusb1
+    podofo
+    poppler_utils
+    qtbase
+    qtwayland
+    sqlite
+    xdg-utils
+  ] ++ (
+    with python3Packages; [
+      (apsw.overrideAttrs (oldAttrs: rec {
+        setupPyBuildFlags = [ "--enable=load_extension" ];
+      }))
+      beautifulsoup4
+      cchardet
+      css-parser
+      cssselect
+      python-dateutil
+      dnspython
+      feedparser
+      html2text
+      html5-parser
+      lxml
+      markdown
+      mechanize
+      msgpack
+      netifaces
+      pillow
+      pychm
+      pyqt-builder
+      pyqt6
+      python
+      regex
+      sip
+      setuptools
+      zeroconf
+      jeepney
+      pycryptodome
+      # the following are distributed with calibre, but we use upstream instead
+      odfpy
+    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
+      # much of calibre's functionality is usable without a web
+      # browser, so we enable building on platforms which qtwebengine
+      # does not support by simply omitting qtwebengine.
+      pyqt6-webengine
+    ] ++ lib.optional (unrarSupport) unrardll
+  );
 
   installPhase = ''
     runHook preInstall
@@ -60,8 +144,15 @@ mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${python2Packages.sip}/bin/sip
-    ${python2Packages.python.interpreter} setup.py install --prefix=$out
+    export XDG_DATA_HOME=$out/share
+    export XDG_UTILS_INSTALL_MODE="user"
+
+    ${python3Packages.python.interpreter} setup.py install --root=$out \
+      --prefix=$out \
+      --libdir=$out/lib \
+      --staging-root=$out \
+      --staging-libdir=$out/lib \
+      --staging-sharedir=$out/share
 
     PYFILES="$out/bin/* $out/lib/calibre/calibre/web/feeds/*.py
       $out/lib/calibre/calibre/ebooks/metadata/*.py
@@ -69,13 +160,6 @@ mkDerivation rec {
 
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     sed -i "2i import sys; sys.argv[0] = 'calibre'" $out/bin/calibre
-
-    # Replace @out@ by the output path.
-    mkdir -p $out/share/applications/
-    cp {$calibreDesktopItem,$ebookEditDesktopItem,$ebookViewerDesktopItem}/share/applications/* $out/share/applications/
-    for entry in $out/share/applications/*.desktop; do
-      substituteAllInPlace $entry
-    done
 
     mkdir -p $out/share
     cp -a man-pages $out/share/man
@@ -85,18 +169,16 @@ mkDerivation rec {
 
   # Wrap manually
   dontWrapQtApps = true;
-  dontWrapGApps = true;
 
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
-    remove-references-to -t ${podofo.dev} $out/lib/calibre/calibre/plugins/podofo.so
+    remove-references-to -t ${podofo.dev} \
+      $out/lib/calibre/calibre/plugins/podofo.so
 
     for program in $out/bin/*; do
-      wrapProgram $program \
-        ''${qtWrapperArgs[@]} \
-        ''${gappsWrapperArgs[@]} \
+      wrapQtApp $program \
         --prefix PYTHONPATH : $PYTHONPATH \
         --prefix PATH : ${poppler_utils.out}/bin
     done
@@ -104,82 +186,17 @@ mkDerivation rec {
 
   disallowedReferences = [ podofo.dev ];
 
-  calibreDesktopItem = makeDesktopItem {
-    name = "calibre-gui";
-    desktopName = "calibre";
-    exec = "@out@/bin/calibre --detach %F";
-    genericName = "E-book library management";
-    icon = "@out@/share/calibre/images/library.png";
-    comment = "Manage, convert, edit, and read e-books";
-    mimeType = stdenv.lib.concatStringsSep ";" [
-      "application/x-mobipocket-subscription"
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      "text/html"
-      "application/x-cbc"
-      "application/ereader"
-      "application/oebps-package+xml"
-      "image/vnd.djvu"
-      "application/x-sony-bbeb"
-      "application/vnd.ms-word.document.macroenabled.12"
-      "text/rtf"
-      "text/x-markdown"
-      "application/pdf"
-      "application/x-cbz"
-      "application/x-mobipocket-ebook"
-      "application/x-cbr"
-      "application/x-mobi8-ebook"
-      "text/fb2+xml"
-      "application/vnd.oasis.opendocument.text"
-      "application/epub+zip"
-      "text/plain"
-      "application/xhtml+xml"
-    ];
-    categories = "Office";
-    extraEntries = ''
-      Actions=Edit;Viewer;
-
-      [Desktop Action Edit]
-      Name=Edit E-book
-      Icon=@out@/share/calibre/images/tweak.png
-      Exec=@out@/bin/ebook-edit --detach %F
-
-      [Desktop Action Viewer]
-      Name=E-book Viewer
-      Icon=@out@/share/calibre/images/viewer.png
-      Exec=@out@/bin/ebook-viewer --detach %F
-    '';
-  };
-
-  ebookEditDesktopItem = makeDesktopItem {
-    name = "calibre-edit-book";
-    desktopName = "Edit E-book";
-    genericName = "E-book Editor";
-    comment = "Edit e-books";
-    icon = "@out@/share/calibre/images/tweak.png";
-    exec = "@out@/bin/ebook-edit --detach %F";
-    categories = "Office;Publishing";
-    mimeType = "application/epub+zip";
-    extraEntries = "NoDisplay=true";
-  };
-
-  ebookViewerDesktopItem = makeDesktopItem {
-    name = "calibre-ebook-viewer";
-    desktopName = "E-book Viewer";
-    genericName = "E-book Viewer";
-    comment = "Read e-books in all the major formats";
-    icon = "@out@/share/calibre/images/viewer.png";
-    exec = "@out@/bin/ebook-viewer --detach %F";
-    categories = "Office;Viewer";
-    mimeType = "application/epub+zip";
-    extraEntries = "NoDisplay=true";
-  };
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://calibre-ebook.com";
     description = "Comprehensive e-book software";
-    homepage = https://calibre-ebook.com;
-    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
-    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
+    longDescription = ''
+      calibre is a powerful and easy to use e-book manager. Users say it’s
+      outstanding and a must-have. It’ll allow you to do nearly everything and
+      it takes things a step beyond normal e-book software. It’s also completely
+      free and open source and great for both casual users and computer experts.
+    '';
+    license = with licenses; if unrarSupport then unfreeRedistributable else gpl3Plus;
+    maintainers = with maintainers; [ pSub AndersonTorres ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

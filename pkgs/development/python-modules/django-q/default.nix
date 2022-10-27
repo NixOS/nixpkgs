@@ -1,24 +1,82 @@
-{ stdenv, buildPythonPackage, fetchPypi, django-picklefield, arrow
-, blessed, django, future }:
+{ arrow
+, blessed
+, buildPythonPackage
+, croniter
+, django
+, django-redis
+, django-picklefield
+, fetchFromGitHub
+, future
+, lib
+, poetry-core
+, pytest-django
+, pytest-mock
+, pytestCheckHook
+, pkgs
+, stdenv
+}:
 
 buildPythonPackage rec {
   pname = "django-q";
-  version = "1.0.1";
+  version = "1.3.9";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "17mqxiacsp2yszak6j48fm7vx0w44pcg86flc63r9y5yhx490n5r";
+  src = fetchFromGitHub {
+    owner = "Koed00";
+    repo = "django-q";
+    sha256 = "sha256-gFSrAl3QGoJEJfvTTvLQgViPPjeJ6BfvgEwgLLo+uAA=";
+    rev = "v${version}";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    django-picklefield arrow blessed django future
+    django-picklefield
+    arrow
+    blessed
+    django
+    future
   ];
 
-  doCheck = false;
+  # fixes empty version string
+  # analog to https://github.com/NixOS/nixpkgs/pull/171200
+  patches = [
+    ./pep-621.patch
+  ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "django_q"
+  ];
+
+  preCheck = ''
+    ${pkgs.redis}/bin/redis-server &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
+
+  checkInputs = [
+    croniter
+    django-redis
+    pytest-django
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  # don't bother with two more servers to test
+  disabledTests = [
+    "test_disque"
+    "test_mongo"
+  ];
+
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
     description = "A multiprocessing distributed task queue for Django";
-    homepage = https://django-q.readthedocs.org;
+    homepage = "https://django-q.readthedocs.org";
     license = licenses.mit;
+    maintainers = with maintainers; [ gador ];
   };
 }

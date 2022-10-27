@@ -1,52 +1,61 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
-, libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
-, colord, lcms2, pipewire ? null
-, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+{ lib, stdenv, fetchurl
+, meson, ninja, pkg-config, python3, wayland-scanner
+, cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
+, libjpeg, seatd, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
+, wayland-protocols, xlibsWrapper
+, pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
+, libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "7.0.0";
+  version = "11.0.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0r4sj11hq4brv3ryrgp2wmkkfz1h59vh9ih18igzjibagch6s2m0";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    sha256 = "078y14ff9wmmbzq314f7bq1bxx0rc12xy4j362n60iamr56qs4x6";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
-    mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
-    libwebp wayland-protocols
-    colord lcms2 pipewire
+    cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
+    libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
+    pango pipewire udev vaapi wayland wayland-protocols xlibsWrapper
   ];
 
   mesonFlags= [
-    "-Dbackend-drm-screencast-vaapi=${boolToString (vaapi != null)}"
-    "-Dbackend-rdp=${boolToString (freerdp != null)}"
-    "-Dxwayland=${boolToString (xwayland != null)}" # Default is true!
+    "-Dbackend-drm-screencast-vaapi=${lib.boolToString (vaapi != null)}"
+    "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
+    "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
     "-Dremoting=false" # TODO
-    "-Dpipewire=${boolToString (pipewire != null)}"
-    "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Dsimple-dmabuf-drm=" # Disables all drivers
+    "-Dpipewire=${lib.boolToString (pipewire != null)}"
+    "-Dimage-webp=${lib.boolToString (libwebp != null)}"
     "-Ddemo-clients=false"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
     # TODO:
     #"--enable-clients"
-    #"--disable-setuid-install" # prevent install target to chown root weston-launch, which fails
-  ] ++ optionals (xwayland != null) [
+  ] ++ lib.optionals (xwayland != null) [
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
-  meta = {
-    description = "Reference implementation of a Wayland compositor";
-    homepage = https://wayland.freedesktop.org/;
-    license = licenses.mit;
+  passthru.providedSessions = [ "weston" ];
+
+  meta = with lib; {
+    description = "A lightweight and functional Wayland compositor";
+    longDescription = ''
+      Weston is the reference implementation of a Wayland compositor, as well
+      as a useful environment in and of itself.
+      Out of the box, Weston provides a very basic desktop, or a full-featured
+      environment for non-desktop uses such as automotive, embedded, in-flight,
+      industrial, kiosks, set-top boxes and TVs. It also provides a library
+      allowing other projects to build their own full-featured environments on
+      top of Weston's core. A small suite of example or demo clients are also
+      provided.
+    '';
+    homepage = "https://gitlab.freedesktop.org/wayland/weston";
+    license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };

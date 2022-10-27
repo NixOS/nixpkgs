@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v4pqyflkpz6sp1884jfsxsa68wnxai4rd5la6sgf3s6civ8qzxm";
+    sha256 = "b57f8c7664460ff7b451b4b44ca2ea9623a374d74e1284c2d5e6df499dc7976c";
   };
 
   propagatedBuildInputs = [ fs six boto3 ];
@@ -15,9 +15,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://pypi.org/project/fs-s3fs/;
+    homepage = "https://pypi.org/project/fs-s3fs/";
     license = licenses.mit;
     description = "Amazon S3 filesystem for PyFilesystem2";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

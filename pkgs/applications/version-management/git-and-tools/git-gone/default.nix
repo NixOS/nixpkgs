@@ -1,28 +1,37 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, curl, libiconv, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, Security
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.1.2";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
-    repo = pname;
+    repo = "git-gone";
     rev = "v${version}";
-    sha256 = "0vgkx227wpg9l2zza6446wzshjhnrhba3qhabibn4gg8wwcqmmxf";
+    sha256 = "sha256-aKBNi797aMPawxD+BLpk0sazXz2g0XTzmDpR/mk07no=";
   };
 
-  cargoSha256 = "11h2whlgjhg3j98a9w9k29njj89wx93w0dcyf981985flin709sx";
+  cargoSha256 = "sha256-vO1ePqDIy5HEBauO3OkMCovrgtIVB9biJExw/q89ivE=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ curl libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
-    description = "Cleanup stale Git branches of pull requests";
+  postInstall = ''
+    installManPage git-gone.1
+  '';
+
+  meta = with lib; {
+    description = "Cleanup stale Git branches of merge requests";
     homepage = "https://github.com/lunaryorn/git-gone";
+    changelog = "https://github.com/lunaryorn/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    platforms = platforms.unix;
   };
 }

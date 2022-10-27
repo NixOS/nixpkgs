@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 
@@ -16,12 +16,13 @@
 , which
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "crip-3.9";
+  pname = "crip";
+  version = "3.9";
   src = fetchurl {
-    url = "http://bach.dynet.com/crip/src/${name}.tar.gz";
+    url = "http://bach.dynet.com/${pname}/src/${pname}-${version}.tar.gz";
     sha256 = "0pk9152wll6fmkj1pki3fz3ijlf06jyk32v31yarwvdkwrk7s9xz";
   };
 
@@ -58,10 +59,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://bach.dynet.com/crip/;
+    homepage = "http://bach.dynet.com/crip/";
     description = "Terminal-based ripper/encoder/tagger tool for creating Ogg Vorbis/FLAC files";
-    license = stdenv.lib.licenses.gpl1;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl1Only;
+    platforms = lib.platforms.linux;
     maintainers = [ maintainers.endgame ];
   };
 }

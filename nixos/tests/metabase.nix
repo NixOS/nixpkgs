@@ -1,20 +1,19 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "metabase";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ mmahut ];
   };
 
   nodes = {
     machine = { ... }: {
       services.metabase.enable = true;
-      virtualisation.memorySize = 1024;
     };
   };
 
   testScript = ''
-    startAll;
-    $machine->waitForUnit("metabase.service");
-    $machine->waitForOpenPort(3000);
-    $machine->waitUntilSucceeds("curl -L http://localhost:3000/setup | grep Metabase");
+    start_all()
+    machine.wait_for_unit("metabase.service")
+    machine.wait_for_open_port(3000)
+    machine.wait_until_succeeds("curl -fL http://localhost:3000/setup | grep Metabase")
   '';
 })

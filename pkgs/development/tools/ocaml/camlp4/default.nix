@@ -1,4 +1,8 @@
-{ stdenv, fetchzip, which, ocaml, ocamlbuild }:
+{ lib, stdenv, fetchzip, which, ocaml, ocamlbuild }:
+
+if lib.versionAtLeast ocaml.version "4.15"
+then throw "camlp4 is not available for OCaml ${ocaml.version}"
+else
 
 let param = {
   "4.02" = {
@@ -22,6 +26,24 @@ let param = {
   "4.08" = {
      version = "4.08+1";
      sha256 = "0qplawvxwai25bi27niw2cgz2al01kcnkj8wxwhxslpi21z6pyx1"; };
+  "4.09" = {
+     version = "4.09+1";
+     sha256 = "1gr33x6xs1rs0bpyq4vzyfxd6vn47jfkg8imi81db2r0cbs0kxx1"; };
+  "4.10" = {
+     version = "4.10+1";
+     sha256 = "093bc1c28wid5li0jwglnd4p3csxw09fmbs9ffybq2z41a5mgay6"; };
+  "4.11" = {
+     version = "4.11+1";
+     sha256 = "0sn7f6im940qh0ixmx1k738xrwwdvy9g7r19bv5218jb6mh0g068"; };
+  "4.12" = {
+     version = "4.12+1";
+     sha256 = "1cfk5ppnd511vzsr9gc0grxbafmh0m3m897aij198rppzxps5kyz"; };
+  "4.13" = {
+     version = "4.13+1";
+     sha256 = "0fzxa1zdhk74mlxpin7p90flks6sp4gkc0mfclmj9zak15rii55n"; };
+  "4.14" = {
+     version = "4.14+1";
+     sha256 = "sha256-cPN3GioZT/Zt6uzbjGUPEGVJcPQdsAnCkU/AQoPfvuo="; };
   }.${ocaml.meta.branch};
 in
 
@@ -36,9 +58,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ocaml ocamlbuild ];
 
+  # build fails otherwise
+  enableParallelBuilding = false;
+
   dontAddPrefix = true;
 
   preConfigure = ''
+    # increase stack space for spacetime variant of the compiler
+    # https://github.com/ocaml/ocaml/issues/7435
+    # but disallowed by darwin sandbox
+    ulimit -s unlimited || true
+
     configureFlagsArray=(
       --bindir=$out/bin
       --libdir=$out/lib/ocaml/${ocaml.version}/site-lib
@@ -51,15 +81,15 @@ stdenv.mkDerivation rec {
     --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
-  installTargets = "install install-META";
+  installTargets = [ "install" "install-META" ];
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A software system for writing extensible parsers for programming languages";
-    homepage = https://github.com/ocaml/camlp4;
+    homepage = "https://github.com/ocaml/camlp4";
     platforms = ocaml.meta.platforms or [];
   };
 }

@@ -1,29 +1,36 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage {
-  pname = "subfinder-git";
-  version = "2018-07-15";
-
-  goPackagePath = "github.com/subfinder/subfinder";
+buildGoModule rec {
+  pname = "subfinder";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
-    owner = "subfinder";
-    repo = "subfinder";
-    rev = "26596affed961c535676395f443acc5af95ac9e6";
-    sha256 = "0m842jyrwlg4kaja1m3kca07jf20fxva0frg66b13zpsm8hdp10q";
+    owner = "projectdiscovery";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-I8VC/fwcDXqdT7U1WrptqVWufCLbk+3Zc2iXsBj6Fno=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-3K2jZRJksY/rzRiFjgU06fkXpySkJI0JTTGvvEDwS6s=";
 
-  meta = with stdenv.lib; {
+  modRoot = "./v2";
+
+  subPackages = [
+    "cmd/subfinder/"
+  ];
+
+  meta = with lib; {
     description = "Subdomain discovery tool";
     longDescription = ''
       SubFinder is a subdomain discovery tool that discovers valid
       subdomains for websites. Designed as a passive framework to be
       useful for bug bounties and safe for penetration testing.
     '';
-    homepage = https://github.com/subfinder/subfinder;
+    homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz Br1ght0ne ];
   };
 }

@@ -1,34 +1,34 @@
-{stdenv, fetchsvn, SDL, libGLU_combined, openal, libvorbis, freealut, SDL_image}:
+{ lib, stdenv, fetchFromSourcehut
+, zig, glfw, libGLU, libGL, openal, libsndfile }:
 
-stdenv.mkDerivation {
-  name = "blackshades-svn-110";
-  src = fetchsvn {
-    url = svn://svn.icculus.org/blackshades/trunk;
-    rev = "110";
-    sha256 = "0kbrh1dympk8scjxr6av24qs2bffz44l8qmw2m5gyqf4g3rxf6ra";
+stdenv.mkDerivation rec {
+  pname = "blackshades";
+  version = "2.4.9";
+
+  src = fetchFromSourcehut {
+    owner = "~cnx";
+    repo = pname;
+    rev = version;
+    fetchSubmodules = true;
+    sha256 = "sha256-Hg+VcWI28GzY/CPm1lUftP0RGztOnzizrKJQVTmeJ9I=";
   };
 
-  NIX_LDFLAGS = "-lSDL_image";
+  nativeBuildInputs = [ zig ];
+  buildInputs = [ glfw libGLU libGL openal libsndfile ];
 
-  buildInputs = [ SDL SDL_image libGLU_combined openal libvorbis freealut ];
-
-  patchPhase = ''
-    sed -i -e s,Data/,$out/opt/$name/Data/,g \
-      -e s,Data:,$out/opt/$name/Data/,g \
-      Source/*.cpp
+  preBuild = ''
+    export HOME=$TMPDIR
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/opt/$name
-    cp objs/blackshades $out/bin
-    cp -R Data IF* Readme $out/opt/$name/
+    zig build -Drelease-fast -Dcpu=baseline --prefix $out install
   '';
 
   meta = {
-    homepage = http://icculus.org/blackshades/;
-    description = "Protect the VIP";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://sr.ht/~cnx/blackshades";
+    description = "A psychic bodyguard FPS";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ McSinyx viric ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -1,37 +1,51 @@
-{
-  stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
-  , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
-  , libarchive, lzma
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, asciidoc
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, libarchive
+, xz
 }:
-stdenv.mkDerivation rec {
-  baseName = "pixz";
-  version = "1.0.6";
-  name = "${baseName}-${version}";
 
-  nativeBuildInputs = [ pkgconfig ];
+stdenv.mkDerivation rec {
+  pname = "pixz";
+  version = "1.0.7";
+
+  nativeBuildInputs = [ pkg-config autoconf automake ];
   buildInputs = [
-    autoconf automake libtool asciidoc libxslt libxml2
-    docbook_xml_dtd_45 docbook_xsl
-    libarchive lzma
+    libtool
+    asciidoc
+    libxslt
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libarchive
+    xz
   ];
   preBuild = ''
     echo "XML_CATALOG_FILES='$XML_CATALOG_FILES'"
   '';
   src = fetchFromGitHub {
     owner = "vasi";
-    repo = baseName;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0q61wqg2yxrgd4nc7256mf7izp92is29ll3rax1cxr6fj9jrd8b7";
+    sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };
   preConfigure = ''
     ./autogen.sh
   '';
 
-  meta = {
-    inherit version;
-    description = ''A parallel compressor/decompressor for xz format'';
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+  meta = with lib; {
+    description = "A parallel compressor/decompressor for xz format";
+    license = licenses.bsd2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
   };
 }

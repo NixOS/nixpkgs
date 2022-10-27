@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "repoze.who";
-  version = "2.3";
+  version = "2.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b95dadc1242acc55950115a629cfb1352669774b46d22def51400ca683efea28";
+    sha256 = "sha256-ikybkmi0/w7dkG6Xwu7XzoPrn2LkJQv+A7zbum0xojc=";
   };
 
   propagatedBuildInputs = [ zope_interface webob ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WSGI Authentication Middleware / API";
     homepage = "http://www.repoze.org";
     license = licenses.bsd0;

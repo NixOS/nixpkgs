@@ -1,31 +1,51 @@
-{ stdenv, fetchzip, bison, flex, which, perl
-, sensord ? false, rrdtool ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, bison
+, flex
+, which
+, perl
+, sensord ? false
+, rrdtool ? null
 }:
 
 assert sensord -> rrdtool != null;
 
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
-  version = "3.5.0";
+  version = "3.6.0";
+  dashedVersion = lib.replaceStrings [ "." ] [ "-" ] version;
 
-  src = fetchzip {
-    url = "https://github.com/lm-sensors/lm-sensors/archive/V${stdenv.lib.replaceStrings ["."] ["-"] version}.tar.gz";
-    sha256 = "1mdrnb9r01z1xfdm6dpkywvf9yy9a4yzb59paih9sijwmigv19fj";
+  src = fetchFromGitHub {
+    owner = "lm-sensors";
+    repo = "lm-sensors";
+    rev = "V${dashedVersion}";
+    hash = "sha256-9lfHCcODlS7sZMjQhK0yQcCBEoGyZOChx/oM0CU37sY=";
   };
 
   nativeBuildInputs = [ bison flex which ];
-  buildInputs = [ perl ]
-   ++ stdenv.lib.optional sensord rrdtool;
+  # bash is required for correctly replacing the shebangs in all tools for cross-compilation.
+  buildInputs = [ bash perl ]
+    ++ lib.optional sensord rrdtool;
 
-  preBuild = ''
-    makeFlagsArray=(PREFIX=$out ETCDIR=$out/etc
-    ${stdenv.lib.optionalString sensord "PROG_EXTRA=sensord"})
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
 
-  meta = with stdenv.lib; {
-    homepage = https://hwmon.wiki.kernel.org/lm_sensors;
+  installFlags = [
+    "ETCDIR=${placeholder "out"}/etc"
+  ];
+
+  meta = with lib; {
+    homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
+    changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
+    maintainers = with maintainers; [ pmy ];
     platforms = platforms.linux;
+    mainProgram = "sensors";
   };
 }

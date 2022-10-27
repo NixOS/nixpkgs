@@ -1,25 +1,18 @@
-{ stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
+{ lib, stdenv, fetchurl
+, zlibSupport ? true, zlib
+, sslSupport ? true, openssl
+, idnSupport ? true, libidn
 }:
 
-assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
-assert idnSupport -> libidn != null;
+with lib;
 
-with stdenv.lib;
-
-let
-  version = "1.0.22";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec{
   pname = "gloox";
-  inherit version;
+  version = "1.0.24";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "0r69gq8if9yy1amjzl7qrq9lzhhna7qgz905ln4wvkwchha1ppja";
+    sha256 = "1jgrd07qr9jvbb5hcmhrqz4w4lvwc51m30jls1fgxf1f5az6455f";
   };
 
   buildInputs = [ ]
@@ -29,9 +22,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A portable high-level Jabber/XMPP library for C++";
-    homepage = http://camaya.net/gloox;
+    homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,36 +1,52 @@
-{ lib, isPy3k, fetchPypi, buildPythonPackage
-, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, pdm-pep517
+, sybil
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "1.0";
-  disabled = !isPy3k;
+  version = "3.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i3sbxkdlbb4560rrlmwwd5y4ps7k73lp4d8wnmd7ag9k426gjkx";
+    sha256 = "sha256-MJjuEtAQfMUAnWH06A5e3PrEzaK9qgRkSvdYJ8sSGxg=";
   };
 
-  checkInputs = [
-    pytest
+  nativeBuildInputs = [
+    pdm-pep517
   ];
 
-  checkPhase = ''
-    pytest --pyargs public
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    sybil
+  ];
+
+  postPatch = ''
+    sed -i '/cov=public/d' pyproject.toml
   '';
 
+  pythonImportsCheck = [
+    "public"
+  ];
+
   meta = with lib; {
-    homepage = https://public.readthedocs.io/en/latest/;
-    description = "A decorator and function which populates a module's __all__ and globals";
+    description = "Python decorator and function which populates a module's __all__ and globals";
+    homepage = "https://public.readthedocs.io/";
     longDescription = ''
       This is a very simple decorator and function which populates a module's
       __all__ and optionally the module globals.
-
-      This provides both a pure-Python implementation and a C implementation. It is
-      proposed that the C implementation be added to builtins_ for Python 3.6.
-
-      This proposal seems to have been rejected, for more information see
-      https://bugs.python.org/issue26632.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ eadwu ];

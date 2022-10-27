@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
-, alsaLib ? null
+{ lib, stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
+, Accelerate
+, AudioUnit
+, CoreAudio
+, CoreMIDI
+, alsa-lib ? null
 , libpulseaudio ? null
 , libjack2 ? null
 , liblo ? null
@@ -14,12 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "csound";
-  # When updating, please check if https://github.com/csound/csound/issues/1078
-  # has been fixed in the new version so we can use the normal fluidsynth
-  # version and remove fluidsynth 1.x from nixpkgs again.
-  version = "6.13.0";
-
-  enableParallelBuilding = true;
+  version = "6.17.0";
 
   hardeningDisable = [ "format" ];
 
@@ -27,25 +26,33 @@ stdenv.mkDerivation rec {
     owner = "csound";
     repo = "csound";
     rev = version;
-    sha256 = "14822ybqyp31z18gky2y9zadr9dkbhabg97y139py73w7v3af1bh";
+    sha256 = "sha256-O19jm3JxHg4TcQzWQZu1uFjfYN2FR41fCRq5YGnTGD0=";
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
-    ++ stdenv.lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
+    ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
+    ++ lib.optional (libjack2 != null) "-DJACK_HEADER=${libjack2}/include/jack/jack.h";
 
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
-    ++ builtins.filter (optional: optional != null) [
-      alsaLib libpulseaudio libjack2
+    ++ lib.optionals stdenv.isDarwin [
+      Accelerate AudioUnit CoreAudio CoreMIDI
+    ] ++ lib.optionals stdenv.isLinux (builtins.filter (optional: optional != null) [
+      alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen
-      curl tcltk fltk ];
+      curl tcltk fltk
+    ]);
 
-  meta = with stdenv.lib; {
+  postInstall = lib.optional stdenv.isDarwin ''
+    mkdir -p $out/Library/Frameworks
+    ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
+  '';
+
+  meta = with lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
-    homepage = http://www.csounds.com/;
-    license = licenses.gpl2;
+    homepage = "https://csound.com/";
+    license = licenses.lgpl21Plus;
     maintainers = [maintainers.marcweber];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
-

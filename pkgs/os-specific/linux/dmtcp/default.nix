@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, bash, perl, python }:
+{ lib, stdenv, fetchFromGitHub, bash, perl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
-  version = "2.6.0";
+  version = "unstable-2022-02-28";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "01skyhr573w1dygvkwz66lvir2jsq443fjwkysglwxvmrdfz9kwd";
+    rev = "133687764c6742906006a1d247e3b83cd860fa1d";
+    hash = "sha256-9Vr8IhoeATCfyt7Lp7kYe/7e87mFX9KMNGTqxJgIztE=";
   };
 
   dontDisableStatic = true;
@@ -21,19 +21,19 @@ stdenv.mkDerivation rec {
     substituteInPlace configure \
       --replace '#define ELF_INTERPRETER "$interp"' \
                 "#define ELF_INTERPRETER \"$(cat $NIX_CC/nix-support/dynamic-linker)\""
-    substituteInPlace src/dmtcp_coordinator.cpp \
+    substituteInPlace src/restartscript.cpp \
       --replace /bin/bash ${stdenv.shell}
-    substituteInPlace util/gdb-add-symbol-file \
+    substituteInPlace util/dmtcp_restart_wrapper.sh \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace test/autotest.py \
       --replace /bin/bash ${bash}/bin/bash \
       --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace /usr/bin/python ${python}/bin/python \
+      --replace /usr/bin/python ${python3.interpreter} \
       --replace "os.environ['USER']" "\"nixbld1\"" \
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed MultiThreaded Checkpointing";
     longDescription = ''
       DMTCP (Distributed MultiThreaded Checkpointing) is a tool to

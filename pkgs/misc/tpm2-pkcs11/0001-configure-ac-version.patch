@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index e861e42..018c19c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -26,7 +26,7 @@
+ #;**********************************************************************;
+ 
+ AC_INIT([tpm2-pkcs11],
+-  [m4_esyscmd_s([git describe --tags --always --dirty])],
++  [git-@VERSION@],
+   [https://github.com/tpm2-software/tpm2-pkcs11/issues],
+   [],
+   [https://github.com/tpm2-software/tpm2-pkcs11])

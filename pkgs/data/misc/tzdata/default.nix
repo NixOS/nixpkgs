@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, buildPackages }:
+{ lib, stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2019b";
+  version = "2022e";
 
-  srcs =
-    [ (fetchurl {
-        url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "0r0clnlslwm15m1c61dinf1fi9ffgl6aipng7i7yryfwj0n0kn85";
-      })
-      (fetchurl {
-        url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "0vbmswvv3li25s31shyllq5v24449lxnrki9hr043nipjd09sirf";
-      })
-    ];
+  srcs = [
+    (fetchurl {
+      url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
+      hash = "sha256-jeTCaG3OPRqukDBxnmgUkxwhai1eiR7D0zLm9lFq7M0=";
+    })
+    (fetchurl {
+      url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
+      hash = "sha256-1AKAJTmA6JFo5r5CdahSv5UhUk1HaE3jE1uaXKOHcQs=";
+    })
+  ];
 
   sourceRoot = ".";
+
+  patches = lib.optionals stdenv.hostPlatform.isWindows [
+    ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
+  ];
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [];
@@ -26,33 +30,30 @@ stdenv.mkDerivation rec {
     "BINDIR=$(bin)/bin"
     "ZICDIR=$(bin)/bin"
     "ETCDIR=$(TMPDIR)/etc"
-    "TZDEFAULT=$(TMPDIR)/etc"
+    "TZDEFAULT=tzdefault-to-remove"
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
+    "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SYMLINK=0"
+    "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   doCheck = false; # needs more tools
 
-  installFlags = [ "ZIC=./zic-native" ];
-
-  preInstall = ''
-     mv zic.o zic.o.orig
-     mv zic zic.orig
-     make $makeFlags cc=cc AR=ar zic
-     mv zic zic-native
-     mv zic.o.orig zic.o
-     mv zic.orig zic
-  '';
+  installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "zic=${buildPackages.tzdata.bin}/bin/zic"
+  ];
 
   postInstall =
     ''
       rm $out/share/zoneinfo-posix
+      rm $out/share/zoneinfo/tzdefault-to-remove
       mkdir $out/share/zoneinfo/posix
       ( cd $out/share/zoneinfo/posix; ln -s ../* .; rm posix )
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
@@ -63,10 +64,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./tzdata-setup-hook.sh;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.iana.org/time-zones;
+  meta = with lib; {
+    homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
+    changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
+    license = with licenses; [
+      bsd3 # tzcode
+      publicDomain # tzdata
+    ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ajs124 fpletz ];
   };
 }

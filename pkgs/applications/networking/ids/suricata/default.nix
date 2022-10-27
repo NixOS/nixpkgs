@@ -3,7 +3,7 @@
 , fetchurl
 , clang
 , llvm
-, pkgconfig
+, pkg-config
 , makeWrapper
 , file
 , hyperscan
@@ -34,18 +34,18 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "5.0.0";
+  version = "6.0.6";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0qwav4qpvx3i5khkyvdvx42n8b9mza8c4cpxvrf7m4lnf51cqgba";
+    sha256 = "sha256-ABc2NPp2ruY244qQscAmFskD5CFzEH1HtBFJYLX76Dk=";
   };
 
   nativeBuildInputs = [
     clang
     llvm
     makeWrapper
-    pkgconfig
+    pkg-config
   ]
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
@@ -109,12 +109,12 @@ stdenv.mkDerivation rec {
     "--with-libnet-includes=${libnet}/include"
     "--with-libnet-libraries=${libnet}/lib"
   ]
-  ++ lib.optional hyperscanSupport [
+  ++ lib.optionals hyperscanSupport [
     "--with-libhs-includes=${hyperscan.dev}/include/hs"
     "--with-libhs-libraries=${hyperscan}/lib"
   ]
-  ++ lib.optional redisSupport [ "--enable-hiredis" ]
-  ++ lib.optional rustSupport [
+  ++ lib.optional redisSupport "--enable-hiredis"
+  ++ lib.optionals rustSupport [
     "--enable-rust"
     "--enable-rust-experimental"
   ];
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  installTargets = "install install-conf";
+  installTargets = [ "install" "install-conf" ];
 
   postInstall = ''
     wrapProgram "$out/bin/suricatasc" \
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       --replace "/etc/suricata" "$out/etc/suricata"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata-ids.org";
     license = licenses.gpl2;

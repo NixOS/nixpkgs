@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmtp, libid3tag, flac, libvorbis, gtk3
+{ lib, stdenv, fetchurl, pkg-config, libmtp, libid3tag, flac, libvorbis, gtk3
 , gsettings-desktop-schemas, wrapGAppsHook
 }:
 
@@ -13,20 +13,26 @@ stdenv.mkDerivation {
     sha256 = "04q6byyq002fhzkc2rkkahwh5b6272xakaj4m3vwm8la8jf0r0ss";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ libmtp libid3tag flac libvorbis gtk3 gsettings-desktop-schemas ];
 
   enableParallelBuilding = true;
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: gmtp-preferences.o:src/main.h:72: multiple definition of
+  #     `scrolledwindowMain'; gmtp-about.o:src/main.h:72: first defined here
+  # TODO: can be removed when 1.4.0 is released.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--datapath \"$out/share\"");
+    gappsWrapperArgs+=(--add-flags "--datapath $out/share");
   '';
 
   meta = {
-    description = "A simple MP3 and Media player client for UNIX and UNIX like systems.";
-    homepage = https://gmtp.sourceforge.io;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pbogdan ];
-    license = stdenv.lib.licenses.bsd3;
+    description = "A simple MP3 and Media player client for UNIX and UNIX like systems";
+    homepage = "https://gmtp.sourceforge.io";
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
   };
 }

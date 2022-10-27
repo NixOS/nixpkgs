@@ -1,44 +1,65 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, Security, utillinux }:
+{ lib
+, buildGoModule
+, fetchpatch
+, fetchFromGitHub
+, git
+, groff
+, installShellFiles
+, makeWrapper
+, unixtools
+, nixosTests
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hub";
-  version = "2.12.8";
-
-  goPackagePath = "github.com/github/hub";
-
-  # Only needed to build the man-pages
-  excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
+  version = "unstable-2022-04-04";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0a2dpg0w29nblk1dba9a35bpwwyf0zbqcgrwn4a8diyx27b77x3x";
+    rev = "363513a0f822a8bde5b620e5de183702280d4ace";
+    sha256 = "sha256-jipZHmGtPTsztTeVZofaMReU4AEU9k6mdw9YC4KKB1Q=";
   };
 
-  nativeBuildInputs = [ groff utillinux ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-
   postPatch = ''
-    patchShebangs .
+    patchShebangs script/
   '';
+
+  vendorSha256 = "sha256-wQH8V9jRgh45JGs4IfYS1GtmCIYdo93JG1UjJ0BGxXk=";
+
+  # Only needed to build the man-pages
+  excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
+
+  nativeBuildInputs = [
+    groff
+    installShellFiles
+    makeWrapper
+    unixtools.col
+  ];
 
   postInstall = ''
-    cd go/src/${goPackagePath}
-    install -D etc/hub.zsh_completion "$bin/share/zsh/site-functions/_hub"
-    install -D etc/hub.bash_completion.sh "$bin/share/bash-completion/completions/hub"
-    install -D etc/hub.fish_completion  "$bin/share/fish/vendor_completions.d/hub.fish"
+    installShellCompletion --cmd hub \
+      --bash etc/hub.bash_completion.sh \
+      --fish etc/hub.fish_completion \
+      --zsh etc/hub.zsh_completion
 
-    LC_ALL=C.UTF8 \
-    make man-pages
-    cp -vr --parents share/man/man[1-9]/*.[1-9] $bin/
+    LC_ALL=C.UTF8 make man-pages
+    installManPage share/man/man[1-9]/*.[1-9]
+
+    wrapProgram $out/bin/hub \
+      --suffix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    git
+  ];
+
+  passthru.tests = { inherit (nixosTests) hub; };
+
+  meta = with lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
+    homepage = "https://hub.github.com/";
     license = licenses.mit;
-    homepage = https://hub.github.com/;
-    maintainers = with maintainers; [ the-kenny globin ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ globin ];
   };
 }

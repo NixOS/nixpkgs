@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub, lm_sensors }:
+{ lib, buildPythonPackage, unittestCheckHook, fetchFromGitHub, lm_sensors }:
 buildPythonPackage {
   version = "2017-07-13";
   pname = "pysensors";
@@ -17,15 +17,14 @@ buildPythonPackage {
   # due to sandboxing
   doCheck = false;
 
-  checkPhase = ''
-    cd tests
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
-  meta = with stdenv.lib; {
+  unittestFlagsArray = [ "-s" "tests" ];
+
+  meta = with lib; {
     maintainers = with maintainers; [ guibou ];
     description = "Easy hardware health monitoring in Python for Linux systems";
-    homepage = https://pysensors.readthedocs.org;
+    homepage = "https://pysensors.readthedocs.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

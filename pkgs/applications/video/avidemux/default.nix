@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig
+{ stdenv, lib, fetchurl, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.4";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "1acdb3m37vdzzbm8mwyibcn8msi7birb5v30qfi7jli5r00src3x";
+    sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
   patches = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkgconfig ]
+    [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     cd "$sourceRoot"
     patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libXext}/lib"
     ${stdenv.shell} bootStrap.bash \
       --with-core \
       ${if withQT then "--with-qt" else "--without-qt"} \
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
 
     ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ${stdenv.lib.optionalString withQT ''
+    ${lib.optionalString withQT ''
       ${wrapQtApp "$out/bin/avidemux3_qt5"}
       ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
     ''}
@@ -88,10 +87,10 @@ stdenv.mkDerivation rec {
     fixupPhase
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://fixounet.free.fr/avidemux/;
+  meta = with lib; {
+    homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

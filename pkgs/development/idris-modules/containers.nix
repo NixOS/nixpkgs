@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "containers";
+  pname = "containers";
   version = "2017-09-10";
 
   idrisDeps = [ effects test ];
@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Various data structures for use in the Idris Language.";
-    homepage = https://github.com/jfdm/idris-containers;
+    homepage = "https://github.com/jfdm/idris-containers";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

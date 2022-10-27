@@ -16,7 +16,7 @@
      certain packets anyway, you can insert rules at the start of
      this chain.
 
-   - ‘nixos-fw-rpfilter’ is used as the main chain in the raw table,
+   - ‘nixos-fw-rpfilter’ is used as the main chain in the mangle table,
      called from the built-in ‘PREROUTING’ chain.  If the kernel
      supports it and `cfg.checkReversePath` is set this chain will
      perform a reverse path filter test.
@@ -42,16 +42,7 @@ let
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
-  helpers =
-    ''
-      # Helper command to manipulate both the IPv4 and IPv6 tables.
-      ip46tables() {
-        iptables -w "$@"
-        ${optionalString config.networking.enableIPv6 ''
-          ip6tables -w "$@"
-        ''}
-      }
-    '';
+  helpers = import ./helpers.nix { inherit config lib; };
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
     #! ${pkgs.runtimeShell} -e
@@ -118,28 +109,28 @@ let
     ip46tables -N nixos-fw
 
     # Clean up rpfilter rules
-    ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2> /dev/null || true
-    ip46tables -t raw -F nixos-fw-rpfilter 2> /dev/null || true
-    ip46tables -t raw -X nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -D PREROUTING -j nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -F nixos-fw-rpfilter 2> /dev/null || true
+    ip46tables -t mangle -X nixos-fw-rpfilter 2> /dev/null || true
 
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       # Perform a reverse-path test to refuse spoofers
-      # For now, we just drop, as the raw table doesn't have a log-refuse yet
-      ip46tables -t raw -N nixos-fw-rpfilter 2> /dev/null || true
-      ip46tables -t raw -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+      # For now, we just drop, as the mangle table doesn't have a log-refuse yet
+      ip46tables -t mangle -N nixos-fw-rpfilter 2> /dev/null || true
+      ip46tables -t mangle -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCP4 client without first having to use APIPA
-      iptables -t raw -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
+      iptables -t mangle -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
 
       # Allows this host to act as a DHCPv4 server
-      iptables -t raw -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
+      iptables -t mangle -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
 
       ${optionalString cfg.logReversePathDrops ''
-        ip46tables -t raw -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
+        ip46tables -t mangle -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
       ''}
-      ip46tables -t raw -A nixos-fw-rpfilter -j DROP
+      ip46tables -t mangle -A nixos-fw-rpfilter -j DROP
 
-      ip46tables -t raw -A PREROUTING -j nixos-fw-rpfilter
+      ip46tables -t mangle -A PREROUTING -j nixos-fw-rpfilter
     ''}
 
     # Accept all traffic on the trusted interfaces.
@@ -188,10 +179,6 @@ let
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
 
-    # Accept IPv4 multicast.  Not a big security risk since
-    # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
-
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
       iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
@@ -231,7 +218,7 @@ let
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
     ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
-      ip46tables -t raw -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
+      ip46tables -t mangle -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
     ''}
 
     ${cfg.extraStopCommands}
@@ -271,7 +258,7 @@ let
       apply = canonicalizePortList;
       example = [ 22 80 ];
       description =
-        '' 
+        lib.mdDoc ''
           List of TCP ports on which incoming connections are
           accepted.
         '';
@@ -282,7 +269,7 @@ let
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
-        '' 
+        lib.mdDoc ''
           A range of TCP ports on which incoming connections are
           accepted.
         '';
@@ -294,7 +281,7 @@ let
       apply = canonicalizePortList;
       example = [ 53 ];
       description =
-        ''
+        lib.mdDoc ''
           List of open UDP ports.
         '';
     };
@@ -304,7 +291,7 @@ let
       default = [ ];
       example = [ { from = 60000; to = 61000; } ];
       description =
-        ''
+        lib.mdDoc ''
           Range of open UDP ports.
         '';
     };
@@ -323,7 +310,7 @@ in
         type = types.bool;
         default = true;
         description =
-          ''
+          lib.mdDoc ''
             Whether to enable the firewall.  This is a simple stateful
             firewall that blocks connection attempts to unauthorised TCP
             or UDP ports on this machine.  It does not affect packet
@@ -334,10 +321,10 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.iptables;
-        defaultText = "pkgs.iptables";
-        example = literalExample "pkgs.iptables-nftables-compat";
+        defaultText = literalExpression "pkgs.iptables";
+        example = literalExpression "pkgs.iptables-legacy";
         description =
-          ''
+          lib.mdDoc ''
             The iptables package to use for running the firewall service."
           '';
       };
@@ -346,8 +333,10 @@ in
         type = types.bool;
         default = true;
         description =
-          ''
+          lib.mdDoc ''
             Whether to log rejected or dropped incoming connections.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -355,10 +344,12 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             Whether to log all rejected or dropped incoming packets.
             This tends to give a lot of log messages, so it's mostly
             useful for debugging.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -366,8 +357,8 @@ in
         type = types.bool;
         default = true;
         description =
-          ''
-            If <option>networking.firewall.logRefusedPackets</option>
+          lib.mdDoc ''
+            If {option}`networking.firewall.logRefusedPackets`
             and this option are enabled, then only log packets
             specifically directed at this machine, i.e., not broadcasts
             or multicasts.
@@ -378,7 +369,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             If set, refused packets are rejected rather than dropped
             (ignored).  This means that an ICMP "port unreachable" error
             message is sent back to the client (or a TCP RST packet in
@@ -392,7 +383,7 @@ in
         default = [ ];
         example = [ "enp0s2" ];
         description =
-          ''
+          lib.mdDoc ''
             Traffic coming in from these interfaces will be accepted
             unconditionally.  Traffic from the loopback (lo) interface
             will always be accepted.
@@ -403,7 +394,7 @@ in
         type = types.bool;
         default = true;
         description =
-          ''
+          lib.mdDoc ''
             Whether to respond to incoming ICMPv4 echo requests
             ("pings").  ICMPv6 pings are always allowed because the
             larger address space of IPv6 makes network scanning much
@@ -416,7 +407,7 @@ in
         default = null;
         example = "--limit 1/minute --limit-burst 5";
         description =
-          ''
+          lib.mdDoc ''
             If pings are allowed, this allows setting rate limits
             on them.  If non-null, this option should be in the form of
             flags like "--limit 1/minute --limit-burst 5"
@@ -426,9 +417,10 @@ in
       checkReversePath = mkOption {
         type = types.either types.bool (types.enum ["strict" "loose"]);
         default = kernelHasRPFilter;
+        defaultText = literalMD "`true` if supported by the chosen kernel";
         example = "loose";
         description =
-          ''
+          lib.mdDoc ''
             Performs a reverse path filter test on a packet.  If a reply
             to the packet would not be sent via the same interface that
             the packet arrived on, it is refused.
@@ -441,8 +433,6 @@ in
             drop the packet if the source address is not reachable via any
             interface) or false.  Defaults to the value of
             kernelHasRPFilter.
-
-            (needs kernel 3.3+)
           '';
       };
 
@@ -450,7 +440,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             Logs dropped packets failing the reverse path filter test if
             the option networking.firewall.checkReversePath is enabled.
           '';
@@ -461,7 +451,7 @@ in
         default = [ ];
         example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
         description =
-          ''
+          lib.mdDoc ''
             List of connection-tracking helpers that are auto-loaded.
             The complete list of possible values is given in the example.
 
@@ -481,7 +471,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             Whether to auto-load connection-tracking helpers.
             See the description at networking.firewall.connectionTrackingModules
 
@@ -494,7 +484,7 @@ in
         default = "";
         example = "iptables -A INPUT -p icmp -j ACCEPT";
         description =
-          ''
+          lib.mdDoc ''
             Additional shell commands executed as part of the firewall
             initialisation script.  These are executed just before the
             final "reject" firewall rule is added, so they can be used
@@ -505,9 +495,9 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.ipset ]";
+        example = literalExpression "[ pkgs.ipset ]";
         description =
-          ''
+          lib.mdDoc ''
             Additional packages to be included in the environment of the system
             as well as the path of networking.firewall.extraCommands.
           '';
@@ -518,7 +508,7 @@ in
         default = "";
         example = "iptables -P INPUT ACCEPT";
         description =
-          ''
+          lib.mdDoc ''
             Additional shell commands executed as part of the firewall
             shutdown script.  These are executed just after the removal
             of the NixOS input rule, or if the service enters a failed
@@ -530,7 +520,7 @@ in
         default = { };
         type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
         description =
-          ''
+          lib.mdDoc ''
             Interface-specific open ports.
           '';
       };
@@ -555,9 +545,13 @@ in
       options nf_conntrack nf_conntrack_helper=1
     '';
 
-    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
-                     message = "This kernel does not support rpfilter"; }
-                 ];
+    assertions = [
+      # This is approximately "checkReversePath -> kernelHasRPFilter",
+      # but the checkReversePath option can include non-boolean
+      # values.
+      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter"; }
+    ];
 
     systemd.services.firewall = {
       description = "Firewall";

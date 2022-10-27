@@ -1,34 +1,34 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, bluez, libusb1, curl
 , libiconv, gettext, sqlite
 , dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
 , postgresSupport ? false, postgresql ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gammu";
-  version = "1.40.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "gammu";
     rev = version;
-    sha256 = "1jjaa9r3x6i8gv3yn1ngg815s6gsxblsw4wb5ddm77kamn2qyvpf";
+    sha256 = "sha256-aeaGHVxOMiXRU6RHws+oAnzdO9RY1jw/X/xuGfSt76I=";
   };
 
   patches = [ ./bashcomp-dir.patch ./systemd.patch ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
+  strictDeps = true;
+
+  buildInputs = [ bluez libusb1 curl gettext sqlite libiconv ]
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]
   ++ optionals postgresSupport [ postgresql ];
 
-  enableParallelBuilding = true;
-
   meta = {
-    homepage = https://wammu.eu/gammu/;
+    homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2;
     platforms = platforms.linux;

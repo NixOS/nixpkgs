@@ -1,21 +1,39 @@
-{ stdenv, rofi-unwrapped, makeWrapper, theme ? null }:
+{ symlinkJoin, lib, rofi-unwrapped, makeWrapper, wrapGAppsHook, gdk-pixbuf, hicolor-icon-theme, theme ? null, plugins ? [], symlink-dmenu ? false }:
 
-if theme == null then rofi-unwrapped else
-stdenv.mkDerivation {
-  pname = "rofi";
-  version = rofi-unwrapped.version;
+symlinkJoin {
+  name = "rofi-${rofi-unwrapped.version}";
 
-  buildInputs = [ makeWrapper ];
+  paths = [
+    rofi-unwrapped.out
+  ] ++ (lib.forEach plugins (p: p.out));
+
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ gdk-pixbuf ];
+
   preferLocalBuild = true;
   passthru.unwrapped = rofi-unwrapped;
-  buildCommand = ''
-    mkdir $out
-    ln -s ${rofi-unwrapped}/* $out
-    rm $out/bin
+
+  dontWrapGApps = true;
+
+  postBuild = ''
+    rm -rf $out/bin
     mkdir $out/bin
     ln -s ${rofi-unwrapped}/bin/* $out/bin
     rm $out/bin/rofi
-    makeWrapper ${rofi-unwrapped}/bin/rofi $out/bin/rofi --add-flags "-theme ${theme}"
+
+    gappsWrapperArgsHook
+    makeWrapper ${rofi-unwrapped}/bin/rofi $out/bin/rofi \
+      ''${gappsWrapperArgs[@]} \
+      --prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share \
+      ${lib.optionalString (plugins != []) ''--prefix XDG_DATA_DIRS : ${lib.concatStringsSep ":" (lib.forEach plugins (p: "${p.out}/share"))}''} \
+      ${lib.optionalString (theme != null) ''--add-flags "-theme ${theme}"''} \
+      ${lib.optionalString (plugins != []) ''--add-flags "-plugin-path $out/lib/rofi"''}
+
+    ${lib.optionalString symlink-dmenu "ln -s ${rofi-unwrapped}/bin/rofi $out/bin/dmenu"}
+
+    rm $out/bin/rofi-theme-selector
+    makeWrapper ${rofi-unwrapped}/bin/rofi-theme-selector $out/bin/rofi-theme-selector \
+      --prefix XDG_DATA_DIRS : $out/share
   '';
 
   meta = rofi-unwrapped.meta // {

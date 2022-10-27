@@ -1,37 +1,39 @@
-{ stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses, hexdump }:
 
 stdenv.mkDerivation rec {
   pname = "translate-shell";
-  version = "0.9.6.11";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v${version}";
-    sha256 = "137fz3ahzf65hfqcs4k7hhrmfjlhlw7wr3gfsvk88bnyqkyw44sm";
+    sha256 = "sha256-OLbGBP+QHW51mt0sFXf6SqrIYZ0iC/X10F148NAG4A4=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     wrapProgram $out/bin/trans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         gawk
         curl
         ncurses
         rlwrap
         groff
         fribidi
+        hexdump
       ]}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.soimort.org/translate-shell;
+  meta = with lib; {
+    homepage = "https://www.soimort.org/translate-shell";
     description = "Command-line translator using Google Translate, Bing Translator, Yandex.Translate, and Apertium";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ebzzry infinisil ];
+    mainProgram = "trans";
     platforms = platforms.unix;
   };
 }

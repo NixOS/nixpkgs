@@ -1,35 +1,76 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, gtk3, enchant2, isocodes, vala, gobject-introspection, gnome3 }:
+{ lib, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, libxml2
+, autoreconfHook
+, gtk-doc
+, glib
+, gtk3
+, enchant2
+, icu
+, vala
+, gobject-introspection
+, gnome
+, gtk-mac-integration
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.8.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.12.0";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1miybm1z5cl91i25l7mfqlxhv7j8yy8rcgi0s1bgbb2vm71rb4dv";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "QNKFDxu26HdSRvoeOUOLNsqvvbraHSihn6HKB+H/gq0=";
   };
 
-  propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
+  patches = [
+    # Extracted from: https://github.com/Homebrew/homebrew-core/blob/2a27fb86b08afc7ae6dff79cf64aafb8ecc93275/Formula/gspell.rb#L125-L149
+    ./0001-Darwin-build-fix.patch
+  ];
 
-  nativeBuildInputs = [ pkgconfig vala gobject-introspection libxml2 ];
-  buildInputs = [ glib gtk3 isocodes ];
+  nativeBuildInputs = [
+    pkg-config
+    vala
+    gobject-introspection
+    libxml2
+    autoreconfHook
+    gtk-doc
+    glib
+  ];
+
+  buildInputs = [
+    gtk3
+    icu
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration
+  ];
+
+  propagatedBuildInputs = [
+    # required for pkg-config
+    enchant2
+  ];
+
+  configureFlags = [
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "GLIB_MKENUMS=${lib.getDev buildPackages.glib}/bin/glib-mkenums"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A spell-checking library for GTK applications";
-    homepage = https://wiki.gnome.org/Projects/gspell;
+    homepage = "https://wiki.gnome.org/Projects/gspell";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

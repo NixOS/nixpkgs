@@ -1,14 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, isPy27
 # python dependencies
 , click
-, configparser ? null
-, dateutil
+, python-dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
-, futures
 , mock
 , networkx
 , nibabel
@@ -19,22 +19,26 @@
 , pybids
 , pydot
 , pytest
-, pytest_xdist
+, pytest-xdist
 , pytest-forked
+, rdflib
 , scipy
 , simplejson
 , traits
 , xvfbwrapper
-, pytestcov
+, pytest-cov
 , codecov
+, sphinx
 # other dependencies
 , which
 , bash
 , glibcLocales
 , callPackage
+# causes Python packaging conflict with any package requiring rdflib,
+# so use the unpatched rdflib by default (disables Nipype provenance tracking);
+# see https://github.com/nipy/nipype/issues/2888:
+, useNeurdflib ? false
 }:
-
-assert !isPy3k -> configparser != null;
 
 let
 
@@ -45,11 +49,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.2.0";
+  version = "1.8.4";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09azgfmb0992c3xqmi7n93pz95i4v37vc9kqmjh8c9jjxjzszdd5";
+    sha256 = "sha256-yoG6iLfF7ugBL4eNC9OLINIzBj1YgF4TVngFKb77qak=";
   };
 
   postPatch = ''
@@ -57,13 +62,18 @@ buildPythonPackage rec {
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
+  nativeBuildInputs = [
+    sphinx
+  ];
+
   propagatedBuildInputs = [
     click
-    dateutil
+    python-dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
-    neurdflib
     nibabel
     numpy
     packaging
@@ -74,10 +84,7 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
-    configparser
-    futures
-  ];
+  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
 
   checkInputs = [
     pybids
@@ -86,18 +93,21 @@ buildPythonPackage rec {
     mock
     pytest
     pytest-forked
-    pytest_xdist
-    pytestcov
+    pytest-xdist
+    pytest-cov
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
   '';
+  pythonImportsCheck = [ "nipype" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipype/;
+  meta = with lib; {
+    homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

@@ -1,30 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, numpy, scipy, matplotlib, pandas, tabulate, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, matplotlib
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, scipy
+, tabulate
+}:
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.1";
-
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d7cec62d3e7a7eb26026f2aacc726fb1dd0b044574cbdee83da654b847543c20";
-  };
-
-  checkPhase = ''
-    pushd tests
-    py.test ./.
-    popd
-  '';
+  version = "0.2.6";
 
   disabled = pythonOlder "3.6";
 
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-0CvMhCUc+i7dPiHH+IXdlj+OjFh/l1wvnU4dmxQrzFI=";
+  };
+
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pandas
+    scipy
+    tabulate
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+    mkdir -p $HOME/.matplotlib
+    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # All tests fail with TypeError
+    "tests/test_aio.py"
+  ];
+
+  pythonImportsCheck = [ "acoustics" ];
+
   meta = with lib; {
-    description = "A package for acousticians";
+    description = "Python package for acousticians";
     maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];
-    homepage = https://github.com/python-acoustics/python-acoustics;
+    homepage = "https://github.com/python-acoustics/python-acoustics";
   };
 }

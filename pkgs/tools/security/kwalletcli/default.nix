@@ -1,15 +1,15 @@
-{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkgconfig
-, kcoreaddons, ki18n, kwallet, mksh, pinentry_qt5 }:
+{ mkDerivation, fetchFromGitHub, lib, makeWrapper, pkg-config
+, kcoreaddons, ki18n, kwallet, mksh, pinentry-qt }:
 
 mkDerivation rec {
   pname = "kwalletcli";
-  version = "3.02";
+  version = "3.03";
 
   src = fetchFromGitHub {
     owner = "MirBSD";
     repo = pname;
     rev = "${pname}-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1gq45afb5nmmjfqxglv7wvcxcjd9822pc7nysq0350jmmmqwb474";
+    sha256 = "sha256-DUtaQITzHhQrqA9QJd0U/5EDjH0IzY9/kal/7SYQ/Ck=";
   };
 
   postPatch = ''
@@ -22,11 +22,14 @@ mkDerivation rec {
 
     substituteInPlace pinentry-kwallet \
       --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
+
+    substituteInPlace kwalletcli_getpin \
+      --replace '/usr/bin/env mksh' ${mksh}/bin/mksh
   '';
 
   makeFlags = [ "KDE_VER=5" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   # if using just kwallet, cmake will be added as a buildInput and fail the build
   propagatedBuildInputs = [ kcoreaddons ki18n (lib.getLib kwallet) ];
 
@@ -35,14 +38,16 @@ mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/pinentry-kwallet \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry_qt5 ]} \
-      --set-default PINENTRY pinentry-qt
+    for program in pinentry-kwallet kwalletcli_getpin; do
+      wrapProgram $out/bin/$program \
+        --prefix PATH : $out/bin:${lib.makeBinPath [ pinentry-qt ]} \
+        --set-default PINENTRY pinentry-qt
+    done
   '';
 
   meta = with lib; {
     description = "Command-Line Interface to the KDE Wallet";
-    homepage = https://www.mirbsd.org/kwalletcli.htm;
+    homepage = "https://www.mirbsd.org/kwalletcli.htm";
     license = licenses.miros;
     maintainers = with maintainers; [ peterhoeg ];
   };

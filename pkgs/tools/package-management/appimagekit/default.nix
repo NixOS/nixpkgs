@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake, autoconf, automake, libtool, makeWrapper
 , wget, xxd, desktop-file-utils, file
 , gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
 , squashfsTools
@@ -11,30 +11,36 @@ let
   appimagekit_src = fetchFromGitHub {
     owner = "AppImage";
     repo = "AppImageKit";
-    rev = "b0859501df61cde198b54a317c03b41dbafc98b1";
-    sha256 = "0qqg79jw9w9rs8c2w3lla4kz62ihafrf7jm370pp1dl8y2i81jzg";
+    rev = "8bbf694455d00f48d835f56afaa1dabcd9178ba6";
+    sha256 = "sha256-pqg+joomC5CI9WdKP/h/XKPsruMgZEaIOjPLOqnNPZw=";
+    fetchSubmodules = true;
   };
 
-  # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/cmake/dependencies.cmake"
+  # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
   appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
-    name = "squashfuse-${version}";
-    version = "20161009";
+    pname = "squashfuse";
+    version = "unstable-2016-10-09";
 
     src = fetchFromGitHub {
       owner = "vasi";
-      repo  = "squashfuse";
-      rev   = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
-      sha256 = "0lrw9ff8k15l34wjwyllw3i35hl0cms97jj2hpnr2q8ipgxpb5q5";
+      repo  = pname;
+      rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
+      sha256 = "sha256-BZd1+7sRYZHthULKk3RlgMIy4uCUei45GbSEiZxLPFM=";
     };
 
     patches = [
-      "${appimagekit_src}/squashfuse.patch"
-      "${appimagekit_src}/squashfuse_dlopen.patch"
+      "${appimagekit_src}/lib/libappimage/src/patches/squashfuse.patch"
+      "${appimagekit_src}/lib/libappimage/src/patches/squashfuse_dlopen.patch"
     ];
 
     postPatch = ''
-      cp -v ${appimagekit_src}/squashfuse_dlopen.[hc] .
+      cp -v ${appimagekit_src}/lib/libappimage/src/patches/squashfuse_dlopen.[hc] .
     '';
+
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: libsquashfuse_ll.a(libfuseprivate_la-fuseprivate.o):(.bss+0x8):
+    #     multiple definition of `have_libloaded'; runtime.4.o:(.bss.have_libloaded+0x0): first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
 
     preConfigure = ''
       sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
@@ -58,26 +64,26 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  name = "appimagekit-20180727";
+  pname = "appimagekit";
+  version = "unstable-2020-12-31";
 
   src = appimagekit_src;
 
   patches = [ ./nix.patch ];
 
+  postPatch = ''
+    patchShebangs src/embed-magic-bytes-in-file.sh
+  '';
+
   nativeBuildInputs = [
-    pkgconfig cmake autoconf automake libtool wget xxd
-    desktop-file-utils
+    pkg-config cmake autoconf automake libtool wget xxd
+    desktop-file-utils makeWrapper
   ];
 
   buildInputs = [
-    glib zlib cairo openssl fuse
-    xz inotify-tools libarchive
-    squashfsTools makeWrapper
+    glib zlib cairo openssl fuse xz inotify-tools
+    libarchive squashfsTools appimagekit_squashfuse
   ];
-
-  postPatch = ''
-    substituteInPlace src/appimagetool.c --replace "/usr/bin/file" "${file}/bin/file"
-  '';
 
   preConfigure = ''
     export HOME=$(pwd)
@@ -87,29 +93,30 @@ in stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_XZ=ON"
     "-DUSE_SYSTEM_SQUASHFUSE=ON"
     "-DSQUASHFUSE=${appimagekit_squashfuse}"
-    "-DUSE_SYSTEM_INOTIFY_TOOLS=ON"
     "-DUSE_SYSTEM_LIBARCHIVE=ON"
     "-DUSE_SYSTEM_GTEST=ON"
     "-DUSE_SYSTEM_MKSQUASHFS=ON"
+    "-DTOOLS_PREFIX=${stdenv.cc.targetPrefix}"
   ];
 
   postInstall = ''
+    mkdir -p $out/lib/appimagekit
     cp "${squashfsTools}/bin/mksquashfs" "$out/lib/appimagekit/"
     cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
 
     wrapProgram "$out/bin/appimagetool" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ file gnupg ]}"
+      --prefix PATH : "${lib.makeBinPath [ file gnupg ]}" \
+      --unset SOURCE_DATE_EPOCH
   '';
 
   checkInputs = [ gtest ];
-  doCheck = false; # fails 1 out of 4 tests, I'm too lazy to debug why
 
   # for debugging
   passthru = {
     squashfuse = appimagekit_squashfuse;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that
@@ -117,6 +124,7 @@ in stdenv.mkDerivation rec {
       AppImages.
     '';
     license = licenses.mit;
+    maintainers = with maintainers; [ taeer ];
     homepage = src.meta.homepage;
     platforms = platforms.linux;
   };

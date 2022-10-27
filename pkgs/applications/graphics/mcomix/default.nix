@@ -1,34 +1,64 @@
-{ stdenv, fetchurl, python27Packages }:
+{ lib
+, fetchurl
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, mcomix
+, python3
+, testers
+, wrapGAppsHook
 
-python27Packages.buildPythonApplication rec {
-    name = "mcomix-${version}";
-    version = "1.2.1";
+# Recommended Dependencies:
+, lhasa
+, mupdf
+, p7zip
+, unrar
+, unrarSupport ? false  # unfree software
+}:
 
-    src = fetchurl {
-      url = "mirror://sourceforge/mcomix/${name}.tar.bz2";
-      sha256 = "0fzsf9pklhfs1rzwzj64c0v30b74nk94p93h371rpg45qnfiahvy";
-    };
+python3.pkgs.buildPythonApplication rec {
+  pname = "mcomix";
+  version = "2.0.2";
 
-    propagatedBuildInputs = with python27Packages; [ pygtk pillow setuptools ];
+  src = fetchurl {
+    url = "mirror://sourceforge/mcomix/${pname}-${version}.tar.gz";
+    sha256 = "sha256-7zjQcT5WoHxy+YzCDJ6s2ngOOfO4L9exuqBqacecClg=";
+  };
 
-    doCheck = false;
+  buildInputs = [ gobject-introspection gtk3 gdk-pixbuf ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  propagatedBuildInputs = (with python3.pkgs; [ pillow pygobject3 pycairo ]);
 
-    meta = {
-      description = "Image viewer designed to handle comic books";
-      longDescription = ''
-        MComix is an user-friendly, customizable image viewer. It is specifically
-        designed to handle comic books, but also serves as a generic viewer.
-        It reads images in ZIP, RAR, 7Zip or tar archives as well as plain image
-        files. It is written in Python and uses GTK through the PyGTK bindings,
-        and runs on both Linux and Windows.
+  # Tests are broken
+  doCheck = false;
 
-        MComix is a fork of the Comix project, and aims to add bug fixes and
-        stability improvements after Comix development came to a halt in late 2009.
-      '';
-      homepage = http://mcomix.sourceforge.net/;
-      license = stdenv.lib.licenses.gpl2;
-      maintainers = with stdenv.lib.maintainers; [ fuuzetsu AndersonTorres ];
-    };
+  # Correct wrapper behavior, see https://github.com/NixOS/nixpkgs/issues/56943
+  # until https://github.com/NixOS/nixpkgs/pull/102613
+  strictDeps = false;
+
+  # prevent double wrapping
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${lib.makeBinPath ([ p7zip lhasa mupdf ] ++ lib.optional (unrarSupport) unrar)}"
+    )
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = mcomix;
+  };
+
+  meta = with lib; {
+    description = "Comic book reader and image viewer";
+    longDescription = ''
+      User-friendly, customizable image viewer, specifically designed to handle
+      comic books and manga supporting a variety of container formats
+      (including CBR, CBZ, CB7, CBT, LHA and PDF)
+    '';
+    homepage = "https://sourceforge.net/projects/mcomix/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ thiagokokada ];
+  };
 }
-# TODO:
-# - error in check phase

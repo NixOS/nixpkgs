@@ -1,8 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
-, intltool
-, pkgconfig
+, appstream-glib
+, gettext
+, pkg-config
 , wrapGAppsHook
 , gtk3
 , ibus
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
-  version = "1.5.1";
+  version = "1.5.4";
 
   src = fetchurl {
     url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0gha8dfdf54rx8fv3yfikbgdg6lqq6l883lhg7q68ybvkjx9bwbs";
+    sha256 = "1q6g2pnrn5gqn9jqnm3975v9hh60hc5gn9x3zbrdjgy0n3wpxwm9";
   };
 
   patches = [
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool
-    pkgconfig
-    python3.pkgs.wrapPython
+    appstream-glib
+    gettext
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -43,10 +44,10 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "Ibus Hangul engine";
-    homepage = https://github.com/choehwanjin/ibus-hangul;
+    homepage = "https://github.com/choehwanjin/ibus-hangul";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ericsagnes ];
     platforms = platforms.linux;

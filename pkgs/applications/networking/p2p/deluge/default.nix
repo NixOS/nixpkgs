@@ -1,41 +1,104 @@
-{ stdenv, fetchurl, fetchpatch, intltool, libtorrentRasterbar, pythonPackages }:
+{ lib
+, fetchurl
+, intltool
+, libtorrent-rasterbar
+, python3Packages
+, gtk3
+, glib
+, gobject-introspection
+, librsvg
+, wrapGAppsHook
+}:
 
-pythonPackages.buildPythonPackage rec {
-  pname = "deluge";
-  version = "1.3.15";
+let
+  inherit (lib) optionals;
 
-  src = fetchurl {
-    url = "http://download.deluge-torrent.org/source/${pname}-${version}.tar.bz2";
-    sha256 = "1467b9hmgw59gf398mhbf40ggaka948yz3afh6022v753c9j7y6w";
-  };
+  pypkgs = python3Packages;
 
-  patches = [
-    # Fix preferences when built against libtorrent >=0.16
-    (fetchpatch {
-      url = "https://git.deluge-torrent.org/deluge/patch/?id=38d7b7cdfde3c50d6263602ffb03af92fcbfa52e";
-      sha256 = "0la3i0lkj6yv4725h4kbd07mhfwcb34w7prjl9gxg12q7px6c31d";
-    })
-  ];
+  generic = { pname, withGUI }:
+    pypkgs.buildPythonPackage rec {
+      inherit pname;
+      version = "2.1.1";
 
-  propagatedBuildInputs = with pythonPackages; [
-    pyGtkGlade twisted Mako chardet pyxdg pyopenssl service-identity
-    libtorrentRasterbar.dev libtorrentRasterbar.python setuptools
-  ];
+      src = fetchurl {
+        url = "http://download.deluge-torrent.org/source/${lib.versions.majorMinor version}/deluge-${version}.tar.xz";
+        hash = "sha256-do3TGYAuQkN6s3lOvnW0lxQuCO1bD7JQO61izvRC3/c=";
+      };
 
-  nativeBuildInputs = [ intltool ];
+      propagatedBuildInputs = with pypkgs; [
+        twisted
+        Mako
+        chardet
+        pyxdg
+        pyopenssl
+        service-identity
+        libtorrent-rasterbar.dev
+        libtorrent-rasterbar.python
+        setuptools
+        setproctitle
+        pillow
+        rencode
+        six
+        zope_interface
+        dbus-python
+        pycairo
+        librsvg
+      ] ++ optionals withGUI [
+        gtk3
+        gobject-introspection
+        pygobject3
+      ];
 
-  postInstall = ''
-     mkdir -p $out/share/applications
-     cp -R deluge/data/pixmaps $out/share/
-     cp -R deluge/data/icons $out/share/
-     cp deluge/data/share/applications/deluge.desktop $out/share/applications
-  '';
+      nativeBuildInputs = [
+        intltool
+        glib
+      ] ++ optionals withGUI [
+        gobject-introspection
+        wrapGAppsHook
+      ];
 
-  meta = with stdenv.lib; {
-    homepage = https://deluge-torrent.org;
-    description = "Torrent client";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ domenkozar ebzzry ];
-    platforms = platforms.all;
-  };
+      checkInputs = with pypkgs; [
+        pytestCheckHook
+        pytest-twisted
+        pytest-cov
+        mock
+        mccabe
+        pylint
+      ];
+
+      doCheck = false; # tests are not working at all
+
+      postInstall = ''
+        install -Dm444 -t $out/lib/systemd/system packaging/systemd/*.service
+      '' + (if withGUI
+      then ''
+        mkdir -p $out/share
+        cp -R deluge/ui/data/{icons,pixmaps} $out/share/
+        install -Dm444 -t $out/share/applications deluge/ui/data/share/applications/deluge.desktop
+      '' else ''
+        rm -r $out/bin/deluge-gtk
+        rm -r $out/lib/${python3Packages.python.libPrefix}/site-packages/deluge/ui/gtk3
+        rm -r $out/share/{icons,man/man1/deluge-gtk*,pixmaps}
+      '');
+
+      postFixup = ''
+        for f in $out/lib/systemd/system/*; do
+          substituteInPlace $f --replace /usr/bin $out/bin
+        done
+      '';
+
+      meta = with lib; {
+        description = "Torrent client";
+        homepage = "https://deluge-torrent.org";
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ domenkozar ebzzry ];
+        platforms = platforms.all;
+      };
+    };
+
+in
+rec {
+  deluge-gtk = generic { pname = "deluge-gtk"; withGUI = true; };
+  deluged = generic { pname = "deluged"; withGUI = false; };
+  deluge = deluge-gtk;
 }

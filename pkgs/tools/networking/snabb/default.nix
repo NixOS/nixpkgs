@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, bash, makeWrapper, git, mysql, diffutils, which, coreutils, procps, nettools
+{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools
 ,supportOpenstack ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2018.01.2";
+  version = "2019.11";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "0n6bjf5g4imy0aql8fa55c0db3w8h944ia1dk10167x5pqvkgdgm";
+    sha256 = "1sas9d9kk92mc2wrwgmm0xxz7ycmh388dwvyxf1hy183yvin1nac";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
   patchPhase = ''
     patchShebangs .
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     done
   '' + optionalString supportOpenstack ''
     # We need a way to pass $PATH to the scripts
-    sed -i '2iexport PATH=${git}/bin:${mysql}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
+    sed -i '2iexport PATH=${git}/bin:${mariadb}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
     sed -i '2iexport PATH=${git}/bin:${coreutils}/bin:${diffutils}/bin:${nettools}/bin' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
   '';
 
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta =  {
-    homepage = https://github.com/SnabbCo/snabbswitch;
+    homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
       Snabb Switch is a LuaJIT-based toolkit for writing high-speed
@@ -56,6 +58,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.domenkozar ];
+    maintainers = [ maintainers.lukego ];
   };
 }

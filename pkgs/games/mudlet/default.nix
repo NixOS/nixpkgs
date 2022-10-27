@@ -1,32 +1,78 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, pcre, pugixml, qtbase, qtmultimedia, qttools, yajl, libzip, hunspell
-, boost, libGLU, lua, cmake,  which, }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, pkg-config
+, qttools
+, which
+, wrapQtAppsHook
+, boost
+, hunspell
+, libGLU
+, libsForQt5
+, libsecret
+, libzip
+, lua
+, pcre
+, pugixml
+, qtbase
+, qtmultimedia
+, yajl
+}:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
+  luaEnv = lua.withPackages(ps: with ps; [
+    luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8
+  ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.1.2";
+  version = "4.15.1";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "1d6r51cj8a71hmhzsayd2far4hliwz5pnrsaj3dn39m7c0iikgdn";
+    hash = "sha256-GnTQc0Jh4YaQnfy7fYsTCACczlzWCQ+auKYoU9ET83M=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools which ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    qttools
+    which
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
-    pcre pugixml qtbase qtmultimedia luaEnv libzip libGLU yajl boost hunspell
+    boost
+    hunspell
+    libGLU
+    libsForQt5.qtkeychain
+    libsecret
+    libzip
+    luaEnv
+    pcre
+    pugixml
+    qtbase
+    qtmultimedia
+    yajl
+  ];
+
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  enableParallelBuilding = true;
-
   installPhase =  ''
+    runHook preInstall
+
     mkdir -pv $out/lib
     cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
     mkdir -pv $out/bin
@@ -43,14 +89,17 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
-      --run "cd $out";
+      --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
+      --chdir "$out";
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crossplatform mud client";
-    homepage = http://mudlet.org/;
+    homepage = "https://www.mudlet.org/";
     maintainers = [ maintainers.wyvie maintainers.pstn ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

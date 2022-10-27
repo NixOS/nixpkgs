@@ -1,44 +1,51 @@
-{ stdenv, fetchFromGitHub, fetchpatch, coreutils
-, python3Packages, substituteAll }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "trash-cli-${version}";
-  version = "0.17.1.14";
-  namePrefix = "";
+  pname = "trash-cli";
+  version = "0.22.10.20";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "1bqazna223ibqjwbc1wfvfnspfyrvjy8347qlrgv4cpng72n7gfi";
+    hash = "sha256-NnFOe471GxcjpTwpsoxKaWiw4lW4tUPIM+WpzCsEdkI=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./nix-paths.patch;
-      df = "${coreutils}/bin/df";
-      libc = let ext = if stdenv.isDarwin then ".dylib" else ".so.6";
-             in "${stdenv.cc.libc}/lib/libc${ext}";
-    })
-
-    # Fix build on Python 3.6.
-    (fetchpatch {
-      url = "https://github.com/andreafrancia/trash-cli/commit/a21b80d1e69783bb09376c3f60dd2f2a10578805.patch";
-      sha256 = "0w49rjh433sjfc2cl5a9wlbr6kcn9f1qg905qsyv7ay3ar75wvyp";
-    })
-  ];
+  propagatedBuildInputs = with python3Packages; [ psutil six ];
 
   checkInputs = with python3Packages; [
-    nose
     mock
+    pytestCheckHook
   ];
-  checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/andreafrancia/trash-cli;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Create a home directory with a test file.
+    HOME="$(mktemp -d)"
+    touch "$HOME/deleteme"
+
+    # Verify that trash list is initially empty.
+    [[ $($out/bin/trash-list) == "" ]]
+
+    # Trash a test file and verify that it shows up in the list.
+    $out/bin/trash "$HOME/deleteme"
+    [[ $($out/bin/trash-list) == *" $HOME/deleteme" ]]
+
+    # Empty the trash and verify that it is empty.
+    $out/bin/trash-empty
+    [[ $($out/bin/trash-list) == "" ]]
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
+    mainProgram = "trash";
   };
 }

@@ -1,29 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, file
+{ lib, stdenv, fetchurl, cmake, python3
 , bison, openssl, readline, bzip2
 }:
 
-let
-  version = "11.33.11";
-in stdenv.mkDerivation {
-
+stdenv.mkDerivation rec {
   pname = "monetdb";
-  inherit version;
+  version = "11.45.7";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "1fzgf1hplwlki6l6yvrk8an9y4jj40xzl4m5x1d8vi3xr526bzc9";
+    sha256 = "sha256-hIfi8YfZIExgv+z3YAxvkX8MiiGmOjB+/OryUoRPmDI=";
   };
 
   postPatch = ''
-    sed -i "s,/usr/bin/file,${file}/bin/file," configure
+    substituteInPlace cmake/monetdb-packages.cmake --replace \
+      'get_os_release_info(LINUX_DISTRO LINUX_DISTRO_VERSION)' \
+      'set(LINUX_DISTRO "nixos")'
   '';
 
-  nativeBuildInputs = [ pkgconfig file ];
+  postInstall = ''
+    rm $out/bin/monetdb_mtest.sh \
+      $out/bin/mktest.py \
+      $out/bin/sqlsample.php \
+      $out/bin/sqllogictest.py \
+      $out/bin/Mz.py \
+      $out/bin/Mtest.py \
+      $out/bin/sqlsample.pl \
+      $out/bin/malsample.pl
+  '';
+
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ bison openssl readline bzip2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source database system";
-    homepage = https://www.monetdb.org/;
+    homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.StillerHarpo ];

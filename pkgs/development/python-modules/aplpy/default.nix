@@ -1,61 +1,70 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, numpy
 , astropy
 , astropy-helpers
+, buildPythonPackage
+, cython
+, fetchpatch
+, fetchPypi
 , matplotlib
-, reproject
+, numpy
+, pillow
 , pyavm
 , pyregion
-, pillow
+, pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, reproject
 , scikitimage
 , shapely
-, pytest
-, pytest-astropy
 }:
 
 buildPythonPackage rec {
   pname = "aplpy";
-  version = "2.0.3";
+  version = "2.1.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "APLpy";
+    pname = "aplpy";
     inherit version;
-    sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";
+    hash = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
 
+  nativeBuildInputs = [
+    astropy-helpers
+  ];
+
   propagatedBuildInputs = [
-    numpy
     astropy
+    cython
     matplotlib
-    reproject
+    numpy
+    pillow
     pyavm
     pyregion
-    pillow
+    reproject
     scikitimage
     shapely
   ];
 
-  nativeBuildInputs = [ astropy-helpers ];
+  checkInputs = [
+    pytest-astropy
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytest pytest-astropy ];
-
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  preCheck = ''
+    OPENMP_EXPECTED=0
   '';
 
-  # Tests must be run in the build directory
-  checkPhase = ''
-    cd build/lib
-    pytest
-  '';
+  pythonImportsCheck = [
+    "aplpy"
+  ];
 
   meta = with lib; {
     description = "The Astronomical Plotting Library in Python";
-    homepage = http://aplpy.github.io;
+    homepage = "http://aplpy.github.io";
     license = licenses.mit;
-    maintainers = [ maintainers.smaret ];
+    maintainers = with maintainers; [ smaret ];
   };
 }

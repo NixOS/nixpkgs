@@ -5,9 +5,9 @@ let
     # for a host utility with IPv6 support
     environment.systemPackages = [ pkgs.bind ];
   };
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nsd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
   };
 
@@ -43,6 +43,10 @@ in import ./make-test.nix ({ pkgs, ...} : {
       services.nsd.enable = true;
       services.nsd.rootServer = true;
       services.nsd.interfaces = lib.mkForce [];
+      services.nsd.keys."tsig.example.com." = {
+        algorithm = "hmac-sha256";
+        keyFile = pkgs.writeTextFile { name = "tsig.example.com."; text = "aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc="; };
+      };
       services.nsd.zones."example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         ipv4 A 1.2.3.4
@@ -51,6 +55,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
         ns A 192.168.0.1
         ns AAAA dead:beef::1
       '';
+      services.nsd.zones."example.com.".provideXFR = [ "0.0.0.0 tsig.example.com." ];
       services.nsd.zones."deleg.example.com.".data = ''
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         @ A 9.8.7.6
@@ -65,37 +70,40 @@ in import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $clientv4->waitForUnit("network.target");
-    $clientv6->waitForUnit("network.target");
-    $server->waitForUnit("nsd.service");
+    clientv4.wait_for_unit("network.target")
+    clientv6.wait_for_unit("network.target")
+    server.wait_for_unit("nsd.service")
 
-    sub assertHost {
-      my ($type, $rr, $query, $expected) = @_;
-      my $self = $type eq 4 ? $clientv4 : $clientv6;
-      my $out = $self->succeed("host -$type -t $rr $query");
-      $self->log("output: $out");
-      chomp $out;
-      die "DNS IPv$type query on $query gave '$out' instead of '$expected'"
-        if ($out !~ $expected);
-    }
+    with subtest("server tsig.example.com."):
+        expected_tsig = "  secret: \"aR3FJA92+bxRSyosadsJ8Aeeav5TngQW/H/EF9veXbc=\"\n"
+        tsig=server.succeed("cat /var/lib/nsd/private/tsig.example.com.")
+        assert expected_tsig == tsig, f"Expected /var/lib/nsd/private/tsig.example.com. to contain '{expected_tsig}', but found '{tsig}'"
 
-    foreach (4, 6) {
-      subtest "ipv$_", sub {
-        assertHost($_, "a", "example.com", qr/has no [^ ]+ record/);
-        assertHost($_, "aaaa", "example.com", qr/has no [^ ]+ record/);
+    def assert_host(type, rr, query, expected):
+        self = clientv4 if type == 4 else clientv6
+        out = self.succeed(f"host -{type} -t {rr} {query}").rstrip()
+        self.log(f"output: {out}")
+        import re
+        assert re.search(
+            expected, out
+        ), f"DNS IPv{type} query on {query} gave '{out}' instead of '{expected}'"
 
-        assertHost($_, "soa", "example.com", qr/SOA.*?noc\.example\.com/);
-        assertHost($_, "a", "ipv4.example.com", qr/address 1.2.3.4$/);
-        assertHost($_, "aaaa", "ipv6.example.com", qr/address abcd::eeff$/);
 
-        assertHost($_, "a", "deleg.example.com", qr/address 9.8.7.6$/);
-        assertHost($_, "aaaa", "deleg.example.com", qr/address fedc::bbaa$/);
+    for ipv in 4, 6:
+        with subtest(f"IPv{ipv}"):
+            assert_host(ipv, "a", "example.com", "has no [^ ]+ record")
+            assert_host(ipv, "aaaa", "example.com", "has no [^ ]+ record")
 
-        assertHost($_, "a", "root", qr/address 1.8.7.4$/);
-        assertHost($_, "aaaa", "root", qr/address acbd::4$/);
-      };
-    }
+            assert_host(ipv, "soa", "example.com", "SOA.*?noc\.example\.com")
+            assert_host(ipv, "a", "ipv4.example.com", "address 1.2.3.4$")
+            assert_host(ipv, "aaaa", "ipv6.example.com", "address abcd::eeff$")
+
+            assert_host(ipv, "a", "deleg.example.com", "address 9.8.7.6$")
+            assert_host(ipv, "aaaa", "deleg.example.com", "address fedc::bbaa$")
+
+            assert_host(ipv, "a", "root", "address 1.8.7.4$")
+            assert_host(ipv, "aaaa", "root", "address acbd::4$")
   '';
 })

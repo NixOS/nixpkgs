@@ -1,16 +1,20 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.1.0";
   pname = "dj-email-url";
+  version = "1.0.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84f32673156f58d740a14cab09f04ca92a65b2c8881b60e31e09e67d7853e544";
+    hash = "sha256-Vf/jMp5I9U+Kdao27OCPNl4J1h+KIJdz7wmh1HYOaZo=";
   };
 
   checkPhase = ''
@@ -20,10 +24,10 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/migonzalvar/dj-email-url;
+  meta = with lib; {
     description = "Use an URL to configure email backend settings in your Django Application";
+    homepage = "https://github.com/migonzalvar/dj-email-url";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

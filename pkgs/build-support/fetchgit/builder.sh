@@ -8,8 +8,11 @@ header "exporting $url (rev $rev) into $out"
 
 $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
+  ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
+  ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
+  ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch

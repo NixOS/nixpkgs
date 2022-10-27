@@ -1,21 +1,21 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, substituteAll
+, nix-update-script
+, desktop-file-utils
+, pkg-config
 , writeScript
-, pantheon
 , gnome-keyring
 , gnome-session
 , wingpanel
 , orca
 , onboard
-, at-spi2-core
 , elementary-default-settings
-, elementary-settings-daemon
+, gnome-settings-daemon
 , runtimeShell
 , writeText
 , meson
 , ninja
-, git
 }:
 
 let
@@ -60,84 +60,99 @@ let
   '';
 
   executable = writeScript "pantheon" ''
-    export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+    # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
+
+    # Make sure we use our gtk-3.0/settings.ini
+    export XDG_CONFIG_DIRS=${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
+
+    # * gnome-session can find the `pantheon' session
+    # * use pantheon-mimeapps.list
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
+
+    # Start pantheon session. Keep in sync with upstream
+    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+  '';
+
+  # Absolute path patched version of the upstream xsession
+  xsession = writeText "pantheon.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon
+    TryExec=${wingpanel}/bin/io.elementary.wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
   '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "5.0.3";
-
-  repoName = "session-settings";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "session-settings";
     rev = version;
-    sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
+    sha256 = "1faglpa7q3a4335gnd074a3lnsdspyjdnskgy4bfnf6xmwjx7kjx";
   };
 
-  postPatch = ''
-    ${git}/bin/git apply --verbose ${./meson.patch}
-  '';
-
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    gnome-keyring
+    gnome-settings-daemon
+    onboard
+    orca
   ];
 
   mesonFlags = [
-    "-Ddefaults-list=false"
-    "-Dpatched-gsd-autostarts=false"
-    "-Dpatched-ubuntu-autostarts=false"
+    "-Dmimeapps-list=false"
     "-Dfallback-session=GNOME"
+    "-Ddetect-program-prefixes=true"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
+    # our mimeapps patched from upstream to exclude:
+    # * evince.desktop -> org.gnome.Evince.desktop
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
-    mkdir -p $out/etc/xdg/autostart
-    for package in ${gnome-keyring} ${orca} ${onboard} ${at-spi2-core}; do
-      cp -av $package/etc/xdg/autostart/* $out/etc/xdg/autostart
-    done
-
+    # instantiates pantheon's dockitems
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
+    # script `Exec` to start pantheon
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-  '';
 
-  postFixup = ''
-    substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
-      --replace "wingpanel" "${wingpanel}/bin/wingpanel"
-
-    for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done
-
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
+    # absolute path patched xsession
+    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
+
+    providedSessions = [
+      "pantheon"
+    ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session settings for elementary";
-    homepage = https://github.com/elementary/session-settings;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/elementary/session-settings";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

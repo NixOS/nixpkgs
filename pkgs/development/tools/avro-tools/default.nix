@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "avro-tools";
-  version = "1.9.1";
+  version = "1.11.1";
 
   src = fetchurl {
     url =
-    "https://repo1.maven.org/maven2/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
-    sha256 = "0d73qbfx59pa4mgsjwgl5dvc4895rm90pdwr4sbd77biscjad94s";
+    "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
+    sha256 = "sha256-uVTnWXbCS3JQkHWxopixhNue/ihzvukJ0CNDL5gm24g=";
   };
 
   dontUnpack = true;
@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     --add-flags "-jar $out/libexec/avro-tools/${pname}.jar"
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://avro.apache.org/;
+  meta = with lib; {
+    homepage    = "https://avro.apache.org/";
     description = "Avro command-line tools and utilities";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.nequissimus ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

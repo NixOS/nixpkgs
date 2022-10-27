@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ncurses, zlib
+{ lib, stdenv, fetchurl, ncurses, zlib
 , openssl ? null
 , sslSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 assert sslSupport -> openssl != null;
 
@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
     [ ncurses zlib ]
     ++ optional sslSupport openssl;
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: world.o:/build/tf-50b8/src/socket.h:24: multiple definition of
+  #     `world_decl'; command.o:/build/tf-50b8/src/socket.h:24: first defined here
+  NIX_CFLAGS_COMPILE="-fcommon";
+
   meta = {
-    homepage = http://tinyfugue.sourceforge.net/;
+    homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

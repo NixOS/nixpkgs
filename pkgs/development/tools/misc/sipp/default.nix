@@ -1,41 +1,37 @@
-{stdenv, fetchFromGitHub, autoreconfHook, ncurses, libpcap }:
+{ lib, stdenv, fetchurl, ncurses, libpcap, cmake, openssl, git, lksctp-tools }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.1";
-
+  version = "3.6.1";
   pname = "sipp";
 
-  src = fetchFromGitHub {
-    owner = "SIPp";
-    repo = "sipp";
-    rev = "v${version}";
-    sha256 = "179a1fvqyk3jpxbi28l1xfw22cw9vgvxrn19w5f38w74x0jwqg5k";
+  src = fetchurl {
+    url = "https://github.com/SIPp/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-alYOg6/5gvMx3byt+zvVMMWJbNW3V91utoITPMhg7LE=";
   };
 
-  patchPhase = ''
-    sed -i "s@pcap/\(.*\).pcap@$out/share/pcap/\1.pcap@g" src/scenario.cpp
-    sed -i -e "s|AC_CHECK_LIB(curses|AC_CHECK_LIB(ncurses|" configure.ac
-    echo "#define SIPP_VERSION \"v${version}\"" > include/version.h
+  postPatch = ''
+    cp version.h src/version.h
   '';
 
-  configureFlags = [
-    "--with-pcap"
+  cmakeFlags = [
+    "-DUSE_GSL=1"
+    "-DUSE_PCAP=1"
+    "-DUSE_SSL=1"
+    "-DUSE_SCTP=${if stdenv.isLinux then "1" else "0"}"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+  enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -pv $out/share/pcap
-    cp pcap/* $out/share/pcap
-  '';
+  nativeBuildInputs = [ cmake git ];
+  buildInputs = [ ncurses libpcap openssl ]
+    ++ lib.optional (stdenv.isLinux) lksctp-tools;
 
-  buildInputs = [ncurses libpcap];
-
-  nativeBuildInputs = [ autoreconfHook ];
-
-  meta = with stdenv.lib; {
-    homepage = http://sipp.sf.net;
+  meta = with lib; {
+    homepage = "http://sipp.sf.net";
     description = "The SIPp testing tool";
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
 }
-

@@ -1,23 +1,32 @@
-{ stdenv, fetchFromGitHub, cpp-utilities, qttools, qtbase, cmake, pkgconfig }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cpp-utilities
+, qttools
+, qtbase
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "qtutilities";
-  version = "6.0.1";
+  version = "6.8.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gg1qcyn1b52sy4akrpxjy8rnprp6dgzw2ywr18jp6m1fsy74rk2";
+    hash = "sha256-I8VvVGlz6rQLWd7Fq0q58VFFj+EHGiwkayam2Cj3aJQ=";
   };
 
   buildInputs = [ qtbase cpp-utilities ];
   nativeBuildInputs = [ cmake qttools ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     homepage = "https://github.com/Martchus/qtutilities";
-    description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
-    license = licenses.gpl2;
+    description = "Common Qt related C++ classes and routines used by @Martchus' applications such as dialogs, widgets and models Topics";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
     platforms   = platforms.linux;
   };

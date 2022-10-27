@@ -1,29 +1,28 @@
-{stdenv, fetchurl, ocaml, findlib}:
-let
-  pname = "xml-light";
-  version = "2.4";
-in
-stdenv.mkDerivation {
-  name = "ocaml-${pname}-${version}";
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
 
-  src = fetchurl {
-    url = "https://github.com/ncannasse/${pname}/archive/${version}.tar.gz";
-    sha256 = "10b55qf6mvdp11ny3h0jv6k6wrs78jr9lhsiswl0xya7z8r8j0a2";
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-xml-light";
+  version = "2.4";
+
+  src = fetchFromGitHub {
+    owner = "ncannasse";
+    repo = "xml-light";
+    rev = version;
+    sha256 = "sha256-2txmkl/ZN5RGaLQJmr+orqwB4CbFk2RpLJd4gr7kPiE=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
-  
   installPhase = ''
+    runHook preInstall
     make install_ocamlfind
     mkdir -p $out/share
     cp -vai doc $out/share/
+    runHook postInstall
   '';
 
   meta = {
@@ -35,9 +34,9 @@ stdenv.mkDerivation {
       entirely written in OCaml, hence it does not require additional C
       library.
     '';
-    homepage = http://tech.motion-twin.com/xmllight.html;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    homepage = "http://tech.motion-twin.com/xmllight.html";
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.romildo ];
+    inherit (ocaml.meta) platforms;
   };
 }

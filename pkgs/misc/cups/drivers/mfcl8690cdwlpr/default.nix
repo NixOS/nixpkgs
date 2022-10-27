@@ -1,5 +1,5 @@
 { coreutils, dpkg, fetchurl, file, ghostscript, gnugrep, gnused,
-makeWrapper, perl, pkgs, stdenv, which }:
+makeWrapper, perl, pkgs, lib, stdenv, which }:
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwlpr";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 
     wrapProgram $filter \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
       coreutils file ghostscript gnugrep gnused which
       ]}
 
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L8690CDW LPR printer driver";
-    homepage = http://www.brother.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.fuzzy-id ];
+    homepage = "http://www.brother.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ ];
     platforms = [ "i686-linux" ];
   };
 }

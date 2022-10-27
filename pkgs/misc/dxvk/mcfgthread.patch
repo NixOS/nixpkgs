@@ -1,0 +1,34 @@
+diff --git a/setup_dxvk.sh b/setup_dxvk.sh
+index 3e63ecf0..87c04f23 100755
+--- a/setup_dxvk.sh
++++ b/setup_dxvk.sh
+@@ -133,6 +133,8 @@
+         rm -v "${dstfile}"
+       fi
+       $file_cmd "${srcfile}" "${dstfile}"
++    elif [ "${4}" = "--force" ]; then
++      $file_cmd "${srcfile}" "${dstfile}"
+     else
+       echo "${dstfile}: File not found in wine prefix" >&2
+       return 1
+@@ -170,12 +172,12 @@
+ }
+ 
+ install() {
+-  installFile "$win64_sys_path" "$dxvk_lib64" "$1"
++  installFile "$win64_sys_path" "$dxvk_lib64" "$1" "${2-}"
+   inst64_ret="$?"
+ 
+   inst32_ret=-1
+   if $wow64; then
+-    installFile "$win32_sys_path" "$dxvk_lib32" "$1"
++    installFile "$win32_sys_path" "$dxvk_lib32" "$1" "${2-}"
+     inst32_ret="$?"
+   fi
+ 
+@@ -214,3 +216,5 @@
+ 
+ $action d3d10core
+ $action d3d11
++
++basedir="" dxvk_lib32=@mcfgthreads32@/bin dxvk_lib64=@mcfgthreads64@/bin $action mcfgthread-12 --force

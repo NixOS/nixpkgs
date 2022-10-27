@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, docutils, makeWrapper
+{ lib, stdenv, fetchFromGitHub, docutils, makeWrapper
 , gnupg, curl, rsync, coreutils
 , gawk, gnused, gnugrep
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-remote-gcrypt";
-  version = "1.2";
+  version = "1.5";
   rev = version;
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "spwhitton";
     repo = "git-remote-gcrypt";
-    sha256 = "0isfg0vlmcphxzj4jm32dycprhym26ina1b28jgc4j57kiqqrdcy";
+    sha256 = "sha256-uy6s3YQwY/aZmQoW/qe1YrSlfNHyDTXBFxB6fPGiPNQ=";
   };
 
   outputs = [ "out" "man" ];
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     prefix="$out" ./install.sh
     wrapProgram "$out/bin/git-remote-gcrypt" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg curl rsync coreutils
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg curl rsync coreutils
                                                     gawk gnused gnugrep ]}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://spwhitton.name/tech/code/git-remote-gcrypt;
+  meta = with lib; {
+    homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
     description = "A git remote helper for GPG-encrypted remotes";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ellis montag451 ];

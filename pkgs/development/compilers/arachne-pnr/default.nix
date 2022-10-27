@@ -1,30 +1,28 @@
-{ stdenv, fetchFromGitHub, icestorm }:
-
-with builtins;
+{ lib, stdenv, fetchFromGitHub, icestorm }:
 
 stdenv.mkDerivation rec {
   pname = "arachne-pnr";
-  version = "2018.09.09";
+  version = "2019.07.29";
 
   src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "arachne-pnr";
-    rev    = "840bdfdeb38809f9f6af4d89dd7b22959b176fdd";
-    sha256 = "1dqvjvgvsridybishv4pnigw9gypxh7r7nrqp9z9qq92v7c5rxzl";
+    owner = "yosyshq";
+    repo = "arachne-pnr";
+    rev = "c40fb2289952f4f120cc10a5a4c82a6fb88442dc";
+    sha256 = "0lg9rccr486cvips3jf289af2b4a2j9chc8iqnkhykgi1hw4pszc";
   };
 
   enableParallelBuilding = true;
-  makeFlags =
-    [ "PREFIX=$(out)"
-      "ICEBOX=${icestorm}/share/icebox"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ICEBOX=${icestorm}/share/icebox"
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${substring 0 10 src.rev}'
+      --replace 'echo UNKNOWN' 'echo ${lib.substring 0 10 src.rev}'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Place and route tool for FPGAs";
     longDescription = ''
       Arachne-pnr implements the place and route step of
@@ -36,9 +34,9 @@ stdenv.mkDerivation rec {
       is a textual bitstream representation for assembly by
       the IceStorm [2] icepack command.
     '';
-    homepage = https://github.com/cseed/arachne-pnr;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/cseed/arachne-pnr";
+    license = licenses.mit;
+    maintainers = with maintainers; [ shell thoughtpolice ];
+    platforms = platforms.unix;
   };
 }

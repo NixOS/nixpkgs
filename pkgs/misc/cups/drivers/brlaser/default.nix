@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, cups }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, cups }:
 
 stdenv.mkDerivation rec {
   pname = "brlaser";
-  version = "5";
+  version = "6";
 
   src = fetchFromGitHub {
     owner = "pdewacht";
     repo = "brlaser";
     rev = "v${version}";
-    sha256 = "133fx49wkg1v8r4kcishd035hlsscv8kc2q4jnln5qmyhpyygjyy";
+    sha256 = "1995s69ksq1fz0vb34v0ndiqncrinbrlpmp70rkl6az7kag99s80";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCUPS_SERVER_BIN=lib/cups" "-DCUPS_DATA_DIR=share/cups" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CUPS driver for Brother laser printers";
     longDescription =
       ''
@@ -34,13 +34,19 @@ stdenv.mkDerivation rec {
            Brother DCP-7065DN
            Brother DCP-7080
            Brother DCP-L2500D
+           Brother DCP-L2520D
            Brother DCP-L2540DW
-           Brother HL-1110 series
-           Brother HL-1200 series
-           Brother HL-L2300D series
-           Brother HL-L2320D series
-           Brother HL-L2340D series
-           Brother HL-L2360D series
+           Brother HL-1110
+           Brother HL-1200
+           Brother HL-2030
+           Brother HL-2140
+           Brother HL-2220
+           Brother HL-2270DW
+           Brother HL-5030
+           Brother HL-L2300D
+           Brother HL-L2320D
+           Brother HL-L2340D
+           Brother HL-L2360D
            Brother MFC-1910W
            Brother MFC-7240
            Brother MFC-7360N
@@ -49,7 +55,7 @@ stdenv.mkDerivation rec {
            Brother MFC-L2710DW
            Lenovo M7605D
       '';
-    homepage = https://github.com/pdewacht/brlaser;
+    homepage = "https://github.com/pdewacht/brlaser";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ StijnDW ];

@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
 
-stdenv.mkDerivation {
-
+stdenv.mkDerivation rec {
   pname = "structure-synth";
-  version = "v1.5";
+  version = "1.5.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/structuresynth/StructureSynth-Source-v1.5.0.zip;
+    url = "mirror://sourceforge/structuresynth/StructureSynth-Source-v${version}.zip";
     sha256 = "1kiammx46719az6jzrav8yrwz82nk4m72ybj0kpbnvp9wfl3swbb";
   };
 
-  buildInputs = [ qt4 unzip libGLU makeWrapper ];
-  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ qt4 libGLU ];
+  nativeBuildInputs = [ qmake4Hook makeWrapper unzip ];
 
   # Thanks to https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=672000#15:
   patches = [ ./gcc47.patch ];
@@ -34,12 +33,12 @@ stdenv.mkDerivation {
   # either $HOME or $PWD - so help it along by moving $PWD to 'share',
   # where we just copied those two directories:
   preFixup = ''
-    wrapProgram "$out/bin/structure-synth" --run "cd $out/share"
+    wrapProgram "$out/bin/structure-synth" --chdir "$out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for generating 3D structures by specifying a design grammar";
-    homepage = http://structuresynth.sourceforge.net;
+    homepage = "http://structuresynth.sourceforge.net";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl3;
     platforms = platforms.linux;

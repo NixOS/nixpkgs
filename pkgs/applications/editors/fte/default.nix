@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, unzip, perl, libX11, libXpm, gpm, ncurses, slang }:
+{ lib, stdenv, fetchurl, unzip, perl, libX11, libXpm, gpm, ncurses, slang }:
 
 stdenv.mkDerivation rec {
-  name = "fte-0.50.02";
+  pname = "fte";
+  version = "0.50.02";
 
-  buildInputs = [ unzip perl libX11 libXpm gpm ncurses slang ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ perl libX11 libXpm gpm ncurses slang ];
 
   ftesrc = fetchurl {
     url = "mirror://sourceforge/fte/fte-20110708-src.zip";
@@ -15,15 +17,15 @@ stdenv.mkDerivation rec {
   };
   src = [ ftesrc ftecommon ];
 
-  buildFlags = "PREFIX=$(out)";
+  buildFlags = [ "PREFIX=$(out)" ];
 
-  installFlags = "PREFIX=$(out) INSTALL_NONROOT=1";
+  installFlags = [ "PREFIX=$(out)" "INSTALL_NONROOT=1" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free text editor for developers";
-    homepage = http://fte.sourceforge.net/;
+    homepage = "http://fte.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

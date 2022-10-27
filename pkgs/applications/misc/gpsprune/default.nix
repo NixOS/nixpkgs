@@ -1,43 +1,49 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre8 }:
+{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jre, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "19.2";
+  version = "22.2";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "1q2kpkkh75b9l1x7fkmv88s8k84gzcdnrg5sgf8ih0zrp49lawg9";
+    sha256 = "sha256-7T7UmS650VvYN29vQxemzsaxF5wPFF+yCNCTyXY7nmY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre8 ];
+  dontUnpack = true;
 
-  desktopItem = makeDesktopItem {
-    name = "gpsprune";
-    exec = "gpsprune";
-    icon = "gpsprune";
-    desktopName = "GpsPrune";
-    genericName = "GPS Data Editor";
-    comment = meta.description;
-    categories = "Education;Geoscience;";
-  };
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  buildInputs = [ jre ];
 
-  buildCommand = ''
-    mkdir -p $out/bin $out/share/java
-    cp -v $src $out/share/java/gpsprune.jar
-    makeWrapper ${jre8}/bin/java $out/bin/gpsprune \
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gpsprune";
+      exec = "gpsprune";
+      icon = "gpsprune";
+      desktopName = "GpsPrune";
+      genericName = "GPS Data Editor";
+      comment = meta.description;
+      categories = [ "Education" "Geoscience" ];
+    })
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 ${src} $out/share/java/gpsprune.jar
+    makeWrapper ${jre}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications"/"* $out/share/applications
     mkdir -p $out/share/pixmaps
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
-    homepage = https://activityworkshop.net/software/gpsprune/;
+    homepage = "https://activityworkshop.net/software/gpsprune/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
   };
 }

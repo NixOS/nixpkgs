@@ -1,33 +1,64 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, nose
-, pandas
+, flit-core
 , matplotlib
+, pytestCheckHook
+, numpy
+, pandas
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.9.0";
+  version = "0.12.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f";
+    hash = "sha256-iT8XKS2LrKYWwVeN21jrJcctYi9U/F7jKcggfcm1eyM=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ pandas matplotlib ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkPhase = ''
-    nosetests -v
-  '';
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pandas
+    scipy
+  ];
 
-  # Computationally very demanding tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
-    description = "Statisitical data visualization";
-    homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
+  disabledTests = [
+    # incompatible with matplotlib 3.5
+    "TestKDEPlotBivariate"
+    "TestBoxPlotter"
+    "TestCatPlot"
+    "TestKDEPlotUnivariate"
+    "test_with_rug"
+    "test_bivariate_kde_norm"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # overly strict float tolerances
+    "TestDendrogram"
+  ];
+
+  pythonImportsCheck = [
+    "seaborn"
+  ];
+
+  meta = with lib; {
+    description = "Statistical data visualization";
+    homepage = "https://seaborn.pydata.org/";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

@@ -1,32 +1,33 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , haskellPackages, haskell
 , which, swiProlog, rlwrap, tk
 , curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
-  name = "pakcs-2.1.2";
+  pname = "pakcs";
+  version = "2.2.1";
 
-  # Don't switch to development release without a reason, because its
-  # source updates without version bump. Prefer current release instead.
+  # Don't switch to "Current release" without a reason, because its
+  # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
-    url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "0i0nprli3knc7zlp5qkqkpiq3ny36v52hnvgph376l3ajjds7wf6";
+    url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
+    sha256 = "1jyg29j8r8pgcin7ixdya6c3zzfjdi66rghpwrfnkk133fz4iz7s";
   };
 
   curry-frontend = (haskellPackages.override {
     overrides = self: super: {
-      curry-base = haskell.lib.overrideCabal (super.callPackage ./curry-base.nix {}) (drv: {
+      curry-base = haskell.lib.compose.overrideCabal (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-base";
-      });
-      curry-frontend = haskell.lib.overrideCabal (super.callPackage ./curry-frontend.nix {}) (drv: {
+      }) (super.callPackage ./curry-base.nix {});
+      curry-frontend = haskell.lib.compose.overrideCabal (drv: {
         inherit src;
         postUnpack = "sourceRoot+=/frontend/curry-frontend";
-      });
+      }) (super.callPackage ./curry-frontend.nix {});
     };
   }).curry-frontend;
 in stdenv.mkDerivation {
-  inherit name src;
+  inherit pname version src;
 
   buildInputs = [ swiProlog ];
   nativeBuildInputs = [ which makeWrapper ];
@@ -73,11 +74,11 @@ in stdenv.mkDerivation {
 
     # List of dependencies from currytools/cpm/src/CPM/Main.curry
     wrapProgram $out/pakcs/bin/cypm \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.informatik.uni-kiel.de/~pakcs/;
+  meta = with lib; {
+    homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
     description = "An implementation of the multi-paradigm declarative language Curry";
     license = licenses.bsd3;
 
@@ -93,7 +94,7 @@ in stdenv.mkDerivation {
       with dynamic web pages, prototyping embedded systems).
     '';
 
-    maintainers = with maintainers; [ kkallio gnidorah ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

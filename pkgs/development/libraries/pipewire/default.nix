@@ -1,49 +1,256 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, alsaLib, ffmpeg, libjack2, udev, libva, xorg
-, sbc, SDL2, makeFontsConf
+{ stdenv
+, lib
+, buildPackages
+, fetchFromGitLab
+, fetchpatch
+, removeReferencesTo
+, python3
+, meson
+, ninja
+, eudev
+, systemd
+, enableSystemd ? true
+, pkg-config
+, docutils
+, doxygen
+, graphviz
+, glib
+, dbus
+, alsa-lib
+, libjack2
+, libusb1
+, udev
+, libva
+, libsndfile
+, vulkan-headers
+, vulkan-loader
+, webrtc-audio-processing
+, ncurses
+, readline81 # meson can't find <7 as those versions don't have a .pc file
+, lilv
+, makeFontsConf
+, callPackage
+, nixosTests
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
+, valgrind
+, withMediaSession ? true
+, libcameraSupport ? true
+, libcamera
+, libdrm
+, gstreamerSupport ? true
+, gst_all_1
+, ffmpegSupport ? true
+, ffmpeg
+, bluezSupport ? true
+, bluez
+, sbc
+, libfreeaptx
+, ldacbt
+, liblc3
+, fdk_aac
+, libopus
+, nativeHspSupport ? true
+, nativeHfpSupport ? true
+, ofonoSupport ? true
+, hsphfpdSupport ? true
+, pulseTunnelSupport ? true
+, libpulseaudio
+, zeroconfSupport ? true
+, avahi
+, raopSupport ? true
+, openssl
+, rocSupport ? true
+, roc-toolkit
+, x11Support ? true
+, libcanberra
+, xorg
 }:
 
 let
-  fontsConf = makeFontsConf {
-    fontDirectories = [ ];
+  mesonEnableFeature = b: if b then "enabled" else "disabled";
+  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
+
+  self = stdenv.mkDerivation rec {
+    pname = "pipewire";
+    version = "0.3.59";
+
+    outputs = [
+      "out"
+      "lib"
+      "pulse"
+      "jack"
+      "dev"
+      "doc"
+      "man"
+      "installedTests"
+    ];
+
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      owner = "pipewire";
+      repo = "pipewire";
+      rev = version;
+      sha256 = "sha256-4wDtdgkjBRlthhwbI3cSQFnbr+gxPQP5j5YnrWiQVp4=";
+    };
+
+    patches = [
+      # Break up a dependency cycle between outputs.
+      ./0040-alsa-profiles-use-libdir.patch
+      # Change the path of the pipewire-pulse binary in the service definition.
+      ./0050-pipewire-pulse-path.patch
+      # Move installed tests into their own output.
+      ./0070-installed-tests-path.patch
+      # Add option for changing the config install directory
+      ./0080-pipewire-config-dir.patch
+      # Remove output paths from the comments in the config templates to break dependency cycles
+      ./0090-pipewire-config-template-paths.patch
+      # Place SPA data files in lib output to avoid dependency cycles
+      ./0095-spa-data-dir.patch
+
+      # remove when updating to 0.3.60
+      (fetchpatch { # filter-chain: iterate the port correctly
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/94a64268613adac8ef6f3e6c1f04468220540d00.patch";
+        sha256 = "sha256-IDTB7NgadgR3vKv97Nvd9pBfnOnMi21YsvLdD1Ew7HE=";
+      })
+    ];
+
+    nativeBuildInputs = [
+      docutils
+      doxygen
+      graphviz
+      meson
+      ninja
+      pkg-config
+      python3
+    ];
+
+    buildInputs = [
+      alsa-lib
+      dbus
+      glib
+      libjack2
+      libusb1
+      libsndfile
+      lilv
+      ncurses
+      readline81
+      udev
+      vulkan-headers
+      vulkan-loader
+      webrtc-audio-processing
+    ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ++ lib.optionals libcameraSupport [ libcamera libdrm ]
+    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
+    ++ lib.optional pulseTunnelSupport libpulseaudio
+    ++ lib.optional zeroconfSupport avahi
+    ++ lib.optional raopSupport openssl
+    ++ lib.optional rocSupport roc-toolkit
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+
+    # Valgrind binary is required for running one optional test.
+    checkInputs = lib.optional withValgrind valgrind;
+
+    mesonFlags = [
+      "-Ddocs=enabled"
+      "-Dudevrulesdir=lib/udev/rules.d"
+      "-Dinstalled_tests=enabled"
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
+      "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
+      "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+      "-Droc=${mesonEnableFeature rocSupport}"
+      "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
+      "-Davahi=${mesonEnableFeature zeroconfSupport}"
+      "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
+      "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
+      "-Dudev=${mesonEnableFeature (!enableSystemd)}"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+      "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
+      "-Dbluez5=${mesonEnableFeature bluezSupport}"
+      "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
+      "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
+      "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
+      "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      "-Dbluez5-codec-lc3plus=disabled"
+      "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
+      "-Dsysconfdir=/etc"
+      "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
+      "-Draop=${mesonEnableFeature raopSupport}"
+      "-Dsession-managers="
+      "-Dvulkan=enabled"
+      "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+    ];
+
+    # Fontconfig error: Cannot load default config file
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+    doCheck = true;
+
+    postUnpack = ''
+      patchShebangs source/doc/input-filter.sh
+      patchShebangs source/doc/input-filter-h.sh
+    '';
+
+    postInstall = ''
+      mkdir $out/nix-support
+      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
+        pushd $lib/share/pipewire
+        for f in *.conf; do
+          echo "Generating JSON from $f"
+
+          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+        done
+        popd
+      '' else ''
+        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
+      ''}
+
+      ${lib.optionalString enableSystemd ''
+        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ''}
+
+      moveToOutput "bin/pipewire-pulse" "$pulse"
+
+      moveToOutput "bin/pw-jack" "$jack"
+    '';
+
+    passthru = {
+      updateScript = ./update-pipewire.sh;
+      tests = {
+        installedTests = nixosTests.installed-tests.pipewire;
+
+        # This ensures that all the paths used by the NixOS module are found.
+        test-paths = callPackage ./test-paths.nix { package = self; } {
+          paths-out = [
+            "share/alsa/alsa.conf.d/50-pipewire.conf"
+            "nix-support/client-rt.conf.json"
+            "nix-support/client.conf.json"
+            "nix-support/jack.conf.json"
+            "nix-support/minimal.conf.json"
+            "nix-support/pipewire.conf.json"
+            "nix-support/pipewire-pulse.conf.json"
+          ];
+          paths-lib = [
+            "lib/alsa-lib/libasound_module_pcm_pipewire.so"
+            "share/alsa-card-profile/mixer"
+          ];
+        };
+      };
+    };
+
+    meta = with lib; {
+      description = "Server and user space API to deal with multimedia pipelines";
+      homepage = "https://pipewire.org/";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jtojnar kranzes ];
+    };
   };
-in stdenv.mkDerivation rec {
-  pname = "pipewire";
-  version = "0.2.7";
 
-  src = fetchFromGitHub {
-    owner = "PipeWire";
-    repo = "pipewire";
-    rev = version;
-    sha256 = "1q5wrqnhhs6r49p8yvkw1pl0cnsd4rndxy4h5lvdydwgf1civcwc";
-  };
-
-  outputs = [ "out" "lib" "dev" "doc" ];
-
-  nativeBuildInputs = [
-    meson ninja pkgconfig doxygen graphviz valgrind
-  ];
-  buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer
-    alsaLib ffmpeg libjack2 udev libva xorg.libX11 sbc SDL2
-  ];
-
-  mesonFlags = [
-    "-Ddocs=true"
-    "-Dgstreamer=enabled"
-  ];
-
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
-
-  FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
-
-  doCheck = true;
-
-  meta = with stdenv.lib; {
-    description = "Server and user space API to deal with multimedia pipelines";
-    homepage = https://pipewire.org/;
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jtojnar ];
-  };
-}
+in
+self

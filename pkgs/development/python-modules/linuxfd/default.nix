@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "linuxfd";
-  version = "1.4.4";
+  version = "1.5";
 
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8bf6847b5c8e50e0842024d2911bfc1048db9abf37582a310cd57070971d692";
+    sha256 = "b8c00109724b68e093f9b556edd78e41ed65fb8d969fd0e83186a97b5d3139b4";
   };
 
   # no tests
@@ -18,7 +18,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the Linux eventfd/signalfd/timerfd/inotify syscalls";
-    homepage = https://github.com/FrankAbelbeck/linuxfd;
-    license = with lib.licenses; [ lgpl3 ];
+    homepage = "https://github.com/FrankAbelbeck/linuxfd";
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ lgpl3Plus ];
   };
 }

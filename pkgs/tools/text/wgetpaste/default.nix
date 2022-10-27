@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, wget, bash }:
+{ lib, stdenv, fetchurl, wget, bash }:
 
 stdenv.mkDerivation rec {
-  version = "2.29";
   pname = "wgetpaste";
+  version = "2.32";
 
   src = fetchurl {
-    url = "http://wgetpaste.zlin.dk/${pname}-${version}.tar.bz2";
-    sha256 = "1rp0wxr3zy7y2xp3azaadfghrx7g0m138f9qg6icjxkkz4vj9r22";
+    url = "https://github.com/zlin/wgetpaste/releases/download/${version}/wgetpaste-${version}.tar.xz";
+    sha256 = "04yv1hndxhrc5axwiw1yy0yrw1kli5fk4yj4267l7xdwqzxvl7b2";
   };
   # currently zsh-autocompletion support is not installed
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Command-line interface to various pastebins";
-    homepage = http://wgetpaste.zlin.dk/;
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ qknight domenkozar ndowens ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/zlin/wgetpaste";
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ qknight domenkozar ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,31 +1,60 @@
-{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "20190521";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "CraneStation";
-    repo = "wasmtime";
-    rev = "e530a582afe6a2b5735fd7cdf5e2e88391e58669";
-    sha256 = "13lqf9dp1cnw7ms7hcgirmlfkr0v7nrn3p5g7yacfasrqgnwsyl8";
+    owner = "bytecodealliance";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-ffmdm+L4QL4NHQp58TgHYC0sGIbCIi4Q9AleG0tSt0s=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1jbpq09czm295316gdv3y0pfapqs0ynj3qbarwlnrv7valq5ak13";
+  cargoSha256 = "sha256-BkH9gPo61s4m36hjAFU8ZLmtje787mBswF7zUMwEc70=";
 
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoBuildFlags = [
+    "--package wasmtime-cli"
+    "--package wasmtime-c-api"
+  ];
 
-  nativeBuildInputs = [ python cmake clang ];
-  buildInputs = [ llvmPackages.libclang ];
+  outputs = [ "out" "dev" ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  # We disable tests on x86_64-darwin because Hydra runners do not
+  # support SSE3, SSSE3, SSE4.1 and SSE4.2 at this time. This is
+  # required by wasmtime. Given this is very specific to Hydra
+  # runners, just disable tests on this platform, so we don't get
+  # false positives of this package being broken due to failed runs on
+  # Hydra (e.g. https://hydra.nixos.org/build/187667794/)
+  doCheck = (stdenv.system != "x86_64-darwin");
+  checkFlags = [
+    "--skip=cli_tests::run_cwasm"
+    "--skip=commands::compile::test::test_unsupported_flags_compile"
+    "--skip=commands::compile::test::test_aarch64_flags_compile"
+    "--skip=commands::compile::test::test_successful_compile"
+    "--skip=commands::compile::test::test_x64_flags_compile"
+    "--skip=commands::compile::test::test_x64_presets_compile"
+    "--skip=traps::parse_dwarf_info"
+  ];
+
+  postInstall = ''
+    # move libs from out to dev
+    install -d -m 0755 $dev/lib
+    install -m 0644 ''${!outputLib}/lib/* $dev/lib
+    rm -r ''${!outputLib}/lib
+
+    install -d -m0755 $dev/include/wasmtime
+    install -m0644 $src/crates/c-api/include/*.h $dev/include
+    install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
+    install -m0644 $src/crates/c-api/wasm-c-api/include/* $dev/include
+  '';
 
   meta = with lib; {
-    description = "Standalone JIT-style runtime for WebAsssembly, using Cranelift";
-    homepage = https://github.com/CraneStation/wasmtime;
+    description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
+    homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
-    maintainers = [ maintainers.matthewbauer ];
+    maintainers = with maintainers; [ ereslibre matthewbauer ];
     platforms = platforms.unix;
   };
 }

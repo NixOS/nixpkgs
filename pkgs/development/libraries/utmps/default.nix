@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "utmps";
-  version = "0.0.2.1";
-  sha256 = "1q90mcn50irhhrzl3h9bvhsn7hac0zgg67b6hfhmc5yvh4c8wnr4";
+  version = "0.1.2.0";
+  sha256 = "sha256-kCXZYbgnGg7MjutXhhJra3mTdq+m8r0lwPhy/STxEjw=";
 
   description = "A secure utmpx and wtmp implementation";
 
@@ -29,4 +29,3 @@ buildPackage {
     mv examples $doc/share/doc/utmps/examples
   '';
 }
-

@@ -1,39 +1,57 @@
-{ stdenv, fetchFromGitHub, which
-, withPython ? true, python
-, withPHP72 ? true, php72
-, withPHP73 ? false, php73
-, withPerl ? true, perl
+{ lib, stdenv, fetchFromGitHub, nixosTests, which
+, pcre2
+, withPython3 ? true, python3, ncurses
+, withPHP80 ? false, php80
+, withPHP81 ? true, php81
+, withPerl534 ? false, perl534
+, withPerl536 ? true, perl536
 , withPerldevel ? false, perldevel
-, withRuby_2_4 ? false, ruby_2_4
-, withRuby ? true, ruby
+, withRuby_2_7 ? true, ruby_2_7
+, withRuby_3_0 ? false, ruby_3_0
+, withRuby_3_1 ? false, ruby_3_1
 , withSSL ? true, openssl ? null
 , withIPv6 ? true
 , withDebug ? false
 }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
-  version = "1.12.0";
+let
+  phpConfig = {
+    embedSupport = true;
+    apxs2Support = false;
+    systemdSupport = false;
+    phpdbgSupport = false;
+    cgiSupport = false;
+    fpmSupport = false;
+  };
+
+  php80-unit = php80.override phpConfig;
+  php81-unit = php81.override phpConfig;
+
+in stdenv.mkDerivation rec {
+  version = "1.28.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
-    repo = "unit";
+    repo = pname;
     rev = version;
-    sha256 = "1ylzfsajjfaxzn7mycjs69ms4x58r4szpk07kqrmbf03dp2cmxkq";
+    sha256 = "sha256-nsalloOghC8tOMRP/N/L2raOmWwA4cz6Yr6H3IHHbR4=";
   };
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ ]
-    ++ optional withPython python
-    ++ optional withPHP72 php72
-    ++ optional withPHP73 php73
-    ++ optional withPerl perl
+  buildInputs = [ pcre2.dev ]
+    ++ optionals withPython3 [ python3 ncurses ]
+    ++ optional withPHP80 php80-unit
+    ++ optional withPHP81 php81-unit
+    ++ optional withPerl534 perl534
+    ++ optional withPerl536 perl536
     ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_4 ruby_2_4
-    ++ optional withRuby ruby
+    ++ optional withRuby_2_7 ruby_2_7
+    ++ optional withRuby_3_0 ruby_3_0
+    ++ optional withRuby_3_1 ruby_3_1
     ++ optional withSSL openssl;
 
   configureFlags = [
@@ -41,23 +59,35 @@ stdenv.mkDerivation rec {
     "--pid=/run/unit/unit.pid"
     "--user=unit"
     "--group=unit"
-  ] ++ optional withSSL     [ "--openssl" ]
-    ++ optional (!withIPv6) [ "--no-ipv6" ]
-    ++ optional withDebug   [ "--debug" ];
+  ] ++ optional withSSL     "--openssl"
+    ++ optional (!withIPv6) "--no-ipv6"
+    ++ optional withDebug   "--debug";
+
+  # Optionally add the PHP derivations used so they can be addressed in the configs
+  usedPhp80 = optionals withPHP80 php80-unit;
+  usedPhp81 = optionals withPHP81 php81-unit;
 
   postConfigure = ''
-    ${optionalString withPython     "./configure python  --module=python    --config=${python}/bin/python-config  --lib-path=${python}/lib"}
-    ${optionalString withPHP72      "./configure php     --module=php72     --config=${php72.dev}/bin/php-config  --lib-path=${php72}/lib"}
-    ${optionalString withPHP73      "./configure php     --module=php73     --config=${php73.dev}/bin/php-config  --lib-path=${php73}/lib"}
-    ${optionalString withPerl       "./configure perl    --module=perl      --perl=${perl}/bin/perl"}
-    ${optionalString withPerldevel  "./configure perl    --module=perl529   --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_4   "./configure ruby    --module=ruby24    --ruby=${ruby_2_4}/bin/ruby"}
-    ${optionalString withRuby       "./configure ruby    --module=ruby      --ruby=${ruby}/bin/ruby"}
+    ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
+    ${optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}
+    ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
+    ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
+    ${optionalString withPerl536    "./configure perl   --module=perl536  --perl=${perl536}/bin/perl"}
+    ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
+    ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
+    ${optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
+    ${optionalString withRuby_3_1   "./configure ruby   --module=ruby31   --ruby=${ruby_3_1}/bin/ruby"}
   '';
 
+  postInstall = ''
+    rmdir $out/state
+  '';
+
+  passthru.tests.unit-php = nixosTests.unit-php;
+
   meta = {
-    description = "Dynamic web and application server, designed to run applications in multiple languages.";
-    homepage    = https://unit.nginx.org/;
+    description = "Dynamic web and application server, designed to run applications in multiple languages";
+    homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

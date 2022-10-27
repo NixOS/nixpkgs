@@ -1,7 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, isPy27
+, click
 , num2words
 , numpy
 , scipy
@@ -10,20 +10,20 @@
 , patsy
 , bids-validator
 , sqlalchemy
-, pytest
-, pathlib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.9.2";
+  version = "0.15.3";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16c0v800yklp043prbrx1357vx1mq5gddxz5zqlcnf4akhzcqrxs";
+    sha256 = "sha256-TZnJebxLwgnP9woC0downJv4xrAzjioLZuvqd8fzxGE=";
   };
 
   propagatedBuildInputs = [
+    click
     num2words
     numpy
     scipy
@@ -34,16 +34,16 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytest ] ++ lib.optionals isPy27 [ pathlib ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "bids" ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
-    homepage = https://github.com/bids-standard/pybids;
+    homepage = "https://github.com/bids-standard/pybids";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
+    # Doesn't support sqlalchemy >=1.4
+    # See https://github.com/bids-standard/pybids/issues/680
+    broken = true;
   };
 }

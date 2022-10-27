@@ -1,10 +1,10 @@
 /*
-   Copyright: (C)2015-2017 Laurent Bercot.  http://skarnet.org/
+   Copyright: (C)2015-2020 Laurent Bercot.  http://skarnet.org/
    ISC license. See http://opensource.org/licenses/ISC
 
-   Build-time requirements: skalibs.  http://skarnet.org/software/skalibs/
+   Build-time requirements: skalibs.  https://skarnet.org/software/skalibs/
    Run-time requirements: none, if you link skalibs statically.
- 
+
    Compilation:
      gcc -o sdnotify-wrapper -L/usr/lib/skalibs sdnotify-wrapper.c -lskarnet
    Use /usr/lib/skalibs/libskarnet.a instead of -lskarnet to link statically.
@@ -53,20 +53,22 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+
 #include <skalibs/uint64.h>
 #include <skalibs/types.h>
 #include <skalibs/bytestr.h>
 #include <skalibs/sgetopt.h>
 #include <skalibs/strerr2.h>
-#include <skalibs/env.h>
 #include <skalibs/allreadwrite.h>
 #include <skalibs/tai.h>
 #include <skalibs/iopause.h>
 #include <skalibs/djbunix.h>
-#include <skalibs/webipc.h>
+#include <skalibs/socket.h>
+#include <skalibs/exec.h>
 
 #define USAGE "sdnotify-wrapper [ -d fd ] [ -f ] [ -t timeout ] [ -k ] prog..."
 #define dieusage() strerr_dieusage(100, USAGE)
@@ -102,7 +104,7 @@ static inline int run_child (int fd, unsigned int timeout, pid_t pid, char const
 {
   char dummy[4096] ;
   iopause_fd x = { .fd = fd, .events = IOPAUSE_READ } ;
-  tain_t deadline ;
+  tain deadline ;
   tain_now_g() ;
   if (timeout) tain_from_millisecs(&deadline, timeout) ;
   else deadline = tain_infinite_relative ;
@@ -123,18 +125,18 @@ static inline int run_child (int fd, unsigned int timeout, pid_t pid, char const
   return 0 ;
 }
 
-int main (int argc, char const *const *argv, char const *const *envp)
+int main (int argc, char const *const *argv)
 {
-  char const *s = env_get2(envp, VAR) ;
+  char const *s = getenv(VAR) ;
   unsigned int fd = 1 ;
   unsigned int timeout = 0 ;
   int df = 1, keep = 0 ;
   PROG = "sdnotify-wrapper" ;
   {
-    subgetopt_t l = SUBGETOPT_ZERO ;
+    subgetopt l = SUBGETOPT_ZERO ;
     for (;;)
     {
-      register int opt = subgetopt_r(argc, argv, "d:ft:k", &l) ;
+      int opt = subgetopt_r(argc, argv, "d:ft:k", &l) ;
       if (opt == -1) break ;
       switch (opt)
       {
@@ -149,7 +151,7 @@ int main (int argc, char const *const *argv, char const *const *envp)
   }
   if (!argc) dieusage() ;
 
-  if (!s) xpathexec_run(argv[0], argv, envp) ;
+  if (!s) xexec(argv) ;
   else
   {
     pid_t parent = getpid() ;
@@ -166,7 +168,7 @@ int main (int argc, char const *const *argv, char const *const *envp)
     }
     close(p[0]) ;
     if (fd_move((int)fd, p[1]) < 0) strerr_diefu1sys(111, "move descriptor") ;
-    if (keep) xpathexec_run(argv[0], argv, envp) ;
-    else xpathexec_r(argv, envp, env_len(envp), VAR, sizeof(VAR)) ;
+    if (keep) xexec(argv) ;
+    else xmexec_m(argv, VAR, sizeof(VAR)) ;
   }
 }

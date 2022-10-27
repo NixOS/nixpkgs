@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU_combined, libva, pkgconfig }:
+{ lib, stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libva-vdpau-driver";
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
                   sha256 = "1m4is6lk580mppsx2mvdv1xifj6gvx724si4qynsm9qrdfdc9fby"; })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libvdpau libGLU_combined libva ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libvdpau libGLU libGL libva ];
 
   postPatch = ''
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/vaapi/vdpau-driver";
     license = licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";

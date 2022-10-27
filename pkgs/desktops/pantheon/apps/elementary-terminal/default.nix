@@ -1,81 +1,85 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, fetchpatch
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , python3
 , vala
 , desktop-file-utils
 , gtk3
-, libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
-, appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.3.6";
-
-  repoName = "terminal";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "terminal";
     rev = version;
-    sha256 = "0jp21sy8k3jq3ycvng9yy2hbhcvfgiknxxa8vcg3c06vqhadmnc3";
+    sha256 = "sha256-qxjHrlpdJcfXEUan/JgU7HqBRdB36gxAb5xmd/ySsj0=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
-  };
+  patches = [
+    # TerminalWidget: Fix terminal freeze when closing in GLib 2.73.2+
+    # https://github.com/elementary/terminal/pull/691
+    (fetchpatch {
+      url = "https://github.com/elementary/terminal/commit/3cabe328abb839f12cd21f4d3d474d1d1e42b907.patch";
+      sha256 = "sha256-wd36vOKqqPHCFPOok+Id9KqxbqjF0ohqsoxAU+jo4+Y=";
+    })
+  ];
 
   nativeBuildInputs = [
-    appstream
     desktop-file-utils
-    libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
+    libhandy
     libnotify
+    pcre2
     vte
   ];
-
-  # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
-  mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/elementary/terminal";
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

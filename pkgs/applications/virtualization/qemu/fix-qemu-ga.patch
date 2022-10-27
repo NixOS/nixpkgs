@@ -1,22 +1,36 @@
-diff --git a/qga/commands-posix.c b/qga/commands-posix.c
-index 0dc219d..9d020d3 100644
---- a/qga/commands-posix.c
-+++ b/qga/commands-posix.c
-@@ -102,6 +102,8 @@ void qmp_guest_shutdown(bool has_mode, const char *mode, Error **errp)
-         reopen_fd_to_null(1);
-         reopen_fd_to_null(2);
-
-+        execle("/run/current-system/sw/bin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
-+               "hypervisor initiated shutdown", (char*)NULL, environ);
-         execle("/sbin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
-                "hypervisor initiated shutdown", (char*)NULL, environ);
-         _exit(EXIT_FAILURE);
-@@ -189,6 +191,8 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
-
+diff --git i/qga/commands-posix.c w/qga/commands-posix.c
+index 954efed01b..39c4b916ce 100644
+--- i/qga/commands-posix.c
++++ w/qga/commands-posix.c
+@@ -123,6 +123,8 @@ void qmp_guest_shutdown(bool has_mode, const char *mode, Error **errp)
+         execl("/sbin/shutdown", "shutdown", shutdown_flag, "-g0", "-y",
+               "hypervisor initiated shutdown", (char *)NULL);
+ #else
++        execl("/run/current-system/sw/bin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
++               "hypervisor initiated shutdown", (char *)NULL);
+         execl("/sbin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
+                "hypervisor initiated shutdown", (char *)NULL);
+ #endif
+@@ -158,11 +160,13 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
+     pid_t pid;
+     Error *local_err = NULL;
+     struct timeval tv;
++    static const char hwclock_path_nix[] = "/run/current-system/sw/bin/hwclock";
+     static const char hwclock_path[] = "/sbin/hwclock";
+     static int hwclock_available = -1;
+ 
+     if (hwclock_available < 0) {
+-        hwclock_available = (access(hwclock_path, X_OK) == 0);
++        hwclock_available = (access(hwclock_path_nix, X_OK) == 0) ||
++                            (access(hwclock_path, X_OK) == 0);
+     }
+ 
+     if (!hwclock_available) {
+@@ -208,6 +212,7 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
+ 
          /* Use '/sbin/hwclock -w' to set RTC from the system time,
           * or '/sbin/hwclock -s' to set the system time from RTC. */
-+        execle("/run/current-system/sw/bin/hwclock", "hwclock", has_time ? "-w" : "-s",
-+               NULL, environ);
-         execle("/sbin/hwclock", "hwclock", has_time ? "-w" : "-s",
-                NULL, environ);
++        execl(hwclock_path_nix, "hwclock", has_time ? "-w" : "-s", NULL);
+         execl(hwclock_path, "hwclock", has_time ? "-w" : "-s", NULL);
          _exit(EXIT_FAILURE);
+     } else if (pid < 0) {

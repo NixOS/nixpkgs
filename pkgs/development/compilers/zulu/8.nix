@@ -1,27 +1,42 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
-, zulu, glib, libxml2, libav_0_8, ffmpeg, libxslt, libGL, alsaLib
-, fontconfig, freetype, gnome2, cairo, gdk-pixbuf, atk, xorg
-, swingSupport ? true }:
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, unzip
+, makeWrapper
+, setJavaClassPath
+, zulu
+# minimum dependencies
+, alsa-lib
+, fontconfig
+, freetype
+, xorg
+# runtime dependencies
+, cups
+# runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? stdenv.isLinux
+, cairo
+, glib
+, gtk3
+}:
 
 let
-  version = "8.28.0.1";
-  openjdk = "8.0.163";
+  version = "8.48.0.53";
+  openjdk = "8.0.265";
 
-  sha256_linux = "1z8s3a948nvv92wybnhkyr27ipibcy45k0zv5h5gp37ynd91df45";
-  sha256_darwin = "0i0prjijsgg0yyycplpp9rlfl428126rqz7bb31pchrhi6jhk699";
+  sha256_linux = "ed32513524b32a83b3b388831c69d1884df5675bd5069c6d1485fd1a060be209";
+  sha256_darwin = "36f189bfbd0255195848835819377474ba9c1c868e3c204633c451c96e21f30a";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
 
-  libraries = [
-    stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
-    gnome2.gtk cairo gdk-pixbuf atk
-  ] ++ (lib.optionals swingSupport (with xorg; [
-    xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
-    xorg.libXt xorg.libXrender stdenv.cc.cc
-  ]));
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo glib gtk3
+  ];
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
@@ -29,54 +44,76 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
     sha256 = hash;
   };
 
-  buildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin unzip;
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib # libasound.so wanted by lib/libjsound.so
+    fontconfig
+    freetype
+    stdenv.cc.cc # libstdc++.so.6
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    autoPatchelfHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    unzip
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r ./* "$out/"
-
-    jrePath="$out/jre"
-
-    rpath=$rpath''${rpath:+:}$jrePath/lib/amd64/jli
-    rpath=$rpath''${rpath:+:}$jrePath/lib/amd64/server
-    rpath=$rpath''${rpath:+:}$jrePath/lib/amd64/xawt
-    rpath=$rpath''${rpath:+:}$jrePath/lib/amd64
-
-    # set all the dynamic linkers
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
-
+  '' + lib.optionalString stdenv.isLinux ''
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
+  '' + ''
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+  '' + lib.optionalString stdenv.isLinux ''
+    # We cannot use -exec since wrapProgram is a function but not a command.
+    for bin in $( find "$out" -executable -type f ); do
+      if patchelf --print-interpreter "$bin" &> /dev/null; then
+        wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+      fi
+    done
+  '' + ''
+    runHook postInstall
   '';
 
-  rpath = stdenv.lib.strings.makeLibraryPath libraries;
+  preFixup = ''
+    find "$out" -name libfontmanager.so -exec \
+      patchelf --add-needed libfontconfig.so {} \;
+  '';
 
   passthru = {
     home = zulu;
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://www.azul.com/products/zulu/;
+  meta = with lib; {
+    homepage = "https://www.azul.com/products/zulu/";
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";
     longDescription = ''
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ nequissimus fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "java";
   };
 }

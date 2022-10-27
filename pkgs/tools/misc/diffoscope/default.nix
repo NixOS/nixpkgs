@@ -1,20 +1,24 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man
-, acl, apktool, binutils-unwrapped, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
-, squashfsTools, tcpdump, unoconv, unzip, xxd, xz
+{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles
+, abootimg, acl, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
+, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
+, gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
+, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
+# updater only
+, writeScript
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "126";
+  version = "224";
 
   src = fetchurl {
-    url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "0jbmpxj3y1gnmd00pj9x3jrx0hnjlkrzvk1m9miswgfq0ac1ws3p";
+    url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
+    sha256 = "sha256-rbfXQJJjPZAtoYbrpJczR5Gft+SeGoo6xjZvgwI+l1g=";
   };
+
+  outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
@@ -28,33 +32,72 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man ];
+  nativeBuildInputs = [ docutils help2man installShellFiles ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript wasm2wat zipnode
-  # Also these libraries: python3-guestfs
-  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
-      acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
-      dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
-    ] ++ lib.optionals enableBloat [
-      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
-      llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
-      python3Packages.guestfs
-    ];
+  # Still missing these tools: docx2txt lipo otool r2pipe
+  pythonPath = [
+      binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
+      e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      xz zip zstd
+    ]
+    ++ (with python3Packages; [
+      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
+      python-magic progressbar33 pypdf2 rpm tlsh
+    ])
+    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
+    ++ lib.optionals enableBloat ([
+      abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
-  doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
   postInstall = ''
     make -C doc
-    mkdir -p $out/share/man/man1
-    cp doc/diffoscope.1 $out/share/man/man1/diffoscope.1
+    installManPage doc/diffoscope.1
   '';
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    "test_sbin_added_to_path"
+    "test_diff_meta"
+    "test_diff_meta2"
+
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable flaky tests on Darwin
+    "test_non_unicode_filename"
+    "test_listing"
+    "test_symlink_root"
+  ];
+
+  # flaky tests on Darwin
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "tests/comparators/test_git.py"
+    "tests/comparators/test_java.py"
+    "tests/comparators/test_uimage.py"
+    "tests/comparators/test_device.py"
+    "tests/comparators/test_macho.py"
+  ];
+
+   passthru = {
+    updateScript = writeScript "update-diffoscope" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
+      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      update-source-version ${pname} "$newVersion"
+    '';
+   };
+
+  meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories
@@ -66,9 +109,9 @@ python3Packages.buildPythonApplication rec {
       diffoscope is developed as part of the "reproducible builds" Debian
       project and was formerly known as "debbindiff".
     '';
-    homepage    = https://wiki.debian.org/ReproducibleBuilds;
-    license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms   = platforms.linux;
+    homepage = "https://diffoscope.org/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ dezgeg danielfullmer ];
+    platforms = platforms.unix;
   };
 }

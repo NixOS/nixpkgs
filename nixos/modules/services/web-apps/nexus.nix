@@ -11,42 +11,43 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "Sonatype Nexus3 OSS service";
+      enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
 
       package = mkOption {
         type = types.package;
         default = pkgs.nexus;
-        description = "Package which runs Nexus3";
+        defaultText = literalExpression "pkgs.nexus";
+        description = lib.mdDoc "Package which runs Nexus3";
       };
 
       user = mkOption {
         type = types.str;
         default = "nexus";
-        description = "User which runs Nexus3.";
+        description = lib.mdDoc "User which runs Nexus3.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nexus";
-        description = "Group which runs Nexus3.";
+        description = lib.mdDoc "Group which runs Nexus3.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/sonatype-work";
-        description = "Home directory of the Nexus3 instance.";
+        description = lib.mdDoc "Home directory of the Nexus3 instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Address to listen on.";
+        description = lib.mdDoc "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8081;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       jvmOpts = mkOption {
@@ -68,9 +69,31 @@ in
           -Dkaraf.data=${cfg.home}/nexus3
           -Djava.io.tmpdir=${cfg.home}/nexus3/tmp
           -Dkaraf.startLocalConsole=false
+          -Djava.endorsed.dirs=${cfg.package}/lib/endorsed
+        '';
+        defaultText = literalExpression ''
+          '''
+            -Xms1200M
+            -Xmx1200M
+            -XX:MaxDirectMemorySize=2G
+            -XX:+UnlockDiagnosticVMOptions
+            -XX:+UnsyncloadClass
+            -XX:+LogVMOutput
+            -XX:LogFile=''${home}/nexus3/log/jvm.log
+            -XX:-OmitStackTraceInFastThrow
+            -Djava.net.preferIPv4Stack=true
+            -Dkaraf.home=''${package}
+            -Dkaraf.base=''${package}
+            -Dkaraf.etc=''${package}/etc/karaf
+            -Djava.util.logging.config.file=''${package}/etc/karaf/java.util.logging.properties
+            -Dkaraf.data=''${home}/nexus3
+            -Djava.io.tmpdir=''${home}/nexus3/tmp
+            -Dkaraf.startLocalConsole=false
+            -Djava.endorsed.dirs=''${package}/lib/endorsed
+          '''
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Options for the JVM written to `nexus.jvmopts`.
           Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
           for further information.

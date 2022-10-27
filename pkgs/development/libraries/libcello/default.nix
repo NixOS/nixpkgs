@@ -1,17 +1,21 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libcello-0.9.2";
+  pname = "libcello";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "http://libcello.org/static/${name}.tar.gz";
-    sha256 = "cd82639cb9b133119fd89a77a5a505a55ea5fcc8decfc53bee0725358ec8bad0";
+    url = "https://libcello.org/static/libCello-${version}.tar.gz";
+    sha256 = "0a1b2x5ni07vd9ridnl7zv7h2s32070wsphjy94qr066b99gdb29";
   };
 
+  makeFlags = [ "PREFIX=$(out)" ];
+
   meta = {
-    homepage = http://libcello.org/;
+    homepage = "https://libcello.org/";
     description = "Higher level programming in C";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    platforms = lib.platforms.unix;
   };
 }

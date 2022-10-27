@@ -1,28 +1,42 @@
-{ buildPythonPackage, lib, fetchPypi, file, stdenv }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, substituteAll
+, file
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "python-magic";
-  version = "0.4.15";
+  version = "0.4.27";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f3765c0f582d2dfc72c15f3b5a82aecfae9498bd29ca840d72f37d7bd38bfcd5";
+  src = fetchFromGitHub {
+    owner = "ahupp";
+    repo = "python-magic";
+    rev = version;
+    sha256 = "sha256-fZ+5xJ3P0EYK+6rQ8VzXv2zckKfEH5VUdISIR6ybIfQ=";
   };
 
-  postPatch = ''
-    substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
+  patches = [
+    (substituteAll {
+      src = ./libmagic-path.patch;
+      libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
+
+  preCheck = ''
+    export LC_ALL=en_US.UTF-8
   '';
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # TODO: tests are failing
-  #checkPhase = ''
-  #  ${python}/bin/${python.executable} ./test.py
-  #'';
-
-  meta = {
+  meta = with lib; {
     description = "A python interface to the libmagic file type identification library";
-    homepage = https://github.com/ahupp/python-magic;
-    license = lib.licenses.mit;
+    homepage = "https://github.com/ahupp/python-magic";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

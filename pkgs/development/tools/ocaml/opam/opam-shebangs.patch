@@ -2,7 +2,7 @@ diff --git a/src/client/opamInitDefaults.ml b/src/client/opamInitDefaults.ml
 index eca13a7c..1fd66f43 100644
 --- a/src/client/opamInitDefaults.ml
 +++ b/src/client/opamInitDefaults.ml
-@@ -35,11 +35,15 @@ let eval_variables = [
+@@ -35,14 +35,18 @@ let eval_variables = [
  let os_filter os =
    FOp (FIdent ([], OpamVariable.of_string "os", None), `Eq, FString os)
  
@@ -13,6 +13,9 @@ index eca13a7c..1fd66f43 100644
  let macos_filter = os_filter "macos"
  let openbsd_filter = os_filter "openbsd"
  let freebsd_filter = os_filter "freebsd"
+ let not_open_free_bsd_filter =
+   FNot (FOr (openbsd_filter,  freebsd_filter))
+ let win32_filter = os_filter "win32"
  let sandbox_filter = FOr (linux_filter, macos_filter)
 +let nixos_filter = os_distribution_filter "nixos"
  
@@ -64,7 +67,7 @@ index 00000000..3ea84e2d
 +header() { echo "$1"; }
 +stopNest() { true; }
 +
-+fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
++fixupOutputHooks+=('if [ -z "${dontPatchShebangs-}" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
 +
 +patchShebangs() {
 +    local dir="$1"

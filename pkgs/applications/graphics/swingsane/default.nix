@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "swingsane";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontConfigure = true;
 
   installPhase = let
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       desktopName = "SwingSane";
       genericName = "Scan from local or remote SANE servers";
       comment = meta.description;
-      categories = "Office;Application;";
+      categories = [ "Office" ];
     };
 
   in ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     cp -v -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java GUI for SANE scanner servers (saned)";
     longDescription = ''
       SwingSane is a powerful, cross platform, open source Java front-end for
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';
-    homepage = http://swingsane.com/;
+    homepage = "http://swingsane.com/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.all;
   };

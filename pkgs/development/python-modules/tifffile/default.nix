@@ -1,34 +1,62 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
-, numpy, enum34, futures, pathlib
-, pytest
+{ lib
+, buildPythonPackage
+, dask
+, fetchPypi
+, fsspec
+, lxml
+, numpy
+, pytestCheckHook
+, pythonOlder
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2019.2.22";
+  version = "2022.8.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed49d75b3eff711dbe74b35324dfd79e0db598b6e772a9096001545e81e95437";
+    hash = "sha256-PnTg/UiDhHfrz0Dgm3eAvQle5ZILIjj0heLGhGOj3LQ=";
   };
 
-  patches = lib.optional isPy27 ./python2-regex-compat.patch;
+  propagatedBuildInputs = [
+    numpy
+  ];
 
-  # Missing dependencies: imagecodecs, czifile, cmapfile, oiffile, lfdfiles
-  # and test data missing from PyPI tarball
-  doCheck = false;
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [
+    dask
+    fsspec
+    lxml
+    pytestCheckHook
+    zarr
+  ];
 
-  propagatedBuildInputs = [ numpy ]
-    ++ lib.optional isPy27 [ futures enum34 pathlib ];
+  disabledTests = [
+    # Test require network access
+    "test_class_omexml"
+    "test_write_ome"
+    # Test file is missing
+    "test_write_predictor"
+    "test_issue_imagej_hyperstack_arg"
+    "test_issue_description_overwrite"
+    # AssertionError
+    "test_write_bigtiff"
+    "test_write_imagej_raw"
+    # https://github.com/cgohlke/tifffile/issues/142
+    "test_func_bitorder_decode"
+  ];
+
+  pythonImportsCheck = [
+    "tifffile"
+  ];
 
   meta = with lib; {
-    description = "Read and write image data from and to TIFF files.";
-    homepage = https://www.lfd.uci.edu/~gohlke/;
-    maintainers = [ maintainers.lebastr ];
+    description = "Read and write image data from and to TIFF files";
+    homepage = "https://github.com/cgohlke/tifffile/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ lebastr ];
   };
 }

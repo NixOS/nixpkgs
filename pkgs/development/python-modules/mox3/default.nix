@@ -1,35 +1,35 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, python
+, pythonOlder
 , subunit
 , testrepository
 , testtools
 , six
 , pbr
 , fixtures
-, isPy36
 }:
 
 buildPythonPackage rec {
   pname = "mox3";
-  version = "0.28.0";
+  version = "1.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17d4vglb71s96hhi6d30vnkr7g1pahv95igc4sjv857qf278d540";
+    sha256 = "8a526b7b9b6341f541a9aef3e08c93fd84a5373fe89d4cc51dd571f085b2363c";
   };
 
   buildInputs = [ subunit testrepository testtools six ];
   propagatedBuildInputs = [ pbr fixtures ];
 
-  # Disabling as several tests depdencies are missing:
+  # Disabling as several tests dependencies are missing:
   # https://opendev.org/openstack/mox3/src/branch/master/test-requirements.txt
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mock object framework for Python";
-    homepage = https://docs.openstack.org/mox3/latest/;
+    homepage = "https://docs.openstack.org/mox3/latest/";
     license = licenses.asl20;
   };
 

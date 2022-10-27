@@ -1,30 +1,26 @@
-{ stdenv, fetchurl
-, unzip
+{ lib, stdenv, fetchzip
 }:
 
 stdenv.mkDerivation rec {
-  name = "widevine";
-  version = "4.10.1196.0";
+  pname = "widevine";
+  version = "4.10.2449.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://dl.google.com/widevine-cdm/${version}-linux-x64.zip";
-    sha256 = "01c7nr7d2xs718jymicbk4ipzfx6q253109qv3lk4lryrrhvw14y";
+    sha256 = "sha256-f2kAkP+s3fB+krEZsiujEoI4oznkzSyaIB/CRJZWlXE=";
+    stripRoot = false;
   };
 
-  buildInputs = [ unzip ];
-
-  unpackPhase = ''
-    unzip $src libwidevinecdm.so
-    find .
-  '';
-
   installPhase = ''
-    install -vD libwidevinecdm.so $out/lib/libwidevinecdm.so
+    install -vD manifest.json $out/share/google/chrome/WidevineCdm/manifest.json
+    install -vD LICENSE.txt $out/share/google/chrome/WidevineCdm/LICENSE.txt
+    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Widevine support for Vivaldi";
     homepage = "https://www.widevine.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ betaboon ];
     platforms   = [ "x86_64-linux" ];

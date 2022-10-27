@@ -1,21 +1,39 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, watchdog, mock
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, watchdog
 }:
 
 buildPythonPackage rec {
   pname = "hupper";
-  version = "1.6.1";
+  version = "1.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe8febd68cec7fbed174fcbb0b42c427f96c8a7471c1cd4999fc698dd8dc6c34";
+    sha256 = "sha256-zW9Rtyx1h7ybzopl7NAloelfGwMoRRm/6RKE0BAxbNk=";
   };
-
-  checkPhase = ''
-    py.test
-  '';
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
-  checkInputs = [ pytest pytestcov mock ] ++ stdenv.lib.optional (!stdenv.isDarwin) watchdog;
+  checkInputs = [
+    pytestCheckHook
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    watchdog
+  ];
+
+  disabledTestPaths = [
+    # Doesn't work with an exported home, RuntimeError: timeout waiting for change to file=/build/tmpgfn145cx
+    "tests/test_it.py"
+  ];
+
+  pythonImportsCheck = [ "hupper" ];
+
+  meta = with lib; {
+    description = "In-process file monitor/reloader for reloading your code automatically during development";
+    homepage = "https://github.com/Pylons/hupper";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

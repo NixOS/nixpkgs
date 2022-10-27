@@ -1,26 +1,72 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, google_api_python_client, simplejson, oauth2client, setuptools
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pythonOlder
+, docutils
+, installShellFiles
+, poetry-core
+, google-api-python-client
+, simplejson
+, oauth2client
+, setuptools
+, pyxdg
 }:
 
 buildPythonPackage rec {
   pname = "goobook";
-  version = "3.4";
-  disabled = !isPy3k;
+  version = "3.5.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "089a95s6g9izsy1fzpz48p6pz0wpngcbbrvsillm1n53492gfhjg";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitLab {
+    owner = "goobook";
+    repo = "goobook";
+    rev = version;
+    sha256 = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
   };
 
-  propagatedBuildInputs = [
-    google_api_python_client simplejson oauth2client setuptools
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools = "^62.6.0"' 'setuptools = "*"' \
+      --replace 'google-api-python-client = "^1.7.12"' 'google-api-python-client = "*"' \
+      --replace 'pyxdg = "^0.28"' 'pyxdg = "*"'
+  '';
+
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+    poetry-core
   ];
 
-  meta = with stdenv.lib; {
-    description = "Search your google contacts from the command-line or mutt";
-    homepage    = https://pypi.python.org/pypi/goobook;
-    license     = licenses.gpl3;
+  propagatedBuildInputs = [
+    google-api-python-client
+    simplejson
+    oauth2client
+    setuptools
+    pyxdg
+  ];
+
+  postInstall = ''
+    rst2man goobook.1.rst goobook.1
+    installManPage goobook.1
+  '';
+
+  # has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "goobook" ];
+
+  meta = with lib; {
+    description = "Access your Google contacts from the command line";
+    longDescription = ''
+      The purpose of GooBook is to make it possible to use your Google Contacts
+      from the command-line and from MUAs such as Mutt.
+      It can be used from Mutt the same way as abook.
+    '';
+    homepage = "https://pypi.org/project/goobook/";
+    changelog = "https://gitlab.com/goobook/goobook/-/blob/${version}/CHANGES.rst";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ primeos ];
-    platforms   = platforms.unix;
   };
 }

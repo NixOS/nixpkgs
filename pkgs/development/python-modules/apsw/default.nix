@@ -1,24 +1,45 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, sqlite, isPyPy }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, sqlite
+, isPyPy
+, python
+}:
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.22.0-r1";
+  version = "3.39.3.0";
+  format = "setuptools";
 
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "rogerbinns";
     repo = "apsw";
-    rev = version;
-    sha256 = "02ldvshcgr4c7c8anp4flfnw8g8ys5bflkb8b51rb618qxhhwyak";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rUG6TXGdF+XaRTFn2luffYw+1EEChxtLgQx2Gn+7J6A=";
   };
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    sqlite
+  ];
 
-  meta = with stdenv.lib; {
+  # Project uses custom test setup to exclude some tests by default, so using pytest
+  # requires more maintenance
+  # https://github.com/rogerbinns/apsw/issues/335
+  checkPhase = ''
+    ${python.interpreter} setup.py test
+  '';
+
+  pythonImportsCheck = [
+    "apsw"
+  ];
+
+  meta = with lib; {
     description = "A Python wrapper for the SQLite embedded relational database engine";
-    homepage = https://github.com/rogerbinns/apsw;
+    homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
+    maintainers = with maintainers; [ gador ];
   };
 }

@@ -1,16 +1,40 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pillow
+, pytestCheckHook
+, pythonOlder
+}:
+
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "3.0";
+  version = "6.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b568f90f67fd25413c8da9f8bc9f9f8ab089425c20fa03330e97e77d13880ee";
+    hash = "sha256-GiFZ+duJjfk8RjfP08yvfaH9Bz9Z+ppZUMc+RtSqGso=";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pillow
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # generated image differs from example
+    "test_image"
+  ];
+
+  pythonImportsCheck = [
+    "svg.path"
+  ];
+
+  meta = with lib; {
     description = "SVG path objects and parser";
-    homepage = https://github.com/regebro/svg.path;
+    homepage = "https://github.com/regebro/svg.path";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
   };

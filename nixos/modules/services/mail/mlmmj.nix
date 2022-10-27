@@ -16,7 +16,14 @@ let
   alias = domain: list: "${list}: \"|${pkgs.mlmmj}/bin/mlmmj-receive -L ${listDir domain list}/\"";
   subjectPrefix = list: "[${list}]";
   listAddress = domain: list: "${list}@${domain}";
-  customHeaders = domain: list: [ "List-Id: ${list}" "Reply-To: ${list}@${domain}" ];
+  customHeaders = domain: list: [
+    "List-Id: ${list}"
+    "Reply-To: ${list}@${domain}"
+    "List-Post: <mailto:${list}@${domain}>"
+    "List-Help: <mailto:${list}+help@${domain}>"
+    "List-Subscribe: <mailto:${list}+subscribe@${domain}>"
+    "List-Unsubscribe: <mailto:${list}+unsubscribe@${domain}>"
+  ];
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l:
     let ctlDir = listCtl d l; in
@@ -49,40 +56,39 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable mlmmj";
+        description = lib.mdDoc "Enable mlmmj";
       };
 
       user = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local user";
+        description = lib.mdDoc "mailinglist local user";
       };
 
       group = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local group";
+        description = lib.mdDoc "mailinglist local group";
       };
 
       listDomain = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Set the mailing list domain";
+        description = lib.mdDoc "Set the mailing list domain";
       };
 
       mailLists = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "The collection of hosted maillists";
+        description = lib.mdDoc "The collection of hosted maillists";
       };
 
       maintInterval = mkOption {
         type = types.str;
         default = "20min";
-        description = ''
+        description = lib.mdDoc ''
           Time interval between mlmmj-maintd runs, see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for format information.
+          {manpage}`systemd.time(7)` for format information.
         '';
       };
 
@@ -94,8 +100,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "mlmmj user";
       home = stateDir;
       createHome = true;
@@ -104,25 +109,36 @@ in
       useDefaultShell = true;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.mlmmj;
     };
 
     services.postfix = {
       enable = true;
       recipientDelimiter= "+";
-      extraMasterConf = ''
-        mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nexthop
-      '';
+      masterConfig.mlmmj = {
+        type = "unix";
+        private = true;
+        privileged = true;
+        chroot = false;
+        wakeup = 0;
+        command = "pipe";
+        args = [
+          "flags=ORhu"
+          "user=mlmmj"
+          "argv=${pkgs.mlmmj}/bin/mlmmj-receive"
+          "-F"
+          "-L"
+          "${spoolDir}/$nexthop"
+        ];
+      };
 
       extraAliases = concatMapLines (alias cfg.listDomain) cfg.mailLists;
 
-      extraConfig = ''
-        transport_maps = hash:${stateDir}/transports
-        virtual_alias_maps = hash:${stateDir}/virtuals
-        propagate_unmatched_extensions = virtual
-      '';
+      extraConfig = "propagate_unmatched_extensions = virtual";
+
+      virtual = concatMapLines (virtual cfg.listDomain) cfg.mailLists;
+      transport = concatMapLines (transport cfg.listDomain) cfg.mailLists;
     };
 
     environment.systemPackages = [ pkgs.mlmmj ];
@@ -131,10 +147,8 @@ in
           ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
           ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
           ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          echo "${concatMapLines (virtual cfg.listDomain) cfg.mailLists}" > ${stateDir}/virtuals
-          echo "${concatMapLines (transport cfg.listDomain) cfg.mailLists}" > ${stateDir}/transports
-          ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
-          ${pkgs.postfix}/bin/postmap ${stateDir}/transports
+          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
       '';
 
     systemd.services.mlmmj-maintd = {

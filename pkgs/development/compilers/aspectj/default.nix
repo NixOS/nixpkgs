@@ -1,21 +1,25 @@
-{stdenv, fetchurl, jre}:
+{lib, stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
-  name = "aspectj-1.5.2";
+  pname = "aspectj";
+  version = "1.9.9.1";
   builder = ./builder.sh;
 
-  src = fetchurl {
-    url = "http://archive.eclipse.org/tools/aspectj/${name}.jar";
-    sha256 = "1b3mx248dc1xka1vgsl0jj4sm0nfjsqdcj9r9036mvixj1zj3nmh";
+  src = let
+    versionSnakeCase = builtins.replaceStrings ["."] ["_"] version;
+  in fetchurl {
+    url = "https://github.com/eclipse/org.aspectj/releases/download/V${versionSnakeCase}/aspectj-${version}.jar";
+    sha256 = "sha256-kiMQuEPXoSpHUiInkfYsrfCAcSc6mX42TRIBbeIQhWs=";
   };
 
   inherit jre;
   buildInputs = [jre];
 
   meta = {
-    homepage = http://www.eclipse.org/aspectj/;
+    homepage = "http://www.eclipse.org/aspectj/";
     description = "A seamless aspect-oriented extension to the Java programming language";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.epl10;
   };
 }

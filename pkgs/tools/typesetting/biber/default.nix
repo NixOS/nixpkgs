@@ -1,7 +1,21 @@
-{ stdenv, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
+{ lib, stdenv, fetchurl, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+
+  # perl 5.32.0 ships with U:C 1.27
+  UnicodeCollate_1_29 = perlPackages.buildPerlPackage rec {
+    pname = "Unicode-Collate";
+    version = "1.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SADAHIRO/${pname}-${version}.tar.gz";
+      sha256 = "0dr4k10fgbsczh4sz7w8d0nnba38r6jrg87cm3gw4xxgn55fzj7l";
+    };
+    meta = {
+      description = "Unicode Collation Algorithm";
+      license = perlPackages.perl.meta.license;
+    };
+  };
 in
 
 perlPackages.buildPerlModule {
@@ -10,17 +24,11 @@ perlPackages.buildPerlModule {
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
 
-  patches = stdenv.lib.optionals (stdenv.lib.versionAtLeast perlPackages.perl.version "5.30") [
+  patches = [
+    # Perl 5.36.0 compatibility: https://github.com/plk/biber/pull/411
     (fetchpatch {
-      name = "biber-fix-tests.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/biber-fix-tests.patch?h=5d0fffd493550e28b2fb81ad114d62a7c9403812";
-      sha256 = "1ninf46bxf4hm0p5arqbxqyv8r98xdwab34vvp467q1v23kfbhya";
-    })
-
-    (fetchpatch {
-      name = "biber-fix-tests-2.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/biber-fix-tests-2.patch?h=5d0fffd493550e28b2fb81ad114d62a7c9403812";
-      sha256 = "1l8pk454kkm0szxrv9rv9m2a0llw1jm7ffhgpyg4zfiw246n62x0";
+      url = "https://github.com/plk/biber/commit/d9e961710074d266ad6bdf395c98868d91952088.patch";
+      sha256 = "08fx7mvq78ndnj59xv3crncih7a8201rr31367kphysz2msjbj52";
     })
   ];
 
@@ -29,19 +37,19 @@ perlPackages.buildPerlModule {
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurper FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
-    ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-    UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ListMoreUtils MozillaCA ParseRecDescent IOString ReadonlyXS RegexpCommon TextBibTeX
+    UnicodeCollate_1_29 UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
     ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit SortKey
     TestDifferences
     PerlIOutf8_strict
   ];
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/biber
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backend for BibLaTeX";
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;

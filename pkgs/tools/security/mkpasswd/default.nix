@@ -1,18 +1,18 @@
-{ stdenv, whois, perl }:
+{ lib, stdenv, whois, libxcrypt, perl, pkg-config }:
 
 stdenv.mkDerivation {
-  name = "mkpasswd-${whois.version}";
+  pname = "mkpasswd";
+  inherit (whois) version src;
 
-  src = whois.src;
+  nativeBuildInputs = [ perl pkg-config ];
+  buildInputs = [ libxcrypt ];
 
-  nativeBuildInputs = [ perl ];
-
-  preConfigure = whois.preConfigure;
+  inherit (whois) preConfigure;
   buildPhase = "make mkpasswd";
   installPhase = "make install-mkpasswd";
 
-  meta = with stdenv.lib; {
-    homepage = https://packages.qa.debian.org/w/whois.html;
+  meta = with lib; {
+    homepage = "https://packages.qa.debian.org/w/whois.html";
     description = "Overfeatured front-end to crypt, from the Debian whois package";
     license = licenses.gpl2;
     maintainers = with maintainers; [ cstrahan fpletz ];

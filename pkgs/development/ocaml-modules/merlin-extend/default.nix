@@ -1,22 +1,24 @@
-{ lib, buildDunePackage, fetchFromGitHub, cppo }:
+{ lib, buildDunePackage, fetchurl, cppo }:
 
 buildDunePackage rec {
   pname = "merlin-extend";
-  version = "0.4";
+  version = "0.6";
 
-  src = fetchFromGitHub {
-    owner = "let-def";
-    repo = pname;
-    sha256 = "1dxiqmm7ry24gvw6p9n4mrz37mnq4s6m8blrccsv3rb8yq82acx9";
-    rev = "v${version}";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/let-def/merlin-extend/releases/download/v${version}/merlin-extend-v${version}.tbz";
+    sha256 = "0hvc4mz92x3rl2dxwrhvhzwl4gilnyvvwcqgr45vmdpyjyp3dwn2";
   };
 
-  buildInputs = [ cppo ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cppo ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/let-def/merlin-extend";
     description = "SDK to extend Merlin";
     license = licenses.mit;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

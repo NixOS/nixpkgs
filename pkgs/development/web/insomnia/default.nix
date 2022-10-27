@@ -1,39 +1,38 @@
-{ stdenv, makeWrapper, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, gnome2, nspr, nss, gtk3, gtk2, at-spi2-atk
-, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
+{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat
+, fontconfig, freetype, gdk-pixbuf, glib, pango, mesa, nspr, nss, gtk3
+, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, nghttp2
-, libudev0-shim, glibc, curl, openssl, autoPatchelfHook
-}:
+, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, nghttp2
+, libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
 
 let
-  runtimeLibs = stdenv.lib.makeLibraryPath [
+  runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
     libudev0-shim
     nghttp2
     openssl
-    stdenv.cc.cc
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "6.6.2";
+  version = "2022.6.0";
 
   src = fetchurl {
-    url = "https://github.com/getinsomnia/insomnia/releases/download/v${version}/insomnia_${version}_amd64.deb";
-    sha256 = "0hlny3lac7whdbpp0pcyaa30h6x9536jsg95gj9irw2qjsx74xa7";
+    url =
+      "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
+    sha256 = "sha256-ARGIcNHnqQEyp1JVNV59FvvYv9JTSS55R+lTHl0IrWk=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
     makeWrapper
-    gobject-introspection wrapGAppsHook
+    gobject-introspection
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     atk
     cairo
@@ -44,9 +43,7 @@ in stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
-    gnome2.pango
-    gtk2
+    pango
     gtk3
     gsettings-desktop-schemas
     libX11
@@ -61,13 +58,15 @@ in stdenv.mkDerivation rec {
     libXrender
     libXtst
     libxcb
+    libxshmfence
+    mesa # for libgbm
     nspr
     nss
-    stdenv.cc.cc
   ];
 
   dontBuild = true;
   dontConfigure = true;
+  dontWrapGApps = true;
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -76,7 +75,6 @@ in stdenv.mkDerivation rec {
 
     mv usr/share/* $out/share/
     mv opt/Insomnia/* $out/share/insomnia
-    mv $out/share/insomnia/*.so $out/lib/
 
     ln -s $out/share/insomnia/insomnia $out/bin/insomnia
     sed -i 's|\/opt\/Insomnia|'$out'/bin|g' $out/share/applications/insomnia.desktop
@@ -86,12 +84,13 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://insomnia.rest/;
+  meta = with lib; {
+    homepage = "https://insomnia.rest/";
     description = "The most intuitive cross-platform REST API Client";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markus1189 ];
+    maintainers = with maintainers; [ markus1189 babariviere ];
   };
 
 }

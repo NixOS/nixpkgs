@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, perlPackages }:
+{ lib, stdenv, fetchurl, perl, perlPackages }:
 
 let
   pname = "stow";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A tool for managing the installation of multiple software packages in the same run-time directory tree";
 
     longDescription = ''
@@ -29,10 +29,9 @@ stdenv.mkDerivation {
       as .../share, .../man, and so on.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://www.gnu.org/software/stow/;
-
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/stow/";
+    maintainers = with maintainers; [ sarcasticadmin ];
+    platforms = platforms.all;
   };
 }

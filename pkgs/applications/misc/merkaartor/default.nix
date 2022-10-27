@@ -1,34 +1,62 @@
-{ stdenv, fetchFromGitHub, makeWrapper, qmake, pkgconfig, boost, gdal, proj
-, qtbase, qtsvg, qtwebkit }:
+{ mkDerivation
+, lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qttools
+, qttranslations
+, gdal
+, proj
+, qtsvg
+, qtwebengine
+, withGeoimage ? true, exiv2
+, withGpsdlib ? (!stdenv.isDarwin), gpsd
+, withLibproxy ? false, libproxy
+, withZbar ? false, zbar
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "merkaartor";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
-    sha256 = "0ls3q8m1hxiwyrypy6qca8wczhl4969ncl0sszfdwfv70rzxjk88";
+    sha256 = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
-  nativeBuildInputs = [ makeWrapper qmake pkgconfig ];
+  nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ boost gdal proj qtbase qtsvg qtwebkit ];
+  buildInputs = [ gdal proj qtsvg qtwebengine ]
+    ++ lib.optional withGeoimage exiv2
+    ++ lib.optional withGpsdlib gpsd
+    ++ lib.optional withLibproxy libproxy
+    ++ lib.optional withZbar zbar;
 
-  enableParallelBuilding = true;
-
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/merkaartor \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms
+  preConfigure = ''
+    lrelease src/src.pro
   '';
 
-  meta = with stdenv.lib; {
+  qmakeFlags = [
+    "TRANSDIR_SYSTEM=${qttranslations}/translations"
+    "USEWEBENGINE=1"
+  ] ++ lib.optional withGeoimage "GEOIMAGE=1"
+    ++ lib.optional withGpsdlib "GPSDLIB=1"
+    ++ lib.optional withLibproxy "LIBPROXY=1"
+    ++ lib.optional withZbar "ZBAR=1";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv binaries/bin/merkaartor.app $out/Applications
+    mv binaries/bin/plugins $out/Applications/merkaartor.app/Contents
+  '';
+
+  meta = with lib; {
     description = "OpenStreetMap editor";
-    homepage = http://merkaartor.be/;
+    homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

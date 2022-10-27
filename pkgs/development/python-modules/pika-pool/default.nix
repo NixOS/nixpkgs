@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pika
 }:
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ pika ];
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bninja/pika-pool;
+  meta = with lib; {
+    homepage = "https://github.com/bninja/pika-pool";
     license = licenses.bsdOriginal;
     description = "Pools for pikas.";
   };

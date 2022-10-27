@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt4 }:
+{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
   version = "0.9.0";
@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1f4wnxzx0qdmxzc7hqk28m0sva7z9p9xmxm6aifvjlp0ha6pmfxs";
   };
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase ];
+  dontWrapQtApps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight data-interchange format";
-    homepage = http://qjson.sourceforge.net/;
+    homepage = "http://qjson.sourceforge.net/";
     license = licenses.lgpl21;
-    inherit (qt4.meta) platforms;
   };
 }

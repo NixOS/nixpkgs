@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
 
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.59";
+  pname = "libpng";
+  version = "1.2.59";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/${name}.tar.xz";
+    url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
     sha256 = "1izw9ybm27llk8531w6h4jp4rk2rxy2s9vil16nwik5dp0amyqxl";
   };
 
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official reference implementation for the PNG file format";
-    homepage = http://www.libpng.org/pub/png/libpng.html;
+    homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     branch = "1.2";
     platforms = platforms.unix;
   };

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 SDL2_image
   ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     (fetchpatch {
@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
       sha256 = "06gl9q0jwg039kpxb13lg9x0k59s11968qn4lybgkadvzmhxkgmi";
     })
   ];
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: libengine_gui.a(gui_menu.o):(.bss+0x0): multiple definition of
+  #     `menu_t'; objs.release/action.o:(.bss+0x20): first defined here
+  # TODO: remove it for 1.7.7+ release as it was fixed upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildFlags = [ "PREFIX=${placeholder "out"}" "CFG=release" ];
 
@@ -42,7 +48,7 @@ stdenv.mkDerivation rec {
       --replace "klystrack %f" "$out/bin/klystrack %f"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
     license = licenses.mit;

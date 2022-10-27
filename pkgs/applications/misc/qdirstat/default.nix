@@ -1,32 +1,34 @@
-{ stdenv, fetchFromGitHub, qmake
-, coreutils, xdg_utils, bash
+{ lib, fetchFromGitHub, qmake
+, coreutils, xdg-utils, bash
 , makeWrapper, perlPackages, mkDerivation }:
 
 let
-  version = "1.6";
-in mkDerivation rec {
   pname = "qdirstat";
-  inherit version;
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "shundhammer";
-    repo = "qdirstat";
+    repo = pname;
     rev = version;
-    sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
+    sha256 = "sha256-yWv41iWtdTdlFuvLHKCbwmnSXq7Z5pIJq28GMDltdxM=";
   };
+in
+
+mkDerivation {
+  inherit pname version src;
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
   buildInputs = [ perlPackages.perl ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace scripts/scripts.pro \
       --replace /bin/true ${coreutils}/bin/true
 
     for i in src/SysUtil.cpp src/FileSizeStatsWindow.cpp
     do
       substituteInPlace $i \
-        --replace /usr/bin/xdg-open ${xdg_utils}/bin/xdg-open
+        --replace /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open
     done
     for i in src/Cleanup.cpp src/cleanup-config-page.ui
     do
@@ -37,20 +39,19 @@ in mkDerivation rec {
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
   '';
-  postPatch = ''
-    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-  '';
+
+  qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ gnidorah ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

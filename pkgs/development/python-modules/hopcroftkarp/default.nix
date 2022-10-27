@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "hopcroftkarp";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cc6fc7ad348bbe5c9451f8116845c46ae26290c92b2dd14690aae2d55ba5e3a6";
+    sha256 = "28a7887db81ad995ccd36a1b5164a4c542b16d2781e8c49334dc9d141968c0e7";
   };
 
   # tests fail due to bad package name
@@ -17,8 +17,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Implementation of HopcroftKarp's algorithm";
-    homepage = https://github.com/sofiat-olaosebikan/hopcroftkarp;
-    license = licenses.gpl1;
+    homepage = "https://github.com/sofiat-olaosebikan/hopcroftkarp";
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.costrouc ];
   };
 }

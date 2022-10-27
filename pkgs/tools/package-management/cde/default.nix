@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "cde";
   version = "0.1";
 
   src = fetchFromGitHub {
-    owner = "pgbovine";
-    repo = "CDE";
-    sha256 = "0raiz7pczkbnzxpg7g59v7gdp1ipkwgms2vh3431snw1va1gjzmk";
+    owner = "usnistgov";
+    repo = "corr-CDE";
     rev = "v${version}";
+    sha256 = "sha256-s375gtqBWx0GGXALXR+fN4bb3tmpvPNu/3bNz+75UWU=";
   };
 
   # The build is small, so there should be no problem
@@ -17,23 +17,34 @@ stdenv.mkDerivation rec {
   # useful.
   preferLocalBuild = true;
 
+  buildInputs = [ libxcrypt ];
+
   patchBuild = ''
-    sed '/install/d' $src/Makefile > $src/Makefile
-  '';
-  
-  installPhase = ''
-    mkdir -p $out/bin
-    cp cde $out/bin
-    cp cde-exec $out/bin
+    sed -i -e '/install/d' $src/Makefile
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pgbovine/CDE;
+  preBuild = ''
+    patchShebangs .
+  '';
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: ../readelf-mini/libreadelf-mini.a(dwarf.o):/build/source/readelf-mini/dwarf.c:64:
+  #     multiple definition of `do_wide'; ../readelf-mini/libreadelf-mini.a(readelf-mini.o):/build/source/readelf-mini/readelf-mini.c:170: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
+  installPhase = ''
+    install -d $out/bin
+    install -t $out/bin cde cde-exec
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/usnistgov/corr-CDE";
     description = "A packaging tool for building portable packages";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.rlupton20 ];
     platforms = platforms.linux;
-    # error: architecture aarch64 is not supported by strace
+    # error: architecture aarch64 is not supported by bundled strace
     badPlatforms = [ "aarch64-linux" ];
   };
 }

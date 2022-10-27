@@ -1,17 +1,22 @@
-{ stdenv, fetchzip, perl, python, gnuplot, coreutils, gnugrep }:
+{ lib, stdenv, fetchFromGitHub, perl, python2, gnuplot, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
   version = "2016-01-08";
 
   # upstream does not make releases
-  src = fetchzip {
-    url = "https://github.com/hoxu/gitstats/archive/55c5c285558c410bb35ebf421245d320ab9ee9fa.zip";
-    sha256 = "1bfcwhksylrpm88vyp33qjby4js31zcxy7w368dzjv4il3fh2i59";
-    name = "${pname}-${version}" + "-src";
+  src = fetchFromGitHub {
+    owner = "hoxu";
+    repo = "gitstats";
+    rev = "55c5c285558c410bb35ebf421245d320ab9ee9fa";
+    sha256 = "sha256-qUQB3aCRbPkbMoMf39kPQ0vil8RjXL8RqjdTryfkzK0=";
   };
 
-  buildInputs = [ perl python ];
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ python2 ];
+
+  strictDeps = true;
 
   postPatch = ''
     sed -e "s|gnuplot_cmd = .*|gnuplot_cmd = '${gnuplot}/bin/gnuplot'|" \
@@ -29,8 +34,8 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/gitstats.1 "$out"/share/man/man1/gitstats.1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://gitstats.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://gitstats.sourceforge.net/";
     description = "Git history statistics generator";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

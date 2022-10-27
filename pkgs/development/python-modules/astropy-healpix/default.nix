@@ -3,30 +3,47 @@
 , fetchPypi
 , numpy
 , astropy
-, astropy-helpers
+, astropy-extension-helpers
+, setuptools-scm
+, pytestCheckHook
+, pytest-doctestplus
+, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "0.4";
-
-  doCheck = false; # tests require pytest-astropy
+  version = "0.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "8c9709ac923759c92eca6d2e623e734d0f417eed40ba835b77d99dec09e51aa2";
+    inherit version;
+    pname = lib.replaceStrings ["-"] ["_"] pname;
+    sha256 = "sha256-iMOE60MimXpY3ok46RrJ/5D2orbLKuI+IWnHQFrdOtg=";
   };
 
-  propagatedBuildInputs = [ numpy astropy astropy-helpers ];
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    setuptools-scm
+  ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  propagatedBuildInputs = [
+    numpy
+    astropy
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    pytest-doctestplus
+    hypothesis
+  ];
+
+  # tests must be run in the build directory
+  preCheck = ''
+    cd build/lib*
   '';
 
   meta = with lib; {
     description = "BSD-licensed HEALPix for Astropy";
-    homepage = https://github.com/astropy/astropy-healpix;
+    homepage = "https://github.com/astropy/astropy-healpix";
     license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];
   };

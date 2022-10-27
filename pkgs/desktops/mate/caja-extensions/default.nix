@@ -1,17 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gupnp, mate, imagemagick, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gupnp
+, mate
+, imagemagick
+, wrapGAppsHook
+, mateUpdateScript
+, glib
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
-  version = "1.22.1";
+  version = "1.26.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xzhphzvaxbwyyp242pnhl5zjrkiznj90i0xjmy7pvi155pmp16h";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "WJwZ4/oQJC1iOaXMuVhVmENqVuvpTS6ypQtZUMzh1SA=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     wrapGAppsHook
   ];
 
@@ -23,7 +36,22 @@ stdenv.mkDerivation rec {
     imagemagick
   ];
 
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      CAJA_GSETTINGS_PATH = glib.getSchemaPath mate.caja;
+      TERM_GSETTINGS_PATH = glib.getSchemaPath mate.mate-terminal;
+    })
+  ];
+
   postPatch = ''
+    substituteInPlace open-terminal/caja-open-terminal.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace sendto/caja-sendto-command.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace wallpaper/caja-wallpaper-extension.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
     for f in image-converter/caja-image-{resizer,rotator}.c; do
       substituteInPlace $f --replace "/usr/bin/convert" "${imagemagick}/bin/convert"
     done
@@ -31,11 +59,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
     description = "Set of extensions for Caja file manager";
-    homepage = https://mate-desktop.org;
-    license = licenses.gpl2;
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

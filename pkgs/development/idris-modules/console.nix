@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "console";
+  pname = "console";
   version = "2017-04-20";
 
   idrisDeps = [ idrisscript hrtime webgl ];
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "An Idris library to interact with the browser console";
-    homepage = https://github.com/pierrebeaucamp/idris-console;
+    homepage = "https://github.com/pierrebeaucamp/idris-console";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

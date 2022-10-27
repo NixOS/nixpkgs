@@ -3,24 +3,39 @@ wafConfigurePhase() {
 
     if ! [ -f "${wafPath:=./waf}" ]; then
         echo "copying waf to $wafPath..."
-        cp @waf@ "$wafPath"
+        cp @waf@/bin/waf "$wafPath"
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
         wafConfigureFlags="${prefixKey:---prefix=}$prefix $wafConfigureFlags"
     fi
 
+    if [ -n "${PKG_CONFIG}" ]; then
+      export PKGCONFIG="${PKG_CONFIG}"
+    fi
+
     local flagsArray=(
-        @crossFlags@
         "${flagsArray[@]}"
         $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
+    if [ -z "${dontAddWafCrossFlags:-}" ]; then
+        flagsArray+=(@crossFlags@)
+    fi
     echoCmd 'configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "waf: enabled parallel building"
+    fi
+
     runHook postConfigure
 }
+
+if [ -z "${dontUseWafConfigure-}" -a -z "${configurePhase-}" ]; then
+    configurePhase=wafConfigurePhase
+fi
 
 wafBuildPhase () {
     runHook preBuild
@@ -41,6 +56,10 @@ wafBuildPhase () {
     runHook postBuild
 }
 
+if [ -z "${dontUseWafBuild-}" -a -z "${buildPhase-}" ]; then
+    buildPhase=wafBuildPhase
+fi
+
 wafInstallPhase() {
     runHook preInstall
 
@@ -51,7 +70,7 @@ wafInstallPhase() {
     local flagsArray=(
         $wafFlags ${wafFlagsArray[@]}
         $installFlags ${installFlagsArray[@]}
-	${installTargets:-install}
+        ${installTargets:-install}
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
@@ -60,6 +79,6 @@ wafInstallPhase() {
     runHook postInstall
 }
 
-configurePhase=wafConfigurePhase
-buildPhase=wafBuildPhase
-installPhase=wafInstallPhase
+if [ -z "${dontUseWafInstall-}" -a -z "${installPhase-}" ]; then
+    installPhase=wafInstallPhase
+fi

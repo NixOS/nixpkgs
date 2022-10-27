@@ -1,9 +1,7 @@
-{ stdenv, pythonPackages, fetchurl, xpdf }:
-let
-  py = pythonPackages;
-in
-py.buildPythonApplication rec {
-  name = "pdfdiff-${version}";
+{ lib, python2Packages, fetchurl, xpdf }:
+
+python2Packages.buildPythonApplication rec {
+  pname = "pdfdiff";
   version = "0.92";
 
   src = fetchurl {
@@ -11,11 +9,11 @@ py.buildPythonApplication rec {
     sha256 = "0zxwjjbklz87wkbhkmsvhc7xmv5php7m2a9vm6ydhmhlxsybf836";
   };
 
-  buildInputs = [  pythonPackages.wrapPython ];
+  buildInputs = [  python2Packages.wrapPython ];
 
+  dontConfigure = true;
+  dontBuild = true;
   doCheck = false;
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   unpackPhase = "cp $src pdfdiff.py";
 
@@ -29,11 +27,11 @@ py.buildPythonApplication rec {
     cp pdfdiff.py $out/bin/pdfdiff
     chmod +x $out/bin/pdfdiff
 
-    substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${pythonPackages.python.interpreter}"
+    substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${python2Packages.python.interpreter}"
     '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html;
+  meta = with lib; {
+    homepage = "http://www.cs.ox.ac.uk/people/cas.cremers/misc/pdfdiff.html";
     description = "Tool to view the difference between two PDF or PS files";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

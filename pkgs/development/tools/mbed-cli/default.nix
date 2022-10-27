@@ -25,10 +25,10 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/ARMmbed/mbed-cli;
+    homepage = "https://github.com/ARMmbed/mbed-cli";
     description = "Arm Mbed Command Line Interface";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [ ];
   };
 }
 

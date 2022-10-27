@@ -1,16 +1,19 @@
-{ stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
-, gconf, nss, xorg, libcap, systemd, libnotify, libsecret
+{ stdenv, lib, zlib, glib, alsa-lib, dbus, gtk3, atk, pango, freetype, fontconfig
+, gdk-pixbuf, cairo, cups, expat, libgpg-error, nspr
+, nss, xorg, libcap, systemd, libnotify, libsecret, libuuid, at-spi2-atk
+, at-spi2-core, libdbusmenu, libdrm, mesa
 }:
 
 let
   packages = [
-    stdenv.cc.cc zlib glib dbus gtk3 atk pango freetype libgnome-keyring3
-    fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
+    stdenv.cc.cc zlib glib dbus gtk3 atk pango freetype
+    fontconfig gdk-pixbuf cairo cups expat libgpg-error alsa-lib nspr nss
     xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
     xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
     xorg.libXcursor xorg.libxkbfile xorg.libXScrnSaver libcap systemd libnotify
-    xorg.libxcb libsecret
+    xorg.libxcb libsecret libuuid at-spi2-atk at-spi2-core libdbusmenu
+    libdrm
+    mesa # required for libgbm
   ];
 
   libPathNative = lib.makeLibraryPath packages;

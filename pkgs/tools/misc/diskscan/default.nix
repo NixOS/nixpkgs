@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ncurses, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "diskscan";
@@ -15,12 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/baruch/diskscan;
+  meta = with lib; {
+    homepage = "https://github.com/baruch/diskscan";
     description = "Scan HDD/SSD for failed and near failed sectors";
     platforms = with platforms; linux;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit version;
     license = licenses.gpl3;
   };
 }

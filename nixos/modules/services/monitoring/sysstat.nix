@@ -5,24 +5,20 @@ let
 in {
   options = {
     services.sysstat = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable sar system activity collection.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "sar system activity collection");
 
       collect-frequency = mkOption {
+        type = types.str;
         default = "*:00/10";
-        description = ''
+        description = lib.mdDoc ''
           OnCalendar specification for sysstat-collect
         '';
       };
 
       collect-args = mkOption {
+        type = types.str;
         default = "1 1";
-        description = ''
+        description = lib.mdDoc ''
           Arguments to pass sa1 when collecting statistics
         '';
       };
@@ -33,13 +29,13 @@ in {
     systemd.services.sysstat = {
       description = "Resets System Activity Logs";
       wantedBy = [ "multi-user.target" ];
-      preStart = "test -d /var/log/sa || mkdir -p /var/log/sa";
 
       serviceConfig = {
         User = "root";
         RemainAfterExit = true;
         Type = "oneshot";
         ExecStart = "${pkgs.sysstat}/lib/sa/sa1 --boot";
+        LogsDirectory = "sa";
       };
     };
 

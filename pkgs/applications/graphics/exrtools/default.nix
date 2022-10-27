@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openexr, libpng12, libjpeg }:
+{ lib, stdenv, fetchurl, pkg-config, openexr, libpng12, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "exrtools";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jpkskqs1yjiighab4s91jy0c0qxcscwadfn94xy2mm2bx2qwp4z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ stdenv openexr libpng12 libjpeg ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openexr libpng12 libjpeg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of utilities for manipulating OpenEXR images";
-    homepage = http://scanline.ca/exrtools;
+    homepage = "http://scanline.ca/exrtools";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];

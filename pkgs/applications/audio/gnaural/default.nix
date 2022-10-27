@@ -1,19 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libsndfile, portaudio }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile, portaudio, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnaural-1.0.20110606";
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 libsndfile portaudio ];
+  pname = "gnaural";
+  version = "20110606";
+
   src = fetchurl {
-    url = "mirror://sourceforge/gnaural/Gnaural/${name}.tar.gz";
-    sha256 = "0p9rasz1jmxf16vnpj17g3vzdjygcyz3l6nmbq6wr402l61f1vy5";
+    url = "mirror://sourceforge/${pname}/${pname}_${version}.tar.xz";
+    hash = "sha256-0a09DUMfHEIGYuIYSBGJalBiIHIgejr/KVDXCFgKBb8=";
   };
-  meta = with stdenv.lib;
-    { description = "Auditory binaural-beat generator";
-      homepage = http://gnaural.sourceforge.net/;
-      license = licenses.gpl2;
-      maintainers = [ maintainers.ehmry ];
-      platforms = platforms.linux;
-      broken = true;
-    };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 libsndfile portaudio ];
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: src/net/../gnauralnet.h:233: multiple definition of `GN_ScheduleFingerprint';
+  #     src/net/../../src/gnauralnet.h:233: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    substitute \
+      $out/share/gnome/apps/Multimedia/gnaural.desktop \
+      $out/share/applications/gnaural.desktop \
+      --replace \
+        "/usr/share/gnaural/pixmaps/gnaural-icon.png" \
+        "$out/share/gnaural/pixmaps/gnaural-icon.png" \
+
+    rm -rf $out/share/gnome
+  '';
+
+  meta = with lib; {
+    description = "Programmable auditory binaural-beat synthesizer";
+    homepage = "http://gnaural.sourceforge.net/";
+    maintainers = with maintainers; [ ehmry ];
+    license = with licenses; [ gpl2Only ];
+  };
 }

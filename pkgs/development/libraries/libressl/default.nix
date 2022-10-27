@@ -1,14 +1,24 @@
-{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
+{ stdenv
+, fetchurl
+, lib
+, cmake
+, cacert
+, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
+  ldLibPathEnvName = if stdenv.isDarwin
+    then "DYLD_LIBRARY_PATH"
+    else "LD_LIBRARY_PATH";
 
-  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
     inherit version;
 
     src = fetchurl {
       url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     nativeBuildInputs = [ cmake ];
@@ -30,17 +40,30 @@ let
     # removing ./configure pre-config.
     preConfigure = ''
       rm configure
+      substituteInPlace CMakeLists.txt \
+        --replace 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
+        --replace 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
     '';
 
     inherit patches;
 
     # Since 2.9.x the default location can't be configured from the build using
     # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
-    postPatch = lib.optionalString (lib.versionAtLeast version "2.9.2") ''
-      substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+    postPatch = ''
+      patchShebangs tests/
+      ${lib.optionalString (lib.versionAtLeast version "2.9.2") ''
+        substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+      ''}
     '';
 
-    enableParallelBuilding = true;
+    doCheck = true;
+    preCheck = ''
+      export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
+      export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
+    '';
+    postCheck = ''
+      export ${ldLibPathEnvName}=$PREVIOUS_${ldLibPathEnvName}
+    '';
 
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 
@@ -48,10 +71,8 @@ let
       moveToOutput "bin/nc" "$nc"
       moveToOutput "bin/openssl" "$bin"
       moveToOutput "bin/ocspcheck" "$bin"
-      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+      moveToOutput "share/man/man1/nc.1.gz" "$nc"
     '';
-
-    dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";
@@ -63,25 +84,36 @@ let
   };
 
 in {
-
-  libressl_2_8 = generic {
-    version = "2.8.3";
-    sha256 = "0xw4z4z6m7lyf1r4m2w2w1k7as791c04ygnfk4d7d0ki0h9hnr4v";
+  libressl_3_4 = generic {
+    version = "3.4.3";
+    hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
   };
 
-  libressl_2_9 = generic {
-    version = "2.9.2";
-    sha256 = "1m6mz515dcbrbnyz8hrpdfjzdmj1c15vbgnqxdxb89g3z9kq3iy4";
-    patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+  libressl_3_5 = generic {
+    version = "3.5.3";
+    hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
+
+    patches = [
+      # Fix endianness detection on aarch64-darwin, issue #181187
       (fetchpatch {
-        url = "https://github.com/libressl-portable/portable/pull/529/commits/a747aacc23607c993cc481378782b2c7dd5bc53b.patch";
-        sha256 = "0wbrcscdkjpk4mhh7f3saghi4smia4lhf7fl6la3ahhgx1krn5zm";
+        name = "fix-endian-header-detection.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
+        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
       })
     ];
   };
 
-  libressl_3_0 = generic {
-    version = "3.0.1";
-    sha256 = "1js3fddxwzafiyspif0bwmvpp1fz98mkv10q5xaagqzvjw8xnsk4";
+  libressl_3_6 = generic {
+    version = "3.6.0";
+    hash = "sha256-GxLe/Lvb2+2oaSnkIQAK8PQjM63UgX/SbA2aGuxHhAQ=";
+
+    patches = [
+      # Fix endianness detection on aarch64-darwin, issue #181187
+      (fetchpatch {
+        name = "fix-endian-header-detection.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
+        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
+      })
+    ];
   };
 }

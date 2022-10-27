@@ -1,40 +1,67 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
 , libtoxcore
-, libpthreadstubs, libXdmcp, libXScrnSaver
-, qtbase, qtsvg, qttools, qttranslations
-, ffmpeg, filter-audio, libexif, libsodium, libopus
-, libvpx, openal, pcre, qrencode, sqlcipher
-, AVFoundation ? null }:
+, libpthreadstubs
+, libXdmcp
+, libXScrnSaver
+, qtbase
+, qtsvg
+, qttools
+, qttranslations
+, ffmpeg
+, filter-audio
+, libexif
+, libsodium
+, libopus
+, libvpx
+, openal
+, pcre
+, qrencode
+, sqlcipher
+, AVFoundation
+}:
 
-let
-  version = "1.16.3";
-  rev = "v${version}";
-
-in mkDerivation {
+mkDerivation rec {
   pname = "qtox";
-  inherit version;
+  version = "1.17.6";
 
   src = fetchFromGitHub {
-    owner  = "qTox";
-    repo   = "qTox";
-    sha256 = "0qd4nvbrjnnfnk8ghsxq3cd1n1qf1ck5zg6ib11ij2pg03s146pa";
-    inherit rev;
+    owner = "qTox";
+    repo = "qTox";
+    rev = "v${version}";
+    sha256 = "sha256-naKWoodSMw0AEtACvkASFmw9t0H0d2pcqOW79NNTYF0=";
   };
 
   buildInputs = [
     libtoxcore
-    libpthreadstubs libXdmcp libXScrnSaver
-    qtbase qtsvg qttranslations
-    ffmpeg filter-audio libexif libopus libsodium
-    libvpx openal pcre qrencode sqlcipher
-  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
+    libpthreadstubs
+    libXdmcp
+    libXScrnSaver
+    qtbase
+    qtsvg
+    qttranslations
+    ffmpeg
+    filter-audio
+    libexif
+    libopus
+    libsodium
+    libvpx
+    openal
+    pcre
+    qrencode
+    sqlcipher
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config qttools ]
+    ++ lib.optionals stdenv.isDarwin [ perl ];
 
   cmakeFlags = [
-    "-DGIT_DESCRIBE=${rev}"
+    "-DGIT_DESCRIBE=v${version}"
     "-DENABLE_STATUSNOTIFIER=False"
     "-DENABLE_GTK_SYSTRAY=False"
     "-DENABLE_APPINDICATOR=False"
@@ -42,10 +69,11 @@ in mkDerivation {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Qt Tox client";
-    homepage    = https://tox.chat;
-    license     = licenses.gpl3;
+    homepage = "https://tox.chat";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ akaWolf peterhoeg ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

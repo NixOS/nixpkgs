@@ -1,81 +1,102 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, imagemagick
-, enablePlayer ? true, vlc ? null, qt5 }:
+{ lib
+, stdenv
+, fetchurl
+, python3
+, makeWrapper
+, libtorrent-rasterbar-1_2_x
+, qt5
+}:
 
+let
+  libtorrent = (python3.pkgs.toPythonModule (
+    libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
+in
 stdenv.mkDerivation rec {
   pname = "tribler";
-  version = "7.1.2";
+  version = "7.11.0";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.gz";
-    sha256 = "1ayzqx4358qlx56hsnsn5s8xl6mzdb6nw4kwsalmp86dw6vmmis8";
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
+    sha256 = "0ffh8chb47iaar8872gvalgm84fjzyxph16nixsxknnprqdxyrkx";
   };
 
-  buildInputs = [
-    pythonPackages.python
-    pythonPackages.wrapPython
+  nativeBuildInputs = [
+    python3.pkgs.wrapPython
     makeWrapper
-    imagemagick
+  ];
+
+  buildInputs = [
+    python3.pkgs.python
   ];
 
   pythonPath = [
-    pythonPackages.libtorrentRasterbar
-    pythonPackages.apsw
-    pythonPackages.twisted
-    pythonPackages.netifaces
-    pythonPackages.pycrypto
-    pythonPackages.pyasn1
-    pythonPackages.requests
-    pythonPackages.setuptools
-    pythonPackages.m2crypto
-    pythonPackages.pyqt5
-    pythonPackages.chardet
-    pythonPackages.cherrypy
-    pythonPackages.cryptography
-    pythonPackages.libnacl
-    pythonPackages.configobj
-    pythonPackages.matplotlib
-    pythonPackages.plyvel
-    pythonPackages.decorator
-    pythonPackages.feedparser
-    pythonPackages.service-identity
-    pythonPackages.psutil
-    pythonPackages.meliae
-    pythonPackages.sip
-    pythonPackages.pillow
-    pythonPackages.networkx
-  ];
-
-  postPatch = ''
-    ${stdenv.lib.optionalString enablePlayer ''
-      substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${vlc}/lib/libvlc.so')"
-      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "if vlc and vlc.plugin_path" "if vlc"
-      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${vlc}/lib/vlc/plugins'"
-    ''}
-  '';
+    libtorrent
+  ] ++ (with python3.pkgs; [
+    aiohttp
+    aiohttp-apispec
+    asynctest
+    chardet
+    cherrypy
+    configobj
+    cryptography
+    decorator
+    faker
+    feedparser
+    libnacl
+    lz4
+    m2crypto
+    netifaces
+    networkx
+    pillow
+    pony
+    psutil
+    pyasn1
+    pycrypto
+    pyqt5
+    pyqtgraph
+    pytest-asyncio
+    pytest-timeout
+    pyyaml
+    requests
+    sentry-sdk
+    service-identity
+    twisted
+    yappi
+    pydantic
+    anyio
+  ]);
 
   installPhase = ''
-    find . -name '*.png' -exec convert -strip {} {} \;
     mkdir -pv $out
     # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
     wrapPythonPrograms
     cp -prvd ./* $out/
-    makeWrapper ${pythonPackages.python}/bin/python $out/bin/tribler \
+    makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
-        --set _TRIBLERPATH $out \
-        --set PYTHONPATH $out:$program_PYTHONPATH \
+        --set QT_PLUGIN_PATH "${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}" \
+        --set _TRIBLERPATH "$out/src" \
+        --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
         --set NO_AT_BRIDGE 1 \
-        --run 'cd $_TRIBLERPATH' \
-        --add-flags "-O $out/run_tribler.py" \
-        ${stdenv.lib.optionalString enablePlayer ''
-          --prefix LD_LIBRARY_PATH : ${vlc}/lib
-        ''}
+        --chdir "$out/src" \
+        --add-flags "-O $out/src/run_tribler.py"
+
+    mkdir -p $out/share/applications $out/share/icons
+    cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
+    cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
   '';
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ xvapx ];
-    homepage = https://www.tribler.org/;
-    description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = licenses.lgpl21;
+  shellHook = ''
+    wrapPythonPrograms || true
+    export QT_QPA_PLATFORM_PLUGIN_PATH=$(echo ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms)
+    export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
+    export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
+  '';
+
+  meta = with lib; {
+    description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
+    homepage = "https://www.tribler.org/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ xvapx viric ];
     platforms = platforms.linux;
   };
 }

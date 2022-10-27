@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 {
-  makeEc2Test = { name, image, userData, script, hostname ? "ec2-instance", sshPublicKey ? null }:
+  makeEc2Test = { name, image, userData, script, hostname ? "ec2-instance", sshPublicKey ? null, meta ? {} }:
     let
       metaData = pkgs.stdenv.mkDerivation {
         name = "metadata";
@@ -20,30 +20,47 @@ with pkgs.lib;
     in makeTest {
       name = "ec2-" + name;
       nodes = {};
-      testScript =
-        ''
-          my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";
-          mkdir $imageDir, 0700;
-          my $diskImage = "$imageDir/machine.qcow2";
-          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.qcow2 $diskImage") == 0 or die;
-          system("qemu-img resize $diskImage 10G") == 0 or die;
+      testScript = ''
+        import os
+        import subprocess
+        import tempfile
 
-          # Note: we use net=169.0.0.0/8 rather than
-          # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
-          # confused. (It would get a DHCP lease in the 169.254.*
-          # range, which it would then configure and prompty delete
-          # again when it deletes link-local addresses.) Ideally we'd
-          # turn off the DHCP server, but qemu does not have an option
-          # to do that.
-          my $startCommand = "qemu-kvm -m 768";
-          $startCommand .= " -device virtio-net-pci,netdev=vlan0";
-          $startCommand .= " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
-          $startCommand .= " -drive file=$diskImage,if=virtio,werror=report";
-          $startCommand .= " \$QEMU_OPTS";
+        image_dir = os.path.join(
+            os.environ.get("TMPDIR", tempfile.gettempdir()), "tmp", "vm-state-machine"
+        )
+        os.makedirs(image_dir, mode=0o700, exist_ok=True)
+        disk_image = os.path.join(image_dir, "machine.qcow2")
+        subprocess.check_call(
+            [
+                "qemu-img",
+                "create",
+                "-f",
+                "qcow2",
+                "-o",
+                "backing_file=${image}",
+                disk_image,
+            ]
+        )
+        subprocess.check_call(["qemu-img", "resize", disk_image, "10G"])
 
-          my $machine = createMachine({ startCommand => $startCommand });
+        # Note: we use net=169.0.0.0/8 rather than
+        # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
+        # confused. (It would get a DHCP lease in the 169.254.*
+        # range, which it would then configure and prompty delete
+        # again when it deletes link-local addresses.) Ideally we'd
+        # turn off the DHCP server, but qemu does not have an option
+        # to do that.
+        start_command = (
+            "qemu-kvm -m 1024"
+            + " -device virtio-net-pci,netdev=vlan0"
+            + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'"
+            + f" -drive file={disk_image},if=virtio,werror=report"
+            + " $QEMU_OPTS"
+        )
 
-          ${script}
-        '';
+        machine = create_machine({"startCommand": start_command})
+      '' + script;
+
+      inherit meta;
     };
 }

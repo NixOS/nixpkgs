@@ -1,47 +1,56 @@
 { lib
-, pythonOlder
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, betamax
-, pytest
-, betamax-matchers
-, unittest2
-, mock
 , requests
 , uritemplate
-, dateutil
-, jwcrypto
-, pyopenssl
-, ndg-httpsclient
-, pyasn1
+, python-dateutil
+, pyjwt
+, pytestCheckHook
+, betamax
+, betamax-matchers
 }:
 
 buildPythonPackage rec {
   pname = "github3.py";
-  version = "1.3.0";
+  version = "3.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15a115c18f7bfcf934dfef7ab103844eb9f620c586bad65967708926da47cbda";
+    sha256 = "sha256-Cbcr4Ul9NGsJaM3oNgoNavedwgbQFJpjzT7IbGXDd8w=";
   };
 
-  checkInputs = [ betamax pytest betamax-matchers ]
-    ++ lib.optional (pythonOlder "3") unittest2
-    ++ lib.optional (pythonOlder "3.3") mock;
-  propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
+  propagatedBuildInputs = [
+    requests
+    uritemplate
+    python-dateutil
+    pyjwt
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  postPatch = ''
-    sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py
+  checkInputs = [
+    pytestCheckHook
+    betamax
+    betamax-matchers
+  ];
+
+  # Solves "__main__.py: error: unrecognized arguments: -nauto"
+  preCheck = ''
+    rm tox.ini
   '';
 
-  # TODO: only disable the tests that require network
-  doCheck = false;
+  disabledTests = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'tests/id_rsa.pub'
+    "test_delete_key"
+  ];
 
   meta = with lib; {
-    homepage = https://github3py.readthedocs.org/en/master/;
+    homepage = "https://github3py.readthedocs.org/en/master/";
     description = "A wrapper for the GitHub API written in python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
   };
-
 }

@@ -1,28 +1,29 @@
-{ stdenv, fetchzip, autoreconfHook, pkgconfig, glib, libtool, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
+{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, pcre
+, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "19.08.00";
+  version = "22.09.00";
 
   src = fetchzip {
-    url = "http://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "14v4vxvfsl008xalsmlhl9wh89xlrfffh3pky9m90flaizdzwyp4";
+    url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
+    sha256 = "sha256-BaaUvRbon8V8RvAgw+AC9MCHC65Y/NFT1iFZ+B8P2Hk=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode iasl libbsd ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
 
   postPatch = ''
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
+    substituteInPlace src/lib/include/fwts_binpaths.h \
+      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
     platforms = platforms.linux;

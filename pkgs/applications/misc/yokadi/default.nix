@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonApplication, dateutil,
+{ lib, fetchurl, buildPythonApplication, python-dateutil,
   sqlalchemy, setproctitle, icalendar }:
 
 buildPythonApplication rec {
@@ -11,7 +11,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
     sqlalchemy
     setproctitle
     icalendar
@@ -20,10 +20,10 @@ buildPythonApplication rec {
   # Yokadi doesn't have any tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line oriented, sqlite powered, todo-list";
-    homepage = https://yokadi.github.io/index.html;
+    homepage = "https://yokadi.github.io/index.html";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nipav ];
+    maintainers = [ maintainers.nkpvk ];
   };
 }

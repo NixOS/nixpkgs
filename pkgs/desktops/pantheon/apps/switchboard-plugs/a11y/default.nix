@@ -1,27 +1,30 @@
-{ stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchFromGitHub
-, pantheon
+, fetchpatch
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
 , gtk3
 , switchboard
+, wingpanel-indicator-a11y
 , onboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-a11y";
-  version = "2.1.3";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1wh46lrsliii5bbvfc4xnzgnii2v7sqxnbn43ylmyqppfv9mk1wd";
+    sha256 = "0dc5jv335j443rg08cb7p8wvmcg36wrf1vlcfg9r20cksdis9v4l";
   };
 
   patches = [
@@ -29,18 +32,18 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit onboard;
     })
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/switchboard-plug-a11y/pull/79
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-a11y/commit/08db4b696128a6bf809da3403a818834fcd62b02.patch";
+      sha256 = "1s13ak23bdxgcb74wdz3ql192bla5qhabdicqyjv1rp32plhkbg5";
+    })
   ];
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
-  };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -49,15 +52,20 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     switchboard
+    wingpanel-indicator-a11y
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Universal Access Plug";
-    homepage = https://github.com/elementary/switchboard-plug-a11y;
-    license = licenses.lgpl3Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-a11y";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

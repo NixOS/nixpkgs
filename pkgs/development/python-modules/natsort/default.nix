@@ -1,43 +1,47 @@
 { lib
 , buildPythonPackage
-, pythonOlder
+, fastnumbers
 , fetchPypi
-, pytest
-, pytestcov
-, pytest-mock
-, hypothesis
 , glibcLocales
-, pathlib ? null
+, hypothesis
+, PyICU
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "6.0.0";
+  version = "8.2.0";
+  format = "setuptools";
 
-  checkInputs = [
-    pytest
-    pytestcov
-    pytest-mock
-    hypothesis
-    glibcLocales
-  ]
-  # pathlib was made part of standard library in 3.5:
-  ++ (lib.optionals (pythonOlder "3.4") [ pathlib ]);
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff3effb5618232866de8d26e5af4081a4daa9bb0dfed49ac65170e28e45f2776";
+    hash = "sha256-V/hbcsaIsJ4FPNrDAt1bW1PfX3OuILSHT8v/2L94PRE=";
   };
 
-  # testing based on project's tox.ini
-  checkPhase = ''
-    pytest --doctest-modules natsort
-    pytest
-  '';
+  propagatedBuildInputs = [
+    fastnumbers
+    PyICU
+  ];
 
-  meta = {
-    description = "Natural sorting for python";
-    homepage = https://github.com/SethMMorton/natsort;
-    license = lib.licenses.mit;
+  checkInputs = [
+    glibcLocales
+    hypothesis
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "natsort"
+  ];
+
+  meta = with lib; {
+    description = "Natural sorting for Python";
+    homepage = "https://github.com/SethMMorton/natsort";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

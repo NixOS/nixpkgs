@@ -1,18 +1,27 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchPypi, isPy27, lib, setuptools, setuptools-scm
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "simpy";
-  version = "3.0.11";
+  version = "4.0.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hqgxk3lggf21jq9lh8838cdl24mdkdnpzh0w4m28d0zn2wjb5nh";
+    sha256 = "b36542e2faab612f861c5ef4da17220ac1553f5892b3583c67281dbe4faad404";
   };
 
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [ setuptools ];
+
+  checkInputs = [ pytestCheckHook ];
+
   meta = with lib; {
-    homepage = https://simpy.readthedocs.io/en/latest/;
-    description = "A process-based discrete-event simulation framework based on standard Python.";
+    homepage = "https://simpy.readthedocs.io/en/${version}/";
+    description = "Process-based discrete-event simulation framework based on standard Python";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ shlevy ];
+    maintainers = with maintainers; [ dmrauh shlevy ];
   };
 }

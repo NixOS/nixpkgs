@@ -1,15 +1,19 @@
-{ lib, buildDunePackage, cstruct, sexplib, ppx_tools_versioned }:
+{ lib, buildDunePackage, cstruct, sexplib, ppxlib, stdlib-shims
+, ounit, cppo, ppx_sexp_conv, cstruct-unix, cstruct-sexp
+}:
 
-if !lib.versionAtLeast (cstruct.version or "1") "3"
+if lib.versionOlder (cstruct.version or "1") "3"
 then cstruct
 else
 
 buildDunePackage {
-	pname = "ppx_cstruct";
-	inherit (cstruct) version src meta;
+  pname = "ppx_cstruct";
+  inherit (cstruct) version src meta;
 
-	minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.08";
 
-	buildInputs = [ sexplib ppx_tools_versioned ];
-	propagatedBuildInputs = [ cstruct ];
+  propagatedBuildInputs = [ cstruct ppxlib sexplib stdlib-shims ];
+
+  doCheck = true;
+  checkInputs = [ ounit cppo ppx_sexp_conv cstruct-sexp cstruct-unix ];
 }

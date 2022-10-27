@@ -1,116 +1,190 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
-, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
-, libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
-, libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
-, libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
-, libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, libestr
+, json_c
+, zlib
+, docutils
+, fastJson
+, withKrb5 ? true
+, libkrb5
+, withSystemd ? stdenv.isLinux
+, systemd
+, withJemalloc ? true
+, jemalloc
+, withMysql ? true
+, libmysqlclient
+, withPostgres ? true
+, postgresql
+, withDbi ? true
+, libdbi
+, withNetSnmp ? true
+, net-snmp
+, withUuid ? true
+, libuuid
+, withCurl ? true
+, curl
+, withGnutls ? true
+, gnutls
+, withGcrypt ? true
+, libgcrypt
+, withLognorm ? true
+, liblognorm
+, withMaxminddb ? true
+, libmaxminddb
+, withOpenssl ? true
+, openssl
+, withRelp ? true
+, librelp
+, withKsi ? true
+, libksi
+, withLogging ? true
+, liblogging
+, withNet ? true
+, libnet
+, withHadoop ? true
+, hadoop
+, withRdkafka ? true
+, rdkafka
+, withMongo ? true
+, libmongo-client
+, mongoc
+, withCzmq ? true
+, czmq
+, withRabbitmq ? true
+, rabbitmq-c
+, withHiredis ? true
+, hiredis
+, nixosTests
 }:
 
-with stdenv.lib;
-let
-  mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
-in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.1910.0";
+  version = "8.2208.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "14qczsj12spx0m3dz1pkxnacwi5njr0syamnmi1rg8ri5xlyw682";
+    sha256 = "sha256-FN5o57jlqwxdc0+C4tyf/yLNf0cQrWkHJ+sQp7mz314=";
   };
 
-  #patches = [ ./fix-gnutls-detection.patch ];
-
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
-    postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
-    librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
-    rabbitmq-c hiredis mongoc
-  ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
-    ++ stdenv.lib.optional stdenv.isLinux systemd;
+    fastJson
+    libestr
+    json_c
+    zlib
+    docutils
+  ] ++ lib.optional withKrb5 libkrb5
+  ++ lib.optional withJemalloc jemalloc
+  ++ lib.optional withPostgres postgresql
+  ++ lib.optional withDbi libdbi
+  ++ lib.optional withNetSnmp net-snmp
+  ++ lib.optional withUuid libuuid
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGnutls gnutls
+  ++ lib.optional withGcrypt libgcrypt
+  ++ lib.optional withLognorm liblognorm
+  ++ lib.optional withOpenssl openssl
+  ++ lib.optional withRelp librelp
+  ++ lib.optional withKsi libksi
+  ++ lib.optional withLogging liblogging
+  ++ lib.optional withNet libnet
+  ++ lib.optional withHadoop hadoop
+  ++ lib.optional withRdkafka rdkafka
+  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+  ++ lib.optional withCzmq czmq
+  ++ lib.optional withRabbitmq rabbitmq-c
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withMaxminddb libmaxminddb
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withSystemd systemd;
 
-  hardeningDisable = [ "format" ];
-
-  configureFlags = [
+  configureFlags = with lib; [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-    (mkFlag true                      "largefile")
-    (mkFlag true                      "regexp")
-    (mkFlag (libkrb5 != null)         "gssapi-krb5")
-    (mkFlag true                      "klog")
-    (mkFlag true                      "kmsg")
-    (mkFlag (systemd != null)         "imjournal")
-    (mkFlag true                      "inet")
-    (mkFlag (jemalloc != null)        "jemalloc")
-    (mkFlag true                      "unlimited-select")
-    (mkFlag false                     "debug")
-    (mkFlag false                     "debug-symbols")
-    (mkFlag true                      "debugless")
-    (mkFlag false                     "valgrind")
-    (mkFlag false                     "diagtools")
-    (mkFlag true                      "usertools")
-    (mkFlag (libmysqlclient != null)  "mysql")
-    (mkFlag (postgresql != null)      "pgsql")
-    (mkFlag (libdbi != null)          "libdbi")
-    (mkFlag (net_snmp != null)        "snmp")
-    (mkFlag (libuuid != null)         "uuid")
-    (mkFlag (curl != null)            "elasticsearch")
-    (mkFlag (gnutls != null)          "gnutls")
-    (mkFlag (libgcrypt != null)       "libgcrypt")
-    (mkFlag true                      "rsyslogrt")
-    (mkFlag true                      "rsyslogd")
-    (mkFlag true                      "mail")
-    (mkFlag (liblognorm != null)      "mmnormalize")
-    (mkFlag true                      "mmjsonparse")
-    (mkFlag true                      "mmaudit")
-    (mkFlag true                      "mmanon")
-    (mkFlag true                      "mmutf8fix")
-    (mkFlag true                      "mmcount")
-    (mkFlag true                      "mmsequence")
-    (mkFlag true                      "mmfields")
-    (mkFlag true                      "mmpstrucdata")
-    (mkFlag (openssl != null)         "mmrfc5424addhmac")
-    (mkFlag (librelp != null)         "relp")
-    (mkFlag (libgt != null)           "guardtime")
-    (mkFlag (libksi != null)          "gt-ksi")
-    (mkFlag (liblogging != null)      "liblogging-stdlog")
-    (mkFlag (liblogging != null)      "rfc3195")
-    (mkFlag true                      "imfile")
-    (mkFlag false                     "imsolaris")
-    (mkFlag true                      "imptcp")
-    (mkFlag true                      "impstats")
-    (mkFlag true                      "omprog")
-    (mkFlag (libnet != null)          "omudpspoof")
-    (mkFlag true                      "omstdout")
-    (mkFlag (systemd != null)         "omjournal")
-    (mkFlag true                      "pmlastmsg")
-    (mkFlag true                      "pmcisconames")
-    (mkFlag true                      "pmciscoios")
-    (mkFlag true                      "pmaixforwardedfrom")
-    (mkFlag true                      "pmsnare")
-    (mkFlag true                      "omruleset")
-    (mkFlag true                      "omuxsock")
-    (mkFlag true                      "mmsnmptrapd")
-    (mkFlag (hadoop != null)          "omhdfs")
-    (mkFlag (rdkafka != null)         "omkafka")
-    (mkFlag (libmongo-client != null) "ommongodb")
-    (mkFlag (czmq != null)            "imzmq3")
-    (mkFlag (czmq != null)            "imczmq")
-    (mkFlag (czmq != null)            "omzmq3")
-    (mkFlag (czmq != null)            "omczmq")
-    (mkFlag (rabbitmq-c != null)      "omrabbitmq")
-    (mkFlag (hiredis != null)         "omhiredis")
-    (mkFlag (curl != null)            "omhttpfs")
-    (mkFlag true                      "generate-man-pages")
+    (enableFeature true "largefile")
+    (enableFeature true "regexp")
+    (enableFeature withKrb5 "gssapi-krb5")
+    (enableFeature true "klog")
+    (enableFeature true "kmsg")
+    (enableFeature withSystemd "imjournal")
+    (enableFeature true "inet")
+    (enableFeature withJemalloc "jemalloc")
+    (enableFeature true "unlimited-select")
+    (enableFeature withCurl "clickhouse")
+    (enableFeature false "debug")
+    (enableFeature false "debug-symbols")
+    (enableFeature true "debugless")
+    (enableFeature false "valgrind")
+    (enableFeature false "diagtools")
+    (enableFeature withCurl "fmhttp")
+    (enableFeature true "usertools")
+    (enableFeature withMysql "mysql")
+    (enableFeature withPostgres "pgsql")
+    (enableFeature withDbi "libdbi")
+    (enableFeature withNetSnmp "snmp")
+    (enableFeature withUuid "uuid")
+    (enableFeature withCurl "elasticsearch")
+    (enableFeature withGnutls "gnutls")
+    (enableFeature withGcrypt "libgcrypt")
+    (enableFeature true "rsyslogrt")
+    (enableFeature true "rsyslogd")
+    (enableFeature true "mail")
+    (enableFeature withLognorm "mmnormalize")
+    (enableFeature withMaxminddb "mmdblookup")
+    (enableFeature true "mmjsonparse")
+    (enableFeature true "mmaudit")
+    (enableFeature true "mmanon")
+    (enableFeature true "mmutf8fix")
+    (enableFeature true "mmcount")
+    (enableFeature true "mmsequence")
+    (enableFeature true "mmfields")
+    (enableFeature true "mmpstrucdata")
+    (enableFeature withOpenssl "mmrfc5424addhmac")
+    (enableFeature withRelp "relp")
+    (enableFeature withKsi "ksi-ls12")
+    (enableFeature withLogging "liblogging-stdlog")
+    (enableFeature withLogging "rfc3195")
+    (enableFeature true "imfile")
+    (enableFeature false "imsolaris")
+    (enableFeature true "imptcp")
+    (enableFeature true "impstats")
+    (enableFeature true "omprog")
+    (enableFeature withNet "omudpspoof")
+    (enableFeature true "omstdout")
+    (enableFeature withSystemd "omjournal")
+    (enableFeature true "pmlastmsg")
+    (enableFeature true "pmcisconames")
+    (enableFeature true "pmciscoios")
+    (enableFeature true "pmaixforwardedfrom")
+    (enableFeature true "pmsnare")
+    (enableFeature true "omruleset")
+    (enableFeature true "omuxsock")
+    (enableFeature true "mmsnmptrapd")
+    (enableFeature withHadoop "omhdfs")
+    (enableFeature withRdkafka "omkafka")
+    (enableFeature withMongo "ommongodb")
+    (enableFeature withCzmq "imczmq")
+    (enableFeature withCzmq "omczmq")
+    (enableFeature withRabbitmq "omrabbitmq")
+    (enableFeature withHiredis "omhiredis")
+    (enableFeature withCurl "omhttp")
+    (enableFeature true "generate-man-pages")
   ];
 
-  meta = {
-    homepage = https://www.rsyslog.com/;
+  passthru.tests = {
+    nixos-rsyslogd = nixosTests.rsyslogd;
+  };
+
+  meta = with lib; {
+    homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

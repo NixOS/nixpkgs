@@ -1,30 +1,92 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
 
 let
-
-  runCommand' = stdenv: name: env: buildCommand:
-    stdenv.mkDerivation ({
-      inherit name buildCommand;
-      passAsFile = [ "buildCommand" ];
-    } // env);
-
+  inherit (lib)
+    optionalAttrs
+    warn
+    ;
 in
 
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
   * `name'.  The attributes in `env' are added to the environment
-  * prior to running the command. By default `runCommand' runs using
-  * stdenv with no compiler environment. `runCommandCC`
+  * prior to running the command. By default `runCommand` runs in a
+  * stdenv with no compiler environment. `runCommandCC` uses the default
+  * stdenv, `pkgs.stdenv`.
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+  *
+  * The `*Local` variants force a derivation to be built locally,
+  * it is not substituted.
+  *
+  * This is intended for very cheap commands (<1s execution time).
+  * It saves on the network roundrip and can speed up a build.
+  *
+  * It is the same as adding the special fields
+  * `preferLocalBuild = true;`
+  * `allowSubstitutes = false;`
+  * to a derivation’s attributes.
   */
-  runCommand = runCommandNoCC;
-  runCommandNoCC = runCommand' stdenvNoCC;
-  runCommandCC = runCommand' stdenv;
+  runCommand = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
+  runCommandLocal = name: env: runCommandWith {
+    stdenv = stdenvNoCC;
+    runLocal = true;
+    inherit name;
+    derivationArgs = env;
+  };
+
+  runCommandCC = name: env: runCommandWith {
+    stdenv = stdenv;
+    runLocal = false;
+    inherit name;
+    derivationArgs = env;
+  };
+  # `runCommandCCLocal` left out on purpose.
+  # We shouldn’t force the user to have a cc in scope.
+
+  /* Generalized version of the `runCommand`-variants
+   * which does customized behavior via a single
+   * attribute set passed as the first argument
+   * instead of having a lot of variants like
+   * `runCommand*`. Additionally it allows changing
+   * the used `stdenv` freely and has a more explicit
+   * approach to changing the arguments passed to
+   * `stdenv.mkDerivation`.
+   */
+  runCommandWith =
+    let
+      # prevent infinite recursion for the default stdenv value
+      defaultStdenv = stdenv;
+    in
+    { stdenv ? defaultStdenv
+    # which stdenv to use, defaults to a stdenv with a C compiler, pkgs.stdenv
+    , runLocal ? false
+    # whether to build this derivation locally instead of substituting
+    , derivationArgs ? {}
+    # extra arguments to pass to stdenv.mkDerivation
+    , name
+    # name of the resulting derivation
+    # TODO(@Artturin): enable strictDeps always
+    }: buildCommand:
+    stdenv.mkDerivation ({
+      enableParallelBuilding = true;
+      inherit buildCommand name;
+      passAsFile = [ "buildCommand" ]
+        ++ (derivationArgs.passAsFile or []);
+    }
+    // (lib.optionalAttrs runLocal {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+       })
+    // builtins.removeAttrs derivationArgs [ "passAsFile" ]);
 
 
   /* Writes a text file to the nix store.
@@ -56,27 +118,28 @@ rec {
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , meta ? { }
     }:
     runCommand name
-      { inherit text executable;
+      { inherit text executable checkPhase meta;
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
       }
       ''
-        n=$out${destination}
-        mkdir -p "$(dirname "$n")"
+        target=$out${lib.escapeShellArg destination}
+        mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
-          mv "$textPath" "$n"
+          mv "$textPath" "$target"
         else
-          echo -n "$text" > "$n"
+          echo -n "$text" > "$target"
         fi
 
-        ${checkPhase}
+        eval "$checkPhase"
 
-        (test -n "$executable" && chmod +x "$n") || true
+        (test -n "$executable" && chmod +x "$target") || true
       '';
 
   /*
@@ -163,7 +226,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${stdenv.shellDryRun} "$target"
       '';
     };
 
@@ -190,8 +253,64 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out/bin/${name}
+        ${stdenv.shellDryRun} "$target"
       '';
+    };
+
+  /*
+   * Similar to writeShellScriptBin and writeScriptBin.
+   * Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
+   * checks its syntax with shellcheck and the shell's -n option.
+   * Automatically includes sane set of shellopts (errexit, nounset, pipefail)
+   * and handles creation of PATH based on runtimeInputs
+   *
+   * Note that the checkPhase uses stdenv.shell for the test run of the script,
+   * while the generated shebang uses runtimeShell. If, for whatever reason,
+   * those were to mismatch you might lose fidelity in the default checks.
+   *
+   * Example:
+   * # Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+   * writeShellApplication {
+   *   name = "my-file";
+   *   runtimeInputs = [ curl w3m ];
+   *   text = ''
+   *     curl -s 'https://nixos.org' | w3m -dump -T text/html
+   *    '';
+   * }
+  */
+  writeShellApplication =
+    { name
+    , text
+    , runtimeInputs ? [ ]
+    , checkPhase ? null
+    }:
+    writeTextFile {
+      inherit name;
+      executable = true;
+      destination = "/bin/${name}";
+      text = ''
+        #!${runtimeShell}
+        set -o errexit
+        set -o nounset
+        set -o pipefail
+      '' + lib.optionalString (runtimeInputs != [ ]) ''
+
+        export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+      '' + ''
+
+        ${text}
+      '';
+
+      checkPhase =
+        if checkPhase == null then ''
+          runHook preCheck
+          ${stdenv.shellDryRun} "$target"
+          ${shellcheck}/bin/shellcheck "$target"
+          runHook postCheck
+        ''
+        else checkPhase;
+
+      meta.mainProgram = name;
     };
 
   # Create a C binary
@@ -206,24 +325,118 @@ rec {
       allowSubstitutes = false;
     }
     ''
-    n=$out/bin/$name
-    mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
-    $CC -x c code.c -o "$n"
+      n=$out/bin/$name
+      mkdir -p "$(dirname "$n")"
+      mv "$codePath" code.c
+      $CC -x c code.c -o "$n"
     '';
 
+
+  /* concat a list of files to the nix store.
+   * The contents of files are added to the file in the store.
+   *
+   * Examples:
+   * # Writes my-file to /nix/store/<store path>
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = [ drv1 "${drv2}/path/to/file" ];
+   * }
+   * # See also the `concatText` helper function below.
+   *
+   * # Writes executable my-file to /nix/store/<store path>/bin/my-file
+   * concatTextFile {
+   *   name = "my-file";
+   *   files = [ drv1 "${drv2}/path/to/file" ];
+   *   executable = true;
+   *   destination = "/bin/my-file";
+   * }
+   */
+  concatTextFile =
+    { name # the name of the derivation
+    , files
+    , executable ? false # run chmod +x ?
+    , destination ? ""   # relative path appended to $out eg "/bin/foo"
+    , checkPhase ? ""    # syntax checks, e.g. for scripts
+    , meta ? { }
+    }:
+    runCommandLocal name
+      { inherit files executable checkPhase meta destination; }
+      ''
+        file=$out$destination
+        mkdir -p "$(dirname "$file")"
+        cat $files > "$file"
+
+        (test -n "$executable" && chmod +x "$file") || true
+        eval "$checkPhase"
+      '';
+
+
   /*
-  * Create a forest of symlinks to the files in `paths'.
-  *
-  * Examples:
-  * # adds symlinks of hello to current build.
-  * { symlinkJoin, hello }:
-  * symlinkJoin { name = "myhello"; paths = [ hello ]; }
-  *
-  * # adds symlinks of hello to current build and prints "links added"
-  * { symlinkJoin, hello }:
-  * symlinkJoin { name = "myhello"; paths = [ hello ]; postBuild = "echo links added"; }
+   * Writes a text file to nix store with no optional parameters available.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatText "my-file" [ file1 file2 ]
+   *
   */
+  concatText = name: files: concatTextFile { inherit name files; };
+
+    /*
+   * Writes a text file to nix store with and mark it as executable.
+   *
+   * Example:
+   * # Writes contents of files to /nix/store/<store path>
+   * concatScript "my-file" [ file1 file2 ]
+   *
+  */
+  concatScript = name: files: concatTextFile { inherit name files; executable = true; };
+
+
+  /*
+   * Create a forest of symlinks to the files in `paths'.
+   *
+   * This creates a single derivation that replicates the directory structure
+   * of all the input paths.
+   *
+   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
+   *
+   * Examples:
+   * # adds symlinks of hello to current build.
+   * symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }
+   *
+   * # adds symlinks of hello and stack to current build and prints "links added"
+   * symlinkJoin { name = "myexample"; paths = [ pkgs.hello pkgs.stack ]; postBuild = "echo links added"; }
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/sglsr5g079a5235hy29da3mq3hv8sjmm-myexample
+   * |-- bin
+   * |   |-- hello -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10/bin/hello
+   * |   `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/bin/stack
+   * `-- share
+   *     |-- bash-completion
+   *     |   `-- completions
+   *     |       `-- stack -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/bash-completion/completions/stack
+   *     |-- fish
+   *     |   `-- vendor_completions.d
+   *     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
+   * ...
+   *
+   * symlinkJoin and linkFarm are similar functions, but they output
+   * derivations with different structure.
+   *
+   * symlinkJoin is used to create a derivation with a familiar directory
+   * structure (top-level bin/, share/, etc), but with all actual files being symlinks to
+   * the files in the input derivations.
+   *
+   * symlinkJoin is used many places in nixpkgs to create a single derivation
+   * that appears to contain binaries, libraries, documentation, etc from
+   * multiple input derivations.
+   *
+   * linkFarm is instead used to create a simple derivation with symlinks to
+   * other derivations.  A derivation created with linkFarm is often used in CI
+   * as a easy way to build multiple derivations at once.
+   */
   symlinkJoin =
     args_@{ name
          , paths
@@ -234,15 +447,72 @@ rec {
          }:
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
-        // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
+        // {
+          inherit preferLocalBuild allowSubstitutes;
+          passAsFile = [ "paths" ];
+        }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $paths; do
+        for i in $(cat $pathsPath); do
           ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}
       '';
+
+  /*
+   * Quickly create a set of symlinks to derivations.
+   *
+   * This creates a simple derivation with symlinks to all inputs.
+   *
+   * entries is a list of attribute sets like
+   * { name = "name" ; path = "/nix/store/..."; }
+   *
+   * Example:
+   *
+   * # Symlinks hello and stack paths in store to current $out/hello-test and
+   * # $out/foobar.
+   * linkFarm "myexample" [ { name = "hello-test"; path = pkgs.hello; } { name = "foobar"; path = pkgs.stack; } ]
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/qc5728m4sa344mbks99r3q05mymwm4rw-myexample
+   * |-- foobar -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1
+   * `-- hello-test -> /nix/store/qy93dp4a3rqyn2mz63fbxjg228hffwyw-hello-2.10
+   *
+   * See the note on symlinkJoin for the difference between linkFarm and symlinkJoin.
+   */
+  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
+    ''mkdir -p $out
+      cd $out
+      ${lib.concatMapStrings (x: ''
+          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
+          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
+      '') entries}
+    '';
+
+  /*
+   * Easily create a linkFarm from a set of derivations.
+   *
+   * This calls linkFarm with a list of entries created from the list of input
+   * derivations.  It turns each input derivation into an attribute set
+   * like { name = drv.name ; path = drv }, and passes this to linkFarm.
+   *
+   * Example:
+   *
+   * # Symlinks the hello, gcc, and ghc derivations in $out
+   * linkFarmFromDrvs "myexample" [ pkgs.hello pkgs.gcc pkgs.ghc ]
+   *
+   * This creates a derivation with a directory structure like the following:
+   *
+   * /nix/store/m3s6wkjy9c3wy830201bqsb91nk2yj8c-myexample
+   * |-- gcc-wrapper-9.2.0 -> /nix/store/fqhjxf9ii4w4gqcsx59fyw2vvj91486a-gcc-wrapper-9.2.0
+   * |-- ghc-8.6.5 -> /nix/store/gnf3s07bglhbbk4y6m76sbh42siym0s6-ghc-8.6.5
+   * `-- hello-2.10 -> /nix/store/k0ll91c4npk4lg8lqhx00glg2m735g74-hello-2.10
+   */
+  linkFarmFromDrvs = name: drvs:
+    let mkEntryFromDrv = drv: { name = drv.name; path = drv; };
+    in linkFarm name (map mkEntryFromDrv drvs);
 
 
   /*
@@ -255,15 +525,33 @@ rec {
    * # setup hook that depends on the hello package and runs ./myscript.sh
    * myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
    *
-   * # wrotes a setup hook where @bash@ myscript.sh is substituted for the
+   * # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
    * # bash interpreter.
    * myhellohookSub = makeSetupHook {
    *                 deps = [ hello ];
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
+   *               } ./myscript.sh;
+   *
+   * # setup hook with a package test
+   * myhellohookTested = makeSetupHook {
+   *                 deps = [ hello ];
+   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
+   *                 passthru.tests.greeting = callPackage ./test { };
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {} }: script:
-    runCommand name substitutions
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
+    runCommand name
+      (substitutions // {
+        inherit meta;
+        strictDeps = true;
+        # TODO 2023-01, no backport: simplify to inherit passthru;
+        passthru = passthru
+          // optionalAttrs (substitutions?passthru)
+            (warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly."
+              substitutions.passthru);
+      })
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
@@ -290,26 +578,116 @@ rec {
       done < graph
     '';
 
+  /*
+    Write the set of references to a file, that is, their immediate dependencies.
+
+    This produces the equivalent of `nix-store -q --references`.
+   */
+  writeDirectReferencesToFile = path: runCommand "runtime-references"
+    {
+      exportReferencesGraph = ["graph" path];
+      inherit path;
+    }
+    ''
+      touch ./references
+      while read p; do
+        read dummy
+        read nrRefs
+        if [[ $p == $path ]]; then
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+            echo $ref >>./references
+          done
+        else
+          for ((i = 0; i < nrRefs; i++)); do
+            read ref;
+          done
+        fi
+      done < graph
+      sort ./references >$out
+    '';
+
 
   /*
-   * Quickly create a set of symlinks to derivations.
-   * entries is a list of attribute sets like
-   * { name = "name" ; path = "/nix/store/..."; }
+   * Extract a string's references to derivations and paths (its
+   * context) and write them to a text file, removing the input string
+   * itself from the dependency graph. This is useful when you want to
+   * make a derivation depend on the string's references, but not its
+   * contents (to avoid unnecessary rebuilds, for example).
    *
-   * Example:
-   *
-   * # Symlinks hello path in store to current $out/hello
-   * linkFarm "hello" [ { name = "hello"; path = pkgs.hello; } ];
-   *
+   * Note that this only works as intended on Nix >= 2.3.
    */
-  linkFarm = name: entries: runCommand name { preferLocalBuild = true; allowSubstitutes = false; }
-    ''mkdir -p $out
-      cd $out
-      ${lib.concatMapStrings (x: ''
-          mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
-      '') entries}
-    '';
+  writeStringReferencesToFile = string:
+    /*
+    * The basic operation this performs is to copy the string context
+    * from `string' to a second string and wrap that string in a
+    * derivation. However, that alone is not enough, since nothing in the
+    * string refers to the output paths of the derivations/paths in its
+    * context, meaning they'll be considered build-time dependencies and
+    * removed from the wrapper derivation's closure. Putting the
+    * necessary output paths in the new string is however not very
+    * straightforward - the attrset returned by `getContext' contains
+    * only references to derivations' .drv-paths, not their output
+    * paths. In order to "convert" them, we try to extract the
+    * corresponding paths from the original string using regex.
+    */
+    let
+      # Taken from https://github.com/NixOS/nix/blob/130284b8508dad3c70e8160b15f3d62042fc730a/src/libutil/hash.cc#L84
+      nixHashChars = "0123456789abcdfghijklmnpqrsvwxyz";
+      context = builtins.getContext string;
+      derivations = lib.filterAttrs (n: v: v ? outputs) context;
+      # Objects copied from outside of the store, such as paths and
+      # `builtins.fetch*`ed ones
+      sources = lib.attrNames (lib.filterAttrs (n: v: v ? path) context);
+      packages =
+        lib.mapAttrs'
+          (name: value:
+            {
+              inherit value;
+              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\.drv" name);
+            })
+          derivations;
+      # The syntax of output paths differs between outputs named `out`
+      # and other, explicitly named ones. For explicitly named ones,
+      # the output name is suffixed as `-name`, but `out` outputs
+      # aren't suffixed at all, and thus aren't easily distinguished
+      # from named output paths. Therefore, we find all the named ones
+      # first so we can use them to remove false matches when looking
+      # for `out` outputs (see the definition of `outputPaths`).
+      namedOutputPaths =
+        lib.flatten
+          (lib.mapAttrsToList
+            (name: value:
+              (map
+                (output:
+                  lib.filter
+                    lib.isList
+                    (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name}-${output})" string))
+                (lib.remove "out" value.outputs)))
+            packages);
+      # Only `out` outputs
+      outputPaths =
+        lib.flatten
+          (lib.mapAttrsToList
+            (name: value:
+              if lib.elem "out" value.outputs then
+                lib.filter
+                  (x: lib.isList x &&
+                      # If the matched path is in `namedOutputPaths`,
+                      # it's a partial match of an output path where
+                      # the output name isn't `out`
+                      lib.all (o: !lib.hasPrefix (lib.head x) o) namedOutputPaths)
+                  (builtins.split "(${builtins.storeDir}/[${nixHashChars}]+-${name})" string)
+              else
+                [])
+            packages);
+      allPaths = lib.concatStringsSep "\n" (lib.unique (sources ++ namedOutputPaths ++ outputPaths));
+      allPathsWithContext = builtins.appendContext allPaths context;
+    in
+      if builtins ? getContext then
+        writeText "string-references" allPathsWithContext
+      else
+        writeDirectReferencesToFile (writeText "string-file" string);
 
 
   /* Print an error message if the file with the specified name and
@@ -414,4 +792,20 @@ rec {
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
     };
+
+  /* An immutable file in the store with a length of 0 bytes. */
+  emptyFile = runCommand "empty-file" {
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "0ip26j2h11n1kgkz36rl4akv694yz65hr72q4kv4b3lxcbi65b3p";
+    preferLocalBuild = true;
+  } "touch $out";
+
+  /* An immutable empty directory in the store. */
+  emptyDirectory = runCommand "empty-directory" {
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+    preferLocalBuild = true;
+  } "mkdir $out";
 }

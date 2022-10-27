@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "sickbeard";
 
   cfg = config.services.sickbeard;
+  opt = options.services.sickbeard;
   sickbeard = cfg.package;
 
 in
@@ -19,41 +20,43 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the sickbeard server.";
+        description = lib.mdDoc "Whether to enable the sickbeard server.";
       };
       package = mkOption {
         type = types.package;
         default = pkgs.sickbeard;
-        example = literalExample "pkgs.sickrage";
-        description =''
-          Enable <literal>pkgs.sickrage</literal> or <literal>pkgs.sickgear</literal>
+        defaultText = literalExpression "pkgs.sickbeard";
+        example = literalExpression "pkgs.sickrage";
+        description =lib.mdDoc ''
+          Enable `pkgs.sickrage` or `pkgs.sickgear`
           as an alternative to SickBeard
         '';
       };
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
-        description = "Path where to store data files.";
+        description = lib.mdDoc "Path where to store data files.";
       };
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
-        description = "Path to config file.";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
+        description = lib.mdDoc "Path to config file.";
       };
       port = mkOption {
         type = types.ints.u16;
         default = 8081;
-        description = "Port to bind to.";
+        description = lib.mdDoc "Port to bind to.";
       };
       user = mkOption {
         type = types.str;
         default = name;
-        description = "User to run the service as";
+        description = lib.mdDoc "User to run the service as";
       };
       group = mkOption {
         type = types.str;
         default = name;
-        description = "Group to run the service as";
+        description = lib.mdDoc "Group to run the service as";
       };
     };
   };
@@ -63,19 +66,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      name = name;
-      uid = config.ids.uids.sickbeard;
-      group = cfg.group;
-      description = "sickbeard user";
-      home = cfg.dataDir;
-      createHome = true;
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        uid = config.ids.uids.sickbeard;
+        group = cfg.group;
+        description = "sickbeard user";
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      name = name;
-      gid = config.ids.gids.sickbeard;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = config.ids.gids.sickbeard;
+    };
 
     systemd.services.sickbeard = {
       description = "Sickbeard Server";
@@ -85,7 +88,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${sickbeard}/SickBeard.py --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port}";
+        ExecStart = "${sickbeard}/bin/${sickbeard.pname} --datadir ${cfg.dataDir} --config ${cfg.configFile} --port ${toString cfg.port}";
       };
     };
   };

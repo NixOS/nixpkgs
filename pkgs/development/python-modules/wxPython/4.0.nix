@@ -1,53 +1,55 @@
 { lib
 , stdenv
-, openglSupport ? true
-, libX11
-, pyopengl
 , buildPythonPackage
 , fetchPypi
-, pkgconfig
-, libjpeg
-, libtiff
-, SDL
-, gst-plugins-base
-, libnotify
-, freeglut
-, xorg
+, setuptools
+, pkg-config
 , which
 , cairo
-, requests
 , pango
-, pathlib2
 , python
 , doxygen
 , ncurses
-, libpng
-, gstreamer
+, libintl
 , wxGTK
+, IOKit
+, Carbon
+, Cocoa
+, AudioToolbox
+, OpenGL
+, CoreFoundation
+, pillow
+, numpy
+, six
 }:
 
 buildPythonPackage rec {
   pname = "wxPython";
-  version = "4.0.6";
+  version = "4.0.7.post2";
+  format = "other";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35cc8ae9dd5246e2c9861bb796026bbcb9fb083e4d49650f776622171ecdab37";
+    sha256 = "5a229e695b64f9864d30a5315e0c1e4ff5e02effede0a07f16e8d856737a0c4e";
   };
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
+  nativeBuildInputs = [ pkg-config which doxygen setuptools wxGTK ];
 
-  buildInputs = [ libjpeg libtiff SDL
-      gst-plugins-base libnotify freeglut xorg.libSM ncurses
-      requests libpng gstreamer libX11
-      pathlib2
-      (wxGTK.gtk)
-  ]
-    ++ lib.optional openglSupport pyopengl;
+  buildInputs = [ ncurses libintl ]
+  ++ (if stdenv.isDarwin
+  then
+    [ AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL ]
+  else
+    [ wxGTK.gtk ]
+  );
 
-  hardeningDisable = [ "format" ];
+  propagatedBuildInputs = [
+    numpy
+    pillow
+    six
+  ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
@@ -60,6 +62,9 @@ buildPythonPackage rec {
         ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
         ("appsvc",     None)
       ]}'
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # Remove the OSX-Only wx.webkit module
+    sed -i "s/makeETGRule(.*'WXWEBKIT')/pass/" wscript
   '';
 
   buildPhase = ''
@@ -68,15 +73,14 @@ buildPythonPackage rec {
 
   installPhase = ''
     ${python.interpreter} setup.py install --skip-build --prefix=$out
-    wrapPythonPrograms
   '';
 
-  passthru = { inherit wxGTK openglSupport; };
+  passthru = { wxWidgets = wxGTK; };
 
 
   meta = {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
-    homepage = http://wxpython.org/;
+    homepage = "http://wxpython.org/";
     license = lib.licenses.wxWindows;
   };
 

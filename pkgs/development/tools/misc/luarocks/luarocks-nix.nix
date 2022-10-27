@@ -1,14 +1,23 @@
-{ luarocks, fetchFromGitHub }:
-luarocks.overrideAttrs(old: {
+{ luarocks, fetchFromGitHub, unstableGitUpdater }:
+
+luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "2019-09-07";
+  version = "unstable-2022-10-12";
+
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = "luarocks";
-    rev = "fa7c367bcdad36768db5f19fd4fcdd9681a14429";
-    sha256 = "0kziwfw5gqq5xsckl7qf9wasaiy8rp42h5qrcnjx07qp47a9ldx7";
+    repo = "luarocks-nix";
+    rev = "7b3cc90ebf07813ed511f530cc50d602e9502001";
+    sha256 = "sha256-zN+8BzUkKUQU/6BWg1kcsL3XV9qehnwm1L4vRKOejPs=";
   };
-  patches = [
-    ./darwin-3.1.3.patch
-  ];
+
+  patches = [ ];
+
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
+
+  meta = {
+    mainProgram = "luarocks";
+  };
 })

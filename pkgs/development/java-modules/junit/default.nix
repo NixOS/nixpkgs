@@ -1,12 +1,17 @@
-{ stdenv, pkgs, mavenbuild, fetchMaven }:
+{ lib, pkgs, mavenbuild, fetchMaven, maven, jdk8 }:
 
 with pkgs.javaPackages;
 
 let
   poms = import (../poms.nix) { inherit fetchMaven; };
   collections = import (../collections.nix) { inherit pkgs; };
+  mavenbuild-jdk8 = mavenbuild.override {
+    maven = maven.override {
+      jdk = jdk8;
+    };
+  };
 in rec {
-  junitGen = { mavenDeps, sha512, version }: mavenbuild {
+  junitGen = { mavenDeps, sha512, version }: mavenbuild-jdk8 {
     inherit mavenDeps sha512 version;
 
     name = "junit-${version}";
@@ -19,11 +24,11 @@ in rec {
     m2Path = "/junit/junit/${version}";
 
     meta = {
-      homepage = https://junit.org/junit4/;
+      homepage = "https://junit.org/junit4/";
       description = "Simple framework to write repeatable tests. It is an instance of the xUnit architecture for unit testing frameworks";
-      license = stdenv.lib.licenses.epl10;
-      platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers;
+      license = lib.licenses.epl10;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers;
         [ nequissimus ];
     };
   };

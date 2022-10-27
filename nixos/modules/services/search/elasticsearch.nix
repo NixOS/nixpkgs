@@ -5,14 +5,16 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es6 = builtins.compareVersions cfg.package.version "6" >= 0;
+  es7 = builtins.compareVersions cfg.package.version "7" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
     cluster.name: ${cfg.cluster_name}
+    ${lib.optionalString cfg.single_node "discovery.type: single-node"}
+    ${lib.optionalString (cfg.single_node && es7) "gateway.auto_import_dangling_indices: true"}
 
     http.port: ${toString cfg.port}
-    transport.tcp.port: ${toString cfg.tcp_port}
+    transport.port: ${toString cfg.tcp_port}
 
     ${cfg.extraConf}
   '';
@@ -36,50 +38,57 @@ let
     postBuild = "${pkgs.coreutils}/bin/mkdir -p $out/plugins";
   };
 
-in {
+in
+{
 
   ###### interface
 
   options.services.elasticsearch = {
     enable = mkOption {
-      description = "Whether to enable elasticsearch.";
+      description = lib.mdDoc "Whether to enable elasticsearch.";
       default = false;
       type = types.bool;
     };
 
     package = mkOption {
-      description = "Elasticsearch package to use.";
+      description = lib.mdDoc "Elasticsearch package to use.";
       default = pkgs.elasticsearch;
-      defaultText = "pkgs.elasticsearch";
+      defaultText = literalExpression "pkgs.elasticsearch";
       type = types.package;
     };
 
     listenAddress = mkOption {
-      description = "Elasticsearch listen address.";
+      description = lib.mdDoc "Elasticsearch listen address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Elasticsearch port to listen for HTTP traffic.";
+      description = lib.mdDoc "Elasticsearch port to listen for HTTP traffic.";
       default = 9200;
       type = types.int;
     };
 
     tcp_port = mkOption {
-      description = "Elasticsearch port for the node to node communication.";
+      description = lib.mdDoc "Elasticsearch port for the node to node communication.";
       default = 9300;
       type = types.int;
     };
 
     cluster_name = mkOption {
-      description = "Elasticsearch name that identifies your cluster for auto-discovery.";
+      description = lib.mdDoc "Elasticsearch name that identifies your cluster for auto-discovery.";
       default = "elasticsearch";
       type = types.str;
     };
 
+    single_node = mkOption {
+      description = lib.mdDoc "Start a single-node cluster";
+      default = true;
+      type = types.bool;
+    };
+
     extraConf = mkOption {
-      description = "Extra configuration for elasticsearch.";
+      description = lib.mdDoc "Extra configuration for elasticsearch.";
       default = "";
       type = types.str;
       example = ''
@@ -90,7 +99,7 @@ in {
     };
 
     logging = mkOption {
-      description = "Elasticsearch logging configuration.";
+      description = lib.mdDoc "Elasticsearch logging configuration.";
       default = ''
         logger.action.name = org.elasticsearch.action
         logger.action.level = info
@@ -109,29 +118,40 @@ in {
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/elasticsearch";
-      description = ''
+      description = lib.mdDoc ''
         Data directory for elasticsearch.
       '';
     };
 
     extraCmdLineOptions = mkOption {
-      description = "Extra command line options for the elasticsearch launcher.";
-      default = [];
+      description = lib.mdDoc "Extra command line options for the elasticsearch launcher.";
+      default = [ ];
       type = types.listOf types.str;
     };
 
     extraJavaOptions = mkOption {
-      description = "Extra command line options for Java.";
-      default = [];
+      description = lib.mdDoc "Extra command line options for Java.";
+      default = [ ];
       type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 
     plugins = mkOption {
-      description = "Extra elasticsearch plugins";
-      default = [];
+      description = lib.mdDoc "Extra elasticsearch plugins";
+      default = [ ];
       type = types.listOf types.package;
-      example = lib.literalExample "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
+      example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
+    };
+
+    restartIfChanged  = mkOption {
+      type = types.bool;
+      description = lib.mdDoc ''
+        Automatically restart the service on config change.
+        This can be set to false to defer restarts on a server or cluster.
+        Please consider the security implications of inadvertently running an older version,
+        and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
+      '';
+      default = true;
     };
 
   };
@@ -144,11 +164,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pkgs.inetutils ];
+      inherit (cfg) restartIfChanged;
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
-                                  ++ cfg.extraJavaOptions);
-      } // optionalAttrs es6 {
+        ES_JAVA_OPTS = toString cfg.extraJavaOptions;
         ES_PATH_CONF = configDir;
       };
       serviceConfig = {
@@ -156,6 +175,8 @@ in {
         User = "elasticsearch";
         PermissionsStartOnly = true;
         LimitNOFILE = "1024000";
+        Restart = "always";
+        TimeoutStartSec = "infinity";
       };
       preStart = ''
         ${optionalString (!config.boot.isContainer) ''
@@ -187,9 +208,19 @@ in {
         rm -f "${configDir}/logging.yml"
         cp ${loggingConfigFile} ${configDir}/${loggingConfigFilename}
         mkdir -p ${configDir}/scripts
-        ${optionalString es6 "cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options"}
+        cp ${cfg.package}/config/jvm.options ${configDir}/jvm.options
+        # redirect jvm logs to the data directory
+        mkdir -m 0700 -p ${cfg.dataDir}/logs
+        ${pkgs.sd}/bin/sd 'logs/gc.log' '${cfg.dataDir}/logs/gc.log' ${configDir}/jvm.options \
 
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch:elasticsearch ${cfg.dataDir}; fi
+      '';
+      postStart = ''
+        # Make sure elasticsearch is up and running before dependents
+        # are started
+        while ! ${pkgs.curl}/bin/curl -sS -f http://${cfg.listenAddress}:${toString cfg.port} 2>/dev/null; do
+          sleep 1
+        done
       '';
     };
 

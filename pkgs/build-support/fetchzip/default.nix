@@ -5,21 +5,51 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ fetchurl, unzip }:
+{ lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
-, url
+, url ? ""
+, urls ? []
 , extraPostFetch ? ""
+, postFetch ? ""
 , name ? "source"
+, pname ? ""
+, version ? ""
+, nativeBuildInputs ? [ ]
+, # Allows to set the extension for the intermediate downloaded
+  # file. This can be used as a hint for the unpackCmdHooks to select
+  # an appropriate unpacking tool.
+  extension ? null
 , ... } @ args:
 
-(fetchurl ({
-  inherit name;
 
+lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
+
+(let
+  tmpFilename =
+    if extension != null
+    then "download.${extension}"
+    else baseNameOf (if url != "" then url else builtins.head urls);
+in
+
+fetchurl ((
+  if (pname != "" && version != "") then
+    {
+      name = "${name}-${version}";
+      inherit pname version;
+    }
+  else
+    { inherit name; }
+) // {
   recursiveHash = true;
 
   downloadToTemp = true;
+
+  # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
+  # UTF-8 aware locale:
+  #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
+  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
 
   postFetch =
     ''
@@ -27,9 +57,10 @@
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      renamed="$TMPDIR/${tmpFilename}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
+      chmod -R +w "$unpackDir"
     ''
     + (if stripRoot then ''
       if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
@@ -44,9 +75,16 @@
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
-    '') #*/
-    + extraPostFetch;
-} // removeAttrs args [ "stripRoot" "extraPostFetch" ])).overrideAttrs (x: {
-  # Hackety-hack: we actually need unzip hooks, too
-  nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
-})
+    '')
+    + ''
+      ${postFetch}
+    '' + ''
+      ${extraPostFetch}
+    ''
+
+    # Remove non-owner write permissions
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+    + ''
+      chmod 755 "$out"
+    '';
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ]))

@@ -1,28 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi
-, pbr, requests
-, pytest, pytestpep8, waitress }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, requests
+, pytestCheckHook
+, waitress
+}:
 
 buildPythonPackage rec {
   pname = "requests-unixsocket";
-  version = "0.1.5";
+  version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k19knydh0fzd7w12lfy18arl1ndwa0zln33vsb37yv1iw9w06x9";
+    hash = "sha256-KDBCg+qTV9Rf/1itWxHkdwjPv1gGgXqlmyo2Mijulx4=";
   };
 
-  nativeBuildInputs = [ pbr ];
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [
+    pbr
+  ];
 
-  checkInputs = [ pytest pytestpep8 waitress ];
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    requests
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    waitress
+  ];
+
+  pythonImportsCheck = [
+    "requests_unixsocket"
+  ];
 
   meta = with lib; {
     description = "Use requests to talk HTTP via a UNIX domain socket";
-    homepage = https://github.com/msabramo/requests-unixsocket;
+    homepage = "https://github.com/msabramo/requests-unixsocket";
     license = licenses.asl20;
-    maintainers = [ maintainers.catern ];
+    maintainers = with maintainers; [ catern ];
   };
 }

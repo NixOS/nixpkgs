@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "yampa";
+  pname = "yampa";
   version = "2016-07-05";
 
   ipkgName = "idris-yampa";
@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris implementation of Yampa FRP library as described in Reactive Programming through Dependent Types";
-    homepage = https://github.com/BartAdv/idris-yampa;
+    homepage = "https://github.com/BartAdv/idris-yampa";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

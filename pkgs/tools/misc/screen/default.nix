@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
+{ lib, stdenv, fetchurl, autoreconfHook, ncurses, libxcrypt, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "4.7.0";
+  version = "4.9.0";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${pname}-${version}.tar.gz";
-    sha256 = "1h90bpy2wk304xw367y1zwz0kilrpm6h28nphykx4fvqz8l56xys";
+    sha256 = "1x1hqy4h47i7hk85f779lkwkm7gkq8h8mxwd0znkh5adpf0m4czr";
   };
 
   configureFlags= [
@@ -14,28 +14,22 @@ stdenv.mkDerivation rec {
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"
     "--enable-colors256"
+    "--enable-rxvt_osc"
   ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
-    (fetchpatch {
-      url = https://gist.githubusercontent.com/yujinakayama/4608863/raw/76b9f89af5e5a2e97d9a0f36aac989fb56cf1447/gistfile1.diff;
-      sha256 = "0f9bf83p8zdxaa1pr75jyf5g8xr3r8kv7cyzzbpraa1q4j15ss1p";
-      stripLen = 1;
-    });
-
-  postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
-    # XXX: Awful hack to allow cross-compilation.
-    '' sed -i ./configure \
-           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
-    ''; # "
-
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isLinux pam
-                            ++ stdenv.lib.optional stdenv.isDarwin utmp;
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+  buildInputs = [
+    ncurses
+    libxcrypt
+  ] ++ lib.optional stdenv.isLinux pam
+    ++ lib.optional stdenv.isDarwin utmp;
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/screen/;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/screen/";
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;
 
@@ -62,6 +56,6 @@ stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ peti vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 }

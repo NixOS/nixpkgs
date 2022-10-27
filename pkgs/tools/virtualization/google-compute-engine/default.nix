@@ -1,19 +1,18 @@
 { lib
 , fetchFromGitHub
-, buildPythonApplication
+, buildPythonPackage
 , bash
 , bashInteractive
 , systemd
-, utillinux
+, util-linux
 , boto
 , setuptools
 , distro
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "google-compute-engine";
   version = "20190124";
-  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
@@ -25,20 +24,19 @@ buildPythonApplication rec {
   buildInputs = [ bash ];
   propagatedBuildInputs = [ boto setuptools distro ];
 
-
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
-        --replace /bin/systemctl "/run/current-system/sw/bin/systemctl" \
+        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
         --replace /bin/bash "${bashInteractive}/bin/bash" \
-        --replace /sbin/hwclock "${utillinux}/bin/hwclock"
+        --replace /sbin/hwclock "${util-linux}/bin/hwclock"
       # SELinux tool ???  /sbin/restorecon
     done
 
     substituteInPlace google_config/udev/64-gce-disk-removal.rules \
       --replace /bin/sh "${bash}/bin/sh" \
-      --replace /bin/umount "${utillinux}/bin/umount" \
-      --replace /usr/bin/logger "${utillinux}/bin/logger"
+      --replace /bin/umount "${util-linux}/bin/umount" \
+      --replace /usr/bin/logger "${util-linux}/bin/logger"
   '';
 
   postInstall = ''
@@ -54,6 +52,7 @@ buildPythonApplication rec {
   '';
 
   doCheck = false;
+  pythonImportsCheck = [ "google_compute_engine" ];
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";

@@ -1,36 +1,86 @@
-{ buildPythonPackage
-, fetchPypi
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# propagates
 , isodate
-, html5lib
-, SPARQLWrapper
+, pyparsing
+
+# propagates <3.8
+, importlib-metadata
+
+# extras: networkx
 , networkx
-, nose
-, python
+
+# extras: html
+, html5lib
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "4.2.2";
+  version = "6.1.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0398c714znnhaa2x7v51b269hk20iz073knq2mvmqp2ma92z27fs";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "RDFLib";
+    repo = pname;
+    rev = version;
+    hash = "sha256:1ih7vx4i16np1p8ig5faw74apmbm7kgyj9alya521yvzid6d7pzd";
   };
 
-  propagatedBuildInputs = [isodate html5lib SPARQLWrapper ];
+  propagatedBuildInputs = [
+    isodate
+    html5lib
+    pyparsing
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
-  checkInputs = [ networkx nose ];
+  passthru.optional-dependencies = {
+    html = [
+      html5lib
+    ];
+    networkx = [
+      networkx
+    ];
+  };
 
-  # Python 2 syntax
-  # Failing doctest
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ]
+  ++ passthru.optional-dependencies.networkx
+  ++ passthru.optional-dependencies.html;
 
-  checkPhase = ''
-    ${python.interpreter} run_tests.py
-  '';
+  pytestFlagsArray = [
+    # requires network access
+    "--deselect=rdflib/__init__.py::rdflib"
+    "--deselect=test/jsonld/test_onedotone.py::test_suite"
+  ];
 
-  meta = {
-    description = "A Python library for working with RDF, a simple yet powerful language for representing information";
-    homepage = http://www.rdflib.net/;
+  disabledTests = [
+    # Requires network access
+    "test_service"
+    "testGuessFormatForParse"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Require loopback network access
+    "TestGraphHTTP"
+  ];
+
+  pythonImportsCheck = [
+    "rdflib"
+  ];
+
+  meta = with lib; {
+    description = "Python library for working with RDF";
+    homepage = "https://rdflib.readthedocs.io";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

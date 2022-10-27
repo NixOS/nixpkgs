@@ -16,7 +16,7 @@
 # See the NixOS manual for how to run this test:
 # https://nixos.org/nixos/manual/index.html#sec-running-nixos-tests-interactively
 
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   allowESP = "iptables --insert INPUT --protocol ESP --jump ACCEPT";
@@ -31,7 +31,7 @@ let
   proposals     = [ "aes128-sha256-x25519" ];
 in {
   name = "strongswan-swanctl";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ basvandijk ];
+  meta.maintainers = with pkgs.lib.maintainers; [ basvandijk ];
   nodes = {
 
     alice = { ... } : {
@@ -142,7 +142,7 @@ in {
 
   };
   testScript = ''
-    startAll();
-    $carol->waitUntilSucceeds("ping -c 1 alice");
+    start_all()
+    carol.wait_until_succeeds("ping -c 1 alice")
   '';
 })

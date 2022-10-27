@@ -1,26 +1,35 @@
-{ stdenv, fetchurl, cmake, libdigidoc, minizip, pcsclite, opensc, openssl
-, xercesc, xml-security-c, pkgconfig, xsd, zlib, xalanc, xxd }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, minizip, pcsclite, opensc, openssl
+, xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
-  version = "3.14.0";
+  version = "3.14.10";
   pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     sha256 = "0klbr881d56661d1lqlv4ivxhxcv2q16ivlz7r0rb901wilq5jyl";
+     hash = "sha256-n/+R4ho1Qcft3YSKE12oxZjbFHAsUDwoLFNuk5GXf5c=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig xxd ];
+  nativeBuildInputs = [ cmake pkg-config xxd ];
 
   buildInputs = [
-    libdigidoc minizip pcsclite opensc openssl xercesc
+    minizip pcsclite opensc openssl xercesc
     xml-security-c xsd zlib xalanc
   ];
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "lib" "dev" "bin" ];
+
+  # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
+  # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
+  # https://github.com/open-eid/cmake/pull/35 might be an alternative.
+  postFixup = ''
+    patchelf --add-rpath ${opensc}/lib/pkcs11 $lib/lib/libdigidocpp.so
+  '';
+
+  meta = with lib; {
     description = "Library for creating DigiDoc signature files";
-    homepage = http://www.id.ee/;
-    license = licenses.lgpl2;
+    homepage = "http://www.id.ee/";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];
   };

@@ -1,15 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll
-, geos, pytest, cython
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, pythonOlder
+, geos
+, pytestCheckHook
+, cython
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.6.4.post2";
+  version = "1.8.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4b87bb61fc3de59fc1f85e71a79b0c709dc68364d9584473697aad4aa13240f";
+    sha256 = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
   };
 
   nativeBuildInputs = [
@@ -17,31 +25,47 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    numpy
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # environment variable used in shapely/_buildcfg.py
+  # Environment variable used in shapely/_buildcfg.py
   GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   patches = [
+    # Patch to search form GOES .so/.dylib files in a Nix-aware way
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}"
-               + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
+      libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
-  ];
+ ];
 
-  # Disable the tests that improperly try to use the built extensions
-  checkPhase = ''
+  preCheck = ''
     rm -r shapely # prevent import of local shapely
-    py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # FIXME(lf-): these logging tests are broken, which is definitely our
+    # fault. I've tried figuring out the cause and failed.
+    #
+    # It is apparently some sandbox or no-sandbox related thing on macOS only
+    # though.
+    "test_error_handler_exception"
+    "test_error_handler"
+    "test_info_handler"
+  ];
+
+  pythonImportsCheck = [ "shapely" ];
+
+  meta = with lib; {
     description = "Geometric objects, predicates, and operations";
-    maintainers = with maintainers; [ knedlsepp ];
     homepage = "https://pypi.python.org/pypi/Shapely/";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ knedlsepp ];
   };
 }

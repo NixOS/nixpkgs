@@ -1,39 +1,44 @@
-{ stdenv, fetchgit, libcap }:
+{ stdenv, lib, fetchFromGitiles, libcap }:
 
 stdenv.mkDerivation rec {
-  shortname = "minijail";
-  name = "${shortname}-${version}";
-  version = "android-9.0.0_r3";
+  pname = "minijail";
+  version = "18";
 
-  src = fetchgit {
+  src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
-    rev = version;
-    sha256 = "1g1g52s3q61amcnx8cv1332sbixpck1bmjzgsrjiw5ix7chrzkp2";
+    rev = "linux-v${version}";
+    sha256 = "sha256-OpwzISZ5iZNQvJAX7UJJ4gELEaVfcQgY9cqMM0YvBzc=";
   };
 
   buildInputs = [ libcap ];
 
-  makeFlags = [ "LIBDIR=$(out)/lib" ];
+  makeFlags = [ "ECHO=echo" "LIBDIR=$(out)/lib" ];
 
-  preConfigure = ''
-    substituteInPlace common.mk --replace /bin/echo echo
-    sed -i '/#include <asm\/siginfo.h>/ d' signal_handler.c
+  postPatch = ''
+    substituteInPlace Makefile --replace /bin/echo echo
+    patchShebangs platform2_preinstall.sh
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
+    ./platform2_preinstall.sh ${version} $out/include/chromeos
+
+    mkdir -p $out/lib/pkgconfig $out/include/chromeos $out/bin \
+        $out/share/minijail
+
     cp -v *.so $out/lib
-    mkdir -p $out/include
-    cp -v libminijail.h $out/include
-    mkdir -p $out/bin
-    cp minijail0 $out/bin
+    cp -v *.pc $out/lib/pkgconfig
+    cp -v libminijail.h scoped_minijail.h $out/include/chromeos
+    cp -v minijail0 $out/bin
   '';
 
-  meta = {
-    homepage = https://android.googlesource.com/platform/external/minijail/;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://android.googlesource.com/platform/external/minijail/";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [pcarrier];
-    platforms = stdenv.lib.platforms.linux;
+    changelog = "https://android.googlesource.com/platform/external/minijail/+/refs/tags/linux-v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pcarrier qyliss ];
+    platforms = platforms.linux;
   };
 }

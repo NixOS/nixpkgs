@@ -1,21 +1,41 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gettext, python3, fetchpatch,
-  pkgconfig, libxml2, json-glib , sqlite, itstool, librsvg,
-  vala, gtk3, gnome3, desktop-file-utils, wrapGAppsHook, gobject-introspection
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, gettext
+, python3
+, pkg-config
+, libxml2
+, json-glib
+, sqlite
+, itstool
+, yelp-tools
+, vala
+, gsettings-desktop-schemas
+, gtk3
+, gnome
+, desktop-file-utils
+, wrapGAppsHook
+, gobject-introspection
+, libsoup
+, glib-networking
+, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "16hma8rrkam6ngn5vbdaryn31vdixvii6920g9z928gylz9xkd3g";
+    sha256 = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gettext
@@ -23,7 +43,7 @@ stdenv.mkDerivation rec {
     itstool
     desktop-file-utils
     vala
-    gnome3.yelp-tools
+    yelp-tools
     wrapGAppsHook
     # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection
@@ -33,22 +53,16 @@ stdenv.mkDerivation rec {
     libxml2
     json-glib
     sqlite
-    librsvg
+    gsettings-desktop-schemas # for font settings
     gtk3
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
+    libsoup
+    glib-networking # for SSL so that Google Fonts can load
+    webkitgtk
   ];
 
   mesonFlags = [
-    "-Ddisable_pycompile=true"
-  ];
-
-  patches = [
-    # fix build with Vala 0.46
-    (fetchpatch {
-      url = "https://github.com/FontManager/font-manager/commit/c73b40de11f376f4515a0edfe97fb3721a264b35.patch";
-      sha256 = "0lacwsifgvda2r3z6j2a0svdqr6mgav7zkvih35xa8155y8wfpnw";
-      excludes = [ "fedora/font-manager.spec" ];
-    })
+    "-Dreproducible=true" # Do not hardcode build directory…
   ];
 
   postPatch = ''
@@ -56,8 +70,8 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fontmanager.github.io/;
+  meta = with lib; {
+    homepage = "https://fontmanager.github.io/";
     description = "Simple font management for GTK desktop environments";
     longDescription = ''
       Font Manager is intended to provide a way for average users to
@@ -68,7 +82,7 @@ stdenv.mkDerivation rec {
 
       Font Manager is NOT a professional-grade font management solution.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

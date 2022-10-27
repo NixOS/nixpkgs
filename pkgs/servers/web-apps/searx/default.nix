@@ -1,56 +1,75 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, nixosTests, python3, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
-buildPythonApplication rec {
+toPythonModule (buildPythonApplication rec {
   pname = "searx";
-  version = "0.15.0";
+  version = "1.0.0";
 
-  # Can not use PyPI because certain test files are missing.
+  # pypi doesn't receive updates
   src = fetchFromGitHub {
-    owner = "asciimoo";
+    owner = "searx";
     repo = "searx";
     rev = "v${version}";
-    sha256 = "05si0fn57z1g80l6003cs0ypag2m6zyi3dgsi06pvjp066xbrjvd";
+    sha256 = "0ghkx8g8jnh8yd46p4mlbjn2zm12nx27v7qflr4c8xhlgi0px0mh";
   };
 
+  patches = [
+    # Fix a crash, remove with the next update
+    (fetchpatch {
+      url = "https://github.com/searx/searx/commit/9c10b150963babb7f0b52081693a42b2e61eede9.patch";
+      sha256 = "0svp8799628wja2hq59da6rxqi99am8p6hb8y27ciwzsjz0wwba7";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'certifi==2017.11.5' 'certifi' \
-      --replace 'flask==1.0.2' 'flask==1.0.*' \
-      --replace 'flask-babel==0.11.2' 'flask-babel==0.11.*' \
-      --replace 'lxml==4.2.3' 'lxml==4.2.*' \
-      --replace 'idna==2.7' 'idna' \
-      --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
-      --replace 'pyopenssl==18.0.0' 'pyopenssl' \
-      --replace 'python-dateutil==2.7.3' 'python-dateutil==2.7.*'
-    substituteInPlace requirements-dev.txt \
-      --replace 'plone.testing==5.0.0' 'plone.testing' \
-      --replace 'pep8==1.7.1' 'pep8==1.7.*' \
-      --replace 'splinter==0.7.5' 'splinter' \
-      --replace 'selenium==3.5.0' 'selenium'
+    sed -i 's/==.*$//' requirements.txt
+  '';
+
+  preBuild = ''
+    export SEARX_DEBUG="true";
   '';
 
   propagatedBuildInputs = [
-    pyyaml lxml grequests flaskbabel flask requests
-    gevent speaklater Babel pytz dateutil pygments
-    pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
+    babel
+    certifi
+    python-dateutil
+    flask
+    flaskbabel
+    gevent
+    grequests
+    jinja2
+    langdetect
+    lxml
+    ndg-httpsclient
+    pyasn1
+    pyasn1-modules
+    pygments
+    pysocks
+    pytz
+    pyyaml
+    requests
+    speaklater
+    werkzeug
   ];
 
-  checkInputs = [
-    Babel mock nose2 covCore pep8 plone-testing splinter
-    unittest2 zope_testrunner selenium
-  ];
+  # tests try to connect to network
+  doCheck = false;
 
-  preCheck = ''
-    rm tests/test_robot.py # A variable that is imported is commented out
-    rm tests/unit/engines/pubmed.py
+  pythonImportsCheck = [ "searx" ];
+
+  postInstall = ''
+    # Create a symlink for easier access to static data
+    mkdir -p $out/share
+    ln -s ../${python3.sitePackages}/searx/static $out/share/
   '';
 
+  passthru.tests = { inherit (nixosTests) searx; };
+
   meta = with lib; {
-    homepage = https://github.com/asciimoo/searx;
+    homepage = "https://github.com/searx/searx";
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ matejc fpletz globin ];
+    maintainers = with maintainers; [ matejc globin danielfullmer ];
   };
-}
+})

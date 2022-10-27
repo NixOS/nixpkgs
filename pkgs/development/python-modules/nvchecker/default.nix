@@ -1,28 +1,79 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl }:
+{ lib
+, aiohttp
+, appdirs
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, flaky
+, installShellFiles
+, packaging
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.4.4";
+  version = "2.9";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6276ed2a897a30ccd71bfd7cf9e6b7842f37f3d5a86d7a70fe46f437c62b1875";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-BlprjNfw/oas4mnnGWPpuHmdJihEGjDdKPiAWuE7m8k=";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio flaky ];
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+  ];
 
-  # requires network access
-  doCheck = false;
+  propagatedBuildInputs = [
+    aiohttp
+    appdirs
+    packaging
+    pycurl
+    setuptools
+    structlog
+    tomli
+    tornado
+  ];
 
-  checkPhase = ''
-    py.test
+  checkInputs = [
+    flaky
+    pytest-asyncio
+    pytest-httpbin
+    pytestCheckHook
+  ];
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
   '';
 
-  disabled = pythonOlder "3.5";
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+  pythonImportsCheck = [
+    "nvchecker"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_net'"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

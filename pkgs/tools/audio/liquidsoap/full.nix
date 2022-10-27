@@ -1,60 +1,98 @@
-{ stdenv, makeWrapper, fetchurl, which, pkgconfig
+{ lib, stdenv, makeWrapper, fetchurl, which, pkg-config
+, libjpeg
 , ocamlPackages
-, libao, portaudio, alsaLib, libpulseaudio, libjack2
-, libsamplerate, libmad, taglib, lame, libogg
-, libvorbis, speex, libtheora, libopus, fdk_aac
-, faad2, flac, ladspaH, ffmpeg, frei0r, dssi
+, awscli2, curl, ffmpeg, youtube-dl
+, runtimePackages ? [ awscli2 curl ffmpeg youtube-dl ]
 }:
 
 let
   pname = "liquidsoap";
-  version = "1.3.4";
-
-  packageFilters = map (p: "-e '/ocaml-${p}/d'" )
-    [ "gstreamer" "shine" "aacplus" "schroedinger"
-      "voaacenc" "soundtouch" "gavl" "lo"
-    ];
+  version = "2.1.2";
 in
 stdenv.mkDerivation {
-  name = "${pname}-full-${version}";
+  inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/savonet/${pname}/releases/download/${version}/${pname}-${version}-full.tar.bz2";
-    sha256 = "11l1h42sljfxcdhddc8klya4bk99j7a1pndwnzvscb04pvmfmlk0";
+    url = "https://github.com/savonet/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-e7iCBY9xKQZrkQ+IlahE1KEbDW89tTIlpGvHZubh3bM=";
   };
 
-  preConfigure = /* we prefer system-wide libs */ ''
-    sed -i "s|gsed|sed|" Makefile
-    make bootstrap
-    # autoreconf -vi # use system libraries
-
-    sed ${toString packageFilters} PACKAGES.default > PACKAGES
-  '';
-
   postFixup = ''
-    wrapProgram $out/bin/liquidsoap --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa
+    wrapProgram $out/bin/liquidsoap \
+      --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa \
+      --prefix PATH : ${lib.makeBinPath runtimePackages}
   '';
 
-  configureFlags = [ "--localstatedir=/var" ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [
+      libjpeg
+      which
+      ocamlPackages.ocaml ocamlPackages.findlib
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs =
-    [ which ocamlPackages.ocaml ocamlPackages.findlib
-      libao portaudio alsaLib libpulseaudio libjack2
-      libsamplerate libmad taglib lame libogg
-      libvorbis speex libtheora libopus fdk_aac
-      faad2 flac ladspaH ffmpeg frei0r dssi
-      ocamlPackages.xmlm ocamlPackages.ocaml_pcre
+      # Mandatory dependencies
+      ocamlPackages.dtools
+      ocamlPackages.duppy
+      ocamlPackages.mm
+      ocamlPackages.ocaml_pcre
+      ocamlPackages.menhir ocamlPackages.menhirLib
       ocamlPackages.camomile
+      ocamlPackages.ocurl
+      ocamlPackages.uri
+      ocamlPackages.sedlex
+
+      # Recommended dependencies
+      ocamlPackages.ffmpeg
+
+      # Optional dependencies
+      ocamlPackages.camlimages
+      ocamlPackages.gd4o
+      ocamlPackages.alsa
+      ocamlPackages.ao
+      ocamlPackages.bjack
+      ocamlPackages.cry
+      ocamlPackages.dssi
+      ocamlPackages.faad
+      ocamlPackages.fdkaac
+      ocamlPackages.flac
+      ocamlPackages.frei0r
+      ocamlPackages.gstreamer
+      ocamlPackages.inotify
+      ocamlPackages.ladspa
+      ocamlPackages.lame
+      ocamlPackages.lastfm
+      ocamlPackages.lilv
+      ocamlPackages.lo
+      ocamlPackages.mad
+      ocamlPackages.magic
+      ocamlPackages.ogg
+      ocamlPackages.opus
+      ocamlPackages.portaudio
+      ocamlPackages.pulseaudio
+      ocamlPackages.shine
+      ocamlPackages.samplerate
+      ocamlPackages.soundtouch
+      ocamlPackages.speex
+      ocamlPackages.srt
+      ocamlPackages.ssl
+      ocamlPackages.taglib
+      ocamlPackages.theora
+      ocamlPackages.vorbis
+      ocamlPackages.xmlplaylist
+      ocamlPackages.posix-time2
+      ocamlPackages.tsdl
+      ocamlPackages.tsdl-image
+      ocamlPackages.tsdl-ttf
+
+      # Undocumented dependencies
+      ocamlPackages.graphics
+      ocamlPackages.cohttp-lwt-unix
     ];
 
-  hardeningDisable = [ "format" "fortify" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swiss-army knife for multimedia streaming";
-    homepage = https://www.liquidsoap.info/;
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.gpl2;
+    homepage = "https://www.liquidsoap.info/";
+    maintainers = with maintainers; [ dandellion ehmry ];
+    license = licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [];
   };
 }

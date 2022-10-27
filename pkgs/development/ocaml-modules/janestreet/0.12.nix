@@ -1,13 +1,10 @@
-{ janePackage
-, ctypes
-, num
-, octavius
-, ppxlib
-, re
+{ self
 , openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
@@ -27,6 +24,7 @@ rec {
     hash = "0gl89zpgsf3n30nb6v5cns27g2bfg4rf3s2427gqvwbkr5gcf7ri";
     meta.description = "Full standard library replacement for OCaml";
     propagatedBuildInputs = [ sexplib0 ];
+    buildInputs = [ dune_1 ];
   };
 
   stdio = janePackage {
@@ -210,7 +208,7 @@ rec {
     pname = "jst-config";
     hash = "0yxcz13vda1mdh9ah7qqxwfxpcqang5sgdssd8721rszbwqqaw93";
     meta.description = "Compile-time configuration for Jane Street libraries";
-    buildInputs = [ ppx_assert ];
+    buildInputs = [ dune_1 ppx_assert ];
   };
 
   ppx_optcomp = janePackage {
@@ -382,7 +380,12 @@ rec {
   async_ssl = janePackage {
     pname = "async_ssl";
     hash = "02ard8x5q5c42d9jdqmyzfx624yjq8cxxmvq3zb82hf6p8cc57ml";
-    meta.description = "An Async-pipe-based interface with OpenSSL";
+    meta = {
+      description = "An Async-pipe-based interface with OpenSSL";
+      # ctypes no longer works with dune 1
+      # dune 2 no longer supports jbuild
+      broken = true;
+    };
     propagatedBuildInputs = [ async ctypes openssl ];
   };
 
@@ -398,6 +401,10 @@ rec {
     hash = "1sw32lb0y501y971ij7287796lvfhs0nfgla895r74ymfks2rcjb";
     meta.description = "OCaml bindings for RE2, Google's regular expression library";
     propagatedBuildInputs = [ core_kernel ];
+    prePatch = ''
+      substituteInPlace src/re2_c/dune --replace 'CXX=g++' 'CXX=c++'
+      substituteInPlace src/dune --replace '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
+    '';
   };
 
   shell = janePackage {
@@ -456,6 +463,13 @@ rec {
     hash = "055kd3piadjnplip8c8q99ssh79d4irmhg2wng7aida5pbqp2p9f";
     meta.description = "Diff library using Bram Cohen's patience diff algorithm";
     propagatedBuildInputs = [ core_kernel ];
+  };
+
+  ecaml = janePackage {
+    pname = "ecaml";
+    hash = "0n9xi6agc3lgyj2nsi10cbif0xwn57xyaranad9r285rmbxrgjh7";
+    meta.description = "Library for writing Emacs plugin in OCaml";
+    propagatedBuildInputs = [ async expect_test_helpers_kernel ];
   };
 
   ### Packages at version 0.11, with dependencies at version 0.12

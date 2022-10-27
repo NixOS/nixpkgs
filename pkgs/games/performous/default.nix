@@ -1,30 +1,57 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext
-, glibmm, libxmlxx, pango, librsvg
-, SDL2, glew, boost, libav, portaudio, epoxy
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, boost
+, cmake
+, ffmpeg
+, gettext
+, glew
+, glibmm
+, libepoxy
+, librsvg
+, libxmlxx
+, pango
+, pkg-config
+, portaudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "performous";
   version = "1.1";
 
-  meta = with stdenv.lib; {
-    description = "Karaoke, band and dancing game";
-    homepage    = "http://performous.org/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
-  };
-
   src = fetchFromGitHub {
     owner = "performous";
     repo = "performous";
     rev = version;
-    sha256 = "08j0qhr65l7qnd5vxl4l07523qpvdwi31h4vzl3lfiinx1zcgr4x";
+    hash = "sha256-neTHfug2RkcH/ZvAMCJv++IhygGU0L5Ls/jQYjLEQCI=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  patches = [ ./performous-cmake.patch ];
+
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+  ];
 
   buildInputs = [
-    glibmm libxmlxx pango librsvg
-    SDL2 glew boost libav portaudio epoxy
+    SDL2
+    boost
+    ffmpeg
+    glew
+    glibmm
+    libepoxy
+    librsvg
+    libxmlxx
+    pango
+    portaudio
   ];
+
+  meta = with lib; {
+    homepage = "http://performous.org/";
+    description = "Karaoke, band and dancing game";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+  };
 }

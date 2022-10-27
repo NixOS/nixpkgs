@@ -1,22 +1,31 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mynewt-newt";
-  version = "1.3.0";
-
-  goPackagePath = "mynewt.apache.org/newt";
-  goDeps = ./deps.nix;
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "incubator-mynewt-newt";
+    repo = "mynewt-newt";
     rev = "mynewt_${builtins.replaceStrings ["."] ["_"] version}_tag";
-    sha256 = "0ia6q1wf3ki2yw8ngw5gnbdrb7268qwi078j05f8gs1sppb3g563";
+    sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://mynewt.apache.org/;
-    description = "Build and package management tool for embedded development.";
+  vendorSha256 = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";
+
+  doCheck = false;
+
+  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
+  # https://github.com/shirou/gopsutil/issues/976
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+
+  meta = with lib; {
+    homepage = "https://mynewt.apache.org/";
+    description = "Build and package management tool for embedded development";
     longDescription = ''
       Apache Newt is a smart build and package management tool,
       designed for C and C++ applications in embedded contexts. Newt

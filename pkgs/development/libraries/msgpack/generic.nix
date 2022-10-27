@@ -1,4 +1,4 @@
-{ stdenv, cmake
+{ lib, stdenv, cmake
 , version, src, patches ? [ ]
 , ...
 }:
@@ -11,16 +11,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DMSGPACK_BUILD_EXAMPLES=OFF";
 
-  cmakeFlags = []
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           "-DMSGPACK_BUILD_EXAMPLES=OFF"
-    ;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MessagePack implementation for C and C++";
-    homepage    = https://msgpack.org;
+    homepage    = "https://msgpack.org";
     license     = licenses.asl20;
     maintainers = with maintainers; [ redbaron ];
     platforms   = platforms.all;

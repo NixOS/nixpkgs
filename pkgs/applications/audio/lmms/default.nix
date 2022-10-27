@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
-, fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
+{ lib, fetchFromGitHub, cmake, pkg-config, alsa-lib ? null, fftwFloat, fltk13
+, fluidsynth ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
-, qtbase, qtx11extras, qttools, SDL ? null }:
+, qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lmms";
-  version = "1.2.0-rc7";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "1hshzf2sbdfw37y9rz1ksgvn81kp2n23dp74lsaasc2n7wzjwdis";
+    sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qttools pkgconfig ];
+  nativeBuildInputs = [ cmake qttools pkg-config ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     fftwFloat
     fltk13
-    fluidsynth_1
+    fluidsynth
     lame
     libgig
     libjack2
@@ -37,13 +37,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DAW similar to FL Studio (music production software)";
-    homepage = https://lmms.io;
+    homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu yegortimoshenko ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ goibhniu yana ];
   };
 }

@@ -1,28 +1,43 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, python
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.6.4.9";
+  version = "1.7.6.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5537b00afb7b247da0f59cc57ee5680178be61c8b2e21b5a0672b70a3d247791";
+    sha256 = "sha256-R+DauHpRbAuZks1bDJCDSOTH2WQwTRBrIn+tKK4DIZ4=";
   };
 
+  propagatedBuildInputs = [
+    six
+  ];
+
+  # darwin seems to hang
+  doCheck = !stdenv.isDarwin;
   checkPhase = ''
-    python -m ppft.tests
+    cd examples
+    ${python.interpreter} -m ppft.tests
   '';
 
-  propagatedBuildInputs = [ six ];
+  pythonImportsCheck = [
+    "ppft"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Distributed and parallel python";
-    homepage = https://github.com/uqfoundation;
+  meta = with lib; {
+    description = "Distributed and parallel Python";
+    homepage = "https://ppft.readthedocs.io/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -1,19 +1,36 @@
-{ mkDerivation, lib, fetchFromGitHub, installShellFiles, pkgconfig, runtimeShell
-, qtbase, qtsvg, qttools, qmake
-, boost, muparser }:
+{ lib
+, boost
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, mkDerivation
+, muparser
+, pkg-config
+, qmake
+, qtbase
+, qtsvg
+, qttools
+, runtimeShell
+}:
 
 mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc1";
+  version = "2.2.0-rc2";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "0kwj838hqzbw95gl4x6scli9gj3gs72hdmrrkzwq5rjxam18k3f3";
+    sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
   };
 
-  patches = [ ./fix_qt_5_11_build.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/LibreCAD/LibreCAD/pull/1465/commits/4edcbe72679f95cb60979c77a348c1522a20b0f4.patch";
+      sha256 = "sha256-P0G2O5sL7Ip860ByxFQ87TfV/lq06wCQnzPxADGqFPs=";
+      name = "CVE-2021-45342.patch";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \
@@ -48,17 +65,25 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [ boost muparser qtbase qtsvg ];
+  buildInputs = [
+    boost
+    muparser
+    qtbase
+    qtsvg
+  ];
 
-  nativeBuildInputs = [ installShellFiles pkgconfig qmake qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ viric ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kiwi viric ];
     platforms = platforms.linux;
   };
 }

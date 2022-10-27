@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, perl, mlton }:
+{ lib, stdenv, fetchFromGitHub, perl, mlton }:
 
 stdenv.mkDerivation {
   pname = "metis-prover";
-  version = "2.3.20160713";
+  version = "2.4.20200713";
 
   src = fetchFromGitHub {
     owner = "gilith";
     repo = "metis";
-    rev = "f0b1a17cd57eb098077e963ab092477aee9fb340";
-    sha256 = "1i7paax7b4byk8110f5zk4071mh5603r82bq7hbprqzljvsiipk7";
+    rev = "d17c3a8cf6537212c5c4bfdadcf865bd25723132";
+    sha256 = "phu1x0yahK/B2bSOCvlze7UJw8smX9zw6dJTpDD9chM=";
   };
 
   nativeBuildInputs = [ perl ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
     install -Dm0755 bin/mlton/metis $out/bin/metis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic theorem prover for first-order logic with equality";
-    homepage = http://www.gilith.com/research/metis/;
+    homepage = "http://www.gilith.com/research/metis/";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;

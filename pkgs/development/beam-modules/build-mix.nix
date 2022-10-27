@@ -1,100 +1,94 @@
-{ stdenv, writeText, elixir, erlang, hexRegistrySnapshot, hex, lib }:
+{ stdenv, writeText, elixir, erlang, hex, lib }:
 
 { name
 , version
 , src
-, setupHook ? null
-, buildInputs ? []
-, beamDeps ? []
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, beamDeps ? [ ]
+, propagatedBuildInputs ? [ ]
 , postPatch ? ""
 , compilePorts ? false
-, installPhase ? null
-, buildPhase ? null
-, configurePhase ? null
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
-, ... }@attrs:
+, mixEnv ? "prod"
+, ...
+}@attrs:
 
-with stdenv.lib;
-
+with lib;
 let
-
-  debugInfoFlag = lib.optionalString (enableDebugInfo || elixir.debugInfo) "--debug-info";
-
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
-  bootstrapper = ./mix-bootstrap;
-
-  pkg = self: stdenv.mkDerivation ( attrs // {
+  pkg = self: stdenv.mkDerivation (attrs // {
     name = "${name}-${version}";
-    inherit version;
+    inherit version src;
 
-    dontStrip = true;
+    MIX_ENV = mixEnv;
+    MIX_DEBUG = if enableDebugInfo then 1 else 0;
+    HEX_OFFLINE = 1;
 
-    inherit src;
+    # add to ERL_LIBS so other modules can find at runtime.
+    # http://erlang.org/doc/man/code.html#code-path
+    # Mix also searches the code path when compiling with the --no-deps-check flag
+    setupHook = attrs.setupHook or
+      writeText "setupHook.sh" ''
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
+    '';
 
-    setupHook = if setupHook == null
-    then writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
-    ''
-    else setupHook;
+    buildInputs = buildInputs ++ [ ];
+    nativeBuildInputs = nativeBuildInputs ++ [ elixir hex ];
+    propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
-    inherit buildInputs;
-    propagatedBuildInputs = [ hexRegistrySnapshot hex elixir ] ++ beamDeps;
-
-    configurePhase = if configurePhase == null
-    then ''
+    configurePhase = attrs.configurePhase or ''
       runHook preConfigure
-      ${erlang}/bin/escript ${bootstrapper}
+
+      ${./mix-configure-hook.sh}
+
       runHook postConfigure
-    ''
-    else configurePhase ;
+    '';
 
+    buildPhase = attrs.buildPhase or ''
+      runHook preBuild
+      export HEX_HOME="$TEMPDIR/hex"
+      export MIX_HOME="$TEMPDIR/mix"
+      mix compile --no-deps-check
+      runHook postBuild
+    '';
 
-    buildPhase = if buildPhase == null
-    then ''
-        runHook preBuild
+    installPhase = attrs.installPhase or ''
+      runHook preInstall
 
-        export HEX_OFFLINE=1
-        export HEX_HOME=`pwd`
-        export MIX_ENV=prod
-        export MIX_NO_DEPS=1
+      # This uses the install path convention established by nixpkgs maintainers
+      # for all beam packages. Changing this will break compatibility with other
+      # builder functions like buildRebar3 and buildErlangMk.
+      mkdir -p "$out/lib/erlang/lib/${name}-${version}"
 
-        mix compile ${debugInfoFlag} --no-deps-check
-
-        runHook postBuild
-    ''
-    else buildPhase;
-
-    installPhase = if installPhase == null
-    then ''
-        runHook preInstall
-
-        MIXENV=prod
-
-        if [ -d "_build/shared" ]; then
-          MIXENV=shared
+      # Some packages like db_connection will use _build/shared instead of
+      # honoring the $MIX_ENV variable.
+      for reldir in _build/{$MIX_ENV,shared}/lib/${name}/{src,ebin,priv,include} ; do
+        if test -d $reldir ; then
+          # Some builds produce symlinks (eg: phoenix priv dircetory). They must
+          # be followed with -H flag.
+          cp  -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
         fi
+      done
 
-        mkdir -p "$out/lib/erlang/lib/${name}-${version}"
-        for reldir in src ebin priv include; do
-          fd="_build/$MIXENV/lib/${name}/$reldir"
-          [ -d "$fd" ] || continue
-          cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$fd"
-          success=1
-        done
+      runHook postInstall
+    '';
 
-        runHook postInstall
-    ''
-    else installPhase;
+    # stripping does not have any effect on beam files
+    # it is however needed for dependencies with NIFs like bcrypt for example
+    dontStrip = false;
 
     passthru = {
       packageName = name;
       env = shell self;
       inherit beamDeps;
     };
-});
-in fix pkg
+  });
+in
+fix pkg
+

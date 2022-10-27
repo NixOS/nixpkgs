@@ -1,28 +1,57 @@
-{ stdenv
+{ lib
+, arabic-reshaper
 , buildPythonPackage
-, fetchPypi
-, pillow
+, fetchFromGitHub
 , html5lib
-, pypdf2
+, pillow
+, pyhanko
+, pypdf3
+, pytestCheckHook
+, python-bidi
+, pythonOlder
 , reportlab
-, six
+, svglib
 }:
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.3";
+  version = "0.2.8";
+  format = "setuptools";
 
-  propagatedBuildInputs = [pillow html5lib pypdf2 reportlab six];
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10kg8cmn7zgql2lb6cfmqj94sa0jkraksv3lc4kvpn58sxw7x8w6";
+  # Tests are only available on GitHub
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    # Currently it is not possible to fetch from version as there is a branch with the same name
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-zWzg/r18wjzxWyD5QJ7l4pY+4bJTvHjrD11FRuuy8H8=";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    arabic-reshaper
+    html5lib
+    pillow
+    pyhanko
+    pypdf3
+    python-bidi
+    reportlab
+    svglib
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "xhtml2pdf"
+  ];
+
+  meta = with lib; {
     description = "A PDF generator using HTML and CSS";
-    homepage = https://github.com/xhtml2pdf/xhtml2pdf;
+    homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

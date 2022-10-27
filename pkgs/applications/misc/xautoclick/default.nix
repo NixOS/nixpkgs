@@ -1,32 +1,30 @@
-{ stdenv, fetchurl, xorg, pkgconfig
-, gtkSupport ? true, gtk2
-, qtSupport ? true, qt4
+{ lib, stdenv, fetchFromGitHub, xorg, pkg-config
+, cmake, libevdev
+, gtkSupport ? true, gtk3, pcre, glib, wrapGAppsHook
+, fltkSupport ? true, fltk
+, qtSupport ? true, qt5
 }:
 
-stdenv.mkDerivation {
-  version = "0.31";
+stdenv.mkDerivation rec {
   pname = "xautoclick";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
-    sha256 = "0h522f12a7v2b89411xm51iwixmjp2mp90rnizjgiakx9ajnmqnm";
-  };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ xorg.libX11 xorg.libXtst xorg.xinput xorg.libXi xorg.libXext ]
-    ++ stdenv.lib.optionals gtkSupport [ gtk2 ]
-    ++ stdenv.lib.optionals qtSupport [ qt4 ];
-  patchPhase = ''
-    substituteInPlace configure --replace /usr/X11R6 ${xorg.libX11.dev}
-  '';
-  preConfigure = stdenv.lib.optional qtSupport ''
-    mkdir .bin
-    ln -s ${qt4}/bin/moc .bin/moc-qt4
-    addToSearchPath PATH .bin
-    sed -i -e "s@LD=\$_cc@LD=\$_cxx@" configure
-  '';
+  version = "0.34";
 
-  meta = with stdenv.lib; {
+  src = fetchFromGitHub {
+    owner = "qarkai";
+    repo = "xautoclick";
+    rev = "v${version}";
+    sha256 = "GN3zI5LQnVmRC0KWffzUTHKrxcqnstiL55hopwTTwpE=";
+  };
+
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libevdev xorg.libXtst ]
+    ++ lib.optionals gtkSupport [ gtk3 pcre glib wrapGAppsHook ]
+    ++ lib.optionals fltkSupport [ fltk ]
+    ++ lib.optionals qtSupport [ qt5.qtbase qt5.wrapQtAppsHook ];
+
+  meta = with lib; {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";
-    homepage = http://xautoclick.sourceforge.net;
+    homepage = "https://github.com/qarkai/xautoclick";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

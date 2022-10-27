@@ -1,64 +1,76 @@
-{ stdenv, fetchurl, itstool, python3, intltool, wrapGAppsHook
-, libxml2, gobject-introspection, gtk3, gtksourceview, gnome3
-, gsettings-desktop-schemas, dbus, xvfb_run
+{ lib
+, fetchurl
+, gettext
+, itstool
+, python3
+, meson
+, ninja
+, wrapGAppsHook
+, libxml2
+, pkg-config
+, desktop-file-utils
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, gnome
+, gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.20.1";
+  version = "3.22.0";
+
+  format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jdj7kd6vj1mdc16gvrj1kar88b2j5875ajq18fx7cbc9ny46j55";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-P8EHyY7251NY/9Kw0UyF3bSP4UoR6TmpQyL6qo6QxA0=";
   };
 
   nativeBuildInputs = [
-    intltool itstool libxml2 gobject-introspection wrapGAppsHook
+    meson
+    ninja
+    gettext
+    itstool
+    libxml2
+    pkg-config
+    desktop-file-utils
+    gobject-introspection
+    wrapGAppsHook
+    gtk3 # for gtk-update-icon-cache
   ];
+
   buildInputs = [
-    gtk3 gtksourceview gsettings-desktop-schemas gnome3.adwaita-icon-theme
-    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
+    gtk3
+    gtksourceview4
+    gsettings-desktop-schemas
+    gnome.adwaita-icon-theme
   ];
-  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pycairo ];
-  checkInputs = [ xvfb_run python3.pkgs.pytest dbus gtksourceview gtk3 ];
 
-  installPhase = ''
-    runHook preInstall
-    ${python3.interpreter} setup.py install --prefix=$out
-    runHook postInstall
-  '';
+  propagatedBuildInputs = with python3.pkgs; [
+    pygobject3
+    pycairo
+  ];
 
-  checkPhase = ''
-    runHook preCheck
+  # gobject-introspection and some other similar setup hooks do not currently work with strictDeps.
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
-    # Unable to create user data directory '/homeless-shelter/.local/share' for storing the recently used files list: Permission denied
-    mkdir test-home
-    export HOME=$(pwd)/test-home
-
-    # GLib.GError: gtk-icon-theme-error-quark: Icon 'meld-change-apply-right' not present in theme Adwaita
-    export XDG_DATA_DIRS="$out/share:$XDG_DATA_DIRS"
-
-    # ModuleNotFoundError: No module named 'meld'
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
-
-    # Gtk-CRITICAL **: gtk_icon_theme_get_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      py.test
-
-    runHook postCheck
+  postPatch = ''
+    patchShebangs meson_shebang_normalisation.py
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "none"; # should be odd-unstable but we are tracking unstable versions for now
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual diff and merge tool";
-    homepage = http://meldmerge.org/;
-    license = licenses.gpl2;
+    homepage = "https://meld.app/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
   };

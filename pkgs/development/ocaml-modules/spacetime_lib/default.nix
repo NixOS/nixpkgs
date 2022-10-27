@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, buildDunePackage, owee }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, owee }:
+
+lib.throwIfNot (lib.versionAtLeast "4.12" ocaml.version)
+  "spacetime_lib is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "spacetime_lib";
   version = "0.3.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "lpw25";
@@ -12,6 +17,10 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ owee ];
+
+  preConfigure = ''
+    bash ./configure.sh
+  '';
 
   meta = {
     description = "An OCaml library providing some simple operations for handling OCaml “spacetime” profiles";

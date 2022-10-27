@@ -1,43 +1,98 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
-, libvorbis, libtheora, speex, zlib, perl, ffmpeg
-, flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, aalib
+, alsa-lib
+, autoconf
+, ffmpeg
+, flac
+, libGL
+, libGLU
+, libcaca
+, libcdio
+, libmng
 , libmpcdec
+, libpulseaudio
+, libtheora
+, libv4l
+, libvorbis
+, ncurses
+, perl
+, pkg-config
+, speex
+, vcdimager
+, xorg
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "xine-lib-1.2.9";
+  pname = "xine-lib";
+  version = "1.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "13clir4qxl2zvsvvjd9yv3yrdhsnvcn5s7ambbbn5dzy9604xcrj";
+    url = "mirror://sourceforge/xine/xine-lib-${version}.tar.xz";
+    sha256 = "sha256-71GyHRDdoQRfp9cRvZFxz9rwpaKHQjO88W/98o7AcAU=";
   };
 
-  nativeBuildInputs = [ pkgconfig perl ];
-
-  buildInputs = [
-    xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
-    alsaLib libGLU_combined aalib libvorbis libtheora speex perl ffmpeg flac
-    libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
-  ];
-
   patches = [
+    # Fix build with libcaca 0.99.beta20 ; remove for xine-lib 1.2.12
     (fetchpatch {
-      name = "0001-fix-XINE_PLUGIN_PATH-splitting.patch";
-      url = "https://sourceforge.net/p/xine/mailman/attachment/32394053-5e27-6558-f0c9-49e0da0bc3cc%40gmx.de/1/";
-      sha256 = "0nrsdn7myvjs8fl9rj6k4g1bnv0a84prsscg1q9n49gwn339v5rc";
+      name = "xine-lib-libcaca-0.99.beta20-fix.patch";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/209ae10d59d29c13633b75aa327cf937f3ff0725/trunk/010-xine-lib-libcaca-0.99.beta20-fix.patch";
+      sha256 = "088141x1yp84y09x3s01v21yzas2bwavxz9v30z5hyq6c3syrmgr";
+    })
+    # Fix build with ffmpeg 5.0 ; remove for xine-lib 1.2.12
+    (fetchpatch {
+      name = "xine-lib-ffmpeg-5.0-fix.patch";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/209ae10d59d29c13633b75aa327cf937f3ff0725/trunk/020-xine-lib-ffmpeg-5.0-fix.patch";
+      sha256 = "15ff15bqxq1nqqazfbmfq6swrdjr2raxyq7hx6k0r61izhf0g8ld";
     })
   ];
 
-  NIX_LDFLAGS = "-lxcb-shm";
-
-  propagatedBuildInputs = [zlib];
+  nativeBuildInputs = [
+    autoconf
+    pkg-config
+    perl
+  ];
+  buildInputs = [
+    aalib
+    alsa-lib
+    ffmpeg
+    flac
+    libGL
+    libGLU
+    libcaca
+    libcdio
+    libmng
+    libmpcdec
+    libpulseaudio
+    libtheora
+    libv4l
+    libvorbis
+    ncurses
+    perl
+    speex
+    vcdimager
+    zlib
+  ] ++ (with xorg; [
+    libX11
+    libXext
+    libXinerama
+    libXv
+    libxcb
+  ]);
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.xine-project.org/;
+  NIX_LDFLAGS = "-lxcb-shm";
+
+
+  meta = with lib; {
+    homepage = "http://xine.sourceforge.net/";
     description = "A high-performance, portable and reusable multimedia playback engine";
+    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

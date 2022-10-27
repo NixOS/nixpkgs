@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
+{ lib, stdenv, fetchurl, libX11, libXtst, xorgproto, libXi }:
 
 stdenv.mkDerivation rec {
   pname = "xmacro";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

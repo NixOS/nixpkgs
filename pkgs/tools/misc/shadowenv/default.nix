@@ -1,21 +1,31 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "1.2.1";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    sha256 = "01hhh45h742z9mjcpmyjpbjf90a5b1m58b6nml2han149xpn5b74";
+    sha256 = "sha256-OfrK5eQ2oJ7ZeUem4PZPE2tsjIObQ+aao6GrtrK8AqA=";
   };
 
-  cargoSha256 = "0r8s20xgcp5d1ac07g5g4lrrnhrn2qsr1kgj13h2csly22j0ca2a";
+  cargoSha256 = "sha256-gno44ZdLthcp5/+NP12d0C+x1jrmJHNkHSnyuHWl3Zk=";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
+  postInstall = ''
+    installManPage man/man1/shadowenv.1
+    installManPage man/man5/shadowlisp.5
+    installShellCompletion --bash sh/completions/shadowenv.bash
+    installShellCompletion --fish sh/completions/shadowenv.fish
+    installShellCompletion --zsh sh/completions/_shadowenv
+  '';
+
+  meta = with lib; {
     homepage = "https://shopify.github.io/shadowenv/";
     description = "reversible directory-local environment variable manipulations";
     license = licenses.mit;

@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, python3, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3, python3Packages }:
 
-stdenv.mkDerivation {
-  name = "postiats-utilities-2.0.1";
-  src = fetchurl {
-    url = "https://github.com/Hibou57/PostiATS-Utilities/archive/v2.0.1.tar.gz";
-    sha256 = "12jlzqigmaa9m37x0nq5v3gq8v61m73i5kzdnsm06chf0przpaix";
+stdenv.mkDerivation rec {
+  pname = "postiats-utilities";
+  version = "2.1.1";
+  src = fetchFromGitHub {
+    owner = "Hibou57";
+    repo = "PostiATS-Utilities";
+    rev = "v${version}";
+    sha256 = "sha256-QeBbv5lwqL2ARjB+RGyBHeuibaxugffBLhC9lYs+5tE=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Hibou57/PostiATS-Utilities;
+  meta = with lib; {
+    homepage = "https://github.com/Hibou57/PostiATS-Utilities";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
   };
 
   buildInputs = [ python3 python3Packages.wrapPython ];
-
-  phases = "unpackPhase patchPhase installPhase";
 
   postPatch = ''
     for f in pats-* postiats/*.py; do

@@ -1,61 +1,71 @@
-{ lib, stdenv, fetchurl, pkgconfig
-
-, abiVersion ? "6"
-, mouseSupport ? false
-, unicode ? true
-, enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
-, enableShared ? !enableStatic
-, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
-
-, gpm
-
+{ lib
+, stdenv
+, fetchurl
 , buildPackages
+, pkg-config
+, abiVersion ? "6"
+, enableStatic ? stdenv.hostPlatform.isStatic
+, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+, mouseSupport ? false, gpm
+, unicodeSupport ? true
 }:
 
 stdenv.mkDerivation rec {
-  # Note the revision needs to be adjusted.
-  version = "6.1-20190112";
-  name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
+  ver = "6.3";
+  # We pick fresh intermediate release to get a fix for CVE-2022-29458
+  # which was fixed in 20220416 patchset.
+  patchver = "20220507";
+  version = "${ver}-p${patchver}";
+  pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  # We cannot use fetchFromGitHub (which calls fetchzip)
-  # because we need to be able to use fetchurlBoot.
-  src = let
-    # Note the version needs to be adjusted.
-    rev = "acb4184f8f69fddd052a3daa8c8675f4bf8ce369";
-  in fetchurl {
-    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1z8v63cj2y7dxf4m1api8cvk0ns9frif9c60m2sxhibs06pjy4q0";
+  src = fetchurl {
+    url = "https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
+    sha256 = "02y4n4my5qqhw3fdhdjv1zc9xpyglzlzmzjwq2zcwbwv738255ja";
   };
-
-  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
 
   configureFlags = [
-    (lib.withFeature enableShared "shared")
+    (lib.withFeature (!enableStatic) "shared")
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
-  ] ++ lib.optional unicode "--enable-widec"
+    "--with-versioned-syms"
+  ] ++ lib.optional unicodeSupport "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-    ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+      # For static binaries, the point is to have a standalone binary with
+      # minimum dependencies. So here we make sure that binaries using this
+      # package won't depend on a terminfo database located in the Nix store.
+      "--with-terminfo-dirs=${lib.concatStringsSep ":" [
+        "/etc/terminfo" # Debian, Fedora, Gentoo
+        "/lib/terminfo" # Debian
+        "/usr/share/terminfo" # upstream default, probably all FHS-based distros
+        "/run/current-system/sw/share/terminfo" # NixOS
+      ]}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.ncurses
   ];
+
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
@@ -141,37 +151,33 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tset" "$out"
     moveToOutput "bin/captoinfo" "$out"
     moveToOutput "bin/infotocap" "$out"
+    moveToOutput "bin/infocmp" "$out"
   '';
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
   '';
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
-
     longDescription = ''
-      The Ncurses (new curses) library is a free software emulation of
-      curses in System V Release 4.0, and more.  It uses Terminfo
-      format, supports pads and color and multiple highlights and
-      forms characters and function-key mapping, and has all the other
-      SYSV-curses enhancements over BSD Curses.
+      The Ncurses (new curses) library is a free software emulation of curses in
+      System V Release 4.0, and more. It uses Terminfo format, supports pads and
+      color and multiple highlights and forms characters and function-key
+      mapping, and has all the other SYSV-curses enhancements over BSD Curses.
 
-      The ncurses code was developed under GNU/Linux.  It has been in
-      use for some time with OpenBSD as the system curses library, and
-      on FreeBSD and NetBSD as an external package.  It should port
-      easily to any ANSI/POSIX-conforming UNIX.  It has even been
-      ported to OS/2 Warp!
+      The ncurses code was developed under GNU/Linux. It has been in use for
+      some time with OpenBSD as the system curses library, and on FreeBSD and
+      NetBSD as an external package. It should port easily to any
+      ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
-
-    homepage = https://www.gnu.org/software/ncurses/;
-
-    license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
   };
 
   passthru = {
     ldflags = "-lncurses";
-    inherit unicode abiVersion;
+    inherit unicodeSupport abiVersion;
   };
 }

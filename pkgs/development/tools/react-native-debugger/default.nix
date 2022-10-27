@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
+{ lib, stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome, atk, at-spi2-atk, at-spi2-core
+, gtk3, glib, freetype, dbus, nss, nspr, alsa-lib, cups, expat, udev, makeDesktopItem
 }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
     gdk-pixbuf
     fontconfig
     pango
     atk
-    gtk2
+    gtk3
     glib
     freetype
     dbus
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     udev
-
-    gnome2.GConf
+    at-spi2-atk
+    at-spi2-core
 
     xorg.libX11
     xorg.libXcursor
@@ -38,29 +38,28 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "react-native-debugger";
-  version = "0.9.10";
-
+  version = "0.13.0";
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "158275sp37smc8lnrcbj56lp7aa6fj9gzb6fzjgz9r980qgzhia6";
+    sha256 = "sha256-/uVXMVrVS7n4/mqz6IlKkk63hy67fn9KRjZ1wP5MHB0=";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   buildCommand = ''
     shopt -s extglob
     mkdir -p $out
     unzip $src -d $out
 
     mkdir $out/{lib,bin,share}
-    mv $out/lib{node,ffmpeg}.so $out/lib
+    mv $out/{libEGL,libGLESv2,libvk_swiftshader,libffmpeg}.so $out/lib
     mv $out/!(lib|share|bin) $out/share
 
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath ${rpath}:$out/lib \
-      $out/share/React\ Native\ Debugger
+      $out/share/react-native-debugger
 
-    ln -s $out/share/React\ Native\ Debugger $out/bin/React\ Native\ Debugger
+    ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
 
     install -Dm644 "${desktopItem}/share/applications/"* \
       -t $out/share/applications/
@@ -68,16 +67,17 @@ in stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "rndebugger";
-    exec = "React\\ Native\\ Debugger";
+    exec = "react-native-debugger";
     desktopName = "React Native Debugger";
     genericName = "React Native Debugger";
-    categories = "Development;Tools;";
+    categories = [ "Development" "Debugger" ];
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jhen0409/react-native-debugger;
+  meta = with lib; {
+    homepage = "https://github.com/jhen0409/react-native-debugger";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     description = "The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

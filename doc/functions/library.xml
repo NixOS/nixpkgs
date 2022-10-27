@@ -25,4 +25,8 @@
  <xi:include href="./library/generated/debug.xml" />
 
  <xi:include href="./library/generated/options.xml" />
+
+ <xi:include href="./library/generated/filesystem.xml" />
+
+ <xi:include href="./library/generated/sources.xml" />
 </section>

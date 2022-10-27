@@ -1,32 +1,54 @@
-{ stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
+{ lib
+, python3Packages
+, ffmpeg
+, fetchpatch
+}:
 
-pythonPackages.buildPythonApplication rec {
-  version = "1.2.0";
+python3Packages.buildPythonApplication rec {
   pname = "streamlink";
+  version = "5.0.1";
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "streamlink";
-    repo = "streamlink";
-    rev = version;
-    sha256 = "0l8b9ipfmd6dic07ajqqml26jdydz0k046hvx32mqp64jl5jpznh";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    hash = "sha256-PKRioPBhTV6i3ckQgcKuhQFmpBvUQE4o3FLej8qx4mM=";
   };
 
-  checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];
+  checkInputs = with python3Packages; [
+    pytestCheckHook
+    mock
+    requests-mock
+    freezegun
+  ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client isodate ]) ++ [ rtmpdump ffmpeg ];
+  nativeBuildInputs = with python3Packages; [
+    versioningit
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/streamlink/streamlink;
+  propagatedBuildInputs = (with python3Packages; [
+    isodate
+    lxml
+    pycountry
+    pycryptodome
+    pysocks
+    requests
+    websocket-client
+  ]) ++ [
+    ffmpeg
+  ];
+
+  meta = with lib; {
+    homepage = "https://streamlink.github.io/";
     description = "CLI for extracting streams from various websites to video player of your choosing";
     longDescription = ''
-      Streamlink is a CLI utility that pipes flash videos from online
+      Streamlink is a CLI utility that pipes videos from online
       streaming services to a variety of video players such as VLC, or
       alternatively, a browser.
 
       Streamlink is a fork of the livestreamer project.
     '';
+    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg zraexy enzime ];
+    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

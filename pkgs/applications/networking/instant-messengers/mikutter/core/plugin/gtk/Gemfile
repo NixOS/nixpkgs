@@ -1,3 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'gtk2', '3.3.2'

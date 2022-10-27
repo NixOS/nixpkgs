@@ -12,7 +12,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether or not to enable the Jenkins Job Builder (JJB) service. It
           allows defining jobs for Jenkins in a declarative manner.
 
@@ -24,15 +24,15 @@ in {
           deleted.
 
           Please see the Jenkins Job Builder documentation for more info:
-          <link xlink:href="http://docs.openstack.org/infra/jenkins-job-builder/">
-          http://docs.openstack.org/infra/jenkins-job-builder/</link>
+          [
+          http://docs.openstack.org/infra/jenkins-job-builder/](http://docs.openstack.org/infra/jenkins-job-builder/)
         '';
       };
 
       accessUser = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User id in Jenkins used to reload config.
         '';
       };
@@ -40,10 +40,10 @@ in {
       accessToken = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User token in Jenkins used to reload config.
           WARNING: This token will be world readable in the Nix store. To keep
-          it secret, use the <option>accessTokenFile</option> option instead.
+          it secret, use the {option}`accessTokenFile` option instead.
         '';
       };
 
@@ -51,8 +51,8 @@ in {
         default = "";
         type = types.str;
         example = "/run/keys/jenkins-job-builder-access-token";
-        description = ''
-          File containing the API token for the <option>accessUser</option>
+        description = lib.mdDoc ''
+          File containing the API token for the {option}`accessUser`
           user.
         '';
       };
@@ -66,7 +66,7 @@ in {
               builders:
                 - shell: echo 'Hello world!'
         '';
-        description = ''
+        description = lib.mdDoc ''
           Job descriptions for Jenkins Job Builder in YAML format.
         '';
       };
@@ -74,7 +74,7 @@ in {
       jsonJobs = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        example = literalExample ''
+        example = literalExpression ''
           [
             '''
               [ { "job":
@@ -86,7 +86,7 @@ in {
             '''
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Job descriptions for Jenkins Job Builder in JSON format.
         '';
       };
@@ -94,7 +94,7 @@ in {
       nixJobs = mkOption {
         default = [ ];
         type = types.listOf types.attrs;
-        example = literalExample ''
+        example = literalExpression ''
           [ { job =
               { name = "jenkins-job-test-3";
                 builders = [
@@ -104,7 +104,7 @@ in {
             }
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Job descriptions for Jenkins Job Builder in Nix format.
 
           This is a trivial wrapper around jsonJobs, using builtins.toJSON
@@ -156,15 +156,61 @@ in {
           reloadScript = ''
             echo "Asking Jenkins to reload config"
             curl_opts="--silent --fail --show-error"
-            access_token=${if cfg.accessTokenFile != ""
-                           then "$(cat '${cfg.accessTokenFile}')"
-                           else cfg.accessToken}
-            jenkins_url="http://${cfg.accessUser}:$access_token@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
-            crumb=$(curl $curl_opts "$jenkins_url"'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-            curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
+            access_token_file=${if cfg.accessTokenFile != ""
+                           then cfg.accessTokenFile
+                           else "$RUNTIME_DIRECTORY/jenkins_access_token.txt"}
+            if [ "${cfg.accessToken}" != "" ]; then
+               (umask 0077; printf "${cfg.accessToken}" >"$access_token_file")
+            fi
+            jenkins_url="http://${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
+            auth_file="$RUNTIME_DIRECTORY/jenkins_auth_file.txt"
+            trap 'rm -f "$auth_file"' EXIT
+            (umask 0077; printf "${cfg.accessUser}:@password_placeholder@" >"$auth_file")
+            "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "$access_token_file" "$auth_file"
+
+            if ! "${pkgs.jenkins}/bin/jenkins-cli" -s "$jenkins_url" -auth "@$auth_file" reload-configuration; then
+                echo "error: failed to reload configuration"
+                exit 1
+            fi
           '';
         in
           ''
+            joinByString()
+            {
+                local separator="$1"
+                shift
+                local first="$1"
+                shift
+                printf "%s" "$first" "''${@/#/$separator}"
+            }
+
+            # Map a relative directory path in the output from
+            # jenkins-job-builder (jobname) to the layout expected by jenkins:
+            # each directory level gets prepended "jobs/".
+            getJenkinsJobDir()
+            {
+                IFS='/' read -ra input_dirs <<< "$1"
+                printf "jobs/"
+                joinByString "/jobs/" "''${input_dirs[@]}"
+            }
+
+            # The inverse of getJenkinsJobDir (remove the "jobs/" prefixes)
+            getJobname()
+            {
+                IFS='/' read -ra input_dirs <<< "$1"
+                local i=0
+                local nelem=''${#input_dirs[@]}
+                for e in "''${input_dirs[@]}"; do
+                    if [ $((i % 2)) -eq 1 ]; then
+                        printf "$e"
+                        if [ $i -lt $(( nelem - 1 )) ]; then
+                            printf "/"
+                        fi
+                    fi
+                    i=$((i + 1))
+                done
+            }
+
             rm -rf ${jobBuilderOutputDir}
             cur_decl_jobs=/run/jenkins-job-builder/declarative-jobs
             rm -f "$cur_decl_jobs"
@@ -172,31 +218,32 @@ in {
             # Create / update jobs
             mkdir -p ${jobBuilderOutputDir}
             for inputFile in ${yamlJobsFile} ${concatStringsSep " " jsonJobsFiles}; do
-                HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test -o "${jobBuilderOutputDir}" "$inputFile"
+                HOME="${jenkinsCfg.home}" "${pkgs.jenkins-job-builder}/bin/jenkins-jobs" --ignore-cache test --config-xml -o "${jobBuilderOutputDir}" "$inputFile"
             done
 
-            for file in "${jobBuilderOutputDir}/"*; do
-                test -f "$file" || continue
-                jobname="$(basename $file)"
-                jobdir="${jenkinsCfg.home}/jobs/$jobname"
+            find "${jobBuilderOutputDir}" -type f -name config.xml | while read -r f; do echo "$(dirname "$f")"; done | sort | while read -r dir; do
+                jobname="$(realpath --relative-to="${jobBuilderOutputDir}" "$dir")"
+                jenkinsjobname=$(getJenkinsJobDir "$jobname")
+                jenkinsjobdir="${jenkinsCfg.home}/$jenkinsjobname"
                 echo "Creating / updating job \"$jobname\""
-                mkdir -p "$jobdir"
-                touch "$jobdir/${ownerStamp}"
-                cp "$file" "$jobdir/config.xml"
-                echo "$jobname" >> "$cur_decl_jobs"
+                mkdir -p "$jenkinsjobdir"
+                touch "$jenkinsjobdir/${ownerStamp}"
+                cp "$dir"/config.xml "$jenkinsjobdir/config.xml"
+                echo "$jenkinsjobname" >> "$cur_decl_jobs"
             done
 
             # Remove stale jobs
-            for file in "${jenkinsCfg.home}"/jobs/*/${ownerStamp}; do
-                test -f "$file" || continue
-                jobdir="$(dirname $file)"
-                jobname="$(basename "$jobdir")"
-                grep --quiet --line-regexp "$jobname" "$cur_decl_jobs" 2>/dev/null && continue
+            find "${jenkinsCfg.home}" -type f -name "${ownerStamp}" | while read -r f; do echo "$(dirname "$f")"; done | sort --reverse | while read -r dir; do
+                jenkinsjobname="$(realpath --relative-to="${jenkinsCfg.home}" "$dir")"
+                grep --quiet --line-regexp "$jenkinsjobname" "$cur_decl_jobs" 2>/dev/null && continue
+                jobname=$(getJobname "$jenkinsjobname")
                 echo "Deleting stale job \"$jobname\""
+                jobdir="${jenkinsCfg.home}/$jenkinsjobname"
                 rm -rf "$jobdir"
             done
           '' + (if cfg.accessUser != "" then reloadScript else "");
       serviceConfig = {
+        Type = "oneshot";
         User = jenkinsCfg.user;
         RuntimeDirectory = "jenkins-job-builder";
       };

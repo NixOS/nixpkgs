@@ -1,19 +1,19 @@
-{ stdenv, fetchPypi, buildPythonPackage, tqdm }:
+{ lib, fetchPypi, buildPythonPackage, tqdm }:
 
 buildPythonPackage rec {
   pname = "proglog";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13diln950wk6nnn4rpmzx37rvrnpa7f803gwygiwbq1q46zwri6q";
+    sha256 = "sha256-ZYwoycguTK6y8l9Ij/+c6s4i+NabFdDByG1kJ15N2rQ=";
   };
 
   propagatedBuildInputs = [ tqdm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logs and progress bars manager for Python";
-    homepage = https://github.com/Edinburgh-Genome-Foundry/Proglog;
+    homepage = "https://github.com/Edinburgh-Genome-Foundry/Proglog";
     license = licenses.mit;
   };
 }

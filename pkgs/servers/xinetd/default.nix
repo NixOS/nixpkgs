@@ -1,25 +1,32 @@
-{ fetchurl, fetchpatch, stdenv }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libtirpc
+}:
 
 stdenv.mkDerivation rec {
-  name = "xinetd-2.3.15";
+  pname = "xinetd";
+  version = "2.3.15.4";
 
   src = fetchurl {
-    url = "http://www.xinetd.org/${name}.tar.gz";
-    sha256 = "1qsv1al506x33gh92bqa8w21k7mxqrbsrwmxvkj0amn72420ckmz";
+    url = "https://github.com/openSUSE/xinetd/releases/download/${version}/xinetd-${version}.tar.xz";
+    hash = "sha256-K6pYEBC8cDYavfo38SHpKuucXOZ/mnGRPOvWk1nMllQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/xinetd/files/xinetd-2.3.15-creds.patch?id=426002bfe2789fb6213fba832c8bfee634d68d02";
-      name = "CVE-2013-4342.patch";
-      sha256 = "1iqcrqzgisz4b6vamprzg2y6chai7qpifqcihisrwbjwbc4wzj8v";
-    })
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libtirpc
   ];
 
   meta = {
     description = "Secure replacement for inetd";
-    platforms = stdenv.lib.platforms.linux;
-    homepage = http://xinetd.org;
-    license = stdenv.lib.licenses.free;
+    platforms = lib.platforms.linux;
+    homepage = "https://github.com/openSUSE/xinetd";
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

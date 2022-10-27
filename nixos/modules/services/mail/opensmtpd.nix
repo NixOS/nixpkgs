@@ -17,6 +17,10 @@ in {
 
   ###### interface
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "opensmtpd" "addSendmailToSystemPath" ] [ "services" "opensmtpd" "setSendmail" ])
+  ];
+
   options = {
 
     services.opensmtpd = {
@@ -24,30 +28,27 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the OpenSMTPD server.";
+        description = lib.mdDoc "Whether to enable the OpenSMTPD server.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.opensmtpd;
-        defaultText = "pkgs.opensmtpd";
-        description = "The OpenSMTPD package to use.";
+        defaultText = literalExpression "pkgs.opensmtpd";
+        description = lib.mdDoc "The OpenSMTPD package to use.";
       };
 
-      addSendmailToSystemPath = mkOption {
+      setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Whether to add OpenSMTPD's sendmail binary to the
-          system path or not.
-        '';
+        description = lib.mdDoc "Whether to set the system sendmail to OpenSMTPD's.";
       };
 
       extraServerArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-v" "-P mta" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra command line arguments provided when the smtpd process
           is started.
         '';
@@ -59,7 +60,7 @@ in {
           listen on lo
           accept for any deliver to lmtp localhost:24
         '';
-        description = ''
+        description = lib.mdDoc ''
           The contents of the smtpd.conf configuration file. See the
           OpenSMTPD documentation for syntax information.
         '';
@@ -68,7 +69,7 @@ in {
       procPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Packages to search for filters, tables, queues, and schedulers.
 
           Add OpenSMTPD-extras here if you want to use the filters, etc. from
@@ -82,7 +83,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable rec {
     users.groups = {
       smtpd.gid = config.ids.gids.smtpd;
       smtpq.gid = config.ids.gids.smtpq;
@@ -101,6 +102,23 @@ in {
       };
     };
 
+    security.wrappers.smtpctl = {
+      owner = "root";
+      group = "smtpq";
+      setuid = false;
+      setgid = true;
+      source = "${cfg.package}/bin/smtpctl";
+    };
+
+    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail
+      (security.wrappers.smtpctl // { program = "sendmail"; });
+
+    systemd.tmpfiles.rules = [
+      "d /var/spool/smtpd 711 root - - -"
+      "d /var/spool/smtpd/offline 770 root smtpq - -"
+      "d /var/spool/smtpd/purge 700 smtpq root - -"
+    ];
+
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {
         name = "opensmtpd-procs";
@@ -110,22 +128,8 @@ in {
     in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = ''
-        mkdir -p /var/spool/smtpd
-        chmod 711 /var/spool/smtpd
-
-        mkdir -p /var/spool/smtpd/offline
-        chown root.smtpq /var/spool/smtpd/offline
-        chmod 770 /var/spool/smtpd/offline
-
-        mkdir -p /var/spool/smtpd/purge
-        chown smtpq.root /var/spool/smtpd/purge
-        chmod 700 /var/spool/smtpd/purge
-      '';
       serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
-
-    environment.systemPackages = mkIf cfg.addSendmailToSystemPath [ sendmail ];
   };
 }

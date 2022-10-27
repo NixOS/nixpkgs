@@ -1,67 +1,125 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+
+# dependencies
+, cyrus_sasl
+, db
+, groff
+, libsodium
+, libtool
+, openssl
+, systemdMinimal
+, libxcrypt
+}:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.48";
+  pname = "openldap";
+  version = "2.6.3";
 
   src = fetchurl {
-    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0k87qra4kirb6xgja4q1jyw6piwb9v8b8g6gkxq4plawmgy3ylnr";
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
+    hash = "sha256-0qKh1x3z13OWscFq11AuZ030RuBgcrDlpOlBw9BsDUY=";
   };
 
   # TODO: separate "out" and "bin"
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "devdoc"
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [
+    groff
+  ];
 
-  buildInputs = [ openssl cyrus_sasl db libtool ];
+  buildInputs = [
+    cyrus_sasl
+    db
+    libsodium
+    libtool
+    openssl
+  ] ++ lib.optionals (stdenv.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
+    systemdMinimal
+  ];
 
-  # Disable install stripping as it breaks cross-compiling.
-  # We strip binaries anyway in fixupPhase.
-  makeFlags= [ "STRIP=" ];
-
-  configureFlags = [
-    "--enable-overlays"
-    "--disable-dependency-tracking"   # speeds up one-time build
-    "--enable-modules"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--enable-crypt"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--with-yielding_select=yes"
-    "ac_cv_func_memcmp_working=yes"
-  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
-
-  doCheck = false; # needs a running LDAP server
-
-  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
-
-  # 1. Fixup broken libtool
-  # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
-  #    Delete these to let patchelf discover the right path instead.
-  #    FIXME: that one can be removed when https://github.com/NixOS/patchelf/pull/98
-  #    is in Nixpkgs patchelf.
-  preFixup = ''
-    sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
-        -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
-        -i $out/lib/libldap.la -i $out/lib/libldap_r.la
-
-    rm -rf $out/var
-    rm -r libraries/*/.libs
+  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
+  configureFlags = [
+    "--enable-argon2"
+    "--enable-crypt"
+    "--enable-modules"
+    "--enable-overlays"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
+
+  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+
+  makeFlags= [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP_OPTS="
+    "prefix=${placeholder "out"}"
+    "sysconfdir=/etc"
+    "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    # contrib modules require these
+    "moduledir=${placeholder "out"}/lib/modules"
+    "mandir=${placeholder "out"}/share/man"
+  ];
+
+  extraContribModules = [
+    # https://git.openldap.org/openldap/openldap/-/tree/master/contrib/slapd-modules
+    "passwd/sha2"
+    "passwd/pbkdf2"
+    "passwd/totp"
+  ];
+
+  postBuild = ''
+    for module in $extraContribModules; do
+      make $makeFlags CC=$CC -C contrib/slapd-modules/$module
+    done
+  '';
+
+  preCheck = ''
+    substituteInPlace tests/scripts/all \
+      --replace "/bin/rm" "rm"
+  '';
+
+  doCheck = true;
+
+  # The directory is empty and serve no purpose.
+  preFixup = ''
+    rm -r $out/var
+  '';
+
+  installFlags = [
+    "prefix=${placeholder "out"}"
+    "sysconfdir=${placeholder "out"}/etc"
+    "moduledir=${placeholder "out"}/lib/modules"
+    "INSTALL=install"
+  ];
+
   postInstall = ''
+    for module in $extraContribModules; do
+      make $installFlags install -C contrib/slapd-modules/$module
+    done
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = http://www.openldap.org/;
+  meta = with lib; {
+    homepage = "https://www.openldap.org/";
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    maintainers = with maintainers; [ ajs124 das_j hexa ];
+    platforms = platforms.unix;
   };
 }

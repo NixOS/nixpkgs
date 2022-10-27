@@ -1,35 +1,62 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
-, boost, openssl, zlib, libsodium, olm, nlohmann_json }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, openssl
+, olm
+, spdlog
+, nlohmann_json
+, coeurl
+, libevent
+, curl
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.2.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "0pycznrvj57ff6gbwfn1xj943d2dr4vadl79hii1z16gn0nzxpmj";
+    sha256 = "sha256-x2c+wZWAWYoKxSqEezoInw3SwcGo9dQNDvuq7racLBA=";
   };
 
+  postPatch = ''
+    # See https://github.com/gabime/spdlog/issues/1897
+    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
+  '';
+
   cmakeFlags = [
+    # Network requiring tests can't be disabled individually:
+    # https://github.com/Nheko-Reborn/mtxclient/issues/22
     "-DBUILD_LIB_TESTS=OFF"
     "-DBUILD_LIB_EXAMPLES=OFF"
-    "-Dnlohmann_json_DIR=${nlohmann_json}/lib/cmake/nlohmann_json"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ boost openssl zlib libsodium olm ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    spdlog
+    nlohmann_json
+    openssl
+    olm
+    coeurl
+    libevent
+    curl
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Client API library for Matrix, built on top of Boost.Asio";
-    homepage = https://github.com/Nheko-Reborn/mtxclient;
+  meta = with lib; {
+    description = "Client API library for the Matrix protocol.";
+    homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
-
-    # As of 2019-06-30, all of the dependencies are available on macOS but the
-    # package itself does not build.
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ fpletz pstn ];
+    platforms = platforms.all;
+    # Should be fixable if a higher clang version is used, see:
+    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
+    broken = stdenv.targetPlatform.isDarwin;
   };
 }

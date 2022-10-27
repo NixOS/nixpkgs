@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, libconfig
+{ config, lib, stdenv, fetchFromGitHub, pkg-config, libconfig
 , gtkmm2, glibmm, libxml2, libsecret, curl, libzip
 , librsvg, gst_all_1, autoreconfHook, makeWrapper
 , useUnrar ? config.ahoviewer.useUnrar or false, unrar
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [
     glibmm libconfig gtkmm2 glibmm libxml2
     libsecret curl libzip librsvg
@@ -27,13 +27,11 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
-  ] ++ stdenv.lib.optional useUnrar unrar;
+  ] ++ lib.optional useUnrar unrar;
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
-  postPatch = ''patchShebangs version.sh'';
+  postPatch = "patchShebangs version.sh";
 
   postInstall = ''
     wrapProgram $out/bin/ahoviewer \
@@ -41,10 +39,10 @@ stdenv.mkDerivation rec {
     --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ahodesuka/ahoviewer;
+  meta = with lib; {
+    homepage = "https://github.com/ahodesuka/ahoviewer";
     description = "A GTK2 image viewer, manga reader, and booru browser";
-    maintainers = with maintainers; [ skrzyp xzfc ];
+    maintainers = with maintainers; [ xzfc ];
     license = licenses.mit;
     # Unintentionally not working on Darwin:
     # https://github.com/ahodesuka/ahoviewer/issues/62

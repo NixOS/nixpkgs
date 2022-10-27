@@ -1,16 +1,16 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "sshpass";
-  version = "1.06";
+  version = "1.09";
 
   src = fetchurl {
     url = "mirror://sourceforge/sshpass/sshpass-${version}.tar.gz";
-    sha256 = "0q7fblaczb7kwbsz0gdy9267z0sllzgmf0c7z5c9mf88wv74ycn6";
+    sha256 = "sha256-cXRuXgV//psAtErEBFO/RwkZMMupa76o3Ehxfe3En7c=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/sshpass/;
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/sshpass/";
     description = "Non-interactive ssh password auth";
     license = licenses.gpl2;
     maintainers = [ maintainers.madjar ];

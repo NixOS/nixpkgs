@@ -1,9 +1,10 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "clickhouse";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ ma27 ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ma27 ];
 
-  machine = {
+  nodes.machine = {
     services.clickhouse.enable = true;
+    virtualisation.memorySize = 4096;
   };
 
   testScript =
@@ -14,12 +15,18 @@ import ./make-test.nix ({ pkgs, ... }: {
       selectQuery = pkgs.writeText "select.sql" "SELECT * from `demo`";
     in
       ''
-        $machine->start();
-        $machine->waitForUnit("clickhouse.service");
-        $machine->waitForOpenPort(9000);
+        machine.start()
+        machine.wait_for_unit("clickhouse.service")
+        machine.wait_for_open_port(9000)
 
-        $machine->succeed("cat ${tableDDL} | clickhouse-client");
-        $machine->succeed("cat ${insertQuery} | clickhouse-client");
-        $machine->succeed("cat ${selectQuery} | clickhouse-client | grep foo");
+        machine.succeed(
+            "cat ${tableDDL} | clickhouse-client"
+        )
+        machine.succeed(
+            "cat ${insertQuery} | clickhouse-client"
+        )
+        machine.succeed(
+            "cat ${selectQuery} | clickhouse-client | grep foo"
+        )
       '';
 })

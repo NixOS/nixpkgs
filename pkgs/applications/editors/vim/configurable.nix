@@ -1,7 +1,5 @@
-# TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
-# but I have gvim with python support now :) - Marc
-{ source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
-, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
+{ source ? "default", callPackage, lib, stdenv, ncurses, pkg-config, gettext
+, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
@@ -14,7 +12,7 @@
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or "gtk3"
+, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -27,7 +25,6 @@
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
 , darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
-, ...
 }:
 
 
@@ -64,8 +61,6 @@ let
 
   common = callPackage ./common.nix {};
 
-  isPython3 = python.isPy3 or false;
-
 in stdenv.mkDerivation rec {
 
   pname = "vim_configurable";
@@ -76,10 +71,9 @@ in stdenv.mkDerivation rec {
     default = common.src; # latest release
   };
 
-  patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
+  patches = [ ./cflags-prune.diff ] ++ lib.optional ftNixSupport ./ft-nix-support.patch;
 
   configureFlags = [
-    "--enable-gui=${guiSupport}"
     "--with-features=${features}"
     "--disable-xsmp"              # XSMP session management
     "--disable-xsmp_interact"     # XSMP interaction
@@ -98,88 +92,94 @@ in stdenv.mkDerivation rec {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "vim_cv_toupper_broken=no"
+    "--with-tlib=ncurses"
+    "vim_cv_terminfo=yes"
+    "vim_cv_tgetent=zero" # it does on native anyway
+    "vim_cv_tty_group=tty"
+    "vim_cv_tty_mode=0660"
+    "vim_cv_getcwd_broken=no"
+    "vim_cv_stat_ignores_slash=yes"
+    "vim_cv_memmove_handles_overlap=yes"
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin
+    ++ lib.optional (guiSupport == "gtk2" || guiSupport == "gtk3") "--enable-gui=${guiSupport}"
+  ++ lib.optional stdenv.isDarwin
      (if darwinSupport then "--enable-darwin" else "--disable-darwin")
-  ++ stdenv.lib.optionals luaSupport [
+  ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
+  ] ++ lib.optionals lua.pkgs.isLuaJIT [
+    "--with-luajit"
   ]
-  ++ stdenv.lib.optionals pythonSupport [
-    "--enable-python${if isPython3 then "3" else ""}interp=yes"
-    "--with-python${if isPython3 then "3" else ""}-config-dir=${python}/lib"
-    "--disable-python${if (!isPython3) then "3" else ""}interp"
+  ++ lib.optionals pythonSupport [
+    "--enable-python3interp=yes"
+    "--with-python3-config-dir=${python3}/lib"
+    # Disables Python 2
+    "--disable-pythoninterp"
   ]
-  ++ stdenv.lib.optional nlsSupport          "--enable-nls"
-  ++ stdenv.lib.optional perlSupport         "--enable-perlinterp"
-  ++ stdenv.lib.optional rubySupport         "--enable-rubyinterp"
-  ++ stdenv.lib.optional tclSupport          "--enable-tclinterp"
-  ++ stdenv.lib.optional multibyteSupport    "--enable-multibyte"
-  ++ stdenv.lib.optional cscopeSupport       "--enable-cscope"
-  ++ stdenv.lib.optional netbeansSupport     "--enable-netbeans"
-  ++ stdenv.lib.optional ximSupport          "--enable-xim";
+  ++ lib.optional nlsSupport          "--enable-nls"
+  ++ lib.optional perlSupport         "--enable-perlinterp"
+  ++ lib.optional rubySupport         "--enable-rubyinterp"
+  ++ lib.optional tclSupport          "--enable-tclinterp"
+  ++ lib.optional multibyteSupport    "--enable-multibyte"
+  ++ lib.optional cscopeSupport       "--enable-cscope"
+  ++ lib.optional netbeansSupport     "--enable-netbeans"
+  ++ lib.optional ximSupport          "--enable-xim";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ]
-  ++ stdenv.lib.optional wrapPythonDrv makeWrapper
-  ++ stdenv.lib.optional nlsSupport gettext
-  ++ stdenv.lib.optional perlSupport perl
-  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
+  ++ lib.optional wrapPythonDrv makeWrapper
+  ++ lib.optional nlsSupport gettext
+  ++ lib.optional perlSupport perl
+  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
-  buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
-    libXmu glib libICE ]
-    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
-    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
-    ++ stdenv.lib.optional luaSupport lua
-    ++ stdenv.lib.optional pythonSupport python
-    ++ stdenv.lib.optional tclSupport tcl
-    ++ stdenv.lib.optional rubySupport ruby;
+  buildInputs = [
+    ncurses
+    glib
+  ]
+    # All X related dependencies
+    ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
+      libSM
+      libICE
+      libX11
+      libXext
+      libXpm
+      libXt
+      libXaw
+      libXau
+      libXmu
+    ]
+    ++ lib.optional (guiSupport == "gtk2") gtk2-x11
+    ++ lib.optional (guiSupport == "gtk3") gtk3-x11
+    ++ lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
+    ++ lib.optional luaSupport lua
+    ++ lib.optional pythonSupport python3
+    ++ lib.optional tclSupport tcl
+    ++ lib.optional rubySupport ruby;
 
-  preConfigure = ''
-    '' + stdenv.lib.optionalString ftNixSupport ''
+  preConfigure = "" + lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
       cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
-  postInstall = ''
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/{vim,gvim}
-
-    ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
-  '' + stdenv.lib.optionalString wrapPythonDrv ''
-    wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
-  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
-
-    rewrap () {
-      rm -f "$out/bin/$1"
-      echo -e '#!${runtimeShell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
-      chmod a+x "$out/bin/$1"
-    }
-
-    rewrap ex -e
-    rewrap view -R
-    rewrap gvim -g
-    rewrap gex -eg
-    rewrap gview -Rg
-    rewrap rvim -Z
-    rewrap rview -RZ
-    rewrap rgvim -gZ
-    rewrap rgview -RgZ
-    rewrap evim    -y
-    rewrap eview   -yR
-    rewrap vimdiff -d
-    rewrap gvimdiff -gd
-  '';
-
   preInstall = ''
     mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
   '';
 
-  dontStrip = 1;
+  postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
+  '' + lib.optionalString stdenv.isLinux ''
+    ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
+  '';
+
+  postFixup = lib.optionalString wrapPythonDrv ''
+    wrapProgram "$out/bin/vim" --prefix PATH : "${python3}/bin" \
+      --set NIX_PYTHONPATH "${python3}/${python3.sitePackages}"
+  '';
+
+  dontStrip = true;
 }

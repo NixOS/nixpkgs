@@ -1,28 +1,56 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi, isPy27
-, ldap , django_2_2 
-, mock
+, fetchPypi
+, isPy27
+
+# buildtime
+, setuptools-scm
+
+# runtime
+, django
+, python-ldap
+
+# tests
+, python
+, pkgs
 }:
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "2.0.0";
+  version = "4.1.0";
+  format = "pyproject";
+
   disabled = isPy27;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1samrxf8lic6a4c0lgw31b38s97l8hnaknd7ilyy2plahmm0h03i";
+    sha256 = "sha256-d/dJ07F4B86OtWqcnI5XRv8xZWf4HVumE0ldnHSVqUk=";
   };
 
-  propagatedBuildInputs = [ ldap django_2_2 ]; 
-  checkInputs = [ mock ]; 
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # django.core.exceptions.ImproperlyConfigured: Requested setting INSTALLED_APPS, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
+  propagatedBuildInputs = [
+    django
+    python-ldap
+  ];
+
+  # ValueError: SCHEMADIR is None, ldap schemas are missing.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  checkPhase = ''
+    runHook preCheck
+    export PATH=${pkgs.openldap}/bin:${pkgs.openldap}/libexec:$PATH
+    ${python.interpreter} -m django test --settings tests.settings
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "django_auth_ldap" ];
+
+  meta = with lib; {
     description = "Django authentication backend that authenticates against an LDAP service";
-    homepage = https://github.com/django-auth-ldap/django-auth-ldap;
+    homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mmai ];
     platforms = platforms.linux;

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "perseus-4-beta";
+  pname = "perseus";
   version = "4-beta";
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
-    url = "http://www.sas.upenn.edu/~vnanda/source/perseus_4_beta.zip";
-    sha256 = "09brijnqabhgfjlj5wny0bqm5dwqcfkp1x5wif6yzdmqh080jybj";
+    url = "http://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
+    sha256 = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
   };
 
   sourceRoot = ".";
-
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
   buildPhase = ''
     g++ Pers.cpp -O3 -fpermissive -o perseus
   '';
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = http://www.sas.upenn.edu/~vnanda/perseus/index.html;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [erikryb];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://people.maths.ox.ac.uk/nanda/perseus/index.html";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ erikryb ];
+    platforms = lib.platforms.linux;
   };
 }

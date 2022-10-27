@@ -1,19 +1,19 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "certigo";
-  version = "1.11.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vi4gn484kc7vyxnm2nislzy587h2h4gc8d197vslhyfygac9y7b";
+    sha256 = "sha256-+j1NeQJPDwQxXVYnHNmL49Li2IMH+9ehS0HSM3kqyxU=";
   };
 
-  goPackagePath = "github.com/square/certigo";
+  vendorSha256 = "sha256-G9YpMF4qyL8eJPnai81ihVTDK9E4meKxdpk+rjISnIM=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility to examine and validate certificates in a variety of formats";
     homepage = "https://github.com/square/certigo";
     license = licenses.asl20;

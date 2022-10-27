@@ -1,16 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ buildPythonPackage, fetchPypi, isPy3k, lib }:
 
 buildPythonPackage rec {
   pname = "lmtpd";
-  version = "6.0.0";
+  version = "6.2.0";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "192d1j9lj9i6f4llwg51817am4jj8pjvlqmkx03spmsay6f832bm";
+    sha256 = "2c6825d2ffa1de099440411a742f58e1b3e8deeb3345adcfd4c2c38d4baf62b3";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/moggers87/lmtpd;
+  meta = with lib; {
+    homepage = "https://github.com/moggers87/lmtpd";
     description = "LMTP counterpart to smtpd in the Python standard library";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

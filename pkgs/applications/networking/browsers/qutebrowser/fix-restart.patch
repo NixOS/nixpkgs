@@ -1,29 +1,19 @@
-diff --git a/qutebrowser/app.py b/qutebrowser/app.py
-index 2b6896b76..ee05f379d 100644
---- a/qutebrowser/app.py
-+++ b/qutebrowser/app.py
-@@ -555,22 +555,8 @@ class Quitter:
-                 args: The commandline as a list of strings.
-                 cwd: The current working directory as a string.
+diff --git a/quitter.py b/quitter.py
+index a42b9d0..f544ccb 100644
+--- a/qutebrowser/misc/quitter.py
++++ b/qutebrowser/misc/quitter.py
+@@ -112,13 +112,7 @@ class Quitter(QObject):
+         Return:
+             The commandline as a list of strings.
          """
 -        if os.path.basename(sys.argv[0]) == 'qutebrowser':
 -            # Launched via launcher script
 -            args = [sys.argv[0]]
--            cwd = None
 -        elif hasattr(sys, 'frozen'):
 -            args = [sys.executable]
--            cwd = os.path.abspath(os.path.dirname(sys.executable))
 -        else:
 -            args = [sys.executable, '-m', 'qutebrowser']
--            cwd = os.path.join(
--                os.path.abspath(os.path.dirname(qutebrowser.__file__)), '..')
--            if not os.path.isdir(cwd):
--                # Probably running from a python egg. Let's fallback to
--                # cwd=None and see if that works out.
--                # See https://github.com/qutebrowser/qutebrowser/issues/323
--                cwd = None
 +        args = ['@qutebrowser@']
-+        cwd = None
  
          # Add all open pages so they get reopened.
-         page_args = []
+         page_args = []  # type: typing.MutableSequence[str]

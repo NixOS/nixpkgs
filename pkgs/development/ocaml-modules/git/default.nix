@@ -1,27 +1,44 @@
-{ stdenv, fetchFromGitHub, buildDunePackage
-, astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, ocplib-endian, uri
-, alcotest, mtime, nocrypto
+{ stdenv, lib, fetchurl, buildDunePackage
+, alcotest, mirage-crypto-rng, git-binary
+, angstrom, astring, cstruct, decompress, digestif, encore, fmt, checkseum
+, fpath, ke, logs, lwt, ocamlgraph, uri, rresult, base64, hxd
+, result, bigstringaf, optint, mirage-flow, domain-name, emile
+, mimic, carton, carton-lwt, carton-git, ipaddr, psq, crowbar, alcotest-lwt, cmdliner
 }:
 
 buildDunePackage rec {
   pname = "git";
-	version = "1.11.5";
+  version = "3.10.0";
 
-	src = fetchFromGitHub {
-		owner = "mirage";
-		repo = "ocaml-git";
-		rev = version;
-		sha256 = "0r1bxpxjjnl9hh8xbabsxl7svzvd19hfy73a2y1m4kljmw64dpfh";
-	};
+  minimalOCamlVersion = "4.08";
 
-	buildInputs = [ alcotest mtime nocrypto ];
-	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph ocplib-endian uri ];
-	doCheck = true;
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
+    sha256 = "sha256-slUzAT4qwPzUNzHMbib/ArxaGzcMFl8tg0ynq1y5U1M=";
+  };
 
-	meta = {
-		description = "Git format and protocol in pure OCaml";
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
-	};
+  # remove changelog for the carton package
+  postPatch = ''
+    rm CHANGES.carton.md
+  '';
+
+  buildInputs = [
+    base64
+  ];
+  propagatedBuildInputs = [
+    angstrom astring checkseum cstruct decompress digestif encore fmt fpath
+    ke logs lwt ocamlgraph uri rresult result bigstringaf optint mirage-flow
+    domain-name emile mimic carton carton-lwt carton-git ipaddr psq hxd
+  ];
+  checkInputs = [
+    alcotest alcotest-lwt mirage-crypto-rng git-binary crowbar cmdliner
+  ];
+  doCheck = !stdenv.isAarch64;
+
+  meta = {
+    description = "Git format and protocol in pure OCaml";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann vbgl ];
+    homepage = "https://github.com/mirage/ocaml-git";
+  };
 }

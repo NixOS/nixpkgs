@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
@@ -6,13 +6,13 @@
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, libpulseaudio
+, alsa-lib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (http://www.wavpack.com/)
+#  wavpack (https://www.wavpack.com/)
 #  gme (Game music support)
 #  Ogg Opus support
 #  BS2B effect plugin (http://bs2b.sourceforge.net/)
@@ -29,14 +29,15 @@
 # handle that.
 
 mkDerivation rec {
-  name = "qmmp-1.3.4";
+  pname = "qmmp";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "0j9vgm6216w7arwl919p9rps0a9r6s4415spl3qkpifhwlk90zg0";
+    url = "https://qmmp.ylsoftware.com/files/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
     [ # basic requirements
       qtbase qttools qtmultimedia qtx11extras xlibsWrapper
@@ -46,19 +47,16 @@ mkDerivation rec {
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib libpulseaudio
+      alsa-lib libpulseaudio
       # effect plugins
       libsamplerate
     ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = http://qmmp.ylsoftware.com/;
-    license = licenses.gpl2;
+    homepage = "https://qmmp.ylsoftware.com/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = http://qmmp.googlecode.com/svn/;
   };
 }

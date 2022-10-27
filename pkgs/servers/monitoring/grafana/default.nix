@@ -1,44 +1,85 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests, tzdata, wire }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "grafana";
-  version = "6.4.3";
+  version = "9.2.1";
 
-  goPackagePath = "github.com/grafana/grafana";
-
-  excludedPackages = [ "release_publisher" ];
+  excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "0150s14yjgshncs94xf42yrz7awvw2x91j0j9v23fypqmlch2p3m";
+    sha256 = "sha256-0TMvSILkT29Ebm/P3PK1NKNs+TbE+874aDRybahhMGg=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "0gr9m05h8qx3g0818b0qf1w26pdir3c5ydgi9zwdhjkppsq14dq2";
+    sha256 = "sha256-yL6qyAOZT47eiPkdxeBARkChP0L4vj1y7LDvrPUBmQQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pkg/cmd/grafana-server/main.go \
-      --replace 'var version = "5.0.0"'  'var version = "${version}"'
+  vendorSha256 = "sha256-021b+Jdk1VUGNSVNef89KLbWLdy4XhhEry4S2S0AhRg=";
+
+  nativeBuildInputs = [ wire ];
+
+  preBuild = ''
+    # Generate DI code that's required to compile the package.
+    # From https://github.com/grafana/grafana/blob/v8.2.3/Makefile#L33-L35
+    wire gen -tags oss ./pkg/server
+    wire gen -tags oss ./pkg/cmd/grafana-cli/runner
+
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/framework/coremodel
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins
+
+    # The testcase makes an API call against grafana.com:
+    #
+    # [...]
+    # grafana> t=2021-12-02T14:24:58+0000 lvl=dbug msg="Failed to get latest.json repo from github.com" logger=update.checker error="Get \"https://raw.githubusercontent.com/grafana/grafana/main/latest.json\": dial tcp: lookup raw.githubusercontent.com on [::1]:53: read udp [::1]:36391->[::1]:53: read: connection refused"
+    # grafana> t=2021-12-02T14:24:58+0000 lvl=dbug msg="Failed to get plugins repo from grafana.com" logger=plugin.manager error="Get \"https://grafana.com/api/plugins/versioncheck?slugIn=&grafanaVersion=\": dial tcp: lookup grafana.com on [::1]:53: read udp [::1]:41796->[::1]:53: read: connection refused"
+    sed -i -e '/Request is not forbidden if from an admin/a t.Skip();' pkg/tests/api/plugins/api_plugins_test.go
+
+    # Skip a flaky test (https://github.com/NixOS/nixpkgs/pull/126928#issuecomment-861424128)
+    sed -i -e '/it should change folder successfully and return correct result/{N;s/$/\nt.Skip();/}'\
+      pkg/services/libraryelements/libraryelements_patch_test.go
+
+
+    # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
+    rm -r scripts/go
   '';
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}"
+  ];
+
+  # Tests start http servers which need to bind to local addresses:
+  # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  __darwinAllowLocalNetworking = true;
+
+  # On Darwin, files under /usr/share/zoneinfo exist, but fail to open in sandbox:
+  # TestValueAsTimezone: date_formats_test.go:33: Invalid has err for input "Europe/Amsterdam": operation not permitted
+  preCheck = ''
+    export ZONEINFO=${tzdata}/share/zoneinfo
+  '';
 
   postInstall = ''
     tar -xvf $srcStatic
-    mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf,tools} $bin/share/grafana/
-    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
+    mkdir -p $out/share/grafana
+    mv grafana-*/{public,conf,tools} $out/share/grafana/
+
+    cp ./conf/defaults.ini $out/share/grafana/conf/
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) grafana; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
-    license = licenses.asl20;
+    license = licenses.agpl3;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
+    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "grafana-server";
   };
 }

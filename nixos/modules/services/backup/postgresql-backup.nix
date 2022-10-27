@@ -7,22 +7,49 @@ let
   cfg = config.services.postgresqlBackup;
 
   postgresqlBackupService = db: dumpCmd:
-    {
+    let
+      compressSuffixes = {
+        "none" = "";
+        "gzip" = ".gz";
+        "zstd" = ".zstd";
+      };
+      compressSuffix = getAttr cfg.compression compressSuffixes;
+
+      compressCmd = getAttr cfg.compression {
+        "none" = "cat";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel}";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel}";
+      };
+
+      mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
+      curFile = mkSqlPath "" compressSuffix;
+      prevFile = mkSqlPath ".prev" compressSuffix;
+      prevFiles = map (mkSqlPath ".prev") (attrValues compressSuffixes);
+      inProgressFile = mkSqlPath ".in-progress" compressSuffix;
+    in {
       enable = true;
 
       description = "Backup of ${db} database(s)";
 
       requires = [ "postgresql.service" ];
 
+      path = [ pkgs.coreutils config.services.postgresql.package ];
+
       script = ''
+        set -e -o pipefail
+
         umask 0077 # ensure backup is only readable by postgres user
 
-        if [ -e ${cfg.location}/${db}.sql.gz ]; then
-          ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
+        if [ -e ${curFile} ]; then
+          rm -f ${toString prevFiles}
+          mv ${curFile} ${prevFile}
         fi
 
-        ${dumpCmd} | \
-          ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
+        ${dumpCmd} \
+          | ${compressCmd} \
+          > ${inProgressFile}
+
+        mv ${inProgressFile} ${curFile}
       '';
 
       serviceConfig = {
@@ -35,19 +62,22 @@ let
 
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
+       A systemd timer is now used instead of cron.
+       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+    '')
+  ];
+
   options = {
     services.postgresqlBackup = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable PostgreSQL dumps.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "PostgreSQL dumps");
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";
-        description = ''
-          This option defines (see <literal>systemd.time</literal> for format) when the
+        type = with types; either (listOf str) str;
+        description = lib.mdDoc ''
+          This option defines (see `systemd.time` for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
         '';
@@ -55,12 +85,12 @@ in {
 
       backupAll = mkOption {
         default = cfg.databases == [];
-        defaultText = "services.postgresqlBackup.databases == []";
+        defaultText = literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Backup all databases using pg_dumpall.
           This option is mutual exclusive to
-          <literal>services.postgresqlBackup.databases</literal>.
+          `services.postgresqlBackup.databases`.
           The resulting backup dump will have the name all.sql.gz.
           This option is the default if no databases are specified.
         '';
@@ -68,26 +98,45 @@ in {
 
       databases = mkOption {
         default = [];
-        description = ''
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
           List of database names to dump.
         '';
       };
 
       location = mkOption {
         default = "/var/backup/postgresql";
-        description = ''
-          Location to put the gzipped PostgreSQL database dumps.
+        type = types.path;
+        description = lib.mdDoc ''
+          Path of directory where the PostgreSQL database dumps will be placed.
         '';
       };
 
       pgdumpOptions = mkOption {
         type = types.separatedString " ";
-        default = "-Cbo";
-        description = ''
+        default = "-C";
+        description = lib.mdDoc ''
           Command line options for pg_dump. This options is not used
-          if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
+          if `config.services.postgresqlBackup.backupAll` is enabled.
           Note that config.services.postgresqlBackup.backupAll is also active,
           when no databases where specified.
+        '';
+      };
+
+      compression = mkOption {
+        type = types.enum ["none" "gzip" "zstd"];
+        default = "gzip";
+        description = lib.mdDoc ''
+          The type of compression to use on the generated database dump.
+        '';
+      };
+
+      compressionLevel = mkOption {
+        type = types.ints.between 1 19;
+        default = 6;
+        description = lib.mdDoc ''
+          The compression level used when compression is enabled.
+          gzip accepts levels 1 to 9. zstd accepts levels 1 to 19.
         '';
       };
     };
@@ -96,10 +145,18 @@ in {
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+        {
+          assertion = cfg.compression == "none" ||
+            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
+            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [
@@ -108,12 +165,12 @@ in {
     })
     (mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
-        postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";
+        postgresqlBackupService "all" "pg_dumpall";
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
       systemd.services = listToAttrs (map (db:
         let
-          cmd = "${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db}";
+          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
         in {
           name = "postgresqlBackup-${db}";
           value = postgresqlBackupService db cmd;

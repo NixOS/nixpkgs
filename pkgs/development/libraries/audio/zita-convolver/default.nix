@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwFloat }:
+{ lib, stdenv, fetchurl, fftwFloat }:
 
 stdenv.mkDerivation rec {
   pname = "zita-convolver";
@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # create lib link for building apps
-    ln -s $out/lib/libzita-convolver.so.${version} $out/lib/libzita-convolver.so.${stdenv.lib.versions.major version}
+    ln -s $out/lib/libzita-convolver.so.${version} $out/lib/libzita-convolver.so.${lib.versions.major version}
   '';
 
   meta = {
     description = "Convolution library by Fons Adriaensen";
     version = version;
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

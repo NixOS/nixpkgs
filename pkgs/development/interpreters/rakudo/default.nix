@@ -1,29 +1,33 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, readline
-, CoreServices, ApplicationServices }:
+{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  pname = "rakudo-star";
-  version = "2017.01";
+  pname = "rakudo";
+  version = "2022.07";
 
   src = fetchurl {
-    url    = "http://rakudo.org/downloads/star/${pname}-${version}.tar.gz";
-    sha256 = "07zjqdzxm30pmjqwlnr669d75bsbimy09sk0dvgm0pnn3zr92fjq";
+    url = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
+    hash = "sha256-ejvJ1lTh0nkqBVtPrxFu820UH2tq3eeqcDF3BfJgkK0=";
   };
 
-  buildInputs = [ icu zlib gmp readline perl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
-  configureScript = "perl ./Configure.pl";
-  configureFlags =
-    [ "--backends=moar"
-      "--gen-moar"
-      "--gen-nqp"
-    ];
+  nativeBuildInputs = [ removeReferencesTo ];
 
-  meta = with stdenv.lib; {
-    description = "A Perl 6 implementation";
-    homepage    = https://www.rakudo.org;
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra ];
+  buildInputs = [ icu zlib gmp perl ];
+  configureScript = "perl ./Configure.pl";
+  configureFlags = [
+    "--backends=moar"
+    "--with-nqp=${nqp}/bin/nqp"
+  ];
+
+  disallowedReferences = [ stdenv.cc.cc ];
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
+  '';
+
+  meta = with lib; {
+    description = "Raku implementation on top of Moar virtual machine";
+    homepage = "https://rakudo.org";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
   };
 }

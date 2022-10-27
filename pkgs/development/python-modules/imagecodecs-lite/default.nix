@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
+{ stdenv
+, lib, fetchPypi, buildPythonPackage
 , pytest
 , numpy
 , cython
@@ -6,17 +7,31 @@
 
 buildPythonPackage rec {
   pname = "imagecodecs-lite";
-  version = "2019.4.20";
+  version = "2019.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cp88g7g91gdhjhaz6gvb4jzvi5ad817id9f2bnc5r95ag93bqb0";
+    sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy cython ];
+  nativeBuildInputs = [
+    cython
+  ];
+
+  checkInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.tbenst ];

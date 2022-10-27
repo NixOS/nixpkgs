@@ -1,31 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestrunner
-, dateutil
+, python-dateutil
 , babelfish
 , rebulk
+, pythonOlder
+, importlib-resources
+, pytestCheckHook
+, pytest-mock
+, pytest-benchmark
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "guessit";
-  version = "3.0.4";
+  version = "3.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h9f4car26mkck360dxaf9ccdff3inbvpqyz4la2w3zjsz03x01p";
+    sha256 = "731e96e6a1f3b065d05accc8c19f35d4485d880b77ab8dc4b262cc353df294f7";
   };
 
-  # Tests require more packages.
-  doCheck = false;
-  buildInputs = [ pytestrunner ];
   propagatedBuildInputs = [
-    dateutil babelfish rebulk
-  ];
+    rebulk
+    babelfish
+    python-dateutil
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  checkInputs = [ pytestCheckHook pytest-mock pytest-benchmark pyyaml ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
+  pythonImportsCheck = [ "guessit" ];
 
   meta = {
-    homepage = https://pypi.python.org/pypi/guessit;
-    license = lib.licenses.lgpl3;
-    description = "A library for guessing information from video files";
+    homepage = "https://doc.guessit.io/";
+    description = "A Python library that extracts as much information as possible from a video filename";
+    changelog = "https://github.com/guessit-io/guessit/raw/v${version}/CHANGELOG.md";
+    license = lib.licenses.lgpl3Only;
   };
 }

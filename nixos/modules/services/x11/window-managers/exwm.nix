@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
-    (require 'exwm)
+    ${cfg.loadScript}
     ${optionalString cfg.enableDefaultConfig ''
       (require 'exwm-config)
       (exwm-config-default)
@@ -18,25 +18,40 @@ in
 {
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption "exwm";
+      enable = mkEnableOption (lib.mdDoc "exwm");
+      loadScript = mkOption {
+        default = "(require 'exwm)";
+        type = types.lines;
+        example = ''
+          (require 'exwm)
+          (exwm-enable)
+        '';
+        description = lib.mdDoc ''
+          Emacs lisp code to be run after loading the user's init
+          file. If enableDefaultConfig is true, this will be run
+          before loading the default config.
+        '';
+      };
       enableDefaultConfig = mkOption {
         default = true;
         type = lib.types.bool;
-        description = "Enable an uncustomised exwm configuration.";
+        description = lib.mdDoc "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
-        default = self: [];
-        example = literalExample ''
+        type = types.functionTo (types.listOf types.package);
+        default = epkgs: [];
+        defaultText = literalExpression "epkgs: []";
+        example = literalExpression ''
           epkgs: [
             epkgs.emms
             epkgs.magit
             epkgs.proofgeneral
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
-          <varname>emacsPackages</varname> as the sole argument.
+          {var}`emacs.pkgs` as the sole argument.
         '';
       };
     };

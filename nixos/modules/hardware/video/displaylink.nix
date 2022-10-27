@@ -19,6 +19,21 @@ in
   config = mkIf enabled {
 
     boot.extraModulePackages = [ evdi ];
+    boot.kernelModules = [ "evdi" ];
+
+    environment.etc."X11/xorg.conf.d/40-displaylink.conf".text = ''
+      Section "OutputClass"
+        Identifier  "DisplayLink"
+        MatchDriver "evdi"
+        Driver      "modesetting"
+        Option      "AccelMethod" "none"
+      EndSection
+    '';
+
+    # make the device available
+    services.xserver.displayManager.sessionCommands = ''
+      ${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 1 0
+    '';
 
     # Those are taken from displaylink-installer.sh and from Arch Linux AUR package.
 
@@ -47,18 +62,13 @@ in
       description = "DisplayLink Manager Service";
       after = [ "display-manager.service" ];
       conflicts = [ "getty@tty7.service" ];
-      path = [ pkgs.kmod ];
 
       serviceConfig = {
         ExecStart = "${displaylink}/bin/DisplayLinkManager";
         Restart = "always";
         RestartSec = 5;
+        LogsDirectory = "displaylink";
       };
-
-      preStart = ''
-        mkdir -p /var/log/displaylink
-        modprobe evdi
-      '';
     };
 
   };

@@ -1,4 +1,5 @@
-{ stdenv, makeWrapper, bash, curl, darwin
+{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
+, autoPatchelfHook, gcc
 , version
 , src
 , platform
@@ -6,7 +7,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionalString;
+  inherit (lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
@@ -19,20 +20,22 @@ in
 
 rec {
   rustc = stdenv.mkDerivation {
-    name = "rustc-${versionType}-${version}";
+    pname = "rustc-${versionType}";
 
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+    meta = with lib; {
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
+    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+      ++ lib.optionals (!stdenv.isDarwin) [ gcc.cc.lib zlib ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -42,18 +45,6 @@ rec {
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustdoc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
-
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
       # the wrong libraries in a bootstrap-build causing failures that
@@ -61,24 +52,33 @@ rec {
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
 
+    # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
+    # binaries. The lib.rmeta object inside the ar archive should contain an
+    # .rmeta section, but it is removed. Luckily, this doesn't appear to be an
+    # issue for Rust builds produced by Nix.
+    dontStrip = stdenv.isDarwin;
+
     setupHooks = ./setup-hook.sh;
   };
 
   cargo = stdenv.mkDerivation {
-    name = "cargo-${versionType}-${version}";
+    pname = "cargo-${versionType}";
 
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+    meta = with lib; {
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    buildInputs = [ bash ]
+      ++ lib.optional (!stdenv.isDarwin) gcc.cc.lib
+      ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -88,12 +88,6 @@ rec {
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
-
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"

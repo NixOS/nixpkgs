@@ -1,28 +1,31 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitLab, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.0.0";
+  version = "3.2.13";
 
-  meta = {
-    description = "Implements double cryptographic ratchet and Megolm ratchet";
-    license = stdenv.lib.licenses.asl20;
-    homepage = https://matrix.org/git/olm/about;
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
+  src = fetchFromGitLab {
+    domain = "gitlab.matrix.org";
+    owner = "matrix-org";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-s1OleVRvJRFvN9MwXT7lAjDjyHkbIkbpl/F8P/91oaU=";
   };
 
-  src = fetchurl {
-    url = "https://matrix.org/git/olm/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "1iivxjk458v9lhqgzp0c4k5azligsh9k3rk6irf9ssj29wzgjm2c";
-  };
+  nativeBuildInputs = [ cmake ];
 
   doCheck = true;
-  checkTarget = "test";
 
-  # requires optimisation but memory operations are compiled with -O0
-  hardeningDisable = ["fortify"];
+  postPatch = ''
+    substituteInPlace olm.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 
-  makeFlags = if stdenv.cc.isClang then [ "CC=cc" ] else null;
-
-  installFlags = "PREFIX=$(out)";
+  meta = with lib; {
+    description = "Implements double cryptographic ratchet and Megolm ratchet";
+    homepage = "https://gitlab.matrix.org/matrix-org/olm";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ tilpner oxzi ];
+  };
 }

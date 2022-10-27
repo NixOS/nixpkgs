@@ -1,34 +1,34 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
+, pythonOlder
 , importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "0.12.0";
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0825a152ac059776623854c1543d65a4ad408eb3d33ee114dff91e57ec6ae6fc";
+    sha256 = "4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159";
   };
 
-  checkPhase = ''
-    py.test
-  '';
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;
-
-  nativeBuildInputs = [ setuptools_scm ];
-
-  propagatedBuildInputs = [ importlib-metadata ];
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://github.com/pytest-dev/pluggy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

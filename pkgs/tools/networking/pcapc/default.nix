@@ -1,29 +1,24 @@
-{ stdenv, fetchFromGitHub, libpcap, cmake }:
+{ lib, stdenv, fetchFromGitLab, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "pcapc";
-  version = "1.0.0";
+  version = "1.0.1";
 
-  src = fetchFromGitHub {
-    sha256 = "137crs0bb7kh9a8p9g168yj2jrp0h3j3073nwh31jy4nk0g5hlfp";
+  src = fetchFromGitLab {
+    owner = "post-factum";
+    repo = pname;
     rev = "v${version}";
-    repo = "pcapc";
-    owner = "pfactum";
+    hash = "sha256-oDg9OSvi9aQsZ2SQm02NKAcppE0w5SGZaI13gdp7gv4=";
   };
 
-  nativeBuildInputs = [ cmake ];
   buildInputs = [ libpcap ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  enableParallelBuilding = true;
-
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pfactum/pcapc;
+  meta = with lib; {
+    homepage = "https://gitlab.com/post-factum/pcapc";
     description = "Compile libpcap filter expressions into BPF opcodes";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
   };
 }

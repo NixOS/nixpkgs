@@ -1,25 +1,28 @@
 { lib
-, python
 , buildPythonPackage
 , bootstrapped-pip
-, fetchPypi
+, fetchFromGitHub
 , mock
 , scripttest
 , virtualenv
 , pretend
 , pytest
-, setuptools
-, wheel
+
+# coupled downsteam dependencies
+, pip-tools
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.2.3";
+  version = "22.2.2";
   format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-SLjmxFUFmvgy8E8kxfc6lxxCRo+GN4L77pqkWkRR8aE=";
+    name = "${pname}-${version}-source";
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
@@ -32,10 +35,12 @@ buildPythonPackage rec {
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
 
+  passthru.tests = { inherit pip-tools; };
+
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
-    license = lib.licenses.mit;
-    homepage = https://pip.pypa.io/;
+    license = with lib.licenses; [ mit ];
+    homepage = "https://pip.pypa.io/";
     priority = 10;
   };
 }

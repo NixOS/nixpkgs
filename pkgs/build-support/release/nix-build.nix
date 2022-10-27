@@ -12,7 +12,7 @@
 , doCoverityAnalysis ? false
 , lcovFilter ? []
 , lcovExtraTraceFiles ? []
-, src, stdenv
+, src, lib, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , failureHook ? null
 , prePhases ? []
@@ -69,7 +69,7 @@ stdenv.mkDerivation (
         fi
       '';
 
-    failureHook = (stdenv.lib.optionalString (failureHook != null) failureHook) +
+    failureHook = (lib.optionalString (failureHook != null) failureHook) +
     ''
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
@@ -83,9 +83,9 @@ stdenv.mkDerivation (
     '';
   }
 
-  // args //
+  // removeAttrs args [ "lib" ] # Propagating lib causes the evaluation to fail, because lib is a function that can't be converted to a string
 
-  {
+  // {
     name = name + (if src ? version then "-" + src.version else "");
 
     postHook = ''
@@ -136,10 +136,10 @@ stdenv.mkDerivation (
 
     buildInputs =
       buildInputs ++
-      (stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport) ++
-      (stdenv.lib.optional doClangAnalysis args.clang-analyzer) ++
-      (stdenv.lib.optional doCoverityAnalysis args.cov-build) ++
-      (stdenv.lib.optional doCoverityAnalysis args.xz);
+      (lib.optional doCoverageAnalysis args.makeGCOVReport) ++
+      (lib.optional doClangAnalysis args.clang-analyzer) ++
+      (lib.optional doCoverityAnalysis args.cov-build) ++
+      (lib.optional doCoverityAnalysis args.xz);
 
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 

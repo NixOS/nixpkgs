@@ -1,20 +1,36 @@
-{ stdenv, fetchurl, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, fetchpatch, ncurses ? null, perl ? null, lib }:
 
 stdenv.mkDerivation rec {
-  name = "liboping-1.10.0";
+  pname = "liboping";
+  version = "1.10.0";
 
   src = fetchurl {
-    url = "http://verplant.org/liboping/files/${name}.tar.bz2";
+    url = "https://noping.cc/files/${pname}-${version}.tar.bz2";
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
+  patches = [
+    # Add support for ncurses-6.3. A backport of patch pending upstream
+    # inclusion: https://github.com/octo/liboping/pull/61
+    ./ncurses-6.3.patch
+
+    # Pull pending fix for format arguments mismatch:
+    #  https://github.com/octo/liboping/pull/60
+    (fetchpatch {
+      name = "format-args.patch";
+      url = "https://github.com/octo/liboping/commit/7a50e33f2a686564aa43e4920141e6f64e042df1.patch";
+      sha256 = "118fl3k84m3iqwfp49g5qil4lw1gcznzmyxnfna0h7za2nm50cxw";
+    })
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString
+    stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];
 
-  configureFlags = stdenv.lib.optional (perl == null) "--with-perl-bindings=no";
+  configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library to generate ICMP echo requests (a.k.a. ping packets)";
     longDescription = ''
       liboping is a C library to generate ICMP echo requests, better known as
@@ -23,7 +39,7 @@ stdenv.mkDerivation rec {
       Included is a sample application, called oping, which demonstrates the
       library's abilities.
     '';
-    homepage = http://noping.cc/;
+    homepage = "http://noping.cc/";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

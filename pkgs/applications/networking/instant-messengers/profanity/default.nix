@@ -1,61 +1,85 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
-, glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, stabber, expat, libmesode
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoconf-archive
-
-, autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
-, notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
-, traySupport ? true,           gnome2 ? null
-, pgpSupport ? true,            gpgme ? null
-, pythonPluginSupport ? true,   python ? null
-, omemoSupport ? true,          libsignal-protocol-c ? null, libgcrypt ? null
+, autoreconfHook
+, cmocka
+, curl
+, expat
+, expect
+, glib
+, glibcLocales
+, libstrophe
+, libmicrohttpd
+, libotr
+, libuuid
+, ncurses
+, openssl
+, pkg-config
+, readline
+, sqlite
+, autoAwaySupport ? true,       libXScrnSaver, libX11
+, notifySupport ? true,         libnotify, gdk-pixbuf
+, omemoSupport ? true,          libsignal-protocol-c, libgcrypt
+, pgpSupport ? true,            gpgme
+, pythonPluginSupport ? true,   python3
+, traySupport ? true,           gtk3
 }:
-
-assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;
-assert notifySupport       -> libnotify != null && gdk-pixbuf != null;
-assert traySupport         -> gnome2 != null;
-assert pgpSupport          -> gpgme != null;
-assert pythonPluginSupport -> python != null;
-assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.7.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "15adg7ndjkzy04lizjmnvv0pf0snhzp6a8x74mndcm0zma0dia0z";
+    hash = "sha256-A9ZgHliLb4v/3W5tm5zD0WN8mRmxLE/MUSTBXGvBCCM=";
   };
 
-  patches = [ ./patches/packages-osx.patch ./patches/undefined-macros.patch ];
+  patches = [
+    ./patches/packages-osx.patch
+  ];
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive glibcLocales pkgconfig
+    autoconf-archive
+    autoreconfHook
+    glibcLocales
+    pkg-config
   ];
 
   buildInputs = [
-    expect readline libuuid glib openssl expat ncurses libotr
-    curl libmesode cmocka libmicrohttpd stabber
-  ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
-    ++ optionals notifySupport       [ libnotify gdk-pixbuf ]
-    ++ optionals traySupport         [ gnome2.gtk ]
-    ++ optionals pgpSupport          [ gpgme ]
-    ++ optionals pythonPluginSupport [ python ]
-    ++ optionals omemoSupport        [ libsignal-protocol-c libgcrypt ];
+    cmocka
+    curl
+    expat
+    expect
+    glib
+    libstrophe
+    libmicrohttpd
+    libotr
+    libuuid
+    ncurses
+    openssl
+    readline
+    sqlite
+  ] ++ lib.optionals autoAwaySupport     [ libXScrnSaver libX11 ]
+    ++ lib.optionals notifySupport       [ libnotify gdk-pixbuf ]
+    ++ lib.optionals omemoSupport        [ libsignal-protocol-c libgcrypt ]
+    ++ lib.optionals pgpSupport          [ gpgme ]
+    ++ lib.optionals pythonPluginSupport [ python3 ]
+    ++ lib.optionals traySupport         [ gtk3 ];
 
   # Enable feature flags, so that build fail if libs are missing
-  configureFlags = [ "--enable-c-plugins" "--enable-otr" ]
-    ++ optionals notifySupport       [ "--enable-notifications" ]
-    ++ optionals traySupport         [ "--enable-icons" ]
-    ++ optionals pgpSupport          [ "--enable-pgp" ]
-    ++ optionals pythonPluginSupport [ "--enable-python-plugins" ]
-    ++ optionals omemoSupport        [ "--enable-omemo" ];
+  configureFlags = [
+    "--enable-c-plugins"
+    "--enable-otr"
+  ] ++ lib.optionals notifySupport       [ "--enable-notifications" ]
+    ++ lib.optionals traySupport         [ "--enable-icons-and-clipboard" ]
+    ++ lib.optionals pgpSupport          [ "--enable-pgp" ]
+    ++ lib.optionals pythonPluginSupport [ "--enable-python-plugins" ]
+    ++ lib.optionals omemoSupport        [ "--enable-omemo" ];
 
   preAutoreconf = ''
     mkdir m4
@@ -65,16 +89,15 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "en_US.utf8";
 
-  meta = {
+  meta =  with lib; {
+    homepage = "http://www.profanity.im/";
     description = "A console based XMPP client";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    homepage = http://www.profanity.im/;
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
-    updateWalker = true;
+    platforms = platforms.unix;
   };
 }

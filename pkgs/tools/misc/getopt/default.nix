@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "getopt";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
-    homepage = http://frodo.looijaard.name/project/getopt;
+    platforms = lib.platforms.unix;
+    homepage = "http://frodo.looijaard.name/project/getopt";
     description = "Parses command-line arguments from shell scripts";
   };
 }

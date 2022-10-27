@@ -1,21 +1,26 @@
-{ stdenv, fetchurl, libao }:
+{ lib, stdenv, fetchgit, libao, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+let
   pname = "aldo";
-  version = "0.7.7";
+  version = "0.7.8";
+in stdenv.mkDerivation {
+  inherit pname version;
 
-  src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "14lzgldqzbbzydsy1cai3wln3hpyj1yhj8ji3wygyzr616fq9f7i";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/${pname}.git";
+    rev = "v${version}";
+    sha256 = "0swvdq0pw1msy40qkpn1ar9kacqjyrw2azvf2fy38y0svyac8z2i";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ libao ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Morse code training program";
-    homepage = http://aldo.nongnu.org/;
+    homepage = "http://aldo.nongnu.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

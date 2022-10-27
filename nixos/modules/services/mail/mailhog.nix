@@ -4,17 +4,59 @@ with lib;
 
 let
   cfg = config.services.mailhog;
-in {
+
+  args = lib.concatStringsSep " " (
+    [
+      "-api-bind-addr :${toString cfg.apiPort}"
+      "-smtp-bind-addr :${toString cfg.smtpPort}"
+      "-ui-bind-addr :${toString cfg.uiPort}"
+      "-storage ${cfg.storage}"
+    ] ++ lib.optional (cfg.storage == "maildir")
+      "-maildir-path $STATE_DIRECTORY"
+    ++ cfg.extraArgs
+  );
+
+in
+{
   ###### interface
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "mailhog" "user" ] "")
+  ];
 
   options = {
 
     services.mailhog = {
-      enable = mkEnableOption "MailHog";
-      user = mkOption {
-        type = types.str;
-        default = "mailhog";
-        description = "User account under which mailhog runs.";
+      enable = mkEnableOption (lib.mdDoc "MailHog");
+
+      storage = mkOption {
+        type = types.enum [ "maildir" "memory" ];
+        default = "memory";
+        description = lib.mdDoc "Store mails on disk or in memory.";
+      };
+
+      apiPort = mkOption {
+        type = types.port;
+        default = 8025;
+        description = lib.mdDoc "Port on which the API endpoint will listen.";
+      };
+
+      smtpPort = mkOption {
+        type = types.port;
+        default = 1025;
+        description = lib.mdDoc "Port on which the SMTP endpoint will listen.";
+      };
+
+      uiPort = mkOption {
+        type = types.port;
+        default = 8025;
+        description = lib.mdDoc "Port on which the HTTP UI will listen.";
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = lib.mdDoc "List of additional arguments to pass to the MailHog process.";
       };
     };
   };
@@ -24,19 +66,16 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.users.mailhog = {
-      name = cfg.user;
-      description = "MailHog service user";
-    };
-
     systemd.services.mailhog = {
-      description = "MailHog service";
+      description = "MailHog - Web and API based SMTP testing";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.mailhog}/bin/MailHog";
-        User = cfg.user;
+        Type = "exec";
+        ExecStart = "${pkgs.mailhog}/bin/MailHog ${args}";
+        DynamicUser = true;
+        Restart = "on-failure";
+        StateDirectory = "mailhog";
       };
     };
   };

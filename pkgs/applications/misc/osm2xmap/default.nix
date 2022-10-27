@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost } :
+{ lib, stdenv, fetchFromGitHub, libroxml, proj_7, libyamlcpp, boost } :
 
 stdenv.mkDerivation rec {
   pname = "osm2xmap";
@@ -12,25 +12,22 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [
-    "GIT_VERSION=$(version)"
+    "GIT_VERSION=${version}"
     "GIT_TIMESTAMP="
-    "SHAREDIR=$(out)/share/"
-    "INSTALL_BINDIR=$(out)/bin"
-    "INSTALL_MANDIR=$(out)/share/man/man1"
-    "INSTALL_SHAREDIR=$(out)/share/"
+    "SHAREDIR=${placeholder "out"}/share/osm2xmap/"
+    "INSTALL_BINDIR=${placeholder "out"}/bin"
+    "INSTALL_MANDIR=${placeholder "out"}/share/man/man1"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
-  installFlags = [ "DESTDIR=$(out)" ];
+  buildInputs = [ libroxml proj_7 libyamlcpp boost ];
 
-  buildInputs = [ libroxml proj libyamlcpp boost ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sembruk/osm2xmap";
-    description = "Converter from OpenStreetMap data format to OpenOrienteering Mapper format.";
+    description = "Converter from OpenStreetMap data format to OpenOrienteering Mapper format";
     license = licenses.gpl3;
     maintainers = [ maintainers.mpickering ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

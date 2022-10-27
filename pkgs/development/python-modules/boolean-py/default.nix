@@ -1,21 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "boolean.py";
-  version = "3.6";
+  pname = "boolean-py";
+  version = "4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bastikr";
     repo = "boolean.py";
     rev = "v${version}";
-    sha256 = "1wc89y73va58cj7dsx6c199zpxsy9q53dsffsdj6zmc90inqz6qs";
+    hash = "sha256-i6aNzGDhZip9YHXLiuh9crGm2qT2toBU2xze4PDLleg=";
   };
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "boolean"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/bastikr/boolean.py";
     description = "Implements boolean algebra in one module";
+    homepage = "https://github.com/bastikr/boolean.py";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
-
 }

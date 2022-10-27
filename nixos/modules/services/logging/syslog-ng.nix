@@ -25,6 +25,10 @@ let
   ];
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "syslog-ng" "serviceName" ] "")
+    (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ] "")
+  ];
 
   options = {
 
@@ -32,35 +36,32 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the syslog-ng daemon.
         '';
       };
       package = mkOption {
         type = types.package;
         default = pkgs.syslogng;
-        defaultText = "pkgs.syslogng";
-        description = ''
+        defaultText = literalExpression "pkgs.syslogng";
+        description = lib.mdDoc ''
           The package providing syslog-ng binaries.
         '';
       };
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
-          [ "''${pkgs.syslogng_incubator}/lib/syslog-ng" ]
-        '';
-        description = ''
+        description = lib.mdDoc ''
           A list of paths that should be included in syslog-ng's
-          <literal>--module-path</literal> option. They should usually
-          end in <literal>/lib/syslog-ng</literal>
+          `--module-path` option. They should usually
+          end in `/lib/syslog-ng`
         '';
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Configuration added to the end of <literal>syslog-ng.conf</literal>.
+        description = lib.mdDoc ''
+          Configuration added to the end of `syslog-ng.conf`.
         '';
       };
       configHeader = mkOption {
@@ -69,7 +70,7 @@ in {
           @version: 3.6
           @include "scl.conf"
         '';
-        description = ''
+        description = lib.mdDoc ''
           The very first lines of the configuration file. Should usually contain
           the syslog-ng version header.
         '';

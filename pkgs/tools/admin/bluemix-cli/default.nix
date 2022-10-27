@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -m755 -D -t $out/bin/cfcli bin/cfcli/cf
     ln -sv $out/bin/ibmcloud $out/bin/bx
     ln -sv $out/bin/ibmcloud $out/bin/bluemix
-    install -D -t "$out/etc/bash_completion.d" bx/bash_autocomplete
+    install -D -t "$out/share/bash-completion/completions" bx/bash_autocomplete
     install -D -t "$out/share/zsh/site-functions" bx/zsh_autocomplete
   '';
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     description  = "Administration CLI for IBM BlueMix";
     homepage     = "https://console.bluemix.net/docs/cli/index.html";
     downloadPage = "https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html#download_install";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license      = licenses.unfree;
     maintainers  = [ maintainers.tazjin maintainers.jensbin ];
     platforms    = [ "x86_64-linux" "i686-linux" ];

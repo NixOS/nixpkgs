@@ -38,39 +38,41 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to run the dnscache caching dns server.";
+        description = lib.mdDoc "Whether to run the dnscache caching dns server.";
       };
 
       ip = mkOption {
         default = "0.0.0.0";
         type = types.str;
-        description = "IP address on which to listen for connections.";
+        description = lib.mdDoc "IP address on which to listen for connections.";
       };
 
       clientIps = mkOption {
         default = [ "127.0.0.1" ];
         type = types.listOf types.str;
-        description = "Client IP addresses (or prefixes) from which to accept connections.";
+        description = lib.mdDoc "Client IP addresses (or prefixes) from which to accept connections.";
         example = ["192.168" "172.23.75.82"];
       };
 
       domainServers = mkOption {
         default = { };
         type = types.attrsOf (types.listOf types.str);
-        description = ''
+        description = lib.mdDoc ''
           Table of {hostname: server} pairs to use as authoritative servers for hosts (and subhosts).
           If entry for @ is not specified predefined list of root servers is used.
         '';
-        example = {
-          "@" = ["8.8.8.8" "8.8.4.4"];
-          "example.com" = ["192.168.100.100"];
-        };
+        example = literalExpression ''
+          {
+            "@" = ["8.8.8.8" "8.8.4.4"];
+            "example.com" = ["192.168.100.100"];
+          }
+        '';
       };
 
       forwardOnly = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to treat root servers (for @) as caching
           servers, requesting addresses the same way a client does. This is
           needed if you want to use e.g. Google DNS as your upstream DNS.
@@ -84,7 +86,7 @@ in {
 
   config = mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
-    users.users.dnscache = {};
+    users.users.dnscache.isSystemUser = true;
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";

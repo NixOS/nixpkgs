@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "cutee";
@@ -9,16 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "18bzvhzx8k24mpcim5669n3wg9hd0sfsxj8zjpbr24hywrlppgc2";
   };
 
-  buildFlags = "cutee";
+  buildFlags = [ "cutee" ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp cutee $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ Unit Testing Easy Environment";
-    homepage    = http://www.codesink.org/cutee_unit_testing.html;
+    homepage    = "http://www.codesink.org/cutee_unit_testing.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

@@ -1,17 +1,17 @@
 { stdenv
+, lib
 , fetchFromGitLab
 , fetchpatch
+, nix-update-script
 , meson
 , ninja
 , gettext
-, cargo
-, rustc
 , python3
 , rustPlatform
-, pkgconfig
-, gtksourceview
+, pkg-config
+, gtksourceview4
 , glib
-, libhandy
+, libhandy_0
 , gtk3
 , dbus
 , openssl
@@ -23,29 +23,47 @@
 , wrapGAppsHook
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "0clwsmd6h759bzlazfq5ig56dbx7npx3h43yspk87j1rm2dp1177";
+    hash = "sha256-To6lr2I+JVrxvuK++2gLWntFGnEBm+B6KTRuOvjASek=";
   };
 
-  cargoSha256 = "1hwjajkphl5439dymglgj3h92hxgbf7xpipzrga7ga8m10nx1dhl";
+  patches = [
+    # Fix build with meson 0.61
+    # fractal-gtk/res/meson.build:5:0: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/fractal/-/commit/6fa1a23596d65d94aa889efe725174e6cd2903f0.patch";
+      hash = "sha256-3OzU9XL2V1VNOkvL1j677K3HNoBqPMQudQDmiDxYfAc=";
+    })
+
+    # This is in fractal v4.4.1b1+ so can be removed when fractal is updated.
+    ./update-socket2-for-rust-1.64.diff
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}";
+    hash = "sha256-d99zSaxp22YyLP3Wckgcm7wlz7nFrLJDHq2xPJmZFf0=";
+  };
 
   nativeBuildInputs = [
-    cargo
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
-    rustc
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
@@ -57,20 +75,16 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-editing-services
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override {
+      gtkSupport = true;
+    })
     gst_all_1.gstreamer
+    gst_all_1.gst-devtools
     gtk3
-    gtksourceview
-    libhandy
+    gtksourceview4
+    libhandy_0
     openssl
     sqlite
-  ];
-
-  cargoPatches = [
-    # https://gitlab.gnome.org/GNOME/fractal/merge_requests/446
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/commit/2778acdc6c50bc6f034513029b66b0b092bc4c38.patch";
-      sha256 = "08v17xmbwrjw688ps4hsnd60d5fm26xj72an3zf6yszha2b97j6y";
-    })
   ];
 
   postPatch = ''
@@ -78,17 +92,16 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
-  checkPhase = null;
-  installPhase = null;
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix group messaging app";
-    homepage = https://gitlab.gnome.org/GNOME/fractal;
+    homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill worldofpeace ];
+    maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
   };
 }
-

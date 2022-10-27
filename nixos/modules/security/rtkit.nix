@@ -12,7 +12,7 @@ with lib;
     security.rtkit.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the RealtimeKit system service, which hands
         out realtime scheduling priority to user processes on
         demand. For example, the PulseAudio server uses this to
@@ -34,11 +34,13 @@ with lib;
 
     services.dbus.packages = [ pkgs.rtkit ];
 
-    users.users = singleton
-      { name = "rtkit";
-        uid = config.ids.uids.rtkit;
+    users.users.rtkit =
+      {
+        isSystemUser = true;
+        group = "rtkit";
         description = "RealtimeKit daemon";
       };
+    users.groups.rtkit = {};
 
   };
 

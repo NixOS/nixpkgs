@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Logbook";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mvsig6sk4dywpw5naah1npf6h621qzhg0sd427j5znr06a2ksqs";
+    sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
   };
 
   checkInputs = [ pytest ] ++ lib.optionals (!isPy3k) [ mock ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    homepage = https://pythonhosted.org/Logbook/;
+    homepage = "https://pythonhosted.org/Logbook/";
     description = "A logging replacement for Python";
     license = lib.licenses.bsd3;
   };

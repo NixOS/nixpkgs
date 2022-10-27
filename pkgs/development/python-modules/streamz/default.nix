@@ -1,53 +1,83 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
-, tornado
-, toolz
-, zict
-, six
-, pytest_4
-, networkx
-, distributed
 , confluent-kafka
+, distributed
+, fetchpatch
+, fetchPypi
+, flaky
 , graphviz
+, networkx
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 , requests
+, six
+, toolz
+, tornado
+, zict
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.5.2";
+  version = "0.6.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "127rpdjgkcyjifmkqbhmqfbzlgi32n54rybrdxja610qr906y40c";
+    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
 
   propagatedBuildInputs = [
-    tornado
-    toolz
-    zict
+    networkx
     six
+    toolz
+    tornado
+    zict
   ];
 
   checkInputs = [
     confluent-kafka
     distributed
+    flaky
     graphviz
-    networkx
-    pytest_4
+    pytest-asyncio
+    pytestCheckHook
     requests
   ];
 
-  # Disable test_tcp_async because fails on sandbox build
-  checkPhase = ''
-    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
-      --deselect=streamz/tests/test_sources.py::test_tcp
-  '';
+  pythonImportsCheck = [
+    "streamz"
+  ];
+
+  disabledTests = [
+    # Error with distutils version: fixture 'cleanup' not found
+    "test_separate_thread_without_time"
+    "test_await_syntax"
+    "test_partition_then_scatter_sync"
+    "test_sync"
+    "test_sync_2"
+    # Test fail in the sandbox
+    "test_tcp_async"
+    "test_tcp"
+    "test_partition_timeout"
+    # Tests are flaky
+    "test_from_iterable"
+    "test_buffer"
+  ];
+
+  disabledTestPaths = [
+    # Disable kafka tests
+    "streamz/tests/test_kafka.py"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pipelines to manage continuous streams of data";
-    homepage = "https://github.com/mrocklin/streamz";
+    homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

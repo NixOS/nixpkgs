@@ -1,37 +1,39 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkgconfig
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib
-, numactl, perl, cctools, CoreServices, developer_cmds
+{ lib, stdenv, fetchurl, bison, cmake, pkg-config
+, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
+, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
 }:
 
 let
 self = stdenv.mkDerivation rec {
-  name = "mysql-8.0.17";
+  pname = "mysql";
+  version = "8.0.31";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${name}.tar.gz";
-    sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-Z7uMunWyjpXH95SFY/AfuEUo/LsaNduoOdTORP4Bm6o=";
   };
 
-  patches = [
-    ./abi-check.patch
-    ./libutils.patch
-  ];
+  nativeBuildInputs = [ bison cmake pkg-config ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
-  nativeBuildInputs = [ bison cmake pkgconfig ];
+  ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
+  postPatch = ''
+    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+  '';
 
   buildInputs = [
-    boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    zstd libfido2
   ] ++ lib.optionals stdenv.isLinux [
-    numactl
+    numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds
+    cctools CoreServices developer_cmds DarwinTools
   ];
 
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12" # For std::shared_timed_mutex.
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.
     "-DWITH_SYSTEM_LIBS=ON"
@@ -61,6 +63,7 @@ self = stdenv.mkDerivation rec {
     connector-c = self;
     server = self;
     mysqlVersion = "8.0";
+    tests = nixosTests.mysql.mysql80;
   };
 
   meta = with lib; {

@@ -1,19 +1,30 @@
-{ stdenv
-, coreutils
+{ lib
 , patchelf
 , requireFile
-, alsaLib
+, stdenv
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
+, version
+# dependencies
+, alsa-lib
+, coreutils
+, cudaPackages
 , fontconfig
 , freetype
 , gcc
 , glib
+, libuuid
+, libxml2
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xorg
-, libxml2
-, libuuid
+# options
+, cudaSupport
 }:
 
 let
@@ -24,24 +35,14 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  version = "10.0.2";
+  inherit meta src version;
 
   pname = "mathematica";
-
-  src = requireFile rec {
-    name = "Mathematica_${version}_LINUX.sh";
-    message = '' 
-      This nix expression requires that ${name} is
-      already part of the store. Find the file on your Mathematica CD
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "1d2yaiaikzcacjamlw64g3xkk81m3pb4vz4an12cv8nb7kb20x9l";
-  };
 
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     fontconfig
     freetype
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     gcc.libc
     glib
     ncurses
-    opencv
+    opencv2
     openssl
     unixODBC
     libxml2
@@ -69,9 +70,9 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -104,7 +105,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \
@@ -127,10 +128,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
-    license = stdenv.lib.licenses.unfree;
-  };
 }

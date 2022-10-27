@@ -1,6 +1,6 @@
 # This test runs simple etcd cluster
 
-import ./make-test.nix ({ pkgs, ... } : let
+import ./make-test-python.nix ({ pkgs, ... } : let
 
   runWithOpenSSL = file: cmd: pkgs.runCommand file {
     buildInputs = [ pkgs.openssl ];
@@ -97,7 +97,7 @@ import ./make-test.nix ({ pkgs, ... } : let
 in {
   name = "etcd";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ offline ];
   };
 
@@ -129,29 +129,26 @@ in {
   };
 
   testScript = ''
-    subtest "should start etcd cluster", sub {
-      $node1->start();
-      $node2->start();
-      $node1->waitForUnit("etcd.service");
-      $node2->waitForUnit("etcd.service");
-      $node2->waitUntilSucceeds("etcdctl cluster-health");
-      $node1->succeed("etcdctl set /foo/bar 'Hello world'");
-      $node2->succeed("etcdctl get /foo/bar | grep 'Hello world'");
-    };
+    with subtest("should start etcd cluster"):
+        node1.start()
+        node2.start()
+        node1.wait_for_unit("etcd.service")
+        node2.wait_for_unit("etcd.service")
+        node2.wait_until_succeeds("etcdctl cluster-health")
+        node1.succeed("etcdctl set /foo/bar 'Hello world'")
+        node2.succeed("etcdctl get /foo/bar | grep 'Hello world'")
 
-    subtest "should add another member", sub {
-      $node1->waitUntilSucceeds("etcdctl member add node3 https://node3:2380");
-      $node3->start();
-      $node3->waitForUnit("etcd.service");
-      $node3->waitUntilSucceeds("etcdctl member list | grep 'node3'");
-      $node3->succeed("etcdctl cluster-health");
-    };
+    with subtest("should add another member"):
+        node1.wait_until_succeeds("etcdctl member add node3 https://node3:2380")
+        node3.start()
+        node3.wait_for_unit("etcd.service")
+        node3.wait_until_succeeds("etcdctl member list | grep 'node3'")
+        node3.succeed("etcdctl cluster-health")
 
-    subtest "should survive member crash", sub {
-      $node3->crash;
-      $node1->succeed("etcdctl cluster-health");
-      $node1->succeed("etcdctl set /foo/bar 'Hello degraded world'");
-      $node1->succeed("etcdctl get /foo/bar | grep 'Hello degraded world'");
-    };
+    with subtest("should survive member crash"):
+        node3.crash()
+        node1.succeed("etcdctl cluster-health")
+        node1.succeed("etcdctl set /foo/bar 'Hello degraded world'")
+        node1.succeed("etcdctl get /foo/bar | grep 'Hello degraded world'")
   '';
 })

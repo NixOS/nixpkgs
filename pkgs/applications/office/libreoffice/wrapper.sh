@@ -2,7 +2,7 @@
 export JAVA_HOME="${JAVA_HOME:-@jdk@}"
 #export SAL_USE_VCLPLUGIN="${SAL_USE_VCLPLUGIN:-gen}"
 
-if uname | grep Linux > /dev/null && 
+if "@coreutils@"/bin/uname | "@gnugrep@"/bin/grep Linux > /dev/null &&
        ! ( test -n "$DBUS_SESSION_BUS_ADDRESS" ); then
     dbus_tmp_dir="/run/user/$(id -u)/libreoffice-dbus"
     if ! test -d "$dbus_tmp_dir" && test -d "/run"; then
@@ -14,11 +14,19 @@ if uname | grep Linux > /dev/null &&
     fi
     dbus_socket_dir="$(mktemp -d -p "$dbus_tmp_dir")"
     "@dbus@"/bin/dbus-daemon --nopidfile --nofork --config-file "@dbus@"/share/dbus-1/session.conf --address "unix:path=$dbus_socket_dir/session"  &> /dev/null &
+    dbus_pid=$!
     export DBUS_SESSION_BUS_ADDRESS="unix:path=$dbus_socket_dir/session"
 fi
 
-"@libreoffice@/bin/$(basename "$0")" "$@"
+for PROFILE in $NIX_PROFILES; do
+    HDIR="$PROFILE/share/hunspell"
+    if [ -d "$HDIR" ]; then
+        export DICPATH=$DICPATH''${DICPATH:+:}$HDIR
+    fi
+done
+
+"@libreoffice@/bin/$("@coreutils@"/bin/basename "$0")" "$@"
 code="$?"
 
-test -n "$dbus_socket_dir" && rm -rf "$dbus_socket_dir"
+test -n "$dbus_socket_dir" && { rm -rf "$dbus_socket_dir"; kill $dbus_pid; }
 exit "$code"

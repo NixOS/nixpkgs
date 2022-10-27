@@ -1,26 +1,46 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, six
+, regex
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
   pname = "parsimonious";
+  version = "0.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3add338892d580e0cb3b1a39e4a1b427ff9f687858fdd61097053742391a9f6b";
+    hash = "sha256-goFgDaGA7IrjVCekq097gr/sHj0eUvgMtg6oK5USUBw=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    regex
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "regex>=2022.3.15" "regex"
+  '';
+
+  pythonImportsCheck = [
+    "parsimonious"
+    "parsimonious.grammar"
+    "parsimonious.nodes"
+  ];
+
+  meta = with lib; {
+    description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
-    description = "Fast arbitrary-lookahead parser written in pure Python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

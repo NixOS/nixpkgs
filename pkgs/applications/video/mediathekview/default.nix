@@ -1,30 +1,47 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, zip }:
 
 stdenv.mkDerivation rec {
-  version = "13.2.1";
+  version = "13.9.1";
   pname = "mediathekview";
   src = fetchurl {
-    url = "https://download.mediathekview.de/stabil/MediathekView-${version}.tar.gz";
-    sha256 = "11wg6klviig0h7pprfaygamsgqr7drqra2s4yxgfak6665033l2a";
+    url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
+    sha256 = "4BYKkYhl1YjiAZyfNRdV5KQL+dVkL058uhTG892mXUM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    mkdir -p $out/{lib,bin,share/mediathekview}
+  nativeBuildInputs = [ makeWrapper zip ];
 
-    install -m644 MediathekView.jar $out/
-    install -m644 -t $out/lib lib/*
-    install -m755 bin/flv.sh $out/share/mediathekview
+  installPhase =
+  let
+    libraryPath = lib.strings.makeLibraryPath [ libglvnd libnotify ];
+  in
+  ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib}
+
+    install -m644 MediathekView.jar $out/lib
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-cp '$out/lib/*' -jar $out/MediathekView.jar"
-    '';
+      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
-  meta = with stdenv.lib; {
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView \
+      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
+
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
+      --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
-    homepage = https://mediathekview.de/;
-    license = licenses.gpl3;
+    homepage = "https://mediathekview.de/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ moredread ];
     platforms = platforms.all;
   };

@@ -1,37 +1,34 @@
-{ stdenv, mkDerivation, fetchgit, qtbase, cmake, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
-mkDerivation {
+{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc
+, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config
+, libtraceevent, libtracefs, freefont_ttf
+}:
+
+mkDerivation rec {
   pname = "kernelshark";
-  version = "0.9.8";
+  version = "2.1.1";
 
-  src = fetchgit (import ./src.nix);
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/";
+    rev = "kernelshark-v${version}";
+    sha256 = "sha256-1M35y3EkMHbGkVv93Xwo4zApvy9usIcz1spm5Z+1iUs=";
+  };
 
-  patches = [ ./fix-Makefiles.patch ];
+  outputs = [ "out" ];
 
-  outputs = [ "out" "doc" ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
-  preConfigure = "pushd kernel-shark";
-
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = [ qtbase json_c mesa_glu freeglut pkg-config ];
+  buildInputs = [ qtbase json_c mesa_glu freeglut libtraceevent libtracefs trace-cmd ];
 
   cmakeFlags = [
     "-D_INSTALL_PREFIX=${placeholder "out"}"
-    "-DTRACECMD_BIN_DIR=${trace-cmd}/bin"
-    "-DTRACECMD_INCLUDE_DIR=${trace-cmd.dev}/include"
-    "-DTRACECMD_LIBRARY=${trace-cmd.lib}/lib/libtracecmd.a"
-    "-DTRACEEVENT_LIBRARY=${trace-cmd.lib}/lib/libtraceevent.a"
+    "-D_POLKIT_INSTALL_PREFIX=${placeholder "out"}"
+    "-DPKG_CONGIG_DIR=${placeholder "out"}/lib/pkgconfig"
+    "-DTT_FONT_FILE=${freefont_ttf}/share/fonts/truetype/FreeSans.ttf"
   ];
 
-  preInstall = ''
-    popd
-    make install_gui_docs prefix=$doc
-    pushd kernel-shark/build
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
-    homepage    = http://kernelshark.org/;
+    homepage    = "https://kernelshark.org/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ basvandijk ];

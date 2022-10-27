@@ -1,36 +1,51 @@
-{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file, libintl, hicolor-icon-theme }:
-
-with stdenv.lib;
-
-let
-  version = "1.36";
-in
+{ lib, stdenv
+, fetchurl
+, gtk3
+, which
+, pkg-config
+, intltool
+, file
+, libintl
+, hicolor-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "geany";
-  inherit version;
+  version = "1.38";
+
+  outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://download.geany.org/${pname}-${version}.tar.bz2";
-    sha256 = "0gnm17cr4rf3pmkf0axz4a0fxwnvp55ji0q0lzy88yqbshyxv14i";
+    sha256 = "abff176e4d48bea35ee53037c49c82f90b6d4c23e69aed6e4a5ca8ccd3aad546";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libintl ];
-  buildInputs = [ gtk2 which file hicolor-icon-theme ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    libintl
+    which
+    file
+    hicolor-icon-theme
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+  ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  patchPhase = "patchShebangs .";
-
-  meta = {
+  meta = with lib; {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.
       It was developed to provide a small and fast IDE, which has only a few dependencies from other packages.
       Another goal was to be as independent as possible from a special Desktop Environment like KDE or GNOME.
-      Geany only requires the GTK2 runtime libraries.
+      Geany only requires the GTK runtime libraries.
       Some basic features of Geany:
       - Syntax highlighting
       - Code folding
@@ -45,7 +60,7 @@ stdenv.mkDerivation rec {
       - Simple project management
       - Plugin interface
     '';
-    homepage = https://www.geany.org/;
+    homepage = "https://www.geany.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;

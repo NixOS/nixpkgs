@@ -18,10 +18,15 @@ in
 
     environment.variables =
       { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
-        PAGER = mkDefault "less -R";
+        # note: many programs exec() this directly, so default options for less must not
+        # be specified here; do so in the default value of programs.less.envVariables instead
+        PAGER = mkDefault "less";
         EDITOR = mkDefault "nano";
         XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
+
+    # since we set PAGER to this above, make sure it's installed
+    programs.less.enable = true;
 
     environment.profiles = mkAfter
       [ "/nix/var/nix/profiles/default"
@@ -33,15 +38,16 @@ in
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         KDEDIRS = [ "" ];
-        STRIGI_PLUGIN_PATH = [ "/lib/strigi/" ];
         QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
-        GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
+        GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" "/lib/gtk-4.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
         MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
         LIBEXEC_PATH = [ "/lib/libexec" ];
       };
+
+    environment.pathsToLink = [ "/lib/gtk-2.0" "/lib/gtk-3.0" "/lib/gtk-4.0" ];
 
     environment.extraInit =
       ''

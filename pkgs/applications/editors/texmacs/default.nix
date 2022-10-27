@@ -1,7 +1,13 @@
-{ stdenv, callPackage,
-  fetchurl, guile_1_8, qt4, xmodmap, which, makeWrapper, freetype,
+{ lib, mkDerivation, callPackage, fetchurl,
+  guile_1_8, qtbase, xmodmap, which, freetype,
+  libjpeg,
+  sqlite,
   tex ? null,
   aspell ? null,
+  git ? null,
+  python3 ? null,
+  cmake,
+  pkg-config,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
@@ -10,32 +16,52 @@
 
 let
   pname = "TeXmacs";
-  version = "1.99.2";
+  version = "2.1";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
 in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
-    url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    sha256 = "0l48g9746igiaxw657shm8g3xxk565vzsviajlrxqyljbh6py0fs";
+    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
+    sha256 = "1gl6k1bwrk1y7hjyl4xvlqvmk5crl4jvsk8wrfp7ynbdin6n2i48";
   };
 
-  buildInputs = [ guile_1_8 qt4 makeWrapper ghostscriptX freetype ];
-  NIX_LDFLAGS = [ "-lz" ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    guile_1_8
+    qtbase
+    ghostscriptX
+    freetype
+    libjpeg
+    sqlite
+    git
+    python3
+  ];
+  NIX_LDFLAGS = "-lz";
 
-  postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
-        (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +
-        (if aspell == null then "" else "${aspell}/bin:") +
-        (if tex == null then "" else "${tex}/bin:") +
-        "${xmodmap}/bin:${which}/bin";
+  qtWrapperArgs = [
+    "--suffix" "PATH" ":" (lib.makeBinPath [
+      xmodmap
+      which
+      ghostscriptX
+      aspell
+      tex
+      git
+      python3
+    ])
+  ];
+
+  postFixup = ''
+    wrapQtApp $out/bin/texmacs
+  '';
 
   inherit (common) postPatch;
 
   meta = common.meta // {
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = [ lib.maintainers.roconnor ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

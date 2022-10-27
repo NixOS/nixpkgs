@@ -1,13 +1,12 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, Cocoa }:
 
 let
-  shortName = "libui";
-  version   = "4.1a";
   backend   = if stdenv.isDarwin then "darwin" else "unix";
 in
 
-stdenv.mkDerivation {
-  name = "${shortName}-${version}";
+stdenv.mkDerivation rec {
+  pname = "libui";
+  version   = "4.1a";
   src  = fetchFromGitHub {
     owner  = "andlabs";
     repo   = "libui";
@@ -15,39 +14,39 @@ stdenv.mkDerivation {
     sha256 = "0bm6xvqk4drg2kw6d304x6mlfal7gh8mbl5a9f0509smmdzgdkwm";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux gtk3
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = lib.optional stdenv.isLinux gtk3
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt
   '';
 
   installPhase = ''
     mkdir -p $out/{include,lib}
     mkdir -p $out/lib/pkgconfig
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    mv ./out/${shortName}.so.0 $out/lib/
-    ln -s $out/lib/${shortName}.so.0 $out/lib/${shortName}.so
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    mv ./out/${shortName}.A.dylib $out/lib/
-    ln -s $out/lib/${shortName}.A.dylib $out/lib/${shortName}.dylib
+  '' + lib.optionalString stdenv.isLinux ''
+    mv ./out/libui.so.0 $out/lib/
+    ln -s $out/lib/libui.so.0 $out/lib/libui.so
+  '' + lib.optionalString stdenv.isDarwin ''
+    mv ./out/libui.A.dylib $out/lib/
+    ln -s $out/lib/libui.A.dylib $out/lib/libui.dylib
   '' + ''
     cp $src/ui.h $out/include
     cp $src/ui_${backend}.h $out/include
 
-    cp ${./libui.pc} $out/lib/pkgconfig/${shortName}.pc
-    substituteInPlace $out/lib/pkgconfig/${shortName}.pc \
+    cp ${./libui.pc} $out/lib/pkgconfig/libui.pc
+    substituteInPlace $out/lib/pkgconfig/libui.pc \
       --subst-var-by out $out \
       --subst-var-by version "${version}"
   '';
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/${shortName}.A.dylib $out/lib/${shortName}.A.dylib
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libui.A.dylib $out/lib/libui.A.dylib
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/andlabs/libui;
-    description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports.";
+  meta = with lib; {
+    homepage    = "https://github.com/andlabs/libui";
+    description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports";
     license     = licenses.mit;
     platforms   = platforms.unix;
   };

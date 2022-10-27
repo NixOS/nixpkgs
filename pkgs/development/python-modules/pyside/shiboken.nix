@@ -1,39 +1,66 @@
-{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36, isPy37 }:
+{ lib, fetchFromGitHub, buildPythonPackage
+, cmake
+, fetchurl
+, isPy3k
+, libxml2
+, libxslt
+, pkg-config
+, pysideApiextractor
+, pysideGeneratorrunner
+, python
+, pythonAtLeast
+, qt4
+, sphinx
+}:
 
-# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
-# Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
 buildPythonPackage rec {
   pname = "pyside-shiboken";
   version = "1.2.4";
-
   format = "other";
 
-  src = fetchurl {
-    url = "https://github.com/PySide/Shiboken/archive/${version}.tar.gz";
-    sha256 = "1536f73a3353296d97a25e24f9554edf3e6a48126886f8d21282c3645ecb96a4";
+  src = fetchFromGitHub {
+    owner = "PySide";
+    repo = "Shiboken";
+    rev = version;
+    sha256 = "0x2lyg52m6a0vn0665pgd1z1qrydglyfxxcggw6xzngpnngb6v5v";
   };
 
+  nativeBuildInputs = [ cmake pkg-config pysideApiextractor pysideGeneratorrunner sphinx qt4 ];
 
-  enableParallelBuilding = true;
+  buildInputs = [ python libxml2 libxslt ];
 
-  nativeBuildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
+  outputs = [ "out" "dev" ];
 
   preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
     echo "preConfigure: Fixing shiboken_generator install target."
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/
   '';
 
-  # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
-  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36 || isPy37) ./shiboken_py35.patch);
+  patches = [
+    # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
+    ./gcc6.patch
+    (lib.optional (pythonAtLeast "3.5") ./shiboken_py35.patch)
+    (fetchurl {
+      # https://github.com/pyside/Shiboken/pull/90
+      name = "fix-build-with-python-3.9.patch";
+      url = "https://github.com/pyside/Shiboken/commit/d1c901d4c0af581003553865360ba964cda041e8.patch";
+      sha256 = "1f7slz8n8rps5r67hz3hi4rr82igc3l166shfy6647ivsb2fnxwy";
+    })
+  ];
 
-  cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
+  cmakeFlags = lib.optionals isPy3k [
+    "-DUSE_PYTHON3=TRUE"
+    "-DPYTHON3_INCLUDE_DIR=${lib.getDev python}/include/${python.libPrefix}"
+    "-DPYTHON3_LIBRARY=${lib.getLib python}/lib"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
-    license = lib.licenses.gpl2;
-    homepage = http://www.pyside.org/docs/shiboken/;
+    license = licenses.gpl2;
+    homepage = "http://www.pyside.org/";
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, json-glib }:
+{ lib, stdenv, fetchFromGitHub, imagemagick, gettext, pidgin, json-glib }:
 
 stdenv.mkDerivation {
   pname = "purple-discord";
-  version = "unstable-2018-04-10";
+  version = "unstable-2021-10-17";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "purple-discord";
-    rev = "9a97886d15a1f028de54b5e6fc54e784531063b0";
-    sha256 = "0dc344zh1v4yh9c8javcw5ylzwc1wpx0ih8bww8p8cjmhr8kcl32";
+    rev = "b7ac72399218d2ce011ac84bb171b572560aa2d2";
+    sha256 = "0xvj9rdvgsvcr55sk9m40y07rchg699l1yr98xqwx7sc2sba3814";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ imagemagick gettext ];
   buildInputs = [ pidgin json-glib ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/EionRobb/purple-discord;
+  meta = with lib; {
+    homepage = "https://github.com/EionRobb/purple-discord";
     description = "Discord plugin for Pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;

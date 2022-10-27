@@ -1,14 +1,14 @@
-{ stdenv, R, libcxx, xvfb_run, utillinux, Cocoa, Foundation, gettext, gfortran }:
+{ stdenv, lib, R, libcxx, xvfb-run, util-linux, Cocoa, Foundation, gettext, gfortran }:
 
 { name, buildInputs ? [], requireX ? false, ... } @ attrs:
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
-                stdenv.lib.optionals requireX [utillinux xvfb_run] ++
-                stdenv.lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
+                lib.optionals requireX [util-linux xvfb-run] ++
+                lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   configurePhase = ''
     runHook preConfigure
@@ -29,14 +29,14 @@ stdenv.mkDerivation ({
   rCommand = if requireX then
     # Unfortunately, xvfb-run has a race condition even with -a option, so that
     # we acquire a lock explicitly.
-    "flock ${xvfb_run} xvfb-run -a -e xvfb-error R"
+    "flock ${xvfb-run} xvfb-run -a -e xvfb-error R"
   else
     "R";
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/library
-    $rCommand CMD INSTALL $installFlags --configure-args="$configureFlags" -l $out/library .
+    $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' $installFlags --configure-args="$configureFlags" -l $out/library .
     runHook postInstall
   '';
 

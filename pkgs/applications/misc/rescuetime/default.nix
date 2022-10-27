@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver }:
+{ stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, libXScrnSaver, writeScript, common-updater-scripts, curl, pup }:
 
 let
+  version = "2.16.5.1";
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
-      url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "0mw8dh9z7pqan0yrhycmv39h5c1sc4mbw5l02cfnn17cy75xdiay";
+      url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
+      sha256 = "1xrvyy0higc1fbc8ascpaszvg2bl6x0a35bzmdq6dkay48hnrd8b";
     } else fetchurl {
       name = "rescuetime-installer.deb";
-      url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "1a6pc8vi2ab721kzyhvg6bmw24dr85dgmx2m9j9vbf3jyr85fv10";
+      url = "https://www.rescuetime.com/installers/rescuetime_${version}_amd64.deb";
+      sha256 = "09ng0yal66d533vzfv27k9l2va03rqbqmsni43qi3hgx7w9wx5ii";
     };
-in mkDerivation {
+in mkDerivation rec {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.14.5.2";
+  inherit version;
+  pname = "rescuetime";
   inherit src;
   nativeBuildInputs = [ dpkg ];
   # avoid https://github.com/NixOS/patchelf/issues/99
@@ -32,10 +34,26 @@ in mkDerivation {
       --set-rpath "${lib.makeLibraryPath [ qt5.qtbase libXtst libXext libX11 libXScrnSaver ]}" \
       $out/bin/rescuetime
   '';
+
+  passthru.updateScript = writeScript "${pname}-updater" ''
+    #!${stdenv.shell}
+    set -eu -o pipefail
+    PATH=${lib.makeBinPath [curl pup common-updater-scripts]}:$PATH
+    latestVersion="$(curl -sS https://www.rescuetime.com/release-notes/linux | pup '.release:first-of-type h2 strong text{}' | tr -d '\n')"
+
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
+      # The script will not perform an update when the version attribute is up to date from previous platform run
+      # We need to clear it before each run
+      update-source-version ${pname} 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform
+      update-source-version ${pname} "$latestVersion" --system=$platform
+    done
+  '';
+
   meta = with lib; {
     description = "Helps you understand your daily habits so you can focus and be more productive";
     homepage    = "https://www.rescuetime.com";
     maintainers = with maintainers; [ cstrahan ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfree;
     platforms   = [ "i686-linux" "x86_64-linux" ];
   };

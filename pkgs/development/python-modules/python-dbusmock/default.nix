@@ -1,24 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi,
-  nose, dbus, dbus-python, pygobject3,
-  which, pyflakes, pycodestyle, bluez, networkmanager
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nose
+, dbus
+, dbus-python
+, pygobject3
+, bluez
+, networkmanager
+, setuptools-scm
+, runCommand
 }:
 
-buildPythonPackage rec {
+let
+  # Cannot just add it to path in preCheck since that attribute will be passed to
+  # mkDerivation even with doCheck = false, causing a dependency cycle.
+  pbap-client = runCommand "pbap-client" { } ''
+    mkdir -p "$out/bin"
+    ln -s "${bluez.test}/test/pbap-client" "$out/bin/pbap-client"
+  '';
+in buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.18.1";
+  version = "0.28.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hj02p65cic4jdc6a5xf1hx8j5icwy7dcrm5kg91lkjks4gwpg5h";
+  src = fetchFromGitHub {
+    owner = "martinpitt";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-gsGg9zHVyDTCVZmFUI8qqXDt0ui+o3hPwjRlsYUmShg=";
   };
 
-  prePatch = ''
-    sed -i -e 's|pyflakes3|pyflakes|g' tests/test_code.py;
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    dbus-python
+  ];
+
+  checkInputs = [
+    dbus
+    pygobject3
+    bluez
+    pbap-client
+    networkmanager
+    nose
+  ];
 
   # TODO: Get the rest of these tests running?
-  # This is a mocking library used as a check dependency for a single derivation.
-  # That derivation's tests pass. Maybe not worth the effort to fix these...
   NOSE_EXCLUDE = lib.concatStringsSep "," [
     "test_bluez4" # NixOS ships BlueZ5
     # These appear to fail because they're expecting to run in an Ubuntu chroot?
@@ -33,25 +63,23 @@ buildPythonPackage rec {
     "test_cli"
     "test_timedated"
     "test_upower"
+    # needs glib
+    "test_accounts_service"
+    # needs dbus-daemon active
+    "test_systemd"
     # Very slow, consider disabling?
     # "test_networkmanager"
   ];
 
-  checkInputs = [
-    nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez bluez.test networkmanager
-  ];
-
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:${bluez.test}/test";
     nosetests -v
     runHook postCheck
   '';
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

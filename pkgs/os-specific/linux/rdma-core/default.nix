@@ -1,24 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, docutils
-, pandoc, ethtool, iproute, libnl, udev, python, perl
-, makeWrapper
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, docutils
+, pandoc, ethtool, iproute2, libnl, udev, python3, perl
 } :
 
-let
-  version = "26.0";
 
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rdma-core";
-  inherit version;
+  version = "43.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "0yvhc7xc3mxzjd7v2y408w333qi7hkf1f99gbsd3fv2qydp9gps3";
+    sha256 = "sha256-tqlanUZpDYT3wgvD0hA1D5RrMdzPzOqoELzuXGhjnz8=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc docutils makeWrapper ];
-  buildInputs = [ libnl ethtool iproute udev python perl ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake pkg-config pandoc docutils python3 ];
+  buildInputs = [ libnl ethtool iproute2 udev perl ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
@@ -26,11 +24,6 @@ in stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace providers/rxe/rxe_cfg.in \
-      --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace 'ip addr' "${iproute}/bin/ip addr" \
-      --replace 'ip link' "${iproute}/bin/ip link"
-
     substituteInPlace srp_daemon/srp_daemon.sh.in \
       --replace /bin/rm rm
   '';
@@ -44,14 +37,15 @@ in stdenv.mkDerivation {
   postFixup = ''
     for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
       echo "wrapping $pls"
-      wrapProgram $pls --prefix PERL5LIB : "$out/${perl.libPrefix}"
+      substituteInPlace $pls --replace \
+        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
-    homepage = https://github.com/linux-rdma/rdma-core;
-    license = licenses.gpl2;
+    homepage = "https://github.com/linux-rdma/rdma-core";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];
   };

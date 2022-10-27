@@ -1,14 +1,11 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchzip }:
 
 let
-  pname = "victor-mono";
-  version = "1.2.5";
-in fetchFromGitHub rec {
-  name = "${pname}-${version}";
-
-  owner = "rubjo";
-  repo = pname;
-  rev = "v${version}";
+  version = "1.5.4";
+in
+fetchzip {
+  name = "victor-mono-${version}";
+  stripRoot = false;
 
   # Upstream prefers we download from the website,
   # but we really insist on a more versioned resource.
@@ -17,23 +14,24 @@ in fetchFromGitHub rec {
   # so we extract it from the tagged release.
   # Both methods produce the same file, but this way
   # we can safely reason about what version it is.
+  url = "https://github.com/rubjo/victor-mono/raw/v${version}/public/VictorMonoAll.zip";
+
   postFetch = ''
-    tar xvf $downloadedFile --strip-components=2 ${name}/public/VictorMonoAll.zip
+    mkdir -p "$out/share/fonts/"
 
-    mkdir -p $out/share/fonts/{true,open}type/${pname}
+    mv $out/OTF $out/share/fonts/opentype
+    mv $out/TTF $out/share/fonts/truetype
 
-    unzip -j VictorMonoAll.zip \*.ttf -d $out/share/fonts/truetype/${pname}
-    unzip -j VictorMonoAll.zip \*.otf -d $out/share/fonts/opentype/${pname}
+    rm -r $out/{EOT,WOFF,WOFF2}
   '';
 
-  sha256 = "0dj5h45qk6abggj6mgm19sb0a7q0v4x41f2zds1ab79yd22gbjns";
+  sha256 = "sha256-1si0d2lpuXaDcSc3giVMMMbZc/eKbHKU3wmwfYHZ8o0=";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";
     homepage = "https://rubjo.github.io/victor-mono";
-    license = with licenses; [ mit ];
+    license = licenses.ofl;
     maintainers = with maintainers; [ jpotier dtzWill ];
     platforms = platforms.all;
   };
 }
-

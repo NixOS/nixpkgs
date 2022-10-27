@@ -1,64 +1,70 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, meson
-, ninja
-, python3
-, gettext
-, pkgconfig
-, desktop-file-utils
-, wrapGAppsHook
 , appstream-glib
-, epoxy
+, desktop-file-utils
 , glib
-, gtk3
+, gtk4
+, libepoxy
+, libadwaita
+, meson
 , mpv
+, ninja
+, nix-update-script
+, pkg-config
+, python3
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.17";
+  version = "0.24";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    sha256 = "0pnxjv6n2q6igxdr8wzbahcj7vccw4nfjdk8fjdnaivf2lyrpv2d";
+    hash = "sha256-8Y/dCeoS29R1UHwmLOp0d+JNNC4JH5pLpiqfBZU+kLI=";
   };
 
   nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
     meson
     ninja
+    pkg-config
     python3
-    appstream-glib
-    gettext
-    pkgconfig
-    desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    epoxy
     glib
-    gtk3
+    gtk4
+    libadwaita
+    libepoxy
     mpv
   ];
 
   postPatch = ''
     patchShebangs meson-post-install.py src/generate-authors.py
-    sed -i '/gtk-update-icon-cache/s/^/#/' meson-post-install.py
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/celluloid-player/celluloid";
     description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
-      GNOME MPV interacts with mpv via the client API exported by libmpv,
-      allowing access to mpv's powerful playback capabilities through an
-      easy-to-use user interface.
+      Celluloid (formerly GNOME MPV) is a simple GTK+ frontend for mpv.
+      Celluloid interacts with mpv via the client API exported by libmpv,
+      allowing access to mpv's powerful playback capabilities.
     '';
-    homepage = "https://github.com/celluloid-player/celluloid";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

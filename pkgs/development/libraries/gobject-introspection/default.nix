@@ -1,72 +1,165 @@
-{ stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
-, libintl, cctools, cairo, gnome3, glibcLocales
-, substituteAll, nixStoreDir ? builtins.storeDir
+{ stdenv
+, lib
+, fetchurl
+, glib
+, flex
+, bison
+, meson
+, ninja
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, docbook_xml_dtd_45
+, pkg-config
+, libffi
+, python3
+, cctools
+, cairo
+, gnome
+, substituteAll
+, buildPackages
+, gobject-introspection-unwrapped
+, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
+
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
 let
-  pname = "gobject-introspection";
-  version = "1.62.0";
-in
-with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "18lhglg9v6y83lhqzyifc1z0wrlawzrhzzxx0a3h1g7xaz97xvmi";
-  };
-
-  outputs = [ "out" "dev" "man" ];
-  outputBin = "dev";
-
-  LC_ALL = "en_US.UTF-8"; # for tests
-
-  nativeBuildInputs = [ meson ninja pkgconfig libintl glibcLocales ];
-  buildInputs = [ flex bison python3 setupHook/*move .gir*/ ]
-    ++ stdenv.lib.optional stdenv.isDarwin cctools;
-  propagatedBuildInputs = [ libffi glib ];
-
-  mesonFlags = [
-    "--datadir=${placeholder "dev"}/share"
+  pythonModules = pp: [
+    pp.Mako
+    pp.markdown
   ];
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gobject-introspection";
+  version = "1.74.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
+  outputs = [ "out" "dev" "devdoc" "man" ];
+  outputBin = "dev";
 
-  setupHook = ./setup-hook.sh;
+  src = fetchurl {
+    url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
+    sha256 = "NHs6cZ5oukxp/y1X7iaJIz6owH/EkiBeVzOGd55C1lM=";
+  };
 
   patches = [
-    (substituteAll {
-      src = ./test_shlibs.patch;
-      inherit nixStoreDir;
-    })
+    # Make g-ir-scanner put absolute path to GIR files it generates
+    # so that programs can just dlopen them without having to muck
+    # with LD_LIBRARY_PATH environment variable.
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
-  ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
+  ] ++ lib.optionals x11Support [
+    # Hardcode the cairo shared library path in the Cairo gir shipped with this package.
+    # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
-      cairoLib = "${getLib cairo}/lib";
-    });
+      cairoLib = "${lib.getLib cairo}/lib";
+    })
+  ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    flex
+    bison
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    # Build definition checks for the Python modules needed at runtime by importing them.
+    (buildPackages.python3.withPackages pythonModules)
+    finalAttrs.setupHook # move .gir files
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+
+  buildInputs = [
+    (python3.withPackages pythonModules)
+  ];
+
+  checkInputs = lib.optionals stdenv.isDarwin [
+    cctools # for otool
+  ];
+
+  propagatedBuildInputs = [
+    libffi
+    glib
+  ];
+
+  mesonFlags = [
+    "--datadir=${placeholder "dev"}/share"
+    "-Dcairo=disabled"
+    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-Dgi_cross_ldd_wrapper=${substituteAll {
+      name = "g-ir-scanner-lddwrapper";
+      isExecutable = true;
+      src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+      inherit (buildPackages) bash;
+      buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
+    }}"
+    "-Dgi_cross_use_prebuilt_gi=true"
+    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
   doCheck = !stdenv.isAarch64;
 
+  # During configurePhase, two python scripts are generated and need this. See
+  # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
+  postConfigure = ''
+    patchShebangs tools/*
+  '';
+
+  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cp -r ${buildPackages.gobject-introspection-unwrapped.devdoc} $devdoc
+    # these are uncompiled c and header files which aren't installed when cross-compiling because
+    # code that installs them is in tests/meson.build which is only run when not cross-compiling
+    # pygobject3 needs them
+    cp -r ${buildPackages.gobject-introspection-unwrapped.dev}/share/gobject-introspection-1.0/tests $dev/share/gobject-introspection-1.0/tests
+  '';
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that we will delete before installation.
+    mkdir -p $out/lib
+    ln -s $PWD/tests/scanner/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary} $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+  '';
+
+  postCheck = ''
+    rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
+  '';
+
+  # add self to buildInputs to avoid needing to add gobject-introspection to buildInputs in addition to nativeBuildInputs
+  # builds use target-pkg-config to look for gobject-introspection instead of just looking for binaries in $PATH
+  # wrapper uses depsTargetTargetPropagated so ignore it
+  preFixup = lib.optionalString (!lib.hasSuffix "-wrapped" finalAttrs.pname) ''
+    mkdir -p $dev/nix-support
+    echo "$out" > $dev/nix-support/propagated-target-target-deps
+  '';
+
+  setupHook = ./setup-hook.sh;
+
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
+    updateScript = gnome.updateScript {
+      packageName = "gobject-introspection";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
-    homepage    = http://live.gnome.org/GObjectIntrospection;
-    maintainers = with maintainers; [ lovek323 lethalman ];
-    platforms   = platforms.unix;
+    homepage = "https://gi.readthedocs.io/";
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''
@@ -77,4 +170,4 @@ stdenv.mkDerivation rec {
       automatically provide bindings to call into the C library.
     '';
   };
-}
+})

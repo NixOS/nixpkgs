@@ -1,36 +1,77 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
 , singlePrec ? true
-, mpiEnabled ? false
-, fftw
-, openmpi
-, perl
+, enableMpi ? false
+, enableCuda ? false
+, cpuAcceleration ? null
 }:
 
+let
+  # Select reasonable defaults for all major platforms
+  # The possible values are defined in CMakeLists.txt:
+  # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
+  # AVX2_128 AVX_512 AVX_512_KNL MIC ARM_NEON ARM_NEON_ASIMD
+  SIMD = x: if (cpuAcceleration != null) then x else
+    if stdenv.hostPlatform.system == "i686-linux" then "SSE2" else
+    if stdenv.hostPlatform.system == "x86_64-linux" then "SSE4.1" else
+    if stdenv.hostPlatform.system == "x86_64-darwin" then "SSE4.1" else
+    if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON_ASIMD" else
+    "None";
 
-stdenv.mkDerivation {
-  name = "gromacs-2019.4";
+in stdenv.mkDerivation rec {
+  pname = "gromacs";
+  version = "2022.3";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2019.4.tar.gz";
-    sha256 = "0rqqrbjrdhprlw2z6cqid59xwxfdx05ikvywppvdp8f8vzp6chxs";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
+    sha256 = "sha256-FM+xMN2vj3WaOvZDwE9aDQ0ysJvDRIsWr6W2F/XjXa4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ fftw perl ]
-  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
-  cmakeFlags = ''
-    ${if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF"}
-    ${if mpiEnabled then "-DGMX_MPI:BOOL=TRUE
-                          -DGMX_CPU_ACCELERATION:STRING=SSE4.1
-                          -DGMX_OPENMP:BOOL=TRUE
-                          -DGMX_THREAD_MPI:BOOL=FALSE"
-                     else "-DGMX_MPI:BOOL=FALSE" }
+  buildInputs = [
+    fftw
+    perl
+    hwloc
+    blas
+    lapack
+  ] ++ lib.optional enableMpi mpi
+    ++ lib.optional enableCuda cudatoolkit
+  ;
+
+  propagatedBuildInputs = lib.optional enableMpi mpi;
+  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
+
+  cmakeFlags = [
+    "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
+    "-DGMX_OPENMP:BOOL=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ (
+    if singlePrec then [
+      "-DGMX_DOUBLE=OFF"
+    ] else [
+      "-DGMX_DOUBLE=ON"
+      "-DGMX_DEFAULT_SUFFIX=OFF"
+    ]
+  ) ++ (
+    if enableMpi
+      then [
+        "-DGMX_MPI:BOOL=TRUE"
+        "-DGMX_THREAD_MPI:BOOL=FALSE"
+      ]
+     else [
+       "-DGMX_MPI:BOOL=FALSE"
+     ]
+  ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
+
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$out/$out/" "$out/"
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = "http://www.gromacs.org";
-    license     = licenses.gpl2;
+  meta = with lib; {
+    homepage = "http://www.gromacs.org";
+    license = licenses.gpl2;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,
@@ -52,5 +93,6 @@ stdenv.mkDerivation {
       See: http://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
+    maintainers = with maintainers; [ sheepforce markuskowa ];
   };
 }

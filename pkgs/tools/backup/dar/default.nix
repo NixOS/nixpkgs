@@ -1,18 +1,31 @@
-{ stdenv, fetchurl, zlib, bzip2, openssl, attr, lzo, libgcrypt, e2fsprogs, gpgme, xz }:
+{ lib, stdenv, fetchurl
+, which
+, attr, e2fsprogs
+, curl, libargon2, librsync, libthreadar
+, gpgme, libgcrypt, openssl
+, bzip2, lz4, lzo, xz, zlib
+}:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.6.6";
+  version = "2.7.7";
   pname = "dar";
 
   src = fetchurl {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "1pqdcb9dkjlf8wzpsnx4gcv9nhrm60glv4xadxnknnqlvzs6vips";
+    sha256 = "sha256-wD4vUu/WWi8Ee2C77aJGDLUlFl4b4y8RC2Dgzs4/LMk=";
   };
 
-  buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
-    ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ which ];
+
+  buildInputs = [
+    curl librsync libthreadar
+    gpgme libargon2 libgcrypt openssl
+    bzip2 lz4 lzo xz zlib
+  ] ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [
     "--disable-birthtime"
@@ -23,7 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    rm -r "$out"/share/dar # Disable html help
+    # Disable html help
+    rm -r "$out"/share/dar
   '';
 
   enableParallelBuilding = true;
@@ -31,8 +45,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://dar.linux.free.fr;
+    broken = stdenv.isDarwin;
+    homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
+    maintainers = with maintainers; [ izorkin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

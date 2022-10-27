@@ -1,33 +1,50 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, vala
-, gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, libgee
+, libhandy
+, libsecret
+, libsoup
+, meson
+, ninja
+, nix-update-script
+, pantheon
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "taxi";
-  version = "0.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "01c552w68576pnsyqbwy3hjhbww6vys3r3s0wxjdiscjqj1aawqg";
+    rev = version;
+    sha256 = "1a4a14b2d5vqbk56drzbbldp0nngfqhwycpyv8d3svi2nchkvpqa";
   };
 
   nativeBuildInputs = [
-    vala
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
+    vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.granite
-    libgee
     gtk3
+    libgee
+    libhandy
     libsecret
     libsoup
+    pantheon.granite
   ];
 
   postPatch = ''
@@ -35,11 +52,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/Alecaddd/taxi";
     description = "The FTP Client that drives you anywhere";
-    homepage    = https://github.com/Alecaddd/taxi;
-    license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
-    platforms   = platforms.linux;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    platforms = platforms.linux;
+    mainProgram = "com.github.alecaddd.taxi";
   };
 }

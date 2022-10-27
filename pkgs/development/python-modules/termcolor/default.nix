@@ -1,20 +1,37 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, hatch-vcs
+, hatchling
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "1.1.0";
+  version = "2.0.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b";
+    sha256 = "sha256-ayz3aekzZKJnbh3lanwM/yz1vQfzfpzICw3WMg6/44g=";
   };
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
+
+  pythonImportsCheck = [
+    "termcolor"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "Termcolor";
-    homepage = https://pypi.python.org/pypi/termcolor;
+    homepage = "https://pypi.python.org/pypi/termcolor";
     license = licenses.mit;
   };
 

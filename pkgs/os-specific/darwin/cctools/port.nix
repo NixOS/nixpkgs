@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
-, libcxxabi, libuuid
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, installShellFiles
+, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
 }:
@@ -8,7 +9,7 @@ let
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = stdenv.lib.optionalString
+  targetPrefix = lib.optionalString
     (stdenv.targetPlatform != stdenv.hostPlatform)
     "${stdenv.targetPlatform.config}-";
 in
@@ -16,96 +17,165 @@ in
 # Non-Darwin alternatives
 assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
-let
-  baseParams = rec {
-    name = "${targetPrefix}cctools-port-${version}";
-    version = "895";
+stdenv.mkDerivation {
+  pname = "${targetPrefix}cctools-port";
+  version = "973.0.1";
 
-    src = fetchFromGitHub {
-      owner  = "tpoechtrager";
-      repo   = "cctools-port";
-      rev    = "07619027f8311fa61b4a549c75994b88739a82d8";
-      sha256 = "12g94hhz5v5bmy2w0zb6fb4bjlmn992gygc60h9nai15kshj2spi";
-    };
+  src = fetchFromGitHub {
+    owner  = "tpoechtrager";
+    repo   = "cctools-port";
+    # This is the commit before: https://github.com/tpoechtrager/cctools-port/pull/114
+    # That specific change causes trouble for us (see the PR discussion), but
+    # is also currently the last commit on master at the time of writing, so we
+    # can just go back one step.
+    rev    = "457dc6ddf5244ebf94f28e924e3a971f1566bd66";
+    sha256 = "0ns12q7vg9yand4dmdsps1917cavfbw67yl5q7bm6kb4ia5kkx13";
+  };
 
-    outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
 
-    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
-    buildInputs = [ libuuid ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
-      ++ stdenv.lib.optional enableTapiSupport libtapi;
+  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
+  buildInputs = [ libuuid ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc ]
+    ++ lib.optional enableTapiSupport libtapi;
 
-    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ./apfs.patch ];
+  patches = [
+    ./ld-ignore-rpath-link.patch
+    ./ld-rpath-nonfinal.patch
+  ]
+    ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
 
-    __propagatedImpureHostDeps = [
-      # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
-      "/usr/lib/libobjc.A.dylib"
-      "/usr/lib/libobjc.dylib"
+  __propagatedImpureHostDeps = [
+    # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
+    "/usr/lib/libobjc.A.dylib"
+    "/usr/lib/libobjc.dylib"
+  ];
+
+  enableParallelBuilding = true;
+
+  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
+  configurePlatforms = [ "build" "host" ]
+    ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configureFlags = [ "--disable-clang-as" ]
+    ++ lib.optionals enableTapiSupport [
+      "--enable-tapi-support"
+      "--with-libtapi=${libtapi}"
     ];
 
-    enableParallelBuilding = true;
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cctools/Makefile.am --replace libobjc2 ""
+  '' + ''
+    sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
 
-    # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ]
-      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
-    configureFlags = [ "--disable-clang-as" ]
-      ++ stdenv.lib.optionals enableTapiSupport [
-        "--enable-tapi-support"
-        "--with-libtapi=${libtapi}"
-      ];
+    # FIXME: there are far more absolute path references that I don't want to fix right now
+    substituteInPlace cctools/configure.ac \
+      --replace "-isystem /usr/local/include -isystem /usr/pkg/include" "" \
+      --replace "-L/usr/local/lib" "" \
 
-    postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cctools/Makefile.am --replace libobjc2 ""
-    '' + ''
-      sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
+    # Appears to use new libdispatch API not available in macOS SDK 10.12.
+    substituteInPlace cctools/ld64/src/ld/libcodedirectory.c \
+      --replace "#define LIBCD_PARALLEL 1" ""
 
-      # FIXME: there are far more absolute path references that I don't want to fix right now
-      substituteInPlace cctools/configure.ac \
-        --replace "-isystem /usr/local/include -isystem /usr/pkg/include" "" \
-        --replace "-L/usr/local/lib" "" \
+    patchShebangs tools
+    sed -i -e 's/which/type -P/' tools/*.sh
 
-      substituteInPlace cctools/include/Makefile \
-        --replace "/bin/" ""
+    cd cctools
+  '';
 
-      patchShebangs tools
-      sed -i -e 's/which/type -P/' tools/*.sh
+  preInstall = ''
+    installManPage ar/ar.{1,5}
 
-      # Workaround for https://www.sourceware.org/bugzilla/show_bug.cgi?id=11157
-      cat > cctools/include/unistd.h <<EOF
-      #ifdef __block
-      #  undef __block
-      #  include_next "unistd.h"
-      #  define __block __attribute__((__blocks__(byref)))
-      #else
-      #  include_next "unistd.h"
-      #endif
-      EOF
+    # The makefile rules for installing headers are missing in 973.0.1.
+    # The below is derived from 949.0.1.
+    mkdir -p $dev/include/mach-o/i386
+    mkdir -p $dev/include/mach-o/ppc
+    mkdir -p $dev/include/mach-o/x86_64
+    mkdir -p $dev/include/mach-o/arm
+    mkdir -p $dev/include/mach-o/arm64
+    mkdir -p $dev/include/mach-o/m68k
+    mkdir -p $dev/include/mach-o/sparc
+    mkdir -p $dev/include/mach-o/hppa
+    mkdir -p $dev/include/mach-o/i860
+    mkdir -p $dev/include/mach-o/m88k
+    mkdir -p $dev/include/dyld
+    mkdir -p $dev/include/cbt
 
-      cd cctools
-    '';
+    pushd include/mach-o
+    install -c -m 444  arch.h ldsyms.h reloc.h \
+      stab.h loader.h fat.h swap.h getsect.h nlist.h \
+      ranlib.h $dev/include/mach-o
+    popd
 
-    # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
-    # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = ''
-      sh autogen.sh
-    '';
+    pushd include/mach-o/i386
+    install -c -m 444  swap.h \
+      $dev/include/mach-o/i386
+    popd
 
-    preInstall = ''
-      pushd include
-      make DSTROOT=$out/include RC_OS=common install
-      popd
-    '';
+    pushd include/mach-o/ppc
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/ppc
+    popd
 
-    passthru = {
-      inherit targetPrefix;
-    };
+    pushd include/mach-o/x86_64
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/x86_64
+    popd
 
-    meta = {
-      broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
-      homepage = http://www.opensource.apple.com/source/cctools/;
-      description = "MacOS Compiler Tools (cross-platform port)";
-      license = stdenv.lib.licenses.apsl20;
-      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
-    };
+    pushd include/mach-o/arm
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/arm
+    popd
+
+    pushd include/mach-o/arm64
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/arm64
+    popd
+
+    pushd include/mach-o/m68k
+    install -c -m 444  swap.h \
+      $dev/include/mach-o/m68k
+    popd
+
+    pushd include/mach-o/sparc
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/sparc
+    popd
+
+    pushd include/mach-o/hppa
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/hppa
+    popd
+
+    pushd include/mach-o/i860
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/i860
+    popd
+
+    pushd include/mach-o/m88k
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/m88k
+    popd
+
+    pushd include/stuff
+    install -c -m 444  bool.h \
+      $dev/include/dyld
+    popd
+
+    pushd include/cbt
+    install -c -m 444  libsyminfo.h \
+      $dev/include/cbt
+    popd
+  '';
+
+  passthru = {
+    inherit targetPrefix;
   };
-in stdenv.mkDerivation baseParams
+
+  meta = {
+    broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
+    homepage = "http://www.opensource.apple.com/source/cctools/";
+    description = "MacOS Compiler Tools (cross-platform port)";
+    license = lib.licenses.apsl20;
+    maintainers = with lib.maintainers; [ matthewbauer ];
+  };
+}

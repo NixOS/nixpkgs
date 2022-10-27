@@ -1,14 +1,18 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 {
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options = {
     xdg.icons.enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install files to support the
-        <link xlink:href="https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html">XDG Icon Theme specification</link>.
+        [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
       '';
     };
   };
@@ -17,6 +21,12 @@ with lib;
     environment.pathsToLink = [
       "/share/icons"
       "/share/pixmaps"
+    ];
+
+    environment.systemPackages = [
+      # Empty icon theme that contains index.theme file describing directories
+      # where toolkits should look for icons installed by apps.
+      pkgs.hicolor-icon-theme
     ];
 
     # libXcursor looks for cursors in XCURSOR_PATH

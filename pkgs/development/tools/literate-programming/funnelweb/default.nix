@@ -1,10 +1,11 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
+  pname = "funnelweb";
+  version = "3.20";
 
-  name = "funnelweb-${meta.version}";
   src = fetchurl {
-    url = http://www.ross.net/funnelweb/download/funnelweb_v320/funnelweb_v320_source.tar.gz;
+    url = "http://www.ross.net/funnelweb/download/funnelweb_v320/funnelweb_v320_source.tar.gz";
     sha256 = "0zqhys0j9gabrd12mnk8ibblpc8dal4kbl8vnhxmdlplsdpwn4wg";
   };
 
@@ -18,10 +19,10 @@ stdenv.mkDerivation rec {
     install fw $out/bin/fw
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     version = "3.20";
     description = "A simple, reliable literate-programming macro preprocessor";
-    homepage = http://www.ross.net/funnelweb/;
+    homepage = "http://www.ross.net/funnelweb/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];

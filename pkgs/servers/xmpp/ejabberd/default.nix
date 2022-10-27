@@ -1,13 +1,11 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
-, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps, gd
+, erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
 , flock
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withRiak ? false
-, withElixir ? false, elixir
 , withIconv ? true
 , withTools ? false
 , withRedis ? false
@@ -21,28 +19,24 @@ let
     fi
   '';
 
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "19.08";
+  version = "21.04";
   pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
-    sha256 = "0ivkw31civcznv9k645hvrzn1yc6a4qsrsywjrakniwaaxlsnj8w";
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
+    sha256 = "09s8mj0dkvp9mxazsqxqqmnl5n2xyi8avx0rzgvqrbl3byanzfzr";
   };
 
-  nativeBuildInputs = [ fakegit ];
+  nativeBuildInputs = [ fakegit makeWrapper ];
 
-  buildInputs = [ erlang openssl expat libyaml gd makeWrapper ]
+  buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
-    ++ lib.optional withElixir elixir
-    ;
-
-  # Apparently needed for Elixir
-  LANG = "en_US.UTF-8";
+  ;
 
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
@@ -52,13 +46,11 @@ in stdenv.mkDerivation rec {
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     makeFlags = [ "deps" ];
-
-    phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
     installPhase = ''
       for i in deps/*; do
@@ -76,7 +68,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0h1amqp2x6ir29bdh9x8bm0abj67k81nmkqi8gidwccsa5z94s2c";
+    outputHash = "1mvixgb46ss35abjwz3lw38c69bii1xyj557a92bvrxc1gc6gx31";
   };
 
   configureFlags =
@@ -85,8 +77,6 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withSqlite "sqlite")
       (lib.enableFeature withPam "pam")
       (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withRiak "riak")
-      (lib.enableFeature withElixir "elixir")
       (lib.enableFeature withIconv "iconv")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
@@ -97,7 +87,7 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     cp -r $deps deps
     chmod -R +w deps
-    patchShebangs deps
+    patchShebangs .
   '';
 
   postInstall = ''
@@ -107,15 +97,15 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    rm $out/bin/{mix,iex,elixir}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
-    homepage = https://www.ejabberd.im;
+    homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];
-    broken = withElixir;
   };
 }

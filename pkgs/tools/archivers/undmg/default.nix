@@ -1,25 +1,26 @@
-{ stdenv, fetchFromGitHub, zlib, bzip2 }:
+{ lib, stdenv, fetchFromGitHub, zlib, bzip2, lzfse, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.3";
+  version = "1.1.0";
   pname = "undmg";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "undmg";
     rev = "v${version}";
-    sha256 = "1pxqw92h2w75d4jwiihwnkhnsfk09cddh3flgrqwh9r3ry14fgbb";
-    
+    sha256 = "0rb4h89jrl04vwf6p679ipa4mp95hzmc1ca11wqbanv3xd1kcpxm";
   };
 
-  buildInputs = [ zlib bzip2 ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zlib bzip2 lzfse ];
 
   setupHook = ./setup-hook.sh;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/matthewbauer/undmg;
+  meta = with lib; {
+    homepage = "https://github.com/matthewbauer/undmg";
     description = "Extract a DMG file";
     license = licenses.gpl3;
     platforms = platforms.all;

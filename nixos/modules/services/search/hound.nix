@@ -8,7 +8,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the hound code search daemon.
         '';
       };
@@ -16,7 +16,7 @@ in {
       user = mkOption {
         default = "hound";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User the hound daemon should execute under.
         '';
       };
@@ -24,7 +24,7 @@ in {
       group = mkOption {
         default = "hound";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Group the hound daemon should execute under.
         '';
       };
@@ -33,7 +33,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         example = [ "dialout" ];
-        description = ''
+        description = lib.mdDoc ''
           List of extra groups that the "hound" user should be a part of.
         '';
       };
@@ -41,7 +41,7 @@ in {
       home = mkOption {
         default = "/var/lib/hound";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path to use as hound's $HOME. If the default user
           "hound" is configured then this is the home of the "hound"
           user.
@@ -50,29 +50,31 @@ in {
 
       package = mkOption {
         default = pkgs.hound;
-        defaultText = "pkgs.hound";
+        defaultText = literalExpression "pkgs.hound";
         type = types.package;
-        description = ''
+        description = lib.mdDoc ''
           Package for running hound.
         '';
       };
 
       config = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The full configuration of the Hound daemon. Note the dbpath
           should be an absolute path to a writable location on disk.
         '';
-        example = ''
-          {
-             "max-concurrent-indexers" : 2,
-             "dbpath" : "''${services.hound.home}/data",
-             "repos" : {
-                "nixpkgs": {
-                   "url" : "https://www.github.com/NixOS/nixpkgs.git"
-                }
-             }
-          }
+        example = literalExpression ''
+          '''
+            {
+              "max-concurrent-indexers" : 2,
+              "dbpath" : "''${services.hound.home}/data",
+              "repos" : {
+                  "nixpkgs": {
+                    "url" : "https://www.github.com/NixOS/nixpkgs.git"
+                  }
+              }
+            }
+          '''
         '';
       };
 
@@ -80,7 +82,7 @@ in {
         type = types.str;
         default = "0.0.0.0:6080";
         example = "127.0.0.1:6080 or just :6080";
-        description = ''
+        description = lib.mdDoc ''
           Listen on this IP:port / :port
         '';
       };
@@ -88,19 +90,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "hound") {
-      name = "hound";
-      gid = config.ids.gids.hound;
+    users.groups = optionalAttrs (cfg.group == "hound") {
+      hound.gid = config.ids.gids.hound;
     };
 
-    users.users = optional (cfg.user == "hound") {
-      name = "hound";
-      description = "hound code search";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      uid = config.ids.uids.hound;
+    users.users = optionalAttrs (cfg.user == "hound") {
+      hound = {
+        description = "hound code search";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        uid = config.ids.uids.hound;
+      };
     };
 
     systemd.services.hound = {
@@ -118,7 +120,6 @@ in {
                     " -conf ${pkgs.writeText "hound.json" cfg.config}";
 
       };
-      path = [ pkgs.git pkgs.mercurial pkgs.openssh ];
     };
   };
 

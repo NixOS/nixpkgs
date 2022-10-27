@@ -1,57 +1,67 @@
-{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkgconfig
+{ stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
 , lib
-, fetchpatch
 , autoreconfHook
+, buildPackages
+, sharutils
 , file
+, getconf
 , flint
 , ntl
 , cddlib
-, enableFactory ? true
+, gfan
+, lrcalc
+, doxygen
+, graphviz
+, latex2html
+# upstream generates docs with texinfo 4. later versions of texinfo
+# use letters instead of numbers for post-appendix chapters, and we
+# want it to match the upstream format because sage depends on it.
+, texinfo4
+, texlive
+, enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.1.1p2";
+  version = "4.3.1p2";
 
-  src = let
-    # singular sorts its tarballs in directories by base release (without patch version)
-    # for example 4.1.1p1 will be in the directory 4-1-1
-    baseVersion = builtins.head (lib.splitString "p" version);
-    urlVersion = builtins.replaceStrings [ "." ] [ "-" ] baseVersion;
-  in
-  fetchurl {
-    url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/${urlVersion}/singular-${version}.tar.gz";
-    sha256 = "07x9kri8vl4galik7lr6pscq3c51n8570pyw64i7gbj0m706f7wf";
+  # since the tarball does not contain tests, we fetch from GitHub.
+  src = fetchFromGitHub {
+    owner = "Singular";
+    repo = "Singular";
+
+    # if a release is tagged (which sometimes does not happen), it will
+    # be in the format below.
+    # rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    rev = "370a87f29e7b2a3fefe287184bd4f75b793cb03c";
+    sha256 = "sha256-T2tJ5yHTLzrXdozQB/XGZn4lNhpwVd9L30ZOzKAHxWs=";
+
+    # the repository's .gitattributes file contains the lines "/Tst/
+    # export-ignore" and "/doc/ export-ignore" so some directories are
+    # not included in the tarball downloaded by fetchzip.
+    forceFetchGit = true;
   };
 
   configureFlags = [
     "--with-ntl=${ntl}"
-  ] ++ lib.optionals enableFactory [
-    "--enable-factory"
+    "--disable-pyobject-module"
+  ] ++ lib.optionals enableDocs [
+    "--enable-doc-build"
   ] ++ lib.optionals enableGfanlib [
     "--enable-gfanlib"
   ];
 
-  postUnpack = ''
+  prePatch = ''
+    # don't let the tests depend on `hostname`
+    substituteInPlace Tst/regress.cmd --replace 'mysystem_catch("hostname")' 'nix_test_runner'
+
     patchShebangs .
   '';
 
-  patches = [
-    # NTL error handler was introduced in the library part, preventing users of
-    # the library from implementing their own error handling
-    # https://www.singular.uni-kl.de/forum/viewtopic.php?t=2769
-    (fetchpatch {
-      name = "move_error_handler_out_of_libsingular.patch";
-      # rebased version of https://github.com/Singular/Sources/commit/502cf86d0bb2a96715be6764774b64a69c1ca34c.patch
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/singular/patches/singular-ntl-error-handler.patch?h=50b9ae2fd233c30860e1cbb3e63a26f2cc10560a";
-      sha256 = "0vgh4m9zn1kjl0br68n04j4nmn5i1igfn28cph0chnwf7dvr9194";
-    })
-  ];
-
   # For reference (last checked on commit 75f460d):
-  # https://github.com/Singular/Sources/blob/spielwiese/doc/Building-Singular-from-source.md
-  # https://github.com/Singular/Sources/blob/spielwiese/doc/external-packages-dynamic-modules.md
+  # https://github.com/Singular/Singular/blob/spielwiese/doc/Building-Singular-from-source.md
+  # https://github.com/Singular/Singular/blob/spielwiese/doc/external-packages-dynamic-modules.md
   buildInputs = [
     # necessary
     gmp
@@ -60,15 +70,26 @@ stdenv.mkDerivation rec {
     readline
     ntl
     flint
+    lrcalc
+    gfan
   ] ++ lib.optionals enableGfanlib [
     cddlib
   ];
+
   nativeBuildInputs = [
     bison
     perl
-    pkgconfig
+    pkg-config
     autoreconfHook
-  ];
+    sharutils # needed for regress.cmd install checks
+  ] ++ lib.optionals enableDocs [
+    doxygen
+    graphviz
+    latex2html
+    texinfo4
+    texlive.combined.scheme-small
+  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''
     find . -type f -readable -writable -exec sed \
@@ -80,39 +101,73 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.isi686 "stackprotector";
 
-  # The Makefile actually defaults to `make install` anyway
-  buildPhase = ''
-    # do nothing
-  '';
+  doCheck = true; # very basic checks, does not test any libraries
 
   installPhase = ''
-    mkdir -p "$out"
-    cp -r Singular/LIB "$out/lib"
     make install
-
+  '' + lib.optionalString enableDocs ''
+    # Sage uses singular.info, which is not installed by default
+    mkdir -p $out/share/info
+    cp doc/singular.info $out/share/info
+  '' + ''
     # Make sure patchelf picks up the right libraries
     rm -rf libpolys factory resources omalloc Singular
   '';
 
+  # singular tests are a bit complicated, see
+  # https://github.com/Singular/Singular/tree/spielwiese/Tst
+  # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
+  testsToRun = [
+    "Old/universal.lst"
+    "Buch/buch.lst"
+    "Plural/short.lst"
+    "Old/factor.tst"
+  ] ++ lib.optionals enableGfanlib [
+    # tests that require gfanlib
+    "Short/ok_s.lst"
+  ];
+
   # simple test to make sure singular starts and finds its libraries
   doInstallCheck = true;
   installCheckPhase = ''
+    # Very basic sanity check to make sure singular starts and finds its libraries.
+    # This is redundant with the below tests. It is only kept because the singular test
+    # runner is a bit complicated. In case we decide to give up those tests in the future,
+    # this will still be useful. It takes barely any time.
     "$out/bin/Singular" -c 'LIB "freegb.lib"; exit;'
     if [ $? -ne 0 ]; then
         echo >&2 "Error loading the freegb library in Singular."
         exit 1
     fi
+
+    # Run the test suite
+    cd Tst
+    perl ./regress.cmd \
+      -s "$out/bin/Singular" \
+      ${lib.concatStringsSep " " (map lib.escapeShellArg testsToRun)} \
+      2>"$TMPDIR/out-err.log"
+
+    # unfortunately regress.cmd always returns exit code 0, so check stderr
+    # https://www.singular.uni-kl.de/forum/viewtopic.php?f=10&t=2773
+    if [[ -s "$TMPDIR/out-err.log" ]]; then
+      cat "$TMPDIR/out-err.log"
+      exit 1
+    fi
+
+    echo "Exit status $?"
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A CAS for polynomial computations";
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     # 32 bit x86 fails with some link error: `undefined reference to `__divmoddi4@GCC_7.0.0'`
+    # https://www.singular.uni-kl.de:8002/trac/ticket/837
     platforms = subtractLists platforms.i686 platforms.unix;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
-    homepage = http://www.singular.uni-kl.de;
+    homepage = "http://www.singular.uni-kl.de";
     downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
+    mainProgram = "Singular";
   };
 }

@@ -1,18 +1,26 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man
+, apparmorRulesFromClosure, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
-  name = "inetutils-1.9.4";
+  pname = "inetutils";
+  version = "2.3";
 
   src = fetchurl {
-    url = "mirror://gnu/inetutils/${name}.tar.gz";
-    sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-CwG7COKWI8TjuUDyM8lhRR2a+MUGYwGt12pSqV1Rdyw=";
   };
 
+  outputs = ["out" "apparmor"];
+
   patches = [
-    ./whois-Update-Canadian-TLD-server.patch
-    ./service-name.patch
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
+    (fetchpatch {
+      name = "CVE-2022-39028.patch";
+      url = "https://sources.debian.org/data/main/i/inetutils/2%3A2.3-5/debian/patches/inetutils-telnetd-EC_EL_null_deref.patch";
+      sha256 = "sha256-NYNDbEk3q3EhQdJaR12JBbnjJIRRpOcKLBF/EJJPiGU=";
+    })
   ];
 
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
@@ -41,6 +49,23 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SUIDMODE=" ];
 
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; } [stdenv.cc.libc]}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+    }
+    EOF
+  '';
+
   meta = with lib; {
     description = "Collection of common network programs";
 
@@ -51,7 +76,7 @@ stdenv.mkDerivation rec {
          traceroute, uucpd, and whois.
       '';
 
-    homepage = https://www.gnu.org/software/inetutils/;
+    homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;
 
     maintainers = with maintainers; [ matthewbauer ];

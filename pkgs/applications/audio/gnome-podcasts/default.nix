@@ -1,52 +1,95 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext, cargo, rustc, python3, pkgconfig, gnome3
-, glib, libhandy, gtk3, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, gettext
+, python3
+, pkg-config
+, glib
+, libhandy
+, gtk3
+, appstream-glib
+, desktop-file-utils
+, dbus
+, openssl
+, sqlite
+, gst_all_1
+, wrapGAppsHook
+}:
 
-# TODO: build from git for easier updates
-# rustPlatform.buildRustPackage rec {
-stdenv.mkDerivation {
-  version = "0.4.6";
+stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
+  version = "0.5.1";
 
-  src = fetchurl {
-    url = https://gitlab.gnome.org/World/podcasts/uploads/e59ac5d618d7daf4c7f33ba72957c466/gnome-podcasts-0.4.6.tar.xz;
-    sha256 = "0g2rk3w251fp5jwbxs5ya1adv8nsgdqjy1vmfg8qqab6qyndhbrc";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
+    repo = "podcasts";
+    rev = version;
+    sha256 = "00vy1qkkpn76jdpybsq9qp8s6fh1ih10j73p2x43sl97m5g8944h";
   };
 
   patches = [
-    # podcasts-data would fail to build because it errors on warnings
+    # Fix build with meson 0.61, can be removed on next release.
+    # podcasts-gtk/resources/meson.build:5:0: ERROR: Function does not take positional arguments.
+    # podcasts-gtk/resources/meson.build:30:0: ERROR: Function does not take positional arguments.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/World/podcasts/commit/7dc1b25ee7fc59a188312d31b1fa00c3110ae63e.patch";
-      sha256 = "03ibbh1snk1391vnni529agqs14lzg5g0axjgpf3gn8dwwh1yvd5";
+      url = "https://gitlab.gnome.org/World/podcasts/-/commit/6614bb62ecbec7c3b18ea7fe44beb50fe7942b27.patch";
+      sha256 = "3TVKFV9V6Ofdajgkdc+j+yxsU21C4JWSc6GjLExSM00=";
     })
   ];
 
-  # src = fetchFromGitLab {
-  #   domain = "gitlab.gnome.org";
-  #   owner = "World";
-  #   repo = "podcasts";
-  #   rev = version;
-  #   sha256 = "15xj98dhxvys0cnya9488qsfsm0ys1wy69wkc39z8j6hwdm7byq2";
-  # };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    sha256 = "0y34b5rnr75h7dxbx93mafrmwsh187wq5js7fmkb1m1yyybj1v1x";
+  };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext cargo rustc python3 wrapGAppsHook
-  ];
-  buildInputs = [
-    glib gtk3 libhandy dbus openssl sqlite gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-bad
+    meson
+    ninja
+    pkg-config
+    gettext
+    python3
+    rustPlatform.rust.cargo
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.rustc
+    wrapGAppsHook
+    glib
   ];
 
-  # cargoSha256 = "0721b5f700vvvzvmdl8nfjaa6j412q1fjssgrjv8n6rmn9z13d2v";
+  buildInputs = [
+    appstream-glib
+    desktop-file-utils
+    glib
+    gtk3
+    libhandy
+    dbus
+    openssl
+    sqlite
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+  ];
+
+  # tests require network
+  doCheck = false;
 
   postPatch = ''
     chmod +x scripts/compile-gschema.py # patchShebangs requires executable file
-    patchShebangs scripts/compile-gschema.py
+    patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
-    homepage = https://wiki.gnome.org/Apps/Podcasts;
-    license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    homepage = "https://wiki.gnome.org/Apps/Podcasts";
+    license = licenses.gpl3Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };
 }

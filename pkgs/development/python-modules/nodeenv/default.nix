@@ -1,20 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pytestCheckHook
+, python
+, pythonOlder
+, setuptools
+, which
+}:
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.3.3";
+  version = "1.7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ekalinin";
+    repo = pname;
+    rev = version;
+    hash = "sha256-X30PUiOMT/vXqmdSJKHTNNA8aLWavCUaKa7LzqkdLrk=";
   };
 
-  # Tests not included in PyPI tarball
-  doCheck = false;
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  preFixup = ''
+    substituteInPlace $out/${python.sitePackages}/nodeenv.py \
+      --replace '["which", candidate]' '["${lib.getBin which}/bin/which", candidate]'
+  '';
+
+  pythonImportsCheck = [
+    "nodeenv"
+  ];
+
+  disabledTests = [
+    # Test requires coverage
+    "test_smoke"
+  ];
 
   meta = with lib; {
     description = "Node.js virtual environment builder";
-    homepage = https://github.com/ekalinin/nodeenv;
+    homepage = "https://github.com/ekalinin/nodeenv";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

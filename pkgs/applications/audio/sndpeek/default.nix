@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsndfile, freeglut, alsaLib, mesa, libGLU, libX11, libXmu
+{ lib, stdenv, fetchurl, libsndfile, freeglut, alsa-lib, mesa, libGLU, libX11, libXmu
 , libXext, libXi }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    alsaLib
+    alsa-lib
     mesa
     libGLU
     libsndfile
@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
     libXext
     libXi
   ];
-  buildFlags = "linux-alsa";
+  buildFlags = [ "linux-alsa" ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv sndpeek $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time 3D animated audio display/playback";
     longDescription = ''
        sndpeek is just what it sounds (and looks) like:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
          * available on MacOS X, Linux, and Windows under GPL
          * part of the sndtools distribution.
     '';
-    homepage = https://soundlab.cs.princeton.edu/software/sndpeek/;
+    homepage = "https://soundlab.cs.princeton.edu/software/sndpeek/";
     license = licenses.gpl2;
     maintainers = [ maintainers.laikq ];
   };

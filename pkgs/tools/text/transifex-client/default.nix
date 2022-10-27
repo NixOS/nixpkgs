@@ -1,32 +1,44 @@
-{ stdenv, buildPythonApplication, fetchPypi
-, python-slugify, requests, urllib3, six, setuptools }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, python-slugify
+, requests
+, urllib3
+, six
+, setuptools
+, GitPython
+, pythonRelaxDepsHook
+}:
 
 buildPythonApplication rec {
   pname = "transifex-client";
-  version = "0.13.6";
-
-  propagatedBuildInputs = [
-    urllib3 requests python-slugify six setuptools
-  ];
+  version = "0.14.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y6pprlmkmi7wfqr3k70sb913qa70p3i90q5mravrai7cr32y1w8";
+    sha256 = "11dc95cefe90ebf0cef3749c8c7d85b9d389c05bd0e3389bf117685df562bd5c";
   };
 
-  prePatch = ''
-    substituteInPlace requirements.txt --replace "urllib3<1.24" "urllib3<2.0" \
-      --replace "six==1.11.0" "six<2.0.0" \
-      --replace "python-slugify==1.2.6" "python-slugify<4.0.0"
-  '';
+  # https://github.com/transifex/transifex-client/issues/323
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [ "python-slugify" ];
+
+  propagatedBuildInputs = [
+    GitPython
+    python-slugify
+    requests
+    setuptools
+    six
+    urllib3
+  ];
 
   # Requires external resources
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.transifex.com/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     description = "Transifex translation service client";
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ sikmir ];
   };
 }

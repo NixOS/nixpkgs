@@ -1,20 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, openssl, pcsclite, check }:
+{ lib, stdenv, fetchurl, pkg-config, openssl, check, pcsclite, PCSC, gengetopt, cmake
+, withApplePCSC ? stdenv.isDarwin
+}:
 
 stdenv.mkDerivation rec {
-  name = "yubico-piv-tool-1.7.0";
+  pname = "yubico-piv-tool";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/yubico-piv-tool/Releases/${name}.tar.gz";
-    sha256 = "0zzxh8p9p097zkh9b3prbnigxsc2wy1pj1r8f5ikli9i81z54a5l";
+    url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
+    hash = "sha256-oCoS2VRdHvehuZhgbYm3tlWl9aFDdzbPUdsIP4dvVak=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl pcsclite check ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+  '';
 
-  configureFlags = [ "--with-backend=pcsc" ];
+  nativeBuildInputs = [ pkg-config cmake gengetopt ];
+  buildInputs = [ openssl check ]
+    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
-  meta = with stdenv.lib; {
-    homepage = https://developers.yubico.com/yubico-piv-tool/;
+  cmakeFlags = [
+    "-DGENERATE_MAN_PAGES=OFF" # Use the man page generated at release time
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_MANDIR=share/man"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
+  configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
+
+  meta = with lib; {
+    homepage = "https://developers.yubico.com/yubico-piv-tool/";
     description = ''
       Used for interacting with the Privilege and Identification Card (PIV)
       application on a YubiKey
@@ -28,5 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.all;
+    maintainers = with maintainers; [ viraptor anthonyroussel ];
   };
 }

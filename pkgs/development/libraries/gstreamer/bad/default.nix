@@ -1,13 +1,41 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, gettext
-, config
-, pkgconfig, python3, gst-plugins-base, orc
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, meson
+, ninja
+, gettext
+, pkg-config
+, python3
+, gst-plugins-base
+, orc
+, gstreamer
 , gobject-introspection
-, enableZbar ? true
-, faacSupport ? false, faac ? null
-, faad2, libass, libkate, libmms, librdf, ladspaH
-, libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
-, libbs2b, libmodplug, mpeg2dec
-, openjpeg, libopus, librsvg
+, enableZbar ? false
+, faacSupport ? false
+, faac
+, faad2
+, ldacbt
+, libass
+, libkate
+, lrdf
+, ladspaH
+, lcms2
+, libnice
+, webrtc-audio-processing
+, webrtc-audio-processing_1
+, lilv
+, lv2
+, serd
+, sord
+, sratom
+, libbs2b
+, libmodplug
+, libmpeg2
+, libmicrodns
+, openjpeg
+, libopus
+, librsvg
 , bluez
 , chromaprint
 , curl
@@ -15,6 +43,7 @@
 , fdk_aac
 , flite
 , gsm
+, json-glib
 , libaom
 , libdc1394
 , libde265
@@ -22,14 +51,15 @@
 , libdvdnav
 , libdvdread
 , libgudev
-, libofa
+, qrencode
 , libsndfile
 , libusb1
 , neon
 , openal
-, opencv3
+, opencv4
 , openexr
 , openh264
+, libopenmpt
 , pango
 , rtmpdump
 , sbc
@@ -38,130 +68,188 @@
 , srtp
 , zbar
 , wayland-protocols
-, wildmidi, fluidsynth, libvdpau, wayland
-, libwebp, xvidcore, gnutls, mjpegtools
-, libGLU_combined, libintl, libgme
-, openssl, x265, libxml2
+, wildmidi
+, fluidsynth
+, libva
+, libvdpau
+, wayland
+, libwebp
+, xvidcore
+, gnutls
+, mjpegtools
+, libGLU
+, libGL
+, addOpenGLRunpath
+, libintl
+, game-music-emu
+, openssl
+, x265
+, libxml2
 , srt
+, vo-aacenc
+, libfreeaptx
+, zxing-cpp
+, VideoToolbox
+, AudioToolbox
+, AVFoundation
+, CoreMedia
+, CoreVideo
+, Foundation
+, MediaToolbox
+, enableGplPlugins ? true
+, bluezSupport ? stdenv.isLinux
 }:
 
-assert faacSupport -> faac != null;
-
-let
-  inherit (stdenv.lib) optional optionals;
-in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.16.0";
-
-  meta = with stdenv.lib; {
-    description = "Gstreamer Bad Plugins";
-    homepage    = "https://gstreamer.freedesktop.org";
-    longDescription = ''
-      a set of plug-ins that aren't up to par compared to the
-      rest.  They might be close to being good quality, but they're missing
-      something - be it a good code review, some documentation, a set of tests,
-      a real live maintainer, or some actual wide use.
-    '';
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
-  };
-
-  preConfigure = ''
-    patchShebangs .
-  '';
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_requests/312 is merged and available to us
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/99790eaad9083cce5ab2b1646489e1a1c0faad1e.patch";
-      sha256 = "11bqy4sl05qq5mj4bx5s09rq106s3j0vnpjl4np058im32j69lr3";
-    })
-    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/merge_requests/312 is merged and available to us
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/1872da81c48d3a719bd39955fd97deac7d037d74.patch";
-      sha256 = "11zwrr5ggflmvr0qfssj7dmhgd3ybiadmy79b4zh24022zgw3xpz";
-    })
-  ];
-
-  src = fetchurl {
-    url = "${meta.homepage}/src/gst-plugins-bad/${pname}-${version}.tar.xz";
-    sha256 = "019b0yqjrcg6jmfd4cc336h1bz5p4wxl58yz1c4sdb96avirs4r2";
-  };
+  version = "1.20.3";
 
   outputs = [ "out" "dev" ];
 
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ehHBO1XdHSOG3ZAiGeQcv83ajh4Ko+c4GGyVB0s12k8=";
+  };
+
+  patches = [
+    # Add fallback paths for nvidia userspace libraries
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkgconfig python3 gettext gobject-introspection
-  ]
-  ++ optionals stdenv.isLinux [
-    wayland-protocols
+    meson
+    ninja
+    pkg-config
+    orc # for orcc
+    python3
+    gettext
+    gstreamer # for gst-tester-1.0
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
-    gst-plugins-base orc
-    faad2 libass libkate libmms
-    libnice webrtc-audio-processing # webrtc
+    gobject-introspection
+    gst-plugins-base
+    orc
+    json-glib
+    lcms2
+    ldacbt
+    libass
+    libkate
+    webrtc-audio-processing # required by webrtcdsp
+    #webrtc-audio-processing_1 # required by isac
     libbs2b
-    ladspaH librdf # ladspa plug-in
-    lilv lv2 serd sord sratom # lv2 plug-in
-    libmodplug mpeg2dec
-    openjpeg libopus librsvg
-    bluez
-    chromaprint
+    libmodplug
+    libmicrodns
+    openjpeg
+    libopenmpt
+    libopus
+    librsvg
     curl.dev
-    directfb
     fdk_aac
-    flite
     gsm
     libaom
     libdc1394
     libde265
-    libdrm
     libdvdnav
     libdvdread
-    libgudev
-    libofa
+    qrencode
     libsndfile
     libusb1
     neon
     openal
-    opencv3
+    opencv4
     openexr
     openh264
     rtmpdump
     pango
-    sbc
     soundtouch
-    spandsp
     srtp
-    fluidsynth libvdpau
-    libwebp xvidcore gnutls libGLU_combined
-    libgme openssl x265 libxml2
+    fluidsynth
+    libvdpau
+    libwebp
+    xvidcore
+    gnutls
+    libGL
+    libGLU
+    game-music-emu
+    openssl
+    libxml2
     libintl
     srt
-  ]
-    ++ optional enableZbar zbar
-    ++ optional faacSupport faac
-    ++ optional stdenv.isLinux wayland
+    vo-aacenc
+    libfreeaptx
+    zxing-cpp
+  ] ++ lib.optionals enableZbar [
+    zbar
+  ] ++ lib.optionals faacSupport [
+    faac
+  ] ++ lib.optionals enableGplPlugins [
+    libmpeg2
+    mjpegtools
+    faad2
+    x265
+  ] ++ lib.optionals bluezSupport [
+    bluez
+  ] ++ lib.optionals stdenv.isLinux [
+    libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # wildmidi requires apple's OpenAL
     # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    ++ optional (!stdenv.isDarwin) wildmidi
+    wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
-    ++ optional (!stdenv.isDarwin) mjpegtools;
+    mjpegtools
+
+    chromaprint
+    directfb
+    flite
+    libdrm
+    libgudev
+    libnice
+    sbc
+    spandsp
+
+    # ladspa plug-in
+    ladspaH
+    lrdf # TODO: make build on Darwin
+
+    # lv2 plug-in
+    lilv
+    lv2
+    serd
+    sord
+    sratom
+  ] ++ lib.optionals stdenv.isDarwin [
+    # For unknown reasons the order is important, e.g. if
+    # VideoToolbox is last, we get:
+    #     fatal error: 'VideoToolbox/VideoToolbox.h' file not found
+    VideoToolbox
+    AudioToolbox
+    AVFoundation
+    CoreMedia
+    CoreVideo
+    Foundation
+    MediaToolbox
+  ];
 
   mesonFlags = [
-    # Enables all features, so that we know when new dependencies are necessary.
-    "-Dauto_features=enabled"
-
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
+    "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
-    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
+    "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
     #   "Could not find libmpcdec header files, but Musepack was enabled via options"
@@ -174,27 +262,86 @@ stdenv.mkDerivation rec {
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
     "-Dmusepack=disabled"
-    "-Dopenmpt=disabled" # `libopenmpt` not packaged in nixpkgs as of writing
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
+    "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
-    "-Dvoaacenc=disabled" # required `vo-aacenc` library not packaged in nixpkgs as of writing
     "-Dvoamrwbenc=disabled" # required `vo-amrwbenc` library not packaged in nixpkgs as of writing
     "-Dvulkan=disabled" # Linux-only, and we haven't figured out yet which of the vulkan nixpkgs it needs
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
+    "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
+    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
+    "-Dgs=disabled" # depends on `google-cloud-cpp`
+    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
+    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+  ]
+  ++ lib.optionals (!stdenv.isLinux) [
+    "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    "-Dchromaprint=disabled"
+    "-Ddirectfb=disabled"
+    "-Dflite=disabled"
+    "-Dkms=disabled" # renders to libdrm output
+    "-Dlv2=disabled"
+    "-Dsbc=disabled"
+    "-Dspandsp=disabled"
+    "-Ddvb=disabled"
+    "-Dfbdev=disabled"
+    "-Duvch264=disabled" # requires gudev
+    "-Dv4l2codecs=disabled" # requires gudev
+    "-Dladspa=disabled" # requires lrdf
+    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
+    "-Dwildmidi=disabled" # see dependencies above
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    "-Dgl=disabled"
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
+    "-Dwayland=disabled"
+  ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
+    # but its meson build system does not declare the dependency.
+    "-Dapplemedia=disabled"
+  ] ++ (if enableGplPlugins then [
+    "-Dgpl=enabled"
+  ] else [
+    "-Ddts=disabled"
+    "-Dfaad=disabled"
+    "-Diqa=disabled"
+    "-Dmpeg2enc=disabled"
+    "-Dmplex=disabled"
+    "-Dresindvd=disabled"
+    "-Dx265=disabled"
+  ]);
 
-    # Requires CUDA and we haven't figured out how to make Meson find CUDA yet;
-    # it probably searches via pkgconfig, for which we have no .pc files,
-    # see https://github.com/NixOS/nixpkgs/issues/54395
-    "-Dnvdec=disabled"
-    "-Dnvenc=disabled"
-  ];
+  # Argument list too long
+  strictDeps = true;
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
+
+  # This package has some `_("string literal")` string formats
+  # that trip up clang with format security enabled.
+  hardeningDisable = [ "format" ];
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
+  meta = with lib; {
+    description = "GStreamer Bad Plugins";
+    homepage = "https://gstreamer.freedesktop.org";
+    longDescription = ''
+      a set of plug-ins that aren't up to par compared to the
+      rest.  They might be close to being good quality, but they're missing
+      something - be it a good code review, some documentation, a set of tests,
+      a real live maintainer, or some actual wide use.
+    '';
+    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
+  };
 }

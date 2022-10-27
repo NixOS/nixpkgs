@@ -11,13 +11,18 @@ ver: deps:
                    inherit (info) sha256;
                  };
 
-                 phases = [ "unpackPhase" "installPhase" ];
+                 configurePhase = ''
+                   true
+                 '';
+
+                 buildPhase = ''
+                   true
+                 '';
 
                  installPhase = ''
                    mkdir -p $out
                    cp -r * $out
                  '';
-
                };
              in ''
                mkdir -p .elm/${ver}/packages/${name}

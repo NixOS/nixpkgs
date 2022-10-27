@@ -1,26 +1,31 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
+  # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20190819";
+  version = "1.20220331";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "0qzpc092qg748i5s23xa1jk6qpga9wn0441r2awsz0apkysqx5fj";
+    hash = "sha256-TxlpHPEJAtVJTtDghuJpx2mLjEPiKkcAr7S9Cd/cocE=";
   };
 
   installPhase = ''
-    mkdir -p $out/share/raspberrypi/boot
-    cp -R boot/* $out/share/raspberrypi/boot
+    mkdir -p $out/share/raspberrypi/
+    mv boot "$out/share/raspberrypi/"
   '';
 
-  meta = with stdenv.lib; {
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
+
+  meta = with lib; {
     description = "Firmware for the Raspberry Pi board";
-    homepage = https://github.com/raspberrypi/firmware;
+    homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ dezgeg tavyc ];
+    maintainers = with maintainers; [ dezgeg ];
+    broken = stdenvNoCC.isDarwin; # Hash mismatch on source, mystery.
   };
 }

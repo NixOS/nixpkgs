@@ -1,16 +1,13 @@
-# Test for NixOS' container support.
-
-import ./make-test.nix ({ pkgs, ...} : {
-  name = "containers-bridge";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ kampfschlaefer ];
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
+  name = "containers-extra_veth";
+  meta = {
+    maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
       networking.useDHCP = false;
@@ -47,57 +44,48 @@ import ./make-test.nix ({ pkgs, ...} : {
             };
         };
 
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
 
   testScript =
     ''
-      $machine->waitForUnit("default.target");
-      $machine->succeed("nixos-container list") =~ /webserver/ or die;
+      machine.wait_for_unit("default.target")
+      assert "webserver" in machine.succeed("nixos-container list")
 
-      # Status of the webserver container.
-      $machine->succeed("nixos-container status webserver") =~ /up/ or die;
+      with subtest("Status of the webserver container is up"):
+          assert "up" in machine.succeed("nixos-container status webserver")
 
-      # Debug
-      #$machine->succeed("nixos-container run webserver -- ip link >&2");
+      with subtest("Ensure that the veths are inside the container"):
+          assert "state UP" in machine.succeed(
+              "nixos-container run webserver -- ip link show veth1"
+          )
+          assert "state UP" in machine.succeed(
+              "nixos-container run webserver -- ip link show veth2"
+          )
 
-      # Ensure that the veths are inside the container
-      $machine->succeed("nixos-container run webserver -- ip link show veth1") =~ /state UP/ or die;
-      $machine->succeed("nixos-container run webserver -- ip link show veth2") =~ /state UP/ or die;
+      with subtest("Ensure the presence of the extra veths"):
+          assert "state UP" in machine.succeed("ip link show veth1")
+          assert "state UP" in machine.succeed("ip link show veth2")
 
-      # Debug
-      #$machine->succeed("ip link >&2");
+      with subtest("Ensure the veth1 is part of br1 on the host"):
+          assert "master br1" in machine.succeed("ip link show veth1")
 
-      # Ensure the presence of the extra veths
-      $machine->succeed("ip link show veth1") =~ /state UP/ or die;
-      $machine->succeed("ip link show veth2") =~ /state UP/ or die;
+      with subtest("Ping on main veth"):
+          machine.succeed("ping -n -c 1 192.168.0.100")
+          machine.succeed("ping -n -c 1 fc00::2")
 
-      # Ensure the veth1 is part of br1 on the host
-      $machine->succeed("ip link show veth1") =~ /master br1/ or die;
+      with subtest("Ping on the first extra veth"):
+          machine.succeed("ping -n -c 1 192.168.1.100 >&2")
 
-      # Debug
-      #$machine->succeed("ip -4 a >&2");
-      #$machine->succeed("ip -4 r >&2");
-      #$machine->succeed("nixos-container run webserver -- ip link >&2");
-      #$machine->succeed("nixos-container run webserver -- ip -4 a >&2");
-      #$machine->succeed("nixos-container run webserver -- ip -4 r >&2");
+      with subtest("Ping on the second extra veth"):
+          machine.succeed("ping -n -c 1 192.168.2.100 >&2")
 
-      # Ping on main veth
-      $machine->succeed("ping -n -c 1 192.168.0.100");
-      $machine->succeed("ping -n -c 1 fc00::2");
+      with subtest("Container can be stopped"):
+          machine.succeed("nixos-container stop webserver")
+          machine.fail("ping -n -c 1 192.168.1.100 >&2")
+          machine.fail("ping -n -c 1 192.168.2.100 >&2")
 
-      # Ping on the first extra veth
-      $machine->succeed("ping -n -c 1 192.168.1.100 >&2");
-
-      # Ping on the second extra veth
-      $machine->succeed("ping -n -c 1 192.168.2.100 >&2");
-
-      # Stop the container.
-      $machine->succeed("nixos-container stop webserver");
-      $machine->fail("ping -n -c 1 192.168.1.100 >&2");
-      $machine->fail("ping -n -c 1 192.168.2.100 >&2");
-
-      # Destroying a declarative container should fail.
-      $machine->fail("nixos-container destroy webserver");
+      with subtest("Destroying a declarative container should fail"):
+          machine.fail("nixos-container destroy webserver")
     '';
 })

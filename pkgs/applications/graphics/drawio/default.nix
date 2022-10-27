@@ -1,21 +1,21 @@
 { stdenv, lib, fetchurl, rpmextract, autoPatchelfHook, wrapGAppsHook
 
 # Dynamic libraries
-, alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
+, alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, dbus, cups, expat
 , gdk-pixbuf, glib, gtk3, libX11, libXScrnSaver, libXcomposite, libXcursor
 , libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst
-, libxcb, libuuid, nspr, nss, pango
+, libxcb, libuuid, libxshmfence, nspr, nss, pango, mesa
 
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "12.1.0";
+  version = "20.3.0";
 
   src = fetchurl {
-    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "02gwhnbl9fzgf1z8c9bkm3rxzyncp7v57yqc322r85vg0wxir3f8";
+    url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/drawio-x86_64-${version}.rpm";
+    sha256 = "bfcd363f549ce8dc13ae2287cec5099e4bf1d0d4b6f8deef40a81279f78817e1";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     atk
     at-spi2-atk
     at-spi2-core
@@ -46,9 +46,11 @@ stdenv.mkDerivation rec {
     libXi
     libXrandr
     libXrender
+    libxshmfence
     libXtst
     libxcb
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   dontBuild = true;
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share
-    cp -r opt/draw.io $out/share/
+    cp -r opt/drawio $out/share/
 
     # Application icon
     mkdir -p $out/share/icons/hicolor
@@ -77,18 +79,26 @@ stdenv.mkDerivation rec {
 
     # Symlink wrapper
     mkdir -p $out/bin
-    ln -s $out/share/draw.io/drawio $out/bin/drawio
+    ln -s $out/share/drawio/drawio $out/bin/drawio
 
     # Update binary path
     substituteInPlace $out/share/applications/drawio.desktop \
-      --replace /opt/draw.io/drawio $out/bin/drawio
+      --replace /opt/drawio/drawio $out/bin/drawio
   '';
 
-  meta = with stdenv.lib; {
+  doInstallCheckPhase = true;
+
+  installCheckPhase = ''
+    $out/bin/drawio --help > /dev/null
+  '';
+
+  meta = with lib; {
     description = "A desktop application for creating diagrams";
-    homepage = https://about.draw.io/;
+    homepage = "https://about.draw.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ danieldk ];
+    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
+    maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
   };
 }

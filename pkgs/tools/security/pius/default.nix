@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, python3Packages, gnupg, perl }:
+{ fetchFromGitHub, lib, python3Packages, gnupg, perl }:
 
 let version = "3.0.0"; in
 python3Packages.buildPythonApplication {
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication {
   buildInputs = [ perl ];
 
   meta = {
-    homepage = https://www.phildev.net/pius/;
+    homepage = "https://www.phildev.net/pius/";
 
     description = "PGP Individual UID Signer (PIUS), quickly and easily sign UIDs on a set of PGP keys";
 
@@ -33,9 +33,9 @@ python3Packages.buildPythonApplication {
          to the process.
       '';
 
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    maintainers = with lib.maintainers; [ kierdavis ];
   };
 }

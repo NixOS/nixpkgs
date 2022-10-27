@@ -1,32 +1,64 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
+}:
 
-buildGoPackage rec {
-  version = "0.3.0";
+buildGoModule rec {
+  version = "2.6.1";
   pname = "grafana-loki";
-  goPackagePath = "github.com/grafana/loki";
-
-  doCheck = true;
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "1b61fqk6ah4qps4nq7ypdax4i7pkhjxdw4qrhc1zvzzhxr7x13rs";
+    sha256 = "sha256-6g0tzI6ZW+wwbPrNTdj0t2H0/M8+M9ioJl6iPL0mAtY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ systemd.dev ];
+  patches = [
+    ./go119.patch
+  ];
 
-  preFixup = ''
-    wrapProgram $bin/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
+  vendorSha256 = null;
+
+  subPackages = [
+    # TODO split every executable into its own package
+    "cmd/loki"
+    "cmd/loki-canary"
+    "clients/cmd/promtail"
+    "cmd/logcli"
+  ];
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+
+  preFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/promtail \
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  meta = with stdenv.lib; {
-    description = "Like Prometheus, but for logs.";
-    license = licenses.asl20;
-    homepage = "https://grafana.com/loki";
-    maintainers = with maintainers; [ willibutz globin ];
-    platforms = platforms.linux;
+  passthru.tests = { inherit (nixosTests) loki; };
+
+  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=${version}"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.Revision=unknown"
+  ];
+
+  doCheck = true;
+
+  meta = with lib; {
+    description = "Like Prometheus, but for logs";
+    license = with licenses; [ agpl3Only asl20 ];
+    homepage = "https://grafana.com/oss/loki/";
+    maintainers = with maintainers; [ willibutz globin mmahut ];
+    platforms = platforms.unix;
   };
 }

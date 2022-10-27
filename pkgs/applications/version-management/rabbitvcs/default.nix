@@ -1,17 +1,19 @@
-{ fetchFromGitHub, lib, python2Packages, meld, subversion, gvfs, xdg_utils }:
-python2Packages.buildPythonApplication rec {
+{ fetchFromGitHub, lib, python3Packages, meld, subversion, gvfs, xdg-utils, gtk3 }:
+
+python3Packages.buildPythonApplication rec {
   pname = "rabbitvcs";
-  version = "0.17.1";
+  version = "0.18";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "rabbitvcs";
     repo = "rabbitvcs";
     rev = "v${version}";
-    sha256 = "01cr16zf3gzsci1hhfli79m34fcx5m1pvswl16rkxxn212yc9fhy";
+    hash = "sha256-gVrdf8vQWAGORZqlTS/axs4U7aZlS8OAgPM3iKgqAtM=";
   };
 
-  pythonPath = with python2Packages; [ configobj dbus-python pygobject2 pygtk simplejson pysvn dulwich tkinter gvfs xdg_utils ];
+  buildInputs = [ gtk3 ];
+  pythonPath = with python3Packages; [ configobj pygobject3 pysvn dulwich tkinter gvfs xdg-utils ];
 
   prePatch = ''
       sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
@@ -34,7 +36,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "Graphical tools for working with version control systems";
-    homepage = http://rabbitvcs.org/;
+    homepage = "http://rabbitvcs.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.mathnerd314 ];

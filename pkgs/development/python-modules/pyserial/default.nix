@@ -1,21 +1,44 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, unittestCheckHook
+, pythonOlder
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "pyserial";
-  version="3.4";
+  version = "3.5";
+  format = "setuptools";
+
+  # Supports Python 2.7 and 3.4+
+  disabled = isPy3k && pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09y68bczw324a4jb9a1cfwrbjhq179vnfkkkrybbksp0vqgl0bbf";
+    hash = "sha256-PHfgFBcN//vYFub/wgXphC77EL6fWOwW0+hnW0klzds=";
   };
 
-  checkPhase = "python -m unittest discover -s test";
+  patches = [
+    ./001-rfc2217-only-negotiate-on-value-change.patch
+    ./002-rfc2217-timeout-setter-for-rfc2217.patch
+  ];
+
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "test" ];
+
+  pythonImportsCheck = [
+    "serial"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/pyserial/pyserial";
-    license = licenses.psfl;
     description = "Python serial port extension";
+    homepage = "https://github.com/pyserial/pyserial";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ makefu ];
   };
 }

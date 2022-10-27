@@ -20,6 +20,7 @@ let
         size = 2048;
     };
     CN = top.masterAddress;
+    hosts = [top.masterAddress] ++ cfg.cfsslAPIExtraSANs;
   });
 
   cfsslAPITokenBaseName = "apitoken.secret";
@@ -40,16 +41,16 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "easyCert issuer service";
+    enable = mkEnableOption (lib.mdDoc "easyCert issuer service");
 
     certs = mkOption {
-      description = "List of certificate specs to feed to cert generator.";
+      description = lib.mdDoc "List of certificate specs to feed to cert generator.";
       default = {};
       type = attrs;
     };
 
     genCfsslCACert = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl CA certificate and key,
         if they don't exist.
       '';
@@ -58,7 +59,7 @@ in
     };
 
     genCfsslAPICerts = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl API webserver TLS cert and key,
         if they don't exist.
       '';
@@ -66,8 +67,17 @@ in
       type = bool;
     };
 
+    cfsslAPIExtraSANs = mkOption {
+      description = lib.mdDoc ''
+        Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
+      '';
+      default = [];
+      example = [ "subdomain.example.com" ];
+      type = listOf str;
+    };
+
     genCfsslAPIToken = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl API-token secret,
         if they doesn't exist.
       '';
@@ -76,23 +86,24 @@ in
     };
 
     pkiTrustOnBootstrap = mkOption {
-      description = "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
+      description = lib.mdDoc "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
       default = true;
       type = bool;
     };
 
     caCertPathPrefix = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Path-prefrix for the CA-certificate to be used for cfssl signing.
         Suffixes ".pem" and "-key.pem" will be automatically appended for
         the public and private keys respectively.
       '';
       default = "${config.services.cfssl.dataDir}/ca";
+      defaultText = literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
       type = str;
     };
 
     caSpec = mkOption {
-      description = "Certificate specification for the auto-generated CAcert.";
+      description = lib.mdDoc "Certificate specification for the auto-generated CAcert.";
       default = {
         CN = "kubernetes-cluster-ca";
         O = "NixOS";
@@ -103,9 +114,9 @@ in
     };
 
     etcClusterAdminKubeconfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Symlink a kubeconfig with cluster-admin privileges to environment path
-        (/etc/&lt;path&gt;).
+        (/etc/\<path\>).
       '';
       default = null;
       type = nullOr str;
@@ -179,6 +190,7 @@ in
         # manually paste it in place. Just symlink.
         # otherwise, create the target file, ready for users to insert the token
 
+        mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else
@@ -218,7 +230,8 @@ in
             };
             private_key = cert.privateKeyOptions;
             request = {
-              inherit (cert) CN hosts;
+              hosts = [cert.CN] ++ cert.hosts;
+              inherit (cert) CN;
               key = {
                 algo = "rsa";
                 size = 2048;
@@ -253,7 +266,7 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
@@ -350,6 +363,7 @@ in
           tlsCertFile = mkDefault cert;
           tlsKeyFile = mkDefault key;
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
+          serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
           kubeletClientCaFile = mkDefault caCert;
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
@@ -387,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

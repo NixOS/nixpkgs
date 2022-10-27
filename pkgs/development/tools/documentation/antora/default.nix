@@ -1,16 +1,15 @@
-{ stdenv, nodePackages_10_x }:
+{ lib, nodePackages }:
 
 let
-  drvName = drv: (builtins.parseDrvName drv).name;
   linkNodeDeps = ({ pkg, deps, name ? "" }:
     let
-      targetModule = if name != "" then name else drvName pkg;
-    in nodePackages_10_x.${pkg}.override (oldAttrs: {
+      targetModule = if name != "" then name else lib.getName pkg;
+    in nodePackages.${pkg}.override (oldAttrs: {
       postInstall = ''
         mkdir -p $out/lib/node_modules/${targetModule}/node_modules
-        ${stdenv.lib.concatStringsSep "\n" (map (dep: ''
-          ln -s ${nodePackages_10_x.${dep}}/lib/node_modules/${drvName dep} \
-            $out/lib/node_modules/${targetModule}/node_modules/${drvName dep}
+        ${lib.concatStringsSep "\n" (map (dep: ''
+          ln -s ${nodePackages.${dep}}/lib/node_modules/${lib.getName dep} \
+            $out/lib/node_modules/${targetModule}/node_modules/${lib.getName dep}
         '') deps
         )}
       '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, libgpgerror, gobject-introspection }:
+{ lib, stdenv, fetchurl, pkg-config, glib, zlib, gnupg, libgpg-error, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   version = "2.6.23";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  propagatedBuildInputs = [ glib zlib libgpgerror ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
+  propagatedBuildInputs = [ glib zlib libgpg-error ];
   configureFlags = [ "--enable-introspection=yes" ];
 
   postPatch = ''
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jstedfast/gmime/;
+  meta = with lib; {
+    homepage = "https://github.com/jstedfast/gmime/";
     description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];

@@ -1,26 +1,63 @@
-{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobject-introspection, libxml2
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, dbus, xvfb_run, glib, gtk3, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, ninja
+, meson
+, mesonEmulatorHook
+, pkg-config
+, vala
+, gobject-introspection
+, libxml2
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, dbus
+, xvfb-run
+, glib
+, gtk3
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdazzle";
-  version = "3.34.1";
+  version = "3.44.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libdazzle/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "01cmcrd75b7ns7j2b4p6h7pv68vjhkcl9zbvzzx7pf4vknxir61x";
+    url = "mirror://gnome/sources/libdazzle/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "PNPkXrbiaAywXVLh6A3Y+dWdR2UhLw4o945sF4PRjq4=";
   };
 
-  nativeBuildInputs = [ ninja meson pkgconfig vala gobject-introspection libxml2 gtk-doc docbook_xsl docbook_xml_dtd_43 dbus xvfb_run ];
-  buildInputs = [ glib gtk3 ];
+  nativeBuildInputs = [
+    ninja
+    meson
+    pkg-config
+    vala
+    gobject-introspection
+    libxml2
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+    dbus
+    glib
+  ] ++ lib.optionals stdenv.isLinux [
+    xvfb-run
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+  ];
 
   mesonFlags = [
     "-Denable_gtk_doc=true"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
@@ -29,12 +66,12 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to delight your users with fancy features";
     longDescription = ''
       The libdazzle library is a companion library to GObject and GTK. It
@@ -43,9 +80,9 @@ stdenv.mkDerivation rec {
       for those libraries. In other cases, our design isn't quite generic
       enough to work for everyone.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

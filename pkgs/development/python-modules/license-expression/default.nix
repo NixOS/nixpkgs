@@ -1,25 +1,49 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
 , boolean-py
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "0.999";
+  version = "30.0.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "license-expression";
     rev = "v${version}";
-    sha256 = "0q8sha38w7ajg7ar0rmbqrwv0n58l8yzyl96cqwcbvp578fn3ir0";
+    hash = "sha256-tGXNZm9xH8sXa7dtBFsTzGgT+hfbmkwps7breR7KUWU=";
   };
-  postPatch = "patchShebangs ./configure";
 
-  propagatedBuildInputs = [ boolean-py ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  dontConfigure = true;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    boolean-py
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "license_expression"
+  ];
 
   meta = with lib; {
+    description = "Utility library to parse, normalize and compare License expressions";
     homepage = "https://github.com/nexB/license-expression";
-    description = "Utility library to parse, normalize and compare License expressions for Python using a boolean logic engine";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
-
 }

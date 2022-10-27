@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, makeWrapper
+{ lib, stdenv, fetchgit, makeWrapper
 , surf, wmctrl, matchbox, xdotool, unclutter
 , xorg, pulseaudio, xprintidle-ng }:
 
 stdenv.mkDerivation rec {
   pname = "surf-display";
-  version = "unstable-2019-04-15";
+  version = "unstable-2022-10-07";
 
   src = fetchgit {
     url = "https://code.it-zukunft-schule.de/cgit/surf-display";
-    rev = "972d6c4b7c4503dbb63fa6c92cdc24d1e32064a4";
-    sha256 = "03c68gg4kfmkri1gn5b7m1g8vh9ciawhajb29c17kkc7mn388hjm";
+    rev = "ad0bd30642f8334d42bb08ea5c1b9dd03fccc4d1";
+    hash = "sha256-wiyFh1te3afASIODn0cA5QXcqnrP/8Bk6hBAZYbKJQQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,15 +38,19 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/bin/surf-display
     wrapProgram $out/bin/surf-display \
-       --prefix PATH ':' ${stdenv.lib.makeBinPath buildInputs}
+       --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    providedSessions = [ "surf-display" ];
+  };
+
+  meta = with lib; {
     description = "Kiosk browser session manager based on the surf browser";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

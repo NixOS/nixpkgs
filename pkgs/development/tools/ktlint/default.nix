@@ -1,38 +1,31 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "0.34.2";
+  version = "0.47.1";
 
   src = fetchurl {
-    url = "https://github.com/shyiko/ktlint/releases/download/${version}/ktlint";
-    sha256 = "1v1s4y8ads2s8hjsjacxni1j0dbmnhilhnfs0xabr3aljqs15wb2";
+    url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
+    sha256 = "sha256-ozOtAXI2mlzZc66oPgLotpjAai2qxvMpJdoDBJqj3Oc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = [ jre ];
-
-  unpackCmd = ''
-    mkdir -p ${pname}-${version}
-    cp $curSrc ${pname}-${version}/ktlint
-  '';
+  dontUnpack = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv ktlint $out/bin/ktlint
-    chmod +x $out/bin/ktlint
+    install -Dm755 $src $out/bin/ktlint
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${jre}/bin"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An anti-bikeshedding Kotlin linter with built-in formatter";
-    homepage = https://ktlint.github.io/;
+    homepage = "https://ktlint.github.io/";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ tadfisher ];
+    platforms = jre_headless.meta.platforms;
+    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
   };
 }

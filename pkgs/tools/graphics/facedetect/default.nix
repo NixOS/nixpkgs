@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "facedetect";
@@ -11,14 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "0mddh71cjbsngpvjli406ndi2x613y39ydgb8bi4z1jp063865sd";
   };
 
-  buildInputs = [ python2Packages.python python2Packages.wrapPython ];
-  pythonPath = [ python2Packages.numpy python2Packages.opencv ];
+  patches = [
+    (fetchpatch {
+      name = "python3-support.patch";
+      url = "https://gitlab.com/wavexx/facedetect/-/commit/8037d4406eb76dd5c106819f72c3562f8b255b5b.patch";
+      sha256 = "1752k37pbkigiwglx99ba9360ahzzrrb65a8d77k3xs4c3bcmk2p";
+    })
+  ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+  buildInputs = [ python3Packages.python python3Packages.wrapPython ];
+  pythonPath = [ python3Packages.numpy python3Packages.opencv4 ];
 
-  patchPhase = ''
+  dontConfigure = true;
+
+  postPatch = ''
     substituteInPlace facedetect \
-      --replace /usr/share/opencv "${python2Packages.opencv}/share/OpenCV"
+      --replace /usr/share/opencv "${python3Packages.opencv4}/share/opencv4"
   '';
 
   installPhase = ''
@@ -27,8 +35,8 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.thregr.org/~wavexx/software/facedetect/;
+  meta = with lib; {
+    homepage = "https://www.thregr.org/~wavexx/software/facedetect/";
     description = "A simple face detector for batch processing";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

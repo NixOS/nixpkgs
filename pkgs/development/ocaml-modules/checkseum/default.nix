@@ -1,39 +1,45 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, alcotest, cmdliner, fmt, optint, rresult }:
+{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator, pkg-config
+, optint
+, fmt, rresult, bos, fpath, astring, alcotest
+, withFreestanding ? false
+, ocaml-freestanding
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "checkseum is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  version = "0.4.0";
+  pname = "checkseum";
 
-# The C implementation is not portable: x86 only
-let hasC = stdenv.isi686 || stdenv.isx86_64; in
+  minimalOCamlVersion = "4.07";
 
-stdenv.mkDerivation rec {
-  version = "0.0.3";
-  name = "ocaml${ocaml.version}-checkseum-${version}";
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v0.0.3/checkseum-v0.0.3.tbz";
-    sha256 = "12j45zsvil1ynwx1x8fbddhqacc8r1zf7f6h576y3f3yvbg7l1fm";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
+    sha256 = "sha256-K6QPMts5+hxH2a+WQ1N0lwMBoshG2T0bSozNgzRvAlo=";
   };
 
-  postPatch = stdenv.lib.optionalString (!hasC) ''
-    rm -r bin src-c
-  '';
+  buildInputs = [ dune-configurator ];
+  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [
+    optint
+  ] ++ lib.optionals withFreestanding [
+    ocaml-freestanding
+  ];
 
-  buildInputs = [ ocaml findlib dune alcotest cmdliner fmt rresult ];
-  propagatedBuildInputs = [ optint ];
+  checkInputs = [
+    alcotest
+    bos
+    astring
+    fmt
+    fpath
+    rresult
+  ];
 
-  buildPhase = "dune build";
-
-  doCheck = hasC;
-  checkPhase = "dune runtest";
-
-  inherit (dune) installPhase;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    homepage = "https://github.com/mirage/checkseum";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

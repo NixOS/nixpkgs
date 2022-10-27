@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -8,18 +8,18 @@
 , nose
 , numpy
 , scipy
+, setuptools
 , six
 , libgpuarray
-, cudaSupport ? false, cudatoolkit
-, cudnnSupport ? false, cudnn
-, nvidia_x11
+, cudaSupport ? false, cudaPackages ? {}
+, cudnnSupport ? false
 }:
 
-assert cudnnSupport -> cudaSupport;
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
-                   && cudnn != null;
+assert cudnnSupport -> cudaSupport;
 
 let
   wrapped = command: buildTop: buildInputs:
@@ -35,36 +35,44 @@ let
     '';
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
-  cxx_compiler = wrapped "g++" "\\$HOME/.theano"
-    (    stdenv.lib.optional cudaSupport libgpuarray_
-      ++ stdenv.lib.optional cudnnSupport cudnn );
+  cxx_compiler_name =
+    if stdenv.cc.isGNU then "g++" else
+    if stdenv.cc.isClang then "clang++" else
+    throw "Unknown C++ compiler";
+  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
+    (    lib.optional cudaSupport libgpuarray_
+      ++ lib.optional cudnnSupport cudnn );
 
-  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
+  # We need to be careful with overriding Python packages within the package set
+  # as this can lead to collisions!
+  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudaPackages; };
 
 in buildPythonPackage rec {
   pname = "Theano";
-  version = "1.0.4";
+  version = "1.0.5";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35c9bbef56b61ffa299265a42a4e8f8cb5a07b2997dabaef0f8830b397086913";
+    sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
   };
 
   postPatch = ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
       --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
-  '' + stdenv.lib.optionalString cudaSupport ''
+  '' + lib.optionalString cudaSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
-  '' + stdenv.lib.optionalString cudnnSupport ''
+  '' + lib.optionalString cudnnSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -75,12 +83,22 @@ in buildPythonPackage rec {
 
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+  # setuptools needed for cuda support
+  propagatedBuildInputs = [
+    libgpuarray_
+    numpy
+    numpy.blas
+    scipy
+    setuptools
+    six
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://deeplearning.net/software/theano/;
+  pythonImportsCheck = [ "theano" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/Theano/Theano";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ maintainers.bcdarwin ];
+    maintainers = [ ];
   };
 }

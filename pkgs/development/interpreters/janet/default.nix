@@ -1,26 +1,38 @@
-{ stdenv, fetchFromGitHub, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.4.0";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xszmgw5nl5b6gd3344h1mic1c1a3hj7nivp4d9hqzzh131qvbn5";
+    sha256 = "sha256-uGbaoWJAWbSQ7QkocU7gFZUiWb0GD8mtuO7V0sUXTv0=";
   };
 
+  postPatch = ''
+    substituteInPlace janet.1 \
+      --replace /usr/local/ $out/
+  '';
+
   nativeBuildInputs = [ meson ninja ];
+
   mesonFlags = [ "-Dgit_hash=release" ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/janet -e '(+ 1 2 3)'
+  '';
+
+  meta = with lib; {
     description = "Janet programming language";
-    homepage = https://janet-lang.org/;
+    homepage = "https://janet-lang.org/";
     license = licenses.mit;
+    maintainers = with maintainers; [ andrewchambers peterhoeg ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ andrewchambers ];
   };
 }

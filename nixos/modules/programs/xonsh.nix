@@ -18,7 +18,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure xonsh as an interactive shell.
         '';
         type = types.bool;
@@ -27,15 +27,16 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.xonsh;
-        example = literalExample "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
-        description = ''
+        defaultText = literalExpression "pkgs.xonsh";
+        example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
+        description = lib.mdDoc ''
           xonsh package to use.
         '';
       };
 
       config = mkOption {
         default = "";
-        description = "Control file to customize your shell behavior.";
+        description = lib.mdDoc "Control file to customize your shell behavior.";
         type = types.lines;
       };
 
@@ -45,7 +46,32 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc.xonshrc.text = cfg.config;
+    environment.etc.xonshrc.text = ''
+      # /etc/xonshrc: DO NOT EDIT -- this file has been generated automatically.
+
+
+      if not ''${...}.get('__NIXOS_SET_ENVIRONMENT_DONE'):
+          # The NixOS environment and thereby also $PATH
+          # haven't been fully set up at this point. But
+          # `source-bash` below requires `bash` to be on $PATH,
+          # so add an entry with bash's location:
+          $PATH.add('${pkgs.bash}/bin')
+
+          # Stash xonsh's ls alias, so that we don't get a collision
+          # with Bash's ls alias from environment.shellAliases:
+          _ls_alias = aliases.pop('ls', None)
+
+          # Source the NixOS environment config.
+          source-bash "${config.system.build.setEnvironment}"
+
+          # Restore xonsh's ls alias, overriding that from Bash (if any).
+          if _ls_alias is not None:
+              aliases['ls'] = _ls_alias
+          del _ls_alias
+
+
+      ${cfg.config}
+    '';
 
     environment.systemPackages = [ cfg.package ];
 

@@ -1,48 +1,51 @@
-{ stdenv, cmake, fetchurl, perl, python, flex, bison, qt4, CoreServices, libiconv }:
+{ lib, stdenv, cmake, fetchFromGitHub, python3, flex, bison, qt5, CoreServices, libiconv }:
 
 stdenv.mkDerivation rec {
+  pname = "doxygen";
+  version = "1.9.5";
 
-  name = "doxygen-1.8.15";
-
-  src = fetchurl {
-    urls = [
-      "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
-      "http://doxygen.nl/files/${name}.src.tar.gz"
-    ];
-    sha256 = "bd9c0ec462b6a9b5b41ede97bede5458e0d7bb40d4cfa27f6f622eb33c59245d";
+  src = fetchFromGitHub {
+    owner = "doxygen";
+    repo = "doxygen";
+    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "sha256-968LGj2b8qLs/YQ1DxC1s/xf5qUwnrd8xu5iKrqNN+Y=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    flex
+    bison
+  ];
 
   buildInputs =
-    [ perl python flex bison ]
-    ++ stdenv.lib.optional (qt4 != null) qt4
-    ++ stdenv.lib.optional stdenv.isSunOS libiconv
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+       lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    ++ lib.optional stdenv.isSunOS libiconv
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   cmakeFlags =
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
-    stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
+    lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
-
-  enableParallelBuilding = true;
-  doCheck = false; # fails
+    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   meta = {
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://doxygen.nl/;
+    license = lib.licenses.gpl2Plus;
+    homepage = "https://www.doxygen.nl/";
+    changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
 
     longDescription = ''
-      Doxygen is a documentation system for C++, C, Java, Objective-C,
-      Python, IDL (CORBA and Microsoft flavors), Fortran, VHDL, PHP,
-      C\#, and to some extent D.  It can generate an on-line
-      documentation browser (in HTML) and/or an off-line reference
-      manual (in LaTeX) from a set of documented source files.
+      Doxygen is the de facto standard tool for generating documentation from
+      annotated C++ sources, but it also supports other popular programming
+      languages such as C, Objective-C, C#, PHP, Java, Python, IDL (Corba,
+      Microsoft, and UNO/OpenOffice flavors), Fortran, VHDL and to some extent
+      D. It can generate an on-line documentation browser (in HTML) and/or an
+      off-line reference manual (in LaTeX) from a set of documented source
+      files.
     '';
 
-    platforms = if qt4 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
+    platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
 }

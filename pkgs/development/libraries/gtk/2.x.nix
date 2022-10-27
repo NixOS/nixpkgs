@@ -1,23 +1,31 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
-, fetchpatch
+, fetchpatch, buildPackages
 }:
 
-assert xineramaSupport -> xorg.libXinerama != null;
-assert cupsSupport -> cups != null;
+with lib;
 
-with stdenv.lib;
+let
+
+  gtkCleanImmodulesCache = substituteAll {
+    src = ./hooks/clean-immodules-cache.sh;
+    gtk_module_path = "gtk-2.0";
+    gtk_binary_version = "2.10.0";
+  };
+
+in
 
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.32";
+  pname = "gtk+";
+  version = "2.24.33";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
-    sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
+    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
+    sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -26,18 +34,19 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   setupHooks =  [
-    ./hooks/gtk2-clean-immodules-cache.sh
     ./hooks/drop-icon-theme-cache.sh
+    gtkCleanImmodulesCache
   ];
 
-  nativeBuildInputs = [ setupHooks perl pkgconfig gettext gobject-introspection ];
+
+  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
     ./patches/gtk2-theme-paths.patch
   ] ++ optionals stdenv.isDarwin [
     (fetchpatch {
-      url = https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776;
+      url = "https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776";
       sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
     })
     ./patches/2.0-darwin-x11.patch
@@ -53,6 +62,10 @@ stdenv.mkDerivation rec {
     ++ optionals cupsSupport [ cups ]
     ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
 
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
+  '' else null;
+
   configureFlags = [
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
@@ -60,6 +73,9 @@ stdenv.mkDerivation rec {
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
+    "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
 
   doCheck = false; # needs X11
@@ -80,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
-    homepage    = https://www.gtk.org/;
+    homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.all;
@@ -95,5 +111,6 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }

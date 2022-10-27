@@ -16,7 +16,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable the usbmuxd ("USB multiplexing daemon") service. This daemon is
         in charge of multiplexing connections over USB to an iOS device. This is
         needed for transferring data from and to iOS devices (see ifuse). Also
@@ -27,7 +27,7 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUserGroup;
-      description = ''
+      description = lib.mdDoc ''
         The user usbmuxd should use to run after startup.
       '';
     };
@@ -35,7 +35,7 @@ in
     group = mkOption {
       type = types.str;
       default = defaultUserGroup;
-      description = ''
+      description = lib.mdDoc ''
         The group usbmuxd should use to run after startup.
       '';
     };
@@ -43,14 +43,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optional (cfg.user == defaultUserGroup) {
-      name = cfg.user;
-      description = "usbmuxd user";
-      group = cfg.group;
+    users.users = optionalAttrs (cfg.user == defaultUserGroup) {
+      ${cfg.user} = {
+        description = "usbmuxd user";
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
-    users.groups = optional (cfg.group == defaultUserGroup) {
-      name = cfg.group;
+    users.groups = optionalAttrs (cfg.group == defaultUserGroup) {
+      ${cfg.group} = { };
     };
 
     # Give usbmuxd permission for Apple devices

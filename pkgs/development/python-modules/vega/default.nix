@@ -1,19 +1,23 @@
-{ stdenv, buildPythonPackage , fetchPypi
-, pytest, jupyter_core, pandas }:
+{ lib, buildPythonPackage , fetchPypi, pythonOlder
+, jupyter_core, pandas, ipywidgets, jupyter }:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "2.3.2";
+  version = "3.6.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f39kfinn297gjhms9jys3ixdlsn0dz3gndgacyimp77jhzir4v1";
+    sha256 = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter_core pandas ];
+  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
 
-  meta = with stdenv.lib; {
+  # currently, recommonmark is broken on python3
+  doCheck = false;
+  pythonImportsCheck = [ "vega" ];
+
+  meta = with lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
@@ -21,7 +25,7 @@ buildPythonPackage rec {
       jupyter nbextension install --user --py vega
       jupyter nbextension enable --user vega
     '';
-    homepage = https://github.com/vega/ipyvega;
+    homepage = "https://github.com/vega/ipyvega";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

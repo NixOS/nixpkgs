@@ -1,31 +1,40 @@
-{ stdenv, fetchurl, cmake, pkgconfig, udev, libcec_platform }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, udev
+, libcec_platform
+, withLibraspberrypi ? false
+, libraspberrypi
+}:
 
-let version = "4.0.4"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcec";
-  inherit version;
+  version = "6.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/Pulse-Eight/libcec/archive/libcec-${version}.tar.gz";
-    sha256 = "02j09y06csaic4m0fyb4dr9l3hl15nxbbniwq0i1qlccpxjak0j3";
+  src = fetchFromGitHub {
+    owner = "Pulse-Eight";
+    repo = "libcec";
+    rev = "libcec-${version}";
+    sha256 = "sha256-OWqCn7Z0KG8sLlfMWd0btJIFJs79ET3Y1AV/y/Kj2TU=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake udev libcec_platform ];
-
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
-
   # Fix dlopen path
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [ udev libcec_platform ] ++
+    lib.optional withLibraspberrypi libraspberrypi;
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
+
+  meta = with lib; {
     description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";
-    homepage = http://libcec.pulse-eight.com;
-    repositories.git = "https://github.com/Pulse-Eight/libcec.git";
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://libcec.pulse-eight.com";
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.titanous ];
   };

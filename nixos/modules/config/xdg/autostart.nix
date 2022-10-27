@@ -2,19 +2,23 @@
 
 with lib;
 {
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   options = {
     xdg.autostart.enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
-        Whether to install files to support the 
-        <link xlink:href="https://specifications.freedesktop.org/autostart-spec/autostart-spec-latest.html">XDG Autostart specification</link>.
+      description = lib.mdDoc ''
+        Whether to install files to support the
+        [XDG Autostart specification](https://specifications.freedesktop.org/autostart-spec/autostart-spec-latest.html).
       '';
     };
   };
 
   config = mkIf config.xdg.autostart.enable {
-    environment.pathsToLink = [ 
+    environment.pathsToLink = [
       "/etc/xdg/autostart"
     ];
   };

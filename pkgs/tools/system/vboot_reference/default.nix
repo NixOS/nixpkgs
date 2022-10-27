@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, libuuid, openssl, libyaml, lzma }:
+{ lib, stdenv, fetchFromGitiles, pkg-config, libuuid, openssl, libyaml, xz }:
 
 stdenv.mkDerivation rec {
   version = "20180311";
@@ -6,18 +6,29 @@ stdenv.mkDerivation rec {
 
   pname = "vboot_reference";
 
-  src = fetchgit {
-    url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;
+  src = fetchFromGitiles {
+    url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     rev = checkout;
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl libuuid libyaml lzma ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl libuuid libyaml xz ];
 
   enableParallelBuilding = true;
 
   patches = [ ./dont_static_link.patch ];
+
+  NIX_CFLAGS_COMPILE = [
+    # fix build with gcc9
+    "-Wno-error"
+    # workaround build failure on -fno-common toolchains:
+    #   ld: /build/source/build/futility/vb2_helper.o:(.bss+0x0): multiple definition of
+    #     `vboot_version'; /build/source/build/futility/futility.o:(.bss+0x0): first defined here
+    # TODO: remove it when next release contains:
+    #   https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/df4d2000a22db673a788b8e57e8e7c0cc3cee777
+    "-fcommon"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -38,7 +49,7 @@ stdenv.mkDerivation rec {
     cp -r tests/devkeys* $out/share/vboot/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chrome OS partitioning and kernel signing tools";
     license = licenses.bsd3;
     platforms = platforms.linux;

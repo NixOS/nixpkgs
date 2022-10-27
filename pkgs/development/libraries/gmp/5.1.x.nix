@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ lib, stdenv, fetchurl, m4
+, cxx ? true
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
-let inherit (stdenv.lib) optional; in
+let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-5.1.3";
+  pname = "gmp";
+  version = "5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
-    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+    urls = [ "mirror://gnu/gmp/gmp-${version}.tar.bz2" "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2" ];
     sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
@@ -18,17 +22,21 @@ let self = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
-  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
+  patches = [
+    ./5.1.3-CVE-2021-43618.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./need-size-t.patch
+  ];
 
   configureFlags = [
     "--with-pic"
-    (stdenv.lib.enableFeature cxx "cxx")
+    (lib.enableFeature cxx "cxx")
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
-    # See <http://hydra.nixos.org/build/2760931>, for instance.
+    # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
-    (stdenv.lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
+    (lib.enableFeature (!stdenv.isSunOS && stdenv.hostPlatform.isx86) "fat")
     # The config.guess in GMP tries to runtime-detect various
     # ARM optimization flags via /proc/cpuinfo (and is also
     # broken on multicore CPUs). Avoid this impurity.
@@ -43,8 +51,8 @@ let self = stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://gmplib.org/;
+  meta = with lib; {
+    homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = licenses.gpl3Plus;
 
@@ -72,7 +80,6 @@ let self = stdenv.mkDerivation rec {
 
     platforms = platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
-    maintainers = [ maintainers.peti ];
   };
 };
   in self

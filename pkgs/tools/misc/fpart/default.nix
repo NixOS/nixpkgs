@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fts }:
 
 stdenv.mkDerivation rec {
   pname = "fpart";
-  version = "1.1.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "martymac";
     repo = "fpart";
     rev = "${pname}-${version}";
-    sha256 = "0h3mqc1xj5j2z8s8g3pvvpbjs6x74dj8niyh3p2ymla35kbzskf4";
+    sha256 = "sha256-SULtbfUUzYgD/Q6wmgYSIldiGgk9MY4dr0hveTTMwvw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ fts ];
 
   postInstall = ''
     sed "s|^FPART_BIN=.*|FPART_BIN=\"$out/bin/fpart\"|" \
         -i "$out/bin/fpsync"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Split file trees into bags (called \"partitions\")";
     longDescription = ''
       Fpart is a tool that helps you sort file trees and pack them into bags

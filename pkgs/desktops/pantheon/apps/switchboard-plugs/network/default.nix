@@ -1,9 +1,10 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , substituteAll
 , vala
 , libgee
@@ -11,30 +12,32 @@
 , gtk3
 , networkmanager
 , networkmanagerapplet
+, libnma
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.1.4";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12lvcc15jngzsa40fjhxa6kccs58h5qq4lqrc7lcx5przmfaik8k";
+    sha256 = "sha256-g62+DF84eEI+TvUr1OkeqLnCLz/b7e+xwuTNZS0WJQA=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit networkmanagerapplet;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -43,25 +46,21 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     networkmanager
-    networkmanagerapplet
+    libnma
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./nma.patch;
-      networkmanagerapplet = networkmanagerapplet;
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Networking Plug";
-    homepage = https://github.com/elementary/switchboard-plug-network;
-    license = licenses.lgpl21Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-network";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

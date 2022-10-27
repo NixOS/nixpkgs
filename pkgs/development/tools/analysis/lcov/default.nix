@@ -1,13 +1,17 @@
-{stdenv, fetchurl, perl}:
+ {lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.14";
+  pname = "lcov";
+  version = "1.16";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "06h7ixyznf6vz1qvksjgy5f3q2nw9akf6zx59npf0h3l32cmd68l";
+  src = fetchFromGitHub {
+    owner = "linux-test-project";
+    repo = "lcov";
+    rev = "v${version}";
+    sha256 = "sha256-X1T5OqR6NgTNGedH1on3+XZ7369007By6tRJK8xtmbk=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
 
   preBuild = ''
@@ -15,7 +19,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(PREFIX=$out LCOV_PERL_PATH=$(command -v perl))
   '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    wrapProgram $out/bin/lcov --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.PerlIOgzip perlPackages.JSON ]}
+    wrapProgram $out/bin/genpng --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.GD ]}
+  '';
+
+  meta = with lib; {
     description = "Code coverage tool that enhances GNU gcov";
 
     longDescription =
@@ -27,8 +36,8 @@ stdenv.mkDerivation rec {
          HTML output.
       '';
 
-    homepage = http://ltp.sourceforge.net/coverage/lcov.php;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
+    license = lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.all;

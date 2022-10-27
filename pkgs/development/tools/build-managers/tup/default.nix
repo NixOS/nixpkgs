@@ -1,43 +1,51 @@
-{ stdenv, fetchFromGitHub, fuse, pkgconfig, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, pcre }:
 
-stdenv.mkDerivation rec {
+let
+  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
+in stdenv.mkDerivation rec {
   pname = "tup";
-  version = "0.7.8";
+  version = "0.7.11";
+  outputs = [ "bin" "man" "out" ];
 
   src = fetchFromGitHub {
     owner = "gittup";
     repo = "tup";
     rev = "v${version}";
-    sha256 = "07dmz712zbs5kayf98kywp7blssgh0y2gc1623jbsynmqwi77mcb";
+    hash = "sha256-Q2Y5ErcfhLChi9Wezn8+7eNXYX2UXW1fBOqEclmgzOo=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse pcre ];
 
+  patches = [ ./fusermount-setuid.patch ];
+
   configurePhase = ''
-    sed -i 's/`git describe`/v${version}/g' src/tup/link.sh
-    sed -i 's/pcre-confg/pkg-config pcre/g' Tupfile Tuprules.tup
+    substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
+    substituteInPlace Tuprules.tup --replace 'pcre-config' 'pkg-config libpcre'
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
   # currently provide in a build environment, so we bootstrap and use 'tup
   # generate' instead
   buildPhase = ''
+    runHook preBuild
     ./build.sh
     ./build/tup init
     ./build/tup generate script.sh
     ./script.sh
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp tup $out/bin/
-
-    mkdir -p $out/share/man/man1
-    cp tup.1 $out/share/man/man1/
+    runHook preInstall
+    install -D tup -t $bin/bin/
+    install -D tup.1 -t $man/share/man/man1/
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
     description = "A fast, file-based build system";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list
@@ -47,8 +55,16 @@ stdenv.mkDerivation rec {
       algorithms to avoid doing unnecessary work. This means you can stay focused on
       your project rather than on your build system.
     '';
-    homepage = http://gittup.org/tup/;
+    homepage = "http://gittup.org/tup/";
     license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ ehmry ];
+    platforms = platforms.unix;
+
+    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
+    # Probably MacOS SDK 10.13 or later. Check the current version in
+    # ../../../../os-specific/darwin/apple-sdk/default.nix
+    #
+    # https://github.com/gittup/tup/commit/3697c74
+    broken = stdenv.isDarwin;
   };
 }

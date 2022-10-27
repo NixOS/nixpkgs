@@ -3,7 +3,7 @@
 fetchzip rec {
   name = "encode-sans-1.002";
 
-  url = https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip;
+  url = "https://github.com/impallari/Encode-Sans/archive/11162b46892d20f55bd42a00b48cbf06b5871f75.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -23,7 +23,7 @@ fetchzip rec {
 
       Designed by Pablo Impallari and Andres Torresi.
     '';
-    homepage = http://www.impallari.com/projects/overview/encode;
+    homepage = "https://github.com/impallari/Encode-Sans";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

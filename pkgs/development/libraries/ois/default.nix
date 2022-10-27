@@ -1,41 +1,24 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, libX11, xorgproto
-, libXi, libXaw, libXmu, libXt }:
-
-let
-  majorVersion = "1";
-  minorVersion = "3";
-in
+{ stdenv, lib, fetchFromGitHub, cmake, libX11, Cocoa, IOKit, Kernel }:
 
 stdenv.mkDerivation rec {
   pname = "ois";
-  version = "${majorVersion}.${minorVersion}";
+  version = "1.5";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/wgois/Source%20Release/${version}/ois_v${majorVersion}-${minorVersion}.tar.gz";
-    sha256 = "18gs6xxhbqb91x2gm95hh1pmakimqim1k9c65h7ah6g14zc7dyjh";
+  src = fetchFromGitHub {
+    owner = "wgois";
+    repo = "OIS";
+    rev = "v${version}";
+    sha256 = "0g8krgq5bdx2rw7ig0xva4kqv4x815672i7z6lljp3n8847wmypa";
   };
 
-  patches = [
-    (fetchurl {
-      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-games/ois/files/ois-1.3-gcc47.patch;
-      sha256 = "026jw06n42bcrmg0sbdhzc4cqxsnf7fw30a2z9cigd9x282zhii8";
-      name = "gcc47.patch";
-    })
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  patchFlags = "-p0";
+  buildInputs = [ libX11 ] ++ lib.optionals stdenv.isDarwin [ Cocoa IOKit Kernel ];
 
-  buildInputs = [
-    autoconf automake libtool libX11 xorgproto libXi libXaw
-    libXmu libXt
-  ];
-
-  preConfigure = "sh bootstrap";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Object-oriented C++ input system";
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
   };
 }

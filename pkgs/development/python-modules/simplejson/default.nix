@@ -2,39 +2,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , stdenv
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.16.1";
-  doCheck = !stdenv.isDarwin;
+  version = "3.17.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1v80dbk3ajhgz7q5cc8k0dd22zj9rrlz838c90l5g3w1i280r1iq";
+    rev = "refs/tags/v${version}";
+    sha256 = "1irlp5sakbdfcf717qmrx0r9rjlmwk0vza6zm3y55d32zw5c1cxg";
   };
 
-  # Package does not need pytest, but its a bit easier debugging.
-  checkInputs = [ pytest ];
-  # Ignore warnings because test does not expect them in stderr
-  # See https://github.com/simplejson/simplejson/issues/241
-  checkPhase = ''
-    PYTHONWARNINGS="ignore" pytest simplejson/tests
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
-    description = "A simple, fast, extensible JSON encoder/decoder for Python";
+  doCheck = !stdenv.isDarwin;
+
+  pythonImportsCheck = [ "simplejson" ];
+
+  meta = with lib; {
+    description = "Extensible JSON encoder/decoder for Python";
     longDescription = ''
-      simplejson is compatible with Python 2.4 and later with no
-      external dependencies.  It covers the full JSON specification
-      for both encoding and decoding, with unicode support.  By
-      default, encoding is done in an encoding neutral fashion (plain
-      ASCII with \uXXXX escapes for unicode characters).
+      simplejson covers the full JSON specification for both encoding
+      and decoding, with unicode support. By default, encoding is done
+      in an encoding neutral fashion (plain ASCII with \uXXXX escapes
+      for unicode characters).
     '';
-    homepage = https://github.com/simplejson/simplejson;
-    license = with lib.licenses; [ mit afl21 ];
+    homepage = "https://github.com/simplejson/simplejson";
+    license = with licenses; [ mit afl21 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

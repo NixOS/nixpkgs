@@ -1,40 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
-, nose, mock, blinker
-, flask, six, pytz, aniso8601, pycrypto
+{ lib
+, aniso8601
+, blinker
+, buildPythonPackage
+, fetchPypi
+, flask
+, mock
+, nose
+, pytestCheckHook
+, pythonOlder
+, pytz
+, six
+, werkzeug
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-RESTful";
-  version = "0.3.6";
+  pname = "flask-restful";
+  version = "0.3.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "01rlvl2iq074ciyn4schmjip7cyplkwkysbb8f610zil06am35ap";
+    pname = "Flask-RESTful";
+    inherit version;
+    hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/54979f0a49b2217babc53c5b65b5df10b6de8e05.patch;
-      sha256 = "11s6ag6l42g61ccg5jw9j1f26hwgjfa3sp890cbl5r4hy5ycpyr5";
-    })
-    (fetchpatch {
-      url = https://github.com/flask-restful/flask-restful/commit/f45e81a45ed03922fd225afe27006315811077e6.patch;
-      sha256 = "16avd369j5r08d1l23mwbba26zjwnmfqvfvnfz02am3gr5l6p3gl";
-    })
+  # conditional so that overrides are easier for web applications
+  patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
+    ./werkzeug-2.1.0-compat.patch
   ];
 
-  postPatch = lib.optionalString isPy3k ''
-    # TypeError: Only byte strings can be passed to C code
-    rm tests/test_crypto.py tests/test_paging.py
-  '';
+  propagatedBuildInputs = [
+    aniso8601
+    flask
+    pytz
+    six
+  ];
 
-  checkInputs = [ nose mock blinker ];
+  checkInputs = [
+    blinker
+    mock
+    nose
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
+  disabledTests = [
+    # Broke in flask 2.2 upgrade
+    "test_exception_header_forwarded"
+  ];
+
+  pythonImportsCheck = [
+    "flask_restful"
+  ];
 
   meta = with lib; {
-    homepage = "https://flask-restful.readthedocs.io/";
-    description = "REST API building blocks for Flask";
+    description = "Framework for creating REST APIs";
+    homepage = "https://flask-restful.readthedocs.io";
+    longDescription = ''
+      Flask-RESTful provides the building blocks for creating a great
+      REST API.
+    '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

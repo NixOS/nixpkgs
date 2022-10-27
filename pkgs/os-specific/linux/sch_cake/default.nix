@@ -1,9 +1,8 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
-assert stdenv.lib.versionAtLeast kernel.version "4.4";
-
 stdenv.mkDerivation {
-  name = "sch_cake-2017-07-16";
+  pname = "sch_cake";
+  version = "unstable-2017-07-16";
 
   src = fetchFromGitHub {
     owner = "dtaht";
@@ -26,10 +25,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "The cake qdisc scheduler";
-    homepage = https://www.bufferbloat.net/projects/codel/wiki/Cake/;
+    homepage = "https://www.bufferbloat.net/projects/codel/wiki/Cake/";
     license = with licenses; [ bsd3 gpl2 ];
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
-    broken = !stdenv.lib.versionOlder kernel.version "4.13";
+    broken = lib.versionAtLeast kernel.version "4.13";
   };
 }

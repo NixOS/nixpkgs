@@ -1,10 +1,10 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 {
   name = "incron";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.incron.enable = true;
       services.incron.extraPackages = [ pkgs.coreutils ];
@@ -19,34 +19,34 @@ import ./make-test.nix ({ pkgs, lib, ... }:
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit("multi-user.target");
-    $machine->waitForUnit("incron.service");
+    machine.wait_for_unit("multi-user.target")
+    machine.wait_for_unit("incron.service")
 
-    $machine->succeed("test -d /test");
+    machine.succeed("test -d /test")
     # create some activity for incron to monitor
-    $machine->succeed("touch /test/file");
-    $machine->succeed("echo foo >> /test/file");
-    $machine->succeed("mv /test/file /root");
-    $machine->succeed("mv /root/file /test");
+    machine.succeed("touch /test/file")
+    machine.succeed("echo foo >> /test/file")
+    machine.succeed("mv /test/file /root")
+    machine.succeed("mv /root/file /test")
 
-    $machine->sleep(1);
+    machine.sleep(1)
 
     # touch /test/file
-    $machine->succeed("grep '/test/file IN_CREATE' /root/incron.log");
+    machine.succeed("grep '/test/file IN_CREATE' /root/incron.log")
 
     # echo foo >> /test/file
-    $machine->succeed("grep '/test/file IN_MODIFY' /root/incron.log");
-    $machine->succeed("grep '/test/file IN_CLOSE_WRITE' /root/incron.log");
+    machine.succeed("grep '/test/file IN_MODIFY' /root/incron.log")
+    machine.succeed("grep '/test/file IN_CLOSE_WRITE' /root/incron.log")
 
     # mv /test/file /root
-    $machine->succeed("grep '/test/file IN_MOVED_FROM' /root/incron.log");
+    machine.succeed("grep '/test/file IN_MOVED_FROM' /root/incron.log")
 
     # mv /root/file /test
-    $machine->succeed("grep '/test/file IN_MOVED_TO' /root/incron.log");
+    machine.succeed("grep '/test/file IN_MOVED_TO' /root/incron.log")
 
     # ensure something unexpected is not present
-    $machine->fail("grep 'IN_OPEN' /root/incron.log");
+    machine.fail("grep 'IN_OPEN' /root/incron.log")
   '';
 })

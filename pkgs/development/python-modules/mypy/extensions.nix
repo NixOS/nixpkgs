@@ -1,23 +1,47 @@
-{ stdenv, fetchPypi, buildPythonPackage, typing, pythonOlder }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, typing
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "mypy_extensions";
-  version = "0.4.1";
+  pname = "mypy-extensions";
+  version = "0.4.3";
 
-  # Tests not included in pip package.
-  doCheck = false;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "04h8brrbbx151dfa2cvvlnxgmb5wa00mhd2z7nd20s8kyibfkq1p";
+  src = fetchFromGitHub {
+    owner = "python";
+    repo = "mypy_extensions";
+    rev = version;
+    sha256 = "sha256-JjhbxX5DBAbcs1o2fSWywz9tot792q491POXiId+NyI=";
   };
 
-  propagatedBuildInputs = if pythonOlder "3.5" then [ typing ] else [ ];
+  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
-  meta = with stdenv.lib; {
+  # make the testsuite run with pytest, so we can disable individual tests
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/testextensions.py"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/python/mypy_extensions/issues/24
+    "test_typeddict_errors"
+  ];
+
+  pythonImportsCheck = [
+    "mypy_extensions"
+  ];
+
+  meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";
-    homepage    = "http://www.mypy-lang.org";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ martingms lnl7 ];
+    homepage = "http://www.mypy-lang.org";
+    license = licenses.mit;
+    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
   };
 }

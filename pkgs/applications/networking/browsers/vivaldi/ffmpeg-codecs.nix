@@ -1,32 +1,30 @@
-{ stdenv, fetchurl
-, dpkg
-}:
+{ dpkg, fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "chromium-codecs-ffmpeg";
-  version = "74.0.3729.169";
+  pname = "chromium-codecs-ffmpeg-extra";
+  version = "104.0.5112.101";
 
   src = fetchurl {
-    url = "https://launchpadlibrarian.net/424938057/${name}-extra_${version}-0ubuntu0.16.04.1_amd64.deb";
-    sha256 = "1ls2fshfk08hqsfvbd7p6rp2gv3n0xdy86rdh00wiz5qgl3skfzc";
+    url = "https://launchpadlibrarian.net/618703258/${pname}_${version}-0ubuntu0.18.04.1_amd64.deb";
+    sha256 = "sha256-V+zqLhI8L/8ssxSR6S2v4gUAtoK3fB8Fi9bajBFEauU=";
   };
 
   buildInputs = [ dpkg ];
 
   unpackPhase = ''
     dpkg-deb -x $src .
-    find .
   '';
 
   installPhase = ''
     install -vD usr/lib/chromium-browser/libffmpeg.so $out/lib/libffmpeg.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Additional support for proprietary codecs for Vivaldi";
     homepage    = "https://ffmpeg.org/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.lgpl21;
-    maintainers = with maintainers; [ betaboon lluchs ];
+    maintainers = with maintainers; [ betaboon cawilliamson lluchs ];
     platforms   = [ "x86_64-linux" ];
   };
 }

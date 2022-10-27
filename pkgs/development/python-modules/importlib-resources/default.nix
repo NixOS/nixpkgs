@@ -1,34 +1,48 @@
 { lib
+, isPy27
 , buildPythonPackage
 , fetchPypi
-, pathlib2
-, typing
-, isPy3k
+, setuptools-scm
+, importlib-metadata
+, typing ? null
 , pythonOlder
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "importlib_resources";
-  version = "1.0.2";
+  pname = "importlib-resources";
+  version = "5.9.0";
+  format = "pyproject";
+  disabled = isPy27;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "d3279fd0f6f847cced9f7acc19bd3e5df54d34f93a2e7bb5f238f81545787078";
+    pname = "importlib_resources";
+    inherit version;
+    sha256 = "sha256-VIHpf7Ra+Nzy95iVJiVZHFj+WZ0HNdhrEPVN4IamFoE=";
   };
 
-  propagatedBuildInputs = [
-  ] ++ lib.optional (!isPy3k) pathlib2
-    ++ lib.optional (pythonOlder "3.5") typing
-  ;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  propagatedBuildInputs = [
+    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.5") [
+    typing
+  ];
+
+  checkInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "importlib_resources"
+  ];
 
   meta = with lib; {
     description = "Read resources from Python packages";
-    homepage = https://importlib-resources.readthedocs.io/;
+    homepage = "https://importlib-resources.readthedocs.io/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

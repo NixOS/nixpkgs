@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , spake2
@@ -14,26 +15,50 @@
 , humanize
 , txtorcon
 , nettools
-, glibcLocales
 , mock
 , magic-wormhole-transit-relay
 , magic-wormhole-mailbox-server
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01fr4bi6kc6fz9n3c4qq892inrc3nf6p2djy65yvm7xkvdxncydf";
+    sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
   };
 
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
-  checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
+  propagatedBuildInputs = [
+    spake2
+    pynacl
+    six
+    attrs
+    twisted
+    autobahn
+    automat
+    hkdf
+    tqdm
+    click
+    humanize
+    txtorcon
+  ] ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
-  postPatch = ''
+  checkInputs = [
+    mock
+    magic-wormhole-transit-relay
+    magic-wormhole-mailbox-server
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
+    "test_welcome"
+  ];
+
+  postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';
 
@@ -41,20 +66,11 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
   '';
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-    export LANG="en_US.UTF-8"
-    export LC_ALL="en_US.UTF-8"
-    substituteInPlace src/wormhole/test/test_cli.py \
-      --replace 'getProcessOutputAndValue("locale", ["-a"])' 'getProcessOutputAndValue("locale", ["-a"], env=os.environ)' \
-      --replace 'if (os.path.dirname(os.path.abspath(wormhole))' 'if not os.path.abspath(wormhole).startswith("/nix/store") and (os.path.dirname(os.path.abspath(wormhole))' \
-      --replace 'locale_env = dict(LC_ALL=locale, LANG=locale)' 'locale_env = dict(LC_ALL=locale, LANG=locale, LOCALE_ARCHIVE=os.getenv("LOCALE_ARCHIVE"))'
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Securely transfer data between computers";
-    homepage = https://github.com/warner/magic-wormhole;
+    homepage = "https://github.com/magic-wormhole/magic-wormhole";
     license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ asymmetric SuperSandro2000 ];
+    mainProgram = "wormhole";
   };
 }

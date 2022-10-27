@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
+{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
 , pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
-, pcre, harfbuzz
+, pcre, harfbuzz, icu
 }:
 
 let
@@ -17,28 +17,25 @@ let
         inherit sha256;
       };
 
-      enableParallelBuilding = true;
-
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
-        cmake boost doxygen qt48Full libharu
+        boost doxygen qt48Full libharu
         pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
-        openssl pcre
+        openssl pcre harfbuzz icu
       ];
 
       cmakeFlags = [
         "-DWT_CPP_11_MODE=-std=c++11"
-        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
       ]
-      ++ stdenv.lib.optionals (graphicsmagick != null) [
+      ++ lib.optionals (graphicsmagick != null) [
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DGM_PREFIX=${graphicsmagick}"
       ]
-      ++ stdenv.lib.optional (libmysqlclient != null)
+      ++ lib.optional (libmysqlclient != null)
         "-DMYSQL_PREFIX=${libmysqlclient}";
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = platforms.linux;
@@ -48,12 +45,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.4.1";
-    sha256 = "1bsx7hmy6g2x9p3vl5xw9lv1xk891pnvs93a87s15g257gznkjmj";
+    version = "3.7.1";
+    sha256 = "19gf5lbrc5shpvcdyzjh20k8zdj4cybxqvkhwqfl9rvhw89qr11k";
   };
 
   wt4 = generic {
-    version = "4.1.1";
-    sha256 = "1f1imx5kbpqlysrqx5h75hf2f8pkq972rz42x0pl6cxbnsyzngid";
+    version = "4.6.1";
+    sha256 = "04pv4kb8d576bfnd9kjc3cfjls9cm3cgpaiabwb3iyq9z0w585gh";
   };
 }

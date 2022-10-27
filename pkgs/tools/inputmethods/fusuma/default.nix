@@ -5,7 +5,7 @@ bundlerApp {
   gemdir = ./.;
   exes = [ "fusuma" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram "$out/bin/fusuma" \
@@ -16,9 +16,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Multitouch gestures with libinput driver on X11, Linux";
-    homepage    = https://github.com/iberianpig/fusuma;
-    license     = licenses.mit;
-    maintainers = with maintainers; [ jfrankenau nicknovitski ];
-    platforms   = platforms.linux;
+    homepage = "https://github.com/iberianpig/fusuma";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jfrankenau nicknovitski Br1ght0ne ];
+    platforms = platforms.linux;
   };
 }

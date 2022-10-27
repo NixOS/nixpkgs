@@ -1,11 +1,11 @@
-{ stdenv, maven, pkgs }:
+{ lib, stdenv, maven, pkgs }:
 { mavenDeps, src, name, meta, m2Path, skipTests ? true, quiet ? true, ... }:
 
 with builtins;
-with stdenv.lib;
+with lib;
 
 let
-  mavenMinimal = import ./maven-minimal.nix { inherit pkgs stdenv; };
+  mavenMinimal = import ./maven-minimal.nix { inherit lib pkgs ; };
 in stdenv.mkDerivation rec {
   inherit mavenDeps src name meta m2Path;
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   find = ''find ${concatStringsSep " " (map (x: x + "/m2") flatDeps)} -type d -printf '%P\n' | xargs -I {} mkdir -p $out/m2/{}'';
   copy = ''cp -rsfu ${concatStringsSep " " (map (x: x + "/m2/*") flatDeps)} $out/m2'';
 
-  phases = [ "unpackPhase" "buildPhase" ];
+  dontInstall = true;
 
   buildPhase = ''
     mkdir -p $out/target

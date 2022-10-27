@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchurl, fetchFromGitHub, lib }:
+{ buildGoModule, fetchurl, fetchFromGitHub, lib }:
 
 let
   gouiJS = fetchurl {
@@ -11,41 +11,49 @@ let
     sha256 = "09hd7p0xscqnh612jbrjvh3njmlm4292zd5sbqx2lg0aw688q8p2";
   };
 
-in buildGoPackage rec {
-  name = "perkeep-${version}";
-  version = "unstable-2019-07-29";
+  packages = [
+    "perkeep.org/server/perkeepd"
+    "perkeep.org/cmd/pk"
+    "perkeep.org/cmd/pk-get"
+    "perkeep.org/cmd/pk-put"
+    "perkeep.org/cmd/pk-mount"
+  ];
+
+in buildGoModule rec {
+  pname = "perkeep";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "perkeep";
     repo = "perkeep";
-    rev = "c9f78d02adf9740f3b8d403a1418554293cc9f41";
-    sha256 = "11rin94pjzg0kvizrq9ss42fjw7wfwx3g1pk8zdlhyfkiwwh2rmg";
+    rev = version;
+    sha256 = "07j5gplk4kcrbazyg4m4bwggzlz5gk89h90r14jvfcpms7v5nrll";
   };
 
-  goPackagePath = "perkeep.org";
+  vendorSha256 = "1af9a6r9qfrak0n5xyv9z8n7gn7xw2sdjn4s9bwwidkrdm81iq6b";
+  deleteVendor = true; # Vendor is out of sync with go.mod
 
   buildPhase = ''
-    cd "$NIX_BUILD_TOP/go/src/$goPackagePath"
+    cd "$NIX_BUILD_TOP/source"
 
     # Skip network fetches
-    sed -i '/fetchAllJS/a if true { return nil }' make.go
     cp ${publisherJS} app/publisher/publisher.js
     cp ${gouiJS} server/perkeepd/ui/goui.js
 
-    go run make.go
+    go run make.go -offline=true -targets=${lib.concatStringsSep "," packages}
   '';
 
-  # devcam is only useful when developing perkeep, we should not install it as
-  # part of this derivation.
+  # genfileembed gets built regardless of -targets, to embed static
+  # content into the Perkeep binaries. Remove it in post-install to
+  # avoid polluting paths.
   postInstall = ''
-    rm -f $out/bin/devcam
+    rm -f $out/bin/genfileembed
   '';
 
   meta = with lib; {
     description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
-    homepage = https://perkeep.org;
+    homepage = "https://perkeep.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cstrahan kalbasit ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ cstrahan danderson kalbasit ];
   };
 }

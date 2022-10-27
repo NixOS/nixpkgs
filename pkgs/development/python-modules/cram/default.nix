@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A simple testing framework for command line applications";
-    homepage = https://bitheap.org/cram/;
+    homepage = "https://bitheap.org/cram/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jluttine ];
     # Tests fail on i686: https://hydra.nixos.org/build/52896671/nixlog/4

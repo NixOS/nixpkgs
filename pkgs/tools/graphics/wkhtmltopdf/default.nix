@@ -1,17 +1,21 @@
-{ mkDerivation, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
-, fontconfig, freetype, libpng, zlib, libjpeg
+{ stdenv, lib, fetchFromGitHub, qtwebkit, qtsvg, qtxmlpatterns
+, fontconfig, freetype, libpng, zlib, libjpeg, wrapQtAppsHook
 , openssl, libX11, libXext, libXrender }:
 
-mkDerivation rec {
-  version = "0.12.5";
+stdenv.mkDerivation rec {
+  version = "0.12.6";
   pname = "wkhtmltopdf";
 
   src = fetchFromGitHub {
     owner  = "wkhtmltopdf";
     repo   = "wkhtmltopdf";
     rev    = version;
-    sha256 = "0i6b6z3f4szspbbi23qr3hv22j9bhmcj7c1jizr7y0ra43mrgws1";
+    sha256 = "0m2zy986kzcpg0g3bvvm815ap9n5ann5f6bdy7pfj6jv482bm5mg";
   };
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     fontconfig freetype libpng zlib libjpeg openssl
@@ -25,12 +29,18 @@ mkDerivation rec {
     done
   '';
 
+  # rewrite library path
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltopdf
+    install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltoimage
+  '';
+
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://wkhtmltopdf.org/;
+    homepage = "https://wkhtmltopdf.org/";
     description = "Tools for rendering web pages to PDF or images";
     longDescription = ''
       wkhtmltopdf and wkhtmltoimage are open source (LGPL) command line tools
@@ -42,6 +52,6 @@ mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jb55 ];
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
-, alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, libGL, xcbutilkeysyms, xdg_utils, libtool }:
+{ lib, stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
+, alsa-lib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
+, libGL, xcbutilkeysyms, xdg-utils, libtool }:
 
 let
   version = "4.30.5.1682";
 
-  rpath = stdenv.lib.makeLibraryPath [
-    xdg_utils
+  rpath = lib.makeLibraryPath [
+    xdg-utils
     xorg.libXext
     xorg.libSM
     xorg.libICE
@@ -28,7 +28,7 @@ let
     nss
     nspr
     dbus
-    alsaLib
+    alsa-lib
     zlib
     libtool
     libxml2
@@ -43,11 +43,11 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
+    url = "https://atlassian.artifactoryonline.com/artifactory/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
     sha256 = "03pz8wskafn848yvciq29kwdvqcgjrk6sjnm8nk9acl89xf0sn96";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     ar x $src
@@ -78,9 +78,10 @@ in stdenv.mkDerivation {
       --set QT_PLUGIN_PATH "$d/plugins"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for HipChat services";
-    homepage = http://www.hipchat.com;
+    homepage = "http://www.hipchat.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ puffnfresh ];

@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.17";
+  version = "1.4.18";
   pname = "tnef";
 
   src = fetchFromGitHub {
     owner  = "verdammelt";
     repo   = "tnef";
     rev    = version;
-    sha256 = "0cq2xh5wd74qn6k2nnw5rayxgqhjl3jbzf4zlc4babcwxrv32ldh";
+    sha256 = "104g48mcm00bgiyzas2vf86331w7bnw7h3bc11ib4lp7rz6zqfck";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unpacks MIME attachments of type application/ms-tnef";
     longDescription = ''
       TNEF is a program for unpacking MIME attachments of type "application/ms-tnef". This is a Microsoft only attachment.
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
       The TNEF program allows one to unpack the attachments which were encapsulated into the TNEF attachment. Thus alleviating the need to use Microsoft Outlook to view the attachment.
     '';
-    homepage = https://github.com/verdammelt/tnef;
+    homepage = "https://github.com/verdammelt/tnef";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "swaks";
-  version = "20181104.0";
+  version = "20201014.0";
 
   src = fetchurl {
     url = "https://www.jetmore.org/john/code/swaks/files/${pname}-${version}.tar.gz";
-    sha256 = "0n1yd27xcyb1ylp5gln3yv5gzi9r377hjy1j32367kgb3247ygq2";
+    sha256 = "0c2sx4nrh4whsqzj6m5ay8d7yqan3aqgg436p8jb25bs91ykn2pv";
   };
 
-  buildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -21,13 +22,11 @@ stdenv.mkDerivation rec {
       ]}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.jetmore.org/john/code/swaks/;
-    description = ''
-      A featureful, flexible, scriptable, transaction-oriented SMTP test tool
-    '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ndowens ];
+  meta = with lib; {
+    homepage = "http://www.jetmore.org/john/code/swaks/";
+    description = "A featureful, flexible, scriptable, transaction-oriented SMTP test tool";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [];
     platforms = platforms.all;
   };
 

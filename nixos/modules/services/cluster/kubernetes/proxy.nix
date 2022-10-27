@@ -1,42 +1,54 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.proxy;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "proxy" "address" ] ["services" "kubernetes" "proxy" "bindAddress"])
+  ];
 
   ###### interface
   options.services.kubernetes.proxy = with lib.types; {
 
     bindAddress = mkOption {
-      description = "Kubernetes proxy listening address.";
+      description = lib.mdDoc "Kubernetes proxy listening address.";
       default = "0.0.0.0";
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes proxy";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes proxy");
 
     extraOpts = mkOption {
-      description = "Kubernetes proxy extra command line options.";
+      description = lib.mdDoc "Kubernetes proxy extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = lib.mdDoc "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
+    };
+
+    hostname = mkOption {
+      description = lib.mdDoc "Kubernetes proxy hostname override.";
+      default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
+      type = str;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
 
     verbosity = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Optional glog verbosity level for logging statements. See
-        <link xlink:href="https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md"/>
+        <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
       type = nullOr int;
@@ -50,7 +62,7 @@ in
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kubernetes.target" ];
       after = [ "kube-apiserver.service" ];
-      path = with pkgs; [ iptables conntrack_tools ];
+      path = with pkgs; [ iptables conntrack-tools ];
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-proxy \
@@ -59,6 +71,7 @@ in
             "--cluster-cidr=${top.clusterCidr}"} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
+          --hostname-override=${cfg.hostname} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
@@ -67,7 +80,12 @@ in
         Restart = "on-failure";
         RestartSec = 5;
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
     };
+
+    services.kubernetes.proxy.hostname = with config.networking; mkDefault hostName;
 
     services.kubernetes.pki.certs = {
       kubeProxyClient = top.lib.mkCert {
@@ -79,4 +97,6 @@ in
 
     services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

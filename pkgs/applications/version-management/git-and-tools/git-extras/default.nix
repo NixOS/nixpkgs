@@ -1,27 +1,47 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, unixtools
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "4.7.0";
+  version = "6.5.0";
 
-  src = fetchurl {
-    url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "0pab4f5kmmcn333aswkgndf1fgilc41h8h0rk3lviz0yi8j59vaq";
+  src = fetchFromGitHub {
+    owner = "tj";
+    repo = "git-extras";
+    rev = version;
+    sha256 = "sha256-7VNkIFjz4stRT48a9uXks84W7/tP3p7esMJKnIe1O+8=";
   };
+
+  postPatch = ''
+    patchShebangs check_dependencies.sh
+  '';
+
+  nativeBuildInputs = [
+    unixtools.column
+    which
+  ];
 
   dontBuild = true;
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/share"
+  ];
 
   postInstall = ''
+    # bash completion is already handled by make install
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tj/git-extras;
+  meta = with lib; {
+    homepage = "https://github.com/tj/git-extras";
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.spwhitt maintainers.cko ];
+    maintainers = with maintainers; [ spwhitt cko SuperSandro2000 ];
   };
 }

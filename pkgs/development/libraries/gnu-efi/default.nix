@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, pciutils }: with stdenv.lib;
+{ lib, stdenv, buildPackages, fetchurl, pciutils
+, gitUpdater }:
+
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
-  version = "3.0.9";
+  version = "3.0.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
-    sha256 = "1w3p4aqlc5j93q44la7dc8cr3hky20zvsd0h0k2lyzhwmrzfl5b7";
+    sha256 = "sha256-kxole5xcG6Zf9Rnxg3PEOKJoJfLbeGaxY+ltGxaPIOo=";
   };
 
   buildInputs = [ pciutils ];
@@ -15,18 +18,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=\${out}"
-    "CC=${stdenv.cc.targetPrefix}gcc"
-    "AS=${stdenv.cc.targetPrefix}as"
-    "LD=${stdenv.cc.targetPrefix}ld"
-    "AR=${stdenv.cc.targetPrefix}ar"
-    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-  ] ++ stdenv.lib.optional stdenv.isAarch32 "ARCH=arm"
-    ++ stdenv.lib.optional stdenv.isAarch64 "ARCH=aarch64";
+    "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.code.sf.net/p/gnu-efi/code";
+  };
+
+  meta = with lib; {
     description = "GNU EFI development toolchain";
-    homepage = https://sourceforge.net/projects/gnu-efi/;
+    homepage = "https://sourceforge.net/projects/gnu-efi/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

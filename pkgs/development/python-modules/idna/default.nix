@@ -1,16 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "2.8";
+  version = "3.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407";
+    sha256 = "sha256-gU9Sjo3q19MpgzuRxfqofWC/cYJM0Sp1MLVSYGPQLLQ=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/kjd/idna/";

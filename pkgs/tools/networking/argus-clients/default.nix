@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers, pkgconfig, perl }:
+{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers, pkg-config, perl, libtirpc, libnsl }:
 
 stdenv.mkDerivation rec {
   pname = "argus-clients";
-  version = "3.0.8.2";
+  version = "3.0.8.3";
 
   src = fetchurl {
     url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
-    sha256 = "1c9vj6ma00gqq9h92fg71sxcsjzz912166sdg90ahvnmvmh3l1rj";
+    sha256 = "sha256-uNTvi6zbrYHAivQMPkhlNCoqRW9GOkgKvCf3mInds80=";
   };
 
-  patchPhase = ''
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+
+  postPatch = ''
     for file in ./examples/*/*.pl; do
       substituteInPlace $file \
         --subst-var-by PERLBIN ${perl}/bin/perl
@@ -18,10 +20,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-perl=${perl}/bin/perl" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex libnsl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clients for ARGUS";
     longDescription = ''Clients for Audit Record Generation and
     Utilization System (ARGUS). The Argus Project is focused on developing all
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     Operations, Performance and Security Management. If you need to
     know what is going on in your network, right now or historically,
     you will find Argus a useful tool. '';
-    homepage = http://qosient.com/argus;
+    homepage = "http://qosient.com/argus";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

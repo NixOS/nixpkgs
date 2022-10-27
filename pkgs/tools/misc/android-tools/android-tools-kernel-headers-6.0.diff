@@ -1,0 +1,82 @@
+diff --git a/vendor/adb/client/usb_linux.cpp b/vendor/adb/client/usb_linux.cpp
+index 25a50bd..0d09c47 100644
+--- a/vendor/adb/client/usb_linux.cpp
++++ b/vendor/adb/client/usb_linux.cpp
+@@ -59,8 +59,15 @@ using namespace std::literals;
+ #define DBGX(x...)
+ 
+ struct usb_handle {
++    usb_handle() : urb_in(0), urb_out(0) {
++      this->urb_in = new usbdevfs_urb;
++      this->urb_out = new usbdevfs_urb;
++    }
++
+     ~usb_handle() {
+       if (fd != -1) unix_close(fd);
++      delete urb_in;
++      delete urb_out;
+     }
+ 
+     std::string path;
+@@ -72,8 +79,8 @@ struct usb_handle {
+     unsigned zero_mask;
+     unsigned writeable = 1;
+ 
+-    usbdevfs_urb urb_in;
+-    usbdevfs_urb urb_out;
++    usbdevfs_urb *urb_in;
++    usbdevfs_urb *urb_out;
+ 
+     bool urb_in_busy = false;
+     bool urb_out_busy = false;
+@@ -304,7 +311,7 @@ static int usb_bulk_write(usb_handle* h, const void* data, int len) {
+     std::unique_lock<std::mutex> lock(h->mutex);
+     D("++ usb_bulk_write ++");
+ 
+-    usbdevfs_urb* urb = &h->urb_out;
++    usbdevfs_urb* urb = h->urb_out;
+     memset(urb, 0, sizeof(*urb));
+     urb->type = USBDEVFS_URB_TYPE_BULK;
+     urb->endpoint = h->ep_out;
+@@ -343,7 +350,7 @@ static int usb_bulk_read(usb_handle* h, void* data, int len) {
+     std::unique_lock<std::mutex> lock(h->mutex);
+     D("++ usb_bulk_read ++");
+ 
+-    usbdevfs_urb* urb = &h->urb_in;
++    usbdevfs_urb* urb = h->urb_in;
+     memset(urb, 0, sizeof(*urb));
+     urb->type = USBDEVFS_URB_TYPE_BULK;
+     urb->endpoint = h->ep_in;
+@@ -388,7 +395,7 @@ static int usb_bulk_read(usb_handle* h, void* data, int len) {
+         }
+         D("[ urb @%p status = %d, actual = %d ]", out, out->status, out->actual_length);
+ 
+-        if (out == &h->urb_in) {
++        if (out == h->urb_in) {
+             D("[ reap urb - IN complete ]");
+             h->urb_in_busy = false;
+             if (urb->status != 0) {
+@@ -397,7 +404,7 @@ static int usb_bulk_read(usb_handle* h, void* data, int len) {
+             }
+             return urb->actual_length;
+         }
+-        if (out == &h->urb_out) {
++        if (out == h->urb_out) {
+             D("[ reap urb - OUT compelete ]");
+             h->urb_out_busy = false;
+             h->cv.notify_all();
+@@ -501,10 +508,10 @@ void usb_kick(usb_handle* h) {
+             ** but this ensures that a reader blocked on REAPURB
+             ** will get unblocked
+             */
+-            ioctl(h->fd, USBDEVFS_DISCARDURB, &h->urb_in);
+-            ioctl(h->fd, USBDEVFS_DISCARDURB, &h->urb_out);
+-            h->urb_in.status = -ENODEV;
+-            h->urb_out.status = -ENODEV;
++            ioctl(h->fd, USBDEVFS_DISCARDURB, h->urb_in);
++            ioctl(h->fd, USBDEVFS_DISCARDURB, h->urb_out);
++            h->urb_in->status = -ENODEV;
++            h->urb_out->status = -ENODEV;
+             h->urb_in_busy = false;
+             h->urb_out_busy = false;
+             h->cv.notify_all();

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , ruby
 }:
@@ -6,13 +6,13 @@
 # No gems used, so mkDerivation is fine.
 stdenv.mkDerivation rec {
   pname = "nix-universal-prefetch";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "samueldr";
     repo = "nix-universal-prefetch";
     rev = "v${version}";
-    sha256 = "1id9iaibrm2d3fa9dkcxnb3sd0j1vh502181gdd199a1cfsmzh1i";
+    sha256 = "sha256-HGn4qHWqpUwlS3yQrD3j5oH0yOlphsoSPD2vkyyRv+0=";
   };
 
   installPhase = ''
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/env nix-shell" "${ruby}/bin/ruby"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Uses nixpkgs fetchers to figure out hashes";
-    homepage = https://github.com/samueldr/nix-universal-prefetch;
+    homepage = "https://github.com/samueldr/nix-universal-prefetch";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
     platforms = platforms.linux ++ platforms.darwin;

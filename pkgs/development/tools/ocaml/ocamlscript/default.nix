@@ -1,26 +1,34 @@
-{stdenv, fetchurl, ocaml, findlib, camlp4}:
-stdenv.mkDerivation {
-  name = "ocamlscript-2.0.3";
-  src = fetchurl {
-    url = http://mjambon.com/releases/ocamlscript/ocamlscript-2.0.3.tar.gz;
-    sha256 = "1v1i24gijxwris8w4hi95r9swld6dm7jbry0zp72767a3g5ivlrd";
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
+
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
+  "ocamlscript is not available for OCaml ${ocaml.version}"
+
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-ocamlscript";
+  version = "3.0.0";
+  src = fetchFromGitHub {
+    owner = "mjambon";
+    repo = "ocamlscript";
+    rev = "v${version}";
+    sha256 = "sha256:10xz8jknlmcgnf233nahd04q98ijnxpijhpvb8hl7sv94dgkvpql";
   };
 
-  propagatedBuildInputs = [ ocaml findlib camlp4 ];
+  propagatedBuildInputs = [ ocaml findlib ];
 
   patches = [ ./Makefile.patch ];
 
-  buildFlags = "PREFIX=$(out)";
-  installFlags = "PREFIX=$(out)";
+  buildFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
-  preInstall = "mkdir $out/bin";
+  preInstall = "mkdir -p $out/bin";
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://martin.jambon.free.fr/ocamlscript.html;
+  meta = with lib; {
+    inherit (src.meta) homepage;
     license = licenses.boost;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "Natively-compiled OCaml scripts";
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "ocamlscript";
   };
 }

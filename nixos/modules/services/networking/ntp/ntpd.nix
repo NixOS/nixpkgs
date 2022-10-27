@@ -10,8 +10,6 @@ let
 
   stateDir = "/var/lib/ntp";
 
-  ntpUser = "ntp";
-
   configFile = pkgs.writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
@@ -23,9 +21,11 @@ let
     restrict -6 ::1
 
     ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+
+    ${cfg.extraConfig}
   '';
 
-  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
+  ntpFlags = [ "-c" "${configFile}" "-u" "ntp:ntp" ] ++ cfg.extraFlags;
 
 in
 
@@ -38,22 +38,21 @@ in
     services.ntp = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
-          </para>
-          <para>
-          Disables <literal>systemd.timesyncd</literal> if enabled.
+
+          Disables `systemd.timesyncd` if enabled.
         '';
       };
 
       restrictDefault = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The restriction flags to be set by default.
-          </para>
-          <para>
+
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
@@ -64,10 +63,9 @@ in
 
       restrictSource = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The restriction flags to be set on source.
-          </para>
-          <para>
+
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';
@@ -76,15 +74,28 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
-        description = ''
+        defaultText = literalExpression "config.networking.timeServers";
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
           The set of NTP servers from which to synchronise.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          fudge 127.127.1.0 stratum 10
+        '';
+        description = lib.mdDoc ''
+          Additional text appended to {file}`ntp.conf`.
         '';
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = "Extra flags passed to the ntpd command.";
-        example = literalExample ''[ "--interface=eth0" ]'';
+        description = lib.mdDoc "Extra flags passed to the ntpd command.";
+        example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };
 
@@ -104,12 +115,13 @@ in
 
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
-    users.users = singleton
-      { name = ntpUser;
-        uid = config.ids.uids.ntp;
+    users.users.ntp =
+      { isSystemUser = true;
+        group = "ntp";
         description = "NTP daemon user";
         home = stateDir;
       };
+    users.groups.ntp = {};
 
     systemd.services.ntpd =
       { description = "NTP Daemon";
@@ -121,11 +133,11 @@ in
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
-            chown ${ntpUser} ${stateDir}
+            chown ntp ${stateDir}
           '';
 
         serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
+          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
           Type = "forking";
         };
       };

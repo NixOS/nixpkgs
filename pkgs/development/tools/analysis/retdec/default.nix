@@ -9,7 +9,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , groff
@@ -101,7 +101,7 @@ let
                                else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
     stripRoot = false;
     # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
-    extraPostFetch = lib.optionalString (!withPEPatterns) ''
+    postFetch = lib.optionalString (!withPEPatterns) ''
       rm -r "$out/generic/yara_patterns/static-code/pe"
     '';
   } // {
@@ -130,12 +130,12 @@ in stdenv.mkDerivation rec {
   # itself and trying to build it. The build should fail and tell you which dependencies you have to upgrade to which versions.
   # I've notified upstream about this problem here:
   # https://github.com/avast-tl/retdec/issues/412
+  # gcc is pinned to gcc8 in all-packages.nix. That should probably be re-evaluated on update.
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "avast-tl";
-    repo = "retdec";
-    name = "retdec-${version}";
+    repo = pname;
     rev = "refs/tags/v${version}";
     sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
   };
@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     bison
     flex
     groff
@@ -186,12 +186,12 @@ in stdenv.mkDerivation rec {
   patches = [
     # 2.1.2 -> 2.2.1
     (fetchpatch {
-      url = https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch;
+      url = "https://github.com/avast-tl/retdec/commit/c9d23da1c6e23c149ed684c6becd3f3828fb4a55.patch";
       sha256 = "0hdq634f72fihdy10nx2ajbps561w03dfdsy5r35afv9fapla6mv";
     })
     # 2.2.1 -> 2.2.2
     (fetchpatch {
-      url = https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch;
+      url = "https://github.com/avast-tl/retdec/commit/fb85f00754b5d13b781385651db557741679721e.patch";
       sha256 = "0a8mwmwb39pr5ag3q11nv81ncdk51shndqrkm92shqrmdq14va52";
     })
   ];
@@ -216,8 +216,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
   '';
 
-  enableParallelBuilding = true;
-
   doInstallCheck = true;
   installCheckPhase = ''
     ${python3.interpreter} "$out/bin/retdec-tests-runner.py"
@@ -227,7 +225,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A retargetable machine-code decompiler based on LLVM";
-    homepage = https://retdec.com;
+    homepage = "https://retdec.com";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill timokau ];
     platforms = ["x86_64-linux" "i686-linux"];

@@ -1,34 +1,24 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.14";
+  version = "1.2.16";
   pname = "zlog";
 
-  src = fetchzip {
-    name = "${pname}-${version}-src";
-    url = "https://github.com/HardySimpson/zlog/archive/${version}.tar.gz";
-    sha256 = "1qcrfmh2vbarkx7ij3gwk174qmgmhm2j336bfaakln1ixd9lkxa5";
+  src = fetchFromGitHub {
+    owner = "HardySimpson";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-wpaMbFKSwTIFe3p65pMJ6Pf2qKp1uYZCyyinGU4AxrQ=";
   };
 
-  configurePhase = ''
-    sed -i 's;-Werror;;' src/makefile
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  buildPhase = ''
-    mkdir -p $out
-    make PREFIX=$out
-  '';
-
-  installPhase = ''
-    make PREFIX=$out install
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description= "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
-    homepage = http://hardysimpson.github.com/zlog;
+    homepage = "https://hardysimpson.github.io/zlog/";
     license = licenses.lgpl21;
-    platforms = platforms.linux; # cannot test on something else
     maintainers = [ maintainers.matthiasbeyer ];
+    mainProgram = "zlog-chk-conf";
+    platforms = platforms.unix;
   };
-
 }

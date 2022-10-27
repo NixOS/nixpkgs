@@ -1,25 +1,32 @@
-{ stdenv, fetchFromGitHub, qtbase, qtserialport, cmake }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, qtserialport, cmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "cutecom";
-  version = "0.50.0";
-  src = fetchFromGitHub {
-    owner = "neundorf";
-    repo = "CuteCom";
-    rev = "v${version}";
-    sha256 = "0zjmbjrwwan9z5cphqjcq2h71cm4mw88j457lzdqb29cg4bdn3ag";
+  version = "0.51.0+patch";
+
+  src = fetchFromGitLab {
+    owner = "cutecom";
+    repo = "cutecom";
+    rev = "70d0c497acf8f298374052b2956bcf142ed5f6ca";
+    sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
   };
 
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace "#find_package(Serialport REQUIRED)" "find_package(Qt5SerialPort REQUIRED)"
-  '';
-  buildInputs = [qtbase qtserialport cmake];
+  buildInputs = [ qtbase qtserialport ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = {
+  postInstall = ''
+    cd ..
+    mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps,man/man1}
+    cp cutecom.desktop "$out/share/applications"
+    cp images/cutecom.svg "$out/share/icons/hicolor/scalable/apps"
+    cp cutecom.1 "$out/share/man/man1"
+  '';
+
+  meta = with lib; {
     description = "A graphical serial terminal";
-    homepage = http://cutecom.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.bennofs ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://gitlab.com/cutecom/cutecom/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bennofs ];
+    platforms = platforms.linux;
   };
 }

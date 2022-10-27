@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "flaky";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cd5455bb00c677f787da424eaf8c4a58a922d0e97126d3085db5b279a98b698";
+    sha256 = "3ad100780721a1911f57a165809b7ea265a7863305acb66708220820caf8aa0d";
   };
 
   checkInputs = [ mock nose pytest ];
@@ -26,8 +26,8 @@ buildPythonPackage rec {
     pytest --force-flaky --max-runs 2  test/test_pytest/test_pytest_options_example.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/box/flaky;
+  meta = with lib; {
+    homepage = "https://github.com/box/flaky";
     description = "Plugin for nose or py.test that automatically reruns flaky tests";
     license = licenses.asl20;
   };

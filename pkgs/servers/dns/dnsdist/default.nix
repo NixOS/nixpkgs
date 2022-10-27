@@ -1,22 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, systemd
+{ lib, stdenv, fetchurl, pkg-config, systemd
 , boost, libsodium, libedit, re2
-, net_snmp, lua, protobuf, openssl }: stdenv.mkDerivation rec {
+, net-snmp, lua, protobuf, openssl, zlib, h2o
+, nghttp2, nixosTests
+}:
+
+stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.3.2";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "1i3b1vpk9a8zbx9aby2s1ckkzhlvzgn11hcgj3b8x2j1b9771rqb";
+    hash = "sha256-UkvSuwWqLgWYKpca6FEPKBIwOrRIajhhtiIS0GsRJ80=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ systemd boost libsodium libedit re2 net_snmp lua protobuf openssl ];
+  patches = [
+    # Disable tests requiring networking:
+    # "Error connecting to new server with address 192.0.2.1:53: connecting socket to 192.0.2.1:53: Network is unreachable"
+    ./disable-network-tests.patch
+  ];
+
+  nativeBuildInputs = [ pkg-config protobuf ];
+  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o nghttp2 ];
 
   configureFlags = [
-    "--enable-libsodium"
-    "--enable-re2"
+    "--with-libsodium"
+    "--with-re2"
     "--enable-dnscrypt"
     "--enable-dns-over-tls"
+    "--enable-dns-over-https"
     "--with-protobuf=yes"
     "--with-net-snmp"
     "--disable-dependency-tracking"
@@ -26,10 +37,16 @@
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) dnsdist;
+  };
+
+  meta = with lib; {
     description = "DNS Loadbalancer";
     homepage = "https://dnsdist.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [ jojosch ];
   };
 }

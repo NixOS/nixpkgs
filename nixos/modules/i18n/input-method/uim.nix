@@ -2,7 +2,7 @@
 
 with lib;
 
-let 
+let
   cfg = config.i18n.inputMethod.uim;
 in
 {
@@ -13,7 +13,7 @@ in
         type    = types.enum [ "gtk" "gtk3" "gtk-systray" "gtk3-systray" "qt4" ];
         default = "gtk";
         example = "gtk-systray";
-        description = ''
+        description = lib.mdDoc ''
           selected UIM toolbar.
         '';
       };

@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, ncurses, lessSecure ? false }:
+{ lib, stdenv, fetchurl, ncurses, lessSecure ? false }:
 
 stdenv.mkDerivation rec {
   pname = "less";
-  version = "551";
+  version = "608";
 
   src = fetchurl {
-    url = "http://www.greenwoodsoftware.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0ggyjl3yzn7c450zk1rixi9ls6asdhgqynhk34zsd0ckhmsm45pz";
+    url = "https://www.greenwoodsoftware.com/less/less-${version}.tar.gz";
+    sha256 = "02f2d9d6hyf03va28ip620gjc6rf4aikmdyk47h7frqj18pbx6m6";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
-    ++ stdenv.lib.optional lessSecure [ "--with-secure" ];
+    ++ lib.optionals lessSecure [ "--with-secure" ];
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.greenwoodsoftware.com/less/;
+  meta = with lib; {
+    homepage = "https://www.greenwoodsoftware.com/less/";
     description = "A more advanced file pager than ‘more’";
     platforms = platforms.unix;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eelco dtzWill ];
   };
 }

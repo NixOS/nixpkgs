@@ -7,14 +7,19 @@ let
 
 in
   {
+    imports = [
+      (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+      (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
+    ];
+
     options.hardware.ckb-next = {
-      enable = mkEnableOption "the Corsair keyboard/mouse driver";
+      enable = mkEnableOption (lib.mdDoc "the Corsair keyboard/mouse driver");
 
       gid = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 100;
-        description = ''
+        description = lib.mdDoc ''
           Limit access to the ckb daemon to a particular group.
         '';
       };
@@ -22,8 +27,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.ckb-next;
-        defaultText = "pkgs.ckb-next";
-        description = ''
+        defaultText = literalExpression "pkgs.ckb-next";
+        description = lib.mdDoc ''
           The package implementing the Corsair keyboard/mouse driver.
         '';
       };
@@ -38,12 +43,11 @@ in
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ckb-next-daemon ${optionalString (cfg.gid != null) "--gid=${builtins.toString cfg.gid}"}";
           Restart = "on-failure";
-          StandardOutput = "syslog";
         };
       };
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ kierdavis ];
+      maintainers = with lib.maintainers; [ ];
     };
   }

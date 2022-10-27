@@ -1,36 +1,36 @@
-{
-  lib, fetchPypi, buildPythonPackage, isPy3k,
-  # runtime dependencies
-  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools,
-  # test suite dependencies
-  nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy,
-  # additional runtime dependencies are required on Python 2.x
-  pyOpenSSL ? null, ndg-httpsclient ? null, pyasn1 ? null
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, httpretty
+, importlib-metadata
+, inflection
+, jsondate
+, mock
+, more-itertools
+, numpy
+, pandas
+, parameterized
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, six
 }:
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.4.6";
+  version = "3.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "15b58nj45bdax0aha6kwjz5pxj3bz8bs6ajwxqp9r89j13xxn94g";
+    sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
   };
-
-  doCheck = true;
-
-  checkInputs = [
-    nose
-    unittest2
-    flake8
-    httpretty
-    mock
-    jsondate
-    parameterized
-    faker
-    factory_boy
-  ];
 
   propagatedBuildInputs = [
     pandas
@@ -40,16 +40,29 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optional (!isPy3k) [
-    pyOpenSSL
-    ndg-httpsclient
-    pyasn1
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  meta = {
-    homepage = "https://github.com/quandl/quandl-python";
+  checkInputs = [
+    factory_boy
+    faker
+    httpretty
+    jsondate
+    mock
+    parameterized
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "quandl"
+  ];
+
+  meta = with lib; {
     description = "Quandl Python client library";
-    maintainers = [ lib.maintainers.ilya-kolpakov ];
-    license = lib.licenses.mit;
+    homepage = "https://github.com/quandl/quandl-python";
+    changelog = "https://github.com/quandl/quandl-python/blob/master/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ilya-kolpakov ];
   };
 }

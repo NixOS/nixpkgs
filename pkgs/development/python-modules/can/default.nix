@@ -1,45 +1,80 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy27
-, aenum
-, wrapt
-, typing
-, pyserial
-, nose
-, mock
-, hypothesis
+, fetchFromGitHub
 , future
-, pytest
-, pytest-timeout }:
+, hypothesis
+, packaging
+, parameterized
+, msgpack
+, pyserial
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.3.1";
+  version = "4.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1giv9s6w90lalxsijgnxzynygkckcfyaxnxsldbwv0784vwy1jcd";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "hardbyte";
+    repo = pname;
+    rev = version;
+    hash = "sha256-/z7zBfVbO7x4UtzWOXolH2YrtYWgsvRLObWwz8sqOEc=";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
+  propagatedBuildInputs = [
+    msgpack
+    packaging
+    pyserial
+    typing-extensions
+    wrapt
+  ];
 
-  # Tests won't work with hypothesis 4.7.3 under Python 2. So skip the tests in
-  # that case. This clause can be removed once hypothesis has been upgraded in
-  # nixpkgs.
-  doCheck = !(isPy27 && (hypothesis.version == "4.7.3"));
+  checkInputs = [
+    future
+    hypothesis
+    parameterized
+    pytest-timeout
+    pytestCheckHook
+  ];
 
-  # Add the scripts to PATH
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest -c /dev/null
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=can --cov-config=tox.ini --cov-report=xml --cov-report=term" ""
   '';
 
+  disabledTestPaths = [
+    # We don't support all interfaces
+    "test/test_interface_canalystii.py"
+  ];
+
+  disabledTests = [
+    # Tests require access socket
+    "BasicTestUdpMulticastBusIPv4"
+    "BasicTestUdpMulticastBusIPv6"
+    # pytest.approx is not supported in a boolean context (since pytest7)
+    "test_pack_unpack"
+    "test_receive"
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [
+    "can"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
     description = "CAN support for Python";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ sorki ];
+    homepage = "https://python-can.readthedocs.io";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ fab sorki ];
   };
 }

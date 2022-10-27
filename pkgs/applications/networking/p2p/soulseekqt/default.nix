@@ -1,73 +1,61 @@
-{ stdenv
-, fetchurl
-, dbus
-, zlib, fontconfig
-, qtbase, qtmultimedia
-, libjson, libgpgerror
-, libX11, libxcb, libXau, libXdmcp, freetype, libbsd
-, pythonPackages, squashfsTools, desktop-file-utils
+{ stdenv, lib, fetchzip, mkDerivation
+, appimageTools
+, autoPatchelfHook
+, desktop-file-utils
+, imagemagick
+, qtmultimedia
 }:
 
-with stdenv.lib;
-let
-  libPath = makeLibraryPath
-    [ stdenv.cc.cc qtbase qtmultimedia dbus libX11 zlib libX11 libxcb libXau libXdmcp freetype fontconfig libbsd libjson libgpgerror];
-
+mkDerivation rec {
+  pname = "soulseekqt";
   version = "2018-1-30";
+  name="${pname}-${version}";
 
-  mainbin = "SoulseekQt-" + (version) +"-"+ (if stdenv.is64bit then "64bit" else "32bit");
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://www.dropbox.com/s/0vi87eef3ooh7iy/${mainbin}.tgz";
-      sha256 = "0d1cayxr1a4j19bc5a3qp9pg22ggzmd55b6f5av3lc6lvwqqg4w6";
-    };
+  src = fetchzip {
+      url = "https://www.slsknet.org/SoulseekQt/Linux/SoulseekQt-${version}-64bit-appimage.tgz";
+      sha256 = "16ncnvv8h33f161mgy7qc0wjvvqahsbwvby65qhgfh9pbbgb4xgg";
   };
 
-in stdenv.mkDerivation rec {
-
-  pname = "soulseekqt";
-  inherit version;
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  appextracted = appimageTools.extractType2 {
+    inherit name;
+    src="${src}/SoulseekQt-2018-1-30-64bit.AppImage";
+  };
 
   dontBuild = true;
+  dontConfigure = true;
 
-  buildInputs = [ pythonPackages.binwalk squashfsTools desktop-file-utils ];
-
-  # avoid usage of appimage's runner option --appimage-extract 
-  unpackCmd = ''
-    export HOME=$(pwd) # workaround for binwalk
-    appimage=$(tar xvf $curSrc) && binwalk --quiet \
-       $appimage -D 'squashfs:squashfs:unsquashfs %e'
-    '';
-  
-  patchPhase = ''
-    cd squashfs-root/
-    binary="$(readlink AppRun)"
-  
-    # fixup desktop file
-    desktop-file-edit --set-key Exec --set-value $binary default.desktop
-    desktop-file-edit --set-key Comment --set-value "${meta.description}" default.desktop
-    desktop-file-edit --set-key Categories --set-value Network default.desktop   
-  '';
+  nativeBuildInputs = [ imagemagick autoPatchelfHook desktop-file-utils ];
+  buildInputs = [ qtmultimedia stdenv.cc.cc ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share/applications,share/icons/}
-    cp default.desktop $out/share/applications/$binary.desktop
-    cp soulseek.png $out/share/icons/
-    cp $binary $out/bin/
-  '';
+      # directory in /nix/store so readonly
+      cd $appextracted
 
-  fixupPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${libPath} \
-             $out/bin/$binary
-  '';
+      binary="$(readlink AppRun)"
+      install -Dm755 $binary -t $out/bin
 
-  meta = with stdenv.lib; {
+      # fixup and install desktop file
+      desktop-file-install --dir $out/share/applications \
+        --set-key Exec --set-value $binary \
+        --set-key Comment --set-value "${meta.description}" \
+        --set-key Categories --set-value Network default.desktop
+      mv $out/share/applications/default.desktop $out/share/applications/SoulseekQt.desktop
+
+      #TODO: write generic code to read icon path from $binary.desktop
+      icon="$(readlink .DirIcon)"
+      for size in 16 32 48 64 72 96 128 192 256 512 1024; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+        convert -resize "$size"x"$size" $icon $out/share/icons/hicolor/"$size"x"$size"/apps/$icon
+      done
+    '';
+
+  meta = with lib; {
     description = "Official Qt SoulSeek client";
-    homepage = http://www.soulseekqt.net;
+    homepage = "https://www.slsknet.org";
+    mainProgram = "SoulseekQt";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

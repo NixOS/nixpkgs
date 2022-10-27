@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
+{ lib, stdenv, fetchFromGitHub, pkg-config, xorgserver, xorgproto,
   utilmacros, libgestures, libevdevc }:
 
 stdenv.mkDerivation rec {
-  name = "xf86-input-cmt-${version}";
+  pname = "xf86-input-cmt";
   version = "2.0.2";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./apply_patches.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorgserver xorgproto utilmacros
     libgestures libevdevc
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     "--with-sdkdir=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
-    description = "Chromebook touchpad driver.";
+  meta = with lib; {
+    description = "Chromebook touchpad driver";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    homepage = "www.github.com/hugegreenbug/xf86-input-cmt";
+    homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";
     maintainers = with maintainers; [ kcalvinalvin ];
   };
 }

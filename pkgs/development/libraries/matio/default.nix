@@ -1,16 +1,18 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "matio-1.5.17";
+  pname = "matio";
+  version = "1.5.22";
   src = fetchurl {
-    url = "mirror://sourceforge/matio/${name}.tar.gz";
-    sha256 = "00644612zhn53j25vj50q73kmjcrsns2lnmy99y2kavhsckmaiay";
+    url = "mirror://sourceforge/matio/${pname}-${version}.tar.gz";
+    sha256 = "sha256-gMPR4iLhFXaLV7feZAo30O58t6O9A52z6pQecfxSBMM=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for reading and writing Matlab MAT files";
+    homepage = "http://matio.sourceforge.net/";
     license = licenses.bsd2;
+    maintainers = [ ];
+    mainProgram = "matdump";
     platforms = platforms.all;
-    maintainers = [ maintainers.vbgl ];
-    homepage = http://matio.sourceforge.net/;
   };
 }

@@ -1,42 +1,48 @@
-{stdenv, fetchFromGitHub, makeWrapper, gettext, python3Packages, rsync, cron, openssh, sshfs-fuse, encfs }:
+{stdenv, lib, fetchFromGitHub, makeWrapper, gettext,
+python3, rsync, cron, openssh, sshfs-fuse, encfs }:
 
 let
-  inherit (python3Packages) python dbus-python keyring;
-in stdenv.mkDerivation rec {
-  version = "1.1.24";
+  python' = python3.withPackages (ps: with ps; [ dbus-python keyring ]);
 
+  apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
+in stdenv.mkDerivation rec {
   pname = "backintime-common";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "0g6gabnr60ns8854hijdddbanks7319q4n3fj5l6rc4xsq0qck18";
+    sha256 = "sha256-7iTQZ7SiESsKK8F8BpLrRNkj8JhHo64kliaOvMvYGvw=";
   };
 
-  buildInputs = [ makeWrapper gettext python dbus-python keyring openssh cron rsync sshfs-fuse encfs ];
+  nativeBuildInputs = [ makeWrapper gettext ];
+  buildInputs = [ python' ];
 
   installFlags = [ "DEST=$(out)" ];
 
-  preConfigure = "cd common";
+  preConfigure = ''
+    cd common
+    substituteInPlace configure \
+      --replace "/.." "" \
+      --replace "share/backintime" "${python'.sitePackages}/backintime"
+    substituteInPlace "backintime" \
+      --replace "share" "${python'.sitePackages}"
+  '';
 
   dontAddPrefix = true;
 
-  preFixup =
-    ''
-    substituteInPlace "$out/bin/backintime" \
-      --replace "=\"/usr/share" "=\"$prefix/share"
+  preFixup = ''
     wrapProgram "$out/bin/backintime" \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix PATH : "$prefix/bin:$PATH"
+      --prefix PATH : ${apps}
     '';
 
   meta = {
-    homepage = https://github.com/bit-team/backintime;
+    homepage = "https://github.com/bit-team/backintime";
     description = "Simple backup tool for Linux";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     longDescription = ''
       Back In Time is a simple backup tool (on top of rsync) for Linux
       inspired from “flyback project” and “TimeVault”. The backup is

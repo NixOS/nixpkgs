@@ -1,32 +1,26 @@
-{ stdenv, fetchgit, pkgconfig, qt4, SDL, SDL_image, libvorbis, libtar, libxml2
-, gamin, qmake4Hook
-}:
+{ mkDerivation, lib, fetchgit, pkg-config, qmake, qtbase, qttools, qtmultimedia, libvorbis, libtar, libxml2 }:
 
-stdenv.mkDerivation rec {
-  version = "0.8";
+mkDerivation rec {
+  version = "0.8.5";
   pname = "linuxstopmotion";
-  
+
   src = fetchgit {
-    url = "git://git.code.sf.net/p/linuxstopmotion/code";
-    rev = "refs/tags/${version}";
-    sha256 = "19v9d0v3laiwi0f1n92lvj2s5s1mxsrfygna0xyw9pkcnk3b26q6";
+    url = "https://git.code.sf.net/p/linuxstopmotion/code";
+    rev = version;
+    sha256 = "1612lkwsfzc59wvdj2zbj5cwsyw66bwn31jrzjrxvygxdh4ab069";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ qt4 SDL SDL_image libvorbis libtar libxml2 gamin qmake4Hook ];
+  nativeBuildInputs = [ qmake pkg-config ];
+  buildInputs = [ qtbase qttools qtmultimedia libvorbis libtar libxml2 ];
 
-  patches = [ ./linuxstopmotion-fix-wrong-isProcess-logic.patch ];
-
-  # Installation breaks without this
-  preInstall = ''
-    mkdir -p "$out/share/stopmotion/translations/"
-    cp -v build/*.qm "$out/share/stopmotion/translations/"
+  postPatch = ''
+    substituteInPlace stopmotion.pro --replace '$$[QT_INSTALL_BINS]' '${lib.getDev qttools}/bin'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create stop-motion animation movies";
-    homepage = http://linuxstopmotion.org/;
-    license = licenses.gpl2;
+    homepage = "http://linuxstopmotion.org/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish, nixosTests }:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "jonnenauha";
     repo = "prometheus_varnish_exporter";
     rev = version;
-    sha256 = "1lvs44936n3s9z6c5169jbvx390n5g0qk4pcrmnkndg796ixjshd";
+    sha256 = "15w2ijz621caink2imlp1666j0ih5pmlj62cbzggyb34ncl37ifn";
   };
 
-  modSha256 = "0w1zg9jc2466srx9pdckw7rzn7ma4pbd0617b1h98v364wjzgj72";
+  vendorSha256 = "00i9znb1pk5jpmyhxfg9zbw935fk3c1r0qrgf868xlcf9p8x2rrz";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -20,7 +20,7 @@ buildGoModule rec {
       --prefix PATH : "${varnish}/bin"
   '';
 
-  doCheck = true;
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) varnish; };
 
   meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";

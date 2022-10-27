@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-devspaces";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "4710dd59fc219ebfa4272dbbad58bf62093b52ce22bfd32a5c0279d2149471b5";
+    sha256 = "0dvjsr9i87j1ggbj3dcmgifpk64xr5f5ziwf7z1fwkcx0szcid7k";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Dev Spaces Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchgit
 , pyptlib
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.2.13";
 
   src = fetchgit {
-    url = meta.repositories.git;
+    url = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
     rev = "refs/tags/${pname}-${version}";
     sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
   };
@@ -27,11 +27,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pluggable transport proxy";
-    homepage = https://www.torproject.org/projects/obfsproxy;
-    repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
-    maintainers = with maintainers; [ phreedom thoughtpolice ];
+    homepage = "https://www.torproject.org/projects/obfsproxy";
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 
 }

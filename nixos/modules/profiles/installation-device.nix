@@ -22,17 +22,10 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    documentation.enable = mkForce true;
+    documentation.enable = mkImageMediaOverride true;
 
     # Show the manual.
-    documentation.nixos.enable = mkForce true;
-    services.nixosManual.showManual = true;
-
-    # Let the user play Rogue on TTY 8 during the installation.
-    #services.rogue.enable = true;
-
-    # Disable some other stuff we don't need.
-    services.udisks2.enable = mkDefault false;
+    documentation.nixos.enable = mkImageMediaOverride true;
 
     # Use less privileged nixos user
     users.users.nixos = {
@@ -48,35 +41,42 @@ with lib;
     # Allow passwordless sudo from nixos user
     security.sudo = {
       enable = mkDefault true;
-      wheelNeedsPassword = mkForce false;
+      wheelNeedsPassword = mkImageMediaOverride false;
     };
 
     # Automatically log in at the virtual consoles.
-    services.mingetty.autologinUser = "nixos";
+    services.getty.autologinUser = "nixos";
 
     # Some more help text.
-    services.mingetty.helpLine = ''
+    services.getty.helpLine = ''
       The "nixos" and "root" accounts have empty passwords.
 
-      Type `sudo systemctl start sshd` to start the SSH daemon.
-      You then must set a password for either "root" or "nixos"
-      with `passwd` to be able to login.
+      An ssh daemon is running. You then must set a password
+      for either "root" or "nixos" with `passwd` or add an ssh key
+      to /home/nixos/.ssh/authorized_keys be able to login.
+
+      If you need a wireless connection, type
+      `sudo systemctl start wpa_supplicant` and configure a
+      network using `wpa_cli`. See the NixOS manual for details.
     '' + optionalString config.services.xserver.enable ''
+
       Type `sudo systemctl start display-manager' to
       start the graphical user interface.
     '';
 
-    # Allow sshd to be started manually through "systemctl start sshd".
+    # We run sshd by default. Login via root is only possible after adding a
+    # password via "passwd" or by adding a ssh key to /home/nixos/.ssh/authorized_keys.
+    # The latter one is particular useful if keys are manually added to
+    # installation device for head-less systems i.e. arm boards by manually
+    # mounting the storage in a different system.
     services.openssh = {
       enable = true;
-      # Allow password login to the installation, if the user sets a password via "passwd"
-      # It is safe as root doesn't have a password by default and SSH is disabled by default
       permitRootLogin = "yes";
     };
-    systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = mkDefault true;
+    networking.wireless.userControlled.enable = true;
     systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
 
     # Tell the Nix evaluator to garbage collect more aggressively.
@@ -99,11 +99,23 @@ with lib;
         stdenvNoCC # for runCommand
         busybox
         jq # for closureInfo
+        # For boot.initrd.systemd
+        makeInitrdNGTool
+        systemdStage1
+        systemdStage1Network
       ];
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
+
+    # Prevent installation media from evacuating persistent storage, as their
+    # var directory is not persistent and it would thus result in deletion of
+    # those entries.
+    environment.etc."systemd/pstore.conf".text = ''
+      [PStore]
+      Unlink=no
+    '';
   };
 }

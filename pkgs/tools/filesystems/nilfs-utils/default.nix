@@ -1,46 +1,35 @@
-{ stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
-let
-  sourceInfo = rec {
-    version = "2.2.7";
-    url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
-    sha256 = "01f09bvjk2crx65pxmxiw362wkkl3v2v144dfn3i7bk5gz253xic";
-    baseName = "nilfs-utils";
-    name = "${baseName}-${version}";
-  };
-in
-stdenv.mkDerivation {
-  src = fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.sha256;
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
+, e2fsprogs }:
+
+stdenv.mkDerivation rec {
+  pname = "nilfs-utils";
+  version = "2.2.9";
+
+  src = fetchFromGitHub {
+    owner = "nilfs-dev";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-XqViUvPj2BHO3bGs9xBO3VpRq9XqnwBptHvMwBOntqo=";
   };
 
-  inherit (sourceInfo) name version;
-  buildInputs = [libuuid libselinux];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  preConfigure = ''
-    sed -e '/sysconfdir=\/etc/d; ' -i configure
-    sed -e "s@sbindir=/sbin@sbindir=$out/sbin@" -i configure
-    sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./lib/cleaner*.c
+  buildInputs = [ libuuid libselinux ];
+
+  postPatch = ''
+    # Fix up hardcoded paths.
+    substituteInPlace lib/cleaner_exec.c --replace /sbin/ $out/bin/
+    substituteInPlace sbin/mkfs/mkfs.c --replace /sbin/ ${lib.getBin e2fsprogs}/bin/
   '';
 
-  patches = [
-    # Fix w/musl
-    (fetchpatch {
-      url = "https://github.com/nilfs-dev/nilfs-utils/commit/115fe4b976858c487cf83065f513d8626089579a.patch";
-      sha256 = "0h89jz9l5d4rqj647ljbnv451l4ncqpsvzj0v70mn5391hfwsjlv";
-    })
-    (fetchpatch {
-      url =  "https://github.com/nilfs-dev/nilfs-utils/commit/51b32c614be9e98c32de7f531ee600ca0740946f.patch";
-      sha256 = "1ycq83c6jjy74aif47v075k5y2szzwhq6mbcrpd1z4b4i1x6yhpn";
-    })
-  ];
+  # According to upstream, libmount should be detected automatically but the
+  # build system fails to do this. This is likely a bug with their build system
+  # hence it is explicitly enabled here.
+  configureFlags = [ "--with-libmount" ];
 
-  configureFlags = [
-    "--with-libmount"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # AC_FUNC_MALLOC is broken on cross builds.
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+    "root_sbindir=${placeholder "out"}/sbin"
   ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
@@ -49,15 +38,14 @@ stdenv.mkDerivation {
   # To make sure patchelf doesn't mistakenly keep the reference via
   # build directory
   postInstall = ''
-    find . -name .libs | xargs rm -rf
+    find . -name .libs -exec rm -rf -- {} +
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license =  with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
-    updateWalker = true;
   };
 }

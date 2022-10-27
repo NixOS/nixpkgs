@@ -1,15 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
-  libX11, libXinerama, libXrandr, libGLU_combined,
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
+  AGL, Carbon, Cocoa, Foundation,
+  boost,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? true, jasper,
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
   tiffSupport ? true, libtiff,
   gdalSupport ? false, gdal,
   curlSupport ? true, curl,
-  colladaSupport ? false, opencollada,
+  colladaSupport ? false, collada-dom,
   opencascadeSupport ? false, opencascade,
   ffmpegSupport ? false, ffmpeg,
   nvttSupport ? false, nvidia-texture-tools,
@@ -20,36 +21,35 @@
   lasSupport ? false, libLAS,
   luaSupport ? false, lua,
   sdlSupport ? false, SDL2,
-  restSupport ? false, asio, boost,
+  restSupport ? false, asio,
   withApps ? false,
   withExamples ? false, fltk, wxGTK,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openscenegraph";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
     rev = "OpenSceneGraph-${version}";
-    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
+    sha256 = "00i14h82qg3xzcyd8p02wrarnmby3aiwmz0z43l50byc9f8i05n1";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs = [
-    libX11 libXinerama libXrandr libGLU_combined
+    libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
     ++ lib.optional tiffSupport libtiff
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
-    ++ lib.optional colladaSupport opencollada
+    ++ lib.optional colladaSupport collada-dom
     ++ lib.optional opencascadeSupport opencascade
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools
@@ -60,17 +60,19 @@ stdenv.mkDerivation rec {
     ++ lib.optional lasSupport libLAS
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
-    ++ lib.optionals restSupport [ asio boost ]
+    ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk wxGTK ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
+    ++ lib.optional (restSupport || colladaSupport) boost
   ;
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D graphics toolkit";
-    homepage = http://www.openscenegraph.org/;
+    homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }

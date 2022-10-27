@@ -1,19 +1,35 @@
-{ stdenv, fetchurl, autoreconfHook, xz }:
+{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, xz, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
-  version = "1.3.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://savannah/libunwind/${pname}-${version}.tar.gz";
-    sha256 = "1y0l08k6ak1mqbfj6accf9s5686kljwgsl4vcqpxzk5n74wpm6a3";
+    sha256 = "sha256-SmrsZmmR+0XQiJxErt6K1usQgHHDVU/N/2cfnJR5SXY=";
   };
 
-  patches = [ ./backtrace-only-with-glibc.patch ];
+  patches = [
+    # Fix for aarch64 and non-4K pages. Remove once upgraded past 1.6.2.
+    (fetchpatch {
+      url = "https://github.com/libunwind/libunwind/commit/e85b65cec757ef589f28957d0c6c21c498a03bdf.patch";
+      sha256 = "1lnlygvhqrdrjgw303pg2k2k4ms4gaghpjsgmhk47q83vy1yjwfg";
+    })
+  ];
+
+  postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
+    substituteInPlace configure.ac --replace "-lgcc_s" ""
+  '' else lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace configure.ac --replace "-lgcc_s" "-lgcc_eh"
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devman" ];
+
+  # Without latex2man, no man pages are installed despite being
+  # prebuilt in the source tarball.
+  configureFlags = [ "LATEX2MAN=${buildPackages.coreutils}/bin/true" ];
 
   propagatedBuildInputs = [ xz ];
 
@@ -25,13 +41,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
-    homepage = https://www.nongnu.org/libunwind;
+  meta = with lib; {
+    homepage = "https://www.nongnu.org/libunwind";
     description = "A portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
+    badPlatforms = [ "riscv32-linux" ];
     license = licenses.mit;
   };
-
-  passthru.supportsHost = !stdenv.hostPlatform.isRiscV;
 }

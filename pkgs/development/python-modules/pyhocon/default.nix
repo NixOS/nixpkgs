@@ -1,42 +1,67 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-# Runtime inputs:
-, pyparsing
-# Check inputs:
-, pytest
+, fetchFromGitHub
 , mock
+, pyparsing
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyhocon";
-  version = "0.3.51";
+  version = "0.3.59";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "10l014br012fa583rnj3wqf6g9gmljamcwpw4snqwwg15i0dmkll";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "chimpler";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-0BuDYheURFhtnWIh7Qw4LzZbk5tSqiNejo+08eglIvs=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  propagatedBuildInputs = [
+    pyparsing
+    python-dateutil
+  ];
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  # Tests fail because necessary data files aren't packaged for PyPi yet.
-  # See https://github.com/chimpler/pyhocon/pull/203
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyparsing~=2.0" "pyparsing>=2.0"
+  '';
+
+  pythonImportsCheck = [
+    "pyhocon"
+  ];
+
+  disabledTestPaths = [
+    # pyparsing.exceptions.ParseException: Expected end of text, found '='
+    # https://github.com/chimpler/pyhocon/issues/273
+    "tests/test_tool.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert ConfigTree([(...
+    "test_dict_merge"
+    "test_parse_override"
+    "test_include_dict"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/chimpler/pyhocon/;
     description = "HOCON parser for Python";
-    # Long description copied from
-    # https://github.com/chimpler/pyhocon/blob/55a9ea3ebeeac5764bdebebfbeacbf099f64db26/setup.py
-    # (the tip of master as of 2019-03-24).
+    homepage = "https://github.com/chimpler/pyhocon/";
     longDescription = ''
-      A HOCON parser for Python. It additionally provides a tool
-      (pyhocon) to convert any HOCON content into json, yaml and properties
-      format
+      A HOCON parser for Python. It additionally provides a tool (pyhocon) to convert
+      any HOCON content into JSON, YAML and properties format.
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.chreekat ];
+    maintainers = with maintainers; [ chreekat ];
   };
 }

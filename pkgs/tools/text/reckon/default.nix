@@ -4,19 +4,21 @@ stdenv.mkDerivation rec {
   pname = "reckon";
   version = (import ./gemset.nix).reckon.version;
 
-  env = bundlerEnv {
-    name = "${pname}-${version}-gems";
+  dontUnpack = true;
 
-    gemdir = ./.;
-  };
+  nativeBuildInputs = [ makeWrapper ];
 
-  phases = [ "installPhase" ];
+  installPhase = let
+    env = bundlerEnv {
+      name = "${pname}-${version}-gems";
 
-  buildInputs = [ makeWrapper ];
-
-  installPhase = ''
+      gemdir = ./.;
+    };
+  in ''
+    runHook preInstall
     mkdir -p $out/bin
     makeWrapper ${env}/bin/reckon $out/bin/reckon
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "reckon";
@@ -26,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.unix;
+    changelog = "https://github.com/cantino/reckon/blob/v${version}/CHANGELOG.md";
   };
 }

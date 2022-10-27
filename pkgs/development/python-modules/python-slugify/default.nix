@@ -1,25 +1,47 @@
-{ stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, text-unidecode
+, unidecode
+}:
 
 buildPythonPackage rec {
-    pname = "python-slugify";
-    version = "3.0.2";
+  pname = "python-slugify";
+  version = "6.1.2";
+  format = "setuptools";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "57163ffb345c7e26063435a27add1feae67fa821f1ef4b2f292c25847575d758";
-    };
+  disabled = pythonOlder "3.6";
 
-    propagatedBuildInputs = [ text-unidecode ];
+  src = fetchFromGitHub {
+    owner = "un33k";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-JGjUNBEMuICsaClQGDSGX4qFRjecVKzmpPNRUTvfwho=";
+  };
 
-    checkPhase = ''
-      ${python.interpreter} test.py
-    '';
+  propagatedBuildInputs = [
+    text-unidecode
+    unidecode
+  ];
 
-    meta = with stdenv.lib; {
-      homepage = https://github.com/un33k/python-slugify;
-      description = "A Python Slugify application that handles Unicode";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ vrthra ];
-    };
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "test.py"
+  ];
+
+  pythonImportsCheck = [
+    "slugify"
+  ];
+
+  meta = with lib; {
+    description = "Python Slugify application that handles Unicode";
+    homepage = "https://github.com/un33k/python-slugify";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vrthra ];
+  };
 }

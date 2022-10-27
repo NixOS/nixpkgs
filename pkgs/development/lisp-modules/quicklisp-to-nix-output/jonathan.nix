@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''jonathan'';
-  version = ''20190202-git'';
+  baseName = "jonathan";
+  version = "20200925-git";
 
-  description = ''High performance JSON encoder and decoder. Currently support: SBCL, CCL.'';
+  description = "High performance JSON encoder and decoder. Currently support: SBCL, CCL.";
 
   deps = [ args."alexandria" args."babel" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-annot" args."cl-ppcre" args."cl-syntax" args."cl-syntax-annot" args."fast-io" args."named-readtables" args."proc-parse" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/jonathan/2019-02-02/jonathan-20190202-git.tgz'';
-    sha256 = ''1p70ji0mwx11q5iy792lxpcbx7mzh4az88vgkq39yx1ffwvpxvwl'';
+    url = "http://beta.quicklisp.org/archive/jonathan/2020-09-25/jonathan-20200925-git.tgz";
+    sha256 = "1y5v3g351nsy7px0frdr2asmcy0lyfbj73ic1f5yf4q65hrgvryx";
   };
 
   packageName = "jonathan";
@@ -19,9 +20,9 @@ rec {
 }
 /* (SYSTEM jonathan DESCRIPTION
     High performance JSON encoder and decoder. Currently support: SBCL, CCL.
-    SHA256 1p70ji0mwx11q5iy792lxpcbx7mzh4az88vgkq39yx1ffwvpxvwl URL
-    http://beta.quicklisp.org/archive/jonathan/2019-02-02/jonathan-20190202-git.tgz
-    MD5 bf340574fc901706ba2dcdc57e1e78ad NAME jonathan FILENAME jonathan DEPS
+    SHA256 1y5v3g351nsy7px0frdr2asmcy0lyfbj73ic1f5yf4q65hrgvryx URL
+    http://beta.quicklisp.org/archive/jonathan/2020-09-25/jonathan-20200925-git.tgz
+    MD5 27cad3c107544f587f9f33295c10d81e NAME jonathan FILENAME jonathan DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
      (NAME cffi-toolchain FILENAME cffi-toolchain)
@@ -39,4 +40,4 @@ rec {
     (alexandria babel cffi cffi-grovel cffi-toolchain cl-annot cl-ppcre
      cl-syntax cl-syntax-annot fast-io named-readtables proc-parse
      static-vectors trivial-features trivial-gray-streams trivial-types)
-    VERSION 20190202-git SIBLINGS (jonathan-test) PARASITES NIL) */
+    VERSION 20200925-git SIBLINGS (jonathan-test) PARASITES NIL) */

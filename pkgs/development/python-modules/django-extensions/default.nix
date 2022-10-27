@@ -1,46 +1,58 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, typing, pygments
-, django, shortuuid, python-dateutil, pytest
-, pytest-django, pytestcov, mock, vobject
-, werkzeug, glibcLocales, factory_boy
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, factory_boy
+, mock
+, pygments
+, pytest-django
+, pytestCheckHook
+, shortuuid
+, vobject
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.1.9";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "08vggm6wrn5cbf8brfprif0rjrkqz06wddsw0ir1skkk8q2sp1b2";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-i8A/FMba1Lc3IEBzefP3Uu23iGcDGYqo5bNv+u6hKQI=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "'tox'," ""
-
-    # not yet pytest 5 compatible?
-    rm tests/management/commands/test_set_fake_emails.py
-    rm tests/management/commands/test_set_fake_passwords.py
-    rm tests/management/commands/test_validate_templates.py
-
-    # pip should not be used during tests...
-    rm tests/management/commands/test_pipchecker.py
+    substituteInPlace setup.cfg \
+      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
   '';
 
-  propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
-
-  checkInputs = [
-    django shortuuid python-dateutil pytest
-    pytest-django pytestcov mock vobject
-    werkzeug glibcLocales factory_boy pygments
+  propagatedBuildInputs = [
+    django
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  __darwinAllowLocalNetworking = true;
+
+  checkInputs = [
+    factory_boy
+    mock
+    pygments # not explicitly declared in setup.py, but some tests require it
+    pytest-django
+    pytestCheckHook
+    shortuuid
+    vobject
+    werkzeug
+  ];
+
+  disabledTestPaths = [
+    # requires network access
+    "tests/management/commands/test_pipchecker.py"
+  ];
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";
-    homepage = https://github.com/django-extensions/django-extensions;
+    homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };
 }

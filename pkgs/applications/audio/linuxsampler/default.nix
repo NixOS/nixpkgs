@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, autoconf, automake, bison, libtool, pkgconfig, which
-, alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
+{ lib, stdenv, fetchurl, autoconf, automake, bison, libtool, pkg-config, which
+, alsa-lib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "linuxsampler";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "1gijf50x5xbpya5dj3v2mzj7azx4qk9p012csgddp73f0qi0n190";
+    sha256 = "sha256-xNFjxrrC0B8Oj10HIQ1AmI7pO34HuYRyyUaoB2MDmYw=";
   };
 
   preConfigure = ''
     make -f Makefile.svn
   '';
 
-  nativeBuildInputs = [ autoconf automake bison libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf automake bison libtool pkg-config which ];
 
-  buildInputs = [ alsaLib asio libjack2 libgig libsndfile lv2 ];
+  buildInputs = [ alsa-lib asio libjack2 libgig libsndfile lv2 ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+  meta = with lib; {
+    homepage = "http://www.linuxsampler.org";
     description = "Sampler backend";
     longDescription = ''
       Includes sampler engine, audio and MIDI drivers, network layer

@@ -1,10 +1,18 @@
-{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest
+{ lib
+, buildPythonPackage
 , isPy3k
+, fetchFromGitHub
+, appdirs
+, consonance
+, protobuf
+, python-axolotl
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "yowsup";
-  version = "2.5.7";
+  version = "3.3.0";
 
   # The Python 2.x support of this package is incompatible with `six==1.11`:
   # https://github.com/tgalal/yowsup/issues/2416#issuecomment-365113486
@@ -14,22 +22,31 @@ buildPythonPackage rec {
     owner = "tgalal";
     repo = "yowsup";
     rev = "v${version}";
-    sha256 = "1p0hdj5x38v2cxjnhdnqcnp5g7la57mbi365m0z83wa01x2n73w6";
+    sha256 = "1pz0r1gif15lhzdsam8gg3jm6zsskiv2yiwlhaif5rl7lv3p0v7q";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test yowsup
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "argparse" "" \
+      --replace "==" ">=" \
   '';
 
-  patches = [ ./argparse-dependency.patch ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ six python-axolotl ];
+  propagatedBuildInputs = [
+    appdirs
+    consonance
+    protobuf
+    python-axolotl
+    six
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

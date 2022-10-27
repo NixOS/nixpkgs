@@ -4,7 +4,7 @@
 , mock
 , pythonOlder
 , pytz
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage {
@@ -26,7 +26,7 @@ buildPythonPackage {
 
   buildInputs = [ exempi ];
 
-  checkInputs = stdenv.lib.optionals (pythonOlder "3.3") [ mock ];
+  checkInputs = lib.optionals (pythonOlder "3.3") [ mock ];
 
   propagatedBuildInputs = [ pytz ];
 
@@ -35,8 +35,11 @@ buildPythonPackage {
       --replace "ctypes.util.find_library('exempi')" "'${exempi}/lib/libexempi${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/python-xmp-toolkit/python-xmp-toolkit;
+  # hangs on darwin + sandbox
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
+    homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;
     maintainers = [ maintainers.kiwi ];

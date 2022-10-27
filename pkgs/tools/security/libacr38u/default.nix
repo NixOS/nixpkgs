@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcsclite , libusb }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1, IOKit }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
@@ -11,14 +11,15 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pcsclite libusb-compat-0_1 ]
+    ++ lib.optional stdenv.isDarwin IOKit;
 
   preBuild = ''
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ACR38U smartcard reader driver for pcsclite";
     longDescription = ''
       A PC/SC IFD handler implementation for the ACS ACR38U
@@ -33,9 +34,9 @@ stdenv.mkDerivation {
 
       The package is based on the debian package libacr38u.
     '';
-    homepage = https://www.acs.com.hk;
+    homepage = "https://www.acs.com.hk";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;
   };
-} 
+}

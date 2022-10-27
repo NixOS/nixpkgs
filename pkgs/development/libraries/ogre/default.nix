@@ -1,46 +1,89 @@
-{ fetchurl, stdenv, lib
-, cmake, libGLU_combined
-, freetype, freeimage, zziplib, xorgproto, libXrandr
-, libXaw, freeglut, libXt, libpng, boost, ois
-, libX11, libXmu, libSM, pkgconfig
-, libXxf86vm, libICE
+{ fetchFromGitHub
+, stdenv
+, lib
+, cmake
+, libGLU
+, libGL
+, freetype
+, freeimage
+, zziplib
+, xorgproto
+, libXrandr
+, libXaw
+, freeglut
+, libXt
+, libpng
+, boost
+, ois
+, libX11
+, libXmu
+, libSM
+, pkg-config
+, libXxf86vm
+, libICE
 , unzip
 , libXrender
-, withNvidiaCg ? false, nvidia_cg_toolkit
-, withSamples ? false }:
+, SDL2
+, withNvidiaCg ? false
+, nvidia_cg_toolkit
+, withSamples ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "ogre";
   version = "1.12.1";
 
-  src = fetchurl {
-     url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
-     sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
+  src = fetchFromGitHub {
+    owner = "OGRECave";
+    repo = "ogre";
+    rev = "v${version}";
+    sha256 = "sha256-FHW0+DZhw6MLlhjh4DRYhA+6vBBXMN9K6GEVoR6P5kM=";
   };
 
-  cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
+  # fix for ARM. sys/sysctl.h has moved in later glibcs, and
+  # https://github.com/OGRECave/ogre-next/issues/132 suggests it isn't
+  # needed anyway.
+  postPatch = ''
+    substituteInPlace OgreMain/src/OgrePlatformInformation.cpp \
+      --replace '#include <sys/sysctl.h>' ""
+  '';
+
+  cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-           ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
+    ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
     ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
 
-  enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake unzip pkg-config ];
   buildInputs =
-   [ cmake libGLU_combined
-     freetype freeimage zziplib xorgproto libXrandr
-     libXaw freeglut libXt libpng boost ois
-     libX11 libXmu libSM pkgconfig
-     libXxf86vm libICE
-     libXrender
-   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
-
-  nativeBuildInputs = [ unzip ];
+    [
+      libGLU
+      libGL
+      freetype
+      freeimage
+      zziplib
+      xorgproto
+      libXrandr
+      libXaw
+      freeglut
+      libXt
+      libpng
+      boost
+      ois
+      libX11
+      libXmu
+      libSM
+      libXxf86vm
+      libICE
+      libXrender
+      SDL2
+    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
 
   meta = {
     description = "A 3D engine";
-    homepage = https://www.ogre3d.org/;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    homepage = "https://www.ogre3d.org/";
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

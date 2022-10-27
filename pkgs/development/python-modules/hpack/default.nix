@@ -1,21 +1,34 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pythonOlder
+, hypothesis
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "hpack";
-  version = "3.0.0";
+  version = "4.0.0";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8eec9c1f4bfae3408a3f30500261f7e6a65912dc138526ea054f9ad98892e9d2";
+  src = fetchFromGitHub {
+    owner = "python-hyper";
+    repo = "hpack";
+    rev = "v${version}";
+    sha256 = "sha256-2CehGy3K5fKbkB1J8+8x1D4XvnBn1Mbapx+p8rdXDYc=";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "hpack" ];
+
+  meta = with lib; {
     description = "Pure-Python HPACK header compression";
-    homepage = "http://hyper.rtfd.org";
+    homepage = "https://github.com/python-hyper/hpack";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }

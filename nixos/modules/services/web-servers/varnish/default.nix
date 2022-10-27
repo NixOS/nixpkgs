@@ -11,13 +11,15 @@ in
 {
   options = {
     services.varnish = {
-      enable = mkEnableOption "Varnish Server";
+      enable = mkEnableOption (lib.mdDoc "Varnish Server");
+
+      enableConfigCheck = mkEnableOption (lib.mdDoc "checking the config during build time") // { default = true; };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.varnish5;
-        defaultText = "pkgs.varnish5";
-        description = ''
+        default = pkgs.varnish;
+        defaultText = literalExpression "pkgs.varnish";
+        description = lib.mdDoc ''
           The package to use
         '';
       };
@@ -25,42 +27,43 @@ in
       http_address = mkOption {
         type = types.str;
         default = "*:6081";
-        description = "
+        description = lib.mdDoc ''
           HTTP listen address and port.
-        ";
+        '';
       };
 
       config = mkOption {
         type = types.lines;
-        description = "
+        description = lib.mdDoc ''
           Verbatim default.vcl configuration.
-        ";
+        '';
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
-        description = "
+        defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
+        description = lib.mdDoc ''
           Directory holding all state for Varnish to run.
-        ";
+        '';
       };
 
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.varnish5Packages.geoip ]";
-        description = "
+        example = literalExpression "[ pkgs.varnishPackages.geoip ]";
+        description = lib.mdDoc ''
           Varnish modules (except 'std').
-        ";
+        '';
       };
 
       extraCommandLine = mkOption {
         type = types.str;
         default = "";
         example = "-s malloc,256M";
-        description = "
+        description = lib.mdDoc ''
           Command line switches for varnishd (run 'varnishd -?' to get list of options)
-        ";
+        '';
       };
     };
 
@@ -96,11 +99,10 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.extraDependencies = [
-      (pkgs.stdenv.mkDerivation {
-        name = "check-varnish-syntax";
-        buildCommand = "${cfg.package}/sbin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)";
-      })
+    system.extraDependencies = mkIf cfg.enableConfigCheck [
+      (pkgs.runCommand "check-varnish-syntax" {} ''
+        ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
+      '')
     ];
 
     users.users.varnish = {

@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "tlhydra";
+  pname = "tlhydra";
   version = "2017-13-26";
 
   idrisDeps = [ effects contrib lightyear ];
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris parser and serializer/deserealizer for TL language";
-    homepage = https://github.com/Termina1/tlhydra;
+    homepage = "https://github.com/Termina1/tlhydra";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

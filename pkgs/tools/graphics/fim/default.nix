@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig
+{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib
 , perl, flex, bison, readline, libexif
 , x11Support ? true, SDL
 , svgSupport ? true, inkscape
@@ -9,7 +9,7 @@
 , pngSupport ? true, libpng
 }:
 
-stdenv.mkDerivation rec {
+gcc9Stdenv.mkDerivation rec {
   pname = "fim";
   version = "0.6";
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     [ perl flex bison readline libexif ]
     ++ optional x11Support SDL
     ++ optional svgSupport inkscape
@@ -35,16 +35,16 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional x11Support "-lSDL";
+  NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";
     longDescription = ''
       FIM (Fbi IMproved) is a lightweight, console based image viewer that aims
       to be a highly customizable and scriptable for users who are comfortable
       with software like the VIM text editor or the Mutt mail user agent.
     '';
-    homepage = https://www.nongnu.org/fbi-improved/;
+    homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

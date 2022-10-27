@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
-, gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
-, gpart, hdparm, procps, utillinux, polkit, wrapGAppsHook, substituteAll
+{ lib, stdenv, fetchurl, intltool, gettext, coreutils, gnused, gnome
+, gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
+, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
+, mtools, dosfstools
 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-1.0.0";
+  pname = "gparted";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/${name}.tar.gz";
-    sha256 = "0mdvn85jvy72ff7nds3dakx9kzknh8gx1z8i0w2sf970q03qp2z4";
+    url = "mirror://sourceforge/gparted/${pname}-${version}.tar.gz";
+    sha256 = "sha256-5Sk6eS5T/b66KcSoNBE82WA9DWOTMNqTGkaL82h4h74=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -21,14 +23,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [ "--disable-doc" ];
 
-  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome3.adwaita-icon-theme  ];
-  nativeBuildInputs = [ intltool gettext pkgconfig wrapGAppsHook ];
+  buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];
+  nativeBuildInputs = [ intltool gettext pkg-config wrapGAppsHook ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm utillinux procps coreutils gnused gnugrep ]}"
+       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep mtools dosfstools ]}"
     )
   '';
 
@@ -38,14 +42,14 @@ stdenv.mkDerivation rec {
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk
       partitions. GParted enables you to change the partition organization
       while preserving the partition contents.
     '';
-    homepage = https://gparted.org;
+    homepage = "https://gparted.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

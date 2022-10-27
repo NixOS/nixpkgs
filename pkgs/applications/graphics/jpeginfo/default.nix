@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg }:
+{ lib, stdenv, fetchurl, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "jpeginfo";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prints information and tests integrity of JPEG/JFIF files";
     homepage = "https://www.kokkonen.net/tjko/projects.html";
     license = licenses.gpl2Plus;

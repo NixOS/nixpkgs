@@ -43,20 +43,20 @@ with haskellLib;
 self: super: builtins.intersectAttrs super {
 
   # Apply NixOS-specific patches.
-  ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
+  ghc-paths = appendPatch ./patches/ghc-paths-nix.patch super.ghc-paths;
 
   # fix errors caused by hardening flags
-  epanet-haskell = disableHardening super.epanet-haskell ["format"];
+  epanet-haskell = disableHardening ["format"] super.epanet-haskell;
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
-  mysql = dontCheck (super.mysql.override { mysql = pkgs.libmysqlclient; });
+  mysql = dontCheck super.mysql;
 
   # CUDA needs help finding the SDK headers and libraries.
-  cuda = overrideCabal super.cuda (drv: {
+  cuda = overrideCabal (drv: {
     extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
     configureFlags = (drv.configureFlags or []) ++ [
       "--extra-lib-dirs=${pkgs.cudatoolkit.lib}/lib"
@@ -65,130 +65,107 @@ self: super: builtins.intersectAttrs super {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
-  });
+  }) super.cuda;
 
-  nvvm = overrideCabal super.nvvm (drv: {
+  nvvm = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
-  });
+  }) super.nvvm;
 
-  cufft = overrideCabal super.cufft (drv: {
+  cufft = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
-  });
+  }) super.cufft;
 
   # jni needs help finding libjvm.so because it's in a weird location.
-  jni = overrideCabal super.jni (drv: {
+  jni = overrideCabal (drv: {
     preConfigure = ''
       local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
       configureFlags+=" --extra-lib-dir=''${libdir[0]}"
     '';
-  });
+  }) super.jni;
 
   # The package doesn't know about the AL include hierarchy.
   # https://github.com/phaazon/al/issues/1
-  al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
+  al = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.al;
 
   # Won't find it's header files without help.
-  sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
-
-  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = disableLibraryProfiling super.cachix;
+  sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
-  niv = enableSeparateBinOutput super.niv;
-  ormolu = enableSeparateBinOutput super.ormolu;
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
 
-  # Ensure the necessary frameworks for Darwin.
-  OpenAL = if pkgs.stdenv.isDarwin
-    then addExtraLibrary super.OpenAL pkgs.darwin.apple_sdk.frameworks.OpenAL
-    else super.OpenAL;
+  # Generate shell completion.
+  cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
-  # Ensure the necessary frameworks for Darwin.
-  proteaaudio = if pkgs.stdenv.isDarwin
-    then addExtraLibrary super.proteaaudio pkgs.darwin.apple_sdk.frameworks.AudioToolbox
-    else super.proteaaudio;
+  arbtt = overrideCabal (drv: {
+    # The test suite needs the packages's executables in $PATH to succeed.
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+    # One test uses timezone data
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.tzdata
+    ];
+  }) super.arbtt;
 
-
-  hzk = overrideCabal super.hzk (drv: {
+  hzk = overrideCabal (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
-  });
+    configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
+  }) super.hzk;
 
-  haskakafka = overrideCabal super.haskakafka (drv: {
+  haskakafka = overrideCabal (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
-  });
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
+  }) super.haskakafka;
 
   # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
-  hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
+  hw-kafka-client = dontCheck (overrideCabal (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
-    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
-  }));
+    configureFlags = [ "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka" ];
+  }) super.hw-kafka-client);
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
-  # Fix Darwin build.
-  halive = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
-    else super.halive;
-
   # Heist's test suite requires system pandoc
-  heist = overrideCabal super.heist (drv: {
+  heist = overrideCabal (drv: {
     testToolDepends = [pkgs.pandoc];
-  });
-
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
-
-  # Prevents needing to add `security_tool` as a run-time dependency for
-  # everything using x509-system to give access to the `security` executable.
-  x509-system =
-    if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
-    then
-      # darwin.security_tool is broken in Mojave (#45042)
-
-      # We will use the system provided security for now.
-      # Beware this WILL break in sandboxes!
-
-      # TODO(matthewbauer): If someone really needs this to work in sandboxes,
-      # I think we can add a propagatedImpureHost dep here, but I’m hoping to
-      # get a proper fix available soonish.
-      overrideCabal super.x509-system (drv: {
-        postPatch = (drv.postPatch or "") + ''
-          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
-        '';
-      })
-    else super.x509-system;
+  }) super.heist;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
-  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
-  gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
-  gtk = let gtk1 = addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools;
-            gtk2 = addPkgconfigDepend gtk1 pkgs.gtk2;
-            gtk3 = disableHardening gtk1 ["fortify"];
-            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag gtk3 "-fhave-quartz-gtk" else gtk4;
+  gio = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gio));
+  glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
+  gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
+  gtk = let gtk1 = addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.gtk;
+            gtk2 = addPkgconfigDepend pkgs.gtk2 gtk1;
+            gtk3 = disableHardening ["fortify"] gtk1;
+            gtk4 = if pkgs.stdenv.isDarwin then appendConfigureFlag "-fhave-quartz-gtk" gtk3 else gtk4;
         in gtk3;
-  gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
-  gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
+  gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
+  gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
   # Add necessary reference to gtk3 package
-  gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
+  gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
-
-  hs-mesos = overrideCabal super.hs-mesos (drv: {
-    # Pass _only_ mesos; the correct protobuf is propagated.
-    extraLibraries = [ pkgs.mesos ];
-    preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
-  });
+  # Doesn't declare boost dependency
+  nix-serve-ng = overrideSrc {
+    src = assert super.nix-serve-ng.version == "1.0.0";
+      # Workaround missing files in sdist
+      # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      pkgs.fetchFromGitHub {
+        repo = "nix-serve-ng";
+        owner = "aristanetworks";
+        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
+        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+      };
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -200,14 +177,15 @@ self: super: builtins.intersectAttrs super {
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
-  hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
-  hasql-transaction = dontCheck super.hasql-transaction; # wants to connect to postgresql
-  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
+  hjsonschema = overrideCabal (drv: { testTarget = "local"; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
+  persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
+  pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
@@ -227,6 +205,7 @@ self: super: builtins.intersectAttrs super {
   http-client-tls = dontCheck super.http-client-tls;
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
+  telegraph = dontCheck super.telegraph;
   typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
@@ -234,6 +213,15 @@ self: super: builtins.intersectAttrs super {
   tcp-streams = dontCheck super.tcp-streams;
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
+  arch-web = dontCheck super.arch-web;
+
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql = dontCheck super.hasql;
+  hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
+  hasql-interpolate = dontCheck super.hasql-interpolate;
+  hasql-notifications = dontCheck super.hasql-notifications;
+  hasql-pool = dontCheck super.hasql-pool;
+  hasql-transaction = dontCheck super.hasql-transaction;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -245,70 +233,57 @@ self: super: builtins.intersectAttrs super {
   mattermost-api = dontCheck super.mattermost-api;
 
   # Expect to find sendmail(1) in $PATH.
-  mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
+  mime-mail = appendConfigureFlag "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"" super.mime-mail;
 
   # Help the test suite find system timezone data.
-  tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
+  tz = overrideCabal (drv: {
+    preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo";
+  }) super.tz;
 
-  # Nix-specific workaround
-  xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
+  # https://hydra.nixos.org/build/128665302/nixlog/3
+  # Disable tests because they require a running dbus session
+  xmonad-dbus = dontCheck super.xmonad-dbus;
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
+  wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK30; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck (addExtraLibrary (super.hsqml.override { qt5 = pkgs.qt5Full; }) pkgs.libGLU_combined);
+  bindings-GLFW = dontCheck super.bindings-GLFW;
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+  gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
+  hsqml = dontCheck (addExtraLibraries [pkgs.libGLU pkgs.libGL] (super.hsqml.override { qt5 = pkgs.qt5Full; }));
+  monomer = dontCheck super.monomer;
+
+  # Wants to check against a real DB, Needs freetds
+  odbc = dontCheck (addExtraLibraries [ pkgs.freetds ] super.odbc);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
-  # https://github.com/haskell-foundation/foundation/pull/412
-  foundation =
-    if pkgs.stdenv.isDarwin
-    then dontCheck super.foundation
-    else super.foundation;
-
   # Hardcoded include path
-  poppler = overrideCabal super.poppler (drv: {
+  poppler = overrideCabal (drv: {
     postPatch = ''
       sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
       sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
     '';
-  });
+  }) super.poppler;
 
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general =
-    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
-    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
-    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
-      drv: {
-        preConfigure = ''
-          sed -i llvm-general.cabal \
-              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-        '';
-        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-      }
-    );
-
-  llvm-hs =
-      let dontCheckDarwin = if pkgs.stdenv.isDarwin
-                            then dontCheck
-                            else pkgs.lib.id;
-      in dontCheckDarwin (super.llvm-hs.override { llvm-config = pkgs.llvm_8; });
+  # requires llvm 9 specifically https://github.com/llvm-hs/llvm-hs/#building-from-source
+  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm_9; };
 
   # Needs help finding LLVM.
-  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
+  spaceprobe = addBuildTool self.buildHaskellPackages.llvmPackages.llvm super.spaceprobe;
 
   # Tries to run GUI in tests
-  leksah = dontCheck (overrideCabal super.leksah (drv: {
+  leksah = dontCheck (overrideCabal (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
-      gnome3.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
+      gnome.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
       wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
@@ -318,57 +293,62 @@ self: super: builtins.intersectAttrs super {
         substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
       done
     '';
-  }));
+  }) super.leksah);
 
-  # Patch to consider NIX_GHC just like xmonad does
-  dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
-
-  yesod-bin = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa
-    else super.yesod-bin;
-
-  hmatrix = if pkgs.stdenv.isDarwin
-    then addBuildDepend super.hmatrix pkgs.darwin.apple_sdk.frameworks.Accelerate
-    else super.hmatrix;
+  dyre =
+    appendPatch
+      # Dyre needs special support for reading the NIX_GHC env var.  This is
+      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
+      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
+      # next version.
+      (pkgs.fetchpatch {
+        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
+        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
+      })
+      # dyre's tests appear to be trying to directly call GHC.
+      (dontCheck super.dyre);
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
-  epic = addExtraLibraries (addBuildTool super.epic self.buildHaskellPackages.happy) [pkgs.boehmgc pkgs.gmp];
+  epic = addExtraLibraries [pkgs.boehmgc pkgs.gmp] (addBuildTool self.buildHaskellPackages.happy super.epic);
 
   # https://github.com/ekmett/wl-pprint-terminfo/issues/7
-  wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
+  wl-pprint-terminfo = addExtraLibrary pkgs.ncurses super.wl-pprint-terminfo;
 
   # https://github.com/bos/pcap/issues/5
-  pcap = addExtraLibrary super.pcap pkgs.libpcap;
+  pcap = addExtraLibrary pkgs.libpcap super.pcap;
 
   # https://github.com/NixOS/nixpkgs/issues/53336
-  greenclip = addExtraLibrary super.greenclip pkgs.xorg.libXdmcp;
+  greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
-  miniball = overrideCabal super.miniball (drv: {
+  libjwt-typed = overrideCabal (drv: {
+    librarySystemDepends = [ pkgs.libjwt ];
+  }) super.libjwt-typed;
+  miniball = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.miniball ];
-  });
-  SDL-image = overrideCabal super.SDL-image (drv: {
+  }) super.miniball;
+  SDL-image = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_image ] ++ drv.librarySystemDepends or [];
-  });
-  SDL-ttf = overrideCabal super.SDL-ttf (drv: {
+  }) super.SDL-image;
+  SDL-ttf = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_ttf ];
-  });
-  SDL-mixer = overrideCabal super.SDL-mixer (drv: {
+  }) super.SDL-ttf;
+  SDL-mixer = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_mixer ];
-  });
-  SDL-gfx = overrideCabal super.SDL-gfx (drv: {
+  }) super.SDL-mixer;
+  SDL-gfx = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.SDL pkgs.SDL_gfx ];
-  });
-  SDL-mpeg = overrideCabal super.SDL-mpeg (drv: {
+  }) super.SDL-gfx;
+  SDL-mpeg = overrideCabal (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
       "--extra-lib-dirs=${pkgs.smpeg}/lib"
       "--extra-include-dirs=${pkgs.smpeg}/include/smpeg"
     ];
-  });
+  }) super.SDL-mpeg;
 
   # https://github.com/ivanperez-keera/hcwiid/pull/4
-  hcwiid = overrideCabal super.hcwiid (drv: {
+  hcwiid = overrideCabal (drv: {
     configureFlags = (drv.configureFlags or []) ++ [
       "--extra-lib-dirs=${pkgs.bluez.out}/lib"
       "--extra-lib-dirs=${pkgs.cwiid}/lib"
@@ -376,16 +356,16 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.bluez.dev}/include"
     ];
     prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
-  });
+  }) super.hcwiid;
 
   # cabal2nix doesn't pick up some of the dependencies.
   ginsu = let
-    g = addBuildDepend super.ginsu pkgs.perl;
-    g' = overrideCabal g (drv: {
+    g = addBuildDepend pkgs.perl super.ginsu;
+    g' = overrideCabal (drv: {
       executableSystemDepends = (drv.executableSystemDepends or []) ++ [
         pkgs.ncurses
       ];
-    });
+    }) g;
   in g';
 
   # Tests require `docker` command in PATH
@@ -393,64 +373,23 @@ self: super: builtins.intersectAttrs super {
   docker = dontCheck super.docker;
 
   # https://github.com/deech/fltkhs/issues/16
-  fltkhs = overrideCabal super.fltkhs (drv: {
-    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.autoconf];
+  fltkhs = overrideCabal (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.autoconf];
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.fltk13 pkgs.libGL pkgs.libjpeg];
-  });
+  }) super.fltkhs;
 
   # https://github.com/skogsbaer/hscurses/pull/26
-  hscurses = overrideCabal super.hscurses (drv: {
+  hscurses = overrideCabal (drv: {
     librarySystemDepends = (drv.librarySystemDepends or []) ++ [ pkgs.ncurses ];
-  });
+  }) super.hscurses;
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
 
-  # Ensure the necessary frameworks are propagatedBuildInputs on darwin
-  OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
-    librarySystemDepends =
-      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
-    libraryHaskellDepends = drv.libraryHaskellDepends
-      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
-                            [ pkgs.darwin.apple_sdk.frameworks.OpenGL ];
-    preConfigure = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
-      frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
-      frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
-      configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
-    '';
-  });
-  GLURaw = overrideCabal super.GLURaw (drv: {
-    librarySystemDepends =
-      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
-    libraryHaskellDepends = drv.libraryHaskellDepends
-      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
-                            [ pkgs.darwin.apple_sdk.frameworks.OpenGL ];
-  });
-  bindings-GLFW = overrideCabal super.bindings-GLFW (drv: {
-    doCheck = false; # requires an active X11 display
-    librarySystemDepends =
-      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
-    libraryHaskellDepends = drv.libraryHaskellDepends
-      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
-                            (with pkgs.darwin.apple_sdk.frameworks;
-                             [ AGL Cocoa OpenGL IOKit Kernel CoreVideo
-                               pkgs.darwin.CF ]);
-  });
-  OpenCL = overrideCabal super.OpenCL (drv: {
-    librarySystemDepends =
-      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
-    libraryHaskellDepends = drv.libraryHaskellDepends
-      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
-                            [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
-  });
-
-  # depends on 'hie' executable
-  lsp-test = dontCheck super.lsp-test;
-
   # tests depend on executable
-  ghcide = overrideCabal super.ghcide (drv: {
+  ghcide = overrideCabal (drv: {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
-  });
+  }) super.ghcide;
 
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
@@ -462,30 +401,22 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend pkgs.freeglut (appendPatch ./patches/GLUT.patch super.GLUT);
 
-  libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
+  libsystemd-journal = overrideCabal (old: {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
-  });
+  }) super.libsystemd-journal;
 
   # does not specify tests in cabal file, instead has custom runTest cabal hook,
   # so cabal2nix will not detect test dependencies.
-  either-unwrap = overrideCabal super.either-unwrap (drv: {
+  either-unwrap = overrideCabal (drv: {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
-  });
+  }) super.either-unwrap;
 
-  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
-  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
-
-  # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = if pkgs.stdenv.isDarwin
-    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
-    else dontCheck super.fsnotify;
+  fsnotify = dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary super.hidapi pkgs.udev;
+  hidapi = addExtraLibrary pkgs.udev super.hidapi;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -495,48 +426,63 @@ self: super: builtins.intersectAttrs super {
   stackage-curator = dontCheck super.stackage-curator;
 
   # hardcodes /usr/bin/tr: https://github.com/snapframework/io-streams/pull/59
-  io-streams = enableCabalFlag super.io-streams "NoInteractiveTests";
+  io-streams = enableCabalFlag "NoInteractiveTests" super.io-streams;
 
   # requires autotools to build
-  secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
+  secp256k1 = addBuildTools [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ] super.secp256k1;
 
-  # tests require git
-  hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
+  # requires libsecp256k1 in pkg-config-depends
+  secp256k1-haskell = addPkgconfigDepend pkgs.secp256k1 super.secp256k1-haskell;
+
+  # tests require git and zsh
+  hapistrano = addBuildTools [ pkgs.buildPackages.git pkgs.buildPackages.zsh ] super.hapistrano;
 
   # This propagates this to everything depending on haskell-gi-base
-  haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobject-introspection;
+  haskell-gi-base = addBuildDepend pkgs.gobject-introspection super.haskell-gi-base;
 
   # requires valid, writeable $HOME
-  hatex-guide = overrideCabal super.hatex-guide (drv: {
+  hatex-guide = overrideCabal (drv: {
     preConfigure = ''
       ${drv.preConfigure or ""}
       export HOME=$PWD
     '';
-  });
+  }) super.hatex-guide;
 
   # https://github.com/plow-technologies/servant-streaming/issues/12
   servant-streaming-server = dontCheck super.servant-streaming-server;
 
-  # https://github.com/haskell-servant/servant/pull/1128
-  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.15" then
-    appendPatch super.servant-client-core ./patches/servant-client-core-streamBody.patch
+  # https://github.com/haskell-servant/servant/pull/1238
+  servant-client-core = if (pkgs.lib.getVersion super.servant-client-core) == "0.16" then
+    appendPatch ./patches/servant-client-core-redact-auth-header.patch super.servant-client-core
   else
     super.servant-client-core;
 
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
-  intero = overrideCabal super.intero (drv: {
+  intero = overrideCabal (drv: {
     preCheck = ''
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
-  });
+  }) super.intero;
+
+  # Break infinite recursion cycle with criterion and network-uri.
+  js-flot = dontCheck super.js-flot;
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
+
+  # Break infinite recursion cycle between devtools and mprelude.
+  devtools = super.devtools.override { mprelude = dontCheck super.mprelude; };
+
+  # Break dependency cycle between tasty-hedgehog and tasty-expected-failure
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+
+  # Break dependency cycle between hedgehog, tasty-hedgehog and lifted-async
+  lifted-async = dontCheck super.lifted-async;
 
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
@@ -548,50 +494,88 @@ self: super: builtins.intersectAttrs super {
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
 
   # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend super.opencv-extra pkgs.opencv3;
+  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
   spatial-rotations = dontCheck super.spatial-rotations;
 
-  LDAP = dontCheck (overrideCabal super.LDAP (drv: {
+  LDAP = dontCheck (overrideCabal (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
-  }));
+  }) super.LDAP);
+
+  # Not running the "example" test because it requires a binary from lsps test
+  # suite which is not part of the output of lsp.
+  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
+
+  # the test suite attempts to run the binaries built in this package
+  # through $PATH but they aren't in $PATH
+  dhall-lsp-server = dontCheck super.dhall-lsp-server;
 
   # Expects z3 to be on path so we replace it with a hard
-  sbv = overrideCabal super.sbv (drv: {
+  #
+  # The tests expect additional solvers on the path, replace the
+  # available ones also with hard coded paths, and remove the missing
+  # ones from the test.
+  # TODO(@sternenseemann): package cvc5 and re-enable tests
+  sbv = overrideCabal (drv: {
     postPatch = ''
-      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
-  });
+      sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
+      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
+      sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
+
+      # Solvers we don't provide are removed from tests
+      sed -i -e 's|, cvc5||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
+    '';
+  }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
-  futhark = if pkgs.stdenv.isDarwin then super.futhark else with pkgs;
-    let path = stdenv.lib.makeBinPath [ gcc ];
-    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
-      postInstall = ''
-        wrapProgram $out/bin/futhark \
-          --prefix PATH : "${path}" \
-          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
-          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
-          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
-      '';
-    });
+  # Compile manpages (which are in RST and are compiled with Sphinx).
+  futhark =
+    overrideCabal
+      (_drv: {
+        postBuild = (_drv.postBuild or "") + ''
+        make -C docs man
+        '';
 
-  # On Darwin, git-annex mis-detects options to `cp`, so we wrap the binary to
-  # ensure it uses Nixpkgs' coreutils.
-  git-annex = with pkgs;
-    if (!stdenv.isLinux) then
-      let path = stdenv.lib.makeBinPath [ coreutils ];
-      in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
-        postFixup = ''
-          wrapProgram $out/bin/git-annex \
-            --prefix PATH : "${path}"
+        postInstall = (_drv.postInstall or "") + ''
+        mkdir -p $out/share/man/man1
+        mv docs/_build/man/*.1 $out/share/man/man1/
         '';
       })
-    else super.git-annex;
+      (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
+
+  git-annex = overrideCabal (drv: {
+    # This is an instance of https://github.com/NixOS/nix/pull/1085
+    # Fails with:
+    #   gpg: can't connect to the agent: File name too long
+    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      substituteInPlace Test.hs \
+        --replace ', testCase "crypto" test_crypto' ""
+    '' + (drv.postPatch or "");
+    # Ensure git-annex uses the exact same coreutils it saw at build-time.
+    # This is especially important on Darwin but also in Linux environments
+    # where non-GNU coreutils are used by default.
+    postFixup = ''
+      wrapProgram $out/bin/git-annex \
+        --prefix PATH : "${pkgs.lib.makeBinPath (with pkgs; [ coreutils lsof ])}"
+    '' + (drv.postFixup or "");
+    buildTools = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ (drv.buildTools or []);
+  }) (super.git-annex.override {
+    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+  });
 
   # The test suite has undeclared dependencies on git.
   githash = dontCheck super.githash;
@@ -614,15 +598,530 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
-
-  # Hadolint wants to build a statically linked binary by default.
-  hadolint = overrideCabal super.hadolint (drv: {
-    preConfigure = "sed -i -e /ld-options:/d hadolint.cabal";
-  });
+  pantry_0_5_2_1 = dontCheck super.pantry_0_5_2_1;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
-  cairo = addBuildTool super.cairo self.buildHaskellPackages.gtk2hs-buildtools;
-  pango = disableHardening (addBuildTool super.pango self.buildHaskellPackages.gtk2hs-buildtools) ["fortify"];
+  cairo = addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.cairo;
+  pango = disableHardening ["fortify"] (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.pango);
 
+  spago =
+    let
+      docsSearchApp_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
+        sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
+      };
+
+      docsSearchApp_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/docs-search-app.js";
+        sha256 = "17qngsdxfg96cka1cgrl3zdrpal8ll6vyhhnazqm4hwj16ywjm02";
+      };
+
+      purescriptDocsSearch_0_0_10 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/purescript-docs-search";
+        sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
+      };
+
+      purescriptDocsSearch_0_0_11 = pkgs.fetchurl {
+        url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/purescript-docs-search";
+        sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
+      };
+
+      spagoDocs = overrideCabal (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
+          # Spago includes the following two files directly into the binary
+          # with Template Haskell.  They are fetched at build-time from the
+          # `purescript-docs-search` repo above.  If they cannot be fetched at
+          # build-time, they are pulled in from the `templates/` directory in
+          # the spago source.
+          #
+          # However, they are not actually available in the spago source, so they
+          # need to fetched with nix and put in the correct place.
+          # https://github.com/spacchetti/spago/issues/510
+          cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+          cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+          cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+          cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
+
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w \
+            "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+            "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.11"
+        '';
+      }) super.spago;
+
+      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
+        # spago is not yet updated for aeson 2.0
+        aeson = hfinal.aeson_1_5_6_0;
+        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
+        bower-json = hprev.bower-json_1_0_0_1;
+      });
+
+      # Tests require network access.
+      spagoWithoutChecks = dontCheck spagoOldAeson;
+    in
+    spagoWithoutChecks;
+
+  # checks SQL statements at compile time, and so requires a running PostgreSQL
+  # database to run it's test suite
+  postgresql-typed = dontCheck super.postgresql-typed;
+
+  # mplayer-spot uses mplayer at runtime.
+  mplayer-spot =
+    let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
+    in overrideCabal (oldAttrs: {
+      postInstall = ''
+        wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
+      '';
+    }) (addBuildTool pkgs.buildPackages.makeWrapper super.mplayer-spot);
+
+  # break infinite recursion with base-orphans
+  primitive = dontCheck super.primitive;
+  primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
+
+  cut-the-crap =
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
+    in overrideCabal (_drv: {
+      postInstall = ''
+        wrapProgram $out/bin/cut-the-crap \
+          --prefix PATH : "${path}"
+      '';
+    }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
+
+  # Tests access homeless-shelter.
+  hie-bios = dontCheck super.hie-bios;
+
+  # Compiling the readme throws errors and has no purpose in nixpkgs
+  aeson-gadt-th =
+    disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
+
+  neuron = overrideCabal (drv: {
+    # neuron expects the neuron-search script to be in PATH at built-time.
+    buildTools = [ pkgs.buildPackages.makeWrapper ];
+    preConfigure = ''
+      mkdir -p $out/bin
+      cp src-bash/neuron-search $out/bin/neuron-search
+      chmod +x $out/bin/neuron-search
+      wrapProgram $out/bin/neuron-search --prefix 'PATH' ':' ${
+        with pkgs;
+        lib.makeBinPath [ fzf ripgrep gawk bat findutils envsubst ]
+      }
+      PATH=$PATH:$out/bin
+    '';
+  }) super.neuron;
+
+  # Fix compilation of Setup.hs by removing the module declaration.
+  # See: https://github.com/tippenein/guid/issues/1
+  guid = overrideCabal (drv: {
+    prePatch = "sed -i '1d' Setup.hs"; # 1st line is module declaration, remove it
+    doCheck = false;
+  }) super.guid;
+
+  # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
+  shh = dontCheck super.shh;
+
+  # The test suites fail because there's no PostgreSQL database running in our
+  # build sandbox.
+  hasql-queue = dontCheck super.hasql-queue;
+  postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
+  postgresql-pure = dontCheck super.postgresql-pure;
+
+  retrie = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
+  }) super.retrie;
+
+  retrie_1_2_0_0 = overrideCabal (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
+  }) super.retrie_1_2_0_0;
+
+  haskell-language-server = let
+    # This wrapper will be included in the sdist in the next release, then we can remove this custom fetch.
+    abi-compat-check-wrapper = assert super.haskell-language-server.version == "1.8.0.0"; pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/haskell/haskell-language-server/c12379c57ab8f0abd606e9f397de54e508d024a0/bindist/wrapper.in";
+      sha256 = "sha256-vHi6+s8/V4WJSCxIqjP+thumEpttokpCc+a823WEPPk=";
+    }; in
+      overrideCabal (drv: {
+    # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
+    # by default. Unless we reflect this in the generic builder, GHC is going to
+    # produce some illegal references to /build/.
+    enableSharedExecutables = true;
+    # The shell script wrapper checks that the runtime ghc and its boot packages match the ghc hls was compiled with.
+    # This prevents linking issues when running TH splices.
+    postInstall = ''
+      mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
+      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      ${pkgs.buildPackages.gnused}/bin/sed \
+        -e "s!@@EXE_DIR@@!$out/bin!" \
+        -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
+        -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
+        -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
+        -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        ${abi-compat-check-wrapper} > "$out/bin/haskell-language-server"
+      ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
+      chmod +x "$out/bin/haskell-language-server"
+      '';
+    testToolDepends = [ self.cabal-install pkgs.git ];
+    testTarget = "func-test"; # wrapper test accesses internet
+    preCheck = ''
+      export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
+      export HOME=$TMPDIR
+    '';
+  }) super.haskell-language-server;
+
+  # NOTE: this patch updates the hevm code to work with the latest packages that broke the build
+  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
+  # tests depend on a specific version of solc
+  hevm = dontCheck (appendPatch ./patches/hevm-update-deps.patch super.hevm);
+
+  # hadolint enables static linking by default in the cabal file, so we have to explicitly disable it.
+  # https://github.com/hadolint/hadolint/commit/e1305042c62d52c2af4d77cdce5d62f6a0a3ce7b
+  hadolint = disableCabalFlag "static" super.hadolint;
+
+  # Test suite tries to execute the build product "doctest-driver-gen", but it's not in $PATH.
+  doctest-driver-gen = dontCheck super.doctest-driver-gen;
+
+  # Tests access internet
+  prune-juice = dontCheck super.prune-juice;
+
+  # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
+  ihaskell = overrideCabal (drv: {
+    # ihaskell's cabal file forces building a shared executable, which we need
+    # to reflect here or RPATH will contain a reference to /build/.
+    enableSharedExecutables = true;
+    preCheck = ''
+      export HOME=$TMPDIR/home
+      export PATH=$PWD/dist/build/ihaskell:$PATH
+      export GHC_PACKAGE_PATH=$PWD/dist/package.conf.inplace/:$GHC_PACKAGE_PATH
+    '';
+  }) super.ihaskell;
+
+  # tests need to execute the built executable
+  stutter = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=dist/build/stutter:$PATH
+    '' + (drv.preCheck or "");
+  }) super.stutter;
+
+  # Install man page and generate shell completions
+  pinboard-notes-backup = overrideCabal
+    (drv: {
+      postInstall = ''
+        install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
+      '' + (drv.postInstall or "");
+    })
+    (self.generateOptparseApplicativeCompletions [ "pnbackup" ] super.pinboard-notes-backup);
+
+  # Pass the correct libarchive into the package.
+  streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
+
+  hlint = overrideCabal (drv: {
+    postInstall = ''
+      install -Dm644 data/hlint.1 -t "$out/share/man/man1"
+    '' + drv.postInstall or "";
+  }) super.hlint;
+
+  hiedb = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  }) super.hiedb;
+
+  taglib = overrideCabal (drv: {
+    librarySystemDepends = [
+      pkgs.zlib
+    ] ++ (drv.librarySystemDepends or []);
+  }) super.taglib;
+
+  # random 1.2.0 has tests that indirectly depend on
+  # itself causing an infinite recursion at evaluation
+  # time
+  random = dontCheck super.random;
+
+  # mockery's tests depend on hspec-discover which dependso on mockery for its tests
+  mockery = dontCheck super.mockery;
+  # same for logging-facade
+  logging-facade = dontCheck super.logging-facade;
+
+  # Since this package is primarily used by nixpkgs maintainers and is probably
+  # not used to link against by anyone, we can make it’s closure smaller and
+  # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
+  cabal2nix-unstable = overrideCabal
+    (drv: {
+      buildTools = (drv.buildTools or []) ++ [
+        pkgs.buildPackages.makeWrapper
+      ];
+      postInstall = ''
+        wrapProgram $out/bin/cabal2nix \
+          --prefix PATH ":" "${
+            pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]
+          }"
+      '';
+    })
+    (justStaticExecutables super.cabal2nix-unstable);
+
+  # test suite needs local redis daemon
+  nri-redis = dontCheck super.nri-redis;
+
+  # Make tophat find itself for _compiling_ its test suite
+  tophat = overrideCabal (drv: {
+    postPatch = ''
+      sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
+    '' + (drv.postPatch or "");
+  }) super.tophat;
+
+  # Runtime dependencies and CLI completion
+  nvfetcher = self.generateOptparseApplicativeCompletions [ "nvfetcher" ] (overrideCabal
+    (drv: {
+      # test needs network
+      doCheck = false;
+      buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
+      postInstall = drv.postInstall or "" + ''
+        wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
+          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch ]
+        }"
+      '';
+    }) super.nvfetcher);
+
+  rel8 = addTestToolDepend pkgs.postgresql super.rel8;
+
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
+
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
+  hercules-ci-cnix-expr =
+    addTestToolDepend pkgs.git (
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
+    );
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
+
+  # the testsuite fails because of not finding tsc without some help
+  aeson-typescript = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+    # the testsuite assumes that tsc is in the PATH if it thinks it's in
+    # CI, otherwise trying to install it.
+    #
+    # https://github.com/codedownio/aeson-typescript/blob/ee1a87fcab8a548c69e46685ce91465a7462be89/test/Util.hs#L27-L33
+    preCheck = "export CI=true";
+  }) super.aeson-typescript;
+
+  # Enable extra optimisations which increase build time, but also
+  # later compiler performance, so we should do this for user's benefit.
+  # Flag added in Agda 2.6.2
+  Agda = appendConfigureFlag "-foptimise-heavily" super.Agda;
+
+  # ats-format uses cli-setup in Setup.hs which is quite happy to write
+  # to arbitrary files in $HOME. This doesn't either not achieve anything
+  # or even fail, so we prevent it and install everything necessary ourselves.
+  # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
+  ats-format = self.generateOptparseApplicativeCompletions [ "atsfmt" ] (
+    justStaticExecutables (
+      overrideCabal (drv: {
+        # use vanilla Setup.hs
+        preCompileBuildDriver = ''
+          cat > Setup.hs << EOF
+          module Main where
+          import Distribution.Simple
+          main = defaultMain
+          EOF
+        '' + (drv.preCompileBuildDriver or "");
+        # install man page
+        buildTools = [
+          pkgs.buildPackages.installShellFiles
+        ] ++ (drv.buildTools or []);
+        postInstall = ''
+          installManPage man/atsfmt.1
+        '' + (drv.postInstall or "");
+      }) super.ats-format
+    )
+  );
+
+  # Test suite is just the default example executable which doesn't work if not
+  # executed by Setup.hs, but works if started on a proper TTY
+  isocline = dontCheck super.isocline;
+
+  # Some hash implementations are x86 only, but part of the test suite.
+  # So executing and building it on non-x86 platforms will always fail.
+  hashes = overrideCabal {
+    doCheck = with pkgs.stdenv; hostPlatform == buildPlatform
+      && buildPlatform.isx86;
+  } super.hashes;
+
+  # Tries to access network
+  aws-sns-verify = dontCheck super.aws-sns-verify;
+
+  # procex relies on close_range which has been introduced in Linux 5.9,
+  # the test suite seems to force the use of this feature (or the fallback
+  # mechanism is broken), so we can't run the test suite on machines with a
+  # Kernel < 5.9. To check for this, we use uname -r to obtain the Kernel
+  # version and sort -V to compare against our minimum version. If the
+  # Kernel turns out to be older, we disable the test suite.
+  procex = overrideCabal (drv: {
+    postConfigure = ''
+      minimumKernel=5.9
+      higherVersion=`printf "%s\n%s\n" "$minimumKernel" "$(uname -r)" | sort -rV | head -n1`
+      if [[ "$higherVersion" = "$minimumKernel" ]]; then
+        echo "Used Kernel doesn't support close_range, disabling tests"
+        unset doCheck
+      fi
+    '' + (drv.postConfigure or "");
+  }) super.procex;
+
+  # Test suite wants to run main executable
+  fourmolu_0_8_2_0 = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/fourmolu:$PATH"
+    '';
+  }) super.fourmolu_0_8_2_0;
+
+  # Test suite needs to execute 'disco' binary
+  disco = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/disco:$PATH"
+    '';
+    testFlags = drv.testFlags or [] ++ [
+      # Needs network access
+      "-p" "!/oeis/"
+    ];
+    # disco-examples needs network access
+    testTarget = "disco-tests";
+  }) super.disco;
+
+  # Apply a patch which hardcodes the store path of graphviz instead of using
+  # whatever graphviz is in PATH.
+  graphviz = overrideCabal (drv: {
+    patches = [
+      (pkgs.substituteAll {
+        src = ./patches/graphviz-hardcode-graphviz-store-path.patch;
+        inherit (pkgs) graphviz;
+      })
+    ] ++ (drv.patches or []);
+  }) super.graphviz;
+
+  # Test suite requires AWS access which requires both a network
+  # connection and payment.
+  aws = dontCheck super.aws;
+
+  # Test case tries to contact the network
+  http-api-data-qq = overrideCabal (drv: {
+    testFlags = [
+      "-p" "!/Can be used with http-client/"
+    ] ++ drv.testFlags or [];
+  }) super.http-api-data-qq;
+
+  # Additionally install documentation
+  jacinda = overrideCabal (drv: {
+    enableSeparateDocOutput = true;
+    postInstall = ''
+      ${drv.postInstall or ""}
+
+      docDir="$doc/share/doc/${drv.pname}-${drv.version}"
+
+      # man page goes to $out, it's small enough and haskellPackages has no
+      # support for a man output at the moment and $doc requires downloading
+      # a full PDF
+      install -Dm644 man/ja.1 -t "$out/share/man/man1"
+      # language guide and examples
+      install -Dm644 doc/guide.pdf -t "$docDir"
+      install -Dm644 test/examples/*.jac -t "$docDir/examples"
+    '';
+  }) super.jacinda;
+
+  # Smoke test can't be executed in sandbox
+  # https://github.com/georgefst/evdev/issues/25
+  evdev = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [
+      "-p" "!/Smoke/"
+    ];
+  }) super.evdev;
+
+  # Tests assume dist-newstyle build directory is present
+  cabal-hoogle = dontCheck super.cabal-hoogle;
+
+  nfc = overrideCabal (drv: {
+    isExecutable = true;
+    executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];
+    configureFlags = drv.configureFlags or [] ++ [ "-fbuild-examples" ];
+    enableSeparateBinOutput = true;
+  }) super.nfc;
+
+  # Wants to execute cabal-install to (re-)build itself
+  hint = dontCheck super.hint;
+
+  # Make sure that Cabal 3.8.* can be built as-is
+  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
+
+  # cabal-install switched to build type simple in 3.2.0.0
+  # as a result, the cabal(1) man page is no longer installed
+  # automatically. Instead we need to use the `cabal man`
+  # command which generates the man page on the fly and
+  # install it to $out/share/man/man1 ourselves in this
+  # override.
+  # The commit that introduced this change:
+  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
+  # Since cabal-install 3.8, the cabal man (without the raw) command
+  # uses nroff(1) instead of man(1) for macOS/BSD compatibility. That utility
+  # is not commonly installed on systems, so we add it to PATH. Closure size
+  # penalty is about 10MB at the time of writing this (2022-08-20).
+  cabal-install = overrideCabal (old: {
+    executableToolDepends = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ old.buildToolDepends or [];
+    postInstall = old.postInstall + ''
+      mkdir -p "$out/share/man/man1"
+      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+
+      wrapProgram "$out/bin/cabal" \
+        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+    '';
+    hydraPlatforms = pkgs.lib.platforms.all;
+    broken = false;
+  }) super.cabal-install;
+
+  keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
+
+  # ghcide-bench tests need network
+  ghcide-bench = dontCheck super.ghcide-bench;
+
+# haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
+} // pkgs.lib.mapAttrs
+  (_: overrideCabal (drv: {
+    testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '' + (drv.preCheck or "");
+  }))
+{
+  inherit (super)
+    hls-brittany-plugin
+    hls-eval-plugin
+    hls-floskell-plugin
+    hls-fourmolu-plugin
+    hls-module-name-plugin
+    hls-pragmas-plugin
+    hls-splice-plugin
+    hls-refactor-plugin
+    hls-code-range-plugin
+    hls-explicit-fixity-plugin;
+  # Tests have file permissions expections that don‘t work with the nix store.
+  hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
+  hls-gadt-plugin = dontCheck super.hls-gadt-plugin;
+
+  # Flaky tests
+  hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
+  hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
+  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 }

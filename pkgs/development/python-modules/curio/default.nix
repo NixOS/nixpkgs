@@ -2,34 +2,43 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, pytest
+, pytestCheckHook
 , sphinx
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "0.9";
+  version = "1.5";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51d1a7b49b4f8dd1486ac785c72d522962e93ccfdcfc1f818f5c7553a307b5ef";
+    sha256 = "sha256-rwghLlkLt9qOTMOcQgEnEUlNwg1iLxYhVbopbMLjvBA=";
   };
 
-  disabled = !isPy3k;
+  checkInputs = [
+    pytestCheckHook
+    sphinx
+  ];
 
-  checkInputs = [ pytest sphinx ];
+  __darwinAllowLocalNetworking = true;
 
-  # test_aside_basic times out,
-  # test_aside_cancel fails because modifies PYTHONPATH and cant find pytest
-  checkPhase = ''
-    # __pycache__ was packaged accidentally, https://github.com/dabeaz/curio/issues/301
-    rm -r tests/__pycache__
-    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel
-  '';
+  disabledTests = [
+     "test_aside_basic" # times out
+     "test_write_timeout" # flaky, does not always time out
+     "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
+     "test_ssl_outgoing" # touches network
+   ] ++ lib.optionals stdenv.isDarwin [
+     "test_unix_echo" # socket bind error on hydra when built with other packages
+     "test_unix_ssl_server" # socket bind error on hydra when built with other packages
+   ];
+
+  pythonImportsCheck = [ "curio" ];
 
   meta = with lib; {
     homepage = "https://github.com/dabeaz/curio";
-    description = "Library for performing concurrent I/O with coroutines in Python 3";
+    description = "Library for performing concurrent I/O with coroutines in Python";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

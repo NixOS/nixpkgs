@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , patchelf
 , cmake
-, pkgconfig
+, pkg-config
 
 , intel-gmmlib
 , intel-graphics-compiler
@@ -11,19 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
-  version = "19.34.13959";
+  version = "22.35.24055";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
-    sha256 = "1m54w5p5pilrkmlmqgvgrsm3d5dqfdr4jai5siq5ccsqj4gnv1wz";
+    sha256 = "sha256-MOWlhzhEGYyHGk6N+H7O2BLho4YFyvcCbj/zafhzLEw=";
   };
 
-  # Build script tries to write the ICD to /etc
-  patches = [ ./etc-dir.patch ];
-
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
 
@@ -31,7 +28,7 @@ stdenv.mkDerivation rec {
     "-DSKIP_UNIT_TESTS=1"
 
     "-DIGC_DIR=${intel-graphics-compiler}"
-    "-DETC_DIR=${placeholder "out"}/etc"
+    "-DOCL_ICD_VENDORDIR=${placeholder "out"}/etc/OpenCL/vendors"
 
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -43,13 +40,13 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva ]} \
+    patchelf --set-rpath ${lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib ]} \
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/intel/compute-runtime;
-    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond.";
+  meta = with lib; {
+    homepage    = "https://github.com/intel/compute-runtime";
+    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ gloaming ];

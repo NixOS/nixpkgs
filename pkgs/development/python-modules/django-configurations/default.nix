@@ -1,26 +1,48 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, django-discover-runner
-, mock
 , dj-database-url
 , dj-email-url
 , dj-search-url
-, django-cache-url
-, six
 , django
+, django-cache-url
+, django-discover-runner
+, fetchPypi
+, importlib-metadata
+, mock
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "2.1";
   pname = "django-configurations";
+  version = "2.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71d9acdff33aa034f0157b0b3d23629fe0cd499bf4d0b6d699b9ca0701d952e8";
+    sha256 = "sha256-IrmWTmtlfa/Ho1QQoRXSDxRRFJqCc3rcbDMew2WIgZY=";
   };
 
-  checkInputs = [ django-discover-runner mock dj-database-url dj-email-url dj-search-url django-cache-url six ];
+  buildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    django
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    django-discover-runner
+    mock
+    dj-database-url
+    dj-email-url
+    dj-search-url
+    django-cache-url
+  ];
 
   checkPhase = ''
     export PYTHONPATH=.:$PYTHONPATH
@@ -32,10 +54,14 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://django-configurations.readthedocs.io/;
+  pythonImportsCheck = [
+    "configurations"
+  ];
+
+  meta = with lib; {
     description = "A helper for organizing Django settings";
+    homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

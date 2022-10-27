@@ -8,7 +8,7 @@ bundlerEnv {
 
   meta = {
     description = "A modern and powerful project management tool";
-    homepage    = http://taskjuggler.org/;
+    homepage    = "https://taskjuggler.org/";
     license     = lib.licenses.gpl2;
     platforms   = lib.platforms.unix;
   };

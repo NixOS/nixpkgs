@@ -1,15 +1,16 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
 , fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, utillinux, which, writeScript, xfsprogs, runtimeShell }:
+, time, util-linux, which, writeScript, xfsprogs, runtimeShell }:
 
-stdenv.mkDerivation {
-  name = "xfstests-2019-09-08";
+stdenv.mkDerivation rec {
+  pname = "xfstests";
+  version = "2022.09.04";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
-    rev = "0837e907988a5f410cae0ae714f42f9c4242e072";
-    sha256 = "1f5cv0vwc1g9difzp69k49rc5nfd08y72vdg318j25nv3rwv7wc9";
+    rev = "v${version}";
+    sha256 = "sha256-hPFoqNmB8pewvBN1nzVMkTrMHCo0xc8tmmIODaiDeRw=";
   };
 
   nativeBuildInputs = [
@@ -96,13 +97,13 @@ stdenv.mkDerivation {
 
     export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk keyutils
                                    libcap lvm2 perl procps killall quota
-                                   utillinux which xfsprogs]}:$PATH
+                                   util-linux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torture test suite for filesystems";
-    homepage = https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/;
+    homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

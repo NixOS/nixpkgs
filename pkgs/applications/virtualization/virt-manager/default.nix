@@ -1,73 +1,89 @@
-{ stdenv, fetchurl, python3Packages, intltool, file
-, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3
-, gtksourceview4
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
+, vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
+, gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
+, e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
 , spiceSupport ? true, spice-gtk ? null
-, cpio, e2fsprogs, findutils, gzip
 }:
 
-with stdenv.lib;
+python3.pkgs.buildPythonApplication rec {
+  pname = "virt-manager";
+  version = "4.1.0";
 
-# TODO: remove after there's support for setupPyDistFlags
-let
-  setuppy = ../../../development/interpreters/python/run_setup.py;
-in
-python3Packages.buildPythonApplication rec {
-  name = "virt-manager-${version}";
-  version = "2.2.1";
-  namePrefix = "";
-
-  src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
   };
 
   nativeBuildInputs = [
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
+    docutils
   ];
 
   buildInputs = [
     wrapGAppsHook
-    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
-  ] ++ optional spiceSupport spice-gtk;
+  ] ++ lib.optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3Packages;
-    [
-      pygobject3 ipaddress libvirt libxml2 requests
-    ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pygobject3 libvirt libxml2 requests cdrtools
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
   '';
 
   postConfigure = ''
-    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3.interpreter} setup.py configure --prefix=$out
   '';
 
-  # TODO: remove after there's support for setupPyDistFlags
-  buildPhase = ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup
-    ${python3Packages.python.pythonForBuild.interpreter} nix_run_setup --no-update-icon-cache build_ext bdist_wheel
-    runHook postBuild
-  '';
+  setupPyGlobalFlags = [ "--no-update-icon-cache" "--no-compile-schemas" ];
+
+  dontWrapGApps = true;
 
   preFixup = ''
+    glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
+
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
     # these are called from virt-install in initrdinject.py
-    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    # Fixes testCLI0051virt_install_initrd_inject on Darwin: "cpio: root:root: invalid group"
+    substituteInPlace virtinst/install/installerinject.py \
+      --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
-  # Failed tests
-  doCheck = false;
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    cpio
+    cdrtools
+    xorriso
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://virt-manager.org;
+  disabledTests = [
+    "testAlterDisk"
+    "test_misc_nonpredicatble_generate"
+    "test_disk_dir_searchable"  # does something strange with permissions
+    "testCLI0001virt_install_many_devices"  # expects /var to exist
+  ];
+
+  preCheck = ''
+    export HOME=.
+  ''; # <- Required for "tests/test_urldetect.py".
+
+  postCheck = ''
+    $out/bin/virt-manager --version | grep -Fw ${version} > /dev/null
+  '';
+
+  meta = with lib; {
+    homepage = "http://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing
@@ -75,8 +91,7 @@ python3Packages.buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    # exclude Darwin since libvirt-glib currently doesn't build there
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

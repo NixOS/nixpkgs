@@ -21,10 +21,10 @@ in
 {
   options.services.youtrack = {
 
-    enable = mkEnableOption "YouTrack service";
+    enable = mkEnableOption (lib.mdDoc "YouTrack service");
 
     address = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The interface youtrack will listen on.
       '';
       default = "127.0.0.1";
@@ -32,7 +32,7 @@ in
     };
 
     baseUrl = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Base URL for youtrack. Will be auto-detected and stored in database.
       '';
       type = types.nullOr types.str;
@@ -41,28 +41,30 @@ in
 
     extraParams = mkOption {
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Extra parameters to pass to youtrack. See
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
         for more information.
       '';
-      example = {
-        "jetbrains.youtrack.overrideRootPassword" = "tortuga";
-      };
+      example = literalExpression ''
+        {
+          "jetbrains.youtrack.overrideRootPassword" = "tortuga";
+        }
+      '';
       type = types.attrsOf types.str;
     };
 
     package = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Package to use.
       '';
       type = types.package;
       default = pkgs.youtrack;
-      defaultText = "pkgs.youtrack";
+      defaultText = literalExpression "pkgs.youtrack";
     };
 
     port = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The port youtrack will listen on.
       '';
       default = 8080;
@@ -70,7 +72,7 @@ in
     };
 
     statePath = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Where to keep the youtrack database.
       '';
       type = types.path;
@@ -78,7 +80,7 @@ in
     };
 
     virtualHost = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Name of the nginx virtual host to use and setup.
         If null, do not setup anything.
       '';
@@ -87,7 +89,7 @@ in
     };
 
     jvmOpts = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Extra options to pass to the JVM.
         See https://www.jetbrains.com/help/youtrack/standalone/Configure-JVM-Options.html
         for more information.
@@ -98,7 +100,7 @@ in
     };
 
     maxMemory = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Maximum Java heap size
       '';
       type = types.str;
@@ -106,7 +108,7 @@ in
     };
 
     maxMetaspaceSize = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Maximum java Metaspace memory.
       '';
       type = types.str;
@@ -126,6 +128,7 @@ in
         Type = "simple";
         User = "youtrack";
         Group = "youtrack";
+        Restart = "on-failure";
         ExecStart = ''${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${toString cfg.port}'';
       };
     };

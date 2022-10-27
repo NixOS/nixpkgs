@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config,
   libtool, check, bison, git, gperf,
   perl, texinfo, help2man, gettext, ncurses
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patches = [ ./glibc-2.26.patch ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig libtool check
+  nativeBuildInputs = [ autoconf automake pkg-config libtool check
     bison git gettext gperf perl texinfo help2man ncurses
   ];
 
@@ -35,11 +35,14 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Directed Graph Shell";
-    homepage = http://www.dmst.aueb.gr/dds/sw/dgsh;
+    homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;
     maintainers = with maintainers; [ vrthra ];
     platforms = with platforms; all;
+    # lib/freadseek.c:68:3: error: #error "Please port gnulib freadseek.c to your platform! Look at the definition of getc, getc_unlocked on your >
+    # 68 |  #error "Please port gnulib freadseek.c to your platform! Look at the definition of getc, getc_unlocked on your system, then report >
+    broken = true; # marked 2022-05-06
   };
 }

@@ -4,26 +4,32 @@
 , termcolor
 , pytest
 , packaging
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.2";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcd87a74b2bce5386d244b49ad60549bfbc4602527797fac167da147983f58ab";
+    sha256 = "sha256-7qeLbxW2NSd9PZAoDNOG2P7qHKsPm+dZR6Ym6LArR30=";
   };
+
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     termcolor
-    pytest
     packaging
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {
     description = "A plugin that changes the default look and feel of py.test";
-    homepage = https://github.com/Frozenball/pytest-sugar;
+    homepage = "https://github.com/Frozenball/pytest-sugar";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

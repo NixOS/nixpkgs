@@ -1,23 +1,26 @@
-{ stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
-  version = "5.6.3";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0f319979wqfgm4pvsa6y5clg30p55l441kmrr8db0p5smyv3x2s4";
+    sha256 = "sha256-2Sjl9XO01ko0BwbFQSFv9mNoetyMa8Dxx17y0JmlLS0=";
   };
 
   postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
+    for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
+
+  strictDeps = true;
 
   meta = {
     homepage = "http://fabiangreffrath.github.io/crispy-doom";
@@ -26,8 +29,8 @@ stdenv.mkDerivation rec {
       Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom.
       Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ neonfuz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ neonfuz ];
   };
 }

@@ -1,26 +1,44 @@
-{ lib, fetchzip }:
+{ lib, stdenv, fetchFromGitHub, libfaketime, xorg }:
 
-let
-  date = "2016-05-13";
-in fetchzip {
-  name = "siji-${date}";
+stdenv.mkDerivation rec {
+  name = "siji-${version}";
+  version = "2016-05-13";
 
-  url = https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip;
+  src = fetchFromGitHub {
+    owner = "stark";
+    repo = "siji";
+    rev = "3cbb7fe938c33aaadbb657803ea5946e5157d6e2";
+    sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
+  };
 
-  postFetch = ''
-    unzip -j $downloadedFile
+  nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
 
-    install -D *.pcf -t $out/share/fonts/pcf
-    install -D *.bdf -t $out/share/fonts/bdf
+  buildPhase = ''
+    # compress pcf fonts
+    gzip -n -9 pcf/*
+
+    # convert bdf fonts to otb
+    for i in bdf/*; do
+        name=$(basename $i .bdf)
+        faketime -f "1970-01-01 00:00:01" \
+        fonttosfnt -v -o "$name.otb" "$i"
+    done
   '';
 
-  sha256 = "1ymcbirdbkqaf0xs2y00l0wachb4yxh1fgqm5avqwvccs0lsfj1d";
+  postInstall = ''
+    install -m 644 -D *.otb pcf/* -t "$out/share/fonts/misc"
+    install -m 644 -D bdf/* -t "$bdf/share/fonts/misc"
+    mkfontdir "$out/share/fonts/misc"
+    mkfontdir "$bdf/share/fonts/misc"
+  '';
 
-  meta = {
-    homepage = https://github.com/stark/siji;
+  outputs = [ "out" "bdf" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.asymmetric ];
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.asymmetric ];
   };
 }

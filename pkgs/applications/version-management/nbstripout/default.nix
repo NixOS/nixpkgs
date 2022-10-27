@@ -1,20 +1,20 @@
-{lib, python2Packages, git, mercurial, coreutils}:
+{lib, python, git, mercurial, coreutils}:
 
-with python2Packages;
+with python.pkgs;
 buildPythonApplication rec {
-  version = "0.3.6";
+  version = "0.6.0";
   pname = "nbstripout";
 
   # Mercurial should be added as a build input but because it's a Python
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
-  checkInputs = [ pytest pytest-flake8 pytest-cram git ];
-  nativeBuildInputs = [ pytestrunner ];
+  checkInputs = [ pytest pytest-flake8 git ];
+  nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ ipython nbformat ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x6010akw7iqxn7ba5m6malfr2fvaf0bjp3cdh983qn1s7vwlq0r";
+    sha256 = "sha256-TWxDAhVqskaMyOcgLvKPNN2RhFFOIeRDQLzShpaMgss=";
   };
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so
@@ -29,9 +29,8 @@ buildPythonApplication rec {
   '';
 
   meta = {
-    inherit version;
     description = "Strip output from Jupyter and IPython notebooks";
-    homepage = https://github.com/kynan/nbstripout;
+    homepage = "https://github.com/kynan/nbstripout";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };

@@ -13,17 +13,19 @@
    effect after you run <command>nixos-rebuild</command>.
   </para>
  </partintro>
- <xi:include href="config-syntax.xml" />
- <xi:include href="package-mgmt.xml" />
- <xi:include href="user-mgmt.xml" />
- <xi:include href="file-systems.xml" />
- <xi:include href="x-windows.xml" />
- <xi:include href="xfce.xml" />
- <xi:include href="networking.xml" />
- <xi:include href="linux-kernel.xml" />
- <xi:include href="matrix.xml" />
+ <xi:include href="../from_md/configuration/config-syntax.chapter.xml" />
+ <xi:include href="../from_md/configuration/package-mgmt.chapter.xml" />
+ <xi:include href="../from_md/configuration/user-mgmt.chapter.xml" />
+ <xi:include href="../from_md/configuration/file-systems.chapter.xml" />
+ <xi:include href="../from_md/configuration/x-windows.chapter.xml" />
+ <xi:include href="../from_md/configuration/wayland.chapter.xml" />
+ <xi:include href="../from_md/configuration/gpu-accel.chapter.xml" />
+ <xi:include href="../from_md/configuration/xfce.chapter.xml" />
+ <xi:include href="../from_md/configuration/networking.chapter.xml" />
+ <xi:include href="../from_md/configuration/linux-kernel.chapter.xml" />
+ <xi:include href="../from_md/configuration/subversion.chapter.xml" />
  <xi:include href="../generated/modules.xml" xpointer="xpointer(//section[@id='modules']/*)" />
- <xi:include href="profiles.xml" />
- <xi:include href="kubernetes.xml" />
+ <xi:include href="../from_md/configuration/profiles.chapter.xml" />
+ <xi:include href="../from_md/configuration/kubernetes.chapter.xml" />
 <!-- Apache; libvirtd virtualisation -->
 </part>

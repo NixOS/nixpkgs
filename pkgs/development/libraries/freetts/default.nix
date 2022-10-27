@@ -1,12 +1,14 @@
 {stdenv, fetchurl, apacheAnt, unzip, sharutils, lib, jdk}:
 
-stdenv.mkDerivation {
-  name = "freetts-1.2.2";
+stdenv.mkDerivation rec {
+  pname = "freetts";
+  version = "1.2.2";
   src = fetchurl {
-    url = mirror://sourceforge/freetts/freetts-1.2.2-src.zip;
+    url = "mirror://sourceforge/freetts/${pname}-${version}-src.zip";
     sha256 = "0mnikqhpf4f4jdr0irmibr8yy0dnffx1i257y22iamxi7a6by2r7";
   };
-  buildInputs = [ apacheAnt unzip sharutils jdk ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ apacheAnt sharutils jdk ];
   unpackPhase = ''
     unzip $src -x META-INF/*
   '';
@@ -31,7 +33,7 @@ stdenv.mkDerivation {
       Can be used in combination with KDE accessibility.
     '';
     license = "GPL";
-    homepage = http://freetts.sourceforge.net;
+    homepage = "http://freetts.sourceforge.net";
     maintainers = [ lib.maintainers.sander ];
   };
 }

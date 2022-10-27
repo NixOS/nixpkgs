@@ -1,6 +1,13 @@
-{ config, stdenv, lib, fetchgit, cmake
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, ncclSupport ? false, nccl
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gtest
+, doCheck ? true
+, cudaSupport ? config.cudaSupport or false
+, ncclSupport ? false
+, cudaPackages
 , llvmPackages
 }:
 
@@ -8,39 +15,56 @@ assert ncclSupport -> cudaSupport;
 
 stdenv.mkDerivation rec {
   pname = "xgboost";
-  version = "0.90";
+  version = "1.5.2";
 
-  # needs submodules
-  src = fetchgit {
-    url = "https://github.com/dmlc/xgboost";
-    rev = "refs/tags/v${version}";
-    sha256 = "1zs15k9crkiq7bnr4gqq53mkn3w8z9dq4nwlavmfcr5xr5gw2pw4";
+  src = fetchFromGitHub {
+    owner = "dmlc";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-h7zcHCOxe1h7HRB6idtjf4HUBEoHC4V2pqbN9hpe00g=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+                ++ lib.optional ncclSupport cudaPackages.nccl;
 
-  buildInputs = lib.optional cudaSupport cudatoolkit
-                ++ lib.optional ncclSupport nccl;
+  cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
+    ++ lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudaPackages.cudatoolkit.cc}/bin/cc" ]
+    ++ lib.optionals (cudaSupport && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0") [ "-DBUILD_WITH_CUDA_CUB=ON" ]
+    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
 
-  cmakeFlags = lib.optionals cudaSupport [ "-DUSE_CUDA=ON" "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc" ]
-               ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
+  inherit doCheck;
+
+  # By default, cmake build will run ctests with all checks enabled
+  # If we're building with cuda, we run ctest manually so that we can skip the GPU tests
+  checkPhase = lib.optionalString cudaSupport ''
+    ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
+  '';
 
   installPhase = let
     libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
   in ''
+    runHook preInstall
     mkdir -p $out
     cp -r ../include $out
     install -Dm755 ../lib/${libname} $out/lib/${libname}
     install -Dm755 ../xgboost $out/bin/xgboost
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
-    homepage = https://github.com/dmlc/xgboost;
+    homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };
 }

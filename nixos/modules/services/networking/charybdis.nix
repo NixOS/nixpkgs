@@ -18,11 +18,11 @@ in
 
     services.charybdis = {
 
-      enable = mkEnableOption "Charybdis IRC daemon";
+      enable = mkEnableOption (lib.mdDoc "Charybdis IRC daemon");
 
       config = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon configuration file.
         '';
       };
@@ -30,7 +30,7 @@ in
       statedir = mkOption {
         type = types.path;
         default = "/var/lib/charybdis";
-        description = ''
+        description = lib.mdDoc ''
           Location of the state directory of charybdis.
         '';
       };
@@ -38,7 +38,7 @@ in
       user = mkOption {
         type = types.str;
         default = "ircd";
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon user.
         '';
       };
@@ -46,7 +46,7 @@ in
       group = mkOption {
         type = types.str;
         default = "ircd";
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon group.
         '';
       };
@@ -54,7 +54,7 @@ in
       motd = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Charybdis MOTD text.
 
           Charybdis will read its MOTD from /etc/charybdis/ircd.motd .
@@ -71,15 +71,13 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      users.users = singleton {
-        name = cfg.user;
+      users.users.${cfg.user} = {
         description = "Charybdis IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
-      users.groups = singleton {
-        name = cfg.group;
+      users.groups.${cfg.group} = {
         gid = config.ids.gids.ircd;
       };
 
@@ -87,14 +85,21 @@ in
         "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
       ];
 
+      environment.etc."charybdis/ircd.conf".source = configFile;
+
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
         wantedBy = [ "multi-user.target" ];
+        reloadIfChanged = true;
+        restartTriggers = [
+          configFile
+        ];
         environment = {
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
+          ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
           Group = cfg.group;
           User = cfg.user;
         };

@@ -1,7 +1,20 @@
-{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, libGLU_combined
-, enableTWBT ? true, twbt
+{ stdenv
+, buildEnv
+, lib
+, fetchFromGitHub
+, cmake
+, writeScriptBin
+, perl
+, XMLLibXML
+, XMLLibXSLT
+, zlib
+, ruby
+, enableStoneSense ? false
+, allegro5
+, libGLU
+, libGL
+, enableTWBT ? true
+, twbt
 , SDL
 , dfVersion
 }:
@@ -46,11 +59,31 @@ let
       xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
       prerelease = false;
     };
+    "0.47.02" = {
+      dfHackRelease = "0.47.02-alpha0";
+      sha256 = "19lgykgqm0si9vd9hx4zw8b5m9188gg8r1a6h25np2m2ziqwbjj9";
+      xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd509a";
+      prerelease = true;
+    };
+    "0.47.04" = {
+      dfHackRelease = "0.47.04-r2";
+      sha256 = "18ppn1dqaxi6ahjzsvb9kw70rvca106a1hibhzc4rxmraypnqb89";
+      xmlRev = "036b662a1bbc96b4911f3cbe74dfa1243b6459bc";
+      prerelease = false;
+    };
+    "0.47.05" = {
+      dfHackRelease = "0.47.05-r1";
+      sha256 = "sha256-B0iv7fpIcnaO8sx9wPqI7/WuyLK15p8UYlYIcF5F5bw=";
+      xmlRev = "11c379ffd31255f2a1415d98106114a46245e1c3";
+      prerelease = false;
+    };
+
   };
 
-  release = if hasAttr dfVersion dfhack-releases
-            then getAttr dfVersion dfhack-releases
-            else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
+  release =
+    if hasAttr dfVersion dfhack-releases
+    then getAttr dfVersion dfhack-releases
+    else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
   version = release.dfHackRelease;
 
@@ -97,10 +130,26 @@ let
     };
 
     patches = [ ./fix-stonesense.patch ];
+
+    # gcc 11 fix
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+
+    # As of
+    # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
+    # dfhack gets its goodies from the directory above the Dwarf_Fortress
+    # executable, which leads to stock Dwarf Fortress and not the built
+    # environment where all the dfhack resources are symlinked to (typically
+    # ~/.local/share/df_linux). This causes errors like `tweak is not a
+    # recognized command` to be reported and dfhack to lose some of its
+    # functionality.
+    postPatch = ''
+      sed -i 's@cached_path = path_string.*@cached_path = getenv("DF_DIR");@' library/Process-linux.cpp
+    '';
+
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]
-               ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
+      ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
       # Trick build system into believing we have .git
@@ -108,14 +157,15 @@ let
       touch .git/index .git/modules/library/xml/index
     '';
 
-    preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
+    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
+      ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+
+    # dfhack expects an unversioned libruby.so to be present in the hack
+    # subdirectory for ruby plugins to function.
+    postInstall = ''
+      ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
     '';
 
-    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-              ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
-
-    enableParallelBuilding = true;
   };
 in
 
@@ -126,9 +176,9 @@ buildEnv {
 
   paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = https://github.com/DFHack/dfhack/;
+    homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];

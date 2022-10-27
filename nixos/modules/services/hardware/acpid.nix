@@ -3,21 +3,22 @@
 with lib;
 
 let
+  cfg = config.services.acpid;
 
   canonicalHandlers = {
     powerEvent = {
       event = "button/power.*";
-      action = config.services.acpid.powerEventCommands;
+      action = cfg.powerEventCommands;
     };
 
     lidEvent = {
       event = "button/lid.*";
-      action = config.services.acpid.lidEventCommands;
+      action = cfg.lidEventCommands;
     };
 
     acEvent = {
       event = "ac_adapter.*";
-      action = config.services.acpid.acEventCommands;
+      action = cfg.acEventCommands;
     };
   };
 
@@ -33,7 +34,7 @@ let
             echo "event=${handler.event}" > $fn
             echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action }/bin/${name}.sh '%e'" >> $fn
           '';
-        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // config.services.acpid.handlers))
+        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // cfg.handlers))
       }
     '';
 
@@ -47,16 +48,12 @@ in
 
     services.acpid = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the ACPI daemon.";
-      };
+      enable = mkEnableOption (lib.mdDoc "the ACPI daemon");
 
       logEvents = mkOption {
         type = types.bool;
         default = false;
-        description = "Log all event activity.";
+        description = lib.mdDoc "Log all event activity.";
       };
 
       handlers = mkOption {
@@ -64,23 +61,23 @@ in
           options = {
             event = mkOption {
               type = types.str;
-              example = [ "button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*" ];
-              description = "Event type.";
+              example = literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
+              description = lib.mdDoc "Event type.";
             };
 
             action = mkOption {
               type = types.lines;
-              description = "Shell commands to execute when the event is triggered.";
+              description = lib.mdDoc "Shell commands to execute when the event is triggered.";
             };
           };
         });
 
-        description = ''
+        description = lib.mdDoc ''
           Event handlers.
 
-          <note><para>
-            Handler can be a single command.
-          </para></note>
+          ::: {.note}
+          Handler can be a single command.
+          :::
         '';
         default = {};
         example = {
@@ -107,19 +104,19 @@ in
       powerEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on a button/power.* event.";
+        description = lib.mdDoc "Shell commands to execute on a button/power.* event.";
       };
 
       lidEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on a button/lid.* event.";
+        description = lib.mdDoc "Shell commands to execute on a button/lid.* event.";
       };
 
       acEventCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell commands to execute on an ac_adapter.* event.";
+        description = lib.mdDoc "Shell commands to execute on an ac_adapter.* event.";
       };
 
     };
@@ -129,26 +126,28 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.acpid.enable {
+  config = mkIf cfg.enable {
 
     systemd.services.acpid = {
       description = "ACPI Daemon";
+      documentation = [ "man:acpid(8)" ];
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
-
-      path = [ pkgs.acpid ];
 
       serviceConfig = {
-        Type = "forking";
+        ExecStart = escapeShellArgs
+          ([ "${pkgs.acpid}/bin/acpid"
+             "--foreground"
+             "--netlink"
+             "--confdir" "${acpiConfDir}"
+           ] ++ optional cfg.logEvents "--logevents"
+          );
       };
-
       unitConfig = {
         ConditionVirtualization = "!systemd-nspawn";
         ConditionPathExists = [ "/proc/acpi" ];
       };
 
-      script = "acpid ${optionalString config.services.acpid.logEvents "--logevents"} --confdir ${acpiConfDir}";
     };
 
   };

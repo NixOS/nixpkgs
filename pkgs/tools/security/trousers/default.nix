@@ -1,36 +1,29 @@
-{ stdenv, fetchurl, openssl, pkgconfig }:
+{ lib, stdenv, fetchurl, openssl, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "trousers";
-  version = "0.3.13";
+  version = "0.3.15";
 
   src = fetchurl {
     url = "mirror://sourceforge/trousers/trousers/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1lvnla1c1ig2w3xvvrqg2w9qm7a1ygzy1j2gg8j7p8c87i58x45v";
+    sha256 = "0zy7r9cnr2gvwr2fb1q4fc5xnvx405ymcbrdv7qsqwl3a4zfjnqy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];
 
   configureFlags = [ "--disable-usercheck" ];
 
-  # Attempt to remove -std=gnu89 when updating if using gcc5
-  NIX_CFLAGS_COMPILE = "-std=gnu89 -DALLOW_NON_TSS_CONFIG_FILE";
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_CFLAGS_COMPILE = [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
+  enableParallelBuilding = true;
 
-  # Fix broken libtool file
-  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    sed 's,-lcrypto,-L${openssl.out}/lib -lcrypto,' -i $out/lib/libtspi.la
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trusted computing software stack";
-    homepage    = http://trousers.sourceforge.net/;
-    license     = licenses.cpl10;
+    homepage    = "http://trousers.sourceforge.net/";
+    license     = licenses.bsd3;
     maintainers = [ maintainers.ak ];
     platforms   = platforms.linux;
   };
 }
-

@@ -1,11 +1,14 @@
-{stdenv, fetchurl, boost-build, lua, boost}:
+{ lib, stdenv, fetchFromGitHub, boost-build, lua, boost }:
 
-stdenv.mkDerivation {
-  name = "luabind-0.9.1";
+stdenv.mkDerivation rec {
+  pname = "luabind";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url = "https://github.com/luabind/luabind/archive/v0.9.1.tar.gz";
-    sha256 = "0e5ead50a07668d29888f2fa6f53220f900c886e46a2c99c7e8656842f05ff2d";
+  src = fetchFromGitHub {
+    owner = "luabind";
+    repo = "luabind";
+    rev = "v${version}";
+    sha256 = "sha256-sK1ca2Oj9yXdmxyXeDO3k8YZ1g+HxIXLhvdTWdPDdag=";
   };
 
   patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ];
@@ -23,9 +26,9 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = https://github.com/luabind/luabind;
+    homepage = "https://github.com/luabind/luabind";
     description = "A library that helps you create bindings between C++ and Lua";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

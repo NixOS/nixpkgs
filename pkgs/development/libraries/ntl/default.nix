@@ -14,11 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   pname = "ntl";
-  version = "11.3.4";
+  version = "11.5.1";
 
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "0fdy63x6iglp20ypqhkpjj6wqjzpxlyl2wfw2dqlgiy6l6ibm4rd";
+    sha256 = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
   };
 
   buildInputs = [
@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true; # DEF_PREFIX instead
 
+  # Written in perl, does not support autoconf-style
+  # --build=/--host= options:
+  #   Error: unrecognized option: --build=x86_64-unknown-linux-gnu
+  configurePlatforms = [ ];
+
   # reference: http://shoup.net/ntl/doc/tour-unix.html
   configureFlags = [
     "DEF_PREFIX=$(out)"
@@ -48,7 +53,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
-    "CXX=c++"
+    "CXX=${stdenv.cc.targetPrefix}c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"
@@ -66,8 +71,10 @@ stdenv.mkDerivation rec {
     '';
     # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
     # email listed on the homepage.
-    homepage = http://www.shoup.net/ntl/;
-    maintainers = with maintainers; [ timokau ];
+    homepage = "http://www.shoup.net/ntl/";
+    # also locally at "${src}/doc/tour-changes.html";
+    changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
+    maintainers = teams.sage.members;
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

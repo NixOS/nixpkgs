@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , makeWrapper
-, m4
+, readline
 , gmp
+, zlib
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -34,7 +34,7 @@ let
     "autpgrp-*"
     "alnuth-*"
     "crisp-*"
-    "ctbllib"
+    "ctbllib-*"
     "FactInt-*"
     "fga"
     "irredsol-*"
@@ -61,11 +61,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.10.2";
+  version = "4.11.1";
 
   src = fetchurl {
-    url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
+    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    sha256 = "sha256-ZjXF2n2CdV+DOUhrnKwzdm9YcS8pfoI0+6QIGJAuowQ=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -73,24 +73,14 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "--with-gmp=system" ];
-
   buildInputs = [
-    m4
+    readline
     gmp
+    zlib
   ];
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  patches = [
-    # https://github.com/gap-system/gap/pull/3294
-    (fetchpatch {
-      name = "add-make-install-targets.patch";
-      url = "https://github.com/gap-system/gap/commit/3361c172e6c5ff3bb3f01ba9d6f1dd4ad42cea80.patch";
-      sha256 = "1kwp9qnfvmlbpf1c3rs6j5m2jz22rj7a4hb5x1gj9vkpiyn5pdyj";
-    })
   ];
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
@@ -98,7 +88,7 @@ stdenv.mkDerivation rec {
   # checkTarget = "teststandard";
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = "check";
 
   preInstallCheck = ''
     # gap tests check that the home directory exists
@@ -119,16 +109,6 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postCheck = ''
-    # The testsuite doesn't exit with a non-zero exit code on failure.
-    # It leaves its logs in dev/log however.
-
-    # grep for error messages
-    if grep ^##### dev/log/*; then
-        exit 1
-    fi
-  '';
-
   postBuild = ''
     pushd pkg
     bash ../bin/BuildPackages.sh
@@ -147,7 +127,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/bin" "$out/share/gap/"
 
-    mkdir -p "$out/share/gap"
     echo "Copying files to target directory"
     cp -ar . "$out/share/gap/build-dir"
 
@@ -170,11 +149,11 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
-    # keeping all packages increases the package size considerably, wchich
-    # is why a local build is preferable in that situation. The timeframe
-    # is reasonable and that way the binary cache doesn't get overloaded.
+    # keeping all packages increases the package size considerably, which is
+    # why a local build is preferable in that situation. The timeframe is
+    # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
-    homepage = http://gap-system.org/;
+    homepage = "https://www.gap-system.org";
   };
 }

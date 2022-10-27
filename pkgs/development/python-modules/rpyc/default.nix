@@ -1,25 +1,51 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, nose
+, fetchFromGitHub
 , plumbum
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "4.1.1";
+  version = "5.1.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0rhmwq1jra2cs0j09z2ks4vnv0svi8lj21nq9qq50i52x4ml4yb7";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "tomerfiliba";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Xeot4QEgTZjvdO0ydmKjccp6zwC93Yp/HkRlSgyDf8k=";
   };
 
-  propagatedBuildInputs = [ nose plumbum ];
+  propagatedBuildInputs = [
+    plumbum
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Disable tests that requires network access
+    "test_api"
+    "test_pruning"
+    "test_rpyc"
+    # Test is outdated
+    # ssl.SSLError: [SSL: NO_CIPHERS_AVAILABLE] no ciphers available (_ssl.c:997)
+    "test_ssl_conenction"
+  ];
+
+  pythonImportsCheck = [
+    "rpyc"
+  ];
+
+  meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
-    homepage = https://rpyc.readthedocs.org;
-    license = licenses.mit;
+    homepage = "https://rpyc.readthedocs.org";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

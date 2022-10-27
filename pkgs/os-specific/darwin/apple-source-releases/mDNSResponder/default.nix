@@ -1,6 +1,6 @@
-{ appleDerivation }:
+{ appleDerivation', stdenvNoCC }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''

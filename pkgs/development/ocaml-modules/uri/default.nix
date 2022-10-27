@@ -1,18 +1,21 @@
 { lib, fetchurl, buildDunePackage, ounit
-, re, stringext
+, angstrom, stringext
 }:
 
 buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
   pname = "uri";
-  version = "3.0.0";
+  version = "4.2.0";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1yhrgm3hbn0hh4jdmcrvxinazgg8vrm0vn425sg8ggzblvxk9cwg";
+    sha256 = "0szifda6yism5vn5jdizkha3ad0xk6zw4xgfl8g77dnv83ci7h65";
   };
 
-  buildInputs = [ ounit ];
-  propagatedBuildInputs = [ re stringext ];
+  checkInputs = [ ounit ];
+  propagatedBuildInputs = [ angstrom stringext ];
   doCheck = true;
 
   meta = {

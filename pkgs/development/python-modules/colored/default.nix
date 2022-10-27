@@ -1,22 +1,22 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "colored";
-  version = "1.3.93";
+  version = "1.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xbhq9nd9xz3b6w0c4q33jfgnv8jid023v2fyhi7hsrz1scym5l2";
+    sha256 = "b7b48b9f40e8a65bbb54813d5d79dd008dc8b8c5638d5bbfd30fc5a82e6def7a";
   };
 
   # No proper test suite
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.com/dslackw/colored;
+  meta = with lib; {
+    homepage = "https://gitlab.com/dslackw/colored";
     description = "Simple library for color and formatting to terminal";
     license = licenses.mit;
   };

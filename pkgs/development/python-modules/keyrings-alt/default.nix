@@ -1,34 +1,47 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, six
-, pytest, backports_unittest-mock, keyring, setuptools_scm
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy27
+, six
+
+, pytestCheckHook
+, keyring
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "keyrings.alt";
-  version = "3.1.1";
+  version = "4.2.0";
+  format = "pyproject";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lgp2d3hrpvbb2rfz18vrv5lrck72k3l2f2cpkbks2kigrfbgiqb";
+    sha256 = "sha256-K6PVZEG6Bjf1+cCWBo9nAQrART+dC2Jt4qowGTU7ZDE=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--flake8" ""
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [
+    pytestCheckHook
+    keyring
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [
+    "keyrings.alt"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "Alternate keyring implementations";
-    homepage = https://github.com/jaraco/keyrings.alt;
+    homepage = "https://github.com/jaraco/keyrings.alt";
     maintainers = with maintainers; [ nyarly ];
   };
 }

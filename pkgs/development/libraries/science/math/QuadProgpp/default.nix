@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "QuadProgpp";
@@ -12,16 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/liuq/QuadProgpp;
+  meta = with lib; {
+    homepage = "https://github.com/liuq/QuadProgpp";
     license = licenses.mit;
     description = ''
       A C++ library for Quadratic Programming which implements the
       Goldfarb-Idnani active-set dual method.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
   };
 }

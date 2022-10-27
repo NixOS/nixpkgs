@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, libpcap, tcpdump }:
+{ lib, stdenv, fetchurl, libpcap, tcpdump, Carbon, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "tcpreplay";
-  version = "4.3.2";
+  version = "4.4.2";
 
   src = fetchurl {
     url = "https://github.com/appneta/tcpreplay/releases/download/v${version}/tcpreplay-${version}.tar.gz";
-    sha256 = "0ld9v88g5xs2rykimksmhlkwbv2r97575c4aqmqdxbvc37crnisg";
+    sha256 = "sha256-Wycs2Dtn1iiKI06hX4ns2TtPrdpl7dxE57X8svOVthU=";
   };
 
-  buildInputs = [ libpcap ];
+  buildInputs = [ libpcap ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon CoreServices
+    ];
+
 
   configureFlags = [
     "--disable-local-libopts"
@@ -18,14 +22,14 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "--enable-tcpreplay-edit"
     "--with-libpcap=${libpcap}"
-    "--with-tcpdump=${tcpdump}/bin"
+    "--with-tcpdump=${tcpdump}/bin/tcpdump"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of utilities for editing and replaying network traffic";
-    homepage = http://tcpreplay.appneta.com/;
-    license = with licenses; [ bsd3 gpl3 ];
+    homepage = "https://tcpreplay.appneta.com/";
+    license = with licenses; [ bsdOriginalUC gpl3Only ];
     maintainers = with maintainers; [ eleanor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

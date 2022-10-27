@@ -41,10 +41,15 @@ Usage:
   [1] maybe this behaviour should be removed to keep things simple (?)
 */
 
-with lib.lists;
-with lib.attrsets;
-with lib.strings;
-
+let
+  inherit (lib)
+    concatStringsSep
+    head
+    isAttrs
+    listToAttrs
+    tail
+    ;
+in
 rec {
 
   /* !!! The interface of this function is kind of messed up, since

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml }:
 
 buildPythonPackage rec {
   pname = "cmdline";
@@ -13,9 +13,9 @@ buildPythonPackage rec {
   doCheck = false;
   propagatedBuildInputs = [ pyyaml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for consistent command line tools";
-    homepage = https://github.com/rca/cmdline;
+    homepage = "https://github.com/rca/cmdline";
     license = licenses.asl20;
   };
 }

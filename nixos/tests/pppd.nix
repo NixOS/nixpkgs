@@ -1,10 +1,12 @@
-import ./make-test.nix (
+import ./make-test-python.nix (
   let
     chap-secrets = {
       text = ''"flynn" * "reindeerflotilla" *'';
       mode = "0640";
     };
   in {
+    name = "pppd";
+
     nodes = {
       server = {config, pkgs, ...}: {
         config = {
@@ -53,10 +55,10 @@ import ./make-test.nix (
         environment.etc."ppp/chap-secrets" = chap-secrets;
       };
     };
-  
+
     testScript = ''
-      startAll;
-      $client->waitUntilSucceeds("ping -c1 -W1 192.0.2.1");
-      $server->waitUntilSucceeds("ping -c1 -W1 192.0.2.2");
+      start_all()
+      client.wait_until_succeeds("ping -c1 -W1 192.0.2.1")
+      server.wait_until_succeeds("ping -c1 -W1 192.0.2.2")
     '';
-  })  
+  })

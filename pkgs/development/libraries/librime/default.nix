@@ -1,28 +1,36 @@
-{ stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
-  libyamlcpp, gmock }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, glog, leveldb, marisa, opencc,
+  libyamlcpp, gtest, capnproto, pkg-config, plugins ? [ ] }:
 
+let
+  copySinglePlugin = plug: "cp -r ${plug} plugins/${plug.name}";
+  copyPlugins = ''
+    ${lib.concatMapStringsSep "\n" copySinglePlugin plugins}
+    chmod +w -R plugins/*
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.5.3";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "rime";
-    repo = "librime";
+    repo = pname;
     rev = version;
-    sha256 = "0xskhdhk7dgpc71r39pfzxi5vrlzy90aqj1gzv8nnapq91p2awhv";
+    sha256 = "sha256-GzNMwyJR9PgJN0eGYbnBW6LS3vo4SUVLdyNG9kcEE18=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gmock ];
+  buildInputs = [ boost glog leveldb marisa opencc libyamlcpp gtest capnproto ]
+              ++ plugins; # for propagated build inputs
 
-  enableParallelBuilding = true;
+  preConfigure = copyPlugins;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://rime.im/";
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ sifmelcara ];
+    maintainers = with maintainers; [ vonfry ];
     platforms   = platforms.linux;
   };
 }

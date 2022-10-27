@@ -1,20 +1,28 @@
-{ lib, fetchzip }:
+{ lib, fetchFromGitHub }:
 
-fetchzip {
-  name = "junicode-0.7.8";
+let
+  pname = "junicode";
+  version = "1.003";
+in
+fetchFromGitHub {
+  name = "${pname}-${version}";
 
-  url = mirror://sourceforge/junicode/junicode/junicode-0-7-8/junicode-0-7-8.zip;
+  owner = "psb1558";
+  repo = "Junicode-font";
+  rev = "55d816d91a5e19795d9b66edec478379ee2b9ddb";
 
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/junicode-ttf
+    local out_ttf=$out/share/fonts/junicode-ttf
+    mkdir -p $out_ttf
+    tar -f $downloadedFile -C $out_ttf --wildcards -x '*.ttf' --strip=2
   '';
 
-  sha256 = "0q4si9pnbif36154sv49kzc7ygivgflv81nzmblpz3b2p77g9956";
+  sha256 = "1v334gljmidh58kmrarz5pf348b0ac7vh25f1xs3gyvn78khh5nw";
 
   meta = {
-    homepage = http://junicode.sourceforge.net/;
+    homepage = "https://github.com/psb1558/Junicode-font";
     description = "A Unicode font for medievalists";
-    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ivan-timokhin ];
+    license = lib.licenses.ofl;
   };
 }

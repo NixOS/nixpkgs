@@ -1,22 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, case, pytest, pythonOlder }:
+{ lib
+, buildPythonPackage
+, case
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "vine";
-  version = "1.3.0";
+  version = "5.0.0";
+  format = "setuptools";
 
-  disable = pythonOlder "2.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "133ee6d7a9016f177ddeaf191c1f58421a1dcc6ee9a42c58b34bed40e1d2cd87";
+    hash = "sha256-fTsWJKlT2oLvY0YgE7vScdPrdXUUifmAdZjo80C9Y34=";
   };
 
-  buildInputs = [ case pytest ];
+  checkInputs = [
+    case
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "vine"
+  ];
+
+  meta = with lib; {
     description = "Python promises";
-    homepage = https://github.com/celery/vine;
+    homepage = "https://github.com/celery/vine";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

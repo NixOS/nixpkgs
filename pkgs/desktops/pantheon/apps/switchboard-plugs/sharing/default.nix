@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
-, pantheon
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -14,25 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "2.1.3";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1yi6aga9i18wwn22zwmfbhsk16f92fka837is5r8xghqb7a50hyh";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
+    sha256 = "sha256-izo30JjPkZtR6A/bfvZNmIE4Hq5hofWmxdUwBJYoSm8=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -43,21 +37,17 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    # Fix build with latest vala
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-sharing/commit/22c9d52577a2e8c36c840a99009420266a39e1fe.patch";
-      sha256 = "0rbf1yxhc7k44cwikd45mv2g6slzw0rkwn5s38q3yxai9jnpvqch";
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Sharing Plug";
-    homepage = https://github.com/elementary/switchboard-plug-sharing;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-sharing";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

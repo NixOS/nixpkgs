@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "semidirect";
+  pname = "semidirect";
   version = "2018-07-02";
 
   idrisDeps = [ contrib patricia ];
@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Semidirect products in Idris";
-    homepage = https://github.com/clayrat/idris-semidirect;
+    homepage = "https://github.com/clayrat/idris-semidirect";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

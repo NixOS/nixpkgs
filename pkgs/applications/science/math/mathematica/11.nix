@@ -1,43 +1,44 @@
-{ stdenv
-, coreutils
+{ lib
 , patchelf
 , requireFile
-, callPackage
-, alsaLib
+, stdenv
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
+, version
+# dependencies
+, alsa-lib
+, coreutils
+, cudaPackages
 , dbus
 , fontconfig
 , freetype
 , gcc
 , glib
+, libGL
+, libGLU
+, libuuid
+, libxml2
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xkeyboard_config
 , xorg
 , zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
+# options
+, cudaSupport
 }:
 
-let
-  l10n =
-    import ./l10ns.nix {
-      lib = stdenv.lib;
-      inherit requireFile lang;
-      majorVersion = "11";
-    };
-in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  inherit meta name src version;
 
   buildInputs = [
     coreutils
     patchelf
-    alsaLib
+    alsa-lib
     coreutils
     dbus
     fontconfig
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     gcc.libc
     glib
     ncurses
-    opencv
+    opencv2
     openssl
     unixODBC
     xkeyboard_config
@@ -70,9 +71,9 @@ stdenv.mkDerivation rec {
     libSM
   ]);
 
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
+  ldpath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";
 
@@ -118,7 +119,7 @@ stdenv.mkDerivation rec {
         echo "patching $f executable <<"
         patchelf --shrink-rpath "$f"
         patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
           "$f" \
           && patchelf --shrink-rpath "$f" \
@@ -141,10 +142,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
-    license = stdenv.lib.licenses.unfree;
-  };
 }

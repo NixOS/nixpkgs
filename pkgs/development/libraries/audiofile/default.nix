@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
+{ stdenv, lib, fetchurl, fetchpatch, alsa-lib, AudioUnit, CoreServices }:
 
 let
 
@@ -11,19 +11,38 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "audiofile-0.3.6";
+  pname = "audiofile";
+  version = "0.3.6";
 
   buildInputs =
-    stdenv.lib.optionals stdenv.isLinux [
-      alsaLib
-    ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ] ++ lib.optionals stdenv.isDarwin [
       CoreServices AudioUnit
     ];
 
   src = fetchurl {
-    url = "https://audiofile.68k.org/${name}.tar.gz";
+    url = "https://audiofile.68k.org/audiofile-${version}.tar.gz";
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
+
+  # fix build with gcc9
+  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
+
+  # Even when statically linking, libstdc++.la is put in dependency_libs here,
+  # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the
+  # compiler do what it does best.  (libaudiofile.la is a generated file, so we
+  # have to run `make` that far first).
+  #
+  # Without this, the executables in this package (sfcommands and examples)
+  # fail to build: https://github.com/NixOS/nixpkgs/issues/103215
+  #
+  # There might be a more sensible way to do this with autotools, but I am not
+  # smart enough to discover it.
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
+    make -C libaudiofile $makeFlags
+    sed -i "s/dependency_libs=.*/dependency_libs=' -lstdc++'/" libaudiofile/libaudiofile.la
+  '';
 
   patches = [
     ./gcc-6.patch
@@ -66,9 +85,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing audio files in various formats";
-    homepage    = http://www.68k.org/~michael/audiofile/;
+    homepage    = "http://www.68k.org/~michael/audiofile/";
     license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

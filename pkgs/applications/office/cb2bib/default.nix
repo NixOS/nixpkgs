@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmake, qtbase, qtwebkit, qtx11extras, lzo, libX11 }:
+{ lib, stdenv, fetchurl, qmake, qtbase, qtwebkit, qtx11extras, lzo, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "cb2bib";
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Rapidly extract unformatted, or unstandardized bibliographic references from email alerts, journal Web pages and PDF files";
-    homepage = http://www.molspaces.com/d_cb2bib-overview.php;
+    homepage = "http://www.molspaces.com/d_cb2bib-overview.php";
     maintainers = with maintainers; [ edwtjo ];
     license = licenses.gpl3;
   };

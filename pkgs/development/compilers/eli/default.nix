@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , symlinkJoin
 , makeWrapper
@@ -52,8 +52,11 @@ stdenv.mkDerivation rec {
   ];
 
   # skip interactive browser check
-  buildFlags = "nobrowsers";
+  buildFlags = [ "nobrowsers" ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure=''
     configureFlagsArray=(
@@ -83,9 +86,9 @@ stdenv.mkDerivation rec {
       construction with extensive libraries implementing common tasks, yet handling
       arbitrary special cases. Output is the C subset of C++.
     '';
-    homepage = http://eli-project.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ timokau ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://eli-project.sourceforge.net/";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ timokau ];
+    platforms = lib.platforms.linux;
   };
 }

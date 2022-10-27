@@ -1,25 +1,33 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
+{ stdenv, lib, fetchurl, makeWrapper, openjdk17_headless, libmatthew_java, dbus, dbus_java }:
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.6.3";
+  version = "0.11.4";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
-    url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    sha256 = "1gvdifscyxmxn2dwlkqi684ahy5kbcj84mqda0m8l4aa8iaq1d59";
+    url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}-Linux.tar.gz";
+    sha256 = "sha256-1NwaR8EMH2EQKskkPSrfWbUu8Ib7DwI6UNL3nOtc/tM=";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals stdenv.isLinux [ libmatthew_java dbus dbus_java ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp -r lib $out/lib
     cp bin/signal-cli $out/bin/signal-cli
+  '' + (if stdenv.isLinux then ''
+    makeWrapper ${openjdk17_headless}/bin/java $out/bin/signal-cli \
+      --set JAVA_HOME "${openjdk17_headless}" \
+      --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
+      --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
+      --add-flags "org.asamk.signal.Main"
+  '' else ''
     wrapProgram $out/bin/signal-cli \
-      --prefix PATH : ${lib.makeBinPath [ jre_headless ]} \
-      --set JAVA_HOME ${jre_headless}
-  '';
+      --prefix PATH : ${lib.makeBinPath [ openjdk17_headless ]} \
+      --set JAVA_HOME ${openjdk17_headless}
+  '');
 
   # Execution in the macOS (10.13) sandbox fails with
   # dyld: Library not loaded: /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
@@ -29,6 +37,7 @@ stdenv.mkDerivation rec {
   #         /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa: file system sandbox blocked stat()
   # /nix/store/in41dz8byyyz4c0w132l7mqi43liv4yr-stdenv-darwin/setup: line 1310:  2231 Abort trap: 6           signal-cli --version
   doInstallCheck = stdenv.isLinux;
+
   installCheckPhase = ''
     export PATH=$PATH:$out/bin
     # --help returns non-0 exit code even when working
@@ -36,10 +45,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/AsamK/signal-cli;
+    homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ivan erictapen ];
     platforms = platforms.all;
   };
 }

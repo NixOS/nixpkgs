@@ -1,28 +1,66 @@
-{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future,
-  coreutils }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, buildbot
+
+# patch
+, coreutils
+
+# propagates
+, autobahn
+, future
+, msgpack
+, twisted
+
+# tests
+, mock
+, parameterized
+, psutil
+, setuptoolsTrial
+
+# passthru
+, nixosTests
+}:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.4.1";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l2ax9ywrhgrs9f9yyhiq5nhcf34w916ikx6bjcd6f201ixky1xg";
+    sha256 = "sha256-13I7sttnxO6vORFZzpOKmXu3PfwOpSGmXqvozrhzIm0=";
   };
-
-  propagatedBuildInputs = [ twisted future ];
-
-  checkInputs = [ setuptoolsTrial mock ];
 
   postPatch = ''
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
+  nativeBuildInputs = [
+    setuptoolsTrial
+  ];
+
+  propagatedBuildInputs = [
+    autobahn
+    future
+    msgpack
+    twisted
+  ];
+
+  checkInputs = [
+    mock
+    parameterized
+    psutil
+  ];
+
+  passthru.tests = {
+    smoke-test = nixosTests.buildbot;
+  };
+
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
+    maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 })

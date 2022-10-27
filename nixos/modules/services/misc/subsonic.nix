@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
-let cfg = config.services.subsonic; in {
+let
+  cfg = config.services.subsonic;
+  opt = options.services.subsonic;
+in {
   options = {
     services.subsonic = {
-      enable = mkEnableOption "Subsonic daemon";
+      enable = mkEnableOption (lib.mdDoc "Subsonic daemon");
 
       home = mkOption {
         type = types.path;
         default = "/var/lib/subsonic";
-        description = ''
+        description = lib.mdDoc ''
           The directory where Subsonic will create files.
           Make sure it is writable.
         '';
@@ -19,7 +22,7 @@ let cfg = config.services.subsonic; in {
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           The host name or IP address on which to bind Subsonic.
           Only relevant if you have multiple network interfaces and want
           to make Subsonic available on only one of them. The default value
@@ -28,18 +31,18 @@ let cfg = config.services.subsonic; in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4040;
-        description = ''
+        description = lib.mdDoc ''
           The port on which Subsonic will listen for
           incoming HTTP traffic. Set to 0 to disable.
         '';
       };
 
       httpsPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           The port on which Subsonic will listen for
           incoming HTTPS traffic. Set to 0 to disable.
         '';
@@ -48,7 +51,7 @@ let cfg = config.services.subsonic; in {
       contextPath = mkOption {
         type = types.path;
         default = "/";
-        description = ''
+        description = lib.mdDoc ''
           The context path, i.e., the last part of the Subsonic
           URL. Typically '/' or '/subsonic'. Default '/'
         '';
@@ -57,7 +60,7 @@ let cfg = config.services.subsonic; in {
       maxMemory = mkOption {
         type = types.int;
         default = 100;
-        description = ''
+        description = lib.mdDoc ''
           The memory limit (max Java heap size) in megabytes.
           Default: 100
         '';
@@ -66,7 +69,7 @@ let cfg = config.services.subsonic; in {
       defaultMusicFolder = mkOption {
         type = types.path;
         default = "/var/music";
-        description = ''
+        description = lib.mdDoc ''
           Configure Subsonic to use this folder for music.  This option
           only has effect the first time Subsonic is started.
         '';
@@ -75,7 +78,7 @@ let cfg = config.services.subsonic; in {
       defaultPodcastFolder = mkOption {
         type = types.path;
         default = "/var/music/Podcast";
-        description = ''
+        description = lib.mdDoc ''
           Configure Subsonic to use this folder for Podcasts.  This option
           only has effect the first time Subsonic is started.
         '';
@@ -84,7 +87,7 @@ let cfg = config.services.subsonic; in {
       defaultPlaylistFolder = mkOption {
         type = types.path;
         default = "/var/playlists";
-        description = ''
+        description = lib.mdDoc ''
           Configure Subsonic to use this folder for playlists.  This option
           only has effect the first time Subsonic is started.
         '';
@@ -93,10 +96,11 @@ let cfg = config.services.subsonic; in {
       transcoders = mkOption {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        description = ''
+        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
+        description = lib.mdDoc ''
           List of paths to transcoder executables that should be accessible
           from Subsonic. Symlinks will be created to each executable inside
-          ${cfg.home}/transcoders.
+          ''${config.${opt.home}}/transcoders.
         '';
       };
     };
@@ -108,7 +112,7 @@ let cfg = config.services.subsonic; in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+        ${pkgs.jre8}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dsubsonic.home=${cfg.home} \
           -Dsubsonic.host=${cfg.listenAddress} \
           -Dsubsonic.port=${toString cfg.port} \

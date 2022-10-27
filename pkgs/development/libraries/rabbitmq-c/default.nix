@@ -1,21 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, openssl, popt, xmlto }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, popt, xmlto }:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-c";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "alanxz";
     repo = "rabbitmq-c";
     rev = "v${version}";
-    sha256 = "1mhzxyh9pmpxjjbyy8hd34gm39sxf73r1ldk8zjfsfbs26ggrppz";
+    sha256 = "sha256-u1uOrZRiQOU/6vlLdQHypBRSCo3zw7FC1AI9v3NlBVE=";
   };
 
-  buildInputs = [ cmake openssl popt xmlto ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openssl popt xmlto ];
 
-  meta = with stdenv.lib; {
+  # https://github.com/alanxz/rabbitmq-c/issues/733
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
+  meta = with lib; {
     description = "RabbitMQ C AMQP client library";
-    homepage = https://github.com/alanxz/rabbitmq-c;
+    homepage = "https://github.com/alanxz/rabbitmq-c";
     license = licenses.mit;
     platforms = platforms.unix;
   };

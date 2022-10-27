@@ -1,9 +1,9 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
-libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
+{ fetchFromGitHub, lib, stdenv, autoconf, automake, pkg-config, m4, curl,
+libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
 sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
-  majorVersion = "7.14";
+  majorVersion = "7.20";
   minorVersion = "2";
 in
 
@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";
-    sha256 = "0nicpkag18xq0libfqqvs0im22mijpsxzfk272iwdd9l0lmgfvyd";
+    sha256 = "sha256-vMb5Vq/6I6lniG396wd7+FfslsByedMRPIpiItp1d1s=";
   };
 
-  nativeBuildInputs = [ libtool automake autoconf m4 pkgconfig ];
+  nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
 
   buildInputs = [
-    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
+    curl libGLU libGL libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
     libnotify patchelf libX11 libxcb xcbutil
   ];
 
@@ -37,10 +37,19 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-server" ];
 
-  meta = {
+  postInstall = ''
+    install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"
+  '';
+
+  meta = with lib; {
     description = "Free software for distributed and grid computing";
-    homepage = https://boinc.berkeley.edu/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;  # arbitrary choice
+    homepage = "https://boinc.berkeley.edu/";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.linux;  # arbitrary choice
+    # checking for gcc options needed to detect all undeclared functions... cannot detect
+    # configure: error: in `/build/boinc-7.18.1-src':
+    # configure: error: cannot make gcc report undeclared builtins
+    broken = stdenv.isAarch64;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

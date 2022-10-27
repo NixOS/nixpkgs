@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, desktop-file-utils, file, python3Packages }:
+{ lib, fetchurl, desktop-file-utils, file, python3Packages }:
 
-python3Packages.buildPythonApplication rec {
-  name = "mimeo-${version}";
-  version = "2019.7";
+let version = "2022.7";
+in python3Packages.buildPythonApplication {
+  pname = "mimeo";
+  inherit version;
 
   src = fetchurl {
-    url = "https://xyne.archlinux.ca/projects/mimeo/src/${name}.tar.xz";
-    sha256 = "0nzn7qvmpbb17d6q16llnhz1qdmyg718q59ic4gw2rq23cd6q47r";
+    url = "https://xyne.dev/projects/mimeo/src/mimeo-${version}.tar.xz";
+    hash = "sha256-xzWPMtlKj35mkE04jcGalbf/94qEOOUi9pvZgSPgdj8=";
   };
 
   buildInputs = [ file desktop-file-utils ];
@@ -23,10 +24,15 @@ python3Packages.buildPythonApplication rec {
 
   installPhase = "install -Dm755 Mimeo.py $out/bin/mimeo";
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/mimeo --help > /dev/null
+  '';
+
+  meta = with lib; {
     description = "Open files by MIME-type or file name using regular expressions";
-    homepage = http://xyne.archlinux.ca/projects/mimeo/;
-    license = [ licenses.gpl2 ];
+    homepage = "https://xyne.dev/projects/mimeo/";
+    license = [ licenses.gpl2Only ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
   };

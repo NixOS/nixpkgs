@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, pkgconfig,  ibus, ibus-table, python3, cmake }:
+{ lib, stdenv, fetchgit, fetchFromGitHub, pkg-config, ibus, ibus-table, python3, cmake }:
 
 let
   src = fetchFromGitHub {
@@ -51,12 +51,13 @@ in stdenv.mkDerivation {
     rm -rf $HOME
   '';
 
-  buildInputs = [ pkgconfig ibus ibus-table python3 cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ ibus ibus-table python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "Chinese tables for IBus-Table";
-    homepage     = https://github.com/definite/ibus-table-chinese;
+    homepage     = "https://github.com/definite/ibus-table-chinese";
     license      = licenses.gpl3;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ pneumaticat ];

@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "extrace";
-  version = "0.7";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = "extrace";
     rev = "v${version}";
-    sha256 = "0acspj3djspfvgr3ng5b61qws6v2md6b0lc5qkby10mqnfpkvq85";
+    hash = "sha256-Jy/Ac3NcqBkW0kHyypMAVUGAQ41qWM96BbLAym06ogM=";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     install -dm755 "$out/share/licenses/extrace/"
     install -m644 LICENSE "$out/share/licenses/extrace/LICENSE"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/leahneukirchen/extrace;
+  meta = with lib; {
+    homepage = "https://github.com/leahneukirchen/extrace";
     description = "Trace exec() calls system-wide";
-    license = with licenses; [ gpl2 bsd2 ];
+    license = with licenses; [ gpl2Plus bsd2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.leahneukirchen ];
   };

@@ -1,33 +1,51 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, pkgs
 , cffi
+, fetchFromGitHub
+, pytestCheckHook
 , six
-, pytest
-, pytestrunner
+, ssdeep
 }:
 
 buildPythonPackage rec {
   pname = "ssdeep";
-  version = "3.3";
+  version = "3.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "255de1f034652b3ed21920221017e70e570b1644f9436fea120ae416175f4ef5";
+  src = fetchFromGitHub {
+    owner = "DinoTools";
+    repo = "python-ssdeep";
+    rev = version;
+    hash = "sha256-eAB4/HmPGj/ngHrqkOlY/kTdY5iUEBHxrsRYjR/RNyw=";
   };
 
-  buildInputs = [ pkgs.ssdeep pytestrunner ];
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ cffi six ];
+  buildInputs = [
+    ssdeep
+  ];
 
-  # tests repository does not include required files
-  doCheck = false;
+  propagatedBuildInputs = [
+    cffi
+    six
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/DinoTools/python-ssdeep;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+  '';
+
+  pythonImportsCheck = [
+    "ssdeep"
+  ];
+
+  meta = with lib; {
     description = "Python wrapper for the ssdeep library";
-    license = licenses.lgpl3;
+    homepage = "https://github.com/DinoTools/python-ssdeep";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ fab ];
   };
-
 }

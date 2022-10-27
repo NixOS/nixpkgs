@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
-, autoreconfHook
-, pkgconfig
+, pkg-config
+, meson
+, ninja
 , gettext
 , gobject-introspection
 , gtk-doc
@@ -10,31 +10,29 @@
 , docbook_xml_dtd_412
 , glib
 , gupnp
-, gnome3
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-igd";
-  version = "0.2.5";
+  version = "1.2.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "081v1vhkbz3wayv49xfiskvrmvnpx93k25am2wnarg5cifiiljlb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
-  patches = [
-    # Add gupnp-1.2 compatibility
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gupnp-igd/commit/63531558a16ac2334a59f627b2fca5576dcfbb2e.patch;
-      sha256 = "0s8lkyy9fnnnnkkqwbk6gxb7795bb1kl1swk5ldjnlrzhfcy1ab2";
-    })
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
-    pkgconfig
-    autoreconfHook
+    pkg-config
+    meson
+    ninja
     gettext
     gobject-introspection
     gtk-doc
@@ -47,22 +45,26 @@ stdenv.mkDerivation rec {
     gupnp
   ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  mesonFlags = [
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
-  doCheck = true;
+  # Seems to get stuck sometimes.
+  # https://github.com/NixOS/nixpkgs/issues/119288
+  #doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to handle UPnP IGD port mapping";
-    homepage = http://www.gupnp.org/;
-    license = licenses.lgpl21;
+    homepage = "http://www.gupnp.org/";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

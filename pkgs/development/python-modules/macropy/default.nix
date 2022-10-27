@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python
 , isPy27
+, pythonAtLeast
 , pinqSupport ? false, sqlalchemy
 , pyxlSupport ? false, pyxl3
 }:
@@ -30,9 +31,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/lihaoyi/macropy;
+    homepage = "https://github.com/lihaoyi/macropy";
     description = "Macros in Python: quasiquotes, case classes, LINQ and more";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = pythonAtLeast "3.8"; # see https://github.com/lihaoyi/macropy/issues/103
   };
 }

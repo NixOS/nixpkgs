@@ -1,27 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch, bash, coreutils, gdb, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, bash, coreutils, gdb, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "procdump";
-  version = "1.0.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "ProcDump-for-Linux";
     rev = version;
-    sha256 = "1lkm05hq4hl1vadj9ifm18hi7cbf5045xlfxdfbrpsl6kxgfwcc4";
+    sha256 = "sha256-gVswAezHl7E2cBTJEQhPFXhHkzhWVHSpPF8m0s8+ekc=";
   };
+
+  patches = [
+    # Pull upstream patch to fix parallel builds:
+    #  https://github.com/Sysinternals/ProcDump-for-Linux/pull/133
+    (fetchpatch {
+      name = "parallel.patch";
+      url = "https://github.com/Sysinternals/ProcDump-for-Linux/commit/0d735836f11281cc6134be93eac8acb302f2055e.patch";
+      sha256 = "sha256-zsqllPHF8ZuXAIDSAPvbzdKa43uSSx9ilUKM1vFVW90=";
+    })
+  ];
 
   nativeBuildInputs = [ zlib ];
   buildInputs = [ bash coreutils gdb ];
-
-  patches = [
-    # Fix name conflict when built with musl
-    # TODO: check if fixed upstream https://github.com/Microsoft/ProcDump-for-Linux/pull/50
-    (fetchpatch {
-      url = "https://github.com/Microsoft/ProcDump-for-Linux/commit/1b7b50b910f20b463fb628c8213663c8a8d11d0d.patch";
-      sha256 = "0h0dj3gi6hw1wdpc0ih9s4kkagv0d9jzrg602cr85r2z19lmb7yk";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/CoreDumpWriter.c \
@@ -31,16 +32,28 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "DESTDIR=$(out)"
+    "DESTDIR=${placeholder "out"}"
     "INSTALLDIR=/bin"
     "MANDIR=/share/man/man1"
   ];
 
-  doCheck = false; # needs root
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  doCheck = false; # needs sudo root
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    set +o pipefail
+    ($out/bin/procdump -h | grep "ProcDump v${version}") ||
+      (echo "ERROR: ProcDump is not the expected version or does not run properly" ; exit 1)
+    set -o pipefail
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "A Linux version of the ProcDump Sysinternals tool";
-    homepage = https://github.com/Microsoft/ProcDump-for-Linux;
+    homepage = "https://github.com/Microsoft/ProcDump-for-Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.linux;

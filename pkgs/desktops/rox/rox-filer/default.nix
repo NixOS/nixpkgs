@@ -1,29 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, wrapGAppsHook
+, libxml2
+, gtk
+, libSM
+, shared-mime-info
+}:
 
-let
+stdenv.mkDerivation rec {
+  pname = "rox-filer";
   version = "2.11";
-  name = "rox-filer-${version}";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/rox/rox-filer-${version}.tar.bz2";
     sha256 = "a929bd32ee18ef7a2ed48b971574574592c42e34ae09f36604bf663d7c101ba8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook
+  ];
   buildInputs = [ libxml2 gtk shared-mime-info libSM ];
-  NIX_LDFLAGS = [ "-ldl" "-lm" ];
+  NIX_LDFLAGS = "-ldl -lm";
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
+    # Pull upstream fix for -fno-common toolchains like upstream gcc-10:
+    #   https://github.com/rox-desktop/rox-filer/pull/15
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/rox-desktop/rox-filer/commit/86b0bb9144186d51ea9b898905111bd8b143b552.patch";
+      sha256 = "1csyx229i09p00lbdlkdqdhn3x2lb5zby1h9rkjgzlr2qz74gc69";
+    })
   ];
 
   # go to the source directory after unpacking the sources
   setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
 
-  # patch source with defined patches
-  patchFlags = "-p0";
+  # account for 'setSourceRoot' offset
+  patchFlags = [ "-p2" ];
 
   # patch the main.c to disable the lookup of the APP_DIR environment variable,
   # which is used to lookup the location for certain images when rox-filer
@@ -69,9 +87,9 @@ in stdenv.mkDerivation {
     ln -sv application-{msword,rtf}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
-    homepage = http://rox.sourceforge.net/desktop;
+    homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];

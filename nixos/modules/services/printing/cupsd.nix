@@ -31,7 +31,7 @@ let
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
   # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
-  # cupsd.conf tells cupsd to use this tree.
+  # cups-files.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
@@ -104,13 +104,22 @@ let
     ignoreCollisions = true;
   };
 
-  filterGutenprint = pkgs: filter (pkg: pkg.meta.isGutenprint or false == true) pkgs;
+  filterGutenprint = filter (pkg: pkg.meta.isGutenprint or false == true);
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
 in
 
 {
+
+  imports = [
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+  ];
 
   ###### interface
 
@@ -120,15 +129,24 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable printing support through the CUPS daemon.
+        '';
+      };
+
+      stateless = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          If set, all state directories relating to CUPS will be removed on
+          startup of the service.
         '';
       };
 
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           If set, CUPS is socket-activated; that is,
           instead of having it permanently running as a daemon,
           systemd will start it on the first incoming connection.
@@ -139,8 +157,18 @@ in
         type = types.listOf types.str;
         default = [ "localhost:631" ];
         example = [ "*:631" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of addresses and ports on which to listen.
+        '';
+      };
+
+      allowFrom = mkOption {
+        type = types.listOf types.str;
+        default = [ "localhost" ];
+        example = [ "all" ];
+        apply = concatMapStringsSep "\n" (x: "Allow ${x}");
+        description = lib.mdDoc ''
+          From which hosts to allow unconditional access.
         '';
       };
 
@@ -148,7 +176,7 @@ in
         type = types.lines;
         internal = true;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional commands executed while creating the directory
           containing the CUPS server binaries.
         '';
@@ -157,7 +185,7 @@ in
       defaultShared = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether local printers are shared by default.
         '';
       };
@@ -165,7 +193,7 @@ in
       browsing = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether shared printers are advertised.
         '';
       };
@@ -173,7 +201,7 @@ in
       webInterface = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether the web interface is enabled.
         '';
       };
@@ -182,7 +210,7 @@ in
         type = types.str;
         default = "info";
         example = "debug";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the cupsd logging verbosity.
         '';
       };
@@ -190,9 +218,9 @@ in
       extraFilesConf = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra contents of the configuration file of the CUPS daemon
-          (<filename>cups-files.conf</filename>).
+          ({file}`cups-files.conf`).
         '';
       };
 
@@ -204,9 +232,9 @@ in
             BrowsePoll cups.example.com
             MaxCopies 42
           '';
-        description = ''
+        description = lib.mdDoc ''
           Extra contents of the configuration file of the CUPS daemon
-          (<filename>cupsd.conf</filename>).
+          ({file}`cupsd.conf`).
         '';
       };
 
@@ -218,9 +246,9 @@ in
             ServerName server.example.com
             Encryption Never
           '';
-        description = ''
+        description = lib.mdDoc ''
           The contents of the client configuration.
-          (<filename>client.conf</filename>)
+          ({file}`client.conf`)
         '';
       };
 
@@ -231,9 +259,9 @@ in
           ''
             BrowsePoll cups.example.com
           '';
-        description = ''
+        description = lib.mdDoc ''
           The contents of the configuration. file of the CUPS Browsed daemon
-          (<filename>cups-browsed.conf</filename>)
+          ({file}`cups-browsed.conf`)
         '';
       };
 
@@ -242,8 +270,8 @@ in
         default = ''
           Address @LOCAL
         '';
-        description = ''
-          The contents of <filename>/etc/cups/snmp.conf</filename>. See "man
+        description = lib.mdDoc ''
+          The contents of {file}`/etc/cups/snmp.conf`. See "man
           cups-snmp.conf" for a complete description.
         '';
       };
@@ -251,13 +279,13 @@ in
       drivers = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "with pkgs; [ gutenprint hplip splix cups-googlecloudprint ]";
-        description = ''
+        example = literalExpression "with pkgs; [ gutenprint hplip splix ]";
+        description = lib.mdDoc ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,
           Ghostscript and Samba are added unconditionally. If this list contains
           Gutenprint (i.e. a derivation with
-          <literal>meta.isGutenprint = true</literal>) the PPD files in
-          <filename>/var/lib/cups/ppd</filename> will be updated automatically
+          `meta.isGutenprint = true`) the PPD files in
+          {file}`/var/lib/cups/ppd` will be updated automatically
           to avoid errors due to incompatible versions.
         '';
       };
@@ -266,7 +294,7 @@ in
         type = types.path;
         default = "/tmp";
         example = "/tmp/cups";
-        description = ''
+        description = lib.mdDoc ''
           CUPSd temporary directory.
         '';
       };
@@ -279,9 +307,8 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.users = singleton
-      { name = "cups";
-        uid = config.ids.uids.cups;
+    users.users.cups =
+      { uid = config.ids.uids.cups;
         group = "lp";
         description = "CUPS printing services";
       };
@@ -325,8 +352,9 @@ in
 
         path = [ cups.out ];
 
-        preStart =
-          ''
+        preStart = lib.optionalString cfg.stateless ''
+          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+        '' + ''
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
@@ -395,19 +423,19 @@ in
 
         <Location />
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin>
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Location /admin/conf>
           AuthType Basic
           Require user @SYSTEM
           Order allow,deny
-          Allow localhost
+          ${cfg.allowFrom}
         </Location>
 
         <Policy default>

@@ -10,7 +10,7 @@ let
     name = "ircd-hybrid-service";
     scripts = [ "=>/bin" ./control.in ];
     substFiles = [ "=>/conf" ./ircd.conf ];
-    inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
+    inherit (pkgs) ircdHybrid coreutils su iproute2 gnugrep procps;
 
     ipv6Enabled = boolToString config.networking.enableIPv6;
 
@@ -36,71 +36,74 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
+      enable = mkEnableOption (lib.mdDoc "IRCD");
 
       serverName = mkOption {
         default = "hades.arpa";
-        description = "
+        type = types.str;
+        description = lib.mdDoc ''
           IRCD server name.
-        ";
+        '';
       };
 
       sid = mkOption {
         default = "0NL";
-        description = "
+        type = types.str;
+        description = lib.mdDoc ''
           IRCD server unique ID in a net of servers.
-        ";
+        '';
       };
 
       description = mkOption {
         default = "Hybrid-7 IRC server.";
-        description = "
+        type = types.str;
+        description = lib.mdDoc ''
           IRCD server description.
-        ";
+        '';
       };
 
       rsaKey = mkOption {
         default = null;
-        example = literalExample "/root/certificates/irc.key";
-        description = "
+        example = literalExpression "/root/certificates/irc.key";
+        type = types.nullOr types.path;
+        description = lib.mdDoc ''
           IRCD server RSA key.
-        ";
+        '';
       };
 
       certificate = mkOption {
         default = null;
-        example = literalExample "/root/certificates/irc.pem";
-        description = "
+        example = literalExpression "/root/certificates/irc.pem";
+        type = types.nullOr types.path;
+        description = lib.mdDoc ''
           IRCD server SSL certificate. There are some limitations - read manual.
-        ";
+        '';
       };
 
       adminEmail = mkOption {
         default = "<bit-bucket@example.com>";
+        type = types.str;
         example = "<name@domain.tld>";
-        description = "
+        description = lib.mdDoc ''
           IRCD server administrator e-mail.
-        ";
+        '';
       };
 
       extraIPs = mkOption {
         default = [];
         example = ["127.0.0.1"];
-        description = "
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
           Extra IP's to bind.
-        ";
+        '';
       };
 
       extraPort = mkOption {
         default = "7117";
-        description = "
+        type = types.str;
+        description = lib.mdDoc ''
           Extra port to avoid filtering.
-        ";
+        '';
       };
 
     };
@@ -112,9 +115,8 @@ in
 
   config = mkIf config.services.ircdHybrid.enable {
 
-    users.users = singleton
-      { name = "ircd";
-        description = "IRCD owner";
+    users.users.ircd =
+      { description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };

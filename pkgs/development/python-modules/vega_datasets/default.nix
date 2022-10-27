@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "vega_datasets";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20d490b417f84607eb5079400f608f2e9c135b7092bee10f6857f6d23136e459";
+    sha256 = "9dbe9834208e8ec32ab44970df315de9102861e4cda13d8e143aab7a80d93fc0";
   };
 
   propagatedBuildInputs = [ pandas ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python package for offline access to vega datasets";
-    homepage = https://github.com/altair-viz/vega_datasets;
+    homepage = "https://github.com/altair-viz/vega_datasets";
     license = licenses.mit;
   };
 }

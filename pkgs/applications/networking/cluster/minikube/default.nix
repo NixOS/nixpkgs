@@ -1,68 +1,55 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, libvirt, qemu
-, gpgme, makeWrapper, vmnet
-, docker-machine-kvm, docker-machine-kvm2
-, extraDrivers ? []
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, which
+, libvirt
+, vmnet
+, makeWrapper
 }:
 
-let
-  drivers = stdenv.lib.filter (d: d != null) (extraDrivers
-            ++ stdenv.lib.optionals stdenv.isLinux [ docker-machine-kvm docker-machine-kvm2 ]);
+buildGoModule rec {
+  pname = "minikube";
+  version = "1.27.1";
 
-  binPath = drivers
-            ++ stdenv.lib.optionals stdenv.isLinux ([ libvirt qemu ]);
+  vendorSha256 = "sha256-2sXWf+iK1v9gv2DXhmEs8xlIRF+6EM7Y6Otd6F89zGk=";
 
-in buildGoModule rec {
-  pname   = "minikube";
-  version = "1.2.0";
-
-  kubernetesVersion = "1.15.0";
-
-  goPackagePath = "k8s.io/minikube";
+  doCheck = false;
 
   src = fetchFromGitHub {
-    owner  = "kubernetes";
-    repo   = "minikube";
-    rev    = "v${version}";
-    sha256 = "0l9znrp49877cp1bkwx84c8lv282ga5a946rjbxi8gznkf3kwaw7";
+    owner = "kubernetes";
+    repo = "minikube";
+    rev = "v${version}";
+    sha256 = "sha256-GmvxKWHo0meiR1r5IlgI8jQRiDvmQafxTS9acv92EPk=";
   };
 
-  modSha256 = "1cp63n0x2lgbqvvymx9byx48r42qw6w224x5x4iiarc2nryfdhn0";
+  nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 
-  buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
-  subPackages = [ "cmd/minikube" ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "cmd/drivers/hyperkit";
+  buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
 
-  preBuild = ''
-    go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
-
-    VERSION_MAJOR=$(grep "^VERSION_MAJOR" Makefile | sed "s/^.*\s//")
-    VERSION_MINOR=$(grep "^VERSION_MINOR" Makefile | sed "s/^.*\s//")
-    ISO_VERSION=v$VERSION_MAJOR.$VERSION_MINOR.0
-    ISO_BUCKET=$(grep "^ISO_BUCKET" Makefile | sed "s/^.*\s//")
-    KUBERNETES_VERSION=${kubernetesVersion}
-
-    export buildFlagsArray="-ldflags=\
-      -X k8s.io/minikube/pkg/version.version=v${version} \
-      -X k8s.io/minikube/pkg/version.isoVersion=$ISO_VERSION \
-      -X k8s.io/minikube/pkg/version.isoPath=$ISO_BUCKET \
-      -X k8s.io/minikube/vendor/k8s.io/client-go/pkg/version.gitVersion=$KUBERNETES_VERSION \
-      -X k8s.io/minikube/vendor/k8s.io/kubernetes/pkg/version.gitVersion=$KUBERNETES_VERSION"
+  buildPhase = ''
+    make COMMIT=${src.rev}
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/${pname} --prefix PATH : $out/bin:${stdenv.lib.makeBinPath binPath}
-    mkdir -p $out/share/bash-completion/completions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion bash > $out/share/bash-completion/completions/minikube
-    mkdir -p $out/share/zsh/site-functions/
-    MINIKUBE_WANTUPDATENOTIFICATION=false MINIKUBE_WANTKUBECTLDOWNLOADMSG=false HOME=$PWD $out/bin/minikube completion zsh > $out/share/zsh/site-functions/_minikube
-  ''+ stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $out/bin/hyperkit $out/bin/docker-machine-driver-hyperkit
+  installPhase = ''
+    install out/minikube -Dt $out/bin
+
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
+    export HOME=$PWD
+
+    for shell in bash zsh fish; do
+      $out/bin/minikube completion $shell > minikube.$shell
+      installShellCompletion minikube.$shell
+    done
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/kubernetes/minikube;
+  meta = with lib; {
+    homepage = "https://minikube.sigs.k8s.io";
     description = "A tool that makes it easy to run Kubernetes locally";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin vdemeester ];
-    platforms   = with platforms; unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
+    platforms = platforms.unix;
   };
 }

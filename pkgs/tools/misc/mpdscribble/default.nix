@@ -1,23 +1,39 @@
-{ stdenv, fetchurl, mpd_clientlib, curl, glib, pkgconfig }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, boost
+, curl
+, libgcrypt
+, libmpdclient
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpdscribble";
-  version = "0.22";
+  version = "0.24";
 
   src = fetchurl {
-    url =
-    "https://www.musicpd.org/download/mpdscribble/${version}/mpdscribble-${version}.tar.bz2";
-    sha256 = "0hgb7xh3w455m00lpldwkyrc5spjn3q1pl2ry3kf7w3hiigjpphw";
+    url = "https://www.musicpd.org/download/mpdscribble/${version}/mpdscribble-${version}.tar.xz";
+    sha256 = "sha256-9rTLp0izuH5wUnC0kjyOI+lMLgD+3VC+sUaNvi+yqOc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mpd_clientlib curl glib ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
+  buildInputs = [
+    libmpdclient
+    curl
+    boost
+    libgcrypt
+    systemd
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A Music Player Daemon (MPD) client which submits information about tracks beeing played to a scrobbler (e.g. last.fm)";
-    homepage = https://www.musicpd.org/clients/mpdscribble/;
-    license = licenses.gpl2;
-    maintainers = [ maintainers.matthiasbeyer ];
+  meta = with lib; {
+    description = "A MPD client which submits info about tracks being played to a scrobbler";
+    homepage = "https://www.musicpd.org/clients/mpdscribble/";
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sohalt ];
     platforms = platforms.linux;
   };
 }

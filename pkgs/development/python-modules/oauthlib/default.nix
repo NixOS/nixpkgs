@@ -1,33 +1,47 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest
-, cryptography
+{ lib
 , blinker
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, mock
 , pyjwt
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
   pname = "oauthlib";
+  version = "3.2.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ce32c5d989a1827e3f1148f98b9085ed2370fc939bf524c9c851d8714797298";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-9Du0REnN7AkvMmejXsWc7Uy+YF8MYeLK+QnYHbrPhPA=";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ cryptography blinker pyjwt ];
+  propagatedBuildInputs = [
+    blinker
+    cryptography
+    pyjwt
+  ];
 
-  checkPhase = ''
-    py.test tests/
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/idan/oauthlib;
-    description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
-    maintainers = with maintainers; [ prikhi ];
+  pythonImportsCheck = [
+    "oauthlib"
+  ];
+
+  meta = with lib; {
+    description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+    homepage = "https://github.com/idan/oauthlib";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ prikhi ];
   };
 }

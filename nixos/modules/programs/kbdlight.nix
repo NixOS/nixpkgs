@@ -7,10 +7,15 @@ let
 
 in
 {
-  options.programs.kbdlight.enable = mkEnableOption "kbdlight";
+  options.programs.kbdlight.enable = mkEnableOption (lib.mdDoc "kbdlight");
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kbdlight ];
-    security.wrappers.kbdlight.source = "${pkgs.kbdlight.out}/bin/kbdlight";
+    security.wrappers.kbdlight =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.kbdlight.out}/bin/kbdlight";
+      };
   };
 }

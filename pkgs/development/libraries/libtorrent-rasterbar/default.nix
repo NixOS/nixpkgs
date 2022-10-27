@@ -1,13 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
-, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+{ lib, stdenv, fetchFromGitHub, cmake
+, zlib, boost, openssl, python, ncurses, SystemConfiguration
 }:
 
 let
-  version = "1.1.11";
-  formattedVersion = lib.replaceChars ["."] ["_"] version;
+  version = "2.0.8";
 
   # Make sure we override python, so the correct version is chosen
-  # for the bindings, if overridden
   boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
@@ -17,14 +15,27 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "libtorrent_${formattedVersion}";
-    sha256 = "0nwdsv6d2gkdsh7l5a46g6cqx27xwh3msify5paf02l1qzjy4s5l";
+    rev = "v${version}";
+    sha256 = "sha256-mMY3NiSL/lYuYmV/KWgfKbs8XukSV4PvQ87tpgBid6M=";
+    fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
-  preConfigure = "./autotool.sh";
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ boostPython openssl zlib python ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+
+  # https://github.com/arvidn/libtorrent/issues/6865
+  postPatch = ''
+    substituteInPlace cmake/Modules/GeneratePkgConfig.cmake \
+      --replace @CMAKE_INSTALL_PREFIX@/'$<'1: '$<'1:
+    substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
+      --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
+                'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")
+                 set(_INSTALL_FULL_LIBDIR "@CMAKE_INSTALL_FULL_LIBDIR@")'
+    substituteInPlace cmake/Modules/GeneratePkgConfig/pkg-config.cmake.in \
+      --replace '$'{prefix}/@_INSTALL_LIBDIR@ @_INSTALL_FULL_LIBDIR@
+  '';
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -33,20 +44,16 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "python" ];
 
-  configureFlags = [
-    "--enable-python-binding"
-    "--with-libgeoip=system"
-    "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
-    "--with-libiconv=yes"
+  cmakeFlags = [
+    "-Dpython-bindings=on"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

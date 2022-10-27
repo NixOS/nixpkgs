@@ -1,19 +1,28 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, optipng, librsvg, gtk3, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
-  version = "0.14";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
-    sha256 = "00sk6sv0kkfb3q0jqwcllzawi30rw8nfkkfn5l1qwqha48izw3r4";
+    sha256 = "sha256-9WdVUCwHFX6wlu3++QqzV0RgTDYDnUYqK7yUl83liko=";
   };
 
-  nativeBuildInputs = [ pkgconfig gdk-pixbuf librsvg optipng gtk3 ];
+  nativeBuildInputs = [
+    pkg-config
+    gdk-pixbuf
+    librsvg
+    optipng
+    gtk3
+  ];
 
   propagatedBuildInputs = [
+    pantheon.elementary-icon-theme
+    gnome.adwaita-icon-theme
+    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -27,12 +36,12 @@ stdenv.mkDerivation rec {
     make icon-caches
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elementary icons for Xfce and other GTK desktops like GNOME";
-    homepage = https://github.com/shimmerproject/elementary-xfce;
+    homepage = "https://github.com/shimmerproject/elementary-xfce";
     license = licenses.gpl2;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

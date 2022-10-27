@@ -1,15 +1,23 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "ip2location-c";
-  version = "7.0.2"; # meta.homepage might change after a major update
+  version = "8.5.1";
 
-  src = fetchurl {
-    sha256 = "1gs43qgcyfn83abrkhvvw1s67d1sbkbj3hab9m17ysn6swafiycx";
-    url = "https://www.ip2location.com/downloads/ip2location-c-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "chrislim2888";
+    repo = "IP2Location-C-Library";
+    rev = version;
+    sha256 = "sha256-+Az1bAJ3HT9mIjO43FOcEqxX3oA3RcIY7VvxfaHtBX8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   enableParallelBuilding = true;
 
@@ -17,7 +25,7 @@ stdenv.mkDerivation rec {
   # databases are available, downloading them for just 1 test seems excessive):
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to look up locations of host names and IP addresses";
     longDescription = ''
       A C library to find the country, region, city,coordinates,
@@ -25,8 +33,9 @@ stdenv.mkDerivation rec {
       weather, MCC, MNC, mobile brand name, elevation and usage type of
       any IP address or host name in the IP2Location databases.
     '';
-    homepage = http://www.ip2location.com/developers/c-7;
+    homepage = "https://www.ip2location.com/developers/c";
     license = with licenses; [ gpl3Plus lgpl3Plus ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

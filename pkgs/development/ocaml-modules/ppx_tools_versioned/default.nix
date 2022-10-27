@@ -2,21 +2,23 @@
 
 buildDunePackage rec {
   pname = "ppx_tools_versioned";
-  version = "5.2.3";
+  version = "5.4.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = pname;
     rev = version;
-    sha256 = "1hcmpnw26zf70a71r3d2c2c0mn8q084gdn1r36ynng6fv9hq6j0y";
+    sha256 = "07lnj4yzwvwyh5fhpp1dxrys4ddih15jhgqjn59pmgxinbnddi66";
   };
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];
 
   meta = with lib; {
-    homepage = https://github.com/let-def/ppx_tools_versioned;
+    homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

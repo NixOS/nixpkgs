@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
-, libXi, libXmu, libXext, libGLU_combined }:
+{ lib, stdenv, fetchurl, zlib, libtiff, libxml2, SDL, xorgproto, libX11
+, libXi, libXmu, libXext, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "stardust";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zlib libtiff libxml2 SDL xorgproto libX11 libXi
-    libXmu libXext libGLU_combined
+    libXmu libXext libGLU libGL
   ];
 
   installFlags = [ "bindir=\${out}/bin" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --replace '#define PACKAGE ""' '#define PACKAGE "stardust"'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Space flight simulator";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

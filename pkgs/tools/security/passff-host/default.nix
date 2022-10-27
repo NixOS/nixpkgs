@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, pass }:
+{ lib, stdenv, fetchFromGitHub, python3, pass }:
 
 stdenv.mkDerivation rec {
   pname = "passff-host";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "passff";
     repo = pname;
     rev = version;
-    sha256 = "0ydfwvhgnw5c3ydx2gn5d7ys9g7cxlck57vfddpv6ix890v21451";
+    sha256 = "sha256-1JPToJF/ruu69TEZAAvV3Zl0qcTpEyMb2qQDAWWgKNw=";
   };
 
   buildInputs = [ python3 ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       /etc/opt/chrome/native-messaging-hosts
       /etc/chromium/native-messaging-hosts
       /etc/vivaldi/native-messaging-hosts
+      /lib/librewolf/native-messaging-hosts
     )
 
     for manifestDir in "''${nativeMessagingPaths[@]}"; do
@@ -38,10 +39,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Host app for the WebExtension PassFF";
-    homepage = https://github.com/passff/passff-host;
+    homepage = "https://github.com/passff/passff-host";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nadrieril ];
+    maintainers = with maintainers; [ ];
   };
 }

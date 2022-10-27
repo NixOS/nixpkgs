@@ -1,20 +1,42 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig, vlc
-, qtbase, qtmultimedia, qtsvg, qttools
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, perl
 
-# Cantata doesn't build with cdparanoia enabled so we disable that
-# default for now until I (or someone else) figure it out.
-, withCdda ? false, cdparanoia
-, withCddb ? false, libcddb
-, withLame ? false, lame
-, withMusicbrainz ? false, libmusicbrainz5
+  # Cantata doesn't build with cdparanoia enabled so we disable that
+  # default for now until I (or someone else) figure it out.
+, withCdda ? false
+, cdparanoia
+, withCddb ? false
+, libcddb
+, withLame ? false
+, lame
+, withMusicbrainz ? false
+, libmusicbrainz5
 
-, withTaglib ? true, taglib, taglib_extras
-, withReplaygain ? true, ffmpeg, speex, mpg123
-, withMtp ? true, libmtp
+, withTaglib ? true
+, taglib
+, taglib_extras
+, withHttpStream ? true
+, qtmultimedia
+, withReplaygain ? true
+, ffmpeg
+, speex
+, mpg123
+, withMtp ? true
+, libmtp
 , withOnlineServices ? true
-, withDevices ? true, udisks2
+, withDevices ? true
+, udisks2
 , withDynamic ? true
 , withHttpServer ? true
+, withLibVlc ? false
+, libvlc
 , withStreams ? true
 }:
 
@@ -26,63 +48,74 @@ assert withMtp -> withTaglib;
 assert withMusicbrainz -> withCdda && withTaglib;
 assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
+assert withLibVlc -> withHttpStream;
 
 let
-  version = "2.3.3";
-  pname = "cantata";
-  fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
-  fstats = x: map (fstat x);
+  fstat = x: fn:
+    "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
 
   withUdisks = (withTaglib && withDevices);
 
-in mkDerivation {
-  name = "${pname}-${version}";
-
-  src = fetchFromGitHub {
-    owner  = "CDrummond";
-    repo   = "cantata";
-    rev    = "v${version}";
-    sha256 = "1m651fmdbnb50glym75kzma0bllvqbmrb2afp1g9g5cxm1898c0f";
-  };
-
-  buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
-    ++ lib.optionals withTaglib [ taglib taglib_extras ]
-    ++ lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
-    ++ lib.optional  withCdda cdparanoia
-    ++ lib.optional  withCddb libcddb
-    ++ lib.optional  withLame lame
-    ++ lib.optional  withMtp libmtp
-    ++ lib.optional  withMusicbrainz libmusicbrainz5
-    ++ lib.optional  withUdisks udisks2;
-
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
-
-  cmakeFlags = lib.flatten [
-    (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
-    (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])
-    (fstat withCdda           "CDPARANOIA")
-    (fstat withCddb           "CDDB")
-    (fstat withLame           "LAME")
-    (fstat withMtp            "MTP")
-    (fstat withMusicbrainz    "MUSICBRAINZ")
-    (fstat withOnlineServices "ONLINE_SERVICES")
-    (fstat withDynamic        "DYNAMIC")
-    (fstat withDevices        "DEVICES_SUPPORT")
-    (fstat withHttpServer     "HTTP_SERVER")
-    (fstat withStreams        "STREAMS")
-    (fstat withUdisks         "UDISKS2")
-    "-DENABLE_HTTPS_SUPPORT=ON"
+  options = [
+    { names = [ "CDDB" ]; enable = withCddb; pkgs = [ libcddb ]; }
+    { names = [ "CDPARANOIA" ]; enable = withCdda; pkgs = [ cdparanoia ]; }
+    { names = [ "DEVICES_SUPPORT" ]; enable = withDevices; pkgs = [ ]; }
+    { names = [ "DYNAMIC" ]; enable = withDynamic; pkgs = [ ]; }
+    { names = [ "FFMPEG" "MPG123" "SPEEXDSP" ]; enable = withReplaygain; pkgs = [ ffmpeg speex mpg123 ]; }
+    { names = [ "HTTPS_SUPPORT" ]; enable = true; pkgs = [ ]; }
+    { names = [ "HTTP_SERVER" ]; enable = withHttpServer; pkgs = [ ]; }
+    { names = [ "HTTP_STREAM_PLAYBACK" ]; enable = withHttpStream; pkgs = [ qtmultimedia ]; }
+    { names = [ "LAME" ]; enable = withLame; pkgs = [ lame ]; }
+    { names = [ "LIBVLC" ]; enable = withLibVlc; pkgs = [ libvlc ]; }
+    { names = [ "MTP" ]; enable = withMtp; pkgs = [ libmtp ]; }
+    { names = [ "MUSICBRAINZ" ]; enable = withMusicbrainz; pkgs = [ libmusicbrainz5 ]; }
+    { names = [ "ONLINE_SERVICES" ]; enable = withOnlineServices; pkgs = [ ]; }
+    { names = [ "STREAMS" ]; enable = withStreams; pkgs = [ ]; }
+    { names = [ "TAGLIB" "TAGLIB_EXTRAS" ]; enable = withTaglib; pkgs = [ taglib taglib_extras ]; }
+    { names = [ "UDISKS2" ]; enable = withUdisks; pkgs = [ udisks2 ]; }
   ];
 
+in
+mkDerivation rec {
+  pname = "cantata";
+  version = "2.5.0";
+
+  src = fetchFromGitHub {
+    owner = "CDrummond";
+    repo = "cantata";
+    rev = "v${version}";
+    sha256 = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+  };
+
+  patches = [
+    # Cantata wants to check if perl is in the PATH at runtime, but we
+    # patchShebangs the playlists scripts, making that unnecessary (perl will
+    # always be available because it's a dependency)
+    ./dont-check-for-perl-in-PATH.diff
+  ];
+
+  postPatch = ''
+    patchShebangs playlists
+  '';
+
+  buildInputs = [
+    qtbase
+    qtsvg
+    (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
+  ]
+  ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
+
+  nativeBuildInputs = [ cmake pkg-config qttools ];
+
+  cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
+
   meta = with lib; {
-    homepage    = https://github.com/cdrummond/cantata;
     description = "A graphical client for MPD";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ fuuzetsu peterhoeg ];
-    # Technically Cantata can run on Windows so if someone wants to
+    homepage = "https://github.com/cdrummond/cantata";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ peterhoeg ];
+    # Technically, Cantata should run on Darwin/Windows so if someone wants to
     # bother figuring that one out, be my guest.
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

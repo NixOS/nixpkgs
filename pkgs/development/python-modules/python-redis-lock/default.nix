@@ -1,33 +1,43 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , redis
-, pytest
+, pytestCheckHook
 , process-tests
 , pkgs
-, withDjango ? false, django_redis
+, withDjango ? false, django-redis
 }:
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
-  version = "3.3.1";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5316d473ce6ce86a774b9f9c110d84c3a9bd1a2abfda5d99e9c0c8a872a8e6d6";
+    sha256 = "4265a476e39d476a8acf5c2766485c44c75f3a1bd6cf73bb195f3079153b8374";
   };
 
-  checkInputs = [ pytest process-tests pkgs.redis ];
+  propagatedBuildInputs = [
+    redis
+  ] ++ lib.optional withDjango django-redis;
 
-  checkPhase = ''
-    pytest tests/
-  '';
+  checkInputs = [
+    pytestCheckHook
+    process-tests
+    pkgs.redis
+  ];
 
-  propagatedBuildInputs = [ redis ]
-  ++ stdenv.lib.optional withDjango django_redis;
+  disabledTests = [
+    # https://github.com/ionelmc/python-redis-lock/issues/86
+    "test_no_overlap2"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fail on Darwin because it defaults to multiprocessing `spawn`
+    "test_reset_signalizes"
+    "test_reset_all_signalizes"
+  ];
 
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ionelmc/python-redis-lock";
     license = licenses.bsd2;
     description = "Lock context manager implemented via redis SETNX/BLPOP";

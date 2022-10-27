@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, glib, libuuid, popt, elfutils }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libuuid, popt, elfutils }:
 
 stdenv.mkDerivation rec {
-  name = "babeltrace-1.5.7";
+  pname = "babeltrace";
+  version = "1.5.8";
 
   src = fetchurl {
-    url = "https://www.efficios.com/files/babeltrace/${name}.tar.bz2";
-    sha256 = "0yw05cnk5w8b5nbznycglyn4h3hq56a1n8rlb9k9rlzz4ph32lr1";
+    url = "https://www.efficios.com/files/babeltrace/${pname}-${version}.tar.bz2";
+    sha256 = "1hkg3phnamxfrhwzmiiirbhdgckzfkqwhajl0lmr1wfps7j47wcz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libuuid popt elfutils ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line tool and library to read and convert LTTng tracefiles";
-    homepage = https://www.efficios.com/babeltrace;
+    homepage = "https://www.efficios.com/babeltrace";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

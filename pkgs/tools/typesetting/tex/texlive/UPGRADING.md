@@ -28,20 +28,25 @@ To upgrade the package snapshot, follow this process:
 ### Snapshot sources and texlive package database
 
 Mirror the current CTAN archive to our mirror(s) and IPFS (URLs in `default.nix`).
-See <https://tug.org/texlive/acquire-mirror.html> for instructions.
+See https://tug.org/texlive/acquire-mirror.html for instructions.
 
 
 ### Upgrade package information from texlive package database
 
 
-```
-$ curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-           | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
+```bash
+curl -L https://texlive.info/tlnet-archive/$YEAR/$MONTH/$DAY/tlnet/tlpkg/texlive.tlpdb.xz \
+         | xzcat | sed -rn -f ./tl2nix.sed | uniq > ./pkgs.nix
 ```
 
-This will download a current snapshot of the CTAN package database `texlive.tlpdb.xz`
+This will download the daily snapshot of the CTAN package database `texlive.tlpdb.xz`
 and regenerate all of the sha512 hashes for the current upstream distribution in `pkgs.nix`.
 
+Use the url
+
+https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$YEAR/tlnet-final/tlpkg/texlive.tlpdb.xz
+
+for the final TeX Live release.
 
 ### Build packages locally and generate fix hashes
 
@@ -52,17 +57,17 @@ Updating the list of fixed hashes requires a local build of *all* packages,
 which is a resource-intensive process:
 
 
-```
+```bash
 # move fixedHashes away, otherwise build will fail on updated packages
-$ mv fixedHashes.nix fixedHashes-old.nix
+mv fixedHashes.nix fixedHashes-old.nix
 # start with empty fixedHashes
-$ echo '{}' > fixedHashes.nix
-$ nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes-new.nix
-# The script wrongly includes the nix store path to `biber`, which is a separate nixpkgs package
-$ grep -v -F '/nix/store/' fixedHashes-new.nix > fixedHashes.nix 
+echo '{}' > fixedHashes.nix
+
+nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
+
+mv fixedHashes-new.nix fixedHashes.nix
 ```
 
 ### Commit changes
 
 Commit the updated `pkgs.nix` and `fixedHashes.nix` to the repository.
-

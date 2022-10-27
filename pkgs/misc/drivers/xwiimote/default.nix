@@ -1,22 +1,24 @@
-{ stdenv, udev, ncurses, pkgconfig, fetchurl, bluez }:
+{ lib, stdenv, udev, ncurses, pkg-config, fetchurl, bluez }:
 
 stdenv.mkDerivation rec {
-  name = "xwiimote-2";
+  pname = "xwiimote";
+  version = "2";
+
   src = fetchurl {
-    url = "https://github.com/dvdhrm/xwiimote/releases/download/${name}/${name}.tar.xz";
+    url = "https://github.com/dvdhrm/xwiimote/releases/download/xwiimote-${version}/xwiimote-${version}.tar.xz";
     sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ncurses bluez ];
 
   configureFlags = [ "--with-doxygen=no" ];
 
   meta = {
-    homepage = http://dvdhrm.github.io/xwiimote;
+    homepage = "http://dvdhrm.github.io/xwiimote";
     description = "Userspace utilities to control connected Nintendo Wii Remotes";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 
   postInstallPhase = ''

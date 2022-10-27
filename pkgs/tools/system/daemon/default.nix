@@ -1,16 +1,23 @@
-{stdenv, fetchurl, perl}:
+{ lib, stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation {
-  name = "daemon-0.6.4";
+stdenv.mkDerivation rec {
+  pname = "daemon";
+  version = "0.8";
+
   src = fetchurl {
-    url = http://libslack.org/daemon/download/daemon-0.6.4.tar.gz;
-    sha256 = "18aw0f8k3j30xqwv4z03962kdpqd10nf1w9liihylmadlx5fmff4";
+    url = "http://libslack.org/daemon/download/daemon-${version}.tar.gz";
+    sha256 = "sha256-dPEubUs8hWMkib0IQx09mXvBcmS/V7cgI4Ty6AnP9ZY=";
   };
-  makeFlags = "PREFIX=$(out)";
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   buildInputs = [ perl ];
 
-  meta = {
-    description = "Daemon turns other process into daemons";
+  meta = with lib; {
+    description = "Turns other processes into daemons";
     longDescription = ''
       Daemon turns other process into daemons. There are many tasks that need
       to be performed to correctly set up a daemon process. This can be tedious.
@@ -18,8 +25,8 @@ stdenv.mkDerivation {
       writing daemons in languages other than C, C++ or Perl (e.g. /bin/sh,
       Java).
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.unix;
   };
 }

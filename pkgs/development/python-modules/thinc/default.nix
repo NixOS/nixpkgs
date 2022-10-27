@@ -1,86 +1,101 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
+, python
 , fetchPypi
-, pythonOlder
-, pytest
-, cython
-, cymem
-, darwin
-, msgpack-numpy
-, msgpack
-, preshed
-, numpy
-, murmurhash
-, pathlib
-, hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
-, mock
-, wrapt
-, dill
+, pytestCheckHook
 , blis
+, catalogue
+, cymem
+, cython
+, contextvars
+, dataclasses
+, Accelerate
+, CoreFoundation
+, CoreGraphics
+, CoreVideo
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, plac
+, pythonOlder
+, preshed
+, pydantic
 , srsly
+, tqdm
+, typing-extensions
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.1.1";
+  version = "8.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gkz4q53ps3vzz0ww154y0dv6nri5sli8yflh7c26maawvz8wiv8";
+    sha256 = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
-  ]);
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+  '';
+
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
+  ];
 
   propagatedBuildInputs = [
-   blis
-   cython
-   cymem
-   msgpack-numpy
-   msgpack
-   preshed
-   numpy
-   murmurhash
-   tqdm
-   cytoolz
-   plac
-   six
-   srsly
-   wrapt
-   dill
-   wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
-
+    blis
+    catalogue
+    cymem
+    murmurhash
+    numpy
+    plac
+    preshed
+    srsly
+    tqdm
+    pydantic
+    wasabi
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    contextvars
+    dataclasses
+  ];
 
   checkInputs = [
     hypothesis
     mock
-    pytest
+    pytestCheckHook
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
   '';
 
-  # Cannot find cython modules.
-  doCheck = false;
+  pythonImportsCheck = [
+    "thinc"
+  ];
 
-  checkPhase = ''
-    pytest thinc/tests
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+    maintainers = with maintainers; [ aborsu ];
+  };
 }

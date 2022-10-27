@@ -1,15 +1,25 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, ncurses5, taskwarrior }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, perl, ncurses5, taskwarrior }:
 
 stdenv.mkDerivation rec {
-  version = "2017-05-15";
+  version = "2020-12-17";
   pname = "tasknc";
 
   src = fetchFromGitHub {
     owner = "lharding";
     repo = "tasknc";
-    rev = "c41d0240e9b848e432f01de735f28de93b934ae7";
-    sha256 = "0f7l7fy06p33vw6f6sjnjxfhw951664pmwhjl573jvmh6gi2h1yr";
+    rev = "a182661fbcc097a933d5e8cce3922eb1734a563e";
+    sha256 = "0jrv2k1yizfdjndbl06lmy2bb62ky2rjdk308967j31c5kqqnw56";
   };
+
+  # Pull pending upstream inclusion for ncurses-6.3:
+  #  https://github.com/lharding/tasknc/pull/57
+  patches = [
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/lharding/tasknc/commit/f74ea0641e9bf287acf22fac9f6eeea571b01800.patch";
+      sha256 = "18a90zj85sw2zfnfcv055nvi0lx3h8lcgsyabdfk94ksn78pygrv";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -33,8 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lharding/tasknc;
+  meta = with lib; {
+    homepage = "https://github.com/lharding/tasknc";
     description = "A ncurses wrapper around taskwarrior";
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
     platforms = platforms.linux; # Cannot test others

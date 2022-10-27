@@ -1,28 +1,35 @@
-{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, pythonPackages, utillinux }:
+{ lib
+, stdenv
+, runCommand
+, fetchFromGitHub
+, bash
+, btrfs-progs
+, coreutils
+, python3Packages
+, util-linux
+, nixosTests
+}:
 
 let
 
-  version = "0.6.1";
-  sha256 = "0h7idclmhyp14mq6786x7f2237vqpn70gyi88ik4g70xl84yfgyh";
-
-  bees = stdenv.mkDerivation {
+  bees = stdenv.mkDerivation rec {
     pname = "bees";
-    inherit version;
+    version = "0.7";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      inherit sha256;
+      sha256 = "sha256-hD6/pMRnQgPqL1M6QOuRka6ESJv9kjeKy+29nRMTY1o=";
     };
 
     buildInputs = [
-      btrfs-progs               # for btrfs/ioctl.h
-      utillinux                 # for uuid.h
+      btrfs-progs # for btrfs/ioctl.h
+      util-linux # for uuid.h
     ];
 
     nativeBuildInputs = [
-      pythonPackages.markdown   # documentation build
+      python3Packages.markdown # documentation build
     ];
 
     preBuild = ''
@@ -46,7 +53,7 @@ let
       "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/etc/systemd/system"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/Zygo/bees";
       description = "Block-oriented BTRFS deduplication service";
       license = licenses.gpl3;
@@ -58,12 +65,18 @@ let
 
 in
 
-runCommand "bees-service-${version}" {
-  inherit bash bees coreutils utillinux;
-  btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
-} ''
+(runCommand "bees-service"
+  {
+    inherit bash bees coreutils;
+    utillinux = util-linux; # needs to be a valid shell variable name
+    btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
+  } ''
   mkdir -p -- "$out/bin"
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-''
+'').overrideAttrs (old: {
+  passthru.tests = {
+    smoke-test = nixosTests.bees;
+  };
+})

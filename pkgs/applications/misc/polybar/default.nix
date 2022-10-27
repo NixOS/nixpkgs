@@ -1,84 +1,126 @@
-{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
-, xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
+{ config
+, cairo
+, cmake
+, fetchFromGitHub
+, libuv
+, libXdmcp
+, libpthreadstubs
+, libxcb
+, pcre
+, pkg-config
+, python3
+, python3Packages # sphinx-build
+, lib
+, stdenv
+, xcbproto
+, xcbutil
+, xcbutilcursor
+, xcbutilimage
+, xcbutilrenderutil
+, xcbutilwm
+, xcbutilxrm
+, makeWrapper
+, removeReferencesTo
+, alsa-lib
+, curl
+, libmpdclient
+, libpulseaudio
+, wirelesstools
+, libnl
+, i3
+, i3-gaps
+, jsoncpp
 
-# optional packages-- override the variables ending in 'Support' to enable or
-# disable modules
-, alsaSupport   ? true,  alsaLib       ? null
-, githubSupport ? false, curl          ? null
-, mpdSupport    ? false, mpd_clientlib ? null
-, pulseSupport  ? false, libpulseaudio ? null
-, iwSupport     ? false, wirelesstools ? null
-, nlSupport     ? true,  libnl         ? null
-, i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
+  # override the variables ending in 'Support' to enable or disable modules
+, alsaSupport ? true
+, githubSupport ? false
+, mpdSupport ? false
+, pulseSupport ? config.pulseaudio or false
+, iwSupport ? false
+, nlSupport ? true
+, i3Support ? false
+, i3GapsSupport ? false
 }:
 
-assert alsaSupport   -> alsaLib       != null;
-assert githubSupport -> curl          != null;
-assert mpdSupport    -> mpd_clientlib != null;
-assert pulseSupport  -> libpulseaudio != null;
-
-assert iwSupport     -> ! nlSupport && wirelesstools != null;
-assert nlSupport     -> ! iwSupport && libnl         != null;
-
-assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
-assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
-
 stdenv.mkDerivation rec {
-    pname = "polybar";
-    version = "3.4.0";
+  pname = "polybar";
+  version = "3.6.3";
 
-    src = fetchFromGitHub {
-      owner = "jaagr";
-      repo = pname;
-      rev = version;
-      sha256 = "1g3zj0788cdlm8inpl19279bw8zjcy7dzj7q4f1l2d8c8g1jhv0m";
-      fetchSubmodules = true;
-    };
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    hash = "sha256-FKkPSAEMzptnjJq3xTk+fpD8XjASQ3smX5imstDyLNE=";
+    fetchSubmodules = true;
+  };
 
-    meta = with stdenv.lib; {
-      homepage = "https://polybar.github.io/";
-      description = "A fast and easy-to-use tool for creating status bars";
-      longDescription = ''
-        Polybar aims to help users build beautiful and highly customizable
-        status bars for their desktop environment, without the need of
-        having a black belt in shell scripting.
-      '';
-      license = licenses.mit;
-      maintainers = [ maintainers.afldcr ];
-      platforms = platforms.unix;
-    };
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3Packages.sphinx
+    removeReferencesTo
+  ] ++ lib.optional (i3Support || i3GapsSupport) makeWrapper;
 
-    buildInputs = [
-      cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
-      xcbutilcursor xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
+  buildInputs = [
+    cairo
+    libuv
+    libXdmcp
+    libpthreadstubs
+    libxcb
+    pcre
+    python3
+    xcbproto
+    xcbutil
+    xcbutilcursor
+    xcbutilimage
+    xcbutilrenderutil
+    xcbutilwm
+    xcbutilxrm
+  ] ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional githubSupport curl
+  ++ lib.optional mpdSupport libmpdclient
+  ++ lib.optional pulseSupport libpulseaudio
+  ++ lib.optional iwSupport wirelesstools
+  ++ lib.optional nlSupport libnl
+  ++ lib.optional (i3Support || i3GapsSupport) jsoncpp
+  ++ lib.optional i3Support i3
+  ++ lib.optional i3GapsSupport i3-gaps;
 
-      (if alsaSupport   then alsaLib       else null)
-      (if githubSupport then curl          else null)
-      (if mpdSupport    then mpd_clientlib else null)
-      (if pulseSupport  then libpulseaudio else null)
+  patches = [ ./remove-hardcoded-etc.diff ];
 
-      (if iwSupport     then wirelesstools else null)
-      (if nlSupport     then libnl         else null)
+  # Replace hardcoded /etc when copying and reading the default config.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "/etc" $out
+    substituteAllInPlace src/utils/file.cpp
+  '';
 
-      (if i3Support || i3GapsSupport then jsoncpp else null)
-      (if i3Support then i3 else null)
-      (if i3GapsSupport then i3-gaps else null)
-
-      (if i3Support || i3GapsSupport then makeWrapper else null)
-    ];
-
-    postConfigure = ''
-      substituteInPlace generated-sources/settings.hpp \
-        --replace "${stdenv.cc}" "${stdenv.cc.name}"
-    '';
-
-    postInstall = if (i3Support || i3GapsSupport) then ''
+  postInstall =
+    if i3Support then ''
       wrapProgram $out/bin/polybar \
-        --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
-    '' else "";
+        --prefix PATH : "${i3}/bin"
+    ''
+    else if i3GapsSupport
+    then ''
+      wrapProgram $out/bin/polybar \
+        --prefix PATH : "${i3-gaps}/bin"
+    ''
+    else "";
 
-    nativeBuildInputs = [
-      cmake pkgconfig
-    ];
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} $out/bin/polybar
+  '';
+
+  meta = with lib; {
+    homepage = "https://polybar.github.io/";
+    changelog = "https://github.com/polybar/polybar/releases/tag/${version}";
+    description = "A fast and easy-to-use tool for creating status bars";
+    longDescription = ''
+      Polybar aims to help users build beautiful and highly customizable
+      status bars for their desktop environment, without the need of
+      having a black belt in shell scripting.
+    '';
+    license = licenses.mit;
+    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ckie ];
+    platforms = platforms.linux;
+  };
 }

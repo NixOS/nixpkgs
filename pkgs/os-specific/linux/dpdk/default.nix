@@ -1,64 +1,96 @@
-{ stdenv, lib, kernel, fetchurl, pkgconfig, numactl, shared ? false }:
+{ stdenv, lib
+, kernel
+, fetchurl
+, pkg-config, meson, ninja, makeWrapper
+, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
+, doxygen, python3, pciutils
+, withExamples ? []
+, shared ? false }:
 
 let
-
-  kver = kernel.modDirVersion or null;
-
   mod = kernel != null;
-
+  dpdkVersion = "22.03";
 in stdenv.mkDerivation rec {
-  name = "dpdk-${version}" + lib.optionalString mod "-${kernel.version}";
-  version = "19.08";
+  pname = "dpdk";
+  version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "0xgrkip2aji1c7jy5gk38zzwlp5ap1s6dmbcag5dnyy3bmwvmp9y";
+    url = "https://fast.dpdk.org/rel/dpdk-${dpdkVersion}.tar.xz";
+    sha256 = "sha256-st5fCLzVcz+Q1NfmwDJRWQja2PyNJnrGolNELZuDp8U=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ numactl ] ++ lib.optional mod kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    makeWrapper
+    doxygen
+    meson
+    ninja
+    pkg-config
+    python3
+    python3.pkgs.sphinx
+    python3.pkgs.pyelftools
+  ];
+  buildInputs = [
+    jansson
+    libbpf
+    libelf
+    libpcap
+    numactl
+    openssl.dev
+    zlib
+    python3
+  ] ++ lib.optionals mod kernel.moduleBuildDependencies;
 
-  RTE_KERNELDIR = if mod then "${kernel.dev}/lib/modules/${kver}/build" else "/var/empty";
-  RTE_TARGET = "x86_64-native-linuxapp-gcc";
-
-  # we need sse3 instructions to build
-  NIX_CFLAGS_COMPILE = [ "-msse3" ];
-  hardeningDisable = [ "pic" ];
-
-  postPatch = ''
-    cat >>config/defconfig_$RTE_TARGET <<EOF
-# Build static or shared libraries.
-CONFIG_RTE_BUILD_SHARED_LIB=${if shared then "y" else "n"}
-EOF
-  '' + lib.optionalString (!mod) ''
-    cat >>config/defconfig_$RTE_TARGET <<EOF
-# Do not build kernel modules.
-CONFIG_RTE_EAL_IGB_UIO=n
-CONFIG_RTE_KNI_KMOD=n
-EOF
-  '';
-
-  configurePhase = ''
-    make T=${RTE_TARGET} config
-  '';
-
-  installTargets = [ "install-runtime" "install-sdk" "install-kmod" ]; # skip install-doc
-
-  installFlags = [
-    "prefix=$(out)"
-  ] ++ lib.optionals mod [
-    "kerneldir=$(kmod)/lib/modules/${kver}"
+  propagatedBuildInputs = [
+    # Propagated to support current DPDK users in nixpkgs which statically link
+    # with the framework (e.g. odp-dpdk).
+    rdma-core
+    # Requested by pkg-config.
+    libbsd
   ];
 
-  outputs = [ "out" ] ++ lib.optional mod "kmod";
+  postPatch = ''
+    patchShebangs config/arm buildtools
+  '' + lib.optionalString mod ''
+    # kernel_install_dir is hardcoded to `/lib/modules`; patch that.
+    sed -i "s,kernel_install_dir *= *['\"].*,kernel_install_dir = '$kmod/lib/modules/${kernel.modDirVersion}'," kernel/linux/meson.build
+  '';
 
-  enableParallelBuilding = true;
+  mesonFlags = [
+    "-Dtests=false"
+    "-Denable_docs=true"
+    "-Denable_kmods=${lib.boolToString mod}"
+  ]
+  # kni kernel driver is currently not compatble with 5.11
+  ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
+  ++ lib.optional (!shared) "-Ddefault_library=static"
+  ++ lib.optional stdenv.isx86_64 "-Dmachine=nehalem"
+  ++ lib.optional stdenv.isAarch64 "-Dmachine=generic"
+  ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+
+  postInstall = ''
+    # Remove Sphinx cache files. Not only are they not useful, but they also
+    # contain store paths causing spurious dependencies.
+    rm -rf $out/share/doc/dpdk/html/.doctrees
+
+    wrapProgram $out/bin/dpdk-devbind.py \
+      --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
+  '' + lib.optionalString (withExamples != []) ''
+    mkdir -p $examples/bin
+    find examples -type f -executable -exec install {} $examples/bin \;
+  '';
+
+  outputs =
+    [ "out" "doc" ]
+    ++ lib.optional mod "kmod"
+    ++ lib.optional (withExamples != []) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
-    homepage = http://dpdk.org/;
+    homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  [ "x86_64-linux" ];
-    maintainers = with maintainers; [ domenkozar magenbluten orivej ];
+    platforms =  platforms.linux;
+    maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
+    broken = mod && kernel.kernelAtLeast "5.18";
   };
 }

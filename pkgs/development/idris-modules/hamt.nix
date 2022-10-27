@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "hamt";
+  pname = "hamt";
   version = "2016-11-15";
 
   idrisDeps = [ contrib effects ];
@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris Hash Array Mapped Trie";
-    homepage = https://github.com/bamboo/idris-hamt;
+    homepage = "https://github.com/bamboo/idris-hamt";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

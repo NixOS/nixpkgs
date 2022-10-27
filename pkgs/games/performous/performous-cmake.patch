@@ -1,0 +1,86 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.6)
+ project(Performous CXX C)
+ 
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+--- a/cmake/Modules/FindPango.cmake
++++ b/cmake/Modules/FindPango.cmake
+@@ -2,31 +2,10 @@
+ # Once done, this will define
+ #
+ #  Pango_FOUND - system has Pango
+-#  Pango_INCLUDE_DIRS - the Pango include directories
+ #  Pango_LIBRARIES - link these to use Pango
+ 
+ include(LibFindMacros)
+ 
+-# Dependencies
+-libfind_package(Pango Freetype)
+-libfind_package(Pango Glib)
+-libfind_package(Pango GObject)
+-
+-# Use pkg-config to get hints about paths
+-libfind_pkg_check_modules(Pango_PKGCONF pango)
+-
+-# Include dir
+-find_path(Pango_INCLUDE_DIR
+-  NAMES pango/pango.h
+-  HINTS ${Pango_PKGCONF_INCLUDE_DIRS}
+-  PATH_SUFFIXES pango-1.0
+-)
+-
+-# Finally the library itself
+-find_library(Pango_LIBRARY
+-  NAMES pango-1.0
+-  HINTS ${Pango_PKGCONF_LIBRARY_DIRS}
+-)
+-
++libfind_pkg_check_modules(Pango_PKGCONF IMPORTED_TARGET pango)
++set(Pango_LIBRARY PkgConfig::Pango_PKGCONF)
+ libfind_process(Pango)
+-
+--- a/cmake/Modules/FindPangoCairo.cmake
++++ b/cmake/Modules/FindPangoCairo.cmake
+@@ -1,35 +1,11 @@
+ # - Try to find PangoCairo
+ # Once done, this will define
+ #
+-#  PangoCairo_FOUND - system has Pango
+-#  PangoCairo_INCLUDE_DIRS - the Pango include directories
+-#  PangoCairo_LIBRARIES - link these to use Pango
++#  PangoCairo_FOUND - system has PangoCairo
++#  PangoCairo_LIBRARIES - link these to use PangoCairo
+ 
+ include(LibFindMacros)
+ 
+-# Dependencies
+-libfind_package(PangoCairo Pango)
+-libfind_package(PangoCairo Cairo)
+-
+-# Use pkg-config to get hints about paths
+-libfind_pkg_check_modules(PangoCairo_PKGCONF pangocairo)
+-
+-# Include dir
+-find_path(PangoCairo_INCLUDE_DIR
+-  NAMES pango/pangocairo.h
+-  HINTS ${PangoCairo_PKGCONF_INCLUDE_DIRS}
+-  PATH_SUFFIXES pango-1.0
+-)
+-
+-# Finally the library itself
+-find_library(PangoCairo_LIBRARY
+-  NAMES pangocairo-1.0
+-  HINTS ${PangoCairo_PKGCONF_LIBRARY_DIRS}
+-)
+-
+-# Set the include dir variables and the libraries and let libfind_process do the rest.
+-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
+-set(PangoCairo_PROCESS_INCLUDES PangoCairo_INCLUDE_DIR Pango_INCLUDE_DIR Cairo_INCLUDE_DIR)
+-set(PangoCairo_PROCESS_LIBS PangoCairo_LIBRARY Pango_LIBRARY Cairo_LIBRARY)
++libfind_pkg_check_modules(PangoCairo_PKGCONF IMPORTED_TARGET pangocairo)
++set(PangoCairo_LIBRARY PkgConfig::PangoCairo_PKGCONF)
+ libfind_process(PangoCairo)
+-

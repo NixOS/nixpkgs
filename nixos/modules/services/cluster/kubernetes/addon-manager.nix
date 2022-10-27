@@ -21,13 +21,13 @@ in
   options.services.kubernetes.addonManager = with lib.types; {
 
     bootstrapAddons = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Bootstrap addons are like regular addons, but they are applied with cluster-admin rigths.
         They are applied at addon-manager startup only.
       '';
       default = { };
       type = attrsOf attrs;
-      example = literalExample ''
+      example = literalExpression ''
         {
           "my-service" = {
             "apiVersion" = "v1";
@@ -43,10 +43,10 @@ in
     };
 
     addons = mkOption {
-      description = "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
+      description = lib.mdDoc "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
       default = { };
       type = attrsOf (either attrs (listOf attrs));
-      example = literalExample ''
+      example = literalExpression ''
         {
           "my-service" = {
             "apiVersion" = "v1";
@@ -58,11 +58,11 @@ in
             "spec" = { ... };
           };
         }
-        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dashboard.nix> { cfg = config.services.kubernetes; };
+        // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dns.nix> { cfg = config.services.kubernetes; };
       '';
     };
 
-    enable = mkEnableOption "Whether to enable Kubernetes addon manager.";
+    enable = mkEnableOption (lib.mdDoc "Kubernetes addon manager.");
   };
 
   ###### implementation
@@ -84,11 +84,14 @@ in
         Restart = "on-failure";
         RestartSec = 10;
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
     };
 
     services.kubernetes.addonManager.bootstrapAddons = mkIf isRBACEnabled
     (let
-      name = system:kube-addon-manager;
+      name = "system:kube-addon-manager";
       namespace = "kube-system";
     in
     {
@@ -164,4 +167,5 @@ in
     };
   };
 
+  meta.buildDocsInSandbox = false;
 }

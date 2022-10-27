@@ -1,53 +1,55 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib
 , betamax
-, betamax-serializers
 , betamax-matchers
+, betamax-serializers
+, buildPythonPackage
+, fetchFromGitHub
 , mock
-, six
-, pytestrunner
 , prawcore
-, pytest
+, pytestCheckHook
+, pythonOlder
 , requests-toolbelt
 , update_checker
-, websocket_client
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "6.4.0";
+  version = "7.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "praw-dev";
-    repo = "praw";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0j92wqyppif2k80zhzq30b04r8ljwjviply400kn4rjn54hxd4hb";
+    sha256 = "sha256-y2eynMsjF4wZd31YoLdtk8F+ga7Z3R+IQkQK0x0RAGA=";
   };
-
-  nativeBuildInputs = [
-    pytestrunner
-  ];
 
   propagatedBuildInputs = [
     mock
     prawcore
     update_checker
-    websocket_client
+    websocket-client
   ];
 
   checkInputs = [
     betamax
     betamax-serializers
     betamax-matchers
-    mock
-    pytest
+    pytestCheckHook
     requests-toolbelt
-    six
   ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "praw"
+  ];
+
+  meta = with lib; {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

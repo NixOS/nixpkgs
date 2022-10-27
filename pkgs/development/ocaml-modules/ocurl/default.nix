@@ -1,24 +1,27 @@
-{ stdenv, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses }:
-
-if stdenv.lib.versionOlder ocaml.version "4.02"
+{ lib, stdenv, fetchurl, pkg-config, ocaml, findlib, curl, lwt, lwt_ppx }:
+if lib.versionOlder ocaml.version "4.04"
 then throw "ocurl is not available for OCaml ${ocaml.version}"
 else
-
 stdenv.mkDerivation rec {
-  name = "ocurl-0.8.2";
+  pname = "ocurl";
+  version = "0.9.2";
+
   src = fetchurl {
-    url = "http://ygrek.org.ua/p/release/ocurl/${name}.tar.gz";
-    sha256 = "1ax3xdlzgb1zg7d0wr9nwgmh6a45a764m0wk8p6mx07ad94hz0q9";
+    url = "https://github.com/ygrek/ocurl/releases/download/${version}/ocurl-${version}.tar.gz";
+    sha256 = "sha256-4DWXGMh02s1VwLWW5d7h0jtMOUubWmBPGm1hghfWd2M=";
   };
 
-  buildInputs = [ pkgconfig ocaml findlib ncurses ];
-  propagatedBuildInputs = [ curl ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
+  propagatedBuildInputs = [ curl lwt lwt_ppx ];
+
+  strictDeps = true;
+
   createFindlibDestdir = true;
   meta = {
     description = "OCaml bindings to libcurl";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://ygrek.org.ua/p/ocurl/";
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    platforms = ocaml.meta.platforms or [];
+    maintainers = with lib.maintainers; [ dandellion bennofs ];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

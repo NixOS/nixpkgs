@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "headphones";
 
   cfg = config.services.headphones;
+  opt = options.services.headphones;
 
 in
 
@@ -19,37 +20,38 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the headphones server.";
+        description = lib.mdDoc "Whether to enable the headphones server.";
       };
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/${name}";
-        description = "Path where to store data files.";
+        description = lib.mdDoc "Path where to store data files.";
       };
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
-        description = "Path to config file.";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
+        description = lib.mdDoc "Path to config file.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Host to listen on.";
+        description = lib.mdDoc "Host to listen on.";
       };
       port = mkOption {
         type = types.ints.u16;
         default = 8181;
-        description = "Port to bind to.";
+        description = lib.mdDoc "Port to bind to.";
       };
       user = mkOption {
         type = types.str;
         default = name;
-        description = "User to run the service as";
+        description = lib.mdDoc "User to run the service as";
       };
       group = mkOption {
         type = types.str;
         default = name;
-        description = "Group to run the service as";
+        description = lib.mdDoc "Group to run the service as";
       };
     };
   };
@@ -59,19 +61,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      name = name;
-      uid = config.ids.uids.headphones;
-      group = cfg.group;
-      description = "headphones user";
-      home = cfg.dataDir;
-      createHome = true;
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        uid = config.ids.uids.headphones;
+        group = cfg.group;
+        description = "headphones user";
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      name = name;
-      gid = config.ids.gids.headphones;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = config.ids.gids.headphones;
+    };
 
     systemd.services.headphones = {
         description = "Headphones Server";

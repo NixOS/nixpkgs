@@ -1,122 +1,320 @@
-# based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
+# https://nim-lang.github.io/Nim/packaging.html
+# https://nim-lang.org/docs/nimc.html
 
-{ stdenv, lib, fetchurl, makeWrapper, nodejs-slim, openssl, pcre, readline,
-  boehmgc, sfml, tzdata, coreutils, sqlite }:
+{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
+, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, nim-unwrapped
+, nimble-unwrapped }:
 
-stdenv.mkDerivation rec {
-  pname = "nim";
-  version = "1.0.0";
+let
+  parseCpu = platform:
+    with platform;
+    # Derive a Nim CPU identifier
+    if isAarch32 then
+      "arm"
+    else if isAarch64 then
+      "arm64"
+    else if isAlpha then
+      "alpha"
+    else if isAvr then
+      "avr"
+    else if isMips && is32bit then
+      "mips"
+    else if isMips && is64bit then
+      "mips64"
+    else if isMsp430 then
+      "msp430"
+    else if isPower && is32bit then
+      "powerpc"
+    else if isPower && is64bit then
+      "powerpc64"
+    else if isRiscV && is64bit then
+      "riscv64"
+    else if isSparc then
+      "sparc"
+    else if isx86_32 then
+      "i386"
+    else if isx86_64 then
+      "amd64"
+    else
+      abort "no Nim CPU support known for ${config}";
 
-  src = fetchurl {
-    url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
-    sha256 = "1pg0lxahis8zfk6rdzdj281bahl8wglpjgngkc4vg1pc9p61fj03";
+  parseOs = platform:
+    with platform;
+    # Derive a Nim OS identifier
+    if isAndroid then
+      "Android"
+    else if isDarwin then
+      "MacOSX"
+    else if isFreeBSD then
+      "FreeBSD"
+    else if isGenode then
+      "Genode"
+    else if isLinux then
+      "Linux"
+    else if isNetBSD then
+      "NetBSD"
+    else if isNone then
+      "Standalone"
+    else if isOpenBSD then
+      "OpenBSD"
+    else if isWindows then
+      "Windows"
+    else if isiOS then
+      "iOS"
+    else
+      abort "no Nim OS support known for ${config}";
+
+  parsePlatform = p: {
+    cpu = parseCpu p;
+    os = parseOs p;
   };
 
-  doCheck = !stdenv.isDarwin;
+  nimHost = parsePlatform stdenv.hostPlatform;
+  nimTarget = parsePlatform stdenv.targetPlatform;
+in {
 
-  enableParallelBuilding = true;
+  nim-unwrapped = stdenv.mkDerivation rec {
+    pname = "nim-unwrapped";
+    version = "1.6.8";
+    strictDeps = true;
 
-  NIX_LDFLAGS = [
-    "-lcrypto"
-    "-lpcre"
-    "-lreadline"
-    "-lgc"
-    "-lsqlite3"
-  ];
+    src = fetchurl {
+      url = "https://nim-lang.org/download/nim-${version}.tar.xz";
+      hash = "sha256-D1tlzbYPeK9BywdcI4mDaJoeH34lyBnxeYYsGKSEz1c=";
+    };
 
-  # 1. nodejs is only needed for tests
-  # 2. we could create a separate derivation for the "written in c" version of nim
-  #    used for bootstrapping, but koch insists on moving the nim compiler around
-  #    as part of building it, so it cannot be read-only
+    buildInputs = [ boehmgc openssl pcre readline sqlite ];
 
-  checkInputs = [
-    nodejs-slim tzdata coreutils
-  ];
+    patches = [
+      ./NIM_CONFIG_DIR.patch
+      # Override compiler configuration via an environmental variable
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+      ./nixbuild.patch
+      # Load libraries at runtime by absolute path
+    ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
-  buildInputs = [
-    openssl pcre readline boehmgc sfml sqlite
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    # build.sh wants to write to $HOME/.cache
-    HOME=$TMPDIR
-    sh build.sh
-    ./bin/nim c koch
-    ./koch boot  -d:release \
-                 -d:useGnuReadline \
-                 ${lib.optionals (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace"}
-    ./koch tools -d:release
-
-    runHook postBuild
-  '';
-
-  prePatch =
-    let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
-        disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
-        disableCompile = ''sed -i -e 's/^/#/' '';
-    in ''
-      substituteInPlace ./tests/osproc/tworkingdir.nim --replace "/usr/bin" "${coreutils}/bin"
-      substituteInPlace ./tests/stdlib/ttimes.nim --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-
-      # runs out of memory on a machine with 8GB RAM
-      ${disableTest} ./tests/system/t7894.nim
-
-      # requires network access (not available in the build container)
-      ${disableTest} ./tests/stdlib/thttpclient.nim
-    '' + lib.optionalString stdenv.isAarch64 ''
-      # supposedly broken on aarch64
-      ${disableStdLibTest} ./lib/pure/stats.nim
-
-      # reported upstream: https://github.com/nim-lang/Nim/issues/11463
-      ${disableCompile} ./lib/nimhcr.nim
-      ${disableTest} ./tests/dll/nimhcr_unit.nim
-      ${disableTest} ./tests/dll/nimhcr_integration.nim
-
-      # reported upstream: https://github.com/nim-lang/Nim/issues/12262
-      ${disableTest} ./tests/range/tcompiletime_range_checks.nim
-
-      # requires "immintrin.h" which is available only on x86
-      ${disableTest} ./tests/misc/tsizeof3.nim
+    configurePhase = ''
+      runHook preConfigure
+      echo 'define:nixbuild' >> config/nim.cfg
+      runHook postConfigure
     '';
 
-  checkPhase = ''
-    runHook preCheck
+    kochArgs = [
+      "--cpu:${nimHost.cpu}"
+      "--os:${nimHost.os}"
+      "-d:release"
+      "-d:useGnuReadline"
+    ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
 
-    # Fortify hardening breaks tests
-    # https://github.com/nim-lang/Nim/issues/11435#issuecomment-534545696
-    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/} \
-    ./koch tests --nim:bin/nim all
+    buildPhase = ''
+      runHook preBuild
+      local HOME=$TMPDIR
+    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      sed -i "s/aarch64/arm64/g" makefile
+    '' + ''
+      make -j$NIX_BUILD_CORES
+      ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
+      ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
+      ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
+      ./bin/nim js -d:release tools/dochack/dochack.nim
+      runHook postBuild
+    '';
 
-    runHook postCheck
-  '';
+    installPhase = ''
+      runHook preInstall
+      install -Dt $out/bin bin/*
+      ln -sf $out/nim/bin/nim $out/bin/nim
+      ln -sf $out/nim/lib $out/lib
+      ./install.sh $out
+      cp -a tools $out/nim/
+      runHook postInstall
+    '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dt $out/bin bin/* koch
-    ./koch install $out
-    mv $out/nim/bin/* $out/bin/ && rmdir $out/nim/bin
-    mv $out/nim/*     $out/     && rmdir $out/nim
-
-    # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
-    wrapProgram $out/bin/nim \
-      --run 'NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}' \
-      --suffix PATH : ${lib.makeBinPath [ stdenv.cc ]}
-
-    runHook postInstall
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Statically typed, imperative programming language";
-    homepage = "https://nim-lang.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = with platforms; linux ++ darwin; # arbitrary
+    meta = with lib; {
+      description = "Statically typed, imperative programming language";
+      homepage = "https://nim-lang.org/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ ehmry ];
+    };
   };
+
+  nimble-unwrapped = stdenv.mkDerivation rec {
+    pname = "nimble-unwrapped";
+    version = "0.13.1";
+    strictDeps = true;
+
+    src = fetchFromGitHub {
+      owner = "nim-lang";
+      repo = "nimble";
+      rev = "v${version}";
+      sha256 = "1idb4r0kjbqv16r6bgmxlr13w2vgq5332hmnc8pjbxiyfwm075x8";
+    };
+
+    depsBuildBuild = [ nim-unwrapped ];
+    buildInputs = [ openssl ];
+
+    nimFlags = [ "--cpu:${nimHost.cpu}" "--os:${nimHost.os}" "-d:release" ];
+
+    buildPhase = ''
+      runHook preBuild
+      HOME=$NIX_BUILD_TOP nim c $nimFlags src/nimble
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preBuild
+      install -Dt $out/bin src/nimble
+      runHook postBuild
+    '';
+
+    meta = with lib; {
+      description = "Package manager for the Nim programming language";
+      homepage = "https://github.com/nim-lang/nimble";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ehmry ];
+      mainProgram = "nimble";
+    };
+  };
+
+  nim = let
+    nim' = buildPackages.nim-unwrapped;
+    nimble' = buildPackages.nimble-unwrapped;
+    inherit (stdenv) targetPlatform;
+    self = stdenv.mkDerivation {
+      name = "${targetPlatform.config}-nim-wrapper-${nim'.version}";
+      inherit (nim') version;
+      preferLocalBuild = true;
+      strictDeps = true;
+
+      nativeBuildInputs = [ makeWrapper ];
+
+      patches = [
+        ./nim.cfg.patch
+        # Remove configurations that clash with ours
+      ];
+
+      unpackPhase = ''
+        runHook preUnpack
+        tar xf ${nim'.src} nim-$version/config
+        cd nim-$version
+        runHook postUnpack
+      '';
+
+      dontConfigure = true;
+
+      buildPhase =
+        # Configure the Nim compiler to use $CC and $CXX as backends
+        # The compiler is configured by two configuration files, each with
+        # a different DSL. The order of evaluation matters and that order
+        # is not documented, so duplicate the configuration across both files.
+        ''
+          runHook preBuild
+          cat >> config/config.nims << WTF
+
+          switch("os", "${nimTarget.os}")
+          switch("cpu", "${nimTarget.cpu}")
+          switch("define", "nixbuild")
+
+          # Configure the compiler using the $CC set by Nix at build time
+          import strutils
+          let cc = getEnv"CC"
+          if cc.contains("gcc"):
+            switch("cc", "gcc")
+          elif cc.contains("clang"):
+            switch("cc", "clang")
+          WTF
+
+          mv config/nim.cfg config/nim.cfg.old
+          cat > config/nim.cfg << WTF
+          os = "${nimTarget.os}"
+          cpu =  "${nimTarget.cpu}"
+          define:"nixbuild"
+          WTF
+
+          cat >> config/nim.cfg < config/nim.cfg.old
+          rm config/nim.cfg.old
+
+          cat >> config/nim.cfg << WTF
+
+          clang.cpp.exe %= "\$CXX"
+          clang.cpp.linkerexe %= "\$CXX"
+          clang.exe %= "\$CC"
+          clang.linkerexe %= "\$CC"
+          gcc.cpp.exe %= "\$CXX"
+          gcc.cpp.linkerexe %= "\$CXX"
+          gcc.exe %= "\$CC"
+          gcc.linkerexe %= "\$CC"
+          WTF
+
+          runHook postBuild
+        '';
+
+      wrapperArgs = [
+        "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
+          placeholder "out"
+        }/bin"
+        # Used by nim-gdb
+
+        "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl pcre ]}"
+        # These libraries may be referred to by the standard library.
+        # This is broken for cross-compilation because the package
+        # set will be shifted back by nativeBuildInputs.
+
+        "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
+        # Use the custom configuration
+
+        ''--set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}"''
+        # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
+      ];
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/bin $out/etc
+
+        cp -r config $out/etc/nim
+
+        for binpath in ${nim'}/bin/nim?*; do
+          local binname=`basename $binpath`
+          makeWrapper \
+            $binpath $out/bin/${targetPlatform.config}-$binname \
+            $wrapperArgs
+          ln -s $out/bin/${targetPlatform.config}-$binname $out/bin/$binname
+        done
+
+        makeWrapper \
+          ${nim'}/nim/bin/nim $out/bin/${targetPlatform.config}-nim \
+          --set-default CC $(command -v $CC) \
+          --set-default CXX $(command -v $CXX) \
+          $wrapperArgs
+        ln -s $out/bin/${targetPlatform.config}-nim $out/bin/nim
+
+        makeWrapper \
+          ${nim'}/bin/testament $out/bin/${targetPlatform.config}-testament \
+          $wrapperArgs
+        ln -s $out/bin/${targetPlatform.config}-testament $out/bin/testament
+
+        makeWrapper \
+          ${nimble'}/bin/nimble $out/bin/${targetPlatform.config}-nimble \
+          --suffix PATH : $out/bin
+        ln -s $out/bin/${targetPlatform.config}-nimble $out/bin/nimble
+
+        runHook postInstall
+      '';
+
+      passthru = {
+        nim = nim';
+        nimble = nimble';
+      };
+
+      meta = nim'.meta // {
+        description = nim'.meta.description
+          + " (${targetPlatform.config} wrapper)";
+        platforms = with lib.platforms; unix ++ genode;
+      };
+    };
+  in self // {
+    pkgs = callPackage ../../../top-level/nim-packages.nix { nim = self; };
+  };
+
 }

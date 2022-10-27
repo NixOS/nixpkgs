@@ -1,35 +1,68 @@
-{stdenv, fetchurl, libX11, xorgproto, libXt, libXaw, libSM, libICE, libXmu
-, libXext, gnuchess, texinfo, libXpm, pkgconfig, librsvg, cairo, pango
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libX11
+, xorgproto
+, libXt
+, libXaw
+, libSM
+, libICE
+, libXmu
+, libXext
+, gnuchess
+, texinfo
+, libXpm
+, pkg-config
+, librsvg
+, cairo
+, pango
 , gtk2
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="xboard";
-    version="4.9.1";
-    name="${baseName}-${version}";
-    hash="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
-    url="https://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz";
-    sha256="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
-  };
-  buildInputs = [
-    libX11 xorgproto libXt libXaw libSM libICE libXmu
-    libXext gnuchess texinfo libXpm pkgconfig librsvg
-    cairo pango gtk2
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+
+stdenv.mkDerivation rec {
+  pname = "xboard";
+  version = "4.9.1";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "mirror://gnu/xboard/xboard-${version}.tar.gz";
+    sha256 = "sha256-Ky5T6EKK2bbo3IpVs6UYM4GRGk2uLABy+pYpa7sZcNY=";
   };
-  meta = {
-    inherit (s) version;
-    description = ''GUI for chess engines'';
-    homepage = https://www.gnu.org/software/xboard/;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3Plus;
+
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain support:
+    #   https://savannah.gnu.org/patch/index.php?10211
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://savannah.gnu.org/patch/download.php?file_id=53275";
+      sha256 = "sha256-ZOo9jAy1plFjhC5HXJQvXL+Zf7FL14asV3G4AwfgqTY=";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libX11
+    xorgproto
+    libXt
+    libXaw
+    libSM
+    libICE
+    libXmu
+    libXext
+    gnuchess
+    texinfo
+    libXpm
+    librsvg
+    cairo
+    pango
+    gtk2
+  ];
+
+  meta = with lib; {
+    description = "GUI for chess engines";
+    homepage = "https://www.gnu.org/software/xboard/";
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
   };
 }

@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''swap-bytes'';
-  version = ''v1.1'';
+  baseName = "swap-bytes";
+  version = "v1.2";
 
   parasites = [ "swap-bytes/test" ];
 
-  description = ''Optimized byte-swapping primitives.'';
+  description = "Optimized byte-swapping primitives.";
 
   deps = [ args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz'';
-    sha256 = ''0snwbfplqhg1y4y4m7lgvksg1hs0sygfikz3rlbkfl4gwg8pq8ky'';
+    url = "http://beta.quicklisp.org/archive/swap-bytes/2019-11-30/swap-bytes-v1.2.tgz";
+    sha256 = "05g37m4cpsszh16jz7kiscd6m6l66ms73f3s6s94i56c49jfxdy8";
   };
 
   packageName = "swap-bytes";
@@ -20,11 +21,11 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM swap-bytes DESCRIPTION Optimized byte-swapping primitives. SHA256
-    0snwbfplqhg1y4y4m7lgvksg1hs0sygfikz3rlbkfl4gwg8pq8ky URL
-    http://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz
-    MD5 dda8b3b0a4e345879e80a3cc398667bb NAME swap-bytes FILENAME swap-bytes
+    05g37m4cpsszh16jz7kiscd6m6l66ms73f3s6s94i56c49jfxdy8 URL
+    http://beta.quicklisp.org/archive/swap-bytes/2019-11-30/swap-bytes-v1.2.tgz
+    MD5 eea516d7fdbe20bc963a6708c225d719 NAME swap-bytes FILENAME swap-bytes
     DEPS
     ((NAME fiveam FILENAME fiveam)
      (NAME trivial-features FILENAME trivial-features))
-    DEPENDENCIES (fiveam trivial-features) VERSION v1.1 SIBLINGS NIL PARASITES
+    DEPENDENCIES (fiveam trivial-features) VERSION v1.2 SIBLINGS NIL PARASITES
     (swap-bytes/test)) */

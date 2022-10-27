@@ -1,149 +1,53 @@
-{ stdenv
-, coreutils
-, patchelf
-, requireFile
-, callPackage
-, alsaLib
-, dbus
-, fontconfig
-, freetype
-, gcc
-, glib
-, ncurses
-, opencv
-, openssl
-, unixODBC
-, xkeyboard_config
-, xorg
-, zlib
-, libxml2
-, libuuid
+{ callPackage
+, config
+, lib
+, cudaPackages
+, cudaSupport ? config.cudaSupport or false
 , lang ? "en"
-, libGL
-, libGLU
+, version ? null
 }:
 
-let
-  l10n =
-    import ./l10ns.nix {
-      lib = stdenv.lib;
-      inherit requireFile lang;
-    };
+let versions = callPackage ./versions.nix { };
+
+    matching-versions =
+      lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (lib.filter
+        (v: v.lang == lang
+            && (if version == null then true else isMatching v.version version))
+        versions);
+
+    found-version =
+      if matching-versions == []
+      then throw ("No registered Mathematica version found to match"
+                  + " version=${version} and language=${lang}")
+      else lib.head matching-versions;
+
+    specific-drv = ./. + "/(lib.versions.major found-version.version).nix";
+
+    real-drv = if lib.pathExists specific-drv
+               then specific-drv
+               else ./generic.nix;
+
+    isMatching = v1: v2:
+      let as      = lib.splitVersion v1;
+          bs      = lib.splitVersion v2;
+          n       = lib.min (lib.length as) (lib.length bs);
+          sublist = l: lib.sublist 0 n l;
+      in lib.compareLists lib.compare (sublist as) (sublist bs) == 0;
+
 in
-stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
 
-  buildInputs = [
-    coreutils
-    patchelf
-    alsaLib
-    coreutils
-    dbus
-    fontconfig
-    freetype
-    gcc.cc
-    gcc.libc
-    glib
-    ncurses
-    opencv
-    openssl
-    unixODBC
-    xkeyboard_config
-    libxml2
-    libuuid
-    zlib
-    libGL
-    libGLU
-  ] ++ (with xorg; [
-    libX11
-    libXext
-    libXtst
-    libXi
-    libXmu
-    libXrender
-    libxcb
-    libXcursor
-    libXfixes
-    libXrandr
-    libICE
-    libSM
-  ]);
-
-  ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
-
-  unpackPhase = ''
-    echo "=== Extracting makeself archive ==="
-    # find offset from file
-    offset=$(${stdenv.shell} -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
-    dd if="$src" ibs=$offset skip=1 | tar -xf -
-    cd Unix
-  '';
-
-  installPhase = ''
-    cd Installer
-    # don't restrict PATH, that has already been done
-    sed -i -e 's/^PATH=/# PATH=/' MathInstaller
-    sed -i -e 's/\/bin\/bash/\/bin\/sh/' MathInstaller
-
-    echo "=== Running MathInstaller ==="
-    ./MathInstaller -auto -createdir=y -execdir=$out/bin -targetdir=$out/libexec/Mathematica -silent
-
-    # Fix library paths
-    cd $out/libexec/Mathematica/Executables
-    for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e 's#export LD_LIBRARY_PATH$#export LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}#' $path
-    done
-
-    # Fix xkeyboard config path for Qt
-    for path in mathematica Mathematica; do
-      sed -i -e "2iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"\n" $path
-    done
-  '';
-
-  preFixup = ''
-    echo "=== PatchElfing away ==="
-    # This code should be a bit forgiving of errors, unfortunately
-    set +e
-    find $out/libexec/Mathematica/SystemFiles -type f -perm -0100 | while read f; do
-      type=$(readelf -h "$f" 2>/dev/null | grep 'Type:' | sed -e 's/ *Type: *\([A-Z]*\) (.*/\1/')
-      if [ -z "$type" ]; then
-        :
-      elif [ "$type" == "EXEC" ]; then
-        echo "patching $f executable <<"
-        patchelf --shrink-rpath "$f"
-        patchelf \
-	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
-          "$f" \
-          && patchelf --shrink-rpath "$f" \
-          || echo unable to patch ... ignoring 1>&2
-      elif [ "$type" == "DYN" ]; then
-        echo "patching $f library <<"
-        patchelf \
-          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
-          "$f" \
-          && patchelf --shrink-rpath "$f" \
-          || echo unable to patch ... ignoring 1>&2
-      else
-        echo "not patching $f <<: unknown elf type"
-      fi
-    done
-  '';
-
-  dontBuild = true;
-
-  # all binaries are already stripped
-  dontStrip = true;
-
-  # we did this in prefixup already
-  dontPatchELF = true;
-
-  meta = with stdenv.lib; {
+callPackage real-drv {
+  inherit cudaSupport cudaPackages;
+  inherit (found-version) version lang src;
+  name = ("mathematica"
+          + lib.optionalString cudaSupport "-cuda"
+          + "-${found-version.version}"
+          + lib.optionalString (lang != "en") "-${lang}");
+  meta = with lib; {
     description = "Wolfram Mathematica computational software system";
-    homepage = http://www.wolfram.com/mathematica/;
+    homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ herberteuler ];
     platforms = [ "x86_64-linux" ];
   };

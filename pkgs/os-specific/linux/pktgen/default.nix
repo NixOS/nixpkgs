@@ -1,48 +1,48 @@
-{ stdenv, lib, fetchurl, pkgconfig
-, dpdk, libpcap, lua5_3, numactl, utillinux
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config
+, dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
 , gtk2, which, withGtk ? false
 }:
 
-let
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "3.7.2";
+  version = "22.04.1";
 
-  src = fetchurl {
-    url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/${pname}-${version}.tar.xz";
-    sha256 = "03k7h4j2lsrh6b7477hgn87ljrjh2673ncffx9v261bx1ns54y7w";
+  src = fetchFromGitHub {
+    owner = "pktgen";
+    repo = "Pktgen-DPDK";
+    rev = "pktgen-${version}";
+    sha256 = "0gbag98i2jq0p2hpvfgc3fiqy2sark1dm72hla4sxmn3gljy3p70";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs =
-    [ dpdk libpcap lua5_3 numactl which ]
-    ++ stdenv.lib.optionals withGtk [gtk2];
+  buildInputs = [
+    dpdk libbsd libpcap lua5_3 numactl which
+  ] ++ lib.optionals withGtk [
+    gtk2
+  ];
 
-  RTE_SDK = "${dpdk}/share/dpdk";
-  RTE_TARGET = "x86_64-native-linuxapp-gcc";
-  GUI = stdenv.lib.optionalString withGtk "true";
+  RTE_SDK = dpdk;
+  GUI = lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = [ "-msse3" ];
+  # requires symbols from this file
+  NIX_LDFLAGS = "-lrte_net_bond";
 
-  postPatch = let dpdkMajor = lib.versions.major dpdk.version; in ''
-    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
+  postPatch = ''
+    substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${util-linux}/bin/lscpu
   '';
 
-  installPhase = ''
-    install -d $out/bin
-    install -m 0755 app/${RTE_TARGET}/pktgen $out/bin
-    install -m 0644 Pktgen.lua $out/bin
+  postInstall = ''
+    # meson installs unneeded files with conflicting generic names, such as
+    # include/cli.h and lib/liblua.so.
+    rm -rf $out/include $out/lib
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traffic generator powered by DPDK";
-    homepage = http://dpdk.org/;
+    homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;
-    platforms =  [ "x86_64-linux" ];
+    platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

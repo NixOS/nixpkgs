@@ -1,20 +1,55 @@
-{ lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint
-, stdenv
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, intervaltree
+, pyflakes
+, requests
+, lxml
+, google-i18n-address
+, pycountry
+, html5lib
+, six
+, kitchen
+, pypdf2
+, dict2xml
+, weasyprint
+, pyyaml
+, jinja2
+, configargparse
+, appdirs
+, decorator
+, pycairo
+, pytestCheckHook
+, python-fontconfig
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.27.1";
+  version = "3.15.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "00v5gsshy1rmjd334d2awh0mvri949lmyk8f02wfr20rq6fc3xqd";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "ietf-tools";
+    repo = "xml2rfc";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sCpV4pmBIBFxFpDK7H9riQ+0174xCn6uVztGDAEeoII=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "SHELL := /bin/bash" "SHELL := bash" \
+      --replace "test flaketest" "test"
+    substituteInPlace setup.py \
+      --replace "'tox'," ""
+  '';
 
   propagatedBuildInputs = [
     intervaltree
+    jinja2
     pyflakes
+    pyyaml
     requests
     lxml
     google-i18n-address
@@ -25,18 +60,29 @@ buildPythonPackage rec {
     pypdf2
     dict2xml
     weasyprint
+    configargparse
+    appdirs
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
+  checkInputs = [
+    decorator
+    pycairo
+    pytestCheckHook
+    python-fontconfig
+  ];
+
+   # requires Noto Serif and Roboto Mono font
+  doCheck = false;
+
+  checkPhase = ''
+    make tests-no-network
   '';
 
-  # lxml tries to fetch from the internet
-  doCheck = false;
+  pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
-    homepage = https://tools.ietf.org/tools/xml2rfc/trac/;
+    homepage = "https://github.com/ietf-tools/xml2rfc";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = licenses.bsd3;

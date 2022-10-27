@@ -1,21 +1,29 @@
-import ./make-test.nix ({ pkgs, ...} : 
+import ./make-test-python.nix ({ pkgs, ...} :
 
 let
   client = { pkgs, ... }: {
     imports = [ ./common/x11.nix ];
     environment.systemPackages = [ pkgs.mumble ];
   };
+
+  # outside of tests, this file should obviously not come from the nix store
+  envFile = pkgs.writeText "nixos-test-mumble-murmurd.env" ''
+    MURMURD_PASSWORD=testpassword
+  '';
+
 in
 {
   name = "mumble";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ thoughtpolice eelco ];
   };
 
   nodes = {
     server = { config, ... }: {
-      services.murmur.enable       = true;
+      services.murmur.enable = true;
       services.murmur.registerName = "NixOS tests";
+      services.murmur.password = "$MURMURD_PASSWORD";
+      services.murmur.environmentFile = envFile;
       networking.firewall.allowedTCPPorts = [ config.services.murmur.port ];
     };
 
@@ -24,50 +32,54 @@ in
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $server->waitForUnit("murmur.service");
-    $client1->waitForX;
-    $client2->waitForX;
+    server.wait_for_unit("murmur.service")
+    client1.wait_for_x()
+    client2.wait_for_x()
 
-    $client1->execute("mumble mumble://client1\@server/test &");
-    $client2->execute("mumble mumble://client2\@server/test &");
+    client1.execute("mumble mumble://client1:testpassword\@server/test >&2 &")
+    client2.execute("mumble mumble://client2:testpassword\@server/test >&2 &")
 
     # cancel client audio configuration
-    $client1->waitForWindow(qr/Audio Tuning Wizard/);
-    $client2->waitForWindow(qr/Audio Tuning Wizard/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendKeys("esc");
-    $client2->sendKeys("esc");
+    client1.wait_for_window(r"Audio Tuning Wizard")
+    client2.wait_for_window(r"Audio Tuning Wizard")
+    server.sleep(5)  # wait because mumble is slow to register event handlers
+    client1.send_key("esc")
+    client2.send_key("esc")
 
     # cancel client cert configuration
-    $client1->waitForWindow(qr/Certificate Management/);
-    $client2->waitForWindow(qr/Certificate Management/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendKeys("esc");
-    $client2->sendKeys("esc");
+    client1.wait_for_window(r"Certificate Management")
+    client2.wait_for_window(r"Certificate Management")
+    server.sleep(5)  # wait because mumble is slow to register event handlers
+    client1.send_key("esc")
+    client2.send_key("esc")
 
     # accept server certificate
-    $client1->waitForWindow(qr/^Mumble$/);
-    $client2->waitForWindow(qr/^Mumble$/);
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendChars("y");
-    $client2->sendChars("y");
-    $server->sleep(5); # wait because mumble is slow to register event handlers
+    client1.wait_for_window(r"^Mumble$")
+    client2.wait_for_window(r"^Mumble$")
+    server.sleep(5)  # wait because mumble is slow to register event handlers
+    client1.send_chars("y")
+    client2.send_chars("y")
+    server.sleep(5)  # wait because mumble is slow to register event handlers
 
     # sometimes the wrong of the 2 windows is focused, we switch focus and try pressing "y" again
-    $client1->sendKeys("alt-tab");
-    $client2->sendKeys("alt-tab");
-    $server->sleep(5); # wait because mumble is slow to register event handlers
-    $client1->sendChars("y");
-    $client2->sendChars("y");
+    client1.send_key("alt-tab")
+    client2.send_key("alt-tab")
+    server.sleep(5)  # wait because mumble is slow to register event handlers
+    client1.send_chars("y")
+    client2.send_chars("y")
 
     # Find clients in logs
-    $server->waitUntilSucceeds("journalctl -eu murmur -o cat | grep -q client1");
-    $server->waitUntilSucceeds("journalctl -eu murmur -o cat | grep -q client2");
+    server.wait_until_succeeds(
+        "journalctl -eu murmur -o cat | grep -q 'client1.\+Authenticated'"
+    )
+    server.wait_until_succeeds(
+        "journalctl -eu murmur -o cat | grep -q 'client2.\+Authenticated'"
+    )
 
-    $server->sleep(5); # wait to get screenshot
-    $client1->screenshot("screen1");
-    $client2->screenshot("screen2");
+    server.sleep(5)  # wait to get screenshot
+    client1.screenshot("screen1")
+    client2.screenshot("screen2")
   '';
 })

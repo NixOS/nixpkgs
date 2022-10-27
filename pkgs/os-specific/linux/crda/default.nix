@@ -1,22 +1,45 @@
-{ stdenv, fetchurl, libgcrypt, libnl, pkgconfig, python2Packages, wireless-regdb }:
+{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkg-config, python3Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
   pname = "crda";
-  version = "3.18";
+  version = "4.14";
 
   src = fetchurl {
-    sha256 = "1gydiqgb08d9gbx4l6gv98zg3pljc984m50hmn3ysxcbkxkvkz23";
-    url = "http://kernel.org/pub/software/network/crda/crda-${version}.tar.xz";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/crda.git/snapshot/crda-${version}.tar.gz";
+    sha256 = "sha256-Wo81u4snR09Gaw511FG6kXQz2KqxiJZ4pk2cTnKouMI=";
   };
 
-  buildInputs = [ libgcrypt libnl ];
+  patches = [
+    # Fix python 3 build: except ImportError, e: SyntaxError: invalid syntax
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/d234fddf451fab0f4fc412e2769f54e11f10d7d8/trunk/crda-4.14-python-3.patch";
+      sha256 = "sha256-KEezEKrfizq9k4ZiE2mf3Nl4JiBayhXeVnFl7wYh28Y=";
+    })
+
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/d48ec843222b0d74c85bce86fa6f087c7dfdf952/trunk/0001-Makefile-Link-libreg.so-against-the-crypto-library.patch";
+      sha256 = "sha256-j93oydi209f22OF8aXZ/NczuUOnlhkdSeYvy2WRRvm0=";
+    })
+  ];
+
+  strictDeps = true;
+
   nativeBuildInputs = [
-    pkgconfig python2Packages.m2crypto python2Packages.python
+    pkg-config
+    python3Packages.m2crypto # only used for a build time script
+  ];
+
+  buildInputs = [
+    libgcrypt
+    libnl
   ];
 
   postPatch = ''
     patchShebangs utils/
-    substituteInPlace Makefile --replace ldconfig true
+    substituteInPlace Makefile \
+      --replace 'gzip' 'gzip -n' \
+      --replace ldconfig true \
+      --replace pkg-config $PKG_CONFIG
     sed -i crda.c \
       -e "/\/usr\/.*\/regulatory.bin/d" \
       -e "s|/lib/crda|${wireless-regdb}/lib/crda|g"
@@ -29,15 +52,13 @@ stdenv.mkDerivation rec {
     "REG_BIN=${wireless-regdb}/lib/crda/regulatory.bin"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-const-variable";
-
   buildFlags = [ "all_noverify" ];
   enableParallelBuilding = true;
 
   doCheck = true;
   checkTarget = "verify";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux wireless Central Regulatory Domain Agent";
     longDescription = ''
       CRDA acts as the udev helper for communication between the kernel and
@@ -50,7 +71,7 @@ stdenv.mkDerivation rec {
 
       to the system configuration.
     '';
-    homepage = http://drvbp1.linux-foundation.org/~mcgrof/rel-html/crda/;
+    homepage = "https://wireless.wiki.kernel.org/en/developers/regulatory/crda";
     license = licenses.free; # "copyleft-next 0.3.0", as yet without a web site
     platforms = platforms.linux;
   };

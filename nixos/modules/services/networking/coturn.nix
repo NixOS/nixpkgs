@@ -16,6 +16,7 @@ ${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
 ${lib.optionalString cfg.no-auth "no-auth"}
 ${lib.optionalString cfg.use-auth-secret "use-auth-secret"}
 ${lib.optionalString (cfg.static-auth-secret != null) ("static-auth-secret=${cfg.static-auth-secret}")}
+${lib.optionalString (cfg.static-auth-secret-file != null) ("static-auth-secret=#static-auth-secret#")}
 realm=${cfg.realm}
 ${lib.optionalString cfg.no-udp "no-udp"}
 ${lib.optionalString cfg.no-tcp "no-tcp"}
@@ -39,11 +40,11 @@ ${cfg.extraConfig}
 in {
   options = {
     services.coturn = {
-      enable = mkEnableOption "coturn TURN server";
+      enable = mkEnableOption (lib.mdDoc "coturn TURN server");
       listening-port = mkOption {
         type = types.int;
         default = 3478;
-        description = ''
+        description = lib.mdDoc ''
           TURN listener port for UDP and TCP.
           Note: actually, TLS and DTLS sessions can connect to the
           "plain" TCP and UDP port(s), too - if allowed by configuration.
@@ -52,7 +53,7 @@ in {
       tls-listening-port = mkOption {
         type = types.int;
         default = 5349;
-        description = ''
+        description = lib.mdDoc ''
           TURN listener port for TLS.
           Note: actually, "plain" TCP and UDP sessions can connect to the TLS and
           DTLS port(s), too - if allowed by configuration. The TURN server
@@ -67,8 +68,8 @@ in {
       alt-listening-port = mkOption {
         type = types.int;
         default = cfg.listening-port + 1;
-        defaultText = "listening-port + 1";
-        description = ''
+        defaultText = literalExpression "listening-port + 1";
+        description = lib.mdDoc ''
           Alternative listening port for UDP and TCP listeners;
           default (or zero) value means "listening port plus one".
           This is needed for RFC 5780 support
@@ -82,8 +83,8 @@ in {
       alt-tls-listening-port = mkOption {
         type = types.int;
         default = cfg.tls-listening-port + 1;
-        defaultText = "tls-listening-port + 1";
-        description = ''
+        defaultText = literalExpression "tls-listening-port + 1";
+        description = lib.mdDoc ''
           Alternative listening port for TLS and DTLS protocols.
         '';
       };
@@ -91,7 +92,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "203.0.113.42" "2001:DB8::42" ];
-        description = ''
+        description = lib.mdDoc ''
           Listener IP addresses of relay server.
           If no IP(s) specified in the config file or in the command line options,
           then all IPv4 and IPv6 system IPs will be used for listening.
@@ -101,7 +102,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "203.0.113.42" "2001:DB8::42" ];
-        description = ''
+        description = lib.mdDoc ''
           Relay address (the local IP address that will be used to relay the
           packets to the peer).
           Multiple relay addresses may be used.
@@ -117,28 +118,28 @@ in {
       min-port = mkOption {
         type = types.int;
         default = 49152;
-        description = ''
+        description = lib.mdDoc ''
           Lower bound of UDP relay endpoints
         '';
       };
       max-port = mkOption {
         type = types.int;
         default = 65535;
-        description = ''
+        description = lib.mdDoc ''
           Upper bound of UDP relay endpoints
         '';
       };
       lt-cred-mech = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Use long-term credential mechanism.
         '';
       };
       no-auth = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option is opposite to lt-cred-mech.
           (TURN Server with no-auth option allows anonymous access).
           If neither option is defined, and no users are defined,
@@ -150,7 +151,7 @@ in {
       use-auth-secret = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           TURN REST API flag.
           Flag that sets a special authorization option that is based upon authentication secret.
           This feature can be used with the long-term authentication mechanism, only.
@@ -174,7 +175,7 @@ in {
       static-auth-secret = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           'Static' authentication secret value (a string) for TURN REST API only.
           If not set, then the turn server
           will try to use the 'dynamic' value in turn_secret table
@@ -182,11 +183,19 @@ in {
           by a separate program, so this is why that other mode is 'dynamic'.
         '';
       };
+      static-auth-secret-file = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc ''
+          Path to the file containing the static authentication secret.
+        '';
+      };
       realm = mkOption {
         type = types.str;
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
-        description = ''
+        description = lib.mdDoc ''
           The default realm to be used for the users when no explicit
           origin/realm relationship was found in the database, or if the TURN
           server is not using any database (just the commands-line settings
@@ -198,7 +207,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/acme/example.com/fullchain.pem";
-        description = ''
+        description = lib.mdDoc ''
           Certificate file in PEM format.
         '';
       };
@@ -206,21 +215,21 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/acme/example.com/key.pem";
-        description = ''
+        description = lib.mdDoc ''
           Private key file in PEM format.
         '';
       };
       dh-file = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Use custom DH TLS key, stored in PEM format in the file.
         '';
       };
       secure-stun = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Require authentication of the STUN Binding request.
           By default, the clients are allowed anonymous access to the STUN Binding functionality.
         '';
@@ -228,28 +237,28 @@ in {
       no-cli = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Turn OFF the CLI support.
         '';
       };
       cli-ip = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           Local system IP address to be used for CLI server endpoint.
         '';
       };
       cli-port = mkOption {
         type = types.int;
         default = 5766;
-        description = ''
+        description = lib.mdDoc ''
           CLI server port.
         '';
       };
       cli-password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           CLI access password.
           For the security reasons, it is recommended to use the encrypted
           for of the password (see the -P command in the turnadmin utility).
@@ -258,79 +267,100 @@ in {
       no-udp = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable UDP client listener";
+        description = lib.mdDoc "Disable UDP client listener";
       };
       no-tcp = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable TCP client listener";
+        description = lib.mdDoc "Disable TCP client listener";
       };
       no-tls = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable TLS client listener";
+        description = lib.mdDoc "Disable TLS client listener";
       };
       no-dtls = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable DTLS client listener";
+        description = lib.mdDoc "Disable DTLS client listener";
       };
       no-udp-relay = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable UDP relay endpoints";
+        description = lib.mdDoc "Disable UDP relay endpoints";
       };
       no-tcp-relay = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable TCP relay endpoints";
+        description = lib.mdDoc "Disable TCP relay endpoints";
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional configuration options";
+        description = lib.mdDoc "Additional configuration options";
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users = [
-      { name = "turnserver";
-        uid = config.ids.uids.turnserver;
-        description = "coturn TURN server user";
-      } ];
-    users.groups = [
-      { name = "turnserver";
-        gid = config.ids.gids.turnserver;
-        members = [ "turnserver" ];
-      } ];
+  config = mkIf cfg.enable (mkMerge ([
+    { assertions = [
+      { assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null ;
+        message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
+      }
+    ];}
 
-    systemd.services.coturn = {
-      description = "coturn TURN server";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    {
+      users.users.turnserver =
+        { uid = config.ids.uids.turnserver;
+          group = "turnserver";
+          description = "coturn TURN server user";
+        };
+      users.groups.turnserver =
+        { gid = config.ids.gids.turnserver;
+          members = [ "turnserver" ];
+        };
 
-      unitConfig = {
-        Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
+      systemd.services.coturn = let
+        runConfig = "/run/coturn/turnserver.cfg";
+      in {
+        description = "coturn TURN server";
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+
+        unitConfig = {
+          Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
+        };
+
+        preStart = ''
+          cat ${configFile} > ${runConfig}
+          ${optionalString (cfg.static-auth-secret-file != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret \
+              "#static-auth-secret#" \
+              ${cfg.static-auth-secret-file} \
+              ${runConfig}
+          '' }
+          chmod 640 ${runConfig}
+        '';
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.coturn}/bin/turnserver -c ${runConfig}";
+          RuntimeDirectory = "turnserver";
+          User = "turnserver";
+          Group = "turnserver";
+          AmbientCapabilities =
+            mkIf (
+              cfg.listening-port < 1024 ||
+              cfg.alt-listening-port < 1024 ||
+              cfg.tls-listening-port < 1024 ||
+              cfg.alt-tls-listening-port < 1024 ||
+              cfg.min-port < 1024
+            ) "cap_net_bind_service";
+          Restart = "on-abort";
+        };
       };
-
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.coturn}/bin/turnserver -c ${configFile}";
-        RuntimeDirectory = "turnserver";
-        User = "turnserver";
-        Group = "turnserver";
-        AmbientCapabilities =
-          mkIf (
-            cfg.listening-port < 1024 ||
-            cfg.alt-listening-port < 1024 ||
-            cfg.tls-listening-port < 1024 ||
-            cfg.alt-tls-listening-port < 1024 ||
-            cfg.min-port < 1024
-          ) "cap_net_bind_service";
-        Restart = "on-abort";
-      };
-    };
-  };
+    systemd.tmpfiles.rules = [
+      "d  /run/coturn 0700 turnserver turnserver - -"
+    ];
+  }]));
 }

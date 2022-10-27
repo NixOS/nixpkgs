@@ -1,51 +1,43 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config, cmake
 , zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
-, libmspack, systemd
+, libmspack, systemd, Foundation, json_c, check
+, rustc, rust-bindgen, rustfmt, cargo, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "0.102.0";
+  version = "0.105.1";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    sha256 = "1qdyj4r39266bmbsd2nwyspm20k9wh3c30awrg8c54y78s61izj8";
+    sha256 = "sha256-0rwWN024iablpqxA+MbnACVKA5rKpTaIWgnu6kuFKfY=";
   };
 
-  # don't install sample config files into the absolute sysconfdir folder
-  postPatch = ''
-    substituteInPlace Makefile.in --replace ' etc ' ' '
-  '';
+  patches = [
+    # Flaky test, remove this when https://github.com/Cisco-Talos/clamav/issues/343 is fixed
+    ./remove-freshclam-test.patch
+    ./sample-cofiguration-file-install-location.patch
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
   buildInputs = [
-    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack
-    systemd
+    zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
+  ] ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.isDarwin Foundation;
+
+  cmakeFlags = [
+    "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
+    "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
   ];
 
-  configureFlags = [
-    "--libdir=$(out)/lib"
-    "--sysconfdir=/etc/clamav"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd"
-    "--disable-llvm" # enabling breaks the build at the moment
-    "--with-zlib=${zlib.dev}"
-    "--with-xml=${libxml2.dev}"
-    "--with-openssl=${openssl.dev}"
-    "--with-libcurl=${curl.dev}"
-    "--with-system-libmspack"
-    "--enable-milter"
-  ];
+  doCheck = true;
 
-  postInstall = ''
-    mkdir $out/etc
-    cp etc/*.sample $out/etc
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.clamav.net;
+  meta = with lib; {
+    homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom robberer qknight fpletz globin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ robberer qknight globin ];
+    platforms = platforms.unix;
   };
 }

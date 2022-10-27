@@ -1,62 +1,72 @@
-{ stdenv
+{ lib
+, python3
 , python3Packages
 , fetchFromGitHub
 , systemd
-, xrandr }:
+, xrandr
+, installShellFiles }:
 
-let
-  python = python3Packages.python;
-  version = "1.8.1";
-in
-  stdenv.mkDerivation {
-    pname = "autorandr";
-    inherit version;
+python3.pkgs.buildPythonApplication rec {
+  pname = "autorandr";
+  version = "1.12.1";
+  format = "other";
 
-    buildInputs = [ python ];
+  nativeBuildInputs = [ installShellFiles ];
+  propagatedBuildInputs = [ python3Packages.packaging ];
 
-    # no wrapper, as autorandr --batch does os.environ.clear()
-    buildPhase = ''
-      substituteInPlace autorandr.py \
-        --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
-        --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
-    '';
+  buildPhase = ''
+    substituteInPlace autorandr.py \
+      --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+      --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      make install TARGETS='autorandr' PREFIX=$out
+  patches = [ ./0001-don-t-use-sys.executable.patch ];
 
-      make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
+  outputs = [ "out" "man" ];
 
-      make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+  installPhase = ''
+    runHook preInstall
+    make install TARGETS='autorandr' PREFIX=$out
 
-      ${if systemd != null then ''
-        make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
-          SYSTEMD_UNIT_DIR=/lib/systemd/system \
-          UDEV_RULES_DIR=/etc/udev/rules.d
-        substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-          --replace /bin/systemctl "${systemd}/bin/systemctl"
-      '' else ''
-        make install TARGETS='pmutils' DESTDIR=$out \
-          PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
-        make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
-          UDEV_RULES_DIR=/etc/udev/rules.d
-      ''}
+    # zsh completions exist but currently have no make target, use
+    # installShellCompletions for both
+    # see https://github.com/phillipberndt/autorandr/issues/197
+    installShellCompletion --cmd autorandr \
+        --bash contrib/bash_completion/autorandr \
+        --zsh contrib/zsh_completion/_autorandr
 
-      runHook postInstall
-    '';
+    make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
-    src = fetchFromGitHub {
-      owner = "phillipberndt";
-      repo = "autorandr";
-      rev = version;
-      sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
-    };
+    make install TARGETS='manpage' PREFIX=$man
 
-    meta = with stdenv.lib; {
-      homepage = https://github.com/phillipberndt/autorandr/;
-      description = "Automatically select a display configuration based on connected devices";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ coroa globin ];
-      platforms = platforms.unix;
-    };
-  }
+    ${if systemd != null then ''
+      make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
+        SYSTEMD_UNIT_DIR=/lib/systemd/system \
+        UDEV_RULES_DIR=/etc/udev/rules.d
+      substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
+        --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
+    '' else ''
+      make install TARGETS='pmutils' DESTDIR=$out \
+        PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
+      make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
+        UDEV_RULES_DIR=/etc/udev/rules.d
+    ''}
+
+    runHook postInstall
+  '';
+
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "autorandr";
+    rev = version;
+    sha256 = "sha256-7SNnbgV6PeseBD6wdilEIOfOL2KVDpnlkSn9SBgRhhM=";
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/phillipberndt/autorandr/";
+    description = "Automatically select a display configuration based on connected devices";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ coroa globin ];
+    platforms = platforms.unix;
+  };
+}

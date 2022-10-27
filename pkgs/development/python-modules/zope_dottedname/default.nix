@@ -1,19 +1,19 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "zope.dottedname";
-  version = "4.3";
+  version = "5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cec09844d309550359ac1941abfcd9141e213f67f3c19bb8f90360c40787576";
+    sha256 = "sha256-mfWDqAKFhqtMIXlGE+QR0BDNCZF/RdqXa9/udI87++w=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://pypi.python.org/pypi/zope.dottedname;
+  meta = with lib; {
+    homepage = "http://pypi.python.org/pypi/zope.dottedname";
     description = "Resolver for Python dotted names";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

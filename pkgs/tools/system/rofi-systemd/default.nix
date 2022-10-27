@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, rofi, systemd, coreutils, utillinux, gawk, makeWrapper
+{ lib, stdenv, fetchFromGitHub, rofi, systemd, coreutils, util-linux, gawk, makeWrapper, jq
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-systemd";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "IvanMalison";
     repo = "rofi-systemd";
     rev = "v${version}";
-    sha256 = "1dbygq3qaj1f73hh3njdnmibq7vi6zbyzdc6c0j989c0r1ksv0zi";
+    sha256 = "0lgffb6rk1kf91j4j303lzpx8w2g9zy2gk99p8g8pk62a30c5asm";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
     cp -a rofi-systemd $out/bin/rofi-systemd
   '';
 
-  wrapperPath = with stdenv.lib; makeBinPath [
-    rofi
+  wrapperPath = with lib; makeBinPath [
     coreutils
-    utillinux
     gawk
+    jq
+    rofi
     systemd
+    util-linux
   ];
 
   fixupPhase = ''
@@ -37,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Control your systemd units using rofi";
-    homepage = https://github.com/IvanMalison/rofi-systemd;
-    maintainers = with stdenv.lib.maintainers; [ imalison ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://github.com/IvanMalison/rofi-systemd";
+    maintainers = with lib.maintainers; [ imalison ];
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; linux;
   };
 }

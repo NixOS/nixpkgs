@@ -40,40 +40,40 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the <command>fcron</command> daemon.";
+        description = lib.mdDoc "Whether to enable the {command}`fcron` daemon.";
       };
 
       allow = mkOption {
         type = types.listOf types.str;
         default = [ "all" ];
-        description = ''
+        description = lib.mdDoc ''
           Users allowed to use fcrontab and fcrondyn (one name per
-          line, <literal>all</literal> for everyone).
+          line, `all` for everyone).
         '';
       };
 
       deny = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Users forbidden from using fcron.";
+        description = lib.mdDoc "Users forbidden from using fcron.";
       };
 
       maxSerialJobs = mkOption {
         type = types.int;
         default = 1;
-        description = "Maximum number of serial jobs which can run simultaneously.";
+        description = lib.mdDoc "Maximum number of serial jobs which can run simultaneously.";
       };
 
       queuelen = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "Number of jobs the serial queue and the lavg queue can contain.";
+        description = lib.mdDoc "Number of jobs the serial queue and the lavg queue can contain.";
       };
 
       systab = mkOption {
         type = types.lines;
         default = "";
-        description = ''The "system" crontab contents.'';
+        description = lib.mdDoc ''The "system" crontab contents.'';
       };
     };
 
@@ -86,7 +86,8 @@ in
 
     services.fcron.systab = systemCronJobs;
 
-    environment.etc =
+    environment.etc = listToAttrs
+      (map (x: { name = x.target; value = x; })
       [ (allowdeny "allow" (cfg.allow))
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
@@ -112,7 +113,7 @@ in
           gid = config.ids.gids.fcron;
           mode = "0644";
         }
-      ];
+      ]);
 
     environment.systemPackages = [ pkgs.fcron ];
     users.users.fcron = {
@@ -135,10 +136,13 @@ in
         owner = "fcron";
         group = "fcron";
         setgid = true;
+        setuid = false;
       };
       fcronsighup = {
         source = "${pkgs.fcron}/bin/fcronsighup";
+        owner = "root";
         group = "fcron";
+        setuid = true;
       };
     };
     systemd.services.fcron = {

@@ -1,26 +1,48 @@
-{ stdenv, alsaLib, boost, dbus-glib, fetchsvn, ganv, glibmm
-, gtkmm2, libjack2, pkgconfig, python2, wafHook
+{ lib
+, stdenv
+, fetchFromGitLab
+, alsa-lib
+, boost
+, dbus-glib
+, ganv
+, glibmm
+, gtkmm2
+, libjack2
+, pkg-config
+, python3
+, wafHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "patchage";
-  version = "1.0.1";
-  src = fetchsvn {
-    url = http://svn.drobilla.net/lad/trunk/patchage/;
-    rev = "5821";
-    sha256 = "1ar64l0sg468qzxj7i6ppgfqjpm92awcp5lzskamrf3ln17lrgj7";
+  version = "1.0.6";
+
+  src = fetchFromGitLab {
+    owner = "drobilla";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-LzN6RyF/VT4LUVeR0904BnLuNMFZjFTDu9oDIKYG2Yo=";
+    fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    alsaLib boost dbus-glib ganv glibmm gtkmm2 libjack2
-    pkgconfig python2 wafHook
+    alsa-lib
+    boost
+    dbus-glib
+    ganv
+    glibmm
+    gtkmm2
+    libjack2
+    python3
+    wafHook
   ];
 
   meta = {
     description = "Modular patch bay for Jack and ALSA systems";
-    homepage = http://non.tuxfamily.org;
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = "https://drobilla.net/software/patchage.html";
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

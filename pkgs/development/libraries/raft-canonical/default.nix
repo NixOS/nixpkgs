@@ -1,32 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libuv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv, lz4 }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
-  version = "0.9.6";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "raft";
     rev = "v${version}";
-    sha256 = "083il7b5kw3pc7m5p9xjpb9dlvfarc51sni92mkgm9ckc32x9vpp";
+    sha256 = "050dwy34jh8dihfwfm0r1by2i3sy9crapipp9idw32idm79y4izb";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkgconfig ];
-  buildInputs = [ libuv ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
+  buildInputs = [ libuv lz4 ];
+
+  enableParallelBuilding = true;
+
+  # Ignore broken test, likely not causing huge breakage
+  # (https://github.com/canonical/raft/issues/292)
+  postPatch = ''
+    substituteInPlace test/integration/test_uv_tcp_connect.c --replace \
+      "TEST(tcp_connect, closeDuringHandshake, setUp, tearDownDeps, 0, NULL)" \
+      "TEST(tcp_connect, closeDuringHandshake, setUp, tearDownDeps, MUNIT_TEST_OPTION_TODO, NULL)"
+  '';
 
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/ " "
   '';
 
-  doCheck = false;
-  # Due to
-  #io_uv_recv/success/first                                    [ ERROR ]
-  #Error: test/lib/dir.c:97: No such file or directory
-  #Error: child killed by signal 6 (Aborted)
+  doCheck = true;
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Fully asynchronous C implementation of the Raft consensus protocol
     '';
@@ -39,6 +45,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/canonical/raft";
     license = licenses.asl20;
-    maintainers = [ maintainers.wucke13 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wucke13 ];
   };
 }

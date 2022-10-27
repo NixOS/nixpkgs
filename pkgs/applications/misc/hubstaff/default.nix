@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
+{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl }:
+, curl, writeShellScript, common-updater-scripts }:
 
 let
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.7-5c6fee47/Hubstaff-1.6.7-5c6fee47.sh";
+  version = "1.6.7-5c6fee47";
+  sha256 = "0i0xlabdi4xhjkfwb6s4bwjnl4k3dj15k7aqjilmq5wb4rhhfpws";
 
-  data = builtins.fromJSON (builtins.readFile ./revision.json);
-
-  inherit (data) version url sha256;
-
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
       libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];
@@ -56,9 +55,22 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = writeShellScript "hubstaff-updater" ''
+    set -eu -o pipefail
+
+    installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
+
+    version=$(echo "$installation_script_url" | sed -r 's/^https:\/\/hubstaff\-production\.s3\.amazonaws\.com\/downloads\/HubstaffClient\/Builds\/Release\/([^\/]+)\/Hubstaff.+$/\1/')
+
+    sha256=$(nix-prefetch-url "$installation_script_url")
+
+    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "$sha256" "$installation_script_url"
+  '';
+
+  meta = with lib; {
     description = "Time tracking software";
-    homepage = https://hubstaff.com/;
+    homepage = "https://hubstaff.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus srghma ];

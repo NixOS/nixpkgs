@@ -10,14 +10,15 @@ let
   {
     description = "FreeRadius server";
     wantedBy = ["multi-user.target"];
-    after = ["network-online.target"];
-    wants = ["network-online.target"];
+    after = ["network.target"];
+    wants = ["network.target"];
     preStart = ''
       ${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout
     '';
 
     serviceConfig = {
-        ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout -xx";
+        ExecStart = "${pkgs.freeradius}/bin/radiusd -f -d ${cfg.configDir} -l stdout" +
+                    optionalString cfg.debug " -xx";
         ExecReload = [
           "${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout"
           "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
@@ -27,17 +28,28 @@ let
         ProtectHome = "on";
         Restart = "on-failure";
         RestartSec = 2;
+        LogsDirectory = "radius";
     };
   };
 
   freeradiusConfig = {
-    enable = mkEnableOption "the freeradius server";
+    enable = mkEnableOption (lib.mdDoc "the freeradius server");
 
     configDir = mkOption {
       type = types.path;
       default = "/etc/raddb";
-      description = ''
+      description = lib.mdDoc ''
         The path of the freeradius server configuration directory.
+      '';
+    };
+
+    debug = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to enable debug logging for freeradius (-xx
+        option). This should not be left on, since it includes
+        sensitive data such as passwords in the logs.
       '';
     };
 
@@ -62,10 +74,12 @@ in
       users.radius = {
         /*uid = config.ids.uids.radius;*/
         description = "Radius daemon user";
+        isSystemUser = true;
       };
     };
 
     systemd.services.freeradius = freeradiusService cfg;
+    warnings = optional cfg.debug "Freeradius debug logging is enabled. This will log passwords in plaintext to the journal!";
 
   };
 

@@ -1,19 +1,31 @@
-{stdenv, fetchurl, zlib}:
+{lib, stdenv, fetchurl, zlib}:
 
-stdenv.mkDerivation {
-  name = "cramfsswap-1.4.1";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  pname = "cramfsswap";
+  version = "1.4.2";
+
   src = fetchurl {
-    url = mirror://debian/pool/main/c/cramfsswap/cramfsswap_1.4.1.tar.gz;
-    sha256 = "0c6lbx1inkbcvvhh3y6fvfaq3w7d1zv7psgpjs5f3zjk1jysi9qd";
+    url = "mirror://debian/pool/main/c/cramfsswap/${pname}_${version}.tar.xz";
+    sha256 = "10mj45zx71inaa3l1d81g64f7yn1xcprvq4v4yzpdwbxqmqaikw1";
   };
+  #  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=996964
+  patches = [ ./parallel-make.patch ];
+
+  # Needed for cross-compilation
+  postPatch = ''
+    substituteInPlace Makefile --replace 'strip ' '$(STRIP) '
+  '';
 
   buildInputs = [zlib];
 
-  meta = with stdenv.lib; {
-    description = "swap endianess of a cram filesystem (cramfs)";
+  installPhase = ''
+    install --target $out/bin -D cramfsswap
+  '';
+
+  meta = with lib; {
+    description = "Swap endianess of a cram filesystem (cramfs)";
     homepage = "https://packages.debian.org/sid/utils/cramfsswap";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

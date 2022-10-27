@@ -1,6 +1,5 @@
-{ stdenv, cleanPackaging, fetchurl }:
-let lib = stdenv.lib;
-in {
+{ lib, stdenv, cleanPackaging, fetchurl }:
+{
   # : string
   pname
   # : string
@@ -16,12 +15,15 @@ in {
   # TODO(Profpatsch): automatically infer most of these
   # : list string
 , configureFlags
+  # : string
+, postConfigure ? null
   # mostly for moving and deleting files from the build directory
   # : lines
 , postInstall
   # : list Maintainer
-, maintainers ? []
-
+, maintainers ? [ ]
+  # : passthru arguments (e.g. tests)
+, passthru ? { }
 
 }:
 
@@ -48,10 +50,13 @@ let
     "CHANGELOG"
     "README"
     "README.*"
+    "DCO"
+    "CONTRIBUTING"
   ];
 
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchurl {
     url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
@@ -65,9 +70,12 @@ in stdenv.mkDerivation {
 
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
+    # We assume every nix-based cross target has urandom.
+    # This might not hold for e.g. BSD.
+    "--with-sysdep-devurandom=yes"
     (if stdenv.isDarwin
-      then "--disable-shared"
-      else "--enable-shared")
+    then "--disable-shared"
+    else "--enable-shared")
   ]
     # On darwin, the target triplet from -dumpmachine includes version number,
     # but skarnet.org software uses the triplet to test binary compatibility.
@@ -75,7 +83,11 @@ in stdenv.mkDerivation {
     # binary built on a different version of darwin.
     # http://www.skarnet.org/cgi-bin/archive.cgi?1:mss:623:heiodchokfjdkonfhdph
     ++ (lib.optional stdenv.isDarwin
-         "--build=${stdenv.hostPlatform.system}");
+    "--build=${stdenv.hostPlatform.system}");
+
+  inherit postConfigure;
+
+  makeFlags = lib.optionals stdenv.cc.isClang [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];
 
   # TODO(Profpatsch): ensure that there is always a $doc output!
   postInstall = ''
@@ -95,9 +107,11 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
     inherit description platforms;
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers;
-      [ pmahoney Profpatsch ] ++ maintainers;
+      [ pmahoney Profpatsch qyliss ] ++ maintainers;
   };
+
+  inherit passthru;
 
 }

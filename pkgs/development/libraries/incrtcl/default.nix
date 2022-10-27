@@ -1,31 +1,39 @@
-{stdenv, fetchurl, tcl}:
+{ lib, stdenv, fetchurl, writeText, tcl }:
 
-stdenv.mkDerivation {
+tcl.mkTclDerivation rec {
   pname = "incrtcl";
-  version = "4.0.4";
+  version = "4.2.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl4.0.4.tar.gz;
-    sha256 = "1ppc9b13cvmc6rp77k7dl2zb26xk0z30vxygmr4h1xr2r8w091k3";
+    url    = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itcl${version}.tar.gz";
+    sha256 = "sha256-rExnDq8bWyVb/KzKgyCzPVa72S/VRGPGPW9pmocOFWw=";
   };
 
-  buildInputs = [ tcl ];
-  configureFlags = [ "--with-tcl=${tcl}/lib" ];
+  enableParallelBuilding = true;
+
   patchPhase = ''
-      substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
-  '';
-  preConfigure = ''
-      configureFlags="--exec_prefix=$prefix $configureFlags"
+    substituteInPlace configure --replace "\''${TCL_SRC_DIR}/generic" "${tcl}/include"
   '';
 
-  passthru = {
-    libPrefix = "itcl3.4";
-  };
+  postInstall = ''
+    rmdir $out/bin
+    mv $out/lib/itcl${version}/* $out/lib
+    ln -s libitcl${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitcl${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
+    rmdir $out/lib/itcl${version}
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = http://incrtcl.sourceforge.net/;
+  setupHook = writeText "setup-hook.sh" ''
+    export ITCL_LIBRARY=@out@/lib
+  '';
+
+  outputs = [ "out" "dev" "man" ];
+
+  meta = with lib; {
+    homepage    = "http://incrtcl.sourceforge.net/";
     description = "Object Oriented Enhancements for Tcl/Tk";
-    platforms = platforms.unix;
-    license = licenses.tcltk;
+    license     = licenses.tcltk;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

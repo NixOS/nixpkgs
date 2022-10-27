@@ -1,18 +1,49 @@
-{ stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
-  unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
-  python-daemon, pymsgbox }:
+{ lib
+, fetchFromGitHub
+, bech32
+, buildPythonPackage
+, cryptography
+, ed25519
+, ecdsa
+, semver
+, mnemonic
+, unidecode
+, mock
+, pytest
+, backports-shutil-which
+, configargparse
+, python-daemon
+, pymsgbox
+, pynacl
+}:
+
+# XXX: when changing this package, please test the package onlykey-agent.
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.13.1";
+  version = "0.14.5";
 
-  src = fetchPypi{
-    inherit pname version;
-    sha256 = "b9afa0851f668612702fcd648cee47af4dc7cfe4f86d4c4a84b1a6b4a4960b41";
+  src = fetchFromGitHub {
+    owner = "romanz";
+    repo = "trezor-agent";
+    rev = "v${version}";
+    sha256 = "sha256-RISAy0efdatr9u4CWNRGnlffkC8ksw1NyRpJWKwqz+s=";
   };
 
-  propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
-    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
+  propagatedBuildInputs = [
+    unidecode
+    backports-shutil-which
+    configargparse
+    python-daemon
+    pymsgbox
+    ecdsa
+    ed25519
+    mnemonic
+    semver
+    pynacl
+    bech32
+    cryptography
+  ];
 
   checkInputs = [ mock pytest ];
 
@@ -20,10 +51,10 @@ buildPythonPackage rec {
     py.test libagent/tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";
-    homepage = https://github.com/romanz/trezor-agent;
-    license = licenses.gpl3;
+    homepage = "https://github.com/romanz/trezor-agent";
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ np ];
   };
 }

@@ -1,50 +1,95 @@
-{ stdenv, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, libGLU_combined, glew, libtheora, libvpx, SDL, libupnp
-, ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
-, python, libXext, libmatroska, openssl, fetchpatch
+{ bctoolbox
+, bzrtp
+, cmake
+, fetchFromGitLab
+, ffmpeg
+, glew
+, gsm
+, lib
+, libX11
+, libXext
+, libopus
+, libpulseaudio
+, libv4l
+, libvpx
+, ortp
+, python3
+, qtbase
+, qtdeclarative
+, speex
+, srtp
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
-  baseName = "mediastreamer2";
-  version = "2.16.1";
-  name = "${baseName}-${version}";
+  pname = "mediastreamer2";
+  version = "5.1.20";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
-    repo = baseName;
+  dontWrapQtApps = true;
+
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
     rev = version;
-    sha256 = "02745bzl2r1jqvdqzyv94fjd4w92zr976la4c4nfvsy52waqah7j";
+    sha256 = "sha256-u8YqF5BzyYIF9+XB90Eu6DlwXuu1FDOJUzxebj0errU=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "allow-build-without-git.patch";
-      url = "https://github.com/BelledonneCommunications/mediastreamer2/commit/de3a24b795d7a78e78eab6b974e7ec5abf2259ac.patch";
-      sha256 = "1zqkrab42n4dha0knfsyj4q0wc229ma125gk9grj67ps7r7ipscy";
-    })
+    # Plugins directory is normally fixed during compile time. This patch makes
+    # it possible to set the plugins directory run time with an environment
+    # variable MEDIASTREAMER_PLUGINS_DIR. This makes it possible to construct a
+    # plugin directory with desired plugins and wrap executables so that the
+    # environment variable points to that directory.
     ./plugins_dir.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig intltool cmake doxygen python ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    qtbase
+    qtdeclarative
+  ];
 
   propagatedBuildInputs = [
-    alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv libGLU_combined glew libtheora libvpx SDL libupnp
-    ortp libv4l libpcap srtp bctoolbox libXext libmatroska
-    openssl
+    # Made by BC
+    bctoolbox
+    bzrtp
+    ortp
+
+    ffmpeg
+    glew
+    libX11
+    libXext
+    libpulseaudio
+    libv4l
+    speex
+    srtp
+
+    # Optional
+    gsm  # GSM audio codec
+    libopus  # Opus audio codec
+    libvpx  # VP8 video codec
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-DGIT_VERSION=\"v2.14.0\""
-    "-Wno-error=deprecated-declarations"
-    "-Wno-error=cast-function-type"
-  ];
-  NIX_LDFLAGS = "-lXext -lssl";
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
-    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
-    homepage = http://www.linphone.org/technical-corner/mediastreamer2/overview;
-    license = licenses.gpl2;
+  cmakeFlags = [
+    "-DENABLE_STATIC=NO" # Do not build static libraries
+    "-DENABLE_QT_GL=ON" # Build necessary MSQOGL plugin for Linphone desktop
+    "-DCMAKE_C_FLAGS=-DGIT_VERSION=\"v${version}\""
+    "-DENABLE_STRICT=NO" # Disable -Werror
+    "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+  ];
+
+  NIX_LDFLAGS = "-lXext";
+
+  meta = with lib; {
+    description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications. Part of the Linphone project";
+    homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

@@ -1,13 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , bleach
 , mt-940
-, pytest
 , requests
 , sepaxml
+, pytestCheckHook
+, pytest-mock
 }:
 
 buildPythonPackage rec {
-  version = "2.2.0";
+  version = "3.1.0";
   pname = "fints";
   disabled = isPy27;
 
@@ -15,27 +16,17 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     rev = "v${version}";
-    sha256 = "1gx173dzdprf3jsc7dss0xax8s6l2hr02qg9m5c4rksb3dl5fl8w";
+    hash = "sha256-3frJIEZgVnZD2spWYIuEtUt7MVsU/Zj82HOB9fKYQWE=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'sepaxml==2.0.*' 'sepaxml~=2.0'
-  '';
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook pytest-mock ];
 
-  # ignore network calls and broken fixture
-  checkPhase = ''
-    pytest . --ignore=tests/test_client.py -k 'not robust_mode'
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/raphaelm/python-fints/;
+  meta = with lib; {
+    homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ elohmeier ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ elohmeier dotlambda ];
   };
 }

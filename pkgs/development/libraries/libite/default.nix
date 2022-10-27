@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libconfuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libconfuse }:
 
 stdenv.mkDerivation rec {
   pname = "libite";
-  version = "2.1.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "libite";
     rev = "v${version}";
-    sha256 = "0fi3j3y37id24cgy3868pyvxkd6mvbbraalvpm99f5dhrxdlv961";
+    sha256 = "sha256-iviHxGXYUMjTgafkG4aqeHd9cnHA2VNhYG2eUta9R0Q=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libconfuse ];
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+  meta = with lib; {
     description = "Lightweight library of frog DNA";
     longDescription = ''
       Libite is a lightweight library of frog DNA. It can be used to fill
@@ -29,7 +28,8 @@ stdenv.mkDerivation rec {
       _SAFE macros in the BSD sys/queue.h API — highly recommended when
       traversing lists to delete/free nodes.
     '';
-    platforms = platforms.unix;
+    homepage = "https://github.com/troglobit/libite";
+    platforms = with platforms; linux ++ netbsd;
     maintainers = with maintainers; [ fpletz ];
     license = with licenses; [ mit isc bsd2 bsd3 ];
   };

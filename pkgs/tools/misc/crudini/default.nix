@@ -1,24 +1,19 @@
-{ stdenv, fetchFromGitHub, python2Packages, help2man, installShellFiles }:
+{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
 
-let
-  # py3 is supposedly working in version 0.9.3 but the tests fail so stick to py2
-  pypkgs = python2Packages;
-
-in
-pypkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "crudini";
   version = "0.9.3";
 
   src = fetchFromGitHub {
-    owner  = "pixelb";
-    repo   = "crudini";
-    rev    = version;
+    owner = "pixelb";
+    repo = "crudini";
+    rev = version;
     sha256 = "0298hvg0fpk0m0bjpwryj3icksbckwqqsr9w1ain55wf5s0v24k3";
   };
 
   nativeBuildInputs = [ help2man installShellFiles ];
 
-  propagatedBuildInputs = with pypkgs; [ iniparse ];
+  propagatedBuildInputs = with python3Packages; [ iniparse ];
 
   postPatch = ''
     substituteInPlace crudini-help \
@@ -45,10 +40,10 @@ pypkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility for manipulating ini files ";
     homepage = "https://www.pixelbeat.org/programs/crudini/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl }:
-    
+{ lib, stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
   pname = "szip";
   version = "2.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compression library that can be used with the hdf5 library";
-    homepage = http://www.hdfgroup.org/doc_resource/SZIP/;
-    license = stdenv.lib.licenses.unfree;
+    homepage = "https://www.hdfgroup.org/doc_resource/SZIP/";
+    license = lib.licenses.unfree;
   };
 }

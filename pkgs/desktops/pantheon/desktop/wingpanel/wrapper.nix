@@ -1,29 +1,60 @@
 { lib
-, makeWrapper
-, symlinkJoin
+, wrapGAppsHook
+, glib
+, stdenv
+, xorg
 , wingpanel
 , wingpanelIndicators
 , switchboard-with-plugs
 , indicators ? null
+  # Only useful to disable for development testing.
+, useDefaultIndicators ? true
 }:
 
 let
-  selectedIndicators = if indicators == null then wingpanelIndicators else indicators;
+  selectedIndicators =
+    if indicators == null then wingpanelIndicators
+    else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
-symlinkJoin {
-  name = "${wingpanel.name}-with-indicators";
+stdenv.mkDerivation rec {
+  pname = "${wingpanel.pname}-with-indicators";
+  inherit (wingpanel) version;
 
-  paths = [ wingpanel ] ++ selectedIndicators;
+  src = null;
 
-  buildInputs = [ makeWrapper ];
+  paths = [
+    wingpanel
+  ] ++ selectedIndicators;
 
-  # We have to set SWITCHBOARD_PLUGS_PATH because wingpanel-applications-menu
-  # has a plugin to search switchboard settings
-  postBuild = ''
-    wrapProgram $out/bin/wingpanel \
-      --set WINGPANEL_INDICATORS_PATH "$out/lib/wingpanel" \
-      --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard" \
-      --suffix XDG_DATA_DIRS : ${lib.concatMapStringsSep ":" (indicator: ''${indicator}/share/gsettings-schemas/${indicator.name}'') selectedIndicators}
+  passAsFile = [ "paths" ];
+
+  nativeBuildInputs = [
+    glib
+    wrapGAppsHook
+  ];
+
+  buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)
+    ++ selectedIndicators;
+
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
+  installPhase = ''
+    mkdir -p $out
+    for i in $(cat $pathsPath); do
+      ${xorg.lndir}/bin/lndir -silent $i $out
+    done
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set WINGPANEL_INDICATORS_PATH "$out/lib/wingpanel"
+      --set SWITCHBOARD_PLUGS_PATH "${switchboard-with-plugs}/lib/switchboard"
+    )
   '';
 
   inherit (wingpanel) meta;

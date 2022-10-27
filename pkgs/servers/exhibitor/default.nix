@@ -1,4 +1,4 @@
-{ fetchFromGitHub, maven, jdk, makeWrapper, stdenv, ... }:
+{ fetchFromGitHub, maven, jdk, makeWrapper, lib, stdenv, ... }:
 stdenv.mkDerivation rec {
   pname = "exhibitor";
   version = "1.5.6";
@@ -31,16 +31,17 @@ stdenv.mkDerivation rec {
   # (given the state of Maven support in Nix). We're not actually building any java
   # source here.
   pomFileDir = "exhibitor-standalone/src/main/resources/buildscripts/standalone/maven";
-  nativeBuildInputs = [ maven ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ maven makeWrapper ];
   buildPhase = ''
       cd ${pomFileDir}
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
-  meta = with stdenv.lib; {
-    homepage = https://github.com/soabase/exhibitor;
+  meta = with lib; {
     description = "ZooKeeper co-process for instance monitoring, backup/recovery, cleanup and visualization";
+    homepage = "https://github.com/soabase/exhibitor";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
+    mainProgram = "startExhibitor.sh";
     platforms = platforms.unix;
   };
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/java
     mv target/$name.jar $out/share/java/
-    makeWrapper ${jdk}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${stdenv.lib.makeBinPath [ jdk ]}
+    makeWrapper ${jdk}/bin/java $out/bin/startExhibitor.sh --add-flags "-jar $out/share/java/$name.jar" --suffix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
 }

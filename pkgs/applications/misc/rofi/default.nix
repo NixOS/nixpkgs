@@ -1,16 +1,38 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
-, cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
-, bison, flex, librsvg, check
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libxkbcommon
+, pango
+, which
+, git
+, cairo
+, libxcb
+, xcbutil
+, xcbutilwm
+, xcbutilxrm
+, xcb-util-cursor
+, libstartup_notification
+, bison
+, flex
+, librsvg
+, check
+, glib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.5.4";
+  version = "1.7.5";
 
-  src = fetchurl {
-    url = "https://github.com/davatorium/rofi/releases/download/${version}/rofi-${version}.tar.gz";
-    sha256 = "1g1170zmh5v7slnm1sm2d08jgz6icikf8rm17apm1bjzzyw1lhk7";
+  src = fetchFromGitHub {
+    owner = "davatorium";
+    repo = "rofi";
+    rev = version;
+    fetchSubmodules = true;
+    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''
@@ -19,15 +41,23 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
-    libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
+  depsBuildBuild = [ buildPackages.stdenv.cc pkg-config glib ];
+  nativeBuildInputs = [ meson ninja pkg-config flex bison ];
+  buildInputs = [
+    libxkbcommon
+    pango
+    cairo
+    git
+    librsvg
+    check
+    libstartup_notification
+    libxcb
+    xcbutil
+    xcbutilwm
+    xcbutilxrm
+    xcb-util-cursor
+    which
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/rofi-theme-selector \
-      --prefix XDG_DATA_DIRS : $out/share
-  '';
 
   doCheck = false;
 
@@ -35,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
     license = licenses.mit;
-    maintainers = with maintainers; [ mbakke ma27 ];
+    maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
   };
 }

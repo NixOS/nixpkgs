@@ -1,27 +1,29 @@
 {
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   shared-mime-info,
   akonadi, akonadi-calendar, akonadi-contacts, akonadi-mime, akonadi-notes,
-  kalarmcal, kcalutils, kcontacts, kdav, kdelibs4support, kidentitymanagement,
-  kimap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
-  pimcommon, qtwebengine, libkgapi, qtnetworkauth, qtspeech, qtxmlpatterns,
+  cyrus_sasl, kholidays, kcalutils, kcontacts, kdav, kidentitymanagement,
+  kimap, kldap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
+  pimcommon, libkgapi, libsecret,
+  qca-qt5, qtkeychain, qtnetworkauth, qtspeech, qtwebengine, qtxmlpatterns,
 }:
 
 mkDerivation {
-  name = "kdepim-runtime";
+  pname = "kdepim-runtime";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools shared-mime-info ];
   buildInputs = [
     akonadi akonadi-calendar akonadi-contacts akonadi-mime akonadi-notes
-    kalarmcal kcalutils kcontacts kdav kdelibs4support kidentitymanagement kimap
-    kmailtransport kmbox kmime knotifications knotifyconfig qtwebengine
-    pimcommon libkgapi qtnetworkauth qtspeech qtxmlpatterns
+    kholidays kcalutils kcontacts kdav kidentitymanagement kimap
+    kldap kmailtransport kmbox kmime knotifications knotifyconfig qtwebengine
+    pimcommon libkgapi libsecret
+    qca-qt5 qtkeychain qtnetworkauth qtspeech qtxmlpatterns
   ];
-  # Attempts to build some files before dependencies have been generated
-  enableParallelBuilding = false;
+  qtWrapperArgs = [
+    "--prefix SASL_PATH : ${lib.makeSearchPath "lib/sasl2" [ cyrus_sasl.out libkgapi ]}"
+  ];
 }

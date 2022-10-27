@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "02z85waj5jc312biv2qhbgplsggxgjmfmyv9v8b1ky0iq1mpxjw7";
   };
 
-  cargoSha256 = "03ab6jbcgmbgg9hn7ihk8814sjwdmrr9p4xlll6nfdad4a7gq3yn";
+  cargoSha256 = "19mk0hl7cr5qb3r64zi0hcsn4yqbg8c3g2f9jywm0g2c13ak36li";
 
   meta = with lib; {
     description      = "CLI tool to manage POSIX message queues";
@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     license          = licenses.mit;
     maintainers      = with maintainers; [ tazjin ];
     platforms        = platforms.linux;
-    repositories.git = git://github.com/aprilabank/mq-cli.git;
   };
 }

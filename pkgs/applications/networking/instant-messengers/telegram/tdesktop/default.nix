@@ -1,152 +1,169 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
-, pkgconfig, pythonPackages, cmake, wrapGAppsHook, wrapQtAppsHook, gcc9
-, qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
-, dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
+{ lib
+, fetchFromGitHub
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
+, extra-cmake-modules
+, qtbase
+, qtwayland
+, qtsvg
+, qtimageformats
+, qt5compat
+, gtk3
+, libdbusmenu
+, lz4
+, xxHash
+, ffmpeg
+, openalSoft
+, minizip
+, libopus
+, alsa-lib
+, libpulseaudio
+, pipewire
+, range-v3
+, tl-expected
+, hunspell
+, glibmm
+, webkitgtk_4_1
+, jemalloc
+, rnnoise
+, abseil-cpp
+  # Transitive dependencies:
+, util-linuxMinimal
+, pcre
+, libpthreadstubs
+, libXdamage
+, libXdmcp
+, libselinux
+, libsepol
+, libepoxy
+, at-spi2-core
+, libXtst
+, libthai
+, libdatrie
+, xdg-utils
+, xorg
+, libsysprof-capture
+, libpsl
+, brotli
+, microsoft_gsl
+, rlottie
+, stdenv
+, gcc10Stdenv
 }:
 
-with lib;
+# Main reference:
+# - This package was originally based on the Arch package but all patches are now upstreamed:
+#   https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/telegram-desktop
+# Other references that could be useful:
+# - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
+# - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-mkDerivation rec {
+let
+  tg_owt = callPackage ./tg_owt.nix {
+    abseil-cpp = abseil-cpp.override {
+      cxxStandard = "17";
+    };
+  };
+  # Aarch64 default gcc9 will cause ICE. For reference #108305
+  env = if stdenv.isAarch64 then gcc10Stdenv else stdenv;
+in
+env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.8.15";
-  # Note: Due to our strong dependency on the Arch patches it's probably best
-  # to also wait for the Arch update (especially if the patches don't apply).
+  version = "4.2.4";
+  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "03173y2nlkf757llgpia8p2dkkwsjra7b6qm5nhmkcwcm8kmsvyy";
     fetchSubmodules = true;
+    sha256 = "sha256-X2ZbjlL3YbPdXSgS+wqZL3FUW2xQ0DhqiOO5MR1QyLY=";
   };
-
-  # Arch patches (svn export telegram-desktop/trunk)
-  archPatches = fetchsvn {
-    url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
-    # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "512849";
-    sha256 = "1hl7znvv6qr4cwpkj8wlplpa63i1lhk2iax7hb4l1s1a4mijx9ls";
-  };
-  privateHeadersPatch = fetchpatch {
-    url = "https://github.com/telegramdesktop/tdesktop/commit/b9d3ba621eb8af638af46c6b3cfd7a8330bf0dd5.patch";
-    sha256 = "1s5xvcp9dk0jfywssk8xfcsh7bk5xxif8xqnba0413lfx5rgvs5v";
-  };
-
-  # Note: It would be best if someone could get as many patches upstream as
-  # possible (we currently depend a lot on custom patches...).
-  patches = [
-    "${archPatches}/tdesktop.patch"
-    "${archPatches}/no-gtk2.patch"
-    "${archPatches}/Revert-Disable-DemiBold-fallback-for-Semibold.patch"
-    "${archPatches}/tdesktop_lottie_animation_qtdebug.patch"
-    # "${archPatches}/Revert-Change-some-private-header-includes.patch"
-    # "${archPatches}/Use-system-wide-font.patch"
-  ];
 
   postPatch = ''
-    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
-      --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
-    substituteInPlace Telegram/SourceFiles/platform/linux/linux_libnotify.cpp \
-      --replace '"notify"' '"${libnotify}/lib/libnotify.so"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
+      --replace '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkgconfig pythonPackages.gyp cmake wrapGAppsHook wrapQtAppsHook gcc9 ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
+    wrapGAppsHook
+    wrapQtAppsHook
+    extra-cmake-modules
+  ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libappindicator-gtk3
-    dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
+    qtbase
+    qtwayland
+    qtsvg
+    qtimageformats
+    qt5compat
+    gtk3
+    libdbusmenu
+    lz4
+    xxHash
+    ffmpeg
+    openalSoft
+    minizip
+    libopus
+    alsa-lib
+    libpulseaudio
+    pipewire
+    range-v3
+    tl-expected
+    hunspell
+    glibmm
+    webkitgtk_4_1
+    jemalloc
+    rnnoise
+    tg_owt
+    # Transitive dependencies:
+    util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
+    pcre
+    libpthreadstubs
+    libXdamage
+    libXdmcp
+    libselinux
+    libsepol
+    libepoxy
+    at-spi2-core
+    libXtst
+    libthai
+    libdatrie
+    libsysprof-capture
+    libpsl
+    brotli
+    microsoft_gsl
+    rlottie
   ];
 
-  enableParallelBuilding = true;
-
-  GYP_DEFINES = concatStringsSep "," [
-    "TDESKTOP_DISABLE_CRASH_REPORTS"
-    "TDESKTOP_DISABLE_AUTOUPDATE"
-    "TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
+  cmakeFlags = [
+    "-Ddisable_autoupdate=ON"
+    # We're allowed to used the API ID of the Snap package:
+    "-DTDESKTOP_API_ID=611335"
+    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
+    "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-DTDESKTOP_DISABLE_CRASH_REPORTS"
-    "-DTDESKTOP_DISABLE_AUTOUPDATE"
-    "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
-    "-I${minizip}/include/minizip"
-    # See Telegram/gyp/qt.gypi
-    "-I${getDev qtbase}/mkspecs/linux-g++"
-  ] ++ concatMap (x: [
-    "-I${getDev qtbase}/include/${x}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
-    "-I${getDev libopus}/include/opus"
-    "-I${getDev alsaLib}/include/alsa"
-    "-I${getDev libpulseaudio}/include/pulse"
-    ]) [ "QtCore" "QtGui" "QtDBus" ];
-  CPPFLAGS = NIX_CFLAGS_COMPILE;
-
-  preConfigure = ''
-    # Patches to revert:
-    patch -R -Np1 -i "${privateHeadersPatch}"
-
-    # Patches to apply:
-    pushd "Telegram/ThirdParty/libtgvoip"
-    patch -Np1 -i "${archPatches}/libtgvoip.patch"
-    popd
-
-    # disable static-qt for rlottie
-    sed "/RLOTTIE_WITH_STATIC_QT/d" -i "Telegram/gyp/lib_rlottie.gyp"
-
-    sed -i Telegram/gyp/telegram/linux.gypi \
-      -e 's,/usr,/does-not-exist,g' \
-      -e 's,appindicator-0.1,appindicator3-0.1,g' \
-      -e 's,-flto,,g'
-
-    sed -i Telegram/gyp/modules/qt.gypi \
-      -e "s,/usr/include/qt/QtCore/,${qtbase.dev}/include/QtCore/,g" \
-      -e 's,\d+",\d+" | head -n1,g'
-    sed -i Telegram/gyp/modules/qt_moc.gypi \
-      -e "s,/usr/bin/moc,moc,g"
-    sed -i Telegram/gyp/modules/qt_rcc.gypi \
-      -e "s,/usr/bin/rcc,rcc,g"
-
-    # Build system assumes x86, but it works fine on non-x86 if we patch this one flag out
-    sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
-      -e "/-msse2/d"
-
-    gyp \
-      -Dapi_id=17349 \
-      -Dapi_hash=344583e45741c457fe1862106095a5eb \
-      -Dbuild_defines=${GYP_DEFINES} \
-      -Gconfig=Release \
-      --depth=Telegram/gyp \
-      --generator-output=../.. \
-      -Goutput_dir=out \
-      --format=cmake \
-      Telegram/gyp/Telegram.gyp
-
-    cd out/Release
-
-    NUM=$((`wc -l < CMakeLists.txt` - 2))
-    sed -i "$NUM r $archPatches/CMakeLists.inj" CMakeLists.txt
-
-    export ASM=$(type -p gcc)
-  '';
-
-  cmakeFlags = [ "-UTDESKTOP_OFFICIAL_TARGET" ];
-
-  installPhase = ''
-    install -Dm755 Telegram $out/bin/telegram-desktop
-
-    mkdir -p $out/share/applications $out/share/kde4/services
-    install -m444 "$src/lib/xdg/telegramdesktop.desktop" "$out/share/applications/telegram-desktop.desktop"
-    sed "s,/usr/bin,$out/bin,g" $archPatches/tg.protocol > $out/share/kde4/services/tg.protocol
-    for icon_size in 16 32 48 64 128 256 512; do
-      install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram.png"
-    done
-  '';
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
@@ -154,21 +171,28 @@ mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
 
-  meta = {
+  passthru = {
+    inherit tg_owt;
+    updateScript = ./update.py;
+  };
+
+  meta = with lib; {
     description = "Telegram Desktop messaging app";
     longDescription = ''
       Desktop client for the Telegram messenger, based on the Telegram API and
       the MTProto secure protocol.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    homepage = https://desktop.telegram.org/;
-    maintainers = with maintainers; [ primeos abbradar ];
+    homepage = "https://desktop.telegram.org/";
+    changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
+    maintainers = with maintainers; [ nickcao ];
   };
 }

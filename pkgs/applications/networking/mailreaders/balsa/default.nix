@@ -1,20 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gtk3, gmime, gnutls,
-  webkitgtk, libesmtp, openssl, libnotify, gtkspell3, gpgme,
-  libcanberra-gtk3, libsecret, gtksourceview, gobject-introspection,
-  wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, glib
+, gmime3
+, gnutls
+, gobject-introspection
+, gpgme
+, gtk3
+, gtksourceview4
+, gtkspell3
+, intltool
+, libcanberra-gtk3
+, libesmtp
+, libical
+, libnotify
+, libsecret
+, openssl
+, pkg-config
+, sqlite
+, webkitgtk
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "balsa";
-  version = "2.5.7";
+  version = "2.6.4";
 
   src = fetchurl {
-    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.bz2";
-    sha256 = "0yfqhfpwm1qnwmbpr6dfn2f5w8a8xxq51pn8ypgg0fw973l1c1nx";
+    url = "https://pawsa.fedorapeople.org/balsa/${pname}-${version}.tar.xz";
+    sha256 = "1hcgmjka2x2igdrmvzlfs12mv892kv4vzv5iy90kvcqxa625kymy";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     gobject-introspection
     wrapGAppsHook
@@ -22,37 +40,37 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
-    gmime
+    gmime3
     gnutls
-    webkitgtk
-    openssl
-    libnotify
-    gtkspell3
     gpgme
+    gtk3
+    gtksourceview4
+    gtkspell3
     libcanberra-gtk3
-    gtksourceview
-    libsecret
     libesmtp
+    libical
+    libnotify
+    libsecret
+    openssl
+    sqlite
+    webkitgtk
   ];
 
   configureFlags = [
     "--with-canberra"
-    "--with-gpgme"
     "--with-gtksourceview"
     "--with-libsecret"
+    "--with-spell-checker=gtkspell"
+    "--with-sqlite"
     "--with-ssl"
     "--with-unique"
     "--without-gnome"
-    "--with-spell-checker=gtkspell"
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://pawsa.fedorapeople.org/balsa/;
+  meta = with lib; {
+    homepage = "http://pawsa.fedorapeople.org/balsa/";
     description = "An e-mail client for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

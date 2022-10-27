@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) mysql gzip;
+  inherit (pkgs) mariadb gzip;
 
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -37,45 +37,44 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable MySQL backups.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "MySQL backups");
 
       calendar = mkOption {
         type = types.str;
         default = "01:15:00";
-        description = ''
+        description = lib.mdDoc ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
       user = mkOption {
+        type = types.str;
         default = defaultUser;
-        description = ''
+        description = lib.mdDoc ''
           User to be used to perform backup.
         '';
       };
 
       databases = mkOption {
         default = [];
-        description = ''
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
           List of database names to dump.
         '';
       };
 
       location = mkOption {
+        type = types.path;
         default = "/var/backup/mysql";
-        description = ''
+        description = lib.mdDoc ''
           Location to put the gzipped MySQL database dumps.
         '';
       };
 
       singleTransaction = mkOption {
         default = false;
-        description = ''
+        type = types.bool;
+        description = lib.mdDoc ''
           Whether to create database dump in a single transaction
         '';
       };
@@ -84,13 +83,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
-      { name = defaultUser;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
         home = cfg.location;
         group = "nogroup";
-      });
+      };
+    };
 
     services.mysql.ensureUsers = [{
       name = cfg.user;
@@ -113,9 +113,10 @@ in
         };
       };
       services.mysql-backup = {
-        description = "Mysql backup service";
+        description = "MySQL backup service";
         enable = true;
         serviceConfig = {
+          Type = "oneshot";
           User = cfg.user;
         };
         script = backupScript;

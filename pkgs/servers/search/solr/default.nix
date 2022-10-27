@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "solr";
-  version = "7.7.2";
+  version = "8.6.3";
 
   src = fetchurl {
-    url = "mirror://apache/lucene/solr/${version}/solr-${version}.tgz";
-    sha256 = "1pr02d4sw5arig1brjb6j7ir644n8s737qsx6ll46di5iw1y93pb";
+    url = "mirror://apache/lucene/${pname}/${version}/${pname}-${version}.tgz";
+    sha256 = "0mbbmamajamxzcvdlrzx9wmv26kg9nhg9bzazk176dhhx3rjajf2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,12 +24,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/post --set JAVA_HOME "${jre}"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (nixosTests) solr;
+  };
+
+  meta = with lib; {
     homepage = "https://lucene.apache.org/solr/";
     description = "Open source enterprise search platform from the Apache Lucene project";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.domenkozar maintainers.aanderse ];
+    maintainers = with maintainers; [ ];
+    knownVulnerabilities = [
+      "Multiple security issues throughout 2021, see https://solr.apache.org/security.html"
+      "Package is outdated and has no maintainer"
+    ];
   };
 
 }

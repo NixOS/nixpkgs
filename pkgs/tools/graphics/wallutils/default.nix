@@ -1,16 +1,17 @@
 { buildGoPackage, fetchFromGitHub, lib
-, wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm
+, pkg-config
+, wayland, libX11, xbitmaps, libXcursor, libXmu, libXpm, libheif
 }:
 
 buildGoPackage rec {
   pname = "wallutils";
-  version = "5.8.2";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
-    sha256 = "1ghvcxsy5prj8l38r4lg39imsqbwmvn1zmiv7004j6skmgpaaawh";
+    sha256 = "sha256-FL66HALXsf7shoUKIZp6HORyuxhOfgTrY+PQAe92yk8=";
   };
 
   goPackagePath = "github.com/xyproto/wallutils";
@@ -22,13 +23,14 @@ buildGoPackage rec {
     sed -iE 's/VersionString = "[0-9].[0-9].[0-9]"/VersionString = "${version}"/' wallutils.go
   '';
 
-  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu libXpm ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ wayland libX11 xbitmaps libXcursor libXmu libXpm libheif ];
 
   meta = with lib; {
     description = "Utilities for handling monitors, resolutions, and (timed) wallpapers";
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

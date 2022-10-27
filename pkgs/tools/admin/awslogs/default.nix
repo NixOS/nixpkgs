@@ -1,26 +1,51 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "awslogs";
-  version = "0.11.0";
+  version = "0.14.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jorgebastida";
-    repo = "awslogs";
+    repo = pname;
     rev = version;
-    sha256 = "0vdpld7r7y78x1lcd5z3qsx047dwichxb8f3447yzl75fnsm75dc";
+    sha256 = "sha256-DrW8s0omQqLp1gaoR6k/YR11afRjUbGYrFtfYhby2b8=";
   };
 
-  doCheck = false;
-
-  propagatedBuildInputs = with python3Packages; [
-    boto3 termcolor dateutil docutils
+  propagatedBuildInputs = with python3.pkgs; [
+    boto3
+    termcolor
+    python-dateutil
+    docutils
+    setuptools
+    jmespath
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jorgebastida/awslogs;
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "jmespath>=0.7.1,<1.0.0" "jmespath>=0.7.1"
+  '';
+
+  disabledTests = [
+    "test_main_get_query"
+    "test_main_get_with_color"
+  ];
+
+  pythonImportsCheck = [
+    "awslogs"
+  ];
+
+  meta = with lib; {
     description = "AWS CloudWatch logs for Humans";
-    maintainers = with maintainers; [ dbrock ];
+    homepage = "https://github.com/jorgebastida/awslogs";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dbrock ];
   };
 }

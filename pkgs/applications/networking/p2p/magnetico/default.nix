@@ -1,31 +1,43 @@
-{ lib, fetchFromGitHub, buildGoModule, go-bindata }:
+{ lib
+, fetchFromGitHub
+, nixosTests
+, buildGoModule
+}:
 
 buildGoModule rec {
   pname = "magnetico";
-  version = "0.8.1";
+  version = "unstable-2022-08-10";
 
   src = fetchFromGitHub {
-    owner  = "boramalper";
+    owner  = "ireun";
     repo   = "magnetico";
-    rev    = "v${version}";
-    sha256 = "1f7y3z9ql079ix6ycihkmd3z3da3sfiqw2fap31pbvvjs65sg644";
+    rev    = "828e230d3b3c0759d3274e27f5a7b70400f4d6ea";
+    sha256 = "sha256-V1pBzillWTk9iuHAhFztxYaq4uLL3U3HYvedGk6ffbk=";
   };
 
-  modSha256 = "1h9fij8mxlxfw7kxix00n10fkhkvmf8529fxbk1n30cxc1bs2szf";
+  vendorSha256 = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
 
-  buildInputs = [ go-bindata ];
   buildPhase = ''
+    runHook preBuild
+
     make magneticow magneticod
+
+    runHook postBuild
   '';
 
-  doCheck = true;
   checkPhase = ''
+    runHook preBuild
+
     make test
+
+    runHook postBuild
   '';
+
+  passthru.tests = { inherit (nixosTests) magnetico; };
 
   meta = with lib; {
-    description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite.";
-    homepage     = https://github.com/boramalper/magnetico;
+    description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
+    homepage     = "https://github.com/boramalper/magnetico";
     license      = licenses.agpl3;
     badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];

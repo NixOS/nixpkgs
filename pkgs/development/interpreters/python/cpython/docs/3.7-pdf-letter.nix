@@ -2,10 +2,12 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation {
-  name = "python37-docs-pdf-letter-3.7.2";
+stdenv.mkDerivation rec {
+  pname = "python37-docs-pdf-letter";
+  version = "3.7.2";
+
   src = fetchurl {
-    url = http://docs.python.org/ftp/python/doc/3.7.2/python-3.7.2-docs-pdf-letter.tar.bz2;
+    url = "http://docs.python.org/ftp/python/doc/${version}/python-${version}-docs-pdf-letter.tar.bz2";
     sha256 = "17g57vlyvqx0k916q84q2pcx7y8myw0fda9fvg9kh0ph930c837x";
   };
   installPhase = ''

@@ -1,49 +1,108 @@
-{ stdenv, fetchurl, gettext, gtk3, pythonPackages
-, gdk-pixbuf, libnotify, gst_all_1
-, libgnome-keyring3
-, wrapGAppsHook, gnome3
-# otherwise passwords are stored unencrypted
-, withGnomeKeyring ? true
+{ lib
+, fetchFromGitHub
+, gettext
+, xorg # for lndir
+, gtk3
+, python3Packages
+, gdk-pixbuf
+, libnotify
+, gst_all_1
+, libsecret
+, wrapGAppsHook
+, gsettings-desktop-schemas
+, glib
+, gobject-introspection
+# Available plugins (can be overriden)
+, availablePlugins
+# Used in the withPlugins interface at passthru, can be overrided directly, or
+# prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
+, mailnag
+, userPlugins ? [ ]
+, pluginsDeps ? [ ]
 }:
 
-let
-  inherit (pythonPackages) python;
-in pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mailnag";
-  version = "1.3.0";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/pulb/mailnag/archive/v${version}.tar.gz";
-    sha256 = "0cp5pad6jzd5c14pddbi9ap5bi78wjhk1x2p0gbblmvmcasw309s";
+  src = fetchFromGitHub {
+    owner = "pulb";
+    repo = "mailnag";
+    rev = "v${version}";
+    sha256 = "0m1cyzwzm7z4p2v31dx098a1iar7dbilwyjcxiqnjx05nlmiqvgf";
   };
 
   buildInputs = [
-    gtk3 gdk-pixbuf libnotify gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gtk3
+    gdk-pixbuf
+    glib
+    libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gnome3.adwaita-icon-theme
-  ] ++ stdenv.lib.optional withGnomeKeyring libgnome-keyring3;
+    gobject-introspection
+    libsecret
+  ] ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
+    # To later add plugins to
+    xorg.lndir
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    pygobject3 dbus-python pyxdg
+  propagatedBuildInputs = with python3Packages; [
+    gsettings-desktop-schemas
+    pygobject3
+    dbus-python
+    pyxdg
   ];
 
-  buildPhase = "";
+  passthru = {
+    inherit availablePlugins;
+    withPlugins =
+      plugs:
+      let
+        # goa plugin requires gio's gnome-online-accounts which requires making sure
+        # mailnag runs with GI_TYPELIB_PATH containing the path to Goa-1.0.typelib.
+        # This is handled best by adding the plugins' deps to buildInputs and let
+        # wrapGAppsHook handle that.
+        pluginsDeps = lib.flatten (lib.catAttrs "buildInputs" plugs);
+        self = mailnag;
+      in
+        self.override {
+          userPlugins = plugs;
+          inherit pluginsDeps;
+        };
+  };
 
-  installPhase = "${python}/bin/python setup.py install --prefix=$out";
+  # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped
+  dontWrapGApps = true;
 
-  doCheck = false;
+  preFixup = ''
+    substituteInPlace $out/${python3Packages.python.sitePackages}/Mailnag/common/dist_cfg.py \
+      --replace "/usr/" $out/
+    for desktop_file in $out/share/applications/*.desktop; do
+      substituteInPlace "$desktop_file" \
+      --replace "/usr/bin" $out/bin
+    done
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
-  meta = with stdenv.lib; {
+  # Actually install plugins
+  postInstall = ''
+    for plug in ${builtins.toString userPlugins}; do
+      lndir $plug/${python3Packages.python.sitePackages} $out/${python3Packages.python.sitePackages}
+    done
+  '';
+
+  meta = with lib; {
     description = "An extensible mail notification daemon";
-    homepage = https://github.com/pulb/mailnag;
+    homepage = "https://github.com/pulb/mailnag";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ doronbehar ];
+    broken = true; # at 2022-09-23
   };
 }

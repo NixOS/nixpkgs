@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, git, makeWrapper, which }:
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, which }:
 
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ingydotnet";
     repo = "git-subrepo";
     rev = version;
-    sha256 = "05m2dm9gq2nggwnxxdyq2kjj584sn2lxk66pr1qhjxnk81awj9l7";
+    sha256 = "0n10qnc8kyms6cv65k1n5xa9nnwpwbjn9h2cq47llxplawzqgrvp";
   };
 
   nativeBuildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${git}/bin"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/ingydotnet/git-subrepo;
+  meta = with lib; {
+    homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix ++ platforms.darwin;
     maintainers = [ maintainers.ryantrinkle ];
   };
 }

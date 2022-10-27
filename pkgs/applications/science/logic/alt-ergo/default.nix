@@ -1,26 +1,49 @@
-{ fetchurl, stdenv, which, dune, ocamlPackages }:
+{ fetchFromGitHub, fetchpatch, lib, which, ocamlPackages }:
 
-stdenv.mkDerivation rec {
+let
   pname = "alt-ergo";
-  version = "2.3.0";
+  version = "2.4.2";
 
-  src = fetchurl {
-    url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${pname}-${version}.tar.gz";
-    name   = "${pname}-${version}.tar.gz";
-    sha256 = "1ycr3ff0gacq1aqzs16n6swgfniwpim0m7rvhcam64kj0a80c6bz";
+  configureScript = "ocaml unix.cma configure.ml";
+
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
   };
+in
 
-  buildInputs = [ dune which ] ++ (with ocamlPackages; [
-    ocaml findlib camlzip lablgtk menhir num ocplib-simplex psmt2-frontend seq zarith
-  ]);
+let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
+  pname = "alt-ergo-lib";
+  inherit version src configureScript;
+  configureFlags = [ pname ];
+  nativeBuildInputs = [ which ];
+  buildInputs = with ocamlPackages; [ dune-configurator ];
+  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
+}; in
 
-  preConfigure = "patchShebangs ./configure";
+let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
+  pname = "alt-ergo-parsers";
+  inherit version src configureScript;
+  configureFlags = [ pname ];
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
+  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
+}; in
+
+ocamlPackages.buildDunePackage {
+
+  inherit pname version src configureScript;
+
+  configureFlags = [ pname ];
+
+  nativeBuildInputs = [ which ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
     homepage    = "https://alt-ergo.ocamlpro.com/";
-    license     = stdenv.lib.licenses.ocamlpro_nc;
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.ocamlpro_nc;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

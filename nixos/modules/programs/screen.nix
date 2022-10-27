@@ -13,7 +13,7 @@ in
 
       screenrc = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The contents of /etc/screenrc file.
         '';
         type = types.lines;
@@ -27,6 +27,7 @@ in
     environment.etc.screenrc.text = cfg.screenrc;
 
     environment.systemPackages = [ pkgs.screen ];
+    security.pam.services.screen = {};
   };
 
 }

@@ -1,27 +1,34 @@
-{stdenv, fetchurl, utillinux, libuuid
-, crypto ? false, libgcrypt, gnutls, pkgconfig}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, gettext, mount, libuuid, kmod, macfuse-stubs, DiskArbitration
+, crypto ? false, libgcrypt, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2017.3.23";
+  version = "2022.5.17";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
-  buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
-  nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
-
-  src = fetchurl {
-    url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
-    sha256 = "1mb228p80hv97pgk3myyvgp975r9mxq56c6bdn1n24kngcfh4niy";
+  src = fetchFromGitHub {
+    owner = "tuxera";
+    repo = "ntfs-3g";
+    rev = version;
+    sha256 = "sha256-xh8cMNIHeJ1rtk5zwOsmcxeedgZ3+MSiWn2UC7y+gtQ=";
   };
 
-  patchPhase = ''
-    substituteInPlace src/Makefile.in --replace /sbin '@sbindir@'
-    substituteInPlace ntfsprogs/Makefile.in --replace /sbin '@sbindir@'
-    substituteInPlace libfuse-lite/mount_util.c \
-      --replace /bin/mount ${utillinux}/bin/mount \
-      --replace /bin/umount ${utillinux}/bin/umount
-  '';
+  buildInputs = [ gettext libuuid ]
+    ++ lib.optionals crypto [ gnutls libgcrypt ]
+    ++ lib.optionals stdenv.isDarwin [ macfuse-stubs DiskArbitration ];
+
+  # Note: libgcrypt is listed here non-optionally because its m4 macros are
+  # being used in ntfs-3g's configure.ac.
+  nativeBuildInputs = [ autoreconfHook libgcrypt pkg-config ];
+
+  patches = [
+    # https://github.com/tuxera/ntfs-3g/pull/39
+    ./autoconf-sbin-helpers.patch
+    ./consistent-sbindir-usage.patch
+  ];
 
   configureFlags = [
     "--disable-ldconfig"
@@ -31,6 +38,10 @@ stdenv.mkDerivation rec {
     "--enable-xattr-mappings"
     "--${if crypto then "enable" else "disable"}-crypto"
     "--enable-extras"
+    "--with-mount-helper=${mount}/bin/mount"
+    "--with-umount-helper=${mount}/bin/umount"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--with-modprobe-helper=${kmod}/bin/modprobe"
   ];
 
   postInstall =
@@ -39,11 +50,16 @@ stdenv.mkDerivation rec {
       ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
     '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.tuxera.com/community/open-source-ntfs-3g/;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus; # and (lib)fuse-lite under LGPL2+
+    platforms = with platforms; darwin ++ linux;
+    license = with licenses; [
+      gpl2Plus # ntfs-3g itself
+      lgpl2Plus # fuse-lite
+    ];
   };
 }

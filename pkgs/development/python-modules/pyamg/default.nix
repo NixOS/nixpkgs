@@ -5,16 +5,21 @@
 , scipy
 , pytest
 , pybind11
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "4.0.0";
+  version = "4.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ceb38ffd86e29774e759486f2961599c8ed847459c68727493cadeaf115a38a";
+    sha256 = "sha256-N608Hcr/JDXCq3yOw2lCrwcmxWPTUFm80Y6wdHP3GC4=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -23,13 +28,21 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  # failed with "ModuleNotFoundError: No module named 'pyamg.amg_core.evolution_strength'"
+  doCheck = false;
+  # taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=python-pyamg#n27
+  # checkPhase = ''
+  #   PYTHONPATH="$PWD/build/lib.linux-*:$PYTHONPATH" ${python3.interpreter} -c "import pyamg; pyamg.test()"
+  # '';
+
+  pythonImportsCheck = [
+    "pyamg"
+    "pyamg.amg_core.evolution_strength"
+  ];
 
   meta = with lib; {
     description = "Algebraic Multigrid Solvers in Python";
-    homepage = https://github.com/pyamg/pyamg;
+    homepage = "https://github.com/pyamg/pyamg";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

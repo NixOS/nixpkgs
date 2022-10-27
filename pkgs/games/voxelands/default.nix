@@ -1,13 +1,30 @@
-{ stdenv, fetchurl, cmake, irrlicht, libpng, bzip2, sqlite
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, xlibsWrapper, pkgconfig }:
+{ lib, stdenv
+, fetchFromGitLab
+, bzip2
+, cmake
+, expat
+, irrlicht
+, libGL
+, libGLU
+, libXxf86vm
+, libjpeg
+, libpng
+, libvorbis
+, openal
+, pkg-config
+, sqlite
+, xlibsWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "voxelands";
-  version = "1512.00";
+  version = "1704.00";
 
-  src = fetchurl {
-    url = "http://voxelands.com/downloads/${pname}-${version}-src.tar.bz2";
-    sha256 = "0bims0y0nyviv2f2nxfj37s3258cjbfp9xd97najz0yylnk3qdfw";
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0yj9z9nygpn0z63y739v72l3kg81wd71xgix5k045vfzhqsam5m0";
   };
 
   cmakeFlags = [
@@ -16,16 +33,32 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
   ];
 
-  buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg sqlite
-    libXxf86vm libGLU_combined openal libvorbis xlibsWrapper pkgconfig
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://voxelands.com/;
+  buildInputs = [
+    bzip2
+    expat
+    irrlicht
+    libGL
+    libGLU
+    libXxf86vm
+    libjpeg
+    libpng
+    libvorbis
+    openal
+    sqlite
+    xlibsWrapper
+  ];
+
+  meta = with lib; {
+    homepage = "https://voxelands.net/";
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    broken = stdenv.isAarch64;  # build fails with "libIrrlicht.so: undefined reference to `png_init_filter_functions_neon'"
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, skawarePackages }:
+{ lib, skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "s6-linux-utils";
-  version = "2.5.0.1";
-  sha256 = "0bpcaah3rbz4i013bkarr7wxmfvisjyxg0z78xg5zfbgajpgjxx1";
+  version = "2.6.0.0";
+  sha256 = "sha256-bHEyc0oMgocALuaRDEafF1qX12aoAjwMM6+LqSZD7Vk=";
 
   description = "A set of minimalistic Linux-specific system utilities";
-  platforms = stdenv.lib.platforms.linux;
+  platforms = lib.platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 
@@ -24,7 +24,7 @@ buildPackage {
 
   postInstall = ''
     # remove all s6 executables from build directory
-    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable) rngseed
 
     mv doc $doc/share/doc/s6-linux-utils/html
   '';

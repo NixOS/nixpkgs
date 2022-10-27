@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, gmp4, ncurses, zlib, clang_35 }:
+{ lib, stdenv, fetchurl, gmp4, ncurses, zlib, clang }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.libc
       stdenv.cc.cc
       gmp4
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     ln -s ${stdenv.cc.libc}/lib/libpthread.so.0 $out/lib/libpthread.so.0
 
     # Add a clang symlink for easy building with a suitable compiler.
-    ln -s ${clang_35}/bin/clang $out/bin/saw-clang
+    ln -s ${clang}/bin/clang $out/bin/saw-clang
   '';
 
   fixupPhase = ''
@@ -48,13 +48,12 @@ stdenv.mkDerivation {
     done
   '';
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   meta = {
     description = "Tools for software verification and analysis";
     homepage    = "https://saw.galois.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK30, boost, firebird }:
+{ lib, stdenv, fetchFromGitHub, wxGTK30, boost, firebird }:
 
 stdenv.mkDerivation rec {
   version = "0.9.3.1";
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     "--disable-debug"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database administration tool for Firebird RDBMS";
-    homepage = https://github.com/mariuz/flamerobin;
+    homepage = "https://github.com/mariuz/flamerobin";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.unix;

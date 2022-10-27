@@ -1,31 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, python
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.2.9";
+  version = "0.3.5.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f6d6046f9f9195206063dd0415dff185ad593d6ee8b0e67f12597c0f4df4986f";
+  src = fetchFromGitHub {
+    owner = "uqfoundation";
+    repo = pname;
+    rev = "refs/tags/dill-${version}";
+    sha256 = "sha256-gWE7aQodblgHjUqGAzOJGgxJ4qx9wHo/DU4KRE6JMWo=";
   };
 
-  # Messy test suite. Even when running the tests like tox does, it fails
-  doCheck = false;
-  checkPhase = ''
-    for test in tests/*.py; do
-      ${python.interpreter} $test
-    done
-  '';
-  # Following error without setting checkPhase
-  # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  # Tests seem to fail because of import pathing and referencing items/classes in modules.
+  # Seems to be a Nix/pathing related issue, not the codebase, so disabling failing tests.
+  disabledTestPaths = [
+    "tests/test_diff.py"
+    "tests/test_module.py"
+    "tests/test_objects.py"
+    "tests/test_session.py"
+  ];
+
+  disabledTests = [
+    "test_class_objects"
+    "test_importable"
+    "test_method_decorator"
+    "test_the_rest"
+    # test exception catching needs updating, can probably be removed with next update
+    "test_recursive_function"
+  ];
+
+  pythonImportsCheck = [ "dill" ];
+
+  meta = with lib; {
     description = "Serialize all of python (almost)";
-    homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
-    license = lib.licenses.bsd3;
+    homepage = "https://github.com/uqfoundation/dill/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

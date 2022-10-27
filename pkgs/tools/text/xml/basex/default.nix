@@ -1,48 +1,40 @@
-{ stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "8.6.6";
+  version = "10.2";
 
   src = fetchurl {
-    url = "http://files.basex.org/releases/${version}/BaseX866.zip";
-    sha256 = "1kws6swisdaa17yhijjvkh2ikwz9rd5cw8mdjvkqw6vlcp1nq6m4";
+    url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
+    hash = "sha256-byx1gY/tzUmdi120tQzUywj9XroLyxYVMb4UilkChNk=";
   };
 
-  buildInputs = [ unzip jre ];
+  nativeBuildInputs = [ unzip copyDesktopItems ];
+  buildInputs = [ jre ];
 
-  desktopItem = makeDesktopItem {
+  desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
-    icon = ./basex.svg; # icon copied from Ubuntu basex package
+    icon = "${./basex.svg}"; # icon copied from Ubuntu basex package
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
-    categories = "Development;Utility;Database";
-    mimeType = "text/xml";
-  };
+    categories = [ "Development" "Utility" "Database" ];
+    mimeTypes = [ "text/xml" ];
+  });
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out"
-    cp -r * "$out"
+    runHook preInstall
 
     # Remove Windows batch files (unclutter $out/bin)
-    rm -f "$out"/bin/*.bat
+    rm ./bin/*.bat
 
-    # Move some top-level stuff to $out/share/basex (unclutter $out)
     mkdir -p "$out/share/basex"
-    mv "$out"/*.txt "$out/share/basex/"
-    mv "$out"/webapp "$out/share/basex/"
 
-    # Remove empty directories
-    rmdir "$out/repo"
-    rmdir "$out/data"
-
-    # Install desktop file
-    mkdir -p "$out/share/applications"
-    cp "$desktopItem"/share/applications/* "$out/share/applications/"
+    cp -R bin etc lib webapp src BaseX.jar "$out"
+    cp -R readme.txt webapp "$out/share/basex"
 
     # Use substitutions instead of wrapper scripts
     for file in "$out"/bin/*; do
@@ -54,9 +46,11 @@ stdenv.mkDerivation rec {
                -e "s|echo|${coreutils}/bin/echo|" \
             "$file"
     done
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML database and XPath/XQuery processor";
     longDescription = ''
       BaseX is a very fast and light-weight, yet powerful XML database and
@@ -65,9 +59,10 @@ stdenv.mkDerivation rec {
       highly interactive front-end (basexgui). Apart from two local standalone
       modes, BaseX offers a client/server architecture.
     '';
-    homepage = http://basex.org/;
+    homepage = "https://basex.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

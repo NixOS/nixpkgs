@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "pfds";
+  pname = "pfds";
   version = "2017-09-25";
 
   idrisDeps = [ contrib ];
@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Purely functional data structures in Idris";
-    homepage = https://github.com/timjb/idris-pfds;
+    homepage = "https://github.com/timjb/idris-pfds";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

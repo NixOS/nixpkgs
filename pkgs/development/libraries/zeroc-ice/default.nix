@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, mcpp, bzip2, expat, openssl, lmdb
-, darwin, libiconv, Security
+{ stdenv, lib, fetchFromGitHub
+, bzip2, expat, libedit, lmdb, openssl, libxcrypt
+, python3 # for tests only
 , cpp11 ? false
 }:
 
 let
-  zeroc_mcpp = mcpp.overrideAttrs (self: rec {
+  zeroc_mcpp = stdenv.mkDerivation rec {
     pname = "zeroc-mcpp";
     version = "2.7.2.14";
 
@@ -15,29 +16,22 @@ let
       sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
     };
 
+    configureFlags = [ "--enable-mcpplib" ];
     installFlags = [ "PREFIX=$(out)" ];
-  });
+  };
 
 in stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.2";
+  version = "3.7.7";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    sha256 = "0m9lh79dfpcwcp2jhmj0wqdcsw3rl633x2hzfw9n2i34jjv64fvg";
+    sha256 = "sha256-h455isEmnRyoasXhh1UaA5PICcEEM8/C3IJf5yHRl5g=";
   };
 
-  buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
-
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=class-memaccess" ];
-
-  prePatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace Make.rules.Darwin \
-        --replace xcrun ""
-  '';
+  buildInputs = [ zeroc_mcpp bzip2 expat libedit lmdb openssl libxcrypt ];
 
   preBuild = ''
     makeFlagsArray+=(
@@ -50,11 +44,27 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  buildFlags = [ "srcs" ]; # no tests; they require network
-
   enableParallelBuilding = true;
 
   outputs = [ "out" "bin" "dev" ];
+
+  doCheck = true;
+  checkInputs = with python3.pkgs; [ passlib ];
+  checkPhase = with lib; let
+    # these tests require network access so we need to skip them.
+    brokenTests = map escapeRegex [
+      "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
+
+      # FIXME: certificate expired, remove for next release?
+      "IceSSL/configuration"
+    ];
+    # matches CONFIGS flag in makeFlagsArray
+    configFlag = optionalString cpp11 "--config=cpp11-shared";
+  in ''
+    runHook preCheck
+    ${python3.interpreter} ./cpp/allTests.py ${configFlag} --rfilter='${concatStringsSep "|" brokenTests}'
+    runHook postCheck
+  '';
 
   postInstall = ''
     mkdir -p $bin $dev/share
@@ -62,11 +72,12 @@ in stdenv.mkDerivation rec {
     mv $out/share/ice $dev/share
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.zeroc.com/ice.html;
+  meta = with lib; {
+    homepage = "https://www.zeroc.com/ice.html";
     description = "The internet communications engine";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    broken = stdenv.isDarwin;
   };
 }

@@ -4,13 +4,14 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "rss2email";
-  version = "3.10";
+  version = "3.14";
 
-  propagatedBuildInputs = [ feedparser beautifulsoup4 html2text ];
+  propagatedBuildInputs = [ feedparser html2text ];
+  checkInputs = [ beautifulsoup4 ];
 
   src = fetchurl {
     url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "1yjgbgpq9jjmpywwk6n4lzb2k7mqgdgfgm4jckv4zy0fn595pih1";
+    sha256 = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -31,15 +32,17 @@ buildPythonApplication rec {
     cp AUTHORS COPYING CHANGELOG README.rst $doc/share/doc/rss2email/
   '';
 
-  postCheck = ''
+  checkPhase = ''
+    runHook preCheck
     env PATH=$out/bin:$PATH python ./test/test.py
+    runHook postCheck
   '';
 
   meta = with lib; {
-    description = "A tool that converts RSS/Atom newsfeeds to email.";
-    homepage = https://pypi.python.org/pypi/rss2email;
+    description = "A tool that converts RSS/Atom newsfeeds to email";
+    homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jb55 Profpatsch ];
+    maintainers = with maintainers; [ Profpatsch ekleog ];
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

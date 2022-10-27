@@ -1,44 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , numpy
+, packaging
+, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.6.9";
+  version = "2.8.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc218b777cdbb14fa8cff8f28175ee631bacabbdd41ca34e061325b6c44a6fa6";
+    hash = "sha256-y2R8nZx4Xa4HWb9sh1zeK+xHK1w/emAVc0sWGudm0UE=";
   };
 
-  # Remove existing site.cfg, use the one we built for numpy.
+  nativeBuildInputs = [
+    numpy
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    packaging
+  ];
+
   preBuild = ''
-    rm site.cfg
+    # Remove existing site.cfg, use the one we built for numpy
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  propagatedBuildInputs = [ numpy ];
-
-  # Run the test suite.
-  # It requires the build path to be in the python search path.
   checkPhase = ''
-    pushd $out
-    ${python}/bin/${python.executable} <<EOF
-    import sys
-    import numexpr
-    r = numexpr.test()
-    if not r.wasSuccessful():
-        sys.exit(1)
-    EOF
+    runtest="$(pwd)/numexpr/tests/test_numexpr.py"
+    pushd "$out"
+    ${python.interpreter} "$runtest"
     popd
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "numexpr"
+  ];
+
+  meta = with lib; {
     description = "Fast numerical array expression evaluator for NumPy";
     homepage = "https://github.com/pydata/numexpr";
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -19,7 +19,10 @@ let
     "interface ${name} ${paramsString interface}\n";
 
   configFile = with cfg; pkgs.writeText "babeld.conf" (
-    (optionalString (cfg.interfaceDefaults != null) ''
+    ''
+      skip-kernel-setup true
+    ''
+    + (optionalString (cfg.interfaceDefaults != null) ''
       default ${paramsString cfg.interfaceDefaults}
     '')
     + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
@@ -29,24 +32,21 @@ in
 
 {
 
+  meta.maintainers = with maintainers; [ hexa ];
+
   ###### interface
 
   options = {
 
     services.babeld = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the babeld network routing daemon.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "the babeld network routing daemon");
 
       interfaceDefaults = mkOption {
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A set describing default parameters for babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.nullOr (types.attrsOf types.unspecified);
         example =
@@ -58,9 +58,9 @@ in
 
       interfaces = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           A set describing babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
@@ -74,9 +74,10 @@ in
 
       extraConfig = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Options that will be copied to babeld.conf.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.
+          See {manpage}`babeld(8)` for details.
         '';
       };
     };
@@ -88,13 +89,56 @@ in
 
   config = mkIf config.services.babeld.enable {
 
+    boot.kernel.sysctl = {
+      "net.ipv6.conf.all.forwarding" = 1;
+      "net.ipv6.conf.all.accept_redirects" = 0;
+      "net.ipv4.conf.all.forwarding" = 1;
+      "net.ipv4.conf.all.rp_filter" = 0;
+    } // lib.mapAttrs' (ifname: _: lib.nameValuePair "net.ipv4.conf.${ifname}.rp_filter" (lib.mkDefault 0)) config.services.babeld.interfaces;
+
     systemd.services.babeld = {
       description = "Babel routing daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile}";
+      serviceConfig = {
+        ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
+        AmbientCapabilities = [ "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+        DevicePolicy = "closed";
+        DynamicUser = true;
+        IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" ];
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        MemoryDenyWriteExecute = true;
+        ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET6" "AF_INET" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = false; # kernel_route(ADD): Operation not permitted
+        ProcSubset = "pid";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
+        UMask = "0177";
+        RuntimeDirectory = "babeld";
+        StateDirectory = "babeld";
+      };
     };
-
   };
-
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, perl, gettext, pkgconfig, libidn2, libiconv }:
+{ lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.2";
+  version = "5.5.13";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "0587xvw0ifjrwxgisw0nfx7qykmkly1knfdghrpph9vicpzwsidw";
+    sha256 = "sha256-Qd1tPRKbiTNmsOdawxQhJO1ykEA1VdAAXeBPPVlXwvI=";
   };
 
-  nativeBuildInputs = [ perl gettext pkgconfig ];
+  nativeBuildInputs = [ perl gettext pkg-config ];
   buildInputs = [ libidn2 libiconv ];
 
   preConfigure = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-whois" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intelligent WHOIS client from Debian";
     longDescription = ''
       This package provides a commandline client for the WHOIS (RFC 3912)
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       select the appropriate WHOIS server for most queries.
     '';
 
-    homepage = https://packages.qa.debian.org/w/whois.html;
+    homepage = "https://packages.qa.debian.org/w/whois.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

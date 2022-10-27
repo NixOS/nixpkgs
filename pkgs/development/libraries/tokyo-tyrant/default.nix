@@ -1,17 +1,18 @@
-{ fetchurl, stdenv, tokyocabinet, pkgconfig }:
+{ fetchurl, lib, stdenv, tokyocabinet, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "tokyotyrant-1.1.41";
+  pname = "tokyotyrant";
+  version = "1.1.41";
 
   src = fetchurl {
-    url = "http://fallabs.com/tokyotyrant/${name}.tar.gz";
+    url = "https://fallabs.com/tokyotyrant/tokyotyrant-${version}.tar.gz";
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ tokyocabinet ];
 
-  doCheck = false;                                # FIXME
+  doCheck = false; # FIXME
 
   meta = {
     description = "Network interface of the Tokyo Cabinet DBM";
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
          licensed under the GNU Lesser General Public License.
        '';
 
-    homepage = http://fallabs.com/tokyotyrant/;
+    homepage = "https://fallabs.com/tokyotyrant/";
 
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
     maintainers = [ ];
   };
 }

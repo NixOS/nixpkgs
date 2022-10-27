@@ -1,28 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, fastjsonschema
+, flit-core
+, pytestCheckHook
 , glibcLocales
 , ipython_genutils
 , traitlets
 , testpath
 , jsonschema
 , jupyter_core
+, pep440
 }:
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "4.4.0";
+  version = "5.5.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7494ef0df60766b7cabe0a3651556345a963b74dbc16bc7c18479041170d402";
+    sha256 = "sha256-nr4w5sOz5bR9Of8KOJehrPUj0r+vy04tBM23D4pmxQc=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   LC_ALL="en_US.utf8";
 
-  checkInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
+  propagatedBuildInputs = [
+    fastjsonschema
+    ipython_genutils
+    jsonschema
+    jupyter_core
+    pep440
+    testpath
+    traitlets
+  ];
+
+  checkInputs = [ pytestCheckHook glibcLocales ];
 
   preCheck = ''
     mkdir tmp
@@ -34,7 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Jupyter Notebook format";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh globin ];
   };

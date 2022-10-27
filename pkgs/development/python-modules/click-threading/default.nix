@@ -4,16 +4,16 @@
 , pytest
 , click
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "click-threading";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2b0fada5bf184b56afaccc99d0d2548d8ab07feb2e95e29e490f6b99c605de7";
+    sha256 = "sha256-rc/mI8AqWVwQfDFAcvZ6Inj+TrQLcsDRoskDzHivNDk=";
   };
 
   checkInputs = [ pytest ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = {
-    homepage = https://github.com/click-contrib/click-threading/;
+    homepage = "https://github.com/click-contrib/click-threading/";
     description = "Multithreaded Click apps made easy";
     license = lib.licenses.mit;
   };

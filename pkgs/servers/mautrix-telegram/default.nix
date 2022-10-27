@@ -1,59 +1,74 @@
-{ lib, python3, mautrix-telegram }:
+{ lib
+, python3
+, fetchFromGitHub
+, withE2BE ? true
+, withHQthumbnails ? false
+}:
 
-with python3.pkgs;
-
-buildPythonPackage rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
+        version = "1.26.0a5";
+        pname = "tulir-telethon";
+        src = super.fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-s6pj9kHqcl6XU1KQ/aOw1XWQ3CyDotaDl0m7aj9SbW4=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.6.1";
+  version = "0.12.1";
+  disabled = python.pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1lsi6x5yr8f9yjxsh1rmcd6wnxr6s6rpr720lg7sq629m42d9p1d";
+  src = fetchFromGitHub {
+    owner = "mautrix";
+    repo = "telegram";
+    rev = "v${version}";
+    sha256 = "sha256-ecNcoNz++HtuDZnDLsXfPL0MRF+XMQ1BU/NFkKPbD5U=";
   };
 
-  postPatch = ''
-    sed -i -e '/alembic>/d' setup.py
-  '';
+  patches = [ ./0001-Re-add-entrypoint.patch ];
 
-  propagatedBuildInputs = [
-    Mako
-    aiohttp
-    mautrix-appservice
-    sqlalchemy
+  propagatedBuildInputs = with python.pkgs; ([
+    ruamel-yaml
+    python-magic
     CommonMark
-    ruamel_yaml
-    future-fstrings
-    python_magic
-    telethon
-    telethon-session-sqlalchemy
+    aiohttp
+    yarl
+    mautrix
+    tulir-telethon
+    asyncpg
+    Mako
+    # optional
+    cryptg
+    cchardet
+    aiodns
+    brotli
     pillow
-    lxml
-    setuptools
-  ];
+    qrcode
+    phonenumbers
+    prometheus-client
+    aiosqlite
+  ] ++ lib.optionals withHQthumbnails [
+    moviepy
+  ] ++ lib.optionals withE2BE [
+    python-olm
+    pycryptodome
+    unpaddedbase64
+  ]);
 
-  # `alembic` (a database migration tool) is only needed for the initial setup,
-  # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
-  # in its environment to create a database schema from all models.
-  #
-  # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
-  # which has `mautrix-telegram` in its environment.
-  passthru.alembic = alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
-      mautrix-telegram
-    ];
-  });
-
-  checkInputs = [
-    pytest
-    pytestrunner
-    pytest-mock
-    pytest-asyncio
-  ];
+  # has no tests
+  doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/tulir/mautrix-telegram;
+    homepage = "https://github.com/mautrix/telegram";
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ nyanloutre ma27 ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nyanloutre ma27 nickcao ];
   };
 }

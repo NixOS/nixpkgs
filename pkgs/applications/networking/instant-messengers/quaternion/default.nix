@@ -1,44 +1,53 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
-, qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
-, libqmatrixclient_0_5 }:
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtquickcontrols
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
+}:
 
-let
-  generic = version: sha256: prefix: library: mkDerivation {
-    pname = "quaternion";
-    inherit version;
+mkDerivation rec {
+  pname = "quaternion";
+  version = "0.0.95.1";
 
-    src = fetchFromGitHub {
-      owner = "QMatrixClient";
-      repo  = "Quaternion";
-      rev   = "${prefix}${version}";
-      inherit sha256;
-    };
+  src = fetchFromGitHub {
+    owner = "QMatrixClient";
+    repo = "Quaternion";
+    rev = version;
+    sha256 = "sha256-6FLj/hVY13WO7sMgHCHV57eMJu39cwQHXQX7m0lmv4I=";
+  };
 
-    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library ];
+  buildInputs = [
+    qtmultimedia
+    qtquickcontrols2
+    qtkeychain
+    libquotient
+    libsecret
+  ];
 
-    nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [ cmake qttools ];
 
-    postInstall = if stdenv.isDarwin then ''
+  postInstall =
+    if stdenv.isDarwin then ''
       mkdir -p $out/Applications
       mv $out/bin/quaternion.app $out/Applications
       rmdir $out/bin || :
     '' else ''
-      substituteInPlace $out/share/applications/quaternion.desktop \
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
         --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
     '';
 
-    meta = with lib; {
-      description = "Cross-platform desktop IM client for the Matrix protocol";
-      homepage    = "https://matrix.org/docs/projects/client/quaternion.html";
-      license     = licenses.gpl3;
-      maintainers = with maintainers; [ peterhoeg ];
-      inherit (qtbase.meta) platforms;
-      inherit version;
-    };
+  meta = with lib; {
+    description = "Cross-platform desktop IM client for the Matrix protocol";
+    homepage = "https://matrix.org/docs/projects/client/quaternion.html";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ peterhoeg ];
+    inherit (qtquickcontrols2.meta) platforms;
   };
-
-in rec {
-  quaternion     = generic "0.0.9.4c"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
-
-  quaternion-git = quaternion;
 }

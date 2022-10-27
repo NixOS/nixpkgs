@@ -1,39 +1,78 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection,
-pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, buildPythonPackage
+, pkg-config
+, glib
+, gobject-introspection
+, pycairo
+, cairo
+, ncurses
+, meson
+, ninja
+, isPy3k
+, gnome
+, python
+}:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.32.1";
+  version = "3.42.2";
+
+  outputs = [ "out" "dev" ];
+
+  disabled = !isPy3k;
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1n04dnvq3bx7vk7pgnxlg6kiwnc7xxv9bjabkv7abpmqjkprvj9j";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "rehpXipwc4Sd0DFtMdhyjhXh4Lxx2f9tHAnoa+UryVc=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  mesonFlags = [
-    "-Dpython=python${if isPy3k then "3" else "2" }"
+  depsBuildBuild = [
+    pkg-config
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
-  buildInputs = [ glib gobject-introspection ]
-                 ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
-  propagatedBuildInputs = [ pycairo cairo ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    # # .so files link to these
+    gobject-introspection
+    glib
+  ] ++ lib.optionals stdenv.isDarwin [
+    ncurses
+  ];
+
+  propagatedBuildInputs = [
+    pycairo
+    cairo
+  ];
+
+  mesonFlags = [
+    # This is only used for figuring out what version of Python is in
+    # use, and related stuff like figuring out what the install prefix
+    # should be, but it does need to be able to execute Python code.
+    "-Dpython=${python.pythonForBuild.interpreter}"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}3";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://pygobject.readthedocs.io/;
+  meta = with lib; {
+    homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };

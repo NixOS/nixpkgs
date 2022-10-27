@@ -1,78 +1,112 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, aiofiles
+, asgi-csrf
 , click
 , click-default-group
+, itsdangerous
+, janus
 , jinja2
 , hupper
+, mergedeep
 , pint
 , pluggy
-, pytest
-, pytestrunner
+, python-baseconv
+, pyyaml
+, uvicorn
+, httpx
+# Check Inputs
+, pytestCheckHook
 , pytest-asyncio
-, black
+, pytest-timeout
 , aiohttp
 , beautifulsoup4
-, uvicorn
 , asgiref
-, aiofiles
+, setuptools
+, trustme
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.29.3";
+  version = "0.61.1";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = "datasette";
+    repo = pname;
     rev = version;
-    sha256 = "0cib7pd4z240ncck0pskzvizblhwkr42fsjpd719wdxy4scs7yqa";
+    sha256 = "sha256-HVzMyF4ujYK12UQ25il/XROPo+iBldsMxOTx+duoc5o=";
   };
 
-  buildInputs = [ pytestrunner ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' "" \
+      --replace "click>=7.1.1,<8.1.0" "click>=7.1.1,<8.2.0" \
+      --replace "click-default-group~=1.2.2" "click-default-group" \
+      --replace "hupper~=1.9" "hupper" \
+      --replace "Jinja2>=2.10.3,<3.1.0" "Jinja2" \
+      --replace "pint~=0.9" "pint" \
+      --replace "uvicorn~=0.11" "uvicorn"
+  '';
 
   propagatedBuildInputs = [
+    aiofiles
+    asgi-csrf
+    asgiref
     click
     click-default-group
-    jinja2
+    httpx
     hupper
+    itsdangerous
+    janus
+    jinja2
+    mergedeep
     pint
     pluggy
+    python-baseconv
+    pyyaml
+    setuptools
     uvicorn
-    aiofiles
   ];
 
   checkInputs = [
-    pytest
-    pytest-asyncio
     aiohttp
     beautifulsoup4
-    black
-    asgiref
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+    trustme
   ];
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "click-default-group==1.2" "click-default-group" \
-      --replace "Sanic==0.7.0" "Sanic" \
-      --replace "hupper==1.0" "hupper" \
-      --replace "pint~=0.8.1" "pint" \
-      --replace "Jinja2==2.10.1" "Jinja2" \
-      --replace "uvicorn~=0.8.4" "uvicorn"
-  '';
+  # takes 30-180 mins to run entire test suite, not worth the CPU resources, slows down reviews
+  # with pytest-xdist, it still takes around 10 mins with 32 cores
+  # just run the csv tests, as this should give some indictation of correctness
+  pytestFlagsArray = [
+    "tests/test_csv.py"
+  ];
 
-  # many tests require network access
-  checkPhase = ''
-    pytest --ignore tests/test_api.py \
-           --ignore tests/test_csv.py \
-           --ignore tests/test_html.py
-  '';
+  disabledTests = [
+    "facet"
+    "_invalid_database" # checks error message when connecting to invalid database
+  ];
+
+  pythonImportsCheck = [
+    "datasette"
+    "datasette.cli"
+    "datasette.app"
+    "datasette.database"
+    "datasette.renderer"
+    "datasette.tracer"
+    "datasette.plugins"
+  ];
 
   meta = with lib; {
-    description = "An instant JSON API for your SQLite databases";
-    homepage = https://github.com/simonw/datasette;
+    description = "Multi-tool for exploring and publishing data";
+    homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
-
 }

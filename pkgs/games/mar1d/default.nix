@@ -1,60 +1,36 @@
 { stdenv
-, fetchFromGitHub
-, cmake
+, lib
+, SDL2
+, SDL2_mixer
 , libGLU
-, xlibsWrapper
-, xorg
-, xinput_calibrator
-, doxygen
-, libpthreadstubs
-, alsaLib
-, alsaOss
-, libao
-, width ? 30
-, mute ? false
-, effects ? false
-, sensitivity ? 5
-, reverseY ? false
+, libconfig
+, meson
+, ninja
+, pkg-config
+, fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
   pname = "MAR1D";
-  version = "0.2.0";
-  options = "-w${toString width}"
-          + " -s${toString sensitivity}"
-          + (if mute then " -m" else "")
-          + (if effects then " -f" else "")
-          + (if reverseY then " -r" else "");
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    sha256 = "152w5dnlxzv60cl24r5cmrj2q5ar0jiimrmxnp87kf4d2dpbnaq7";
+    sha256 = "sha256-c48azBGdnzhEQGUeRJWlNLJhtrYjnpiORuWvowcQK5Y=";
     rev = "v${version}";
-    repo = "fp_mario";
-    owner = "olynch";
+    repo = "MAR1D";
+    owner = "Radvendii";
   };
 
-  buildInputs =
-    [
-      alsaLib
-      alsaOss
-      cmake
-      doxygen
-      libao
-      libpthreadstubs
-      libGLU
-      xlibsWrapper
-      xinput_calibrator
-      xorg.libXrandr
-      xorg.libXi
-      xorg.xinput
-      xorg.libXxf86vm
-    ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  preConfigure = ''
-    cd src
-  '';
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    libconfig
+    libGLU
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "First person Super Mario Bros";
     longDescription = ''
       The original Super Mario Bros as you've never seen it. Step into Mario's
@@ -62,9 +38,9 @@ stdenv.mkDerivation rec {
       original, however, the game still takes place in a two dimensional world.
       You must view the world as mario does, as a one dimensional line.
     '';
-    homepage = https://github.com/olynch/fp_mario;
+    homepage = "https://mar1d.com";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

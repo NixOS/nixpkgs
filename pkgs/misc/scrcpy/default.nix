@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
-, pkgconfig
-, fetchpatch
+, pkg-config
+, installShellFiles
 
 , platform-tools
 , ffmpeg
+, libusb1
 , SDL2
 }:
 
 let
-  version = "1.10";
+  version = "1.24";
   prebuilt_server = fetchurl {
-    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
-    sha256 = "144k25x6ha89l9p5a1dm6r3fqvgqszzwrhvkvk0r44vg0i71msyb";
+    url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
+    sha256 = "sha256-rnSoHqecDcclDlhmJ8J4wKmoxd5GyftcOMFn+xo28FY=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hhncqcs49n9g8sgvwbyvkaq4b1dhrpn7qgnaj6grjcb0i27vzaq";
+    sha256 = "sha256-mL0lSZUPMMcLGq4iPp/IgYZLaTeey9Nv9vVwY1gaIRk=";
   };
 
   # postPatch:
@@ -36,35 +37,32 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg SDL2 ];
-
-  # FIXME: remove on update to > 1.10
-  patches = [(fetchpatch {
-    url = "https://github.com/Genymobile/scrcpy/commit/c05056343b56be65ae887f8b7ead61a8072622b9.diff";
-    sha256 = "1xh24gr2g2i9rk0zyv19jx54hswrq12ssp227vxbhsbamin9ir5b";
-  })];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
-    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server.jar"
+    ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
-    homepage = https://github.com/Genymobile/scrcpy;
+    homepage = "https://github.com/Genymobile/scrcpy";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # server
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

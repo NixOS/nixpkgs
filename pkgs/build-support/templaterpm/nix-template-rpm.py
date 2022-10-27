@@ -229,26 +229,26 @@ class SPECTemplate(object):
 
   @property
   def meta(self):
-    out = '  meta = {\n'
+    out = '  meta = with lib; {\n'
     out += '    homepage = ' + self.spec.sourceHeader['url'] + ';\n'
     out += '    description = "' + self.spec.sourceHeader['summary'] + '";\n'
-    out += '    license = stdenv.lib.licenses.' + self.spec.sourceHeader['license'] + ';\n'
+    out += '    license = lib.licenses.' + self.spec.sourceHeader['license'] + ';\n'
     out += '    platforms = [ "i686-linux" "x86_64-linux" ];\n'
-    out += '    maintainers = with stdenv.lib.maintainers; [ ' + self.maintainer + ' ];\n'
+    out += '    maintainers = with lib.maintainers; [ ' + self.maintainer + ' ];\n'
     out += '  };\n'
     out += '}\n'
     return out
 
 
   def __str__(self):
-    head = '{stdenv, fetchurl, ' + ', '.join(self.getBuildInputs("ALL")) + '}:\n\n'
+    head = '{lib, stdenv, fetchurl, ' + ', '.join(self.getBuildInputs("ALL")) + '}:\n\n'
     head += 'stdenv.mkDerivation {\n'
     body = [ self.name, self.src, self.patch, self.buildInputs, self.configure, self.build, self.ocamlExtra, self.install, self.meta ]
     return head + '\n'.join(body)
 
 
   def getTemplate(self):
-    head = '{stdenv, buildRoot, fetchurl, ' + ', '.join(self.getBuildInputs("ALL")) + '}:\n\n'
+    head = '{lib, stdenv, buildRoot, fetchurl, ' + ', '.join(self.getBuildInputs("ALL")) + '}:\n\n'
     head += 'let\n'
     head += '  buildRootInput = (import "${buildRoot}/usr/share/buildroot/buildRootInput.nix") { fetchurl=fetchurl; buildRoot=buildRoot; };\n'
     head += 'in\n\n'

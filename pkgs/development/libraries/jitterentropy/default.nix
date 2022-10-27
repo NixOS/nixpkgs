@@ -1,30 +1,31 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
-  version = "2.2.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${version}";
-    sha256 = "0n2l1fxr7bynnarpwdjifb2fvlsq8w5wmfh31yk5nrc756cjlgyw";
+    hash = "sha256-go7eGwBoZ58LkgKL7t8oZSc1cFlE6fPOT/ML3Aa8+CM=";
   };
 
-  enableParallelBuilding = true;
+  outputs = [ "out" "dev" ];
 
-  preInstall = ''
-    mkdir -p $out/include
-  '';
+  enableParallelBuilding = true;
+  hardeningDisable = [ "fortify" ]; # avoid warnings
 
   installFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Provides a noise source using the CPU execution timing jitter";
-    homepage = https://github.com/smuellerDD/jitterentropy-library;
-    license = with stdenv.lib.licenses; [ gpl2 bsd3 ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ johnazoidberg ];
+    homepage = "https://github.com/smuellerDD/jitterentropy-library";
+    changelog = "https://github.com/smuellerDD/jitterentropy-library/raw/v${version}/CHANGES.md";
+    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg c0bw3b ];
   };
 }

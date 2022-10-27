@@ -1,26 +1,36 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, llvm }:
+{ callPackage, fetchurl, lib, stdenv, gtk3, pkg-config, libxml2, llvm, perl, sqlite }:
 
-stdenv.mkDerivation rec {
-  name = "sparse-0.5.0";
+let
+  GCC_BASE = "${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.uname.processor}-unknown-linux-gnu/${stdenv.cc.cc.version}";
+in stdenv.mkDerivation rec {
+  pname = "sparse";
+  version = "0.6.4";
 
   src = fetchurl {
-    url = "mirror://kernel/software/devel/sparse/dist/${name}.tar.xz";
-    sha256 = "1mc86jc5xdrdmv17nqj2cam2yqygnj6ar1iqkwsx2y37ij8wy7wj";
+    url = "mirror://kernel/software/devel/sparse/dist/${pname}-${version}.tar.xz";
+    sha256 = "sha256-arKLSZG8au29c1UCkTYKpqs99B9ZIGqb3paQIIpuOHw=";
   };
 
   preConfigure = ''
-    sed -i Makefile -e "s|^PREFIX=.*$|PREFIX=$out|g"
+    sed -i 's|"/usr/include"|"${stdenv.cc.libc.dev}/include"|' pre-process.c
+    sed -i 's|qx(\$ccom -print-file-name=)|"${GCC_BASE}"|' cgcc
+    makeFlags+=" PREFIX=$out"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 llvm ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk3 libxml2 llvm perl sqlite ];
   doCheck = true;
+  buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
 
-  meta = {
+  passthru.tests = {
+    simple-execution = callPackage ./tests.nix { };
+  };
+
+  meta = with lib; {
     description = "Semantic parser for C";
-    homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice jkarlson ];
   };
 }

@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, fetchpatch, lksctp-tools }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.7";
+  pname = "iperf";
+  version = "3.11";
 
   src = fetchurl {
-    url = "https://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "033is7b5grfbiil98jxlz4ixp9shm44x6hy8flpsyz1i4h108inq";
+    url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
+    sha256 = "0pvy1cj92phpbldw0bdc0ds70n8irqcyn1ybyis0a6nnz84v936y";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+  ];
 
   outputs = [ "out" "man" ];
 
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=7f979fc51ae31d5c695d8481ba84a4afc5080efb";
       name = "remove-pg-flags.patch";
@@ -25,11 +29,11 @@ stdenv.mkDerivation rec {
     ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://software.es.net/iperf/;
+  meta = with lib; {
+    homepage = "http://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
-    license = "as-is";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
   };
 }

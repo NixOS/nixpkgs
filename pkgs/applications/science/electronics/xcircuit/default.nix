@@ -1,35 +1,31 @@
-{ stdenv, fetchurl, autoreconfHook, automake, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
-let
-  version = "3.9.73";
-  name = "xcircuit-${version}";
-  inherit (stdenv.lib) getBin;
-
-in stdenv.mkDerivation {
-  inherit name version;
+stdenv.mkDerivation rec {
+  version = "3.10.12";
+  pname = "xcircuit";
 
   src = fetchurl {
-    url = "http://opencircuitdesign.com/xcircuit/archive/${name}.tgz";
-    sha256 = "1kj9hayipplzm4960kx48vxddqj154qnxkccaqj9cnkp62b7q3jg";
+    url = "http://opencircuitdesign.com/xcircuit/archive/xcircuit-${version}.tgz";
+    sha256 = "1h1ywc3mr7plvwnhdii2zgnnv5ih2nhyl4qbdjpi83dq0aq1s2mn";
   };
 
-  nativeBuildInputs = [ autoreconfHook automake pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook automake pkg-config ];
   hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
-    "--with-ngspice=${getBin ngspice}/bin/ngspice"
+    "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
   buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic drawing program tailored to circuit diagrams";
-    homepage = http://opencircuitdesign.com/xcircuit;
+    homepage = "http://opencircuitdesign.com/xcircuit";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.spacefrogg ];
+    maintainers = with maintainers; [ spacefrogg thoughtpolice ];
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, python
+, unittestCheckHook
 , fetchPypi
 , flask
-, Babel
+, babel
 , jinja2
 , pytz
 , speaklater
@@ -11,26 +11,24 @@
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.12.2";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11jwp8vvq1gnm31qh6ihy2h393hy18yn9yjp569g60r0wj1x2sii";
+    sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
   };
 
   propagatedBuildInputs = [
     flask
-    Babel
+    babel
     jinja2
     pytz
     speaklater
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  unittestFlagsArray = [ "-s" "tests" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";
     longDescription = ''
       Implements i18n and l10n support for Flask.
@@ -38,7 +36,7 @@ buildPythonPackage rec {
       installed automatically for you if you install this library.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/python-babel/flask-babel;
+    maintainers = teams.sage.members;
+    homepage = "https://github.com/python-babel/flask-babel";
   };
 }

@@ -1,4 +1,4 @@
-fixupOutputHooks+=('if [ -z "$dontGzipMan" ]; then compressManPages "$prefix"; fi')
+fixupOutputHooks+=('if [ -z "${dontGzipMan-}" ]; then compressManPages "$prefix"; fi')
 
 compressManPages() {
     local dir="$1"
@@ -9,7 +9,7 @@ compressManPages() {
     echo "gzipping man pages under $dir/share/man/"
 
     # Compress all uncompressed manpages.  Don't follow symlinks, etc.
-    find "$dir"/share/man/ -type f -a '!' -regex '.*\.\(bz2\|gz\)$' -print0 \
+    find "$dir"/share/man/ -type f -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
         | while IFS= read -r -d $'\0' f
     do
         if gzip -c -n "$f" > "$f".gz; then
@@ -20,7 +20,8 @@ compressManPages() {
     done
 
     # Point symlinks to compressed manpages.
-    find "$dir"/share/man/ -type l -a '!' -regex '.*\.\(bz2\|gz\)$' -print0 \
+    find "$dir"/share/man/ -type l -a '!' -regex '.*\.\(bz2\|gz\|xz\)$' -print0 \
+        | sort -z \
         | while IFS= read -r -d $'\0' f
     do
         local target

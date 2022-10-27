@@ -4,12 +4,8 @@ with lib;
 
 let
   cfg = config.services.logstash;
-  pluginPath = lib.concatStringsSep ":" cfg.plugins;
-  havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
   verbosityFlag = "--log.level " + cfg.logLevel;
-
-  pluginsPath = "--path.plugins ${pluginPath}";
 
   logstashConf = pkgs.writeText "logstash.conf" ''
     input {
@@ -27,16 +23,25 @@ let
 
   logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
 
+  logstashJvmOptionsFile = pkgs.writeText "jvm.options" cfg.extraJvmOptions;
+
   logstashSettingsDir = pkgs.runCommand "logstash-settings" {
+      inherit logstashJvmOptionsFile;
       inherit logstashSettingsYml;
       preferLocalBuild = true;
     } ''
     mkdir -p $out
     ln -s $logstashSettingsYml $out/logstash.yml
+    ln -s $logstashJvmOptionsFile $out/jvm.options
   '';
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
+    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+  ];
+
   ###### interface
 
   options = {
@@ -46,28 +51,27 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable logstash.";
+        description = lib.mdDoc "Enable logstash.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.logstash;
-        defaultText = "pkgs.logstash";
-        example = literalExample "pkgs.logstash";
-        description = "Logstash package to use.";
+        defaultText = literalExpression "pkgs.logstash";
+        description = lib.mdDoc "Logstash package to use.";
       };
 
       plugins = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExample "[ pkgs.logstash-contrib ]";
-        description = "The paths to find other logstash plugins in.";
+        example = literalExpression "[ pkgs.logstash-contrib ]";
+        description = lib.mdDoc "The paths to find other logstash plugins in.";
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/logstash";
-        description = ''
+        description = lib.mdDoc ''
           A path to directory writable by logstash that it uses to store data.
           Plugins will also have access to this path.
         '';
@@ -76,44 +80,46 @@ in
       logLevel = mkOption {
         type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
         default = "warn";
-        description = "Logging verbosity level.";
+        description = lib.mdDoc "Logging verbosity level.";
       };
 
       filterWorkers = mkOption {
         type = types.int;
         default = 1;
-        description = "The quantity of filter workers to run.";
+        description = lib.mdDoc "The quantity of filter workers to run.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Address on which to start webserver.";
+        description = lib.mdDoc "Address on which to start webserver.";
       };
 
       port = mkOption {
         type = types.str;
         default = "9292";
-        description = "Port on which to start webserver.";
+        description = lib.mdDoc "Port on which to start webserver.";
       };
 
       inputConfig = mkOption {
         type = types.lines;
-        default = ''generator { }'';
-        description = "Logstash input configuration.";
-        example = ''
-          # Read from journal
-          pipe {
-            command => "''${pkgs.systemd}/bin/journalctl -f -o json"
-            type => "syslog" codec => json {}
-          }
+        default = "generator { }";
+        description = lib.mdDoc "Logstash input configuration.";
+        example = literalExpression ''
+          '''
+            # Read from journal
+            pipe {
+              command => "''${config.systemd.package}/bin/journalctl -f -o json"
+              type => "syslog" codec => json {}
+            }
+          '''
         '';
       };
 
       filterConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "logstash filter configuration.";
+        description = lib.mdDoc "logstash filter configuration.";
         example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
@@ -130,8 +136,8 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = ''stdout { codec => rubydebug }'';
-        description = "Logstash output configuration.";
+        default = "stdout { codec => rubydebug }";
+        description = lib.mdDoc "Logstash output configuration.";
         example = ''
           redis { host => ["localhost"] data_type => "list" key => "logstash" codec => json }
           elasticsearch { }
@@ -141,7 +147,7 @@ in
       extraSettings = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra Logstash settings in YAML format.";
+        description = lib.mdDoc "Extra Logstash settings in YAML format.";
         example = ''
           pipeline:
             batch:
@@ -150,6 +156,15 @@ in
         '';
       };
 
+      extraJvmOptions = mkOption {
+        type = types.lines;
+        default = "";
+        description = lib.mdDoc "Extra JVM options, one per line (jvm.options format).";
+        example = ''
+          -Xms2g
+          -Xmx2g
+        '';
+      };
 
     };
   };
@@ -158,17 +173,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.logstash = with pkgs; {
+    systemd.services.logstash = {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
-      environment = { JAVA_HOME = jre; };
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
         ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
           "${cfg.package}/bin/logstash"
           "-w ${toString cfg.filterWorkers}"
-          (ops havePluginPath pluginsPath)
+          (concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
           "${verbosityFlag}"
           "-f ${logstashConf}"
           "--path.settings ${logstashSettingsDir}"

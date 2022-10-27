@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, json_c, libbsd }:
+{ stdenv, lib, fetchFromGitHub, json_c, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "health-check";
-  version = "0.03.03";
+  version = "0.03.10";
 
-  src = fetchurl {
-    url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1bvgfzmvbqqhf1ailbwrsma6sbp5wcl6a35pb1n0y1n1p1hnqzph";
+  src = fetchFromGitHub {
+    owner = "ColinIanKing";
+    repo = pname;
+    rev = "V${version}";
+    hash = "sha256-1dm7tl7DHv1CzuLe1/UewDSUOanO0hN+STkPrAHcZmI=";
   };
 
   buildInputs = [ json_c libbsd ];
@@ -16,11 +18,12 @@ stdenv.mkDerivation rec {
   installFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man/man8"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   meta = with lib; {
     description = "Process monitoring tool";
-    homepage = "https://kernel.ubuntu.com/~cking/health-check/";
+    homepage = "https://github.com/ColinIanKing/health-check";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];

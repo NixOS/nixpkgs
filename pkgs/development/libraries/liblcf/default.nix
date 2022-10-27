@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, expat, icu }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, expat, icu }:
 
 stdenv.mkDerivation rec {
   pname = "liblcf";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "liblcf";
     rev = version;
-    sha256 = "18kx9h004bncyi0hbj6vrc7f4k8l1rwp96cwncv3xm0lwspj0vyl";
+    sha256 = "sha256-69cYZ8hJ92gK39gueaEoUM0K7BDWIQ/0NvcQ/6e3Sg8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ expat icu ];
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
-    homepage = https://github.com/EasyRPG/liblcf;
+    homepage = "https://github.com/EasyRPG/liblcf";
     license = licenses.mit;
-    maintainers = with maintainers; [ yegortimoshenko ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ yana ];
+    platforms = platforms.all;
   };
 }

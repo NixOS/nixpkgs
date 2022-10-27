@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, pidgin, cmake, libxml2 } :
+{ lib, stdenv, fetchhg, pidgin, cmake, libxml2 } :
 
 let
   version = "40ddb6d";
@@ -13,18 +13,19 @@ stdenv.mkDerivation {
     sha256 = "02p57fgx8ml00cbrb4f280ak2802svz80836dzk9f1zwm1bcr2qc";
   };
 
-  buildInputs = [ pidgin cmake libxml2 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ pidgin libxml2 ];
 
   preConfigure = ''
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION lib/purple-2|' CMakeLists.txt
   '';
 
-  cmakeFlags = "-DCMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT=1";
+  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT=1" ];
 
   meta = {
-    homepage = https://bitbucket.org/olegoandreev/purple-vk-plugin;
+    homepage = "https://bitbucket.org/olegoandreev/purple-vk-plugin";
     description = "Vk (russian social network) plugin for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

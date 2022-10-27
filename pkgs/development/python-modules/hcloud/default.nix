@@ -2,37 +2,44 @@
 , buildPythonPackage
 , fetchPypi
 , future
-, requests
-, python-dateutil
-, flake8
-, isort
 , mock
-, pytest
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.6.2";
+  version = "1.18.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x18yqxa6a884j0ip92kgl5s8c77z6f4pvnq6q4lzisyffkyq6c7";
+    hash = "sha256-nhz9fJEcYyt7rhIe0AkYPgG/mV0r87KUj/mM2A70rPE=";
   };
 
-  propagatedBuildInputs = [ future requests python-dateutil ];
+  propagatedBuildInputs = [
+    future
+    requests
+    python-dateutil
+  ];
 
-  checkInputs = [ flake8 isort mock pytest ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  # Skip integration tests since they require a separate external fake API endpoint.
-  checkPhase = ''
-    pytest --ignore=tests/integration
-  '';
+  pythonImportsCheck = [
+    "hcloud"
+  ];
 
   meta = with lib; {
-    description = "Official Hetzner Cloud python library";
+    description = "Library for the Hetzner Cloud API";
     homepage = "https://github.com/hetznercloud/hcloud-python";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ liff ];
   };
 }

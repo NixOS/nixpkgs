@@ -1,24 +1,18 @@
-diff -uNr mediastreamer2/src/base/msfactory.c mediastreamer2-new/src/base/msfactory.c
---- a/src/base/msfactory.c	2015-05-13 16:53:49.801113249 +0200
-+++ b/src/base/msfactory.c	2015-08-26 21:35:44.994724647 +0200
-@@ -630,12 +630,18 @@
+diff --git a/src/base/msfactory.c b/src/base/msfactory.c
+index 14f868e3..2e3445a1 100644
+--- a/src/base/msfactory.c
++++ b/src/base/msfactory.c
+@@ -770,7 +770,12 @@ void ms_factory_uninit_plugins(MSFactory *factory){
  }
  
  void ms_factory_init_plugins(MSFactory *obj) {
+-	if (obj->plugins_dir == NULL) {
 +	char *package_plugins_dir;
- 	if (obj->plugins_dir == NULL) {
-+		package_plugins_dir=getenv("MEDIASTREAMER_PLUGINS_DIR");
-+		if (package_plugins_dir!=NULL){
-+			obj->plugins_dir = ms_strdup(package_plugins_dir);
-+		} else {
- #ifdef PACKAGE_PLUGINS_DIR
--		obj->plugins_dir = ms_strdup(PACKAGE_PLUGINS_DIR);
-+			obj->plugins_dir = ms_strdup(PACKAGE_PLUGINS_DIR);
- #else
--		obj->plugins_dir = ms_strdup("");
-+			obj->plugins_dir = ms_strdup("");
- #endif
-+		}
- 	}
- 	if (strlen(obj->plugins_dir) > 0) {
- 		ms_message("Loading ms plugins from [%s]",obj->plugins_dir);
++	// Force plugin dir from environment variable if set
++	package_plugins_dir = getenv("MEDIASTREAMER_PLUGINS_DIR");
++	if (package_plugins_dir != NULL) {
++		ms_factory_set_plugins_dir(obj, package_plugins_dir);
++	} else if (obj->plugins_dir == NULL) {
+ #ifdef __APPLE__
+ 	char *dir = getPluginsDir();
+ 	if (dir != NULL) {

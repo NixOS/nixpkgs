@@ -1,28 +1,38 @@
-{ stdenv, fetchzip, makeWrapper, unzip, jre }:
+{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "yEd";
-  version = "3.19";
+  version = "3.22";
 
   src = fetchzip {
     url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
-    sha256 = "0l70pc7wl2ghfkjab9w2mbx7crwha7xwkrpmspsi5c6q56dw7s33";
+    sha256 = "sha256-GHYdvWie2k9YarS9DaA4bExswV3UQ26O8+7K/6yvtac=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook ];
+  # For wrapGAppsHook setup hook
+  buildInputs = [ (jre.gtk3 or null) ];
 
-  installPhase = ''
+  dontConfigure = true;
+  dontBuild = true;
+  dontInstall = true;
+
+  preFixup = ''
     mkdir -p $out/yed
     cp -r * $out/yed
     mkdir -p $out/bin
 
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
     makeWrapper ${jre}/bin/java $out/bin/yed \
+      ''${makeWrapperArgs[@]} \
       --add-flags "-jar $out/yed/yed.jar --"
   '';
+  dontWrapGApps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.unfree;
-    homepage = http://www.yworks.com/en/products/yfiles/yed/;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    homepage = "https://www.yworks.com/products/yed";
     description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ abbradar ];

@@ -1,29 +1,26 @@
-{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , Cocoa, Foundation
-, enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.14.9";
+  version = "1.16.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1mhdrlflxxyknf54lwdbvs7fazlc1scf7z6vxxa3j746fks533ga";
+  src = fetchFromGitHub {
+    rev = version;
+    owner = "wesnoth";
+    repo = "wesnoth";
+    sha256 = "sha256-oQRjVjVjLIvCCafLr0FXvLwnKDjJY2FU20dYGLtNFiU=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
 
-  cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
       The Battle for Wesnoth is a Free, turn-based tactical strategy
@@ -33,8 +30,8 @@ stdenv.mkDerivation rec {
       adventures.
     '';
 
-    homepage = http://www.wesnoth.org/;
-    license = licenses.gpl2;
+    homepage = "https://www.wesnoth.org/";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };

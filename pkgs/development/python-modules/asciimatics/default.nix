@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pyfiglet
 , pillow
 , wcwidth
@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "asciimatics";
-  version = "1.11.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "132y3gc0dj9vmgajmzz2fyc3icrrgsvynwfl0g31bylm7h9p220x";
+    sha256 = "sha256-FtIM5CIQtDTrBbpGns24KTrH7TwM4N1PcOMNctdgIic=";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -39,9 +39,16 @@ buildPythonPackage rec {
   # which is too complicated to setup here
   doCheck = false;
 
+  pythonImportsCheck =  [
+    "asciimatics.effects"
+    "asciimatics.renderers"
+    "asciimatics.scene"
+    "asciimatics.screen"
+  ];
+
   meta = with lib; {
     description = "Helps to create full-screen text UIs (from interactive forms to ASCII animations) on any platform";
-    homepage = https://github.com/peterbrittain/asciimatics;
+    homepage = "https://github.com/peterbrittain/asciimatics";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

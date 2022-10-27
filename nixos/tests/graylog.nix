@@ -1,8 +1,8 @@
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "graylog";
-  meta.maintainers = with lib.maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
     virtualisation.diskSize = 4096;
 
@@ -64,48 +64,52 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
       facility = "Test";
     });
   in ''
-    $machine->start;
-    $machine->waitForUnit("graylog.service");
-    $machine->waitForOpenPort(9000);
-    $machine->succeed("curl -sSfL http://127.0.0.1:9000/");
+    machine.start()
+    machine.wait_for_unit("graylog.service")
+    machine.wait_for_open_port(9000)
+    machine.succeed("curl -sSfL http://127.0.0.1:9000/")
 
-    my $session = $machine->succeed("curl -X POST "
-                                  . "-sSfL http://127.0.0.1:9000/api/system/sessions "
-                                  . "-d \$(cat ${payloads.login}) "
-                                  . "-H 'Content-Type: application/json' "
-                                  . "-H 'Accept: application/json' "
-                                  . "-H 'x-requested-by: cli' "
-                                  . "| jq .session_id | xargs echo"
-                                  );
+    session = machine.succeed(
+        "curl -X POST "
+        + "-sSfL http://127.0.0.1:9000/api/system/sessions "
+        + "-d $(cat ${payloads.login}) "
+        + "-H 'Content-Type: application/json' "
+        + "-H 'Accept: application/json' "
+        + "-H 'x-requested-by: cli' "
+        + "| jq .session_id | xargs echo"
+    ).rstrip()
 
-    chomp($session);
+    machine.succeed(
+        "curl -X POST "
+        + f"-sSfL http://127.0.0.1:9000/api/system/inputs -u {session}:session "
+        + '-d $(cat ${payloads.input} | sed -e "s,@node@,$(cat /var/lib/graylog/server/node-id),") '
+        + "-H 'Accept: application/json' "
+        + "-H 'Content-Type: application/json' "
+        + "-H 'x-requested-by: cli' "
+    )
 
-    $machine->succeed("curl -X POST "
-                    . "-sSfL http://127.0.0.1:9000/api/system/inputs -u $session:session "
-                    . "-d \$(cat ${payloads.input} | sed -e \"s,\@node\@,\$(cat /var/lib/graylog/server/node-id),\") "
-                    . "-H 'Accept: application/json' "
-                    . "-H 'Content-Type: application/json' "
-                    . "-H 'x-requested-by: cli' "
-                    );
+    machine.wait_until_succeeds(
+        "test \"$(curl -sSfL 'http://127.0.0.1:9000/api/cluster/inputstates' "
+        + f"-u {session}:session "
+        + "-H 'Accept: application/json' "
+        + "-H 'Content-Type: application/json' "
+        + "-H 'x-requested-by: cli'"
+        + "| jq 'to_entries[]|.value|.[0]|.state' | xargs echo"
+        + ')" = "RUNNING"'
+    )
 
-    $machine->waitUntilSucceeds("test \"\$(curl -sSfL 'http://127.0.0.1:9000/api/cluster/inputstates' "
-                              . "-u $session:session "
-                              . "-H 'Accept: application/json' "
-                              . "-H 'Content-Type: application/json' "
-                              . "-H 'x-requested-by: cli'"
-                              . "| jq 'to_entries[]|.value|.[0]|.state' | xargs echo"
-                              . ")\" = \"RUNNING\""
-                              );
+    machine.succeed(
+        "echo -n $(cat ${payloads.gelf_message}) | nc -w10 -u 127.0.0.1 12201"
+    )
 
-    $machine->succeed("echo -n \$(cat ${payloads.gelf_message}) | nc -w10 -u 127.0.0.1 12201");
-
-    $machine->succeed("test \"\$(curl -X GET "
-                    . "-sSfL 'http://127.0.0.1:9000/api/search/universal/relative?query=*' "
-                    . "-u $session:session "
-                    . "-H 'Accept: application/json' "
-                    . "-H 'Content-Type: application/json' "
-                    . "-H 'x-requested-by: cli'"
-                    . " | jq '.total_results' | xargs echo)\" = \"1\""
-                    );
+    machine.succeed(
+        'test "$(curl -X GET '
+        + "-sSfL 'http://127.0.0.1:9000/api/search/universal/relative?query=*' "
+        + f"-u {session}:session "
+        + "-H 'Accept: application/json' "
+        + "-H 'Content-Type: application/json' "
+        + "-H 'x-requested-by: cli'"
+        + ' | jq \'.total_results\' | xargs echo)" = "1"'
+    )
   '';
 })

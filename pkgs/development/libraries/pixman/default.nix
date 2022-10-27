@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, glib /*just passthru*/ }:
+{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   pname = "pixman";
@@ -9,18 +9,25 @@ stdenv.mkDerivation rec {
     sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  separateDebugInfo = !stdenv.hostPlatform.isStatic;
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libpng ];
 
-  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
+
+  preConfigure = ''
+    # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62
+    export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 184 ? 184 : NIX_BUILD_CORES))
+  '';
 
   doCheck = true;
 
   postInstall = glib.flattenInclude;
 
-  meta = with stdenv.lib; {
-    homepage = http://pixman.org;
+  meta = with lib; {
+    homepage = "http://pixman.org";
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;
     platforms = platforms.all;

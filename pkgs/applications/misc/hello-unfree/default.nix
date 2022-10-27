@@ -1,10 +1,10 @@
-{ stdenv, runtimeShell }:
+{ lib, stdenv, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "example-unfree-package";
   version = "1.0";
 
-  phases = [ "installPhase" "fixupPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An example package with unfree license (for testing)";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.oxij ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.oxij ];
   };
 }

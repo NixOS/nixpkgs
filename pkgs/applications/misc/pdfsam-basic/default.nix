@@ -1,12 +1,12 @@
-{ stdenv, makeDesktopItem, fetchurl, jdk11, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk11, wrapGAppsHook, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "4.0.4";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    sha256 = "17lhzxlgr4l4dljy0b0avfrgbj9rsfzk1dzg0abqvld4w4igkqbq";
+    sha256 = "sha256-DYCiK5DgWTu1cm4TRsGDCB3LzVCGVkVzSlG3Jeo2WVI=";
   };
 
   unpackPhase = ''
@@ -35,15 +35,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "PDFsam Basic";
     genericName = "PDF Split and Merge";
-    mimeType = "application/pdf;";
-    categories = "Office;Application;";
+    mimeTypes = [ "application/pdf" ];
+    categories = [ "Office" ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       homepage = "https://github.com/torakiki/pdfsam";
       description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
+      sourceProvenance = with sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
       license = licenses.agpl3;
       platforms = platforms.all;
-      maintainers = with maintainers; [ maintainers."1000101" ];
+      maintainers = with maintainers; [ _1000101 ];
   };
 }

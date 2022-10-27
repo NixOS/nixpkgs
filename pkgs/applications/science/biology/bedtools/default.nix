@@ -1,25 +1,33 @@
-{stdenv, fetchFromGitHub, zlib, python, bzip2, lzma}:
+{lib, stdenv, fetchFromGitHub, zlib, python3, bzip2, xz}:
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
-  version = "2.29.0";
+  version = "2.30.0";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "0d6i985qqxp92ddq4n6558m70qi5rqhl724wrfys0hm0p6a9h56x";
+    sha256 = "sha256-NqKldF7ePJn3pT+AkESIQghBKSFFOEBBsTaKEbU+oaQ=";
   };
 
-  buildInputs = [ zlib python bzip2 lzma ];
-  cc = if stdenv.cc.isClang then "clang++" else "g++";
-  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} -j $NIX_BUILD_CORES";
-  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} install";
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
-    description = "A powerful toolset for genome arithmetic.";
+  nativeBuildInputs = [
+    python3
+  ];
+
+  buildInputs = [ zlib bzip2 xz ];
+
+  cxx = if stdenv.cc.isClang then "clang++" else "g++";
+  cc = if stdenv.cc.isClang then "clang" else "gcc";
+  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";
+  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} install";
+
+  meta = with lib; {
+    description = "A powerful toolset for genome arithmetic";
     license = licenses.gpl2;
-    homepage = https://bedtools.readthedocs.io/en/latest/;
+    homepage = "https://bedtools.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.unix;
   };

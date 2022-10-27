@@ -1,28 +1,41 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+, pytestCheckHook
+, fetchpatch
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest, bluez
+, evdev, pygobject3, pylibacl, bluez, vdf
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.7";
+  version = "0.4.8.9";
 
   src = fetchFromGitHub {
-    owner  = "kozec";
+    owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1dskjh5qcjf4x21n4nk1zvdfivbgimsrc2lq1id85bibzps29499";
+    sha256 = "sha256-ym5fkOTRhibBaUqT0+p/jyqqKOVsyMz5INgfkoz0IJA=";
   };
+
+  # see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
-  propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
+  propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
+
+  patches = [
+    # Fix a broken test
+    (fetchpatch {
+      url = "https://github.com/Ryochan7/sc-controller/pull/73.patch";
+      sha256 = "sha256-qU8hIReZE3cEPCMOFc4RCUCIhiS0gJ3PushMkfDlPns=";
+     })
+  ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
@@ -34,9 +47,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    # gdk-pixbuf setup hook can not choose between propagated librsvg
-    # and our librsvg with GObject introspection.
-    GDK_PIXBUF_MODULE_FILE=$(echo ${librsvg}/lib/gdk-pixbuf-2.0/*/loaders.cache)
   '';
 
   postFixup = ''
@@ -48,12 +58,8 @@ buildPythonApplication rec {
     )
   '';
 
-  checkPhase = ''
-    PYTHONPATH=. py.test
-  '';
-
   meta = with lib; {
-    homepage    = https://github.com/kozec/sc-controller;
+    homepage    = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
     license     = licenses.gpl2;

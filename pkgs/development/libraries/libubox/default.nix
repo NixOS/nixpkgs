@@ -1,24 +1,26 @@
-{ stdenv, lib, fetchgit, cmake, pkgconfig, json_c }:
+{ stdenv, lib, fetchgit, cmake, pkg-config, json_c }:
 
 stdenv.mkDerivation {
-  name = "libubox-2017-09-29";
+  pname = "libubox";
+  version = "unstable-2021-03-09";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "632688e8d6cde32781e4ec685d59afb0938300ad";
-    sha256 = "1rkwn287k7p802hbd9ap13xxrxsghq6827r86ymqbbcmbcrna13c";
+    rev = "551d75b5662cccd0466b990d58136bdf799a804d";
+    sha256 = "05cnjjqjv9nvrs1d8pg4xxxf27jryiv6xk8plmdpmm7r2wkvwn3r";
   };
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" "-DBUILD_EXAMPLES=OFF" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ json_c ];
 
   meta = with lib; {
     description = "C utility functions for OpenWrt";
     homepage = "https://git.openwrt.org/?p=project/libubox.git;a=summary";
     license = licenses.isc;
-    platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
+    mainProgram = "jshn";
+    platforms = platforms.all;
   };
 }

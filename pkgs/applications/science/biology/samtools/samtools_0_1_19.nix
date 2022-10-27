@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
     cp samtools.1 $out/share/man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";
     license = licenses.mit;
-    homepage = http://samtools.sourceforge.net/;
+    homepage = "http://samtools.sourceforge.net/";
     platforms = platforms.unix;
     maintainers = [ maintainers.unode ];
   };

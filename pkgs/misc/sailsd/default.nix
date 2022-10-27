@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, pkgconfig, jansson }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, jansson }:
 
 let
   libsailing = fetchFromGitHub {
     owner = "sails-simulator";
     repo = "libsailing";
-    rev = "c24cddb717f81cd432868b8d41e04486c0a440fd";
-    sha256 = "0mna0c9n8lvfdf4y1iigjy3dlks70hq6jik52zkik2yxvkqv949f";
+    rev = "9b2863ff0c539cd23d91b0254032a7af9c840574";
+    sha256 = "06rcxkwgms9sxqr1swnnc4jnvgs0iahm4cksd475yd1bp5p1gq6j";
   };
 in
 stdenv.mkDerivation rec {
-  version = "0.2.0";
+  version = "0.3.0";
   pname = "sailsd";
   src = fetchFromGitHub {
     owner = "sails-simulator";
     repo = "sailsd";
     rev = version;
-    sha256 = "147cr4aw1kw4gv3bhn0cska855kmyah8m70vdw1q2lwz56lbf4mb";
+    sha256 = "1s4nlffp683binbdxwwzbsci61kbjylbcr1jf44sv1h1r5d5js05";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ jansson libsailing ];
 
   INSTALL_PATH = "$(out)";
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       --replace gcc cc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simulator daemon for autonomous sailing boats";
-    homepage = https://github.com/sails-simulator/sailsd;
+    homepage = "https://github.com/sails-simulator/sailsd";
     license = licenses.gpl3;
     longDescription = ''
       Sails is a simulator designed to test the AI of autonomous sailing

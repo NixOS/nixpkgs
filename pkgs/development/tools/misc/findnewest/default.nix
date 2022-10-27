@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "findnewest";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/0-wiz-0/findnewest;
+  meta = with lib; {
+    homepage = "https://github.com/0-wiz-0/findnewest";
     description = "Recursively find newest file in a hierarchy and print its timestamp";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bhipple ];

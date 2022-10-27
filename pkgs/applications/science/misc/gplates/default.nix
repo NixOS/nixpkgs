@@ -1,29 +1,71 @@
-{ stdenv, fetchurl, qt4, qwt6_qt4, libGLU_combined, glew, gdal_1_11, cgal
-, proj, boost, cmake, python2, doxygen, graphviz, gmp }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, cmake
+, doxygen
+, graphviz
+, boost
+, cgal_5
+, gdal
+, glew
+, gmp
+, libGL
+, libGLU
+, mpfr
+, proj
+, python3
+, qtxmlpatterns
+, qwt
+}:
 
-stdenv.mkDerivation rec {
+let
+  python = python3.withPackages (ps: with ps; [
+    numpy
+  ]);
+  boost' = boost.override {
+    enablePython = true;
+    inherit python;
+  };
+  cgal = cgal_5.override {
+    boost = boost';
+  };
+in mkDerivation rec {
   pname = "gplates";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gplates/${pname}-${version}-unixsrc.tar.bz2";
-    sha256 = "02scnjj5nlc2d2c8lbx0xvj8gg1bgkjliv3wxsx564c55a9x69qw";
+    name = "gplates_${version}_src.tar.bz2";
+    url = "https://www.earthbyte.org/download/8421/?uid=b89bb31428";
+    sha256 = "0lrcmcxc924ixddii8cyglqlwwxvk7f00g4yzbss5i3fgcbh8n96";
   };
 
-  patches = [
-    ./boostfix.patch
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
   ];
 
   buildInputs = [
-    qt4 qwt6_qt4 libGLU_combined glew gdal_1_11 cgal proj boost cmake python2
-    doxygen graphviz gmp
+    boost'
+    cgal
+    gdal
+    glew
+    gmp
+    libGL
+    libGLU
+    mpfr
+    proj
+    python
+    qtxmlpatterns
+    qwt
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
-    homepage = https://www.gplates.org;
-    license = licenses.gpl2;
+    homepage = "https://www.gplates.org";
+    license = licenses.gpl2Only;
     platforms = platforms.all;
-    broken = true;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gplates.x86_64-darwin
   };
 }

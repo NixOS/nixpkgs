@@ -1,24 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "prom2json";
-  version = "0.1.0";
-  rev = version;
-
-  goPackagePath = "github.com/prometheus/prom2json";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "prometheus";
     repo = "prom2json";
-    sha256 = "0wwh3mz7z81fwh8n78sshvj46akcgjhxapjgfic5afc4nv926zdl";
+    sha256 = "09glf7br1a9k6j2hs94l2k4mlmlckdz5c9v6qg618c2nd4rk1mz6";
   };
 
-  goDeps = ./prom2json_deps.nix;
+  vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to scrape a Prometheus client and dump the result as JSON";
-    homepage = https://github.com/prometheus/prom2json;
+    homepage = "https://github.com/prometheus/prom2json";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;

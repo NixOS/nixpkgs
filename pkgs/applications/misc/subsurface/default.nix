@@ -1,19 +1,27 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
-, curl, grantlee, libgit2, libusb, libssh2, libxml2, libxslt, libzip, zlib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
+, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+, bluez
 }:
 
 let
-  version = "4.8.2";
+  version = "5.0.2";
+
+  subsurfaceSrc = (fetchFromGitHub {
+    owner = "Subsurface";
+    repo = "subsurface";
+    rev = "v${version}";
+    sha256 = "1yay06m8p9qp2ghrg8dxavdq55y09apcgdnb7rihgs3hq86k539n";
+    fetchSubmodules = true;
+  });
 
   libdc = stdenv.mkDerivation {
     pname = "libdivecomputer-ssrf";
     inherit version;
 
-    src = fetchurl {
-      url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
-      sha256 = "167qan59raibmilkc574gdqxfjg2f5ww2frn86xzk2kn4qg8190w";
-    };
+    src = subsurfaceSrc;
+
+    prePatch = "cd libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook ];
 
@@ -21,8 +29,8 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
-      homepage = http://www.libdivecomputer.org;
+    meta = with lib; {
+      homepage = "http://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
@@ -33,18 +41,20 @@ let
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
 
-    version = "2017-12-18";
+    version = "2021-03-19";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "79f3511d60dc9640de02a5f24656094c8982b26d";
-      sha256 = "11334w0bnfb97sv23vvj2b5hcwvr0171hxldn91jms9y12l5j15d";
+      rev = "8f7def10c203fd3faa5ef96c5010a7294dca0759";
+      sha256 = "1irz398g45hk6xizwzd07qcx1ln8f7l6bhjh15f56yc20waqpx1x";
     };
 
     nativeBuildInputs = [ qmake ];
 
     buildInputs = [ qtbase qtlocation libXcomposite ];
+
+    dontWrapQtApps = true;
 
     pluginsSubdir = "lib/qt-${qtbase.qtCompatVersion}/plugins";
 
@@ -55,9 +65,7 @@ let
       mv lib $out/
     '';
 
-    enableParallelBuilding = true;
-
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
       maintainers = with maintainers; [ orivej ];
@@ -70,29 +78,25 @@ in stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
-  src = fetchurl {
-    url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
-    sha256 = "1fzrq6rqb6pzs36wxar2453cl509dqpcy9w7nq4gw7b1v2331wfy";
-  };
+  src = subsurfaceSrc;
 
   buildInputs = [
     libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb libxml2 libxslt libzip
+    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
     qtbase qtconnectivity qtsvg qttools qtwebkit
+    bluez
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"
     "-DNO_PRINTING=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   passthru = { inherit version libdc googlemaps; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A divelog program";
     longDescription = ''
       Subsurface can track single- and multi-tank dives using air, Nitrox or TriMix.
@@ -100,9 +104,9 @@ in stdenv.mkDerivation {
       conveniently be entered using a map interface), logging of equipment used and
       names of other divers, and lets users rate dives and provide additional notes.
     '';
-    homepage = https://subsurface-divelog.org;
+    homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner ];
+    maintainers = with maintainers; [ mguentner adisbladis ];
     platforms = platforms.all;
   };
 }

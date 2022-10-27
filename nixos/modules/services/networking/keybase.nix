@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to start the Keybase service.";
+        description = lib.mdDoc "Whether to start the Keybase service.";
       };
 
     };
@@ -24,13 +24,18 @@ in {
 
   config = mkIf cfg.enable {
 
+    # Upstream: https://github.com/keybase/client/blob/master/packaging/linux/systemd/keybase.service
     systemd.user.services.keybase = {
       description = "Keybase service";
       unitConfig.ConditionUser = "!@system";
+      environment.KEYBASE_SERVICE_TYPE = "systemd";
       serviceConfig = {
-        ExecStart = ''
-          ${pkgs.keybase}/bin/keybase service --auto-forked
-        '';
+        Type = "notify";
+        EnvironmentFile = [
+          "-%E/keybase/keybase.autogen.env"
+          "-%E/keybase/keybase.env"
+        ];
+        ExecStart = "${pkgs.keybase}/bin/keybase service";
         Restart = "on-failure";
         PrivateTmp = true;
       };

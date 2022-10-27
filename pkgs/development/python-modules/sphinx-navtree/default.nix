@@ -14,5 +14,7 @@ buildPythonPackage rec {
     description = "Navigation tree customization for Sphinx";
     homepage = "https://github.com/bintoro/sphinx-navtree";
     license = lib.licenses.mit;
+    # not compatible with sphinx 3.3, not updated since 2016
+    broken = true;
   };
 }

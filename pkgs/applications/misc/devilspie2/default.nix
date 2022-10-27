@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, gtk, lua, libwnck3 }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk, lua, libwnck }:
 
 stdenv.mkDerivation rec {
   pname = "devilspie2";
-  version = "0.43";
+  version = "0.44";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/devilspie2/devilspie2_${version}-src.tar.gz";
-    sha256 = "0a7qjl2qd4099kkkbwa1y2fk48s21jlr409lf9mij7mlc9yc3zzc";
+    url = "https://download.savannah.gnu.org/releases/devilspie2/devilspie2-${version}.tar.xz";
+    sha256 = "Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
-  buildInputs = [ glib gtk lua libwnck3 ];
+  nativeBuildInputs = [ intltool pkg-config ];
+  buildInputs = [ glib gtk lua libwnck ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp devilspie2.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       positioned at a specific screen position, or position a window
       on a specific workspace.
     '';
-    homepage = http://www.gusnan.se/devilspie2/;
+    homepage = "https://www.nongnu.org/devilspie2/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.linux;

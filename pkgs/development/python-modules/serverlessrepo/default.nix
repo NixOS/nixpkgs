@@ -1,20 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , boto3
 , six
 , pyyaml
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "serverlessrepo";
-  version = "0.1.8";
+  version = "0.1.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "533389d41a51450e50cc01405ab766550170149c08e1c85b3a1559b0fab4cb25";
+    sha256 = "671f48038123f121437b717ed51f253a55775590f00fbab6fbc6a01f8d05c017";
   };
 
   propagatedBuildInputs = [
@@ -23,24 +27,33 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [ pytest mock ];
-
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace "pyyaml~=3.12" "pyyaml~=5.1"
+    substituteInPlace setup.py \
+      --replace "pyyaml~=5.1" "pyyaml" \
+      --replace "boto3~=1.9, >=1.9.56" "boto3"
   '';
 
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+
+  pythonImportsCheck = [
+    "serverlessrepo"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/awslabs/aws-serverlessrepo-python;
+    homepage = "https://github.com/awslabs/aws-serverlessrepo-python";
     description = "Helpers for working with the AWS Serverless Application Repository";
     longDescription = ''
       A Python library with convenience helpers for working with the
       AWS Serverless Application Repository.
     '';
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ dhkl ];
   };
 }

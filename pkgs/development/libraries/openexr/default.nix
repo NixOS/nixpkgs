@@ -1,54 +1,43 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase, }:
-
-let
-  # Doesn't really do anything when not crosscompiling
-  emulator = stdenv.hostPlatform.emulator buildPackages;
-in
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = lib.getVersion ilmbase;
-
-  src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
-  };
-
-  patches = [
-    ./bootstrap.patch
-  ];
+  version = "2.5.8";
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  # Needed because there are some generated sources. Solution: just run them under QEMU.
-  postPatch = ''
-    for file in b44ExpLogTable dwaLookups
-    do
-      # Ecape for both sh and Automake
-      emu=${lib.escapeShellArg (lib.replaceStrings ["$"] ["$$"] emulator)}
-      before="./$file > $file.h"
-      after="$emu $before"
-      substituteInPlace IlmImf/Makefile.am \
-        --replace "$before" "$after"
-    done
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openexr";
+    rev = "v${version}";
+    sha256 = "sha256-N7XdDaDsYdx4TXvHplQDTvhHNUmW5rntdaTKua4C0es=";
+  };
 
-    # Make sure the patch succeeded
-    [[ $(grep "$emu" IlmImf/Makefile.am | wc -l) = 2 ]]
-  '';
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-45942.patch";
+      url = "https://github.com/AcademySoftwareFoundation/openexr/commit/11cad77da87c4fa2aab7d58dd5339e254db7937e.patch";
+      stripLen = 4;
+      extraPrefix = "OpenEXR/IlmImf/";
+      sha256 = "1wa2jn6sa0n3phaqvklnlbgk1bz60y756ad4jk4d757pzpnannsy";
+    })
+  ];
 
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
+  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
-  enableParallelBuilding = true;
-  doCheck = false; # fails 1 of 1 tests
-
-  meta = with stdenv.lib; {
-    homepage = https://www.openexr.com/;
+  meta = with lib; {
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

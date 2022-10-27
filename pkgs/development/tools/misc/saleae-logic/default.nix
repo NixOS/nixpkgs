@@ -6,7 +6,7 @@
 #
 # In NixOS, simply add this package to services.udev.packages.
 
-{ stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
+{ lib, stdenv, fetchurl, unzip, glib, libSM, libICE, gtk2, libXext, libXft
 , fontconfig, libXrender, libXfixes, libX11, libXi, libXrandr, libXcursor
 , freetype, libXinerama, libxcb, zlib, pciutils
 , makeDesktopItem, xkeyboardconfig, dbus, runtimeShell, libGL
@@ -14,7 +14,7 @@
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     glib libSM libICE gtk2 libXext libXft fontconfig libXrender libXfixes libX11
     libXi libXrandr libXcursor freetype libXinerama libxcb zlib stdenv.cc.cc.lib
     dbus libGL
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Application;Development";
+    categories = [ "Development" ];
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     # Copy prebuilt app to $out
@@ -87,9 +87,10 @@ stdenv.mkDerivation rec {
     cp Drivers/99-SaleaeLogic.rules "$out/etc/udev/rules.d/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software for Saleae logic analyzers";
-    homepage = http://www.saleae.com/;
+    homepage = "https://www.saleae.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

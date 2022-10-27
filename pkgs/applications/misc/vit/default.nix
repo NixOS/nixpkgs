@@ -1,25 +1,27 @@
 { lib
 , python3Packages
-, taskwarrior }:
+, taskwarrior
+, glibcLocales
+}:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "vit";
-  version = "2.0.0";
-  disabled = lib.versionOlder python.version "3.6";
+  version = "2.2.0";
+  disabled = lib.versionOlder python.version "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5282d8076d9814d9248071aec8784cffbd968601542533ccb28ca61d1d08205e";
+    sha256 = "sha256-6GbIc5giuecxUqswyaAJw675R1M8BvelyyRNFcTqKW8=";
   };
 
   propagatedBuildInputs = [
-    pytz
     tasklib
-    tzlocal
     urwid
   ];
+
+  checkInputs = [ glibcLocales ];
 
   makeWrapperArgs = [ "--suffix" "PATH" ":" "${taskwarrior}/bin" ];
 
@@ -28,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/scottkosty/vit;
+    homepage = "https://github.com/scottkosty/vit";
     description = "Visual Interactive Taskwarrior";
     maintainers = with maintainers; [ dtzWill arcnmx ];
     platforms = platforms.all;

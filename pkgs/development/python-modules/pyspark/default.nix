@@ -1,30 +1,44 @@
-{ buildPythonPackage, fetchPypi, stdenv, py4j }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, py4j
+}:
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "2.4.3";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6839718ce9f779e81153d8a14a843a5c4b2d5e6574f3c916aec241022d717cb2";
+    sha256 = "sha256-fr6OlQVke00STVqC/KYN/TiRAhz4rWxeyId37uzpLPc=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
   postPatch = ''
     sed -i "s/'pypandoc'//" setup.py
 
-    # Current release works fine with py4j 0.10.8.1
-    substituteInPlace setup.py --replace py4j==0.10.7 'py4j>=0.10.7,<0.11'
+    substituteInPlace setup.py \
+      --replace py4j== 'py4j>='
   '';
 
-  propagatedBuildInputs = [ py4j ];
+  propagatedBuildInputs = [
+    py4j
+  ];
 
-  # Tests assume running spark...
+  # Tests assume running spark instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "Apache Spark";
-    homepage = https://github.com/apache/spark/tree/master/python;
+  pythonImportsCheck = [
+    "pyspark"
+  ];
+
+  meta = with lib; {
+    description = "Python bindings for Apache Spark";
+    homepage = "https://github.com/apache/spark/tree/master/python";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     maintainers = [ maintainers.shlevy ];
   };

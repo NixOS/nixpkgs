@@ -1,33 +1,35 @@
-{ stdenv, fetchurl, python2 }:
+{ newScope, lib, python3 }:
 
-stdenv.mkDerivation rec {
-  pname = "mailman";
-  version = "2.1.29";
+let
+  self = lib.makeExtensible (self: let inherit (self) callPackage; in {
+    callPackage = newScope self;
 
-  src = fetchurl {
-    url = "mirror://gnu/mailman/${pname}-${version}.tgz";
-    sha256 = "0b0dpwf6ap260791c7lg2vpw30llf19hymbf2hja3s016rqp5243";
-  };
+    python3 = callPackage ./python.nix { inherit python3; };
 
-  buildInputs = [ python2 python2.pkgs.dnspython ];
+    hyperkitty = callPackage ./hyperkitty.nix { };
 
-  patches = [ ./fix-var-prefix.patch ];
+    mailman = callPackage ./package.nix { };
 
-  configureFlags = [
-    "--without-permcheck"
-    "--with-cgi-ext=.cgi"
-    "--with-var-prefix=/var/lib/mailman"
-  ];
+    mailman-hyperkitty = callPackage ./mailman-hyperkitty.nix { };
 
-  installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
+    postorius = callPackage ./postorius.nix { };
 
-  makeFlags = [ "DIRSETGID=:" ];
+    web = callPackage ./web.nix { };
 
-  meta = {
-    homepage = https://www.gnu.org/software/mailman/;
-    description = "Free software for managing electronic mail discussion and e-newsletter lists";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-  };
-}
+    buildEnvs = { web ? self.web
+                , mailman ? self.mailman
+                , mailman-hyperkitty ? self.mailman-hyperkitty
+                , withHyperkitty ? false
+                , withLDAP ? false
+                }:
+      {
+        mailmanEnv = self.python3.withPackages
+          (ps: [ mailman ps.psycopg2 ]
+            ++ lib.optional withHyperkitty mailman-hyperkitty
+            ++ lib.optionals withLDAP [ ps.python-ldap ps.django-auth-ldap ]);
+        webEnv = self.python3.withPackages
+          (ps: [ web ps.psycopg2 ] ++ lib.optionals withLDAP [ ps.python-ldap ps.django-auth-ldap ]);
+      };
+  });
+
+in self

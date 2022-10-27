@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "zm-py";
-  version = "0.3.3";
+  version = "0.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7cac73bd4f5e729fd8b3cff6f456652c3fd76b1a11f5d539bc7e14ffc7a87e9a";
+    sha256 = "b391cca0e52f2a887aa7a46c314b73335b7e3341c428b425fcf314983e5ebb36";
   };
 
   disabled = !isPy3k;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A loose python wrapper around the ZoneMinder REST API";
-    homepage = https://github.com/rohankapoorcom/zm-py;
+    homepage = "https://github.com/rohankapoorcom/zm-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

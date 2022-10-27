@@ -1,26 +1,61 @@
-{ stdenv, fetchurl
-, intltool, pkgconfig, glib, libsoup }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, libsoup_3
+, libxml2
+, meson
+, ninja
+, gnome
+}:
 
-let
-  version = "2.2";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phodav";
-  inherit version;
+  version = "3.0";
+
+  outputs = [ "out" "dev" "lib" ];
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1hap0lncbcmivnflh0fbx7y58ry78p9wgj7z03r64ic0kvf0a0q8";
+    url = "mirror://gnome/sources/phodav/${version}/phodav-${version}.tar.xz";
+    sha256 = "OS7C0G1QMA3P8e8mmiqYUwTim841IAAvyiny7cHRONE=";
   };
 
-  buildInputs = [ intltool glib libsoup ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [
+    libsoup_3
+    libxml2
+  ];
 
-  meta = with stdenv.lib; {
+  mesonFlags = [
+    "-Davahi=disabled"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "-Dgtk_doc=disabled"
+    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+  ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
+
+  # We need to do this in pre-configure before the data/ folder disappears.
+  preConfigure = ''
+    install -vDt $out/lib/udev/rules.d/ data/*-spice-webdavd.rules
+  '';
+
+  meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
-    homepage = https://wiki.gnome.org/phodav;
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ gnidorah ];
-    platforms = platforms.linux;
+    homepage = "https://wiki.gnome.org/phodav";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

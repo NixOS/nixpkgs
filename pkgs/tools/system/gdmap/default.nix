@@ -1,26 +1,25 @@
-{ stdenv, fetchurl, gtk2, pkgconfig, libxml2, intltool, gettext }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config, libxml2, intltool, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "gdmap-0.8.1";
+  pname = "gdmap";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gdmap/${name}.tar.gz";
+    url = "mirror://sourceforge/gdmap/gdmap-${version}.tar.gz";
     sha256 = "0nr8l88cg19zj585hczj8v73yh21k7j13xivhlzl8jdk0j0cj052";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 libxml2 intltool gettext ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ gtk2 libxml2 gettext ];
 
   patches = [ ./get_sensitive.patch ./set_flags.patch ];
 
   hardeningDisable = [ "format" ];
 
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
-  meta = with stdenv.lib; {
-    homepage = http://gdmap.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://gdmap.sourceforge.net";
     description = "Recursive rectangle map of disk usage";
     license = licenses.gpl2;
     platforms = platforms.linux;

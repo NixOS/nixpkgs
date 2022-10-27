@@ -1,27 +1,34 @@
+{ rustcVersion
+, rustcSha256
+, enableRustcDev ? true
+, bootstrapVersion
+, bootstrapHashes
+, selectRustPackage
+, rustcPatches ? []
+, llvmBootstrapForDarwin
+, llvmShared
+, llvmSharedForBuild
+, llvmSharedForHost
+, llvmSharedForTarget
+, llvmPackages # Exposed through rustc for LTO in Firefox
+}:
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
-, CoreFoundation, Security
-, llvmPackages_5
+, CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild
-}: rec {
-  makeRustPlatform = { rustc, cargo, ... }: {
-    rust = {
-      inherit rustc cargo;
-    };
+, makeRustPlatform
+}:
 
-    buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo;
+let
+  # Use `import` to make sure no packages sneak in here.
+  lib' = import ../../../build-support/rust/lib { inherit lib; };
+in
+{
+  lib = lib';
 
-      fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
-        inherit cargo;
-      };
-    };
-
-    rustcSrc = callPackage ./rust-src.nix {
-      inherit rustc;
-    };
-  };
+  # Backwards compat before `lib` was factored out.
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions from
@@ -36,28 +43,38 @@
   # cycles / purify builds). In this way, nixpkgs would be in control of all
   # bootstrapping.
   packages = {
-    prebuilt = callPackage ./bootstrap.nix {};
+    prebuilt = callPackage ./bootstrap.nix {
+      version = bootstrapVersion;
+      hashes = bootstrapHashes;
+    };
     stable = lib.makeScope newScope (self: let
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
       bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-          buildPackages.rust.packages.prebuilt);
+          (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = buildPackages.rust.packages.stable;
+      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
       rustc = self.callPackage ./rustc.nix ({
+        version = rustcVersion;
+        sha256 = rustcSha256;
+        inherit enableRustcDev;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
+
+        patches = rustcPatches;
+
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmPackages_5.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        stdenv = llvmBootstrapForDarwin.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
       });
       rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
       cargo = self.callPackage ./cargo.nix {
@@ -66,7 +83,6 @@
         inherit CoreFoundation Security;
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
     });
   };
 }

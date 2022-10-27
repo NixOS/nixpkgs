@@ -1,44 +1,74 @@
-{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+{ lib, stdenv, fetchurl
+, pkg-config, python3, sphinx
+, zstd
+, acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
+, runCommand, btrfs-progs
+, gitUpdater
+, udevSupport ? true
+, enablePython ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.2.2";
+  version = "6.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1imivxjppi8zl27gn472pwpk8bg5dijkbyi340by31vhy7dj24w2";
+    sha256 = "sha256-Rp4bLshCpuZISK5j3jAiRG+ACel19765GRkfE3y91TQ=";
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    pkg-config
+  ] ++ lib.optionals enablePython [
     python3 python3.pkgs.setuptools
+  ] ++ [
+    sphinx
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
-
-  # for python cross-compiling
-  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-  # The i686 case is a quick hack; I don't know what's wrong.
-  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
-    export LDSHARED="$LD -shared"
-  '';
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 udev zlib zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
   postPatch = "sed -i s/-O1/-O2/ configure";
 
   postInstall = ''
-    install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs
+    install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-backtrace"
+  ] ++ lib.optionals (!enablePython) [
+    "--disable-python"
+  ] ++ lib.optionals (!udevSupport) [
+    "--disable-libudev"
+  ];
 
-  meta = with stdenv.lib; {
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
+
+  installFlags = lib.optionals enablePython [ "install_python" ];
+
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    simple-filesystem = runCommand "btrfs-progs-create-fs" {} ''
+      mkdir -p $out
+      truncate -s110M $out/disc
+      ${btrfs-progs}/bin/mkfs.btrfs $out/disc | tee $out/success
+      ${btrfs-progs}/bin/btrfs check $out/disc | tee $out/success
+      [ -e $out/success ]
+    '';
+  };
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/kdave/btrfs-progs.git";
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
     description = "Utilities for the btrfs filesystem";
-    homepage = https://btrfs.wiki.kernel.org/;
-    license = licenses.gpl2;
+    homepage = "https://btrfs.wiki.kernel.org/";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

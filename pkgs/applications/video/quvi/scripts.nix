@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig}:
+{lib, stdenv, fetchurl, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "quvi-scripts";
@@ -9,13 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1qvp6z5k1qgcys7vf7jd6fm0g07xixmciwj14ypn1kqhmjgizwhp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = {
     description = "Web video downloader";
-    homepage = http://quvi.sf.net;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://quvi.sf.net";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
+    broken = true; # missing glibc-2.34 support, no upstream activity
   };
 }

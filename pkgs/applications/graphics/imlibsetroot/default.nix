@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXinerama, imlib2 }:
+{ lib, stdenv, fetchurl, libX11, libXinerama, imlib2 }:
 
 stdenv.mkDerivation {
   pname = "imlibsetroot";
@@ -9,21 +9,28 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libX11 imlib2 libXinerama ];
+
   buildPhase = ''
-    gcc -g imlibsetroot.c -o imlibsetroot             \
-      `imlib2-config --cflags` `imlib2-config --libs` \
-      -I/include/X11/extensions -lXinerama -lX11
-  '';
-  installPhase = ''
-    mkdir -p $out/bin
-    install -m 755 imlibsetroot $out/bin
+    runHook preBuild
+
+    gcc -g imlibsetroot.c -o imlibsetroot              \
+      -I${imlib2.dev}/include -L${imlib2}/lib -lImlib2 \
+      -I${libX11.dev}/include -lXinerama -lX11
+
+    runHook postBuild
   '';
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    runHook preInstall
+    install -D -m 0755 imlibsetroot -t $out/bin
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "A Xinerama Aware Background Changer";
-    homepage = http://robotmonkeys.net/2010/03/30/imlibsetroot/;
-    license = licenses.gpl2;
+    homepage = "http://robotmonkeys.net/2010/03/30/imlibsetroot/";
+    license = licenses.mitAdvertising;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

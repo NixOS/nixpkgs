@@ -1,29 +1,34 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, xorg, libfaketime }:
 
-stdenv.mkDerivation {
-  name = "clearlyU-12-1.9";
+stdenv.mkDerivation rec {
+  pname = "clearlyU";
+  version = "12-1.9";
 
   src = fetchurl {
-    url = https://www.math.nmsu.edu/~mleisher/Software/cu/cu12-1.9.tgz;
+    url = "https://www.math.nmsu.edu/~mleisher/Software/cu/cu${version}.tgz";
     sha256 = "1xn14jbv3m1khy7ydvad9ydkn7yygdbhjy9wm1v000jzjwr3lv21";
   };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ xorg.fonttosfnt xorg.mkfontscale libfaketime ];
 
-  installPhase = ''
-    mkdir -p $out/share/fonts
-    cp *.bdf $out/share/fonts
-    cd $out/share/fonts
-    mkfontdir
-    mkfontscale
+  buildPhase = ''
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename "$i" .bdf)
+      faketime -f "1970-01-01 00:00:01" fonttosfnt -g 2 -m 2 -v -o "$name.otb" "$i"
+    done
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "127zrg65s90ksj99kr9hxny40rbxvpai62mf5nqk853hcd1bzpr6";
+  installPhase = ''
+    # install otb and bdf fonts
+    fontDir="$out/share/fonts"
+    install -m 644 -D *.bdf *.otb -t "$fontDir"
+    mkfontdir "$fontDir"
+  '';
 
-  meta = {
+  meta = with lib; {
     description = "A Unicode font";
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = licenses.mit;
+    maintainers = [ maintainers.raskin ];
   };
 }

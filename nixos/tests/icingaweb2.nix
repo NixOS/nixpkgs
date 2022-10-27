@@ -1,6 +1,6 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "icingaweb2";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ das_j ];
   };
 
@@ -64,8 +64,8 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    startAll();
-    $icingaweb2->waitForUnit("multi-user.target");
-    $icingaweb2->succeed("curl -sSf http://icingaweb2/authentication/login");
+    start_all()
+    icingaweb2.wait_for_unit("multi-user.target")
+    icingaweb2.succeed("curl -sSf http://icingaweb2/authentication/login")
   '';
 })

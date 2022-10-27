@@ -6,7 +6,8 @@ with lib;
     gtk.iconCache.enable = mkOption {
       type = types.bool;
       default = config.services.xserver.enable;
-      description = ''
+      defaultText = literalExpression "config.services.xserver.enable";
+      description = lib.mdDoc ''
         Whether to build icon theme caches for GTK applications.
       '';
     };
@@ -77,7 +78,7 @@ with lib;
 
         if [ -w "$themedir" ]; then
           rm -f "$themedir"/icon-theme.cache
-          ${pkgs.gtk3.out}/bin/gtk-update-icon-cache --ignore-theme-index "$themedir"
+          ${pkgs.buildPackages.gtk3.out}/bin/gtk-update-icon-cache --ignore-theme-index "$themedir"
         fi
       done
     '';

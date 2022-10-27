@@ -1,9 +1,11 @@
-{fetchurl, stdenv, flex, db}:
+{fetchurl, lib, stdenv, flex, db}:
 
 stdenv.mkDerivation rec {
-  name = "bogofilter-1.2.4";
+  pname = "bogofilter";
+  version = "1.2.4";
+
   src = fetchurl {
-    url = "mirror://sourceforge/bogofilter/${name}.tar.bz2";
+    url = "mirror://sourceforge/bogofilter/bogofilter-${version}.tar.bz2";
     sha256 = "1d56n2m9inm8gnzm88aa27xl2a7sp7aff3484vmflpqkinjqf0p1";
   };
 
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # needs "y" tool
 
   meta = {
-    homepage = http://bogofilter.sourceforge.net/;
+    homepage = "http://bogofilter.sourceforge.net/";
     longDescription = ''
       Bogofilter is a mail filter that classifies mail as spam or ham
       (non-spam) by a statistical analysis of the message's header and
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
       classifications and corrections.  It is based on a Bayesian
       filter.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

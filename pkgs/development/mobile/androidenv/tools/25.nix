@@ -2,8 +2,8 @@
 
 deployAndroidPackage {
   name = "androidsdk";
-  buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXext pkgs.xlibs.libXdamage pkgs.xlibs.libxcb pkgs.xlibs.libXfixes pkgs.xlibs.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xlibs.libX11 pkgs_i686.xlibs.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.xorg.libX11 pkgs.xorg.libXext pkgs.xorg.libXdamage pkgs.xorg.libxcb pkgs.xorg.libXfixes pkgs.xorg.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xorg.libX11 pkgs_i686.xorg.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
   inherit package os;
 
   patchInstructions = ''
@@ -41,7 +41,7 @@ deployAndroidPackage {
     do
         wrapProgram $PWD/$i \
           --prefix PATH : ${pkgs.jdk8}/bin \
-          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.xlibs.libX11 pkgs.xlibs.libXtst ]}
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.xorg.libX11 pkgs.xorg.libXtst ]}
     done
 
     ${lib.optionalString (os == "linux") ''
@@ -58,5 +58,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.licenses = lib.licenses.unfree;
+  meta.license = lib.licenses.unfree;
 }

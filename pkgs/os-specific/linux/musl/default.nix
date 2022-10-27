@@ -16,24 +16,35 @@ let
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
+  stack_chk_fail_local_c = fetchurl {
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/__stack_chk_fail_local.c?h=3.10-stable";
+    sha256 = "1nhkzzy9pklgjcq2yg89d3l18jif331srd3z3vhy5qwxl1spv6i9";
+  };
+
   # iconv tool, implemented by musl author.
   # Original: http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f
   # We use copy from Alpine which fixes error messages, see:
-  # https://git.alpinelinux.org/cgit/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
+  # https://git.alpinelinux.org/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
   iconv_c = fetchurl {
     name = "iconv.c";
-    url = "https://git.alpinelinux.org/cgit/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
+
+  arch = if stdenv.hostPlatform.isx86_64
+    then "x86_64"
+    else if stdenv.hostPlatform.isx86_32
+      then "i386"
+      else null;
 
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.1.24";
+  version = "1.2.3";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
+    url    = "https://musl.libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-fVsLYGJSHkYn4JnkydyCSNMqMChelZt+7Kp4DPjP1KQ=";
   };
 
   enableParallelBuilding = true;
@@ -53,8 +64,14 @@ stdenv.mkDerivation rec {
   patches = [
     # Minor touchup to build system making dynamic linker symlink relative
     (fetchurl {
-      url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+
+    # fix parsing lines with optional fields in fstab etc. NOTE: Remove for the next release since it has been merged upstream
+    (fetchurl {
+      url = "https://git.musl-libc.org/cgit/musl/patch/?id=751bee0ee727e8d8b003c87cff77ac76f1dbecd6";
+      sha256 = "sha256-qCw132TCSaZrkISmtDb8Q8ufyt8sAJdwACkvfwuoi/0=";
     })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]
@@ -71,18 +88,32 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
   separateDebugInfo = true;
 
   NIX_DONT_SET_RPATH = true;
+
+  preBuild = ''
+    ${if (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32) then
+    "# the -x c flag is required since the file extension confuses gcc
+    # that detect the file as a linker script.
+    $CC -x c -c ${stack_chk_fail_local_c} -o __stack_chk_fail_local.o
+    $AR r libssp_nonshared.a __stack_chk_fail_local.o"
+      else ""
+    }
+  '';
 
   postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
 
-    # Strip debug out of the static library
-    $STRIP -S $out/lib/libc.a
     mkdir -p $out/bin
+
+
+    ${lib.optionalString (stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32)
+      "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"
+    }
 
     # Create 'ldd' symlink, builtin
     ln -rs $out/lib/libc.so $out/bin/ldd
@@ -102,6 +133,9 @@ stdenv.mkDerivation rec {
       -lc \
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  '' + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
@@ -112,7 +146,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "http://www.musl-libc.org";
+    homepage    = "https://musl.libc.org/";
+    changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice dtzWill ];

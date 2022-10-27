@@ -1,7 +1,8 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
-, lib, fetchhg, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
+{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+, lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
-, qtbase, qttools
+, qtbase, qttools, wrapQtAppsHook
+, llvm
 , withServer ? true
 }:
 
@@ -10,33 +11,25 @@ let
           SHA bytestring entropy hslogger network pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
-
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hedgewars";
-  version = "1.0.0-beta2";
+  version = "1.0.2";
 
-  # it's crazy slow to fetch the whole repo but the beta versions are not
-  # released as tarballs
-  src = fetchhg {
-    url = "https://hg.hedgewars.org/hedgewars/";
-    rev = "dff37ac61dcf";
-    sha256 = "1dsq6wfv3d7jfnr068b7ixpnqp0h6mj7zgby6h1viwblgbirri78";
+  src = fetchurl {
+    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    sha256 = "sha256-IB/l5FvYyls9gbGOwGvWu8n6fCxjvwGQBeL4C+W88hI=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
+    llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
     ffmpeg freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
-
-  postPatch = ''
-    substituteInPlace gameServer/CMakeLists.txt \
-      --replace mask evaluate
-  '';
 
   cmakeFlags = [
     "-DNOVERSIONINFOUPDATE=ON"
@@ -89,7 +82,7 @@ mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
-    inherit (ghc.meta) platforms;
-    hydraPlatforms = [];
+    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
 
 let
   jamp = makeDesktopItem rec {
@@ -8,7 +8,7 @@ let
     comment = "Open Source Jedi Academy game released by Raven Software";
     desktopName = "Jedi Academy (Multi Player)";
     genericName = "Jedi Academy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
   jasp = makeDesktopItem rec {
     name = "jasp";
@@ -17,48 +17,73 @@ let
     comment = "Open Source Jedi Academy game released by Raven Software";
     desktopName = "Jedi Academy (Single Player)";
     genericName = "Jedi Academy";
-    categories = "Game;";
+    categories = [ "Game" ];
+  };
+  josp = makeDesktopItem rec {
+    name = "josp";
+    exec = name;
+    icon = "OpenJK_Icon_128";
+    comment = "Open Source Jedi Outcast game released by Raven Software";
+    desktopName = "Jedi Outcast (Single Player)";
+    genericName = "Jedi Outcast";
+    categories = [ "Game" ];
   };
 in stdenv.mkDerivation {
   pname = "OpenJK";
-  version = "2019-06-24";
+  version = "unstable-2022-01-30";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "e8b5c135eccb05ddae67e00ff944001f373fddd4";
-    sha256 = "0qkbn59swhnb0anvy9gq945rkb58j6axlcfgb7sff0m4swqw2394";
+    rev = "235fb9e1a9c4537a603b2e54e444327d20d198a3";
+    sha256 = "sha256-DqP6wnu5sE7lQJGEdsEPOc6FIaJjqxt5ANKZ5eiabC4=";
   };
 
   dontAddPrefix = true;
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
   buildInputs = [ libjpeg zlib libpng libGL SDL2 ];
+
+  outputs = [ "out" "openjo" "openja" ];
 
   # move from $out/JediAcademy to $out/opt/JediAcademy
   preConfigure = ''
     cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$out/opt")
   '';
+  cmakeFlags = ["-DBuildJK2SPEngine:BOOL=ON"
+                "-DBuildJK2SPGame:BOOL=ON"
+                "-DBuildJK2SPRdVanilla:BOOL=ON"];
 
   postInstall = ''
-    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/128x128/apps
-    prefix=$out/opt/JediAcademy
+    mkdir -p $out/bin $openja/bin $openjo/bin
+    mkdir -p $openja/share/applications $openjo/share/applications
+    mkdir -p $openja/share/icons/hicolor/128x128/apps $openjo/share/icons/hicolor/128x128/apps
+    mkdir -p $openja/opt $openjo/opt
+    mv $out/opt/JediAcademy $openja/opt/
+    mv $out/opt/JediOutcast $openjo/opt/
+    jaPrefix=$openja/opt/JediAcademy
+    joPrefix=$openjo/opt/JediOutcast
 
-    makeWrapper $prefix/openjk.* $out/bin/jamp --run "cd $prefix"
-    makeWrapper $prefix/openjk_sp.* $out/bin/jasp --run "cd $prefix"
-    makeWrapper $prefix/openjkded.* $out/bin/openjkded --run "cd $prefix"
+    makeWrapper $jaPrefix/openjk.* $openja/bin/jamp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjk_sp.* $openja/bin/jasp --chdir "$jaPrefix"
+    makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --chdir "$jaPrefix"
+    makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --chdir "$joPrefix"
 
-    cp $src/shared/icons/OpenJK_Icon_128.png $out/share/icons/hicolor/128x128/apps
-    ln -s ${jamp}/share/applications/* $out/share/applications
-    ln -s ${jasp}/share/applications/* $out/share/applications
+    cp $src/shared/icons/OpenJK_Icon_128.png $openjo/share/icons/hicolor/128x128/apps
+    cp $src/shared/icons/OpenJK_Icon_128.png $openja/share/icons/hicolor/128x128/apps
+    ln -s ${jamp}/share/applications/* $openja/share/applications
+    ln -s ${jasp}/share/applications/* $openja/share/applications
+    ln -s ${josp}/share/applications/* $openjo/share/applications
+    ln -s $openja/bin/* $out/bin
+    ln -s $openjo/bin/* $out/bin
+    rm -rf $out/opt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source engine for Star Wars Jedi Academy game";
-    homepage = https://github.com/JACoders/OpenJK;
+    homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ tgunnoe ];
   };
 }

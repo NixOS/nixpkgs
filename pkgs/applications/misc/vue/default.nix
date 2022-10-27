@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "vue";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yfzr80pw632lkayg4qfmwzrqk02y30yz8br7isyhmgkswyp5rnx";
   };
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{share/vue,bin}
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Visual Understanding Environment - mind mapping software";
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.free; # Apache License fork, actually
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = with lib.platforms; linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.free; # Apache License fork, actually
   };
 }

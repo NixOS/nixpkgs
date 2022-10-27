@@ -1,9 +1,6 @@
-{ localSystem ? { system = builtins.currentSystem; }
-, crossSystem ? null
-}:
+{ pkgs ? import ../../.. {} }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
@@ -33,10 +30,25 @@ in with pkgs; rec {
     '';
   };
 
+  bootGCC = gcc.cc.override { enableLTO = false; };
+  bootBinutils = binutils.bintools.override {
+    withAllTargets = false;
+    # Don't need two linkers, disable whatever's not primary/default.
+    enableGold = false;
+    # bootstrap is easier w/static
+    enableShared = false;
+  };
+
   build =
 
     stdenv.mkDerivation {
       name = "stdenv-bootstrap-tools";
+
+      meta = {
+        # Increase priority to unblock nixpkgs-unstable
+        # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+        schedulingPriority = 200;
+      };
 
       nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ];
 
@@ -58,6 +70,9 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libnss*.so* $out/lib
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
         cp -d ${libc.out}/lib/crt?.o $out/lib
+
+        # Hacky compat with our current unpack-bootstrap-tools.sh
+        ln -s librt.so "$out"/lib/librt-dummy.so
 
         cp -rL ${libc.dev}/include $out
         chmod -R u+w "$out"
@@ -109,12 +124,14 @@ in with pkgs; rec {
         cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc.cc.out}/bin/gcc $out/bin
-        cp -d ${gcc.cc.out}/bin/cpp $out/bin
-        cp -d ${gcc.cc.out}/bin/g++ $out/bin
-        cp -d ${gcc.cc.lib}/lib/libgcc_s.so* $out/lib
-        cp -d ${gcc.cc.lib}/lib/libstdc++.so* $out/lib
-        cp -rd ${gcc.cc.out}/lib/gcc $out/lib
+        cp -d ${bootGCC.out}/bin/gcc $out/bin
+        cp -d ${bootGCC.out}/bin/cpp $out/bin
+        cp -d ${bootGCC.out}/bin/g++ $out/bin
+        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
+        cp -rd ${bootGCC.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -122,11 +139,11 @@ in with pkgs; rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.cc.out}/libexec/* $out/libexec
+        cp -rd ${bootGCC.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir -p $out/include
-        cp -rd ${gcc.cc.out}/include/c++ $out/include
+        cp -rd ${bootGCC.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -135,22 +152,26 @@ in with pkgs; rec {
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
-        cp -d ${libelf}/lib/libelf.so* $out/lib
 
       '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         # These needed for cross but not native tools because the stdenv
         # GCC has certain things built in statically. See
         # pkgs/stdenv/linux/default.nix for the details.
-        cp -d ${isl_0_17.out}/lib/libisl*.so* $out/lib
+        cp -d ${isl_0_20.out}/lib/libisl*.so* $out/lib
+
+      '' + lib.optionalString (stdenv.hostPlatform.isRiscV) ''
+        # libatomic is required on RiscV platform for C/C++ atomics and pthread
+        # even though they may be translated into native instructions.
+        cp -d ${bootGCC.out}/lib/libatomic.a* $out/lib
 
       '' + ''
         cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.bintools.out}/bin/$i $out/bin
+          cp ${bootBinutils.out}/bin/$i $out/bin
         done
-        cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
+        cp -r '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
         chmod -R u+w $out
 
@@ -164,15 +185,17 @@ in with pkgs; rec {
 
         nuke-refs $out/bin/*
         nuke-refs $out/lib/*
+        nuke-refs $out/lib/*/*
         nuke-refs $out/libexec/gcc/*/*/*
         nuke-refs $out/lib/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/include-fixed/*{,/*}
 
         mkdir $out/.pack
         mv $out/* $out/.pack
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        XZ_OPT=-9 tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
+        XZ_OPT="-9 -e" tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
@@ -187,6 +210,12 @@ in with pkgs; rec {
   dist = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
+    meta = {
+      # Increase priority to unblock nixpkgs-unstable
+      # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
+      schedulingPriority = 200;
+    };
+
     buildCommand = ''
       mkdir -p $out/nix-support
       echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
@@ -200,15 +229,24 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
-  bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
+  bootstrapTools =
+    let extraAttrs = lib.optionalAttrs
+      config.contentAddressedByDefault
+      {
+        __contentAddressed = true;
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+      };
+    in
+    if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
       inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles;
+      inherit bootstrapFiles extraAttrs;
     }
     else throw "unsupported libc";
 
@@ -234,7 +272,7 @@ in with pkgs; rec {
       gcc --version
 
     '' + lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      ldlinux=$(echo ${bootstrapTools}/lib/${builtins.baseNameOf binutils.dynamicLinker})
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
       export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
       export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"

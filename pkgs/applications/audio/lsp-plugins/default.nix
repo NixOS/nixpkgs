@@ -1,53 +1,35 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
-, libsndfile, jack2Full
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper
+, libsndfile, jack2
 , libGLU, libGL, lv2, cairo
-, ladspaH, php, expat }:
+, ladspaH, php, libXrandr }:
 
 stdenv.mkDerivation rec {
-  pname = "lsp-plugins";
-  version = "1.1.10";
+        pname = "lsp-plugins";
+        version = "1.2.3";
 
-  src = fetchFromGitHub {
-    owner = "sadko4u";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "09gmwzh1gq1q2lxn8fc1bpdh02h8vr7r0i040c1nx256wgfsarqb";
-  };
+        src = fetchurl {
+                url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
+                sha256 = "sha256-ej8t3xk29VLJMO1lvXuzUlD00al8TTkPLL8z62fmTys=";
+        };
 
-  nativeBuildInputs = [ pkgconfig php expat ];
-  buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH makeWrapper ];
+        nativeBuildInputs = [ pkg-config php makeWrapper ];
+        buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH libXrandr ];
 
-  makeFlags = [
-    "BIN_PATH=$(out)/bin"
-    "LIB_PATH=$(out)/lib"
-    "DOC_PATH=$(out)/share/doc"
+        makeFlags = [
+                "PREFIX=${placeholder "out"}"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DLSP_NO_EXPERIMENTAL" ];
+  NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
-  patchPhase = ''
-    runHook prePatch
-    substituteInPlace Makefile --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/jack/main.h --replace "/usr/lib" "$out/lib"
-    substituteInPlace ./include/container/vst/main.h --replace "/usr/lib" "$out/lib"
-    # for https://github.com/sadko4u/lsp-plugins/issues/7#issuecomment-426561549 :
-    sed -i '/X11__NET_WM_WINDOW_TYPE_DOCK;/d' ./src/ui/ws/x11/X11Window.cpp
-    runHook postPatch
+  configurePhase = ''
+    make config PREFIX=${placeholder "out"}
   '';
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-    TEST_PATH=$(pwd)".build-test"
-    make OBJDIR=$TEST_PATH test
-    $TEST_PATH/lsp-plugins-test utest
-    runHook postCheck
-  '';
+  enableParallelBuilding = true;
 
-  buildFlags = "release";
-
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Collection of open-source audio plugins";
       longDescription = ''
         Compatible with follwing formats:
@@ -69,6 +51,10 @@ stdenv.mkDerivation rec {
         - Expander MidSide - Expander MidSide
         - Expander Mono - Expander Mono
         - Expander Stereo - Expander Stereo
+        - Crossover LeftRight x8 - Frequenzweiche LeftRight x8
+        - Crossover MidSide x8 - Frequenzweiche MidSide x8
+        - Crossover Mono x8 - Frequenzweiche Mono x8
+        - Crossover Stereo x8 - Frequenzweiche Stereo x8
         - Gate LeftRight - Gate LeftRight
         - Gate MidSide - Gate MidSide
         - Gate Mono - Gate Mono
@@ -91,11 +77,26 @@ stdenv.mkDerivation rec {
         - Compressor MidSide - Kompressor MidSide
         - Compressor Mono - Kompressor Mono
         - Compressor Stereo - Kompressor Stereo
+        - Artistic Delay Mono - Künstlerische Verzögerung
+        - Artistic Delay Stereo - Künstlerische Verzögerung
         - Latency Meter - Latenzmessgerät
+        - Loudness Compensator Mono - Lautstärke Kompensator Mono
+        - Loudness Compensator Stereo - Lautstärke Kompensator Stereo
+        - Multiband Expander LeftRight x8 - Multi-band Expander LeftRight x8
+        - Multiband Expander MidSide x8 - Multi-band Expander MidSide x8
+        - Multiband Expander Mono x8 - Multi-band Expander Mono x8
+        - Multiband Expander Stereo x8 - Multi-band Expander Stereo x8
+        - Multiband Gate LeftRight x8 - Multi-band Gate LeftRight x8
+        - Multiband Gate MidSide x8 - Multi-band Gate MidSide x8
+        - Multiband Gate Mono x8 - Multi-band Gate Mono x8
+        - Multiband Gate Stereo x8 - Multi-band Gate Stereo x8
         - Multiband Compressor LeftRight x8 - Multi-band Kompressor LeftRight x8
         - Multiband Compressor MidSide x8 - Multi-band Kompressor MidSide x8
         - Multiband Compressor Mono x8 - Multi-band Kompressor Mono x8
         - Multiband Compressor Stereo x8 - Multi-band Kompressor Stereo x8
+        - Oscilloscope x1 - Oscilloscope x1
+        - Oscilloscope x2 - Oscilloscope x2
+        - Oscilloscope x4 - Oscilloscope x4
         - Oscillator Mono - Oszillator Mono
         - Parametric Equalizer x16 LeftRight - Parametrischer Entzerrer x16 LeftRight
         - Parametric Equalizer x16 MidSide - Parametrischer Entzerrer x16 MidSide
@@ -107,12 +108,23 @@ stdenv.mkDerivation rec {
         - Parametric Equalizer x32 Stereo - Parametrischer Entzerrer x32 Stereo
         - Phase Detector - Phasendetektor
         - Profiler Mono - Profiler Mono
+        - Profiler Stereo - Profiler Stereo
+        - Room Builder Mono - Raumbaumeister Mono
+        - Room Builder Stereo - Raumbaumeister Stereo
         - Multi-Sampler x12 DirectOut - Schlagzeug x12 Direktausgabe
         - Multi-Sampler x12 Stereo - Schlagzeug x12 Stereo
         - Multi-Sampler x24 DirectOut - Schlagzeug x24 Direktausgabe
         - Multi-Sampler x24 Stereo - Schlagzeug x24 Stereo
         - Multi-Sampler x48 DirectOut - Schlagzeug x48 Direktausgabe
         - Multi-Sampler x48 Stereo - Schlagzeug x48 Stereo
+        - Sidechain Multiband Expander LeftRight x8 - Sidechain Multi-band Expander LeftRight x8
+        - Sidechain Multiband Expander MidSide x8 - Sidechain Multi-band Expander MidSide x8
+        - Sidechain Multiband Expander Mono x8 - Sidechain Multi-band Expander Mono x8
+        - Sidechain Multiband Expander Stereo x8 - Sidechain Multi-band Expander Stereo x8
+        - Sidechain Multiband Gate LeftRight x8 - Sidechain Multi-band Gate LeftRight x8
+        - Sidechain Multiband Gate MidSide x8 - Sidechain Multi-band Gate MidSide x8
+        - Sidechain Multiband Gate Mono x8 - Sidechain Multi-band Gate Mono x8
+        - Sidechain Multiband Gate Stereo x8 - Sidechain Multi-band Gate Stereo x8
         - Sidechain Multiband Compressor LeftRight x8 - Sidechain Multi-band Kompressor LeftRight x8
         - Sidechain Multiband Compressor MidSide x8 - Sidechain Multi-band Kompressor MidSide x8
         - Sidechain Multiband Compressor Mono x8 - Sidechain Multi-band Kompressor Mono x8
@@ -143,6 +155,8 @@ stdenv.mkDerivation rec {
         - Spectrum Analyzer x2 - Spektrumanalysator x2
         - Spectrum Analyzer x4 - Spektrumanalysator x4
         - Spectrum Analyzer x8 - Spektrumanalysator x8
+        - Surge Filter Mono - Sprungfilter Mono
+        - Surge Filter Stereo - Sprungfilter Stereo
         - Trigger MIDI Mono - Triggersensor MIDI Mono
         - Trigger MIDI Stereo - Triggersensor MIDI Stereo
         - Trigger Mono - Triggersensor Mono
@@ -151,9 +165,9 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = [ "x86_64-linux" ];
+      platforms = platforms.linux;
     };
 }

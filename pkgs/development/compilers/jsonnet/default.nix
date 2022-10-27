@@ -1,15 +1,18 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, jekyll, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "jsonnet";
-  version = "0.14.0";
+  version = "0.19.0";
+  outputs = ["out" "doc"];
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "012zapx0xvlkl2y7dljpdn18gymnmzc4mma2yagf9pxnr286lwrf";
+    sha256 = "sha256-tCK6iEj6GNL46zGMzOnVv40/P0T6EpttoK0NokJ6qyM=";
   };
+
+  nativeBuildInputs = [ jekyll ];
 
   enableParallelBuilding = true;
 
@@ -19,19 +22,26 @@ stdenv.mkDerivation rec {
     "libjsonnet.so"
   ];
 
+  # Upstream writes documentation in html, not in markdown/rst, so no
+  # other output formats, sorry.
+  preBuild = ''
+    jekyll build --source ./doc --destination ./html
+  '';
+
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/include
+    mkdir -p $out/bin $out/lib $out/include $out/share/doc/jsonnet
     cp jsonnet $out/bin/
     cp jsonnetfmt $out/bin/
     cp libjsonnet*.so $out/lib/
     cp -a include/*.h $out/include/
+    cp -r ./html $out/share/doc/jsonnet
   '';
 
   meta = {
     description = "Purely-functional configuration language that helps you define JSON data";
     maintainers = with lib.maintainers; [ benley copumpkin ];
     license = lib.licenses.asl20;
-    homepage = https://github.com/google/jsonnet;
+    homepage = "https://github.com/google/jsonnet";
     platforms = lib.platforms.unix;
   };
 }

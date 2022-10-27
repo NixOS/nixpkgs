@@ -1,44 +1,56 @@
 { lib
-, python
+, python3
+, fetchFromGitHub
 , groff
 , less
-, fetchpatch
 }:
-
 let
-  py = python.override {
+  py = python3.override {
     packageOverrides = self: super: {
-      rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
-        };
-      });
+      # TODO: https://github.com/aws/aws-cli/pull/5712
       colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.9";
+        version = "0.4.3";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
+          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         };
       });
-      pyyaml = super.pyyaml_3;
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.4.1";
+        src = fetchFromGitHub {
+          owner = "yaml";
+          repo = "pyyaml";
+          rev = version;
+          hash = "sha256-VUqnlOF/8zSOqh6JoEYOsfQ0P4g+eYqxyFTywgCS7gM=";
+        };
+        checkPhase = ''
+          runHook preCheck
+          PYTHONPATH="tests/lib3:$PYTHONPATH" ${self.python.interpreter} -m test_all
+          runHook postCheck
+        '';
+      });
     };
+    self = py;
   };
 
-in py.pkgs.buildPythonApplication rec {
+in
+with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.215"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.25.76"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
-  src = py.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "13r32z8iyza4gvpf81l6l2ywv37yxi4bb08ry7cli5m6ny9xqlq8";
+    hash = "sha256-PSr0zZEGXFxcFSN7QQ5Ux0Z4aCwwm9na+2hIv/gR6+s=";
   };
 
-  # No tests included
-  doCheck = false;
+  # https://github.com/aws/aws-cli/issues/4837
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
+      --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
+  '';
 
-  pythonPath = with py.pkgs; [
+  propagatedBuildInputs = [
     botocore
     bcdoc
     s3transfer
@@ -49,24 +61,37 @@ in py.pkgs.buildPythonApplication rec {
     pyyaml
     groff
     less
-    urllib3
-    dateutil
-    jmespath
-    futures
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
+    mkdir -p $out/share/bash-completion/completions
+    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/awscli
+
     mkdir -p $out/share/zsh/site-functions
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+
     rm $out/bin/aws.cmd
   '';
 
+  passthru = {
+    python = py; # for aws_shell
+  };
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
+    $out/bin/aws --version | grep "${version}"
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    homepage = https://aws.amazon.com/cli/;
+    homepage = "https://aws.amazon.com/cli/";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
+    mainProgram = "aws";
+    maintainers = with maintainers; [ ];
   };
 }

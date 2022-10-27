@@ -1,25 +1,42 @@
-{ stdenv, buildPythonPackage, fetchPypi, lxml, requests, tkinter }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "0.6.5";
+  version = "1.10.3";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14g3sxprq65lxbgkf3rjgb1bjqnj2jc5p1swlq9sk9gwnl6ca3ds";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "kbr";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-eRvo40VXgo+SQGeh88vRfHPnbrsVDyz03ToIgwRc43Q=";
   };
 
-  prePatch = ''
-    substituteInPlace fritzconnection/test.py \
-      --replace "from fritzconnection import" "from .fritzconnection import"
-  '';
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  propagatedBuildInputs = [ lxml requests tkinter ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Python-Tool to communicate with the AVM FritzBox using the TR-064 protocol";
-    homepage = https://bitbucket.org/kbr/fritzconnection;
+  pythonImportsCheck = [
+    "fritzconnection"
+  ];
+
+  meta = with lib; {
+    description = "Python module to communicate with the AVM Fritz!Box";
+    homepage = "https://github.com/kbr/fritzconnection";
+    changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/changes.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda valodim ];
   };
 }

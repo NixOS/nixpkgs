@@ -11,17 +11,17 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable urxvtd, the urxvt terminal daemon. To use urxvtd, run
         "urxvtc".
       '';
     };
 
     package = mkOption {
-      default = pkgs.rxvt_unicode-with-plugins;
-      defaultText = "pkgs.rxvt_unicode-with-plugins";
-      description = ''
-        Package to install. Usually pkgs.rxvt_unicode-with-plugins or pkgs.rxvt_unicode
+      default = pkgs.rxvt-unicode;
+      defaultText = literalExpression "pkgs.rxvt-unicode";
+      description = lib.mdDoc ''
+        Package to install. Usually pkgs.rxvt-unicode.
       '';
       type = types.package;
     };
@@ -44,5 +44,7 @@ in {
     environment.systemPackages = [ cfg.package ];
     environment.variables.RXVT_SOCKET = "/run/user/$(id -u)/urxvtd-socket";
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }

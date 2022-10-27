@@ -1,34 +1,26 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit, qcheck
+{ lib, fetchurl, ocaml, buildDunePackage, ounit, qtest
 # Optionally enable tests; test script use OCaml-4.01+ features
-, doCheck ? stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01"
+, doCheck ? lib.versionAtLeast ocaml.version "4.08"
 }:
 
-let version = "1.4.3"; in
+let version = "1.6.0"; in
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-stringext-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/rgrinberg/stringext/archive/v${version}.tar.gz";
-    sha256 = "121k79vjazvsd254yg391fp4spsd1p32amccrahd0g6hjhf5w6sl";
+buildDunePackage {
+  pname = "stringext";
+  version = version;
+  useDune2 = true;
+  src = fetchurl {
+    url = "https://github.com/rgrinberg/stringext/releases/download/${version}/stringext-${version}.tbz";
+    sha256 = "1sh6nafi3i9773j5mlwwz3kxfzdjzsfqj2qibxhigawy5vazahfv";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit qcheck ];
-
-  configurePhase = "ocaml setup.ml -configure --prefix $out"
-  + stdenv.lib.optionalString doCheck " --enable-tests";
-  buildPhase = "ocaml setup.ml -build";
+  checkInputs = [ ounit qtest ];
   inherit doCheck;
-  checkPhase = "ocaml setup.ml -test";
-  installPhase = "ocaml setup.ml -install";
-
-  createFindlibDestdir = true;
 
   meta = {
-    homepage = https://github.com/rgrinberg/stringext;
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/rgrinberg/stringext";
     description = "Extra string functions for OCaml";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

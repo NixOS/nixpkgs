@@ -1,9 +1,12 @@
+{ stdenv, lib }:
+
 let
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  variant = if stdenv.hostPlatform.isMusl then "alpine_linux" else "linux";
+  sources = lib.importJSON ./sources.json;
 in
 {
-  jdk-hotspot = import ./jdk-linux-base.nix sources.openjdk11.linux.jdk.hotspot;
-  jre-hotspot = import ./jdk-linux-base.nix sources.openjdk11.linux.jre.hotspot;
-  jdk-openj9 = import ./jdk-linux-base.nix sources.openjdk11.linux.jdk.openj9;
-  jre-openj9 = import ./jdk-linux-base.nix sources.openjdk11.linux.jre.openj9;
+  jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk11.${variant}.jdk.hotspot; };
+  jre-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk11.${variant}.jre.hotspot; };
+  jdk-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk11.${variant}.jdk.openj9; };
+  jre-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk11.${variant}.jre.openj9; };
 }

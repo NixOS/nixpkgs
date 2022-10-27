@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, stdenv
+{ buildPythonPackage, fetchPypi, lib
 }:
 
 buildPythonPackage rec {
@@ -13,8 +13,8 @@ buildPythonPackage rec {
   # PyPi package does not include tests.
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/okunishinishi/python-stringcase;
+  meta = with lib; {
+    homepage = "https://github.com/okunishinishi/python-stringcase";
     description = "Convert string cases between camel case, pascal case, snake case etc…";
     license = licenses.mit;
     maintainers = with maintainers; [ alunduil ];

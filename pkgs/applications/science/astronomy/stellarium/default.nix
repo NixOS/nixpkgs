@@ -1,33 +1,38 @@
-{ mkDerivation, lib, fetchFromGitHub
-, cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
-, qtscript, qtserialport, qttools
+{ stdenv, lib, fetchFromGitHub
+, cmake, freetype, libpng, libGLU, libGL, openssl, perl, libiconv
+, qtscript, qtserialport, qttools, qtcharts
 , qtmultimedia, qtlocation, qtbase, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "0.19.2";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "1ki3s4smazr6xfkr0grrmjp2s8yjprismiaq7l54d0il7rkvhibd";
+    sha256 = "sha256-FBH5IB1keMzRP06DQK2e7HX8rwm5/sdTX+cB80uG0vw=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
 
   buildInputs = [
-    freetype libpng libGLU_combined openssl libiconv qtscript qtserialport qttools
-    qtmultimedia qtlocation qtbase
+    freetype libpng libGLU libGL openssl libiconv qtscript qtserialport qttools
+    qtmultimedia qtlocation qtbase qtcharts
   ];
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+                'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
+  '';
 
   meta = with lib; {
     description = "Free open-source planetarium";
-    homepage = http://stellarium.org/;
-    license = licenses.gpl2;
-
-    platforms = platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin
-    maintainers = with maintainers; [ peti ma27 ];
+    homepage = "https://stellarium.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ma27 ];
   };
 }

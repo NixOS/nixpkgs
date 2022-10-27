@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "mrrescue";
@@ -13,13 +13,13 @@ let
     name = "mrrescue";
     exec = pname;
     icon = icon;
-    comment = "Arcade-style fire fighting game"; 
+    comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -29,10 +29,9 @@ stdenv.mkDerivation {
     sha256 = "0kzahxrgpb4vsk9yavy7f8nc34d62d1jqjrpsxslmy9ywax4yfpi";
   };
 
-  nativeBuildInputs = [ lua love ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ lua love makeWrapper ];
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase =
   ''
@@ -48,12 +47,12 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Arcade-style fire fighting game";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.zlib;
-    downloadPage = http://tangramgames.dk/games/mrrescue;
+    downloadPage = "http://tangramgames.dk/games/mrrescue";
   };
 
 }

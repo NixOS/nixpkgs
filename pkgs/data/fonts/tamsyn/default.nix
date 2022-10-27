@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, fontforge, xorg }:
 
 let
   version = "1.11";
@@ -11,37 +11,38 @@ in stdenv.mkDerivation {
     sha256 = "0kpjzdj8sv5871b8827mjgj9dswk75h94jj5iia2bds18ih1pglp";
    };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ fontforge xorg.mkfontscale ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1
   '';
 
-  installPhase = ''
-    # install the pcf fonts (for xorg applications)
-    fontDir="$out/share/fonts/tamsyn"
-    mkdir -p "$fontDir"
-    mv *.pcf "$fontDir"
-    mv *.psf.gz "$fontDir"
+  postBuild = ''
+    # convert pcf fonts to otb
+    for i in *.pcf; do
+      name=$(basename "$i" .pcf)
+      fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otb\")"
+    done
 
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+    # compress pcf fonts
+    gzip -n -9 *.pcf
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "13l7ighfmn3kmqmchlksfg8ss22ndjk71rs0f9fn5p5zk7s4dn5x";
+  installPhase = ''
+    install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
+    install -m 644 -D *.psf.gz -t "$out/share/consolefonts"
+    mkfontdir "$out/share/fonts/misc"
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A monospace bitmap font aimed at programmers";
     longDescription = ''Tamsyn is a monospace bitmap font, primarily aimed at
     programmers. It was derived from Gilles Boccon-Gibod's MonteCarlo. Tamsyn
     font was further inspired by Gohufont, Terminus, Dina, Proggy, Fixedsys, and
     Consolas.
     '';
-    homepage = http://www.fial.com/~scott/tamsyn-font/;
-    downloadPage = http://www.fial.com/~scott/tamsyn-font/download;
+    homepage = "http://www.fial.com/~scott/tamsyn-font/";
+    downloadPage = "http://www.fial.com/~scott/tamsyn-font/download";
     license = licenses.free;
     maintainers = [ maintainers.rps ];
   };

@@ -1,29 +1,30 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , cffi
+, lmdb
 }:
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "0.97";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jw3n14x6qg5wps2w4qkqf4pyan949h1s2nbkrz2qh7xwnnp2g8p";
+    sha256 = "60a11efc21aaf009d06518996360eed346f6000bfc9de05114374230879f992e";
   };
 
-  checkInputs = [ pytest cffi ];
-  checkPhase = ''
-    py.test
-  '';
+  buildInputs = [ lmdb ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ cffi pytestCheckHook ];
+
+  LMDB_FORCE_SYSTEM=1;
+
+  meta = with lib; {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
     license = licenses.openldap;
     maintainers = with maintainers; [ copumpkin ivan ];
   };
-
 }

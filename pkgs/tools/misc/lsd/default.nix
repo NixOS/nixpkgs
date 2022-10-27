@@ -1,31 +1,44 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, pandoc
+, testers
+, lsd
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.16.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "0fh5rz6slyjzz03bpjcl9gplk36vm7qcc0i0gvhsikwvw0cf3hym";
+    sha256 = "sha256-FY1odcKBl7zJ+MxfohkmC1e45fPQK3MKB3orQdCRpA4=";
   };
 
-  cargoSha256 = "0377jbjkrrjss3w8xmjsjjynycpdk19grp20hffxschg4ryvniin";
+  cargoSha256 = "sha256-t7J7hIbLlRq99Yd2/3Zn+PbHhJtaJRdDluDXN0Hp/Jc=";
 
-  preFixup = ''
-    install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd
-    install -Dm644 -t $out/share/fish/vendor_completions.d/ target/release/build/lsd-*/out/lsd.fish
-    install -Dm644 -t $out/share/bash-completion/completions/ target/release/build/lsd-*/out/lsd.bash
+  nativeBuildInputs = [ installShellFiles pandoc ];
+  postInstall = ''
+    pandoc --standalone --to man doc/lsd.md -o lsd.1
+    installManPage lsd.1
+
+    installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 
-  # Some tests fail, but Travis ensures a proper build
+  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Peltoche/lsd;
+  passthru.tests.version = testers.testVersion {
+    package = lsd;
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/Peltoche/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ Br1ght0ne marsam zowoq SuperSandro2000 ];
   };
 }

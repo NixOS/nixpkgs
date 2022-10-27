@@ -1,16 +1,21 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
+, gawk
 , enableSSO ? false
-, crowdProperties ? null
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-jira";
-  version = "8.4.2";
+  version = "9.2.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "0f0l9ss8jv06iidg8jw7yk5z42r1m0cbmlgj1wgli9a21ssp65sh";
+    sha256 = "sha256-+QlZ5/3LZnW7lPvm0it7/pC7kVySbHgf1AQTyPJ+L+U=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     mv conf/server.xml conf/server.xml.dist
@@ -18,24 +23,22 @@ stdenv.mkDerivation rec {
     rm -r logs; ln -sf /run/atlassian-jira/logs/ .
     rm -r work; ln -sf /run/atlassian-jira/work/ .
     rm -r temp; ln -sf /run/atlassian-jira/temp/ .
+    substituteInPlace bin/check-java.sh \
+      --replace "awk" "${gawk}/bin/gawk"
   '' + lib.optionalString enableSSO ''
     substituteInPlace atlassian-jira/WEB-INF/classes/seraph-config.xml \
       --replace com.atlassian.jira.security.login.JiraSeraphAuthenticator \
                 com.atlassian.jira.security.login.SSOSeraphAuthenticator
-  '' + lib.optionalString (crowdProperties != null) ''
-    cat <<EOF > atlassian-jira/WEB-INF/classes/crowd.properties
-    ${crowdProperties}
-    EOF
   '';
 
   installPhase = ''
     cp -rva . $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proprietary issue tracking product, also providing project management functions";
     homepage = "https://www.atlassian.com/software/jira";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ciil ];
+    maintainers = with maintainers; [ globin ciil megheaiulian techknowlogick ma27 ];
   };
 }

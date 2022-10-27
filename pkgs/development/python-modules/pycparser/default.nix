@@ -1,21 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, python }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pycparser";
-  version = "2.19";
+  version = "2.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3";
+    sha256 = "e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
 
-  meta = with stdenv.lib; {
+  unittestFlagsArray = [ "-s" "tests" ];
+
+  meta = with lib; {
     description = "C parser in Python";
-    homepage = https://github.com/eliben/pycparser;
+    homepage = "https://github.com/eliben/pycparser";
     license = licenses.bsd3;
     maintainers = with maintainers; [ domenkozar ];
   };

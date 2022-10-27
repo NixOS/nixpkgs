@@ -1,46 +1,91 @@
-{ stdenv, fetchFromGitHub, python3Packages, glibcLocales, coreutils, git }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+, glibcLocales
+, coreutils
+, git
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.11";
+  version = "0.13.3";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
-    owner  = "xonsh";
-    repo   = "xonsh";
-    rev    = "refs/tags/${version}";
-    sha256 = "0kvq1hlmlb8k9z6z385924fcqq3sf36pmi3aqczlb90m37rwzb6d";
+    owner = "xonsh";
+    repo = "xonsh";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-COm+MZUbiFTB5EaOB+1+lIef1IfhQ95Ya1MmnJXGu6A=";
   };
 
   LC_ALL = "en_US.UTF-8";
+
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
     sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py
 
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
+
+    substituteInPlace scripts/xon.sh \
+      --replace 'python' "${python3Packages.python}/bin/python"
+
   '';
 
-  doCheck = !stdenv.isDarwin;
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+  ];
 
-  checkPhase = ''
-    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight'
-    HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
-    HOME=$TMPDIR pytest -k 'test_ptk_highlight'
+  postInstall = ''
+    wrapProgram $out/bin/xonsh \
+      $makeWrapperArgs
   '';
 
-  checkInputs = [ python3Packages.pytest python3Packages.pytest-rerunfailures glibcLocales git ];
+  disabledTests = [
+    # fails on sandbox
+    "test_colorize_file"
+    "test_loading_correctly"
+    "test_no_command_path_completion"
+    "test_bsd_man_page_completions"
+    "test_xonsh_activator"
+    # fails on non-interactive shells
+    "test_capture_always"
+    "test_casting"
+    "test_command_pipeline_capture"
+    "test_dirty_working_directory"
+    "test_man_completion"
+    "test_vc_get_branch"
+    "test_bash_and_is_alias_is_only_functional_alias"
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit pygments ];
+  disabledTestPaths = [
+    # fails on sandbox
+    "tests/completers/test_command_completers.py"
+    "tests/test_ptk_highlight.py"
+    "tests/test_ptk_shell.py"
+    # fails on non-interactive shells
+    "tests/prompt/test_gitstatus.py"
+    "tests/completers/test_bash_completer.py"
+  ];
 
-  meta = with stdenv.lib; {
+  preCheck = ''
+    HOME=$TMPDIR
+  '';
+
+  checkInputs = [ glibcLocales git ] ++
+    (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+
+  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
+
+  meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = http://xon.sh/;
+    homepage = "https://xon.sh/";
+    changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ spwhitt vrthra ];
-    platforms = platforms.all;
   };
 
   passthru = {

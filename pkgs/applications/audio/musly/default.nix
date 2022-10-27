@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, eigen, libav_all }:
+{ lib, stdenv, fetchFromGitHub, cmake, eigen, ffmpeg }:
 stdenv.mkDerivation {
   pname = "musly";
   version = "unstable-2017-04-26";
@@ -9,15 +9,15 @@ stdenv.mkDerivation {
     sha256 = "1q42wvdwy2pac7bhfraqqj2czw7w2m33ms3ifjl8phm7d87i8825";
   };
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen (libav_all.override { vaapiSupport = stdenv.isLinux; }).libav_11 ];
+  buildInputs = [ eigen ffmpeg ];
   fixupPhase = if stdenv.isDarwin then ''
     install_name_tool -change libmusly.dylib $out/lib/libmusly.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/bin/musly
     install_name_tool -change libmusly_resample.dylib $out/lib/libmusly_resample.dylib $out/lib/libmusly.dylib
   '' else "";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.musly.org;
+  meta = with lib; {
+    homepage = "https://www.musly.org";
     description = "A fast and high-quality audio music similarity library written in C/C++";
     longDescription = ''
       Musly analyzes the the audio signal of music pieces to estimate their similarity.

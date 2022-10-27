@@ -1,33 +1,68 @@
-{ stdenv, fetchFromGitHub, fetchzip, cmake, pkgconfig, lv2, alsaLib, libjack2,
-  freetype, libX11, gtk3, pcre, libpthreadstubs, libXdmcp, libxkbcommon,
-  epoxy, at-spi2-core, dbus, curl, fftwFloat }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lv2
+, alsa-lib
+, libjack2
+, freetype
+, libX11
+, gtk3
+, pcre
+, libpthreadstubs
+, libXdmcp
+, libxkbcommon
+, libepoxy
+, at-spi2-core
+, dbus
+, curl
+, fftwFloat
+}:
 
 let
   pname = "HybridReverb2";
-  version = "2.1.1";
+  version = "2.1.2";
   owner = "jpcima";
   DBversion = "1.0.0";
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
-  impulseDB = fetchzip {
-    url = "https://github.com/${owner}/${pname}-impulse-response-database/archive/v${DBversion}.zip";
-    sha256 = "1hlfxbbkahm1k2sk3c3n2mjaz7k80ky3r55xil8nfbvbv0qan89z";
+  impulseDB = fetchFromGitHub {
+    inherit owner;
+    repo = "HybridReverb2-impulse-response-database";
+    rev = "v${DBversion}";
+    sha256 = "sha256-PyGrMNhrL2cRjb2UPPwEaJ6vZBV2sDG1mKFCNdfqjsI=";
   };
 
   src = fetchFromGitHub {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "15mba9qvlis0qrklr50wp3jdysvmk33m7pvclp0k1is9pirj97cb";
+    sha256 = "16r20plz1w068bgbkrydv01a991ygjybdya3ah7bhp3m5xafjwqb";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ lv2 alsaLib libjack2 freetype libX11 gtk3 pcre
-    libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus curl fftwFloat ];
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [
+    lv2
+    alsa-lib
+    libjack2
+    freetype
+    libX11
+    gtk3
+    pcre
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    libepoxy
+    at-spi2-core
+    dbus
+    curl
+    fftwFloat
+  ];
 
   cmakeFlags = [
     "-DHybridReverb2_AdvancedJackStandalone=ON"
@@ -39,8 +74,8 @@ stdenv.mkDerivation rec {
     cp  -r ${impulseDB}/* $out/share/${pname}/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www2.ika.ruhr-uni-bochum.de/HybridReverb2;
+  meta = with lib; {
+    homepage = "https://github.com/jpcima/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];

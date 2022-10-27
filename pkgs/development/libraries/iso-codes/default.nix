@@ -1,12 +1,12 @@
-{stdenv, fetchurl, gettext, python3}:
+{ lib, stdenv, fetchurl, gettext, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
-  version = "4.3";
+  version = "4.11.0";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
-    sha256 = "11n3sccwapfr7npxad8m3xmc7w8i11kk70ffbz25gj82bn8rylvb";
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "sha256-QI95nfQTVGj6fKNetrBcQAS+pEPYHKWLibLkgkAagrs=";
   };
 
   patchPhase = ''
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext python3 ];
 
-  meta = with stdenv.lib; {
-    homepage = https://salsa.debian.org/iso-codes-team/iso-codes;
+  meta = with lib; {
+    homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;
     platforms = platforms.all;

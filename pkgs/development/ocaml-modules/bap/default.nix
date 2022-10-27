@@ -1,23 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchurl
-, ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
- utop, libxml2,
- ppx_tools_versioned,
- which, makeWrapper, writeText
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, ocaml, findlib, ocamlbuild, ocaml_oasis
+, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, mmap, lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
+, utop, libxml2, ncurses
+, linenoise
+, ppx_bap
+, ppx_bitstring
+, yojson
+, which, makeWrapper, writeText
+, z3
 }:
 
-if stdenv.lib.versionAtLeast core_kernel.version "0.12"
-then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+if lib.versionOlder ocaml.version "4.08"
+then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-bap-${version}";
-  version = "1.6.0";
+  pname = "ocaml${ocaml.version}-bap";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0ryf2xb37pj2f9mc3p5prqgqrylph9qgq7q9jnbx8b03nzzpa6h6";
+    sha256 = "1c30zxn0zyi0wypvjmik3fd6n6a8xjcb102qfnccn1af052bvsrd";
   };
 
   sigs = fetchurl {
@@ -28,41 +32,53 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}-llvm-plugins/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/ocaml${ocaml.version}-bap-${version}-llvm-plugins/"
   '';
 
-  nativeBuildInputs = [ which makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ocaml findlib ocamlbuild ocaml_oasis ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm ppx_tools_versioned
-                  utop libxml2 ];
+  buildInputs = [ linenoise
+                  ounit
+                  ppx_bitstring
+                  z3
+                  utop libxml2 ncurses ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
-                            piqi-ocaml uuidm frontc ounit ];
+  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils mmap lwt ocamlgraph ocurl re uri zarith piqi parsexp
+                            piqi-ocaml uuidm frontc yojson ];
 
   installPhase = ''
+    runHook preInstall
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR;
     export PATH=$PATH:$out/bin
-    export CAML_LD_LIBRARY_PATH=$CAML_LD_LIBRARY_PATH:$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
+    export CAML_LD_LIBRARY_PATH=''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}$OCAMLFIND_DESTDIR/bap-plugin-llvm/:$OCAMLFIND_DESTDIR/bap/
     mkdir -p $out/lib/bap
     make install
     rm $out/bin/baptop
     makeWrapper ${utop}/bin/utop $out/bin/baptop --prefix OCAMLPATH : $OCAMLPATH --prefix PATH : $PATH --add-flags "-ppx ppx-bap -short-paths -require \"bap.top\""
     wrapProgram $out/bin/bapbuild --prefix OCAMLPATH : $OCAMLPATH --prefix PATH : $PATH
     ln -s $sigs $out/share/bap/sigs.zip
+    runHook postInstall
   '';
 
-  disableIda = "--disable-ida --disable-fsi-benchmark";
+  disableIda = "--disable-ida";
+  disableGhidra = "--disable-ghidra";
 
-  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
+  patches = [
+    ./curses_is_ncurses.patch
+  ];
 
-  BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
+  preConfigure = ''
+    substituteInPlace oasis/elf-loader --replace bitstring.ppx ppx_bitstring
+  '';
 
-  meta = with stdenv.lib; {
+  configureFlags = [ "--enable-everything ${disableIda} ${disableGhidra}" "--with-llvm-config=${llvm.dev}/bin/llvm-config" ];
+
+  meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
-    homepage = https://github.com/BinaryAnalysisPlatform/bap/;
-    maintainers = [ maintainers.maurer ];
+    homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     license = licenses.mit;
+    maintainers = [ maintainers.maurer ];
+    mainProgram = "bap";
   };
 }

@@ -1,45 +1,43 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, tornado
-, requests
-, httplib2
 , sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
 , six
-, mock
+, pytest
+, freezegun
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.9.6";
+  version = "1.1.4";
+
+  # drop this for version > 0.9.7
+  # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
+  doCheck = lib.versionAtLeast version "0.9.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01b52d45077e702eda491f4fe75328d3468fd886aed5dcc530003e7b2b5939dc";
+    sha256 = "20de0e5dd5a18292d36d928cc3d6e52f8b2ac73daec40d41eb62dee154933b68";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose
-    # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+  checkInputs = [
+    sure
+    freezegun
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    "tests/bugfixes"
+    "tests/functional"
+    "tests/pyopenssl"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  # Those flaky tests are failing intermittently on all platforms
-  NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
-    "tests.functional.test_httplib2.test_callback_response"
-    "tests.functional.test_requests.test_streaming_responses"
-    "tests.functional.test_httplib2.test_callback_response"
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = licenses.mit;

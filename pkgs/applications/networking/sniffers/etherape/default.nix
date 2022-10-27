@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk3, libpcap, goocanvas2,
+{ lib, stdenv, fetchurl, pkg-config, libtool, gtk3, libpcap, goocanvas2,
 popt, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "etherape-0.9.18";
+  pname = "etherape";
+  version = "0.9.20";
   src = fetchurl {
-    url = "mirror://sourceforge/etherape/${name}.tar.gz";
-    sha256 = "0y9cfc5iv5zy82j165i9agf45n1ixka064ykdvpdhb07sr3lzhmv";
+    url = "mirror://sourceforge/etherape/etherape-${version}.tar.gz";
+    sha256 = "sha256-9UsQtWOXB1yYofGS4rMIF+ISWBsJKd0DBOFfqOr1n5Y=";
   };
 
-  nativeBuildInputs = [ itstool pkgconfig (stdenv.lib.getBin libxml2) ];
+  nativeBuildInputs = [ itstool pkg-config (lib.getBin libxml2) ];
   buildInputs = [
     libtool gtk3 libpcap goocanvas2 popt
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://etherape.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
+  meta = with lib; {
+    homepage = "http://etherape.sourceforge.net/";
+    license = lib.licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ symphorien ];
   };

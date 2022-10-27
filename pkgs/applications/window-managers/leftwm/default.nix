@@ -1,38 +1,39 @@
-{ stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
 
-let 
-    rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
+let
+  rpathLibs = [ libXinerama libX11 ];
 in
 
 rustPlatform.buildRustPackage rec {
-    pname = "leftwm";
-    version = "0.1.10";
+  pname = "leftwm";
+  version = "0.4.0";
 
-    src = fetchFromGitHub {
-        owner = "leftwm";
-        repo = "leftwm";
-        rev = version;
-        sha256 = "190lc48clkh9vzlsfg2a70w405k7xyyw7avnxwna1glfwmbyy2ag";
-    };
+  src = fetchFromGitHub {
+    owner = "leftwm";
+    repo = "leftwm";
+    rev = version;
+    sha256 = "sha256-4f9YOVkOXn7+TzTUZS2Lultgj9WhiOPUa/fHUeyLBUU=";
+  };
 
-    buildInputs = [ makeWrapper libX11 libXinerama ];
+  cargoSha256 = "sha256-D00IFTELRlqeKQ7zheJKTvu5FBgYQXsZ+OnPnVzweC4=";
 
-    postInstall = ''
-        wrapProgram $out/bin/leftwm --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-state --prefix LD_LIBRARY_PATH : "${rpath}"
-        wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
-    '';
+  buildInputs = rpathLibs;
 
-    cargoSha256 = "0mpvfix7bvc84vanha474l4gaq97ac1zy5l77z83m9jg0246yxd6";
+  postInstall = ''
+    for p in $out/bin/leftwm*; do
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $p
+    done
+  '';
 
-    # patch wrong version in Cargo.lock
-    cargoPatches = [ ./cargo-lock.patch ];
+  dontPatchELF = true;
 
-    meta = {
-        description = "Leftwm - A tiling window manager for the adventurer";
-        homepage = https://github.com/leftwm/leftwm;
-        license = stdenv.lib.licenses.mit;
-        platforms = stdenv.lib.platforms.linux;
-        maintainers = with stdenv.lib.maintainers; [ mschneider ];
-    };
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "A tiling window manager for the adventurer";
+    homepage = "https://github.com/leftwm/leftwm";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
+  };
 }

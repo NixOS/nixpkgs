@@ -3,17 +3,17 @@
 buildPythonPackage rec {
 
   pname = "sharedmem";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c351ab3f6a4fe9fe0c692ab6a8c88013e625845b31a168ff12d16254ed4154d5";
+    sha256 = "c654a6bee2e2f35c82e6cc8b6c262fcabd378f5ba11ac9ef71530f8dabb8e2f7";
   };
 
   propagatedBuildInputs = [ numpy ];
 
   meta = {
-    homepage = http://rainwoodman.github.io/sharedmem/;
+    homepage = "http://rainwoodman.github.io/sharedmem/";
     description = "Easier parallel programming on shared memory computers";
     maintainers = with lib.maintainers; [ edwtjo ];
     license = lib.licenses.gpl3;

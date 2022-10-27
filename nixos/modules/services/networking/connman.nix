@@ -4,25 +4,30 @@ with pkgs;
 with lib;
 
 let
-  cfg = config.networking.connman;
+  cfg = config.services.connman;
   configFile = pkgs.writeText "connman.conf" ''
     [General]
     NetworkInterfaceBlacklist=${concatStringsSep "," cfg.networkInterfaceBlacklist}
 
     ${cfg.extraConfig}
   '';
+  enableIwd = cfg.wifi.backend == "iwd";
 in {
+
+  imports = [
+    (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
+  ];
 
   ###### interface
 
   options = {
 
-    networking.connman = {
+    services.connman = {
 
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use ConnMan for managing your network connections.
         '';
       };
@@ -30,16 +35,15 @@ in {
       enableVPN = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ConnMan VPN service.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
-        default = ''
-        '';
-        description = ''
+        default = "";
+        description = lib.mdDoc ''
           Configuration lines appended to the generated connman configuration file.
         '';
       };
@@ -47,18 +51,37 @@ in {
       networkInterfaceBlacklist = mkOption {
         type = with types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
-        description = ''
+        description = lib.mdDoc ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
+      };
+
+      wifi = {
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = lib.mdDoc ''
+            Specify the Wi-Fi backend used.
+            Currently supported are {option}`wpa_supplicant` or {option}`iwd`.
+          '';
+        };
       };
 
       extraFlags = mkOption {
         type = with types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags to pass to connmand
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        description = lib.mdDoc "The connman package / build flavor";
+        default = connman;
+        defaultText = literalExpression "pkgs.connman";
+        example = literalExpression "pkgs.connmanFull";
       };
 
     };
@@ -71,26 +94,31 @@ in {
 
     assertions = [{
       assertion = !config.networking.useDHCP;
-      message = "You can not use services.networking.connman with services.networking.useDHCP";
+      message = "You can not use services.connman with networking.useDHCP";
     }{
-      assertion = config.networking.wireless.enable;
-      message = "You must use services.networking.connman with services.networking.wireless";
-    }{
+      # TODO: connman seemingly can be used along network manager and
+      # connmanFull supports this - so this should be worked out somehow
       assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.networking.connman with services.networking.networkmanager";
+      message = "You can not use services.connman with networking.networkmanager";
     }];
 
-    environment.systemPackages = [ connman ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ];
+      after = [ "syslog.target" ] ++ optional enableIwd "iwd.service";
+      requires = optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon ${toString cfg.extraFlags}";
+        ExecStart = toString ([
+          "${cfg.package}/sbin/connmand"
+          "--config=${configFile}"
+          "--nodaemon"
+        ] ++ optional enableIwd "--wifi=iwd_agent"
+          ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };
@@ -99,11 +127,11 @@ in {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
-      before = [ "connman" ];
+      before = [ "connman.service" ];
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman.vpn";
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         StandardOutput = "null";
       };
     };
@@ -112,8 +140,8 @@ in {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";
-        before = [ "connman" ];
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        before = [ "connman.service" ];
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         User = "root";
         SystemdService = "connman-vpn.service";
       };
@@ -121,7 +149,13 @@ in {
 
     networking = {
       useDHCP = false;
-      wireless.enable = true;
+      wireless = {
+        enable = mkIf (!enableIwd) true;
+        dbusControlled = true;
+        iwd = mkIf enableIwd {
+          enable = true;
+        };
+      };
       networkmanager.enable = false;
     };
   };

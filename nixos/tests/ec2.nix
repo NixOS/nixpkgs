@@ -3,46 +3,63 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image =
-    (import ../lib/eval-config.nix {
-      inherit system;
-      modules = [
-        ../maintainers/scripts/ec2/amazon-image.nix
-        ../modules/testing/test-instrumentation.nix
-        ../modules/profiles/qemu-guest.nix
-        { ec2.hvm = true;
+  imageCfg = (import ../lib/eval-config.nix {
+    inherit system;
+    modules = [
+      ../maintainers/scripts/ec2/amazon-image.nix
+      ../modules/testing/test-instrumentation.nix
+      ../modules/profiles/qemu-guest.nix
+      {
+        ec2.hvm = true;
 
-          # Hack to make the partition resizing work in QEMU.
-          boot.initrd.postDeviceCommands = mkBefore
-            ''
-              ln -s vda /dev/xvda
-              ln -s vda1 /dev/xvda1
-            '';
+        # Hack to make the partition resizing work in QEMU.
+        boot.initrd.postDeviceCommands = mkBefore ''
+          ln -s vda /dev/xvda
+          ln -s vda1 /dev/xvda1
+        '';
 
-          # Needed by nixos-rebuild due to the lack of network
-          # access. Mostly copied from
-          # modules/profiles/installation-device.nix.
-          system.extraDependencies =
-            with pkgs; [
-              stdenv busybox perlPackages.ArchiveCpio unionfs-fuse mkinitcpio-nfs-utils
+        # In a NixOS test the serial console is occupied by the "backdoor"
+        # (see testing/test-instrumentation.nix) and is incompatible with
+        # the configuration in virtualisation/amazon-image.nix.
+        systemd.services."serial-getty@ttyS0".enable = mkForce false;
 
-              # These are used in the configure-from-userdata tests for EC2. Httpd and valgrind are requested
-              # directly by the configuration we set, and libxslt.bin is used indirectly as a build dependency
-              # of the derivation for dbus configuration files.
-              apacheHttpd valgrind.doc libxslt.bin
-            ];
-        }
-      ];
-    }).config.system.build.amazonImage;
+        # Needed by nixos-rebuild due to the lack of network
+        # access. Determined by trial and error.
+        system.extraDependencies = with pkgs; ( [
+          # Needed for a nixos-rebuild.
+          busybox
+          cloud-utils
+          desktop-file-utils
+          libxslt.bin
+          mkinitcpio-nfs-utils
+          stdenv
+          stdenvNoCC
+          texinfo
+          unionfs-fuse
+          xorg.lndir
+
+          # These are used in the configure-from-userdata tests
+          # for EC2. Httpd and valgrind are requested by the
+          # configuration.
+          apacheHttpd
+          apacheHttpd.doc
+          apacheHttpd.man
+          valgrind.doc
+        ]);
+      }
+    ];
+  }).config;
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
+  snakeOilPrivateKeyFile = pkgs.writeText "private-key" snakeOilPrivateKey;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
 in {
@@ -56,47 +73,51 @@ in {
       SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
     '';
     script = ''
-      $machine->start;
-      $machine->waitForFile("/etc/ec2-metadata/user-data");
-      $machine->waitForUnit("sshd.service");
+      machine.start()
+      machine.wait_for_file("/etc/ec2-metadata/user-data")
+      machine.wait_for_unit("sshd.service")
 
-      $machine->succeed("grep unknown /etc/ec2-metadata/ami-manifest-path");
+      machine.succeed("grep unknown /etc/ec2-metadata/ami-manifest-path")
 
       # We have no keys configured on the client side yet, so this should fail
-      $machine->fail("ssh -o BatchMode=yes localhost exit");
+      machine.fail("ssh -o BatchMode=yes localhost exit")
 
       # Let's install our client private key
-      $machine->succeed("mkdir -p ~/.ssh");
+      machine.succeed("mkdir -p ~/.ssh")
 
-      $machine->succeed("echo '${snakeOilPrivateKey}' > ~/.ssh/id_ed25519");
-      $machine->succeed("chmod 600 ~/.ssh/id_ed25519");
+      machine.copy_from_host_via_shell(
+          "${snakeOilPrivateKeyFile}", "~/.ssh/id_ed25519"
+      )
+      machine.succeed("chmod 600 ~/.ssh/id_ed25519")
 
       # We haven't configured the host key yet, so this should still fail
-      $machine->fail("ssh -o BatchMode=yes localhost exit");
+      machine.fail("ssh -o BatchMode=yes localhost exit")
 
       # Add the host key; ssh should finally succeed
-      $machine->succeed("echo localhost,127.0.0.1 ${snakeOilPublicKey} > ~/.ssh/known_hosts");
-      $machine->succeed("ssh -o BatchMode=yes localhost exit");
+      machine.succeed(
+          "echo localhost,127.0.0.1 ${snakeOilPublicKey} > ~/.ssh/known_hosts"
+      )
+      machine.succeed("ssh -o BatchMode=yes localhost exit")
 
       # Test whether the root disk was resized.
-      my $blocks = $machine->succeed("stat -c %b -f /");
-      my $bsize = $machine->succeed("stat -c %S -f /");
-      my $size = $blocks * $bsize;
-      die "wrong free space $size" if $size < 9.7 * 1024 * 1024 * 1024 || $size > 10 * 1024 * 1024 * 1024;
+      blocks, block_size = map(int, machine.succeed("stat -c %b:%S -f /").split(":"))
+      GB = 1024 ** 3
+      assert 9.7 * GB <= blocks * block_size <= 10 * GB
 
       # Just to make sure resizing is idempotent.
-      $machine->shutdown;
-      $machine->start;
-      $machine->waitForFile("/etc/ec2-metadata/user-data");
+      machine.shutdown()
+      machine.start()
+      machine.wait_for_file("/etc/ec2-metadata/user-data")
     '';
   };
 
   boot-ec2-config = makeEc2Test {
     name         = "config-userdata";
+    meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 
-    # ### http://nixos.org/channels/nixos-unstable nixos
+    # ### https://nixos.org/channels/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 
@@ -110,21 +131,28 @@ in {
           text = "whoa";
         };
 
+        networking.hostName = "ec2-test-vm"; # required by services.httpd
+
         services.httpd = {
           enable = true;
           adminAddr = "test@example.org";
-          documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+          virtualHosts.localhost.documentRoot = "''${pkgs.valgrind.doc}/share/doc/valgrind/html";
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
       }
     '';
     script = ''
-      $machine->start;
-      $machine->waitForFile("/etc/testFile");
-      $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
+      machine.start()
 
-      $machine->waitForUnit("httpd.service");
-      $machine->succeed("curl http://localhost | grep Valgrind");
+      # amazon-init must succeed. if it fails, make the test fail
+      # immediately instead of timing out in wait_for_file.
+      machine.wait_for_unit("amazon-init.service")
+
+      machine.wait_for_file("/etc/testFile")
+      assert "whoa" in machine.succeed("cat /etc/testFile")
+
+      machine.wait_for_unit("httpd.service")
+      assert "Valgrind" in machine.succeed("curl http://localhost")
     '';
   };
 }

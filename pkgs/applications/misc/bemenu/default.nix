@@ -1,45 +1,52 @@
-{ stdenv, fetchFromGitHub, cairo, cmake, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
+, pango, fribidi, harfbuzz, pcre, pkg-config
 , ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null
-, x11Support ? true, xlibs ? null, xorg ? null
+, waylandSupport ? true, wayland ? null, wayland-protocols ? null
+, x11Support ? true, xorg ? null
 }:
 
 assert ncursesSupport -> ncurses != null;
-assert waylandSupport -> wayland != null;
-assert x11Support -> xlibs != null && xorg != null;
+assert waylandSupport -> ! lib.elem null [wayland wayland-protocols];
+assert x11Support -> xorg != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bemenu";
-  version = "0.1.0";
+  version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = "Cloudef";
-    repo = "bemenu";
-    rev = "33e540a2b04ce78f5c7ab4a60b899c67f586cc32";
-    sha256 = "11h55m9dx6ai12pqij52ydjm36dvrcc856pa834njihrp626pl4w";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-YGaAJOyVZBHEWQuZVfPIIbtuntv1klQk9GcWRN+oVF4=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pcre ];
+  nativeBuildInputs = [ pkg-config pcre ];
 
-  buildInputs = with stdenv.lib; [
+  makeFlags = ["PREFIX=$(out)"];
+
+  buildFlags = ["clients"]
+    ++ lib.optional ncursesSupport "curses"
+    ++ lib.optional waylandSupport "wayland"
+    ++ lib.optional x11Support "x11";
+
+  buildInputs = with lib; [
     cairo
     fribidi
     harfbuzz
     libxkbcommon
     pango
-  ] ++ optionals ncursesSupport [ ncurses ]
-    ++ optionals waylandSupport [ wayland ]
+  ] ++ optional ncursesSupport ncurses
+    ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optionals x11Support [
-      xlibs.libX11 xlibs.libXinerama xlibs.libXft
+      xorg.libX11 xorg.libXinerama xorg.libXft
       xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Cloudef/bemenu";
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [ lheckemann ];
     platforms = with platforms; linux;
   };
 }

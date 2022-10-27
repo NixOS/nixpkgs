@@ -1,26 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , gevent
 , gunicorn
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gevent-websocket";
   version = "0.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c2zv2rahp1gil3cj66hfsqgy0n35hz9fny3ywhr2319d0lz7bky";
+    hash = "sha256-fq7zKWgpDJEh98Nblz4swwL/sHbQGMkGjS9cqLLYX7A=";
   };
 
-  propagatedBuildInputs = [ gevent gunicorn ];
+  propagatedBuildInputs = [
+    gevent
+    gunicorn
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gitlab.com/noppo/gevent-websocket;
-    description = "Websocket handler for the gevent pywsgi server, a Python network library";
+  # Module has no test
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "geventwebsocket"
+  ];
+
+  meta = with lib; {
+    description = "Websocket handler for the gevent pywsgi server";
+    homepage = "https://www.gitlab.com/noppo/gevent-websocket";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

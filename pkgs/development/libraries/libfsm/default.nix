@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfsm";
-  version = "0.1pre1869_${builtins.substring 0 7 src.rev}";
+  version = "0.1pre2442_${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {
     owner  = "katef";
-    repo   = "libfsm";
-    rev    = "f70c3c5778a79eeecb52f9fd35c7cbc241db0ed6";
-    sha256 = "1hgv272jdv6dwnsdjajyky537z84q0cwzspw9br46qj51h8gkwvx";
+    repo   = pname;
+    rev    = "9c5095f7364fa464efff6c81fad9b60b19dfcc99";
+    sha256 = "1bs51agvrrwqid0slq2svj2yj7kkjdsnv3xsrk8zmf1jbgza6jrm";
     fetchSubmodules = true;
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   # if we use stdenv vs clangStdenv, we don't know which, and CC=cc in all
   # cases.) it's unclear exactly what should be done if we want those flags,
   # but the defaults work fine.
-  buildPhase = "PREFIX=$out bmake -r install";
+  makeFlags = [ "-r" "PREFIX=$(out)" ];
 
-  # fix up multi-output install. we also have to fix the pkgconfig libdir
+  # fix up multi-output install. we also have to fix the pkg-config libdir
   # file; it uses prefix=$out; libdir=${prefix}/lib, which is wrong in
   # our case; libdir should really be set to the $lib output.
-  installPhase = ''
+  postInstall = ''
     mkdir -p $lib $dev/lib
 
     mv $out/lib             $lib/lib
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DFA regular expression library & friends";
     homepage    = "https://github.com/katef/libfsm";
     license     = licenses.bsd2;

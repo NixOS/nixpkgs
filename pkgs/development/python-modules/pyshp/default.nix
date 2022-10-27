@@ -1,20 +1,41 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "2.1.0";
   pname = "pyshp";
+  version = "2.3.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1h75a5fisqqj48m6wq7jhdxv6arjg3mvnr5q404pvfbjscj7yp76";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "GeospatialPython";
+    repo = pname;
+    rev = version;
+    hash = "sha256-yfxhgk8a1rdpGVkE1sjJqT6tiFLimhu2m2SjGxLI6wo=";
   };
 
-  buildInputs = [ setuptools ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Pure Python read/write support for ESRI Shapefile format";
-    homepage = https://github.com/GeospatialPython/pyshp;
+  pythonImportsCheck = [
+    "shapefile"
+  ];
+
+  disabledTests = [
+    # Requires network access
+    "test_reader_url"
+  ];
+
+  meta = with lib; {
+    description = "Python read/write support for ESRI Shapefile format";
+    homepage = "https://github.com/GeospatialPython/pyshp";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

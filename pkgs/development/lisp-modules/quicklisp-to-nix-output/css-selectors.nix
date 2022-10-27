@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''css-selectors'';
-  version = ''20160628-git'';
+  baseName = "css-selectors";
+  version = "20160628-git";
 
   parasites = [ "css-selectors-test" ];
 
-  description = ''An implementation of css selectors'';
+  description = "An implementation of css selectors";
 
   deps = [ args."alexandria" args."babel" args."buildnode" args."buildnode-xhtml" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."closure-common" args."closure-html" args."collectors" args."cxml" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" args."puri" args."split-sequence" args."swank" args."symbol-munger" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/css-selectors/2016-06-28/css-selectors-20160628-git.tgz'';
-    sha256 = ''0y9q719w5cv4g7in731q5p98n7pznb05vr7i7wi92mmpah2g1w4b'';
+    url = "http://beta.quicklisp.org/archive/css-selectors/2016-06-28/css-selectors-20160628-git.tgz";
+    sha256 = "0y9q719w5cv4g7in731q5p98n7pznb05vr7i7wi92mmpah2g1w4b";
   };
 
   packageName = "css-selectors";

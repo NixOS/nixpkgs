@@ -1,25 +1,29 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gotty";
-  version = "0.0.13";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/yudai/gotty";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "yudai";
+    owner = "sorenisanerd";
     repo = "gotty";
-    sha256 = "1hsfjyjjzr1zc9m8bnhid1ag6ipcbx59111y9p7k8az8jiyr112g";
+    rev = "v${version}";
+    sha256 = "sha256-VSu0ASnLmRzOGOEKqb/zB43+HxEwMpKLpbdbWY5QrEk=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
 
-  meta = with stdenv.lib; {
+  # upstream did not update the tests, so they are broken now
+  # https://github.com/sorenisanerd/gotty/issues/13
+  doCheck = false;
+
+  meta = with lib; {
     description = "Share your terminal as a web application";
-    homepage = https://github.com/yudai/gotty;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/sorenisanerd/gotty";
+    maintainers = with maintainers; [ prusnak ];
     license = licenses.mit;
   };
 }

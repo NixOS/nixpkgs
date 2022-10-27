@@ -1,55 +1,40 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
-  libxslt, docbook_xsl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, perl
+, withDebug ? false
+}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "tinyproxy";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
-    sha256 = "0gzapnllzyc005l3rs6iarjk1p5fc8mf9ysbck1mbzbd8xg6w35s";
+    sha256 = "sha256-tipFXh9VG5auWTI2/IC5rwMQFls7aZr6dkzhYTZZkXM=";
     rev = version;
     repo = "tinyproxy";
     owner = "tinyproxy";
   };
 
-  nativeBuildInputs = [ autoreconfHook asciidoc libxml2 libxslt docbook_xsl ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-40468.patch";
+      url = "https://github.com/tinyproxy/tinyproxy/commit/3764b8551463b900b5b4e3ec0cd9bb9182191cb7.patch";
+      sha256 = "sha256-P0c4mUK227ld3703ss5MQhi8Vo2QVTCVXhKmc9fcufk=";
+    })
+  ];
 
-  # -z flag is not supported in darwin
-  preAutoreconf = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.ac --replace \
-          'LDFLAGS="-Wl,-z,defs $LDFLAGS"' \
-          'LDFLAGS="-Wl, $LDFLAGS"'
-  '';
+  # perl is needed for man page generation.
+  nativeBuildInputs = [ autoreconfHook perl ];
 
-  # See: https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=154624
-  postConfigure = ''
-    substituteInPlace docs/man5/Makefile --replace \
-          "-f manpage" \
-          "--xsltproc-opts=--nonet \\
-           -f manpage \\
-           -L"
-    substituteInPlace docs/man8/Makefile --replace \
-          "-f manpage" \
-          "--xsltproc-opts=--nonet \\
-           -f manpage \\
-           -L"
-  '';
+  configureFlags = lib.optionals withDebug [ "--enable-debug" ]; # Enable debugging support code and methods.
 
-  configureFlags = [
-    "--disable-debug"      # Turn off debugging
-    "--enable-xtinyproxy"  # Compile in support for the XTinyproxy header, which is sent to any web server in your domain.
-    "--enable-filter"      # Allows Tinyproxy to filter out certain domains and URLs.
-    "--enable-upstream"    # Enable support for proxying connections through another proxy server.
-    "--enable-transparent" # Allow Tinyproxy to be used as a transparent proxy daemon.
-    "--enable-reverse"     # Enable reverse proxying.
-  ] ++
-  # See: https://github.com/tinyproxy/tinyproxy/issues/1
-  stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
-
-  meta = with stdenv.lib; {
-    homepage = https://tinyproxy.github.io/;
+  meta = with lib; {
+    homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.carlosdagos ];
   };

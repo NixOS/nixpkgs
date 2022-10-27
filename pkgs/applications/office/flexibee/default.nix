@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 let
-  version = "2019.3.0.3";
+  version = "2021.2.1";
   majorVersion = builtins.substring 0 6 version;
 in
 
@@ -11,20 +11,29 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.flexibee.eu/download/${majorVersion}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1ivhqh1rl4ll0af9nfgfm7f647vc9zk61aplinvz73xb3grb4j6f";
+    sha256 = "sha256-WorRyfjWucV8UhAjvuW+22CRzPcz5tjXF7Has4wrLMI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+
+  prePatch = ''
+    substituteInPlace usr/sbin/flexibee-server \
+      --replace "/usr/share/flexibee" $out \
+      --replace "/var/run" "/run"
+  '';
+
 
   installPhase = ''
     runHook preInstall
     cp -R usr/share/flexibee/ $out/
     install -Dm755 usr/bin/flexibee $out/bin/flexibee
-    wrapProgram  $out/bin/flexibee --set JAVA_HOME "${jre}"
+    install -Dm755 usr/sbin/flexibee-server $out/bin/flexibee-server
+    wrapProgram $out/bin/flexibee --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/flexibee-server --set JAVA_HOME "${jre}"
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for an accouting economic system";
     homepage = "https://www.flexibee.eu/";
     license = licenses.unfree;

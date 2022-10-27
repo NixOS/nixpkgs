@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , twisted
 , requests
 , cryptography
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,15 +21,13 @@ buildPythonPackage rec {
   # Require network access
   doCheck = false;
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Asynchronous Python HTTP for Humans.";
     homepage    = "https://github.com/tardyp/txrequests";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 
 }

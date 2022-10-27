@@ -1,5 +1,5 @@
-{ clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
-  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb,
+{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
+  python, pkg-config, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -13,17 +13,17 @@ let
     sha256 = "10bdjn481jsh32vll7r756l392anz44h6207vjqwby3rplk31np1";
   };
 in clangStdenv.mkDerivation rec {
-  name    = "fcitx-mozc-${version}";
-  version = "2.20.2673.102";
+  pname = "fcitx-mozc";
+  version = "2.23.2815.102";
 
   src = fetchFromGitHub {
     owner  = "google";
     repo   = "mozc";
-    rev    = "280e38fe3d9db4df52f0713acf2ca65898cd697a";
-    sha256 = "0s599f817gjgqynm4n1yll1ipd25ai2c55y8k6wvhg9s7qaxnyhs";
+    rev    = "afb03ddfe72dde4cf2409863a3bfea160f7a66d8";
+    sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
 
-  nativeBuildInputs = [ gyp which ninja python pkgconfig ];
+  nativeBuildInputs = [ gyp which ninja python pkg-config qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf gtk2 zinnia qt5.qtbase libxcb fcitx gettext ];
 
   postUnpack = ''
@@ -32,17 +32,22 @@ in clangStdenv.mkDerivation rec {
     tar -xzf ${icons} -C $sourceRoot/src
   '';
 
-  patch_version = "2.18.2612.102.1";
+  patch_version = "${version}.1";
   patches = [
     (fetchpatch rec {
       name   = "fcitx-mozc-${patch_version}.patch";
       url    = "https://download.fcitx-im.org/fcitx-mozc/${name}";
-      sha256 = "1f9m4310kz09v5qvnv75ka2vq63m7by023qrkpddgq4dv7gxx3ca";
+      sha256 = "0a8q3vzcbai1ccdrl6qdb81gvbw8aby4lqkl6qs9hg68p6zg42hg";
      })
     # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
     (fetchpatch {
       url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
       sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
+    })
+    # Support dates after 2019
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mozc/-/raw/master/debian/patches/add_support_new_japanese_era.patch";
+      sha256 = "1dsiiglrmm8i8shn2hv0j2b8pv6miysjrimj4569h606j4lwmcw2";
     })
   ];
 
@@ -52,7 +57,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_fcitx5=0 zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
@@ -74,6 +79,8 @@ in clangStdenv.mkDerivation rec {
     install -D -m 755 out_linux/Release/mozc_server     $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool       $out/lib/mozc/mozc_tool
 
+    wrapQtApp $out/lib/mozc/mozc_tool
+
     install -D -m 755 out_linux/Release/fcitx-mozc.so   $out/lib/fcitx/fcitx-mozc.so
     install -D -m 644 unix/fcitx/fcitx-mozc.conf        $out/share/fcitx/addon/fcitx-mozc.conf
     install -D -m 644 unix/fcitx/mozc.conf              $out/share/fcitx/inputmethod/mozc.conf
@@ -93,14 +100,14 @@ in clangStdenv.mkDerivation rec {
     install    -m 644 fcitx-mozc-icons/*.png                 $out/share/fcitx/mozc/icon/
   '';
 
-  meta = with clangStdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description   = "Fcitx engine for Google japanese input method";
-    homepage      = https://github.com/google/mozc;
+    homepage      = "https://github.com/google/mozc";
     downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
     license       = licenses.free;
     platforms     = platforms.linux;
-    maintainers   = [ maintainers.ericsagnes ];
+    maintainers   = with maintainers; [ gebner ericsagnes ];
   };
 
 }

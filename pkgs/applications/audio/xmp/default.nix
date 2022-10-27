@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, libxmp }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, libxmp }:
 
 stdenv.mkDerivation rec {
-  name = "xmp-4.1.0";
+  pname = "xmp";
+  version = "4.1.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extended module player";
     homepage    = "http://xmp.sourceforge.net/";
     license     = licenses.gpl2Plus;
@@ -11,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmp/xmp/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tar.gz";
     sha256 = "17i8fc7x7yn3z1x963xp9iv108gxfakxmdgmpv3mlm438w3n3g8x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ alsaLib libxmp ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ alsa-lib libxmp ];
 }

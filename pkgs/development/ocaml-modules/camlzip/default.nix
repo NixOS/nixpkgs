@@ -1,56 +1,61 @@
-{stdenv, fetchurl, zlib, ocaml, findlib}:
+{lib, stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
   param =
-    if stdenv.lib.versionAtLeast ocaml.version "4.02"
+    if lib.versionAtLeast ocaml.version "4.02"
     then {
-      version = "1.07";
-      url = "https://github.com/xavierleroy/camlzip/archive/rel107.tar.gz";
-      sha256 = "1pdz3zyiczm6c46zfgag2frwq3ljlq044p3a2y4wm2wb4pgz8k9g";
+      version = "1.10";
+      url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
+      sha256 = "X0YcczaQ3lFeJEiTIgjSSZ1zi32KFMtmZsP0FFpyfbI=";
       patches = [];
-      installTargets = "install-findlib";
+      postPatchInit = ''
+        cp META-zip META-camlzip
+        echo 'directory="../zip"' >> META-camlzip
+      '';
     } else {
       version = "1.05";
       download_id = "1037";
       url = "http://forge.ocamlcore.org/frs/download.php/${param.download_id}/camlzip-${param.version}.tar.gz";
       sha256 = "930b70c736ab5a7ed1b05220102310a0a2241564786657abe418e834a538d06b";
       patches = [./makefile_1_05.patch];
-      installTargets = "install";
+      postPatchInit = ''
+        substitute ${./META} META --subst-var-by VERSION "${param.version}"
+      '';
     };
 in
 
 stdenv.mkDerivation {
-  name = "camlzip-${param.version}";
+  pname = "camlzip";
+  version = param.version;
 
   src = fetchurl {
     inherit (param) url;
     inherit (param) sha256;
   };
 
-  buildInputs = [ocaml findlib];
+  nativeBuildInputs = [ ocaml findlib ];
 
   propagatedBuildInputs = [zlib];
+
+  strictDeps = true;
 
   inherit (param) patches;
 
   createFindlibDestdir = true;
 
-  postPatch = ''
-    substitute ${./META} META --subst-var-by VERSION "${param.version}"
+  postPatch = param.postPatchInit + ''
     substituteInPlace Makefile \
       --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
       --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
   '';
 
-  buildFlags = "all allopt";
-
-  inherit (param) installTargets;
+  buildFlags = [ "all" "allopt" ];
 
   postInstall = ''
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";
     description = "A library for handling ZIP and GZIP files in OCaml";
     longDescription = ''
@@ -59,9 +64,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms or [];
-    maintainers = [
-      stdenv.lib.maintainers.z77z
-    ];
+    inherit (ocaml.meta) platforms;
+    maintainers = with maintainers; [ maggesi ];
   };
 }

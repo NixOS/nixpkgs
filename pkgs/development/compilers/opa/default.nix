@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, perl, jdk
+{ lib, stdenv, fetchFromGitHub, which, perl, jdk
 , ocamlPackages, openssl
 , coreutils, zlib, ncurses, makeWrapper
 , gcc, binutils, gnumake, nodejs
@@ -15,15 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
+  patches = [ ./ocaml-4.03.patch ./ocaml-4.04.patch ];
+
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
-  codeGeneratorPaths = stdenv.lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
+  codeGeneratorPaths = lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
 
   preConfigure = ''
     patchShebangs .
     (
     cat ./compiler/buildinfos/buildInfos.ml.pre
-    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 
+    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt
     echo let opa_git_version = ${version}
     echo 'let opa_git_sha = "xxxx"'
     cat ./compiler/buildinfos/buildInfos.ml.post
@@ -34,19 +36,21 @@ stdenv.mkDerivation rec {
     done
     export CAMLP4O=${ocamlPackages.camlp4}/bin/camlp4o
     export CAMLP4ORF=${ocamlPackages.camlp4}/bin/camlp4orf
+    export OCAMLBUILD=${ocamlPackages.ocamlbuild}/bin/ocamlbuild
+    substituteInPlace _tags --replace ', warn_error_A' ""
   '';
 
   prefixKey = "-prefix ";
 
   configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
+  nativeBuildInputs = [ gcc binutils nodejs which makeWrapper ];
+  buildInputs = [ perl jdk openssl coreutils zlib ncurses
   ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
+    ocaml findlib ssl camlzip ulex ocamlgraph camlp4
   ]);
 
-  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   postInstall = ''
     # Have compiler use same tools for code generation as used to build it.
@@ -66,9 +70,9 @@ stdenv.mkDerivation rec {
       web applications using a single technology. Among the the many features of Opa are these:
       Opa is concise, simple, concurrent, dynamically distributed, and secure.
     '';
-    homepage = http://opalang.org/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "http://opalang.org/";
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
+    platforms = with lib.platforms; unix;
   };
 }

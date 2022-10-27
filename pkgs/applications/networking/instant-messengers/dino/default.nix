@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
+{ lib, stdenv, fetchFromGitHub
+, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
+, librsvg, libsignal-protocol-c
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -12,24 +13,26 @@
 , pcre
 , qrencode
 , icu
+, gspell
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
  }:
 
-stdenv.mkDerivation {
-  name = "dino-unstable-2019-09-12";
+stdenv.mkDerivation rec {
+  pname = "dino";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "c8f2b80978706c4c53deb7ddfb8188c751bcb291";
-    sha256 = "17lc6xiarb174g1hgjfh1yjrr0l2nzc3kba8xp5niwakbx7qicqr";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "sha256-L5a5QlF9qlr4X/hGTabbbvOE5J1x/UVneWl/BRAa29Q=";
   };
 
   nativeBuildInputs = [
     vala
     cmake
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
   ];
@@ -40,7 +43,7 @@ stdenv.mkDerivation {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
     gtk3
@@ -49,23 +52,57 @@ stdenv.mkDerivation {
     libgcrypt
     libsoup
     pcre
+    libepoxy
+    at-spi2-core
+    dbus
+    icu
+    libsignal-protocol-c
+    librsvg
+    gspell
+    srtp
+    libnice
+    gnutls
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    webrtc-audio-processing
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs
     libXdmcp
     libxkbcommon
-    epoxy
-    at-spi2-core
-    dbus
-    icu
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = ["-DBUILD_TESTS=yes"];
 
-  meta = with stdenv.lib; {
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ./xmpp-vala-test
+    ./signal-protocol-vala-test
+    runHook postCheck
+  '';
+
+  # Dino looks for plugins with a .so filename extension, even on macOS where
+  # .dylib is appropriate, and despite the fact that it builds said plugins with
+  # that as their filename extension
+  #
+  # Therefore, on macOS rename all of the plugins to use correct names that Dino
+  # will load
+  #
+  # See https://github.com/dino/dino/wiki/macOS
+  postFixup = lib.optionalString (stdenv.isDarwin) ''
+    cd "$out/lib/dino/plugins/"
+    for f in *.dylib; do
+      mv "$f" "$(basename "$f" .dylib).so"
+    done
+  '';
+
+  meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
-    homepage = https://github.com/dino/dino;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    homepage = "https://github.com/dino/dino";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
 }

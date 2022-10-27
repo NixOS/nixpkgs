@@ -1,41 +1,75 @@
-{ stdenv, fetchurl, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig
-, freetype, libid3tag
-, x11Support ? true, xlibsWrapper ? null }:
+{ lib, stdenv, fetchurl
+# Image file formats
+, libjpeg, libtiff, giflib, libpng, libwebp, libjxl
+, libspectre
+# imlib2 can load images from ID3 tags.
+, libid3tag, librsvg, libheif
+, freetype , bzip2, pkg-config
+, x11Support ? true
+, webpSupport ? true
+, svgSupport ? false
+, heifSupport ? false
+, jxlSupport ? false
+, psSupport ? false
 
-with stdenv.lib;
+# for passthru.tests
+, libcaca
+, diffoscopeMinimal
+, feh
+, icewm
+, openbox
+, fluxbox
+, enlightenment
+, xorg
+}:
 
+let
+  inherit (lib) optional optionals;
+in
 stdenv.mkDerivation rec {
-  name = "imlib2-1.5.1";
+  pname = "imlib2";
+  version = "1.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
-    sha256 = "1bms2iwmvnvpz5jqq3r52glarqkafif47zbh1ykz8hw85d2mfkps";
+    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
+    hash = "sha256-SiJAOL//vl1NJQxE4F9O5a4k3P74OVsWd8cVxY92TUM=";
   };
 
-  buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype libid3tag ]
-    ++ optional x11Support xlibsWrapper;
+  buildInputs = [
+    libjpeg libtiff giflib libpng
+    bzip2 freetype libid3tag
+  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
+    ++ optional heifSupport libheif
+    ++ optional svgSupport librsvg
+    ++ optional webpSupport libwebp
+    ++ optional jxlSupport libjxl
+    ++ optional psSupport libspectre;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    substituteInPlace imlib2-config.in \
-      --replace "@my_libs@" ""
-  '';
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!svgSupport) "--without-svg"
+    ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
 
-  postInstall = ''
-    moveToOutput bin/imlib2-config "$dev"
-  '';
+  passthru.tests = {
+    inherit
+      libcaca
+      diffoscopeMinimal
+      feh
+      icewm
+      openbox
+      fluxbox
+      enlightenment;
+  };
 
-  meta = {
+  meta = with lib; {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -46,8 +80,9 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    homepage = http://docs.enlightenment.org/api/imlib2/html;
-    license = licenses.free;
+    homepage = "https://docs.enlightenment.org/api/imlib2/html";
+    changelog = "https://git.enlightenment.org/legacy/imlib2.git/plain/ChangeLog?h=v${version}";
+    license = licenses.imlib2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };

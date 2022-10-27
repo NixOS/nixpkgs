@@ -1,90 +1,86 @@
-{stdenv, fetchurl, libedit, automake, autoconf, libtool
-,
-  # icu = null: use icu which comes with firebird
+{ lib, stdenv, fetchFromGitHub, libedit, autoreconfHook, zlib, unzip, libtommath, libtomcrypt, icu, superServer ? false }:
 
-  # icu = pkgs.icu => you may have trouble sharing database files with windows
-  # users if "Collation unicode" columns are being used
-  # windows icu version is *30.dll, however neither the icu 3.0 nor the 3.6
-  # sources look close to what ships with this package.
-  # Thus I think its best to trust firebird devs and use their version
-
-  # icu version missmatch may cause such error when selecting from a table:
-  # "Collation unicode for character set utf8 is not installed"
-
-  # icu 3.0 can still be built easily by nix (by dropping the #elif case and
-  # make | make)
-  icu ? null
-
-, superServer ? false
-, port ? 3050
-, serviceName ? "gds_db"
-}:
-
-/*
-   there are 3 ways to use firebird:
-   a) superserver
-    - one process, one thread for each connection
-   b) classic
-    - is built by default
-    - one process for each connection
-    - on linux direct io operations (?)
-   c) embedded.
-
-   manual says that you usually don't notice the difference between a and b.
-
-   I'm only interested in the embedder shared libary for now.
-   So everything isn't tested yet
-
-*/
-
-stdenv.mkDerivation rec {
-  version = "2.5.7.27050-0";
+let base = {
   pname = "firebird";
 
-  # enableParallelBuilding = false; build fails
+  meta = with lib; {
+    description = "SQL relational database management system";
+    downloadPage = "https://github.com/FirebirdSQL/firebird/";
+    homepage = "https://firebirdsql.org/";
+    changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
+    license = [ "IDPL" "Interbase-1.0" ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ marcweber ];
+  };
 
-  # http://tracker.firebirdsql.org/browse/CORE-3246
-  preConfigure = ''
-    makeFlags="$makeFlags CPU=$NIX_BUILD_CORES"
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ libedit icu ];
+
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ icu ];
+
+  configureFlags = [
+    "--with-system-editline"
+  ] ++ (lib.optional superServer "--enable-superserver");
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r gen/Release/firebird/* $out
+    runHook postInstall
   '';
 
-  configureFlags =
-    [ "--with-serivec-port=${builtins.toString port}"
-      "--with-service-name=${serviceName}"
-      "--with-system-editline"
-      "--with-fblog=/var/log/firebird"
-      "--with-fbconf=/etc/firebird"
-      "--with-fbsecure-db=/var/db/firebird/system"
-    ]
-    ++ (stdenv.lib.optional  (icu != null) "--with-system-icu")
-    ++ (stdenv.lib.optional superServer "--enable-superserver");
+}; in rec {
 
-  src = fetchurl {
-    url = "mirror://sourceforge/firebird/Firebird-${version}.tar.bz2";
-    sha256 = "06hp6bq5irqvm3h03s79qjgcc3jsjpq150y9aq7anklx9v4nhfqa";
-  };
+  firebird_2_5 = stdenv.mkDerivation (base // rec {
+    version = "2.5.9";
 
-  hardeningDisable = [ "format" ];
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      sha256 = "sha256-YyvlMeBux80OpVhsCv+6IVxKXFRsgdr+1siupMR13JM=";
+    };
 
-  # configurePhase = ''
-  #   sed -i 's@cp /usr/share/automake-.*@@' autogen.sh
-  #   sh autogen.sh $configureFlags --prefix=$out
-  # '';
-  buildInputs = [libedit icu automake autoconf libtool];
+    configureFlags = base.configureFlags ++ [ "--with-system-icu" ];
 
-  # TODO: Probably this hase to be tidied up..
-  # make install requires beeing. disabling the root checks
-  # dosen't work. Copying the files manually which can be found
-  # in ubuntu -dev -classic, -example packages:
-  # maybe some of those files can be removed again
-  installPhase = ''cp -r gen/firebird $out'';
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r gen/firebird/* $out
+      runHook postInstall
+    '';
 
-  meta = {
-    description = "SQL relational database management system";
-    homepage = https://www.firebirdnews.org;
-    license = ["IDPL" "Interbase-1.0"];
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
-  };
+    meta = base.meta // { platforms = [ "x86_64-linux" ]; };
+  });
 
+  firebird_3 = stdenv.mkDerivation (base // rec {
+    version = "3.0.10";
+
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "v${version}";
+      sha256 = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
+    };
+
+    buildInputs = base.buildInputs ++ [ zlib libtommath ];
+
+    meta = base.meta // { platforms = [ "x86_64-linux" ]; };
+  });
+
+  firebird_4 = stdenv.mkDerivation (base // rec {
+    version = "4.0.2";
+
+    src = fetchFromGitHub {
+      owner = "FirebirdSQL";
+      repo = "firebird";
+      rev = "v${version}";
+      sha256 = "sha256-hddW/cozboGw693q4k5f4+x9ccQFWFytXPUaBVkFnL4=";
+    };
+
+    buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];
+  });
+
+  firebird = firebird_4;
 }

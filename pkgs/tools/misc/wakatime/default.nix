@@ -1,28 +1,19 @@
-{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-with python3Packages;
-buildPythonApplication rec {
+buildGoModule rec {
   pname = "wakatime";
-  version = "10.8.0";
+  version = "1.55.2";
 
   src = fetchFromGitHub {
     owner = "wakatime";
-    repo = "wakatime";
-    rev = version;
-    sha256 = "057gq6j41x9z29az4s21crswm97pa9z4v58m34q8mi3chihc3pj6";
+    repo = "wakatime-cli";
+    rev = "v${version}";
+    sha256 = "sha256-Gp4whRxKhZfs0eFxTTrnrtqJAaWGX4ueKKoLUgbz4Ts=";
   };
 
-  # needs more dependencies from https://github.com/wakatime/wakatime/blob/191b302bfb5f272ae928c6d3867d06f3dfcba4a8/dev-requirements.txt
-  # especially nose-capturestderr, which we do not package yet.
-  doCheck = false;
-  checkInputs = [ mock testfixtures pytest glibcLocales ];
+  vendorSha256 = "sha256-ANRcgeZYtcWGbK8c9KE8joo97d8LKvKA8/A+/rrjOoM=";
 
-  checkPhase = ''
-    export HOME=$(mktemp -d) LC_ALL=en_US.utf-8
-    pytest tests
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "WakaTime command line interface";
     longDescription = ''
@@ -32,5 +23,6 @@ buildPythonApplication rec {
       to install the wakatime CLI interface manually.
     '';
     license = licenses.bsd3;
+    mainProgram = "wakatime-cli";
   };
 }

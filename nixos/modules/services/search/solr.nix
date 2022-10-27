@@ -11,51 +11,43 @@ in
 {
   options = {
     services.solr = {
-      enable = mkEnableOption "Solr";
+      enable = mkEnableOption (lib.mdDoc "Solr");
 
-      # default to the 8.x series not forcing major version upgrade of those on the 7.x series
       package = mkOption {
         type = types.package;
-        default = if versionAtLeast config.system.stateVersion "19.09"
-          then pkgs.solr_8
-          else pkgs.solr_7
-        ;
-        defaultText = "pkgs.solr";
-        description = ''
-          Which Solr package to use. This defaults to version 7.x if
-          <literal>system.stateVersion &lt; 19.09</literal> and version 8.x
-          otherwise.
-        '';
+        default = pkgs.solr;
+        defaultText = literalExpression "pkgs.solr";
+        description = lib.mdDoc "Which Solr package to use.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8983;
-        description = "Port on which Solr is ran.";
+        description = lib.mdDoc "Port on which Solr is ran.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/solr";
-        description = "The solr home directory containing config, data, and logging files.";
+        description = lib.mdDoc "The solr home directory containing config, data, and logging files.";
       };
 
       extraJavaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Extra command line options given to the java process running Solr.";
+        description = lib.mdDoc "Extra command line options given to the java process running Solr.";
       };
 
       user = mkOption {
         type = types.str;
         default = "solr";
-        description = "User under which Solr is ran.";
+        description = lib.mdDoc "User under which Solr is ran.";
       };
 
       group = mkOption {
         type = types.str;
         default = "solr";
-        description = "Group under which Solr is ran.";
+        description = lib.mdDoc "Group under which Solr is ran.";
       };
     };
   };
@@ -100,18 +92,18 @@ in
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "solr") (singleton
-      { name = "solr";
+    users.users = optionalAttrs (cfg.user == "solr") {
+      solr = {
         group = cfg.group;
         home = cfg.stateDir;
         createHome = true;
         uid = config.ids.uids.solr;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "solr") (singleton
-      { name = "solr";
-        gid = config.ids.gids.solr;
-      });
+    users.groups = optionalAttrs (cfg.group == "solr") {
+      solr.gid = config.ids.gids.solr;
+    };
 
   };
 

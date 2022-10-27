@@ -1,25 +1,23 @@
-{ stdenv, buildPythonPackage , fetchFromGitHub
-, bashInteractive , urlgrabber, m2crypto
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, bashInteractive
+, rpm, urllib3, cryptography, diffstat
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "0.165.4";
+  version = "1.0.0b1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    sha256 = "1f8q65wlgchzwzarwrv6a0p60gw0ykpf4d5s7cks835hyawgcbyl";
+    sha256 = "cMltsR4Nxe0plHU5cP2Lj/qqlIqRbCXi6FXP8qx7908=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
-  propagatedBuildInputs = [ urlgrabber m2crypto ];
-
-  doCheck = false;
+  checkInputs = [ rpm diffstat ];
+  propagatedBuildInputs = [ urllib3 cryptography ];
 
   postInstall = ''
-    ln -s $out/bin/osc-wrapper.py $out/bin/osc
     install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
     install -D -m555 dist/osc.complete $out/share/bash-completion/helpers/osc-helper
     mkdir -p $out/share/bash-completion/completions
@@ -31,7 +29,11 @@ buildPythonPackage rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  preCheck = "HOME=$TOP/tmp";
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     maintainers = [ maintainers.peti ];
     license = licenses.gpl2;

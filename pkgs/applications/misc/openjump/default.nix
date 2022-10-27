@@ -1,39 +1,39 @@
-{ stdenv, fetchurl, unzip, runtimeShell }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper
+, coreutils, gawk, which, gnugrep, findutils
+, jdk
+}:
 
 stdenv.mkDerivation {
-  name = "openjump-1.3.1";
+  pname = "openjump";
+  version = "1.15";
 
   src = fetchurl {
-    url = mirror://sourceforge/jump-pilot/OpenJUMP/1.3.1/openjump-1.3.1.zip;
-    sha256 = "0y4z53yx0x7rp3c8rnj028ni3gr47r35apgcpqp3jl7r2di6zgqm";
+    url = "mirror://sourceforge/jump-pilot/OpenJUMP/1.15/OpenJUMP-Portable-1.15-r6241-CORE.zip";
+    sha256 = "12snzkv83w6khcdqzp6xahqapwp82af6c7j2q8n0lj62hk79rfgl";
   };
 
-  # ln jump.log hack: a different user will probably get a permission denied
-  # error. Still this is better than getting it always.
-  # TODO: build from source and patch this
+  # TODO: build from source
   unpackPhase = ''
     mkdir -p $out/bin;
     cd $out; unzip $src
-    s=$out/bin/OpenJump
-    dir=$(echo $out/openjump-*)
-    cat >> $s << EOF
-    #!${runtimeShell}
-    cd $dir/bin
-    exec ${stdenv.shell} openjump.sh
-    EOF
-    chmod +x $s
-    ln -s /tmp/openjump.log $dir/bin/jump.log
   '';
 
-  installPhase = ":";
+  nativeBuildInputs = [ makeWrapper unzip ];
 
-  buildInputs = [unzip];
+  installPhase = ''
+    dir=$(echo $out/OpenJUMP-*)
+
+    chmod +x $dir/bin/oj_linux.sh
+    makeWrapper $dir/bin/oj_linux.sh $out/bin/OpenJump \
+      --set JAVA_HOME ${jdk.home} \
+      --set PATH "${coreutils}/bin:${gawk}/bin:${which}/bin:${gnugrep}/bin:${findutils}/bin"
+  '';
 
   meta = {
     description = "Open source Geographic Information System (GIS) written in the Java programming language";
-    homepage = http://www.openjump.org/index.html;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.openjump.org/index.html";
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
   };
 }

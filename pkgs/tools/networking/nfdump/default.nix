@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoconf, automake, libtool, pkg-config
-, bzip2, libpcap, flex, yacc }:
+, bzip2, libpcap, flex, bison }:
 
-let version = "1.6.18"; in
+let version = "1.7.0.1"; in
 
 stdenv.mkDerivation {
   pname = "nfdump";
@@ -12,10 +12,10 @@ stdenv.mkDerivation {
     owner = "phaag";
     repo = "nfdump";
     rev = "v${version}";
-    sha256 = "0hfgj9lghkjrjxww0jdk8gxr6g4gbmbdmfg9ddg5jj6gcra21gha";
+    sha256 = "sha256-yD/NFGw38ishqQmKhlnHYodXmJuezI09hxNsyObZ1QE=";
   };
 
-  nativeBuildInputs = [ autoconf automake flex libtool pkg-config yacc ];
+  nativeBuildInputs = [ autoconf automake flex libtool pkg-config bison ];
   buildInputs = [ bzip2 libpcap ];
 
   preConfigure = ''
@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     "--enable-nfpcapd"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for working with netflow data";
     longDescription = ''
       nfdump is a set of tools for working with netflow data.
     '';
-    homepage = https://github.com/phaag/nfdump;
+    homepage = "https://github.com/phaag/nfdump";
     license = licenses.bsd3;
     maintainers = [ maintainers.takikawa ];
     platforms = platforms.unix;

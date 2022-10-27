@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 stdenv.mkDerivation rec {
   pname = "glucose";
   version = "4.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${pname}-${version}/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, parallel SAT solver (sequential version)";
     license = licenses.mit;
     platforms = platforms.unix;

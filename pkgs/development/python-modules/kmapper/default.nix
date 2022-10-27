@@ -1,50 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, scikitlearn
+, fetchFromGitHub
+, scikit-learn
 , numpy
 , scipy
 , jinja2
-, pytest
+, pytestCheckHook
 , networkx
 , matplotlib
-, python-igraph
+, igraph
 , plotly
 , ipywidgets
 }:
 
 buildPythonPackage rec {
   pname = "kmapper";
-  version = "1.2.0";
+  version = "2.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0879294680c5d01a928847b818a3c4e07eded3f602f96e510858e68e74fa3783";
+  src = fetchFromGitHub {
+    owner = "scikit-tda";
+    repo = "kepler-mapper";
+    rev = "v${version}";
+    sha256 = "1jqqrn7ig9kylcc8xbslxmchzghr9jgffaab3g3y3nyghk8azlgj";
   };
 
   propagatedBuildInputs = [
-    scikitlearn
+    scikit-learn
     numpy
     scipy
     jinja2
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     networkx
     matplotlib
-    python-igraph
+    igraph
     plotly
     ipywidgets
   ];
 
-  checkPhase = ''
-    pytest test --ignore test/test_drawing.py
-  '';
-
   meta = with lib; {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
-    homepage = http://kepler-mapper.scikit-tda.org;
+    homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

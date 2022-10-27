@@ -1,52 +1,67 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
-, zimg, libass, python3, libiconv
-, ApplicationServices, nasm
-, ocrSupport ?  false, tesseract ? null
-, imwriSupport? true,  imagemagick7 ? null
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
+, runCommandCC, runCommand, vapoursynth, writeText, patchelf, buildEnv
+, zimg, libass, python3, libiconv, testers
+, ApplicationServices
 }:
-
-assert ocrSupport   -> tesseract != null;
-assert imwriSupport -> imagemagick7 != null;
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R47.2";
+  version = "60";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
-    rev    = version;
-    sha256 = "004h0vvih7dlhkcz6l2786pf7s04qhiv0bii4gjx23cxyklglh9i";
+    rev    = "R${version}";
+    sha256 = "sha256-E1uHNcGxBrwg00tNnY3qH6BpvXtBEGkX7QFy0aMLSnA=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook nasm makeWrapper ];
+  patches = [
+    ./0001-Call-weak-function-to-allow-adding-preloaded-plugins.patch
+  ];
+
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
-    ++ optional ocrSupport   tesseract
-    ++ optional imwriSupport imagemagick7;
-
-  configureFlags = [
-    (optionalString (!ocrSupport)   "--disable-ocr")
-    (optionalString (!imwriSupport) "--disable-imwri")
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
+
+  passthru = rec {
+    # If vapoursynth is added to the build inputs of mpv and then
+    # used in the wrapping of it, we want to know once inside the
+    # wrapper, what python3 version was used to build vapoursynth so
+    # the right python3.sitePackages will be used there.
+    inherit python3;
+
+    withPlugins = import ./plugin-interface.nix {
+      inherit lib python3 buildEnv writeText runCommandCC stdenv runCommand
+        vapoursynth makeWrapper withPlugins;
+    };
+
+    tests.version = testers.testVersion {
+      package = vapoursynth;
+      # Check Core version to prevent false positive with API version
+      version = "Core R${version}";
+    };
+  };
 
   postInstall = ''
     wrapProgram $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}
+
+    # VapourSynth does not include any plugins by default
+    # and emits a warning when the system plugin directory does not exist.
+    mkdir $out/lib/vapoursynth
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "A video processing framework with the future in mind";
-    homepage    = http://www.vapoursynth.com/;
+    homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
-    maintainers = with maintainers; [ rnhmjoj tadeokondrak ];
+    maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
+    mainProgram = "vspipe";
   };
-
 }

@@ -2,7 +2,7 @@
 
 runCommand "fc-cache"
   {
-    buildInputs = [ fontconfig.bin ];
+    nativeBuildInputs = [ fontconfig.bin ];
     preferLocalBuild = true;
     allowSubstitutes = false;
     passAsFile = [ "fontDirs" ];
@@ -16,7 +16,7 @@ runCommand "fc-cache"
 
     cat > fonts.conf << EOF
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
       <include>${fontconfig.out}/etc/fonts/fonts.conf</include>
       <cachedir>$out</cachedir>

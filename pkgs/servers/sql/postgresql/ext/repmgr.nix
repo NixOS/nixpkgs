@@ -1,27 +1,36 @@
-{ stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{ lib, stdenv, fetchFromGitHub
+, postgresql
+, openssl
+, zlib
+, readline
+, flex
+}:
 
 stdenv.mkDerivation rec {
   pname = "repmgr";
-  version = "4.4.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "2ndQuadrant";
     repo = "repmgr";
     rev = "v${version}";
-    sha256 = "185789f7igvlqyqcb8kf42jjq8g0wbs2aqd9kimrq5kf4srwgpim";
+    sha256 = "sha256-M8FMin9y6nAiPYeT5pUUy0KyZ1dkuH708GshZ6GoXXw=";
   };
 
-  installPhase = ''
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *.so      $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [ postgresql openssl zlib readline ];
 
-  meta = with stdenv.lib; {
+  installPhase = ''
+    mkdir -p $out/{bin,lib,share/postgresql/extension}
+
+    cp repmgr{,d} $out/bin
+    cp *.so       $out/lib
+    cp *.sql      $out/share/postgresql/extension
+    cp *.control  $out/share/postgresql/extension
+  '';
+
+  meta = with lib; {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
     license = licenses.postgresql;

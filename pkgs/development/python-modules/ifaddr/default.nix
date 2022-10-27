@@ -1,27 +1,26 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, ipaddress
-, python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "0.1.6";
+  version = "0.2.0";
   pname = "ifaddr";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c19c64882a7ad51a394451dabcbbed72e98b5625ec1e79789924d5ea3e3ecb93";
+    sha256 = "sha256-zAy/yqv3ZdRFlYJfuWqZuxLHlxa3O0QzDqOO4rDErtQ=";
   };
 
-  propagatedBuildInputs = [ ipaddress ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-   ${python.interpreter} -m unittest discover
-  '';
+  pythonImportsCheck = [ "ifaddr" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pydron/ifaddr;
+  meta = with lib; {
+    homepage = "https://github.com/pydron/ifaddr";
     description = "Enumerates all IP addresses on all network adapters of the system";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

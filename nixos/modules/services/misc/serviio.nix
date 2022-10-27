@@ -31,7 +31,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Serviio Media Server.
         '';
       };
@@ -39,7 +39,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/serviio";
-        description = ''
+        description = lib.mdDoc ''
           The directory where serviio stores its state, data, etc.
         '';
       };
@@ -63,20 +63,15 @@ in {
       };
     };
 
-    users.users = [
-      {
-        name = "serviio";
-        group = "serviio";
+    users.users.serviio =
+      { group = "serviio";
         home = cfg.dataDir;
         description = "Serviio Media Server User";
         createHome = true;
         isSystemUser = true;
-      }
-    ];
+      };
 
-    users.groups = [
-      { name = "serviio";}
-    ];
+    users.groups.serviio = { };
 
     networking.firewall = {
       allowedTCPPorts = [

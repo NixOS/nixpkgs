@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, python2Packages }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "screencloud";
   version = "1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # for tracking usage.
   consumerKey = "23e747012c68601f27ab69c6de129ed70552d55b6";
   consumerSecret = "4701cb00c1bd357bbcae7c3d713dd216";
-  
+
   src = fetchFromGitHub {
     owner = "olav-st";
     repo = "screencloud";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1s0dxa1sa37nvna5nfqdsp294810favj68qb7ghl78qna7zw0cim";
   };
 
-  buildInputs = [ cmake qt4 quazip qt-mobility qxt pythonPackages.python pythonPackages.pycrypto ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 quazip qt-mobility qxt python2Packages.python python2Packages.pycrypto ];
 
   patchPhase = ''
     # Required to make the configure script work. Normally, screencloud's
@@ -27,8 +28,6 @@ stdenv.mkDerivation rec {
     # have nice things.
     substituteInPlace "CMakeLists.txt" --replace "set(CMAKE_INSTALL_PREFIX \"/opt\")" ""
   '';
-
-  enableParallelBuilding = true;
 
   # We need to append /opt to our CMAKE_INSTALL_PREFIX, so we tell the Nix not
   # to add the argument for us.
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     patchShebangs $prefix/opt/screencloud/screencloud.sh
     substituteInPlace "$prefix/opt/screencloud/screencloud.sh" --replace "/opt" "$prefix/opt"
-    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${pythonPackages.pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
+    sed -i "2 i\export PYTHONPATH=$(toPythonPath ${python2Packages.pycrypto}):\$PYTHONPATH" "$prefix/opt/screencloud/screencloud.sh"
     mkdir $prefix/bin
     mkdir $prefix/lib
     ln -s $prefix/opt/screencloud/screencloud.sh $prefix/bin/screencloud
@@ -68,10 +67,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://screencloud.net/;
+    homepage = "https://screencloud.net/";
     description = "Client for Screencloud, an easy to use screenshot sharing tool";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ forkk ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ forkk ];
+    platforms = with lib.platforms; linux;
   };
 }

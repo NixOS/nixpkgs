@@ -1,30 +1,68 @@
-{ buildPythonPackage
-, fetchPypi
-, six
+{ lib
+, symlinkJoin
+, buildPythonPackage
+, fetchFromGitHub
+, ninja
+, which
+, libjpeg_turbo
+, libpng
 , numpy
+, scipy
 , pillow
-, pytorch
-, lib
+, torch
+, pytest
+, cudaSupport ? torch.cudaSupport or false # by default uses the value from torch
 }:
 
-buildPythonPackage rec {
-  version = "0.2.1";
-  pname   = "torchvision";
+let
+  inherit (torch.cudaPackages) cudatoolkit cudnn;
 
-  format = "wheel";
+  cudatoolkit_joined = symlinkJoin {
+    name = "${cudatoolkit.name}-unsplit";
+    paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
+  cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" torch.cudaArchList;
+in buildPythonPackage rec {
+  pname = "torchvision";
+  version = "0.13.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    sha256 = "18gvdabkmzfjg47ns0lw38mf85ry28nq1mas5rzlwvb4l5zmw2ms";
+  src = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "vision";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QlUAFAG6zEDCDSXR5n2CznspU3fT0kbqySzofGLPgK4=";
   };
 
-  propagatedBuildInputs = [ six numpy pillow pytorch ];
+  nativeBuildInputs = [ libpng ninja which ]
+    ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  meta = {
+  TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
+  TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
+
+  buildInputs = [ libjpeg_turbo libpng ]
+    ++ lib.optionals cudaSupport [ cudnn ];
+
+  propagatedBuildInputs = [ numpy pillow torch scipy ];
+
+  preBuild = lib.optionalString cudaSupport ''
+    export TORCH_CUDA_ARCH_LIST="${cudaArchStr}"
+    export FORCE_CUDA=1
+  '';
+
+  # tries to download many datasets for tests
+  doCheck = false;
+
+  checkPhase = ''
+    HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
+  '';
+
+  checkInputs = [ pytest ];
+
+  meta = with lib; {
     description = "PyTorch vision library";
-    homepage    = https://pytorch.org/;
-    license     = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    homepage = "https://pytorch.org/";
+    license = licenses.bsd3;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 }

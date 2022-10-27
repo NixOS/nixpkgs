@@ -1,34 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , isPy3k
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "backports.functools_lru_cache";
-  version = "1.5";
+  version = "1.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a";
+    sha256 = "d5ed2169378b67d3c545e5600d363a923b09c456dab1593914935a68ad478271";
   };
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   # Test fail on Python 2
   doCheck = isPy3k;
 
+  pythonNamespaces = [ "backports" ];
+
   meta = {
     description = "Backport of functools.lru_cache";
-    homepage = https://github.com/jaraco/backports.functools_lru_cache;
+    homepage = "https://github.com/jaraco/backports.functools_lru_cache";
     license = lib.licenses.mit;
   };
 }

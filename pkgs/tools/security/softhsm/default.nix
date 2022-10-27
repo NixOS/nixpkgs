@@ -1,32 +1,43 @@
-{ stdenv, fetchurl, botan, libobjc, Security }:
+{ lib, stdenv, fetchurl, botan2, libobjc, Security }:
 
 stdenv.mkDerivation rec {
 
   pname = "softhsm";
-  version = "2.5.0";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
-    sha256 = "1cijq78jr3mzg7jj11r0krawijp99p253f4qdqr94n728p7mdalj";
+    hash = "sha256-YSSUcwVLzRgRUZ75qYmogKe9zDbTF8nCVFf8YU30dfI=";
   };
 
   configureFlags = [
     "--with-crypto-backend=botan"
-    "--with-botan=${botan}"
+    "--with-botan=${botan2}"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
     ];
 
   propagatedBuildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc Security ];
+    lib.optionals stdenv.isDarwin [ libobjc Security ];
 
-  buildInputs = [ botan ];
+  buildInputs = [ botan2 ];
 
   postInstall = "rm -rf $out/var";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.opendnssec.org/softhsm;
+  meta = with lib; {
+    homepage = "https://www.opendnssec.org/softhsm";
     description = "Cryptographic store accessible through a PKCS #11 interface";
+    longDescription = "
+      SoftHSM provides a software implementation of a generic
+      cryptographic device with a PKCS#11 interface, which is of
+      course especially useful in environments where a dedicated hardware
+      implementation of such a device - for instance a Hardware
+      Security Module (HSM) or smartcard - is not available.
+
+      SoftHSM follows the OASIS PKCS#11 standard, meaning it should be
+      able to work with many cryptographic products. SoftHSM is a
+      programme of The Commons Conservancy.
+    ";
     license = licenses.bsd2;
     maintainers = [ maintainers.leenaars ];
     platforms = platforms.unix;

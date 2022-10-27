@@ -1,30 +1,45 @@
-{ stdenv, fetchurl, libusb1, pkgconfig, ... }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "blink1";
-  version = "1.98a";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/todbot/blink1/archive/v${version}.tar.gz";
-    sha256 = "1waci6hccv5i50v5d3z7lx4h224fbkj66ywfynnsgn46w0jm6imv";
+  src = fetchFromGitHub {
+    owner = "todbot";
+    repo = "blink1-tool";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-xuCjPSQUQ/KOcdsie/ndecUiEt+t46m4eI33PXJoAAY=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "@git submodule update --init" "true"
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  configurePhase = ''
-    cd commandline
-  '';
+  makeFlags = [
+    "GIT_TAG=v${version}"
+    "USBLIB_TYPE=HIDAPI"
+    "HIDAPI_TYPE=LIBUSB"
+  ];
 
-  installPhase = ''
-    PREFIX=$out make install
-  '';
+  hardeningDisable = [ "format" ];
 
-  meta = {
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  meta = with lib; {
     description = "Command line client for the blink(1) notification light";
-    homepage = https://blink1.thingm.com/;
-    license = stdenv.lib.licenses.cc-by-sa-30;
-    maintainers = [ stdenv.lib.maintainers.cransom ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://blink1.thingm.com/";
+    license = with licenses; [ cc-by-sa-40 ];
+    maintainers = with maintainers; [ cransom ];
+    platforms = platforms.linux;
   };
 }

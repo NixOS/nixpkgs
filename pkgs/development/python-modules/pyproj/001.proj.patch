@@ -1,47 +1,48 @@
-diff a/pyproj/datadir.py b/pyproj/datadir.py
+diff --git a/pyproj/datadir.py b/pyproj/datadir.py
+index 9ca1d25..4198490 100644
 --- a/pyproj/datadir.py
 +++ b/pyproj/datadir.py
-@@ -52,6 +52,7 @@ def get_data_dir():
-     str: The valid data directory.
-
-     """
-+    return "@proj@/share/proj"
-     # to avoid re-validating
+@@ -70,7 +70,7 @@ def get_data_dir() -> str:
      global _VALIDATED_PROJ_DATA
      if _VALIDATED_PROJ_DATA is not None:
-diff a/setup.py b/setup.py
+         return _VALIDATED_PROJ_DATA
+-    internal_datadir = Path(__file__).absolute().parent / "proj_dir" / "share" / "proj"
++    internal_datadir = Path("@proj@/share/proj")
+     proj_lib_dirs = os.environ.get("PROJ_LIB", "")
+     prefix_datadir = Path(sys.prefix, "share", "proj")
+ 
+diff --git a/setup.py b/setup.py
+index 6bb0c6c..b3d0321 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -16,7 +16,7 @@ INTERNAL_PROJ_DIR = os.path.join(CURRENT_FILE_PATH, "pyproj", BASE_INTERNAL_PROJ
-
- def check_proj_version(proj_dir):
-     """checks that the PROJ library meets the minimum version"""
--    proj = os.path.join(proj_dir, "bin", "proj")
-+    proj = "@proj@/bin/proj"
-     proj_ver_bytes = subprocess.check_output(proj, stderr=subprocess.STDOUT)
-     proj_ver_bytes = (proj_ver_bytes.decode("ascii").split()[1]).strip(",")
-     proj_version = parse_version(proj_ver_bytes)
-@@ -33,6 +33,7 @@ def get_proj_dir():
-     """
-     This function finds the base PROJ directory.
-     """
-+    return "@proj@"
-     proj_dir = os.environ.get("PROJ_DIR")
-     if proj_dir is None and os.path.exists(INTERNAL_PROJ_DIR):
-         proj_dir = INTERNAL_PROJ_DIR
-@@ -56,6 +57,7 @@ def get_proj_libdirs(proj_dir):
-     """
-     This function finds the library directories
-     """
-+    return ["@proj@/lib"]
-     proj_libdir = os.environ.get("PROJ_LIBDIR")
-     libdirs = []
-     if proj_libdir is None:
-@@ -77,6 +79,7 @@ def get_proj_incdirs(proj_dir):
-     """
-     This function finds the include directories
-     """
-+    return ["@proj@/include"]
-     proj_incdir = os.environ.get("PROJ_INCDIR")
-     incdirs = []
-     if proj_incdir is None:
+@@ -12,7 +12,7 @@ from setuptools import Extension, setup
+ PROJ_MIN_VERSION = parse_version("7.2.0")
+ CURRENT_FILE_PATH = Path(__file__).absolute().parent
+ BASE_INTERNAL_PROJ_DIR = Path("proj_dir")
+-INTERNAL_PROJ_DIR = CURRENT_FILE_PATH / "pyproj" / BASE_INTERNAL_PROJ_DIR
++INTERNAL_PROJ_DIR = Path("@proj@")
+ 
+ 
+ def get_proj_version(proj_dir: Path) -> str:
+@@ -155,7 +155,7 @@ def get_extension_modules():
+     # By default we'll try to get options PROJ_DIR or the local version of proj
+     proj_dir = get_proj_dir()
+     library_dirs = get_proj_libdirs(proj_dir)
+-    include_dirs = get_proj_incdirs(proj_dir)
++    include_dirs = get_proj_incdirs(Path("@projdev@"))
+ 
+     proj_version = get_proj_version(proj_dir)
+     check_proj_version(proj_version)
+diff --git a/test/test_cli.py b/test/test_cli.py
+index 7a696de..1b9b777 100644
+--- a/test/test_cli.py
++++ b/test/test_cli.py
+@@ -14,7 +14,7 @@ from pyproj.sync import _load_grid_geojson
+ from test.conftest import grids_available, proj_env, tmp_chdir
+ 
+ PYPROJ_CLI_ENDPONTS = pytest.mark.parametrize(
+-    "input_command", [["pyproj"], [sys.executable, "-m", "pyproj"]]
++    "input_command", [[sys.executable, "-m", "pyproj"]]
+ )
+ 
+ 

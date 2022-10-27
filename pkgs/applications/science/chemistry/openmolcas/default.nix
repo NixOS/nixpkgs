@@ -1,57 +1,94 @@
-{ stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
-, makeWrapper
+{ lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
+, blas-ilp64, hdf5-cpp, python3, texlive
+, armadillo, libxc, makeWrapper
+# Note that the CASPT2 module is broken with MPI
+# See https://gitlab.com/Molcas/OpenMolcas/-/issues/169
+, enableMpi ? false
+, mpi, globalarrays
 } :
 
-let
-  version = "18.09";
-  gitLabRev = "v${version}";
+assert blas-ilp64.isILP64;
+assert lib.elem blas-ilp64.passthru.implementation [ "openblas" "mkl" ];
 
-  python = python3.withPackages (ps : with ps; [ six pyparsing ]);
+let
+  python = python3.withPackages (ps : with ps; [ six pyparsing numpy h5py ]);
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
-  inherit version;
+  version = "22.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
-    rev = gitLabRev;
-    sha256 = "1di1ygifx7ycfpwh25mv76xlv15wqfdmqzjsg5nani2d5z0arri2";
+    # The tag keeps moving, fix a hash instead
+    rev = "aedb15be52d6dee285dd3e10e9d05f44e4ca969a"; # 2022-10-22
+    sha256 = "sha256-7d2wBIEg/r5bPZXlngTIZxYdMN0UIop7TA+WFZmzCo8=";
   };
 
-  nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];
-  buildInputs = [
+  patches = [
+    # Required to handle openblas multiple outputs
+    ./openblasPath.patch
+    # Required for MKL builds
+    ./MKL-MPICH.patch
+  ];
+
+  postPatch = ''
+    # Using env fails in the sandbox
+    substituteInPlace Tools/pymolcas/export.py --replace \
+      "/usr/bin/env','python3" "python3"
+  '';
+
+  nativeBuildInputs = [
+    perl
     gfortran
-    openblas
+    cmake
+    texlive.combined.scheme-minimal
+    makeWrapper
+  ];
+
+  buildInputs = [
+    blas-ilp64.passthru.provider
     hdf5-cpp
     python
     armadillo
-    openmpi
+    libxc
+  ] ++ lib.optionals enableMpi [
+    mpi
     globalarrays
-    openssh
   ];
 
-  enableParallelBuilding = true;
+  passthru = lib.optionalAttrs enableMpi { inherit mpi; };
 
   cmakeFlags = [
     "-DOPENMP=ON"
-    "-DGA=ON"
-    "-DMPI=ON"
     "-DLINALG=OpenBLAS"
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DOPENBLASROOT=${openblas}"
+    "-DEXTERNAL_LIBXC=${libxc}"
+  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "openblas") [
+    "-DOPENBLASROOT=${blas-ilp64.passthru.provider.dev}" "-DLINALG=OpenBLAS"
+  ] ++ lib.optionals (blas-ilp64.passthru.implementation == "mkl") [
+    "-DMKLROOT=${blas-ilp64.passthru.provider}" "-DLINALG=MKL"
+  ] ++ lib.optionals enableMpi [
+    "-DGA=ON"
+    "-DMPI=ON"
   ];
 
-  GAROOT=globalarrays;
+  preConfigure = lib.optionalString enableMpi ''
+    export GAROOT=${globalarrays};
+  '';
 
   postConfigure = ''
     # The Makefile will install pymolcas during the build grrr.
     mkdir -p $out/bin
     export PATH=$PATH:$out/bin
+  '';
+
+  postInstall = ''
+    mv $out/pymolcas $out/bin
+    find $out/Tools -type f -exec mv \{} $out/bin \;
+    rm -r $out/Tools
   '';
 
   postFixup = ''
@@ -62,12 +99,13 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/pymolcas --set MOLCAS $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced quantum chemistry software package";
-    homepage = https://gitlab.com/Molcas/OpenMolcas;
+    homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = licenses.lgpl21Only;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "pymolcas";
   };
 }
 

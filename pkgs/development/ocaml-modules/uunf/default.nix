@@ -1,32 +1,52 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner
+, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+}:
+
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
+  version = "15.0.0";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+if lib.versionOlder ocaml.version "4.03"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
 
-stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "11.0.0";
+stdenv.mkDerivation {
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  inherit version;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1j0v3dg19sq13fmbx4kzy3n1hjiv7hkm1ysxyrdva430jvqw23df";
+    sha256 = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg uutf ]
+  ++ lib.optional cmdlinerSupport cmdliner;
 
   propagatedBuildInputs = [ uchar ];
 
-  inherit (topkg) buildPhase installPhase;
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
+  prePatch = lib.optionalString stdenv.isAarch64 "ulimit -s 16384";
+
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build \
+      --with-uutf true \
+      --with-cmdliner ${lib.boolToString cmdlinerSupport}
+    runHook postBuild
+  '';
+
+  inherit (topkg) installPhase;
+
+  meta = with lib; {
     description = "An OCaml module for normalizing Unicode text";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    broken = stdenv.isAarch64;
+    mainProgram = "unftrip";
+    inherit (ocaml.meta) platforms;
   };
 }

@@ -1,19 +1,19 @@
-{ boost, cmake, fetchFromGitHub, gtest, libpcap, openssl, stdenv }:
+{ boost, cmake, fetchFromGitHub, gtest, libpcap, openssl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "libtins";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gv661gdf018zk1sr6fnvcmd5akqjihs4h6zzxv6881v6yhhglrz";
+    sha256 = "sha256-mXbinXh/CO0SZZ71+K+FozbHCCoi12+AIa2o+P0QmUw=";
   };
 
   postPatch = ''
     rm -rf googletest
-    cp -r ${gtest.src}/googletest googletest
+    cp -r ${gtest.src} googletest
     chmod -R a+w googletest
   '';
 
@@ -29,20 +29,15 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
-  enableParallelBuilding = true;
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD${placeholder "out"}/lib
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$PWD${placeholder "out"}/lib
-  '';
   checkTarget = "tests test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
     changelog = "https://raw.githubusercontent.com/mfontanini/${pname}/v${version}/CHANGES.md";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with maintainers; [ fdns ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

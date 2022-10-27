@@ -1,24 +1,30 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocurl, cryptokit, ocaml_extlib, yojson, ocamlnet, xmlm }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
+, cryptokit, ocamlnet, ocurl, yojson
+, ounit2
+}:
 
 buildDunePackage rec {
   pname = "gapi-ocaml";
-  version = "0.3.6";
+  version = "0.4.3";
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qgsy51bhkpfgl5rdnjw4bqs5fbh2w4vwrfbl8y3lh1wrqmnwci4";
+    sha256 = "sha256-V0GB9Bd06IdcI5PDFHGVZ0Y/qi7tTs/4ITqPXUOxCLs=";
   };
 
-  propagatedBuildInputs = [ ocurl cryptokit ocaml_extlib yojson ocamlnet xmlm ];
+  propagatedBuildInputs = [ cryptokit ocamlnet ocurl yojson ];
+
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  checkInputs = [ ounit2 ];
 
   meta = {
     description = "OCaml client for google services";
-    homepage = http://gapi-ocaml.forge.ocamlcore.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
+    inherit (src.meta) homepage;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

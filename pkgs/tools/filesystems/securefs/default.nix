@@ -1,24 +1,33 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake
 , fuse }:
 
 stdenv.mkDerivation rec {
   pname = "securefs";
-  version = "0.8.3";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
-    sha256 = "0nf0bd163gz844mikqab2mh7xjlj31ixa6hi85qxdifyjpfjv7y4";
+    sha256 = "1sxfgqgy63ml7vg7zj3glvra4wj2qmfv9jzmpm1jqy8hq7qlqlsx";
     rev = version;
     repo = "securefs";
     owner = "netheril96";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    # Make it build with macFUSE
+    # Backported from https://github.com/netheril96/securefs/pull/114
+    ./add-macfuse-support.patch
+  ];
+
+  postPatch = ''
+    sed -i -e '/TEST_SOURCES/d' CMakeLists.txt
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Transparent encryption filesystem";
     longDescription = ''
@@ -32,6 +41,6 @@ stdenv.mkDerivation rec {
       contents.
     '';
     license = with licenses; [ bsd2 mit ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

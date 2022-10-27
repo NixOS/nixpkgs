@@ -1,32 +1,52 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, django
 , faker
-, python
+, fetchPypi
+, flask
+, flask-sqlalchemy
+, mongoengine
+, pytestCheckHook
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
-  pname = "factory_boy";
-  version = "2.12.0";
+  pname = "factory-boy";
+  version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0w53hjgag6ad5i2vmrys8ysk54agsqvgbjy9lg8g0d8pi9h8vx7s";
+    pname = "factory_boy";
+    inherit version;
+    sha256 = "sha256-qY0newwEfHXrbkq4UIp/gfsD0sshmG9ieRNUbveipV4=";
   };
 
-  propagatedBuildInputs = [ faker ];
+  propagatedBuildInputs = [
+    faker
+  ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    django
+    flask
+    flask-sqlalchemy
+    mongoengine
+    pytestCheckHook
+    sqlalchemy
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  # Checks for MongoDB requires an a running DB
+  disabledTests = [
+    "MongoEngineTestCase"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A Python package to create factories for complex objects";
-    homepage    = https://github.com/rbarrois/factory_boy;
-    license     = licenses.mit;
+  pythonImportsCheck = [
+    "factory"
+  ];
+
+  meta = with lib; {
+    description = "Python package to create factories for complex objects";
+    homepage = "https://github.com/rbarrois/factory_boy";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

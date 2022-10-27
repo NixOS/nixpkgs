@@ -1,8 +1,8 @@
-{ stdenv, appleDerivation, xcbuildHook, zlib, bzip2, lzma, ncurses, libutil }:
+{ lib, appleDerivation, xcbuildHook, zlib, bzip2, xz, ncurses, libutil, Libinfo }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ zlib bzip2 lzma ncurses libutil ];
+  buildInputs = [ zlib bzip2 xz ncurses libutil Libinfo ];
 
   # some commands not working:
   # mtree: _simple.h not found
@@ -16,6 +16,10 @@ appleDerivation {
       --replace '/usr/lib/libcurses.dylib' 'libncurses.dylib'
     sed -i -re "s/name = ([a-zA-Z]+);/name = \1; productName = \1;/" file_cmds.xcodeproj/project.pbxproj
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   duplicate symbol '_chdname' in: ar_io.o tty_subs.o
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
@@ -32,7 +36,7 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

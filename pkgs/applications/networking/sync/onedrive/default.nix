@@ -1,35 +1,56 @@
 { stdenv
+, lib
 , fetchFromGitHub
-, dmd
-, pkgconfig
+, autoreconfHook
+, ldc
+, installShellFiles
+, pkg-config
 , curl
 , sqlite
+, libnotify
+, withSystemd ? stdenv.isLinux
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.3.10";
+  version = "2.4.21";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
-    repo = "onedrive";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0ks22anxih63zwlc11z0gi531wvcricbkv1wlkrgfihi58l8fhfk";
+    hash = "sha256-KZVRLXXaJYMqHzjxTfQaD0u7n3ACBEk3fLOmqwybNhM=";
   };
 
-  nativeBuildInputs = [
-    dmd
-    pkgconfig
-  ];
+  nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
+
   buildInputs = [
     curl
     sqlite
+    libnotify
+  ] ++ lib.optional withSystemd systemd;
+
+  configureFlags = [
+    "--enable-notifications"
+  ] ++ lib.optionals withSystemd [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ];
-  meta = with stdenv.lib; {
+
+  # we could also pass --enable-completions to configure but we would then have to
+  # figure out the paths manually and pass those along.
+  postInstall = ''
+    installShellCompletion --bash --name ${pname}  contrib/completions/complete.bash
+    installShellCompletion --zsh  --name _${pname} contrib/completions/complete.zsh
+    installShellCompletion --fish --name ${pname}  contrib/completions/complete.fish
+  '';
+
+  meta = with lib; {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ doronbehar ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ srgom peterhoeg bertof ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pyannotate
@@ -6,12 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
   pname = "pytest-annotate";
+  version = "1.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03e4dece2d1aa91666034f1b2e8bb7a7b8c6be11baf3cf2929b26eea5c6e86f3";
+    hash = "sha256-CSaTIPjSGHKCR0Nvet6W8zzz/oWEC0BjIULZ+JaMH9A=";
   };
 
   buildInputs = [
@@ -24,16 +26,21 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest>=3.2.0,<4.0.0" "pytest"
+      --replace "pytest>=3.2.0,<7.0.0" "pytest>=3.2.0"
   '';
 
-  # no testing in a testing module...
+  # Module has no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kensho-technologies/pytest-annotate;
+  pythonImportsCheck = [
+    "pytest_annotate"
+  ];
+
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Generate PyAnnotate annotations from your pytest tests";
+    homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

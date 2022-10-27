@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }: let
+{ lib, stdenv, fetchurl }: let
   version = "1.2.0";
 in stdenv.mkDerivation {
   pname = "long-shebang";
@@ -12,10 +12,10 @@ in stdenv.mkDerivation {
   meta = {
     description = "A tool for #! scripts with more than one argument";
 
-    homepage = https://github.com/shlevy/long-shebang;
+    homepage = "https://github.com/shlevy/long-shebang";
 
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

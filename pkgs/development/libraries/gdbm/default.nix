@@ -2,14 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gdbm";
-  version = "1.18.1";
-
-  # FIXME: remove on update to > 1.18.1
-  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
+  version = "1.23";
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
-    sha256 = "1p4ibds6z3ccy65lkmd6lm7js0kwifvl53r0fd759fjxgr917rl6";
+    sha256 = "sha256-dLEIHSH/8TrkvXwW5dblBKTCb3zeHcoNljpIQXS7ys0=";
   };
 
   doCheck = true; # not cross;
@@ -62,7 +59,7 @@ stdenv.mkDerivation rec {
        For compatibility with programs using old UNIX dbm function, the
        package also provides traditional dbm and ndbm interfaces.
       '';
-    homepage = https://www.gnu.org/software/gdbm/;
+    homepage = "https://www.gnu.org/software/gdbm/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.vrthra ];

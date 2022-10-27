@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif } :
+{ lib, stdenv, fetchurl, pkg-config, gtk2, imlib2, file, lcms2, libexif } :
 
 stdenv.mkDerivation (rec {
   version = "2.3.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation (rec {
     sha256 = "1mc0f2nnas4q0d7zc9r6g4z93i32xlx0p9hl4fn5zkyml24a1q28";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
 
   preBuild=''
@@ -18,10 +18,9 @@ stdenv.mkDerivation (rec {
     substituteInPlace Makefile --replace /share/share/ /share/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick image viewer";
-    homepage = http://spiegl.de/qiv/;
-    inherit version;
+    homepage = "http://spiegl.de/qiv/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

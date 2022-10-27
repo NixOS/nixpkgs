@@ -18,11 +18,11 @@ in
 
 buildPythonPackage rec {
   pname = "entrance";
-  version = "1.1.10";
+  version = "1.1.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "080qkvkmfw4004cl721l5bvpg001xz8vs6q59dg797kqxfrwk5kw";
+    sha256 = "dee5b4f3330f633fcd4e665f1781bf6e53b375ffdc7a24434257dfba6b1c2d7f";
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A server framework for web apps with an Elm frontend";
-    homepage = https://github.com/ensoft/entrance;
+    homepage = "https://github.com/ensoft/entrance";
     license = licenses.mit;
     maintainers = with maintainers; [ simonchatts ];
   };

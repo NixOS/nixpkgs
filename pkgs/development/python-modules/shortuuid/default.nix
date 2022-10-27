@@ -1,25 +1,38 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pep8
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "0.5.0";
+  version = "1.0.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d08fd398f40f8baf87e15eef8355e92fa541bca4eb8465fefab7ee22f92711b9";
+    hash = "sha256-RZ8S+hrMNP8hOxNxRnwDJRaWRaMe2YniaIcjOa91Y9U=";
   };
 
-  buildInputs = [pep8];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A generator library for concise, unambiguous and URL-safe UUIDs";
-    homepage = https://github.com/stochastic-technologies/shortuuid/;
+  pythonImportsCheck = [
+    "shortuuid"
+  ];
+
+  pytestFlagsArray = [
+    "shortuuid/tests.py"
+  ];
+
+  meta = with lib; {
+    description = "Library to generate concise, unambiguous and URL-safe UUIDs";
+    homepage = "https://github.com/stochastic-technologies/shortuuid/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zagy ];
   };
-
 }

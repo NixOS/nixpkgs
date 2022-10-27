@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
+{ lib, stdenv, fetchurl, gtk2-x11, glib, pango, cairo, atk, gdk-pixbuf, libX11 }:
 
 # Arena is free software in the sense of "free beer" but not as in "free
 # speech". We can install it as we please, but we cannot re-distribute it in
@@ -7,16 +7,17 @@
 
 let
 
-  inherit (stdenv.lib) makeLibraryPath;
+  inherit (lib) makeLibraryPath;
   libDir = "lib64";
 
 in
 stdenv.mkDerivation rec {
-  name = "arena-1.1";
+  pname = "arena";
+  version = "3.10-beta";
 
   src = fetchurl {
-    url = http://www.playwitharena.de/downloads/arenalinux_64bit_1.1.tar.gz;
-    sha256 = "1sh71v5ymzwflq8ycx9j9kl0jhqllgs6z24h4h8j5z8pwdh528v6";
+    url = "http://www.playwitharena.de/downloads/arenalinux_64bit_${lib.replaceStrings ["-"] [""] version}.tar.gz";
+    sha256 = "1pzb9sg4lzbbi4gbldvlb85p8xyl9xnplxwyb9pkk2mwzvvxkf0d";
   };
 
   # stdenv.cc.cc.lib is in that list to pick up libstdc++.so. Is there a better way?
@@ -25,19 +26,19 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     # This is is a tar bomb, i.e. it extract a dozen files and directories to
     # the top-level, so we must create a sub-directory first.
-    mkdir -p $out/lib/${name}
-    tar -C $out/lib/${name} -xf ${src}
+    mkdir -p $out/lib/${pname}-${version}
+    tar -C $out/lib/${pname}-${version} -xf ${src}
 
     # Remove executable bits from data files. This matters for the find command
     # we'll use below to find all bundled engines.
-    chmod -x $out/lib/${name}/Engines/*/*.{txt,bin,bmp}
+    chmod -x $out/lib/${pname}-${version}/Engines/*/*.{txt,bin,bmp,zip}
   '';
 
   buildPhase = ''
     # Arena has (at least) two executables plus a couple of bundled chess
     # engines that we need to patch.
     exes=( $(find $out -name '*x86_64_linux')
-           $(find $out/lib/${name}/Engines -type f -perm /u+x)
+           $(find $out/lib/${pname}-${version}/Engines -type f -perm /u+x)
          )
     for i in "''${exes[@]}"; do
       # Arminius is statically linked.
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s $out/lib/${name}/Arena_x86_64_linux $out/bin/arena
+    ln -s $out/lib/${pname}-${version}/Arena_x86_64_linux $out/bin/arena
   '';
 
   dontStrip = true;
@@ -66,9 +67,9 @@ stdenv.mkDerivation rec {
       UCI protocol I, II. Furthermore, compatible to Chess960, DGT electronic
       chess board & DGT clocks and much more.
     '';
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = ["x86_64-linux"];
-    hydraPlatforms = stdenv.lib.platforms.none;
+    hydraPlatforms = lib.platforms.none;
   };
 
 }

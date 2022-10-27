@@ -4,25 +4,26 @@
 let
   binPath = lib.makeBinPath [ which file ];
 in stdenv.mkDerivation {
-  name = "mumble-overlay-${mumble.version}";
+  pname = "mumble-overlay";
+  version = mumble.version;
 
   inherit (mumble) src;
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   installPhase = ''
     mkdir -p $out/lib
-    ln -s ${mumble}/lib/libmumble.so.1.2.* $out/lib/libmumble.so.1
+    ln -s ${mumble}/lib/libmumble.so.1 $out/lib/
+
     ${lib.optionalString (mumble_i686 != null) ''
       mkdir -p $out/lib32
-      ln -s ${mumble_i686}/lib/libmumble.so.1.2.* $out/lib32/libmumble.so.1
+      ln -s ${mumble_i686}/lib/libmumble.so.1 $out/lib32/
     ''}
+
     install -Dm755 scripts/mumble-overlay $out/bin/mumble-overlay
     sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
     sed -i '2iPATH="${binPath}:$PATH"' $out/bin/mumble-overlay
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

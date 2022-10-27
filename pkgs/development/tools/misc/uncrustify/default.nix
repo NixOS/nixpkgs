@@ -1,24 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "${product}-${version}";
-  product = "uncrustify";
-  version = "0.67";
+  pname = "uncrustify";
+  version = "0.75.1";
 
   src = fetchFromGitHub {
-    owner = product;
-    repo = product;
-    rev = name;
-    sha256 = "0hf8c93aj1hjg6cc77x6p7nf7ddp8mn4b6a9gpcrvmx8w81afpd3";
+    owner = "uncrustify";
+    repo = "uncrustify";
+    rev = "uncrustify-${version}";
+    sha256 = "sha256-wLzj/KcqXlcTsOJo7T166jLcWi1KNLmgblIqqkj7/9c=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake python3 ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";
-    homepage = http://uncrustify.sourceforge.net/;
+    homepage = "http://uncrustify.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

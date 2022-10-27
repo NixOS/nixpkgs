@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.0";
+  version = "0.9.0";
   pname = "reptyr";
 
   src = fetchFromGitHub {
     owner = "nelhage";
     repo = "reptyr";
     rev = "reptyr-${version}";
-    sha256 = "1hnijfz1ab34j2h2cxc3f43rmbclyihgn9x9wxa7jqqgb2xm71hj";
+    sha256 = "sha256-gM3aMEqk71RWUN1NxByd21tIzp6PmJ54Cqrh5MsjHtI=";
   };
 
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];
@@ -26,10 +26,11 @@ stdenv.mkDerivation rec {
       "armv6l-linux"
       "armv7l-linux"
       "aarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = with lib.maintainers; [raskin];
     license = lib.licenses.mit;
     description = "Reparent a running program to a new terminal";
-    homepage = https://github.com/nelhage/reptyr;
+    homepage = "https://github.com/nelhage/reptyr";
   };
 }

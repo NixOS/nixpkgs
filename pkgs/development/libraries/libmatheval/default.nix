@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, guile, autoconf, flex, fetchpatch }:
+{ lib, stdenv, fetchurl, pkg-config, guile, autoconf, flex, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
   pname = "libmatheval";
 
-  nativeBuildInputs = [ pkgconfig autoconf flex ];
+  nativeBuildInputs = [ pkg-config autoconf flex ];
   buildInputs = [ guile ];
 
   src = fetchurl {
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
       mathematical functions. In addition to parsing and evaluation, libmatheval can also compute
       symbolic derivatives and output expressions to strings.
     '';
-    homepage = https://www.gnu.org/software/libmatheval/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.gnu.org/software/libmatheval/";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }
 

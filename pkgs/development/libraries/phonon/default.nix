@@ -1,51 +1,64 @@
-{ stdenv, lib, fetchurl, cmake, libGLU_combined, pkgconfig, libpulseaudio
-, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qttools ? null
-, withQt5 ? false
-, debug ? false }:
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, pkg-config
+, libpulseaudio
+, extra-cmake-modules
+, qtbase
+, qttools
+, debug ? false
+}:
 
 with lib;
 
 let
-  v = "4.10.3";
-
-  soname = if withQt5 then "phonon4qt5" else "phonon";
+  soname = "phonon4qt5";
   buildsystemdir = "share/cmake/${soname}";
 in
 
-assert withQt5 -> qtbase != null;
-assert withQt5 -> qttools != null;
-
-stdenv.mkDerivation {
-  name = "phonon-${if withQt5 then "qt5" else "qt4"}-${v}";
+stdenv.mkDerivation rec {
+  pname = "phonon";
+  version = "4.11.1";
 
   meta = {
-    homepage = https://phonon.kde.org/;
+    homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
-    sha256 = "15f2vndpqfcivifzl1s07r0wkavpfrjln1p46cwfk85gd5b192rf";
+    url = "mirror://kde/stable/phonon/${version}/phonon-${version}.tar.xz";
+    sha256 = "0bfy8iqmjhlg3ma3iqd3kxjc2zkzpjgashbpf5x17y0dc2i1whxl";
   };
 
-  buildInputs =
-    [ libGLU_combined libpulseaudio ]
-    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ]);
+  buildInputs = [
+    libGLU
+    libGL
+    libpulseaudio
+    qtbase
+    qttools
+  ];
 
-  nativeBuildInputs =
-    [ cmake pkgconfig ]
-    ++ optional withQt5 extra-cmake-modules;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    extra-cmake-modules
+  ];
 
   outputs = [ "out" "dev" ];
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
-  cmakeFlags =
-    [ "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}" ]
-    ++ optional withQt5 "-DPHONON_BUILD_PHONON4QT5=ON";
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
+  ];
+
+  dontWrapQtApps = true;
 
   preConfigure = ''
     cmakeFlags+=" -DPHONON_QT_MKSPECS_INSTALL_DIR=''${!outputDev}/mkspecs"
@@ -63,10 +76,8 @@ stdenv.mkDerivation {
     sed -i cmake/FindPhononInternal.cmake \
         -e "/set(INCLUDE_INSTALL_DIR/ c set(INCLUDE_INSTALL_DIR \"''${!outputDev}/include\")"
 
-    ${optionalString withQt5 ''
     sed -i cmake/FindPhononInternal.cmake \
         -e "/set(PLUGIN_INSTALL_DIR/ c set(PLUGIN_INSTALL_DIR \"$qtPluginPrefix/..\")"
-    ''}
 
     sed -i CMakeLists.txt \
         -e "/set(BUILDSYSTEM_INSTALL_DIR/ c set(BUILDSYSTEM_INSTALL_DIR \"''${!outputDev}/${buildsystemdir}\")"

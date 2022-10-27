@@ -1,40 +1,50 @@
-{ stdenv, fetchurl, mkfontdir, mkfontscale }:
+{ lib, stdenv, fetchurl, libfaketime
+, xorg
+}:
 
-stdenv.mkDerivation {
-  name = "envypn-font-1.7.1";
+stdenv.mkDerivation rec {
+  pname = "envypn-font";
+  version = "1.7.1";
 
   src = fetchurl {
-    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-1.7.1.tar.gz";
+    url = "https://ywstd.fr/files/p/envypn-font/envypn-font-${version}.tar.gz";
     sha256 = "bda67b6bc6d5d871a4d46565d4126729dfb8a0de9611dae6c68132a7b7db1270";
   };
 
-  nativeBuildInputs = [ mkfontdir mkfontscale ];
+  nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
 
   unpackPhase = ''
     tar -xzf $src --strip-components=1
   '';
 
-  installPhase = ''
-    # install the pcf fonts (for xorg applications)
-    fontDir="$out/share/fonts/envypn"
-    mkdir -p "$fontDir"
-    mv *.pcf.gz "$fontDir"
+  buildPhase = ''
+    runHook preBuild
 
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+    # convert pcf fonts to otb
+    for i in *e.pcf.gz; do
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$(basename "$i" .pcf.gz)".otb "$i"
+    done
+
+    runHook postBuild
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "04sjxfrlvjc2f0679cy4w366mpzbn3fp6gnrjb8vy12vjd1ffnc1";
+  installPhase = ''
+    runHook preInstall
 
-  meta = with stdenv.lib; {
+    install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
+    mkfontdir "$out/share/fonts/misc"
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
     license = licenses.miros;
-    platforms = platforms.linux;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ erdnaxe ];
   };
 }

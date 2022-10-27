@@ -1,78 +1,48 @@
-{ fetchurl, stdenv, python2
-
+{ fetchurl, lib, stdenv, python3
+, fetchFromGitHub, autoreconfHook
+, installShellFiles
 , enableStandardFeatures ? false
-, sourceHighlight ? null
-, highlight ? null
-, pygments ? null
-, graphviz ? null
-, texlive ? null
-, dblatexFull ? null
-, libxslt ? null
-, w3m ? null
-, lynx ? null
-, imagemagick ? null
-, lilypond ? null
-, libxml2 ? null
-, docbook_xml_dtd_45 ? null
-, docbook_xsl_ns ? null
-, docbook_xsl ? null
-, fop ? null
-# TODO: Package this:
-#, epubcheck ? null
-, gnused ? null
-, coreutils ? null
+, sourceHighlight
+, highlight
+, pygments
+, graphviz
+, texlive
+, dblatexFull
+, libxslt
+, w3m
+, lynx
+, imagemagick
+, lilypond
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+, docbook_xsl
+, fop
+, epubcheck
+, gnused
+, coreutils
 
 # if true, enable all the below filters and backends
 , enableExtraPlugins ? false
 
 # unzip is needed to extract filter and backend plugins
-, unzip ? null
+, unzip
 # filters
-, enableDitaaFilter ? false, jre ? null
-, enableMscgenFilter ? false, mscgen ? null
-, enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
-, enableQrcodeFilter ? false, qrencode ? null
-, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
-, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
+, enableDitaaFilter ? false, jre
+, enableMscgenFilter ? false, mscgen
+, enableDiagFilter ? false, blockdiag, seqdiag, actdiag, nwdiag
+, enableQrcodeFilter ? false, qrencode
+, enableMatplotlibFilter ? false, matplotlib, numpy
+, enableAafigureFilter ? false, aafigure, recursivePthLoader
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
 
 # java is problematic on some platforms, where it is unfree
 , enableJava ? true
+
+, buildPackages
 }:
-
-assert enableStandardFeatures ->
-  sourceHighlight != null &&
-  highlight != null &&
-  pygments != null &&
-  graphviz != null &&
-  texlive != null &&
-  dblatexFull != null &&
-  libxslt != null &&
-  w3m != null &&
-  lynx != null &&
-  imagemagick != null &&
-  lilypond != null &&
-  libxml2 != null &&
-  docbook_xml_dtd_45 != null &&
-  docbook_xsl_ns != null &&
-  docbook_xsl != null &&
-  (fop != null || !enableJava) &&
-# TODO: Package this:
-#  epubcheck != null &&
-  gnused != null &&
-  coreutils != null;
-
-# filters
-assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
-assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre != null;
-assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
-assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
-assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
-assert enableExtraPlugins || enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
-# backends
-assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip != null;
 
 let
 
@@ -136,25 +106,33 @@ let
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odt-backend-0.1.zip";
     sha256 = "1zaa97h9sx6ncxcdkl1x3ggydi7f8kjgvrnpjnkjiizi45k350kw";
   };
+
   odpBackendSrc = fetchurl {
     url = "https://github.com/downloads/dagwieers/asciidoc-odf/odp-backend-0.1.zip";
     sha256 = "08ya4bskygzqkfqwjllpg31qc5k08xp2k78z9b2480g8y57bfy10";
   };
 
-in
+in python3.pkgs.buildPythonApplication rec {
+  pname = "asciidoc"
+    + lib.optionalString enableStandardFeatures "-full"
+    + lib.optionalString enableExtraPlugins "-with-plugins";
+  version = "10.2.0";
 
-stdenv.mkDerivation rec {
-  name = "asciidoc-8.6.9";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/asciidoc/${name}.tar.gz";
-    sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
+  src = fetchFromGitHub {
+    owner = "asciidoc-py";
+    repo = "asciidoc-py";
+    rev = version;
+    hash = "sha256-TqC0x9xB6e2d6Wc9bgnlqgZVOmYHmUUKfE/CKAiEtag=";
   };
 
-  buildInputs = [ python2 unzip ];
+  nativeBuildInputs = [
+    autoreconfHook
+    installShellFiles
+    unzip
+  ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with stdenv.lib; ''
+  postPatch = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''
@@ -212,34 +190,35 @@ stdenv.mkDerivation rec {
     # the odp backend already has that fix. Copy it here until fixed upstream.
     sed -i "s|'/etc/asciidoc/backends/odt/asciidoc.ott'|os.path.dirname(__file__),'asciidoc.ott'|" \
         "$out/etc/asciidoc/backends/odt/a2x-backend.py"
-  '' + optionalString enableStandardFeatures ''
+  '' + (if enableStandardFeatures then ''
     sed -e "s|dot|${graphviz}/bin/dot|g" \
         -e "s|neato|${graphviz}/bin/neato|g" \
         -e "s|twopi|${graphviz}/bin/twopi|g" \
         -e "s|circo|${graphviz}/bin/circo|g" \
         -e "s|fdp|${graphviz}/bin/fdp|g" \
-        -i "filters/graphviz/graphviz2png.py"
+        -i "asciidoc/resources/filters/graphviz/graphviz2png.py"
 
     sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
         -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
-        -i "filters/latex/latex2png.py"
+        -e "s|cmd = 'dvisvgm'|cmd = '${texlive}/bin/dvisvgm'|g" \
+        -i "asciidoc/resources/filters/latex/latex2img.py"
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
         -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
         -e "s|run('convert|run('${imagemagick.out}/bin/convert|g" \
-        -i "filters/music/music2png.py"
+        -i "asciidoc/resources/filters/music/music2png.py"
 
     sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \
         -e 's|filter="highlight|filter="${highlight}/bin/highlight|' \
         -e 's|filter="pygmentize|filter="${pygments}/bin/pygmentize|' \
-        -i "filters/source/source-highlight-filter.conf"
+        -i "asciidoc/resources/filters/source/source-highlight-filter.conf"
 
     # ENV is custom environment passed to programs that a2x invokes. Here we
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
     # TODO: Is this still necessary when using texlive?
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${lib.makeBinPath [ texlive coreutils gnused ]}', **(dict(filter(lambda v: v[0] == 'SOURCE_DATE_EPOCH', os.environ.items()))))|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
@@ -247,21 +226,47 @@ stdenv.mkDerivation rec {
         -e "s|^W3M =.*|W3M = '${w3m}/bin/w3m'|" \
         -e "s|^LYNX =.*|LYNX = '${lynx}/bin/lynx'|" \
         -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
-        -e "s|^EPUBCHECK =.*|EPUBCHECK = 'nixpkgs_is_missing_epubcheck'|" \
-        -i a2x.py
-  '' + ''
-    for n in $(find "$out" . -name \*.py); do
-      sed -i -e "s,^#![[:space:]]*.*/bin/env python,#!${python2}/bin/python,g" "$n"
-      chmod +x "$n"
+        -e "s|^EPUBCHECK =.*|EPUBCHECK = '${epubcheck}/bin/epubcheck'|" \
+        -i asciidoc/a2x.py
+  '' else ''
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', **(dict(filter(lambda v: v[0] == 'SOURCE_DATE_EPOCH', os.environ.items()))))|" \
+        -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
+        -e "s|^XMLLINT =.*|XMLLINT = '${libxml2.bin}/bin/xmllint'|" \
+        -i asciidoc/a2x.py
+  '') + ''
+    # Fix tests
+    for f in $(grep -R --files-with-matches "2002-11-25") ; do
+      substituteInPlace $f --replace "2002-11-25" "1980-01-02"
+      substituteInPlace $f --replace "00:37:42" "00:00:00"
     done
-
-    sed -i -e "s,/etc/vim,,g" Makefile.in
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # We want to use asciidoc from the build platform to build the documentation.
+    substituteInPlace Makefile.in \
+      --replace "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"
   '';
 
-  preInstall = "mkdir -p $out/etc/vim";
-  makeFlags = if stdenv.isCygwin then "DESTDIR=/." else null;
+  postBuild = ''
+    make manpages
+  '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installManPage doc/asciidoc.1 doc/a2x.1 doc/testasciidoc.1
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytest
+    pytest-mock
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    make test
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,
@@ -273,9 +278,13 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
-    homepage = http://www.methods.co.nz/asciidoc/;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ] ++ lib.optional _enableDitaaFilter binaryBytecode;
+    homepage = "https://asciidoc-py.github.io/";
+    changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${version}/CHANGELOG.adoc";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor dotlambda ];
   };
 }

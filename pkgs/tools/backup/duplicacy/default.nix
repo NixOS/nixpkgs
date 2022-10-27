@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "duplicacy";
-  version = "2.1.2";
+  version = "2.7.2";
 
-  goPackagePath = "github.com/gilbertchen/duplicacy/";
+  goPackagePath = "github.com/gilbertchen/duplicacy";
 
   src = fetchFromGitHub {
     owner = "gilbertchen";
     repo = "duplicacy";
     rev = "v${version}";
-    sha256 = "0v3rk4da4b6dhqq8zsr4z27wd8p7crxapkn265kwpsaa99xszzbv";
+    sha256 = "0j37sqicj7rl982czqsl3ipxw7k8k4smcr63s0yklxwz7ch3353c";
   };
   goDeps = ./deps.nix;
   buildPhase = ''
@@ -19,12 +19,12 @@ buildGoPackage rec {
   '';
 
   installPhase = ''
-    install -D duplicacy_main $bin/bin/duplicacy
+    install -D duplicacy_main $out/bin/duplicacy
   '';
 
   meta = with lib; {
-    homepage = https://duplicacy.com;
-    description = "A new generation cloud backup tool ";
+    homepage = "https://duplicacy.com";
+    description = "A new generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
     maintainers = with maintainers; [ ffinkdevs ];

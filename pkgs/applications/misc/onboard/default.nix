@@ -1,13 +1,12 @@
 { fetchurl
-, stdenv
+, lib
 , substituteAll
 , aspellWithDicts
 , at-spi2-core ? null
 , atspiSupport ? true
 , bash
 , glib
-, glibcLocales
-, gnome3
+, dconf
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
@@ -16,11 +15,12 @@
 , hunspellWithDicts
 , intltool
 , isocodes
+, libappindicator-gtk3
 , libcanberra-gtk3
 , mousetweaks
 , udev
 , libxkbcommon
-, pkgconfig
+, pkg-config
 , procps
 , python3
 , wrapGAppsHook
@@ -59,27 +59,28 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     intltool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
     bash
     glib
-    gnome3.dconf
+    dconf
     gsettings-desktop-schemas
     gtk3
     hunspell
     isocodes
+    libappindicator-gtk3
     libcanberra-gtk3
     libxkbcommon
     mousetweaks
     udev
     xorg.libXtst
     xorg.libxkbfile
-  ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
+  ] ++ lib.optional atspiSupport at-spi2-core;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     dbus-python
     distutils_extra
     pyatspi
@@ -89,7 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.dconf
+    dconf
   ];
 
   checkInputs = [
@@ -130,8 +131,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "/etc" "$out/etc"
 
     substituteInPlace  ./Onboard/LanguageSupport.py \
-      --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes" \
-      --replace "/usr/bin/yelp" "${yelp}/bin/yelp"
+      --replace "/usr/share/xml/iso-codes" "${isocodes}/share/xml/iso-codes"
 
     substituteInPlace  ./Onboard/Indicator.py \
       --replace   "/usr/bin/yelp" "${yelp}/bin/yelp"
@@ -172,8 +172,8 @@ python3.pkgs.buildPythonApplication rec {
     rm -rf  $out/share/icons/ubuntu-mono-*
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/onboard;
+  meta = with lib; {
+    homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = with maintainers; [ johnramsden ];
     license = licenses.gpl3;

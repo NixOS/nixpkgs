@@ -1,47 +1,55 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
+, pythonOlder
 , cython
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , persim
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.3.2";
+  version = "0.6.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff9f50fba911f0e9212077b78014f83e30c97526194dd6bd1df3d81896e6cb58";
+    sha256 = "335112a0f94532ccbe686db7826ee8d0714b32f65891abf92c0a02f3cb0fc5fd";
   };
 
-  checkInputs = [
-    pytest
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/scikit-tda/ripser.py/commit/4baa248994cee9a65d710fac91809bad8ed4e5f1.patch";
+      sha256 = "sha256-J/nxMOGOUiBueojJrUlAaXwktHDploYG/XL8/siF2kY=";
+    })
   ];
 
   propagatedBuildInputs = [
     cython
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     persim
   ];
 
-  checkPhase = ''
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-
-    pytest
   '';
 
   meta = with lib; {
     description = "A Lean Persistent Homology Library for Python";
-    homepage = https://ripser.scikit-tda.org;
+    homepage = "https://ripser.scikit-tda.org";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,41 +1,51 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv
+, cmake
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
+}:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
-  version = "1.3.0";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
-    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
+    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
+    sha256 = "sha256-/Wp/dF3j1pz1YD7cnLM9KJDwGY5BUlXQmHoM8Q2CTG8=";
   };
 
-  postPatch = ''
-    patchShebangs test-driver
-    patchShebangs man/handle_links
-  '';
+  outputs = [ "out" "dev" "man" ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
+
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
 
   preCheck = ''
-    # regress/runtests is a generated file
+    # regress/runtest is a generated file
     patchShebangs regress
   '';
 
-  # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
-  # had this same problem.  This links it somewhere that mysqlworkbench looks.
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/libzip $dev/lib/libzip
-    ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+  meta = with lib; {
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
 }

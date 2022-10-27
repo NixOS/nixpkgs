@@ -1,30 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, cython, nose, numpy }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, cython, pytest, importlib-resources, numpy }:
 
 buildPythonPackage rec {
   pname = "pyjet";
-  version = "1.4.0";
+  version = "1.9.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "89ce11cd4541fb573d68fd60a219e5e1bdeb94cfcfffc917b472fde2aa9a5a31";
+  # tests not included in pypi tarball
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-0g0fCf0FIwde5Vsc/BJxjgMcs5llpD8JqOgFbMjOooc=";
   };
 
-  # fix for python37
-  # https://github.com/scikit-hep/pyjet/issues/8
   nativeBuildInputs = [ cython ];
-  preBuild = ''
-    for f in pyjet/src/*.{pyx,pxd}; do
-      cython --cplus "$f"
-    done
-  '';
+  propagatedBuildInputs = [
+    numpy
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
-  propagatedBuildInputs = [ numpy ];
-  checkInputs = [ nose ];
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    mv pyjet _pyjet
+    pytest tests/
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/pyjet";
     description = "The interface between FastJet and NumPy";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl ];
   };
 }

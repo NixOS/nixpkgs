@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, m4, cxx ? true }:
+{ lib, stdenv, fetchurl, m4, cxx ? true }:
 
 let self = stdenv.mkDerivation rec {
-  name = "gmp-4.3.2";
+  pname = "gmp";
+  version = "4.3.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gmp/${name}.tar.bz2";
+    url = "mirror://gnu/gmp/gmp-${version}.tar.bz2";
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
 
@@ -28,8 +29,8 @@ let self = stdenv.mkDerivation rec {
     else ''echo "Darwin host is `./config.guess`."'';
 
   configureFlags = [
-    (stdenv.lib.enableFeature cxx "cxx")
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    (lib.enableFeature cxx "cxx")
+  ] ++ lib.optionals stdenv.isDarwin [
     "ac_cv_build=x86_64-apple-darwin13.4.0"
     "ac_cv_host=x86_64-apple-darwin13.4.0"
   ];
@@ -64,11 +65,11 @@ let self = stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    homepage = https://gmplib.org/;
-    license = stdenv.lib.licenses.lgpl3Plus;
+    homepage = "https://gmplib.org/";
+    license = lib.licenses.lgpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
   };
 };

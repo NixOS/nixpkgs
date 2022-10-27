@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "trees";
+  pname = "trees";
   version = "2018-03-19";
 
   idrisDeps = [ contrib bi ];
@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Trees in Idris";
-    homepage = https://github.com/clayrat/idris-trees;
+    homepage = "https://github.com/clayrat/idris-trees";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

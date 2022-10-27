@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "catdoc";
@@ -16,12 +16,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Remove INSTALL file to avoid `make` misinterpreting it as an up-to-date
+  # target on case-insensitive filesystems e.g. Darwin
+  preInstall = ''
+    rm -v INSTALL
+  '';
+
   configureFlags = [ "--disable-wordview" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MS-Word/Excel/PowerPoint to text converter";
     platforms = platforms.all;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ndowens ];
+    maintainers = with maintainers; [];
   };
 }

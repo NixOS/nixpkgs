@@ -1,30 +1,30 @@
 { stdenv
+, lib
 , fetchurl
-, substituteAll
-, intltool
+, asciidoc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, gettext
 , itstool
 , libxslt
 , gexiv2
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , bzip2
 , dbus
-, evolution-data-server
 , exempi
-, flac
 , giflib
 , glib
-, gnome3
+, gnome
 , gst_all_1
 , icu
 , json-glib
 , libcue
 , libexif
-, libgrss
 , libgsf
 , libgxps
 , libiptcdata
@@ -32,90 +32,92 @@
 , libosinfo
 , libpng
 , libseccomp
-, libsoup
 , libtiff
 , libuuid
-, libvorbis
 , libxml2
+, networkmanager
 , poppler
+, systemd
 , taglib
 , upower
 , totem-pl-parser
+, e2fsprogs
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "2.3.1";
+  version = "3.4.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1q4hlpl3nkr0y13rzkwryyajnpy5s661z8n82dw1rskrg9mf07bv";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "L84OyF+3YXyLKIfCJ5d0DV3shOwDbbdNbCCLurXFjCQ=";
   };
 
   nativeBuildInputs = [
-    intltool
+    asciidoc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gettext
     itstool
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   # TODO: add libenca, libosinfo
   buildInputs = [
     bzip2
     dbus
-    evolution-data-server
     exempi
-    flac
     giflib
     glib
     gexiv2
     totem-pl-parser
     tracker
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     icu
     json-glib
     libcue
     libexif
-    libgrss
     libgsf
     libgxps
     libiptcdata
     libjpeg
     libosinfo
     libpng
-    libseccomp
-    libsoup
     libtiff
     libuuid
-    libvorbis
     libxml2
     poppler
     taglib
+  ] ++ lib.optionals stdenv.isLinux [
+    libseccomp
+    networkmanager
+    systemd
     upower
+  ] ++ lib.optionals stdenv.isDarwin [
+    e2fsprogs
   ];
 
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
-  ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tracker;
-    })
-    # https://bugzilla.gnome.org/show_bug.cgi?id=795576
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=371427;
-      sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
-    })
+    # libgrss is unmaintained and has no new releases since 2015, and an open
+    # security issue since then. Despite a patch now being availab, we're opting
+    # to be safe due to the general state of the project
+    "-Dminer_rss=false"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dnetwork_manager=disabled"
+    "-Dsystemd_user_services=false"
   ];
 
   postInstall = ''
@@ -123,18 +125,16 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
-      versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tracker;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

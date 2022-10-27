@@ -1,23 +1,63 @@
-{ stdenv, fetchurl, lzma }:
+{ lib, stdenv, fetchFromGitHub, fetchzip
+, meson, ninja, pkg-config
+, python3
+, icu
+, libuuid
+, xapian
+, xz
+, zstd
+, gtest
+}:
 
 stdenv.mkDerivation rec {
   pname = "zimlib";
-  version = "1.4";
+  version = "7.2.2";
 
-  src = fetchurl {
-    url = "http://www.openzim.org/download/${pname}-${version}.tar.gz";
-    sha256 = "14ra3iq42x53k1nqxb5lsg4gadlkpkgv6cbjjl6305ajmbrghcdq";
+  src = fetchFromGitHub {
+    owner = "openzim";
+    repo = "libzim";
+    rev = version;
+    sha256 = "sha256-AEhhjinnnMA4NbYL7NVHYeRZX/zfNiidbY/VeFjZuQs=";
   };
 
-  buildInputs = [ lzma ];
+  testData = fetchzip rec {
+    passthru.version = "0.4";
+    url = "https://github.com/openzim/zim-testing-suite/releases/download/v${passthru.version}/zim-testing-suite-${passthru.version}.tar.gz";
+    sha256 = "sha256-2eJqmvs/GrvOD/pq8dTubaiO9ZpW2WqTNQByv354Z0w=";
+  };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    python3
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    icu
+    libuuid
+    xapian
+    xz
+    zstd
+  ];
+
+  postPatch = ''
+    patchShebangs scripts
+  '';
+
+  mesonFlags = [  "-Dtest_data_dir=${testData}" ];
+
+  checkInputs = [
+    gtest
+  ];
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "Library for reading and writing ZIM files";
-    homepage =  http://www.openzim.org/wiki/Zimlib;
+    homepage =  "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ robbinch ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.linux;
   };
 }

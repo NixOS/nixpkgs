@@ -1,37 +1,43 @@
-{ stdenv, fetchFromGitHub, python, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, ninja, cmake, python3, llvmPackages, spirv-llvm-translator }:
 
 let
   llvm = llvmPackages.llvm;
-  clang = llvmPackages.clang;
+  clang-unwrapped = llvmPackages.clang-unwrapped;
 in
 
-stdenv.mkDerivation {
-  name = "libclc-2017-11-29";
+stdenv.mkDerivation rec {
+  pname = "libclc";
+  version = "12.0.1";
 
   src = fetchFromGitHub {
-    owner = "llvm-mirror";
-    repo = "libclc";
-    rev = "d6384415ab854c68777dd77451aa2bc0d959da99";
-    sha256 = "10fqrlnqlknh58x7pfsbg9r07fblfg2mgq2m4fr1jbb836ncn3wh";
+    owner = "llvm";
+    repo = "llvm-project";
+    rev = "llvmorg-${version}";
+    sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
   };
+  sourceRoot = "source/libclc";
 
-  nativeBuildInputs = [ python ];
-  buildInputs = [ llvm clang ];
-
+  # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
-    sed -i 's,llvm_clang =.*,llvm_clang = "${clang}/bin/clang",' configure.py
-    sed -i 's,cxx_compiler =.*,cxx_compiler = "${clang}/bin/clang++",' configure.py
+    substituteInPlace CMakeLists.txt \
+      --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
+                'find_program( LLVM_CLANG clang PATHS "${clang-unwrapped}/bin" NO_DEFAULT_PATH )' \
+      --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_BINDIR} NO_DEFAULT_PATH )' \
+                'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
   '';
 
-  configurePhase = ''
-    ${python.interpreter} ./configure.py --prefix=$out
-  '';
+  nativeBuildInputs = [ cmake ninja python3 spirv-llvm-translator ];
+  buildInputs = [ llvm clang-unwrapped ];
+  strictDeps = true;
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://libclc.llvm.org/;
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;
-    broken = true;
   };
 }

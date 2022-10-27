@@ -2,22 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , markdown
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "python-markdown-math";
-  version = "0.6";
+  version = "0.8";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c68d8cb9695cb7b435484403dc18941d1bad0ff148e4166d9417046a0d5d3022";
+    sha256 = "8564212af679fc18d53f38681f16080fcd3d186073f23825c7ce86fadd3e3635";
   };
 
   checkInputs = [ markdown ];
 
   meta = {
     description = "Math extension for Python-Markdown";
-    homepage = https://github.com/mitya57/python-markdown-math;
+    homepage = "https://github.com/mitya57/python-markdown-math";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ klntsky ];
   };

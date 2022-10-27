@@ -1,18 +1,29 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "1.3.0";
   pname = "elementpath";
+  version = "2.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "v${version}";
-    sha256 = "0ahqqqpcf3fd6xcdhiwwscincyj6h5xyjaacnqxwph1y1b8mnzyw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+NCsWPt5yMXe+GR9nEBU7byYhKrH/6xghQioj9AOGm4=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
+
+  pythonImportsCheck = [
+    "elementpath"
+  ];
 
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";

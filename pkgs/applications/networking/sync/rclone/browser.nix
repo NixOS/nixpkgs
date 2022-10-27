@@ -1,21 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, wrapQtAppsHook, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "rclone-browser";
-  version = "1.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
-    owner = "mmozeiko";
+    owner = "kapitainsky";
     repo = "RcloneBrowser";
     rev = version;
-    sha256 = "1ldradd5c606mfkh46y4mhcvf9kbjhamw0gahksp9w43h5dh3ir7";
+    sha256 = "14ckkdypkfyiqpnz0y2b73wh1py554iyc3gnymj4smy0kg70ai33";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    # patch for Qt 5.15, https://github.com/kapitainsky/RcloneBrowser/pull/126
+    (fetchpatch {
+      url = "https://github.com/kapitainsky/RcloneBrowser/commit/ce9cf52e9c584a2cc85a5fa814b0fd7fa9cf0152.patch";
+      sha256 = "0nm42flmaq7mva9j4dpp18i1xcv8gr08zfyb9apz1zwn79h1w0c8";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
   buildInputs = [ qtbase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Graphical Frontend to Rclone written in Qt";
     license = licenses.unlicense;

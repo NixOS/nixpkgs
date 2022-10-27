@@ -1,12 +1,14 @@
-{ stdenv, fetchurl } :
+{ lib, stdenv, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
   version = "2.5.2";
   pname = "afio";
 
-  src = fetchurl {
-    url = "http://members.chello.nl/~k.holtman/${pname}-${version}.tgz";
-    sha256 = "1fa29wlqv76hzf8bxp1qpza1r23pm2f3m7rcf0jpwm6z150s2k66";
+  src = fetchFromGitHub {
+    owner = "kholtman";
+    repo = "afio";
+    rev = "v${version}";
+    sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
   };
 
   /*
@@ -15,17 +17,17 @@ stdenv.mkDerivation rec {
    */
   patches = [ ./0001-makefile-fix-installation.patch ];
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
-    homepage = http://members.chello.nl/~k.holtman/afio.html;
+    homepage = "https://github.com/kholtman/afio";
     description = "Fault tolerant cpio archiver targeting backups";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     /*
      * Licensing is complicated due to the age of the code base, but
      * generally free. See the file ``afio_license_issues_v5.txt`` for
      * a comprehensive discussion.
      */
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

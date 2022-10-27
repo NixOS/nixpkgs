@@ -1,25 +1,33 @@
-{ stdenv, fetchFromGitHub, cmake, libGLU_combined, freeglut
-, Cocoa,  OpenGL
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, freeglut
+, Cocoa
+, OpenGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "bullet";
-  version = "2.87";
+  version = "3.24";
 
   src = fetchFromGitHub {
     owner = "bulletphysics";
     repo = "bullet3";
     rev = version;
-    sha256 = "1msp7w3563vb43w70myjmqsdb97kna54dcfa7yvi9l3bvamb92w3";
+    sha256 = "sha256-1zQZI1MdW0Ipg5XJeiFZQi/6cI0t6Ckralc5DE3auow=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libGLU_combined freeglut ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
-  patches = [ ./gwen-narrowing.patch ];
-
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    substituteInPlace examples/ThirdPartyLibs/Gwen/CMakeLists.txt \
+      --replace "-DGLEW_STATIC" "-DGLEW_STATIC -Wno-narrowing"
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
@@ -28,7 +36,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_CPU_DEMOS=OFF"
     "-DINSTALL_EXTRA_LIBS=ON"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_FOUND=true"
     "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
@@ -36,20 +44,19 @@ stdenv.mkDerivation rec {
     "-DCOCOA_LIBRARY=${Cocoa}/Library/Frameworks/Cocoa.framework"
     "-DBUILD_BULLET2_DEMOS=OFF"
     "-DBUILD_UNIT_TESTS=OFF"
+    "-DBUILD_BULLET_ROBOTICS_GUI_EXTRA=OFF"
   ];
 
-  enableParallelBuilding = true;
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
-    homepage = http://bulletphysics.org;
+    homepage = "http://bulletphysics.org";
     license = licenses.zlib;
     maintainers = with maintainers; [ aforemny ];
     platforms = platforms.unix;

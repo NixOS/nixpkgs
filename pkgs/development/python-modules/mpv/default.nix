@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
 , mpv
 }:
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "0.3.9";
+  version = "1.0.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
     rev = "v${version}";
-    sha256 = "112kr9wppcyy3shsb7v7kq0s1pdw6vw3v2fvqicm7qb2f49y2p4q";
+    sha256 = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
   };
 
   buildInputs = [ mpv ];
@@ -25,9 +25,9 @@ buildPythonPackage rec {
   # tests impure, will error if it can't load libmpv.so
   checkPhase = "${python.interpreter} -c 'import mpv'";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

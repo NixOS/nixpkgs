@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -9,29 +9,31 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.4.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1khh02z6wryrnrxlx2wrxzhaqsg5hlgypy0643rvi4zcqanvdpym";
+    sha256 = "sha256-fOrEZoAfnZfss04Q3e2MJM9eCSfqfoNNocydLtP8Nm8=";
   };
 
   nativeBuildInputs = [
     cython
   ];
 
+  propagatedBuildInputs = [
+    numpy
+  ];
+
 
   checkInputs = [
-    cython
     hypothesis
-    numpy
     pytest
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BLAS-like linear algebra library";
-    homepage = https://github.com/explosion/cython-blis;
+    homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ danieldk ];
+    platforms = platforms.x86_64;
   };
 }

@@ -1,21 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, six
+}:
 
 buildPythonPackage rec {
   pname = "langdetect";
-  version = "1.0.7";
+  version = "1.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "0c5zm6c7xzsigbb9c7v4r33fcpz911zscfwvh3dq1qxdy3ap18ci";
+    sha256 = "1805svvb7xjm4sf1j7b6nc3409x37pd1xmabfwwjf1ldkzwgxhfb";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "langdetect" ];
 
   meta = with lib; {
     description = "Python port of Google's language-detection library";
-    homepage = https://github.com/Mimino666/langdetect;
+    homepage = "https://github.com/Mimino666/langdetect";
     license = licenses.asl20;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

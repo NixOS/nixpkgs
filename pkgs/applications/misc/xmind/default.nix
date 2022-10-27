@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ stdenv, lib, fetchzip, fetchurl, gtk3, jre8, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
-  version = "8-update8";
+  version = "8-update9";
 
   src = fetchzip {
-    url = "https://xmind.net/xmind/downloads/${pname}-${version}-linux.zip";
+    url = "https://www.xmind.app/xmind/downloads/${pname}-${version}-linux.zip";
     stripRoot = false;
-    sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";
+    sha256 = "9769c4a9d42d3370ed2c2d1bed5a5d78f1fc3dc5bd604b064b56101fc7f90bb4";
   };
 
   srcIcon = fetchurl {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/xmind.png?h=xmind";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/xmind.png?h=xmind&id=41936c866b244b34d7dfbee373cbb835eed7860b";
     sha256 = "0jxq2fiq69q9ly0m6hx2qfybqad22sl42ciw636071khpqgc885f";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  libPath = lib.makeLibraryPath [ gtk2 libXtst ];
+  libPath = lib.makeLibraryPath [ gtk3 libXtst ];
 
   desktopItem = makeDesktopItem {
     name = "XMind";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     icon = "xmind";
     desktopName = "XMind";
     comment = meta.description;
-    categories = "Office;";
-    mimeType = "application/xmind;x-scheme-handler/xmind";
+    categories = [ "Office" ];
+    mimeTypes = [ "application/xmind" "x-scheme-handler/xmind" ];
   };
 
   installPhase = let
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/XMind
 
-    ln -s ${jre} $out/libexec/jre
+    ln -s ${jre8} $out/libexec/jre
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mind-mapping software";
     longDescription = ''
       XMind is a mind mapping and brainstorming software. In addition
@@ -84,9 +84,13 @@ stdenv.mkDerivation rec {
       GTD. Meanwhile, XMind can read FreeMind and MindManager files,
       and save to Evernote.
     '';
-    homepage = https://www.xmind.net/;
+    homepage = "https://www.xmind.net/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ michalrus ma27 ];
+    maintainers = with maintainers; [ michalrus ];
   };
 }

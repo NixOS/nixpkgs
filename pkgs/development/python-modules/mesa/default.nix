@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , cookiecutter, networkx , pandas, tornado, tqdm
 , pytest }:
 
 buildPythonPackage rec {
   pname = "mesa";
-  version = "0.8.6";
+  version = "0.8.7";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "projectmesa";
     repo = "mesa";
     rev = "v${version}";
-    sha256 = "0d8c636zhswxd91ldlmdxxlyym2fj3bk1iqmpc1jp3hg7vvc7w03";
+    sha256 = "0i1bpdqjrx4avgrzyqxpwxx86j11yhrq1j4kca854xahvhmwis19";
   };
 
   checkInputs = [ pytest ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cookiecutter networkx pandas tornado tqdm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
     description = "An agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;

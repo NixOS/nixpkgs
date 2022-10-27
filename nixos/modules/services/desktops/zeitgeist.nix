@@ -5,11 +5,16 @@
 with lib;
 
 {
+
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+  };
+
   ###### interface
 
   options = {
     services.zeitgeist = {
-      enable = mkEnableOption "zeitgeist";
+      enable = mkEnableOption (lib.mdDoc "zeitgeist");
     };
   };
 

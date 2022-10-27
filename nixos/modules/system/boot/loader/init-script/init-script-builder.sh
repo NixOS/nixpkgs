@@ -49,11 +49,10 @@ addEntry() {
       echo "#!/bin/sh"
       echo "# $name"
       echo "# created by init-script-builder.sh"
-      echo "export systemConfig=$(readlink -f $path)"
       echo "exec $stage2"
     )"
 
-    [ "$path" != "$defaultConfig" ] || { 
+    [ "$path" != "$defaultConfig" ] || {
       echo "$content" > $tmp
       echo "# older configurations: $targetOther" >> $tmp
       chmod +x $tmp
@@ -69,7 +68,7 @@ addEntry "NixOS - Default" $defaultConfig ""
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
-for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
+for link in $((ls -d $defaultConfig/specialisation/* ) | sort -n); do
     date=$(stat --printf="%y\n" $link | sed 's/\..*//')
     addEntry "NixOS - variation" $link ""
 done

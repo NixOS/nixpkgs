@@ -1,6 +1,6 @@
 # The actual Plex package that we run is a FHS userenv of the "raw" package.
 { stdenv
-, buildFHSUserEnv
+, buildFHSUserEnvBubblewrap
 , writeScript
 , plexRaw
 
@@ -9,9 +9,15 @@
 , dataDir ? "/var/lib/plex"
 }:
 
-buildFHSUserEnv {
+buildFHSUserEnvBubblewrap {
   name = "plexmediaserver";
+
   inherit (plexRaw) meta;
+
+  # Plex does some magic to detect if it is already running.
+  # The separate PID namespace somehow breaks this and Plex is thinking it's already
+  # running and refuses to start.
+  unsharePid = false;
 
   # This script is run when we start our Plex binary
   runScript = writeScript "plex-run-script" ''
@@ -63,13 +69,10 @@ buildFHSUserEnv {
       test -d "$pluginDir" || mkdir -p "$pluginDir"
 
       # First, remove all of the symlinks in the plugins directory.
-      echo "Removing old symlinks"
-      for f in $(ls "$pluginDir/"); do
-        if [[ -L "$pluginDir/$f" ]]; then
-          echo "Removing plugin symlink: $pluginDir/$f"
-          rm "$pluginDir/$f"
-        fi
-      done
+      while IFS= read -r -d $'\0' f; do
+        echo "Removing plugin symlink: $f"
+        rm "$f"
+      done < <(find "$pluginDir" -type l -print0)
 
       echo "Symlinking plugins"
       IFS=':' read -ra pluginsArray <<< "$PLEX_PLUGINS"
@@ -87,6 +90,40 @@ buildFHSUserEnv {
       done
     fi
 
+    if [[ -n "''${PLEX_SCANNERS:-}" ]]; then
+      for scannerType in Common Movies Music Series; do
+        echo "Preparing $scannerType scanners directory"
+
+        scannerDir="$PLEX_DATADIR/Plex Media Server/Scanners/$scannerType"
+        test -d "$scannerDir" || mkdir -p "$scannerDir"
+
+        # First, remove all of the symlinks in the scanners directory.
+        echo "Removing old symlinks"
+        while IFS= read -r -d $'\0' f; do
+          echo "Removing scanner symlink: $f"
+          rm "$f"
+        done < <(find "$scannerDir" -type l -print0)
+
+        echo "Symlinking scanners"
+        IFS=':' read -ra scannersArray <<< "$PLEX_SCANNERS"
+        for path in "''${scannersArray[@]}"; do
+          # The provided source should contain a 'Scanners' directory; symlink
+          # from inside that.
+          subpath="$path/Scanners/$scannerType"
+          while IFS= read -r -d $'\0' file; do
+            dest="$scannerDir/$(basename "$file")"
+
+            if [[ -f "$dest" || -L "$dest" ]]; then
+              echo "Error symlinking scanner from $file to $dest: file or directory already exists"
+            else
+              echo "Symlinking scanner at: $file"
+              ln -s "$file" "$dest"
+            fi
+          done < <(find "$subpath" -type f -print0)
+        done
+      done
+    fi
+
     # Tell Plex to use the data directory as the "Application Support"
     # directory, otherwise it tries to write things into the user's home
     # directory.
@@ -97,6 +134,6 @@ buildFHSUserEnv {
 
     # Actually run Plex, prepending LD_LIBRARY_PATH with the libraries from
     # the Plex package.
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$root exec "$root/Plex Media Server"
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$root exec "$root/Plex Media Server"
   '';
 }

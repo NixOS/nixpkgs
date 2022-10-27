@@ -1,28 +1,31 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
+, six
 }:
 
 buildPythonPackage rec {
   pname = "iniparse";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m60k46vr03x68jckachzsipav0bwhhnqb8715hm1cngs89fxhdb";
+    sha256 = "932e5239d526e7acb504017bb707be67019ac428a6932368e6851691093aa842";
   };
 
   checkPhase = ''
     ${python.interpreter} runtests.py
   '';
 
+  propagatedBuildInputs = [ six ];
+
   # Does not install tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Accessing and Modifying INI files";
-    homepage = http://code.google.com/p/iniparse/;
+    homepage = "https://github.com/candlepin/python-iniparse";
     license = licenses.mit;
     maintainers = with maintainers; [ danbst ];
   };

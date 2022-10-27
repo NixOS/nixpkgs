@@ -1,17 +1,41 @@
-{ stdenv, fetchurl, meson, ninja, glib, json-glib, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, glib
+, json-glib
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, gnome
+}:
+
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-  version = "3.33.3";
+  version = "3.42.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
-  buildInputs = [ glib json-glib ];
-
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03vni35vxhajpgcaz104fzpzgs1yw6lc78d0bz1q1b1yi1b0807q";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "IhmJpXyoKhJGfcQngizXZRsMrQOBQMkxAnvxB0IIJ2s=";
   };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gi-docgen
+  ];
+
+  buildInputs = [
+    glib
+    json-glib
+  ];
 
   mesonFlags = [
     "-Denable_gtk_doc=true"
@@ -21,17 +45,23 @@ stdenv.mkDerivation rec {
   # https://gitlab.gnome.org/GNOME/jsonrpc-glib/issues/2
   doCheck = false;
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to communicate using the JSON-RPC 2.0 specification";
-    homepage = https://gitlab.gnome.org/GNOME/jsonrpc-glib;
+    homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

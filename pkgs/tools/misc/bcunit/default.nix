@@ -1,22 +1,27 @@
-{stdenv, fetchFromGitHub, cmake}:
+{ cmake
+, fetchFromGitLab
+, lib, stdenv
+}:
+
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
-  baseName = "bcunit";
-  version = "3.0.2";
-  buildInputs = [cmake];
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
-    repo = baseName;
-    rev = version;
-    sha256 = "063yl7kxkix76r49qrj0h1qpz2p538d1yw8aih0x4i47g35k00y7";
+  pname = "bcunit";
+  version = "linphone-4.4.1";
+
+  nativeBuildInputs = [ cmake ];
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "c5eebcc7f794e9567d3c72d15d3f28bffe6bfd0f";
+    sha256 = "sha256-8DSfqHerx/V00SJjTSQaG9Rjqx330iG6sGivBDUvQfA=";
   };
 
-  meta = {
-    inherit version;
-    description = ''A fork of CUnit test framework'';
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "Belledonne Communications' fork of CUnit test framework. Part of the Linphone project.";
+    homepage = "https://gitlab.linphone.org/BC/public/bcunit";
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ raskin jluttine ];
+    platforms = platforms.all;
   };
 }
-

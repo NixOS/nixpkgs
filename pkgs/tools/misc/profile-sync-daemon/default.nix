@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, utillinux}:
+{ lib, stdenv, fetchFromGitHub, util-linux, coreutils }:
 
 stdenv.mkDerivation rec {
-  version = "6.35";
   pname = "profile-sync-daemon";
+  version = "6.47";
 
-  src = fetchurl {
-    url = "https://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
-    sha256 = "0hd3cjhf9nv4q5gvc8lbh5c82095lll7mxll1mj5hkzmnijzsf0v";
+  src = fetchFromGitHub {
+    owner = "graysky2";
+    repo = "profile-sync-daemon";
+    rev = "v${version}";
+    hash = "sha256-BAr+EvSjSPBKdSX49tEgXOpMK3NB5JZ+cmfuKkyDbGs=";
   };
 
   installPhase = ''
@@ -17,12 +19,11 @@ stdenv.mkDerivation rec {
     # $HOME detection fails (and is unnecessary)
     sed -i '/^HOME/d' $out/bin/profile-sync-daemon
     substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${utillinux.bin}/bin"
+      --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
+      --replace "sudo " "/run/wrappers/bin/sudo "
   '';
 
-  preferLocalBuild = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Syncs browser profile dirs to RAM";
     longDescription = ''
       Profile-sync-daemon (psd) is a tiny pseudo-daemon designed to manage your
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
       between the two. One of the major design goals of psd is a completely
       transparent user experience.
     '';
-    homepage = https://github.com/graysky2/profile-sync-daemon;
-    downloadPage = https://github.com/graysky2/profile-sync-daemon/releases;
+    homepage = "https://github.com/graysky2/profile-sync-daemon";
+    downloadPage = "https://github.com/graysky2/profile-sync-daemon/releases";
     license = licenses.mit;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

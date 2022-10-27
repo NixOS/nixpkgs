@@ -1,51 +1,44 @@
-{ stdenv, fetchurl, pkgconfig, intltool, perlPackages
-, goffice, gnome3, wrapGAppsHook, gtk3, bison, pythonPackages
-, itstool, autoreconfHook
+{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
+, goffice, gnome, wrapGAppsHook, gtk3, bison, python3Packages
+, itstool
 }:
 
 let
-  inherit (pythonPackages) python pygobject3;
+  inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.45"; # TODO next release: remove gamma patch and autoreconfHook
+  version = "1.12.53";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c8dl1kvnj3g32qy3s92qpqpqfy0in59cx005gjvvzsflahav61h";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "VWjkyNzqu5Ao8TYdEEVSL5Xwpx2qWelzy90tObrdTwI=";
   };
-
-  patches = stdenv.lib.optional stdenv.isDarwin
-    # https://gitlab.gnome.org/GNOME/gnumeric/issues/402
-    (fetchurl {
-      name = "math-gamma.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnumeric/uploads/cf8d162bc719de92e97d01cb0ba5b637/ppp";
-      sha256 = "17wiigs06qc86a1nghwcg3pcnpa28123jblgsxpy3j7drardgnlp";
-    });
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkgconfig intltool bison itstool wrapGAppsHook ]
-    ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    goffice gtk3 gnome3.adwaita-icon-theme
+    goffice gtk3 gnome.adwaita-icon-theme
     python pygobject3
   ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNOME Office Spreadsheet";
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://projects.gnome.org/gnumeric/;
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
+    broken = with stdenv; isDarwin && isAarch64;
     maintainers = [ maintainers.vcunat ];
   };
 }

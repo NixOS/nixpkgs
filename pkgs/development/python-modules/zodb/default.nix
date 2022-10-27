@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , python
@@ -15,43 +15,43 @@
 }:
 
 buildPythonPackage rec {
-    pname = "ZODB";
-    version = "5.5.1";
+  pname = "ZODB";
+  version = "5.7.0";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-+kC7wF7NoewkNc0MbdAqE7dphGBVikYENm9qCmhAHNM=";
+  };
 
-    # remove broken test
-    postPatch = ''
-      rm -vf src/ZODB/tests/testdocumentation.py
-    '';
+  # remove broken test
+  postPatch = ''
+    rm -vf src/ZODB/tests/testdocumentation.py
+  '';
 
-    propagatedBuildInputs = [
-      transaction
-      six
-      zope_interface
-      zodbpickle
-      zconfig
-      persistent
-      zc_lockfile
-      BTrees
-    ];
+  propagatedBuildInputs = [
+    transaction
+    six
+    zope_interface
+    zodbpickle
+    zconfig
+    persistent
+    zc_lockfile
+    BTrees
+  ];
 
-    checkInputs = [
-      manuel
-      zope_testrunner
-    ];
+  checkInputs = [
+    manuel
+    zope_testrunner
+  ];
 
-    checkPhase = ''
-      ${python.interpreter} -m zope.testrunner --test-path=src []
-    '';
+  checkPhase = ''
+    ${python.interpreter} -m zope.testrunner --test-path=src []
+  '';
 
-    meta = with stdenv.lib; {
-      description = "Zope Object Database: object database and persistence";
-      homepage = https://pypi.python.org/pypi/ZODB;
-      license = licenses.zpl21;
-      maintainers = with maintainers; [ goibhniu ];
-    };
+  meta = with lib; {
+    description = "Zope Object Database: object database and persistence";
+    homepage = "https://pypi.python.org/pypi/ZODB";
+    license = licenses.zpl21;
+    maintainers = with maintainers; [ goibhniu ];
+  };
 }

@@ -1,43 +1,55 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-# propagatedBuildInputs
 , aiohttp
-, async-timeout
-# buildInputs
-, pytestrunner
-# checkInputs
-, pytest
-, pytest-asyncio
 , aresponses
+, awesomeversion
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
 }:
+
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "3.1.0";
+  version = "22.8.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1d4smpzlaw0sqfgkgvhxsn8h7bmwj8h9gj98sdzvkzhp5vhd96b2";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "ludeeus";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-30UHbxs0WZyIVyq0ai2PsoPTkvoYawS1OBhVbV0JVN8=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
-  ];
-
-  buildInputs = [
-    pytestrunner
+    awesomeversion
   ];
 
   checkInputs = [
-    pytest
-    pytest-asyncio
     aresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # Upstream doesn't set a version for the tagged releases
+    substituteInPlace setup.py \
+      --replace "main" ${version}
+  '';
+
+
+  pythonImportsCheck = [
+    "pyhaversion"
   ];
 
   meta = with lib; {
-    description = "A python module to the newest version number of Home Assistant";
-    homepage = https://github.com/ludeeus/pyhaversion;
-    maintainers = [ maintainers.makefu ];
+    description = "Python module to the newest version number of Home Assistant";
+    homepage = "https://github.com/ludeeus/pyhaversion";
+    changelog = "https://github.com/ludeeus/pyhaversion/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ makefu ];
   };
 }

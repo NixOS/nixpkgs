@@ -1,4 +1,4 @@
-import ./make-test.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({pkgs, lib, ...}:
 let
   # A filesystem image with a (presumably) bootable debian
   debianImage = pkgs.vmTools.diskImageFuns.debian9i386 {
@@ -9,7 +9,7 @@ let
       ${parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
       mkdir /mnt
       ${e2fsprogs}/bin/mkfs.ext4 /dev/vda1
-      ${utillinux}/bin/mount -t ext4 /dev/vda1 /mnt
+      ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
         exec ${bash}/bin/sh
@@ -34,9 +34,6 @@ let
     '';
   };
 
-  # options to add the disk to the test vm
-  QEMU_OPTS = "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio";
-
   # a part of the configuration of the test vm
   simpleConfig = {
     boot.loader.grub = {
@@ -46,49 +43,62 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    nix.binaryCaches = lib.mkForce [ ];
-    nix.extraOptions = ''
-      hashed-mirrors =
-      connect-timeout = 1
-    '';
-    services.udisks2.enable = lib.mkForce false;
+    nix.settings = {
+      substituters = lib.mkForce [];
+      hashed-mirrors = null;
+      connect-timeout = 1;
+    };
+    # save some memory
+    documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''
-    {config, pkgs, ...}: ({
-    imports = 
+    {config, pkgs, lib, ...}: ({
+    imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
-    } // (builtins.fromJSON (builtins.readFile ${
+    } // lib.importJSON ${
       pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
-    })))
+    })
   '';
 in {
   name = "os-prober";
 
-  machine = { config, pkgs, ... }: (simpleConfig // {
+  nodes.machine = { config, pkgs, ... }: (simpleConfig // {
       imports = [ ../modules/profiles/installation-device.nix
                   ../modules/profiles/base.nix ];
-      virtualisation.memorySize = 1024;
+      virtualisation.memorySize = 1300;
+      # To add the secondary disk:
+      virtualisation.qemu.options = [ "-drive index=2,file=${debianImage}/disk-image.qcow2,read-only,if=virtio" ];
+
       # The test cannot access the network, so any packages
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
-        [ sudo
-          libxml2.bin
-          libxslt.bin
+        [
+          brotli
+          brotli.dev
+          brotli.lib
           desktop-file-utils
           docbook5
           docbook_xsl_ns
-          unionfs-fuse
-          ntp
-          nixos-artwork.wallpapers.simple-dark-gray-bottom
-          perlPackages.XMLLibXML
-          perlPackages.ListCompare
-          shared-mime-info
-          texinfo
-          xorg.lndir
           grub2
+          kmod.dev
+          libarchive
+          libarchive.dev
+          libxml2.bin
+          libxslt.bin
+          nixos-artwork.wallpapers.simple-dark-gray-bottom
+          ntp
+          perlPackages.ListCompare
+          perlPackages.XMLLibXML
+          python3Minimal
+          shared-mime-info
+          stdenv
+          sudo
+          texinfo
+          unionfs-fuse
+          xorg.lndir
 
           # add curl so that rather than seeing the test attempt to download
           # curl's tarball, we see what it's trying to download
@@ -97,23 +107,24 @@ in {
   });
 
   testScript = ''
-    # hack to add the secondary disk
-    $machine->{startCommand} = "QEMU_OPTS=\"\$QEMU_OPTS \"${lib.escapeShellArg QEMU_OPTS} ".$machine->{startCommand};
-
-    $machine->start;
-    $machine->succeed("udevadm settle");
-    $machine->waitForUnit("multi-user.target");
+    machine.start()
+    machine.succeed("udevadm settle")
+    machine.wait_for_unit("multi-user.target")
+    print(machine.succeed("lsblk"))
 
     # check that os-prober works standalone
-    $machine->succeed("${pkgs.os-prober}/bin/os-prober | grep /dev/vdb1");
+    machine.succeed(
+        "${pkgs.os-prober}/bin/os-prober | grep /dev/vdb1"
+    )
 
     # rebuild and test that debian is available in the grub menu
-    $machine->succeed("nixos-generate-config");
-    $machine->copyFileFromHost(
+    machine.succeed("nixos-generate-config")
+    machine.copy_from_host(
         "${configFile}",
-        "/etc/nixos/configuration.nix");
-    $machine->succeed("nixos-rebuild boot >&2");
+        "/etc/nixos/configuration.nix",
+    )
+    machine.succeed("nixos-rebuild boot --show-trace >&2")
 
-    $machine->succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg");
+    machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';
 })

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "dnsenum";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -vD dns.txt -t $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/fwaeytens/dnsenum";
     description = "A tool to enumerate DNS information";
     maintainers = with maintainers; [ c0bw3b ];

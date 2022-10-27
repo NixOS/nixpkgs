@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
+{ lib, stdenv, fetchsvn, jdk, jre, ant, swt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "vuze";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "07w6ipyiy8hi88d6yxbbf3vkv26mj7dcz9yr8141hb2ig03v0h0p";
   };
 
-  buildInputs = [ makeWrapper jdk ant ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk ant ];
 
   buildPhase = "ant";
 
@@ -19,11 +20,11 @@ stdenv.mkDerivation rec {
       --add-flags "-Xmx256m -Djava.library.path=${swt}/lib -cp $out/share/java/Vuze_${version}-00.jar:${swt}/jars/swt.jar org.gudy.azureus2.ui.swt.Main"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torrent client";
-    homepage = http://www.vuze.com;
+    homepage = "http://www.vuze.com";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ ];
   };
 }

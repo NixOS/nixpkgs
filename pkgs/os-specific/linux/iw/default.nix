@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, libnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnl }:
 
 stdenv.mkDerivation rec {
   pname = "iw";
-  version = "5.3";
+  version = "5.19";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1m85ap8hwzfs7xf9r0v5d55ra4mhw45f6vclc7j6gsldpibyibq4";
+    sha256 = "sha256-8We76UfdU7uevAwdzvXbatc6wdYITyxvk3bFw2DMTU4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
       The old tool iwconfig, which uses Wireless Extensions interface, is
       deprecated and it's strongly recommended to switch to iw and nl80211.
     '';
-    homepage = https://wireless.wiki.kernel.org/en/users/Documentation/iw;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ viric primeos ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://wireless.wiki.kernel.org/en/users/Documentation/iw";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ viric primeos ];
+    platforms = with lib.platforms; linux;
   };
 }

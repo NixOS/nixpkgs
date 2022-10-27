@@ -1,52 +1,68 @@
-{ stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
-, openal, cryptopp, libtheora, SDL2, lzo, libjpeg, libogg, tbb
-, pcre, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glew
+, freeimage
+, liblockfile
+, openal
+, libtheora
+, SDL2
+, lzo
+, libjpeg
+, libogg
+, pcre
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
-  pname = "OpenXRay";
-  version = "510";
+  pname = "openxray";
+  version = "1144-december-2021-rc1";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = version;
-    sha256 = "0q142l6xvgnd6ycncqld69izxclynqrs73aq89pfy1r1nzhd60ay";
     fetchSubmodules = true;
+    sha256 = "07qj1lpp21g4p583gvz5h66y2q71ymbsz4g5nr6dcys0vm7ph88v";
   };
 
-  hardeningDisable = [ "format" ];
-  cmakeFlags = [ "-DCMAKE_INCLUDE_PATH=${cryptopp}/include/cryptopp" ];
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
   buildInputs = [
-    glew freeimage liblockfile openal cryptopp libtheora SDL2 lzo
-    libjpeg libogg tbb pcre
+    glew
+    freeimage
+    liblockfile
+    openal
+    libtheora
+    SDL2
+    lzo
+    libjpeg
+    libogg
+    pcre
   ];
-  nativeBuildInputs = [ cmake makeWrapper ];
 
-  preConfigure = ''
-    substituteInPlace src/xrCore/xrCore.cpp \
-      --replace /usr/share $out/share
-  '';
+  # Crashes can happen, we'd like them to be reasonably debuggable
+  cmakeBuildType = "RelWithDebInfo";
+  dontStrip = true;
 
   postInstall = ''
-    mv $out/var/empty/* $out
-    install -Dm755 $out/games/xr_3da $out/bin/xr_3da
-    install -Dm644 $src/License.txt $out/share/licenses/openxray/License.txt
-    rm -r $out/var $out/games
-
     # needed because of SDL_LoadObject library loading code
     wrapProgram $out/bin/xr_3da \
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with stdenv.lib; {
-    description = "X-Ray Engine 1.6 expansion. Original version was used in S.T.A.L.K.E.R.: Call of Pripyat";
-    homepage = src.meta.homepage;
+  meta = with lib; {
+    mainProgram = "xray-16";
+    description = "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
+    homepage = "https://github.com/OpenXRay/xray-16/";
     license = licenses.unfree // {
-      url = https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt;
+      url = "https://github.com/OpenXRay/xray-16/blob/${version}/License.txt";
     };
-    maintainers = [ maintainers.gnidorah ];
-    platforms = ["x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

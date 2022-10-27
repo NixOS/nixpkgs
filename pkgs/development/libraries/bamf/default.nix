@@ -1,44 +1,57 @@
-{ stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2, wrapGAppsHook }:
+{ stdenv
+, lib
+, autoreconfHook
+, gitUpdater
+, gnome
+, which
+, fetchgit
+, libgtop
+, libwnck
+, glib
+, vala
+, pkg-config
+, libstartup_notification
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, xorgserver
+, dbus
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
-  version = "0.5.4";
+  version = "0.5.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
-    url = https://git.launchpad.net/~unity-team/bamf;
+    url = "https://git.launchpad.net/~unity-team/bamf";
     rev = version;
-    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
+    sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
+    autoreconfHook
+    dbus
     docbook_xsl
-    gnome3.gnome-common
+    gnome.gnome-common
     gobject-introspection
     gtk-doc
-    libtool
-    pkgconfig
+    pkg-config
     vala
     which
-    # Tests
-    python2
-    python2.pkgs.libxslt
-    python2.pkgs.libxml2
-    dbus
-    xorgserver
     wrapGAppsHook
+    xorgserver
   ];
 
   buildInputs = [
     glib
     libgtop
     libstartup_notification
-    libwnck3
+    libwnck
   ];
 
   # Fix hard-coded path
@@ -49,35 +62,35 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-headless-tests"
     "--enable-gtk-doc"
+    "--enable-headless-tests"
   ];
 
-  # fix paths
+  # Fix paths
   makeFlags = [
     "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   # TODO: Requires /etc/machine-id
   doCheck = false;
 
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  # Ignore deprecation errors
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = ".ubuntu.*";
+  };
+
+  meta = with lib; {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
-    homepage = https://launchpad.net/bamf;
+    homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

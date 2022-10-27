@@ -8,8 +8,7 @@ with lib;
 let
 
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
-      pkgs.acl
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -30,20 +29,29 @@ let
       pkgs.xz
       pkgs.less
       pkgs.libcap
-      pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
-      pkgs.perl
+      pkgs.mkpasswd
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
-      pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.util-linux
+      pkgs.which
+      pkgs.zstd
     ];
+
+  defaultPackageNames =
+    [ "nano"
+      "perl"
+      "rsync"
+      "strace"
+    ];
+  defaultPackages =
+    map
+      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      defaultPackageNames;
+  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
 in
 
@@ -55,15 +63,44 @@ in
       systemPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
-        description = ''
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
+        description = lib.mdDoc ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.  (The latter is the main difference with
           installing them in the default profile,
-          <filename>/nix/var/nix/profiles/default</filename>.
+          {file}`/nix/var/nix/profiles/default`.
+        '';
+      };
+
+      defaultPackages = mkOption {
+        type = types.listOf types.package;
+        default = defaultPackages;
+        defaultText = literalMD ''
+          these packages, with their `meta.priority` numerically increased
+          (thus lowering their installation priority):
+
+              ${defaultPackagesText}
+        '';
+        example = [];
+        description = lib.mdDoc ''
+          Set of default packages that aren't strictly necessary
+          for a running system, entries can be removed for a more
+          minimal NixOS installation.
+
+          Note: If `pkgs.nano` is removed from this list,
+          make sure another editor is installed and the
+          `EDITOR` environment variable is set to it.
+          Environment variables can be set using
+          {option}`environment.variables`.
+
+          Like with systemPackages, packages are installed to
+          {file}`/run/current-system/sw`. They are
+          automatically available to all users, and are
+          automatically updated every time you rebuild the system
+          configuration.
         '';
       };
 
@@ -73,20 +110,20 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
+        description = lib.mdDoc "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "doc" "info" "devdoc" ];
-        description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+        description = lib.mdDoc "List of additional package outputs to be symlinked into {file}`/run/current-system/sw`.";
       };
 
       extraSetup = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+        description = lib.mdDoc "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
       };
 
     };
@@ -95,7 +132,7 @@ in
 
       path = mkOption {
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           The packages you want in the boot environment.
         '';
       };
@@ -106,7 +143,7 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages;
+    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
 
     environment.pathsToLink =
       [ "/bin"
@@ -116,6 +153,7 @@ in
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
+        "/share/hunspell"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -124,6 +162,8 @@ in
         "/share/kservices5"
         "/share/kservicetypes5"
         "/share/kxmlgui5"
+        "/share/systemd"
+        "/share/thumbnailers"
       ];
 
     system.path = pkgs.buildEnv {

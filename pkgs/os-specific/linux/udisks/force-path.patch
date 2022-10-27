@@ -1,8 +1,9 @@
-diff -ruN udisks-2.1.0.orig/src/main.c udisks-2.1.0/src/main.c
---- udisks-2.1.0.orig/src/main.c	2013-04-02 10:43:41.629332135 +0000
-+++ udisks-2.1.0/src/main.c	2013-04-02 11:04:55.635342823 +0000
-@@ -140,8 +140,7 @@
-         }
+diff --git a/src/main.c b/src/main.c
+index b4dbf9e0..3171fa34 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -144,8 +144,7 @@ main (int    argc,
+       g_setenv("G_MESSAGES_DEBUG", "udisks", FALSE);
      }
  
 -  if (g_getenv ("PATH") == NULL)
@@ -11,3 +12,6 @@ diff -ruN udisks-2.1.0.orig/src/main.c udisks-2.1.0/src/main.c
  
    udisks_notice ("udisks daemon version %s starting", PACKAGE_VERSION);
  
+-- 
+2.33.1
+

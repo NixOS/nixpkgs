@@ -1,43 +1,43 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles }:
 
 with lib;
 
 let
-
-  version = "1.1.0";
-
-  # switch the dropdown to “manual” on https://pulumi.io/quickstart/install.html # TODO: update script
-  pulumiArchPackage = {
-    x86_64-linux = {
-      url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-linux-x64.tar.gz";
-      sha256 = "1r498pxsjdj9mhdzh9vh4nw8fcjxfga44xlg43b0yakkgrp7c224";
-    };
-    x86_64-darwin = {
-      url = "https://get.pulumi.com/releases/sdk/pulumi-v${version}-darwin-x64.tar.gz";
-      sha256 = "02nr5yxn5aqgbwrnl4shgd6rh4n4v8giqki4qkbgx74xf3bbwihg";
-    };
-  };
-
+  data = import ./data.nix {};
 in stdenv.mkDerivation {
-  inherit version;
   pname = "pulumi";
+  version = data.version;
 
-  src = fetchurl pulumiArchPackage.${stdenv.hostPlatform.system};
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp * $out/bin/
+  postUnpack = ''
+    mv pulumi-* pulumi
   '';
 
-  buildInputs = optionals stdenv.isLinux [ autoPatchelfHook ];
+  srcs = map (x: fetchurl x) data.pulumiPkgs.${stdenv.hostPlatform.system};
+
+  installPhase = ''
+    install -D -t $out/bin/ *
+  '' + optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+  '' + ''
+    installShellCompletion --cmd pulumi \
+      --bash <($out/bin/pulumi completion bash) \
+      --fish <($out/bin/pulumi completion fish) \
+      --zsh  <($out/bin/pulumi completion zsh)
+  '';
+
+  nativeBuildInputs = [ installShellFiles ] ++ optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
 
   meta = {
-    homepage = https://pulumi.io/;
+    homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ asl20 ];
-    platforms = builtins.attrNames pulumiArchPackage;
+    platforms = builtins.attrNames data.pulumiPkgs;
     maintainers = with maintainers; [
+      ghuntley
       peterromfeldhk
+      jlesquembre
+      cpcloud
     ];
   };
 }

@@ -1,22 +1,28 @@
-{ stdenv, autoreconfHook, fetchFromGitHub }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "inotify-tools";
-  version = "3.20.1";
+  version = "3.22.6.0";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
-    owner = "rvoicilas";
+    owner = "inotify-tools";
     rev = version;
-    sha256 = "14dci1i4mhsd5sa33k8h3ayphk19kizynh5ql9ryibdpmcanfiyq";
+    sha256 = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rvoicilas/inotify-tools/wiki;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ marcweber pSub ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/inotify-tools/inotify-tools/wiki";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ marcweber pSub shamilton ];
     platforms = platforms.linux;
   };
 }

@@ -1,57 +1,65 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake
-, glew, ftgl, ttf_bitstream_vera
-, withQt ? true, qt4
-, withLibvisual ? false, libvisual, SDL
-, withJack ? false, libjack2
-, withPulseAudio ? true, libpulseaudio
+{ stdenv
+, mkDerivation
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, SDL2
+, qtdeclarative
+, libpulseaudio
+, glm
+, which
 }:
 
-assert withJack       -> withQt;
-assert withPulseAudio -> withQt;
+mkDerivation rec {
+  pname = "projectm";
+  version = "3.1.12";
 
-stdenv.mkDerivation {
-  name = "projectm-2.1.0";
+  src = fetchFromGitHub {
+    owner = "projectM-visualizer";
+    repo = "projectM";
+    rev = "v${version}";
+    sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    which
+  ];
+
+  buildInputs = [
+    SDL2
+    qtdeclarative
+    libpulseaudio
+    glm
+  ];
+
+  configureFlags = [
+    "--enable-qt"
+    "--enable-sdl"
+  ];
+
+  fixupPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # NOTE: 2019-10-05: Upstream inserts the src path buring build into ELF rpath, so must delete it out
+    # upstream report: https://github.com/projectM-visualizer/projectm/issues/245
+    for entry in $out/bin/* ; do
+      patchelf --set-rpath "$(patchelf --print-rpath $entry | tr ':' '\n' | grep -v 'src/libprojectM' | tr '\n' ':')" "$entry"
+    done
+  '' + ''
+    wrapQtApp $out/bin/projectM-pulseaudio
+    rm $out/bin/projectM-unittest
+  '';
 
   meta = {
-    description = "Music Visualizer";
-    homepage = http://projectm.sourceforge.net/;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/projectM-visualizer/projectm";
+    description = "Cross-platform Milkdrop-compatible music visualizer";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ];
+    longDescription = ''
+      The open-source project that reimplements the esteemed Winamp Milkdrop by Geiss in a more modern, cross-platform reusable library.
+      Read an audio input and produces mesmerizing visuals, detecting tempo, and rendering advanced equations into a limitless array of user-contributed visualizations.
+    '';
   };
-
-  src = fetchurl {
-    url = "mirror://sourceforge/projectm/2.1.0/projectM-complete-2.1.0-Source.tar.gz";
-    sha256 = "1vh6jk68a0jdb6qwppb6f8cbgmhnv2ba3bcavzfd6sq06gq08cji";
-  };
-
-  patch_gcc6 = fetchpatch {
-    url = https://raw.githubusercontent.com/gentoo/gentoo/45abd63abc6644b6e177c057b5b42d894dbf8e29/media-libs/libprojectm/files/libprojectm-2.1.0-fix-c++14.patch;
-    sha256 = "1i50scxv1jlqvb3jm3sql89a7wqckxhlpvnhz20vvmm1kii6lrsn";
-  };
-
-  patchPhase = ''
-    patch -d src/libprojectM -p1 -i "$patch_gcc6"
-    sed -i 's:''${LIBVISUAL_PLUGINSDIR}:''${CMAKE_INSTALL_PREFIX}/lib/libvisual-0.4:' \
-      src/projectM-libvisual/CMakeLists.txt
-  '';
-
-  nativeBuildInputs = [ pkgconfig cmake ];
-
-  cmakeFlags = ''
-    -DprojectM_FONT_MENU=${ttf_bitstream_vera}/share/fonts/truetype/VeraMono.ttf
-    -DprojectM_FONT_TITLE=${ttf_bitstream_vera}/share/fonts/truetype/Vera.ttf
-    -DINCLUDE-PROJECTM-TEST=OFF
-    -DINCLUDE-PROJECTM-QT=${if withQt then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-LIBVISUAL=${if withLibvisual then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-JACK=${if withJack then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-PULSEAUDIO=${if withPulseAudio then "ON" else "OFF"}
-  '';
-
-  buildInputs = with stdenv.lib;
-    [ glew ftgl ]
-    ++ optional withQt qt4
-    ++ optionals withLibvisual [ libvisual SDL ]
-    ++ optional withJack libjack2
-    ++ optional withPulseAudio libpulseaudio
-    ;
 }

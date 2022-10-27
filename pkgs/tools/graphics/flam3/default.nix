@@ -1,24 +1,42 @@
-{stdenv, fetchFromGitHub, zlib, libpng, libxml2, libjpeg }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjpeg
+, libpng
+, libxml2
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "flam3";
-  version = "3.1.1-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "e0801543538451234d7a8a240ba3b417cbda5b21";
+  version = "3.1.1+date=2018-04-12";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "scottdraves";
     repo = pname;
-    sha256 = "18iyj16k0sn3fs52fj23lj31xi4avlddhbib6kk309576nlxp17w";
+    rev = "7fb50c82e90e051f00efcc3123d0e06de26594b2";
+    hash = "sha256-cKRfmTcyWY2LyxqojTzxD2wnxu5eh3emHi51bhS3gYg=";
   };
 
-  buildInputs = [ zlib libpng libxml2 libjpeg ];
+  buildInputs = [
+    libjpeg
+    libpng
+    libxml2
+    zlib
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://flam3.com/";
     description = "Cosmic recursive fractal flames";
-    homepage = https://flam3.com/;
-    maintainers = [ maintainers.nand0p ];
-    platforms = platforms.linux;
-    license = licenses.cc-by-nc-sa-20;
+    longDescription = ''
+      Flames are algorithmically generated images and animations. The software
+      was originally written in 1992 and released as open source, aka free
+      software. Over the years it has been greatly expanded, and is now widely
+      used to create art and special effects. The shape and color of each image
+      is specified by a long string of numbers - a genetic code of sorts.
+    '';
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

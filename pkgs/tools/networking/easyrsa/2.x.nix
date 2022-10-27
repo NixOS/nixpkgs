@@ -1,12 +1,21 @@
-{ stdenv, fetchurl, autoreconfHook, makeWrapper
-, gnugrep, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, makeWrapper
+, gnugrep
+, openssl
+}:
 
-stdenv.mkDerivation {
-  name = "easyrsa-2.2.0";
+stdenv.mkDerivation rec {
+  pname = "easyrsa";
+  version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/OpenVPN/easy-rsa/archive/v2.2.0.tar.gz";
-    sha256 = "1xq4by5frb6ikn53ss3y8v7ss639dccxfq8jfrbk07ynkmk668qk";
+  src = fetchFromGitHub {
+    owner = "OpenVPN";
+    repo = "easy-rsa";
+    rev = "v${version}";
+    sha256 = "sha256-zTdk8mv+gC/SHK813wZ6CWZf9Jm2XkKfAPU3feFpAkY=";
   };
 
   preBuild = ''
@@ -28,9 +37,9 @@ stdenv.mkDerivation {
     sed -i "/EASY_RSA=\|OPENSSL=\|GREP=/d" $out/share/easy-rsa/vars
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple shell based CA utility";
-    homepage = https://openvpn.net/;
+    homepage = "https://openvpn.net/";
     license = licenses.gpl2;
     maintainers = [ maintainers.offline ];
     platforms = platforms.linux;

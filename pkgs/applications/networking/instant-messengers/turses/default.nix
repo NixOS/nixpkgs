@@ -1,7 +1,34 @@
-{ stdenv, fetchpatch, python3Packages }:
+{ lib
+, fetchpatch
+, fetchFromGitHub
+, python3
+}:
 
-with stdenv.lib;
-with python3Packages;
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Support for later tweepy releases is missing
+      # https://github.com/louipc/turses/issues/12
+      tweepy = super.tweepy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.10.0";
+
+        src = fetchFromGitHub {
+          owner = "tweepy";
+          repo = "tweepy";
+          rev = "v${version}";
+          sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          super.six
+          super.requests.optional-dependencies.socks
+        ];
+        doCheck = false;
+      });
+    };
+  };
+in
+with py.pkgs;
 
 buildPythonPackage rec {
   pname = "turses";
@@ -12,8 +39,20 @@ buildPythonPackage rec {
     sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
   };
 
-  checkInputs = [ mock pytest coverage tox ];
-  propagatedBuildInputs = [ urwid tweepy future ];
+  propagatedBuildInputs = with py.pkgs; [
+    urwid
+    tweepy
+    future
+  ];
+
+  checkInputs = with py.pkgs; [
+    mock
+    pytest
+    coverage
+    tox
+  ];
+
+  LC_ALL = "en_US.UTF-8";
 
   patches = [
     (fetchpatch {
@@ -27,6 +66,17 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "urwid==1.3.0" "urwid" \
+      --replace "future==0.14.3" "future" \
+      --replace "tweepy==3.3.0" "tweepy"
+    substituteInPlace tests/test_config.py \
+      --replace "config.generate_config_file.assert_called_once()" "assert config.generate_config_file.call_count == 1"
+    substituteInPlace tests/test_meta.py \
+      --replace "self.observer.update.assert_called_once()" "assert self.observer.update.call_count == 1"
+  '';
+
   checkPhase = ''
     TMP_TURSES=`echo turses-$RANDOM`
     mkdir $TMP_TURSES
@@ -34,18 +84,10 @@ buildPythonPackage rec {
     rm -rf $TMP_TURSES
   '';
 
-  postPatch = ''
-    sed -i -e 's|urwid==1.3.0|urwid==${getVersion urwid}|' setup.py
-    sed -i -e "s|future==0.14.3|future==${getVersion future}|" setup.py
-    sed -i -e "s|tweepy==3.3.0|tweepy==${getVersion tweepy}|" setup.py
-    sed -i -e "s|config.generate_config_file.assert_called_once()|assert config.generate_config_file.call_count == 1|" tests/test_config.py
-    sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/louipc/turses;
+  meta = with lib; {
     description = "A Twitter client for the console";
-    license = licenses.gpl3;
+    homepage = "https://github.com/louipc/turses";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };

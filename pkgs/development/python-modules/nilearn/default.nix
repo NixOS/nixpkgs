@@ -1,34 +1,34 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose, nibabel, numpy, scikitlearn
-, scipy, matplotlib }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, lxml, matplotlib
+, nibabel, numpy, pandas, scikit-learn, scipy, joblib, requests }:
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.5.2";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18b763d641e6903bdf8512e0ec5cdc14133fb4679e9a15648415e9be62c81b56";
+    sha256 = "sha256-jajTg12SzXuKbMkkVaSJ1+f1mUz2T8cbzmU+NidzueQ=";
   };
 
-  # disable some failing tests
-  checkPhase = ''
-    nosetests nilearn/tests \
-    -e test_cache_mixin_with_expand_user -e test_clean_confounds -e test_detrend \
-    -e test_clean_detrending -e test_high_variance_confounds
-  '';
-
-  checkInputs = [ nose ];
+  checkInputs = [ pytestCheckHook ];
+  disabledTests = [ "test_clean_confounds" ];  # https://github.com/nilearn/nilearn/issues/2608
+  # do subset of tests which don't fetch resources
+  pytestFlagsArray = [ "nilearn/connectome/tests" ];
 
   propagatedBuildInputs = [
+    joblib
+    lxml
     matplotlib
     nibabel
     numpy
-    scikitlearn
+    pandas
+    requests
+    scikit-learn
     scipy
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://nilearn.github.io;
+  meta = with lib; {
+    homepage = "https://nilearn.github.io";
     description = "A module for statistical learning on neuroimaging data";
     license = licenses.bsd3;
   };

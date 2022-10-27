@@ -1,45 +1,49 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU_combined, freeglut, camlp4 } :
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut } :
 
-let
-  pname = "lablgl";
-in
+if lib.versionOlder ocaml.version "4.03"
+then throw "lablgl is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "1.05";
+  pname = "ocaml${ocaml.version}-lablgl";
+  version = "1.06";
 
-  src = fetchurl { 
-    url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
-    sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
+  src = fetchFromGitHub {
+    owner = "garrigue";
+    repo = "lablgl";
+    rev = "v${version}";
+    sha256 = "sha256:141kc816iv59z96738i3vn9m9iw9g2zhi45hk4cchpwd99ar5l6k";
   };
 
-  buildInputs = [ocaml findlib lablgtk freeglut camlp4];
-  propagatedBuildInputs = [ libGLU_combined ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ freeglut ];
+  propagatedBuildInputs = [ libGLU libGL ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
 
   preConfigure = ''
+    mkdir -p $out/bin
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     substituteInPlace Makefile.config \
-      --subst-var-by BINDIR $out/bin \
-      --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl \
-      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl \
+      --subst-var-by BINDIR $out/bin/ \
+      --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml.version}/site-lib/lablgl/ \
+      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml.version}/site-lib/stublibs/ \
       --subst-var-by TKINCLUDES "" \
       --subst-var-by XINCLUDES ""
   '';
 
-  createFindlibDestdir = true;
-
-  buildFlags = "lib libopt glut glutopt";
+  buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 
   postInstall = ''
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
+  meta = with lib; {
     description = "OpenGL bindings for ocaml";
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];
+    mainProgram = "lablglut";
     broken = stdenv.isDarwin;
   };
 }

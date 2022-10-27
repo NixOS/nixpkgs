@@ -1,15 +1,15 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ lib, buildPythonPackage, fetchPypi, isPyPy, pytest
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {
   pname = "netCDF4";
-  version = "1.5.2";
+  version = "1.6.1";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08l92yzg2cy1zrkxjvwya2kpnmfzgwnvgb925hlrgcp5ga9y2xg0";
+    sha256 = "sha256-uo3F1lKTqZ8a+4wqz1iNkD/f3BljpiVFtnf6JzQmKng=";
   };
 
   checkInputs = [ pytest ];
@@ -42,9 +42,9 @@ buildPythonPackage rec {
   CURL_DIR=curl.dev;
   JPEG_DIR=libjpeg.dev;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";
-    homepage = https://pypi.python.org/pypi/netCDF4;
+    homepage = "https://pypi.python.org/pypi/netCDF4";
     license = licenses.free;  # Mix of license (all MIT* like)
   };
 }

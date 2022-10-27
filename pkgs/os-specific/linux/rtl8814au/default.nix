@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
-stdenv.mkDerivation rec {
-  name = "rtl8814au-${kernel.version}-${version}";
-  version = "4.3.21";
+stdenv.mkDerivation {
+  pname = "rtl8814au";
+  version = "${kernel.version}-unstable-2022-08-18";
 
   src = fetchFromGitHub {
-    owner = "zebulon2";
-    repo = "rtl8814au";
-    rev = "a58c56a5a6cb99ffb872f07cb67b68197911854f";
-    sha256 = "1ffm67da183nz009gm5v9w1bab081hrm113kk8knl9s5qbqnn13q";
+    owner = "morrownr";
+    repo = "8814au";
+    rev = "752d8ea365b2affc5d356e35659600995508849d";
+    hash = "sha256-m79IVoD3xFigmax13qELx5e3v0NfJSwmmC0PatA91HI=";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   hardeningDisable = [ "pic" ];
 
@@ -29,11 +30,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Realtek 8814AU USB WiFi driver";
-    homepage = https://github.com/zebulon2/rtl8814au;
-    license = licenses.gpl2;
+    homepage = "https://github.com/morrownr/8814au";
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.lassulus ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

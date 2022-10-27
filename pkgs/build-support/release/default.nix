@@ -1,4 +1,4 @@
-{pkgs}:
+{ lib, pkgs }:
 
 with pkgs;
 
@@ -14,16 +14,12 @@ rec {
     { inherit stdenv;
     } // args);
 
-  antBuild = args: import ./ant-build.nix (
-    { inherit pkgs;
-    } // args);
-
   mvnBuild = args: import ./maven-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   nixBuild = args: import ./nix-build.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   coverageAnalysis = args: nixBuild (
@@ -41,16 +37,12 @@ rec {
       doCoverityAnalysis = true;
     } // args);
 
-  gcovReport = args: import ./gcov-report.nix (
-    { inherit runCommand lcov rsync;
-    } // args);
-
   rpmBuild = args: import ./rpm-build.nix (
     { inherit vmTools;
     } // args);
 
   debBuild = args: import ./debian-build.nix (
-    { inherit stdenv vmTools checkinstall;
+    { inherit lib stdenv vmTools checkinstall;
     } // args);
 
   aggregate =
@@ -77,7 +69,7 @@ rec {
      its contituents. Channel jobs are a special type of jobs that are
      listed in the channel tab of Hydra and that can be suscribed.
      A tarball of the src attribute is distributed via the channel.
-     
+
      - constituents: a list of derivations on which the channel success depends.
      - name: the channel name that will be used in the hydra interface.
      - src: should point to the root folder of the nix-expressions used by the
@@ -88,7 +80,7 @@ rec {
          name = "my-channel";
          src = ./.;
        };
-     
+
   */
   channel =
     { name, src, constituents ? [], meta ? {}, isNixOS ? true, ... }@args:
@@ -98,7 +90,7 @@ rec {
 
       phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
-      patchPhase = stdenv.lib.optionalString isNixOS ''
+      patchPhase = lib.optionalString isNixOS ''
         touch .update-on-nixos-rebuild
       '';
 

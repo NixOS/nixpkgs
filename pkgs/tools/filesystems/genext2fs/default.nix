@@ -1,21 +1,32 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libarchive }:
 
-stdenv.mkDerivation {
-  name = "genext2fs-1.4.1";
-  
-  src = fetchurl {
-    url = mirror://sourceforge/genext2fs/genext2fs-1.4.1.tar.gz;
-    sha256 = "1z7czvsf3ircvz2cw1cf53yifsq29ljxmj15hbgc79l6gbxbnka0";
+stdenv.mkDerivation rec {
+  pname = "genext2fs";
+  version = "1.5.0";
+
+  src = fetchFromGitHub {
+    owner = "bestouff";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-9LAU5XuCwwEhU985MzZ2X+YYibvyECULQSn9X2jdj5I=";
   };
 
-  # https://sourceforge.net/p/genext2fs/bugs/2/
-  # Will be fixed in the next release, whenever this happens
-  postPatch = ''
-    sed -e 's@4 [*] (EXT2_TIND_BLOCK+1)@-1+&@' -i genext2fs.c
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [
+    libarchive
+  ];
+
+  configureFlags = [
+    "--enable-libarchive"
+  ];
+
+  doCheck = true;
+  checkPhase = ''
+    ./test.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://genext2fs.sourceforge.net/;
+  meta = with lib; {
+    homepage = "https://github.com/bestouff/genext2fs";
     description = "A tool to generate ext2 filesystem images without requiring root privileges";
     license = licenses.gpl2;
     platforms = platforms.all;

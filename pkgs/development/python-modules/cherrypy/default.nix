@@ -1,60 +1,109 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, setuptools_scm
-, cheroot, portend, more-itertools, zc_lockfile, routes
-, objgraph, pytest, pytestcov, pathpy, requests_toolbelt, pytest-services
-, fetchpatch
+{ lib
+, stdenv
+, buildPythonPackage
+, cheroot
+, fetchPypi
+, jaraco_collections
+, more-itertools
+, objgraph
+, path
+, portend
+, pytest-forked
+, pytest-services
+, pytestCheckHook
+, python-memcached
+, pythonAtLeast
+, pythonOlder
+, requests-toolbelt
+, routes
+, setuptools-scm
+, simplejson
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.1.2";
+  version = "18.8.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    sha256 = "1w3hpsg7q8shdmscmbqk00w90lcw3brary7wl1a56k5h7nx33pj8";
+    hash = "sha256-m0jPuoovFtW2QZzGV+bVHbAFujXF44JORyi7A7vH75s=";
   };
 
-  # Remove patches once 96b34df and 14c12d2
-  # become part of a release - they're currently only present in master.
-  # ref: https://github.com/cherrypy/cherrypy/pull/1791
-  patches = [
-    (fetchpatch {
-      name = "pytest5-1.patch";
-      url = "https://github.com/cherrypy/cherrypy/commit/96b34dfea7853b0189bc0a3878b6ddff0d4e505c.patch";
-      sha256 = "0zy53mahffgkpd844118b42lsk5lkjmig70d60x1i46w6gnr61mi";
-    })
-    (fetchpatch {
-      name = "pytest5-2.patch";
-      url = "https://github.com/cherrypy/cherrypy/commit/14c12d2420a4b3765bb241250bd186e93b2f25eb.patch";
-      sha256 = "0ihcz7b5myn923rq5665b98pz52hnf6fcys2y2inf23r3i07scyz";
-    })
+  postPatch = ''
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv" \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    # required
-    cheroot portend more-itertools zc_lockfile
-    # optional
-    routes
+    cheroot
+    portend
+    more-itertools
+    zc_lockfile
+    jaraco_collections
   ];
-
-  nativeBuildInputs = [ setuptools_scm ];
 
   checkInputs = [
-    objgraph pytest pytestcov pathpy requests_toolbelt pytest-services
+    objgraph
+    path
+    pytest-forked
+    pytest-services
+    pytestCheckHook
+    requests-toolbelt
   ];
 
-  # Disable doctest plugin because times out
-  checkPhase = ''
-    substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes ${stdenv.lib.optionalString stdenv.isDarwin "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
-  '';
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.cherrypy.org;
-    description = "A pythonic, object-oriented HTTP framework";
+  disabledTests = [
+    # Keyboard interrupt ends test suite run
+    "KeyboardInterrupt"
+    # daemonize and autoreload tests have issue with sockets within sandbox
+    "daemonize"
+    "Autoreload"
+
+    "test_antistampede"
+    "test_file_stream"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_block"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "cherrypy/test/test_config_server.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "cherrypy"
+  ];
+
+  passthru.optional-dependencies = {
+    json = [ simplejson ];
+    memcached_session = [ python-memcached ];
+    routes_dispatcher = [ routes ];
+    # not packaged yet
+    xcgi = [ /* flup */ ];
+  };
+
+  meta = with lib; {
+    description = "Object-oriented HTTP framework";
+    homepage = "https://www.cherrypy.org";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

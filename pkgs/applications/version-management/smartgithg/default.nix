@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 , jre
 , gtk3
 , glib
-, gnome3
+, gnome
 , wrapGAppsHook
 , libXtst
 , which
@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "19.1.1";
+  version = "21.2.2";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "0i0dvyy9d63f4hk8czlyk83ai0ywhqp7wbdkq3s87l7irwgs42jy";
+    sha256 = "10v6sg0lmjby3v8g3sk2rzzvdx5p69ia4zz2c0hbf30rk0p6gqn3";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ jre gnome3.adwaita-icon-theme gtk3 ];
+  buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
 
-  preFixup = with stdenv.lib; ''
+  preFixup = with lib; ''
     gappsWrapperArgs+=( \
       --prefix PATH : ${makeBinPath [ jre which ]} \
       --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre} \
-    ) \
+    )
+    # add missing shebang for start script
+    sed -i $out/bin/smartgit \
+      -e '1i#!/bin/bash'
   '';
 
   installPhase = ''
@@ -59,36 +62,32 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItem = with stdenv.lib; makeDesktopItem rec {
+  desktopItem = with lib; makeDesktopItem rec {
     name = "smartgit";
     exec = "smartgit";
     comment = meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
-    categories = concatStringsSep ";" [
+    categories = [
       "Application"
       "Development"
       "RevisionControl"
     ];
-    mimeType = concatStringsSep ";" [
+    mimeTypes = [
       "x-scheme-handler/git"
       "x-scheme-handler/smartgit"
       "x-scheme-handler/sourcetree"
     ];
-    startupNotify = "true";
-    extraEntries = ''
-      Keywords=git
-      StartupWMClass=${name}
-      Version=1.0
-      Encoding=UTF-8
-    '';
+    startupNotify = true;
+    startupWMClass = name;
+    keywords = [ "git" ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for Git, Mercurial, Subversion";
-    homepage = http://www.syntevo.com/smartgit/;
+    homepage = "https://www.syntevo.com/smartgit/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

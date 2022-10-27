@@ -1,49 +1,40 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , libffi
-, llvm_35
-, doCheck ? false
+, llvm_13
 , perl
 }:
 
-let version = "20170519";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "dale";
-  inherit version;
+  version = "20220411";
 
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "dale";
-    rev = "39e16d8e89fa070de65a673d4462e783d530f95a";
-    sha256 = "0dc5cjahv7lzlp92hidlh83rwgrpgb6xz2pnba2pm5xrv2pnsskl";
+    rev = "7386ef2d8912c60c6fb157a1e5cd772e15eaf658";
+    sha256 = "sha256-LNWqrFuEjtL7zuPTBfe4qQWr8IrT/ldQWSeDTK3Wqmo=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libffi llvm_35 ]
-             ++ stdenv.lib.optional doCheck perl;
+  nativeBuildInputs = [ cmake pkg-config llvm_13.dev ];
+  buildInputs = [ libffi llvm_13 ];
 
-  patches = [ ./link-llvm.patch ];
-
-  inherit doCheck;
+  checkInputs = [ perl ];
 
   checkTarget = "tests";
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp-flavoured C";
     longDescription = ''
       Dale is a system (no GC) programming language that uses
       S-expressions for syntax and supports syntactic macros.
     '';
-    homepage = https://github.com/tomhrr/dale;
+    homepage = "https://github.com/tomhrr/dale";
     license = licenses.bsd3;
     maintainers = with maintainers; [ amiloradovsky ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     # failed on Darwin: linker couldn't find the FFI lib
-    # failed on AArch64: because LLVM 3.5 is failed there
   };
 }

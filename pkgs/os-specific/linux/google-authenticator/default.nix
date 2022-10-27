@@ -1,12 +1,14 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pam, qrencode }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pam, qrencode }:
 
 stdenv.mkDerivation rec {
   pname = "google-authenticator-libpam";
-  version = "1.06";
+  version = "1.09";
 
-  src = fetchurl {
-    url = "https://github.com/google/google-authenticator-libpam/archive/${version}.tar.gz";
-    sha256 = "01kb1ppsc2fz1i3crdwi6ic8gyphjv89f5li6ypv3pp88v3kxw2j";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "google-authenticator-libpam";
+    rev = version;
+    hash = "sha256-DS0h6FWMNKnSSj039bH6iyWrERa5M7LBSkbyig6pyxY=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/google/google-authenticator-libpam;
+    homepage = "https://github.com/google/google-authenticator-libpam";
     description = "Two-step verification, with pam module";
     license = licenses.asl20;
     maintainers = with maintainers; [ aneeshusa ];

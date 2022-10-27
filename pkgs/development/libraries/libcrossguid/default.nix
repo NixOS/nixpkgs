@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libuuid }:
+{ lib, stdenv, fetchFromGitHub, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "lib" + pname + "-" + version;
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ];
 
   buildPhase = ''
-    g++ -c guid.cpp -o guid.o $CXXFLAGS -std=c++11 -DGUID_LIBUUID
-    ar rvs libcrossguid.a guid.o
+    $CXX -c guid.cpp -o guid.o $CXXFLAGS -std=c++11 -DGUID_LIBUUID
+    $AR rvs libcrossguid.a guid.o
   '';
   installPhase = ''
     mkdir -p $out/{lib,include}
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     install -D -m644 guid.h "$out/include/guid.h"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight cross platform C++ GUID/UUID library";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];
-    homepage = https://github.com/graeme-hill/crossguid;
+    homepage = "https://github.com/graeme-hill/crossguid";
     platforms = with platforms; linux;
   };
 

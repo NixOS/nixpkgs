@@ -1,4 +1,4 @@
-# Emscripten
+# Emscripten {#emscripten}
 
 [Emscripten](https://github.com/kripken/emscripten): An LLVM-to-JavaScript Compiler
 
@@ -15,28 +15,26 @@ Modes of use of `emscripten`:
 
    If you want to work with `emcc`, `emconfigure` and `emmake` as you are used to from Ubuntu and similar distributions you can use these commands:
 
-    * `nix-env -i emscripten`
+    * `nix-env -f "<nixpkgs>" -iA emscripten`
     * `nix-shell -p emscripten`
 
 * **Declarative usage**:
 
-    This mode is far more power full since this makes use of `nix` for dependency management of emscripten libraries and targets by using the `mkDerivation` which is implemented by `pkgs.emscriptenStdenv` and `pkgs.buildEmscriptenPackage`. The source for the packages is in `pkgs/top-level/emscripten-packages.nix` and the abstraction behind it in `pkgs/development/em-modules/generic/default.nix`.
-    * build and install all packages: 
-        * `nix-env -iA emscriptenPackages` 
-          
-    * dev-shell for zlib implementation hacking: 
-        * `nix-shell -A emscriptenPackages.zlib` 
+    This mode is far more power full since this makes use of `nix` for dependency management of emscripten libraries and targets by using the `mkDerivation` which is implemented by `pkgs.emscriptenStdenv` and `pkgs.buildEmscriptenPackage`. The source for the packages is in `pkgs/top-level/emscripten-packages.nix` and the abstraction behind it in `pkgs/development/em-modules/generic/default.nix`. From the root of the nixpkgs repository:
+    * build and install all packages:
+        * `nix-env -iA emscriptenPackages`
 
+    * dev-shell for zlib implementation hacking:
+        * `nix-shell -A emscriptenPackages.zlib`
 
-## Imperative usage
+## Imperative usage {#imperative-usage}
 
 A few things to note:
 
 * `export EMCC_DEBUG=2` is nice for debugging
 * `~/.emscripten`, the build artifact cache sometimes creates issues and needs to be removed from time to time
 
-
-## Declarative usage
+## Declarative usage {#declarative-usage}
 
 Let's see two different examples from `pkgs/top-level/emscripten-packages.nix`:
 
@@ -50,7 +48,7 @@ A special requirement of the `pkgs.buildEmscriptenPackage` is the `doCheck = tru
 * Use `export EMCC_DEBUG=2` from within a emscriptenPackage's `phase` to get more detailed debug output what is going wrong.
 * ~/.emscripten cache is requiring us to set `HOME=$TMPDIR` in individual phases. This makes compilation slower but also makes it more deterministic.
 
-### Usage 1: pkgs.zlib.override
+### Usage 1: pkgs.zlib.override {#usage-1-pkgs.zlib.override}
 
 This example uses `zlib` from nixpkgs but instead of compiling **C** to **ELF** it compiles **C** to **JS** since we were using `pkgs.zlib.override` and changed stdenv to `pkgs.emscriptenStdenv`. A few adaptions and hacks were set in place to make it working. One advantage is that when `pkgs.zlib` is updated, it will automatically update this package as well. However, this can also be the downside...
 
@@ -60,7 +58,7 @@ See the `zlib` example:
       stdenv = pkgs.emscriptenStdenv;
     }).overrideDerivation
     (old: rec {
-      buildInputs = old.buildInputs ++ [ pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
       NIX_CFLAGS_COMPILE="";
       configurePhase = ''
@@ -90,7 +88,7 @@ See the `zlib` example:
         libz.so.${old.version} -I . -o example.js
 
         echo "Using node to execute the test"
-        ${pkgs.nodejs}/bin/node ./example.js 
+        ${pkgs.nodejs}/bin/node ./example.js
 
         set +x
         if [ $? -ne 0 ]; then
@@ -102,7 +100,7 @@ See the `zlib` example:
         echo "================= /testing zlib using node ================="
       '';
 
-      postPatch = pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
+      postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
         substituteInPlace configure \
           --replace '/usr/bin/libtool' 'ar' \
           --replace 'AR="libtool"' 'AR="ar"' \
@@ -110,15 +108,15 @@ See the `zlib` example:
       '';
     });
 
-### Usage 2: pkgs.buildEmscriptenPackage
+### Usage 2: pkgs.buildEmscriptenPackage {#usage-2-pkgs.buildemscriptenpackage}
 
-This `xmlmirror` example features a emscriptenPackage which is defined completely from this context and no `pkgs.zlib.override` is used. 
+This `xmlmirror` example features a emscriptenPackage which is defined completely from this context and no `pkgs.zlib.override` is used.
 
     xmlmirror = pkgs.buildEmscriptenPackage rec {
       name = "xmlmirror";
 
-      buildInputs = [ pkgconfig autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
-      nativeBuildInputs = [ pkgconfig zlib ];
+      buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
+      nativeBuildInputs = [ pkg-config zlib ];
 
       src = pkgs.fetchgit {
         url = "https://gitlab.com/odfplugfest/xmlmirror.git";
@@ -163,9 +161,9 @@ This `xmlmirror` example features a emscriptenPackage which is defined completel
       checkPhase = ''
 
       '';
-    }; 
+    };
 
-### Declarative debugging
+### Declarative debugging {#declarative-debugging}
 
 Use `nix-shell -I nixpkgs=/some/dir/nixpkgs -A emscriptenPackages.libz` and from there you can go trough the individual steps. This makes it easy to build a good `unit test` or list the files of the project.
 
@@ -177,9 +175,8 @@ Use `nix-shell -I nixpkgs=/some/dir/nixpkgs -A emscriptenPackages.libz` and from
 6. `buildPhase`
 7. ... happy hacking...
 
-## Summary
+## Summary {#summary}
 
 Using this toolchain makes it easy to leverage `nix` from NixOS, MacOSX or even Windows (WSL+ubuntu+nix). This toolchain is reproducible, behaves like the rest of the packages from nixpkgs and contains a set of well working examples to learn and adapt from.
 
 If in trouble, ask the maintainers.
-

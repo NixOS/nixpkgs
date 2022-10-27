@@ -1,27 +1,51 @@
-{ buildGoModule, fetchgit, stdenv }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles, testers, cue }:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.0.11";
+  version = "0.4.3";
 
-  src = fetchgit {
-    url = "https://cue.googlesource.com/cue";
+  src = fetchFromGitHub {
+    owner = "cue-lang";
+    repo = "cue";
     rev = "v${version}";
-    sha256 = "146h3nxx72n3byxr854lnxj7m33ipbmg6j9dy6dlwvqpa7rndrmp";
+    sha256 = "sha256-v9MYrijnbtJpTgRZ4hmkaekisOyujldGewCRNbkVzWw=";
   };
 
-  modSha256 = "1q0fjm34mbijjxg089v5330vc820nrvwdkhm02zi45rk2fpdgdqd";
+  postPatch = ''
+    # Disable script tests
+    rm -f cmd/cue/cmd/script_test.go
+  '';
 
-  subPackages = [ "cmd/cue" ];
+  vendorSha256 = "sha256-jTfV8DJlr5LxS3HjOEBkVzBvZKiySrmINumXSUIq2mI=";
 
-  buildFlagsArray = [
-    "-ldflags=-X cuelang.org/go/cmd/cue/cmd.version=${version}"
-  ];
+  excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
 
-  meta = {
-    description = "A data constraint language which aims to simplify tasks involving defining and using data.";
-    homepage = https://cue.googlesource.com/cue;
-    maintainers = with stdenv.lib.maintainers; [ solson ];
-    license = stdenv.lib.licenses.asl20;
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}" ];
+
+  postInstall = ''
+    # Completions
+    installShellCompletion --cmd cue \
+      --bash <($out/bin/cue completion bash) \
+      --fish <($out/bin/cue completion fish) \
+      --zsh <($out/bin/cue completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/cue eval - <<<'a: "all good"' > /dev/null
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = cue;
+    command = "cue version";
+  };
+
+  meta = with lib;  {
+    description = "A data constraint language which aims to simplify tasks involving defining and using data";
+    homepage = "https://cuelang.org/";
+    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

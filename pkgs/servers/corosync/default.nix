@@ -1,29 +1,30 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
-, dbus, rdma-core, libstatgrab, net_snmp
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, kronosnet, nss, nspr, libqb
+, systemd, dbus, rdma-core, libstatgrab, net-snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "corosync-2.4.3";
+  pname = "corosync";
+  version = "3.1.6";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/${name}.tar.gz";
-    sha256 = "15y5la04qn2lh1gabyifygzpa4dx3ndk5yhmaf7azxyjx0if9rxi";
+    url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-ym7TK01/M+1hSvzodg/ljQ3pLGi1ddSWnrrNiS89Hic=";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
-    nss nspr libqb
+    kronosnet nss nspr libqb systemd.dev
   ] ++ optional enableDbus dbus
     ++ optional enableInfiniBandRdma rdma-core
     ++ optional enableMonitoring libstatgrab
-    ++ optional enableSnmp net_snmp;
+    ++ optional enableSnmp net-snmp;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/corosync"
     "--enable-watchdog"
     "--enable-qdevices"
+    # allows Type=notify in the systemd service
+    "--enable-systemd"
   ] ++ optional enableDbus "--enable-dbus"
     ++ optional enableInfiniBandRdma "--enable-rdma"
     ++ optional enableMonitoring "--enable-monitoring"
@@ -43,6 +46,8 @@ stdenv.mkDerivation rec {
     "INITDDIR=$(out)/etc/init.d"
     "LOGROTATEDIR=$(out)/etc/logrotate.d"
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = optionalString enableInfiniBandRdma ''
     # configure looks for the pkg-config files
@@ -60,13 +65,15 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/sbin:${libqb}/sbin"
   '';
 
-  enableParallelBuilding = true;
+  passthru.tests = {
+    inherit (nixosTests) pacemaker;
+  };
 
   meta = {
-    homepage = http://corosync.org/;
+    homepage = "http://corosync.org/";
     description = "A Group Communication System with features for implementing high availability within applications";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ montag451 ];
+    maintainers = with maintainers; [ montag451 ryantm ];
   };
 }

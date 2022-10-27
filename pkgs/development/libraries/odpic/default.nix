@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 let
-  version = "3.2.1";
-  libPath = stdenv.lib.makeLibraryPath [ oracle-instantclient.lib ];
+  version = "4.5.0";
+  libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in stdenv.mkDerivation {
   inherit version;
@@ -13,32 +13,32 @@ in stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "1f9gznc7h73cgx32p55rkhzla6l7l9dg53ilwh6zdgdqlp7n018i";
+    sha256 = "sha256-EPTEZ8Sh8yWtgbKRhwa1nrXSgQelUJfZDaStGSfOKGw=";
   };
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ oracle-instantclient ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];
+    ++ lib.optionals stdenv.isLinux [ libaio ];
 
   dontPatchELF = true;
-  makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];
+  makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc"];
 
   postFixup = ''
-    ${stdenv.lib.optionalString (stdenv.isLinux) ''
+    ${lib.optionalString (stdenv.isLinux) ''
       patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
-    ${stdenv.lib.optionalString (stdenv.isDarwin) ''
+    ${lib.optionalString (stdenv.isDarwin) ''
       install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle ODPI-C library";
     homepage = "https://oracle.github.io/odpi/";
     maintainers = with maintainers; [ mkazulak flokli ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     hydraPlatforms = [];
   };
 }

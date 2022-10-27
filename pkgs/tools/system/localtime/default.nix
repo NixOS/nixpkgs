@@ -1,35 +1,42 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, m4 }:
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, m4
+}:
 
-buildGoPackage rec {
-  name = "localtime-2017-11-07";
+buildGoModule {
+  pname = "localtime";
+  version = "unstable-2022-02-20";
 
   src = fetchFromGitHub {
     owner = "Stebalien";
     repo = "localtime";
-    rev = "2e7b4317c723406bd75b2a1d640219ab9f8090ce";
-    sha256 = "04fyna8p7q7skzx9fzmncd6gx7x5pwa9jh8a84hpljlvj0kldfs8";
+    rev = "c1e10aa4141ed2bb01986b48e0e942e618993c06";
+    hash = "sha256-bPQ1c2KUTkxx2g7IvLmrKgJKfRHTLlTXLR/QQ0O4CrI=";
   };
-  goPackagePath = "github.com/Stebalien/localtime";
 
-  buildInputs = [ m4 ];
+  vendorSha256 = "sha256-12JnEU41sp9qRP07p502EYogveE+aNdfmLwlDRbIdxU=";
 
-  makeFlags = [ 
-    "PREFIX=${placeholder "out"}" 
-    "BINDIR=${placeholder "bin"}/bin" 
-  ];
+  nativeBuildInputs = [ m4 ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
-    make $makeFlags
+    runHook preBuild
+    make PREFIX="$out"
+    runHook postBuild
   '';
+
+  doCheck = false; # no tests
 
   installPhase = ''
-    make install $makeFlags
+    runHook preInstall
+    make PREFIX="$out" install
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon for keeping the system timezone up-to-date based on the current location";
-    homepage = https://github.com/Stebalien/localtime;
+    homepage = "https://github.com/Stebalien/localtime";
+    maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

@@ -1,44 +1,43 @@
 { stdenv
+, lib
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
+, gi-docgen
+, python3
 , libsoup
-, gtk3
 , glib
-, gnome3
+, gnome
+, gssdp-tools
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.2.1";
+  version = "1.4.0.1";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lsn6mdkk8yb933n0c9dka89bixvwis09w5nh5wkcag2jsdbfmvb";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "hnaEnVf7giuHKIVtut6/OGf4nuR6DsR6IARdAR9DFYI=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     vala
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
+    gi-docgen
+    python3
   ];
 
   buildInputs = [
     libsoup
-    gtk3
   ];
 
   propagatedBuildInputs = [
@@ -46,21 +45,39 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dsniffer=false"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
 
+  postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+      | while IFS= read -r -d ''' file; do
+        moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+    done
+  '';
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
+    };
+
+    tests = {
+      inherit gssdp-tools;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.all;
   };
 }

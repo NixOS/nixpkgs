@@ -1,28 +1,59 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pythonOlder, isPy36
-, nose, asynctest, mock, pytz, tzlocal, imaplib2, docutils, pyopenssl }:
+{ lib
+, pythonOlder
+, pythonAtLeast
+, asynctest
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, imaplib2
+, mock
+, nose
+, pyopenssl
+, pytestCheckHook
+, pytz
+, tzlocal
+}:
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.7.15";
+  version = "1.0.1";
+  format = "setuptools";
 
-  # PyPI tarball doesn't ship tests
+  disabled = pythonOlder "3.5";
+
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "15nny3y8pwaizq1zmkg43ym5jszk2hs010z12yn2d0j1fibymwbj";
+    hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
 
-  disabled = !(isPy3k && pythonOlder "3.7");
+  checkInputs = [
+    asynctest
+    docutils
+    imaplib2
+    mock
+    nose
+    pyopenssl
+    pytestCheckHook
+    pytz
+    tzlocal
+  ];
 
-  checkInputs = [ nose asynctest mock pytz tzlocal imaplib2 docutils pyopenssl ];
+  disabledTests = [
+    # https://github.com/bamthomas/aioimaplib/issues/77
+    "test_get_quotaroot"
+    # asyncio.exceptions.TimeoutError
+    "test_idle"
+  ];
 
-  # https://github.com/bamthomas/aioimaplib/issues/35
-  doCheck = !isPy36;
+  pythonImportsCheck = [
+    "aioimaplib"
+  ];
 
   meta = with lib; {
     description = "Python asyncio IMAP4rev1 client library";
-    homepage = https://github.com/bamthomas/aioimaplib;
+    homepage = "https://github.com/bamthomas/aioimaplib";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

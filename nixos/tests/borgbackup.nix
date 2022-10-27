@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   passphrase = "supersecret";
@@ -36,14 +36,14 @@ let
 
 in {
   name = "borgbackup";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
   nodes = {
     client = { ... }: {
       services.borgbackup.jobs = {
-        
+
         local = {
           paths = dataDir;
           repo = localRepo;
@@ -81,6 +81,24 @@ in {
           environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
         };
 
+        commandSuccess = {
+          dumpCommand = pkgs.writeScript "commandSuccess" ''
+            echo -n test
+          '';
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
+        commandFail = {
+          dumpCommand = "${pkgs.coreutils}/bin/false";
+          repo = remoteRepo;
+          encryption.mode = "none";
+          startAt = [ ];
+          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+        };
+
       };
     };
 
@@ -88,7 +106,7 @@ in {
       services.openssh = {
         enable = true;
         passwordAuthentication = false;
-        challengeResponseAuthentication = false;
+        kbdInteractiveAuthentication = false;
       };
 
       services.borgbackup.repos.repo1 = {
@@ -106,60 +124,85 @@ in {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $client->fail('test -d "${remoteRepo}"');
+    client.fail('test -d "${remoteRepo}"')
 
-    $client->succeed("cp ${privateKey} /root/id_ed25519");
-    $client->succeed("chmod 0600 /root/id_ed25519");
-    $client->succeed("cp ${privateKeyAppendOnly} /root/id_ed25519.appendOnly");
-    $client->succeed("chmod 0600 /root/id_ed25519.appendOnly");
+    client.succeed(
+        "cp ${privateKey} /root/id_ed25519"
+    )
+    client.succeed("chmod 0600 /root/id_ed25519")
+    client.succeed(
+        "cp ${privateKeyAppendOnly} /root/id_ed25519.appendOnly"
+    )
+    client.succeed("chmod 0600 /root/id_ed25519.appendOnly")
 
-    $client->succeed("mkdir -p ${dataDir}");
-    $client->succeed("touch ${dataDir}/${excludeFile}");
-    $client->succeed("echo '${keepFileData}' > ${dataDir}/${keepFile}");
+    client.succeed("mkdir -p ${dataDir}")
+    client.succeed("touch ${dataDir}/${excludeFile}")
+    client.succeed("echo '${keepFileData}' > ${dataDir}/${keepFile}")
 
-    subtest "local", sub {
-      my $borg = "BORG_PASSPHRASE='${passphrase}' borg";
-      $client->systemctl("start --wait borgbackup-job-local");
-      $client->fail("systemctl is-failed borgbackup-job-local");
-      # Make sure exactly one archive has been created
-      $client->succeed("c=\$($borg list '${localRepo}' | wc -l) && [[ \$c == '1' ]]");
-      # Make sure excludeFile has been excluded
-      $client->fail("$borg list '${localRepo}::${archiveName}' | grep -qF '${excludeFile}'");
-      # Make sure keepFile has the correct content
-      $client->succeed("$borg extract '${localRepo}::${archiveName}'");
-      $client->succeed('c=$(cat ${dataDir}/${keepFile}) && [[ "$c" == "${keepFileData}" ]]');
-      # Make sure the same is true when using `borg mount`
-      $client->succeed("mkdir -p /mnt/borg && $borg mount '${localRepo}::${archiveName}' /mnt/borg");
-      $client->succeed('c=$(cat /mnt/borg/${dataDir}/${keepFile}) && [[ "$c" == "${keepFileData}" ]]');
-    };
+    with subtest("local"):
+        borg = "BORG_PASSPHRASE='${passphrase}' borg"
+        client.systemctl("start --wait borgbackup-job-local")
+        client.fail("systemctl is-failed borgbackup-job-local")
+        # Make sure exactly one archive has been created
+        assert int(client.succeed("{} list '${localRepo}' | wc -l".format(borg))) > 0
+        # Make sure excludeFile has been excluded
+        client.fail(
+            "{} list '${localRepo}::${archiveName}' | grep -qF '${excludeFile}'".format(borg)
+        )
+        # Make sure keepFile has the correct content
+        client.succeed("{} extract '${localRepo}::${archiveName}'".format(borg))
+        assert "${keepFileData}" in client.succeed("cat ${dataDir}/${keepFile}")
+        # Make sure the same is true when using `borg mount`
+        client.succeed(
+            "mkdir -p /mnt/borg && {} mount '${localRepo}::${archiveName}' /mnt/borg".format(
+                borg
+            )
+        )
+        assert "${keepFileData}" in client.succeed(
+            "cat /mnt/borg/${dataDir}/${keepFile}"
+        )
 
-    subtest "remote", sub {
-      my $borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg";
-      $server->waitForUnit("sshd.service");
-      $client->waitForUnit("network.target");
-      $client->systemctl("start --wait borgbackup-job-remote");
-      $client->fail("systemctl is-failed borgbackup-job-remote");
+    with subtest("remote"):
+        borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-remote")
+        client.fail("systemctl is-failed borgbackup-job-remote")
 
-      # Make sure we can't access repos other than the specified one
-      $client->fail("$borg list borg\@server:wrong");
+        # Make sure we can't access repos other than the specified one
+        client.fail("{} list borg\@server:wrong".format(borg))
 
-      #TODO: Make sure that data is actually deleted
-    };
+        # TODO: Make sure that data is actually deleted
 
-    subtest "remoteAppendOnly", sub {
-      my $borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly' borg";
-      $server->waitForUnit("sshd.service");
-      $client->waitForUnit("network.target");
-      $client->systemctl("start --wait borgbackup-job-remoteAppendOnly");
-      $client->fail("systemctl is-failed borgbackup-job-remoteAppendOnly");
+    with subtest("remoteAppendOnly"):
+        borg = (
+            "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly' borg"
+        )
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-remoteAppendOnly")
+        client.fail("systemctl is-failed borgbackup-job-remoteAppendOnly")
 
-      # Make sure we can't access repos other than the specified one
-      $client->fail("$borg list borg\@server:wrong");
+        # Make sure we can't access repos other than the specified one
+        client.fail("{} list borg\@server:wrong".format(borg))
 
-      #TODO: Make sure that data is not actually deleted
-    };
+        # TODO: Make sure that data is not actually deleted
 
+    with subtest("commandSuccess"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandSuccess")
+        client.fail("systemctl is-failed borgbackup-job-commandSuccess")
+        id = client.succeed("borg-job-commandSuccess list | tail -n1 | cut -d' ' -f1").strip()
+        client.succeed(f"borg-job-commandSuccess extract ::{id} stdin")
+        assert "test" == client.succeed("cat stdin")
+
+    with subtest("commandFail"):
+        server.wait_for_unit("sshd.service")
+        client.wait_for_unit("network.target")
+        client.systemctl("start --wait borgbackup-job-commandFail")
+        client.succeed("systemctl is-failed borgbackup-job-commandFail")
   '';
 })

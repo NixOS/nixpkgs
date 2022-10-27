@@ -1,9 +1,25 @@
-{ pkgs, options, config, version, revision, extraSources ? [] }:
+{ pkgs
+, options
+, config
+, version
+, revision
+, extraSources ? []
+, baseOptionsJSON ? null
+, warningsAreErrors ? true
+, allowDocBook ? true
+, prefix ? ../../..
+}:
 
 with pkgs;
 
 let
+  inherit (lib) hasPrefix removePrefix;
+
   lib = pkgs.lib;
+
+  docbook_xsl_ns = pkgs.docbook-xsl-ns.override {
+    withManOptDedupPatch = true;
+  };
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -11,16 +27,44 @@ let
   #
   # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
   # you'd need to include `extraSources = [ pkgs.customModules ]`
-  prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
-  stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
+  prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
+  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
-    inherit options revision;
+    inherit options revision baseOptionsJSON warningsAreErrors allowDocBook;
     transformOptions = opt: opt // {
       # Clean up declaration sites to not refer to the NixOS source tree.
       declarations = map stripAnyPrefixes opt.declarations;
     };
   };
+
+  nixos-lib = import ../../lib { };
+
+  testOptionsDoc = let
+      eval = nixos-lib.evalTest {
+        # Avoid evaluating a NixOS config prototype.
+        config.node.type = lib.types.deferredModule;
+        options._module.args = lib.mkOption { internal = true; };
+      };
+    in buildPackages.nixosOptionsDoc {
+      inherit (eval) options;
+      inherit (revision);
+      transformOptions = opt: opt // {
+        # Clean up declaration sites to not refer to the NixOS source tree.
+        declarations =
+          map
+            (decl:
+              if hasPrefix (toString ../../..) (toString decl)
+              then
+                let subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
+                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
+              else decl)
+            opt.declarations;
+      };
+      documentType = "none";
+      variablelistId = "test-options-list";
+      optionIdPrefix = "test-opt-";
+    };
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
 
@@ -36,6 +80,7 @@ let
     mkdir $out
     ln -s ${modulesDoc} $out/modules.xml
     ln -s ${optionsDoc.optionsDocBook} $out/options-db.xml
+    ln -s ${testOptionsDoc.optionsDocBook} $out/test-options-db.xml
     printf "%s" "${version}" > $out/version
   '';
 
@@ -62,14 +107,14 @@ let
     "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
     "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
-    "--param toc.section.depth 3"
+    "--param toc.section.depth 0"
+    "--param generate.consistent.ids 1"
     "--stringparam admon.style ''"
     "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
     "--param chunk.section.depth 0"
     "--param chunk.first.sections 1"
     "--param use.id.as.filename 1"
-    "--stringparam generate.toc 'book toc appendix toc'"
     "--stringparam chunk.toc ${toc}"
   ];
 
@@ -120,12 +165,12 @@ let
           # ^ redirect assumes xmllint doesn’t print to stdout
       }
 
-      lintrng manual-combined.xml
-      lintrng man-pages-combined.xml
-
       mkdir $out
       cp manual-combined.xml $out/
       cp man-pages-combined.xml $out/
+
+      lintrng $out/manual-combined.xml
+      lintrng $out/man-pages-combined.xml
     '';
 
   olinkDB = runCommand "manual-olinkdb"
@@ -161,7 +206,7 @@ let
 in rec {
   inherit generatedSources;
 
-  inherit (optionsDoc) optionsJSON optionsXML optionsDocBook;
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
@@ -205,7 +250,7 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2.bin libxslt.bin zip ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
     }
     ''
       # Generate the epub manual.

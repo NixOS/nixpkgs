@@ -1,8 +1,8 @@
-{ stdenv, appleDerivation, libdispatch, Libsystem }:
+{ lib, stdenv, appleDerivation, libdispatch, Libsystem }:
 
 appleDerivation {
   # these are included in the pure libc
-  buildInputs = stdenv.lib.optionals stdenv.cc.nativeLibc [ libdispatch Libsystem ];
+  buildInputs = lib.optionals stdenv.cc.nativeLibc [ libdispatch Libsystem ];
 
   buildPhase = ''
     cp ${./auto_dtrace.h} ./auto_dtrace.h
@@ -79,6 +79,8 @@ appleDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
+    # libauto is only used by objc4/pure.nix , but objc4 is now using the impure approach, so we don't bother to fix this.
+    broken = true;
+    platforms = lib.platforms.darwin;
   };
 }

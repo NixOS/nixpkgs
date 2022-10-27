@@ -1,43 +1,29 @@
-{ stdenv, fetchurl, which, coq, ssreflect }:
+{ lib, mkCoqDerivation, autoconf,
+  coq, ssreflect, version ? null }:
 
-let param =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.8"
-  then {
-    version = "3.0.3";
-    uid = "38105";
-    sha256 = "0y52lqx1jphv6fwf0d702vzprxmfmxggnh1hy3fznxyl4isfpg4j";
-  } else {
-    version = "3.0.2";
-    uid = "37523";
-    sha256 = "1biia7nfqf7vaqq5gmykl4rwjyvrcwss6r2jdf0in5pvp2rnrj2w";
-  }
-; in
+with lib; mkCoqDerivation {
+  pname = "coquelicot";
+  owner = "coquelicot";
+  domain = "gitlab.inria.fr";
+  inherit version;
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = range "8.8" "8.16"; out = "3.2.0"; }
+    { case = range "8.8" "8.13"; out = "3.1.0"; }
+    { case = range "8.5" "8.9";  out = "3.0.2"; }
+  ] null;
+  release."3.2.0".sha256 = "07w7dbl8x7xxnbr2q39wrdh054gvi3daqjpdn1jm53crsl1fjxm4";
+  release."3.1.0".sha256 = "02i0djar13yk01hzaqprcldhhscn9843x9nf6x3jkv4wv1jwnx9f";
+  release."3.0.2".sha256 = "1rqfbbskgz7b1bcpva8wh3v3456sq2364y804f94sc8y5sij23nl";
+  releaseRev = v: "coquelicot-${v}";
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-coquelicot-${param.version}";
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/${param.uid}/coquelicot-${param.version}.tar.gz";
-    inherit (param) sha256;
-  };
-
-  nativeBuildInputs = [ which ];
-  buildInputs = [ coq ];
+  nativeBuildInputs = [ autoconf ];
   propagatedBuildInputs = [ ssreflect ];
-
-  configureFlags = [ "--libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Coquelicot" ];
-  buildPhase = "./remake";
-  installPhase = "./remake install";
+  useMelquiondRemake.logpath = "Coquelicot";
 
   meta = {
-    homepage = http://coquelicot.saclay.inria.fr/;
+    homepage = "http://coquelicot.saclay.inria.fr/";
     description = "A Coq library for Reals";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (coq.meta) platforms;
+    license = licenses.lgpl3;
+    maintainers = [ maintainers.vbgl ];
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
-  };
-
 }

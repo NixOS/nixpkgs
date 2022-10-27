@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.18.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "0pwpr4fpw56yzzkcabzzgbgwraaxmp7xzzmap7w1xsrkbj7dl2xl";
+    sha256 = "sha256-xM2X+X4qR5H1MqtsQK34Omyt35kEUntn3TqlJ2vWcwg=";
   };
 
-  modSha256 = "0xc4166d74ix5nzjphrq4rgw7qpskz05ymzl77i2qh2nhbdb53p0";
+  vendorSha256 = "sha256-EjcOcrADHdwTCGimv2BRvbjqSZxz4isWhGmPbWQ7YDE=";
 
   outputs = [ "out" "man" ];
 
@@ -19,34 +19,41 @@ buildGoModule rec {
 
   buildInputs = [ ncurses ];
 
-  patchPhase = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$bin'|" plugin/fzf.vim
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
+  ];
 
-    # Original and output files can't be the same
-    if cmp -s $src/plugin/fzf.vim plugin/fzf.vim; then
-      echo "Vim plugin patch not applied properly. Aborting" && \
-      exit 1
+  # The vim plugin expects a relative path to the binary; patch it to abspath.
+  postPatch = ''
+    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
+
+    if ! grep -q $out plugin/fzf.vim; then
+        echo "Failed to replace vim base_dir path with $out"
+        exit 1
     fi
+
+    # Has a sneaky dependency on perl
+    # Include first args to make sure we're patching the right thing
+    substituteInPlace shell/key-bindings.bash \
+      --replace " perl -n " " ${perl}/bin/perl -n "
   '';
 
   preInstall = ''
     mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
-    cp $src/shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
     cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
   '';
 
   postInstall = ''
-    name="${pname}-${version}"
-
-    cp $src/bin/fzf-tmux $out/bin
+    cp bin/fzf-tmux $out/bin
 
     mkdir -p $man/share/man
-    cp -r $src/man/man1 $man/share/man
+    cp -r man/man1 $man/share/man
 
-    mkdir -p $out/share/vim-plugins/$name
-    cp -r $src/plugin $out/share/vim-plugins/$name
+    mkdir -p $out/share/vim-plugins/${pname}
+    cp -r plugin $out/share/vim-plugins/${pname}
 
-    cp -R $src/shell $out/share/fzf
+    cp -R shell $out/share/fzf
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
@@ -60,6 +67,8 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
+    changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
   };
 }

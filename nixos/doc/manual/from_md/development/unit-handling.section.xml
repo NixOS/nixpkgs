@@ -1,0 +1,131 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-unit-handling">
+  <title>Unit handling</title>
+  <para>
+    To figure out what units need to be
+    started/stopped/restarted/reloaded, the script first checks the
+    current state of the system, similar to what
+    <literal>systemctl list-units</literal> shows. For each of the
+    units, the script goes through the following checks:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        Is the unit file still in the new system? If not,
+        <emphasis role="strong">stop</emphasis> the service unless it
+        sets <literal>X-StopOnRemoval</literal> in the
+        <literal>[Unit]</literal> section to <literal>false</literal>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Is it a <literal>.target</literal> unit? If so,
+        <emphasis role="strong">start</emphasis> it unless it sets
+        <literal>RefuseManualStart</literal> in the
+        <literal>[Unit]</literal> section to <literal>true</literal> or
+        <literal>X-OnlyManualStart</literal> in the
+        <literal>[Unit]</literal> section to <literal>true</literal>.
+        Also <emphasis role="strong">stop</emphasis> the unit again
+        unless it sets <literal>X-StopOnReconfiguration</literal> to
+        <literal>false</literal>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Are the contents of the unit files different? They are compared
+        by parsing them and comparing their contents. If they are
+        different but only <literal>X-Reload-Triggers</literal> in the
+        <literal>[Unit]</literal> section is changed,
+        <emphasis role="strong">reload</emphasis> the unit. The NixOS
+        module system allows setting these triggers with the option
+        <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadTriggers</link>.
+        There are some additional keys in the <literal>[Unit]</literal>
+        section that are ignored as well. If the unit files differ in
+        any way, the following actions are performed:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>.path</literal> and <literal>.slice</literal> units
+            are ignored. There is no need to restart them since changes
+            in their values are applied by systemd when systemd is
+            reloaded.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>.mount</literal> units are
+            <emphasis role="strong">reload</emphasis>ed. These mostly
+            come from the <literal>/etc/fstab</literal> parser.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>.socket</literal> units are currently ignored. This
+            is to be fixed at a later point.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The rest of the units (mostly <literal>.service</literal>
+            units) are then <emphasis role="strong">reload</emphasis>ed
+            if <literal>X-ReloadIfChanged</literal> in the
+            <literal>[Service]</literal> section is set to
+            <literal>true</literal> (exposed via
+            <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.reloadIfChanged</link>).
+            A little exception is done for units that were deactivated
+            in the meantime, for example because they require a unit
+            that got stopped before. These are
+            <emphasis role="strong">start</emphasis>ed instead of
+            reloaded.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If the reload flag is not set, some more flags decide if the
+            unit is skipped. These flags are
+            <literal>X-RestartIfChanged</literal> in the
+            <literal>[Service]</literal> section (exposed via
+            <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.restartIfChanged</link>),
+            <literal>RefuseManualStop</literal> in the
+            <literal>[Unit]</literal> section, and
+            <literal>X-OnlyManualStart</literal> in the
+            <literal>[Unit]</literal> section.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Further behavior depends on the unit having
+            <literal>X-StopIfChanged</literal> in the
+            <literal>[Service]</literal> section set to
+            <literal>true</literal> (exposed via
+            <link linkend="opt-systemd.services">systemd.services.&lt;name&gt;.stopIfChanged</link>).
+            This is set to <literal>true</literal> by default and must
+            be explicitly turned off if not wanted. If the flag is
+            enabled, the unit is
+            <emphasis role="strong">stop</emphasis>ped and then
+            <emphasis role="strong">start</emphasis>ed. If not, the unit
+            is <emphasis role="strong">restart</emphasis>ed. The goal of
+            the flag is to make sure that the new unit never runs in the
+            old environment which is still in place before the
+            activation script is run. This behavior is different when
+            the service is socket-activated, as outlined in the
+            following steps.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The last thing that is taken into account is whether the
+            unit is a service and socket-activated. If
+            <literal>X-StopIfChanged</literal> is
+            <emphasis role="strong">not</emphasis> set, the service is
+            <emphasis role="strong">restart</emphasis>ed with the
+            others. If it is set, both the service and the socket are
+            <emphasis role="strong">stop</emphasis>ped and the socket is
+            <emphasis role="strong">start</emphasis>ed, leaving socket
+            activation to start the service when it’s needed.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </itemizedlist>
+</section>

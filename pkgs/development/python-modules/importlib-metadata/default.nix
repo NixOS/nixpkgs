@@ -1,39 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, toml
 , zipp
-, pathlib2
-, contextlib2
-, configparser
-, isPy3k
-, importlib-resources
-, packaging
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "0.18";
+  version = "4.12.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "cb6ee23b46173539939964df59d3d72c3e0c1b5d54b84f1d8a7e912fe43612db";
+    hash = "sha256-Y3JFuLqytlAvy8dSzEt6b2JDuwKzHFwmFWrRA9PUVnA=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools # otherwise cross build fails
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ zipp ]
-    ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
+  propagatedBuildInputs = [
+    toml
+    zipp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkInputs = [ importlib-resources packaging ];
-
-  # Two failing tests: https://gitlab.com/python-devs/importlib_metadata/issues/72
+  # Cyclic dependencies due to pyflakefs
   doCheck = false;
+
+  pythonImportsCheck = [
+    "importlib_metadata"
+  ];
 
   meta = with lib; {
     description = "Read metadata from Python packages";
-    homepage = https://importlib-metadata.readthedocs.io/;
+    homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

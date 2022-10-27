@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, sqlite, makeWrapper }:
+{ lib, stdenv, fetchurl, libpcap, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: crypto/dh_groups.o:src/crypto/../globule.h:141: multiple definition of
+  #     `globule'; /build/ccrzO6vA.o:src/globule.h:141: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   setSourceRoot = ''
     sourceRoot=$(echo */src)
@@ -29,11 +33,15 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  patches = [ ./parallel-build.patch ];
+
+  meta = with lib; {
     description = "Brute force attack against Wifi Protected Setup";
-    homepage = https://code.google.com/archive/p/reaver-wps/;
+    homepage = "https://code.google.com/archive/p/reaver-wps/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nico202 volth ];
+    maintainers = with maintainers; [ nico202 ];
   };
 }

@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
 , fetchpatch
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , swig2
 , openssl
 , typing
@@ -9,12 +10,12 @@
 
 
 buildPythonPackage rec {
-  version = "0.35.2";
+  version = "0.36.0";
   pname = "M2Crypto";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09yirf3w77w6f49q6nxhrjm9c3a4y9s30s1k09chqrw8zdgx8sjc";
+    sha256 = "1hadbdckmjzfb8qzbkafypin6sakfx35j2qx0fsivh757s7c2hhm";
   };
 
   patches = [
@@ -23,12 +24,12 @@ buildPythonPackage rec {
       sha256 = "0z5qnkndg6ma5f5qqrid5m95i9kybsr000v3fdy1ab562kf65a27";
     })
   ];
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [ swig2 ];
   buildInputs = [ swig2 openssl ];
 
-  propagatedBuildInputs = [ typing ];
+  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
   preConfigure = ''
     substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${openssl.dev}'"
@@ -36,9 +37,9 @@ buildPythonPackage rec {
 
   doCheck = false; # another test that depends on the network.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python crypto and SSL toolkit";
-    homepage = https://gitlab.com/m2crypto/m2crypto;
+    homepage = "https://gitlab.com/m2crypto/m2crypto";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };

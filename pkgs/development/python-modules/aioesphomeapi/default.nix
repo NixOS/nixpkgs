@@ -1,29 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, attrs, protobuf, zeroconf }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, noiseprotocol
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, zeroconf
+}:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "2.2.0";
+  version = "11.1.1";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0znal1hi964acc8bl3z0ikscax7zziks838ld099rjsbffjwmwn5";
+  src = fetchFromGitHub {
+    owner = "esphome";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fyY3G2tsrqy5aTXYI+KGqMahWspdTjjjkS9JK/ohjhc=";
   };
 
-  propagatedBuildInputs = [ attrs protobuf zeroconf ];
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
+  '';
 
-  # no tests implemented
-  doCheck = false;
+  propagatedBuildInputs = [
+    noiseprotocol
+    protobuf
+    zeroconf
+  ];
+
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "aioesphomeapi"
+  ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
-
-    # Home Assistant should pin protobuf to the correct version. Can be tested using
-    #     nix-build -E "with import ./. {}; home-assistant.override { extraPackages = ps: [ ps.aioesphomeapi ]; }"
-    broken = !lib.hasPrefix "3.6.1" protobuf.version;
+    maintainers = with maintainers; [ fab hexa ];
   };
 }

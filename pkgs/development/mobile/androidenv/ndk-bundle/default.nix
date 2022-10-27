@@ -1,51 +1,64 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, platform-tools}:
+{ stdenv, lib, pkgs, pkgsHostHost, makeWrapper, autoPatchelfHook
+, deployAndroidPackage, package, os, platform-tools
+}:
 
 let
-  runtime_paths = lib.makeBinPath [ pkgs.coreutils pkgs.file pkgs.findutils pkgs.gawk pkgs.gnugrep pkgs.gnused pkgs.jdk pkgs.python3 pkgs.which ] + ":${platform-tools}/platform-tools";
+  runtime_paths = lib.makeBinPath (with pkgsHostHost; [
+    coreutils file findutils gawk gnugrep gnused jdk python3 which
+  ]) + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ autoPatchelfHook makeWrapper pkgs.python2 ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.stdenv.cc.cc pkgs.ncurses5 pkgs.zlib pkgs.libcxx.out ];
-  patchInstructions = lib.optionalString (os == "linux") ''
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  autoPatchelfIgnoreMissingDeps = true;
+  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib ];
+  patchInstructions = lib.optionalString (os == "linux") (''
     patchShebangs .
-
-    patch -p1 \
-      --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch}
-    wrapProgram $(pwd)/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
 
     # TODO: allow this stuff
     rm -rf docs tests
 
-    # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
+    # Ndk now has a prebuilt toolchains inside, the file layout has changed, we do a symlink
+    # to still support the old standalone toolchains builds.
+    if [ -d $out/libexec/android-sdk/ndk ] && [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
+        ln -sf $out/libexec/android-sdk/ndk/${package.revision} $out/libexec/android-sdk/ndk-bundle
+    elif [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
+        echo "The ndk-bundle layout has changed. The nix expressions have to be updated!"
+        exit 1
+    fi
 
-    addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64
-    find toolchains -type d -name bin | while read dir
-    do
+    # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64 ]; then
+        addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64
+    fi
+
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64 ]; then
+        addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
+    fi
+
+    find toolchains -type d -name bin -or -name lib64 | while read dir; do
         autoPatchelf "$dir"
     done
 
     # fix ineffective PROGDIR / MYNDKDIR determination
-    for i in ndk-build
-    do
-        sed -i -e 's|^PROGDIR=`dirname $0`|PROGDIR=`dirname $(readlink -f $(which $0))`|' $i
+    for progname in ndk-build; do
+        sed -i -e 's|^PROGDIR=`dirname $0`|PROGDIR=`dirname $(readlink -f $(which $0))`|' $progname
     done
 
     # Patch executables
     autoPatchelf prebuilt/linux-x86_64
 
     # wrap
-    for i in ndk-build
-    do
-        wrapProgram "$(pwd)/$i" --prefix PATH : "${runtime_paths}"
+    for progname in ndk-build; do
+        wrapProgram "$(pwd)/$progname" --prefix PATH : "${runtime_paths}"
     done
 
     # make some executables available in PATH
     mkdir -p $out/bin
-    for i in ndk-build
-    do
-        ln -sf ../libexec/android-sdk/ndk-bundle/$i $out/bin/$i
+    for progname in ndk-build; do
+        ln -sf ../libexec/android-sdk/ndk-bundle/$progname $out/bin/$progname
     done
-  '';
+  '');
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
 }

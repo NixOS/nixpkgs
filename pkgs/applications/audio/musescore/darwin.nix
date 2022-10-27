@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, undmg }:
 
 let
-  versionComponents = [ "2" "1" ];
+  versionComponents = [ "3" "6" "2" "548020600" ];
   appName = "MuseScore ${builtins.head versionComponents}";
 in
 
@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
   pname = "musescore-darwin";
   version = concatStringsSep "." versionComponents;
 
+  # The disk image contains the .app and a symlink to /Applications.
+  sourceRoot = "${appName}.app";
+
   src = fetchurl {
-    url =  "ftp://ftp.osuosl.org/pub/musescore/releases/MuseScore-${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
-    sha256 = "19xkaxlkbrhvfip6n3iw6q7463ngr6y5gfisrpjqg2xl2igyl795";
+    url =  "https://github.com/musescore/MuseScore/releases/download/v${concatStringsSep "." (take 3 versionComponents)}/MuseScore-${version}.dmg";
+    sha256 = "sha256-lHckfhTTrDzaGwlbnZ5w0O1gMPbRmrmgATIGMY517l0=";
   };
 
   buildInputs = [ undmg ];
@@ -23,12 +26,11 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/Applications/${appName}.app/Contents/MacOS/mscore"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
-    license = licenses.gpl2;
+    homepage = "https://musescore.org/";
+    license = licenses.gpl3Only;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
-    repositories.git = https://github.com/musescore/MuseScore;
+    maintainers = [];
   };
 }

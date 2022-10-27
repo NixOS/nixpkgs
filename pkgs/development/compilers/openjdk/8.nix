@@ -1,11 +1,10 @@
-{ stdenv, lib, fetchurl, pkgconfig, lndir, bash, cpio, file, which, unzip, zip
-, cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
+{ stdenv, lib, fetchFromGitHub, pkg-config, lndir, bash, cpio, file, which, unzip, zip
+, cups, freetype, alsa-lib, cacert, perl, liberation_ttf, fontconfig, zlib
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableInfinality ? true # font rendering patch
 , enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
@@ -18,99 +17,38 @@ let
     i686-linux = "i386";
     x86_64-linux = "amd64";
     aarch64-linux = "aarch64";
-  }.${stdenv.system} or (throw "Unsupported platform");
+    powerpc64le-linux = "ppc64le";
+  }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
-  update = "222";
-  build = if stdenv.isAarch64 then "b10"
-          else "ga";
-  baseurl = if stdenv.isAarch64 then "https://hg.openjdk.java.net/aarch64-port/jdk8u-shenandoah"
-            else "https://hg.openjdk.java.net/jdk8u/jdk8u";
-  repover = lib.optionalString stdenv.isAarch64 "aarch64-shenandoah-"
-            + "jdk8u${update}-${build}";
+  update = "322";
+  build = "ga";
 
-  jdk8 = fetchurl {
-             name = "jdk8-${repover}.tar.gz";
-             url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "1h19zpmc76f8v4s0mfvqxmxvv8imdwq92z5dmgi19y4xnl978qq8"
-                      else "19dyqayn8n2y08p08g34xxnf0dkm6bfjxkp7633m7dx50mjcpxnj";
-          };
-  langtools = fetchurl {
-             name = "langtools-${repover}.tar.gz";
-             url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "09phy2izw2yyp3hnw7jmb7lp559dgnp2a0rymx1k3q97anfz3bzj"
-                      else "11nibmqnf7nap10sydk57gimgwpxqk5mn12dyg6fzg4s2fxf0y1q";
-          };
-  hotspot = fetchurl {
-             name = "hotspot-${repover}.tar.gz";
-             url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "1dqrzg2af94pjam6jg9nq8ydaibn4bsjv7ai6m7m3r2ph2fml80s"
-                      else "1g512xrrxvnrk5szg7wqqz00x4gv53dx3yffk5im2zfcalyka2q7";
-          };
-  corba = fetchurl {
-             name = "corba-${repover}.tar.gz";
-             url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "15l1ccvk2slx8wf5gilzjvhc428hl57gg1knbma1jqgs3ymnqwpr"
-                      else "0h8nprfzpy21mfl39fxxzfa420skwmaaji4r31j7lj3g8c1wp62r";
-          };
-  jdk = fetchurl {
-             name = "jdk-${repover}.tar.gz";
-             url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "179ij3rs1ahl6dh3n64k4xp2prv413ckqk7sj1g5lw48rj7bjh83"
-                      else "1sb38h0rckgkr2y0kfzav6mb74nv5whb9l8m842mv1jpavxrdv6k";
-          };
-  jaxws = fetchurl {
-             name = "jaxws-${repover}.tar.gz";
-             url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "16bayw7c4vzm9s0ixhw2dv6pan6wywyiddh9a8dss35660dnhrm0"
-                      else "0akn5zapff5m32ibgm3f4lhgq96bsqx74g4xl38xmivvxddsd6kz";
-          };
-  jaxp = fetchurl {
-             name = "jaxp-${repover}.tar.gz";
-             url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "176db7pi2irc7q87c273cjm5nrlj5g973fjmh24m6a1jxanrrm9x"
-                      else "0bw4q8yhmrl8hqlimy1ijnarav4r91dj73lpr7axba77rqlr41c8";
-          };
-  nashorn = fetchurl {
-             name = "nashorn-${repover}.tar.gz";
-             url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = if stdenv.isAarch64 then "0vi3kbsqfpdjxc08ayxk2c87zycd7z0qbqw9xka1vc59iyv97n62"
-                      else "0bfcf3iv2lr0xlp6sclxq7zz7b9ahajl008hz5rasjnrnr993qja";
-          };
-  openjdk8 = stdenv.mkDerivation {
+  openjdk8 = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "8u${update}-${build}";
 
-    srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
-    sourceRoot = ".";
-
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jdk8u";
+      rev = "jdk${version}";
+      sha256 = "sha256-e39Yv+NDQG7z6fGmpKEnkKd5MoHZ50SXlq/Q7lzWcDA=";
+    };
     outputs = [ "out" "jre" ];
 
-    nativeBuildInputs = [ pkgconfig lndir ];
+    nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which unzip zip perl openjdk8-bootstrap zlib cups freetype alsaLib
+      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk2 gnome_vfs GConf glib
     ];
 
-    # move the seven other source dirs under the main jdk8u directory,
-    # with version suffixes removed, as the remainder of the build will expect
-    prePatch = ''
-      mainDir=$(find . -maxdepth 1 -name jdk8u\*);
-      find . -maxdepth 1 -name \*jdk\* -not -name jdk8u\* | awk -F- '{print $1}' | while read p; do
-        mv $p-* $mainDir/$p
-      done
-      cd $mainDir
-    '';
-
     patches = [
       ./fix-java-home-jdk8.patch
       ./read-truststore-from-env-jdk8.patch
       ./currency-date-range-jdk8.patch
-    ] ++ lib.optionals (!headless && enableInfinality) [
-      ./004_add-fontconfig.patch
-      ./005_enable-infinality.patch
+      ./fix-library-path-jdk8.patch
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk8.patch
     ];
@@ -140,7 +78,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [
+    NIX_CFLAGS_COMPILE = toString ([
       # glibc 2.24 deprecated readdir_r so we need this
       # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
       "-Wno-error=deprecated-declarations"
@@ -151,13 +89,19 @@ let
       "-fno-delete-null-pointer-checks"
       "-std=gnu++98"
       "-Wno-error"
-    ];
+    ]);
 
-    NIX_LDFLAGS= lib.optionals (!headless) [
+    NIX_LDFLAGS= toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
       "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
-    ];
+    ]);
+
+    # -j flag is explicitly rejected by the build system:
+    #     Error: 'make -jN' is not supported, use 'make JOBS=N'
+    # Note: it does not make build sequential. Build system
+    # still runs in parallel.
+    enableParallelBuilding = false;
 
     buildFlags = [ "all" ];
 
@@ -192,6 +136,11 @@ let
       mv $out/lib/openjdk/jre $jre/lib/openjdk/jre
       mkdir $out/lib/openjdk/jre
       lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+
+      # Make sure cmm/*.pf are not symlinks:
+      # https://youtrack.jetbrains.com/issue/IDEA-147272
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Setup fallback fonts
       ${lib.optionalString (!headless) ''
@@ -231,7 +180,7 @@ let
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
 
@@ -257,16 +206,18 @@ let
     disallowedReferences = [ openjdk8-bootstrap ];
 
     meta = with lib; {
-      homepage = http://openjdk.java.net/;
+      homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo nequissimus ];
+      maintainers = with maintainers; [ edwtjo ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+      mainProgram = "java";
     };
 
     passthru = {
       inherit architecture;
       home = "${openjdk8}/lib/openjdk";
+      inherit gtk2;
     };
   };
 in openjdk8

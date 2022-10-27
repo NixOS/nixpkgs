@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, fetchpatch
+, nix-update-script
 , vala
-, pkgconfig
+, pkg-config
 , python3
 , glib
 , gtk3
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ideogram";
-  version = "1.2.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = pname;
     rev = version;
-    sha256 = "1qakgg3y4n2vcnykk2004ndvwmjbk2yy0p4j30mlb7p14dxscif6";
+    sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -45,25 +45,24 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  patches = [
-    # See: https://github.com/cassidyjames/ideogram/issues/26
-    (fetchpatch {
-      url = "https://github.com/cassidyjames/ideogram/commit/65994ee11bd21f8316b057cec01afbf50639a708.patch";
-      sha256 = "12vrvvggpqq53dmhbm7gbbbigncn19m1fjln9wxaady21m0w776c";
-    })
-  ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
-    homepage = https://github.com/cassidyjames/ideogram;
+    homepage = "https://github.com/cassidyjames/ideogram";
     license = licenses.gpl2Plus;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.cassidyjames.ideogram";
   };
 
 }

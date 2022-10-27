@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk2 }:
+{ lib, stdenv, fetchurl, gnome_python, librsvg, libwnck2, libgtop, pkg-config, python2, gtk2 }:
 
 let
   inherit (python2.pkgs) python pygtk;
@@ -13,8 +13,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1s8f9rns9v7qlwjv9qh9lr8crp88dpzfm45hj47zc3ivpy0dbnq9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 librsvg libwnck libgtop python ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gtk2 librsvg libwnck2 libgtop python ];
   propagatedBuildInputs = [ gnome_python pygtk ];
 
   # gnome-python-desktop expects that .pth file is already installed by PyGTK
@@ -23,8 +23,8 @@ in stdenv.mkDerivation rec {
     echo "gtk-2.0" > $out/${python2.sitePackages}/${pname}-${version}.pth
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.pygtk.org;
+  meta = with lib; {
+    homepage = "http://www.pygtk.org";
     description = "Python bindings for GNOME desktop packages";
     license = licenses.lgpl21;
     maintainers = [ maintainers.goibhniu ];

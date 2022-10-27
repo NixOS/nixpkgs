@@ -1,21 +1,26 @@
-{ stdenv, fetchgit, alsaLib, libopus, ortp, bctoolbox }:
+{ lib, stdenv, fetchurl, alsa-lib, libopus, ortp, bctoolbox }:
 
-stdenv.mkDerivation {
-  pname = "trx-unstable";
-  version = "2018-01-23";
+stdenv.mkDerivation rec {
+  pname = "trx";
+  version = "0.5";
 
-  src = fetchgit {
-    url = "http://www.pogo.org.uk/~mark/trx.git";
-    rev = "66b4707a24172751a131e24d2a800496c699137f";
-    sha256 = "0w0960p25944b30lkc8n4lj14xgsf0fjpmxqwlz2r8wl642bqnfm";
+  src = fetchurl {
+    url = "https://www.pogo.org.uk/~mark/trx/releases/${pname}-${version}.tar.gz";
+    sha256 = "1jjgca92nifjhcr3n0fmpfr6f5gxlqyal2wmgdlgd7hx834r1if7";
   };
 
-  buildInputs = [ alsaLib libopus ortp bctoolbox ];
+  # Makefile is currently missing -lbctoolbox so the build fails when linking
+  # the libraries. This patch adds that flag.
+  patches = [
+    ./add_bctoolbox_ldlib.patch
+  ];
+
+  buildInputs = [ alsa-lib libopus ortp bctoolbox ];
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple toolset for broadcasting live audio using RTP/UDP and Opus";
-    homepage = http://www.pogo.org.uk/~mark/trx/;
+    homepage = "http://www.pogo.org.uk/~mark/trx/";
     license = licenses.gpl2;
     maintainers = [ maintainers.hansjoergschurr ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "macse";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  dontUnpack = true;
   dontBuild = true;
-  unpackPhase = ":";
 
   installPhase = ''
     runHook preInstall
@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiple alignment of coding sequences";
     homepage = "https://bioweb.supagro.inra.fr/macse/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.all;

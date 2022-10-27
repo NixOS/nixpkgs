@@ -1,22 +1,24 @@
-{ stdenv, pythonPackages }:
+{ lib, pythonPackages }:
 
-pythonPackages.buildPythonApplication rec {
+with pythonPackages;
+
+let
+  cerberus_1_1 = callPackage ./cerberus.nix { };
+in buildPythonApplication rec {
   pname = "pyditz";
-  version = "0.10.3";
+  version = "0.11";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0hxxz7kxv9gsrr86ccsc31g7bc2agw1ihbxhd659c2m6nrqq5qaf";
+    sha256 = "da0365ae9064e30c4a27526fb0d7a802fda5c8651cda6990d17be7ede89a2551";
   };
-  nativeBuildInputs = [ pythonPackages.setuptools_scm ];
-  propagatedBuildInputs = with pythonPackages; [ pyyaml six jinja2 cerberus11 ];
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ pyyaml six jinja2 cerberus_1_1 ];
 
-  checkPhase = ''
-    ${pythonPackages.python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
-  meta = with stdenv.lib; {
-    homepage = https://pythonhosted.org/pyditz/;
+  meta = with lib; {
+    homepage = "https://pythonhosted.org/pyditz/";
     description = "Drop-in replacement for the Ditz distributed issue tracker";
     maintainers = [ maintainers.ilikeavocadoes ];
     license = licenses.lgpl2;

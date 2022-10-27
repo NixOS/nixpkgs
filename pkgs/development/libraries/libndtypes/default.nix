@@ -1,16 +1,16 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
 stdenv.mkDerivation {
   pname = "libndtypes";
-  version = "unstable-2018-11-27";
+  version = "unstable-2019-08-01";
 
   src = fetchFromGitHub {
-    owner = "plures";
+    owner = "xnd-project";
     repo = "ndtypes";
-    rev = "4d810d0c4d54c81a7136f313f0ae6623853d574a";
-    sha256 = "1kk1sa7f17ffh49jc1qlizlsj536fr3s4flb6x4rjyi81rp7psb9";
+    rev = "3ce6607c96d8fe67b72cc0c97bf595620cdd274e";
+    sha256 = "18303q0jfar1lmi4krp94plczb455zcgw772f9lb8xa5p0bkhx01";
   };
 
   # Override linker with cc (symlink to either gcc or clang)
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic types for data description and in-memory computations";
-    homepage = https://xnd.io/;
+    homepage = "https://xnd.io/";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,20 +1,33 @@
-{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
-, libmaxminddb ? null, geolite-legacy ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, getopt
+, ip2location-c
+, openssl
+, perl
+, libmaxminddb ? null
+, geolite-legacy ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "2.2.0";
+  version = "4.0.1";
 
-  src = fetchurl {
-    urls = [
-      "https://www.deepspace6.net/ftp/pub/ds6/sources/ipv6calc/${pname}-${version}.tar.gz"
-      "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${pname}-${version}.tar.gz"
-      "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "18acy0sy3n6jcjjwpxskysinw06czyayx1q4rqc7zc3ic4pkad8r";
+  src = fetchFromGitHub {
+    owner = "pbiering";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-mfJ6ADjGjECyoW5ELnUzXiJHHiwEDHzeOKCGSmGnLno=";
   };
 
-  buildInputs = [ libmaxminddb geolite-legacy getopt ip2location-c openssl perl ];
+  buildInputs = [
+    libmaxminddb
+    geolite-legacy
+    getopt
+    ip2location-c
+    openssl
+    perl
+  ];
 
   postPatch = ''
     patchShebangs *.sh */*.sh
@@ -30,17 +43,17 @@ stdenv.mkDerivation rec {
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ stdenv.lib.optional (libmaxminddb != null ) [
+  ] ++ lib.optionals (libmaxminddb != null) [
     "--enable-mmdb"
-  ] ++ stdenv.lib.optional (geolite-legacy != null) [
+  ] ++ lib.optionals (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ stdenv.lib.optional (ip2location-c != null ) [
+  ] ++ lib.optionals (ip2location-c != null) [
     "--enable-ip2location"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
@@ -51,7 +64,8 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

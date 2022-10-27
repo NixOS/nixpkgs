@@ -1,17 +1,49 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, buildGoModule
+, pgpy
+, srht
+, redis
+, bcrypt
+, qrcode
+, stripe
+, zxcvbn
+, alembic
+, pystache
+, dnspython
+, sshpubkeys
+, weasyprint
+, prometheus-client
 , python
-, pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
-, sshpubkeys, weasyprint, prometheus_client }:
+, unzip
+}:
+let
+  version = "0.58.18";
 
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "meta.sr.ht";
+    rev = version;
+    sha256 = "sha256-OjbQHAzG2nZwpJUIvhKaCJWZbhZDC2R6C+SkbKUpk8o=";
+  };
+
+  metasrht-api = buildGoModule ({
+    inherit src version;
+    pname = "metasrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-kiEuEYZFbwJ6SbKFtxH4SiRaZmqYriRHPoHdTX28+d0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+
+in
 buildPythonPackage rec {
   pname = "metasrht";
-  version = "0.35.2";
+  inherit version src;
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
-    rev = version;
-    sha256 = "10x00lydnrcgk7s27fddbrdb8bwc5ivwlpswkcrsi302qcjdff9w";
-  };
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -27,11 +59,8 @@ buildPythonPackage rec {
     pystache
     sshpubkeys
     weasyprint
-    prometheus_client
-  ];
-
-  patches = [
-    ./use-srht-path.patch
+    prometheus-client
+    dnspython
   ];
 
   preBuild = ''
@@ -39,10 +68,17 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/meta.sr.ht;
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
+  '';
+
+  pythonImportsCheck = [ "metasrht" ];
+
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

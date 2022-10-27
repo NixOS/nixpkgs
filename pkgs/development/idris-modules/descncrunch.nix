@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "descncrunch";
+  pname = "descncrunch";
   version = "2017-11-15";
 
   idrisDeps = [ pruviloj ];
@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Descriptions, levitation, and reflecting the elaborator";
-    homepage = https://github.com/ahmadsalim/desc-n-crunch;
+    homepage = "https://github.com/ahmadsalim/desc-n-crunch";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.brainrape ];
     broken = true;

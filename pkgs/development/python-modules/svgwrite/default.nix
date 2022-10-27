@@ -1,32 +1,34 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
-, pyparsing
-, pytest
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
-  version = "1.2.1";
+  version = "1.4.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "72ef66c9fe367989823cb237ab7f012ac809dd3ba76c1b5ebd9aa61580e2e75e";
+  src = fetchFromGitHub {
+    owner = "mozman";
+    repo = "svgwrite";
+    rev = "v${version}";
+    sha256 = "sha256-uOsrDhE9AwWU7GIrCVuL3uXTPqtrh8sofvo2C5t+25I=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ pyparsing ];
-  checkInputs = [ pytest ];
+  # svgwrite requires Python 3.6 or newer
+  disabled = pythonOlder "3.6";
 
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # embed_google_web_font test tried to pull font from internet
+    "test_embed_google_web_font"
+  ];
+
+  meta = with lib; {
     description = "A Python library to create SVG drawings";
-    homepage = https://github.com/mozman/svgwrite;
+    homepage = "https://github.com/mozman/svgwrite";
     license = licenses.mit;
   };
 

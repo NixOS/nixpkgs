@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocamlPackages, ncurses, remind }:
+{ lib, stdenv, fetchurl, ocamlPackages, ncurses, remind }:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
-
   preConfigure = ''
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
   '';
@@ -19,7 +17,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text-based front-end to Remind";
     longDescription = ''
       Wyrd is a text-based front-end to Remind, a sophisticated
@@ -28,8 +26,8 @@ stdenv.mkDerivation rec {
       flashy GUI dialogs. Rather, Wyrd is designed to make you more
       efficient at editing your reminder files directly.
     '';
-    homepage = http://pessimization.com/software/wyrd/;
-    downloadPage = http://pessimization.com/software/wyrd/;
+    homepage = "http://pessimization.com/software/wyrd/";
+    downloadPage = "http://pessimization.com/software/wyrd/";
     license = licenses.gpl2;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;

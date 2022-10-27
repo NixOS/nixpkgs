@@ -1,40 +1,36 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    arr-pm (0.0.10)
+    arr-pm (0.0.11)
       cabin (> 0)
-    backports (3.14.0)
+    backports (3.21.0)
     cabin (0.9.0)
-    childprocess (0.9.0)
-      ffi (~> 1.0, >= 1.0.11)
     clamp (1.0.1)
-    dotenv (2.7.2)
-    ffi (1.10.0)
-    fpm (1.11.0)
-      arr-pm (~> 0.0.10)
+    dotenv (2.7.6)
+    fpm (1.13.0)
+      arr-pm (~> 0.0.11)
       backports (>= 2.6.2)
       cabin (>= 0.6.0)
-      childprocess (= 0.9.0)
       clamp (~> 1.0.0)
-      ffi
-      json (>= 1.7.7, < 2.0)
+      git (>= 1.3.0, < 2.0)
+      json (>= 1.7.7, < 3.0)
       pleaserun (~> 0.0.29)
-      ruby-xz (~> 0.2.3)
+      rexml
       stud
+    git (1.8.1)
+      rchardet (~> 1.8)
     insist (1.0.0)
-    io-like (0.3.0)
-    json (1.8.6)
+    json (2.5.1)
     mustache (0.99.8)
-    pleaserun (0.0.30)
+    pleaserun (0.0.32)
       cabin (> 0)
       clamp
       dotenv
       insist
       mustache (= 0.99.8)
       stud
-    ruby-xz (0.2.3)
-      ffi (~> 1.9)
-      io-like (~> 0.3)
+    rchardet (1.8.0)
+    rexml (3.2.5)
     stud (0.0.23)
 
 PLATFORMS
@@ -44,4 +40,4 @@ DEPENDENCIES
   fpm
 
 BUNDLED WITH
-   1.17.2
+   2.1.4

@@ -1,39 +1,57 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.14.0";
-
-  # Something subtle in the go sum db is causing every download to
-  # get a new sum (and thus breaking the hash). This disables the
-  # fetching of the sum from the go sum database.
-  modBuildPhase = ''
-    runHook preBuild
-    GONOSUMDB=* go mod download
-    runHook postBuild
-  '';
+  version = "0.35.0";
 
   src = fetchFromGitHub {
-    owner = "instrumenta";
+    owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "0fjz6ad8rnznlp1kiyb3c6anhjs6v6acgziw4hmyz0xva4jnspsh";
+    sha256 = "sha256-rcc4Ziktoq1ZNWdCNxoNtthLzKoMYFOH/dBg2KNQVGY=";
   };
+  vendorSha256 = "sha256-jYBNDUUuTLQTCRWGAgjsvRN13RW97qt+5KREg7YBJnw=";
 
-  modSha256 = "1xwqlqx5794hsi14h5gqg69gjcqcma24ha0fxn0vffqgqs2cz1d1";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/open-policy-agent/conftest/internal/commands.version=${version}"
+  ];
 
-  buildFlagsArray = ''
-    -ldflags=
-        -X main.version=${version}
+  nativeBuildInputs = [ installShellFiles ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
-  subPackages = [ "cmd" ];
+  postInstall = ''
+    installShellCompletion --cmd conftest \
+      --bash <($out/bin/conftest completion bash) \
+      --fish <($out/bin/conftest completion fish) \
+      --zsh <($out/bin/conftest completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export HOME="$(mktemp -d)"
+    $out/bin/conftest --version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
-    homepage = https://github.com/instrumenta/conftest;
+    downloadPage = "https://github.com/open-policy-agent/conftest";
+    homepage = "https://www.conftest.dev";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
+    longDescription = ''
+      Conftest helps you write tests against structured configuration data.
+      Using Conftest you can write tests for your Kubernetes configuration,
+      Tekton pipeline definitions, Terraform code, Serverless configs or any
+      other config files.
+
+      Conftest uses the Rego language from Open Policy Agent for writing the
+      assertions. You can read more about Rego in 'How do I write policies' in
+      the Open Policy Agent documentation.
+    '';
+    maintainers = with maintainers; [ jk yurrriq ];
   };
 }

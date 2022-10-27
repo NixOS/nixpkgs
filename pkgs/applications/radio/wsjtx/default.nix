@@ -1,32 +1,29 @@
-{ stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
+{ lib, stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
   docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
-  qtmultimedia, qtserialport, qttools, texinfo, wrapQtAppsHook }:
+  qtmultimedia, qtserialport, qttools, boost, texinfo, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.1.0";
+  version = "2.5.4";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
     url = "http://physics.princeton.edu/pulsar/k1jt/wsjtx-${version}.tgz";
-    sha256 = "04flhyfw0djnnbrzh3f5lx06bnn92khchz3bmswk8if8n8j58v4y";
+    sha256 = "sha256-Gz84Rq0sCl9BAXi2YSdl1Z7mPbJJ62z8MyrOF/CjCJg=";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
-  # Omitting pkgconfig because it causes issues locating the built hamlib
+  # Omitting pkg-config because it causes issues locating the built hamlib
   nativeBuildInputs = [
     asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
     qttools texinfo wrapQtAppsHook
   ];
-  buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport ];
+  buildInputs = [ fftw fftwFloat libusb1 qtbase qtmultimedia qtserialport boost ];
 
   # Remove Git dependency from superbuild since sources are included
   patches = [ ./super.patch ];
 
-  # Superbuild has its own patch step after it extracts the inner archives
-  postPatch = "cp ${./wsjtx.patch} wsjtx.patch";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Weak-signal digital communication modes for amateur radio";
     longDescription = ''
       WSJT-X implements communication protocols or "modes" called FT4, FT8, JT4,
@@ -39,6 +36,6 @@ stdenv.mkDerivation rec {
     # Older licenses are for the statically-linked hamlib
     license = with licenses; [ gpl3Plus gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lasandell ];
+    maintainers = with maintainers; [ lasandell numinit ];
   };
 }

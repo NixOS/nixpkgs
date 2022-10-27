@@ -1,45 +1,57 @@
 { lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
-let
-  py = python3Packages;
-in py.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.37";
+  version = "0.49";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ivy5qfd90w1s1icsphvvdnnqz563v3fhg5pws2zn4483cgnzc2y";
+    sha256 = "sha256-xKgyBV/Qc+9PgXyxcT0xG1GXLC6KnjavJ/0SUE+9VSY=";
   };
 
-  # module imports scipy.misc.factorial, but it has been removed since scipy
-  # 1.3.0; use scipy.special.factorial instead
-  patches = [ ./factorial.patch ];
-
-  nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
+  nativeBuildInputs = (with python3Packages; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py; [
+  propagatedBuildInputs = with python3Packages; [
     sounddevice
     pyopengl
+    pyopengl-accelerate
     docutils
     numpy
     pyqt5
     appdirs
     pyrr
+    rtmixer
   ];
 
-  postFixup = ''
-    wrapQtApp $out/bin/friture
-    wrapQtApp $out/bin/.friture-wrapped
+  postPatch = ''
+    # Remove version constraints from Python dependencies in setup.py
+    sed -i -E "s/\"([A-Za-z0-9]+)(=|>|<)=[0-9\.]+\"/\"\1\"/g" setup.py
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/friture.desktop --replace usr/bin/friture friture
+
+    for size in 16 32 128 256 512
+    do
+      mkdir -p $out/share/icons/hicolor/$size\x$size
+      cp $src/resources/images/friture.iconset/icon_$size\x$size.png $out/share/icons/hicolor/$size\x$size/friture.png
+    done
+    mkdir -p $out/share/icons/hicolor/scalable/apps/
+    cp $src/resources/images-src/window-icon.svg $out/share/icons/hicolor/scalable/apps/friture.svg
   '';
 
   meta = with lib; {
     description = "A real-time audio analyzer";
-    homepage = "http://friture.org/";
+    homepage = "https://friture.org/";
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
-    maintainers = [ maintainers.laikq ];
+    maintainers = with maintainers; [ laikq alyaeanyx ];
   };
 }

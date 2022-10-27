@@ -1,8 +1,5 @@
-{ stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
-stdenv.mkDerivation rec {
-  pname = "write_stylus";
-  version = "209";
-
+{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
+let
   desktopItem = makeDesktopItem {
     name = "Write";
     exec = "Write";
@@ -10,19 +7,16 @@ stdenv.mkDerivation rec {
     icon = "write_stylus";
     desktopName = "Write";
     genericName = "Write";
-    categories = "Office;Graphics";
+    categories = [ "Office" "Graphics" ];
   };
+in
+mkDerivation rec {
+  pname = "write_stylus";
+  version = "300";
 
   src = fetchurl {
     url = "http://www.styluslabs.com/write/write${version}.tar.gz";
-    sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
-  };
-
-  # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
-  # license: Free for commercial use
-  icon = fetchurl {
-    url = "https://oyra.eu/write/icon.tar.gz";
-    sha256 = "1zd98g63apwi17qc1hm1g14maain5d18g4afadxm30qjz2s0mvs8";
+    sha256 = "0h1wf3af7jzp3f3l8mlnshi83d7a4v4y8nfqfai4lmskyicqlz7c";
   };
 
   sourceRoot = ".";
@@ -35,18 +29,20 @@ stdenv.mkDerivation rec {
     # symlink the binary to bin/
     ln -s $out/Write/Write $out/bin/Write
 
-    # untar icons
-    tar -xzf ${icon} *.tar.gz -C $out/
-
+    # Create desktop item
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    mkdir -p $out/share/icons
+    ln -s $out/Write/Write144x144.png $out/share/icons/write_stylus.png
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [
       qtbase            # libQt5PrintSupport.so.5
       qtsvg             # libQt5Svg.so.5
       stdenv.cc.cc.lib  # libstdc++.so.6
-      libglvnd          # ibGL.so.1
+      libglvnd          # libGL.so.1
+      libX11            # libX11.so.6
+      libXi             # libXi.so.6
     ];
   in ''
     patchelf \
@@ -55,11 +51,12 @@ stdenv.mkDerivation rec {
       $out/Write/Write
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.styluslabs.com/;
-    description = "Write is a word processor for handwriting.";
+  meta = with lib; {
+    homepage = "http://www.styluslabs.com/";
+    description = "Write is a word processor for handwriting";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = with maintainers; [ oyren ];
   };
 }

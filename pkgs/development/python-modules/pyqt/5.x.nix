@@ -1,48 +1,68 @@
-{ lib, fetchurl, pythonPackages, pkgconfig
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, isPy27
+, fetchPypi
+, pkg-config
 , dbus
-, qmake, lndir
-, qtbase
-, qtsvg
-, qtdeclarative
-, qtwebchannel
-, withConnectivity ? false, qtconnectivity
-, withMultimedia ? false, qtmultimedia
-, withWebKit ? false, qtwebkit
-, withWebSockets ? false, qtwebsockets
+, lndir
+, dbus-python
+, sip
+, pyqt5_sip
+, pyqt-builder
+, libsForQt5
+, withConnectivity ? false
+, withMultimedia ? false
+, withWebKit ? false
+, withWebSockets ? false
+, withLocation ? false
 }:
 
-let
+buildPythonPackage rec {
+  pname = "PyQt5";
+  version = "5.15.7";
+  format = "pyproject";
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
+  disabled = isPy27;
 
-  sip = (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
-    # If we install sip in another folder, then we need to create a __init__.py as well
-    # if we want to be able to import it with Python 2.
-    # Python 3 could rely on it being an implicit namespace package, however,
-    # PyQt5 we made an explicit namespace package so sip should be as well.
-    postInstall = ''
-      cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-      from pkgutil import extend_path
-      __path__ = extend_path(__path__, __name__)
-      EOF
-    '';
-  });
-
-in buildPythonPackage rec {
-  pname = "pyqt";
-  version = "5.13.0";
-  format = "other";
-
-  src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/PyQt5/${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "1ydgdz28f1v17qqz3skyv26k5l0w63fr4dncc5xm49jr2gjzznqc";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-dVEhpSs6CMsHJ1wQ67lldtNuMg5XJZHbFs/bxVgQFZQ=";
   };
+
+  patches = [
+    # Fix some wrong assumptions by ./project.py
+    # TODO: figure out how to send this upstream
+    ./pyqt5-fix-dbus-mainloop-support.patch
+    # confirm license when installing via pyqt5_sip
+    ./pyqt5-confirm-license.patch
+  ];
+
+  postPatch =
+  # be more verbose
+  ''
+    cat >> pyproject.toml <<EOF
+    [tool.sip.project]
+    verbose = true
+  ''
+  # Due to bug in SIP .whl name generation we have to bump minimal macos sdk upto 11.0 for
+  # aarch64-darwin. This patch can be removed once SIP will fix it in upstream,
+  # see https://github.com/NixOS/nixpkgs/pull/186612#issuecomment-1214635456.
+  + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    minimum-macos-version = "11.0"
+  '' + ''
+    EOF
+  '';
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [
-    pkgconfig
+  dontWrapQtApps = true;
+
+  nativeBuildInputs = with libsForQt5; [
+    pkg-config
     qmake
+    setuptools
     lndir
     sip
     qtbase
@@ -54,92 +74,57 @@ in buildPythonPackage rec {
     ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
   ;
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     dbus
     qtbase
     qtsvg
     qtdeclarative
+    pyqt-builder
   ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
   ;
 
   propagatedBuildInputs = [
     dbus-python
-    sip
-  ] ++ lib.optional (!isPy3k) enum34;
-
-  patches = [
-    # Fix some wrong assumptions by ./configure.py
-    # TODO: figure out how to send this upstream
-    ./pyqt5-fix-dbus-mainloop-support.patch
+    pyqt5_sip
   ];
 
   passthru = {
-    inherit sip;
+    inherit sip pyqt5_sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
   };
 
-  configurePhase = ''
-    runHook preConfigure
+  dontConfigure = true;
 
-    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
+  # Checked using pythonImportsCheck
+  doCheck = false;
 
-    ${python.executable} configure.py  -w \
-      --confirm-license \
-      --dbus-moduledir=$out/${python.sitePackages}/dbus/mainloop \
-      --no-qml-plugin \
-      --bindir=$out/bin \
-      --destdir=$out/${python.sitePackages} \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --sipdir=$out/share/sip/PyQt5 \
-      --designer-plugindir=$out/plugins/designer
-
-    runHook postConfigure
-  '';
-
-  postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-
-    # Let's make it a namespace package
-    cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-    from pkgutil import extend_path
-    __path__ = extend_path(__path__, __name__)
-    EOF
-  '';
-
-  installCheckPhase = let
-    modules = [
-      "PyQt5"
-      "PyQt5.QtCore"
-      "PyQt5.QtQml"
-      "PyQt5.QtWidgets"
-      "PyQt5.QtGui"
-    ]
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
-    ;
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    ${python.interpreter} -c "${imports}"
-  '';
-
-  doCheck = true;
-
-  enableParallelBuilding = true;
+    ++ lib.optional withLocation "PyQt5.QtPositioning"
+  ;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
-    license     = licenses.gpl3;
+    homepage    = "https://riverbankcomputing.com/";
+    license     = licenses.gpl3Only;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };

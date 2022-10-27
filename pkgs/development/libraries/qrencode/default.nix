@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, SDL2, libpng, libiconv }:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libpng, libiconv, libobjc }:
 
 stdenv.mkDerivation rec {
   pname = "qrencode";
-  version = "4.0.2";
+  version = "4.1.1";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
-    sha256 = "079v3a15ydpr67zdi3xbgvic8n2kxvi0m32dyz8jaik10yffgayv";
+    sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL2 libpng ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ SDL2 libpng ] ++ lib.optionals stdenv.isDarwin [ libiconv libobjc ];
 
   configureFlags = [
     "--with-tests"
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fukuchi.org/works/qrencode/;
+  meta = with lib; {
+    homepage = "https://fukuchi.org/works/qrencode/";
     description = "C library for encoding data in a QR Code symbol";
 
     longDescription = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ adolfogc yegortimoshenko ];
+    maintainers = with maintainers; [ adolfogc yana ];
     platforms = platforms.all;
   };
 }

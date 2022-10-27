@@ -1,23 +1,23 @@
 { lib, fetchPypi, buildPythonPackage
-, six, systemd, pytest, mock, hypothesis, docutils
+, six, udev, pytest, mock, hypothesis, docutils
 }:
 
 buildPythonPackage rec {
   pname = "pyudev";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0arz0dqp75sszsmgm6vhg92n1lsx91ihddx3m944f4ah0487ljq9";
+    sha256 = "sha256-sqOv4cmep1H4KWZSVX6sVZh02iobHsBiUXhwbsWjRfM=";
   };
 
   postPatch = ''
     substituteInPlace src/pyudev/_ctypeslib/utils.py \
-      --replace "find_library(name)" "'${systemd.lib}/lib/libudev.so'"
+      --replace "find_library(name)" "'${lib.getLib udev}/lib/libudev.so'"
     '';
 
   checkInputs = [ pytest mock hypothesis docutils ];
-  propagatedBuildInputs = [ systemd six ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     py.test
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://pyudev.readthedocs.org/;
+    homepage = "https://pyudev.readthedocs.org/";
     description = "Pure Python libudev binding";
     license = lib.licenses.lgpl21Plus;
   };

@@ -1,32 +1,57 @@
-{ stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+, fontconfig
+, harfbuzz
+, openssl
+, pkg-config
+, makeBinaryWrapper
+, biber
+, icu
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.11";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
-    rev = "v${version}";
-    sha256 = "1j98qxlq74vs8nf2jsn2xw9iyrf8kih4v0hrvznkhcab6bpibp2x";
+    rev = "tectonic@${version}";
+    fetchSubmodules = true;
+    sha256 = "tBX737Yv4TvDo64cDYuALX61vzKjhz6PTMXQhWc5S/I=";
   };
 
-  cargoSha256 = "0hsm5a40lc3gy1zrfrchp7zby17xjv5a4llqr4xmka07y7sk08fn";
+  cargoSha256 = "awDVjJLwgpSMbwptmLhczaxB5HqvsdvEOUsLYb/zTUc=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
-  buildInputs = [ fontconfig harfbuzz openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+  buildInputs = [ icu fontconfig harfbuzz openssl ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  # tests fail due to read-only nix store
-  doCheck = false;
+  # Tectonic runs biber when it detects it needs to run it, see:
+  # https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.7.0
+  postInstall = ''
+    wrapProgram $out/bin/tectonic \
+      --prefix PATH : "${lib.getBin biber}/bin"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace dist/appimage/tectonic.desktop \
+      --replace Exec=tectonic Exec=$out/bin/tectonic
+    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
+    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
 
-  meta = with stdenv.lib; {
+    ln -s $out/bin/tectonic $out/bin/nextonic
+  '';
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
-    homepage = https://tectonic-typesetting.github.io/;
+    homepage = "https://tectonic-typesetting.github.io/";
+    changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ lluchs doronbehar ];
   };
 }

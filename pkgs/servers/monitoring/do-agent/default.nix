@@ -2,21 +2,26 @@
 
 buildGoModule rec {
   pname = "do-agent";
-  version = "3.5.6";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
-    rev = "${version}";
-    sha256 = "1gl034cslqa30fqy2p9rymgx398s1rcgbmfvzk5zjlrw47327k8i";
+    rev = version;
+    sha256 = "sha256-f8sUm80Rw9QU1fa8mdepw+zOWEP/UqWLSLtQmwKeB+Q=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.version=${version}
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+  ];
 
-  modSha256 = "164bwqg996097db399j7lar6gj9xpshjdmyapvzg7zh655xlkf3d";
+  vendorSha256 = null;
+
+  doCheck = false;
+
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
+  '';
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";
@@ -25,7 +30,7 @@ buildGoModule rec {
       metrics from a DigitalOcean Droplet (on which the program runs) and sends
       them to DigitalOcean to provide resource usage graphs and alerting.
     '';
-    homepage = https://github.com/digitalocean/do-agent;
+    homepage = "https://github.com/digitalocean/do-agent";
     license = licenses.asl20;
     maintainers = with maintainers; [ yvt ];
     platforms = platforms.linux;

@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, apacheHttpd, jdk }:
+{ lib, stdenv, fetchurl, apacheHttpd, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "tomcat-connectors-1.2.46";
+  pname = "tomcat-connectors";
+  version = "1.2.48";
 
   src = fetchurl {
-    url = "mirror://apache/tomcat/tomcat-connectors/jk/${name}-src.tar.gz";
-    sha256 = "1sfbcsmshjkj4wc969ngjcxhjyp4mbkjprbs111d1b0x3l7547by";
+    url = "mirror://apache/tomcat/tomcat-connectors/jk/${pname}-${version}-src.tar.gz";
+    sha256 = "15wfj1mvad15j1fqw67qbpbpwrcz3rb0zdhrq6z2sax1l05kc6yb";
   };
 
   configureFlags = [
@@ -24,9 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ apacheHttpd jdk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides web server plugins to connect web servers with Tomcat";
-    homepage = https://tomcat.apache.org/download-connectors.cgi;
+    homepage = "https://tomcat.apache.org/download-connectors.cgi";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

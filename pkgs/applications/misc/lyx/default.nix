@@ -1,21 +1,21 @@
-{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc, fetchpatch
+{ fetchurl, lib, mkDerivation, pkg-config, python3, file, bc
 , qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
 }:
 
 mkDerivation rec {
-  version = "2.3.0";
+  version = "2.3.6.1";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.3.x/${pname}-${version}.tar.xz";
-    sha256 = "0axri2h8xkna4mkfchfyyysbjl7s486vx80p5hzj9zgsvdm5a3ri";
+    sha256 = "sha256-xr7SYzQZiY4Bp8w1AxDX2TS/WRyrcln8JYGqTADq+ng=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
-    qtbase qtsvg python file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
+    qtbase qtsvg python3 file/*for libmagic*/ bc
+    hunspell # enchant
   ];
 
   configureFlags = [
@@ -31,19 +31,12 @@ mkDerivation rec {
 
   # python is run during runtime to do various tasks
   qtWrapperArgs = [
-    " --prefix PATH : ${python}/bin"
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-office/lyx/files/lyx-2.3.0-qt-5.11.patch?id=07e82fd1fc07bf055c78b81eaa128f8f837da80d";
-      sha256 = "1bnx0il2iv36lnrnyb370wyvww0rd8bphcy6z8d7zmvd3pwhyfql";
-    })
+    " --prefix PATH : ${python3}/bin"
   ];
 
   meta = with lib; {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = http://www.lyx.org;
+    homepage = "http://www.lyx.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vcunat ];
     platforms = platforms.linux;

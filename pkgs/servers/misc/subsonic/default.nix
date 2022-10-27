@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre }:
+{ lib, stdenv, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   pname = "subsonic";
-  version = "6.1.5";
+  version = "6.1.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/subsonic/subsonic-${version}-standalone.tar.gz";
-    sha256 = "1xz3flxd5hxcvvg1izzxpv5rxwb5zprk92vsgvmcniy7j7r66936";
+    sha256 = "180qdk8mnc147az8v9rmc1kgf8b13mmq88l195gjdwiqpflqzdyz";
   };
 
   inherit jre;
@@ -26,13 +26,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://subsonic.org;
+  meta = with lib; {
+    homepage = "http://subsonic.org";
     description = "Personal media streamer";
     license = licenses.unfree;
     maintainers = with maintainers; [ telotortium ];
     platforms = platforms.unix;
   };
-
-  phases = ["unpackPhase" "installPhase"];
 }

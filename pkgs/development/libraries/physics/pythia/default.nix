@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, boost, fastjet, hepmc2, lhapdf, rsync, zlib }:
+{ lib, stdenv, fetchurl, boost, fastjet, fixDarwinDylibNames, hepmc, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.243";
+  version = "8.307";
 
   src = fetchurl {
-    url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "0y8w5gdaczg8vdw63rkgjr1dcvqs2clqkdia34p30xcwgm1jgv7q";
+    url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
+    sha256 = "sha256-5bFNRKpZQzMuMt1d2poY/dGgCFxxmOKNhA4EFn+mAT0=";
   };
 
-  buildInputs = [ boost fastjet hepmc2 zlib rsync lhapdf ];
+  nativeBuildInputs = [ rsync ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -17,17 +19,20 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-hepmc2=${hepmc2}"
     "--with-lhapdf6=${lhapdf}"
-  ];
+  ] ++ (if lib.versions.major hepmc.version == "3" then [
+    "--with-hepmc3=${hepmc}"
+  ] else [
+    "--with-hepmc2=${hepmc}"
+  ]);
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A program for the generation of high-energy physics events";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://home.thep.lu.se/~torbjorn/Pythia.html;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    license = licenses.gpl2Only;
+    homepage = "https://pythia.org";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

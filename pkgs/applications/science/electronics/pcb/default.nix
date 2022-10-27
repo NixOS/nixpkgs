@@ -1,29 +1,66 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, bison, intltool, flex
-, netpbm, imagemagick, dbus, xlibsWrapper, libGLU_combined
-, shared-mime-info, tcl, tk, gnome2, pangox_compat, gd, xorg
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, bison
+, intltool
+, flex
+, netpbm
+, imagemagick
+, dbus
+, freetype
+, fontconfig
+, libGLU
+, libGL
+, shared-mime-info
+, tcl
+, tk
+, gnome2
+, gd
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcb";
-  version = "20140316";
+  version = "4.3.0";
 
   src = fetchurl {
-    url = "http://ftp.geda-project.org/pcb/pcb-20140316/${pname}-${version}.tar.gz";
-    sha256 = "0l6944hq79qsyp60i5ai02xwyp8l47q7xdm3js0jfkpf72ag7i42";
+    url = "mirror://sourceforge/pcb/${pname}-${version}.tar.gz";
+    sha256 = "sha256-roUvRq+Eq6f1HYE/uRb8f82+6kP3E08VBQcCThdD+14=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper
-    libGLU_combined tcl shared-mime-info tk
-    gnome2.gtkglext pangox_compat gd xorg.libXmu
+  nativeBuildInputs = [
+    pkg-config
+    bison
+    intltool
+    flex
+    netpbm
+    imagemagick
   ];
 
-  configureFlags = ["--disable-update-desktop-database"];
+  buildInputs = [
+    gtk2
+    dbus
+    xorg.libXrender
+    freetype
+    fontconfig
+    libGLU
+    libGL
+    tcl
+    shared-mime-info
+    tk
+    gnome2.gtkglext
+    gd
+    xorg.libXmu
+  ];
 
-  meta = with stdenv.lib; {
+  configureFlags = [
+    "--disable-update-desktop-database"
+  ];
+
+  meta = with lib; {
     description = "Printed Circuit Board editor";
-    homepage = http://pcb.geda-project.org/;
+    homepage = "http://pcb.geda-project.org/";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.gpl2;

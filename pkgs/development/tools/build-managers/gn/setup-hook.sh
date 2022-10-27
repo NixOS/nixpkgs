@@ -9,6 +9,6 @@ gnConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseGnConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseGnConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=gnConfigurePhase
 fi

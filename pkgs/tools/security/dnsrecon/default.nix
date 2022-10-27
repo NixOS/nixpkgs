@@ -1,44 +1,43 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "0.9.1";
+  version = "1.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = pname;
     rev = version;
-    sha256 = "1ysf8wx287psfk89r0i2vgnrjvxdj44s6nhf6sva59jbwvr9lghy";
+    hash = "sha256-V4/6VUlMizy8EN8ajN56YF+COn3/dfmD0997R+iR86g=";
   };
 
-  format = "other";
-
-  pythonPath = with python3.pkgs; [
-    dns netaddr lxml
+  propagatedBuildInputs = with python3.pkgs; [
+    dnspython
+    netaddr
+    lxml
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace dnsrecon.py \
-      --replace "namelist.txt" "../share/namelist.txt" \
-      --replace "0.9.0" "${version}"
+  preFixup = ''
+    # Install wordlists, etc.
+    install -vD namelist.txt subdomains-*.txt snoop.txt -t $out/share/wordlists
   '';
 
-  installPhase = ''
-    runHook preInstall
+  # Tests require access to /etc/resolv.conf
+  doCheck = false;
 
-    install -vD dnsrecon.py $out/bin/dnsrecon
-    install -vD namelist.txt subdomains-*.txt -t $out/share
-    install -vd $out/${python3.sitePackages}/
-    cp -R lib tools msf_plugin $out/${python3.sitePackages}
+  pythonImportsCheck = [
+    "dnsrecon"
+  ];
 
-    runHook postInstall
-  '';
-
-  meta = with stdenv.lib; {
-    description = "DNS Enumeration Script";
+  meta = with lib; {
+    description = "DNS Enumeration script";
     homepage = "https://github.com/darkoperator/dnsrecon";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ c0bw3b ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ c0bw3b fab ];
   };
 }

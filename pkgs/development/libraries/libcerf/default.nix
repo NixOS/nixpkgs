@@ -1,16 +1,23 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, cmake, perl, gnuplot }:
 
-stdenv.mkDerivation {
-  name = "libcerf-1.5";
+stdenv.mkDerivation rec {
+  pname = "libcerf";
+  version = "2.1";
 
   src = fetchurl {
-    url = "http://apps.jcns.fz-juelich.de/src/libcerf/libcerf-1.5.tgz";
-    sha256 = "11jwr8ql4a9kmv04ycgwk4dsqnlv4l65a8aa0x1i3y7zwx3w2vg3";
+    url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${version}/libcerf-v${version}.tar.gz";
+    sha256 = "sha256-ihzYt/rgS4KpUWglISm4wbrKCYooX/jT8leB3q0Ut1o=";
+  };
+
+  nativeBuildInputs = [ cmake perl ];
+
+  passthru.tests = {
+    inherit gnuplot;
   };
 
   meta = with lib; {
     description = "Complex error (erf), Dawson, Faddeeva, and Voigt function library";
-    homepage = http://apps.jcns.fz-juelich.de/doku/sc/libcerf;
+    homepage = "https://jugit.fz-juelich.de/mlz/libcerf";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;

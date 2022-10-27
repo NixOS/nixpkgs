@@ -1,34 +1,48 @@
-{
-  stdenv, fetchurl, lib,
-  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
-  audit,
-  libgcrypt ? null,
-  libsodium ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, installShellFiles
+, nixosTests
+, asciidoc
+, pkg-config
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, dbus-glib
+, libcap_ng
+, libqb
+, libseccomp
+, polkit
+, protobuf
+, audit
+, libsodium
 }:
 
-with stdenv.lib;
-
-assert libgcrypt != null -> libsodium == null;
-
 stdenv.mkDerivation rec {
-  version = "0.7.5";
+  version = "1.1.2";
   pname = "usbguard";
 
-  repo = "https://github.com/USBGuard/usbguard";
-
-  src = fetchurl {
-    url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0jj56sls13ryfgz6vajq8p4dm3grgb6rf2cmga6sckmzd4chk65b";
+  src = fetchFromGitHub {
+    owner = "USBGuard";
+    repo = pname;
+    rev = "usbguard-${version}";
+    sha256 = "sha256-uwNoKczmVOMpkU4KcKTOtbcTHiYVGXjk/rVbqMl5pGk=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    installShellFiles
     asciidoc
-    pkgconfig
+    pkg-config
     libxslt # xsltproc
     libxml2 # xmllint
     docbook_xml_dtd_45
     docbook_xsl
+    dbus-glib # gdbus-codegen
+    protobuf # protoc
   ];
 
   buildInputs = [
@@ -36,28 +50,39 @@ stdenv.mkDerivation rec {
     libcap_ng
     libqb
     libseccomp
+    libsodium
     polkit
     protobuf
     audit
-  ]
-  ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium);
+  ];
 
   configureFlags = [
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
+    "--with-crypto-library=sodium"
     "--with-polkit"
-  ]
-  ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
+  ];
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "The USBGuard software framework helps to protect your computer against BadUSB.";
+  postInstall = ''
+    installShellCompletion --bash --name usbguard.bash scripts/bash_completion/usbguard
+    installShellCompletion --zsh --name _usbguard scripts/usbguard-zsh-completion
+  '';
+
+  passthru.tests = nixosTests.usbguard;
+
+  meta = with lib; {
+    description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    longDescription = ''
+      USBGuard is a software framework for implementing USB device authorization
+      policies (what kind of USB devices are authorized) as well as method of
+      use policies (how a USB device may interact with the system). Simply put,
+      it is a USB device whitelisting tool.
+    '';
     homepage = "https://usbguard.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.tnias ];
   };
 }

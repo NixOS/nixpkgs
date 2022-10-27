@@ -1,34 +1,48 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , glib
 , glibc
+, libseccomp
 , systemd
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  project = "conmon";
-  name = "${project}-${version}";
-  version = "2.0.0";
+  pname = "conmon";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = project;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1sigcylya668f5jzkf1vgfsgqy26l3glh9a3g8lhd2468ax6wymk";
+    sha256 = "sha256-d7fXbzbrqhP6zLVZo3gO+FyvZg7Z3AGlNSNLy0PD6EE=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib systemd ] ++
-    stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ glib libseccomp systemd ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
-  installPhase = "install -Dm755 bin/${project} $out/bin/${project}";
+  # manpage requires building the vendored go-md2man
+  makeFlags = [ "bin/conmon" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/containers/conmon;
+  installPhase = ''
+    runHook preInstall
+    install -D bin/conmon -t $out/bin
+    runHook postInstall
+  '';
+
+  enableParallelBuilding = true;
+  strictDeps = true;
+
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
+
+  meta = with lib; {
+    homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

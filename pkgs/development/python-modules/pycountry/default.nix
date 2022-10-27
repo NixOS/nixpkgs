@@ -1,22 +1,36 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-,
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycountry";
-  version = "19.8.18";
+  version = "22.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jxkdjffrhn0il0nm14dlzxpd6f3v1hbxzxsprcksafgmm0almrw";
+    sha256 = "sha256-shY6JGxYWJTYCPGHg+GRN8twoMGPs2dI3AH8bxCcFkY=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/flyingcircus/pycountry;
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pycountry"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/flyingcircusio/pycountry";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = licenses.lgpl2;
+    maintainers = with maintainers; [ ];
   };
 
 }

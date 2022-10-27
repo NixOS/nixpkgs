@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "kconfiglib";
-  version = "12.12.1";
+  version = "14.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0afc0gidh0pjb0ll99xifzs5z14g365crfj935614zp9w8fcchp0";
+    sha256 = "0g690bk789hsry34y4ahvly5c8w8imca90ss4njfqf7m2qicrlmy";
   };
 
   # doesnt work out of the box but might be possible
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A flexible Python 2/3 Kconfig implementation and library";
-    homepage = https://github.com/ulfalizer/Kconfiglib;
+    homepage = "https://github.com/ulfalizer/Kconfiglib";
     license = licenses.isc;
     maintainers = with maintainers; [ teto ];
   };

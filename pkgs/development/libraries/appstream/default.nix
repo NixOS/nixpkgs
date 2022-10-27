@@ -1,52 +1,107 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
-, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
-, pcre, itstool, gperf, vala
+{ lib
+, stdenv
+, substituteAll
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gettext
+, xmlto
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, libxslt
+, libstemmer
+, glib
+, xapian
+, libxml2
+, libxmlb
+, libyaml
+, gobject-introspection
+, pcre
+, itstool
+, gperf
+, vala
+, curl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.12.6";
+  version = "0.15.5";
+  # When bumping this package, please also check whether
+  # fix-build-for-qt-olderthan-514.patch still applies by
+  # building libsForQt512.appstream-qt.
+
+  outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchFromGitHub {
-    owner  = "ximion";
-    repo   = "appstream";
-    rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0hbl26aw3g2hag7z4di9z59qz057qcywrxpnnmp86z7rngvjbqpx";
+    owner = "ximion";
+    repo = "appstream";
+    rev = "v${version}";
+    sha256 = "sha256-KVZCtu1w5FMgXZMiSW55rbrI6W/A9zWWKKvACtk/jjk=";
   };
 
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext
-    libxslt xmlto docbook_xsl docbook_xml_dtd_45
-    gobject-introspection itstool vala
+  patches = [
+    # Fix hardcoded paths
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libstemmer_includedir = "${lib.getDev libstemmer}/include";
+    })
+
+    # Allow installing installed tests to a separate output.
+    ./installed-tests-path.patch
   ];
 
-  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    libxslt
+    xmlto
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    gobject-introspection
+    itstool
+    vala
+  ];
 
-  prePatch = ''
-    substituteInPlace meson.build \
-      --replace /usr/include ${libstemmer}/include
-
-    substituteInPlace data/meson.build \
-      --replace /etc $out/etc
-  '';
+  buildInputs = [
+    libstemmer
+    pcre
+    glib
+    xapian
+    libxml2
+    libxmlb
+    libyaml
+    gperf
+    curl
+  ];
 
   mesonFlags = [
     "-Dapidocs=false"
     "-Ddocs=false"
     "-Dvapi=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    tests = {
+      installed-tests = nixosTests.installed-tests.appstream;
+    };
+  };
+
+  meta = with lib; {
     description = "Software metadata handling library";
-    homepage    = https://www.freedesktop.org/wiki/Distributions/AppStream/;
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
       and enhancing metadata provided by software components.  It provides
       specifications for meta-information which is shipped by upstream projects and
       can be consumed by other software.
     '';
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
- };
+    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
+    license = licenses.lgpl21Plus;
+    mainProgram = "appstreamcli";
+    platforms = platforms.unix;
+  };
 }

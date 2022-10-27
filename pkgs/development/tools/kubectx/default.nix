@@ -1,53 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, kubectl, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-with lib;
-
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "kubectx";
-  version = "0.7.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11snp3li2w4ds2r7fc6mldlgj24mga40v0knlralaiz296bd6zcs";
+    sha256 = "sha256-WY0zFt76mvdzk/s2Rzqys8n+DVw6qg7V6Y8JncOUVCM=";
   };
 
-  buildInputs = [ makeWrapper ];
+  patches = [
+    ./bump-golang-x-sys.patch
+  ];
 
-  dontBuild = true;
-  doCheck = false;
+  vendorSha256 = "sha256-p4KUBmJw6hWG1J2qwg4QBbh6Vo1cr/HQz0IqytIDJjU=";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/zsh/site-functions
-    mkdir -p $out/share/bash-completion/completions
-    mkdir -p $out/share/fish/vendor_completions.d
+  nativeBuildInputs = [ installShellFiles ];
 
-    cp kubectx $out/bin
-    cp kubens $out/bin
-
-    # Provide ZSH completions
-    cp completion/kubectx.zsh $out/share/zsh/site-functions/_kubectx
-    cp completion/kubens.zsh $out/share/zsh/site-functions/_kubens
-
-    # Provide BASH completions
-    cp completion/kubectx.bash $out/share/bash-completion/completions/kubectx
-    cp completion/kubens.bash $out/share/bash-completion/completions/kubens
-
-    # Provide FISH completions
-    cp completion/*.fish $out/share/fish/vendor_completions.d/
-
-    for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [ kubectl ]}
-    done
+  postInstall = ''
+    installShellCompletion completion/*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast way to switch between clusters and namespaces in kubectl!";
     license = licenses.asl20;
-    homepage = https://github.com/ahmetb/kubectx;
-    maintainers = with maintainers; [ periklis ];
-    platforms = with platforms; unix;
+    homepage = "https://github.com/ahmetb/kubectx";
+    maintainers = with maintainers; [ jlesquembre ];
   };
 }

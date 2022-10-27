@@ -1,25 +1,30 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , isPyPy
+, six
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
+  version = "0.12.0";
   pname = "pyfribidi";
-  disabled = isPy3k || isPyPy;
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6f7d83c09eae0cb98a40b85ba3dedc31af4dbff8fc4425f244c1e9f44392fded";
+    sha256 = "64726a4a56783acdc79c6b9b3a15f16e6071077c897a0b999f3b43f744bc621c";
   };
 
-  meta = with stdenv.lib; {
+  patches = lib.optional stdenv.cc.isClang ./pyfribidi-clang.patch;
+
+  propagatedBuildInputs = [ six ];
+
+  meta = with lib; {
     description = "A simple wrapper around fribidi";
-    homepage = https://github.com/pediapress/pyfribidi;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://github.com/pediapress/pyfribidi";
+    license = licenses.gpl2;
   };
 
 }

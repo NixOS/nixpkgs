@@ -41,31 +41,30 @@ let
         value)
     else value;
 
-  mkIndent = depth: concatStrings (builtins.genList (_:  " ") (2 * depth));
+  indent = "  ";
 
-  mkRelation = name: value: "${name} = ${mkVal { inherit value; }}";
+  mkRelation = name: value:
+    if (isList value) then
+      concatMapStringsSep "\n" (mkRelation name) value
+    else "${name} = ${mkVal value}";
 
-  mkVal = { value, depth ? 0 }:
+  mkVal = value:
     if (value == true) then "true"
     else if (value == false) then "false"
     else if (isInt value) then (toString value)
-    else if (isList value) then
-      concatMapStringsSep " " mkVal { inherit value depth; }
     else if (isAttrs value) then
-      (concatStringsSep "\n${mkIndent (depth + 1)}"
-        ([ "{" ] ++ (mapAttrsToList
-          (attrName: attrValue: let
-            mappedAttrValue = mkVal {
-              value = attrValue;
-              depth = depth + 1;
-            };
-          in "${attrName} = ${mappedAttrValue}")
-        value))) + "\n${mkIndent depth}}"
+      let configLines = concatLists
+        (map (splitString "\n")
+          (mapAttrsToList mkRelation value));
+      in
+      (concatStringsSep "\n${indent}"
+        ([ "{" ] ++ configLines))
+      + "\n}"
     else value;
 
   mkMappedAttrsOrString = value: concatMapStringsSep "\n"
     (line: if builtins.stringLength line > 0
-      then "${mkIndent 1}${line}"
+      then "${indent}${line}"
       else line)
     (splitString "\n"
       (if isAttrs value then
@@ -79,16 +78,16 @@ in {
 
   options = {
     krb5 = {
-      enable = mkEnableOption "building krb5.conf, configuration file for Kerberos V";
+      enable = mkEnableOption (lib.mdDoc "building krb5.conf, configuration file for Kerberos V");
 
       kerberos = mkOption {
         type = types.package;
         default = pkgs.krb5Full;
-        defaultText = "pkgs.krb5Full";
-        example = literalExample "pkgs.heimdalFull";
-        description = ''
+        defaultText = literalExpression "pkgs.krb5Full";
+        example = literalExpression "pkgs.heimdal";
+        description = lib.mdDoc ''
           The Kerberos implementation that will be present in
-          <literal>environment.systemPackages</literal> after enabling this
+          `environment.systemPackages` after enabling this
           service.
         '';
       };
@@ -97,12 +96,12 @@ in {
         type = with types; either attrs lines;
         default = {};
         apply = attrs: filterEmbeddedMetadata attrs;
-        example = literalExample ''
+        example = literalExpression ''
           {
             default_realm = "ATHENA.MIT.EDU";
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Settings used by the Kerberos V5 library.
         '';
       };
@@ -110,29 +109,32 @@ in {
       realms = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
               admin_server = "athena.mit.edu";
-              kdc = "athena.mit.edu";
+              kdc = [
+                "athena01.mit.edu"
+                "athena02.mit.edu"
+              ];
             };
           };
         '';
         apply = attrs: filterEmbeddedMetadata attrs;
-        description = "Realm-specific contact information and settings.";
+        description = lib.mdDoc "Realm-specific contact information and settings.";
       };
 
       domain_realm = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "example.com" = "EXAMPLE.COM";
             ".example.com" = "EXAMPLE.COM";
           };
         '';
         apply = attrs: filterEmbeddedMetadata attrs;
-        description = ''
+        description = lib.mdDoc ''
           Map of server hostnames to Kerberos realms.
         '';
       };
@@ -140,7 +142,7 @@ in {
       capaths = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
               "EXAMPLE.COM" = ".";
@@ -151,7 +153,7 @@ in {
           };
         '';
         apply = attrs: filterEmbeddedMetadata attrs;
-        description = ''
+        description = lib.mdDoc ''
           Authentication paths for non-hierarchical cross-realm authentication.
         '';
       };
@@ -159,7 +161,7 @@ in {
       appdefaults = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             pam = {
               debug = false;
@@ -172,7 +174,7 @@ in {
           };
         '';
         apply = attrs: filterEmbeddedMetadata attrs;
-        description = ''
+        description = lib.mdDoc ''
           Settings used by some Kerberos V5 applications.
         '';
       };
@@ -180,7 +182,7 @@ in {
       plugins = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             ccselect = {
               disable = "k5identity";
@@ -188,7 +190,7 @@ in {
           };
         '';
         apply = attrs: filterEmbeddedMetadata attrs;
-        description = ''
+        description = lib.mdDoc ''
           Controls plugin module registration.
         '';
       };
@@ -202,11 +204,11 @@ in {
             admin_server = SYSLOG:NOTICE
             default      = SYSLOG:NOTICE
         '';
-        description = ''
-          These lines go to the end of <literal>krb5.conf</literal> verbatim.
-          <literal>krb5.conf</literal> may include any of the relations that are
-          valid for <literal>kdc.conf</literal> (see <literal>man
-          kdc.conf</literal>), but it is not a recommended practice.
+        description = lib.mdDoc ''
+          These lines go to the end of `krb5.conf` verbatim.
+          `krb5.conf` may include any of the relations that are
+          valid for `kdc.conf` (see `man kdc.conf`),
+          but it is not a recommended practice.
         '';
       };
 
@@ -233,14 +235,14 @@ in {
             admin_server = SYSLOG:NOTICE
             default      = SYSLOG:NOTICE
         '';
-        description = ''
-          Verbatim <literal>krb5.conf</literal> configuration.  Note that this
+        description = lib.mdDoc ''
+          Verbatim `krb5.conf` configuration.  Note that this
           is mutually exclusive with configuration via
-          <literal>libdefaults</literal>, <literal>realms</literal>,
-          <literal>domain_realm</literal>, <literal>capaths</literal>,
-          <literal>appdefaults</literal>, <literal>plugins</literal> and
-          <literal>extraConfig</literal> configuration options.  Consult
-          <literal>man krb5.conf</literal> for documentation.
+          `libdefaults`, `realms`,
+          `domain_realm`, `capaths`,
+          `appdefaults`, `plugins` and
+          `extraConfig` configuration options.  Consult
+          `man krb5.conf` for documentation.
         '';
       };
 
@@ -248,9 +250,9 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "ATHENA.MIT.EDU";
-        description = ''
+        description = lib.mdDoc ''
           DEPRECATED, please use
-          <literal>krb5.libdefaults.default_realm</literal>.
+          `krb5.libdefaults.default_realm`.
         '';
       };
 
@@ -258,9 +260,9 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "athena.mit.edu";
-        description = ''
+        description = lib.mdDoc ''
           DEPRECATED, please create a map of server hostnames to Kerberos realms
-          in <literal>krb5.domain_realm</literal>.
+          in `krb5.domain_realm`.
         '';
       };
 
@@ -268,9 +270,9 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "kerberos.mit.edu";
-        description = ''
-          DEPRECATED, please pass a <literal>kdc</literal> attribute to a realm
-          in <literal>krb5.realms</literal>.
+        description = lib.mdDoc ''
+          DEPRECATED, please pass a `kdc` attribute to a realm
+          in `krb5.realms`.
         '';
       };
 
@@ -278,9 +280,9 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "kerberos.mit.edu";
-        description = ''
-          DEPRECATED, please pass an <literal>admin_server</literal> attribute
-          to a realm in <literal>krb5.realms</literal>.
+        description = lib.mdDoc ''
+          DEPRECATED, please pass an `admin_server` attribute
+          to a realm in `krb5.realms`.
         '';
       };
     };

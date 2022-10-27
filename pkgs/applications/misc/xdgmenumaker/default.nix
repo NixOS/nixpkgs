@@ -1,37 +1,63 @@
-{ stdenv, fetchFromGitHub, txt2tags, python2Packages }:
+{ lib
+, fetchFromGitHub
+, atk
+, gdk-pixbuf
+, gobject-introspection
+, pango
+, python3Packages
+, txt2tags
+, wrapGAppsHook
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
-  version = "1.5";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "gapan";
-    repo = "xdgmenumaker";
+    repo = pname;
     rev = version;
-    sha256 = "1vrsp5c1ah7p4dpwd6aqvinpwzd8crdimvyyr3lbm3c6cwpyjmif";
+    sha256 = "CLFFsc/F6I8UOY/XbViWCAlnnu32E5gtEXg9+KSJqI0=";
   };
 
+  format = "other";
+
+  strictDeps = false;
+
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
+    gobject-introspection
     txt2tags
-    python2Packages.wrapPython
+    wrapGAppsHook
   ];
 
-  pythonPath = [
-    python2Packages.pyxdg
-    python2Packages.pygtk
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    pango
   ];
 
-  installPhase = ''
-    make install PREFIX=$out DESTDIR=
-    wrapProgram "$out/bin/xdgmenumaker" \
-      --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonPrograms
+  pythonPath = with python3Packages; [
+    pygobject3
+    pyxdg
+  ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-  
-  meta = with stdenv.lib; {
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = with lib; {
     description = "Command line tool that generates XDG menus for several window managers";
-    homepage = https://github.com/gapan/xdgmenumaker;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/gapan/xdgmenumaker";
+    license = licenses.gpl3Plus;
     # NOTE: exclude darwin from platforms because Travis reports hash mismatch
     platforms = with platforms; filter (x: !(elem x darwin)) unix;
     maintainers = [ maintainers.romildo ];

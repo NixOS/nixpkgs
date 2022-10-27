@@ -1,45 +1,91 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchurl
-, numpy
-, scipy
-, matplotlib
-, pyqt4
+, cvxopt
+, cvxpy
 , cython
-, pkgs
-, nose
+, doCheck ? true
+, fetchFromGitHub
+, matplotlib
+, numpy
+, packaging
+, pytest-rerunfailures
+, pytestCheckHook
+, python
+, pythonOlder
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "2.2.0";
+  version = "4.7.0";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "https://qutip.googlecode.com/files/QuTiP-${version}.tar.gz";
-    sha256 = "a26a639d74b2754b3a1e329d91300e587e8c399d8a81d8f18a4a74c6d6f02ba3";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-wGr6uTM6pFL2nvN4zdqPdEO8O3kjrRtKWx8luL1t9Sw=";
   };
 
-  propagatedBuildInputs = [ numpy scipy matplotlib pyqt4 cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  buildInputs = [ pkgs.gcc pkgs.qt4 pkgs.blas nose ];
+  propagatedBuildInputs = [
+    numpy
+    packaging
+    scipy
+  ];
 
-  meta = with stdenv.lib; {
-    description = "QuTiP - Quantum Toolbox in Python";
-    longDescription = ''
-      QuTiP is open-source software for simulating the dynamics of
-      open quantum systems. The QuTiP library depends on the
-      excellent Numpy and Scipy numerical packages. In addition,
-      graphical output is provided by Matplotlib. QuTiP aims to
-      provide user-friendly and efficient numerical simulations of a
-      wide variety of Hamiltonians, including those with arbitrary
-      time-dependence, commonly found in a wide range of physics
-      applications such as quantum optics, trapped ions,
-      superconducting circuits, and quantum nanomechanical
-      resonators.
-    '';
-    homepage = http://qutip.org/;
-    license = licenses.bsd0;
-    broken = true;
+  checkInputs = [
+    pytestCheckHook
+    pytest-rerunfailures
+  ] ++ passthru.optional-dependencies.graphics;
+
+  # Disabling OpenMP support on Darwin.
+  setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [
+    "--with-openmp"
+  ];
+
+  # QuTiP tries to access the home directory to create an rc file for us.
+  # We need to go to another directory to run the tests from there.
+  # This is due to the Cython-compiled modules not being in the correct location
+  # of the source tree.
+  preCheck = ''
+    export HOME=$(mktemp -d);
+    export OMP_NUM_THREADS=$NIX_BUILD_CORES
+    mkdir -p test && cd test
+  '';
+
+  # For running tests, see https://qutip.org/docs/latest/installation.html#verifying-the-installation
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -c "import qutip.testing; qutip.testing.run()"
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    "qutip"
+  ];
+
+  passthru.optional-dependencies = {
+    graphics = [
+      matplotlib
+    ];
+    semidefinite = [
+      cvxpy
+      cvxopt
+    ];
   };
 
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "Open-source software for simulating the dynamics of closed and open quantum systems";
+    homepage = "https://qutip.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fabiangd ];
+  };
 }

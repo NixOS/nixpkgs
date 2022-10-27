@@ -1,31 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, libminc, bicpl, itk, fftwFloat, gsl }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk, fftwFloat, gsl }:
 
-stdenv.mkDerivation rec { pname = "EZminc";
-  name  = "${pname}-2017-08-29";
+stdenv.mkDerivation rec {
+  pname = "EZminc";
+  version = "unstable-2019-03-12";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
     repo   = pname;
-    rev    = "4e017236cb6e7f6e07507446b18b759c584b6fc3";
-    sha256 = "1pg06x42pgsg7zy7dz9wf6ajakkm2n8by64lg9z64qi8qqy82b8v";
+    rev    = "5e3333ee356f914d34d66d33ea8df809c7f7fa51";
+    sha256 = "0wy8cppf5xpgfqvgb3mqs1cjh81n6qzkk6zxv29wvng8nar9wsy4";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ itk libminc bicpl fftwFloat gsl ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/"
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake"
                  "-DEZMINC_BUILD_TOOLS=TRUE"
                  "-DEZMINC_BUILD_MRFSEG=TRUE"
                  "-DEZMINC_BUILD_DD=TRUE" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.free;
-    broken = true;
+    broken = true;  # ITK5 compatibility issue (https://github.com/BIC-MNI/EZminc/issues/15)
   };
 }

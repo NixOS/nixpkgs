@@ -1,25 +1,39 @@
-{ lib, buildDunePackage, fetchFromGitHub, pkg-config, openssl }:
+{ alcotest
+, buildDunePackage
+, dune-configurator
+, fetchFromGitHub
+, lib
+, ocaml
+, openssl
+, pkg-config
+}:
 
 buildDunePackage rec {
   pname = "ssl";
-  version = "0.5.9";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ssl";
     rev = version;
-    sha256 = "04h02rvzrwp886n5hsx84rnc9b150iggy38g5v1x1rwz3pkdnmf0";
+    sha256 = "sha256-cQUJ7t7C9R74lDy1/lt+up4E5CogiPbeZpaDveDzJ7c=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [openssl];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ openssl ];
+
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ alcotest ];
+  preCheck = ''
+    mkdir -p _build/default/tests/
+    cp tests/digicert_certificate.pem _build/default/tests/
+  '';
 
   meta = {
-    homepage = http://savonet.rastageeks.org/;
+    homepage = "http://savonet.rastageeks.org/";
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
-    maintainers = [
-      lib.maintainers.z77z
-    ];
+    maintainers = with lib.maintainers; [ anmonteiro dandellion maggesi ];
   };
 }

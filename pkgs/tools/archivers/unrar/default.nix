@@ -1,12 +1,12 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "unrar";
-  version = "5.8.1";
+  version = "6.1.7";
 
   src = fetchurl {
     url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "0cp6436ckivljfnv8qic5x2a4z74qff6n57ckahaxhhddx1iypq3";
+    hash = "sha256-3nW2E2lYFz/fxTDTigFFtyNCzw04Qr97sSDTNmAtiO0=";
   };
 
   postPatch = ''
@@ -17,27 +17,36 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    # `make {unrar,lib}` call `make clean` implicitly
+    # move build results to another dir to avoid deleting them
+    mkdir -p bin
+
     make unrar
-    make clean
+    mv unrar bin
+
     make lib
+    mv libunrar.so bin
   '';
 
+  outputs = [ "out" "dev" ];
+
   installPhase = ''
-    install -Dt "$out/bin" unrar
+    install -Dt "$out/bin" bin/unrar
 
     mkdir -p $out/share/doc/unrar
     cp acknow.txt license.txt \
         $out/share/doc/unrar
 
-    install -Dm755 libunrar.so $out/lib/libunrar.so
-    install -D dll.hpp $out/include/unrar/dll.hpp
+    install -Dm755 bin/libunrar.so $out/lib/libunrar.so
+
+    install -Dt $dev/include/unrar/ *.hpp
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for RAR archives";
-    homepage = http://www.rarlab.com/;
+    homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.all;

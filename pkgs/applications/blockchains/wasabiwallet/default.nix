@@ -1,12 +1,35 @@
-{ stdenv, fetchurl, makeDesktopItem, openssl, xorg, curl, fontconfig, krb5, zlib, dotnet-sdk }:
+{ lib, stdenv
+, fetchurl
+, makeDesktopItem
+, curl
+, dotnetCorePackages
+, fontconfig
+, krb5
+, openssl
+, xorg
+, zlib
+}:
 
+let
+  dotnet-runtime = dotnetCorePackages.runtime_5_0;
+  libPath = lib.makeLibraryPath [
+    curl
+    dotnet-runtime
+    fontconfig.lib
+    krb5
+    openssl
+    stdenv.cc.cc.lib
+    xorg.libX11
+    zlib
+  ];
+in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "1.1.9";
+  version = "2.0.1.3";
 
   src = fetchurl {
-    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/WasabiLinux-${version}.tar.gz";
-    sha256 = "1dz05ivhadfjfp4yfpz492401yznm3rlnx7g4nqzxwh4cmqzisrm";
+    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
+    sha256 = "sha256-cATqg/n4/BDQtuCVjHAx3EfMLmlX5EjeQ01gavy/L8o=";
   };
 
   dontBuild = true;
@@ -18,7 +41,7 @@ stdenv.mkDerivation rec {
     desktopName = "Wasabi";
     genericName = "Bitcoin wallet";
     comment = meta.description;
-    categories = "Application;Network;Utility;";
+    categories = [ "Network" "Utility" ];
   };
 
   installPhase = ''
@@ -27,16 +50,17 @@ stdenv.mkDerivation rec {
     cd $out/opt/${pname}
     for i in $(find . -type f -name '*.so') wassabee
       do
-        patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ openssl stdenv.cc.cc.lib xorg.libX11 curl fontconfig.lib krb5 zlib dotnet-sdk ]} $i
+        patchelf --set-rpath ${libPath} $i
       done
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" wassabee
     ln -s $out/opt/${pname}/wassabee $out/bin/${pname}
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mmahut ];

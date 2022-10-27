@@ -1,41 +1,51 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pybind11
+, fetchFromGitHub
+, importlib-metadata
 , numpy
-, pytest
+, pybind11
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyfma";
-  version = "0.1.0";
+  version = "0.1.6";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "79514717f8e632a0fb165e3d61222ed61202bea7b0e082f7b41c91e738f1fbc9";
+  src = fetchFromGitHub {
+    owner = "nschloe";
+    repo = pname;
+    rev = version;
+    sha256 = "12i68jj9n1qj9phjnj6f0kmfhlsd3fqjlk9p6d4gs008azw5m8yn";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     pybind11
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
     numpy
-    pytest
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest test
-  '';
+  pythonImportsCheck = [ "pyfma" ];
 
   meta = with lib; {
     description = "Fused multiply-add for Python";
-    homepage = https://github.com/nschloe/pyfma;
+    homepage = "https://github.com/nschloe/pyfma";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

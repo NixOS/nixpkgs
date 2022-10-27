@@ -1,9 +1,8 @@
-{ stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
+{ lib, stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
 , qt5, requireFile, unzip, wine
 }:
 
 let
-
   version = "1.3.3";
 
   airwave-src = fetchFromGitHub {
@@ -22,6 +21,7 @@ let
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
+    meta.license = lib.licenses.unfree;
   };
 
   wine-wow64 = wine.override {
@@ -37,7 +37,8 @@ let
 in
 
 multiStdenv.mkDerivation {
-  name = "airwave-${version}";
+  pname = "airwave";
+  inherit version;
 
   src = airwave-src;
 
@@ -62,7 +63,7 @@ multiStdenv.mkDerivation {
   # Cf. https://github.com/phantom-code/airwave/issues/57
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK";
+  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
 
   postInstall = ''
     mv $out/bin $out/libexec
@@ -72,7 +73,7 @@ multiStdenv.mkDerivation {
     wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${wine-xembed}/bin/wine64
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WINE-based VST bridge for Linux VST hosts";
     longDescription = ''
       Airwave is a wine based VST bridge, that allows for the use of
@@ -82,7 +83,7 @@ multiStdenv.mkDerivation {
       protocol to correctly embed the plugin editor into the host
       window.
     '';
-    homepage = https://github.com/phantom-code/airwave;
+    homepage = "https://github.com/phantom-code/airwave";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];

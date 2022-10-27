@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -16,13 +17,16 @@ buildPythonPackage rec {
 
   checkInputs = [ numpy nose ];
 
-  checkPhase = ''
+  checkPhase = if stdenv.isDarwin then ''
+    # Work around "OSError: AF_UNIX path too long"
+    TMPDIR="/tmp" nosetests
+  '' else ''
     nosetests
   '';
 
   meta = with lib; {
     description = "Nose plugin to randomly order tests and control random.seed";
-    homepage = https://github.com/adamchainz/nose-randomly;
+    homepage = "https://github.com/adamchainz/nose-randomly";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

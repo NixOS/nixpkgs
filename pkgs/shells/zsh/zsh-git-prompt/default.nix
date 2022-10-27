@@ -25,14 +25,14 @@
 # installed.
 #
 { fetchFromGitHub
-, python
+, python2
 , git
 , lib
 , haskellPackages
 }:
 
 haskellPackages.callPackage
-  ({ mkDerivation, base, HUnit, parsec, process, QuickCheck, stdenv }:
+  ({ mkDerivation, base, HUnit, parsec, process, QuickCheck }:
    mkDerivation rec {
      pname = "zsh-git-prompt";
      version = "0.4z";  # While we await a real 0.5 release.
@@ -45,7 +45,7 @@ haskellPackages.callPackage
      prePatch = ''
         substituteInPlace zshrc.sh                       \
           --replace ':-"python"' ':-"haskell"'           \
-          --replace 'python '    '${python.interpreter} ' \
+          --replace 'python '    '${python2.interpreter} ' \
           --replace 'git '       '${git}/bin/git '
      '';
      preCompileBuildDriver = "cd src";
@@ -65,6 +65,6 @@ haskellPackages.callPackage
      testHaskellDepends = [HUnit] ++ libraryHaskellDepends;
      homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
      description = "Informative git prompt for zsh";
-     license = stdenv.lib.licenses.mit;
+     license = lib.licenses.mit;
      maintainers = [lib.maintainers.league];
    }) {}

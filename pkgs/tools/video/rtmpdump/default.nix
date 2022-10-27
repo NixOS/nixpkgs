@@ -1,23 +1,27 @@
-{ stdenv, fetchgit, fetchpatch, zlib
-, gnutlsSupport ? false, gnutls ? null, nettle ? null
-, opensslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, zlib
+, gnutlsSupport ? false
+, gnutls
+, nettle
+, opensslSupport ? true
+, openssl
 }:
 
-# Must have an ssl library enabled
 assert (gnutlsSupport || opensslSupport);
-assert gnutlsSupport -> gnutlsSupport != null && nettle != null && !opensslSupport;
-assert opensslSupport -> openssl != null && !gnutlsSupport;
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation {
   pname = "rtmpdump";
-  version = "2019-03-30";
+  version = "unstable-2021-02-19";
 
   src = fetchgit {
     url = "git://git.ffmpeg.org/rtmpdump";
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
-    rev = "c5f04a58fc2aeea6296ca7c44ee4734c18401aa3";
-    sha256 = "07ias612jgmxpam9h418kvlag32da914jsnjsfyafklpnh8gdzjb";
+    rev = "f1b83c10d8beb43fcc70a6e88cf4325499f25857";
+    sha256 = "0vchr0f0d5fi0zaa16jywva5db3x9dyws7clqaq32gwh5drbkvs0";
   };
 
   patches = [
@@ -28,7 +32,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ ''prefix=$(out)'' ]
+  makeFlags = [
+    "prefix=$(out)"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
     ++ optional stdenv.isDarwin "SYS=darwin"
@@ -44,9 +51,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Toolkit for RTMP streams";
-    homepage    = "http://rtmpdump.mplayerhq.hu/";
-    license     = licenses.gpl2;
-    platforms   = platforms.unix;
+    homepage = "https://rtmpdump.mplayerhq.hu/";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

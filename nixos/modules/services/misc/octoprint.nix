@@ -17,9 +17,9 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = pkgs.python.buildEnv.override {
-    extraLibs = cfg.plugins pkgs.octoprint-plugins;
-  };
+  pluginsEnv = package.python.withPackages (ps: [ps.octoprint] ++ (cfg.plugins ps));
+
+  package = pkgs.octoprint;
 
 in
 {
@@ -29,20 +29,20 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption "OctoPrint, web interface for 3D printers";
+      enable = mkEnableOption (lib.mdDoc "OctoPrint, web interface for 3D printers");
 
       host = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           Host to bind OctoPrint to.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 5000;
-        description = ''
+        description = lib.mdDoc ''
           Port to bind OctoPrint to.
         '';
       };
@@ -50,32 +50,33 @@ in
       user = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "User for the daemon.";
+        description = lib.mdDoc "User for the daemon.";
       };
 
       group = mkOption {
         type = types.str;
         default = "octoprint";
-        description = "Group for the daemon.";
+        description = lib.mdDoc "Group for the daemon.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/octoprint";
-        description = "State directory of the daemon.";
+        description = lib.mdDoc "State directory of the daemon.";
       };
 
       plugins = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = plugins: [];
-        defaultText = "plugins: []";
-        example = literalExample "plugins: [ m3d-fio ]";
-        description = "Additional plugins.";
+        defaultText = literalExpression "plugins: []";
+        example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
+        description = lib.mdDoc "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = "Extra options which are added to OctoPrint's YAML configuration file.";
+        description = lib.mdDoc "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };
@@ -86,16 +87,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == "octoprint") (singleton
-      { name = "octoprint";
+    users.users = optionalAttrs (cfg.user == "octoprint") {
+      octoprint = {
         group = cfg.group;
         uid = config.ids.uids.octoprint;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "octoprint") (singleton
-      { name = "octoprint";
-        gid = config.ids.gids.octoprint;
-      });
+    users.groups = optionalAttrs (cfg.group == "octoprint") {
+      octoprint.gid = config.ids.gids.octoprint;
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
@@ -106,7 +107,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pluginsEnv ];
-      environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
         if [ -e "${cfg.stateDir}/config.yaml" ]; then
@@ -119,9 +119,12 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.octoprint}/bin/octoprint serve -b ${cfg.stateDir}";
+        ExecStart = "${pluginsEnv}/bin/octoprint serve -b ${cfg.stateDir}";
         User = cfg.user;
         Group = cfg.group;
+        SupplementaryGroups = [
+          "dialout"
+        ];
       };
     };
 

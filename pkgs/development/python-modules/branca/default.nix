@@ -5,26 +5,27 @@
 , jinja2
 , selenium
 , six
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3e762c9bdf40725f3d05ea1fda8fae9b470bfada6474e43a1242c8204a7bb15e";
+    sha256 = "sha256-5vL366fdNozu+PY4Irhn9eEdTTq90Jmnh9ue0rcGWuE=";
   };
 
   checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 six ];
+  propagatedBuildInputs = [ jinja2 six setuptools ];
 
   # Seems to require a browser
   doCheck = false;
 
   meta = {
     description = "Generate complex HTML+JS pages with Python";
-    homepage = https://github.com/python-visualization/branca;
+    homepage = "https://github.com/python-visualization/branca";
     license = with lib.licenses; [ mit ];
   };
 }

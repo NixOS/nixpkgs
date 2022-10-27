@@ -1,18 +1,18 @@
-{ stdenv, fetchgit, libmowgli, pkgconfig, git, gettext, pcre, libidn, cracklib, openssl }:
+{ lib, stdenv, fetchgit, libmowgli, pkg-config, git, gettext, pcre, libidn, libxcrypt, cracklib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "atheme";
-  version = "7.2.10-r2";
+  version = "7.2.12";
 
   src = fetchgit {
     url = "https://github.com/atheme/atheme.git";
     rev = "v${version}";
-    sha256 = "1yasfvbmixj4zzfv449hlcp0ms5c250lrshdy6x6l643nbnix4y9";
+    sha256 = "sha256-KAC1ZPNo4TqfVryKOYYef8cRWRgFmyEdvl1bgvpGNiM=";
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkgconfig git gettext ];
-  buildInputs = [ libmowgli pcre libidn cracklib openssl ];
+  nativeBuildInputs = [ pkg-config git gettext ];
+  buildInputs = [ libmowgli pcre libidn libxcrypt cracklib openssl ];
 
   configureFlags = [
     "--with-pcre"
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     "--enable-reproducible-builds"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of services for IRC networks";
-    homepage = https://atheme.github.io/;
+    homepage = "https://atheme.github.io/";
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ leo60228 ];

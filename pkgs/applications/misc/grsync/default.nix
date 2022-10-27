@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, dee, gtk2, intltool, libdbusmenu-gtk2, libunity, pkg-config, rsync }:
+{ lib, stdenv, fetchurl, dee, gtk3, intltool, libdbusmenu-gtk3, libunity, pkg-config, rsync }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.6";
+  version = "1.3.0";
   pname = "grsync";
 
   src = fetchurl {
     url = "mirror://sourceforge/grsync/grsync-${version}.tar.gz";
-    sha256 = "06ani65d58p8r3jvxjwpwyqrr07ya3icdqc243nxcrv7bvmarmb6";
+    sha256 = "sha256-t8fGpi4FMC2DF8OHQefXHvmrRjnuW/8mIqODsgQ6Nfw=";
   };
 
   nativeBuildInputs = [
@@ -16,16 +16,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dee
-    gtk2
-    libdbusmenu-gtk2
+    gtk3
+    libdbusmenu-gtk3
     libunity
     rsync
   ];
 
-  meta = with stdenv.lib; {
-    description = "Grsync is used to synchronize folders, files and make backups";
+  meta = with lib; {
+    description = "Synchronize folders, files and make backups";
     homepage = "http://www.opbyte.it/grsync/";
-    license = licenses.gpl1;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.kuznero ];
   };

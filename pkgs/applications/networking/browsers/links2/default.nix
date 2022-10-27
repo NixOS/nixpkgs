@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, gpm, openssl, pkgconfig, libev # Misc.
+{ lib, stdenv, fetchurl
+, gpm, openssl, pkg-config, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
 , enableFB ? true
@@ -8,32 +8,34 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.20";
+  version = "2.27";
   pname = "links2";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "0bchwqa87dc8cb55spyybkqpc456pp4x2n9aw587wr7pn96cvp9v";
+    sha256 = "sha256-2N3L/O3nzd6Aq+sKI2NY9X+mvrK8+S4QliTpuJb567Q=";
   };
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
-    ++ optional enableDirectFB [ directfb ];
+    ++ optionals enableDirectFB [ directfb ];
 
-  nativeBuildInputs = [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ pkg-config bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
-    ++ stdenv.lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
-    ++ stdenv.lib.optional enableX11 "--with-x"
-    ++ stdenv.lib.optional enableFB "--with-fb"
-    ++ stdenv.lib.optional enableDirectFB "--with-directfb";
+    ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
+    ++ lib.optional enableX11 "--with-x"
+    ++ lib.optional enableFB "--with-fb"
+    ++ lib.optional enableDirectFB "--with-directfb";
 
-  meta = with stdenv.lib; {
-    homepage = http://links.twibright.com/;
+  meta = with lib; {
+    homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
+    mainProgram = "links";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

@@ -1,37 +1,37 @@
-{ stdenv, fetchgit, libvirt, autoconf, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitLab, libvirt, autoreconfHook, pkg-config, ocaml, findlib, perl }:
+
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.02")
+  "libvirt is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation rec {
   pname = "ocaml-libvirt";
-  rev = "bab7f84ade84ceaddb08b6948792d49b3d04b897";
-  version = "0.6.1.4.2017-11-08-unstable"; # libguestfs-1.34+ needs ocaml-libvirt newer than the latest release 0.6.1.4
+  version = "0.6.1.5";
 
-  src = fetchgit {
-    url = "git://git.annexia.org/git/ocaml-libvirt.git";
-    rev = rev;
-    sha256 = "0vxgx1n58fp4qmly6i5zxiacr7303127d6j78a295xin1p3a8xcw";
+  src = fetchFromGitLab {
+    owner = "libvirt";
+    repo = "libvirt-ocaml";
+    rev = "v${version}";
+    sha256 = "0xpkdmknk74yqxgw8z2w8b7ss8hpx92xnab5fsqg2byyj55gzf2k";
   };
 
   propagatedBuildInputs = [ libvirt ];
 
-  nativeBuildInputs = [ autoconf findlib ];
+  nativeBuildInputs = [ autoreconfHook pkg-config findlib perl ocaml ];
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
 
-  createFindlibDestdir = true;
-
-  preConfigure = ''
-    autoconf
+  buildFlags = [ "all" "opt" "CPPFLAGS=-Wno-error" ];
+  installTargets = "install-opt";
+  preInstall = ''
+    # Fix 'dllmllibvirt.so' install failure into non-existent directory.
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  buildPhase = if stdenv.cc.isClang then "make all opt CPPFLAGS=-Wno-error" else "make all opt";
-
-  installPhase = "make install-opt";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml bindings for libvirt";
-    homepage = https://libvirt.org/ocaml/;
+    homepage = "https://libvirt.org/ocaml/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    maintainers = [ ];
+    inherit (ocaml.meta) platforms;
   };
 }

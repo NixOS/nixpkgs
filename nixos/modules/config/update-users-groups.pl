@@ -1,10 +1,9 @@
 use strict;
+use warnings;
 use File::Path qw(make_path);
 use File::Slurp;
+use Getopt::Long;
 use JSON;
-
-make_path("/var/lib/nixos", { mode => 0755 });
-
 
 # Keep track of deleted uids and gids.
 my $uidMapFile = "/var/lib/nixos/uid-map";
@@ -13,13 +12,19 @@ my $uidMap = -e $uidMapFile ? decode_json(read_file($uidMapFile)) : {};
 my $gidMapFile = "/var/lib/nixos/gid-map";
 my $gidMap = -e $gidMapFile ? decode_json(read_file($gidMapFile)) : {};
 
+my $is_dry = ($ENV{'NIXOS_ACTION'} // "") eq "dry-activate";
+GetOptions("dry-activate" => \$is_dry);
+make_path("/var/lib/nixos", { mode => 0755 }) unless $is_dry;
 
 sub updateFile {
     my ($path, $contents, $perms) = @_;
-    write_file("$path.tmp", { binmode => ':utf8', perms => $perms // 0644 }, $contents);
-    rename("$path.tmp", $path) or die;
+    return if $is_dry;
+    write_file($path, { atomic => 1, binmode => ':utf8', perms => $perms // 0644 }, $contents) or die;
 }
 
+sub nscdInvalidate {
+    system("nscd", "--invalidate", $_[0]) unless $is_dry;
+}
 
 sub hashPassword {
     my ($password) = @_;
@@ -27,6 +32,14 @@ sub hashPassword {
     my @chars = ('.', '/', 0..9, 'A'..'Z', 'a'..'z');
     $salt .= $chars[rand 64] for (1..8);
     return crypt($password, '$6$' . $salt . '$');
+}
+
+sub dry_print {
+    if ($is_dry) {
+        print STDERR ("$_[1] $_[2]\n")
+    } else {
+        print STDERR ("$_[0] $_[2]\n")
+    }
 }
 
 
@@ -52,27 +65,26 @@ sub allocGid {
     my ($name) = @_;
     my $prevGid = $gidMap->{$name};
     if (defined $prevGid && !defined $gidsUsed{$prevGid}) {
-        print STDERR "reviving group '$name' with GID $prevGid\n";
+        dry_print("reviving", "would revive", "group '$name' with GID $prevGid");
         $gidsUsed{$prevGid} = 1;
         return $prevGid;
     }
-    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 499, 0, sub { my ($gid) = @_; getgrgid($gid) });
+    return allocId(\%gidsUsed, \%gidsPrevUsed, 400, 999, 0, sub { my ($gid) = @_; getgrgid($gid) });
 }
 
 sub allocUid {
     my ($name, $isSystemUser) = @_;
-    my ($min, $max, $up) = $isSystemUser ? (400, 499, 0) : (1000, 29999, 1);
+    my ($min, $max, $up) = $isSystemUser ? (400, 999, 0) : (1000, 29999, 1);
     my $prevUid = $uidMap->{$name};
     if (defined $prevUid && $prevUid >= $min && $prevUid <= $max && !defined $uidsUsed{$prevUid}) {
-        print STDERR "reviving user '$name' with UID $prevUid\n";
+        dry_print("reviving", "would revive", "user '$name' with UID $prevUid");
         $uidsUsed{$prevUid} = 1;
         return $prevUid;
     }
     return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
 }
 
-
-# Read the declared users/groups.
+# Read the declared users/groups
 my $spec = decode_json(read_file($ARGV[0]));
 
 # Don't allocate UIDs/GIDs that are manually assigned.
@@ -98,7 +110,7 @@ sub parseGroup {
     return ($f[0], { name => $f[0], password => $f[1], gid => $gid, members => $f[3] });
 }
 
-my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group") : ();
+my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group", { binmode => ":utf8" }) : ();
 
 # Read the current /etc/passwd.
 sub parseUser {
@@ -109,20 +121,19 @@ sub parseUser {
     return ($f[0], { name => $f[0], fakePassword => $f[1], uid => $uid,
         gid => $f[3], description => $f[4], home => $f[5], shell => $f[6] });
 }
-
-my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd") : ();
+my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd", { binmode => ":utf8" }) : ();
 
 # Read the groups that were created declaratively (i.e. not by groups)
 # in the past. These must be removed if they are no longer in the
 # current spec.
 my $declGroupsFile = "/var/lib/nixos/declarative-groups";
 my %declGroups;
-$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile) : "";
+$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile, { binmode => ":utf8" }) : "";
 
 # Idem for the users.
 my $declUsersFile = "/var/lib/nixos/declarative-users";
 my %declUsers;
-$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile) : "";
+$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile, { binmode => ":utf8" }) : "";
 
 
 # Generate a new /etc/group containing the declared groups.
@@ -136,7 +147,7 @@ foreach my $g (@{$spec->{groups}}) {
     if (defined $existing) {
         $g->{gid} = $existing->{gid} if !defined $g->{gid};
         if ($g->{gid} != $existing->{gid}) {
-            warn "warning: not applying GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})\n";
+            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})");
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
@@ -165,7 +176,7 @@ foreach my $name (keys %groupsCur) {
     my $g = $groupsCur{$name};
     next if defined $groupsOut{$name};
     if (!$spec->{mutableUsers} || defined $declGroups{$name}) {
-        print STDERR "removing group ‘$name’\n";
+        dry_print("removing group", "would remove group", "‘$name’");
     } else {
         $groupsOut{$name} = $g;
     }
@@ -175,9 +186,9 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-updateFile($gidMapFile, encode_json($gidMap));
+updateFile($gidMapFile, to_json($gidMap, {canonical => 1}));
 updateFile("/etc/group", \@lines);
-system("nscd --invalidate group");
+nscdInvalidate("group");
 
 # Generate a new /etc/passwd containing the declared users.
 my %usersOut;
@@ -198,7 +209,7 @@ foreach my $u (@{$spec->{users}}) {
     if (defined $existing) {
         $u->{uid} = $existing->{uid} if !defined $u->{uid};
         if ($u->{uid} != $existing->{uid}) {
-            warn "warning: not applying UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})\n";
+            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})");
             $u->{uid} = $existing->{uid};
         }
     } else {
@@ -211,10 +222,11 @@ foreach my $u (@{$spec->{users}}) {
         }
     }
 
-    # Create a home directory.
-    if ($u->{createHome}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
+    # Ensure home directory incl. ownership and permissions.
+    if ($u->{createHome} and !$is_dry) {
+        make_path($u->{home}, { mode => oct($u->{homeMode}) }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
+        chmod oct($u->{homeMode}), $u->{home};
     }
 
     if (defined $u->{passwordFile}) {
@@ -226,6 +238,15 @@ foreach my $u (@{$spec->{users}}) {
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});
+    }
+
+    if (!defined $u->{shell}) {
+        if (defined $existing) {
+            $u->{shell} = $existing->{shell};
+        } else {
+            warn "warning: no declarative or previous shell for ‘$name’, setting shell to nologin\n";
+            $u->{shell} = "/run/current-system/sw/bin/nologin";
+        }
     }
 
     $u->{fakePassword} = $existing->{fakePassword} // "x";
@@ -242,7 +263,7 @@ foreach my $name (keys %usersCur) {
     my $u = $usersCur{$name};
     next if defined $usersOut{$name};
     if (!$spec->{mutableUsers} || defined $declUsers{$name}) {
-        print STDERR "removing user ‘$name’\n";
+        dry_print("removing user", "would remove user", "‘$name’");
     } else {
         $usersOut{$name} = $u;
     }
@@ -251,16 +272,16 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-updateFile($uidMapFile, encode_json($uidMap));
+updateFile($uidMapFile, to_json($uidMap, {canonical => 1}));
 updateFile("/etc/passwd", \@lines);
-system("nscd --invalidate passwd");
+nscdInvalidate("passwd");
 
 
 # Rewrite /etc/shadow to add new accounts or remove dead ones.
 my @shadowNew;
 my %shadowSeen;
 
-foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
+foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
@@ -280,4 +301,65 @@ foreach my $u (values %usersOut) {
     push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
 }
 
-updateFile("/etc/shadow", \@shadowNew, 0600);
+updateFile("/etc/shadow", \@shadowNew, 0640);
+{
+    my $uid = getpwnam "root";
+    my $gid = getgrnam "shadow";
+    my $path = "/etc/shadow";
+    (chown($uid, $gid, $path) || die "Failed to change ownership of $path: $!") unless $is_dry;
+}
+
+# Rewrite /etc/subuid & /etc/subgid to include default container mappings
+
+my $subUidMapFile = "/var/lib/nixos/auto-subuid-map";
+my $subUidMap = -e $subUidMapFile ? decode_json(read_file($subUidMapFile)) : {};
+
+my (%subUidsUsed, %subUidsPrevUsed);
+
+$subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
+
+sub allocSubUid {
+    my ($name, @rest) = @_;
+
+    # TODO: No upper bounds?
+    my ($min, $max, $up) = (100000, 100000 * 100, 1);
+    my $prevId = $subUidMap->{$name};
+    if (defined $prevId && !defined $subUidsUsed{$prevId}) {
+        $subUidsUsed{$prevId} = 1;
+        return $prevId;
+    }
+
+    my $id = allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
+    my $offset = $id - 100000;
+    my $count = $offset * 65536;
+    my $subordinate = 100000 + $count;
+    return $subordinate;
+}
+
+my @subGids;
+my @subUids;
+foreach my $u (values %usersOut) {
+    my $name = $u->{name};
+
+    foreach my $range (@{$u->{subUidRanges}}) {
+        my $value = join(":", ($name, $range->{startUid}, $range->{count}));
+        push @subUids, $value;
+    }
+
+    foreach my $range (@{$u->{subGidRanges}}) {
+        my $value = join(":", ($name, $range->{startGid}, $range->{count}));
+        push @subGids, $value;
+    }
+
+    if($u->{autoSubUidGidRange}) {
+        my $subordinate = allocSubUid($name);
+        $subUidMap->{$name} = $subordinate;
+        my $value = join(":", ($name, $subordinate, 65536));
+        push @subUids, $value;
+        push @subGids, $value;
+    }
+}
+
+updateFile("/etc/subuid", join("\n", @subUids) . "\n");
+updateFile("/etc/subgid", join("\n", @subGids) . "\n");
+updateFile($subUidMapFile, encode_json($subUidMap) . "\n");

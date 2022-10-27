@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
+{ lib, stdenv, fetchurl, pkg-config, curl, gpgme, libarchive, bzip2, xz, attr, acl, libxml2
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.1";
+  version = "0.6.0";
   pname = "opkg";
   src = fetchurl {
     url = "https://downloads.yoctoproject.org/releases/opkg/opkg-${version}.tar.gz";
-    sha256 = "0hqa4lqxs3w9fmn9idzfscjkm23jw5asby43v0szcxrqgl1ixb25";
+    sha256 = "sha256-VoRHIu/yN9rxSqbmgUNvMkUhPFWQ7QzaN6ed9jf/Okw=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ curl gpgme libarchive bzip2 lzma attr acl libxml2 ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ curl gpgme libarchive bzip2 xz attr acl libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight package management system based upon ipkg";
-    homepage = https://git.yoctoproject.org/cgit/cgit.cgi/opkg/;
+    homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

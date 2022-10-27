@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernel, which }:
+{ lib, stdenv, fetchurl, kernel, which }:
 
 # Don't bother with older versions, though some might even work:
-assert stdenv.lib.versionAtLeast kernel.version "4.10";
+assert lib.versionAtLeast kernel.version "4.10";
 
 let
   release = "0.4.0";
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the
@@ -44,10 +44,9 @@ in stdenv.mkDerivation rec {
       while noticably reducing fan noise. This driver works only on supported
       Intel architectures.
     '';
-    homepage = http://www.linux-phc.org/;
-    downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
+    homepage = "https://github.com/danielw86dev/phc-intel-dkms";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
+    broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

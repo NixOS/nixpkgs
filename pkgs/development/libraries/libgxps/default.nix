@@ -1,36 +1,40 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, cairo
-, libarchive, freetype, libjpeg, libtiff, gnome3, lcms2
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, cairo
+, libarchive, freetype, libjpeg, libtiff, gnome, lcms2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgxps";
-  version = "0.3.1";
+  version = "0.3.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "157s4c9gjjss6yd7qp7n4q6s72gz1k4ilsx4xjvp357azk49z4qs";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "bSeGclajXM+baSU+sqiKMrrKO5fV9O9/guNmf6Q1JRw=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection ];
   buildInputs = [ glib cairo freetype libjpeg libtiff lcms2 ];
   propagatedBuildInputs = [ libarchive ];
 
   mesonFlags = [
     "-Denable-test=false"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Ddisable-introspection=true"
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GObject based library for handling and rendering XPS documents";
-    homepage = https://wiki.gnome.org/Projects/libgxps;
+    homepage = "https://wiki.gnome.org/Projects/libgxps";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

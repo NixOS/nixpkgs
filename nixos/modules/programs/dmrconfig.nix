@@ -6,7 +6,7 @@ let
   cfg = config.programs.dmrconfig;
 
 in {
-  meta.maintainers = [ maintainers.etu ];
+  meta.maintainers = with maintainers; [ ];
 
   ###### interface
   options = {
@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure system to enable use of dmrconfig. This
           enables the required udev rules and installs the program.
         '';
@@ -24,8 +24,8 @@ in {
       package = mkOption {
         default = pkgs.dmrconfig;
         type = types.package;
-        defaultText = "pkgs.dmrconfig";
-        description = "dmrconfig derivation to use";
+        defaultText = literalExpression "pkgs.dmrconfig";
+        description = lib.mdDoc "dmrconfig derivation to use";
       };
     };
   };

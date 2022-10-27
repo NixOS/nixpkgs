@@ -1,37 +1,28 @@
-{ stdenv, fetchFromGitHub, python, perl, intltool, flex, autoreconfHook
-, texinfo, libiconv, libintl }:
+{ lib, stdenv, fetchurl, python3, perl, intltool, flex, texinfo, libiconv, libintl }:
 
-stdenv.mkDerivation {
-  name = "recode-3.7-2fd838565";
+stdenv.mkDerivation rec {
+  pname = "recode";
+  version = "3.7.12";
 
-  src = fetchFromGitHub {
-    owner = "pinard";
-    repo = "Recode";
-    rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
-    sha256 = "06vyjqaraamcc5vka66mlvxj27ihccqc74aymv2wn8nphr2rhh03";
+  # Use official tarball, avoid need to bootstrap/generate build system
+  src = fetchurl {
+    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-TbHJB28E26oVlyb1AAhH5eWoOuyOXGT4ygQ4P2zaEtU=";
   };
 
-  nativeBuildInputs = [ python perl intltool flex texinfo autoreconfHook libiconv ];
+  nativeBuildInputs = [ python3 python3.pkgs.cython perl intltool flex texinfo libiconv ];
   buildInputs = [ libintl ];
 
-  preAutoreconf = ''
-    # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
-    substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
-    sed -i '/^AM_C_PROTOTYPES/d' configure.ac
-    substituteInPlace src/Makefile.am --replace "ansi2knr" ""
-  '';
+  enableParallelBuilding = true;
 
-  doCheck = false; # fails 10 out of 16 tests
-
-  preCheck = ''
-    checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
-  '';
+  doCheck = true;
 
   meta = {
-    homepage = https://www.gnu.org/software/recode/;
+    homepage = "https://github.com/rrthomas/recode";
     description = "Converts files between various character sets and usages";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    changelog = "https://github.com/rrthomas/recode/raw/v${version}/NEWS";
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

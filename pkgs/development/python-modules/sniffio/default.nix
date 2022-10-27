@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "sniffio";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3810100f69fe0edd463d02ad407112542a11ffdc29f67db2bf3771afb87a21";
+    sha256 = "sha256-5gMFxeXTFPU4klm38iqqM9j33uSXYxGSNK83VcVbkQE=";
   };
 
   disabled = !isPy3k;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/python-trio/sniffio;
+    homepage = "https://github.com/python-trio/sniffio";
     license = licenses.asl20;
     description = "Sniff out which async library your code is running under";
   };

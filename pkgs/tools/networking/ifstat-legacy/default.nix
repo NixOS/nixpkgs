@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, net_snmp }:
+{ lib, stdenv, fetchurl, autoreconfHook, net-snmp }:
 
 stdenv.mkDerivation rec {
   pname = "ifstat-legacy";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01zmv6vk5kh5xmd563xws8a1qnxjb6b6kv59yzz9r3rrghxhd6c5";
   };
 
-  buildInputs = [ net_snmp ];
+  buildInputs = lib.optional stdenv.isLinux net-snmp;
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     mv $out/share/man/man1/ifstat.1 $out/share/man/man1/ifstat-legacy.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Report network interfaces bandwith just like vmstat/iostat do for other system counters - legacy version";
-    homepage    = http://gael.roualland.free.fr/ifstat/;
+    homepage    = "http://gael.roualland.free.fr/ifstat/";
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
     license     = licenses.gpl2;

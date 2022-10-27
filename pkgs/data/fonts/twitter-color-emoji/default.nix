@@ -1,56 +1,47 @@
-# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/tree/454acad50ba584d9602ccd4238fc5e585abc15c9
+# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cairo
 , imagemagick
 , pkg-config
 , pngquant
-, python2
+, python3
 , which
 , zopfli
+, noto-fonts-emoji
 }:
 
 let
-  version = "12.1.2";
-
-  # Cannot use noto-fonts-emoji.src since it is too old
-  # and still tries to use vendored pngquant.
-  notoSrc = fetchFromGitHub {
-    name = "noto";
-    owner = "googlefonts";
-    repo = "noto-emoji";
-    rev = "833a43d03246a9325e748a2d783006454d76ff66";
-    sha256 = "1g6ikzk8banm3ihqm9g27ggjq2mn1b1hq3zhpl13lxid6mp60s4a";
-  };
+  version = "14.0.0";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
+    sha256 = "sha256-ar6rBYudMIMngMVe/IowDV3X8wA77JBA6g0x/M7YLMg=";
   };
 
-  python = python2.withPackages (pp: with pp; [
-    nototools
-  ]);
+  pythonEnv =
+    python3.withPackages (ps: with ps; [ fonttools nototools ]);
+
 in
 stdenv.mkDerivation rec {
   pname = "twitter-color-emoji";
   inherit version;
 
   srcs = [
-    notoSrc
+    noto-fonts-emoji.src
     twemojiSrc
   ];
 
-  sourceRoot = notoSrc.name;
+  sourceRoot = noto-fonts-emoji.src.name;
 
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
-    mv ${twemojiSrc.name} ${notoSrc.name}
+    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
   '';
 
   nativeBuildInputs = [
@@ -58,25 +49,25 @@ stdenv.mkDerivation rec {
     imagemagick
     pkg-config
     pngquant
-    python
+    pythonEnv
     which
     zopfli
   ];
 
   postPatch = let
-    templateSubstitutions = stdenv.lib.concatStringsSep "; " [
-      ''s#Noto Color Emoji#Twitter Color Emoji#''
-      ''s#NotoColorEmoji#TwitterColorEmoji#''
+    templateSubstitutions = lib.concatStringsSep "; " [
+      "s#Noto Color Emoji#Twitter Color Emoji#"
+      "s#NotoColorEmoji#TwitterColorEmoji#"
       ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
-      ''s# Version .*# ${version}#''
-      ''s#.*is a trademark.*##''
+      "s# Version .*# ${version}#"
+      "s#.*is a trademark.*##"
       ''s#Google, Inc\.#Twitter, Inc and other contributors#''
-      ''s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#''
-      ''s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#''
-      ''s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#''
+      "s#http://www.google.com/get/noto/#https://twemoji.twitter.com/#"
+      "s#.*is licensed under.*#      Creative Commons Attribution 4.0 International#"
+      "s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#"
     ];
   in ''
-    patchShebangs ./flag_glyph_name.py
+    ${noto-fonts-emoji.postPatch}
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/
@@ -90,6 +81,8 @@ stdenv.mkDerivation rec {
     "EMOJI=TwitterColorEmoji"
     "EMOJI_SRC_DIR=${twemojiSrc.name}/assets/72x72"
     "BODY_DIMENSIONS=76x72"
+    # twemoji contains some codepoints noto doesn't like
+    "BYPASS_SEQUENCE_CHECK=True"
   ];
 
   enableParallelBuilding = true;
@@ -98,7 +91,7 @@ stdenv.mkDerivation rec {
     install -Dm644 TwitterColorEmoji.ttf $out/share/fonts/truetype/TwitterColorEmoji.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
       A bitmap color emoji font built from the Twitter Emoji for
@@ -116,7 +109,9 @@ stdenv.mkDerivation rec {
     # In twemoji source
     ## Artwork is Creative Commons Attribution 4.0 International
     ## Non-artwork is MIT
+    # In Fedora twitter-twemoji-fonts source
+    ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar emily ];
   };
 }

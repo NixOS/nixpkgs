@@ -1,38 +1,36 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, makeWrapper
-, gstreamer, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper, gstreamer
+, gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
 
-let version = "4f221e6b85abf85957b547436e982d7a501a1718"; in
+let
+  version = "0.1";
 
-stdenv.mkDerivation {
-  pname = "gmrender-resurrect";
-  inherit version;
+  pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ];
+in
+  stdenv.mkDerivation {
+    pname = "gmrender-resurrect";
+    inherit version;
 
-  src = fetchFromGitHub {
-    owner = "hzeller";
-    repo = "gmrender-resurrect";
-    rev = version;
-    sha256 = "1dmdhyz27bh74qmvncfd3kw7zqwnd05bhxcfjjav98z5qrxdygj4";
-  };
+    src = fetchFromGitHub {
+      owner = "hzeller";
+      repo = "gmrender-resurrect";
+      rev = "v${version}";
+      sha256 = "sha256-FR5bMjwPnY1/PNdPRiaxoY1keogq40M06YOaoks4zVY=";
+    };
 
-  preConfigurePhases = "autoconfPhase";
+    buildInputs = [ gstreamer libupnp ];
+    nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
-  autoconfPhase = "./autogen.sh";
+    postInstall = ''
+      for prog in "$out/bin/"*; do
+          wrapProgram "$prog" --suffix GST_PLUGIN_SYSTEM_PATH_1_0 : "${pluginPath}"
+      done
+    '';
 
-  buildInputs = [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav libupnp ];
-  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
-
-  postInstall = ''
-    for prog in "$out/bin/"*; do
-        wrapProgram "$prog" --suffix GST_PLUGIN_SYSTEM_PATH : "${gst-plugins-base}/lib/gstreamer-1.0:${gst-plugins-good}/lib/gstreamer-1.0:${gst-plugins-bad}/lib/gstreamer-1.0:${gst-plugins-ugly}/lib/gstreamer-1.0:${gst-libav}/lib/gstreamer-1.0"
-    done
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Resource efficient UPnP/DLNA renderer, optimal for Raspberry Pi, CuBox or a general MediaServer";
-    homepage = https://github.com/hzeller/gmrender-resurrect;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    broken = true;
-    maintainers = [ maintainers.koral ];
-  };
-}
+    meta = with lib; {
+      description = "Resource efficient UPnP/DLNA renderer, optimal for Raspberry Pi, CuBox or a general MediaServer";
+      homepage = "https://github.com/hzeller/gmrender-resurrect";
+      license = licenses.gpl2Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ koral hzeller ];
+    };
+  }

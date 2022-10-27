@@ -16,15 +16,18 @@ let param =
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-mtime-${param.version}";
+  pname = "ocaml${ocaml.version}-mtime";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ]
-  ++ stdenv.lib.optional jsooSupport js_of_ocaml;
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ] ++ optional jsooSupport js_of_ocaml;
+
+  strictDeps = true;
 
   buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";
 
@@ -32,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Monotonic wall-clock time for OCaml";
-    homepage = https://erratique.ch/software/mtime;
+    homepage = "https://erratique.ch/software/mtime";
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;

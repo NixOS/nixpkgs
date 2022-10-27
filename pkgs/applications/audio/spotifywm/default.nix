@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
 stdenv.mkDerivation {
   pname = "spotifywm-unstable";
   version = "2016-11-28";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
     install -Dm755 spotifywm $out/bin/spotifywm
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dasJ/spotifywm;
+  meta = with lib; {
+    homepage = "https://github.com/dasJ/spotifywm";
     description = "Wrapper around Spotify that correctly sets class name before opening the window";
     license = licenses.mit;
     platforms = platforms.linux;

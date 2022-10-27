@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to add wavemon to the global environment and configure a
           setcap wrapper for it.
         '';
@@ -21,8 +21,10 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ wavemon ];
     security.wrappers.wavemon = {
-      source = "${pkgs.wavemon}/bin/wavemon";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_admin+ep";
+      source = "${pkgs.wavemon}/bin/wavemon";
     };
   };
 }

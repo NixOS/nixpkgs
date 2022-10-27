@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cvs, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, cvs, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cvsps";
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   meta = {
-    description = ''A tool to generate CVS patch set information'';
+    description = "A tool to generate CVS patch set information";
     longDescription = ''
       CVSps is a program for generating `patchset' information from a
       CVS repository.  A patchset in this case is defined as a set of
       changes made to a collection of files, and all committed at the
       same time (using a single "cvs commit" command).
     '';
-    homepage = http://www.cobite.com/cvsps/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.cobite.com/cvsps/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

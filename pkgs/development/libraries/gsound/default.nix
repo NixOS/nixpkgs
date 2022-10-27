@@ -1,28 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, glib, vala, libcanberra, gobject-introspection, libtool, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "gsound";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "bba8ff30eea815037e53bee727bbd5f0b6a2e74d452a7711b819a7c444e78e53";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "06l80xgykj7x1kqkjvcq06pwj2rmca458zvs053qc55x3sg06bfa";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection libtool vala ];
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
   buildInputs = [ glib libcanberra ];
 
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Denable_vala=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GSound;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/GSound";
     description = "Small library for playing system sounds";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

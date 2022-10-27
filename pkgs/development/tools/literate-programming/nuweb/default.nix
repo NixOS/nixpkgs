@@ -1,13 +1,13 @@
-{stdenv, fetchurl, tex}:
+{lib, stdenv, fetchurl, tex}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
   pname = "nuweb";
-  version = "1.58";
+  version = "1.62";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/nuweb/${pname}-${version}.tar.gz";
-    sha256 = "0q51i3miy15fv4njjp82yws01qfjxvqx5ly3g3vh8z3h7iq9p47y";
+    sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 
   buildInputs = [ tex ];
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec{
   patchPhase = ''
     sed -ie 's|nuweb -r|./nuweb -r|' Makefile
   '';
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: global.o:/build/nuweb-1.62/global.h:91: multiple definition of
+  #     `current_sector'; main.o:/build/nuweb-1.62/global.h:91: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildPhase = ''
     make nuweb
     make nuweb.pdf nuwebdoc.pdf all
@@ -27,12 +34,12 @@ stdenv.mkDerivation rec{
     cp htdocs/index.html nuweb.w nuweb.pdf nuwebdoc.pdf README $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple literate programming tool";
-    homepage = http://nuweb.sourceforge.net;
+    homepage = "http://nuweb.sourceforge.net";
     license = licenses.free;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 # TODO: nuweb.el Emacs integration

@@ -1,43 +1,63 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
 , dask
-, numpy, toolz # dask[array]
-, numba
-, pandas
-, scikitlearn
-, scipy
 , dask-glm
-, six
-, multipledispatch
-, packaging
-, pytest
-, xgboost
-, tensorflow
-, joblib
 , distributed
+, fetchPypi
+, multipledispatch
+, numba
+, numpy
+, packaging
+, pandas
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
   pname = "dask-ml";
+  version = "2022.5.27";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9e8e69494560dc23534adb236e88b3b21dc30a156648453c9c6e4b27ff2df96";
+    hash = "sha256-Y2nTk0GSvMGSP87oTD+4+8zsoQITeQEHC6Px2eOGzOQ=";
   };
 
-  checkInputs = [ pytest xgboost tensorflow joblib distributed ];
-  propagatedBuildInputs = [ dask numpy toolz numba pandas scikitlearn scipy dask-glm six multipledispatch packaging ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # dask-ml has some heavy test requirements
-  # and requires some very new packages
+  propagatedBuildInputs = [
+    dask-glm
+    distributed
+    multipledispatch
+    numba
+    numpy
+    packaging
+    pandas
+    scikit-learn
+    scipy
+  ] ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe;
+
+  # has non-standard build from source, and pypi doesn't include tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-ml;
+  pythonImportsCheck = [
+    "dask_ml"
+    "dask_ml.naive_bayes"
+    "dask_ml.wrappers"
+    "dask_ml.utils"
+  ];
+
+  meta = with lib; {
     description = "Scalable Machine Learn with Dask";
+    homepage = "https://github.com/dask/dask-ml";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

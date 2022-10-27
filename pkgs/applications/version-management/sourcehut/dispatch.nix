@@ -1,20 +1,22 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, pyyaml
+, PyGithub
 , python
-, srht, pyyaml, PyGithub, cryptography }:
+}:
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.11.1";
+  version = "0.15.34";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "dispatch.sr.ht";
     rev = version;
-    sha256 = "1bi7vn0yr326mf2c63f2fahdlrx2c6a8d6p6bzy2ym2835qfcc0v";
+    sha256 = "sha256-bZ4ZKohMozZIyP0TUgxETOECib4XGUv29+Mg8ZsoMf8=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -22,7 +24,6 @@ buildPythonPackage rec {
     srht
     pyyaml
     PyGithub
-    cryptography
   ];
 
   preBuild = ''
@@ -30,10 +31,12 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht;
+  pythonImportsCheck = [ "dispatchsrht" ];
+
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

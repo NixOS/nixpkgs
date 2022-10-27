@@ -1,26 +1,28 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , boost
 , cmake
+, giflib
 , ilmbase
 , libjpeg
 , libpng
 , libtiff
-, opencolorio
+, opencolorio_1
 , openexr
 , robin-map
 , unzip
+, fmt
 }:
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
-  version = "2.0.11";
+  version = "2.2.17.0";
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "Release-${version}";
-    sha256 = "1kasp9as81wjvys9qrx10mgdf9bjbdgryhdgjqn05zdmv2rs95nc";
+    sha256 = "0jqpb1zci911wdm928addsljxx8zsh0gzbhv9vbw6man4wi93h6h";
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];
@@ -32,27 +34,34 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
+    giflib
     ilmbase
     libjpeg
     libpng
     libtiff
-    opencolorio
+    opencolorio_1
     openexr
     robin-map
+    fmt
   ];
 
   cmakeFlags = [
     "-DUSE_PYTHON=OFF"
     "-DUSE_QT=OFF"
     # GNUInstallDirs
-    "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkgconfig
+    "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.openimageio.org;
+  postFixup = ''
+    substituteInPlace $dev/lib/cmake/OpenImageIO/OpenImageIOTargets-*.cmake \
+      --replace "\''${_IMPORT_PREFIX}/lib/lib" "$out/lib/lib"
+  '';
+
+  meta = with lib; {
+    homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu jtojnar ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
   };
 }

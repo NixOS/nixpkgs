@@ -2,9 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, setuptools_scm
+, setuptools-scm
+, pythonOlder
 , sdcc
-, nmigen
+, amaranth
 , fx2
 , libusb1
 , aiohttp
@@ -18,22 +19,23 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2019-10-16";
+  version = "unstable-2021-12-12";
+  disabled = pythonOlder "3.7";
   # python software/setup.py --version
-  realVersion = "0.1.dev1286+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "4f968dbe6cf4e9d8e2d0a5163d82e996c24d5e30";
-    sha256 = "1b50n12dc0b3jmim5ywg7daq62k5j4wkgmwzk88ric5ri3b8dl2r";
+    rev = "e640a778c446b7e9812727e73c560d12aeb41d7c";
+    sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm sdcc ];
+  nativeBuildInputs = [ setuptools-scm sdcc ];
 
   propagatedBuildInputs = [
     setuptools
-    nmigen
+    amaranth
     fx2
     libusb1
     aiohttp
@@ -43,6 +45,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ yosys icestorm nextpnr ];
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     make -C firmware LIBFX2=${fx2}/share/libfx2
@@ -55,7 +59,7 @@ buildPythonPackage rec {
   doInstallCheck = false;
 
   checkPhase = ''
-    python -m unittest discover
+    python -W ignore::DeprecationWarning test.py
   '';
 
   makeWrapperArgs = [
@@ -66,8 +70,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
-    homepage = https://github.com/GlasgowEmbedded/Glasgow;
+    homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ emily thoughtpolice ];
   };
 }

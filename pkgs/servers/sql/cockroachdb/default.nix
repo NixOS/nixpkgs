@@ -1,6 +1,8 @@
-{ stdenv, buildGoPackage, fetchurl
+{ lib, stdenv, buildGoPackage, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
+, installShellFiles
+, removeReferencesTo, go
 }:
 
 let
@@ -8,19 +10,21 @@ let
   linuxDeps  = [ ncurses6 ];
 
   buildInputs = if stdenv.isDarwin then darwinDeps else linuxDeps;
-  nativeBuildInputs = [ cmake xz which autoconf ];
+  nativeBuildInputs = [ installShellFiles cmake xz which autoconf ];
 
 in
 buildGoPackage rec {
   pname = "cockroach";
-  version = "19.1.4";
+  version = "20.1.8";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1bqzs844ildvyh4332vapsqhfkwcvjmgkkmn3i8ndd89q5yic6fq";
+    sha256 = "0mm3hfr778c7djza8gr1clwa8wca4d3ldh9hlg80avw4x664y5zi";
   };
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
   inherit nativeBuildInputs buildInputs;
 
@@ -39,8 +43,8 @@ buildGoPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D cockroachoss $bin/bin/cockroach
-    install -D cockroach.bash $bin/share/bash-completion/completions/cockroach.bash
+    install -D cockroachoss $out/bin/cockroach
+    installShellCompletion cockroach.bash
 
     mkdir -p $man/share/man
     cp -r man $man/share/man
@@ -48,17 +52,19 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  # Unfortunately we have to keep an empty reference to $out, because it seems
-  # buildGoPackages only nukes references to the go compiler under $bin, effectively
-  # making all binary output under $bin mandatory. Ideally, we would just use
-  # $out and $man and remove $bin since there's no point in an empty path. :(
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
-    homepage    = https://www.cockroachlabs.com;
+  # fails with `GOFLAGS=-trimpath`
+  allowGoReference = true;
+  preFixup = ''
+    find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
+  '';
+
+  meta = with lib; {
+    homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
-    license     = licenses.asl20;
+    license     = licenses.bsl11;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
+    maintainers = with maintainers; [ rushmorem thoughtpolice ];
   };
 }

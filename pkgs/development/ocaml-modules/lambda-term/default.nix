@@ -1,18 +1,35 @@
-{ stdenv, fetchurl, libev, buildDunePackage, zed, lwt_log, lwt_react }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, zed, lwt_log, lwt_react, mew_vi, uucp, logs }:
+
+let params =
+  if lib.versionAtLeast ocaml.version "4.08" then {
+    version = "3.3.1";
+    sha256 = "sha256-C124bhdrY+XzL93zzNEbCr+U+7CYBZDm0hlAw+iqat4=";
+  } else {
+    version = "3.1.0";
+    sha256 = "1k0ykiz0vhpyyj9fkss29ajas4fh1xh449j702xkvayqipzj1mkg";
+  }
+; in
 
 buildDunePackage rec {
   pname = "lambda-term";
-  version = "2.0.2";
+  inherit (params) version;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-community/lambda-term/releases/download/${version}/lambda-term-${version}.tbz";
-    sha256 = "1p9yczrx78pf5hvhcg1qiqb2vdlmw6bmhhjsm4wiqjq2cc6piaqw";
+  duneVersion = if lib.versionAtLeast ocaml.version "4.08" then "3" else "2";
+
+  strictDeps = true;
+
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = pname;
+    rev = version;
+    inherit (params) sha256;
   };
 
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [ zed lwt_log lwt_react ];
+  propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ]
+    ++ lib.optional (lib.versionAtLeast version "3.3.1") [ uucp logs ] ;
 
-  meta = { description = "Terminal manipulation library for OCaml";
+  meta = {
+    description = "Terminal manipulation library for OCaml";
     longDescription = ''
     Lambda-term is a cross-platform library for
     manipulating the terminal. It provides an abstraction for keys,
@@ -28,10 +45,9 @@ buildDunePackage rec {
     console applications.
     '';
 
-    homepage = https://github.com/diml/lambda-term;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [
-      stdenv.lib.maintainers.gal_bolle
-    ];
+    inherit (src.meta) homepage;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.gal_bolle ];
+    mainProgram = "lambda-term-actions";
   };
 }

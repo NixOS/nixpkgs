@@ -1,17 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml, openssh
-, nose, bc, hostname, coreutils, bash, gnused
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pyyaml
+, openssh
+, nose
+, bc
+, hostname
+, bash
 }:
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e913efb4fe017eed9731d5ad8be397509e7f1966e6cb6441ee2bce074b16b310";
+    sha256 = "ff6fba688a06e5e577315d899f0dab3f4fe479cef99d444a4e651af577b7d081";
   };
-
-  propagatedBuildInputs = [ pyyaml ];
 
   postPatch = ''
     substituteInPlace lib/ClusterShell/Worker/Ssh.py \
@@ -20,29 +26,40 @@ buildPythonPackage rec {
 
     substituteInPlace lib/ClusterShell/Worker/fastsubprocess.py \
       --replace '"/bin/sh"' '"${bash}/bin/sh"'
+
+    for f in tests/*; do
+      substituteInPlace $f \
+        --replace '/bin/hostname'   '${hostname}/bin/hostname' \
+        --replace '/bin/sleep'      'sleep' \
+        --replace '/bin/echo'       'echo' \
+        --replace '/bin/uname'      'uname' \
+        --replace '/bin/false'      'false' \
+        --replace '/bin/true'       'true' \
+        --replace '/usr/bin/printf' 'printf'
+    done
+
+    # Fix warnings
+    substituteInPlace lib/ClusterShell/Task.py \
+      --replace "notifyAll" "notify_all"
+    substituteInPlace tests/TaskPortTest.py lib/ClusterShell/Task.py \
+      --replace "currentThread" "current_thread"
   '';
 
-  checkInputs = [ nose bc hostname coreutils gnused ];
+  propagatedBuildInputs = [ pyyaml ];
+
+  checkInputs = [
+    bc
+    hostname
+    nose
+  ];
+
+  pythonImportsCheck = [ "ClusterShell" ];
 
   # Many tests want to open network connections
   # https://github.com/cea-hpc/clustershell#test-suite
   #
   # Several tests fail on Darwin
   checkPhase = ''
-    for f in tests/*; do
-      substituteInPlace $f \
-        --replace '/bin/hostname'   '${hostname}/bin/hostname' \
-        --replace '/bin/sleep'      '${coreutils}/bin/sleep' \
-        --replace '"sleep'          '"${coreutils}/bin/sleep' \
-        --replace '/bin/echo'       '${coreutils}/bin/echo' \
-        --replace '/bin/uname'      '${coreutils}/bin/uname' \
-        --replace '/bin/false'      '${coreutils}/bin/false' \
-        --replace '/bin/true'       '${coreutils}/bin/true' \
-        --replace '/usr/bin/printf' '${coreutils}/bin/printf' \
-        --replace '"sed'            '"${gnused}/bin/sed' \
-        --replace ' sed '           ' ${gnused}/bin/sed '
-    done
-
     rm tests/CLIClushTest.py
     rm tests/TreeWorkerTest.py
     rm tests/TaskDistantMixin.py
@@ -80,9 +97,10 @@ buildPythonPackage rec {
     tests/*.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Scalable Python framework for cluster administration";
-    homepage = https://cea-hpc.github.io/clustershell;
+    homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;
     maintainers = [ maintainers.alexvorobiev ];
   };

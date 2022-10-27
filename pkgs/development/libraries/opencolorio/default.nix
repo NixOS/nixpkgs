@@ -1,47 +1,82 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, pkgconfig, lcms2, tinyxml, git }:
-
-with lib;
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, expat
+, libyamlcpp
+, ilmbase
+, pystring
+, imath
+# Only required on Linux
+, glew
+, freeglut
+# Only required on Darwin
+, Carbon
+, GLUT
+, Cocoa
+# Python bindings
+, pythonBindings ? true # Python bindings
+, python3Packages
+# Build apps
+, buildApps ? true # Utility applications
+, lcms2
+, openimageio2
+, openexr
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "1.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
-    owner = "imageworks";
+    owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "12srvxca51czpfjl0gabpidj9n84mw78ivxy5w75qhq2mmc798sb";
+    sha256 = "sha256-e1PpWjjfSjtgN9Rs/+lsA45Z9S4y4T6nqrJ02DZ4vjs=";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  patches = [
+    (fetchpatch {
+      name = "darwin-no-hidden-l.patch";
+      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/48bab7c643ed8d108524d718e5038d836f906682.patch";
+      revert = true;
+      sha256 = "sha256-0DF+lwi2nfkUFG0wYvL3HYbhZS6SqGtPWoOabrFS1Eo=";
+    })
+  ];
 
-  # TODO: Investigate whether git can be dropped: It's only used to apply patches
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    expat
+    libyamlcpp
+    ilmbase
+    pystring
+    imath
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
+    ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
+    ++ lib.optionals buildApps [ lcms2 openimageio2 openexr ];
 
-  buildInputs = [ lcms2 tinyxml ] ++ optional stdenv.isDarwin boost;
+    cmakeFlags = [
+      "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
+    ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
+      ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
+  # TODO Investigate this: Python and GPU tests fail to load libOpenColorIO.so.2.0
+  # doCheck = true;
+
+  # https://github.com/AcademySoftwareFoundation/OpenColorIO/issues/1649
   postPatch = ''
-    substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
-    substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
+    substituteInPlace src/OpenColorIO/CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR}
   '';
 
-  cmakeFlags = [
-    "-DUSE_EXTERNAL_LCMS=ON"
-    "-DUSE_EXTERNAL_TINYXML=ON"
-    # External libyamlcpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
-    "-DUSE_EXTERNAL_YAML=OFF"
-  ] ++ optional stdenv.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
-    ++ optional (!stdenv.hostPlatform.isi686 && !stdenv.hostPlatform.isx86_64) "-DOCIO_USE_SSE=OFF";
-
-  postInstall = ''
-    mkdir -p $bin/bin; mv $out/bin $bin/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://opencolorio.org;
+  meta = with lib; {
+    homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;
   };
 }

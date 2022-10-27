@@ -1,25 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner, wcwidth }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, wcwidth
+}:
 
 buildPythonPackage rec {
   pname = "pyte";
-  version = "0.8.0";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7e71d03e972d6f262cbe8704ff70039855f05ee6f7ad9d7129df9c977b5a88c5";
+  version = "0.8.1";
+
+  src = fetchFromGitHub {
+    owner = "selectel";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
   };
+
+  postPatch = ''
+    # Remove pytest-runner dependency since it is not supported in the NixOS
+    # sandbox
+    sed -i '/pytest-runner/d' setup.py
+  '';
 
   propagatedBuildInputs = [ wcwidth ];
 
-  checkInputs = [ pytest pytestrunner ];
+  checkInputs = [ pytestCheckHook ];
 
-  # tries to write to os.path.dirname(__file__) in test_input_output
-  checkPhase = ''
-    py.test -k "not test_input_output"
-  '';
+  pythonImportsCheck = [ "pyte" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple VTXXX-compatible linux terminal emulator";
-    homepage = https://github.com/selectel/pyte;
+    homepage = "https://github.com/selectel/pyte";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ flokli ];
   };

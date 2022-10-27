@@ -1,11 +1,12 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , meson
 , ninja
 , nixos-artwork
 , glib
-, pkgconfig
+, pkg-config
 , dbus
 , polkit
 , accountsservice
@@ -14,28 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "5.1.1";
-
-  repoName = "default-settings";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "default-settings";
     rev = version;
-    sha256 = "10sdy8v34y6bgb3mabwy7k3b5dbqrnab504dvhashpfxr9n9xncy";
+    sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
-  };
-
-  patches = [
-    # https://github.com/elementary/default-settings/pull/119
-    ./0001-Build-with-Meson.patch
-  ];
 
   nativeBuildInputs = [
     accountsservice
@@ -43,14 +30,14 @@ stdenv.mkDerivation rec {
     glib # polkit requires
     meson
     ninja
-    pkgconfig
+    pkg-config
     polkit
     python3
   ];
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
 
@@ -60,34 +47,32 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    # Install our override for plank dockitems.
-    # This is because we don't have Pantheon's mail or Appcenter.
-    # See: https://github.com/NixOS/nixpkgs/issues/58161
+    # Install our override for plank dockitems as the desktop file path is different.
     schema_dir=$out/share/glib-2.0/schemas
     install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
 
     # Our launchers that use paths at /run/current-system/sw/bin
     mkdir -p $out/etc/skel/.config/plank/dock1
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
-
-    # Whitelist wingpanel indicators to be used in the greeter
-    # TODO: is this needed or installed upstream?
-    install -D ${./io.elementary.greeter.whitelist} $out/etc/wingpanel.d/io.elementary.greeter.whitelist
   '';
 
   postFixup = ''
     # https://github.com/elementary/default-settings/issues/55
-    rm -rf $out/share/plymouth
-    rm -rf $out/share/cups
-
-    rm -rf $out/share/applications
+    rm -r $out/share/cups
+    rm -r $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Default settings and configuration files for elementary";
-    homepage = https://github.com/elementary/default-settings;
+    homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

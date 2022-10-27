@@ -1,21 +1,32 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, curlie, testers }:
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.2.0";
+  version = "1.6.9";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jgwd1amwjpmfgg08j9m9i15rpxijhmld9najzqb2gf8c1n5d8cf";
+    hash = "sha256-3EKxuEpFm+lp2myMfymYYY9boSXGOF2iAdjtGKnjJK0=";
   };
 
-  modSha256 = "18nwq99vv3nbdwfilfn8v64mn58jviwybi93li0lcg7779nxab3d";
+  patches = [
+    ./bump-golang-x-sys.patch
+  ];
+
+  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = curlie;
+    command = "curlie version";
+  };
 
   meta = with lib; {
-    description = "Curlie is a frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
-    homepage = https://curlie.io/;
+    description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
+    homepage = "https://curlie.io/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;
   };

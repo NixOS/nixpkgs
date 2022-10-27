@@ -1,57 +1,71 @@
 { lib
+, asdf-standard
+, asdf-transform-schemas
+, astropy
 , buildPythonPackage
 , fetchPypi
-, pytest-astropy
-, semantic-version
-, pyyaml
+, importlib-resources
+, jmespath
 , jsonschema
-, six
+, lz4
 , numpy
-, isPy27
-, astropy
-, setuptools_scm
-, setuptools
+, packaging
+, pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, semantic-version
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.4.2";
-  disabled = isPy27;
+  version = "2.13.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wlgx8469wwsczc2gjka9k1a03yzird67zg3va0kg8y6j1qmbwvg";
+    hash = "sha256-MuKmmlPRcB/EYW6AD7Pa/4G7rYAYMqe/Vj47Ycn+Pf4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "semantic_version>=2.3.1,<=2.6.0" "semantic_version>=2.3.1" \
-      --replace "doctest_plus = enabled" ""
-  '';
-
-  checkInputs = [
-    pytest-astropy
-    astropy
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    semantic-version
-    pyyaml
+    asdf-standard
+    asdf-transform-schemas
+    jmespath
     jsonschema
-    six
     numpy
-    setuptools_scm
-    setuptools
+    packaging
+    pyyaml
+    semantic-version
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
-  checkPhase = ''
-    pytest
+  checkInputs = [
+    astropy
+    lz4
+    pytest-astropy
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
+
+  pythonImportsCheck = [
+    "asdf"
+  ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
-    homepage = https://github.com/spacetelescope/asdf;
+    homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

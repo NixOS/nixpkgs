@@ -9,21 +9,15 @@ let
 
 in
 {
-  options.services.irqbalance.enable = mkEnableOption "irqbalance daemon";
+  options.services.irqbalance.enable = mkEnableOption (lib.mdDoc "irqbalance daemon");
 
   config = mkIf cfg.enable {
 
-    systemd.services = {
-      irqbalance = {
-        description = "irqbalance daemon";
-        path = [ pkgs.irqbalance ];
-        serviceConfig =
-          { ExecStart = "${pkgs.irqbalance}/bin/irqbalance --foreground"; };
-        wantedBy = [ "multi-user.target" ];
-      };
-    };
-
     environment.systemPackages = [ pkgs.irqbalance ];
+
+    systemd.services.irqbalance.wantedBy = ["multi-user.target"];
+
+    systemd.packages = [ pkgs.irqbalance ];
 
   };
 

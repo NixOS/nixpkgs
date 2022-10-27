@@ -1,44 +1,72 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
+, fixDarwinDylibNames
 , cmake
 , libjpeg
+, uselibtirpc ? stdenv.isLinux
+, libtirpc
 , zlib
-, szip ? null
+, szipSupport ? false
+, szip
+, javaSupport ? false
+, jdk
 }:
-
 stdenv.mkDerivation rec {
   pname = "hdf";
-  version = "4.2.14";
+  version = "4.2.15";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${version}/src/hdf-${version}.tar.bz2";
-    sha256 = "0n29klrrbwan9307np0d9hr128dlpc4nnlf57a140080ll3jmp8l";
+    sha256 = "04nbgfxyj5jg4d6sr28162cxbfwqgv0sa7vz1ayzvm8wbbpkbq5x";
   };
 
-  patches = let
-    # The Debian patch revision to fetch from; this may differ from our package
-    # version, but older patches should still apply.
-    patchRev = "4.2.13-4";
-    getPatch = name: sha256: fetchpatch {
-      inherit sha256;
-      url = "https://salsa.debian.org/debian-gis-team/hdf4/raw/debian/${patchRev}/debian/patches/${name}";
-    };
+  patches = [
+    # Note that the PPC, SPARC and s390 patches are only needed so the aarch64 patch applies cleanly
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-ppc.patch";
+      sha256 = "0dbbfpsvvqzy9zyfv38gd81zzc44gxjib9sd8scxqnkkqprj6jq0";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-4.2.4-sparc.patch";
+      sha256 = "0ip4prcjpa404clm87ib7l71605mws54x9492n9pbz5yb51r9aqh";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-s390.patch";
+      sha256 = "0aiqbr4s1l19y3r3y4wjd5fkv9cfc8rlr4apbh1p0d57wyvqa7i3";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-arm.patch";
+      sha256 = "157k1avvkpf3x89m1fv4a1kgab6k3jv74rskazrmjivgzav4qaw3";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
+      sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
+    })
+    ./darwin-aarch64.patch
+  ];
 
-  in [
-    (getPatch "64bit"                     "1xqk9zpch4m6ipa0f3x2cm8rwaz4p0ppp1vqglvz18j6q91p8b5y")
-    (getPatch "hdfi.h"                    "01fr9csylnvk9jd9jn9y23bvxy192s07p32pr76mm3gwhgs9h7r4")
-    (getPatch "hdf-4.2.10-aarch64.patch"  "1hl0xw5pd9xhpq49xpwgg7c4z6vv5p19x6qayixw0myvgwj1r4zn")
-    (getPatch "reproducible-builds.patch" "02j639w26xkxpxx3pdhbi18ywz8w3qmjpqjb83n47gq29y4g13hc")
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
-    cmake
     libjpeg
-    szip
     zlib
-  ];
+  ]
+  ++ lib.optional javaSupport jdk
+  ++ lib.optional szipSupport szip
+  ++ lib.optional uselibtirpc libtirpc;
 
-  preConfigure = stdenv.lib.optionalString (szip != null) "export SZIP_INSTALL=${szip}";
+  preConfigure = lib.optionalString uselibtirpc ''
+    # Make tirpc discovery work with CMAKE_PREFIX_PATH
+    substituteInPlace config/cmake/FindXDR.cmake \
+      --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
+                'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
+  '' + lib.optionalString szipSupport ''
+    export SZIP_INSTALL=${szip}
+  '';
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -50,20 +78,17 @@ stdenv.mkDerivation rec {
     "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
     "-DHDF4_BUILD_FORTRAN=OFF"
     "-DJPEG_DIR=${libjpeg}"
-  ] ++ stdenv.lib.optionals (szip != null) [
+  ] ++ lib.optionals javaSupport [
+    "-DHDF4_BUILD_JAVA=ON"
+    "-DJAVA_HOME=${jdk}"
+  ] ++ lib.optionals szipSupport [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
   ];
 
   doCheck = true;
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  '' + stdenv.lib.optionalString (stdenv.isDarwin) ''
-    export DYLD_LIBRARY_PATH=$(pwd)/bin
-  '';
-
-  excludedTests = stdenv.lib.optionals stdenv.isDarwin [
+  excludedTests = lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
     "HDP-dumpsds-18"
@@ -71,7 +96,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (stdenv.lib.concatStringsSep "|" excludedTests) + ")"
+    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
     else ""; in ''
     runHook preCheck
     ctest -E "${excludedTestsRegex}" --output-on-failure
@@ -84,10 +109,22 @@ stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
   '';
 
-  meta = {
+  passthru = {
+    inherit
+      uselibtirpc
+      libtirpc
+      szipSupport
+      szip
+      javaSupport
+      jdk
+    ;
+  };
+
+  meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
-    homepage = https://support.hdfgroup.org/products/hdf4/;
-    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://support.hdfgroup.org/products/hdf4/";
+    maintainers = with maintainers; [ knedlsepp ];
+    platforms = platforms.unix;
+    license = licenses.bsdOriginal;
   };
 }

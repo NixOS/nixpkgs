@@ -1,11 +1,12 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPyPy
 , python
-, openblasCompat # build segfaults with regular openblas
+, blas
+, lapack # build segfaults with 64-bit blas
 , suitesparse
+, unittestCheckHook
 , glpk ? null
 , gsl ? null
 , fftw ? null
@@ -14,25 +15,28 @@
 , withFftw ? true
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.2.3";
+  version = "1.3.0";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea62a2a1b8e2db3a6ae44ac394f58e4620149af226c250c6f2b18739b48cfc21";
+    sha256 = "sha256-ALGyMvnR+QLVeKnXWBS2f6AgdY1a5CLijKjO9iafpcY=";
   };
+
+  buildInputs = [ blas lapack ];
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
   preConfigure = ''
-    export CVXOPT_BLAS_LIB_DIR=${openblasCompat}/lib
-    export CVXOPT_BLAS_LIB=openblas
-    export CVXOPT_LAPACK_LIB=openblas
-    export CVXOPT_SUITESPARSE_LIB_DIR=${suitesparse}/lib
-    export CVXOPT_SUITESPARSE_INC_DIR=${suitesparse}/include
+    export CVXOPT_BLAS_LIB=blas
+    export CVXOPT_LAPACK_LIB=lapack
+    export CVXOPT_SUITESPARSE_LIB_DIR=${lib.getLib suitesparse}/lib
+    export CVXOPT_SUITESPARSE_INC_DIR=${lib.getDev suitesparse}/include
   '' + lib.optionalString withGsl ''
     export CVXOPT_BUILD_GSL=1
     export CVXOPT_GSL_LIB_DIR=${gsl}/lib
@@ -47,12 +51,12 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
-    homepage = http://cvxopt.org/;
+    homepage = "http://cvxopt.org/";
     description = "Python Software for Convex Optimization";
     longDescription = ''
       CVXOPT is a free software package for convex optimization based on the

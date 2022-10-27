@@ -1,17 +1,13 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox, dos2unix }:
+, zlib, xorg, dbus, virtualbox}:
 
 let
   version = virtualbox.version;
-  xserverVListFunc = builtins.elemAt (stdenv.lib.splitVersion xorg.xorgserver.version);
+  xserverVListFunc = builtins.elemAt (lib.splitVersion xorg.xorgserver.version);
 
-  # Forced to 1.18 in <nixpkgs/nixos/modules/services/x11/xserver.nix>
-  # as it even fails to build otherwise.  Still, override this even here,
-  # in case someone does just a standalone build
-  # (not via videoDrivers = ["vboxvideo"]).
-  # It's likely to work again in some future update.
-  xserverABI = let abi = xserverVListFunc 0 + xserverVListFunc 1;
-    in if abi == "119" || abi == "120" then "118" else abi;
+  # Forced to 1.18; vboxvideo doesn't seem to provide any newer ABI,
+  # and nixpkgs doesn't support older ABIs anymore.
+  xserverABI = "118";
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -19,14 +15,15 @@ let
   dlopenLibs = [
     { name = "libdbus-1.so"; pkg = dbus; }
     { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+    { name = "libXrandr.so"; pkg = xorg.libXrandr; }
   ];
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
+    sha256 = "d456c559926f1a8fdd7259056e0a50f12339fd494122cf30db7736e2032970c6";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -43,35 +40,20 @@ in stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
       --replace "<ttm/" "<drm/ttm/"
-    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
   '';
 
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
-  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-  # https://www.virtualbox.org/ticket/18911
-  patches = [ ./kernel-5.3-fix.patch ];
 
   unpackPhase = ''
-    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
-        chmod 755 ./VBoxLinuxAdditions.run
-        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
-        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
-        ./VBoxLinuxAdditions.run --noexec --keep
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
+    chmod 755 ./VBoxLinuxAdditions.run
+    # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+    sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
+    ./VBoxLinuxAdditions.run --noexec --keep
 
     # Unpack files
     cd install
-    ${if stdenv.hostPlatform.system == "i686-linux" then ''
-        tar xfvj VBoxGuestAdditions-x86.tar.bz2
-      ''
-      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
-        tar xfvj VBoxGuestAdditions-amd64.tar.bz2
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    tar xfvj VBoxGuestAdditions-${if stdenv.hostPlatform.is32bit then "x86" else "amd64"}.tar.bz2
   '';
 
   buildPhase = ''
@@ -108,7 +90,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     # Install kernel modules.
     cd src/vboxguest-${version}
-    make install INSTALL_MOD_PATH=$out
+    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
     # Install binaries
@@ -162,8 +144,10 @@ in stdenv.mkDerivation {
       This add-on provides support for dynamic resizing of the X Display, shared
       host/guest clipboard support and guest OpenGL support.
     '';
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };
 }

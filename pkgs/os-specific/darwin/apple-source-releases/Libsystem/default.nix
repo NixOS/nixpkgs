@@ -1,33 +1,43 @@
-{ stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
+{ lib, stdenv, buildPackages
+, appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutil, hfs, darling }:
+, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
+, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
+, headersOnly ? false
+, withLibresolv ? !headersOnly
+}:
 
-appleDerivation {
+appleDerivation' stdenv {
   dontBuild = true;
   dontFixup = true;
-
-  nativeBuildInputs = [ cpio ];
 
   installPhase = ''
     export NIX_ENFORCE_PURITY=
 
     mkdir -p $out/lib $out/include
 
+    function copyHierarchy () {
+      mkdir -p $1
+      while read f; do
+        mkdir -p $1/$(dirname $f)
+        cp --parents -pn $f $1
+      done
+    }
+
     # Set up our include directories
-    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | cpio -pdm $out/include)
+    (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
-               ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
-               ${libutil} ${libpthread} ${hfs}; do
-      (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
+               ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
+      (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${cctools.dev}/include/mach-o && find . -name '*.h' | cpio -pdm $out/include/mach-o)
+    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     mkdir -p $out/include/os
 
@@ -59,14 +69,21 @@ appleDerivation {
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__
     #define __TARGETCONDITIONALS__
-    #define TARGET_OS_MAC           1
-    #define TARGET_OS_OSX           1
-    #define TARGET_OS_WIN32         0
-    #define TARGET_OS_UNIX          0
-    #define TARGET_OS_EMBEDDED      0
-    #define TARGET_OS_IPHONE        0
-    #define TARGET_IPHONE_SIMULATOR 0
-    #define TARGET_OS_LINUX         0
+    #define TARGET_OS_MAC               1
+    #define TARGET_OS_WIN32             0
+    #define TARGET_OS_UNIX              0
+    #define TARGET_OS_OSX               1
+    #define TARGET_OS_IPHONE            0
+    #define TARGET_OS_IOS               0
+    #define TARGET_OS_WATCH             0
+    #define TARGET_OS_BRIDGE            0
+    #define TARGET_OS_TV                0
+    #define TARGET_OS_SIMULATOR         0
+    #define TARGET_OS_EMBEDDED          0
+    #define TARGET_OS_EMBEDDED_OTHER    0 /* Used in configd */
+    #define TARGET_IPHONE_SIMULATOR     TARGET_OS_SIMULATOR /* deprecated */
+    #define TARGET_OS_NANO              TARGET_OS_WATCH /* deprecated */
+    #define TARGET_OS_LINUX             0
 
     #define TARGET_CPU_PPC          0
     #define TARGET_CPU_PPC64        0
@@ -74,6 +91,7 @@ appleDerivation {
     #define TARGET_CPU_X86          0
     #define TARGET_CPU_X86_64       1
     #define TARGET_CPU_ARM          0
+    #define TARGET_CPU_ARM64        0
     #define TARGET_CPU_MIPS         0
     #define TARGET_CPU_SPARC        0
     #define TARGET_CPU_ALPHA        0
@@ -84,73 +102,43 @@ appleDerivation {
     #define TARGET_RT_64_BIT        1
     #endif  /* __TARGETCONDITIONALS__ */
     EOF
+  '' + lib.optionalString (!headersOnly) ''
 
     # The startup object files
     cp ${Csu}/lib/* $out/lib
 
-    # We can't re-exported libsystem_c and libsystem_kernel directly,
-    # so we link against the central library here.
-    mkdir -p $out/lib/system
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/system/libsystem_c.dylib \
-       /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_c_symbols}
+    cp -vr \
+      ${darwin-stubs}/usr/lib/libSystem.B.tbd \
+      ${darwin-stubs}/usr/lib/system \
+      $out/lib
 
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/system/libsystem_kernel.dylib \
-       /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_kernel_symbols}
-
-    # The umbrella libSystem also exports some symbols,
-    # but we don't want to pull in everything from the other libraries.
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/libSystem_internal.dylib \
-       /usr/lib/libSystem.dylib \
-       -reexported_symbols_list ${./system_symbols}
-
-    # We used to determine these impurely based on the host system, but then when we got some 10.12 Hydra boxes,
-    # one of them accidentally built this derivation, referenced libsystem_symptoms.dylib, which doesn't exist on
-    # 10.11, and then broke all subsequent builds on 10.11. By picking a 10.11 compatible subset of the libraries,
-    # we avoid scary impurity issues like that.
-    libs=$(cat ${./reexported_libraries} | grep -v '^#')
-
-    for i in $libs; do
-      if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
-        args="$args -reexport_library $i"
-      fi
-    done
-
-    ld -macosx_version_min 10.7 -arch x86_64 -dylib \
-       -o $out/lib/libSystem.B.dylib \
-       -compatibility_version 1.0 \
-       -current_version 1226.10.1 \
-       -reexport_library $out/lib/system/libsystem_c.dylib \
-       -reexport_library $out/lib/system/libsystem_kernel.dylib \
-       -reexport_library $out/lib/libSystem_internal.dylib \
-       $args
-
-    ln -s libSystem.B.dylib $out/lib/libSystem.dylib
+    substituteInPlace $out/lib/libSystem.B.tbd \
+      --replace "/usr/lib/system/" "$out/lib/system/"
+    ln -s libSystem.B.tbd $out/lib/libSystem.tbd
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
-      ln -s libSystem.dylib $out/lib/lib$name.dylib
+      ln -s libSystem.tbd $out/lib/lib$name.tbd
     done
+  '' + lib.optionalString withLibresolv ''
 
     # This probably doesn't belong here, but we want to stay similar to glibc, which includes resolv internally...
     cp ${libresolv}/lib/libresolv.9.dylib $out/lib/libresolv.9.dylib
-    resolv_libSystem=$(otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
+    resolv_libSystem=$(${stdenv.cc.bintools.targetPrefix}otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
     echo $libs
 
     chmod +w $out/lib/libresolv.9.dylib
-    install_name_tool \
+    ${stdenv.cc.bintools.targetPrefix}install_name_tool \
       -id $out/lib/libresolv.9.dylib \
-      -change "$resolv_libSystem" $out/lib/libSystem.dylib \
+      -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 
-  meta = with stdenv.lib; {
-    description = "The Mac OS libc/libSystem (impure symlinks to binaries with pure headers)";
+  appleHeaders = builtins.readFile ./headers.txt;
+
+  meta = with lib; {
+    description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

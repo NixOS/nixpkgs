@@ -1,30 +1,66 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
-, nose, mock, vcversioner, functools32 }:
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, importlib-metadata
+, importlib-resources
+, pyrsistent
+, pythonOlder
+, twisted
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "2.6.0";
+  version = "4.16.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
+    sha256 = "sha256-FlBZ8Hbv9pcbrlt0L8App7TvP5vPBMFOR3anYF3hSyM=";
   };
 
-  checkInputs = [ nose mock vcversioner ];
-  propagatedBuildInputs = [ functools32 ];
-
   postPatch = ''
-    substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py \
-      --replace "python" "${python.pythonForBuild.interpreter}"
+    patchShebangs json/bin/jsonschema_suite
   '';
+
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    pyrsistent
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  checkInputs = [
+    twisted
+  ];
 
   checkPhase = ''
-    nosetests
+    export JSON_SCHEMA_TEST_SUITE=json
+    trial jsonschema
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Julian/jsonschema;
+  pythonImportsCheck = [
+    "jsonschema"
+  ];
+
+  meta = with lib; {
     description = "An implementation of JSON Schema validation for Python";
+    homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };

@@ -1,36 +1,47 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+}:
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20191018";
+  version = "20220331";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "0pz95fb1zvsj9238bg7a4vxl1svn5mnjg10sn5qvgr008q0v9782";
+    hash = "sha256-rK/2ixTx4IBOu/xLlyaKTMvvz6BTsC7Zkk8rFNipjiE=";
   };
+
+  nativeBuildInputs = [ bison flex ];
+
+  buildFlags = [
+    "acpibin"
+    "acpidump"
+    "acpiexamples"
+    "acpiexec"
+    "acpihelp"
+    "acpisrc"
+    "acpixtract"
+    "iasl"
+  ];
 
   NIX_CFLAGS_COMPILE = "-O3";
 
   enableParallelBuilding = true;
 
-  buildFlags = [
-    "acpibin"
-    "acpidump"
-    "acpiexec"
-    "acpihelp"
-    "acpinames"
-    "acpixtract"
-  ];
-
-  nativeBuildInputs = [ bison flex ];
+  # We can handle stripping ourselves.
+  # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
+  INSTALLFLAGS = lib.optionals (!stdenv.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
-    description = "ACPICA Tools";
+  meta = with lib; {
     homepage = "https://www.acpica.org/";
-    license = with licenses; [ gpl2 bsd3 ];
-    platforms = platforms.linux;
+    description = "ACPICA Tools";
+    license = with licenses; [ iasl gpl2Only bsd3 ];
     maintainers = with maintainers; [ tadfisher ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

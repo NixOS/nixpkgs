@@ -4,23 +4,27 @@
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg
+, azure-mgmt-core
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datalake-store";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "9376d35495661d19f8acc5604f67b0bc59493b1835bbc480f9a1952f90017a4c";
+    sha256 = "sha256-GrmVK97M+iojevPLVTuLmfQRLxvrHtr9DRHymJvLYHE=";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-datalake-nspkg
   ];
+
+  pythonNamespaces = [ "azure.mgmt.datalake" ];
 
   # has no tests
   doCheck = false;
@@ -29,6 +33,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Data Lake Store Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

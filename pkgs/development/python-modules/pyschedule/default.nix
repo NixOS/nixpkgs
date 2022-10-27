@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Formulate and solve resource-constrained scheduling problems";
-    homepage = https://github.com/timnon/pyschedule;
+    homepage = "https://github.com/timnon/pyschedule";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

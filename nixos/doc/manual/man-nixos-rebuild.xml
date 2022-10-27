@@ -52,10 +52,18 @@
     <option>build-vm-with-bootloader</option>
    </arg>
     </group>
-   <sbr />
-   <arg>
-    <option>--upgrade</option>
-   </arg>
+    <sbr />
+
+    <arg>
+      <group choice='req'>
+        <arg choice='plain'>
+          <option>--upgrade</option>
+        </arg>
+        <arg choice='plain'>
+          <option>--upgrade-all</option>
+        </arg>
+      </group>
+    </arg>
 
    <arg>
     <option>--install-bootloader</option>
@@ -77,7 +85,22 @@
     <option>--builders</option> <replaceable>builder-spec</replaceable>
    </arg>
 
+   <sbr/>
+
+   <arg>
+    <option>--flake</option> <replaceable>flake-uri</replaceable>
+   </arg>
+
+   <arg>
+    <option>--no-flake</option>
+   </arg>
+
+   <arg>
+    <option>--override-input</option> <replaceable>input-name</replaceable> <replaceable>flake-uri</replaceable>
+   </arg>
+
    <sbr />
+
    <arg>
     <group choice='req'>
     <arg choice='plain'>
@@ -89,7 +112,23 @@
     </arg>
      </group> <replaceable>name</replaceable>
    </arg>
+
    <sbr />
+
+   <arg>
+    <option>--build-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--target-host</option> <replaceable>host</replaceable>
+   </arg>
+
+   <arg>
+    <option>--use-remote-sudo</option>
+   </arg>
+
+   <sbr />
+
    <arg>
     <option>--show-trace</option>
    </arg>
@@ -101,6 +140,11 @@
     <group choice='req'>
      <arg choice='plain'><option>--verbose</option></arg>
      <arg choice='plain'><option>-v</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--impure</option></arg>
     </group>
    </arg>
    <arg>
@@ -129,14 +173,17 @@
   <title>Description</title>
 
   <para>
-   This command updates the system so that it corresponds to the configuration
-   specified in <filename>/etc/nixos/configuration.nix</filename>. Thus, every
-   time you modify <filename>/etc/nixos/configuration.nix</filename> or any
-   NixOS module, you must run <command>nixos-rebuild</command> to make the
-   changes take effect. It builds the new system in
-   <filename>/nix/store</filename>, runs its activation script, and stop and
-   (re)starts any system services if needed. Please note that user services need
-   to be started manually as they aren't detected by the activation script at the moment.
+   This command updates the system so that it corresponds to the
+   configuration specified in
+   <filename>/etc/nixos/configuration.nix</filename> or
+   <filename>/etc/nixos/flake.nix</filename>. Thus, every time you
+   modify the configuration or any other NixOS module, you must run
+   <command>nixos-rebuild</command> to make the changes take
+   effect. It builds the new system in
+   <filename>/nix/store</filename>, runs its activation script, and
+   stop and (re)starts any system services if needed. Please note that
+   user services need to be started manually as they aren't detected
+   by the activation script at the moment.
   </para>
 
   <para>
@@ -305,7 +352,7 @@
        switch</command>), because the hardware and boot loader configuration in
        the VM are different. The boot loader is installed on an automatically
        generated virtual disk containing a <filename>/boot</filename>
-       partition, which is mounted read-only in the VM.
+       partition.
       </para>
      </listitem>
     </varlistentry>
@@ -324,9 +371,23 @@
     <term>
      <option>--upgrade</option>
     </term>
+    <term>
+     <option>--upgrade-all</option>
+    </term>
     <listitem>
-     <para>
-      Fetch the latest version of NixOS from the NixOS channel.
+      <para>
+        Update the root user's channel named <literal>nixos</literal>
+        before rebuilding the system.
+      </para>
+      <para>
+        In addition to the <literal>nixos</literal> channel, the root
+        user's channels which have a file named
+        <literal>.update-on-nixos-rebuild</literal> in their base
+        directory will also be updated.
+      </para>
+      <para>
+        Passing <option>--upgrade-all</option> updates all of the root
+        user's channels.
      </para>
     </listitem>
    </varlistentry>
@@ -365,10 +426,9 @@
     </term>
     <listitem>
      <para>
-      Equivalent to <option>--no-build-nix</option>
-      <option>--show-trace</option>. This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re hacking on
-      a NixOS module).
+      Equivalent to <option>--no-build-nix</option>. This option is
+      useful if you call <command>nixos-rebuild</command> frequently
+      (e.g. if you’re hacking on a NixOS module).
      </para>
     </listitem>
    </varlistentry>
@@ -397,7 +457,7 @@
       Allow ad-hoc remote builders for building the new system. This requires
       the user executing <command>nixos-rebuild</command> (usually root) to be
       configured as a trusted user in the Nix daemon. This can be achieved by
-      using the <literal>nix.trustedUsers</literal> NixOS option. Examples
+      using the <literal>nix.settings.trusted-users</literal> NixOS option. Examples
       values for that option are described in the <literal>Remote builds
       chapter</literal> in the Nix manual, (i.e. <command>--builders
       "ssh://bigbrother x86_64-linux"</command>). By specifying an empty string
@@ -479,12 +539,8 @@
      </para>
 
      <para>
-      If <option>--build-host</option> is not explicitly specified,
-      <option>--build-host</option> will implicitly be set to the same value as
-      <option>--target-host</option>. So, if you only specify
-      <option>--target-host</option> both building and activation will take
-      place remotely (and no build artifacts will be copied to the local
-      machine).
+      If <option>--build-host</option> is not explicitly specified, building
+      will take place locally.
      </para>
 
      <para>
@@ -492,15 +548,85 @@
       (<replaceable>user@host</replaceable>). You can also set ssh options by
       defining the <envar>NIX_SSHOPTS</envar> environment variable.
      </para>
+
+     <para>
+      Note that <command>nixos-rebuild</command> honors the
+      <literal>nixpkgs.crossSystem</literal> setting of the given configuration
+      but disregards the true architecture of the target host. Hence the
+      <literal>nixpkgs.crossSystem</literal> setting has to match the target
+      platform or else activation will fail.
+     </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--use-substitutes</option>
+    </term>
+    <listitem>
+     <para>
+       When set, nixos-rebuild will add <option>--use-substitutes</option>
+       to each invocation of nix-copy-closure. This will only affect the
+       behavior of nixos-rebuild if <option>--target-host</option> or
+       <option>--build-host</option> is also set. This is useful when
+       the target-host connection to cache.nixos.org is faster than the
+       connection between hosts.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--use-remote-sudo</option>
+    </term>
+    <listitem>
+     <para>
+      When set, nixos-rebuild prefixes remote commands that run on
+      the <option>--build-host</option> and <option>--target-host</option>
+      systems with <command>sudo</command>. Setting this option allows
+      deploying as a non-root user.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--flake</option> <replaceable>flake-uri</replaceable><optional>#<replaceable>name</replaceable></optional>
+    </term>
+    <listitem>
+     <para>
+      Build the NixOS system from the specified flake. It defaults to
+      the directory containing the target of the symlink
+      <filename>/etc/nixos/flake.nix</filename>, if it exists. The
+      flake must contain an output named
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>. If
+      <replaceable>name</replaceable> is omitted, it default to the
+      current host name.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--no-flake</option>
+    </term>
+    <listitem>
+     <para>
+      Do not imply <option>--flake</option> if
+      <filename>/etc/nixos/flake.nix</filename> exists. With this
+      option, it is possible to build non-flake NixOS configurations
+      even if the current NixOS systems uses flakes.
+     </para>
+    </listitem>
+   </varlistentry>
+
   </variablelist>
 
   <para>
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
    flags, including <option>--max-jobs</option> / <option>-j</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
-   <option>--keep-going</option> and <option>--verbose</option> /
+   <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
   </para>
  </refsection>
@@ -539,6 +665,21 @@
   <title>Files</title>
 
   <variablelist>
+
+   <varlistentry>
+    <term>
+     <filename>/etc/nixos/flake.nix</filename>
+    </term>
+    <listitem>
+     <para>
+      If this file exists, then <command>nixos-rebuild</command> will
+      use it as if the <option>--flake</option> option was given. This
+      file may be a symlink to a <filename>flake.nix</filename> in an
+      actual flake; thus <filename>/etc/nixos</filename> need not be a
+      flake.
+     </para>
+    </listitem>
+   </varlistentry>
 
    <varlistentry>
     <term>

@@ -1,17 +1,18 @@
-{stdenv, fetchurl, jre, makeWrapper}:
+{lib, stdenv, fetchurl, jre, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "varscan";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchurl {
-    url = "https://github.com/dkoboldt/varscan/releases/download/${version}/VarScan.v${version}.jar";
-    sha256 = "0cfhshinyqgwc6i7zf8lhbfybyly2x5anrz824zyvdhzz5i69zrl";
+    url = "https://github.com/dkoboldt/varscan/raw/master/VarScan.v${version}.jar";
+    sha256 = "sha256-+yO3KrZ2+1qJvQIJHCtsmv8hC5a+4E2d7mrvTYtygU0=";
   };
 
-  buildInputs = [ jre makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/libexec/varscan
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Variant calling and somatic mutation/CNV detection for next-generation sequencing data";
     # VarScan 2 is free for non-commercial use by academic,
     # government, and non-profit/not-for-profit institutions. A
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     # through the Office of Technology Management at Washington
     # University School of Medicine.
     license = licenses.unfree;
-    homepage = https://github.com/dkoboldt/varscan;
+    homepage = "https://github.com/dkoboldt/varscan";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ jbedo ];
     platforms = platforms.all;
   };

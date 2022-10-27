@@ -1,78 +1,72 @@
-{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, installShellFiles
+, makeWrapper
+, jre
+, lib
+, zlib
+}:
 
-let
-  baseName = "bloop";
-  version = "1.3.2";
-  nailgunCommit = "9327a60a"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
+stdenv.mkDerivation rec {
+  pname = "bloop";
+  version = "1.5.4";
 
-  client = stdenv.mkDerivation {
-    name = "${baseName}-client-${version}";
+  platform =
+    if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+    else throw "unsupported platform";
 
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-      sha256 = "0z4as5ibmzkd145wsch9caiy4037bgg780gcf7pyns0cv9n955b4";
-    };
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''cp $src $out'';
+  bloop-bash = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
+    sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
   };
 
-  server = stdenv.mkDerivation {
-    name = "${baseName}-server-${version}";
-    buildCommand = ''
-      mkdir -p $out/bin
-
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" \
-        --deterministic \
-        -f --main bloop.Server -o $out/bin/blp-server
-    '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "0k9zc9q793fkfwcssbkmzb0nxmgb99rwi0pjkqhvf719vmgvhc2a";
+  bloop-fish = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
+    sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
   };
 
-  zsh = stdenv.mkDerivation {
-    name = "${baseName}-zshcompletion-${version}";
-
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-      sha256 = "09qq5888vaqlqan2jbs2qajz2c3ff13zj8r0x2pcxsqmvlqr02hp";
-    };
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''cp $src $out'';
+  bloop-zsh = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
+    sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
   };
-in
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
 
-  buildInputs = [ makeWrapper ];
+  bloop-binary = fetchurl rec {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
+    sha256 =
+      if stdenv.isLinux && stdenv.isx86_64 then "sha256-q8K5dzzLhQ8T6VzhoJ5iGk0yz9pOPrP/V4eiTwyzlgo="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-7zTKOAnlQWk9BbdBZLBfSLyBhFqhkscbcHN1zVTjDjQ="
+      else throw "unsupported platform";
+  };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  propagatedBuildInputs = [ jre ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/zsh/site-functions
+    runHook preInstall
 
-    ln -s ${server}/bin/blp-server $out/blp-server
-    ln -s ${zsh} $out/share/zsh/site-functions/_bloop
+    install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
 
-    cp ${client} $out/bloop
-    chmod +x $out/bloop
-    makeWrapper $out/bloop $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
+    makeWrapper $out/.bloop-wrapped $out/bin/bloop
+
+    #Install completions
+    installShellCompletion --name bloop --bash ${bloop-bash}
+    installShellCompletion --name _bloop --zsh ${bloop-zsh}
+    installShellCompletion --name bloop.fish --fish ${bloop-fish}
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://scalacenter.github.io/bloop/;
+  meta = with lib; {
+    homepage = "https://scalacenter.github.io/bloop/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    description = "Bloop is a Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way.";
-    maintainers = with maintainers; [ tomahna ];
+    description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ kubukoz tomahna ];
   };
 }

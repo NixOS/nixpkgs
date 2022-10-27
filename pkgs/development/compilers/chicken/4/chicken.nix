@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
+{ lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
 
 let
   version = "4.13.0";
@@ -8,7 +8,6 @@ let
     else if (isFreeBSD || isOpenBSD) then "bsd"
     else if isSunOS then "solaris"
     else "linux"; # Should be a sane default
-  lib = stdenv.lib;
 in
 stdenv.mkDerivation {
   pname = "chicken";
@@ -21,31 +20,43 @@ stdenv.mkDerivation {
     sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
-  setupHook = lib.ifEnable (bootstrap-chicken != null) ./setup-hook.sh;
+  setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
-  buildFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
-  installFlags = "PLATFORM=${platform} PREFIX=$(out) VARDIR=$(out)/var/lib";
+  # -fno-strict-overflow is not a supported argument in clang on darwin
+  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+
+  makeFlags = [
+    "PLATFORM=${platform}" "PREFIX=$(out)"
+    "VARDIR=$(out)/var/lib"
+  ] ++ (lib.optionals stdenv.isDarwin [
+    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+    "C_COMPILER=$(CC)"
+  ]);
 
   # We need a bootstrap-chicken to regenerate the c-files after
   # applying a patch to add support for CHICKEN_REPOSITORY_EXTRA
-  patches = lib.ifEnable (bootstrap-chicken != null) [
+  patches = lib.optionals (bootstrap-chicken != null) [
     ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
-  ] ++ (lib.ifEnable (bootstrap-chicken != null) [
-    bootstrap-chicken
-  ]);
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
 
-  preBuild = lib.ifEnable (bootstrap-chicken != null) ''
+  buildInputs = lib.optionals (bootstrap-chicken != null) [
+    bootstrap-chicken
+  ];
+
+  preBuild = lib.optionalString (bootstrap-chicken != null) ''
     # Backup the build* files - those are generated from hostname,
     # git-tag, etc. and we don't need/want that
     mkdir -p build-backup
     mv buildid buildbranch buildtag.h build-backup
 
     # Regenerate eval.c after the patch
-    make spotless $buildFlags
+    make spotless $makeFlags
 
     mv build-backup/* .
   '';
@@ -61,10 +72,10 @@ stdenv.mkDerivation {
   # TODO: Assert csi -R files -p '(pathname-file (repository-path))' == binaryVersion
 
   meta = {
-    homepage = http://www.call-cc.org/;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix
+    homepage = "http://www.call-cc.org/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ corngood ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin; # Maybe other Unix
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''
       CHICKEN is a compiler for the Scheme programming language.

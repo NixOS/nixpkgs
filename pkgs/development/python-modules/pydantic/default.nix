@@ -1,46 +1,100 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, ujson
-, email_validator
+, cython
+, devtools
+, email-validator
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, python-dotenv
+, pythonOlder
 , typing-extensions
-, python
-, isPy3k
+# dependencies for building documentation.
+# docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
+, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin)
+, ansi2html
+, markdown-include
+, mkdocs
+, mkdocs-exclude
+, mkdocs-material
+, mdx-truly-sane-lists
+, sqlalchemy
+, ujson
+, orjson
+, hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "0.32.2";
-  disabled = !isPy3k;
+  version = "1.9.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0q565m7d2rapjy6ylbdpd00z9zk99pkqg110191racp1d34kb4va";
+  outputs = [
+    "out"
+  ] ++ lib.optionals withDocs [
+    "doc"
+  ];
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "samuelcolvin";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ZGFxyQ1qD3zZWTdfTeoGj3UcUwAzO8K0DySdVAsMHyI=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    sed -i '/flake8/ d' Makefile
+  '';
+
+  nativeBuildInputs = [
+    cython
+  ] ++ lib.optionals withDocs [
+    # dependencies for building documentation
+    ansi2html
+    markdown-include
+    mdx-truly-sane-lists
+    mkdocs
+    mkdocs-exclude
+    mkdocs-material
+    sqlalchemy
     ujson
-    email_validator
+    orjson
+    hypothesis
+  ];
+
+  propagatedBuildInputs = [
+    devtools
+    email-validator
+    python-dotenv
     typing-extensions
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -c """
-from datetime import datetime
-from typing import List
-from pydantic import BaseModel
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
-class User(BaseModel):
-    id: int
-    name = 'John Doe'
-    signup_ts: datetime = None
-    friends: List[int] = []
-
-external_data = {'id': '123', 'signup_ts': '2017-06-01 12:22', 'friends': [1, '2', b'3']}
-user = User(**external_data)
-assert user.id is "123"
-"""
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
+
+  # Must include current directory into PYTHONPATH, since documentation
+  # building process expects "import pydantic" to work.
+  preBuild = lib.optionalString withDocs ''
+    PYTHONPATH=$PWD:$PYTHONPATH make docs
+  '';
+
+  # Layout documentation in same way as "sphinxHook" does.
+  postInstall = lib.optionalString withDocs ''
+    mkdir -p $out/share/doc/$name
+    mv ./site $out/share/doc/$name/html
+  '';
+
+  enableParallelBuilding = true;
+
+  pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
     homepage = "https://github.com/samuelcolvin/pydantic";

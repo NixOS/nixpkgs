@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
-let
-  version = "0.9.8";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "endless-sky";
-  inherit version;
+  version = "0.9.14";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "0i36lawypikbq8vvzfis1dn7yf6q0d2s1cllshfn7kmjb6pqfi6c";
+    sha256 = "sha256-Vcck+zGcv39DXyhZF2DLUrXq3gDwkgL0NtPT5rVOpHs=";
   };
+
+  patches = [
+    ./fixes.patch
+  ];
+
+  preBuild = ''
+    export AR="${stdenv.cc.targetPrefix}gcc-ar"
+  '';
 
   enableParallelBuilding = true;
 
@@ -25,13 +29,9 @@ stdenv.mkDerivation {
 
   prefixKey = "PREFIX=";
 
-  patches = [
-    ./fixes.patch
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
-    homepage = https://endless-sky.github.io/;
+    homepage = "https://endless-sky.github.io/";
     license = with licenses; [
       gpl3Plus cc-by-sa-30 cc-by-sa-40 publicDomain
     ];

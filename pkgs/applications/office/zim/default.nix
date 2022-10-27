@@ -1,40 +1,43 @@
-{ stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome }:
 
-#
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
 #  -  Included plugins depenencies: dot, ditaa, dia, any other?
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
-#
 
 python3Packages.buildPythonApplication rec {
-  name = "zim-${version}";
-  version = "0.72.0";
+  pname = "zim";
+  version = "0.74.3";
 
   src = fetchurl {
-    url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "1n3gmg7g86s8iwcx0i7rvvfdfs1fzmc9awr9qzjd2rckw4bkxad1";
+    url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
+    sha256 = "sha256-3ehPIkhsf1JnC9Qx3kQ6ilvRaBB7auBm2C1HOuNGzRU=";
   };
 
-  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook ];
+  buildInputs = [ gtk3 gobject-introspection gnome.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
+  # see https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
+  dontWrapGApps = true;
 
   preFixup = ''
-    export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
+    makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # RuntimeError: could not create GtkClipboard object
   doCheck = false;
 
   checkPhase = ''
-    python test.py
+    ${python3Packages.python.interpreter} test.py
   '';
 
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop wiki";
-    homepage = http://zim-wiki.org;
+    homepage = "https://zim-wiki.org/";
+    changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790

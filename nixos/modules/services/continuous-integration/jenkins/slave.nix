@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.jenkinsSlave;
@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true the system will be configured to work as a jenkins slave.
           If the system is also configured to work as a jenkins master then this has no effect.
           In progress: Currently only assures the jenkins user is configured.
@@ -24,7 +24,7 @@ in {
       user = mkOption {
         default = "jenkins";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User the jenkins slave agent should execute under.
         '';
       };
@@ -32,7 +32,7 @@ in {
       group = mkOption {
         default = "jenkins";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           If the default slave agent user "jenkins" is configured then this is
           the primary group of that user.
         '';
@@ -41,28 +41,42 @@ in {
       home = mkOption {
         default = "/var/lib/jenkins";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path to use as JENKINS_HOME. If the default user "jenkins" is configured then
           this is the home of the "jenkins" user.
         '';
+      };
+
+      javaPackage = mkOption {
+        default = pkgs.jdk;
+        defaultText = literalExpression "pkgs.jdk";
+        description = lib.mdDoc ''
+          Java package to install.
+        '';
+        type = types.package;
       };
     };
   };
 
   config = mkIf (cfg.enable && !masterCfg.enable) {
-    users.groups = optional (cfg.group == "jenkins") {
-      name = "jenkins";
-      gid = config.ids.gids.jenkins;
+    users.groups = optionalAttrs (cfg.group == "jenkins") {
+      jenkins.gid = config.ids.gids.jenkins;
     };
 
-    users.users = optional (cfg.user == "jenkins") {
-      name = "jenkins";
-      description = "jenkins user";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      useDefaultShell = true;
-      uid = config.ids.uids.jenkins;
+    users.users = optionalAttrs (cfg.user == "jenkins") {
+      jenkins = {
+        description = "jenkins user";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        useDefaultShell = true;
+        uid = config.ids.uids.jenkins;
+      };
+    };
+
+    programs.java = {
+      enable = true;
+      package = cfg.javaPackage;
     };
   };
 }

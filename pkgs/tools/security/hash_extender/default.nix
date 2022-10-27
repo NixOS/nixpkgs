@@ -1,27 +1,30 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
   pname = "hash_extender";
-  version = "2017-04-10";
+  version = "unstable-2020-03-24";
 
   src = fetchFromGitHub {
     owner = "iagox86";
     repo = "hash_extender";
-    rev = "d27581e062dd0b534074e11d7d311f65a6d7af21";
-    sha256 = "1npwbgqaynjh5x39halw43i116v89sxkpa1g1bbvc1lpi8hkhhcb";
+    rev = "cb8aaee49f93e9c0d2f03eb3cafb429c9eed723d";
+    sha256 = "1fj118566hr1wv03az2w0iqknazsqqkak0mvlcvwpgr6midjqi9b";
   };
 
   buildInputs = [ openssl ];
+
+  doCheck = true;
+  checkPhase = "./hash_extender --test";
 
   installPhase = ''
     mkdir -p $out/bin
     cp hash_extender $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to automate hash length extension attacks";
-    homepage = https://github.com/iagox86/hash_extender;
+    homepage = "https://github.com/iagox86/hash_extender";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

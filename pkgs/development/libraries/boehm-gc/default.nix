@@ -1,40 +1,45 @@
-{ lib, stdenv, fetchurl
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
+, enableLargeConfig ? false
+, enableMmap ? true
+, nixVersions
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.0.4";
+  version = "8.2.2";
 
   src = fetchurl {
     urls = [
-      "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
+      # "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
+      "https://github.com/ivmai/bdwgc/releases/download/v${finalAttrs.version}/gc-${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "1798rp3mcfkgs38ynkbg2p47bq59pisrc6mn0l20pb5iczf0ssj3";
+    sha256 = "sha256-8wEHvLBi4JIKeQ//+lbZUSNIVGhZNkwjoUviZLOINqA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
-  '';
+  configureFlags = [
+    "--enable-cplusplus"
+    "--with-libatomic-ops=none"
+  ]
+  ++ lib.optional enableMmap "--enable-mmap"
+  ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  patches = # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
-
-  configureFlags =
-    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
-    ++ lib.optional enableLargeConfig "--enable-large-config";
-
-  doCheck = true; # not cross;
+  # `gctest` fails under emulation on aarch64-darwin
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
+  passthru.tests = nixVersions;
 
+  meta = with lib; {
+    homepage = "https://hboehm.info/gc/";
+    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
     longDescription = ''
       The Boehm-Demers-Weiser conservative garbage collector can be used as a
       garbage collecting replacement for C malloc or C++ new.  It allows you
@@ -51,13 +56,10 @@ stdenv.mkDerivation rec {
       Alternatively, the garbage collector may be used as a leak detector for
       C or C++ programs, though that is not its primary goal.
     '';
-
-    homepage = http://hboehm.info/gc/;
-
     # non-copyleft, X11-style license
-    license = http://hboehm.info/gc/license.txt;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    changelog = "https://github.com/ivmai/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
+    license = "https://hboehm.info/gc/license.txt";
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.all;
   };
-}
+})

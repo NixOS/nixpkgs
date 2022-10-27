@@ -1,11 +1,11 @@
-{ skawarePackages }:
+{ skawarePackages, pkgs }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "skalibs";
-  version = "2.8.1.0";
-  sha256 = "1fk6n402ywn4kpy6ng7sfnnqcg0mp6wq2hrv8sv3kxd0nh3na723";
+  version = "2.12.0.1";
+  sha256 = "sha256-PiKPcvGNiMF/bE4KZogdbTd5Qnt+foifMUK28m2jAoU=";
 
   description = "A set of general-purpose C programming libraries";
 
@@ -18,6 +18,9 @@ buildPackage {
     "--dynlibdir=\${lib}/lib"
     "--includedir=\${dev}/include"
     "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
+    # Empty the default path, which would be "/usr/bin:bin".
+    # It would be set when PATH is empty. This hurts hermeticity.
+    "--with-default-path="
   ];
 
   postInstall = ''
@@ -26,5 +29,11 @@ buildPackage {
 
     mv doc $doc/share/doc/skalibs/html
   '';
+
+  passthru.tests = {
+    # fdtools is one of the few non-skalib packages that depends on skalibs
+    # and might break if skalibs gets an breaking update.
+    fdtools = pkgs.fdtools;
+  };
 
 }

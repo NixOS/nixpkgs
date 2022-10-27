@@ -7,12 +7,12 @@ let
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption "the oxidized configuration backup service";
+    enable = mkEnableOption (lib.mdDoc "the oxidized configuration backup service");
 
     user = mkOption {
       type = types.str;
       default = "oxidized";
-      description = ''
+      description = lib.mdDoc ''
         User under which the oxidized service runs.
       '';
     };
@@ -20,7 +20,7 @@ in
     group = mkOption {
       type = types.str;
       default = "oxidized";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the oxidized service runs.
       '';
     };
@@ -28,12 +28,12 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/oxidized";
-      description = "State directory for the oxidized service.";
+      description = lib.mdDoc "State directory for the oxidized service.";
     };
 
     configFile = mkOption {
       type = types.path;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
           debug: true
@@ -62,21 +62,21 @@ in
           # ... additional config
         ''';
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to the oxidized configuration file.
       '';
     };
 
     routerDB = mkOption {
       type = types.path;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.writeText "oxidized-router.db" '''
           hostname-sw1:powerconnect:username1:password2
           hostname-sw2:procurve:username2:password2
           # ... additional hosts
         '''
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to the file/database which contains the targets for oxidized.
       '';
     };
@@ -89,6 +89,7 @@ in
       group = cfg.group;
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.oxidized = {
@@ -110,6 +111,7 @@ in
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
+        PIDFile = "${cfg.dataDir}/.config/oxidized/pid";
       };
     };
   };

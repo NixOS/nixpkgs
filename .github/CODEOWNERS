@@ -6,33 +6,59 @@
 #
 # For documentation on this file, see https://help.github.com/articles/about-codeowners/
 # Mentioned users will get code review requests.
+#
+# IMPORTANT NOTE: in order to actually get pinged, commit access is required.
+# This also holds true for GitHub teams. Since almost none of our teams have write
+# permissions, you need to list all members of the team with commit access individually.
 
 # This file
 /.github/CODEOWNERS @edolstra
 
+# GitHub actions
+/.github/workflows @NixOS/Security @Mic92 @zowoq
+/.github/workflows/merge-staging @FRidh
+
+# EditorConfig
+/.editorconfig @Mic92 @zowoq
+
 # Libraries
-/lib                        @edolstra @nbp
-/lib/systems                @nbp @ericson2314 @matthewbauer
+/lib                        @edolstra @nbp @infinisil
+/lib/systems                @alyssais @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
+/lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
+/lib/asserts.nix            @edolstra @nbp @Profpatsch
 
 # Nixpkgs Internals
-/default.nix                          @nbp
-/pkgs/top-level/default.nix           @nbp @Ericson2314
-/pkgs/top-level/impure.nix            @nbp @Ericson2314
-/pkgs/top-level/stage.nix             @nbp @Ericson2314 @matthewbauer
-/pkgs/top-level/splice.nix            @Ericson2314 @matthewbauer
-/pkgs/top-level/release-cross.nix     @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic                  @Ericson2314 @matthewbauer
-/pkgs/stdenv/cross                    @Ericson2314 @matthewbauer
-/pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
-/pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
-/pkgs/build-support/setup-hooks       @Ericson2314
+/default.nix                                     @nbp
+/pkgs/top-level/default.nix                      @nbp @Ericson2314
+/pkgs/top-level/impure.nix                       @nbp @Ericson2314
+/pkgs/top-level/stage.nix                        @nbp @Ericson2314 @matthewbauer
+/pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
+/pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
+/pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
+/pkgs/build-support/cc-wrapper                   @Ericson2314
+/pkgs/build-support/bintools-wrapper             @Ericson2314
+/pkgs/build-support/setup-hooks                  @Ericson2314
+/pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
+/pkgs/build-support/setup-hooks/auto-patchelf.py @layus
+
+# Nixpkgs build-support
+/pkgs/build-support/writers @lassulus @Profpatsch
+
+# Nixpkgs documentation
+/doc @fricklerhandwerk
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+/doc/build-aux/pandoc-filters @jtojnar
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
 
 # NixOS Internals
-/nixos/default.nix          @nbp
-/nixos/lib/from-env.nix     @nbp
-/nixos/lib/eval-config.nix  @nbp
+/nixos/default.nix          @nbp @infinisil
+/nixos/lib/from-env.nix     @nbp @infinisil
+/nixos/lib/eval-config.nix  @nbp @infinisil
 /nixos/doc/manual/configuration/abstractions.xml      @nbp
 /nixos/doc/manual/configuration/config-file.xml       @nbp
 /nixos/doc/manual/configuration/config-syntax.xml     @nbp
@@ -46,43 +72,57 @@
 /nixos/doc/manual/development/writing-modules.xml     @nbp
 /nixos/doc/manual/man-nixos-option.xml                @nbp
 /nixos/modules/installer/tools/nixos-option.sh        @nbp
+/nixos/modules/system                                 @dasJ
 
-# New NixOS modules
-/nixos/modules/module-list.nix @Infinisil
+# NixOS integration test driver
+/nixos/lib/test-driver  @tfc
+
+# Systemd
+/nixos/modules/system/boot/systemd.nix      @NixOS/systemd
+/nixos/modules/system/boot/systemd          @NixOS/systemd
+/nixos/lib/systemd-*.nix                    @NixOS/systemd
+/pkgs/os-specific/linux/systemd             @NixOS/systemd
+
+# Updaters
+## update.nix
+/maintainers/scripts/update.nix   @jtojnar
+/maintainers/scripts/update.py    @jtojnar
+## common-updater-scripts
+/pkgs/common-updater/scripts/update-source-version    @jtojnar
 
 # Python-related code and docs
-/maintainers/scripts/update-python-libraries	@FRidh
-/pkgs/top-level/python-packages.nix     @FRidh @jonringer
-/pkgs/development/interpreters/python   @FRidh
-/pkgs/development/python-modules        @FRidh @jonringer
-/doc/languages-frameworks/python.section.md     @FRidh
+/maintainers/scripts/update-python-libraries	              @FRidh
+/pkgs/top-level/python-packages.nix                         @FRidh @jonringer
+/pkgs/development/interpreters/python                       @FRidh
+/pkgs/development/python-modules                            @FRidh @jonringer
+/doc/languages-frameworks/python.section.md                 @FRidh
+/pkgs/development/tools/poetry2nix                          @adisbladis
+/pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/pkgs/development/compilers/ghc                       @basvandijk @cdepillabout
-/pkgs/development/haskell-modules                     @basvandijk @cdepillabout
-/pkgs/development/haskell-modules/default.nix         @basvandijk @cdepillabout
-/pkgs/development/haskell-modules/generic-builder.nix @basvandijk @cdepillabout
-/pkgs/development/haskell-modules/hoogle.nix          @basvandijk @cdepillabout
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl
-/pkgs/development/interpreters/perl @volth
-/pkgs/top-level/perl-packages.nix   @volth
-/pkgs/development/perl-modules      @volth
+/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
+/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
 
 # R
-/pkgs/applications/science/math/R   @peti
-/pkgs/development/r-modules         @peti
+/pkgs/applications/science/math/R   @jbedo
+/pkgs/development/r-modules         @jbedo
 
 # Ruby
-/pkgs/development/interpreters/ruby @alyssais @zimbatm
-/pkgs/development/ruby-modules      @alyssais @zimbatm
+/pkgs/development/interpreters/ruby @marsam
+/pkgs/development/ruby-modules      @marsam
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7
-
-# Darwin-related
-/pkgs/stdenv/darwin         @NixOS/darwin-maintainers
-/pkgs/os-specific/darwin    @NixOS/darwin-maintainers
+/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer
@@ -92,20 +132,17 @@
 /pkgs/top-level/unix-tools.nix @matthewbauer
 /pkgs/development/tools/xcbuild @matthewbauer
 
-# Beam-related (Erlang, Elixir, LFE, etc)
-/pkgs/development/beam-modules                  @gleber
-/pkgs/development/interpreters/erlang           @gleber
-/pkgs/development/interpreters/lfe              @gleber
-/pkgs/development/interpreters/elixir           @gleber
-/pkgs/development/tools/build-managers/rebar    @gleber
-/pkgs/development/tools/build-managers/rebar3   @gleber
-/pkgs/development/tools/erlang                  @gleber
+# Audio
+/nixos/modules/services/audio/botamusique.nix @mweinelt
+/nixos/modules/services/audio/snapserver.nix @mweinelt
+/nixos/tests/modules/services/audio/botamusique.nix @mweinelt
+/nixos/tests/snapcast.nix @mweinelt
+
+# Browsers
+/pkgs/applications/networking/browsers/firefox @mweinelt
 
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
-
-# Eclipse
-/pkgs/applications/editors/eclipse @rycee
 
 # Licenses
 /lib/licenses.nix @alyssais
@@ -117,7 +154,7 @@
 /pkgs/development/libraries/qt-5 @ttuegel
 
 # PostgreSQL and related stuff
-/pkgs/servers/sql/postgresql @thoughtpolice
+/pkgs/servers/sql/postgresql @thoughtpolice @marsam
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
@@ -130,21 +167,40 @@
 /nixos/tests/hardened.nix @joachifm
 /pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
 
+# Home Automation
+/nixos/modules/services/misc/home-assistant.nix @mweinelt
+/nixos/modules/services/misc/zigbee2mqtt.nix @mweinelt
+/nixos/tests/home-assistant.nix @mweinelt
+/nixos/tests/zigbee2mqtt.nix @mweinelt
+/pkgs/servers/home-assistant @mweinelt
+/pkgs/tools/misc/esphome @mweinelt
+
 # Network Time Daemons
 /pkgs/tools/networking/chrony @thoughtpolice
 /pkgs/tools/networking/ntp @thoughtpolice
 /pkgs/tools/networking/openntpd @thoughtpolice
 /nixos/modules/services/networking/ntp @thoughtpolice
 
+# Network
+/pkgs/tools/networking/kea/default.nix @mweinelt
+/pkgs/tools/networking/babeld/default.nix @mweinelt
+/nixos/modules/services/networking/babeld.nix @mweinelt
+/nixos/modules/services/networking/kea.nix @mweinelt
+/nixos/modules/services/networking/knot.nix @mweinelt
+/nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
+/nixos/tests/babeld.nix @mweinelt
+/nixos/tests/kea.nix @mweinelt
+/nixos/tests/knot.nix @mweinelt
+
 # Dhall
-/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
-/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
 
 # Bazel
-/pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
+/pkgs/development/tools/build-managers/bazel @Profpatsch
 
 # NixOS modules for e-mail and dns services
 /nixos/modules/services/mail/mailman.nix    @peti
@@ -153,11 +209,83 @@
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs-modes @adisbladis
-/pkgs/applications/editors/emacs       @adisbladis
-/pkgs/top-level/emacs-packages.nix     @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @adisbladis
+/pkgs/applications/editors/emacs                @adisbladis
+/pkgs/top-level/emacs-packages.nix              @adisbladis
+
+# Neovim
+/pkgs/applications/editors/neovim      @jonringer @teto
+
+# VimPlugins
+/pkgs/applications/editors/vim/plugins         @jonringer
+
+# VsCode Extensions
+/pkgs/applications/editors/vscode/extensions   @jonringer
 
 # Prometheus exporter modules and tests
 /nixos/modules/services/monitoring/prometheus/exporters.nix  @WilliButz
 /nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
+
+# PHP interpreter, packages, extensions, tests and documentation
+/doc/languages-frameworks/php.section.md          @aanderse @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @etu @globin @ma27 @talyz
+/pkgs/build-support/build-pecl.nix                @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @etu @globin @ma27 @talyz
+
+# Podman, CRI-O modules and related
+/nixos/modules/virtualisation/containers.nix @zowoq @adisbladis
+/nixos/modules/virtualisation/cri-o.nix      @zowoq @adisbladis
+/nixos/modules/virtualisation/podman         @zowoq @adisbladis
+/nixos/tests/cri-o.nix                       @zowoq @adisbladis
+/nixos/tests/podman                          @zowoq @adisbladis
+
+# Docker tools
+/pkgs/build-support/docker                   @roberth
+/nixos/tests/docker-tools*                   @roberth
+/doc/builders/images/dockertools.section.md  @roberth
+
+# Blockchains
+/pkgs/applications/blockchains  @mmahut @RaghavSood
+
+# Go
+/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @Mic92 @zowoq
+/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+
+# GNOME
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
+
+# Cinnamon
+/pkgs/desktops/cinnamon @mkg20001
+
+# nim
+/pkgs/development/compilers/nim   @ehmry
+/pkgs/development/nim-packages    @ehmry
+/pkgs/top-level/nim-packages.nix  @ehmry
+
+# terraform providers
+/pkgs/applications/networking/cluster/terraform-providers @zowoq
+
+# kubernetes
+/nixos/doc/manual/configuration/kubernetes.chapter.md @zowoq
+/nixos/modules/services/cluster/kubernetes            @zowoq
+/nixos/tests/kubernetes                               @zowoq
+/pkgs/applications/networking/cluster/kubernetes      @zowoq
+
+# Matrix
+/pkgs/servers/heisenbridge                                 @piegamesde
+/pkgs/servers/matrix-conduit                               @piegamesde
+/pkgs/servers/matrix-synapse/matrix-appservice-irc         @piegamesde
+/nixos/modules/services/misc/heisenbridge.nix              @piegamesde
+/nixos/modules/services/misc/matrix-appservice-irc.nix     @piegamesde
+/nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
+/nixos/tests/matrix-appservice-irc.nix                     @piegamesde
+/nixos/tests/matrix-conduit.nix                            @piegamesde
+
+# Dotnet
+/pkgs/build-support/dotnet          @IvarWithoutBones
+/pkgs/development/compilers/dotnet  @IvarWithoutBones

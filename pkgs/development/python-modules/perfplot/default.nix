@@ -1,45 +1,54 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
+, dufte
 , matplotlib
 , numpy
 , pipdate
 , tqdm
-, pytest
-, isPy27
+, rich
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.5.0";
-  disabled = isPy27;
+  version = "0.10.2";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = "perfplot";
-    rev = "v${version}";
-    sha256 = "16aj5ryjic1k3qn8xhpw6crczvxcs691vs5kv4pvb1zdx69g1xbv";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bu6eYQukhLE8sLkS3PbqTgXOqJFXJYXTcXAhmjaq48g=";
   };
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   propagatedBuildInputs = [
+    dufte
     matplotlib
     numpy
     pipdate
+    rich
     tqdm
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-   HOME=$(mktemp -d) pytest test/perfplot_test.py
-  '';
+  pythonImportsCheck = [ "perfplot" ];
 
   meta = with lib; {
     description = "Performance plots for Python code snippets";
-    homepage = https://github.com/nschloe/perfplot;
+    homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
+    broken = true; # missing matplotx dependency
   };
 }

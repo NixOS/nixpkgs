@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pylibacl";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c3xw1s5bh6jnsc0wwyxnn6kn6x6rpbmmi05ap1f81fyqlgrzgj0";
+    sha256 = "88a0a4322e3a62d797d61f96ec7f38d1c471c48a3cc3cedb32ab5c20aa98d9ff";
   };
 
   # ERROR: testExtended (tests.test_acls.AclExtensions)

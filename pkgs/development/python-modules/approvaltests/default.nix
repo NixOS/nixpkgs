@@ -1,37 +1,62 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy37, pyperclip }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# propagates
+, allpairspy
+, beautifulsoup4
+, empty-files
+, pyperclip
+, pytest
+
+# tests
+, numpy
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  version = "0.2.4";
+  version = "5.4.2";
   pname = "approvaltests";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6.1";
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = version;
-    sha256 = "05lj5i13zpkgw1wdc1v81wj4zqj8bpzqiwycdnwlg08azcy7k7j1";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ZXtIM3McpfDFCaedlbJ6SU+Er5NyfI8kGnrn7sb1V5M=";
   };
 
-  propagatedBuildInputs = [ pyperclip ];
+  propagatedBuildInputs = [
+    allpairspy
+    beautifulsoup4
+    empty-files
+    pyperclip
+    pytest
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyperclip==1.5.27" "pyperclip>=1.5.27"
-  '';
+  checkInputs = [
+    numpy
+    pytestCheckHook
+  ];
 
-  # Tests fail on Python 3.7
-  # https://github.com/approvals/ApprovalTests.Python/issues/36
-  doCheck = !isPy37;
+  disabledTests = [
+    # tests expects paths below ApprovalTests.Python directory
+    "test_received_filename"
+    "test_pytest_namer"
+  ];
 
-  # Disable Linux failing test, because tries to use darwin/windows specific reporters
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    substituteInPlace tests/test_genericdiffreporter.py \
-      --replace "test_find_working_reporter" "_find_working_reporter"
-  '';
+  pythonImportsCheck = [
+    "approvaltests.approvals"
+    "approvaltests.reporters.generic_diff_reporter_factory"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Assertion/verification library to aid testing";
-    homepage = https://github.com/approvals/ApprovalTests.Python;
+    homepage = "https://github.com/approvals/ApprovalTests.Python";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

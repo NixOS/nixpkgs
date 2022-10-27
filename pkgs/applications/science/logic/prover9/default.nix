@@ -1,16 +1,17 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "prover9-2009-11a";
+  pname = "prover9";
+  version = "2009-11a";
 
   src = fetchurl {
-    url = https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz;
+    url = "https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz";
     sha256 = "1l2i3d3h5z7nnbzilb6z92r0rbx0kh6yaxn2c5qhn3000xcfsay3";
   };
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     RM=$(type -tp rm)
     MV=$(type -tp mv)
     CP=$(type -tp cp)
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildFlags = "all";
+  buildFlags = [ "all" ];
 
   checkPhase = "make test1";
 
@@ -30,16 +31,16 @@ stdenv.mkDerivation {
     cp bin/* $out/bin
   '';
 
-  meta = {
-    homepage = https://www.cs.unm.edu/~mccune/mace4/;
-    license = "GPL";
+  meta = with lib; {
+    homepage = "https://www.cs.unm.edu/~mccune/mace4/";
+    license = licenses.gpl2Only;
     description = "Automated theorem prover for first-order and equational logic";
     longDescription = ''
       Prover9 is a resolution/paramodulation automated theorem prover
       for first-order and equational logic. Prover9 is a successor of
       the Otter Prover. This is the LADR command-line version.
     '';
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

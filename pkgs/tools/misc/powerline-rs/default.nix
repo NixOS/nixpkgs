@@ -1,34 +1,32 @@
-{ stdenv, lib, rustPlatform, fetchFromGitLab, pkgconfig, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitLab, pkg-config, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
+
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "powerline-rs";
-    #rev = version;
+    rev = version;
 
-    # Support for $COMPLETION_OUT:
-    rev = "44679385a95dd9f3ebd9b093f9ef8925610e9a23";
-
-    sha256 = "1mxkw6ydnqjyplbki2j9pbnlhxmkw9qqw54443a3cjmn2g08jyzp";
+    sha256 = "0rqlxxl58dpfvm2idhi0vzinraf4bgiapmawiih9wxs599fnhm3y";
   };
 
-  cargoSha256 = "1d0f1c1vp1r9r3ic921xkcr59f4a45y2xbxm4gl6grhb9z6p5k7l";
+  cargoSha256 = "1i29wps7wz6b0qarqqg8rplq7ak1zz83k6m182sjk17cni74n21l";
 
-  nativeBuildInputs = [ pkgconfig file perl cmake curl ];
+  nativeBuildInputs = [ pkg-config file perl cmake curl ];
   buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;
 
   COMPLETION_OUT = "out";
   postInstall = ''
-    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/etc/bash_completion.d/${pname}"
+    install -Dm 755 "${COMPLETION_OUT}/${pname}.bash" "$out/share/bash-completion/completions/${pname}"
     install -Dm 755 "${COMPLETION_OUT}/${pname}.fish" "$out/share/fish/vendor_completions.d/${pname}"
   '';
 
   meta = with lib; {
     description = "powerline-shell rewritten in Rust, inspired by powerline-go";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

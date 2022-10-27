@@ -1,18 +1,27 @@
-{
-  lib, mkDerivation, fetchFromGitHub,
-  cmake, lxqt-build-tools,
-  qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg, libfm-qt
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, libdbusmenu
+, libfm-qt
+, libqtxdg
+, lxqt-build-tools
+, gitUpdater
+, qtbase
+, qtsvg
+, qttools
+, qtx11extras
 }:
 
 mkDerivation rec {
   pname = "lxqt-qtplugin";
-  version = "0.14.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "16n50lxnya03zcviw65sy5dyg9dsrn64k91mrqfvraf6d90md4al";
+    sha256 = "mTA+3sXFWFYUEQhZOnAy6D/tYVAU+9AXbuLmLi7axlc=";
   };
 
   nativeBuildInputs = [
@@ -21,13 +30,13 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qttools
-    qtsvg
     libdbusmenu
-    libqtxdg
     libfm-qt
+    libqtxdg
+    qtbase
+    qtsvg
+    qttools
+    qtx11extras
   ];
 
   postPatch = ''
@@ -35,11 +44,13 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-qtplugin";
     description = "LXQt Qt platform integration plugin";
-    homepage = https://github.com/lxqt/lxqt-qtplugin;
-    license = licenses.lgpl21;
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = teams.lxqt.members;
   };
 }

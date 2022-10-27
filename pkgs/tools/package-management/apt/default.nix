@@ -1,53 +1,84 @@
-{ stdenv, lib, fetchzip, pkgconfig, cmake, perlPackages, curl, gtest, lzma, bzip2, lz4
-, db, dpkg, libxslt, docbook_xsl, docbook_xml_dtd_45
-
-# used when WITH_DOC=ON
-, w3m
-, doxygen
-
-# used when WITH_NLS=ON
-, gettext
-
-# opts
-, withDocs ? true
-, withNLS ? true
+{ lib
+, stdenv
+, fetchurl
+, bzip2
+, cmake
+, curl
+, db
+, docbook_xml_dtd_45
+, docbook_xsl
+, dpkg
+, gnutls
+, gtest
+, libgcrypt
+, libseccomp
+, libtasn1
+, libxslt
+, lz4
+, perlPackages
+, pkg-config
+, triehash
+, udev
+, xxHash
+, xz
+, zstd
+, withDocs ? true , w3m, doxygen
+, withNLS ? true , gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "apt";
+  version = "2.5.2";
 
-  version = "1.4.6";
-
-  src = fetchzip {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/apt_${version}.tar.xz";
-    sha256 = "0ahwhmscrmnpvl1r732wg93dzkhv8c1sph2yrqgsrhr73c1616ix";
+  src = fetchurl {
+    url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
+    hash = "sha256-zFw3TCgxyeOQ2cXwgCmoHDyit3irwN0UJsgcZXYo/p0=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    cmake
+    gtest
+    libxslt.bin
+    pkg-config
+    triehash
+  ];
 
   buildInputs = [
-    cmake perlPackages.perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
+    bzip2
+    curl
+    db
+    dpkg
+    gnutls
+    libgcrypt
+    libseccomp
+    libtasn1
+    lz4
+    perlPackages.perl
+    udev
+    xxHash
+    xz
+    zstd
   ] ++ lib.optionals withDocs [
-    doxygen perlPackages.Po4a w3m docbook_xml_dtd_45
+    docbook_xml_dtd_45
+    doxygen
+    perlPackages.Po4a
+    w3m
   ] ++ lib.optionals withNLS [
     gettext
   ];
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      -DBERKELEY_DB_INCLUDE_DIRS=${db.dev}/include
-      -DDOCBOOK_XSL="${docbook_xsl}"/share/xml/docbook-xsl
-      -DROOT_GROUP=root
-      -DWITH_DOC=${if withDocs then "ON" else "OFF"}
-      -DUSE_NLS=${if withNLS then "ON" else "OFF"}
-    )
-  '';
-
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DBERKELEY_INCLUDE_DIRS=${db.dev}/include"
+    "-DDOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl"
+    "-DGNUTLS_INCLUDE_DIR=${gnutls.dev}/include"
+    "-DROOT_GROUP=root"
+    "-DUSE_NLS=${if withNLS then "ON" else "OFF"}"
+    "-DWITH_DOC=${if withDocs then "ON" else "OFF"}"
+  ];
 
   meta = with lib; {
-    description = "";
-    homepage = https://launchpad.net/ubuntu/+source/apt;
+    homepage = "https://salsa.debian.org/apt-team/apt";
+    description = "Command-line package management tools used on Debian-based systems";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

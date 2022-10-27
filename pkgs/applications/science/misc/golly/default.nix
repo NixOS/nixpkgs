@@ -1,39 +1,54 @@
-{stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU_combined, libX11}:
+{lib, stdenv, fetchurl, wxGTK, perl, python3, zlib, libGLU, libGL, libX11, SDL2}:
 stdenv.mkDerivation rec {
   pname = "golly";
-  version = "3.3";
+  version = "4.1";
 
   src = fetchurl {
-    sha256 = "1j3ksnar4rdam4xiyspgyrs1pifbvxfxkrn65brkwxpx39mpgzc8";
+    sha256 = "1j30dpzy6wh8fv1j2750hzc6wb0nhk83knl9fapccxgxw9n5lrbc";
     url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK perl python2 zlib libGLU_combined libX11
+    wxGTK perl python3 zlib libGLU libGL libX11 SDL2
   ];
 
   setSourceRoot = ''
-    sourceRoot=$(echo */gui-wx/configure)
+    sourceRoot=$(echo */gui-wx/)
   '';
 
-  # Link against Python explicitly as it is needed for scripts
+  postPatch = ''
+    sed -e '/gollydir =/agollydir += "/../share/golly/";' -i wxgolly.cpp
+    grep share/golly wxgolly.cpp
+
+    sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
+    sed -e 's@PERL_SHLIB@'"$(find "${perl}/lib/" -name libperl.so)"'@' -i wxprefs.cpp
+    ! grep _SHLIB *.cpp
+
+    grep /lib/libpython wxprefs.cpp
+    grep /libperl wxprefs.cpp
+  '';
+
   makeFlags=[
-    "AM_LDFLAGS="
+    "-f" "makefile-gtk"
+    "ENABLE_SOUND=1" "ENABLE_PERL=1"
   ];
-  NIX_LDFLAGS="-l${python2.libPrefix} -lperl";
-  preConfigure=''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
-      -DPYTHON_SHLIB=$(basename "$(
-        readlink -f ${python2}/lib/libpython*.so)")"
+
+  installPhase = ''
+    mkdir -p "$out/bin"
+    cp ../golly ../bgolly "$out/bin"
+
+    mkdir -p "$out/share/doc/golly/"
+    cp ../docs/*  "$out/share/doc/golly/"
+
+    mkdir -p "$out/share/golly"
+    cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
   '';
 
   meta = {
-    inherit version;
     description = "Cellular automata simulation program";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

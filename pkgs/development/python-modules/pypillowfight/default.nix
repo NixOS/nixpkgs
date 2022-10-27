@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitLab, nose, pillow
+{ lib, buildPythonPackage, fetchFromGitLab, nose, pillow
 , isPy3k, isPyPy
 }:
 buildPythonPackage rec {
   pname = "pypillowfight";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "OpenPaperwork";
     repo = "libpillowfight";
     rev = version;
-    sha256 = "0wbzfhbzim61fmkm7p7f2rwslacla1x00a6xp50haawjh9zfwc4y";
+    sha256 = "096242v425mlqqj5g1giy59p7grxp05g78w6bk37vzph98jrgv3w";
   };
 
   prePatch = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
   propagatedBuildInputs = [ pillow ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library containing various image processing algorithms";
     inherit (src.meta) homepage;
     license = licenses.gpl3Plus;

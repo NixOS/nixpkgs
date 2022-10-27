@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , SDL
 , SDL_image
 , mesa
@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zaz";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "15q3kxzl71m50byw37dshfsx5wp240ywah19ccmqmqarcldcqcp3";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1r3bmwny05zzmdalxm5ah2rray0nnsg1w00r30p47q6x2lpwj8ml";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
-    SDL.dev
+    (lib.getDev SDL)
     SDL_image
     mesa
     libtheora
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
+  NIX_CFLAGS_COMPILE="-I${lib.getDev SDL}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     "ZAZ_LIBS+=-lvorbisfile"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "http://zaz.sourceforge.net/";
     license = licenses.gpl3;

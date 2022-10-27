@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, wine-staging }:
+{ lib, stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
 
 let
   wine_custom = wine-staging;
@@ -17,11 +17,17 @@ in stdenv.mkDerivation rec {
     sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
-  buildInputs = [ wine_custom libX11 libGLU_combined curl ];
+  buildInputs = [ wine_custom libX11 libGLU libGL curl ];
 
-  propagatedbuildInputs = [ curl cabextract ];
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
-  patches = [ ./pipelight.patch ];
+  patches = [
+    ./pipelight.patch
+    ./wine-6.13-new-args.patch
+    # https://source.winehq.org/git/wine.git/commit/cf4a781e987a98a8d48610362a20a320c4a1016d
+    # adds ControlMask as a static variable.
+    ./wine-7.10-ControlMask.patch
+  ];
 
   configurePhase = ''
     patchShebangs .
@@ -52,10 +58,10 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://pipelight.net/;
-    license = with stdenv.lib.licenses; [ mpl11 gpl2 lgpl21 ];
+    homepage = "http://pipelight.net/";
+    license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
     description = "A wrapper for using Windows plugins in Linux browsers";
-    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+    maintainers = with lib.maintainers; [ skeidel ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

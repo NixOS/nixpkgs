@@ -1,36 +1,88 @@
-{ stdenv, fetchFromGitHub
-, gettext, pkgconfig, scons
-, glib, json-glib, libelf, sphinx, utillinux }:
+{ lib, stdenv
+, cairo
+, fetchFromGitHub
+, gettext
+, glib
+, gobject-introspection
+, gtksourceview3
+, json-glib
+, libelf
+, makeWrapper
+, pango
+, pkg-config
+, polkit
+, python3
+, scons
+, sphinx
+, util-linux
+, wrapGAppsHook
+, withGui ? false }:
 
-with stdenv.lib;
+assert withGui -> !stdenv.isDarwin;
+
+with lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
-  version = "2.9.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
-    sha256 = "1b5cziam14h80xrfb285fmfrzz2rligxcpsq1xsig14xf4l2875i";
+    sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
-  CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
-
   nativeBuildInputs = [
-    pkgconfig sphinx gettext scons
+    pkg-config
+    sphinx
+    scons
+  ] ++ lib.optionals withGui [
+    makeWrapper
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    glib json-glib libelf utillinux
+    glib
+    json-glib
+    libelf
+    util-linux
+  ] ++ lib.optionals withGui [
+    cairo
+    gobject-introspection
+    gtksourceview3
+    pango
+    polkit
+    python3
+    python3.pkgs.pygobject3
   ];
+
+  prePatch = ''
+    export CFLAGS="$NIX_CFLAGS_COMPILE"
+    export LDFLAGS="''${NIX_LDFLAGS//-rpath /-Wl,-rpath=}"
+
+    # remove sources of nondeterminism
+    substituteInPlace lib/cmdline.c \
+      --replace "__DATE__" "\"Jan  1 1970\"" \
+      --replace "__TIME__" "\"00:00:00\""
+    substituteInPlace docs/SConscript \
+      --replace "gzip -c " "gzip -cn "
+  '';
 
   prefixKey = "--prefix=";
 
+  sconsFlags = lib.optionals (!withGui) [ "--without-gui" ];
+
+  # in GUI mode, this shells out to itself, and tries to import python modules
+  postInstall = lib.optionalString withGui ''
+    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
+    gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
+  '';
+
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
-    homepage = https://rmlint.readthedocs.org;
-    platforms = platforms.linux;
+    homepage = "https://rmlint.readthedocs.org";
+    platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ aaschmid koral ];
   };
 }

@@ -12,22 +12,28 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-version</command> 
+   <command>nixos-version</command>
    <arg>
     <option>--hash</option>
    </arg>
-    
+
    <arg>
     <option>--revision</option>
    </arg>
+
+   <arg>
+    <option>--json</option>
+   </arg>
+
   </cmdsynopsis>
  </refsynopsisdiv>
+
  <refsection>
   <title>Description</title>
   <para>
    This command shows the version of the currently active NixOS configuration.
    For example:
-<screen>$ nixos-version
+<screen><prompt>$ </prompt>nixos-version
 16.03.1011.6317da4 (Emu)
 </screen>
    The version consists of the following elements:
@@ -84,12 +90,16 @@
    </variablelist>
   </para>
  </refsection>
+
  <refsection>
   <title>Options</title>
+
   <para>
    This command accepts the following options:
   </para>
+
   <variablelist>
+
    <varlistentry>
     <term>
      <option>--hash</option>
@@ -101,12 +111,27 @@
      <para>
       Show the full SHA1 hash of the Git commit from which this configuration
       was built, e.g.
-<screen>$ nixos-version --hash
+<screen><prompt>$ </prompt>nixos-version --hash
 6317da40006f6bc2480c6781999c52d88dde2acf
 </screen>
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--json</option>
+    </term>
+    <listitem>
+     <para>
+      Print a JSON representation of the versions of NixOS and the
+      top-level configuration flake.
+     </para>
+    </listitem>
+   </varlistentry>
+
   </variablelist>
+
  </refsection>
+
 </refentry>

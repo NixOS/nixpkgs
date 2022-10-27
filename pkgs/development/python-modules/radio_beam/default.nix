@@ -1,42 +1,47 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, setuptools-scm
 , astropy
-, pytest
-, pytest-astropy
-, astropy-helpers
+, numpy
+, matplotlib
 , scipy
+, six
+, pytestCheckHook
+, pytest-astropy
 }:
 
 buildPythonPackage rec {
   pname = "radio_beam";
-  version = "0.3.2";
+  version = "0.3.4";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0g1nqiikv023ab60gfqrvc13kfjv8m70bpfk264vlliaq6mvxdf2";
+    inherit version;
+    pname = "radio-beam";
+    sha256 = "e032257f1501303873f251c00c74b1188180785c79677fb4443098d517852309";
   };
 
-  propagatedBuildInputs = [ astropy ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ astropy-helpers ];
+  propagatedBuildInputs = [
+    astropy
+    numpy
+    scipy
+    six
+  ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
-  '';
-
-  checkInputs = [ pytest pytest-astropy scipy ];
-
-  # Tests must be run in the build directory
-  checkPhase = ''
-    cd build/lib
-    pytest
-  '';
+  checkInputs = [
+    pytestCheckHook
+    matplotlib
+    pytest-astropy
+  ];
 
   meta = {
     description = "Tools for Beam IO and Manipulation";
-    homepage = http://radio-astro-tools.github.io;
+    homepage = "http://radio-astro-tools.github.io";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ smaret ];

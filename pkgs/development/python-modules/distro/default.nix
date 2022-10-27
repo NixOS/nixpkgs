@@ -1,28 +1,23 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, pytestcov }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mrg75w4ap7mdzyga75yaid9n8bgb345ih5mwjp3plj6v1jxwb9n";
+    sha256 = "sha256-FRrsz2DCFkApMrUuQO5HepOfjViJiSc3igKrvoUsHDk=";
   };
 
-  # TODO: Enable more tests on NixOS (20 out of 173 are failing, 10 due to the
-  # missing lsb_release binary):
-  patches = [ ./nixos.patch ];
+  # tests are very targeted at individual linux distributions
+  doCheck = false;
 
-  checkInputs = [ pytest pytestcov ];
+  pythonImportsCheck = [ "distro" ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/nir0s/distro;
+  meta = with lib; {
+    homepage = "https://github.com/nir0s/distro";
     description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

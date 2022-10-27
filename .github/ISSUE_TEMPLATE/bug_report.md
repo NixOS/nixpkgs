@@ -7,31 +7,34 @@ assignees: ''
 
 ---
 
-**Describe the bug**
+### Describe the bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+### Steps To Reproduce
 Steps to reproduce the behavior:
 1. ...
 2. ...
 3. ...
 
-**Expected behavior**
+### Expected behavior
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+### Screenshots
 If applicable, add screenshots to help explain your problem.
 
-**Additional context**
+### Additional context
 Add any other context about the problem here.
 
-**Metadata**
-Please run `nix run nixpkgs.nix-info -c nix-info -m` and paste the result.
+### Notify maintainers
+<!--
+Please @ people who are in the `meta.maintainers` list of the offending package or module.
+If in doubt, check `git blame` for whoever last touched something.
+-->
 
-Maintainer information:
-```yaml
-# a list of nixpkgs attributes affected by the problem
-attribute:
-# a list of nixos modules affected by the problem
-module:
+### Metadata
+Please run `nix-shell -p nix-info --run "nix-info -m"` and paste the result.
+
+```console
+[user@system:~]$ nix-shell -p nix-info --run "nix-info -m"
+output here
 ```

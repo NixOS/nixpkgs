@@ -1,34 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , coverage
+, fetchPypi
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "0.9.18";
+  version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05648f9b22aeeda9d32e61b46fa78c9ff28f217d69005b3b19ffb75d5992187e";
+    hash = "sha256-PVLXOBTo2xnMBM4wyvrmGgyztW0ajGxMU+oIhrjZiw8=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  propagatedBuildInputs = [ coverage ];
+  propagatedBuildInputs = [
+    coverage
+  ];
 
-  checkInputs = [ pytest ];
+  # The project does not include tests since version 1.3.0
+  doCheck = false;
 
-  checkPhase = ''
-    pytest --deselect=test/test_testmon.py::TestmonDeselect::test_dependent_testmodule
-  '';
+  pythonImportsCheck = [
+    "testmon"
+  ];
 
   meta = with lib; {
+    description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
-    description = "This is a py.test plug-in which automatically selects and re-executes only tests affected by recent changes";
     license = licenses.mit;
-    maintainers = [ maintainers.dmvianna ];
+    maintainers = with maintainers; [ dmvianna ];
   };
 }
-

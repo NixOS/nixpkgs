@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnuplot }:
+{ stdenv, lib, fetchurl, gnuplot }:
 
 let
   target = if stdenv.hostPlatform.system == "i686-linux" then
@@ -13,16 +13,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "iozone-3.471";
+  pname = "iozone";
+  version = "3.493";
 
   src = fetchurl {
-    url = http://www.iozone.org/src/current/iozone3_471.tar;
-    sha256 = "0w63b3d4ws1sm52lpdd08sl7n4ay438dl3wy0q9la12iq81rglid";
+    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tgz";
+    hash = "sha256-Y0wSNgC0u0LoJ0g/oVsq+uba2ikHt4SxTgFBWTPUMZg=";
   };
 
   license = fetchurl {
-    url = http://www.iozone.org/docs/Iozone_License.txt;
-    sha256 = "1309sl1rqm8p9gll3z8zfygr2pmbcvzw5byf5ba8y12avk735zrv";
+    url = "http://www.iozone.org/docs/Iozone_License.txt";
+    hash = "sha256-O/8yztxKBI/UKs6vwv9mq16Rn3cf/UHpSxdVnAPVCYw=";
   };
 
   preBuild = "pushd src/current";
@@ -53,9 +54,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IOzone Filesystem Benchmark";
-    homepage    = http://www.iozone.org/;
-    license     = stdenv.lib.licenses.unfreeRedistributable;
+    homepage    = "http://www.iozone.org/";
+    license     = lib.licenses.unfreeRedistributable;
     platforms   = ["i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ Baughn makefu ];
+    maintainers = with lib.maintainers; [ Baughn makefu ];
   };
 }

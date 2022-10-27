@@ -1,6 +1,6 @@
-{fetchgit }:
+{ fetchFromGitiles }:
 
-fetchgit {
+fetchFromGitiles {
   name = "chromium-xorg-conf";
   url = "https://chromium.googlesource.com/chromiumos/platform/xorg-conf";
   rev = "26fb9d57e195c7e467616b35b17e2b5d279c1514";

@@ -1,22 +1,26 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
+, coverage
+, zope_testrunner
 }:
 
 buildPythonPackage rec {
   pname = "zope.i18nmessageid";
-  version = "4.3.1";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e511edff8e75d3a6f84d8256e1e468c85a4aa9d89c2ea264a919334fae7081e3";
+    sha256 = "9534142b684c986f5303f469573978e5a340f05ba2eee4f872933f1c38b1b059";
   };
 
   propagatedBuildInputs = [ six ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.i18nmessageid;
+  checkInputs = [ coverage zope_testrunner ];
+
+  meta = with lib; {
+    homepage = "https://github.com/zopefoundation/zope.i18nmessageid";
     description = "Message Identifiers for internationalization";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

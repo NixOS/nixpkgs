@@ -1,38 +1,66 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
-, six
+, packaging
 , pytest
-, numpy
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.3.0";
+  version = "0.11.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e641bc720661c08ec3afe44a7951660cdff5e187259c433aa66e9ec2d5ccea1";
+    sha256 = "f393adf659709a5f111d6ca190871c61808a6f3611bd0a132e27e93b24dd3448";
   };
 
-  propagatedBuildInputs = [
-    six
-    numpy
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
     pytest
+  ];
+
+  propagatedBuildInputs = [
+    packaging
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  patches = [
+    # Removal of distutils, https://github.com/astropy/pytest-doctestplus/pull/172
+    (fetchpatch {
+      name = "distutils-removal.patch";
+      url = "https://github.com/astropy/pytest-doctestplus/commit/ae2ee14cca0cde0fab355936995fa083529b00ff.patch";
+      sha256 = "sha256-uryKV7bWw2oz0glyh2lpGqtDPFvRTo8RmI1N1n15/d4=";
+    })
+  ];
+
+  disabledTests = [
+    # ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]
+    # __main__.py: error: unrecognized arguments: --remote-data
+    "test_remote_data_url"
+    "test_remote_data_float_cmp"
+    "test_remote_data_ignore_whitespace"
+    "test_remote_data_ellipsis"
+    "test_remote_data_requires"
+    "test_remote_data_ignore_warnings"
+  ];
 
   meta = with lib; {
     description = "Pytest plugin with advanced doctest features";
-    homepage = https://astropy.org;
+    homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

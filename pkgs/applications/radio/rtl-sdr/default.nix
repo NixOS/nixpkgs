@@ -1,37 +1,44 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
-  version = "0.6.0";
+  version = "0.8.0";
 
-  src = fetchgit {
-    url = "git://git.osmocom.org/rtl-sdr.git";
-    rev = "refs/tags/${version}";
-    sha256 = "0lmvsnb4xw4hmz6zs0z5ilsah5hjz29g1s0050n59fllskqr3b8k";
+  src = fetchFromGitHub {
+    owner = "librtlsdr";
+    repo = "librtlsdr";
+    rev = "v${version}";
+    sha256 = "1fgxlkgmdchbrf0nn98ivjr6css5hak3608nr4xrf2qzf7xy2kdk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libusb1 ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d"
 
-  # TODO: get these fixes upstream:
-  # * Building with -DINSTALL_UDEV_RULES=ON tries to install udev rules to
-  #   /etc/udev/rules.d/, and there is no option to install elsewhere. So install
-  #   rules manually.
-  # * Propagate libusb-1.0 dependency in pkg-config file.
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    mkdir -p "$out/etc/udev/rules.d/"
-    cp ../rtl-sdr.rules "$out/etc/udev/rules.d/99-rtl-sdr.rules"
-
-    pcfile="$out"/lib/pkgconfig/librtlsdr.pc
-    grep -q "Requires:" "$pcfile" && { echo "Upstream has added 'Requires:' in $(basename "$pcfile"); update nix expression."; exit 1; }
-    echo "Requires: libusb-1.0" >> "$pcfile"
+    substituteInPlace rtl-sdr.rules \
+      --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ pkg-config cmake ];
+
+  buildInputs = [ libusb1 ];
+
+  cmakeFlags = lib.optionals stdenv.isLinux [
+    "-DINSTALL_UDEV_RULES=ON"
+    "-DWITH_RPC=ON"
+  ];
+
+  meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
-    homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;
+    homepage = "https://github.com/librtlsdr/librtlsdr";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
   };
 }

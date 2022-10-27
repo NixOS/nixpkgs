@@ -1,22 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib, buildPythonPackage, fetchPypi, django, six }:
 
 buildPythonPackage rec {
   pname = "django-pglocks";
-  version = "1.0.2";
+  version = "1.0.4";
 
   meta = {
     description = "PostgreSQL locking context managers and functions for Django.";
-    homepage = https://github.com/Xof/django-pglocks;
+    homepage = "https://github.com/Xof/django-pglocks";
     license = lib.licenses.mit;
   };
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ks4k0bk4457wfl3xgzr4v7xb0lxmnkhxwhlp0bbnmzipdafw1cl";
+    sha256 = "3c47c66fbfbd268ef46269673a0516a039539b0972b8ed2ec9cfee44c4b65523";
   };
 
   buildInputs = [ django ];
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django six ];
 
   # tests need a postgres database
   doCheck = false;

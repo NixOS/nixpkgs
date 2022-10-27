@@ -1,29 +1,43 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
 , six
 , pycrypto
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "libthumbor";
-  version = "1.3.2";
+  version = "2.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vjhszsf8wl9k16wyg2rfjycjnawzl7z8j39bhiysbz5x4lqg91b";
+    hash = "sha256-1PsiFZrTDVQqy8A3nkaM5LdPiBoriRgHkklTOiczN+g=";
   };
 
-  buildInputs = [ django ];
-  propagatedBuildInputs = [ six pycrypto ];
+  buildInputs = [
+    django
+  ];
+
+  propagatedBuildInputs = [
+    six
+    pycrypto
+  ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "libthumbor is the python extension to thumbor";
-    homepage = https://github.com/heynemann/libthumbor;
-    license = licenses.mit;
-  };
+  pythonImportsCheck = [
+    "libthumbor"
+  ];
 
+  meta = with lib; {
+    description = "Python extension to thumbor";
+    homepage = "https://github.com/heynemann/libthumbor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

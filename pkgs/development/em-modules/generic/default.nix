@@ -1,4 +1,4 @@
-{ pkgs, lib, emscripten, python }:
+{ pkgs, lib, emscripten, python3 }:
 
 { buildInputs ? [], nativeBuildInputs ? []
 
@@ -10,13 +10,16 @@ pkgs.stdenv.mkDerivation (
   args //
   {
 
-  pname = "emscripten-${args.pname or (builtins.parseDrvName args.name).name}";
-  version = args.version or (builtins.parseDrvName args.name).version;
-  buildInputs = [ emscripten python ] ++ buildInputs;
-  nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
+  pname = "emscripten-${lib.getName args}";
+  version = lib.getVersion args;
+  buildInputs = [ emscripten python3 ] ++ buildInputs;
+  nativeBuildInputs = [ emscripten python3 ] ++ nativeBuildInputs;
 
   # fake conftest results with emscripten's python magic
   EMCONFIGURE_JS=2;
+
+  # removes archive indices
+  dontStrip = args.dontStrip or true;
 
   configurePhase = args.configurePhase or ''
     # FIXME: Some tests require writing at $HOME
@@ -25,6 +28,9 @@ pkgs.stdenv.mkDerivation (
 
     emconfigure ./configure --prefix=$out
 
+    mkdir -p .emscriptencache
+    export EM_CACHE=$(pwd)/.emscriptencache
+
     runHook postConfigure
   '';
 
@@ -32,6 +38,7 @@ pkgs.stdenv.mkDerivation (
     runHook preBuild
 
     HOME=$TMPDIR
+
     emmake make
 
     runHook postBuild

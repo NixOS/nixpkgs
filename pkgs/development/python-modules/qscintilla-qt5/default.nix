@@ -1,50 +1,68 @@
 { lib
 , pythonPackages
 , qscintilla
-, lndir
 , qtbase
+, qmake
+, qtmacextras
+, stdenv
 }:
-with pythonPackages;
-buildPythonPackage {
-  pname = "qscintilla";
+
+let
+  inherit (pythonPackages) buildPythonPackage isPy3k python sip sipbuild pyqt5 pyqt-builder;
+in buildPythonPackage rec {
+  pname = "qscintilla-qt5";
   version = qscintilla.version;
   src = qscintilla.src;
-  format = "other";
+  format = "pyproject";
 
-  nativeBuildInputs = [ lndir sip qtbase ];
-  buildInputs = [ qscintilla ];
-  propagatedBuildInputs = [ pyqt5 ];
+  disabled = !isPy3k;
+
+  nativeBuildInputs = [ sip qmake pyqt-builder qscintilla pythonPackages.setuptools ];
+  buildInputs = [ qtbase ];
+  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
+
+  dontWrapQtApps = true;
 
   postPatch = ''
-    substituteInPlace Python/configure.py \
+    cd Python
+    cp pyproject-qt5.toml pyproject.toml
+    echo '[tool.sip.project]' >> pyproject.toml
+    echo 'sip-include-dirs = [ "${pyqt5}/${python.sitePackages}/PyQt5/bindings"]' \
+       >> pyproject.toml
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace project.py \
       --replace \
-      "target_config.py_module_dir" \
-      "'$out/${python.sitePackages}'"
+      "if self.project.qsci_external_lib:
+                if self.qsci_features_dir is not None:" \
+      "if self.project.qsci_external_lib:
+                self.builder_settings.append('QT += widgets')
+
+                self.builder_settings.append('QT += printsupport')
+
+                if self.qsci_features_dir is not None:"
   '';
 
-  preConfigure = ''
-    mkdir -p $out
-    lndir ${pyqt5} $out
-    rm -rf "$out/nix-support"
-    cd Python
-    ${python.executable} ./configure.py \
-      --pyqt=PyQt5 \
-      --destdir=$out/${python.sitePackages}/PyQt5 \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --apidir=$out/api/${python.libPrefix} \
-      --qsci-incdir=${qscintilla}/include \
-      --qsci-featuresdir=${qscintilla}/mkspecs/features \
-      --qsci-libdir=${qscintilla}/lib \
-      --pyqt-sipdir=${pyqt5}/share/sip/PyQt5 \
-      --qsci-sipdir=$out/share/sip/PyQt5 \
-      --sip-incdir=${sip}/include
+  dontConfigure = true;
+
+  build = ''
+    sip-install --qsci-features-dir ${qscintilla}/mkspecs/features \
+    --qsci-include-dir ${qscintilla}/include \
+    --qsci-library-dir ${qscintilla}/lib --api-dir ${qscintilla}/share";
   '';
+  postInstall = ''
+    # Needed by pythonImportsCheck to find the module
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
+  '';
+
+  # Checked using pythonImportsCheck
+  doCheck = false;
+
+  pythonImportsCheck = [ "PyQt5.Qsci" ];
 
   meta = with lib; {
     description = "A Python binding to QScintilla, Qt based text editing control";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
-    homepage = https://www.riverbankcomputing.com/software/qscintilla/;
-    broken = true;
+    homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
   };
 }

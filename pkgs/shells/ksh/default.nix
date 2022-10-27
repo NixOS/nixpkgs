@@ -1,21 +1,31 @@
-{ stdenv, meson, ninja, fetchFromGitHub, which, python, libiconv }:
+{ lib, stdenv, meson, ninja, fetchFromGitHub, which, python3, fetchpatch
+, libiconv }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ksh";
-  version = "93v";
+  version = "2020.0.0";
 
   src = fetchFromGitHub {
     owner  = "att";
     repo   = "ast";
-    rev    = "b8d88244ae87857e7bbd6da230ffbbc51165df70";
-    sha256 = "12kf14n8vz36hnsy3wp6lnyv1841p7hcq25y1d78w532dil69lx9";
+    rev    = version;
+    sha256 = "0cdxz0nhpq03gb9rd76fn0x1yzs2c8q289b7vcxnzlsrz1imz65j";
   };
 
-  nativeBuildInputs = [ meson ninja which python ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/att/ast/commit/11983a71f5e29df578b7e2184400728b4e3f451d.patch";
+      sha256 = "1n9558c4v2qpgpjb1vafs29n3qn3z0770wr1ayc0xjf5z5j4g3kv";
+    })
+  ];
+
+  nativeBuildInputs = [ meson ninja which python3 ];
 
   buildInputs = [ libiconv ];
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  meta = with lib; {
     description = "KornShell Command And Programming Language";
     longDescription = ''
       The KornShell language was designed and developed by David G. Korn at
@@ -23,7 +33,7 @@ stdenv.mkDerivation {
       provides access to the UNIX system and to many other systems, on the
       many different computers and workstations on which it is implemented.
     '';
-    homepage = https://github.com/att/ast;
+    homepage = "https://github.com/att/ast";
     license = licenses.cpl10;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

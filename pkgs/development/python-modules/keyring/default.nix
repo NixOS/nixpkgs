@@ -1,31 +1,65 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
-, dbus-python, setuptools_scm, entrypoints, secretstorage
-, pytest, pytest-flake8 }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
+, importlib-metadata
+, dbus-python
+, jaraco_classes
+, jeepney
+, secretstorage
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "19.2.0";
-  disabled = isPy27;
+  version = "23.9.3";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cvlm48fggl12m19j9vcnrlplidr2sjf8h3pdyki58f9y357q0wi";
+    hash = "sha256-abAd2DxC9ZAlD+eh9QP8IpsU3oOFcxSxkzo92/WVxKU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest pytest-flake8 ];
+  propagatedBuildInputs = [
+    jaraco_classes
+  ] ++ lib.optionals stdenv.isLinux [
+    jeepney
+    secretstorage
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
 
-  # checks try to access a darwin path on linux
-  doCheck = false;
+  pythonImportsCheck = [
+    "keyring"
+    "keyring.backend"
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # E       ValueError: too many values to unpack (expected 1)
+    "test_entry_point"
+  ];
+
+  disabledTestPaths = [
+    "tests/backends/test_macOS.py"
+  ];
+
+  meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://pypi.python.org/pypi/keyring";
-    license     = licenses.psfl;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage    = "https://github.com/jaraco/keyring";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };
 }

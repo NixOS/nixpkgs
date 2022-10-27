@@ -7,12 +7,12 @@ let
 in {
   options = {
     services.throttled = {
-      enable = mkEnableOption "fix for Intel CPU throttling";
+      enable = mkEnableOption (lib.mdDoc "fix for Intel CPU throttling");
 
       extraConfig = mkOption {
         type = types.str;
         default = "";
-        description = "Alternative configuration";
+        description = lib.mdDoc "Alternative configuration";
       };
     };
   };
@@ -26,5 +26,11 @@ in {
       if cfg.extraConfig != ""
       then pkgs.writeText "lenovo_fix.conf" cfg.extraConfig
       else "${pkgs.throttled}/etc/lenovo_fix.conf";
+
+    # Kernel 5.9 spams warnings whenever userspace writes to CPU MSRs.
+    # See https://github.com/erpalma/throttled/issues/215
+    boot.kernelParams =
+      optional (versionAtLeast config.boot.kernelPackages.kernel.version "5.9")
+      "msr.allow_writes=on";
   };
 }

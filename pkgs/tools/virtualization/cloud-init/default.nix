@@ -1,45 +1,124 @@
-{ lib, pythonPackages, fetchurl, cloud-utils }:
+{ lib
+, nixosTests
+, buildPythonApplication
+, cloud-utils
+, dmidecode
+, fetchFromGitHub
+, iproute2
+, openssh
+, python3
+, shadow
+, systemd
+, coreutils
+}:
 
-let version = "0.7.9";
-
-in pythonPackages.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  inherit version;
+  version = "22.3.3";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "https://launchpad.net/cloud-init/trunk/${version}/+download/cloud-init-${version}.tar.gz";
-    sha256 = "0wnl76pdcj754pl99wxx76hkir1s61x0bg0lh27sdgdxy45vivbn";
+  src = fetchFromGitHub {
+    owner = "canonical";
+    repo = "cloud-init";
+    rev = version;
+    hash = "sha256-9vdFPSmkkdJDlVfA9DgqczRoOBMmSMezdl3D/0OSbsQ=";
   };
 
-  patches = [ ./add-nixos-support.patch ];
+  patches = [ ./0001-add-nixos-support.patch ];
+
   prePatch = ''
-    patchShebangs ./tools
-
     substituteInPlace setup.py \
-      --replace /usr $out \
-      --replace /etc $out/etc \
-      --replace /lib/systemd $out/lib/systemd \
-      --replace 'self.init_system = ""' 'self.init_system = "systemd"'
+      --replace /lib/systemd $out/lib/systemd
 
-    substituteInPlace cloudinit/config/cc_growpart.py \
-      --replace 'util.subp(["growpart"' 'util.subp(["${cloud-utils}/bin/growpart"'
+    substituteInPlace cloudinit/net/networkd.py \
+      --replace '["/usr/sbin", "/bin"]' '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
-    # Argparse is part of python stdlib
-    sed -i s/argparse// requirements.txt
-    '';
+    substituteInPlace tests/unittests/test_net_activators.py \
+      --replace '["/usr/sbin", "/bin"]' \
+        '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
-  propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
-    oauthlib pyserial configobj pyyaml requests jsonpatch ];
+    substituteInPlace tests/unittests/cmd/test_clean.py \
+      --replace "/bin/bash" "/bin/sh"
+  '';
 
-  checkInputs = with pythonPackages; [ contextlib2 httpretty mock unittest2 ];
+  postInstall = ''
+    install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/write-ssh-key-fingerprints
+    for i in $out/libexec/*; do
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath [ openssh ]}"
+    done
+  '';
 
-  doCheck = false;
+  propagatedBuildInputs = with python3.pkgs; [
+    configobj
+    jinja2
+    jsonpatch
+    jsonschema
+    netifaces
+    oauthlib
+    pyserial
+    pyyaml
+    requests
+  ];
 
-  meta = {
-    homepage = https://cloudinit.readthedocs.org;
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    httpretty
+    dmidecode
+    # needed for tests; at runtime we rather want the setuid wrapper
+    shadow
+    responses
+    pytest-mock
+    coreutils
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
+  ];
+
+  disabledTests = [
+    # tries to create /var
+    "test_dhclient_run_with_tmpdir"
+    # clears path and fails because mkdir is not found
+    "test_path_env_gets_set_from_main"
+    # tries to read from /etc/ca-certificates.conf while inside the sandbox
+    "test_handler_ca_certs"
+    # Doesn't work in the sandbox
+    "TestEphemeralDhcpNoNetworkSetup"
+    "TestHasURLConnectivity"
+    "TestReadFileOrUrl"
+    "TestConsumeUserDataHttp"
+    # Chef Omnibus
+    "TestInstallChefOmnibus"
+    # https://github.com/canonical/cloud-init/pull/893
+    "TestGetPackageMirrorInfo"
+    # Disable failing VMware and PuppetAio tests
+    "test_get_data_iso9660_with_network_config"
+    "test_get_data_vmware_guestinfo_with_network_config"
+    "test_get_host_info"
+    "test_no_data_access_method"
+    "test_install_with_collection"
+    "test_install_with_custom_url"
+    "test_install_with_default_arguments"
+    "test_install_with_no_cleanup"
+    "test_install_with_version"
+  ];
+
+  preCheck = ''
+    # TestTempUtils.test_mkdtemp_default_non_root does not like TMPDIR=/build
+    export TMPDIR=/tmp
+  '';
+
+  pythonImportsCheck = [
+    "cloudinit"
+  ];
+
+  passthru.tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+
+  meta = with lib; {
+    homepage = "https://cloudinit.readthedocs.org";
     description = "Provides configuration and customization of cloud instance";
-    maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
-    platforms = lib.platforms.all;
+    license = with licenses; [ asl20 gpl3Plus ];
+    maintainers = with maintainers; [ madjar phile314 illustris ];
+    platforms = platforms.all;
   };
 }

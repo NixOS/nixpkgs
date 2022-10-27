@@ -1,54 +1,63 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, gawk, glibc, fetchzip }:
 
-let
-  version = "1.1.3";
-
-  sources = let
-    base = "https://releases.hashicorp.com/vault/${version}";
-  in {
-    x86_64-linux = fetchurl {
-      url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "293b88f4d31f6bcdcc8b508eccb7b856a0423270adebfa0f52f04144c5a22ae0";
-    };
-    i686-linux = fetchurl {
-      url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "9f2fb99e08fa3d25af1497516d08b5d2d8a73bcacd5354ddec024e9628795867";
-    };
-    x86_64-darwin = fetchurl {
-      url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "a0a7a242f8299ac4a00af8aa10ccedaf63013c8a068f56eadfb9d730b87155ea";
-    };
-    i686-darwin = fetchurl {
-      url = "${base}/vault_${version}_darwin_386.zip";
-      sha256 = "50542cfb37abb06e8bb6b8ba41f5ca7d72a4d6a4396d4e3f4a8391bed14f63be";
-    };
-    aarch64-linux = fetchurl {
-      url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "c243dce14b2e48e3667c2aa5b7fb37009dd7043b56032d6ebe50dd456715fd3f";
-    };
-  };
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "vault-bin";
-  inherit version;
+  version = "1.12.0";
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
+        x86_64-linux = "linux_amd64";
+        aarch64-linux = "linux_arm64";
+        i686-linux = "linux_386";
+        x86_64-darwin = "darwin_amd64";
+        aarch64-darwin = "darwin_arm64";
+      };
+      sha256 = selectSystem {
+        x86_64-linux = "sha256-khDTpgezINAIZ8YFhOGoTSe6qzA6bkyhyX25VgcFAhU=";
+        aarch64-linux = "sha256-XOiuH9KmwXz8sR9FzH+wEIg0xzrMAIZaHVHf3TdJp10=";
+        i686-linux = "sha256-jCXQX04/Q1dHCIEcFlq60ICib/kjM8bE8ZKjF+0YPjE=";
+        x86_64-darwin = "sha256-fQaHI0ySer6lRdaEcNl7GN51IP+F5y/FR99Q66LQl3k=";
+        aarch64-darwin = "sha256-ME1u/g3l5Jqwvk9Qw4tTmbIvHOKkPMRayhRgPbZIYnA=";
+      };
+    in
+    fetchzip {
+      url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
+      inherit sha256;
+    };
 
-  nativeBuildInputs = [ unzip ];
-
-  sourceRoot = ".";
+  dontConfigure = true;
+  dontBuild = true;
+  dontStrip = stdenv.isDarwin;
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/bash-completion/completions
-    mv vault $out/bin
-    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
+    runHook preInstall
+    install -D vault $out/bin/vault
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.vaultproject.io;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/vault --help
+    $out/bin/vault version
+    runHook postInstallCheck
+  '';
+
+  dontPatchELF = true;
+  dontPatchShebangs = true;
+
+  passthru.updateScript = ./update-bin.sh;
+
+  meta = with lib; {
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
+    homepage = "https://www.vaultproject.io";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ offline psyanticy ];
+    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick mkaito ];
+    mainProgram = "vault";
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }

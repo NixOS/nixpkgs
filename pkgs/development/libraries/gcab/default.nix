@@ -1,38 +1,81 @@
-{ stdenv, fetchurl, gettext, gobject-introspection, pkgconfig
-, meson, ninja, glibcLocales, git, vala, glib, zlib, gnome3
+{ lib, stdenv
+, fetchurl
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, pkg-config
+, meson
+, ninja
+, vala
+, glib
+, zlib
+, gnome
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcab";
-  version = "1.2";
+  version = "1.5";
 
-  LC_ALL = "en_US.UTF-8";
+  outputs = [ "bin" "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "038h5kk41si2hc9d9169rrlvp8xgsxq27kri7hv2vr39gvz9cbas";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "Rr90QkkfqkFIJCuewqB4al9unv+xsFZuUpDozIbwDww=";
   };
 
-  nativeBuildInputs = [ meson ninja glibcLocales git pkgconfig vala gettext gobject-introspection ];
-
-  buildInputs = [ glib zlib ];
-
-  mesonFlags = [
-    "-Ddocs=false"
-    "-Dtests=false"
+  patches = [
+    # allow installing installed tests to a separate output
+    ./installed-tests-path.patch
   ];
 
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    vala
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
+
+  buildInputs = [
+    glib
+    zlib
+  ];
+
+  # required by libgcab-1.0.pc
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = [
+    "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
+
+  doCheck = true;
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.gcab;
+    };
   };
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
-    homepage = "https://wiki.gnome.org/msitools";
-    maintainers = [ maintainers.lethalman ];
+  meta = with lib; {
+    description = "GObject library to create cabinet files";
+    homepage = "https://gitlab.gnome.org/GNOME/gcab";
+    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

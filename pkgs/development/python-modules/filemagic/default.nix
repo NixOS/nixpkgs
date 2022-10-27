@@ -4,6 +4,7 @@
 buildPythonPackage {
   pname = "filemagic";
   version = "1.6";
+  disabled = !isPy3k; # asserts on ResourceWarning
 
   # Don't use the PyPI source because it's missing files required for testing
   src = fetchFromGitHub {
@@ -18,12 +19,12 @@ buildPythonPackage {
       "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkInputs = [ (if isPy3k then mock else unittest2) ];
+  checkInputs = [ mock ] ++ lib.optionals (!isPy3k) [ unittest2 ];
 
   meta = with lib; {
     description = "File type identification using libmagic";
-    homepage = https://github.com/aliles/filemagic;
+    homepage = "https://github.com/aliles/filemagic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

@@ -1,16 +1,15 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gperf
 , sqlite
-, librest
 , libarchive
-, libsoup
-, gnome3
+, libsoup_3
+, gnome
 , libxml2
 , lua5_3
 , liboauth
@@ -31,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.10";
+  version = "0.3.15";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jldaixc4kzycn5v8ixkjld1n0z3dp0l1p3vchgdwpvdvc7kcfw0";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "hRjD2VT5MJXZVWJKBEzhanNFUy+BHSmdv6HhFM/rqzM=";
   };
 
   patches = [
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
     # * chromaprint (gst-plugins-bad)
     (substituteAll {
       src = ./chromaprint-gst-plugins.patch;
-      load_plugins = stdenv.lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
+      load_plugins = lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
         gstreamer
         gst-plugins-base
         gst-plugins-bad
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     gperf # for lua-factory
@@ -65,15 +64,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    libgdata
+    # libgdata
     lua5_3
     liboauth
     sqlite
     gnome-online-accounts
     totem-pl-parser
-    librest
     libarchive
-    libsoup
+    libsoup_3
     gmime
     gom
     json-glib
@@ -85,18 +83,17 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Grilo;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "A collection of plugins for the Grilo framework";
-    maintainers = gnome3.maintainers;
-    license = licenses.lgpl21;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

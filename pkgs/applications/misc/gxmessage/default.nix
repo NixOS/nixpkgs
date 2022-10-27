@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, gtk3, intltool, pkgconfig, texinfo }:
+{ lib, stdenv, fetchurl, gtk3, intltool, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "gxmessage";
   version = "3.4.3";
 
   src = fetchurl {
-    url = "http://homepages.ihug.co.nz/~trmusson/stuff/${pname}-${version}.tar.gz";
+    url = "https://trmusson.dreamhosters.com/stuff/${pname}-${version}.tar.gz";
     sha256 = "db4e1655fc58f31e5770a17dfca4e6c89028ad8b2c8e043febc87a0beedeef05";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk3 texinfo ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ gtk3 texinfo ];
 
   meta = {
     description = "A GTK enabled dropin replacement for xmessage";
-    homepage = "http://homepages.ihug.co.nz/~trmusson/programs.html#gxmessage";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [jfb];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://trmusson.dreamhosters.com/programs.html#gxmessage";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [jfb];
+    platforms = with lib.platforms; linux;
   };
 }

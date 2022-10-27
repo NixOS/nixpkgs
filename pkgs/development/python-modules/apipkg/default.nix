@@ -1,41 +1,47 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, setuptools_scm, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "apipkg";
-  version = "1.5";
+  version = "3.0.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "37228cda29411948b422fae072f57e31d3396d2ee1c9783775980ee9c9990af6";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-gf84SzfuKLGYfI88IzPRJCqMZWwowUR10FgIbwXjwuY=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ pytest ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # Fix pytest 4 support. See: https://github.com/pytest-dev/apipkg/issues/14
-  postPatch = ''
-    substituteInPlace "test_apipkg.py" \
-      --replace "py.test.ensuretemp('test_apipkg')" "py.path.local('test_apipkg')"
-  '';
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
-  # Failing tests on Python 3
-  # https://github.com/pytest-dev/apipkg/issues/17
-  checkPhase = let
-    disabledTests = stdenv.lib.optionals isPy3k [
-      "test_error_loading_one_element"
-      "test_aliasmodule_proxy_methods"
-      "test_eagerload_on_bython"
-    ];
-    testExpression = stdenv.lib.optionalString (disabledTests != [])
-    "-k 'not ${stdenv.lib.concatStringsSep " and not " disabledTests}'";
-  in ''
-    py.test ${testExpression}
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  pytestFlagsArray = [
+    "test_apipkg.py"
+  ];
+
+  pythonImportsCheck = [
+    "apipkg"
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

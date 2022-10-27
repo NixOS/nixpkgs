@@ -1,25 +1,46 @@
-{ stdenv, lib, fetchurl, glibc, zlib
-, enableStatic ? false
+{ lib, stdenv, fetchurl, glibc, zlib, libxcrypt
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableSCP ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:
 
+let
+  # NOTE: DROPBEAR_PATH_SSH_PROGRAM is only necessary when enableSCP is true,
+  # but it is enabled here always anyways for consistency
+  dflags = {
+    SFTPSERVER_PATH = sftpPath;
+    DROPBEAR_PATH_SSH_PROGRAM = "${placeholder "out"}/bin/dbclient";
+  };
+
+in
+
 stdenv.mkDerivation rec {
-  name = "dropbear-2019.78";
+  pname = "dropbear";
+  version = "2020.81";
 
   src = fetchurl {
-    url = "https://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "19242qlr40pbqfqd0gg6h8qpj38q6lgv03ja6sahj9vj2abnanaj";
+    url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
+    sha256 = "0fy5ma4cfc2pk25mcccc67b2mf1rnb2c06ilb7ddnxbpnc85s8s8";
   };
 
   dontDisableStatic = enableStatic;
-
   configureFlags = lib.optional enableStatic "LDFLAGS=-static";
 
-  CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
+  CFLAGS = lib.pipe (lib.attrNames dflags) [
+    (builtins.map (name: "-D${name}=\\\"${dflags.${name}}\\\""))
+    (lib.concatStringsSep " ")
+  ];
 
   # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
-    makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
+    makeFlagsArray=(
+      VPATH=$(cat $NIX_CC/nix-support/orig-libc)/lib
+      PROGRAMS="${lib.concatStringsSep " " ([ "dropbear" "dbclient" "dropbearkey" "dropbearconvert" ] ++ lib.optionals enableSCP ["scp"])}"
+    )
+  '';
+
+  postInstall = lib.optionalString enableSCP ''
+    ln -rs $out/bin/scp $out/bin/dbscp
   '';
 
   patches = [
@@ -28,10 +49,10 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib libxcrypt ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
-  meta = with stdenv.lib; {
-    homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
+  meta = with lib; {
+    homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     description = "A small footprint implementation of the SSH 2 protocol";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];

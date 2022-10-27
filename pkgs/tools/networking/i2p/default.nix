@@ -1,42 +1,12 @@
-{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
-
-let wrapper = stdenv.mkDerivation rec {
-  pname = "wrapper";
-  version = "3.5.35";
-
-  src = fetchurl {
-    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "0mjyw9ays9v6lnj21pmfd3qdvd9b6rwxfmw3pg6z0kyf2jadixw2";
-  };
-
-  buildInputs = [ jdk ];
-
-  buildPhase = ''
-    export ANT_HOME=${ant}
-    export JAVA_HOME=${jdk}/lib/openjdk/jre/
-    export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
-    export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
-    sed 's/ testsuite$//' -i src/c/Makefile-linux-x86-64.make
-    ${if stdenv.isi686 then "./build32.sh" else "./build64.sh"}
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,lib}
-    cp bin/wrapper $out/bin/wrapper
-    cp lib/wrapper.jar $out/lib/wrapper.jar
-    cp lib/libwrapper.so $out/lib/libwrapper.so
-  '';
-};
-
-in
+{ lib, stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which, java-service-wrapper }:
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "0.9.42";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "04y71hzkdpjzbac569rhyg1zfx37j0alggbl9gnkaqfbprb2nj1h";
+    url = "https://files.i2p-projekt.de/${version}/i2psource_${version}.tar.bz2";
+    sha256 = "sha256-V/YYFQmMNVk9ft4wX5i5AVxMYTxyIxrQhOaAaj4qo3E=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -52,9 +22,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
 
-    cp ${wrapper}/bin/wrapper $out/i2psvc
-    cp ${wrapper}/lib/wrapper.jar $out/lib
-    cp ${wrapper}/lib/libwrapper.so $out/lib
+    cp ${java-service-wrapper}/bin/wrapper $out/i2psvc
+    cp ${java-service-wrapper}/lib/wrapper.jar $out/lib
+    cp ${java-service-wrapper}/lib/libwrapper.so $out/lib
 
     sed -i $out/i2prouter -i $out/runplain.sh \
       -e "s#uname#${coreutils}/bin/uname#" \
@@ -72,11 +42,15 @@ stdenv.mkDerivation rec {
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = [ maintainers.joelmo ];
+    maintainers = with maintainers; [ joelmo ];
   };
 }

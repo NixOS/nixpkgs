@@ -1,10 +1,14 @@
-import ../make-test.nix ({ pkgs, ... }: {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "ejabberd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ajs124 ];
   };
   nodes = {
     client = { nodes, pkgs, ... }: {
+      networking.extraHosts = ''
+        ${nodes.server.config.networking.primaryIPAddress} example.com
+      '';
+
       environment.systemPackages = [
         (pkgs.callPackage ./xmpp-sendmessage.nix { connectTo = nodes.server.config.networking.primaryIPAddress; })
       ];
@@ -46,6 +50,11 @@ import ../make-test.nix ({ pkgs, ... }: {
               module: ejabberd_service
               access: local
               shaper: fast
+            -
+              port: 5444
+              module: ejabberd_http
+              request_handlers:
+                "/upload": mod_http_upload
 
           ## Disabling digest-md5 SASL authentication. digest-md5 requires plain-text
           ## password storage (see auth_password_format option).
@@ -180,6 +189,7 @@ import ../make-test.nix ({ pkgs, ... }: {
             mod_client_state: {}
             mod_configure: {} # requires mod_adhoc
             ## mod_delegation: {} # for xep0356
+            mod_disco: {}
             #mod_irc:
             #  host: "irc.@HOST@"
             #  default_encoding: "utf-8"
@@ -187,9 +197,9 @@ import ../make-test.nix ({ pkgs, ... }: {
             ## mod_http_fileserver:
             ##   docroot: "/var/www"
             ##   accesslog: "/var/log/ejabberd/access.log"
-            #mod_http_upload:
-            #  thumbnail: false # otherwise needs the identify command from ImageMagick installed
-            #  put_url: "https://@HOST@:5444"
+            mod_http_upload:
+              thumbnail: false # otherwise needs the identify command from ImageMagick installed
+              put_url: "http://@HOST@:5444/upload"
             ##   # docroot: "@HOME@/upload"
             #mod_http_upload_quota:
             #  max_days: 14
@@ -248,13 +258,21 @@ import ../make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = { nodes, ... }: ''
-    $server->waitForUnit('ejabberd.service');
-    $server->succeed('su ejabberd -s $(which ejabberdctl) status|grep started') =~ /ejabberd is running/;
-    $server->succeed('su ejabberd -s $(which ejabberdctl) register azurediamond example.com hunter2');
-    $server->succeed('su ejabberd -s $(which ejabberdctl) register cthon98 example.com nothunter2');
-    $server->fail('su ejabberd -s $(which ejabberdctl) register asdf wrong.domain');
-    $client->succeed('send-message');
-    $server->succeed('su ejabberd -s $(which ejabberdctl) unregister cthon98 example.com');
-    $server->succeed('su ejabberd -s $(which ejabberdctl) unregister azurediamond example.com');
+    ejabberd_prefix = "su ejabberd -s $(which ejabberdctl) "
+
+    server.wait_for_unit("ejabberd.service")
+
+    assert "status: started" in server.succeed(ejabberd_prefix + "status")
+
+    server.succeed(
+        ejabberd_prefix + "register azurediamond example.com hunter2",
+        ejabberd_prefix + "register cthon98 example.com nothunter2",
+    )
+    server.fail(ejabberd_prefix + "register asdf wrong.domain")
+    client.succeed("send-message")
+    server.succeed(
+        ejabberd_prefix + "unregister cthon98 example.com",
+        ejabberd_prefix + "unregister azurediamond example.com",
+    )
   '';
 })

@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
-, libjpeg, udev
+{ stdenv, lib, fetchurl, pkg-config, perl
+, argp-standalone, libjpeg, udev
 , withUtils ? true
-, withGUI ? true, alsaLib, libX11, qtbase, libGLU, wrapQtAppsHook
+, withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, libX11 & QT)
@@ -12,11 +12,11 @@ let
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 in stdenv.mkDerivation rec {
   pname = "v4l-utils";
-  version = "1.16.7";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1ng0x3wj3a1ckfd00yxa4za43xms92gdp7rdag060b7p39z7m4gf";
+    hash = "sha256-Zcb76DCkTKEFxEOwJxgsGyyQU6kdHnKthJ36s4i5TjE=";
   };
 
   outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
@@ -33,20 +33,25 @@ in stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional withQt wrapQtAppsHook;
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsaLib libX11 qtbase libGLU ];
+  buildInputs = [ udev ]
+    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
   postPatch = ''
-    patchShebangs utils/cec-ctl/msg2ctl.pl
+    patchShebangs utils/
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
-    homepage = https://linuxtv.org/projects.php;
-    license = licenses.lgpl21Plus;
+    homepage = "https://linuxtv.org/projects.php";
+    changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${version}";
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;
   };

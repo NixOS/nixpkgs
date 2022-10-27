@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, wrapQtAppsHook
-, poppler, qt5, gnuplot
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, pkg-config, wrapQtAppsHook
+, poppler, gnuplot
+, qmake, qtbase, qttools
 }:
 
 # This package only builds ktikz without KDE integration because KDE4 is
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for the TikZ language";
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;
@@ -30,17 +31,22 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix version in qtikz.pro
     (fetchpatch {
       url = "https://github.com/fhackenberger/ktikz/commit/972685a406517bb85eb561f2c8e26f029eacd7db.patch";
       sha256 = "13z40rcd4m4n088v7z2ns17lnpn0z3rzp31lsamic3qdcwjwa5k8";
     })
+    # Fix missing qt5.15 QPainterPath include
+    (fetchpatch {
+      url = "https://github.com/fhackenberger/ktikz/commit/ebe4dfb72ac8a137b475ef688b9f7ac3e5c7f242.patch";
+      sha256 = "GIgPh+iUBPftHKIpZR3a0FxmLhMLuPUapF/t+bCuqMs=";
+    })
   ];
 
-  nativeBuildInputs = [ pkgconfig qt5.qttools qt5.qmake wrapQtAppsHook ];
-  QT_PLUGIN_PATH = "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
+  nativeBuildInputs = [ pkg-config qttools qmake wrapQtAppsHook ];
+  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
-  buildInputs = [ qt5.qtbase poppler ];
-  enableParallelBuilding = true;
+  buildInputs = [ qtbase poppler ];
 
   qmakeFlags = [
     "DESKTOP_INSTALL_DIR=${placeholder "out"}/share/applications"

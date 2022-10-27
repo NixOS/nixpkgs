@@ -1,26 +1,42 @@
-{ stdenv, fetchurl, perl, flex, bison }:
+{ lib, stdenv, fetchFromGitHub
+, perl, flex, bison, python3, autoconf
+}:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.018";
+  version = "4.226";
 
-  src = fetchurl {
-    url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "0ih38dd8hiwgjyc6gclx8i9jlycgdlrxzz8bicm4a6yj4p0jxmcq";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-X6Kwpcm+ugu+4gVkWfsqdCPFTESHzJ1jjCPnGqE3/vo=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl flex bison ];
+  buildInputs = [ perl ];
+  nativeBuildInputs = [ flex bison python3 autoconf ];
 
-  postInstall = ''
-    sed -i -e '3a\#!/usr/bin/env perl' -e '1,3d' $out/bin/{verilator,verilator_coverage,verilator_profcfunc}
+  # these tests need some interpreter paths patched early on...
+  # see https://github.com/NixOS/nix/issues/1205
+  doCheck = false;
+  checkTarget = "test";
+
+  preConfigure = ''
+    autoconf
   '';
 
-  meta = {
+  postPatch = ''
+    patchShebangs \
+      src/flexfix \
+      src/vlcovgen
+  '';
+
+  meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
     homepage    = "https://www.veripool.org/wiki/verilator";
-    license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    license     = with licenses; [ lgpl3Only artistic2 ];
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

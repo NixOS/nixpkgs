@@ -1,35 +1,39 @@
 { stdenv
+, lib
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , itstool
 , gettext
 , python3
 , wrapGAppsHook
 , libxml2
-, libgda
+, libgda6
+, libhandy
+, libsoup_3
+, json-glib
 , gspell
 , glib
 , gtk3
 , gtksourceview4
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "3.32.1";
+  version = "42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nmlj41wm02lbgrxdlpqpcgdab5cxsvggvqnk43v6kk86q27pcz1";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "Kme8v+ZDBhsGltiaEIR9UL81kF/zNhuYcTV9PjQi8Ts=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     itstool
     gettext
     python3
@@ -41,7 +45,10 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gtksourceview4
-    libgda
+    libgda6
+    libhandy
+    libsoup_3
+    json-glib
     gettext
     gspell
     gsettings-desktop-schemas
@@ -53,14 +60,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME translation making program";
-    homepage = https://wiki.gnome.org/Apps/Gtranslator;
+    homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

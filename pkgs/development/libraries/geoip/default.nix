@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
 , drvName ? "geoip"
 
-# in geoipDatabase, you can insert a package defining
-# "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
+  # in geoipDatabase, you can insert a package defining
+  # "${geoipDatabase}/share/GeoIP" e.g. geolite-legacy
 , geoipDatabase ? "/var/lib/geoip-databases"
 }:
 
 let
-  dataDir = if stdenv.lib.isDerivation geoipDatabase
+  dataDir =
+    if lib.isDerivation geoipDatabase
     then "${toString geoipDatabase}/share/GeoIP"
     else geoipDatabase;
+
 in
 stdenv.mkDerivation rec {
   pname = drvName;
   version = "1.6.12";
 
   src = fetchFromGitHub {
-    owner  = "maxmind";
-    repo   = "geoip-api-c";
-    rev    = "v${version}";
+    owner = "maxmind";
+    repo = "geoip-api-c";
+    rev = "v${version}";
     sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   # Cross compilation shenanigans
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
@@ -35,11 +40,13 @@ stdenv.mkDerivation rec {
     find . -name Makefile.in -exec sed -i -r 's#^pkgdatadir\s*=.+$#pkgdatadir = ${dataDir}#' {} \;
   '';
 
-  meta = with stdenv.lib; {
+  passthru = { inherit dataDir; };
+
+  meta = with lib; {
     description = "An API for GeoIP/Geolocation databases";
     maintainers = with maintainers; [ thoughtpolice raskin ];
-    license     = licenses.lgpl21;
-    platforms   = platforms.unix;
-    homepage    = "http://maxmind.com";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    homepage = "https://www.maxmind.com";
   };
 }

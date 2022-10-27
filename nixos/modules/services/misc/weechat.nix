@@ -8,23 +8,23 @@ in
 
 {
   options.services.weechat = {
-    enable = mkEnableOption "weechat";
+    enable = mkEnableOption (lib.mdDoc "weechat");
     root = mkOption {
-      description = "Weechat state directory.";
+      description = lib.mdDoc "Weechat state directory.";
       type = types.str;
       default = "/var/lib/weechat";
     };
     sessionName = mkOption {
-      description = "Name of the `screen' session for weechat.";
+      description = lib.mdDoc "Name of the `screen' session for weechat.";
       default = "weechat-screen";
       type = types.str;
     };
     binary = mkOption {
-      description = "Binary to execute (by default \${weechat}/bin/weechat).";
-      example = literalExample ''
-        ''${pkgs.weechat}/bin/weechat-headless
-      '';
+      type = types.path;
+      description = lib.mdDoc "Binary to execute.";
       default = "${pkgs.weechat}/bin/weechat";
+      defaultText = literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
+      example = literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';
     };
   };
 
@@ -51,7 +51,12 @@ in
       wants = [ "network.target" ];
     };
 
-    security.wrappers.screen.source = "${pkgs.screen}/bin/screen";
+    security.wrappers.screen =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.screen}/bin/screen";
+      };
   };
 
   meta.doc = ./weechat.xml;

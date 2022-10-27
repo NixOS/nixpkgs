@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2 }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv, tiling_wm ? false }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -6,17 +6,20 @@ let
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
+    inherit buildFHSUserEnv;
+    inherit tiling_wm;
   };
   stableVersion = {
-    version = "3.5.1.0"; # "Android Studio 3.5.1"
-    build = "191.5900203";
-    sha256Hash = "0afxlif8pkrl6m1lhiqri1qv4vf5mfm1yg6qk5rad0442hm3kz4l";
+    version = "2021.3.1.16"; # "Android Studio Dolphin (2021.3.1)"
+    sha256Hash = "GnJbWFeG9DuUQzbK9wM2BEbj9LXm4jQFf/Eh5Q75HZo=";
   };
-  betaVersion = latestVersion;
+  betaVersion = {
+    version = "2022.1.1.12"; # "Android Studio Electric Eel (2022.1.1) Beta 2"
+    sha256Hash = "8iSFPH0PTQkzV1t8bEq7CBtOU8pzdnD/PrpVcgPnO6Q=";
+  };
   latestVersion = { # canary & dev
-    version = "3.6.0.13"; # "Android Studio 3.6 Beta 1"
-    build = "192.5916306";
-    sha256Hash = "0kvz3mgpfb3wqr1pw9847d5syswlzls3b4nilzgk6w127k2zmkfy";
+    version = "2022.2.1.2"; # "Android Studio Flamingo (2022.2.1) Canary 2"
+    sha256Hash = "hlHlgyl9If2LH4aExpElx0rqmWeoFX+qx4w6RRb5e8U=";
   };
 in {
   # Attributes are named by their corresponding release channels

@@ -1,11 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , zetup
 , six
 , moretools
-, pathpy
-, pytest
+, path
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,31 +16,22 @@ buildPythonPackage rec {
   src = fetchPypi {
     extension = "zip";
     inherit pname version;
-    sha256 = "64934c68cfcdb75ed4a1ccadcfd5d2a46bf1b8e8e81dde89ef0f042c401e94f1";
+    sha256 = "1wcl3r02q10gxy4xw7g8x2wg2sx4sbawzbfcl7a5xdydrxl4r4v4";
   };
 
-  buildInputs = [
-    zetup
-  ];
+  buildInputs = [ zetup ];
 
-  propagatedBuildInputs = [
-    six
-    moretools
-    pathpy
-  ];
+  propagatedBuildInputs = [ six moretools path ];
 
-  checkInputs = [
-    pytest
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest test
-  '';
+  pythonImportsCheck = [ "modeled" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Universal data modeling for Python";
-    homepage = https://bitbucket.org/userzimmermann/python-modeled;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/modeled/modeled";
+    license = licenses.lgpl3Only;
     maintainers = [ maintainers.costrouc ];
   };
 }

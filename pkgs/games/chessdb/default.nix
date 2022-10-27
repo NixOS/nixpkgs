@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, tcl, tk, libX11, makeWrapper }:
+{ lib, stdenv, fetchurl, tcl, tk, libX11, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "chessdb-3.6.19-beta-1";
-  
+stdenv.mkDerivation rec {
+  pname = "chessdb";
+  version = "3.6.19-beta-1";
+
   src = fetchurl {
-    url = mirror://sourceforge/chessdb/ChessDB-3.6.19-beta-1.tar.gz;
+    url = "mirror://sourceforge/chessdb/ChessDB-${version}.tar.gz";
     sha256 = "0brc3wln3bxp979iqj2w1zxpfd0pch8zzazhdmwf7acww4hrsz62";
   };
 
-  buildInputs = [ tcl tk libX11 makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ tcl tk libX11 ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"
@@ -23,8 +25,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://chessdb.sourceforge.net/;
+    homepage = "http://chessdb.sourceforge.net/";
     description = "A free chess database";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

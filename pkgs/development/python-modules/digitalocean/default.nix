@@ -1,23 +1,51 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, jsonpickle }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, jsonpickle
+, mock
+, pytest
+, pytestCheckHook
+, requests
+, responses
+}:
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
-  version = "1.13.2";
+  version = "1.17.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0h4drpdsmk0b3rlvg6q6cz11k23w0swj1iddk7xdcw4m7r7c52kw";
+  src = fetchFromGitHub {
+    owner = "koalalorenzo";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1c50ka4y712rr551gq3kdfw7fgfxr4w837sww6yy683yz7m1d1h8";
   };
 
-  propagatedBuildInputs = [ requests jsonpickle ];
+  propagatedBuildInputs = [
+    jsonpickle
+    requests
+  ];
 
-  # Package doesn't distribute tests.
-  doCheck = false;
+  dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
-    description = "digitalocean.com API to manage Droplets and Images";
-    homepage = https://pypi.python.org/pypi/python-digitalocean;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ teh ];
+  checkInputs = [
+    pytest
+    pytestCheckHook
+    responses
+  ] ++ lib.optionals (!isPy3k) [
+    mock
+  ];
+
+  preCheck = ''
+    cd digitalocean
+  '';
+
+  pythonImportsCheck = [ "digitalocean" ];
+
+  meta = with lib; {
+    description = "Python API to manage Digital Ocean Droplets and Images";
+    homepage = "https://github.com/koalalorenzo/python-digitalocean";
+    license = with licenses; [ lgpl3Only ];
+    maintainers = with maintainers; [ kiwi teh ];
   };
 }

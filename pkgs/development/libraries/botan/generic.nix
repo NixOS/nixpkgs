@@ -1,9 +1,13 @@
-{ stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
+, sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
+, extraPatches ? [ ]
 , postPatch ? null
-, darwin
+, knownVulnerabilities ? [ ]
+, CoreServices
+, Security
 , ...
 }:
 
@@ -12,20 +16,21 @@ stdenv.mkDerivation rec {
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {
-    name = "Botan-${version}.tgz";
+    name = "Botan-${version}.${sourceExtension}";
     urls = [
-       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz"
-       "http://botan.randombit.net/releases/Botan-${version}.tgz"
+       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
+       "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
     ];
     inherit sha256;
   };
+  patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ]
-             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = [ python3 bzip2 zlib gmp boost ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
   '';
 
   enableParallelBuilding = true;
@@ -41,12 +46,12 @@ stdenv.mkDerivation rec {
     ln -s botan-*.pc botan.pc || true
   '';
 
-  meta = with stdenv.lib; {
-    inherit version;
+  meta = with lib; {
     description = "Cryptographic algorithms library";
     maintainers = with maintainers; [ raskin ];
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
 }

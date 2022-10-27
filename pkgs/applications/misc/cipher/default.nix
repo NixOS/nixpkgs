@@ -1,27 +1,27 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , gettext
 , glib
 , gtk3
 , libgee
-, xdg_utils
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cipher";
-  version = "2.0.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "arshubham";
     repo = "cipher";
     rev = version;
-    sha256 = "0n5aigcyxnl4k52mdmavbxx6afc1ixymn3k3l2ryhyzi5q31x0x3";
+    sha256 = "00azc5ck17zkdypfza6x1viknwhimd9fqgk2ybff3mx6aphmla7a";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -42,17 +42,24 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-  	substituteInPlace data/com.github.arshubham.cipher.desktop.in \
-  		--replace xdg-open ${xdg_utils}/bin/xdg-open
-    chmod +x post_install.py
-    patchShebangs post_install.py
+    substituteInPlace data/com.github.arshubham.cipher.desktop.in \
+      --replace "gio" "${glib.bin}/bin/gio"
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "A simple application for encoding and decoding text, designed for elementary OS";
     homepage = "https://github.com/arshubham/cipher";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.arshubham.cipher";
   };
 }

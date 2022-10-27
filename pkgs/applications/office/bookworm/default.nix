@@ -1,38 +1,63 @@
-{ stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkgconfig, libxml2, meson, ninja, gtk3, gnome3, glib, webkitgtk
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, coreutils
+, curl
+, desktop-file-utils
+, glib
+, gnugrep
+, gobject-introspection
+, gtk3
+, html2text
+, libgee
+, libxml2
+, meson
+, ninja
+, pantheon
+, pkg-config
+, poppler
+, poppler_utils
+, python3
+, sqlite
+, unar
+, unzip
+, vala
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "unstable-2018-11-19";
+  version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = "4c3061784ff42151cac77d12bf2a28bf831fdfc5";
-    sha256 = "0yrqxa60xlvz249kx966z5krx8i7h17ac0hjgq9p8f0irzy5yp0n";
+    rev = "f3df858ce748a6bbc43f03a6e261ff76a6d7d303";
+    hash = "sha256-mLyJfblF5WnWBV3rX1ZRupccou4t5mBpo3W7+ECNMVI=";
   };
 
   nativeBuildInputs = [
-    bash
-    gobject-introspection
-    libxml2
     meson
     ninja
-    pkgconfig
-    python3
+    pkg-config
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
-    pantheon.granite
+    appstream
+    desktop-file-utils
     glib
-    gnome3.libgee
+    gobject-introspection
     gtk3
     html2text
+    libgee
+    libxml2
+    pantheon.granite
     poppler
-    python2
+    python3
     sqlite
     webkitgtk
   ];
@@ -45,7 +70,7 @@ stdenv.mkDerivation rec {
   # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
       --prefix PATH : $out/bin
     )
   '';
@@ -55,13 +80,13 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-   meta = with stdenv.lib; {
-     description = "A simple, focused eBook reader";
-     longDescription = ''
-       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
-     '';
-     homepage = https://babluboy.github.io/bookworm/;
-     license = licenses.gpl3Plus;
-     platforms = platforms.linux;
-   };
- }
+  meta = with lib; {
+    description = "A simple, focused eBook reader";
+    longDescription = ''
+      Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
+    '';
+    homepage = "https://babluboy.github.io/bookworm/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+  };
+}

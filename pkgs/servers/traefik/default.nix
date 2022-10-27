@@ -1,39 +1,39 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
+{ lib, fetchzip, buildGoModule, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "traefik";
-  version = "1.7.14";
+  version = "2.9.1";
 
-  goPackagePath = "github.com/containous/traefik";
-
-  src = fetchFromGitHub {
-    owner = "containous";
-    repo = "traefik";
-    rev = "v${version}";
-    sha256 = "1j3p09j8rpdkp8v4d4mz224ddakkvhzchvccm9qryrqc2fq4022v";
+  # Archive with static assets for webui
+  src = fetchzip {
+    url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
+    sha256 = "sha256-wo1V1anBlIHtMf5ajNs5rLR2uyolCFJTHFIzqJJjwug=";
+    stripRoot = false;
   };
 
-  buildInputs = [ go-bindata bash ];
+  vendorSha256 = "sha256-nAWWnH2ZN+icFPBRaIEATug1jdtRhuiT7CZlYCfzDaY=";
 
-  buildPhase = ''
-    runHook preBuild
-    (
-      cd go/src/github.com/containous/traefik
-      bash ./script/make.sh generate
+  subPackages = [ "cmd/traefik" ];
 
-      CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
-      go build -ldflags "\
-        -X github.com/containous/traefik/version.Version=${version} \
-        -X github.com/containous/traefik/version.Codename=$CODENAME \
-      " -a -o $bin/bin/traefik ./cmd/traefik
-    )
-    runHook postBuild
+  preBuild = ''
+    go generate
+
+    CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+
+    buildFlagsArray+=("-ldflags= -s -w \
+      -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Version=${version} \
+      -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+  doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) traefik; };
+
+  meta = with lib; {
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
+    changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hamhut1066 vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

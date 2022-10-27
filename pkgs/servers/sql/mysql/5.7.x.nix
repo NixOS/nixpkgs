@@ -1,33 +1,40 @@
-{ stdenv, fetchurl, cmake, bison, pkgconfig
+{ lib, stdenv, fetchurl, cmake, bison, pkg-config, nukeReferences
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
-, cctools, CoreServices, developer_cmds }:
+, cctools, CoreServices, developer_cmds
+, libtirpc, rpcsvc-proto, nixosTests
+}:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "5.7.27";
+  version = "5.7.39";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${pname}-${version}.tar.gz";
-    sha256 = "1fhv16zr46pxm1j8vb8x8mh3nwzglg01arz8gnazbmjqldr5idpq";
+    sha256 = "sha256-ERw6ypGJfkUwOds5GkdSZeAg/ZIcuXMHwACEqI5NYQQ=";
   };
 
-  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+  patches = [
+    ./mysql-5.7-add-protobuf-3.8+-support.patch
+  ];
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ cmake bison pkgconfig ];
+  nativeBuildInputs = [ bison cmake pkg-config nukeReferences ]
+    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
-     ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
+     ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ]
+     ++ lib.optionals stdenv.isLinux [ libtirpc ];
 
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"
@@ -56,12 +63,13 @@ self = stdenv.mkDerivation rec {
   ];
 
   CXXFLAGS = "-fpermissive -std=c++11";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   prePatch = ''
     sed -i -e "s|/usr/bin/libtool|libtool|" cmake/merge_archives.cmake.in
   '';
   postInstall = ''
+    nuke-refs "$out/share/mysql/docs/INFO_BIN"
     moveToOutput "lib/*.a" $static
     ln -s libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libmysqlclient_r${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
@@ -71,9 +79,10 @@ self = stdenv.mkDerivation rec {
     connector-c = self;
     server = self;
     mysqlVersion = "5.7";
+    tests = nixosTests.mysql.mysql57;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mysql.com/";
     description = "The world's most popular open source database";
     platforms = platforms.unix;

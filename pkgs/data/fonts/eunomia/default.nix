@@ -18,8 +18,8 @@ fetchzip {
   '';
 
   meta = with lib; {
-    homepage = http://dotcolon.net/font/eunomia/;
-    description = "A futuristic decorative font.";
+    homepage = "http://dotcolon.net/font/eunomia/";
+    description = "A futuristic decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
     license = licenses.ofl;

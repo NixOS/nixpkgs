@@ -1,34 +1,37 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, autoreconfHook
-, gmp, python, iptables, ldns, unbound, openssl, pcsclite, glib
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, autoreconfHook, perl, gperf, bison, flex
+, gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
 , curl
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 , darwin
+, nixosTests
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
 # strongswan curl plugin may break.
 # See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.8.0"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "5.9.8"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  src = fetchurl {
-    url = "https://download.strongswan.org/${pname}-${version}.tar.bz2";
-    sha256 = "0cq9m86ydd2i0awxkv4a256f4926p2f9pzlisyskl9fngl6f3c8m";
+  src = fetchFromGitHub {
+    owner = "strongswan";
+    repo = "strongswan";
+    rev = version;
+    sha256 = "sha256-RRvMQhDVoXF3Uok/Huq20RhqSsMnAsXHKOWfrXypDOk=";
   };
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
   buildInputs =
-    [ curl gmp python ldns unbound openssl pcsclite ]
+    [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
@@ -38,12 +41,6 @@ stdenv.mkDerivation rec {
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
-      sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
-    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -105,9 +102,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
 
+  passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
+
   meta = {
     description = "OpenSource IPsec-based VPN Solution";
-    homepage = https://www.strongswan.org;
+    homepage = "https://www.strongswan.org";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

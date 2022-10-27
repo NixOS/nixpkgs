@@ -1,53 +1,113 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gnupg, p11-kit, glib
-, libgcrypt, libtasn1, dbus-glib, gtk3, pango, gdk-pixbuf, atk
-, gobject-introspection, makeWrapper, libxslt, vala, gnome3
-, python3 }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, gnupg
+, p11-kit
+, glib
+, libgcrypt
+, libtasn1
+, gtk3
+, pango
+, libsecret
+, openssh
+, systemd
+, gobject-introspection
+, wrapGAppsHook
+, gi-docgen
+, vala
+, gnome
+, python3
+, shared-mime-info
+}:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "3.33.4";
+  version = "3.41.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hf06p4qfyywnb6334ysnr6aqxik3srb37glclvr4yhb3wzrjqnm";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "u3Eoo8L+u/7pwDuQ131JjQzrI3sHiYAtYBhcccS+ok8=";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = pname; };
-  };
-
-  postPatch = ''
-    patchShebangs .
-  '';
-
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ pkgconfig gettext gobject-introspection libxslt makeWrapper vala ];
-
-  buildInputs = let
-    gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome
-  in [
-    gpg libgcrypt libtasn1 dbus-glib pango gdk-pixbuf atk
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    python3
+    ninja
+    gettext
+    gobject-introspection
+    gi-docgen
+    wrapGAppsHook
+    vala
+    shared-mime-info
+    gnupg
+    openssh
   ];
 
-  propagatedBuildInputs = [ glib gtk3 p11-kit ];
+  buildInputs = [
+    libgcrypt
+    libtasn1
+    pango
+    libsecret
+    openssh
+  ] ++ lib.optionals stdenv.isLinux [
+    systemd
+  ];
 
-  checkInputs = [ python3 ];
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    p11-kit
+  ];
+
+  checkInputs = [
+    python3
+  ];
+
+  mesonFlags = [
+    # We are still using ssh-agent from gnome-keyring.
+    # https://github.com/NixOS/nixpkgs/issues/140824
+    "-Dssh_agent=false"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd=disabled"
+  ];
+
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
-  #enableParallelBuilding = true; issues on hydra
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
-  preFixup = ''
-    wrapProgram "$out/bin/gcr-viewer" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  postPatch = ''
+    patchShebangs gcr/fixtures/
+
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      freeze = true;
+    };
+  };
+
+  meta = with lib; {
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
-    homepage    = https://gitlab.gnome.org/GNOME/gcr;
-    license     = licenses.gpl2;
+    homepage = "https://gitlab.gnome.org/GNOME/gcr";
+    license = licenses.lgpl2Plus;
 
     longDescription = ''
       GCR is a library for displaying certificates, and crypto UI, accessing

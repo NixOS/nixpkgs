@@ -7,6 +7,10 @@
 with lib;
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "ec2" "metadata" ] "")
+  ];
+
   config = {
 
     systemd.services.apply-ec2-data =
@@ -15,7 +19,7 @@ with lib;
         wantedBy = [ "multi-user.target" "sshd.service" ];
         before = [ "sshd.service" ];
 
-        path = [ pkgs.iproute ];
+        path = [ pkgs.iproute2 ];
 
         script =
           ''

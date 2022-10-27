@@ -3,8 +3,9 @@
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExample optionalString types;
+  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
+  inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
   group = "zabbix-agent";
@@ -14,49 +15,45 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_agent.conf" ''
-    LogType = console
-    Server = ${cfg.server}
-    ListenIP = ${cfg.listen.ip}
-    ListenPort = ${toString cfg.listen.port}
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
-    ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ] "Use services.zabbixAgent.settings instead.")
+  ];
+
   # interface
 
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption "the Zabbix Agent";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
 
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.agent;
-        defaultText = "pkgs.zabbix.agent";
-        description = "The Zabbix package to use.";
+        defaultText = literalExpression "pkgs.zabbix.agent";
+        description = lib.mdDoc "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools ];
-        defaultText = "[ nettools ]";
-        example = "[ nettools mysql ]";
-        description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+        defaultText = literalExpression "with pkgs; [ nettools ]";
+        example = literalExpression "with pkgs; [ nettools mysql ]";
+        description = lib.mdDoc ''
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
 
       modules = mkOption {
         type = types.attrsOf types.package;
-        description = "A set of modules to load.";
+        description = lib.mdDoc "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -74,7 +71,7 @@ in
 
       server = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
@@ -83,7 +80,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = ''
+          description = lib.mdDoc ''
             List of comma delimited IP addresses that the agent should listen on.
           '';
         };
@@ -91,7 +88,7 @@ in
         port = mkOption {
           type = types.port;
           default = 10050;
-          description = ''
+          description = lib.mdDoc ''
             Agent will listen on this port for connections from the server.
           '';
         };
@@ -100,20 +97,23 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the Zabbix Agent.
         '';
       };
 
-      # TODO: for bonus points migrate this to https://github.com/NixOS/rfcs/pull/42
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
-        description = ''
-          Configuration that is injected verbatim into the configuration file. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
+        default = {};
+        description = lib.mdDoc ''
+          Zabbix Agent configuration. Refer to
+          <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd>
           for details on supported values.
         '';
+        example = {
+          Hostname = "example.org";
+          DebugLevel = 4;
+        };
       };
 
     };
@@ -124,6 +124,22 @@ in
 
   config = mkIf cfg.enable {
 
+    services.zabbixAgent.settings = mkMerge [
+      {
+        LogType = "console";
+        Server = cfg.server;
+        ListenPort = cfg.listen.port;
+      }
+      (mkIf (cfg.modules != {}) {
+        LoadModule = builtins.attrNames cfg.modules;
+        LoadModulePath = "${moduleEnv}/lib";
+      })
+
+      # the default value for "ListenIP" is 0.0.0.0 but zabbix agent 2 cannot accept configuration files which
+      # explicitly set "ListenIP" to the default value...
+      (mkIf (cfg.listen.ip != "0.0.0.0") { ListenIP = cfg.listen.ip; })
+    ];
+
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];
     };
@@ -131,6 +147,7 @@ in
     users.users.${user} = {
       description = "Zabbix Agent daemon user";
       inherit group;
+      isSystemUser = true;
     };
 
     users.groups.${group} = { };
@@ -140,7 +157,10 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = [ "/run/wrappers" ] ++ cfg.extraPackages;
+      # https://www.zabbix.com/documentation/current/manual/config/items/userparameters
+      # > User parameters are commands executed by Zabbix agent.
+      # > /bin/sh is used as a command line interpreter under UNIX operating systems.
+      path = with pkgs; [ bash "/run/wrappers" ] ++ cfg.extraPackages;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";

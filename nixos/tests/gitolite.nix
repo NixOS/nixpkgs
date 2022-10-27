@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...}:
+import ./make-test-python.nix ({ pkgs, ...}:
 
 let
   adminPrivateKey = pkgs.writeText "id_ed25519" ''
@@ -43,7 +43,7 @@ let
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJZNonUP1ePHLrvn0W9D2hdN6zWWZYFyJc+QR6pOKQEw bob@client
   '';
 
-  gitoliteAdminConfSnippet = ''
+  gitoliteAdminConfSnippet = pkgs.writeText "gitolite-admin-conf-snippet" ''
     repo alice-project
         RW+     =   alice
   '';
@@ -51,7 +51,7 @@ in
 {
   name = "gitolite";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bjornfor ];
   };
 
@@ -85,55 +85,54 @@ in
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    subtest "can setup ssh keys on system", sub {
-      $client->mustSucceed("mkdir -p ~root/.ssh");
-      $client->mustSucceed("cp ${adminPrivateKey} ~root/.ssh/id_ed25519");
-      $client->mustSucceed("chmod 600 ~root/.ssh/id_ed25519");
+    with subtest("can setup ssh keys on system"):
+        client.succeed(
+            "mkdir -p ~root/.ssh",
+            "cp ${adminPrivateKey} ~root/.ssh/id_ed25519",
+            "chmod 600 ~root/.ssh/id_ed25519",
+        )
+        client.succeed(
+            "sudo -u alice mkdir -p ~alice/.ssh",
+            "sudo -u alice cp ${alicePrivateKey} ~alice/.ssh/id_ed25519",
+            "sudo -u alice chmod 600 ~alice/.ssh/id_ed25519",
+        )
+        client.succeed(
+            "sudo -u bob mkdir -p ~bob/.ssh",
+            "sudo -u bob cp ${bobPrivateKey} ~bob/.ssh/id_ed25519",
+            "sudo -u bob chmod 600 ~bob/.ssh/id_ed25519",
+        )
 
-      $client->mustSucceed("sudo -u alice mkdir -p ~alice/.ssh");
-      $client->mustSucceed("sudo -u alice cp ${alicePrivateKey} ~alice/.ssh/id_ed25519");
-      $client->mustSucceed("sudo -u alice chmod 600 ~alice/.ssh/id_ed25519");
+    with subtest("gitolite server starts"):
+        server.wait_for_unit("gitolite-init.service")
+        server.wait_for_unit("sshd.service")
+        client.succeed("ssh -n gitolite@server info")
 
-      $client->mustSucceed("sudo -u bob mkdir -p ~bob/.ssh");
-      $client->mustSucceed("sudo -u bob cp ${bobPrivateKey} ~bob/.ssh/id_ed25519");
-      $client->mustSucceed("sudo -u bob chmod 600 ~bob/.ssh/id_ed25519");
-    };
+    with subtest("admin can clone and configure gitolite-admin.git"):
+        client.succeed(
+            "git clone gitolite@server:gitolite-admin.git",
+            "git config --global user.name 'System Administrator'",
+            "git config --global user.email root\@domain.example",
+            "cp ${alicePublicKey} gitolite-admin/keydir/alice.pub",
+            "cp ${bobPublicKey} gitolite-admin/keydir/bob.pub",
+            "(cd gitolite-admin && git add . && git commit -m 'Add keys for alice, bob' && git push)",
+            "cat ${gitoliteAdminConfSnippet} >> gitolite-admin/conf/gitolite.conf",
+            "(cd gitolite-admin && git add . && git commit -m 'Add repo for alice' && git push)",
+        )
 
-    subtest "gitolite server starts", sub {
-      $server->waitForUnit("gitolite-init.service");
-      $server->waitForUnit("sshd.service");
-      $client->mustSucceed('ssh gitolite@server info');
-    };
+    with subtest("non-admins cannot clone gitolite-admin.git"):
+        client.fail("sudo -i -u alice git clone gitolite@server:gitolite-admin.git")
+        client.fail("sudo -i -u bob git clone gitolite@server:gitolite-admin.git")
 
-    subtest "admin can clone and configure gitolite-admin.git", sub {
-      $client->mustSucceed('git clone gitolite@server:gitolite-admin.git');
-      $client->mustSucceed("git config --global user.name 'System Administrator'");
-      $client->mustSucceed("git config --global user.email root\@domain.example");
-      $client->mustSucceed("cp ${alicePublicKey} gitolite-admin/keydir/alice.pub");
-      $client->mustSucceed("cp ${bobPublicKey} gitolite-admin/keydir/bob.pub");
-      $client->mustSucceed('(cd gitolite-admin && git add . && git commit -m "Add keys for alice, bob" && git push)');
-      $client->mustSucceed("printf '${gitoliteAdminConfSnippet}' >> gitolite-admin/conf/gitolite.conf");
-      $client->mustSucceed('(cd gitolite-admin && git add . && git commit -m "Add repo for alice" && git push)');
-    };
+    with subtest("non-admins can clone testing.git"):
+        client.succeed("sudo -i -u alice git clone gitolite@server:testing.git")
+        client.succeed("sudo -i -u bob git clone gitolite@server:testing.git")
 
-    subtest "non-admins cannot clone gitolite-admin.git", sub {
-      $client->mustFail('sudo -i -u alice git clone gitolite@server:gitolite-admin.git');
-      $client->mustFail('sudo -i -u bob git clone gitolite@server:gitolite-admin.git');
-    };
+    with subtest("alice can clone alice-project.git"):
+        client.succeed("sudo -i -u alice git clone gitolite@server:alice-project.git")
 
-    subtest "non-admins can clone testing.git", sub {
-      $client->mustSucceed('sudo -i -u alice git clone gitolite@server:testing.git');
-      $client->mustSucceed('sudo -i -u bob git clone gitolite@server:testing.git');
-    };
-
-    subtest "alice can clone alice-project.git", sub {
-      $client->mustSucceed('sudo -i -u alice git clone gitolite@server:alice-project.git');
-    };
-
-    subtest "bob cannot clone alice-project.git", sub {
-      $client->mustFail('sudo -i -u bob git clone gitolite@server:alice-project.git');
-    };
+    with subtest("bob cannot clone alice-project.git"):
+        client.fail("sudo -i -u bob git clone gitolite@server:alice-project.git")
   '';
 })

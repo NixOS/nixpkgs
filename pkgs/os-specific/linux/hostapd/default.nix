@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ lib, stdenv, fetchurl, pkg-config, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
-  version = "2.8";
+  version = "2.10";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "1c74rrazkhy4lr7pwgwa2igzca7h9l4brrs7672kiv7fwqmm57wj";
+    sha256 = "sha256-IG58eZtnhXLC49EgMCOHhLxKn4IyOwFWtMlGbxSYkV0=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl openssl sqlite ];
 
   patches = [
     (fetchurl {
       # Note: fetchurl seems to be unhappy with openwrt git
       # server's URLs containing semicolons. Using the github mirror instead.
-      url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
-      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";})
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/eefed841b05c3cd4c65a78b50ce0934d879e6acf/package/network/services/hostapd/patches/300-noscan.patch";
+      sha256 = "08p5frxhpq1rp2nczkscapwwl8g9nc4fazhjpxic5bcbssc3sb00";
+    })
   ];
 
   outputs = [ "out" "man" ];
@@ -49,7 +50,9 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
-  '' + stdenv.lib.optionalString (sqlite != null) ''
+    CONFIG_GETRANDOM=y
+    CONFIG_SAE=y
+  '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
@@ -68,12 +71,11 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi;
-    repositories.git = git://w1.fi/hostap.git;
+  meta = with lib; {
+    homepage = "https://hostap.epitest.fi";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom ninjatrappeur ];
+    maintainers = with maintainers; [ ninjatrappeur hexa ];
     platforms = platforms.linux;
   };
 }

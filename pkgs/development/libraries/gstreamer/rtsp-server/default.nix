@@ -1,38 +1,67 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
-, gettext, gobject-introspection
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, gettext
+, gobject-introspection
 , gst-plugins-base
 , gst-plugins-bad
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.16.0";
-
-  meta = with stdenv.lib; {
-    description = "Gstreamer RTSP server";
-    homepage    = "https://gstreamer.freedesktop.org";
-    longDescription = ''
-      a library on top of GStreamer for building an RTSP server.
-    '';
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bkchr ];
-  };
+  version = "1.20.3";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-rtsp-server/${pname}-${version}.tar.xz";
-    sha256 = "069zy159izy50blci9fli1i2r8jh91qkmgrz1n0xqciy3bn9x3hr";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-7kAnGL6bEn8OXmbKTBtPQuSSbsk7owe3zMpdxsyXlMo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
 
-  nativeBuildInputs = [ meson ninja gettext gobject-introspection pkgconfig ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gettext
+    gobject-introspection
+    pkg-config
+    python3
 
-  buildInputs = [ gst-plugins-base gst-plugins-bad ];
+    # documentation
+    # TODO add hotdoc here
+  ];
+
+  buildInputs = [
+    gst-plugins-base
+    gst-plugins-bad
+    gobject-introspection
+  ];
 
   mesonFlags = [
-    # Enables all features, so that we know when new dependencies are necessary.
-    "-Dauto_features=enabled"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
+
+  meta = with lib; {
+    description = "GStreamer RTSP server";
+    homepage = "https://gstreamer.freedesktop.org";
+    longDescription = ''
+      A library on top of GStreamer for building an RTSP server.
+    '';
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bkchr ];
+  };
 }

@@ -1,25 +1,17 @@
-{stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
-let
-  s = # Generated upstream information
-  {
-    baseName="fbterm";
-    version="1.7.0";
-    name="fbterm-1.7.0";
-    hash="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-1.7.0.tar.gz";
-    sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
-  };
-  buildInputs = [gpm freetype fontconfig ncurses]
-    ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) libx86;
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
+{ stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
+
+stdenv.mkDerivation rec {
+  version = "1.7.0";
+  pname = "fbterm";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-${version}.tar.gz";
+    sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  inherit buildInputs;
+  nativeBuildInputs = [ pkg-config ncurses ];
+  buildInputs = [ gpm freetype fontconfig ncurses ]
+    ++ lib.optional stdenv.hostPlatform.isx86 libx86;
 
   preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
@@ -31,6 +23,7 @@ stdenv.mkDerivation {
   preBuild = ''
     mkdir -p "$out/share/terminfo"
     tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
+    makeFlagsArray+=("AR=$AR")
   '';
 
   patches = [
@@ -47,13 +40,13 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
       sha256 = "1mjszji0jgs2jsagjp671fv0d1983wmxv009ff1jfhi9pbay6jd0";
     })
+    ./select.patch
   ];
 
-  meta = with stdenv.lib; {
-    inherit (s) version;
+  meta = with lib; {
     description = "Framebuffer terminal emulator";
-    homepage = https://code.google.com/archive/p/fbterm/;
-    maintainers = [ maintainers.raskin ];
+    homepage = "https://code.google.com/archive/p/fbterm/";
+    maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

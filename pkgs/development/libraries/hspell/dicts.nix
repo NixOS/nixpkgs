@@ -1,41 +1,37 @@
 { stdenv, hspell }:
 
 let
-  dict = a: stdenv.mkDerivation ({
-    inherit (hspell) src patchPhase nativeBuildInputs;
+  dict = variant: a: stdenv.mkDerivation ({
+    inherit (hspell) version src patchPhase nativeBuildInputs;
+    buildFlags = [ variant ];
+
     meta = hspell.meta // {
       broken = true;
-      description = "${a.buildFlags} Hebrew dictionary";
+      description = "${variant} Hebrew dictionary";
     } // (if a ? meta then a.meta else {});
   } // (removeAttrs a ["meta"]));
 in
 {
   recurseForDerivations = true;
 
-  aspell = dict {
-    name = "aspell-dict-he-${hspell.version}";
-
-    buildFlags = "aspell";
+  aspell = dict "aspell" {
+    pname = "aspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib/aspell
       cp -v he_affix.dat he.wl $out/lib/aspell'';
   };
 
-  myspell = dict {
-    name = "myspell-dict-he-${hspell.version}";
-
-    buildFlags = "myspell";
+  myspell = dict "myspell" {
+    pname = "myspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib/myspell
       cp -v he.dic he.aff $out/lib/myspell'';
   };
 
-  hunspell = dict {
-    name = "hunspell-dict-he-${hspell.version}";
-
-    buildFlags = "hunspell";
+  hunspell = dict "hunspell" {
+    pname = "hunspell-dict-he";
 
     installPhase = ''
       mkdir -p $out/lib

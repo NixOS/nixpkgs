@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, doxygen, graphviz
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, git, doxygen, graphviz
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium
 }:
 
 let
-  version = "0.12.9.0";
+  version = "0.14.2.2";
 in
 stdenv.mkDerivation {
   pname = "aeon";
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
     repo = "aeon";
     rev = "v${version}-aeon";
     fetchSubmodules = true;
-    sha256 = "194nxf8c8ihkmdsxyhkhrxc2xiinipifk0ng1rmxiiyr2gjgxzga";
+    sha256 = "sha256-2MptLS12CUm9eUKm+V+yYpbLVwNyZeZ5HvAFyjEc4R4=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig git doxygen graphviz ];
+  nativeBuildInputs = [ cmake pkg-config git doxygen graphviz ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
-    homepage = http://www.aeon.cash/;
+    homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;
     maintainers = [ maintainers.aij ];
     platforms = [ "x86_64-linux" ];

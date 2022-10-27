@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, ncurses }:
 
-let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
+let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.93.2";
+  version = "4.95.0";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
@@ -13,19 +13,35 @@ stdenv.mkDerivation rec {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "1gd6r0nv8xz76pmvk52dgmfl0xjvkxl0s51b4jk4a0lphw3393yv";
+    sha256 = "sha256-HgU7/HxLdUOfLU2E/dpusko6gBOoEKeWPJIFbBQGzFU=";
   };
 
-  patches = [ ./no-build-info.patch ];
+  patches = [
+    ./no-build-info.patch
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/lsof-org/lsof/pull/226
+    #   https://github.com/lsof-org/lsof/pull/233
+    (fetchpatch {
+      name = "add-extern.patch";
+      url = "https://github.com/lsof-org/lsof/commit/180ffa29b0544f77cabbc54d7f77d50d33dd27d7.patch";
+      sha256 = "sha256-zzcN9HrFYMTBeEekeAwi2RIcVukymgaqtpvFIBV6njU=";
+    })
+    (fetchpatch {
+      name = "add-declaration.patch";
+      url = "https://github.com/lsof-org/lsof/commit/8e47e1491636e8cf41baf834554391be45177b00.patch";
+      sha256 = "sha256-kwkDQp7VApLenOLTPMY24Me+/xUhD56skHWRd4ZB1I4=";
+    })
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
+  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
@@ -43,7 +59,7 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "A tool to list open files";
     longDescription = ''

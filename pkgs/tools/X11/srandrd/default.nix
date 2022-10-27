@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libX11
 , libXrandr
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXrandr libXinerama ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jceb/srandrd";
     description = "Simple randr daemon";
     license = licenses.mit;

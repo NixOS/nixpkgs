@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
+, gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
+, extraPatches ? []
 }:
 
 let
@@ -15,24 +17,18 @@ stdenv.mkDerivation rec {
     url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
+  nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
   buildInputs =
-    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
+    [ glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
     ]
-    ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
-
-  propagatedBuildInputs = [glib];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
-
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
+    ++ (lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
     "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so"
   ]
-  ++ stdenv.lib.optionals withLLVM [
+  ++ lib.optionals withLLVM [
     "--enable-llvm"
     "--with-llvm=${llvm}"
   ];
@@ -44,14 +40,14 @@ stdenv.mkDerivation rec {
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
-  patches = [ ./pkgconfig-before-gac.patch ];
+  patches = [ ./pkgconfig-before-gac.patch ] ++ extraPatches;
 
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
     substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
-  '' + stdenv.lib.optionalString withLLVM ''
+  '' + lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
@@ -79,8 +75,10 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = with stdenv.lib; {
-    homepage = https://mono-project.com/;
+  meta = with lib; {
+    # Per nixpkgs#151720 the build failures for aarch64-darwin are fixed since 6.12.0.129
+    broken = stdenv.isDarwin && stdenv.isAarch64 && lib.versionOlder version "6.12.0.129";
+    homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];

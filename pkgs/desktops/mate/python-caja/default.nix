@@ -1,17 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, python3Packages }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, mate
+, python3Packages
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
-  version = "1.22.1";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07hkvs4a6anrvh28zjsrj8anbcz32p19hslhq66yhcvh0hh4kvqk";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "181zcs1pi3762chm4xraqs8048jm7jzwnvgwla1v3z2nqzpp3xr1";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     python3Packages.wrapPython
   ];
 
@@ -24,11 +33,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
     description = "Python binding for Caja components";
-    homepage = https://github.com/mate-desktop/python-caja;
+    homepage = "https://github.com/mate-desktop/python-caja";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

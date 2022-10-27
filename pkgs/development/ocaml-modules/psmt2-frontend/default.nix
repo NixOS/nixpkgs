@@ -1,35 +1,29 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ocaml, findlib, menhir }:
+{ lib, fetchFromGitHub, buildDunePackage, menhir }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "psmt2-frontend is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "0.2";
-  name = "ocaml${ocaml.version}-psmt2-frontend-${version}";
+buildDunePackage rec {
+  version = "0.4.0";
+  pname = "psmt2-frontend";
 
   src = fetchFromGitHub {
-    owner = "Coquera";
-    repo = "psmt2-frontend";
+    owner = "ACoquereau";
+    repo = pname;
     rev = version;
-    sha256 = "097zmbrx4gp2gnrxdmsm9lkkp5450gwi0blpxqy3833m6k5brx3n";
+    sha256 = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
   };
 
-  prefixKey = "-prefix ";
+  useDune2 = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ocaml findlib menhir ];
+  minimumOCamlVersion = "4.03";
 
-  createFindlibDestdir = true;
+  strictDeps = true;
 
-  installFlags = "LIBDIR=$(OCAMLFIND_DESTDIR)";
+  nativeBuildInputs = [ menhir ];
 
   meta = {
     description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
   };
 
 }

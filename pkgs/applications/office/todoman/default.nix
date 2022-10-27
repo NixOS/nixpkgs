@@ -1,57 +1,103 @@
-{ stdenv, python3, glibcLocales }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, installShellFiles
+, jq
+, python3
+}:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "3.6.0";
+  version = "4.1.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1c0jh9bi2xfjc7w4kka68mygl00zkp2qxhffnipmfvvykfjmlhk0";
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
   };
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
-      python-dateutil pyxdg tabulate urwid ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ (with python3.pkgs; [
+    setuptools-scm
+  ]);
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-import-order freezegun hypothesis pytest pytestrunner pytestcov ];
+  propagatedBuildInputs = with python3.pkgs; [
+    atomicwrites
+    click
+    click-log
+    click-repl
+    humanize
+    icalendar
+    parsedatetime
+    python-dateutil
+    pyxdg
+    tabulate
+    urwid
+  ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-                      "--set CHARSET en_us.UTF-8" ];
+  checkInputs = with python3.pkgs; [
+    flake8
+    flake8-import-order
+    freezegun
+    hypothesis
+    pytestCheckHook
+    glibcLocales
+  ];
 
-  preCheck = ''
-    # Remove one failing test that only checks whether the command line works
-    rm tests/test_main.py
-    rm tests/test_cli.py
+  LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=todoman --cov-report=term-missing" ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+  postInstall = ''
+    installShellCompletion --bash contrib/completion/bash/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    installShellCompletion --zsh contrib/completion/zsh/_todo
+  '';
+
+  disabledTests = [
+    # Testing of the CLI part and output
+    "test_color_due_dates"
+    "test_color_flag"
+    "test_default_command"
+    "test_main"
+    "test_missing_cache_dir"
+    "test_sorting_null_values"
+    "test_xdg_existant"
+    # Tests are sensitive to performance
+    "test_sorting_fields"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sorting_fields"
+  ];
+
+  pythonImportsCheck = [
+    "todoman"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
-      Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos
-      are stored into icalendar files, which means you can sync them via CalDAV
+      Todoman is a simple, standards-based, cli todo (aka task) manager. Todos
+      are stored into iCalendar files, which means you can sync them via CalDAV
       using, for example, vdirsyncer.
 
       Todos are read from individual ics files from the configured directory.
-      This matches the vdir specification.  There’s support for the most common TODO
+      This matches the vdir specification. There is support for the most common TODO
       features for now (summary, description, location, due date and priority) for
-      now.  Runs on any Unix-like OS. It’s been tested on GNU/Linux, BSD and macOS.
+      now.
       Unsupported fields may not be shown but are never deleted or altered.
-
-      Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
   };
 }

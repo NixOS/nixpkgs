@@ -1,11 +1,6 @@
 /*
 
-NixOS support 2 fontconfig versions, "support" and "latest".
-
-- "latest" refers to default fontconfig package (pkgs.fontconfig).
-  configuration files are linked to /etc/fonts/VERSION/conf.d/
-- "support" refers to supportPkg (pkgs."fontconfig_${supportVersion}").
-  configuration files are linked to /etc/fonts/conf.d/
+Configuration files are linked to /etc/fonts/conf.d/
 
 This module generates a package containing configuration files and link it in /etc/fonts.
 
@@ -22,48 +17,34 @@ let
   cfg = config.fonts.fontconfig;
 
   fcBool = x: "<bool>" + (boolToString x) + "</bool>";
-
-  # back-supported fontconfig version and package
-  # version is used for font cache generation
-  supportVersion = "210";
-  supportPkg     = pkgs."fontconfig_${supportVersion}";
-
-  # latest fontconfig version and package
-  # version is used for configuration folder name, /etc/fonts/VERSION/
-  # note: format differs from supportVersion and can not be used with makeCacheConf
-  latestVersion  = pkgs.fontconfig.configVersion;
-  latestPkg      = pkgs.fontconfig;
-
-  # supported version fonts.conf
-  supportFontsConf = pkgs.makeFontsConf { fontconfig = supportPkg; fontDirectories = config.fonts.fonts; };
+  pkg = pkgs.fontconfig;
 
   # configuration file to read fontconfig cache
-  # version dependent
   # priority 0
-  cacheConfSupport = makeCacheConf { version = supportVersion; };
-  cacheConfLatest  = makeCacheConf {};
+  cacheConf  = makeCacheConf {};
 
-  # generate the font cache setting file for a fontconfig version
-  # use latest when no version is passed
-  makeCacheConf = { version ? null }:
+  # generate the font cache setting file
+  # When cross-compiling, we can’t generate the cache, so we skip the
+  # <cachedir> part. fontconfig still works but is a little slower in
+  # looking things up.
+  makeCacheConf = { }:
     let
-      fcPackage = if version == null
-                  then "fontconfig"
-                  else "fontconfig_${version}";
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-      cache     = makeCache pkgs.${fcPackage};
-      cache32   = makeCache pkgs.pkgsi686Linux.${fcPackage};
+      cache     = makeCache pkgs.fontconfig;
+      cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+        ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>
         ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
           <cachedir>${cache32}</cachedir>
+        ''}
         ''}
       </fontconfig>
     '';
@@ -72,7 +53,7 @@ let
   # priority 10
   renderConf = pkgs.writeText "fc-10-nixos-rendering.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default rendering settings -->
@@ -84,7 +65,7 @@ let
           ${fcBool cfg.hinting.autohint}
         </edit>
         <edit mode="append" name="hintstyle">
-          <const>hintslight</const>
+          <const>${cfg.hinting.style}</const>
         </edit>
         <edit mode="append" name="antialias">
           ${fcBool cfg.antialias}
@@ -96,14 +77,6 @@ let
           <const>lcd${cfg.subpixel.lcdfilter}</const>
         </edit>
       </match>
-
-      ${optionalString (cfg.dpi != 0) ''
-      <match target="pattern">
-        <edit name="dpi" mode="assign">
-          <double>${toString cfg.dpi}</double>
-        </edit>
-      </match>
-      ''}
 
     </fontconfig>
   '';
@@ -129,7 +102,7 @@ let
     in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default fonts -->
@@ -148,7 +121,7 @@ let
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     ${optionalString (!cfg.allowBitmaps) ''
@@ -176,7 +149,7 @@ let
   # priority 53
   rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     <!-- Reject Type 1 fonts -->
@@ -195,63 +168,46 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    support_folder=$out/etc/fonts/conf.d
-    latest_folder=$out/etc/fonts/${latestVersion}/conf.d
-
-    mkdir -p $support_folder
-    mkdir -p $latest_folder
+    dst=$out/etc/fonts/conf.d
+    mkdir -p $dst
 
     # fonts.conf
-    ln -s ${supportFontsConf} $support_folder/../fonts.conf
-    ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
-          $latest_folder/../fonts.conf
+    ln -s ${pkg.out}/etc/fonts/fonts.conf \
+          $dst/../fonts.conf
+    # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
+    mkdir -p $out/etc/fonts/2.11
+    ln -s /etc/fonts/fonts.conf \
+          $out/etc/fonts/2.11/fonts.conf
 
     # fontconfig default config files
-    ln -s ${supportPkg.out}/etc/fonts/conf.d/*.conf \
-          $support_folder/
-    ln -s ${latestPkg.out}/etc/fonts/conf.d/*.conf \
-          $latest_folder/
-
-    # update latest 51-local.conf path to look at the latest local.conf
-    rm    $latest_folder/51-local.conf
-
-    substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
-               $latest_folder/51-local.conf \
-               --replace local.conf /etc/fonts/${latestVersion}/local.conf
+    ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
+          $dst/
 
     # 00-nixos-cache.conf
-    ln -s ${cacheConfSupport} \
-          $support_folder/00-nixos-cache.conf
-    ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
+    ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
     # 10-nixos-rendering.conf
-    ln -s ${renderConf}       $support_folder/10-nixos-rendering.conf
-    ln -s ${renderConf}       $latest_folder/10-nixos-rendering.conf
+    ln -s ${renderConf}       $dst/10-nixos-rendering.conf
 
     # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
-    rm $support_folder/50-user.conf
-    rm $latest_folder/50-user.conf
+    rm $dst/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)
     ${optionalString (cfg.localConf != "") ''
-    ln -s ${localConf}        $support_folder/../local.conf
-    ln -s ${localConf}        $latest_folder/../local.conf
+    ln -s ${localConf}        $dst/../local.conf
     ''}
 
     # 52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $support_folder/52-nixos-default-fonts.conf
-    ln -s ${defaultFontsConf} $latest_folder/52-nixos-default-fonts.conf
+    ln -s ${defaultFontsConf} $dst/52-nixos-default-fonts.conf
 
     # 53-no-bitmaps.conf
-    ln -s ${rejectBitmaps} $support_folder/53-no-bitmaps.conf
-    ln -s ${rejectBitmaps} $latest_folder/53-no-bitmaps.conf
+    ln -s ${rejectBitmaps} $dst/53-no-bitmaps.conf
 
     ${optionalString (!cfg.allowType1) ''
     # 53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $support_folder/53-nixos-reject-type1.conf
-    ln -s ${rejectType1} $latest_folder/53-nixos-reject-type1.conf
+    ln -s ${rejectType1} $dst/53-nixos-reject-type1.conf
     ''}
   '';
 
@@ -264,6 +220,23 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowBitmaps" ] [ "fonts" "fontconfig" "allowBitmaps" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "allowType1" ] [ "fonts" "fontconfig" "allowType1" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "fonts" "fontconfig" "useEmbeddedBitmaps" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "fonts" "fontconfig" "forceAutohint" ])
+    (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
+  ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
+     (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
+       The fonts.fontconfig.ultimate module and configuration is obsolete.
+       The repository has since been archived and activity has ceased.
+       https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+       No action should be needed for font configuration, as the fonts.fontconfig
+       module is already used by default.
+     '');
 
   options = {
 
@@ -273,7 +246,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             If enabled, a Fontconfig configuration file will be built
             pointing to a set of default fonts.  If you don't care about
             running X11 applications or any other program that uses
@@ -286,7 +259,7 @@ in
           internal = true;
           type     = with types; listOf path;
           default  = [ ];
-          description = ''
+          description = lib.mdDoc ''
             Fontconfig configuration packages.
           '';
         };
@@ -294,28 +267,19 @@ in
         antialias = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Enable font antialiasing. At high resolution (> 200 DPI),
             antialiasing has no visible effect; users of such displays may want
             to disable this option.
           '';
         };
 
-        dpi = mkOption {
-          type = types.int;
-          default = 0;
-          description = ''
-            Force DPI setting. Setting to <literal>0</literal> disables DPI
-            forcing; the DPI detected for the display will be used.
-          '';
-        };
-
         localConf = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             System-wide customization file contents, has higher priority than
-            <literal>defaultFonts</literal> settings.
+            `defaultFonts` settings.
           '';
         };
 
@@ -323,7 +287,7 @@ in
           monospace = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Sans Mono"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default monospace font(s). Multiple fonts may be
               listed in case multiple languages must be supported.
             '';
@@ -332,7 +296,7 @@ in
           sansSerif = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Sans"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default sans serif font(s). Multiple fonts may be
               listed in case multiple languages must be supported.
             '';
@@ -341,7 +305,7 @@ in
           serif = mkOption {
             type = types.listOf types.str;
             default = ["DejaVu Serif"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default serif font(s). Multiple fonts may be listed
               in case multiple languages must be supported.
             '';
@@ -350,7 +314,7 @@ in
           emoji = mkOption {
             type = types.listOf types.str;
             default = ["Noto Color Emoji"];
-            description = ''
+            description = lib.mdDoc ''
               System-wide default emoji font(s). Multiple fonts may be listed
               in case a font does not support all emoji.
 
@@ -367,7 +331,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Enable font hinting. Hinting aligns glyphs to pixel boundaries to
               improve rendering sharpness at low resolution. At high resolution
               (> 200 dpi) hinting will do nothing (at best); users of such
@@ -378,10 +342,24 @@ in
           autohint = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Enable the autohinter in place of the default interpreter.
               The results are usually lower quality than correctly-hinted
               fonts, but better than unhinted fonts.
+            '';
+          };
+
+          style = mkOption {
+            type = types.enum [ "hintnone" "hintslight" "hintmedium" "hintfull" ];
+            default = "hintslight";
+            description = lib.mdDoc ''
+              Hintstyle is the amount of font reshaping done to line up
+              to the grid.
+
+              hintslight will make the font more fuzzy to line up to the grid
+              but will be better in retaining font shape, while hintfull will
+              be a crisp font that aligns well to the pixel grid but will lose
+              a greater amount of font shape.
             '';
           };
         };
@@ -389,10 +367,10 @@ in
         includeUserConf = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Include the user configuration from
-            <filename>~/.config/fontconfig/fonts.conf</filename> or
-            <filename>~/.config/fontconfig/conf.d</filename>.
+            {file}`~/.config/fontconfig/fonts.conf` or
+            {file}`~/.config/fontconfig/conf.d`.
           '';
         };
 
@@ -401,26 +379,26 @@ in
           rgba = mkOption {
             default = "rgb";
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
-            description = ''
+            description = lib.mdDoc ''
               Subpixel order. The overwhelming majority of displays are
-              <literal>rgb</literal> in their normal orientation. Select
-              <literal>vrgb</literal> for mounting such a display 90 degrees
-              clockwise from its normal orientation or <literal>vbgr</literal>
+              `rgb` in their normal orientation. Select
+              `vrgb` for mounting such a display 90 degrees
+              clockwise from its normal orientation or `vbgr`
               for mounting 90 degrees counter-clockwise. Select
-              <literal>bgr</literal> in the unlikely event of mounting 180
+              `bgr` in the unlikely event of mounting 180
               degrees from the normal orientation. Reverse these directions in
               the improbable event that the display's native subpixel order is
-              <literal>bgr</literal>.
+              `bgr`.
             '';
           };
 
           lcdfilter = mkOption {
             default = "default";
             type = types.enum ["none" "default" "light" "legacy"];
-            description = ''
+            description = lib.mdDoc ''
               FreeType LCD filter. At high resolution (> 200 DPI), LCD filtering
               has no visible effect; users of such displays may want to select
-              <literal>none</literal>.
+              `none`.
             '';
           };
 
@@ -429,7 +407,7 @@ in
         cache32Bit = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Generate system fonts cache for 32-bit applications.
           '';
         };
@@ -437,8 +415,8 @@ in
         allowBitmaps = mkOption {
           type = types.bool;
           default = true;
-          description = ''
-            Allow bitmap fonts. Set to <literal>false</literal> to ban all
+          description = lib.mdDoc ''
+            Allow bitmap fonts. Set to `false` to ban all
             bitmap fonts.
           '';
         };
@@ -446,8 +424,8 @@ in
         allowType1 = mkOption {
           type = types.bool;
           default = false;
-          description = ''
-            Allow Type-1 fonts. Default is <literal>false</literal> because of
+          description = lib.mdDoc ''
+            Allow Type-1 fonts. Default is `false` because of
             poor rendering.
           '';
         };
@@ -455,7 +433,7 @@ in
         useEmbeddedBitmaps = mkOption {
           type = types.bool;
           default = false;
-          description = ''Use embedded bitmaps in fonts like Calibri.'';
+          description = lib.mdDoc "Use embedded bitmaps in fonts like Calibri.";
         };
 
       };
@@ -467,8 +445,42 @@ in
     (mkIf cfg.enable {
       environment.systemPackages    = [ pkgs.fontconfig ];
       environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
+      security.apparmor.includes."abstractions/fonts" = ''
+        # fonts.conf
+        r ${pkg.out}/etc/fonts/fonts.conf,
+
+        # fontconfig default config files
+        r ${pkg.out}/etc/fonts/conf.d/*.conf,
+
+        # 00-nixos-cache.conf
+        r ${cacheConf},
+
+        # 10-nixos-rendering.conf
+        r ${renderConf},
+
+        # 50-user.conf
+        ${optionalString cfg.includeUserConf ''
+        r ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf,
+        ''}
+
+        # local.conf (indirect priority 51)
+        ${optionalString (cfg.localConf != "") ''
+        r ${localConf},
+        ''}
+
+        # 52-nixos-default-fonts.conf
+        r ${defaultFontsConf},
+
+        # 53-no-bitmaps.conf
+        r ${rejectBitmaps},
+
+        ${optionalString (!cfg.allowType1) ''
+        # 53-nixos-reject-type1.conf
+        r ${rejectType1},
+        ''}
+      '';
     })
-    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+    (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];
     })
   ];

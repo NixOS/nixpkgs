@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = http://www.dabeaz.com/ply/;
+    homepage = "http://www.dabeaz.com/ply/";
     description = "PLY (Python Lex-Yacc), an implementation of the lex and yacc parsing tools for Python";
     longDescription = ''
       PLY is an implementation of lex and yacc parsing tools for Python.

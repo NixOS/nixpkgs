@@ -1,37 +1,41 @@
-{ stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, nettle, clang, libclang, pkgconfig }:
+{ lib, stdenv
+, fetchCrate
+, rustPlatform
+, pkg-config
+, libsodium
+, openssl
+, xxHash
+, zstd
+, darwin
+, gitImportSupport ? true
+, libgit2 ? null
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "0.12.0";
+  version = "1.0.0-beta.2";
 
-  src = fetchurl {
-    url = "https://pijul.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1rm787kkh3ya8ix0rjvj7sbrg9armm0rnpkga6gjmsbg5bx20y4q";
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-78nzCOR+AZuiAA1OpKKW4kfdUnlN8+qVaO3dknMck58=";
   };
 
-  nativeBuildInputs = [ pkgconfig clang ];
-
-  postInstall = ''
-    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions,fish/vendor_completions.d}
-    $out/bin/pijul generate-completions --bash > $out/share/bash-completion/completions/pijul
-    $out/bin/pijul generate-completions --zsh > $out/share/zsh/site-functions/_pijul
-    $out/bin/pijul generate-completions --fish > $out/share/fish/vendor_completions.d/pijul.fish
-  '';
-
-  LIBCLANG_PATH = libclang + "/lib";
-
-  buildInputs = [ openssl libsodium nettle libclang ] ++ stdenv.lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
+  cargoSha256 = "sha256-IhjN0HjIIuP+P8yfZ3NmZpVZBAuetOr4OVZoI8Qfspo=";
 
   doCheck = false;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl libsodium xxHash zstd ]
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreServices Security SystemConfiguration
+    ]));
 
-  cargoSha256 = "1w77s5q18yr1gqqif15wmrfdvv2chq8rq3w4dnmxg2gn0r7bmz2k";
+  buildFeatures = lib.optional gitImportSupport "git";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed version control system";
-    homepage = https://pijul.org;
+    homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
-    maintainers = [ maintainers.gal_bolle ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
   };
 }

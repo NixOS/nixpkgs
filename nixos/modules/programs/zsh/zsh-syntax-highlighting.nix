@@ -6,9 +6,16 @@ let
   cfg = config.programs.zsh.syntaxHighlighting;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "enable" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "highlighters" ] [ "programs" "zsh" "syntaxHighlighting" "highlighters" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "patterns" ] [ "programs" "zsh" "syntaxHighlighting" "patterns" ])
+  ];
+
   options = {
     programs.zsh.syntaxHighlighting = {
-      enable = mkEnableOption "zsh-syntax-highlighting";
+      enable = mkEnableOption (lib.mdDoc "zsh-syntax-highlighting");
 
       highlighters = mkOption {
         default = [ "main" ];
@@ -23,7 +30,7 @@ in
           "line"
         ]));
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.
 
           The following defined options can be found here:
@@ -35,13 +42,13 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "rm -rf *" = "fg=white,bold,bg=red";
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom patterns to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
@@ -52,13 +59,13 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "alias" = "fg=magenta,bold";
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom styles to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
@@ -81,7 +88,7 @@ in
     ];
 
     programs.zsh.interactiveShellInit = with pkgs;
-      lib.concatStringsSep "\n" ([
+      lib.mkAfter (lib.concatStringsSep "\n" ([
         "source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
       ] ++ optional (length(cfg.highlighters) > 0)
         "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
@@ -95,6 +102,6 @@ in
             styles: design:
             "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
           ) cfg.styles)
-      );
+      ));
   };
 }

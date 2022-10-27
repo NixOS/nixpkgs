@@ -1,17 +1,25 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "oh";
-  version = "20160522-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "0daaf4081475fb9d6b3801c85019bdd57b2ee9b4";
+  version = "0.8.1";
 
-  goPackagePath = "github.com/michaelmacinnis/oh";
-
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/michaelmacinnis/oh";
-    sha256 = "0ajidzs0aisbw74nri9ks6sx6644nmwkisc9mvxm3f89zmnlsgwr";
+  src = fetchFromGitHub {
+    owner = "michaelmacinnis";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-DMxC5fv5ZLDv7gMajC/eyJd2YpO+OXFdvwAPYotnczw=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-f4rqXOu6yXUzNsseSaV9pb8c2KXItYOalB5pfH3Acnc=";
+
+  meta = with lib; {
+    homepage = "https://github.com/michaelmacinnis/oh";
+    description = "A new Unix shell";
+    license = licenses.mit;
+  };
+
+  passthru = {
+    shellPath = "/bin/oh";
+  };
 }

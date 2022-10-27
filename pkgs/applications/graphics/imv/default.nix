@@ -1,60 +1,117 @@
-{ stdenv, fetchFromGitHub
-, freeimage, fontconfig, pkgconfig
-, asciidoc, docbook_xsl, libxslt, cmocka
-, librsvg, pango, libxkbcommon, wayland
+{ stdenv
+, lib
+, fetchFromSourcehut
+, asciidoc
+, cmocka
+, docbook_xsl
+, libxslt
+, meson
+, ninja
+, pkg-config
+, icu
+, pango
+, inih
+, withWindowSystem ? "all"
+, xorg
+, libxkbcommon
 , libGLU
+, wayland
+, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+, freeimage
+, libtiff
+, libjpeg_turbo
+, libpng
+, librsvg
+, netsurf
+, libheif
 }:
+
+let
+  windowSystems = {
+    all = windowSystems.x11 ++ windowSystems.wayland;
+    x11 = [ libGLU xorg.libxcb xorg.libX11 ];
+    wayland = [ wayland ];
+  };
+
+  backends = {
+    inherit freeimage libtiff libpng librsvg libheif;
+    libjpeg = libjpeg_turbo;
+    inherit (netsurf) libnsgif;
+  };
+
+  backendFlags = builtins.map
+    (b: if builtins.elem b withBackends
+        then "-D${b}=enabled"
+        else "-D${b}=disabled")
+    (builtins.attrNames backends);
+in
+
+# check that given window system is valid
+assert lib.assertOneOf "withWindowSystem" withWindowSystem
+  (builtins.attrNames windowSystems);
+# check that every given backend is valid
+assert builtins.all
+  (b: lib.assertOneOf "each backend" b (builtins.attrNames backends))
+  withBackends;
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.0.1";
+  version = "4.3.1";
+  outputs = [ "out" "man" ];
 
-  src = fetchFromGitHub {
-    owner  = "eXeC64";
-    repo   = "imv";
-    rev    = "v${version}";
-    sha256 = "sha256:01fbkbwwsyr00k3mwans8jfb9p4gl02v6z62vgx0pkgrzxjkcz07";
+  src = fetchFromSourcehut {
+    owner = "~exec64";
+    repo = "imv";
+    rev = "v${version}";
+    sha256 = "sha256-gMAd8skst72QT4jGFH7aRdWeAd4tf/uQgXhGaM/Dpgc=";
   };
 
-  preBuild = ''
-    # Version is 4.0.1, but Makefile was not updated
-    sed -i 's/echo v4\.0\.0/echo v4.0.1/' Makefile
-  '';
+  mesonFlags = [
+    "-Dwindows=${withWindowSystem}"
+    "-Dtest=enabled"
+    "-Dman=enabled"
+  ] ++ backendFlags;
 
   nativeBuildInputs = [
     asciidoc
     cmocka
     docbook_xsl
     libxslt
+    meson
+    ninja
+    pkg-config
   ];
 
   buildInputs = [
-    freeimage
-    libGLU
-    librsvg
+    icu
     libxkbcommon
     pango
-    pkgconfig
-    wayland
-  ];
+    inih
+  ] ++ windowSystems."${withWindowSystem}"
+    ++ builtins.map (b: backends."${b}") withBackends;
 
-  installFlags = [ "PREFIX=$(out)" "CONFIGPREFIX=$(out)/etc" ];
+  postInstall = ''
+    # fix the executable path and install the desktop item
+    substituteInPlace ../files/imv.desktop --replace "imv %F" "$out/bin/imv %F"
+    install -Dm644 ../files/imv.desktop $out/share/applications/
+  '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
-    sed -i "s|\bimv-wayland\b|$out/bin/imv-wayland|" $out/bin/imv
-    sed -i "s|\bimv-x11\b|$out/bin/imv-x11|" $out/bin/imv
+    substituteInPlace "$out/bin/imv" \
+      --replace "imv-wayland" "$out/bin/imv-wayland" \
+      --replace "imv-x11" "$out/bin/imv-x11"
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line image viewer for tiling window managers";
-    homepage    = https://github.com/eXeC64/imv;
-    license     = licenses.gpl2;
+    homepage = "https://github.com/eXeC64/imv";
+    license = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj markus1189 ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.all;
   };
 }

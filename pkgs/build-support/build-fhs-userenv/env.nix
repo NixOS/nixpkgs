@@ -1,8 +1,11 @@
 { stdenv, buildEnv, writeText, pkgs, pkgsi686Linux }:
 
-{ name, profile ? ""
-, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
-, extraBuildCommands ? "", extraBuildCommandsMulti ? ""
+{ name
+, profile ? ""
+, targetPkgs ? pkgs: []
+, multiPkgs ? pkgs: []
+, extraBuildCommands ? ""
+, extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
 }:
 
@@ -23,7 +26,8 @@
 
 let
   is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  # multi-lib glibc is only supported on x86_64
+  isMultiBuild  = multiPkgs != null && stdenv.hostPlatform.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -41,7 +45,7 @@ let
   basePkgs = with pkgs;
     [ glibcLocales
       (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
+      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
@@ -52,13 +56,16 @@ let
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
+    # XDG_DATA_DIRS is used by pressure-vessel (steam proton) and vulkan loaders to find the corresponding icd
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
+
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
-    export NIX_CC_WRAPPER_${stdenv.cc.infixSalt}_TARGET_HOST=1
+    export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
     export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
     export NIX_LDFLAGS='-L/usr/lib -L/usr/lib32'
@@ -81,6 +88,9 @@ let
       # compatibility with NixOS
       ln -s /host/etc/static static
 
+      # symlink nix config
+      ln -s /host/etc/nix nix
+
       # symlink some NSS stuff
       ln -s /host/etc/passwd passwd
       ln -s /host/etc/group group
@@ -88,6 +98,9 @@ let
       ln -s /host/etc/hosts hosts
       ln -s /host/etc/resolv.conf resolv.conf
       ln -s /host/etc/nsswitch.conf nsswitch.conf
+
+      # symlink user profiles
+      ln -s /host/etc/profiles profiles
 
       # symlink sudo and su stuff
       ln -s /host/etc/login.defs login.defs
@@ -124,6 +137,35 @@ let
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    postBuild = ''
+      if [[ -d  $out/share/gsettings-schemas/ ]]; then
+          # Recreate the standard schemas directory if its a symlink to make it writable
+          if [[ -L $out/share/glib-2.0 ]]; then
+              target=$(readlink $out/share/glib-2.0)
+              rm $out/share/glib-2.0
+              mkdir $out/share/glib-2.0
+              ln -fs $target/* $out/share/glib-2.0
+          fi
+
+          if [[ -L $out/share/glib-2.0/schemas ]]; then
+              target=$(readlink $out/share/glib-2.0/schemas)
+              rm $out/share/glib-2.0/schemas
+              mkdir $out/share/glib-2.0/schemas
+              ln -fs $target/* $out/share/glib-2.0/schemas
+          fi
+
+          mkdir -p $out/share/glib-2.0/schemas
+
+          for d in $out/share/gsettings-schemas/*; do
+              # Force symlink, in case there are duplicates
+              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+          done
+
+          # and compile them
+          ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+      fi
+    '';
   };
 
   staticUsrProfileMulti = buildEnv {
@@ -174,7 +216,7 @@ let
     done
     cd ..
 
-    for i in var etc; do
+    for i in var etc opt; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi

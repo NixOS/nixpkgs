@@ -1,21 +1,23 @@
-{stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
+{ lib, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
 
-with stdenv.lib;
+with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
-  version = "2.99";
+  version = "3.27";
 
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    sha256 = "085bgwkjnaqp96gvd2s8qmkw69rz91si1sgzqdqbplkzj9bk2qii";
+    sha256 = "077y31gg020wjpx5pcivqgkqawcjxh5kjnvq97x2gd7i3wwc30qi";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
-  propagatedBuildInputs = with perlPackages; [HTMLParser HTTPCookies LWP XMLLibXML XMLSimple];
+  propagatedBuildInputs = with perlPackages; [
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple
+  ];
 
   preConfigure = "touch Makefile.PL";
   doCheck = false;
@@ -31,8 +33,9 @@ perlPackages.buildPerlPackage rec {
   meta = {
     description = "Downloads TV and radio from BBC iPlayer";
     license = licenses.gpl3Plus;
-    homepage = https://squarepenguin.co.uk/;
+    homepage = "https://squarepenguin.co.uk/";
     platforms = platforms.all;
+    maintainers = with maintainers; [ rika ];
   };
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl
+{ lib, stdenv, fetchurl, libevent, openssl, nixosTests
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -11,16 +11,16 @@
 , rrtypes          ? false
 , zoneStats        ? false
 
-, configFile ? "etc/nsd/nsd.conf"
+, configFile ? "/etc/nsd/nsd.conf"
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.2.2";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1ys608jyp5scc957q4brm094c97sxlwymina7d2nvzi51aa37cw3";
+    sha256 = "sha256-CQYtm4Pfzd5OTlPsNhVJbWjCgh2DgdDUZOvqMaWXXIE=";
   };
 
   prePatch = ''
@@ -52,8 +52,12 @@ stdenv.mkDerivation rec {
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.nlnetlabs.nl;
+  passthru.tests = {
+    inherit (nixosTests) nsd;
+  };
+
+  meta = with lib; {
+    homepage = "http://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;
     platforms = platforms.unix;

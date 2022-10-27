@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex }:
 
 let
   baseVersion="3";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     install -m0755 SPASS ${extraTools} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automated theorem prover for first-order logic";
     maintainers = with maintainers;
     [

@@ -1,39 +1,27 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
+{ stdenv, lib, fetchFromGitHub
+, qtbase, qttools, cmake, wrapQtAppsHook
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "0.1.2";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
-    owner = "LibrePCB";
-    repo = "LibrePCB";
+    owner  = pname;
+    repo   = pname;
+    rev    = version;
+    sha256 = "sha256-zqvvc3CHqdRWVUFt4BkH5Vq50/FKNvMNW2NvGyfWwFM=";
     fetchSubmodules = true;
-    rev = "acdd94d9d2310f79215125b999153e9da88a9376";
-    sha256 = "1bbl01rp75sl6k1cmch7x90v00lck578xvqmb856s9fx75bdgnv5";
   };
 
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
-
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ qtbase ];
 
-  qmakeFlags = ["-r"];
-
-  postInstall = ''
-      mkdir -p $out/share/librepcb/fontobene
-      cp share/librepcb/fontobene/newstroke.bene $out/share/librepcb/fontobene/
-    '';
-
-  preFixup = ''
-    wrapQtApp $out/bin/librepcb
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
-    homepage = https://librepcb.org/;
-    maintainers = with maintainers; [ luz ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    homepage    = "https://librepcb.org/";
+    maintainers = with maintainers; [ luz thoughtpolice ];
+    license     = licenses.gpl3Plus;
+    platforms   = platforms.linux;
   };
 }

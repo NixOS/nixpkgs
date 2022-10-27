@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmake }:
+{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "accounts-qt";
   version = "1.16";
 
@@ -11,19 +11,15 @@ stdenv.mkDerivation rec {
     owner = "accounts-sso";
   };
 
-  buildInputs = [ glib libaccounts-glib qtbase ];
-  nativeBuildInputs = [ doxygen pkgconfig qmake ];
-
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
-  '';
+  propagatedBuildInputs = [ glib libaccounts-glib ];
+  nativeBuildInputs = [ doxygen pkg-config qmake ];
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt library for accessing the online accounts database";
-    homepage = https://gitlab.com/accounts-sso;
+    homepage = "https://gitlab.com/accounts-sso";
     license = licenses.lgpl21;
     platforms = with platforms; linux;
   };

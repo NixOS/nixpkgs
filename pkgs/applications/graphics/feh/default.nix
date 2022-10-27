@@ -1,17 +1,24 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, perlPackages }:
-
-with stdenv.lib;
+, curl, libexif, jpegexiforient, perl
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.2.1";
+  version = "3.9";
 
-  src = fetchurl {
-    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "070axq8jpibcabmjfv4fmjmpk3k349vzvh4qhsi4n62bkcwl35wg";
+  src = fetchFromGitHub {
+    owner = "derf";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
   };
+
+  postPatch = ''
+    substituteInPlace test/feh.t \
+      --replace "WARNING:" "WARNING: While loading" \
+      --replace "Does not look like an image \(magic bytes missing\)" "Unknown error \(15\)"
+  '';
 
   outputs = [ "out" "man" "doc" ];
 
@@ -21,29 +28,25 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+  ] ++ lib.optional stdenv.isDarwin "verscmp=0"
+    ++ lib.optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${lib.makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
   '';
 
-  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
-  preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
-  '';
-  postCheck = ''
-    unset PERL5LIB
-  '';
-
+  checkInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viric willibutz globin ];
+    # released under a variant of the MIT license
+    # https://spdx.org/licenses/MIT-feh.html
+    license = licenses.mit-feh;
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

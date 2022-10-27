@@ -1,12 +1,8 @@
-{ stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
-
-let
-  version = "016";
-in
+{ lib, stdenv, fetchurl, qt4, pkg-config, libnl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ntrack";
-  inherit version;
+  version = "016";
 
   src = fetchurl {
     url = "https://launchpad.net/ntrack/main/${version}/+download/${pname}-${version}.tar.gz";
@@ -15,10 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnl qt4 ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python3 ];
 
   # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 
@@ -29,9 +25,9 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
-    homepage = https://launchpad.net/ntrack;
+    homepage = "https://launchpad.net/ntrack";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
   };

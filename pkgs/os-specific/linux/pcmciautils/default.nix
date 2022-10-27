@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl
-, yacc, flex
+, bison, flex
 , sysfsutils, kmod, udev
 , firmware   ? config.pcmciaUtils.firmware or [] # Special pcmcia cards.
 , configOpts ? config.pcmciaUtils.config or null # Special hardware (map memory & port & irq)
@@ -7,14 +7,15 @@
 
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
-  name = "pcmciautils-018";
+  pname = "pcmciautils";
+  version = "018";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/${name}.tar.gz";
+    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/pcmciautils-${version}.tar.gz";
     sha256 = "0sfm3w2n73kl5w7gb1m6q8gy5k4rgwvzz79n6yhs9w3sag3ix8sk";
   };
 
-  buildInputs = [udev yacc sysfsutils kmod flex];
+  buildInputs = [udev bison sysfsutils kmod flex];
 
   patchPhase = ''
     sed -i "
@@ -27,12 +28,11 @@ stdenv.mkDerivation rec {
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
   + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if configOpts == null then "" else ''
-    ln -sf ${configOpts} ./config/config.opts'')
+  + (if configOpts == null then "" else "ln -sf ${configOpts} ./config/config.opts")
   ;
 
-  makeFlags = "LEX=flex";
-  installFlags = ''INSTALL=install DESTDIR=''${out}'';
+  makeFlags = [ "LEX=flex" ];
+  installFlags = [ "INSTALL=install" "DESTDIR=${placeholder "out"}" ];
   postInstall =
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
     '') firmware;
 
   meta = {
-    homepage = https://www.kernel.org/pub/linux/utils/kernel/pcmcia/;
+    homepage = "https://www.kernel.org/pub/linux/utils/kernel/pcmcia/";
     longDescription = "
       PCMCIAutils contains the initialization tools necessary to allow
       the PCMCIA subsystem to behave (almost) as every other
       hotpluggable bus system.
     ";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

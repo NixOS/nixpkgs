@@ -1,24 +1,22 @@
-{stdenv, fetchurl, zlib, openssl}:
+{ lib, stdenv, fetchFromGitHub, zlib, openssl }:
 stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "2.8.0";
   pname = "libre";
-  src = fetchurl {
-    url = "http://www.creytiv.com/pub/re-${version}.tar.gz";
-    sha256 = "0cc1x6pm1nz09046bfzgvp2p3wjbgm6f53d71a9dd14grjsvr5qf";
+  src = fetchFromGitHub {
+    owner = "baresip";
+    repo = "re";
+    rev = "v${version}";
+    sha256 = "sha256-mbPFaq49EI2BdhdQJwFaBxjAh2aKlcuFwoCTwhXRbUg=";
   };
   buildInputs = [ zlib openssl ];
   makeFlags = [ "USE_ZLIB=1" "USE_OPENSSL=1" "PREFIX=$(out)" ]
-  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.lib.getDev stdenv.cc.libc}"
+    ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
+    ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"
   ;
   meta = {
-    homepage = http://www.creytiv.com/re.html;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.bsd3;
-    inherit version;
-    downloadPage = "http://www.creytiv.com/pub/";
-    updateWalker = true;
-    downloadURLRegexp = "/re-.*[.]tar[.].*";
+    description = "A library for real-time communications with async IO support and a complete SIP stack";
+    homepage = "https://github.com/baresip/re";
+    maintainers = with lib.maintainers; [ elohmeier raskin ];
+    license = lib.licenses.bsd3;
   };
 }

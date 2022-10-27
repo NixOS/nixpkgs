@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   pname = "sage-tests";
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    makeWrapper
     sage-with-env
   ];
 
@@ -56,6 +56,6 @@ stdenv.mkDerivation {
     export GLIBC_TUNABLES=glibc.malloc.arena_max=4
 
     echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
-    "sage" -t --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
+    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
   '';
 }

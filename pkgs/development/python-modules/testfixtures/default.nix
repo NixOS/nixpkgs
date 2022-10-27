@@ -1,33 +1,58 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, mock, pytest, sybil, zope_component }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, sybil
+, twisted
+, zope_component
+}:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "6.3.0";
+  version = "7.0.0";
+  format = "setuptools";
+  # DO NOT CONTACT upstream.
+  # https://github.com/simplistix/ is only concerned with internal CI process.
+  # Any attempt by non-standard pip workflows to comment on issues will
+  # be met with hostility.
+  # https://github.com/simplistix/testfixtures/issues/169
+  # https://github.com/simplistix/testfixtures/issues/168
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1x16xkw483nb1ngv74s7lgaj514pb1ldklal7kb7iwqbxcgnrh2k";
+    hash = "sha256-jsrFowh5NFFkBZTZykLOibmHcR4eTJMShVMh7CH2zLQ=";
   };
 
-  checkInputs = [ pytest mock sybil zope_component ];
-
-  patches = [
-    # Fix tests for Python 3.7. Remove with the next release
-    (fetchpatch {
-      url = https://github.com/Simplistix/testfixtures/commit/6e8807543b804946aba58e2c9e92f5bdc3656a57.patch;
-      sha256 = "1584jz2qz04arx8z8f6d1l1vab7gi38k3akzm223rmp7j4m7yrii";
-    })
+  checkInputs = [
+    mock
+    pytestCheckHook
+    sybil
+    twisted
+    zope_component
   ];
 
-  checkPhase = ''
-    # django is too much hasle to setup at the moment
-    pytest -W ignore::DeprecationWarning --ignore=testfixtures/tests/test_django testfixtures/tests
-  '';
+  disabledTestPaths = [
+    # Django is too much hasle to setup at the moment
+    "testfixtures/tests/test_django"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/Simplistix/testfixtures;
-    description = "A collection of helpers and mock objects for unit tests and doc tests";
+  pytestFlagsArray = [
+    "testfixtures/tests"
+  ];
+
+  pythonImportsCheck = [
+    "testfixtures"
+  ];
+
+  meta = with lib; {
+    description = "Collection of helpers and mock objects for unit tests and doc tests";
+    homepage = "https://github.com/Simplistix/testfixtures";
     license = licenses.mit;
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

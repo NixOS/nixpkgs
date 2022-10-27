@@ -1,31 +1,26 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, pytestrunner
-, pytest
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
-  pname = "PasteDeploy";
+  pname = "pastedeploy";
+  version = "2.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d423fb9d51fdcf853aa4ff43ac7ec469b643ea19590f67488122d6d0d772350a";
+  src = fetchFromGitHub {
+    owner = "Pylons";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-9/8aM/G/EdapCZJlx0ZPzNbmw2uYjA1zGbNWJAWoeCU=";
   };
 
-  buildInputs = [ pytestrunner ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkInputs = [ pytest ];
-
-  # no tests in PyPI tarball
-  # should be included with versions > 2.0.1
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Load, configure, and compose WSGI applications and servers";
-    homepage = http://pythonpaste.org/deploy/;
+    homepage = "https://github.com/Pylons/pastedeploy";
     license = licenses.mit;
+    maintainers = teams.openstack.members;
   };
-
 }

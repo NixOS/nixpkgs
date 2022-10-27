@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc, enableDrafts ? false }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
+, enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
   pname = "zeromq";
-  version = "4.3.2";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "libzmq";
     rev = "v${version}";
-    sha256 = "1q37z05i76ili31j6jlw8988iy6vxadlmd306f99phxfdpqa6bn9";
+    sha256 = "sha256-epOEyHOswUGVwzz0FLxhow/zISmZHxsIgmpOV8C8bQM=";
   };
 
-  nativeBuildInputs = [ cmake asciidoc ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake asciidoc pkg-config ];
+  buildInputs = [ libsodium ];
 
   doCheck = false; # fails all the tests (ctest)
 
-  cmakeFlags = if enableDrafts then [ "-DENABLE_DRAFTS=ON" ] else null;
+  cmakeFlags = lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "4";
-    homepage = http://www.zeromq.org;
+    homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;

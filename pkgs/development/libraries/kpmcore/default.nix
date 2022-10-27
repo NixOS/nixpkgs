@@ -1,35 +1,42 @@
 { stdenv, lib, fetchurl, extra-cmake-modules
-, qtbase, kdeFrameworks
-, libatasmart, parted
-, utillinux }:
+, qca-qt5, kauth, kio, polkit-qt, qtbase
+, util-linux
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "kpmcore";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.3.0";
+  # NOTE: When changing this version, also change the version of `partition-manager`.
+  version = "22.08.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0s6v0jfrhjg31ri5p6h9n4w29jvasf5dj954j3vfpzl91lygmmmq";
+    url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-Ws20hKX2iDdke5yBBKXukVUD4OnLf1OmwlhW+jUXL24=";
   };
 
-  buildInputs = [
-    qtbase
-    libatasmart
-    parted # we only need the library
-
-    kdeFrameworks.kio
-
-    utillinux # needs blkid (note that this is not provided by utillinux-compat)
-  ];
   nativeBuildInputs = [ extra-cmake-modules ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    # The build requires at least Qt 5.12:
-    broken = lib.versionOlder qtbase.version "5.12.0";
+  buildInputs = [
+    qca-qt5
+    kauth
+    kio
+    polkit-qt
+
+    util-linux # Needs blkid in configure script (note that this is not provided by util-linux-compat)
+  ];
+
+  dontWrapQtApps = true;
+
+  preConfigure = ''
+    substituteInPlace src/util/CMakeLists.txt \
+      --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+  '';
+
+  meta = with lib; {
+    description = "KDE Partition Manager core library";
+    homepage = "https://invent.kde.org/system/kpmcore";
+    license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
+    maintainers = with maintainers; [ peterhoeg oxalica ];
+    # The build requires at least Qt 5.14:
+    broken = versionOlder qtbase.version "5.14";
   };
 }

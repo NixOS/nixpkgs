@@ -1,5 +1,0 @@
---- a/makefiles/Makefile.python.mk
-+++ b/makefiles/Makefile.python.mk
-@@ -1070 +1070 @@ $(PYPI_ARCHIVE_TEMP_DIR)/ortools/ortools/data: $(PYDATA_LIBS) | $(PYPI_ARCHIVE_T
--$(PYPI_ARCHIVE_TEMP_DIR)/ortools/ortools/util: $(PYUTIL_LIBS) | $(PYPI_ARCHIVE_TEMP_DIR)/ortools/ortools
-+$(PYPI_ARCHIVE_TEMP_DIR)/ortools/ortools/util: $(PYSORTED_INTERVAL_LIST_LIBS) | $(PYPI_ARCHIVE_TEMP_DIR)/ortools/ortools

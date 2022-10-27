@@ -1,24 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pytest
+}:
 
 buildPythonPackage rec {
-  version = "0.4.0";
   pname = "pytest-dependency";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bda0ef48e6a44c091399b12ab4a7e580d2dd8294c222b301f88d7d57f47ba142";
+    hash = "sha256-wqiSkGGSZj+FAwpquRME5QjlRs3f5VfWktYexXodlGs=";
   };
 
   patches = [
-    # Fix tests for pytest>=4.2.0. Remove with the next release
+    # Fix build with pytest >= 6.2.0, https://github.com/RKrahl/pytest-dependency/pull/51
     (fetchpatch {
-      url = "https://github.com/RKrahl/pytest-dependency/commit/089395bf77e629ee789666361ee12395d840252c.patch";
-      sha256 = "1nkha2gndrr3mx11kx2ipxhphqd6wr25hvkrfwzyrispqfhgl0wm";
-      excludes = [ "doc/src/changelog.rst" ];
+      url = "https://github.com/RKrahl/pytest-dependency/commit/0930889a13e2b9baa7617f05dc9b55abede5209d.patch";
+      sha256 = "sha256-xRreoIz8+yW0mAUb4FvKVlPjALzMAZDmdpbmDKRISE0=";
     })
   ];
 
-  propagatedBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
 
   checkInputs = [ pytest ];
 
@@ -26,8 +30,8 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/RKrahl/pytest-dependency;
+  meta = with lib; {
+    homepage = "https://github.com/RKrahl/pytest-dependency";
     description = "Manage dependencies of tests";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];

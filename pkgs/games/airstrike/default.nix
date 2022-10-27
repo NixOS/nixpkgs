@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
+{ lib, stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
   pname = "airstrike-pre";
@@ -9,11 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1h6rv2zcp84ycmd0kv1pbpqjgwx57dw42x7878d2c2vnpi5jn8qi";
   };
 
-  buildInputs = [ makeWrapper SDL SDL_image ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ SDL SDL_image ];
 
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   installPhase = ''
     ls -l
@@ -24,12 +23,12 @@ stdenv.mkDerivation rec {
     cp -r data airstrikerc $out/share
 
     wrapProgram $out/bin/airstrike \
-      --run "cd $out/share"
+      --chdir "$out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2d dogfighting game";
-    homepage = https://icculus.org/airstrike/;
+    homepage = "https://icculus.org/airstrike/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

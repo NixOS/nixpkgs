@@ -33,12 +33,12 @@
 
 
 is_ignored_file() {
-	case "$1" in
-		skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
-			return 0
-		;;
-	esac
-	return 1
+    case "$1" in
+        skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
+            return 0
+        ;;
+    esac
+    return 1
 }
 
 VERSION=$(@coreutils@/bin/basename $0)" ver. 19-04"
@@ -75,35 +75,35 @@ while [ $# -gt 0 ]; do
        if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
           if [ -d "${SERVICEDIR}" ]; then
              cd ${SERVICEDIR}
-	     for SERVICE in * ; do
-	       case "${SERVICE}" in
-	         functions | halt | killall | single| linuxconf| kudzu)
-	             ;;
-	         *)
-	           if ! is_ignored_file "${SERVICE}" \
-	   	    && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-	                   out=$(env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
-	                   retval=$?
-	                   if echo "$out" | egrep -iq "usage:"; then
-	                     #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
-	                     echo " [ ? ]  $SERVICE" 1>&2
-	                     continue
-	                   else
-	                     if [ "$retval" = "0" -a -n "$out" ]; then
-	                       #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
-	                       echo " [ + ]  $SERVICE"
-	                       continue
-	                     else
-	                       #printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
-	                       echo " [ - ]  $SERVICE"
-	                       continue
-	                     fi
-	                   fi
-	             #env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
-	           fi
-	           ;;
-	       esac
-	     done
+         for SERVICE in * ; do
+           case "${SERVICE}" in
+             functions | halt | killall | single| linuxconf| kudzu)
+                 ;;
+             *)
+               if ! is_ignored_file "${SERVICE}" \
+               && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+                       out=$(env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+                       retval=$?
+                       if echo "$out" | egrep -iq "usage:"; then
+                         #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+                         echo " [ ? ]  $SERVICE" 1>&2
+                         continue
+                       else
+                         if [ "$retval" = "0" -a -n "$out" ]; then
+                           #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+                           echo " [ + ]  $SERVICE"
+                           continue
+                         else
+                           #printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+                           echo " [ - ]  $SERVICE"
+                           continue
+                         fi
+                       fi
+                 #env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+               fi
+               ;;
+           esac
+         done
           else
              systemctl $sctl_args list-units
           fi

@@ -12,29 +12,29 @@ in {
   options = {
 
     services.vdr = {
-      enable = mkEnableOption "VDR. Please put config into ${libDir}";
+      enable = mkEnableOption (lib.mdDoc "VDR. Please put config into ${libDir}");
 
       package = mkOption {
         type = types.package;
         default = pkgs.vdr;
-        defaultText = "pkgs.vdr";
-        example = literalExample "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
-        description = "Package to use.";
+        defaultText = literalExpression "pkgs.vdr";
+        example = literalExpression "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
+        description = lib.mdDoc "Package to use.";
       };
 
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = "Recording directory";
+        description = lib.mdDoc "Recording directory";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Additional command line arguments to pass to VDR.";
+        description = lib.mdDoc "Additional command line arguments to pass to VDR.";
       };
 
-      enableLirc = mkEnableOption "LIRC";
+      enableLirc = mkEnableOption (lib.mdDoc "LIRC");
     };
   };
 
@@ -66,6 +66,7 @@ in {
     users.users.vdr = {
       group = "vdr";
       home = libDir;
+      isSystemUser = true;
     };
 
     users.groups.vdr = {};

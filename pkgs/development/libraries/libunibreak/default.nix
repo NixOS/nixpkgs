@@ -1,17 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libunibreak";
-  version = "1.1";
+  version = "5.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/vimgadgets/libunibreak/${version}/${pname}-${version}.tar.gz";
-    sha256 = "02657l426bk5d8h42b9ixxy1clc50mx4bzwg02nkdhs09wqw32wn";
+  src = let
+      rev_version = lib.replaceStrings ["."] ["_"] version;
+  in fetchFromGitHub {
+    owner = "adah1972";
+    repo = pname;
+    rev = "libunibreak_${rev_version}";
+    sha256 = "sha256-ju+DNCzwD+y/ebLVBU96iNpE1Wt7/K0qLcZHzWGzrWQ=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://vimgadgets.sourceforge.net/libunibreak/;
-    description = "A library implementing a line breaking algorithm as described in Unicode 6.0.0 Standard";
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with lib; {
+    homepage = "https://github.com/adah1972/libunibreak";
+    description = "Implementation of line breaking and word breaking algorithms as in the Unicode standard";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = [ maintainers.coroa ];

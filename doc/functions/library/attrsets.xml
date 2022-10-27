@@ -7,7 +7,7 @@
  <section xml:id="function-library-lib.attrsets.attrByPath">
   <title><function>lib.attrset.attrByPath</function></title>
 
-  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
+  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet -> Any</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.attrByPath" />
@@ -302,7 +302,7 @@ lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
  <section xml:id="function-library-lib.attrsets.catAttrs">
   <title><function>lib.attrsets.catAttrs</function></title>
 
-  <subtitle><literal>catAttrs :: String -> AttrSet -> [Any]</literal>
+  <subtitle><literal>catAttrs :: String -> [AttrSet] -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.catAttrs" />
@@ -772,7 +772,7 @@ nameValuePair "some" 6
    <title>Modifying each value of an attribute set</title>
 <programlisting><![CDATA[
 lib.attrsets.mapAttrs
-  (name: value: name + "-" value)
+  (name: value: name + "-" + value)
   { x = "foo"; y = "bar"; }
 => { x = "x-foo"; y = "y-bar"; }
 ]]></programlisting>
@@ -855,7 +855,7 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
   <title><function>lib.attrsets.mapAttrsToList</function></title>
 
   <subtitle><literal>mapAttrsToList :: (String -> Any -> Any) ->
-   AttrSet -> Any</literal>
+   AttrSet -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />
@@ -1474,7 +1474,7 @@ lib.attrsets.zipAttrsWith
  <section xml:id="function-library-lib.attrsets.zipAttrs">
   <title><function>lib.attrsets.zipAttrs</function></title>
 
-  <subtitle><literal>zipAttrsWith :: [ AttrSet ] -> AttrSet</literal>
+  <subtitle><literal>zipAttrs :: [ AttrSet ] -> AttrSet</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
@@ -1664,6 +1664,87 @@ recursiveUpdate
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "";
 }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.recurseIntoAttrs">
+  <title><function>lib.attrsets.recurseIntoAttrs</function></title>
+
+  <subtitle><literal>recurseIntoAttrs :: AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recurseIntoAttrs" />
+
+  <para>
+   Make various Nix tools consider the contents of the resulting attribute set when looking for what to build, find, etc.
+  </para>
+
+  <para>
+   This function only affects a single attribute set; it does not apply itself recursively for nested attribute sets.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      An attribute set to scan for derivations.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recurseIntoAttrs-example">
+   <title>Making Nix look inside an attribute set</title>
+<programlisting><![CDATA[
+{ pkgs ? import <nixpkgs> {} }:
+{
+  myTools = pkgs.lib.recurseIntoAttrs {
+    inherit (pkgs) hello figlet;
+  };
+}
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.cartesianProductOfSets">
+  <title><function>lib.attrsets.cartesianProductOfSets</function></title>
+
+  <subtitle><literal>cartesianProductOfSets :: AttrSet -> [ AttrSet ]</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.cartesianProductOfSets" />
+
+  <para>
+   Return the cartesian product of attribute set value combinations.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      An attribute set with attributes that carry lists of values.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.cartesianProductOfSets-example">
+   <title>Creating the cartesian product of a list of attribute values</title>
+<programlisting><![CDATA[
+cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+=> [
+     { a = 1; b = 10; }
+     { a = 1; b = 20; }
+     { a = 2; b = 10; }
+     { a = 2; b = 20; }
+   ]
 ]]></programlisting>
   </example>
  </section>

@@ -1,26 +1,52 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib
+, fetchFromGitHub
+, python3
+, neovim
+, fetchpatch
+}:
 
-with stdenv.lib;
-
-pythonPackages.buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "neovim-remote";
-  version = "2.2.1";
-  disabled = !pythonPackages.isPy3k;
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "0f9x053yr8wq35l2s2dsnb0iygd4g4yya2h3iv0yh3440jjj5vfj";
+    sha256 = "0lbz4w8hgxsw4k1pxafrl3rhydrvi5jc6vnsmkvnhh6l6rxlmvmq";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pynvim psutil ];
+  patches = [
+    # Fix a compatibility issue with neovim 0.8.0
+    (fetchpatch {
+      url = "https://github.com/mhinz/neovim-remote/commit/56d2a4097f4b639a16902390d9bdd8d1350f948c.patch";
+      hash = "sha256-/PjE+9yfHtOUEp3xBaobzRM8Eo2wqOhnF1Es7SIdxvM=";
+    })
+  ];
 
-  meta = {
+  propagatedBuildInputs = [
+    pynvim
+    psutil
+    setuptools
+  ];
+
+  checkInputs = [
+    neovim
+    pytestCheckHook
+  ];
+
+  doCheck = !stdenv.isDarwin;
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
+  meta = with lib; {
     description = "A tool that helps controlling nvim processes from a terminal";
-    homepage = https://github.com/mhinz/neovim-remote/;
+    homepage = "https://github.com/mhinz/neovim-remote/";
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];
     platforms = platforms.unix;
+    mainProgram = "nvr";
   };
 }

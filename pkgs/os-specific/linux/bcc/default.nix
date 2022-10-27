@@ -1,38 +1,28 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
+{ lib, stdenv, fetchFromGitHub
+, makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap
+, bash, libbpf, nixosTests
+, audit
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.11.0";
-  name = "bcc-${version}";
+  pname = "bcc";
+  version = "0.24.0";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner  = "iovisor";
-      repo   = "bcc";
-      rev    = "v${version}";
-      sha256 = "1v2gzdd4k58f3yxmq4z97a7xh5vyd84flzzfr9k2cm29i93cwcam";
-      name   = "bcc";
-    })
+  disabled = !stdenv.isLinux;
 
-    # note: keep this in sync with the version that was used at the time of the
-    # tagged release!
-    (fetchFromGitHub {
-      owner  = "libbpf";
-      repo   = "libbpf";
-      rev    = "a30df5c09fb3941fc42c4570ed2545e7057bf82a";
-      sha256 = "088vb9sfs1zazlqi6abb3ia1xgpmwiz5pmz6y3a6gbh0zdrgh6px";
-      name   = "libbpf";
-    })
-  ];
-  sourceRoot = "bcc";
+  src = fetchFromGitHub {
+    owner = "iovisor";
+    repo = "bcc";
+    rev = "v${version}";
+    sha256 = "sha256-5Nq6LmphiyiiIyru/P2rCCmA25cwJIWn08oK1+eM3cQ=";
+  };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm clang-unwrapped kernel
+    llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex
+    flex bash libbpf
   ];
 
   patches = [
@@ -42,26 +32,30 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
 
   cmakeFlags = [
-    "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
+    "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
+
+  # to replace this executable path:
+  # https://github.com/iovisor/bcc/blob/master/src/python/bcc/syscall.py#L384
+  ausyscall = "${audit}/bin/ausyscall";
 
   postPatch = ''
     substituteAll ${./libbcc-path.patch} ./libbcc-path.patch
     patch -p1 < libbcc-path.patch
-  '';
 
-  preConfigure = ''
-    chmod -R u+w ../libbpf/
-    rmdir src/cc/libbpf
-    (cd src/cc && ln -svf ../../../libbpf/ libbpf)
+    substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
+    patch -p1 < absolute-ausyscall.patch
+
+    # https://github.com/iovisor/bcc/issues/3996
+    substituteInPlace src/cc/libbcc.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''
@@ -76,6 +70,8 @@ python.pkgs.buildPythonApplication rec {
       if [ ! -e $bin ]; then
         ln -s $f $bin
       fi
+      substituteInPlace "$f" \
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
@@ -85,10 +81,16 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "man" ];
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = https://iovisor.github.io/bcc/;
+    homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
   };
 }

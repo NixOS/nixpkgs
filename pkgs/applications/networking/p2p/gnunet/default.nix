@@ -1,25 +1,27 @@
-{ stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
-, makeWrapper, ncurses, pkgconfig, libxml2, sqlite, zlib
-, libpulseaudio, libopus, libogg, jansson }:
+, makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
+, libpulseaudio, libopus, libogg, jansson, libsodium
+
+, postgresqlSupport ? true, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.11.6";
+  version = "0.17.6";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "1gspr1lh885sb9r2anh7bi4zan3zjqx33lpyhq9hm2g0n5ip187q";
+    sha256 = "sha256-JJNY7zsQzpmBB4H+2uxSam6rlDwSDku6CWrt+Rwa/EA=";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig libtool makeWrapper ];
+  nativeBuildInputs = [ pkg-config libtool makeWrapper ];
   buildInputs = [
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
-    libmicrohttpd libunistring libxml2 ncurses gettext
+    libmicrohttpd libunistring libxml2 ncurses gettext libsodium
     sqlite zlib libpulseaudio libopus libogg jansson
-  ];
+  ] ++ lib.optional postgresqlSupport postgresql;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     make -k check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -64,9 +66,9 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = https://gnunet.org/;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ vrthra ];
+    homepage = "https://gnunet.org/";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ pstn vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

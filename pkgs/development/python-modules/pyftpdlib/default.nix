@@ -1,32 +1,52 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
 , psutil
 , pyopenssl
 , pysendfile
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "1.5.5";
   pname = "pyftpdlib";
+  version = "1.5.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1adf1c03d1508749e7c2f26dc9850ec0ef834318d725b7ae5ac91698f5c86752";
+    hash = "sha256-fqPOQTfbggmvH2ueoCBZD0YsY+18ehJAvVluTTp7ZW4=";
   };
 
-  checkInputs = [ mock psutil ];
-  propagatedBuildInputs = [ pyopenssl pysendfile ];
+  propagatedBuildInputs = [
+    pysendfile
+  ];
 
-  # impure filesystem-related tests cause timeouts
+  passthru.optional-dependencies = {
+    ssl = [
+      pyopenssl
+    ];
+  };
+
+  checkInputs = [
+    mock
+    psutil
+  ];
+
+  # Impure filesystem-related tests cause timeouts
   # on Hydra: https://hydra.nixos.org/build/84374861
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/giampaolo/pyftpdlib/;
-    description = "Very fast asynchronous FTP server library";
+  pythonImportsCheck = [
+    "pyftpdlib"
+  ];
+
+  meta = with lib; {
+    description = "Asynchronous FTP server library";
+    homepage = "https://github.com/giampaolo/pyftpdlib/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

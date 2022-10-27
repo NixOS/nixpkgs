@@ -1,30 +1,48 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, botocore
+{ lib
 , boto3
-, docutils
-, unittest2
-, mock
+, botocore
+, buildPythonPackage
+, fetchFromGitHub
+, parquet
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "flowlogs_reader";
-  version = "1.1.1";
+  pname = "flowlogs-reader";
+  version = "3.2.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cd6344fdad097c38756772624922ee37452ef1e131213c7d0b5702bcf52a5b02";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "obsrvbl";
+    repo = pname;
+    # https://github.com/obsrvbl/flowlogs-reader/issues/57
+    rev = "fac4c6c63348ff67fd0a8f51d391ba7c9f59e5ed";
+    hash = "sha256-bGb2CLp33aIr0R/lBPWAF3CbtVTWpqmcvYgZ6bcARTc=";
   };
 
-  propagatedBuildInputs = [ botocore boto3 docutils ];
-  buildInputs = [ unittest2 mock ];
+  propagatedBuildInputs = [
+    botocore
+    boto3
+    parquet
+    python-dateutil
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "flowlogs_reader"
+  ];
+
+  meta = with lib; {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
     homepage = "https://github.com/obsrvbl/flowlogs-reader";
-    maintainers = with maintainers; [ cransom ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ cransom ];
   };
-
 }

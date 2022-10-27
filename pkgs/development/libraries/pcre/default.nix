@@ -1,35 +1,31 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pcre, windows ? null
 , variant ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
-let
-  version = "8.43";
-  pname = if (variant == null) then "pcre"
-    else  if (variant == "cpp") then "pcre-cpp"
-    else  variant;
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "pcre"
+    + lib.optionalString (variant == "cpp") "-cpp"
+    + lib.optionalString (variant != "cpp" && variant != null) variant;
+  version = "8.45";
 
   src = fetchurl {
-    url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";
-    sha256 = "0sxg1wlknq05ryq63h21cchjmcjkin9lmnqsmhs3h08301965rwi";
+    url = "mirror://sourceforge/project/pcre/pcre/${version}/pcre-${version}.tar.bz2";
+    sha256 = "sha256-Ta5v3NK7C7bDe1+Xwzwr6VTadDmFNpzdrDVG4yGL/7g=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
+  configureFlags = optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
-
-  buildInputs = optional (stdenv.hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -44,15 +40,14 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
-  ''
-    + optionalString (variant != null) ''
-    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
+  '' + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
   '';
 
   meta = {
-    homepage = http://www.pcre.org/;
+    homepage = "http://www.pcre.org/";
     description = "A library for Perl Compatible Regular Expressions";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
 
     longDescription = ''
       The PCRE library is a set of functions that implement regular
@@ -63,5 +58,6 @@ in stdenv.mkDerivation {
     '';
 
     platforms = platforms.all;
+    maintainers = with maintainers; [ ];
   };
 }

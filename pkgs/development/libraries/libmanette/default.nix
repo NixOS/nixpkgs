@@ -1,36 +1,69 @@
-{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobject-introspection
-, glib, libgudev, libevdev, gnome3 }:
+{ lib, stdenv
+, fetchurl
+, ninja
+, meson
+, mesonEmulatorHook
+, pkg-config
+, vala
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, glib
+, libgudev
+, libevdev
+, gnome
+}:
 
-let
-  version = "0.2.2";
+stdenv.mkDerivation rec {
   pname = "libmanette";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "0.2.6";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lpprk2qz1lsqf9xj6kj2ciyc1zmjhj5lwd584qkh7jgz2x9y6wb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1b3bcdkk5xd5asq797cch9id8692grsjxrc1ss87vv11m1ck4rb3";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection ];
-  buildInputs = [ glib libgudev libevdev ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    vala
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    glib
+    libgudev
+    libevdev
+  ];
+
+  mesonFlags = [
+    "-Ddoc=true"
+  ];
 
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple GObject game controller library";
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

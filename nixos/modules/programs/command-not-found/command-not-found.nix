@@ -14,10 +14,8 @@ let
     dir = "bin";
     src = ./command-not-found.pl;
     isExecutable = true;
-    inherit (pkgs) perl;
     inherit (cfg) dbPath;
-    perlFlags = concatStrings (map (path: "-I ${path}/${pkgs.perl.libPrefix} ")
-      [ pkgs.perlPackages.DBI pkgs.perlPackages.DBDSQLite pkgs.perlPackages.StringShellQuote ]);
+    perl = pkgs.perl.withPackages (p: [ p.DBDSQLite p.StringShellQuote ]);
   };
 
 in
@@ -28,7 +26,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether interactive shells should show which Nix package (if
         any) provides a missing command.
       '';
@@ -36,7 +34,7 @@ in
 
     dbPath = mkOption {
       default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite" ;
-      description = ''
+      description = lib.mdDoc ''
         Absolute path to programs.sqlite.
 
         By default this file will be provided by your channel
@@ -51,10 +49,10 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handle() {
-          local p=${commandNotFound}/bin/command-not-found
-          if [ -x $p -a -f ${cfg.dbPath} ]; then
+          local p='${commandNotFound}/bin/command-not-found'
+          if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
             # Run the helper program.
-            $p "$@"
+            "$p" "$@"
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
               "$@"
@@ -72,14 +70,16 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handler() {
-          local p=${commandNotFound}/bin/command-not-found
-          if [ -x $p -a -f ${cfg.dbPath} ]; then
+          local p='${commandNotFound}/bin/command-not-found'
+          if [ -x "$p" ] && [ -f '${cfg.dbPath}' ]; then
             # Run the helper program.
-            $p "$@"
+            "$p" "$@"
 
             # Retry the command if we just installed it.
             if [ $? = 126 ]; then
               "$@"
+            else
+              return 127
             fi
           else
             # Indicate than there was an error so ZSH falls back to its default handler

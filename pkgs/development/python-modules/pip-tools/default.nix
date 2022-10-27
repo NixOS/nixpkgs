@@ -1,55 +1,72 @@
-{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six, first
-, setuptools_scm, git, glibcLocales, mock }:
+{ lib
+, stdenv
+, buildPythonPackage
+, build
+, click
+, fetchPypi
+, pep517
+, pip
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
+}:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "3.8.0";
+  version = "6.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vwh3hx4jrzf51yj9h31nk9ji53lqaq63mlqd7n84hcmfwy3rwz4";
+    hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ pytest git glibcLocales mock ];
-  propagatedBuildInputs = [ pip click six first setuptools_scm ];
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
-    # Depend on network tests:
-    "test_allow_unsafe_option" #paramaterized, but all fail
-    "test_annotate_option" #paramaterized, but all fail
-    "test_editable_package_vcs"
-    "test_editable_top_level_deps_preserved" # can't figure out how to select only one parameter to ignore
-    "test_filter_pip_markers"
-    "test_filter_pip_markes"
-    "test_generate_hashes_all_platforms"
-    "test_generate_hashes_verbose"
-    "test_generate_hashes_with_editable"
-    "test_generate_hashes_with_url"
-    "test_generate_hashes_without_interfering_with_each_other"
-    "test_get_hashes_local_repository_cache_miss"
-    "test_realistic_complex_sub_dependencies"
-    "test_stdin"
-    "test_upgrade_packages_option"
-    "test_url_package"
-    # Expect specific version of "six":
-    "test_editable_package"
-    "test_input_file_without_extension"
-    "test_locally_available_editable_package_is_not_archived_in_cache_dir"
-    "test_no_candidates"
-    "test_no_candidates_pre"
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  checkPhase = ''
-    export HOME=$(mktemp -d) VIRTUAL_ENV=1
-    py.test -k "${disabledTests}"
+  propagatedBuildInputs = [
+    build
+    click
+    pep517
+    pip
+    setuptools
+    wheel
+  ];
+
+  checkInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
   '';
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Tests require network access
+    "network"
+    "test_direct_reference_with_extras"
+    "test_local_duplicate_subdependency_combined"
+    "test_bad_setup_file"
+  ];
+
+  pythonImportsCheck = [
+    "piptools"
+  ];
+
+  meta = with lib; {
     description = "Keeps your pinned dependencies fresh";
-    homepage = https://github.com/jazzband/pip-tools/;
+    homepage = "https://github.com/jazzband/pip-tools/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zimbatm ];
-    broken = true;
   };
 }

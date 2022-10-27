@@ -28,7 +28,7 @@ fetchFromGitHub rec {
       It comes in 7 incremental weights: ExtraLight, Light, Book, Medium,
       Semibold, Bold & ExtraBold
     '';
-    homepage = http://www.impallari.com/dosis;
+    homepage = "http://www.impallari.com/dosis";
     license = licenses.ofl;
     maintainers = with maintainers; [ cmfwyp ];
     platforms = platforms.all;

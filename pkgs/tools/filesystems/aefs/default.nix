@@ -1,20 +1,42 @@
-{ stdenv, fetchurl, fuse }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, fuse
+, git
+}:
 
-stdenv.mkDerivation rec {
-  name = "aefs-0.4pre259-8843b7c";
+stdenv.mkDerivation {
+  pname = "aefs";
+  version = "unstable-2015-05-06";
 
-  src = fetchurl {
-    url = "http://tarballs.nixos.org/${name}.tar.bz2";
-    sha256 = "167hp58hmgdavg2mqn5dx1xgq24v08n8d6psf33jhbdabzx6a6zq";
+  src = fetchFromGitHub {
+    owner = "edolstra";
+    repo = "aefs";
+    rev = "e7a9bf8cfa9166668fe1514cc1afd31fc4e10e9a";
+    hash = "sha256-a3YQWxJ7+bYhf1W1kdIykV8U1R4dcDZJ7K3NvNxbF0s=";
   };
+
+  # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
+  # Darwin if FUSE_USE_VERSION isn't set at configure time.
+  #
+  # NOTE: Make sure the value of FUSE_USE_VERSION specified here matches the
+  # actual version used in the source code:
+  #
+  #     $ tar xf "$(nix-build -A aefs.src)"
+  #     $ grep -R FUSE_USE_VERSION
+  configureFlags = lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
+
+  nativeBuildInputs = [ autoreconfHook git ];
 
   buildInputs = [ fuse ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/edolstra/aefs;
+  meta = with lib; {
+    homepage = "https://github.com/edolstra/aefs";
     description = "A cryptographic filesystem implemented in userspace using FUSE";
-    platforms = platforms.linux;
     maintainers = [ maintainers.eelco ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

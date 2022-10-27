@@ -1,30 +1,54 @@
-{ stdenv, fetchurl, pkgconfig, libusb1
-, qtbase, qttools, makeWrapper, qmake
-, withEspeak ? false, espeak ? null }:
-
-let inherit (stdenv.lib) getDev; in
+{ lib
+, stdenv
+, fetchurl
+, cryptopp
+, libusb1
+, makeWrapper
+, pkg-config
+, qt5
+, withEspeak ? false, espeak ? null
+}:
 
 stdenv.mkDerivation  rec {
   pname = "rockbox-utility";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
-    sha256 = "0k3ycga3b0jnj13whwiip2l0gx32l50pnbh7kfima87nq65aaa5w";
+    hash = "sha256-PhlJ+fNY4/Qjoc72zV9WO+kNqF5bZQuwOh4EpAJwqX4=";
   };
 
-  buildInputs = [ libusb1 qtbase qttools ]
-    ++ stdenv.lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    qt5.qmake
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    cryptopp
+    libusb1
+    qt5.qtbase
+    qt5.qttools
+  ]
+  ++ lib.optional withEspeak espeak;
 
   postPatch = ''
     sed -i rbutil/rbutilqt/rbutilqt.pro \
-        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${lib.getDev qt5.qttools}/bin/lrelease|'
   '';
 
   preConfigure = ''
     cd rbutil/rbutilqt
+    lrelease rbutilqt.pro
   '';
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libmkimxboot.a(elf.c.o):utils/imxtools/sbtools/misc.h:43: multiple definition of `g_nr_keys';
+  #     libmkimxboot.a(mkimxboot.c.o):utils/imxtools/sbtools/misc.h:43: first defined here
+  # TODO: try to remove with 1.5.1 update.
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     runHook preInstall
@@ -32,7 +56,7 @@ stdenv.mkDerivation  rec {
     install -Dm755 RockboxUtility $out/bin/rockboxutility
     ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
     wrapProgram $out/bin/rockboxutility \
-    ${stdenv.lib.optionalString withEspeak ''
+    ${lib.optionalString withEspeak ''
       --prefix PATH : ${espeak}/bin
     ''}
 
@@ -45,11 +69,11 @@ stdenv.mkDerivation  rec {
   # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
-    description = "Open source firmware for mp3 players";
-    homepage = https://www.rockbox.org;
-    license = licenses.gpl2;
+  meta = with lib; {
+    homepage = "https://www.rockbox.org";
+    description = "Open source firmware for digital music players";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres goibhniu ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu ];
   };
 }

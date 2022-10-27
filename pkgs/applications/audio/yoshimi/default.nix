@@ -1,43 +1,74 @@
-{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
-, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU_combined, minixml, pkgconfig, zlib, xorg
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, boost
+, cairo
+, cmake
+, fftwSinglePrec
+, fltk
+, libGLU
+, libjack2
+, libsndfile
+, libXdmcp
+, lv2
+, minixml
+, pcre
+, pkg-config
+, readline
+, xorg
+, zlib
 }:
 
-assert stdenv ? glibc;
-
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "1.6.0.1";
+  version = "2.2.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/yoshimi/${pname}-${version}.tar.bz2";
-    sha256 = "140f2k4akj39pny8c7i794q125415gyvmy4rday0il5ncp3glik4";
+  src = fetchFromGitHub {
+    owner = "Yoshimi";
+    repo = pname;
+    rev = version;
+    hash = "sha256-fkN5VNiXRVKCCAyrG6Z2s5qLEtHQNB2874VprhHBhAg=";
   };
 
-  buildInputs = [
-    alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 libGLU_combined
-    minixml zlib xorg.libpthreadstubs pcre
-  ];
+  sourceRoot = "source/src";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  patchPhase = ''
-    substituteInPlace src/Misc/Config.cpp --replace /usr $out
-    substituteInPlace src/Misc/Bank.cpp --replace /usr $out
+  postPatch = ''
+    substituteInPlace Misc/Config.cpp --replace /usr $out
+    substituteInPlace Misc/Bank.cpp --replace /usr $out
   '';
 
-  preConfigure = "cd src";
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
+  buildInputs = [
+    alsa-lib
+    boost
+    cairo
+    fftwSinglePrec
+    fltk
+    libGLU
+    libjack2
+    libsndfile
+    libXdmcp
+    lv2
+    minixml
+    pcre
+    readline
+    xorg.libpthreadstubs
+    zlib
+  ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
+
+  meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";
     longDescription = ''
       Yoshimi delivers the same synthesizer capabilities as
       ZynAddSubFX along with very good Jack and Alsa midi/audio
       functionality on Linux
     '';
-    homepage = http://yoshimi.sourceforge.net;
-    license = licenses.gpl2;
+    homepage = "https://yoshimi.github.io/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
   };

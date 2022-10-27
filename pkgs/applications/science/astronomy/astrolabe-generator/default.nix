@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, unzip }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "astrolabe-generator";
@@ -21,11 +21,13 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/AstrolabeGenerator-${version}.jar"
   '';
 
-  meta = with stdenv.lib;{
-    homepage = https://www.astrolabeproject.com;
+  meta = with lib;{
+    homepage = "https://www.astrolabeproject.com";
     description = "A Java-based tool for generating EPS files for constructing astrolabes and related tools";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
+    mainProgram = "AstrolabeGenerator";
     platforms = platforms.all;
   };
 }

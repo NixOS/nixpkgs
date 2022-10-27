@@ -1,52 +1,68 @@
-{ stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3, gnome3
-, gtk-engine-murrine, optipng, inkscape }:
+{ lib, stdenv
+, fetchFromGitHub
+, sassc
+, meson
+, ninja
+, glib
+, gnome
+, gtk-engine-murrine
+, inkscape
+, cinnamon
+, makeFontsConf
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20190917";
+  version = "20220405";
 
   src = fetchFromGitHub {
-    owner  = "arc-design";
-    repo   = pname;
-    rev    = version;
-    sha256 = "1qgpk4p2hi5hd4yy0hj93kq1vs0b32wb8qkaj1wi90c8gwddq5wa";
+    owner = "jnsh";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-CBj/SpBWH5xdNCQSJquqIntcmfARI7Cud76Tp8txXL4=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
-    pkgconfig
+    meson
+    ninja
     sassc
-    optipng
     inkscape
-    gtk3
+    glib # for glib-compile-resources
+    python3
   ];
 
   propagatedUserEnvPkgs = [
-    gnome3.gnome-themes-extra
+    gnome.gnome-themes-extra
     gtk-engine-murrine
   ];
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    patchShebangs meson/install-file.py
+  '';
 
   preBuild = ''
     # Shut up inkscape's warnings about creating profile directory
-    export HOME="$NIX_BUILD_ROOT"
+    export HOME="$TMPDIR"
   '';
 
-  configureFlags = [
-    "--with-gnome-shell=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
-    "--disable-unity"
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  mesonFlags = [
+    # "-Dthemes=cinnamon,gnome-shell,gtk2,gtk3,plank,xfwm,metacity"
+    # "-Dvariants=light,darker,dark,lighter"
+    "-Dcinnamon_version=${cinnamon.cinnamon-common.version}"
+    "-Dgnome_shell_version=${gnome.gnome-shell.version}"
+    # You will need to patch gdm to make use of this.
+    "-Dgnome_shell_gresource=true"
   ];
 
-  postInstall = ''
-    install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
-    homepage    = https://github.com/arc-design/arc-theme;
-    license     = licenses.gpl3;
+    homepage = "https://github.com/jnsh/arc-theme";
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ simonvandel romildo ];
-    platforms   = platforms.linux;
   };
 }

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "escapism";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5f1cc1fa04a95f5b85b3da194750f8a71846d493ea332f62e8798949f10c9b86";
+    sha256 = "73256bdfb4f22230f0428fc6efecee61cdc4fad531b6f98b849cb9c80711e4ec";
   };
 
   # No tests distributed

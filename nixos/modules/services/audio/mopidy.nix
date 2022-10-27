@@ -13,11 +13,11 @@ let
   mopidyEnv = buildEnv {
     name = "mopidy-with-extensions-${mopidy.version}";
     paths = closePropagation cfg.extensionPackages;
-    pathsToLink = [ "/${python.sitePackages}" ];
-    buildInputs = [ makeWrapper ];
+    pathsToLink = [ "/${mopidyPackages.python.sitePackages}" ];
+    nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
       makeWrapper ${mopidy}/bin/mopidy $out/bin/mopidy \
-        --prefix PYTHONPATH : $out/${python.sitePackages}
+        --prefix PYTHONPATH : $out/${mopidyPackages.python.sitePackages}
     '';
   };
 in {
@@ -26,12 +26,12 @@ in {
 
     services.mopidy = {
 
-      enable = mkEnableOption "Mopidy, a music player daemon";
+      enable = mkEnableOption (lib.mdDoc "Mopidy, a music player daemon");
 
       dataDir = mkOption {
         default = "/var/lib/mopidy";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The directory where Mopidy stores its state.
         '';
       };
@@ -39,8 +39,8 @@ in {
       extensionPackages = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.mopidy-spotify ]";
-        description = ''
+        example = literalExpression "[ pkgs.mopidy-spotify ]";
+        description = lib.mdDoc ''
           Mopidy extensions that should be loaded by the service.
         '';
       };
@@ -48,7 +48,7 @@ in {
       configuration = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           The configuration that Mopidy should use.
         '';
       };
@@ -56,7 +56,7 @@ in {
       extraConfigFiles = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Extra config file read by Mopidy when the service starts.
           Later files in the list overrides earlier configuration.
         '';

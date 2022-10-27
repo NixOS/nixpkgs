@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, options, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.unifi;
@@ -9,25 +9,6 @@ let
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
   '';
-  mountPoints = [
-    {
-      what = "${cfg.unifiPackage}/dl";
-      where = "${stateDir}/dl";
-    }
-    {
-      what = "${cfg.unifiPackage}/lib";
-      where = "${stateDir}/lib";
-    }
-    {
-      what = "${cfg.mongodbPackage}/bin";
-      where = "${stateDir}/bin";
-    }
-    {
-      what = "${cfg.dataDir}";
-      where = "${stateDir}/data";
-    }
-  ];
-  systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
 {
 
@@ -36,7 +17,7 @@ in
     services.unifi.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable the unifi controller service.
       '';
     };
@@ -44,8 +25,8 @@ in
     services.unifi.jrePackage = mkOption {
       type = types.package;
       default = pkgs.jre8;
-      defaultText = "pkgs.jre8";
-      description = ''
+      defaultText = literalExpression "pkgs.jre8";
+      description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
     };
@@ -53,8 +34,8 @@ in
     services.unifi.unifiPackage = mkOption {
       type = types.package;
       default = pkgs.unifiLTS;
-      defaultText = "pkgs.unifiLTS";
-      description = ''
+      defaultText = literalExpression "pkgs.unifiLTS";
+      description = lib.mdDoc ''
         The unifi package to use.
       '';
     };
@@ -62,26 +43,16 @@ in
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
       default = pkgs.mongodb;
-      defaultText = "pkgs.mongodb";
-      description = ''
+      defaultText = literalExpression "pkgs.mongodb";
+      description = lib.mdDoc ''
         The mongodb package to use.
       '';
     };
 
-    services.unifi.dataDir = mkOption {
-      type = types.str;
-      default = "${stateDir}/data";
-      description = ''
-        Where to store the database and other data.
-
-        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
-      '';
-    };
-
-    services.unifi.openPorts = mkOption {
+    services.unifi.openFirewall = mkOption {
       type = types.bool;
-      default = true;
-      description = ''
+      default = false;
+      description = lib.mdDoc ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -94,7 +65,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 1024;
-      description = ''
+      description = lib.mdDoc ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -104,7 +75,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 4096;
-      description = ''
+      description = lib.mdDoc ''
         Set the maximimum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -115,12 +86,14 @@ in
   config = mkIf cfg.enable {
 
     users.users.unifi = {
-      uid = config.ids.uids.unifi;
+      isSystemUser = true;
+      group = "unifi";
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
+    users.groups.unifi = {};
 
-    networking.firewall = mkIf cfg.openPorts {
+    networking.firewall = mkIf cfg.openFirewall {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
         8080  # Port for UAP to inform controller.
@@ -134,56 +107,92 @@ in
       ];
     };
 
-    # We must create the binary directories as bind mounts instead of symlinks
-    # This is because the controller resolves all symlinks to absolute paths
-    # to be used as the working directory.
-    systemd.mounts = map ({ what, where }: {
-        bindsTo = [ "unifi.service" ];
-        partOf = [ "unifi.service" ];
-        unitConfig.RequiresMountsFor = stateDir;
-        options = "bind";
-        what = what;
-        where = where;
-      }) mountPoints;
-
-    systemd.tmpfiles.rules = [
-      "e '${stateDir}' 0700 unifi - - -"
-      "d '${stateDir}/data' 0700 unifi - - -"
-    ];
-
     systemd.services.unifi = {
       description = "UniFi controller daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ systemdMountPoints;
-      partOf = systemdMountPoints;
-      bindsTo = systemdMountPoints;
-      unitConfig.RequiresMountsFor = stateDir;
+      after = [ "network.target" ];
+
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
-
-      preStart = ''
-        # Create the volatile webapps
-        rm -rf "${stateDir}/webapps"
-        mkdir -p "${stateDir}/webapps"
-        ln -s "${cfg.unifiPackage}/webapps/ROOT" "${stateDir}/webapps/ROOT"
-      '';
-
-      postStop = ''
-        rm -rf "${stateDir}/webapps"
-      '';
+      # Make sure package upgrades trigger a service restart
+      restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
 
       serviceConfig = {
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
         Restart = "on-failure";
+        TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
+        # the stop command exits while the main process is still running, and unifi
+        # wants to manage its own child processes. this means we have to set KillSignal
+        # to something the main process ignores, otherwise every stop will have unifi.service
+        # fail with SIGTERM status.
+        KillSignal = "SIGCONT";
+
+        # Hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        # ProtectClock= adds DeviceAllow=char-rtc r
+        DeviceAllow = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" ];
+
+        StateDirectory = "unifi";
+        RuntimeDirectory = "unifi";
+        LogsDirectory = "unifi";
+        CacheDirectory= "unifi";
+
+        TemporaryFileSystem = [
+          # required as we want to create bind mounts below
+          "${stateDir}/webapps:rw"
+        ];
+
+        # We must create the binary directories as bind mounts instead of symlinks
+        # This is because the controller resolves all symlinks to absolute paths
+        # to be used as the working directory.
+        BindPaths =  [
+          "/var/log/unifi:${stateDir}/logs"
+          "/run/unifi:${stateDir}/run"
+          "${cfg.unifiPackage}/dl:${stateDir}/dl"
+          "${cfg.unifiPackage}/lib:${stateDir}/lib"
+          "${cfg.mongodbPackage}/bin:${stateDir}/bin"
+          "${cfg.unifiPackage}/webapps/ROOT:${stateDir}/webapps/ROOT"
+        ];
+
+        # Needs network access
+        PrivateNetwork = false;
+        # Cannot be true due to OpenJDK
+        MemoryDenyWriteExecute = false;
       };
     };
 
   };
+  imports = [
+    (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
+    (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
+  ];
 
-  meta.maintainers = with lib.maintainers; [ erictapen ];
+  meta.maintainers = with lib.maintainers; [ erictapen pennae ];
 }

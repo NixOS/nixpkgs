@@ -1,27 +1,37 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, unittest2, lxml, robotframework
+{ lib
+, buildPythonPackage
+, fetchPypi
+, unittest2
+, lxml
+, robotframework
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "robotsuite";
-  version = "2.0.0";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15iw7g6gspf1ill0mzjrj71dirqfc86f1j14wphdvs2lazv8d50z";
+    sha256 = "sha256-iugVKUPl6HTTO8K1EbSqAk1fl/fsEPoOcsOnnAgcEas=";
   };
 
-  buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ robotframework lxml ];
+  buildInputs = [
+    unittest2
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace robotframework-python3 robotframework
-  '';
+  propagatedBuildInputs = [
+    robotframework
+    lxml
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "Python unittest test suite for Robot Framework";
-    homepage = https://github.com/collective/robotsuite/;
-    license = licenses.gpl3;
+    homepage = "https://github.com/collective/robotsuite/";
+    license = licenses.gpl3Only;
   };
 }

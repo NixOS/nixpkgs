@@ -1,20 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.4.0";
+  version = "2.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1775cz6lipb43hmjll77m2pxh72pikng74lpg30v9n1b66s78959";
+    hash = "sha256-UgEBNgiS6/nQVT9n0341n/kkA9ih4zgUAwUDCIoF2kk=";
   };
 
-  doCheck = !isPy3k;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "dominate"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/Knio/dominate/;
-    description = "Dominate is a Python library for creating and manipulating HTML documents using an elegant DOM API";
-    license = licenses.lgpl3;
+    description = "Library for creating and manipulating HTML documents using an elegant DOM API";
+    homepage = "https://github.com/Knio/dominate/";
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }

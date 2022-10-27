@@ -13,7 +13,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable Open vSwitch. A configuration daemon (ovs-server)
         will be started.
         '';
@@ -22,26 +22,18 @@ in {
     resetOnStart = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to reset the Open vSwitch configuration database to a default
-        configuration on every start of the systemd <literal>ovsdb.service</literal>.
+        configuration on every start of the systemd `ovsdb.service`.
         '';
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.openvswitch;
-      defaultText = "pkgs.openvswitch";
-      description = ''
+      defaultText = literalExpression "pkgs.openvswitch";
+      description = lib.mdDoc ''
         Open vSwitch package to use.
-      '';
-    };
-
-    ipsec = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to start racoon service for openvswitch.
       '';
     };
   };
@@ -62,10 +54,8 @@ in {
       installPhase = "mkdir -p $out";
     };
 
-  in (mkMerge [{
-
-    environment.systemPackages = [ cfg.package pkgs.ipsecTools ];
-
+  in {
+    environment.systemPackages = [ cfg.package ];
     boot.kernelModules = [ "tun" "openvswitch" ];
 
     boot.extraModulePackages = [ cfg.package ];
@@ -89,6 +79,13 @@ in {
             "${cfg.package}/share/openvswitch/vswitch.ovsschema"
         fi
         chmod -R +w /var/db/openvswitch
+        if ${cfg.package}/bin/ovsdb-tool needs-conversion /var/db/openvswitch/conf.db | grep -q "yes"
+        then
+          echo "Performing database upgrade"
+          ${cfg.package}/bin/ovsdb-tool convert /var/db/openvswitch/conf.db
+        else
+          echo "Database already up to date"
+        fi
         '';
       serviceConfig = {
         ExecStart =
@@ -114,7 +111,7 @@ in {
       '';
     };
 
-    systemd.services.vswitchd = {
+    systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
       wantedBy = [ "multi-user.target" ];
       bindsTo = [ "ovsdb.service" ];
@@ -129,48 +126,20 @@ in {
         PIDFile = "/run/openvswitch/ovs-vswitchd.pid";
         # Use service type 'forking' to correctly determine when vswitchd is ready.
         Type = "forking";
+        Restart = "always";
+        RestartSec = 3;
       };
     };
 
-  }
-  (mkIf cfg.ipsec {
-    services.racoon.enable = true;
-    services.racoon.configPath = "${runDir}/ipsec/etc/racoon/racoon.conf";
+  });
 
-    networking.firewall.extraCommands = ''
-      iptables -I INPUT -t mangle -p esp -j MARK --set-mark 1/1
-      iptables -I INPUT -t mangle -p udp --dport 4500 -j MARK --set-mark 1/1
-    '';
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "vswitch" "ipsec" ] ''
+      OpenVSwitch IPSec functionality has been removed, because it depended on racoon,
+      which was removed from nixpkgs, because it was abanoded upstream.
+    '')
+  ];
 
-    systemd.services.ovs-monitor-ipsec = {
-      description = "Open_vSwitch Ipsec Daemon";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "ovsdb.service" ];
-      before = [ "vswitchd.service" "racoon.service" ];
-      environment.UNIXCTLPATH = "/tmp/ovsdb.ctl.sock";
-      serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}/bin/ovs-monitor-ipsec \
-            --root-prefix ${runDir}/ipsec \
-            --pidfile /run/openvswitch/ovs-monitor-ipsec.pid \
-            --monitor --detach \
-            unix:/run/openvswitch/db.sock
-        '';
-        PIDFile = "/run/openvswitch/ovs-monitor-ipsec.pid";
-        # Use service type 'forking' to correctly determine when ovs-monitor-ipsec is ready.
-        Type = "forking";
-      };
-
-      preStart = ''
-        rm -r ${runDir}/ipsec/etc/racoon/certs || true
-        mkdir -p ${runDir}/ipsec/{etc/racoon,etc/init.d/,usr/sbin/}
-        ln -fs ${pkgs.ipsecTools}/bin/setkey ${runDir}/ipsec/usr/sbin/setkey
-        ln -fs ${pkgs.writeScript "racoon-restart" ''
-        #!${pkgs.runtimeShell}
-        /run/current-system/sw/bin/systemctl $1 racoon
-        ''} ${runDir}/ipsec/etc/init.d/racoon
-      '';
-    };
-  })]));
+  meta.maintainers = with maintainers; [ netixx ];
 
 }

@@ -1,5 +1,16 @@
-  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
-  , lv2, pkgconfig, libGLU_combined }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, xorg
+, freetype
+, alsa-lib
+, curl
+, libjack2
+, lv2
+, pkg-config
+, libGLU
+, libGL
+}:
 
   stdenv.mkDerivation {
   version = "0.9.0";
@@ -15,26 +26,29 @@
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib curl libjack2 pkgconfig libGLU_combined lv2
+    freetype alsa-lib curl libjack2 libGLU libGL lv2
   ];
+  nativeBuildInputs = [ pkg-config ];
 
   CXXFLAGS = "-DHAVE_LROUND";
+  enableParallelBuilding = true;
+  makeFlags = [ "DESTDIR=$(out)" ];
 
-  patchPhase = ''
+  patches = [
+    # gcc9 compatibility https://github.com/mtytel/helm/pull/233
+    (fetchpatch {
+      url = "https://github.com/mtytel/helm/commit/cb611a80bd5a36d31bfc31212ebbf79aa86c6f08.patch";
+      sha256 = "1i2289srcfz17c3zzab6f51aznzdj62kk53l4afr32bkjh9s4ixk";
+    })
+  ];
+
+  prePatch = ''
     sed -i 's|usr/||g' Makefile
+    sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
   '';
 
-  buildPhase = ''
-    make lv2
-    make standalone
-  '';
-
-  installPhase = ''
-   make DESTDIR="$out" install
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://tytel.org/helm;
+  meta = with lib; {
+    homepage = "http://tytel.org/helm";
     description = "A free, cross-platform, polyphonic synthesizer";
     longDescription = ''
       A free, cross-platform, polyphonic synthesizer.
@@ -53,7 +67,7 @@
         Simple arpeggiator
         Effects: Formant filter, stutter, delay
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };

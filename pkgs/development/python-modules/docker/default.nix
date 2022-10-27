@@ -1,42 +1,59 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
-, backports_ssl_match_hostname
-, mock
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, packaging
 , paramiko
-, pytest
+, pytestCheckHook
 , requests
-, six
-, websocket_client
+, setuptools-scm
+, urllib3
+, websocket-client
 }:
 
 buildPythonPackage rec {
-  version = "4.0.2";
   pname = "docker";
+  version = "6.0.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r1i46h8x1vfvadayyvmh5hc6mpzgv3vvp6pv4g1wavamya2wnyc";
+    sha256 = "sha256-GeMwRwr0AWfSk7A1JXjB+iLXSzTT7fXU/5DrwgO7svE=";
   };
 
-  propagatedBuildInputs = [
-    six
-    requests
-    websocket_client
-    paramiko
-  ] ++ stdenv.lib.optional isPy27 backports_ssl_match_hostname;
-
-  checkInputs = [
-    mock
-    pytest
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  # Other tests touch network
-  checkPhase = ''
-    ${pytest}/bin/pytest tests/unit/
-  '';
+  propagatedBuildInputs = [
+    packaging
+    requests
+    urllib3
+    websocket-client
+  ];
 
-  meta = with stdenv.lib; {
+  passthru.optional-dependencies.ssh = [
+    paramiko
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+
+  # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
+  disabledTests = lib.optionals stdenv.isDarwin [ "api_test" "stream_response" "socket_file" ];
+
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     description = "An API client for docker written in Python";
-    homepage = https://github.com/docker/docker-py;
+    homepage = "https://github.com/docker/docker-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonringer ];
   };

@@ -1,5 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, requests_oauthlib
-, django, python3-openid }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "django-paintstore";
@@ -12,9 +11,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django app that integrates jQuery ColorPicker with the Django admin";
-    homepage = https://github.com/gsiegman/django-paintstore;
+    homepage = "https://github.com/gsiegman/django-paintstore";
     license = licenses.mit;
   };
 }

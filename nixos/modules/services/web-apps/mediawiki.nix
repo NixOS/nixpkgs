@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionals optionalString types;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -29,13 +29,13 @@ let
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/extensions/${k}
+        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
   };
 
   mediawikiScripts = pkgs.runCommand "mediawiki-scripts" {
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     preferLocalBuild = true;
   } ''
     mkdir -p $out/bin
@@ -64,7 +64,7 @@ let
       $wgScriptPath = "";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.enableSSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
@@ -171,24 +171,26 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption "MediaWiki";
+      enable = mkEnableOption (lib.mdDoc "MediaWiki");
 
       package = mkOption {
         type = types.package;
         default = pkgs.mediawiki;
-        description = "Which MediaWiki package to use.";
+        defaultText = literalExpression "pkgs.mediawiki";
+        description = lib.mdDoc "Which MediaWiki package to use.";
       };
 
       name = mkOption {
+        type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
-        description = "Name of the wiki.";
+        description = lib.mdDoc "Name of the wiki.";
       };
 
       uploadsDir = mkOption {
         type = types.nullOr types.path;
         default = "${stateDir}/uploads";
-        description = ''
+        description = lib.mdDoc ''
           This directory is used for uploads of pictures. The directory passed here is automatically
           created and permissions adjusted as required.
         '';
@@ -196,25 +198,36 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = "A file containing the initial password for the admin user.";
+        description = lib.mdDoc "A file containing the initial password for the admin user.";
         example = "/run/keys/mediawiki-password";
       };
 
       skins = mkOption {
         default = {};
         type = types.attrsOf types.path;
-        description = ''
-          List of paths whose content is copied to the 'skins'
-          subdirectory of the MediaWiki installation.
+        description = lib.mdDoc ''
+          Attribute set of paths whose content is copied to the {file}`skins`
+          subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
 
       extensions = mkOption {
         default = {};
-        type = types.attrsOf types.path;
-        description = ''
-          List of paths whose content is copied to the 'extensions'
-          subdirectory of the MediaWiki installation.
+        type = types.attrsOf (types.nullOr types.path);
+        description = lib.mdDoc ''
+          Attribute set of paths whose content is copied to the {file}`extensions`
+          subdirectory of the MediaWiki installation and enabled in configuration.
+
+          Use `null` instead of path to enable extensions that are part of MediaWiki.
+        '';
+        example = literalExpression ''
+          {
+            Matomo = pkgs.fetchzip {
+              url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
+              sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+            };
+            ParserFunctions = null;
+          }
         '';
       };
 
@@ -222,67 +235,67 @@ in
         type = mkOption {
           type = types.enum [ "mysql" "postgres" "sqlite" "mssql" "oracle" ];
           default = "mysql";
-          description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
+          description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = "Database host address.";
+          description = lib.mdDoc "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
           default = 3306;
-          description = "Database host port.";
+          description = lib.mdDoc "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = "Database name.";
+          description = lib.mdDoc "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/mediawiki-dbpassword";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
         tablePrefix = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             If you only have access to a single database and wish to install more than
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
             conflicts or confusion.
-            See <link xlink:href='https://www.mediawiki.org/wiki/Manual:$wgDBprefix'/>.
+            See <https://www.mediawiki.org/wiki/Manual:$wgDBprefix>.
           '';
         };
 
         socket = mkOption {
           type = types.nullOr types.path;
           default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "/run/mysqld/mysqld.sock";
-          description = "Path to the unix socket file to use for authentication.";
+          defaultText = literalExpression "/run/mysqld/mysqld.sock";
+          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql";
-          defaultText = "true";
-          description = ''
+          defaultText = literalExpression "true";
+          description = lib.mdDoc ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
           '';
@@ -290,24 +303,18 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule ({
-          options = import ../web-servers/apache-httpd/per-server-options.nix {
-            inherit lib;
-            forMainServer = false;
-          };
-        });
-        example = literalExample ''
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = literalExpression ''
           {
             hostName = "mediawiki.example.org";
-            enableSSL = true;
             adminAddr = "webmaster@example.org";
-            sslServerCert = "/var/lib/acme/mediawiki.example.org/full.pem";
-            sslServerKey = "/var/lib/acme/mediawiki.example.org/key.pem";
+            forceSSL = true;
+            enableACME = true;
           }
         '';
-        description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
 
@@ -321,18 +328,18 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = ''
-          Options for the MediaWiki PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+        description = lib.mdDoc ''
+          Options for the MediaWiki PHP pool. See the documentation on `php-fpm.conf`
           for details on configuration directives.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Any additional text to be appended to MediaWiki's
           LocalSettings.php configuration file. For configuration
-          settings, see <link xlink:href="https://www.mediawiki.org/wiki/Manual:Configuration_settings"/>.
+          settings, see <https://www.mediawiki.org/wiki/Manual:Configuration_settings>.
         '';
         default = "";
         example = ''
@@ -389,31 +396,28 @@ in
 
     services.httpd = {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${pkg}/share/mediawiki";
-          extraConfig = ''
-            <Directory "${pkg}/share/mediawiki">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg}/share/mediawiki";
+        extraConfig = ''
+          <Directory "${pkg}/share/mediawiki">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-              Require all granted
-              DirectoryIndex index.php
-              AllowOverride All
-            </Directory>
-          '' + optionalString (cfg.uploadsDir != null) ''
-            Alias "/images" "${cfg.uploadsDir}"
-            <Directory "${cfg.uploadsDir}">
-              Require all granted
-            </Directory>
-          '';
-        }
-      ]) ];
+            Require all granted
+            DirectoryIndex index.php
+            AllowOverride All
+          </Directory>
+        '' + optionalString (cfg.uploadsDir != null) ''
+          Alias "/images" "${cfg.uploadsDir}"
+          <Directory "${cfg.uploadsDir}">
+            Require all granted
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [
@@ -445,6 +449,7 @@ in
           --dbuser ${cfg.database.user} \
           ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${cfg.database.passwordFile}"} \
           --passfile ${cfg.passwordFile} \
+          --dbtype ${cfg.database.type} \
           ${cfg.name} \
           admin
 
@@ -461,7 +466,10 @@ in
 
     systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service";
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ mediawikiScripts ];
   };

@@ -1,35 +1,67 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pandas, shapely, fiona, descartes, pyproj
-, pytest, Rtree }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fiona
+, packaging
+, pandas
+, pyproj
+, pytestCheckHook
+, pythonOlder
+, Rtree
+, shapely
+}:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.6.1";
+  version = "0.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "v${version}";
-    sha256 = "0bdgphw43m2nrgcp83j1pnxknnzahm2zmdr55hyz3jjkva7m6dpk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pMboKhwlueRjpbukF9u+yy9jlu0ikA1vQ08n7V2C7wo=";
   };
 
-  checkInputs = [ pytest Rtree ];
-
-  checkPhase = ''
-    py.test geopandas -m "not web"
-  '';
-
   propagatedBuildInputs = [
-    pandas
-    shapely
     fiona
-    descartes
+    packaging
+    pandas
     pyproj
+    shapely
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+    Rtree
+  ];
+
+  doCheck = !stdenv.isDarwin;
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  disabledTests = [
+    # Requires network access
+    "test_read_file_remote_geojson_url"
+    "test_read_file_remote_zipfile_url"
+  ];
+
+  pytestFlagsArray = [
+    "geopandas"
+  ];
+
+  pythonImportsCheck = [
+    "geopandas"
+  ];
+
+  meta = with lib; {
     description = "Python geospatial data analysis framework";
-    homepage = https://geopandas.org;
+    homepage = "https://geopandas.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

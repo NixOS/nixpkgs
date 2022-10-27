@@ -1,5 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
-, coverage, flake8, mock, nose
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
+, coverage, flake8, mock, nose, importlib-metadata
 , cryptography }:
 
 buildPythonPackage rec {
@@ -11,13 +11,14 @@ buildPythonPackage rec {
     sha256 = "1y5ln09ji4dwpzhxr77cggk02kghq7lql60a6969a5n2lwpvqblk";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  propagatedBuildInputs = [ cryptography ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ coverage flake8 mock nose ];
 
   meta = with lib; {
     description = "Encipher HTTP Messages";
-    homepage = https://github.com/martinthomson/encrypted-content-encoding;
+    homepage = "https://github.com/martinthomson/encrypted-content-encoding";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

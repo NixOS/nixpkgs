@@ -1,29 +1,42 @@
-{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
+{ lib, stdenv, fetchurl, fetchpatch
+, buildPackages, bison, flex, pkg-config
+, db, iptables, libelf, libmnl
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.3.0";
+  version = "5.19.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0gvv269wjn4279hxr5zzwsk2c5qgswr47za3hm1x4frsk52iw76b";
+    sha256 = "JrejTWp/0vekLis5xakMthusUi0QlgZ//rGV5Wk9d5E=";
   };
 
+  patches = [
+    # To avoid ./configure failing due to invalid arguments:
+    (fetchpatch { # configure: restore backward compatibility
+      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
+      sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
+    })
+
+    # fix build on musl. applied anywhere to prevent patchrot.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/min.patch?id=4b78dbe29d18151402052c56af43cc12d04b1a69";
+      sha256 = "sha256-0ROZQAN3mUPPgggictr23jyA4JDG7m9vmBUhgRp4ExY=";
+    })
+  ];
+
   preConfigure = ''
-    patchShebangs ./configure
+    # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
-    # Don't build netem tools--they're not installed and require HOSTCC
-    substituteInPlace Makefile --replace " netem " " "
   '';
 
   outputs = [ "out" "dev" ];
 
   makeFlags = [
-    "DESTDIR="
-    "LIBDIR=$(out)/lib"
+    "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "MANDIR=$(out)/share/man"
-    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ];
@@ -36,17 +49,20 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables libelf ];
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
-  '';
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
+    rev-prefix = "v";
+  };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.linuxfoundation.org/networking/iproute2;
+  meta = with lib; {
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;

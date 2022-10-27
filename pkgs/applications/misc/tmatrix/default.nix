@@ -1,22 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, cmake, ncurses }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "tmatrix";
-  version = "1.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "M4444";
     repo = "TMatrix";
     rev = "v${version}";
-    sha256 = "1x9drk3wdsd6vzcypk3x068sqcbgis488s9fhcpsv8xgb496rd6y";
+    sha256 = "sha256-G3dg0SWfBjCA66TTxkVAcVrFNJOWE9+GJXYKzCUX34w=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake installShellFiles ];
   buildInputs = [ ncurses ];
 
   postInstall = ''
-    mkdir -p $out/share/man/man6
-    install -m 0644 ../tmatrix.6 $out/share/man/man6
+    installManPage ../tmatrix.6
   '';
 
   meta = with lib; {
@@ -30,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/M4444/TMatrix";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ infinisil Br1ght0ne ];
   };
 }

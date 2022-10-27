@@ -1,28 +1,30 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "dosage";
-  version = "2018.04.08";
-  PBR_VERSION = version;
+  version = "2.17";
 
-  src = fetchFromGitHub {
-    owner = "webcomics";
-    repo = "dosage";
-    rev = "b2fdc13feb65b93762928f7e99bac7b1b7b31591";
-    sha256 = "1p6vllqaf9s6crj47xqp97hkglch1kd4y8y4lxvzx3g2shhhk9hh";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "0vmxgn9wd3j80hp4gr5iq06jrl4gryz5zgfdd2ah30d12sfcfig0";
   };
-  checkInputs = with pythonPackages; [ pytest responses ];
-  propagatedBuildInputs = with pythonPackages; [ colorama lxml requests pbr ];
 
-  disabled = pythonPackages.pythonOlder "3.3";
+  checkInputs = with python3Packages; [
+    pytestCheckHook pytest-xdist responses
+  ];
 
-  checkPhase = ''
-    py.test tests/
-  '';
+  nativeBuildInputs = with python3Packages; [ setuptools-scm ];
+
+  propagatedBuildInputs = with python3Packages; [
+    colorama imagesize lxml requests setuptools six
+  ];
+
+  disabled = python3Packages.pythonOlder "3.3";
 
   meta = {
     description = "A comic strip downloader and archiver";
-    homepage = https://dosage.rocks/;
-    license = stdenv.lib.licenses.mit;
+    homepage = "https://dosage.rocks/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ toonn ];
   };
 }

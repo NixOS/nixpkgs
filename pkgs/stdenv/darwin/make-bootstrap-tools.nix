@@ -1,9 +1,23 @@
-{ pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
+{ pkgspath ? ../../.., test-pkgspath ? pkgspath
+, localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+, bootstrapFiles ? null
+}:
 
-with import pkgspath { inherit system; };
+let cross = if crossSystem != null
+      then { inherit crossSystem; }
+      else {};
+    custom-bootstrap = if bootstrapFiles != null
+      then { stdenvStages = args:
+              let args' = args // { bootstrapFiles = bootstrapFiles; };
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+           }
+      else {};
+in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
-  llvmPackages = llvmPackages_7;
+  llvmPackages = llvmPackages_11;
+  storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -18,31 +32,31 @@ in rec {
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
   # Avoid messing with libkrb5 and libnghttp2.
-  curl_ = curl.override (args: { gssSupport = false; http2Support = false; });
+  curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    buildInputs = [nukeReferences cpio];
+    nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ]
+      ++ lib.optionals targetPlatform.isAarch64 [ buildPackages.darwin.sigtool ];
 
     buildCommand = ''
-      mkdir -p $out/bin $out/lib $out/lib/system
+      mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
 
-      # We're not going to bundle the actual libSystem.dylib; instead we reconstruct it on
-      # the other side. See the notes in stdenv/darwin/default.nix for more information.
-      # We also need the .o files for various low-level boot stuff.
-      cp -d ${darwin.Libsystem}/lib/*.o $out/lib
-      cp -d ${darwin.Libsystem}/lib/system/*.dylib $out/lib/system
+      ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
+        # Copy libSystem's .o files for various low-level boot stuff.
+        cp -d ${lib.getLib darwin.Libsystem}/lib/*.o $out/lib
 
-      # Resolv is actually a link to another package, so let's copy it properly
-      cp -L ${darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
+        # Resolv is actually a link to another package, so let's copy it properly
+        cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
-      cp -rL ${darwin.Libsystem}/include $out
-      chmod -R u+w $out/include
-      cp -rL ${darwin.ICU}/include*             $out/include
-      cp -rL ${libiconv}/include/*       $out/include
-      cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
-      mv $out/include $out/include-Libsystem
+        cp -rL ${darwin.Libsystem}/include $out
+        chmod -R u+w $out/include
+        cp -rL ${darwin.ICU}/include*             $out/include
+        cp -rL ${libiconv}/include/*       $out/include
+        cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
+        mv $out/include $out/include-Libsystem
+      ''}
 
       # Copy coreutils, bash, etc.
       cp ${coreutils_}/bin/* $out/bin
@@ -68,48 +82,69 @@ in rec {
       cp ${curl_.bin}/bin/curl $out/bin
       cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
-      cp -d ${openssl.out}/lib/*.dylib $out/lib
+      cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
       cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
+      cp -rd ${lib.getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
 
-      cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
-
-      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
-      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
-      cp -d ${libffi}/lib/libffi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
+      cp -d ${lib.getLib llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${lib.getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
-      cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
+      cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
 
-      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
+      # copy .tbd assembly utils
+      cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
+      cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+
+      # copy package extraction tools
+      cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
+      cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
+      cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
+
+      ${lib.optionalString targetPlatform.isAarch64 ''
+        # copy sigtool
+        cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
+        cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
+      ''}
+
+      cp -d ${lib.getLib darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
 
       # Copy binutils.
-      for i in as ld ar ranlib nm strip otool install_name_tool lipo; do
+      for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
         cp ${cctools_}/bin/$i $out/bin
       done
 
-      cp -rd ${pkgs.darwin.CF}/Library $out
+      cp -d ${lib.getLib darwin.libtapi}/lib/libtapi* $out/lib
+
+      ${lib.optionalString targetPlatform.isx86_64 ''
+        cp -rd ${pkgs.darwin.CF}/Library $out
+      ''}
 
       chmod -R u+w $out
 
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${cctools_}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(${stdenv.cc.targetPrefix}otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local newlib
         for lib in $libs; do
-          ${cctools_}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          ${stdenv.cc.targetPrefix}install_name_tool -change $lib "@rpath/$(basename "$lib")" "$1"
         done
       }
 
@@ -117,20 +152,27 @@ in rec {
       for i in $out/bin/*; do
         if test -x $i -a ! -L $i; then
           chmod +w $i
-          strip $i || true
+          ${stdenv.cc.targetPrefix}strip $i || true
         fi
       done
 
-      for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
+      for i in $out/bin/* $out/lib/*.dylib $out/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
         if test -x "$i" -a ! -L "$i"; then
           echo "Adding rpath to $i"
           rpathify $i
         fi
       done
 
+      for i in $out/bin/*; do
+        if test -x "$i" -a ! -L "$i"; then
+          echo "Adding @executable_path to rpath in $i"
+          ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
+        fi
+      done
+
       nuke-refs $out/lib/*
       nuke-refs $out/lib/system/*
-      nuke-refs $out/lib/clang/*/lib/darwin/*
+      nuke-refs $out/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
       mkdir $out/.pack
@@ -144,7 +186,7 @@ in rec {
       cp ${bzip2_.bin}/bin/bzip2 $out/on-server
 
       chmod u+w $out/on-server/*
-      strip $out/on-server/*
+      ${stdenv.cc.targetPrefix}strip $out/on-server/*
       nuke-refs $out/on-server/*
 
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
@@ -153,7 +195,7 @@ in rec {
     allowedReferences = [];
 
     meta = {
-      maintainers = [ stdenv.lib.maintainers.copumpkin ];
+      maintainers = [ lib.maintainers.copumpkin ];
     };
   };
 
@@ -170,6 +212,8 @@ in rec {
     '';
   };
 
+  bootstrapLlvmVersion = llvmPackages.llvm.version;
+
   bootstrapFiles = {
     sh      = "${build}/on-server/sh";
     bzip2   = "${build}/on-server/bzip2";
@@ -180,9 +224,6 @@ in rec {
 
   unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
-
-    reexportedLibrariesFile =
-      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
@@ -204,39 +245,6 @@ in rec {
           echo patching $i
           install_name_tool -add_rpath $out/lib $i || true
         fi
-      done
-
-      install_name_tool \
-        -id $out/lib/system/libsystem_c.dylib \
-        $out/lib/system/libsystem_c.dylib
-
-      install_name_tool \
-        -id $out/lib/system/libsystem_kernel.dylib \
-        $out/lib/system/libsystem_kernel.dylib
-
-      # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
-      libs=$(cat $reexportedLibrariesFile | grep -v '^#')
-
-      for i in $libs; do
-        if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
-          args="$args -reexport_library $i"
-        fi
-      done
-
-      ld -macosx_version_min 10.7 \
-         -arch x86_64 \
-         -dylib \
-         -o $out/lib/libSystem.B.dylib \
-         -compatibility_version 1.0 \
-         -current_version 1226.10.1 \
-         -reexport_library $out/lib/system/libsystem_c.dylib \
-         -reexport_library $out/lib/system/libsystem_kernel.dylib \
-         $args
-
-      ln -s libSystem.B.dylib $out/lib/libSystem.dylib
-
-      for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
-        ln -s libSystem.dylib $out/lib/lib$name.dylib
       done
 
       ln -s libresolv.9.dylib $out/lib/libresolv.dylib
@@ -307,7 +315,20 @@ in rec {
 
       ${build}/on-server/sh -c 'echo Hello World'
 
-      export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib"
+      # This approximates a bootstrap version of libSystem can that be
+      # assembled via fetchurl. Adapted from main libSystem expression.
+      mkdir libSystem-boot
+      cp -vr \
+        ${darwin.darwin-stubs}/usr/lib/libSystem.B.tbd \
+        ${darwin.darwin-stubs}/usr/lib/system \
+        libSystem-boot
+
+      substituteInPlace libSystem-boot/libSystem.B.tbd \
+        --replace "/usr/lib/system/" "$PWD/libSystem-boot/system/"
+      ln -s libSystem.B.tbd libSystem-boot/libSystem.tbd
+      # End of bootstrap libSystem
+
+      export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib -L$PWD/libSystem-boot"
 
       export CPP="clang -E $flags"
       export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
@@ -332,7 +353,8 @@ in rec {
 
       tar xvf ${hello.src}
       cd hello-*
-      ./configure --prefix=$out
+      # stdenv bootstrap tools ship a broken libiconv.dylib https://github.com/NixOS/nixpkgs/issues/158331
+      am_cv_func_iconv=no ./configure --prefix=$out
       make
       make install
 
@@ -342,9 +364,12 @@ in rec {
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = import test-pkgspath {
-    inherit system;
+    # if the bootstrap tools are for another platform, we should be testing
+    # that platform.
+    localSystem = if crossSystem != null then crossSystem else localSystem;
+
     stdenvStages = args: let
-        args' = args // { inherit bootstrapFiles; };
+        args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };
 }

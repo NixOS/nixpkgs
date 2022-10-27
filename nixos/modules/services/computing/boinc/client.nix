@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the BOINC distributed computing client. If this
           option is set to true, the boinc_client daemon will be run as a
           background service. The boinccmd command can be used to control the
@@ -30,8 +30,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.boinc;
-        defaultText = "pkgs.boinc";
-        description = ''
+        defaultText = literalExpression "pkgs.boinc";
+        description = lib.mdDoc ''
           Which BOINC package to use.
         '';
       };
@@ -39,7 +39,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/boinc";
-        description = ''
+        description = lib.mdDoc ''
           The directory in which to store BOINC's configuration and data files.
         '';
       };
@@ -47,50 +47,37 @@ in
       allowRemoteGuiRpc = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If set to true, any remote host can connect to and control this BOINC
           client (subject to password authentication). If instead set to false,
-          only the hosts listed in <varname>dataDir</varname>/remote_hosts.cfg will be allowed to
+          only the hosts listed in {var}`dataDir`/remote_hosts.cfg will be allowed to
           connect.
 
-          See also: <link xlink:href="http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access"/>
+          See also: <http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
         '';
       };
 
       extraEnvPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = "[ pkgs.virtualbox ]";
-        description = ''
+        example = literalExpression "[ pkgs.virtualbox ]";
+        description = lib.mdDoc ''
           Additional packages to make available in the environment in which
           BOINC will run. Common choices are:
-          <variablelist>
-            <varlistentry>
-              <term><varname>pkgs.virtualbox</varname></term>
-              <listitem><para>
-                The VirtualBox virtual machine framework. Required by some BOINC
-                projects, such as ATLAS@home.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><varname>pkgs.ocl-icd</varname></term>
-              <listitem><para>
-                OpenCL infrastructure library. Required by BOINC projects that
-                use OpenCL, in addition to a device-specific OpenCL driver.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><varname>pkgs.linuxPackages.nvidia_x11</varname></term>
-              <listitem><para>
-                Provides CUDA libraries. Required by BOINC projects that use
-                CUDA. Note that this requires an NVIDIA graphics device to be
-                present on the system.
-              </para><para>
-                Also provides OpenCL drivers for NVIDIA GPUs;
-                <varname>pkgs.ocl-icd</varname> is also needed in this case.
-              </para></listitem>
-            </varlistentry>
-          </variablelist>
+
+          - {var}`pkgs.virtualbox`:
+            The VirtualBox virtual machine framework. Required by some BOINC
+            projects, such as ATLAS@home.
+          - {var}`pkgs.ocl-icd`:
+            OpenCL infrastructure library. Required by BOINC projects that
+            use OpenCL, in addition to a device-specific OpenCL driver.
+          - {var}`pkgs.linuxPackages.nvidia_x11`:
+            Provides CUDA libraries. Required by BOINC projects that use
+            CUDA. Note that this requires an NVIDIA graphics device to be
+            present on the system.
+
+            Also provides OpenCL drivers for NVIDIA GPUs;
+            {var}`pkgs.ocl-icd` is also needed in this case.
         '';
       };
     };
@@ -99,14 +86,16 @@ in
       environment.systemPackages = [cfg.package];
 
       users.users.boinc = {
+        group = "boinc";
         createHome = false;
         description = "BOINC Client";
         home = cfg.dataDir;
         isSystemUser = true;
       };
+      users.groups.boinc = {};
 
       systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - boinc - - -"
+        "d '${cfg.dataDir}' - boinc boinc - -"
       ];
 
       systemd.services.boinc = {
@@ -114,7 +103,7 @@ in
         after = ["network.target"];
         wantedBy = ["multi-user.target"];
         script = ''
-          ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
+          ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
           User = "boinc";

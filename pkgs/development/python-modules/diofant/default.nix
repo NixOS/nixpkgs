@@ -1,39 +1,43 @@
 { lib
-, isPy3k
 , buildPythonPackage
 , fetchPypi
-, pytestrunner
-, setuptools_scm
+, gmpy2
 , isort
 , mpmath
-, strategies
+, numpy
+, pythonOlder
+, scipy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.10.0";
+  version = "0.13.0";
+  disabled = pythonOlder "3.9";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "Diofant";
-    sha256 = "0qjg0mmz2cqxryr610mppx3virf1gslzrsk24304502588z53v8w";
+    sha256 = "bac9e086a7156b20f18e3291d6db34e305338039a3c782c585302d377b74dd3c";
   };
 
   nativeBuildInputs = [
     isort
-    pytestrunner
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    gmpy2
     mpmath
-    strategies
+    numpy
+    scipy
   ];
 
   # tests take ~1h
   doCheck = false;
 
-  disabled = !isPy3k;
+  pythonImportsCheck = [ "diofant" ];
 
   meta = with lib; {
     description = "A Python CAS library";

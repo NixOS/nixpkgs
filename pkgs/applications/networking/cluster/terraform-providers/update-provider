@@ -1,0 +1,170 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+# shellcheck shell=bash
+# vim: ft=sh
+#
+# Update a terraform provider to the latest version advertised at the
+# provider source address.
+#
+set -euo pipefail
+shopt -s inherit_errexit
+
+show_usage() {
+  cat <<DOC
+Usage: ./update-provider [--force] [--no-build] [<owner>/]<provider>
+
+Update a single provider in the providers.json inventory file.
+
+For example to update 'terraform-providers.aws' run:
+
+    ./update-provider aws
+
+If the provider is not in the list already, use the form '<owner>/<provider>'
+to add the provider to the list:
+
+    ./update-provider hetznercloud/hcloud
+
+Options:
+
+  * --force: Force the update even if the version matches.
+  * --no-build: Don't build provider
+  * --vendor-hash <SRI-hash>: Override the SHA256 or "null".
+DOC
+}
+
+force=
+provider=
+build=1
+vendorHash=
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -h | --help)
+    show_usage
+    exit
+    ;;
+  --force)
+    force=1
+    shift
+    ;;
+  --no-build)
+    build=0
+    shift
+    ;;
+  --vendor-hash)
+    force=1
+    vendorHash=$2
+    shift 2
+    ;;
+  *)
+    if [[ -n ${provider} ]]; then
+      echo "ERROR: provider name was passed two times: '${provider}' and '$1'"
+      echo "Use --help for more info"
+      exit 1
+    fi
+    provider=$1
+    shift
+    ;;
+  esac
+done
+
+if [[ -z ${provider} ]]; then
+  echo "ERROR: No providers specified!"
+  echo
+  show_usage
+  exit 1
+fi
+
+# Usage: read_attr <key>
+read_attr() {
+  jq -r ".\"${provider}\".\"$1\"" providers.json
+}
+
+# Usage: update_attr <key> <value>
+update_attr() {
+  if [[ $2 == "null" ]]; then
+    jq -S ".\"${provider}\".\"$1\" = null" providers.json | sponge providers.json
+  else
+    jq -S ".\"${provider}\".\"$1\" = \"$2\"" providers.json | sponge providers.json
+  fi
+}
+
+repo_root=$(git rev-parse --show-toplevel)
+
+generate_hash() {
+  nix-prefetch -I nixpkgs="${repo_root}" \
+    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { inherit sha256; })"
+}
+
+echo_provider() {
+  echo "== terraform-providers.${provider}: $* =="
+}
+
+pushd "$(dirname "$0")" >/dev/null
+
+if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
+  echo_provider "init"
+  source_address=registry.terraform.io/${provider}
+  provider=$(basename "${provider}")
+  update_attr "provider-source-address" "${source_address}"
+  update_attr version "0"
+  # create empty stings so nix-prefetch works
+  update_attr hash ""
+  update_attr vendorHash ""
+else
+  source_address="$(read_attr provider-source-address)"
+fi
+
+old_vendor_hash=$(read_attr vendorHash)
+old_version=$(read_attr version)
+
+# The provider source address (used inside Terraform `required_providers` block) is
+# used to compute the registry API endpoint
+#
+# registry.terraform.io/hashicorp/aws (provider source address)
+# registry.terraform.io/providers/hashicorp/aws (provider URL for the website)
+# registry.terraform.io/v1/providers/hashicorp/aws (provider URL for the JSON API)
+registry_response=$(curl -s https://"${source_address/\///v1/providers/}")
+
+version="$(jq -r '.version' <<<"${registry_response}")"
+if [[ ${old_version} == "${version}" && ${force} != 1 && -z ${vendorHash} && ${old_vendor_hash} != "${vendorHash}" ]]; then
+  echo_provider "already at version ${version}"
+  exit
+fi
+if [[ ${version} =~ [[:alpha:]] && ${force} != 1 ]]; then
+  echo_provider "not updating to unstable version ${version}"
+  exit
+fi
+echo_provider "updating from ${old_version} to ${version}"
+update_attr version "${version}"
+
+provider_source_url="$(jq -r '.source' <<<"${registry_response}")"
+
+org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
+update_attr owner "${org}"
+repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
+update_attr repo "${repo}"
+rev="$(jq -r '.tag' <<<"${registry_response}")"
+update_attr rev "${rev}"
+echo_provider "calculating hash"
+hash=$(generate_hash src)
+update_attr hash "${hash}"
+
+if [[ -z ${vendorHash} ]]; then
+  if [[ ${old_vendor_hash} == null ]]; then
+    vendorHash=null
+  else
+    echo_provider "calculating vendorHash"
+    vendorHash=$(generate_hash go-modules)
+  fi
+fi
+
+update_attr vendorHash "${vendorHash}"
+
+# Check that the provider builds
+if [[ ${build} == 1 ]]; then
+  echo_provider "building"
+  nix-build --no-out-link "${repo_root}" -A "terraform-providers.${provider}"
+fi
+
+popd >/dev/null

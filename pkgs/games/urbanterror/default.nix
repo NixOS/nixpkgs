@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, SDL, libGLU_combined, openal, curl, libXxf86vm }:
+{ lib, stdenv, fetchurl, unzip, SDL, libGLU, libGL, openal, curl, libXxf86vm }:
 
 stdenv.mkDerivation rec {
   pname = "urbanterror";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
        })
     ];
 
-  buildInputs = [ unzip SDL libGLU_combined openal curl libXxf86vm ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ SDL libGL libGLU openal curl libXxf86vm ];
   sourceRoot = "ioq3-for-UrbanTerror-4-release-${version}";
 
   configurePhase = ''
@@ -51,12 +52,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     p=$out/opt/urbanterror/Quake3-UrT
     cur_rpath=$(patchelf --print-rpath $p)
-    patchelf --set-rpath $cur_rpath:${libGLU_combined}/lib $p
+    patchelf --set-rpath $cur_rpath:${libGL}/lib:${libGLU}/lib $p
   '';
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
     longDescription = ''
       Urban Terror is a free multiplayer first person shooter developed by
@@ -65,9 +66,9 @@ stdenv.mkDerivation rec {
       tactical shooter; somewhat realism based, but the motto is "fun over
       realism". This results in a very unique, enjoyable and addictive game.
     '';
-    homepage = http://www.urbanterror.info;
+    homepage = "http://www.urbanterror.info";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ astsmtl fpletz ];
+    maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
     hydraPlatforms = [];
   };

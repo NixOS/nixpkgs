@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ocaml, findlib }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, ocaml, findlib }:
 
 let
   pname = "ocplib-simplex";
@@ -15,18 +15,19 @@ stdenv.mkDerivation {
     sha256 = "09niyidrjzrj8g1qwx4wgsdf5m6cwrnzg7zsgala36jliic4di60";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ autoreconfHook ocaml findlib ];
 
-  installFlags = "LIBDIR=$(OCAMLFIND_DESTDIR)";
+  strictDeps = true;
+
+  installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
   createFindlibDestdir = true;
 
   meta = {
     description = "An OCaml library implementing a simplex algorithm, in a functional style, for solving systems of linear inequalities";
-    homepage = https://github.com/OCamlPro-Iguernlala/ocplib-simplex;
+    homepage = "https://github.com/OCamlPro-Iguernlala/ocplib-simplex";
     inherit (ocaml.meta) platforms;
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -1,22 +1,29 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vultr";
-  version = "1.15.0";
-  goPackagePath = "github.com/JamesClonk/vultr";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "JamesClonk";
     repo = "vultr";
-    rev = version;
-    sha256 = "1bx2x17aa6wfn4qy9lxk8sh7shs3x5ppz2z49s0xm8qq0rs1qi92";
+    rev = "v${version}";
+    sha256 = "sha256-kyB6gUbc32NsSDqDy1zVT4HXn0pWxHdBOEBOSaI0Xro=";
   };
 
-  meta = {
-    description = "A command line tool for Vultr services, a provider for cloud virtual private servers";
-    homepage = https://github.com/JamesClonk/vultr;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.zauberpony ];
+  vendorSha256 = null;
+
+  # There are not test files
+  doCheck = false;
+
+  meta = with lib; {
+    description = "Vultr CLI and API client library";
+    homepage = "https://jamesclonk.github.io/vultr";
+    changelog = "https://github.com/JamesClonk/vultr/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ zauberpony ];
   };
 }

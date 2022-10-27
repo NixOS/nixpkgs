@@ -24,9 +24,7 @@ let
     }
   '';
 
-  lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
-            "${pkgs.less}/bin/lesskey -o $out $src";
+  lessKey = pkgs.writeText "lessconfig" configText;
 
 in
 
@@ -35,18 +33,20 @@ in
 
     programs.less = {
 
-      enable = mkEnableOption "less";
+      # note that environment.nix sets PAGER=less, and
+      # therefore also enables this module
+      enable = mkEnableOption (lib.mdDoc "less");
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = literalExample "$${pkgs.my-configs}/lesskey";
-        description = ''
+        example = literalExpression ''"''${pkgs.my-configs}/lesskey"'';
+        description = lib.mdDoc ''
           Path to lesskey configuration file.
 
-          <option>configFile</option> takes precedence over <option>commands</option>,
-          <option>clearDefaultCommands</option>, <option>lineEditingKeys</option>, and
-          <option>envVariables</option>.
+          {option}`configFile` takes precedence over {option}`commands`,
+          {option}`clearDefaultCommands`, {option}`lineEditingKeys`, and
+          {option}`envVariables`.
         '';
       };
 
@@ -57,13 +57,13 @@ in
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";
         };
-        description = "Defines new command keys.";
+        description = lib.mdDoc "Defines new command keys.";
       };
 
       clearDefaultCommands = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Clear all default commands.
           You should remember to set the quit key.
           Otherwise you will not be able to leave less without killing it.
@@ -76,22 +76,25 @@ in
         example = {
           e = "abort";
         };
-        description = "Defines new line-editing keys.";
+        description = lib.mdDoc "Defines new line-editing keys.";
       };
 
       envVariables = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = {
+          LESS = "-R";
+        };
         example = {
           LESS = "--quit-if-one-screen";
         };
-        description = "Defines environment variables.";
+        description = lib.mdDoc "Defines environment variables.";
       };
 
       lessopen = mkOption {
         type = types.nullOr types.str;
         default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
-        description = ''
+        defaultText = literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
+        description = lib.mdDoc ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';
       };
@@ -99,7 +102,7 @@ in
       lessclose = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           When less closes a file opened in such a way, it will call another program, called the input postprocessor, which may  perform  any  desired  clean-up  action (such  as deleting the replacement file created by LESSOPEN).
         '';
       };
@@ -111,7 +114,7 @@ in
     environment.systemPackages = [ pkgs.less ];
 
     environment.variables = {
-      LESSKEY_SYSTEM = toString lessKey;
+      LESSKEYIN_SYSTEM = toString lessKey;
     } // optionalAttrs (cfg.lessopen != null) {
       LESSOPEN = cfg.lessopen;
     } // optionalAttrs (cfg.lessclose != null) {

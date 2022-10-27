@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-l10n'';
-  version = ''20161204-darcs'';
+  baseName = "cl-l10n";
+  version = "20211209-git";
 
   parasites = [ "cl-l10n/test" ];
 
-  description = ''Portable CL Locale Support'';
+  description = "Portable CL Locale Support";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cl-fad" args."cl-l10n-cldr" args."cl-ppcre" args."closer-mop" args."closure-common" args."cxml" args."flexi-streams" args."hu_dot_dwim_dot_stefil" args."iterate" args."local-time" args."metabang-bind" args."parse-number" args."puri" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz'';
-    sha256 = ''1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl'';
+    url = "http://beta.quicklisp.org/archive/cl-l10n/2021-12-09/cl-l10n-20211209-git.tgz";
+    sha256 = "0l67xg282pim6167g27zcqk4xj51cfpmcbzc8bjg8933w42fdjf4";
   };
 
   packageName = "cl-l10n";
@@ -20,9 +21,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-l10n DESCRIPTION Portable CL Locale Support SHA256
-    1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl URL
-    http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz
-    MD5 c7cb0bb584b061799abaaaf2bd65c9c5 NAME cl-l10n FILENAME cl-l10n DEPS
+    0l67xg282pim6167g27zcqk4xj51cfpmcbzc8bjg8933w42fdjf4 URL
+    http://beta.quicklisp.org/archive/cl-l10n/2021-12-09/cl-l10n-20211209-git.tgz
+    MD5 e575bb4ff3a6d0bbba5220c631f9c83a NAME cl-l10n FILENAME cl-l10n DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cl-fad FILENAME cl-fad) (NAME cl-l10n-cldr FILENAME cl-l10n-cldr)
@@ -39,4 +40,4 @@ rec {
     (alexandria babel bordeaux-threads cl-fad cl-l10n-cldr cl-ppcre closer-mop
      closure-common cxml flexi-streams hu.dwim.stefil iterate local-time
      metabang-bind parse-number puri trivial-features trivial-gray-streams)
-    VERSION 20161204-darcs SIBLINGS NIL PARASITES (cl-l10n/test)) */
+    VERSION 20211209-git SIBLINGS NIL PARASITES (cl-l10n/test)) */

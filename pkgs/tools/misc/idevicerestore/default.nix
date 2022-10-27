@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
 , curl
 , libimobiledevice
 , libirecovery
@@ -8,18 +12,22 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "2019-02-14";
+  version = "1.0.0+date=2022-05-22";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "8a882038b2b1e022fbd19eaf8bea51006a373c06";
-    sha256 = "17lisl7ll43ixl1zqwchn7jljrdyl2p9q99w30i6qaci71mas37m";
+    rev = "f80a876b3598de4eb551bafcb279947c527fae33";
+    hash = "sha256-I9zZQcZFd0hfeEJM7jltJtVJ6V5C5rA/S8gINiCnJdY=";
   };
+
+  postPatch = ''
+    echo '${version}' > .tarball-version
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -33,8 +41,8 @@ stdenv.mkDerivation rec {
     # because they are inherited `libimobiledevice`.
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/idevicerestore;
+  meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/idevicerestore";
     description = "Restore/upgrade firmware of iOS devices";
     longDescription = ''
       The idevicerestore tool allows to restore firmware files to iOS devices.
@@ -51,8 +59,7 @@ stdenv.mkDerivation rec {
       This will download and restore a device to the latest firmware available.
     '';
     license = licenses.lgpl21Plus;
-    # configure.ac suggests it should work for darwin and mingw as well but not tried yet
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nh2 ];
   };
 }

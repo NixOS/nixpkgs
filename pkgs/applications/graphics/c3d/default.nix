@@ -1,25 +1,29 @@
-{ stdenv, fetchgit, cmake, itk, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, itk, Cocoa }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname   = "c3d";
-  version = "2018-10-04";
+  version = "unstable-2021-09-14";
 
-  src = fetchgit {
-    url = "https://git.code.sf.net/p/c3d/git";
-    rev = "351929a582b2ef68fb9902df0b11d38f44a0ccd0";
-    sha256 = "0mpv4yl6hdnxgvnwrmd182h64n3ppp30ldzm0jz6jglk0nvpzq9w";
+  src = fetchFromGitHub {
+    owner = "pyushkevich";
+    repo = pname;
+    rev = "cc06e6e2f04acd3d6faa3d8c9a66b499f02d4388";
+    sha256 = "sha256:1ql1y6694njsmdapywhppb54viyw8wdpaxxr1b3hm2rqhvwmhn52";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ itk ]
-    ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.itksnap.org/c3d;
+  cmakeFlags = [ "-DCONVERT3D_USE_ITK_REMOTE_MODULES=OFF" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/pyushkevich/c3d";
     description = "Medical imaging processing tool";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
-    broken = true;
+    license = licenses.gpl3;
+    broken = stdenv.isAarch64;
+    # /build/source/itkextras/OneDimensionalInPlaceAccumulateFilter.txx:312:10: fatal error: xmmintrin.h: No such file or directory
   };
 }

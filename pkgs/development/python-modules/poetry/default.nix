@@ -1,89 +1,148 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage
-, isPy27, isPy34
-, cleo
-, requests
-, cachy
-, requests-toolbelt
-, pyrsistent
-, pyparsing
+{ lib
+, backports-cached-property
+, buildPythonPackage
 , cachecontrol
-, pkginfo
+, cachy
+, cleo
+, crashtest
+, dataclasses
+, deepdiff
+, dulwich
+, fetchFromGitHub
+, flatdict
 , html5lib
+, httpretty
+, importlib-metadata
+, installShellFiles
+, intreehooks
+, jsonschema
+, keyring
+, lockfile
+, packaging
+, pexpect
+, pkginfo
+, platformdirs
+, poetry-core
+, poetry-plugin-export
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, requests-toolbelt
 , shellingham
-, subprocess32
+, stdenv
 , tomlkit
-, typing
-, pathlib2
+, urllib3
 , virtualenv
-, functools32
-, pytest
+, xattr
 }:
 
-let
-  cleo6 = cleo.overrideAttrs (oldAttrs: rec {
-    version = "0.6.8";
-    src = fetchPypi {
-      inherit (oldAttrs) pname;
-      inherit version;
-      sha256 = "06zp695hq835rkaq6irr1ds1dp2qfzyf32v60vxpd8rcnxv319l5";
-    };
-  });
-
-  jsonschema3 = callPackage ./jsonschema.nix { };
-  glob2 = callPackage ./glob2.nix { };
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.17";
+  version = "1.2.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0gxwcd65qjmzqzppf53x51sic1rbcd9py6cdzx3aprppipimslvf";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "python-poetry";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-huIjLv1T42HEmePCQNJpKnNxJKdyD9MlEtc2WRPOjRE=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace \
-      "requests-toolbelt>=0.8.0,<0.9.0" \
-      "requests-toolbelt>=0.8.0,<0.10.0" \
-      --replace 'pyrsistent>=0.14.2,<0.15.0' 'pyrsistent>=0.14.2,<0.16.0'
+    substituteInPlace pyproject.toml \
+      --replace 'crashtest = "^0.3.0"' 'crashtest = "*"'
   '';
 
-  format = "pyproject";
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   propagatedBuildInputs = [
-    cleo6
-    requests
-    cachy
-    requests-toolbelt
-    jsonschema3
-    pyrsistent
-    pyparsing
     cachecontrol
-    pkginfo
+    cachy
+    cleo
+    crashtest
+    dulwich
     html5lib
+    jsonschema
+    keyring
+    packaging
+    pexpect
+    pkginfo
+    platformdirs
+    poetry-core
+    poetry-plugin-export
+    requests
+    requests-toolbelt
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ];
+    virtualenv
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xattr
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    backports-cached-property
+  ] ++ cachecontrol.optional-dependencies.filecache;
 
   postInstall = ''
-    mkdir -p "$out/share/bash-completion/completions"
-    "$out/bin/poetry" completions bash > "$out/share/bash-completion/completions/poetry"
-    mkdir -p "$out/share/zsh/vendor-completions"
-    "$out/bin/poetry" completions zsh > "$out/share/zsh/vendor-completions/_poetry"
-    mkdir -p "$out/share/fish/vendor_completions.d"
-    "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
+    installShellCompletion --cmd poetry \
+      --bash <($out/bin/poetry completions bash) \
+      --fish <($out/bin/poetry completions fish) \
+      --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  # No tests in Pypi tarball
-  doCheck = false;
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest tests
+  checkInputs = [
+    deepdiff
+    flatdict
+    pytestCheckHook
+    httpretty
+    pytest-mock
+    pytest-xdist
+  ];
+
+  preCheck = (''
+    export HOME=$TMPDIR
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '');
+
+  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    unset no_proxy
   '';
+
+  disabledTests = [
+    # touches network
+    "git"
+    "solver"
+    "load"
+    "vcs"
+    "prereleases_if_they_are_compatible"
+    "test_executor"
+    # requires git history to work correctly
+    "default_with_excluded_data"
+    # toml ordering has changed
+    "lock"
+    # fs permission errors
+    "test_builder_should_execute_build_scripts"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
+    "test_info_setup_complex_pep517_error"
+  ];
+
+  # Allow for package to use pep420's native namespaces
+  pythonNamespaces = [
+    "poetry"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/poetry;
+    homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

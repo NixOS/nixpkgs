@@ -1,29 +1,29 @@
-{ stdenv, fetchFromGitHub
-, autoconf, automake, pkgconfig, pango }:
+{ lib, stdenv, fetchFromGitHub
+, autoconf, automake, pkg-config, intltool, pango }:
 
 stdenv.mkDerivation rec {
   pname = "paps";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "dov";
     repo = pname;
-    rev = version;
-    sha256 = "1f0qcawak76zk2xypipb6sy4bd8mixlrjby851x216a7f6z8fd4y";
+    rev = "v${version}";
+    sha256 = "129wpm2ayxs6qfh2761d4x9c034ivb2bcmmcnl56qs4448qb9495";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config intltool ];
   buildInputs = [ pango ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pango to PostScript converter";
-    homepage = https://github.com/dov/paps;
+    homepage = "https://github.com/dov/paps";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -7,7 +7,7 @@ let
 in {
   ###### interface
 
-  options.powerManagement.powertop.enable = mkEnableOption "powertop auto tuning on startup";
+  options.powerManagement.powertop.enable = mkEnableOption (lib.mdDoc "powertop auto tuning on startup");
 
   ###### implementation
 
@@ -15,6 +15,7 @@ in {
     systemd.services = {
       powertop = {
         wantedBy = [ "multi-user.target" ];
+        after = [ "multi-user.target" ];
         description = "Powertop tunings";
         path = [ pkgs.kmod ];
         serviceConfig = {

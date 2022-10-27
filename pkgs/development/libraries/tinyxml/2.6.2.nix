@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   version = "2.6.2";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   patches = [
-    # add pkgconfig file
+    # add pkg-config file
     ./2.6.2-add-pkgconfig.patch
 
     # https://sourceforge.net/tracker/index.php?func=detail&aid=3031828&group_id=13559&atid=313559
@@ -23,14 +23,14 @@ in stdenv.mkDerivation {
     ./2.6.2-cxx.patch
   ];
 
-  preConfigure = "export LD=${if stdenv.isDarwin then "clang++" else "g++"}";
+  preConfigure = "export LD=${stdenv.cc.targetPrefix}c++";
 
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   buildPhase = ''
     # use STL (xbmc requires it)
     sed '1i#define TIXML_USE_STL 1' -i tinyxml.h
@@ -67,14 +67,14 @@ in stdenv.mkDerivation {
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
   '';
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
-    homepage = http://www.grinninglizard.com/tinyxml/index.html;
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.grinninglizard.com/tinyxml/index.html";
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
   };
 }

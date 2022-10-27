@@ -11,7 +11,7 @@ in
       type = types.bool;
       default = false;
       description =
-        ''
+        lib.mdDoc ''
           Whether to enable nftables.  nftables is a Linux-based packet
           filtering framework intended to replace frameworks like iptables.
 
@@ -21,17 +21,18 @@ in
           Note that if you have Docker enabled you will not be able to use
           nftables without intervention. Docker uses iptables internally to
           setup NAT for containers. This module disables the ip_tables kernel
-          module, however Docker automatically loads the module. Please see [1]
+          module, however Docker automatically loads the module. Please see
+          <https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273>
           for more information.
 
           There are other programs that use iptables internally too, such as
-          libvirt.
-
-          [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
+          libvirt. For information on how the two firewalls interact, see
+          <https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F>.
         '';
     };
     networking.nftables.ruleset = mkOption {
       type = types.lines;
+      default = "";
       example = ''
         # Check out https://wiki.nftables.org/ for better documentation.
         # Table for both IPv4 and IPv6.
@@ -52,7 +53,7 @@ in
             ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
 
             # allow "ping"
-            ip6 nexthdr icmp icmpv6 type echo-request accept
+            ip6 nexthdr icmpv6 icmpv6 type echo-request accept
             ip protocol icmp icmp type echo-request accept
 
             # accept SSH connections (required for a server)
@@ -75,7 +76,7 @@ in
         }
       '';
       description =
-        ''
+        lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
         '';
@@ -86,8 +87,9 @@ in
         name = "nftables-rules";
         text = cfg.ruleset;
       };
+      defaultText = literalMD ''a file with the contents of {option}`networking.nftables.ruleset`'';
       description =
-        ''
+        lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
         '';
@@ -99,10 +101,11 @@ in
   config = mkIf cfg.enable {
     assertions = [{
       assertion = config.networking.firewall.enable == false;
-      message = "You can not use nftables with services.networking.firewall.";
+      message = "You can not use nftables and iptables at the same time. networking.firewall.enable must be set to false.";
     }];
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
+    networking.networkmanager.firewallBackend = mkDefault "nftables";
     systemd.services.nftables = {
       description = "nftables firewall";
       before = [ "network-pre.target" ];
@@ -115,20 +118,11 @@ in
           flush ruleset
           include "${cfg.rulesetFile}"
         '';
-        checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.runtimeShell} -e
-          if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
-            echo "Unload ip_tables before using nftables!" 1>&2
-            exit 1
-          else
-            ${rulesScript}
-          fi
-        '';
       in {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = checkScript;
-        ExecReload = checkScript;
+        ExecStart = rulesScript;
+        ExecReload = rulesScript;
         ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
       };
     };

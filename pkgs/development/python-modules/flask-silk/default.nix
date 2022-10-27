@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , flask
@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "Flask-Silk";
-  version = "2018-06-28";
+  version = "unstable-2018-06-28";
 
   # master fixes flask import syntax and has no major changes
   # new release requested: https://github.com/sublee/flask-silk/pull/6
@@ -21,10 +21,10 @@ buildPythonPackage {
     flask
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds silk icons to your Flask application or module, or extension";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/sublee/flask-silk;
+    maintainers = teams.sage.members;
+    homepage = "https://github.com/sublee/flask-silk";
   };
 }

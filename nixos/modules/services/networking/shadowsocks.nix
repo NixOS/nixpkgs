@@ -11,8 +11,13 @@ let
     method = cfg.encryptionMethod;
     mode = cfg.mode;
     user = "nobody";
-    fast_open = true;
-  } // optionalAttrs (cfg.password != null) { password = cfg.password; };
+    fast_open = cfg.fastOpen;
+  } // optionalAttrs (cfg.plugin != null) {
+    plugin = cfg.plugin;
+    plugin_opts = cfg.pluginOpts;
+  } // optionalAttrs (cfg.password != null) {
+    password = cfg.password;
+  } // cfg.extraConfig;
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
@@ -29,7 +34,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run shadowsocks-libev shadowsocks server.
         '';
       };
@@ -37,7 +42,7 @@ in
       localAddress = mkOption {
         type = types.coercedTo types.str singleton (types.listOf types.str);
         default = [ "[::0]" "0.0.0.0" ];
-        description = ''
+        description = lib.mdDoc ''
           Local addresses to which the server binds.
         '';
       };
@@ -45,7 +50,7 @@ in
       port = mkOption {
         type = types.int;
         default = 8388;
-        description = ''
+        description = lib.mdDoc ''
           Port which the server uses.
         '';
       };
@@ -53,7 +58,7 @@ in
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Password for connecting clients.
         '';
       };
@@ -61,7 +66,7 @@ in
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Password file with a password for connecting clients.
         '';
       };
@@ -69,19 +74,60 @@ in
       mode = mkOption {
         type = types.enum [ "tcp_only" "tcp_and_udp" "udp_only" ];
         default = "tcp_and_udp";
-        description = ''
+        description = lib.mdDoc ''
           Relay protocols.
+        '';
+      };
+
+      fastOpen = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          use TCP fast-open
         '';
       };
 
       encryptionMethod = mkOption {
         type = types.str;
         default = "chacha20-ietf-poly1305";
-        description = ''
-          Encryption method. See <link xlink:href="https://github.com/shadowsocks/shadowsocks-org/wiki/AEAD-Ciphers"/>.
+        description = lib.mdDoc ''
+          Encryption method. See <https://github.com/shadowsocks/shadowsocks-org/wiki/AEAD-Ciphers>.
         '';
       };
 
+      plugin = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = literalExpression ''"''${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin"'';
+        description = lib.mdDoc ''
+          SIP003 plugin for shadowsocks
+        '';
+      };
+
+      pluginOpts = mkOption {
+        type = types.str;
+        default = "";
+        example = "server;host=example.com";
+        description = lib.mdDoc ''
+          Options to pass to the plugin if one was specified
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        example = {
+          nameserver = "8.8.8.8";
+        };
+        description = lib.mdDoc ''
+          Additional configuration for shadowsocks that is not covered by the
+          provided options. The provided attrset will be serialized to JSON and
+          has to contain valid shadowsocks options. Unfortunately most
+          additional options are undocumented but it's easy to find out what is
+          available by looking into the source code of
+          <https://github.com/shadowsocks/shadowsocks-libev/blob/master/src/jconf.c>
+        '';
+      };
     };
 
   };
@@ -99,7 +145,7 @@ in
       description = "shadowsocks-libev Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.shadowsocks-libev ] ++ optional (cfg.passwordFile != null) pkgs.jq;
+      path = [ pkgs.shadowsocks-libev ] ++ optional (cfg.plugin != null) cfg.plugin ++ optional (cfg.passwordFile != null) pkgs.jq;
       serviceConfig.PrivateTmp = true;
       script = ''
         ${optionalString (cfg.passwordFile != null) ''

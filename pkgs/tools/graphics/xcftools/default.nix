@@ -1,16 +1,25 @@
-{stdenv, fetchurl, libpng, perl, gettext }:
+{lib, stdenv, fetchpatch, fetchurl, libpng, perl, gettext }:
 
-stdenv.mkDerivation {
-  name = "xcftools-1.0.7";
+stdenv.mkDerivation rec {
+  pname = "xcftools";
+  version = "1.0.7";
 
   src = fetchurl {
-    url = "http://henning.makholm.net/xcftools/xcftools-1.0.7.tar.gz";
+    url = "http://henning.makholm.net/xcftools/xcftools-${version}.tar.gz";
     sha256 = "19i0x7yhlw6hd2gp013884zchg63yzjdj4hpany011il0n26vgqy";
   };
 
   buildInputs = [ libpng perl gettext ];
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-5086.CVE-2019-5087.patch";
+      url = "https://github.com/gladk/xcftools/commit/59c38e3e45b9112c2bcb4392bccf56e297854f8a.patch";
+      sha256 = "sha256-a1Biv6viXzTSaLDzinOyu0HdDTUPsKITsdKu9B9Y8GE=";
+    })
+  ];
+
+  postPatch = ''
     # Required if building with libpng-1.6, innocuous otherwise
     substituteInPlace xcf2png.c         \
       --replace png_voidp_NULL NULL     \
@@ -21,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://henning.makholm.net/software;
+    homepage = "http://henning.makholm.net/software";
     description = "Command-line tools for converting Gimp XCF files";
     longDescription = ''
       A set of fast command-line tools for extracting information from
@@ -34,7 +43,7 @@ stdenv.mkDerivation {
       These tools work independently of the Gimp engine and do not
       require the Gimp to even be installed.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

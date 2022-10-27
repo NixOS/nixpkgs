@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibm-sw-tpm2";
-  version = "1332";
+  version = "1682";
 
   src = fetchurl {
     url = "mirror://sourceforge/ibmswtpm2/ibmtpm${version}.tar.gz";
-    sha256 = "1zdhi8acd4jfp1v7ibd86hcv0g39yk8qrnhxjmmgzn8i7npr70cf";
+    hash = "sha256-PLZC+HGheyPVCwRuX5X0ScIodBX8HnrrS9u4kg28s48=";
   };
 
   buildInputs = [ openssl ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "IBM's Software TPM 2.0, an implementation of the TCG TPM 2.0 specification";
-    homepage = https://sourceforge.net/projects/ibmswtpm2/;
+    homepage = "https://sourceforge.net/projects/ibmswtpm2/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];
     license = licenses.bsd3;

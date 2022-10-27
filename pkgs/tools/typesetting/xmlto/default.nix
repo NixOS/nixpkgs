@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, libxml2, libxslt
+{ fetchurl, lib, stdenv, libxml2, libxslt
 , docbook_xml_dtd_45, docbook_xsl, w3m
 , bash, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xmlto-0.0.28";
+  pname = "xmlto";
+  version = "0.0.28";
   src = fetchurl {
-    url = "http://fedorahosted.org/releases/x/m/xmlto/${name}.tar.bz2";
+    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0xhj8b2pwp4vhl9y16v3dpxpsakkflfamr191mprzsspg4xdyc0i";
   };
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${stdenv.lib.makeBinPath [ libxslt libxml2 getopt ]}"
+       --prefix PATH : "${lib.makeBinPath [ libxslt libxml2 getopt ]}"
 
     # `w3m' is needed for HTML to text conversions.
     substituteInPlace "$out/share/xmlto/format/docbook/txt" \
@@ -44,8 +45,8 @@ stdenv.mkDerivation rec {
       necessary post-processing.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = https://fedorahosted.org/xmlto/;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    homepage = "https://pagure.io/xmlto/";
+    platforms = lib.platforms.unix;
   };
 }

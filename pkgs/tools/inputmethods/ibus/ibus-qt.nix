@@ -1,23 +1,21 @@
-{ stdenv, fetchurl, ibus, cmake, pkgconfig, qt4, icu, doxygen }:
+{ lib, stdenv, fetchurl, ibus, cmake, pkg-config, qt4, icu, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-qt";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "https://github.com/ibus/ibus-qt/releases/download/${version}/${pname}-${version}-Source.tar.gz";
-    sha256 = "1q9g7qghpcf07valc2ni7yf994xqx2pmdffknj7scxfidav6p19g";
+    sha256 = "sha256-HnsMy4i8NscCVFF28IcOZ2BoXozZfZzXk4CE9c7bL/E=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    ibus cmake qt4 icu doxygen
-  ];
+  nativeBuildInputs = [ cmake pkg-config doxygen ];
+  buildInputs = [ ibus qt4 icu ];
 
   cmakeFlags = [ "-DQT_PLUGINS_DIR=lib/qt4/plugins" ];
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/ibus/ibus-qt/;
+  meta = with lib; {
+    homepage    = "https://github.com/ibus/ibus-qt/";
     description = "Qt4 interface to the ibus input method";
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;

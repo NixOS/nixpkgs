@@ -1,16 +1,24 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "zdelta-2.1";
-  builder = ./builder.sh;
+  pname = "zdelta";
+  version = "2.1";
+
   src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "0k6y0r9kv5qiglnr2j4a0yvfynjkvm0pyv8ly28j0pr3w6rbxrh3";
+    url = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/downloads/zdelta-2.1.tar.gz";
+    sha256 = "sha256-WiQKWxJkINIwRBcdiuVLMDiupQ8gOsiXOEZvHDa5iFg=";
   };
 
-  meta = with stdenv.lib; {
-	  homepage = http://cis.poly.edu/zdelta;
-    platforms = platforms.linux;
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -p zdc zdu $out/bin
+  '';
+
+  meta = with lib; {
+    homepage = "https://web.archive.org/web/20160316212948/http://cis.poly.edu/zdelta/";
+    platforms = platforms.all;
     license = licenses.zlib;
   };
 }

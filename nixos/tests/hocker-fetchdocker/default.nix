@@ -1,15 +1,16 @@
-import ../make-test.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "test-hocker-fetchdocker";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ixmatus ];
+    broken = true; # tries to download from registry-1.docker.io - how did this ever work?
   };
 
-  machine = import ./machine.nix;
+  nodes.machine = import ./machine.nix;
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit("sockets.target");
-    $machine->waitUntilSucceeds("docker run registry-1.docker.io/v2/library/hello-world:latest");
+    machine.wait_for_unit("sockets.target")
+    machine.wait_until_succeeds("docker run registry-1.docker.io/v2/library/hello-world:latest")
   '';
 })

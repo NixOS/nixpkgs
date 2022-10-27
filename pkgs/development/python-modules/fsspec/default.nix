@@ -1,26 +1,76 @@
 { lib
+, stdenv
+, aiohttp
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, numpy
+, paramiko
+, pytest-asyncio
+, pytest-mock
+, pytest-vcr
+, pytestCheckHook
 , pythonOlder
+, requests
+, smbprotocol
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "0.4.1";
+  version = "2022.8.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0fvm1kdnnbf0pppv23mlfdqh220gcldmv72w2rdxp6ks1rcphzg3";
+  src = fetchFromGitHub {
+    owner = "intake";
+    repo = "filesystem_spec";
+    rev = version;
+    hash = "sha256-eT1zqTbU5kfQ7bvzigT9579HfXU6VaOEjRg8VG/DHMI=";
   };
 
-  # no tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    aiohttp
+    paramiko
+    requests
+    smbprotocol
+    tqdm
+  ];
+
+  checkInputs = [
+    numpy
+    pytest-asyncio
+    pytest-mock
+    pytest-vcr
+    pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # Test assumes user name is part of $HOME
+    # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
+    "test_strip_protocol_expanduser"
+    # test accesses this remote ftp server:
+    # https://ftp.fau.de/debian-cd/current/amd64/log/success
+    "test_find"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+    # this two tests however, assume nanosecond resolution
+    "test_modified"
+    "test_touch"
+  ];
+
+  pythonImportsCheck = [
+    "fsspec"
+  ];
 
   meta = with lib; {
-    description = "A specification that python filesystems should adhere to.";
+    description = "A specification that Python filesystems should adhere to";
     homepage = "https://github.com/intake/filesystem_spec";
+    changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-let version = "0.7.2"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libdynd";
-  inherit version;
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "libdynd";
@@ -16,23 +15,24 @@ stdenv.mkDerivation {
     "-DDYND_BUILD_BENCHMARKS=OFF"
   ];
 
-  # added to fix build with gcc7
-  NIX_CFLAGS_COMPILE = [
+  # added to fix build with gcc7+
+  NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"
     "-Wno-error=tautological-compare"
     "-Wno-error=class-memaccess"
     "-Wno-error=parentheses"
+    "-Wno-error=deprecated-copy"
   ];
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   outputs = [ "out" "dev" ];
   outputDoc = "dev";
 
-  meta = with stdenv.lib; {
-    description = "C++ dynamic ndarray library, with Python exposure.";
-    homepage = http://libdynd.org;
+  meta = with lib; {
+    description = "C++ dynamic ndarray library, with Python exposure";
+    homepage = "http://libdynd.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

@@ -1,47 +1,132 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
-, enableGTK3 ? false, gtk3
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, cmake
+, pkg-config
+, openssl
+, curl
+, libevent
+, inotify-tools
+, systemd
+, zlib
+, pcre
+, libb64
+, libutp
+, miniupnpc
+, dht
+, libnatpmp
+  # Build options
+, enableGTK3 ? false
+, gtk3
+, xorg
+, wrapGAppsHook
+, enableQt ? false
+, qt5
+, nixosTests
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
+, installLib ? false
+, apparmorRulesFromClosure
 }:
 
-let inherit (stdenv.lib) optional optionals optionalString; in
+let
+  version = "3.00";
 
-stdenv.mkDerivation rec {
-  name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
-  version = "2.94";
+in stdenv.mkDerivation {
+  pname = "transmission";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
-    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
+  src = fetchFromGitHub {
+    owner = "transmission";
+    repo = "transmission";
+    rev = version;
+    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ optionals enableGTK3 [ wrapGAppsHook ];
-  buildInputs = [ intltool file openssl curl libevent zlib ]
-    ++ optionals enableGTK3 [ gtk3 ]
-    ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ];
+  patches = [
+    # fix build with openssl 3.0
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/transmission/-/raw/debian/3.00-2.1/debian/patches/openssl3-compat.patch";
+      hash = "sha256-v+SDTW/lCtc8B3TuhQB1pmjW/QRAGLtYncaImNNwpes=";
+    })
+  ];
 
-  postPatch = ''
-    substituteInPlace ./configure \
-      --replace "libsystemd-daemon" "libsystemd" \
-      --replace "/usr/bin/file"     "${file}/bin/file" \
-      --replace "test ! -d /Developer/SDKs/MacOSX10.5.sdk" "false"
+  outputs = [ "out" "apparmor" ];
+
+  cmakeFlags =
+    let
+      mkFlag = opt: if opt then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_MAC=OFF" # requires xcodebuild
+      "-DENABLE_GTK=${mkFlag enableGTK3}"
+      "-DENABLE_QT=${mkFlag enableQt}"
+      "-DENABLE_DAEMON=${mkFlag enableDaemon}"
+      "-DENABLE_CLI=${mkFlag enableCli}"
+      "-DINSTALL_LIB=${mkFlag installLib}"
+    ];
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ]
+  ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
+  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ;
+
+  buildInputs = [
+    openssl
+    curl
+    libevent
+    zlib
+    pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
+  ]
+  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
+  ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
+  ++ lib.optionals enableSystemd [ systemd ]
+  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+  ;
+
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.transmission-daemon <<EOF
+    include <tunables/global>
+    $out/bin/transmission-daemon {
+      include <abstractions/base>
+      include <abstractions/nameservice>
+      include <abstractions/ssl_certs>
+      include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
+      ] ++ lib.optionals enableSystemd [ systemd ]
+        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+      )}"
+      r @{PROC}/sys/kernel/random/uuid,
+      r @{PROC}/sys/vm/overcommit_memory,
+      r @{PROC}/@{pid}/environ,
+      r @{PROC}/@{pid}/mounts,
+      rwk /tmp/tr_session_id_*,
+
+      r $out/share/transmission/web/**,
+
+      include <local/bin.transmission-daemon>
+    }
+    EOF
   '';
 
-  configureFlags = [
-      ("--enable-cli=" + (if enableCli then "yes" else "no"))
-      ("--enable-daemon=" + (if enableDaemon then "yes" else "no"))
-      "--disable-mac" # requires xcodebuild
-    ]
-    ++ optional enableSystemd "--with-systemd-daemon"
-    ++ optional enableGTK3 "--with-gtk";
+  passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
+    smoke-test = nixosTests.bittorrent;
+  };
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
-
-  meta = with stdenv.lib; {
+  meta = {
     description = "A fast, easy and free BitTorrent client";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
@@ -54,10 +139,10 @@ stdenv.mkDerivation rec {
         * Bluetack (PeerGuardian) blocklists with automatic updates
         * Full encryption, DHT, and PEX support
     '';
-    homepage = http://www.transmissionbt.com/;
-    license = licenses.gpl2; # parts are under MIT
-    maintainers = with maintainers; [ astsmtl vcunat wizeman ];
-    platforms = platforms.unix;
+    homepage = "http://www.transmissionbt.com/";
+    license = lib.licenses.gpl2Plus; # parts are under MIT
+    maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
+    platforms = lib.platforms.unix;
   };
-}
 
+}

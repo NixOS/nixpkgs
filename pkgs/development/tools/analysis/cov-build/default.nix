@@ -1,4 +1,4 @@
-{ stdenv, requireFile }:
+{ lib, stdenv, requireFile }:
 
 let
   message = ''
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Coverity Scan build tools";
     homepage    = "https://scan.coverity.com";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.unfreeRedistributable;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

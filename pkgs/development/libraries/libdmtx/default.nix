@@ -1,20 +1,29 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
-  name = "libdmtx-0.7.4";
+  pname = "libdmtx";
+  version = "0.7.7";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libdmtx/${name}.tar.bz2";
-    sha256 = "0xnxx075ycy58n92yfda2z9zgd41h3d4ik5d9l197lzsqim5hb5n";
+  src = fetchFromGitHub {
+    owner = "dmtx";
+    repo = "libdmtx";
+    rev = "v${version}";
+    sha256 = "sha256-UQy8iFfl8BNT5cBUMVF1tIScFPfHekSofaebtel9JWk=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = {
     description = "An open source software for reading and writing Data Matrix barcodes";
-    homepage = http://libdmtx.org;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/dmtx/libdmtx";
+    changelog = "https://github.com/dmtx/libdmtx/blob/v${version}/ChangeLog";
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

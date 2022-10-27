@@ -14,7 +14,7 @@ in {
   ###### interface
   options = {
     services.flatpak = {
-      enable = mkEnableOption "flatpak";
+      enable = mkEnableOption (lib.mdDoc "flatpak");
     };
   };
 
@@ -30,6 +30,8 @@ in {
 
     environment.systemPackages = [ pkgs.flatpak ];
 
+    security.polkit.enable = true;
+
     services.dbus.packages = [ pkgs.flatpak ];
 
     systemd.packages = [ pkgs.flatpak ];
@@ -42,6 +44,7 @@ in {
     # It has been possible since https://github.com/flatpak/flatpak/releases/tag/1.3.2
     # to build a SELinux policy module.
 
+    # TODO: use sysusers.d
     users.users.flatpak = {
       description = "Flatpak system helper";
       group = "flatpak";

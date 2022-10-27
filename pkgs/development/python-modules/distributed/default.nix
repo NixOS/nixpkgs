@@ -1,62 +1,71 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, pytest-repeat
-, pytest-faulthandler
-, pytest-timeout
-, mock
-, joblib
 , click
 , cloudpickle
 , dask
+, fetchPypi
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
-, six
+, pythonOlder
+, pyyaml
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
 , zict
-, pyyaml
-, isPy3k
-, futures
-, singledispatch
-, mpi4py
-, bokeh
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.4.0";
+  version = "2022.9.1";
+  format = "setuptools";
 
-  # get full repository need conftest.py to run tests
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cz7n84g8dgx3cs28qnrh1sd6lka9lx8llysxa6mxyz6wf3ngl9h";
+    hash = "sha256-upj1TipRhhvulyuhX4bfbQSWar9m7Xu3mIsi48G+ewE=";
   };
 
-  checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
-  propagatedBuildInputs = [
-      click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
-  ] ++ lib.optionals (!isPy3k) [ futures singledispatch ];
-
-  # tests take about 10-15 minutes
-  # ignore 5 cli tests out of 1000 total tests that fail due to subprocesses
-  # these tests are not critical to the library (only the cli)
-  checkPhase = ''
-    py.test distributed -m "not avoid-travis" -r s --timeout-method=thread --timeout=0 --durations=20 --ignore="distributed/cli/tests"
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "tornado >= 6.0.3, <6.2" "tornado >= 6.0.3"
   '';
 
-  # when tested random tests would fail and not repeatably
+  propagatedBuildInputs = [
+    click
+    cloudpickle
+    dask
+    jinja2
+    locket
+    msgpack
+    packaging
+    psutil
+    pyyaml
+    sortedcontainers
+    tblib
+    toolz
+    tornado
+    urllib3
+    zict
+  ];
+
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  meta = {
-    description = "Distributed computation in Python.";
-    homepage = https://distributed.readthedocs.io/en/latest/;
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.x86; # fails on aarch64
-    maintainers = with lib.maintainers; [ teh costrouc ];
+  pythonImportsCheck = [
+    "distributed"
+  ];
+
+  meta = with lib; {
+    description = "Distributed computation in Python";
+    homepage = "https://distributed.readthedocs.io/";
+    license = licenses.bsd3;
+    platforms = platforms.x86; # fails on aarch64
+    maintainers = with maintainers; [ teh costrouc ];
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pcre
-, pkgconfig
+, pkg-config
 , check
 , autoreconfHook
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "09cixbms817p6nb77wz3rxp0znnac8ybycvsrrzgwlbfn58a3zwl";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ check ];
   propagatedBuildInputs = [ pcre ];
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A high-performance path dispatching library";
-    homepage = https://github.com/c9s/r3;
-    license = [ stdenv.lib.licenses.mit ];
+    homepage = "https://github.com/c9s/r3";
+    license = [ lib.licenses.mit ];
   };
 
 }

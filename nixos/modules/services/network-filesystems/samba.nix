@@ -12,11 +12,6 @@ let
 
   samba = cfg.package;
 
-  setupScript =
-    ''
-      mkdir -p /var/lock/samba /var/log/samba /var/cache/samba /var/lib/samba/private
-    '';
-
   shareConfig = name:
     let share = getAttr name cfg.shares; in
     "[${name}]\n " + (smbToString (
@@ -31,7 +26,6 @@ let
       [global]
       security = ${cfg.securityType}
       passwd program = /run/wrappers/bin/passwd %u
-      pam password change = ${smbToString cfg.syncPasswordsByPam}
       invalid users = ${smbToString cfg.invalidUsers}
 
       ${cfg.extraConfig}
@@ -45,7 +39,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
-      after = [ "network.target" ];
+      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -62,6 +56,7 @@ let
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
       };
+      unitConfig.RequiresMountsFor = "/var/lib/samba";
 
       restartTriggers = [ configFile ];
     };
@@ -69,6 +64,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+    (mkRemovedOptionModule [ "services" "samba" "syncPasswordsByPam" ] "This option has been removed by upstream, see https://bugzilla.samba.org/show_bug.cgi?id=10669#c10")
+  ];
 
   ###### interface
 
@@ -81,24 +80,30 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
 
-          <note>
-            <para>If you use the firewall consider adding the following:</para>
-          <programlisting>
-            networking.firewall.allowedTCPPorts = [ 139 445 ];
-            networking.firewall.allowedUDPPorts = [ 137 138 ];
-          </programlisting>
-          </note>
+          ::: {.note}
+          If you use the firewall consider adding the following:
+
+              services.samba.openFirewall = true;
+          :::
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to automatically open the necessary ports in the firewall.
         '';
       };
 
       enableNmbd = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Samba's nmbd, which replies to NetBIOS over IP name
           service requests. It also participates in the browsing protocols
           which make up the Windows "Network Neighborhood" view.
@@ -108,7 +113,7 @@ in
       enableWinbindd = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Samba's winbindd, which provides a number of services
           to the Name Service Switch capability found in most modern C libraries,
           to arbitrary applications via PAM and ntlm_auth and to Samba itself.
@@ -118,29 +123,17 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.samba;
-        defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba3";
-        description = ''
+        defaultText = literalExpression "pkgs.samba";
+        example = literalExpression "pkgs.samba4Full";
+        description = lib.mdDoc ''
           Defines which package should be used for the samba server.
-        '';
-      };
-
-      syncPasswordsByPam = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enabling this will add a line directly after pam_unix.so.
-          Whenever a password is changed the samba password will be updated as well.
-          However, you still have to add the samba password once, using smbpasswd -a user.
-          If you don't want to maintain an extra password database, you still can send plain text
-          passwords which is not secure.
         '';
       };
 
       invalidUsers = mkOption {
         type = types.listOf types.str;
         default = [ "root" ];
-        description = ''
+        description = lib.mdDoc ''
           List of users who are denied to login via Samba.
         '';
       };
@@ -148,7 +141,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional global section and extra section lines go in here.
         '';
         example = ''
@@ -160,7 +153,7 @@ in
       configText = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Verbatim contents of smb.conf. If null (default), use the
           autogenerated file from NixOS instead.
         '';
@@ -169,14 +162,13 @@ in
       securityType = mkOption {
         type = types.str;
         default = "user";
-        example = "share";
-        description = "Samba security type";
+        description = lib.mdDoc "Samba security type";
       };
 
       nsswins = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the WINS NSS (Name Service Switch) plug-in.
           Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.
           Windows machine names) by transparently querying the winbindd daemon.
@@ -185,12 +177,12 @@ in
 
       shares = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           A set describing shared resources.
-          See <command>man smb.conf</command> for options.
+          See {command}`man smb.conf` for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
-        example =
+        example = literalExpression ''
           { public =
             { path = "/srv/public";
               "read only" = true;
@@ -198,7 +190,8 @@ in
               "guest ok" = "yes";
               comment = "Public samba share.";
             };
-          };
+          }
+        '';
       };
 
     };
@@ -224,12 +217,13 @@ in
       (mkIf cfg.enable {
 
         system.nssModules = optional cfg.nsswins samba;
+        system.nssDatabases.hosts = optional cfg.nsswins "wins";
 
         systemd = {
           targets.samba = {
             description = "Samba Server";
-            requires = [ "samba-setup.service" ];
-            after = [ "samba-setup.service" "network.target" ];
+            after = [ "network.target" ];
+            wants = [ "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
           };
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
@@ -238,16 +232,20 @@ in
             samba-smbd = daemonService "smbd" "";
             samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
             samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-            samba-setup = {
-              description = "Samba Setup Task";
-              script = setupScript;
-              unitConfig.RequiresMountsFor = "/var/lib/samba";
-            };
           };
+          tmpfiles.rules = [
+            "d /var/lock/samba - - - - -"
+            "d /var/log/samba - - - - -"
+            "d /var/cache/samba - - - - -"
+            "d /var/lib/samba/private - - - - -"
+          ];
         };
 
         security.pam.services.samba = {};
+        environment.systemPackages = [ cfg.package ];
 
+        networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 139 445 ];
+        networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 137 138 ];
       })
     ];
 

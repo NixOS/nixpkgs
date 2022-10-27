@@ -1,25 +1,41 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "WebOb";
-  version = "1.8.5";
+  pname = "webob";
+  version = "1.8.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "05aaab7975e0ee8af2026325d656e5ce14a71f1883c52276181821d6d5bf7086";
+    pname = "WebOb";
+    inherit version;
+    hash = "sha256-tk71FBvlWc+t5EjwRPpFwiYDUe3Lao72t+AMfc7wwyM=";
   };
 
-  propagatedBuildInputs = [ nose pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "webob"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: 'Thread' object has no attribute 'isAlive'
+    "tests/test_in_wsgiref.py"
+    "tests/test_client_functional.py"
+  ];
+
+  meta = with lib; {
     description = "WSGI request and response object";
-    homepage = http://pythonpaste.org/webob/;
+    homepage = "https://webob.org/";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

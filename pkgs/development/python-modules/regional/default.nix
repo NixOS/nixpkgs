@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple manipualtion and display of spatial regions";
-    homepage = https://github.com/freeman-lab/regional;
+    homepage = "https://github.com/freeman-lab/regional";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

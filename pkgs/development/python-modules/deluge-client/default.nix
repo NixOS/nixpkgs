@@ -1,20 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "deluge-client";
-  version = "1.7.1";
+  version = "1.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ragmpihjr9p6n27hw7gy83qyc68csqpn18m9kvwsby1vi7mgdy8";
+    sha256 = "0d2f12108a147d44590c8df63997fcb32f8b2fbc18f8cbb221f0136e2e372b85";
   };
 
   # it will try to connect to a running instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight pure-python rpc client for deluge";
-    homepage = https://github.com/JohnDoee/deluge-client;
+    homepage = "https://github.com/JohnDoee/deluge-client";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

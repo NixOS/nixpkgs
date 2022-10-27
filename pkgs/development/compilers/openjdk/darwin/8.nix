@@ -1,21 +1,54 @@
-{ stdenv, fetchurl, unzip, setJavaClassPath, freetype }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, setJavaClassPath
+, enableJavaFX ? false
+}:
 let
+  # Details from https://www.azul.com/downloads/?version=java-8-lts&os=macos&package=jdk
+  # Note that the latest build may differ by platform
+  dist = {
+    x86_64-darwin = {
+      arch = "x64";
+      zuluVersion = "8.54.0.21";
+      jdkVersion = "8.0.292";
+      sha256 =
+        if enableJavaFX then "e671f8990229b1ca2a76faabb21ba2f1a9e1f7211392e0f657225559be9b05c8"
+        else "1pgl0bir4r5v349gkxk54k6v62w241q7vw4gjxhv2g6pfq6hv7in";
+    };
+
+    aarch64-darwin = {
+      arch = "aarch64";
+      zuluVersion = "8.54.0.21";
+      jdkVersion = "8.0.292";
+      sha256 =
+        if enableJavaFX then "8e901075cde2c31f531a34e8321ea4201970936abf54240a232e9389952afe84"
+        else "05w89wfjlfbpqfjnv6wisxmaf13qb28b2223f9264jyx30qszw1c";
+    };
+  }."${stdenv.hostPlatform.system}";
+
   jce-policies = fetchurl {
-    # Ugh, unversioned URLs... I hope this doesn't change often enough to cause pain before we move to a Darwin source build of OpenJDK!
-    url    = "http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
+    url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
-  jdk = stdenv.mkDerivation {
-    name = "zulu1.8.0_121-8.20.0.5";
+  javaPackage = if enableJavaFX then "ca-fx-jdk" else "ca-jdk";
+
+  jdk = stdenv.mkDerivation rec {
+    # @hlolli: Later version than 1.8.0_202 throws error when building jvmci.
+    # dyld: lazy symbol binding failed: Symbol not found: _JVM_BeforeHalt
+    # Referenced from: ../libjava.dylib Expected in: .../libjvm.dylib
+    pname = "zulu${dist.zuluVersion}-${javaPackage}";
+    version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "http://cdn.azul.com/zulu/bin/zulu8.20.0.5-jdk8.0.121-macosx_x64.zip";
-      sha256 = "2a58bd1d9b0cbf0b3d8d1bcdd117c407e3d5a0ec01e2f53565c9bec5cf9ea78b";
-      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      inherit (dist) sha256;
+      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
-    buildInputs = [ unzip freetype ];
+    nativeBuildInputs = [ unzip ];
 
     installPhase = ''
       mkdir -p $out
@@ -40,12 +73,16 @@ let
       mkdir -p $out/nix-support
       printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
-      install_name_tool -change /usr/X11/lib/libfreetype.6.dylib ${freetype}/lib/libfreetype.6.dylib $out/jre/lib/libfontmanager.dylib
-
       # Set JAVA_HOME automatically.
       cat <<EOF >> $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
+    '';
+
+    # fixupPhase is moving the man to share/man which breaks it because it's a
+    # relative symlink.
+    postFixup = ''
+      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
     '';
 
     passthru = {
@@ -53,10 +90,7 @@ let
       home = jdk;
     };
 
-    meta = with stdenv.lib; {
-      license = licenses.gpl2;
-      platforms = platforms.darwin;
-    };
-
+    meta = import ./meta.nix lib version;
   };
-in jdk
+in
+jdk

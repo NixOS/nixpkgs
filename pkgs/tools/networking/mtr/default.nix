@@ -1,18 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libcap, ncurses
-, withGtk ? false, gtk2 ? null }:
-
-assert withGtk -> gtk2 != null;
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libcap
+, ncurses
+, jansson
+, withGtk ? false
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtr${lib.optionalString withGtk "-gui"}";
-  version = "0.93";
+  version = "0.95";
 
   src = fetchFromGitHub {
-    owner  = "traviscross";
-    repo   = "mtr";
-    rev    = "v${version}";
-    sha256 = "0n0zr9k61w7a9psnzgp7xnc7ll1ic2xzcvqsbbbyndg3v9rff6bw";
+    owner = "traviscross";
+    repo = "mtr";
+    rev = "v${version}";
+    sha256 = "sha256-f5bL3IdXibIc1xXCuZHwcEV5vhypRE2mLsS3A8HW2QM=";
   };
 
   # we need this before autoreconfHook does its thing
@@ -26,21 +33,21 @@ stdenv.mkDerivation rec {
       --replace ' install-exec-hook' ""
   '';
 
-  configureFlags = stdenv.lib.optional (!withGtk) "--without-gtk";
+  configureFlags = lib.optional (!withGtk) "--without-gtk";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional withGtk gtk2
-    ++ stdenv.lib.optional stdenv.isLinux libcap;
+  buildInputs = [ ncurses jansson ]
+    ++ lib.optional withGtk gtk3
+    ++ lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network diagnostics tool";
-    homepage    = "https://www.bitwizard.nl/mtr/";
-    license     = licenses.gpl2;
+    homepage = "https://www.bitwizard.nl/mtr/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ koral orivej raskin globin ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

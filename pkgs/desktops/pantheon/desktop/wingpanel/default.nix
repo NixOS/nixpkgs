@@ -1,8 +1,9 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
+, nix-update-script
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -12,6 +13,7 @@
 , granite
 , gettext
 , mutter
+, mesa
 , json-glib
 , python3
 , elementary-gtk-theme
@@ -20,33 +22,30 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.5";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "15pl3km8jfmlgrrb2fcabdd0rkc849arz6sc3vz6azzpln7gxbq7";
+    sha256 = "sha256-dShC6SXjOJmiLI6TUEZsthv5scnm9Jzum+sG/NkWAyM=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
-  };
+  patches = [
+    ./indicators.patch
+  ];
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-gtk-theme
     elementary-icon-theme
     gala
     granite
@@ -54,10 +53,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
-  ];
-
-  patches = [
-    ./indicators.patch
+    mesa # for libEGL
   ];
 
   postPatch = ''
@@ -65,15 +61,32 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # this GTK theme is required
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is required
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
-    homepage = https://github.com/elementary/wingpanel;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/wingpanel";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.wingpanel";
   };
 }

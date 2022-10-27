@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,9 +12,9 @@ buildPythonPackage rec {
     sha256 = "bc058a25d5c209461f134e1f03cab637d66a7a5ccc12e593db56fbb279899a82";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logging utilities";
-    homepage = http://code.google.com/p/logutils/;
+    homepage = "https://bitbucket.org/vinay.sajip/logutils/";
     license = licenses.bsd0;
   };
 

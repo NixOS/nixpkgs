@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, wxsqlite3, sqlite, Cocoa, setfile }:
 
 stdenv.mkDerivation rec {
   pname = "wxsqliteplus";
@@ -8,31 +8,35 @@ stdenv.mkDerivation rec {
     owner = "guanlisheng";
     repo = "wxsqliteplus";
     rev = "v${version}";
-    sha1 = "yr9ysviv4hbrxn900z1wz8j32frimvx1";
+    sha256 = "0mgfq813pli56mar7pdxlhwjf5k10j196rs3jd0nc8b6dkzkzlnf";
   };
 
-  buildInputs = [ wxGTK wxsqlite3 sqlite ];
+  buildInputs = [ wxGTK wxsqlite3 sqlite ] ++ lib.optional stdenv.isDarwin Cocoa;
 
   makeFlags = [
     "LDFLAGS=-L${wxsqlite3}/lib"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "SETFILE=${setfile}/bin/SetFile"
   ];
 
   preBuild = ''
     sed -ie 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile
     sed -ie 's|wxsqliteplus$(EXEEXT): $(WXSQLITEPLUS_OBJECTS) $(LIBPREFIX)wxsqlite$(LIBEXT)|wxsqliteplus$(EXEEXT):  $(WXSQLITEPLUS_OBJECTS) |g' Makefile
-    sed -ie 's|-lwxsqlite |-lwxcode_gtk2u_wxsqlite3-3.0 |g' Makefile
+    sed -ie 's|-lwxsqlite |-lwxcode_${if stdenv.isDarwin then "osx_cocoau_wxsqlite3-3.0.0" else "gtk2u_wxsqlite3-3.0"} |g' Makefile
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp wxsqliteplus $out/bin/
+    install -D ${lib.optionalString stdenv.isDarwin "wxsqliteplus.app/Contents/MacOS/"}wxsqliteplus $out/bin/wxsqliteplus
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv wxsqliteplus.app $out/Applications/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://guanlisheng.com/;
+  meta = with lib; {
     description = "A simple SQLite database browser built with wxWidgets";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vrthra ];
+    homepage = "https://github.com/guanlisheng/wxsqliteplus";
     license = licenses.gpl2;
+    maintainers = [ maintainers.vrthra ];
+    platforms = platforms.unix;
   };
 }

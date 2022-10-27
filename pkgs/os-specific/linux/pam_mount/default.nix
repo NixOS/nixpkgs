@@ -1,37 +1,46 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, utillinux }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre2, perl, openssl, cryptsetup, util-linux }:
 
 stdenv.mkDerivation rec {
-  name = "pam_mount-2.16";
+  pname = "pam_mount";
+  version = "2.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pam-mount/pam_mount/2.16/${name}.tar.xz";
-    sha256 = "1rvi4irb7ylsbhvx1cr6islm2xxw1a4b19q6z4a9864ndkm0f0mf";
+    url = "mirror://sourceforge/pam-mount/pam_mount/${pname}-${version}.tar.xz";
+    sha256 = "02m6w04xhgv2yx69yxph8giw0sp39s9lvvlffslyna46fnr64qvb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool pam libHX utillinux libxml2 pcre perl openssl cryptsetup ];
+  patches = [
+    ./insert_utillinux_path_hooks.patch
+  ];
 
-  patches = [ ./insert_utillinux_path_hooks.patch ];
+  postPatch = ''
+    substituteInPlace src/mtcrypt.c \
+      --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
+  '';
 
-  preConfigure = ''
-    substituteInPlace src/mtcrypt.c --replace @@NIX_UTILLINUX@@ ${utillinux}/bin
-    sh autogen.sh --prefix=$out
-    '';
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
-  makeFlags = "DESTDIR=$(out)";
+  buildInputs = [ pam libHX util-linux libxml2 pcre2 perl openssl cryptsetup ];
 
-  # Probably a hack, but using DESTDIR and PREFIX makes everything work!
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--localstatedir=${placeholder "out"}/var"
+    "--sbindir=${placeholder "out"}/bin"
+    "--sysconfdir=${placeholder "out"}/etc"
+    "--with-slibdir=${placeholder "out"}/lib"
+  ];
+
   postInstall = ''
-    mkdir -p $out
-    cp -r $out/$out/* $out
-    rm -r $out/nix
-    '';
+    rm -r $out/var
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = http://pam-mount.sourceforge.net/;
+  meta = with lib; {
     description = "PAM module to mount volumes for a user session";
-    maintainers = [ maintainers.tstrobel ];
+    homepage = "https://pam-mount.sourceforge.net/";
     license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
+    maintainers = with maintainers; [ netali ];
     platforms = platforms.linux;
   };
 }

@@ -1,10 +1,32 @@
-{ fetchzip, lib }:
+{ fetchgit, fetchzip, lib }:
 
 # gitlab example
-{ owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null
+{ owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
+, fetchSubmodules ? false, leaveDotGit ? false, deepClone ? false
 , ... # For hash agility
-}@args: fetchzip ({
-  inherit name;
-  url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${lib.replaceStrings ["."] ["%2E"] group}%2F"}${lib.replaceStrings ["."] ["%2E"] owner}%2F${lib.replaceStrings ["."] ["%2E"] repo}/repository/archive.tar.gz?sha=${rev}";
-  meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
-} // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; }
+} @ args:
+
+let
+  slug = lib.concatStringsSep "/" ((lib.optional (group != null) group) ++ [ owner repo ]);
+  escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
+  escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
+  passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" ];
+
+  useFetchGit = deepClone || fetchSubmodules || leaveDotGit;
+  fetcher = if useFetchGit then fetchgit else fetchzip;
+
+  gitRepoUrl = "${protocol}://${domain}/${slug}.git";
+
+  fetcherArgs = (if useFetchGit then {
+    inherit rev deepClone fetchSubmodules leaveDotGit;
+    url = gitRepoUrl;
+  } else {
+    url = "${protocol}://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
+
+    passthru = {
+      inherit gitRepoUrl;
+    };
+  }) // passthruAttrs // { inherit name; };
+in
+
+fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev; }

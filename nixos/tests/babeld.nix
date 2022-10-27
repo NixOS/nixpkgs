@@ -1,7 +1,7 @@
 
-import ./make-test.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "babeld";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -21,12 +21,9 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
         };
       };
 
-      localRouter = { pkgs, lib, ... }:
+      local_router = { pkgs, lib, ... }:
       {
         virtualisation.vlans = [ 10 20 ];
-
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
         networking = {
           useDHCP = false;
@@ -70,12 +67,9 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
           '';
         };
       };
-      remoteRouter = { pkgs, lib, ... }:
+      remote_router = { pkgs, lib, ... }:
       {
         virtualisation.vlans = [ 20 30 ];
-
-        boot.kernel.sysctl."net.ipv4.conf.all.forwarding" = 1;
-        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
         networking = {
           useDHCP = false;
@@ -124,25 +118,25 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
 
   testScript =
     ''
-      startAll;
+      start_all()
 
-      $client->waitForUnit("network-online.target");
-      $localRouter->waitForUnit("network-online.target");
-      $remoteRouter->waitForUnit("network-online.target");
+      client.wait_for_unit("network-online.target")
+      local_router.wait_for_unit("network-online.target")
+      remote_router.wait_for_unit("network-online.target")
 
-      $localRouter->waitForUnit("babeld.service");
-      $remoteRouter->waitForUnit("babeld.service");
+      local_router.wait_for_unit("babeld.service")
+      remote_router.wait_for_unit("babeld.service")
 
-      $localRouter->waitUntilSucceeds("ip route get 192.168.30.1");
-      $localRouter->waitUntilSucceeds("ip route get 2001:db8:30::1");
+      local_router.wait_until_succeeds("ip route get 192.168.30.1")
+      local_router.wait_until_succeeds("ip route get 2001:db8:30::1")
 
-      $remoteRouter->waitUntilSucceeds("ip route get 192.168.10.1");
-      $remoteRouter->waitUntilSucceeds("ip route get 2001:db8:10::1");
+      remote_router.wait_until_succeeds("ip route get 192.168.10.1")
+      remote_router.wait_until_succeeds("ip route get 2001:db8:10::1")
 
-      $client->succeed("ping -c1 192.168.30.1");
-      $client->succeed("ping -c1 2001:db8:30::1");
+      client.succeed("ping -c1 192.168.30.1")
+      client.succeed("ping -c1 2001:db8:30::1")
 
-      $remoteRouter->succeed("ping -c1 192.168.10.2");
-      $remoteRouter->succeed("ping -c1 2001:db8:10::2");
+      remote_router.succeed("ping -c1 192.168.10.2")
+      remote_router.succeed("ping -c1 2001:db8:10::2")
     '';
 })

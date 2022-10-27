@@ -16,7 +16,7 @@ buildPythonPackage rec {
   }) ];
 
   meta = {
-    homepage = https://github.com/errbotio/rocket;
+    homepage = "https://github.com/errbotio/rocket";
     description = "Modern, multi-threaded and extensible web server";
     license = lib.licenses.mit;
   };

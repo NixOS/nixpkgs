@@ -1,38 +1,70 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, fetchpatch
+
+# docs
+, python
+, sphinx
+, sphinx-rtd-theme
+
+# tests
 , hypothesis
-, pycodestyle
-, pyflakes
-, pytest
-, pkgs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.42.0";
+  version = "1.45.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c";
+    sha256 = "6397602efb3c2d7baebd2166ed85731ae1c1d475abca22090b7141ff5034b3e1";
   };
 
-  # fix tests with updated pycodestyle
-  patches = fetchpatch {
-    url = https://github.com/quodlibet/mutagen/commit/0ee86ef9d7e06639a388d0638732810b79998608.patch;
-    sha256 = "1bj3mpbv7krh5m1mvfl0z18s8wdxb1949zcnkcqxp2xl5fzsi288";
-  };
+  outputs = [ "out" "doc" ];
+
+  nativeBuildInputs = [
+    sphinx
+    sphinx-rtd-theme
+  ];
+
+  postInstall = ''
+    ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
+  '';
 
   checkInputs = [
-    pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
+    hypothesis
+    pytestCheckHook
   ];
-  LC_ALL = "en_US.UTF-8";
+
+  disabledTests = [
+    # Hypothesis produces unreliable results: Falsified on the first call but did not on a subsequent one
+    "test_test_fileobj_save"
+  ];
+
+  disabledTestPaths = [
+    # we are not interested in code quality measurements
+    "tests/quality/test_flake8.py"
+  ];
 
   meta = with lib; {
-    description = "Python multimedia tagging library";
-    homepage = https://mutagen.readthedocs.io/;
-    license = licenses.lgpl2Plus;
+    description = "Python module for handling audio metadata";
+    longDescription = ''
+      Mutagen is a Python module to handle audio metadata. It supports
+      ASF, FLAC, MP4, Monkey's Audio, MP3, Musepack, Ogg Opus, Ogg FLAC,
+      Ogg Speex, Ogg Theora, Ogg Vorbis, True Audio, WavPack, OptimFROG,
+      and AIFF audio files. All versions of ID3v2 are supported, and all
+      standard ID3v2.4 frames are parsed. It can read Xing headers to
+      accurately calculate the bitrate and length of MP3s. ID3 and APEv2
+      tags can be edited regardless of audio format. It can also
+      manipulate Ogg streams on an individual packet/page level.
+    '';
+    homepage = "https://mutagen.readthedocs.io";
+    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,0 +1,29 @@
+From ea82dbefeb573150935eb78a6916813775512e76 Mon Sep 17 00:00:00 2001
+From: Joris Van den Bossche <jorisvandenbossche@gmail.com>
+Date: Tue, 26 Apr 2022 22:17:00 +0200
+Subject: [PATCH] TST: fix tests for GEOS main (#1357) (backported for nixpkgs)
+
+---
+ pygeos/tests/test_constructive.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/pygeos/tests/test_constructive.py b/pygeos/tests/test_constructive.py
+index 87c0a9f..b3459d1 100644
+--- a/pygeos/tests/test_constructive.py
++++ b/pygeos/tests/test_constructive.py
+@@ -48,7 +48,11 @@ def test_no_args_array(geometry, func):
+ @pytest.mark.parametrize("geometry", all_types)
+ @pytest.mark.parametrize("func", CONSTRUCTIVE_FLOAT_ARG)
+ def test_float_arg_array(geometry, func):
+-    if func is pygeos.offset_curve and pygeos.get_type_id(geometry) not in [1, 2]:
++    if (
++        func is pygeos.offset_curve
++        and pygeos.get_type_id(geometry) not in [1, 2]
++        and pygeos.geos_version < (3, 11, 0)
++    ):
+         with pytest.raises(GEOSException, match="only accept linestrings"):
+             func([geometry, geometry], 0.0)
+         return
+-- 
+2.36.1
+

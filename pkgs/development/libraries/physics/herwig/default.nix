@@ -1,22 +1,26 @@
-{ stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{ lib, stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.1.5";
+  version = "7.2.3";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "0jnrv59zfa41gc37pqr3vaiz5jkh7w0k0alcax37b3mlbsnacr9r";
+    hash = "sha256-VZmJk3mwGwnjMaJCbXjTm39uwSbbJUPp00Cu/mqlD4Q=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool gfortran ];
 
-  buildInputs = [ boost fastjet gfortran gsl thepeg zlib ]
-    # There is a bug that requires for MMHT PDF's to be presend during the build
-    ++ (with lhapdf.pdf_sets; [ MMHT2014lo68cl MMHT2014nlo68cl ]);
+  buildInputs = [ boost fastjet gsl thepeg zlib ]
+    # There is a bug that requires for default PDF's to be present during the build
+    ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
 
   postPatch = ''
     patchShebangs ./
+
+    # Fix failing "make install" being unable to find HwEvtGenInterface.so
+    substituteInPlace src/defaults/decayers.in.in \
+      --replace "read EvtGenDecayer.in" ""
   '';
 
   configureFlags = [
@@ -25,12 +29,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "A multi-purpose particle physics event generator";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://herwig.hepforge.org/;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
-    broken      = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
+    homepage = "https://herwig.hepforge.org/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
+    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

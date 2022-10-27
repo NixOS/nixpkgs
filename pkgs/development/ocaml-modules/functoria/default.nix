@@ -1,28 +1,26 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
-, bos, cmdliner, ocamlgraph
+{ lib, fetchurl, buildDunePackage, cmdliner
+, rresult, astring, fmt, logs, bos, fpath, emile, uri
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "functoria is not available for OCaml ${ocaml.version}" else
+buildDunePackage rec {
+  pname   = "functoria";
+  version = "4.2.0";
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-functoria-${version}";
-	version = "2.0.2";
-	src = fetchurl {
-		url = "https://github.com/mirage/functoria/releases/download/${version}/functoria-${version}.tbz";
-		sha256 = "019rl4rir4lwgjyqj2wq3ylw4daih1kxxgbc6ld6kzcq66mwr747";
-	};
+  minimalOCamlVersion = "4.08";
 
-	buildInputs = [ ocaml findlib ocamlbuild topkg ];
-	propagatedBuildInputs = [ bos cmdliner ocamlgraph ];
+  src = fetchurl {
+    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
+    sha256 = "sha256-rZ9y8+wbDjqjY1sx+TmSoR42hUKRMGpehCCR2cEgbv8=";
+  };
 
-	inherit (topkg) buildPhase installPhase;
+  propagatedBuildInputs = [ cmdliner rresult astring fmt logs bos fpath emile uri ];
 
-	meta = {
-		description = "A DSL to organize functor applications";
-		homepage = https://github.com/mirage/functoria;
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (ocaml.meta) platforms;
-	};
+  doCheck = false;
+
+  meta = with lib; {
+    description = "A DSL to organize functor applications";
+    homepage    = "https://github.com/mirage/functoria";
+    license     = licenses.isc;
+    maintainers = [ maintainers.vbgl ];
+  };
 }

@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchgit, pkgconfig, libssh2
-, qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
+{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchFromGitiles, pkg-config, libssh2
+, qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols2
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
 }:
 
 let
-  breakpad_lss = fetchgit {
+  breakpad_lss = fetchFromGitiles {
     url = "https://chromium.googlesource.com/linux-syscall-support";
     rev = "08056836f2b4a5747daff75435d10d649bed22f6";
     sha256 = "1ryshs2nyxwa0kn3rlbnd5b3fhna9vqm560yviddcfgdm2jyg0hz";
@@ -13,24 +13,28 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "redis-desktop-manager";
   version = "0.9.1";
 
-  src = fetchgit {
-    url = "https://github.com/uglide/RedisDesktopManager.git";
+  src = fetchFromGitHub {
+    owner = "uglide";
+    repo = "RedisDesktopManager";
     fetchSubmodules = true;
-    rev = "refs/tags/${version}";
+    rev = version;
     sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
-    qtquick1 qtquickcontrols qtsvg qttools qtcharts
+    qtquick1 qtquickcontrols2 qtsvg qttools qtcharts
   ];
 
   dontUseQmakeConfigure = true;
+  dontWrapQtApps = true;
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
 
   # Disable annoying update reminder
   postPatch = ''
@@ -71,9 +75,10 @@ EOF
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Cross-platform open source Redis DB management tool";
-    homepage = https://redisdesktop.com/;
-    license = licenses.lgpl21;
+    homepage = "https://redisdesktop.com/";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
   };

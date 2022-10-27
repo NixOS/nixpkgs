@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "0.5.1";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   # Otherwise clang fails with 'duplicate symbol ___sputc'
-  buildFlags = stdenv.lib.optionalString stdenv.isDarwin "CFLAGS=-std=gnu89";
+  buildFlags = lib.optional stdenv.isDarwin "CFLAGS=-std=gnu89";
 
   meta = {
-    homepage = http://libmpeg2.sourceforge.net/;
+    homepage = "http://libmpeg2.sourceforge.net/";
     description = "A free library for decoding mpeg-2 and mpeg-1 video streams";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; unix;
   };
 }

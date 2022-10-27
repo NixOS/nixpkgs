@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "gdrive";
@@ -14,8 +14,8 @@ buildGoPackage rec {
     inherit rev;
   };
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/prasmussen/gdrive;
+  meta = with lib; {
+    homepage    = "https://github.com/prasmussen/gdrive";
     description = "A command line utility for interacting with Google Drive";
     platforms   = platforms.unix;
     license     = licenses.mit;

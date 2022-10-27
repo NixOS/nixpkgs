@@ -5,13 +5,19 @@ The `buildPhase` and `installPhase` attributes can be reused directly
 in many cases. When more fine-grained control on how to run the “topkg”
 build system is required, the attribute `run` can be used.
 */
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opaline }:
-
-if !stdenv.lib.versionAtLeast ocaml.version "4.01"
-then throw "topkg is not available for OCaml ${ocaml.version}"
-else
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, result, opaline }:
 
 let
+  param =
+  if lib.versionAtLeast ocaml.version "4.03" then {
+    version = "1.0.3";
+    sha256 = "0b77gsz9bqby8v77kfi4lans47x9p2lmzanzwins5r29maphb8y6";
+  } else {
+    version = "1.0.0";
+    sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
+    propagatedBuildInputs = [ result ];
+  };
+
 /* This command allows to run the “topkg” build system.
  * It is usually called with `build` or `test` as argument.
  * Packages that use `topkg` may call this command as part of
@@ -21,16 +27,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-topkg-${version}";
-  version = "1.0.0";
+  pname = "ocaml${ocaml.version}-topkg";
+  inherit (param) version;
 
   src = fetchurl {
     url = "https://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
-    sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
+    inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
-  propagatedBuildInputs = [ result ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  propagatedBuildInputs = param.propagatedBuildInputs or [];
+
+  strictDeps = true;
 
   buildPhase = "${run} build";
   createFindlibDestdir = true;
@@ -39,9 +47,9 @@ stdenv.mkDerivation rec {
   passthru = { inherit run; };
 
   meta = {
-    homepage = https://erratique.ch/software/topkg;
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    homepage = "https://erratique.ch/software/topkg";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     description = "A packager for distributing OCaml software";
     inherit (ocaml.meta) platforms;
   };

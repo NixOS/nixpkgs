@@ -2,19 +2,25 @@
 
 buildGoModule rec {
   pname = "todoist";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
     rev = "v${version}";
-    sha256 = "0qhmv65il14lns817yxhma784jw5bz629svzh2ykrmilx5f7dxqc";
+    sha256 = "sha256-cfhwbL7RaeD5LWxlfqnHfPPPkC5AA3Z034p+hlFBWtg=";
   };
 
-  modSha256 = "1nnp5ijz4n34gc97rar4wlvlbx21ndpjyb2mc6gxdk1wzx3mgswp";
+  vendorSha256 = "sha256-ly+OcRo8tGeNX4FnqNVaqjPx/A1FALOnScxs04lIOiU=";
+
+  doCheck = false;
+
+  postPatch = ''
+    substituteInPlace main.go --replace '0.15.0' '${version}'
+  '';
 
   meta = {
-    homepage = https://github.com/sachaos/todoist;
+    homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

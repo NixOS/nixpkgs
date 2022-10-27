@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, setuptools
-, liblapack
+, blas
+, lapack
 , isPy27
 , python
 }:
@@ -24,8 +24,8 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     numpy
-    numpy.blas
-    liblapack
+    blas
+    lapack
   ];
 
   # Include patches from working version of PySparse 1.3-dev in
@@ -41,7 +41,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/PythonOptimizers/pysparse;
+    homepage = "https://github.com/PythonOptimizers/pysparse";
     description = "A Sparse Matrix Library for Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];

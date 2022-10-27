@@ -1,33 +1,25 @@
-{ stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
-, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkgconfig, which, vte }:
+{ lib, stdenv, fetchzip, atk, cairo, dcompiler, gdk-pixbuf, gnome, gst_all_1, librsvg
+, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkg-config, which, vte }:
 
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
 in stdenv.mkDerivation rec {
   pname = "gtkd";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "12kc4s5gp6gn456d8pzhww1ggi9qbxldmcpp6855297g2x8xxy5p";
+    sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ dmd pkgconfig which ];
+  nativeBuildInputs = [ dcompiler pkg-config which ];
   propagatedBuildInputs = [
     atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
     libgda libpeas librsvg pango vte
   ];
 
-  patches = [
-    # Fix makefile not installing .pc's
-    (fetchpatch {
-      url = "https://github.com/gtkd-developers/GtkD/commit/a9db09117ab27127ca4c3b8d2f308fae483a9199.patch";
-      sha256 = "0ngyqifw1kandc1vk01kms3z65pcisfd75q7z09rml96glhfzjd6";
-    })
-  ];
-
-  prePatch = ''
+  postPatch = ''
     substituteAll ${./paths.d} generated/gtkd/gtkd/paths.d
 
     substituteInPlace generated/gstreamer/gst/app/c/functions.d \
@@ -115,12 +107,25 @@ in stdenv.mkDerivation rec {
 
   makeFlags  = [
     "prefix=${placeholder "out"}"
-    "PKG_CONFIG=${pkgconfig}/bin/pkg-config"
+    "PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
   ];
 
-  meta = with stdenv.lib; {
+  # The .pc files does not declare an `includedir=`, so the multiple
+  # outputs setup hook misses this.
+  postFixup = ''
+    for pc in $dev/lib/pkgconfig/*; do
+      substituteInPlace $pc \
+        --replace "$out/include" "$dev/include"
+    done
+  '';
+
+  passthru = {
+    inherit dcompiler;
+  };
+
+  meta = with lib; {
     description = "D binding and OO wrapper for GTK";
-    homepage = https://gtkd.org;
+    homepage = "https://gtkd.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

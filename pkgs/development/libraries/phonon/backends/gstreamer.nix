@@ -1,24 +1,16 @@
-{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkgconfig
-, extra-cmake-modules, qtbase ? null, qtx11extras ? null, qt4 ? null
-, withQt5 ? false
+{ stdenv, lib, fetchurl, fetchpatch, cmake, gst_all_1, phonon, pkg-config
+, extra-cmake-modules, qttools, qtbase, qtx11extras
 , debug ? false
 }:
 
 with lib;
 
-let
-  v = "4.9.0";
+stdenv.mkDerivation rec {
   pname = "phonon-backend-gstreamer";
-in
+  version = "4.10.0";
 
-assert withQt5 -> qtbase != null;
-assert withQt5 -> qtx11extras != null;
-
-stdenv.mkDerivation {
-  name = "${pname}-${if withQt5 then "qt5" else "qt4"}-${v}";
-
-  meta = with stdenv.lib; {
-    homepage = https://phonon.kde.org/;
+  meta = with lib; {
+    homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ttuegel ];
@@ -26,13 +18,23 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${pname}/${v}/${pname}-${v}.tar.xz";
-    sha256 = "1wc5p1rqglf0n1avp55s50k7fjdzdrhg0gind15k8796w7nfbhyf";
+    url = "mirror://kde/stable/phonon/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1wk1ip2w7fkh65zk6rilj314dna0hgsv2xhjmpr5w08xa8sii1y5";
   };
 
-  # Hardcode paths to useful plugins so the backend doesn't depend
-  # on system paths being set.
-  patches = [ ./gst-plugin-paths.patch ];
+  patches = [
+    # Hardcode paths to useful plugins so the backend doesn't depend
+    # on system paths being set.
+    ./gst-plugin-paths.patch
+
+    # Work around https://bugs.kde.org/show_bug.cgi?id=445196 until a new release.
+    (fetchpatch {
+      url = "https://invent.kde.org/libraries/phonon-gstreamer/-/commit/bbbb160f30a394655cff9398d17961142388b0f2.patch";
+      sha256 = "sha256-tNBqVt67LNb9SQogS9ol8/xYIZvVSoVUgXQahMfkFh8=";
+    })
+  ];
+
+  dontWrapQtApps = true;
 
   NIX_CFLAGS_COMPILE =
     let gstPluginPaths =
@@ -45,24 +47,29 @@ stdenv.mkDerivation {
             gst-plugins-bad
             gst-libav
           ]);
-    in [
-      # This flag should be picked up through pkgconfig, but it isn't.
+    in toString [
+      # This flag should be picked up through pkg-config, but it isn't.
       "-I${gst_all_1.gstreamer.dev}/lib/gstreamer-1.0/include"
 
       ''-DGST_PLUGIN_PATH_1_0="${gstPluginPaths}"''
     ];
 
-  buildInputs = with gst_all_1;
-    [ gstreamer gst-plugins-base phonon ]
-    ++ (if withQt5 then [ qtbase qtx11extras ] else [ qt4 ]);
+  buildInputs = with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    phonon
+    qtbase
+    qtx11extras
+  ];
 
-  # cleanup: the build system creates (empty) $out/$out/share/icons (double prefix)
-  # if DESTDIR is unset
-  DESTDIR="/";
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    extra-cmake-modules
+    qttools
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
-
-  cmakeFlags =
-    [ "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}" ]
-    ++ optional withQt5 "-DPHONON_BUILD_PHONON4QT5=ON";
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
+  ];
 }

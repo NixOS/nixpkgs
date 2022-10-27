@@ -1,40 +1,70 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub
-, vdf, wine, winetricks, zenity
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, setuptools-scm
+, setuptools
+, vdf
+, bash
+, steam-run
+, winetricks
+, yad
+, pytestCheckHook
+, nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.2.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "1nkhp1mnvah7zkc1s55jji9lxxbph1miw8dfl9kb72khmaqfzsf0";
+    sha256 = "sha256-StI9UdSILcCUmViQnxteOJr6xLSz+EgtxRpJis57lBY=";
   };
 
-  propagatedBuildInputs = [ vdf ];
+  patches = [
+    # Use steam-run to run Proton binaries
+    ./steam-run.patch
+  ];
 
-  # The wine install shipped with Proton must run under steam's
-  # chrootenv, but winetricks and zenity break when running under
-  # it. See https://github.com/NixOS/nix/issues/902.
-  #
-  # The current workaround is to use wine from nixpkgs
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    setuptools # implicit dependency, used to find data/icon_placeholder.png
+    vdf
+  ];
+
   makeWrapperArgs = [
-    "--set STEAM_RUNTIME 0"
-    "--set-default WINE ${wine}/bin/wine"
-    "--set-default WINESERVER ${wine}/bin/wineserver"
     "--prefix PATH : ${lib.makeBinPath [
-      (winetricks.override { inherit wine; })
-      zenity
+      bash
+      steam-run
+      winetricks
+      yad
     ]}"
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
+  # In most cases the script is unnecessary and should be removed as part of the packaging process.
+  postInstall = ''
+    rm "$out/bin/protontricks-desktop-install"
+  '';
+
+  pythonImportsCheck = [ "protontricks" ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
+  meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
-    homepage = https://github.com/Matoking/protontricks;
-    license = licenses.gpl3;
-    platforms = with platforms; linux;
-    maintainers = with maintainers; [ metadark ];
+    homepage = "https://github.com/Matoking/protontricks";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ kira-bruneau ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

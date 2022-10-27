@@ -1,29 +1,24 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio }:
+{ stdenv, lib, fetchzip, glib, systemd, nss, nspr, gtk3-x11, pango,
+atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, util-linux, alsa-lib, dbus, at-spi2-atk,
+cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "19.5.24";
+  version = "22.8.12";
 
-  src = fetchurl {
-    url = "https://exodusbin.azureedge.net/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "1yx296i525qmpqh8f2vax7igffg826nr8cyq1l0if35374bdsqdw";
+  src = fetchzip {
+    url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
+    sha256 = "sha256-jNzHh4zYhFzpFZAC9rHmwjTdFkbpROSEN3qpL7geiOU=";
   };
 
-  sourceRoot = ".";
-  unpackCmd = ''
-			${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
-  '';
-
   installPhase = ''
-		mkdir -p $out/bin $out/share/applications
-		cd Exodus-linux-x64
-		cp -r . $out
-		ln -s $out/Exodus $out/bin/Exodus
-		ln -s $out/exodus.desktop $out/share/applications
-		substituteInPlace $out/share/applications/exodus.desktop \
-				  --replace 'Exec=bash -c "cd `dirname %k` && ./Exodus"' "Exec=Exodus"
+    mkdir -p $out/bin $out/share/applications
+    cp -r . $out
+    ln -s $out/Exodus $out/bin/Exodus
+    ln -s $out/bin/Exodus $out/bin/exodus
+    ln -s $out/exodus.desktop $out/share/applications
+    substituteInPlace $out/share/applications/exodus.desktop \
+          --replace 'Exec=bash -c "cd \`dirname %k\` && ./Exodus %u"' "Exec=Exodus %u"
   '';
 
   dontPatchELF = true;
@@ -31,35 +26,39 @@ stdenv.mkDerivation rec {
 
   preFixup = let
     libPath = lib.makeLibraryPath [
-			glib
-			nss
-			nspr
-			gtk3-x11
-			gnome2.pango
-			atk
-			cairo
-			gdk-pixbuf
-			xorg.libX11
-			xorg.libxcb
-			xorg.libXcomposite
-			xorg.libXcursor
-			xorg.libXdamage
-			xorg.libXext
-			xorg.libXfixes
-			xorg.libXi
-			xorg.libXrender
-			xorg.libXtst
-			xorg_sys_opengl
-			utillinux
-			xorg.libXrandr
-			xorg.libXScrnSaver
-			alsaLib
-			dbus.lib
-			at-spi2-atk
-			cups.lib
-			libpulseaudio
-			systemd
-			vivaldi-ffmpeg-codecs
+      glib
+      nss
+      nspr
+      gtk3-x11
+      pango
+      atk
+      cairo
+      gdk-pixbuf
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXcursor
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXi
+      xorg.libXrender
+      xorg.libxshmfence
+      xorg.libXtst
+      xorg_sys_opengl
+      util-linux
+      xorg.libXrandr
+      xorg.libXScrnSaver
+      alsa-lib
+      dbus.lib
+      at-spi2-atk
+      at-spi2-core
+      cups.lib
+      libpulseaudio
+      systemd
+      vivaldi-ffmpeg-codecs
+      libxkbcommon
+      mesa
     ];
   in ''
     patchelf \
@@ -68,11 +67,12 @@ stdenv.mkDerivation rec {
       $out/Exodus
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
 }

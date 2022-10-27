@@ -1,71 +1,79 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
-, dbus, readline ? null, pcsclite ? null
+{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
+, nixosTests, wpa_supplicant_gui
+, dbusSupport ? true, dbus
+, withReadline ? true, readline
+, withPcsclite ? true, pcsclite
+, readOnlyModeSSIDs ? false
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  version = "2.9";
+  version = "2.10";
 
   pname = "wpa_supplicant";
 
   src = fetchurl {
     url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
-    sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
+    sha256 = "sha256-IN965RVLODA1X4q0JpEjqHr/3qWf50/pKSqR0Nfhey8=";
   };
 
   patches = [
-    (fetchurl {
-      name = "CVE-2019-16275.patch";
-      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
-      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
-    })
+    # Fix a bug when using two config files
+    ./Use-unique-IDs-for-networks-and-credentials.patch
+  ] ++ lib.optionals readOnlyModeSSIDs [
+    # Allow read-only networks
+    ./0001-Implement-read-only-mode-for-ssids.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
   extraConfig = ''
+    #CONFIG_ELOOP_EPOLL=y
+    #CONFIG_PRIVSEP=y
+    #CONFIG_TLSV12=y see #8332
     CONFIG_AP=y
-    CONFIG_LIBNL32=y
+    CONFIG_BGSCAN_LEARN=y
+    CONFIG_BGSCAN_SIMPLE=y
+    CONFIG_DEBUG_SYSLOG=y
+    CONFIG_EAP_EKE=y
     CONFIG_EAP_FAST=y
-    CONFIG_EAP_PWD=y
-    CONFIG_EAP_PAX=y
-    CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
     CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_EAP_IKEV2=y
+    CONFIG_EAP_PAX=y
+    CONFIG_EAP_PWD=y
+    CONFIG_EAP_SAKE=y
+    CONFIG_ELOOP=eloop
+    CONFIG_EXT_PASSWORD_FILE=y
+    CONFIG_HS20=y
+    CONFIG_HT_OVERRIDES=y
+    CONFIG_IEEE80211AC=y
+    CONFIG_IEEE80211N=y
+    CONFIG_IEEE80211R=y
+    CONFIG_IEEE80211W=y
+    CONFIG_INTERNETWORKING=y
+    CONFIG_L2_PACKET=linux
+    CONFIG_LIBNL32=y
+    CONFIG_OWE=y
+    CONFIG_P2P=y
+    CONFIG_TDLS=y
+    CONFIG_TLS=openssl
+    CONFIG_TLSV11=y
+    CONFIG_VHT_OVERRIDES=y
+    CONFIG_WNM=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
-    CONFIG_EAP_IKEV2=y
-    CONFIG_EAP_EKE=y
-    CONFIG_HT_OVERRIDES=y
-    CONFIG_VHT_OVERRIDES=y
-    CONFIG_ELOOP=eloop
-    #CONFIG_ELOOP_EPOLL=y
-    CONFIG_L2_PACKET=linux
-    CONFIG_IEEE80211W=y
-    CONFIG_TLS=openssl
-    CONFIG_TLSV11=y
-    #CONFIG_TLSV12=y see #8332
-    CONFIG_IEEE80211R=y
-    CONFIG_DEBUG_SYSLOG=y
-    #CONFIG_PRIVSEP=y
-    CONFIG_IEEE80211N=y
-    CONFIG_IEEE80211AC=y
-    CONFIG_INTERNETWORKING=y
-    CONFIG_HS20=y
-    CONFIG_P2P=y
-    CONFIG_TDLS=y
-    CONFIG_BGSCAN_SIMPLE=y
-  '' + optionalString (pcsclite != null) ''
+  '' + optionalString withPcsclite ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_PCSC=y
-  '' + optionalString (dbus != null) ''
+  '' + optionalString dbusSupport ''
     CONFIG_CTRL_IFACE_DBUS=y
     CONFIG_CTRL_IFACE_DBUS_NEW=y
     CONFIG_CTRL_IFACE_DBUS_INTRO=y
-  '' + (if readline != null then ''
+  '' + (if withReadline then ''
     CONFIG_READLINE=y
   '' else ''
     CONFIG_WPA_CLI_EDIT=y
@@ -81,13 +89,16 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/) \
-      -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
+      -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
+      ${optionalString withPcsclite "-I${lib.getDev pcsclite}/include/PCSC/"}"
   '';
 
-  buildInputs = [ openssl libnl dbus readline pcsclite ];
+  buildInputs = [ openssl libnl ]
+    ++ optional dbusSupport dbus
+    ++ optional withReadline readline
+    ++ optional withPcsclite pcsclite;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
@@ -104,11 +115,16 @@ stdenv.mkDerivation rec {
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi/wpa_supplicant/;
+  passthru.tests = {
+    inherit (nixosTests) wpa_supplicant;
+    inherit wpa_supplicant_gui; # inherits the src+version updates
+  };
+
+  meta = with lib; {
+    homepage = "https://w1.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber ];
+    maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;
   };
 }

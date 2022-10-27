@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
-stdenv.mkDerivation {
-  name = "psutils-17";
+stdenv.mkDerivation rec {
+  pname = "psutils";
+  version = "17";
 
   src = fetchurl {
-    url = "ftp://ftp.knackered.org/pub/psutils/psutils-p17.tar.gz";
+    url = "ftp://ftp.knackered.org/pub/psutils/psutils-p${version}.tar.gz";
     sha256 = "1r4ab1fvgganm02kmm70b2r1azwzbav2am41gbigpa2bb1wynlrq";
   };
 
@@ -18,9 +19,9 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of useful utilities for manipulating PS documents";
-    homepage = http://knackered.knackered.org/angus/psutils/;
+    homepage = "http://knackered.knackered.org/angus/psutils/";
     license = licenses.bsd3;
   };
 }

@@ -1,77 +1,82 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkgconfig, Security
-, sqliteSupport ? true, sqlite
-, postgresqlSupport ? true, postgresql
-, mysqlSupport ? true, mysql, zlib, libiconv
+{ lib
+, sqliteSupport ? true
+, postgresqlSupport ? true
+, mysqlSupport ? true
+, rustPlatform
+, fetchCrate
+, installShellFiles
+, pkg-config
+, openssl
+, stdenv
+, Security
+, libiconv
+, sqlite
+, postgresql
+, mariadb
+, zlib
 }:
 
 assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
   "support for at least one database must be enabled";
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
-  features = ''
-    ${optionalString sqliteSupport "sqlite"} \
-    ${optionalString postgresqlSupport "postgres"} \
-    ${optionalString mysqlSupport "mysql"} \
-  '';
+  inherit (lib) optional optionals optionalString;
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "1.4.0";
+  version = "2.0.0";
 
-  src = fetchFromGitHub {
-    owner = "diesel-rs";
-    repo = "diesel";
-    rev = "v${version}";
-    sha256 = "0wp4hvpl9cf8hw1jyz3z476k5blrh6srfpv36dw10bj126rz9pvb";
+  src = fetchCrate {
+    inherit version;
+    crateName = "diesel_cli";
+    sha256 = "sha256-PBfVLqm9vEbf1tDTx4v8U1amYwC0hpYTAYcWyfHB84g=";
   };
 
-  patches = [
-    # Allow warnings to fix many instances of `error: trait objects without an explicit `dyn` are deprecated`
-    #
-    # Remove this after https://github.com/diesel-rs/diesel/commit/9004d1c3fa12aaee84986bd3d893002491373f8c
-    # is in a release.
-    ./allow-warnings.patch
-  ];
+  cargoSha256 = "sha256-8bvJwdZEdIChFUdTVL+EyjzqI+OAJaVMOOyspReSFzc=";
 
-  cargoBuildFlags = [ "--no-default-features --features \"${features}\"" ];
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0xlcskddhy7xsiwj54gmn1xlgkfxb4dwrys7rbamfz1h8aa6ixjx";
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
     ++ optional stdenv.isDarwin Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ mysql zlib ];
+    ++ optionals mysqlSupport [ mariadb zlib ];
 
-  # We must `cd diesel_cli`, we cannot use `--package diesel_cli` to build
-  # because --features fails to apply to the package:
-  # https://github.com/rust-lang/cargo/issues/5015
-  # https://github.com/rust-lang/cargo/issues/4753
-  preBuild = "cd diesel_cli";
-  postBuild = "cd ..";
+  buildNoDefaultFeatures = true;
+  buildFeatures = optional sqliteSupport "sqlite"
+    ++ optional postgresqlSupport "postgres"
+    ++ optional mysqlSupport "mysql";
 
-  checkPhase = optionalString sqliteSupport ''
-    (cd diesel_cli && cargo check --features sqlite)
+  checkPhase = ''
+    runHook preCheck
+  '' + optionalString sqliteSupport ''
+    cargo check --features sqlite
+  '' + optionalString postgresqlSupport ''
+    cargo check --features postgres
+  '' + optionalString mysqlSupport ''
+    cargo check --features mysql
+  '' + ''
+    runHook postCheck
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/diesel --version
+  postInstall = ''
+    installShellCompletion --cmd diesel \
+      --bash <($out/bin/diesel completions bash) \
+      --fish <($out/bin/diesel completions fish) \
+      --zsh <($out/bin/diesel completions zsh)
   '';
 
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
-  NIX_LDFLAGS = lib.optional mysqlSupport "-lz -lssl -lcrypto";
+  NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
 
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";
-    homepage = https://github.com/diesel-rs/diesel/tree/master/diesel_cli;
+    homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
     license = with licenses; [ mit asl20 ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "diesel";
   };
 }

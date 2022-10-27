@@ -4,13 +4,13 @@ let
   password = "helloworld";
 
 in
-  import ./make-test.nix ({ pkgs, ...} : {
+  import ./make-test-python.nix ({ pkgs, ...} : {
     name = "sudo";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ lschuermann ];
     };
 
-    machine =
+    nodes.machine =
       { lib, ... }:
       with lib;
       {
@@ -27,6 +27,10 @@ in
         security.sudo = {
           enable = true;
           wheelNeedsPassword = false;
+
+          extraConfig = ''
+            Defaults lecture="never"
+          '';
 
           extraRules = [
             # SUDOERS SYNTAX CHECK (Test whether the module produces a valid output;
@@ -48,46 +52,55 @@ in
         };
       };
 
+    nodes.strict = { ... }: {
+      users.users = {
+        admin = { isNormalUser = true; extraGroups = [ "wheel" ]; };
+        noadmin = { isNormalUser = true; };
+      };
+
+      security.sudo = {
+        enable = true;
+        wheelNeedsPassword = false;
+        execWheelOnly = true;
+      };
+    };
+
     testScript =
       ''
-        subtest "users in wheel group should have passwordless sudo", sub {
-            $machine->succeed("su - test0 -c \"sudo -u root true\"");
-        };
+        with subtest("users in wheel group should have passwordless sudo"):
+            machine.succeed('su - test0 -c "sudo -u root true"')
 
-        subtest "test1 user should have sudo with password", sub {
-            $machine->succeed("su - test1 -c \"echo ${password} | sudo -S -u root true\"");
-        };
+        with subtest("test1 user should have sudo with password"):
+            machine.succeed('su - test1 -c "echo ${password} | sudo -S -u root true"')
 
-        subtest "test1 user should not be able to use sudo without password", sub {
-            $machine->fail("su - test1 -c \"sudo -n -u root true\"");
-        };
+        with subtest("test1 user should not be able to use sudo without password"):
+            machine.fail('su - test1 -c "sudo -n -u root true"')
 
-        subtest "users in group 'foobar' should be able to use sudo with password", sub {
-            $machine->succeed("sudo -u test2 echo ${password} | sudo -S -u root true");
-        };
+        with subtest("users in group 'foobar' should be able to use sudo with password"):
+            machine.succeed('su - test2 -c "echo ${password} | sudo -S -u root true"')
 
-        subtest "users in group 'barfoo' should be able to use sudo without password", sub {
-            $machine->succeed("sudo -u test3 sudo -n -u root true");
-        };
+        with subtest("users in group 'barfoo' should be able to use sudo without password"):
+            machine.succeed("sudo -u test3 sudo -n -u root true")
 
-        subtest "users in group 'baz' (GID 1337) should be able to use sudo without password", sub {
-            $machine->succeed("sudo -u test4 sudo -n -u root echo true");
-        };
+        with subtest("users in group 'baz' (GID 1337)"):
+            machine.succeed("sudo -u test4 sudo -n -u root echo true")
 
-        subtest "test5 user should be able to run commands under test1", sub {
-            $machine->succeed("sudo -u test5 sudo -n -u test1 true");
-        };
+        with subtest("test5 user should be able to run commands under test1"):
+            machine.succeed("sudo -u test5 sudo -n -u test1 true")
 
-        subtest "test5 user should not be able to run commands under root", sub {
-            $machine->fail("sudo -u test5 sudo -n -u root true");
-        };
+        with subtest("test5 user should not be able to run commands under root"):
+            machine.fail("sudo -u test5 sudo -n -u root true")
 
-        subtest "test5 user should be able to keep his environment", sub {
-            $machine->succeed("sudo -u test5 sudo -n -E -u test1 true");
-        };
+        with subtest("test5 user should be able to keep their environment"):
+            machine.succeed("sudo -u test5 sudo -n -E -u test1 true")
 
-        subtest "users in group 'barfoo' should not be able to keep their environment", sub {
-            $machine->fail("sudo -u test3 sudo -n -E -u root true");
-        };
+        with subtest("users in group 'barfoo' should not be able to keep their environment"):
+            machine.fail("sudo -u test3 sudo -n -E -u root true")
+
+        with subtest("users in wheel should be able to run sudo despite execWheelOnly"):
+            strict.succeed('su - admin -c "sudo -u root true"')
+
+        with subtest("non-wheel users should be unable to run sudo thanks to execWheelOnly"):
+            strict.fail('su - noadmin -c "sudo --help"')
       '';
   })

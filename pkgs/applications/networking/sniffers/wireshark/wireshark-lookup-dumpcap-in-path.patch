@@ -11,16 +11,18 @@ Also change execv() to execvp() because we've set argv[0] to "dumpcap"
 and have to enable PATH lookup. Wireshark is not a setuid program, so
 looking in PATH is not a security issue.
 
+EDITED by teto for wireshark 3.6
+
 Signed-off-by: Franz Pletz <fpletz@fnordicwalking.de>
 ---
  capchild/capture_sync.c | 17 ++++++++++++++---
  1 file changed, 14 insertions(+), 3 deletions(-)
 
 diff --git a/capchild/capture_sync.c b/capchild/capture_sync.c
-index 970688e..49914d5 100644
---- a/capchild/capture_sync.c
-+++ b/capchild/capture_sync.c
-@@ -332,7 +332,18 @@ init_pipe_args(int *argc) {
+index f31914886a..df29b6f0ab 100644
+--- a/capture/capture_sync.c
++++ b/capture/capture_sync.c
+@@ -187,7 +187,18 @@ init_pipe_args(int *argc) {
  #ifdef _WIN32
      exename = g_strdup_printf("%s\\dumpcap.exe", progfile_dir);
  #else
@@ -40,7 +42,7 @@ index 970688e..49914d5 100644
  #endif
  
      /* Make that the first argument in the argument list (argv[0]). */
-@@ -729,7 +740,7 @@ sync_pipe_start(capture_options *capture_opts, capture_session *cap_session, voi
+@@ -572,7 +583,7 @@ sync_pipe_start(capture_options *capture_opts, capture_session *cap_session, inf
           */
          dup2(sync_pipe[PIPE_WRITE], 2);
          ws_close(sync_pipe[PIPE_READ]);
@@ -49,7 +51,7 @@ index 970688e..49914d5 100644
          g_snprintf(errmsg, sizeof errmsg, "Couldn't run %s in child process: %s",
                     argv[0], g_strerror(errno));
          sync_pipe_errmsg_to_parent(2, errmsg, "");
-@@ -997,7 +1008,7 @@ sync_pipe_open_command(char** argv, int *data_read_fd,
+@@ -811,7 +822,7 @@ sync_pipe_open_command(char* const argv[], int *data_read_fd,
          dup2(sync_pipe[PIPE_WRITE], 2);
          ws_close(sync_pipe[PIPE_READ]);
          ws_close(sync_pipe[PIPE_WRITE]);
@@ -58,6 +60,3 @@ index 970688e..49914d5 100644
          g_snprintf(errmsg, sizeof errmsg, "Couldn't run %s in child process: %s",
                     argv[0], g_strerror(errno));
          sync_pipe_errmsg_to_parent(2, errmsg, "");
--- 
-2.6.3
-

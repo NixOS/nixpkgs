@@ -15,23 +15,31 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the sabnzbd server.";
+      enable = mkEnableOption (lib.mdDoc "the sabnzbd server");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.sabnzbd;
+        defaultText = "pkgs.sabnzbd";
+        description = lib.mdDoc "The sabnzbd executable package run by the service.";
       };
+
       configFile = mkOption {
+        type = types.path;
         default = "/var/lib/sabnzbd/sabnzbd.ini";
-        description = "Path to config file.";
+        description = lib.mdDoc "Path to config file.";
       };
 
       user = mkOption {
         default = "sabnzbd";
-        description = "User to run the service as";
+        type = types.str;
+        description = lib.mdDoc "User to run the service as";
       };
 
       group = mkOption {
+        type = types.str;
         default = "sabnzbd";
-        description = "Group to run the service as";
+        description = lib.mdDoc "Group to run the service as";
       };
     };
   };
@@ -62,7 +70,7 @@ in
           GuessMainPID = "no";
           User = "${cfg.user}";
           Group = "${cfg.group}";
-          ExecStart = "${sabnzbd}/bin/sabnzbd -d -f ${cfg.configFile}";
+          ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
         };
     };
   };

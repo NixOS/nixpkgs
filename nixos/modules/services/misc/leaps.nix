@@ -9,22 +9,22 @@ in
 {
   options = {
     services.leaps = {
-      enable = mkEnableOption "leaps";
+      enable = mkEnableOption (lib.mdDoc "leaps");
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
-        description = "A port where leaps listens for incoming http requests";
+        description = lib.mdDoc "A port where leaps listens for incoming http requests";
       };
       address = mkOption {
         default = "";
         type = types.str;
         example = "127.0.0.1";
-        description = "Hostname or IP-address to listen to. By default it will listen on all interfaces.";
+        description = lib.mdDoc "Hostname or IP-address to listen to. By default it will listen on all interfaces.";
       };
       path = mkOption {
         default = "/";
         type = types.path;
-        description = "Subdirectory used for reverse proxy setups";
+        description = lib.mdDoc "Subdirectory used for reverse proxy setups";
       };
     };
   };
@@ -55,7 +55,7 @@ in
         Restart = "on-failure";
         WorkingDirectory = stateDir;
         PrivateTmp = true;
-        ExecStart = "${pkgs.leaps.bin}/bin/leaps -path ${toString cfg.path} -address ${cfg.address}:${toString cfg.port}";
+        ExecStart = "${pkgs.leaps}/bin/leaps -path ${toString cfg.path} -address ${cfg.address}:${toString cfg.port}";
       };
     };
   };

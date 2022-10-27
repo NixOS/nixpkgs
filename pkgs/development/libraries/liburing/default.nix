@@ -1,41 +1,51 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "0.2pre252_${builtins.substring 0 8 src.rev}";
+  version = "2.2";
 
   src = fetchgit {
-    url    = "http://git.kernel.dk/liburing";
-    rev    = "a9bb08db3f8795eb58239d5dbb888e9c1d424011";
-    sha256 = "0gv06fcgqhfkqgiqzjb4qzpxh3h595ypw01a0kmhqnmsnvmb624n";
+    url    = "http://git.kernel.dk/${pname}";
+    rev    = "liburing-${version}";
+    sha256 = "sha256-M/jfxZ+5DmFvlAt8sbXrjBTPf2gLd9UyTNymtjD+55g";
   };
 
   separateDebugInfo = true;
   enableParallelBuilding = true;
-
-  outputs = [ "out" "lib" "dev" "man" ];
-
-  configurePhase = ''
-    ./configure \
-      --prefix=$out \
-      --includedir=$dev/include \
-      --libdir=$lib/lib \
-      --mandir=$man/share/man \
+  # Upstream's configure script is not autoconf generated, but a hand written one.
+  setOutputFlags = false;
+  preConfigure =
+    # We cannot use configureFlags or configureFlagsArray directly, since we
+    # don't have structuredAttrs yet and using placeholder causes permissions
+    # denied errors. Using $dev / $man in configureFlags causes bash evaluation
+    # errors
+  ''
+    configureFlagsArray+=(
+      "--includedir=$dev/include"
+      "--mandir=$man/share/man"
+    )
   '';
 
-  # Copy the examples into $out.
+  # Doesn't recognize platform flags
+  configurePlatforms = [];
+
+  outputs = [ "out" "bin" "dev" "man" ];
+
   postInstall = ''
-    mkdir -p $out/bin
-    cp ./examples/io_uring-cp examples/io_uring-test $out/bin
-    cp ./examples/link-cp $out/bin/io_uring-link-cp
-    cp ./examples/ucontext-cp $out/bin/io_uring-ucontext-cp
+    # Copy the examples into $bin. Most reverse dependency of this package should
+    # reference only the $out output
+    mkdir -p $bin/bin
+    cp ./examples/io_uring-cp examples/io_uring-test $bin/bin
+    cp ./examples/link-cp $bin/bin/io_uring-link-cp
+  '' + lib.optionalString stdenv.hostPlatform.isGnu ''
+    cp ./examples/ucontext-cp $bin/bin/io_uring-ucontext-cp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace library for the Linux io_uring API";
-    homepage    = http://git.kernel.dk/cgit/liburing/;
+    homepage    = "https://git.kernel.dk/cgit/liburing/";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

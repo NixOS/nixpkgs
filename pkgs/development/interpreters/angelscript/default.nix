@@ -1,38 +1,39 @@
-{stdenv, fetchurl, unzip}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="angelscript";
-    version = "2.34.0";
-    name="${baseName}-${version}";
-    url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "1xxxpwln4v2yasa35y7552fsfd8fbg50gnbp4vxy0ajj2wvh9akg";
-  };
-  buildInputs = [
-    unzip
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, cmake
+}:
+
+stdenv.mkDerivation rec {
+  pname = "angelscript";
+  version = "2.36.0";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
+    sha256 = "sha256-M/lfdZe8DYiwl9NeexMg0VQZ/8V3mFHZ0qbMzsV4EbM=";
   };
+
+  nativeBuildInputs = [ unzip cmake ];
+
   preConfigure = ''
-    cd angelscript/projects/gnuc
-    export makeFlags="$makeFlags PREFIX=$out"
+    export ROOT=$PWD
+    cd angelscript/projects/cmake
   '';
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
   postInstall = ''
     mkdir -p "$out/share/docs/angelscript"
-    cp -r ../../../docs/* "$out/share/docs/angelscript"
+    cp -r $ROOT/docs/* "$out/share/docs/angelscript"
   '';
-  meta = {
-    inherit (s) version;
+
+  meta = with lib; {
     description = "Light-weight scripting library";
-    license = stdenv.lib.licenses.zlib ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
-    homepage="http://www.angelcode.com/angelscript/";
+    license = licenses.zlib;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
+    downloadPage = "https://www.angelcode.com/angelscript/downloads.html";
+    homepage = "https://www.angelcode.com/angelscript/";
   };
 }

@@ -1,34 +1,39 @@
-{ stdenv, fetchFromGitHub, python3Packages
-}:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonPackage rec {
-  name = "qnotero-${version}";
+  pname = "qnotero";
 
-  version = "1.0.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "smathot";
-    repo = "qnotero";
-    rev = "release/${version}";
-    name = "qnotero-${version}-src";
-    sha256 = "1d5a9k1llzn9q1qv1bfwc7gfflabh4riplz9jj0hf04b279y1bj0";
+    owner = "ealbiter";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Rym7neluRbYCpuezRQyLc6gSl3xbVR9fvhOxxW5+Nzo=";
   };
 
-  propagatedBuildInputs = [ python3Packages.pyqt4 ];
+  propagatedBuildInputs = [ python3Packages.pyqt5 wrapQtAppsHook ];
 
   patchPhase = ''
       substituteInPlace ./setup.py \
         --replace "/usr/share" "usr/share"
 
-      substituteInPlace ./libqnotero/_themes/default.py \
+      substituteInPlace ./libqnotero/_themes/light.py \
          --replace "/usr/share" "$out/usr/share"
   '';
 
+  preFixup = ''
+    wrapQtApp "$out"/bin/qnotero
+  '';
+
+  # no tests executed
+  doCheck = false;
+
   meta = {
     description = "Quick access to Zotero references";
-    homepage = http://www.cogsci.nl/software/qnotero;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    homepage = "http://www.cogsci.nl/software/qnotero";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

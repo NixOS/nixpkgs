@@ -1,53 +1,63 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
-, openssl, enableMagnet ? false, lua5_1 ? null
-, enableMysql ? false, libmysqlclient ? null
-, enableLdap ? false, openldap ? null
-, enableWebDAV ? false, sqlite ? null, libuuid ? null
-, enableExtendedAttrs ? false, attr ? null
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
+, fetchpatch
+, openssl
+, enableDbi ? false, libdbi
+, enableMagnet ? false, lua5_1
+, enableMysql ? false, libmysqlclient
+, enableLdap ? false, openldap
+, enablePam ? false, linux-pam
+, enableSasl ? false, cyrus_sasl
+, enableWebDAV ? false, sqlite, libuuid
+, enableExtendedAttrs ? false, attr
 , perl
+, nixosTests
 }:
 
-assert enableMagnet -> lua5_1 != null;
-assert enableMysql -> libmysqlclient != null;
-assert enableLdap -> openldap != null;
-assert enableWebDAV -> sqlite != null;
-assert enableWebDAV -> libuuid != null;
-assert enableExtendedAttrs -> attr != null;
-
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.54";
+  pname = "lighttpd";
+  version = "1.4.67";
 
   src = fetchurl {
-    url = "https://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "08c7kbdfq915dzzqcghwacrgia197hd1w66knvydi5ja4picq56g";
+    url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
+    sha256 = "sha256-fgTXZ/UajYJLMuJIPvKVCYKSDUJ9EnLvRmf0nW+J81g=";
   };
 
   postPatch = ''
     patchShebangs tests
     # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
     sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
+    # it's difficult to prevent this test from trying to use /var/tmp (which
+    # the sandbox doesn't have) so until libredirect has support for mkstemp
+    # calls it's easiest to disable it
+    sed -i '/test_mod_ssi/d' src/t/test_mod.c
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
-             ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql libmysqlclient
-             ++ stdenv.lib.optional enableLdap openldap
-             ++ stdenv.lib.optional enableWebDAV sqlite
-             ++ stdenv.lib.optional enableWebDAV libuuid;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
+             ++ lib.optional enableDbi libdbi
+             ++ lib.optional enableMagnet lua5_1
+             ++ lib.optional enableMysql libmysqlclient
+             ++ lib.optional enableLdap openldap
+             ++ lib.optional enablePam linux-pam
+             ++ lib.optional enableSasl cyrus_sasl
+             ++ lib.optional enableWebDAV sqlite
+             ++ lib.optional enableWebDAV libuuid;
 
   configureFlags = [ "--with-openssl" ]
-                ++ stdenv.lib.optional enableMagnet "--with-lua"
-                ++ stdenv.lib.optional enableMysql "--with-mysql"
-                ++ stdenv.lib.optional enableLdap "--with-ldap"
-                ++ stdenv.lib.optional enableWebDAV "--with-webdav-props"
-                ++ stdenv.lib.optional enableWebDAV "--with-webdav-locks"
-                ++ stdenv.lib.optional enableExtendedAttrs "--with-attr";
+                ++ lib.optional enableDbi "--with-dbi"
+                ++ lib.optional enableMagnet "--with-lua"
+                ++ lib.optional enableMysql "--with-mysql"
+                ++ lib.optional enableLdap "--with-ldap"
+                ++ lib.optional enablePam "--with-pam"
+                ++ lib.optional enableSasl "--with-sasl"
+                ++ lib.optional enableWebDAV "--with-webdav-props"
+                ++ lib.optional enableWebDAV "--with-webdav-locks"
+                ++ lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
-    export PATH=$PATH:${pcre.dev}/bin
+    export PATH=$PATH:${pcre2.dev}/bin
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
@@ -63,11 +73,15 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (nixosTests) lighttpd;
+  };
+
+  meta = with lib; {
     description = "Lightweight high-performance web server";
-    homepage = http://www.lighttpd.net/;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "http://www.lighttpd.net/";
+    license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor brecht ];
   };
 }

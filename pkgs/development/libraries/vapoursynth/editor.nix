@@ -1,41 +1,59 @@
-{ stdenv, fetchFromBitbucket, makeWrapper
+{ lib, mkDerivation, fetchFromGitHub, makeWrapper, runCommand
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
 }:
 
-stdenv.mkDerivation rec {
-  pname = "vapoursynth-editor";
-  version = "R19";
+let
+  unwrapped = mkDerivation rec {
+    pname = "vapoursynth-editor";
+    version = "R19-mod-4";
 
-  src = fetchFromBitbucket {
-    owner = "mystery_keeper";
-    repo = pname;
-    rev = stdenv.lib.toLower version;
-    sha256 = "1zlaynkkvizf128ln50yvzz3b764f5a0yryp6993s9fkwa7djb6n";
+    src = fetchFromGitHub {
+      owner = "YomikoR";
+      repo = pname;
+      rev = lib.toLower version;
+      sha256 = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
+    };
+
+    nativeBuildInputs = [ qmake ];
+    buildInputs = [ qtbase vapoursynth qtwebsockets ];
+
+    dontWrapQtApps = true;
+
+    preConfigure = "cd pro";
+
+    preFixup = ''
+      cd ../build/release*
+      mkdir -p $out/bin
+      for bin in vsedit{,-job-server{,-watcher}}; do
+          mv $bin $out/bin
+          wrapQtApp $out/bin/$bin
+      done
+    '';
+
+    passthru = { inherit withPlugins; };
+
+    meta = with lib; {
+      description = "Cross-platform editor for VapourSynth scripts";
+      homepage = "https://github.com/YomikoR/VapourSynth-Editor";
+      license = licenses.mit;
+      maintainers = with maintainers; [ tadeokondrak ];
+      platforms = platforms.all;
+    };
   };
 
-  nativeBuildInputs = [ qmake makeWrapper ];
-  buildInputs = [ qtbase vapoursynth qtwebsockets ];
-
-  preConfigure = "cd pro";
-
-  installPhase = ''
-    cd ../build/release*
+  withPlugins = plugins: let
+    vapoursynthWithPlugins = vapoursynth.withPlugins plugins;
+  in runCommand "${unwrapped.name}-with-plugins" {
+    nativeBuildInputs = [ makeWrapper ];
+    passthru = { withPlugins = plugins': withPlugins (plugins ++ plugins'); };
+  } ''
     mkdir -p $out/bin
     for bin in vsedit{,-job-server{,-watcher}}; do
-        mv $bin $out/bin
-
-        wrapProgram $out/bin/$bin \
-            --prefix PYTHONPATH : ${vapoursynth}/${python3.sitePackages} \
-            --prefix LD_LIBRARY_PATH : ${vapoursynth}/lib
+        makeWrapper ${unwrapped}/bin/$bin $out/bin/$bin \
+            --prefix PYTHONPATH : ${vapoursynthWithPlugins}/${python3.sitePackages} \
+            --prefix LD_LIBRARY_PATH : ${vapoursynthWithPlugins}/lib
     done
   '';
-
-  meta = with stdenv.lib; {
-    description = "Cross-platform editor for VapourSynth scripts";
-    homepage = "https://bitbucket.org/mystery_keeper/vapoursynth-editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tadeokondrak ];
-    platforms = platforms.all;
-  };
-}
+in
+  withPlugins []

@@ -1,43 +1,40 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4 ? null
-, withQt5 ? false, qtbase ? null, qttools ? null
-, darwin ? null
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qtbase, qttools
+, CoreFoundation, Security
 , libsecret
 }:
 
-assert withQt5 -> qtbase != null;
-assert withQt5 -> qttools != null;
-assert stdenv.isDarwin -> darwin != null;
-
 stdenv.mkDerivation rec {
-  name = "qtkeychain-${if withQt5 then "qt5" else "qt4"}-${version}";
-  version = "0.9.1";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
+  pname = "qtkeychain";
+  version = "0.12.0";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = "v${version}";
-    sha256 = "0h4wgngn2yl35hapbjs24amkjfbzsvnna4ixfhn87snjnq5lmjbc"; # v0.9.1
+    sha256 = "0gi1nx4bcc1vwfw41cif3xi2i59229vy0kc2r5959d8n6yv31kfr"; # v0.9.1
   };
 
-  patches = if withQt5 then null else [ ./0001-Fixes-build-with-Qt4.patch ];
+  dontWrapQtApps = true;
+
+  patches = [ ./0002-Fix-install-name-Darwin.patch ];
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) [ libsecret ]
-    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
-    ++ stdenv.lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ [ qtbase qttools ]
+    ++ lib.optionals stdenv.isDarwin [
       CoreFoundation Security
-    ])
+    ]
   ;
 
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";
-    homepage = https://github.com/frankosterfeld/qtkeychain;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/frankosterfeld/qtkeychain";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

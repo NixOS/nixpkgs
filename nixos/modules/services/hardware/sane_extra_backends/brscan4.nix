@@ -15,43 +15,43 @@ let
 
       name = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The friendly name you give to the network device. If undefined,
           the name of attribute will be used.
         '';
 
-        example = literalExample "office1";
+        example = "office1";
       };
 
       model = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The model of the network device.
         '';
 
-        example = literalExample "MFC-7860DW";
+        example = "MFC-7860DW";
       };
 
       ip = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The ip address of the device. If undefined, you will have to
           provide a nodename.
         '';
 
-        example = literalExample "192.168.1.2";
+        example = "192.168.1.2";
       };
 
       nodename = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The node name of the device. If undefined, you will have to
           provide an ip.
         '';
 
-        example = literalExample "BRW0080927AFBCE";
+        example = "BRW0080927AFBCE";
       };
 
     };
@@ -67,11 +67,11 @@ in
 {
   options = {
 
-    hardware.sane.brscan4.enable = 
-      mkEnableOption "Brother's brscan4 scan backend" // {
-      description = ''
+    hardware.sane.brscan4.enable =
+      mkEnableOption (lib.mdDoc "Brother's brscan4 scan backend") // {
+      description = lib.mdDoc ''
         When enabled, will automatically register the "brscan4" sane
-        backend and bring configuration files to their expected location. 
+        backend and bring configuration files to their expected location.
       '';
     };
 
@@ -81,8 +81,8 @@ in
         { office1 = { model = "MFC-7860DW"; ip = "192.168.1.2"; };
           office2 = { model = "MFC-7860DW"; nodename = "BRW0080927AFBCE"; };
         };
-      type = with types; loaOf (submodule netDeviceOpts);
-      description = ''
+      type = with types; attrsOf (submodule netDeviceOpts);
+      description = lib.mdDoc ''
         The list of network devices that will be registered against the brscan4
         sane backend.
       '';
@@ -95,14 +95,11 @@ in
       pkgs.brscan4
     ];
 
-    environment.etc = singleton {
-      target = "opt/brother/scanner/brscan4";
-      source = "${etcFiles}/etc/opt/brother/scanner/brscan4";
-    };
+    environment.etc."opt/brother/scanner/brscan4" =
+      { source = "${etcFiles}/etc/opt/brother/scanner/brscan4"; };
 
     assertions = [
       { assertion = all (x: !(null != x.ip && null != x.nodename)) netDeviceList;
-          
         message = ''
           When describing a network device as part of the attribute list
           `hardware.sane.brscan4.netDevices`, only one of its `ip` or `nodename`

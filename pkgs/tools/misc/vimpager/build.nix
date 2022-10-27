@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , coreutils
 , sharutils
+, runtimeShell
 , version
 , sha256
 }:
@@ -18,7 +19,8 @@ stdenv.mkDerivation {
     rev    = version;
   };
 
-  buildInputs = [ coreutils sharutils ]; # for uuencode
+  nativeBuildInputs = [ sharutils ]; # for uuencode
+  buildInputs = [ coreutils ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -30,9 +32,9 @@ stdenv.mkDerivation {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Use Vim as PAGER";
-    homepage    = "https://www.vim.org/scripts/script.php?script_id = 1723";
+    homepage    = "https://www.vim.org/scripts/script.php?script_id=1723";
     license     = with licenses; [ bsd2 mit vim ];
     platforms   = platforms.unix;
   };

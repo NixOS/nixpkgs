@@ -1,27 +1,28 @@
-{ lib, stdenv, fetchhg, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
+
 stdenv.mkDerivation rec {
-  version = "10.2";
+  version = "11.4";
   pname = "textadept";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config unzip zip ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2 ncurses glib
   ];
 
-  src = fetchhg {
-    url = http://foicica.com/hg/textadept;
+  enableParallelBuilding = true;
+
+  src = fetchFromGitHub {
+    name = "textadept11";
+    owner = "orbitalquark";
+    repo = "textadept";
     rev = "textadept_${version}";
-    sha256 = "0fai8xqddkkprmbf0cf8wwgv7ccfdb1iyim30nppm2m16whkc8fl";
+    sha256 = "sha256-1we2NC4N8oY4QmmqIIWGSpTBuLx3MEFkZK+BjmNEfD0=";
   };
 
   preConfigure =
     lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
       "ln -s ${fetchurl params} $PWD/src/${name}"
     ) (import ./deps.nix)) + ''
-
-    # work around trying to download stuff in `make deps`
-    function wget() { true; }
-    export -f wget
 
     cd src
     make deps
@@ -31,19 +32,27 @@ stdenv.mkDerivation rec {
     make curses
   '';
 
+  preInstall = ''
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/pixmaps
+  '';
+
   postInstall = ''
     make curses install PREFIX=$out MAKECMDGOALS=curses
   '';
 
   makeFlags = [
     "PREFIX=$(out)"
+    "WGET=true"
+    "PIXMAPS_DIR=$(out)/share/pixmaps"
+    "GTK2=1"
   ];
 
-  meta = with stdenv.lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting";
-    homepage = http://foicica.com/textadept;
+  meta = with lib; {
+    description = "An extensible text editor based on Scintilla with Lua scripting.";
+    homepage = "http://foicica.com/textadept";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin mirrexagon ];
+    maintainers = with maintainers; [ raskin mirrexagon patricksjackson ];
     platforms = platforms.linux;
   };
 }

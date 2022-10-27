@@ -1,36 +1,35 @@
-{ callPackage, fetchurl, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/37903/why3-1.2.0.tar.gz;
-    sha256 = "0xz001jhi71ja8vqrjz27v63bidrzj4qvg1yqarq6p4dmpxhk348";
+    url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
   };
 
   buildInputs = with ocamlPackages; [
     ocaml findlib ocamlgraph zarith menhir
-    # Compressed Sessions
     # Emacs compilation of why3.el
     emacs
     # Documentation
     rubber hevea
     # GUI
-    lablgtk
+    lablgtk3-sourceview3
     # WebIDE
     js_of_ocaml js_of_ocaml-ppx
+    # S-expression output for why3pp
+    ppx_deriving ppx_sexp_conv ]
+    ++
     # Coq Support
-    coqPackages.coq coqPackages.flocq ocamlPackages.camlp5
-  ];
+    (with coqPackages; [ coq flocq ])
+  ;
 
-  propagatedBuildInputs = with ocamlPackages; [ camlzip num ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
 
   enableParallelBuilding = true;
-
-  # Remove unnecessary call to which
-  patches = [ ./configure.patch ];
 
   configureFlags = [ "--enable-verbose-make" ];
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation {
 
   passthru.withProvers = callPackage ./with-provers.nix {};
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A platform for deductive program verification";
     homepage    = "http://why3.lri.fr/";
     license     = licenses.lgpl21;

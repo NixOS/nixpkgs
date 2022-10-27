@@ -1,42 +1,25 @@
-{ stdenv, fetchurl, python27Packages, python36Packages, wmctrl,
+{ lib, fetchFromGitHub, python27Packages, python3Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {
-  stable = with python27Packages; buildPythonPackage rec {
-    pname = "plover";
-    version = "3.1.1";
+  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
 
-    meta = with stdenv.lib; {
+  dev = with python3Packages; mkDerivationWith buildPythonPackage rec {
+    pname = "plover";
+    version = "4.0.0.dev10";
+
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;
     };
 
-    src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1hdg5491phx6svrxxsxp8v6n4b25y7y4wxw7x3bxlbyhaskgj53r";
-    };
-
-    nativeBuildInputs     = [ setuptools_scm ];
-    buildInputs           = [ pytest mock ];
-    propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
-    ];
-  };
-
-  dev = with python36Packages; mkDerivationWith buildPythonPackage rec {
-    pname = "plover";
-    version = "4.0.0.dev8";
-
-    meta = with stdenv.lib; {
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
-    };
-
-    src = fetchurl {
-      url    = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "1wxkmik1zyw5gqig5r0cas5v6f5408fbnximzw610rdisqy09rxp";
+    src = fetchFromGitHub {
+      owner = "openstenoproject";
+      repo = "plover";
+      rev = "v${version}";
+      sha256 = "sha256-oJ7+R3ZWhUbNTTAw1AfMg2ur8vW1XEbsa5FgSTam1Ns=";
     };
 
     # I'm not sure why we don't find PyQt5 here but there's a similar
@@ -44,11 +27,12 @@
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
     checkInputs           = [ pytest mock ];
-    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
+    propagatedBuildInputs = [ babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;
-    makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
-    ];
+
+    preFixup = ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    '';
   };
 }

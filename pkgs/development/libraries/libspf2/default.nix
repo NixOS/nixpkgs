@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libspf2";
-  version = "1.2.10";
+  version = "2.2.12";
 
-  src = fetchurl {
-    url = "https://www.libspf2.org/spf/libspf2-${version}.tar.gz";
-    sha256 = "1j91p0qiipzf89qxq4m1wqhdf01hpn1h5xj4djbs51z23bl3s7nr";
+  src = fetchFromGitHub {
+    owner = "helsinki-systems";
+    repo = "libspf2";
+    rev = "v${version}";
+    sha256 = "03iiaafdcwh220pqignk407h6klrakwz0zkb8iwk6nkwipkwvhsx";
   };
 
   patches = [
-    (fetchurl {
-      name = "0001-gcc-variadic-macros.patch";
-      url = "https://github.com/shevek/libspf2/commit/5852828582f556e73751076ad092f72acf7fc8b6.patch";
-      sha256 = "1v6ashqzpr0xidxq0vpkjd8wd66cj8df01kyzj678ljzcrax35hk";
+    # glibc-2.34 compat
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/dbb8a5c9f749cc11e61cfe558f164b165cbc30cb/mail-filter/libspf2/files/libspf2-1.2.11-undefined-dn_.patch";
+      sha256 = "sha256-6JVVkVGCcFJsNeBdVTPcLhW4KoHLY4ai/KXDMliXgPA=";
     })
   ];
 
@@ -34,10 +36,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Implementation of the Sender Policy Framework for SMTP authorization";
-    homepage = https://www.libspf2.org;
+    description = "Implementation of the Sender Policy Framework for SMTP " +
+                  "authorization (Helsinki Systems fork)";
+    homepage = "https://github.com/helsinki-systems/libspf2";
     license = with licenses; [ lgpl21Plus bsd2 ];
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ pacien ajs124 das_j ];
     platforms = platforms.all;
   };
 }

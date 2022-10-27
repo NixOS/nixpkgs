@@ -1,69 +1,209 @@
-{ stdenv, fetchurl, autoreconfHook
-, libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
-, libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
-, libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
-, libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, libssh2, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
-, onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
-, jackSupport ? false
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, SDL
+, SDL_image
+, a52dec
+, alsa-lib
+, autoreconfHook
+, avahi
+, dbus
+, faad2
+, ffmpeg_4
+, flac
+, fluidsynth
+, freefont_ttf
+, fribidi
+, gnutls
+, libarchive
+, libass
+, libbluray
+, libcaca
+, libcddb
+, libdc1394
+, libdvbpsi
+, libdvdnav
+, libebml
+, libgcrypt
+, libgpg-error
+, libjack2
+, libkate
+, libmad
+, libmatroska
+, libmodplug
+, libmtp
+, liboggz
+, libopus
+, libplacebo
+, libpulseaudio
+, libraw1394
+, librsvg
+, libsamplerate
+, libspatialaudio
+, libssh2
+, libtheora
+, libtiger
+, libupnp
+, libv4l
+, libva
+, libvdpau
+, libvorbis
+, libxml2
+, live555
+, lua5
+, mpeg2dec
+, ncurses
+, perl
+, pkg-config
 , removeReferencesTo
-, chromecastSupport ? true, protobuf, libmicrodns
+, samba
+, schroedinger
+, speex
+, srt
+, systemd
+, taglib
+, unzip
+, xlibsWrapper
+, xorg
+, zlib
+, chromecastSupport ? true, libmicrodns, protobuf
+, jackSupport ? false
+, onlyLibVLC ? false
+, skins2Support ? !onlyLibVLC, freetype
+, waylandSupport ? true, wayland, wayland-protocols
+, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
 # If your firewall is enabled, make sure to have something like:
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
-with stdenv.lib;
-
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
-
+let
+  inherit (lib) optionalString optional optionals;
+in
 stdenv.mkDerivation rec {
-  pname = "vlc";
-  version = "3.0.8";
+  pname = "${optionalString onlyLibVLC "lib"}vlc";
+  version = "3.0.17.3";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
-    sha256 = "e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6";
+    url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
+    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
-    libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
-    libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-    systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
-    libkate libtiger libv4l samba libssh2 liboggz libass libdvbpsi libva
-    xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
-    fluidsynth wayland wayland-protocols
-  ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
-    ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
-    ++ optional jackSupport libjack2
-    ++ optionals chromecastSupport [ protobuf libmicrodns ];
+    SDL
+    SDL_image
+    a52dec
+    alsa-lib
+    avahi
+    dbus
+    faad2
+    ffmpeg_4
+    flac
+    fluidsynth
+    fribidi
+    gnutls
+    libarchive
+    libass
+    libbluray
+    libcaca
+    libcddb
+    libdc1394
+    libdvbpsi
+    libdvdnav
+    libdvdnav.libdvdread
+    libebml
+    libgcrypt
+    libgpg-error
+    libkate
+    libmad
+    libmatroska
+    libmtp
+    libmodplug
+    liboggz
+    libopus
+    libplacebo
+    libpulseaudio
+    libraw1394
+    librsvg
+    libsamplerate
+    libspatialaudio
+    libssh2
+    libtheora
+    libtiger
+    libupnp
+    libv4l
+    libva
+    libvdpau
+    libvorbis
+    libxml2
+    lua5
+    mpeg2dec
+    ncurses
+    samba
+    schroedinger
+    speex
+    srt
+    systemd
+    taglib
+    xlibsWrapper
+    zlib
+  ]
+  ++ (with xorg; [
+    libXpm
+    libXv
+    libXvMC
+    xcbutilkeysyms
+  ])
+  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
+  ++ optional jackSupport libjack2
+  ++ optionals chromecastSupport [ libmicrodns protobuf ]
+  ++ optionals skins2Support (with xorg; [
+    freetype
+    libXext
+    libXinerama
+    libXpm
+  ])
+  ++ optionals waylandSupport [ wayland wayland-protocols ]
+  ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
+  ++ optional (waylandSupport && withQt5) qtwayland;
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
-    ++ optionals withQt5 [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    removeReferencesTo
+    unzip
+  ]
+  ++ optionals withQt5 [ wrapQtAppsHook ]
+  ++ optionals waylandSupport [ wayland wayland-protocols ];
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if (!stdenv.hostPlatform.isAarch64) then live555 else null;
+  LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
-  postPatch = ''
-    substituteInPlace configure \
-      --replace /bin/echo echo
+  patches = [
+    # patches to build with recent live555
+    # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/uploads/3c84ea58d7b94d7a8d354eaffe4b7d55/0001-Get-addr-by-ref.-from-getConnectionEndpointAddress.patch";
+      sha256 = "171d3qjl9a4dm13sqig3ra8s2zcr76wfnqz4ba4asg139cyc1axd";
+    })
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
+      sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
+    })
+  ];
 
+  postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
   '';
@@ -81,9 +221,13 @@ stdenv.mkDerivation rec {
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
   configureFlags = [
+    "--enable-srt" # Explicit enable srt to ensure the patch is applied.
     "--with-kde-solid=$out/share/apps/solid/actions"
-  ] ++ optional onlyLibVLC "--disable-vlc"
-    ++ optionals chromecastSupport [
+  ]
+  ++ optional onlyLibVLC "--disable-vlc"
+  ++ optional skins2Support "--enable-skins2"
+  ++ optional waylandSupport "--enable-wayland"
+  ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
     "--enable-microdns"
@@ -94,10 +238,17 @@ stdenv.mkDerivation rec {
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
 
-  meta = with stdenv.lib; {
+  # Add missing SOFA files
+  # Given in EXTRA_DIST, but not in install-data target
+  postInstall = ''
+    cp -R share/hrtfs $out/share/vlc
+  '';
+
+  meta = with lib; {
     description = "Cross-platform media player and streaming server";
-    homepage = http://www.videolan.org/vlc/;
+    homepage = "http://www.videolan.org/vlc/";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

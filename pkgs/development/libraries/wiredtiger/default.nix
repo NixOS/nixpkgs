@@ -1,20 +1,13 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool
 
 # Optional Dependencies
 , lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
 , gperftools ? null, leveldb ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
-  mkFlag = trueStr: falseStr: cond: name: val: "--"
-    + (if cond then trueStr else falseStr)
-    + name
-    + optionalString (val != null && cond != false) "=${val}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;
@@ -39,19 +32,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
 
   configureFlags = [
-    (mkWith   false                   "attach"     null)
-    (mkWith   true                    "builtins"   "")
-    (mkEnable (optBzip2 != null)      "bzip2"      null)
-    (mkEnable false                   "diagnostic" null)
-    (mkEnable false                   "java"       null)
-    (mkEnable (optLeveldb != null)    "leveldb"    null)
-    (mkEnable false                   "python"     null)
-    (mkEnable (optSnappy != null)     "snappy"     null)
-    (mkEnable (optLz4 != null)        "lz4"        null)
-    (mkEnable (optGperftools != null) "tcmalloc"   null)
-    (mkEnable (optZlib != null)       "zlib"       null)
-    (mkWith   (optDb != null)         "berkeleydb" optDb)
-    (mkWith   false                   "helium"     null)
+    (withFeature   false                   "attach")
+    (withFeatureAs true                    "builtins" "")
+    (enableFeature (optBzip2 != null)      "bzip2")
+    (enableFeature false                   "diagnostic")
+    (enableFeature false                   "java")
+    (enableFeature (optLeveldb != null)    "leveldb")
+    (enableFeature false                   "python")
+    (enableFeature (optSnappy != null)     "snappy")
+    (enableFeature (optLz4 != null)        "lz4")
+    (enableFeature (optGperftools != null) "tcmalloc")
+    (enableFeature (optZlib != null)       "zlib")
+    (withFeatureAs (optDb != null)         "berkeleydb" optDb)
+    (withFeature   false                   "helium")
   ];
 
   preConfigure = ''
@@ -59,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://wiredtiger.com/;
+    homepage = "http://wiredtiger.com/";
     description = "";
     license = licenses.gpl2;
     platforms = intersectLists platforms.unix platforms.x86_64;

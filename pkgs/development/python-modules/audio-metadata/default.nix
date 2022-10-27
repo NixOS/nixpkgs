@@ -1,24 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, fetchPypi
 , attrs
 , bidict
 , bitstruct
 , more-itertools
 , pprintpp
+, tbm-utils
 }:
 
 buildPythonPackage rec {
   pname = "audio-metadata";
-  version = "0.4.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a881f0f3b82752d306ac0a7850ed0e31bad275a399f63097733b4890986084b2";
+    sha256 = "9e7ba79d49cf048a911d5f7d55bb2715c10be5c127fe5db0987c5fe1aa7335eb";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bidict>=0.17,<0.18" "bidict" \
-      --replace "more-itertools>=4.0,<5.0" "more-itertools"
+      --replace "'attrs>=18.2,<19.4'" "'attrs'"
   '';
 
   propagatedBuildInputs = [
@@ -27,15 +27,14 @@ buildPythonPackage rec {
     bitstruct
     more-itertools
     pprintpp
+    tbm-utils
   ];
 
   # No tests
   doCheck = false;
 
-  disabled = pythonOlder "3.6";
-
   meta = with lib; {
-    homepage = https://github.com/thebigmunch/audio-metadata;
+    homepage = "https://github.com/thebigmunch/audio-metadata";
     description = "A library for reading and, in the future, writing metadata from audio files";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

@@ -10,19 +10,19 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to run the tinydns dns server";
+        description = lib.mdDoc "Whether to run the tinydns dns server";
       };
 
       data = mkOption {
         type = types.lines;
         default = "";
-        description = "The DNS data to serve, in the format described by tinydns-data(8)";
+        description = lib.mdDoc "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
       ip = mkOption {
         default = "0.0.0.0";
         type = types.str;
-        description = "IP address on which to listen for connections";
+        description = lib.mdDoc "IP address on which to listen for connections";
       };
     };
   };
@@ -32,11 +32,16 @@ with lib;
   config = mkIf config.services.tinydns.enable {
     environment.systemPackages = [ pkgs.djbdns ];
 
-    users.users.tinydns = {};
+    users.users.tinydns = {
+      isSystemUser = true;
+      group = "tinydns";
+    };
+    users.groups.tinydns = {};
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/tinydns

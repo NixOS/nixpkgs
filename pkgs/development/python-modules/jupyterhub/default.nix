@@ -1,30 +1,40 @@
 { lib
+, stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , fetchzip
 , alembic
-, ipython
-, jinja2
-, python-oauth2
-, prometheus_client
 , async_generator
+, certipy
+, python-dateutil
+, entrypoints
+, jinja2
+, jupyter-telemetry
+, oauthlib
 , pamela
+, prometheus-client
+, requests
 , sqlalchemy
 , tornado
 , traitlets
-, requests
-, notebook
-, pythonOlder
 , nodePackages
+, beautifulsoup4
+, cryptography
+, notebook
+, pytest-asyncio
+, pytestCheckHook
+, requests-mock
+, virtualenv
 }:
 
 let
   # js/css assets that setup.py tries to fetch via `npm install` when building
-  # from source.
+  # from source. https://github.com/jupyterhub/jupyterhub/blob/master/package.json
   bootstrap =
     fetchzip {
-      url = "https://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz";
-      sha256 = "0r7s54bbf68ri1na9bbabyf12mcpb6zk5ja2q6z82aw1fa4xi3yd";
+      url = "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz";
+      sha256 = "1ywmxqdccg0mgx0xknrn1hlrfnhcwphc12y9l91zizx26fqfmzgc";
     };
   font-awesome =
     fetchzip {
@@ -33,30 +43,30 @@ let
     };
   jquery =
     fetchzip {
-      url = "https://registry.npmjs.org/jquery/-/jquery-3.2.1.tgz";
-      sha256 = "1j6y18miwzafdj8kfpwbmbn9qvgnbnpc7l4arqrhqj33m04xrlgi";
+      url = "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz";
+      sha256 = "0yi9ql493din1qa1s923nd5zvd0klk1sx00xj1wx2yambmq86vm9";
     };
   moment =
     fetchzip {
-      url = "https://registry.npmjs.org/moment/-/moment-2.22.2.tgz";
-      sha256 = "12gb3p0rz5wyjwykv9g0pix7dd352lx1z7rzdjsf2brhwc4ffyip";
+      url = "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz";
+      sha256 = "0ifzzla4zffw23g3xvhwx3fj3jny6cjzxfzl1x0317q8wa0c7w5i";
     };
   requirejs =
     fetchzip {
-      url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.4.tgz";
-      sha256 = "0q6mkj0iv341kks06dya6lfs2kdw0n6vc7n4a7aa3ia530fk9vja";
+      url = "https://registry.npmjs.org/requirejs/-/requirejs-2.3.6.tgz";
+      sha256 = "165hkli3qcd59cjqvli9r5f92i0h7czkmhcg1cgwamw2d0b7xibz";
     };
 
 in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "0.9.4";
-  disabled = pythonOlder "3.5";
+  version = "1.5.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7848bbb299536641a59eb1977ec3c7c95d931bace4a2803d7e9b28b9256714da";
+    sha256 = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -83,12 +93,7 @@ buildPythonPackage rec {
       "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
 
     substituteInPlace setup.py --replace \
-      "'npm', 'run', 'lessc', '--'" \
-      "'${nodePackages.less}/bin/lessc'"
-
-    substituteInPlace setup.py --replace \
-      "'npm', 'install', '--progress=false'" \
-      "'true'"
+      "'npm'" "'true'"
 
     declare -A deps
     deps[bootstrap]=${bootstrap}
@@ -106,17 +111,54 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
-    traitlets prometheus_client async_generator notebook
+    # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
+    alembic
+    async_generator
+    certipy
+    python-dateutil
+    entrypoints
+    jinja2
+    jupyter-telemetry
+    oauthlib
+    pamela
+    prometheus-client
+    requests
+    sqlalchemy
+    tornado
+    traitlets
   ];
 
-  # Disable tests because they take an excessive amount of time to complete.
-  doCheck = false;
+  preCheck = ''
+    substituteInPlace jupyterhub/tests/test_spawner.py --replace \
+      "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
+  '';
 
+  checkInputs = [
+    # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
+    beautifulsoup4
+    cryptography
+    notebook
+    pytest-asyncio
+    pytestCheckHook
+    requests-mock
+    virtualenv
+  ];
+
+  disabledTests = [
+    # Tries to install older versions through pip
+    "test_upgrade"
+    # Testcase fails to find requests import
+    "test_external_service"
+    # attempts to do ssl connection
+    "test_connection_notebook_wrong_certs"
+  ];
 
   meta = with lib; {
+    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Serves multiple Jupyter notebook instances";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
   };

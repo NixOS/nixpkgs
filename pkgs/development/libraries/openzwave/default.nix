@@ -1,24 +1,34 @@
-{ stdenv, fetchFromGitHub
-, doxygen, fontconfig, graphviz-nox, libxml2, pkgconfig, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
 , systemd }:
 
-let
-  version = "2018-11-13";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openzwave";
-  inherit version;
+  version = "1.6";
 
-  # Use fork by Home Assistant because this package is mainly used for python.pkgs.homeassistant-pyozw.
-  # See https://github.com/OpenZWave/open-zwave/compare/master...home-assistant:hass for the difference.
   src = fetchFromGitHub {
-    owner = "home-assistant";
+    owner = "OpenZWave";
     repo = "open-zwave";
-    rev = "0679daef6aa5a39e2441a68f7b45cfe022c4d961";
-    sha256 = "1d13maj93i6h792cbvqpx43ffss44dxmvbwj2777vzvvjib8m4n8";
+    rev = "v${version}";
+    sha256 = "0xgs4mmr0480c269wx9xkk67ikjzxkh8xcssrdx0f5xcl1lyd333";
   };
 
-  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkgconfig which ];
+  patches = [
+    (fetchpatch {
+      name = "fix-strncat-build-failure.patch";
+      url = "https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105.patch";
+      sha256 = "1n1k5arwk1dyc12xz6xl4n8yw28vghzhv27j65z1nca4zqsxgza1";
+    })
+    (fetchpatch {
+      name = "fix-text-uninitialized.patch";
+      url = "https://github.com/OpenZWave/open-zwave/commit/3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f.patch";
+      sha256 = "183mrzjh1zx2b2wzkj4jisiw8br7g7bbs167afls4li0fm01d638";
+    })
+  ];
+
+  outputs = [ "out" "doc" ];
+
+  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkg-config which ];
 
   buildInputs = [ systemd ];
 
@@ -26,13 +36,9 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    DESTDIR=$out PREFIX= pkgconfigdir=lib/pkgconfig make install $installFlags
-
-    runHook postInstall
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf";
   FONTCONFIG_PATH="${fontconfig.out}/etc/fonts/";
@@ -42,20 +48,11 @@ in stdenv.mkDerivation {
       --replace /etc/openzwave $out/etc/openzwave
   '';
 
-  fixupPhase = ''
-    substituteInPlace $out/lib/pkgconfig/libopenzwave.pc \
-      --replace prefix= prefix=$out \
-      --replace dir=    dir=$out
-
-    substituteInPlace $out/bin/ozw_config \
-      --replace pcfile=${pkgconfig} pcfile=$out
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
-    homepage = http://www.openzwave.net/;
+    homepage = "http://www.openzwave.net/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

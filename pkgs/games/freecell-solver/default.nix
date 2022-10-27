@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ lib, stdenv, fetchurl, pkg-config, cmake
 , perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec{
+with lib;
+stdenv.mkDerivation rec {
 
   pname = "freecell-solver";
   version = "4.18.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec{
   };
 
   nativeBuildInputs = [
-    cmake perl pkgconfig
+    cmake perl pkg-config
   ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
     GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
   ]);
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec{
       Off, Forecell, and Seahaven Towers, as well as Simple Simon
       boards.
     '';
-    homepage = https://fc-solve.shlomifish.org/;
+    homepage = "https://fc-solve.shlomifish.org/";
     license = licenses.mit;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

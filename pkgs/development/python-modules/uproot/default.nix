@@ -1,54 +1,76 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
+{ lib
 , awkward
-, backports_lzma
-, cachetools
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-metadata
 , lz4
-, pytestrunner
-, pytest
-, pkgconfig
-, mock
 , numpy
-, requests
-, uproot-methods
+, packaging
+, pytestCheckHook
+, pythonOlder
+, scikit-hep-testdata
 , xxhash
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.10.0";
+  version = "4.3.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1ir3gxgfidw0lx0d2x1lmmxg9brb5fam3ncfihba2b0bvyq9bqzd";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "uproot4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Te4D2tHVD5fD8DH2njjQMGnTUvLQdcGBzApklnGn6g8=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-
-  checkInputs = [
-    lz4
-    mock
-    pkgconfig
-    pytest
-    requests
-    xxhash
-  ] ++ lib.optional isPy27 backports_lzma;
-
   propagatedBuildInputs = [
-    numpy
-    cachetools
-    uproot-methods
     awkward
+    numpy
+    lz4
+    packaging
+    xxhash
+    zstandard
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  # skip tests which do network calls
-  checkPhase = ''
-    pytest tests -k 'not hist_in_tree and not branch_auto_interpretation'
+  checkInputs = [
+    pytestCheckHook
+    scikit-hep-testdata
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
+  disabledTests = [
+    # Tests that try to download files
+    "test_http"
+    "test_no_multipart"
+    "test_fallback"
+    "test_pickle_roundtrip_http"
+  ];
+
+  disabledTestPaths = [
+    # Tests that try to download files
+    "tests/test_0066-fix-http-fallback-freeze.py"
+    "tests/test_0088-read-with-http.py"
+    "tests/test_0220-contiguous-byte-ranges-in-http.py"
+  ];
+
+  pythonImportsCheck = [
+    "uproot"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/scikit-hep/uproot;
     description = "ROOT I/O in pure Python and Numpy";
+    homepage = "https://github.com/scikit-hep/uproot5";
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ktf ];
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -1,49 +1,69 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
-, numpy
-, scikitlearn
-, scipy
+, keras
 , numba
+, numpy
+, pynndescent
+, pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
+, tensorflow
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.3.10";
+  version = "0.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "0nck5va5km7qkbrhn15dsn0p2mms9kc641lcypy7l8haqgm44h8x";
+    hash = "sha256-S2+k7Ec4AxsN6d0GUGnU81oLnBgmlZp8OmUFCNaUJYw=";
   };
 
-  checkInputs = [
-    nose
-  ];
-
   propagatedBuildInputs = [
-    numpy
-    scikitlearn
-    scipy
     numba
+    numpy
+    pynndescent
+    scikit-learn
+    scipy
+    tqdm
   ];
 
-  postConfigure = ''
-   substituteInPlace umap/tests/test_umap.py \
-     --replace "def test_umap_transform_on_iris()" "@SkipTest
-def test_umap_transform_on_iris()"
+  checkInputs = [
+    keras
+    pytestCheckHook
+    tensorflow
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    nosetests -s umap
-  '';
+  disabledTests = [
+    # Plot functionality requires additional packages.
+    # These test also fail with 'RuntimeError: cannot cache function' error.
+    "test_umap_plot_testability"
+    "test_plot_runs_at_all"
+
+    # Flaky test. Fails with AssertionError sometimes.
+    "test_sparse_hellinger"
+    "test_densmap_trustworthiness_on_iris_supervised"
+
+    # tensorflow maybe incompatible? https://github.com/lmcinnes/umap/issues/821
+    "test_save_load"
+  ];
 
   meta = with lib; {
     description = "Uniform Manifold Approximation and Projection";
-    homepage = http://github.com/lmcinnes/umap;
+    homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

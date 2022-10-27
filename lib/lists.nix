@@ -1,9 +1,10 @@
 # General list operations.
 
 { lib }:
-with lib.trivial;
 let
   inherit (lib.strings) toInt;
+  inherit (lib.trivial) compare min;
+  inherit (lib.attrsets) mapAttrs;
 in
 rec {
 
@@ -35,7 +36,7 @@ rec {
   forEach = xs: f: map f xs;
 
   /* “right fold” a binary function `op` between successive elements of
-     `list` with `nul' as the starting value, i.e.,
+     `list` with `nul` as the starting value, i.e.,
      `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))`.
 
      Type: foldr :: (a -> b -> b) -> b -> [a] -> b
@@ -73,8 +74,8 @@ rec {
        lconcat [ "a" "b" "c" ]
        => "zabc"
        # different types
-       lstrange = foldl (str: int: str + toString (int + 1)) ""
-       strange [ 1 2 3 4 ]
+       lstrange = foldl (str: int: str + toString (int + 1)) "a"
+       lstrange [ 1 2 3 4 ]
        => "a2345"
   */
   foldl = op: nul: list:
@@ -241,7 +242,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") flashplayer').
+     (e.g. `++ optional (system == "i686-linux") firefox').
 
      Type: optional :: bool -> a -> [a]
 
@@ -340,15 +341,15 @@ rec {
        groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
        => { true = 12; false = 3; }
   */
-  groupBy' = op: nul: pred: lst:
-    foldl' (r: e:
-              let
-                key = pred e;
-              in
-                r // { ${key} = op (r.${key} or nul) e; }
-           ) {} lst;
+  groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
 
-  groupBy = groupBy' (sum: e: sum ++ [e]) [];
+  groupBy = builtins.groupBy or (
+    pred: foldl' (r: e:
+       let
+         key = pred e;
+       in
+         r // { ${key} = (r.${key} or []) ++ [e]; }
+    ) {});
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -506,7 +507,7 @@ rec {
        compareLists compare [ "a" ] []
        => 1
        compareLists compare [ "a" "b" ] [ "a" "c" ]
-       => 1
+       => -1
   */
   compareLists = cmp: a: b:
     if a == []
@@ -629,7 +630,9 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
+  crossLists = builtins.trace
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 
   /* Remove duplicate elements from the list. O(n^2) complexity.
@@ -640,13 +643,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
-  unique = list:
-    if list == [] then
-      []
-    else
-      let
-        x = head list;
-      in [x] ++ unique (remove x list);
+  unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 
@@ -667,9 +664,6 @@ rec {
   /* Test if two lists have no common element.
      It should be slightly more efficient than (intersectLists a b == [])
   */
-  mutuallyExclusive = a: b:
-    (builtins.length a) == 0 ||
-    (!(builtins.elem (builtins.head a) b) &&
-     mutuallyExclusive (builtins.tail a) b);
+  mutuallyExclusive = a: b: length a == 0 || !(any (x: elem x a) b);
 
 }

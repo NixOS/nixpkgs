@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy to use retry decorator";
-    homepage = https://github.com/invl/retry;
+    homepage = "https://github.com/invl/retry";
     license = licenses.asl20;
   };
 }

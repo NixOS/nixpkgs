@@ -1,21 +1,21 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
 {
   name = "xss-lock";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ ma27 ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes = {
     simple = {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
       programs.xss-lock.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
     };
 
     custom_lockcmd = { pkgs, ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
 
       programs.xss-lock = {
         enable = true;
@@ -26,15 +26,19 @@ with lib;
   };
 
   testScript = ''
-    startAll;
+    def perform_xsslock_test(machine, lockCmd):
+        machine.start()
+        machine.wait_for_x()
+        machine.wait_for_unit("xss-lock.service", "alice")
+        machine.fail(f"pgrep {lockCmd}")
+        machine.succeed("su -l alice -c 'xset dpms force standby'")
+        machine.wait_until_succeeds(f"pgrep {lockCmd}")
 
-    ${concatStringsSep "\n" (mapAttrsToList (name: lockCmd: ''
-      ${"$"+name}->start;
-      ${"$"+name}->waitForX;
-      ${"$"+name}->waitForUnit("xss-lock.service", "alice");
-      ${"$"+name}->fail("pgrep ${lockCmd}");
-      ${"$"+name}->succeed("su -l alice -c 'xset dpms force standby'");
-      ${"$"+name}->waitUntilSucceeds("pgrep ${lockCmd}");
-    '') { simple = "i3lock"; custom_lockcmd = "xlock"; })}
+
+    with subtest("simple"):
+        perform_xsslock_test(simple, "i3lock")
+
+    with subtest("custom_cmd"):
+        perform_xsslock_test(custom_lockcmd, "xlock")
   '';
 })

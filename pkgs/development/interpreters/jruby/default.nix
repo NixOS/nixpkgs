@@ -1,19 +1,19 @@
-{ stdenv, callPackage, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, callPackage, fetchurl, makeWrapper, jre }:
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
-rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
+rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.2.8.0";
+  version = "9.3.8.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "1fy717xy8csc89dnz3a8j96arq1s1vs8nakkkpcaqm1z1648didp";
+    sha256 = "sha256-Z0pNEwhjH6pfASTQHXPrHtyJNG7n3iHHDhQwW9YbRt8=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
      mkdir -pv $out/docs
@@ -23,7 +23,7 @@ jruby = stdenv.mkDerivation rec {
 
      for i in $out/bin/jruby{,.bash}; do
        wrapProgram $i \
-         --set JAVA_HOME ${jre}
+         --set JAVA_HOME ${jre.home}
      done
 
      ln -s $out/bin/jruby $out/bin/ruby
@@ -40,17 +40,23 @@ jruby = stdenv.mkDerivation rec {
      EOF
   '';
 
+  postFixup = ''
+    PATH=$out/bin:$PATH patchShebangs $out/bin
+  '';
+
   passthru = rec {
     rubyEngine = "jruby";
     gemPath = "lib/${rubyEngine}/gems/${rubyVersion.libDir}";
     libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Ruby interpreter written in Java";
-    homepage = http://jruby.org/;
-    license = with stdenv.lib.licenses; [ cpl10 gpl2 lgpl21 ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://jruby.org/";
+    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fzakaria ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 };
 in jruby.overrideAttrs (oldAttrs: {

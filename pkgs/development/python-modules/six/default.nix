@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "six";
-  version = "1.12.0";
+  version = "1.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d16a0141ec1a18405cd4ce8b4613101da75da0e9a7aec5bdd4fa804d0e0eba73";
+    sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926";
   };
 
   checkInputs = [ pytest ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python 2 and 3 compatibility library";
-    homepage = https://pypi.python.org/pypi/six/;
+    homepage = "https://pypi.python.org/pypi/six/";
     license = lib.licenses.mit;
   };
 }

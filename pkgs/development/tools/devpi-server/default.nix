@@ -1,44 +1,92 @@
-{ stdenv, python3Packages, nginx }:
+{ lib, fetchFromGitHub, buildPythonApplication, isPy27
+, aiohttp
+, appdirs
+, beautifulsoup4
+, defusedxml
+, devpi-common
+, execnet
+, itsdangerous
+, nginx
+, packaging
+, passlib
+, platformdirs
+, pluggy
+, pyramid
+, pytest-flake8
+, pytestCheckHook
+, repoze_lru
+, setuptools
+, strictyaml
+, waitress
+, webtest
+}:
 
-python3Packages.buildPythonApplication rec {
+
+buildPythonApplication rec {
   pname = "devpi-server";
-  version = "5.1.0";
+  version = "6.7.0";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "254fceee846532a5fec4e6bf52a59eb8f236efc657678a542b5200da4bb3abbc";
+  disabled = isPy27;
+
+  src = fetchFromGitHub {
+    owner = "devpi";
+    repo = "devpi";
+    rev = "server-${version}";
+    hash = "sha256-tevQ/Ocusz2PythGnedP6r4xARgetVosAc8uTD49H3M=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    py
+  sourceRoot = "source/server";
+
+  propagatedBuildInputs = [
+    aiohttp
     appdirs
+    defusedxml
     devpi-common
     execnet
     itsdangerous
-    repoze_lru
+    packaging
     passlib
+    platformdirs
     pluggy
     pyramid
+    repoze_lru
+    setuptools
     strictyaml
     waitress
-  ];
+  ] ++ passlib.optional-dependencies.argon2;
 
-  checkInputs = with python3Packages; [
+  checkInputs = [
     beautifulsoup4
     nginx
-    pytest
     pytest-flake8
-    pytestpep8
+    pytestCheckHook
     webtest
-  ] ++ stdenv.lib.optionals isPy27 [ mock ];
+  ];
 
-  # test_genconfig.py needs devpi-server on PATH
-  checkPhase = ''
-    PATH=$PATH:$out/bin pytest ./test_devpi_server --slow -rfsxX
+  # root_passwd_hash tries to write to store
+  # TestMirrorIndexThings tries to write to /var through ngnix
+  # nginx tests try to write to /var
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$TMPDIR
   '';
+  pytestFlagsArray = [
+    "./test_devpi_server"
+    "--slow"
+    "-rfsxX"
+    "--ignore=test_devpi_server/test_nginx_replica.py"
+    "--ignore=test_devpi_server/test_streaming_nginx.py"
+    "--ignore=test_devpi_server/test_streaming_replica_nginx.py"
+  ];
+  disabledTests = [
+    "root_passwd_hash_option"
+    "TestMirrorIndexThings"
+  ];
 
-  meta = with stdenv.lib;{
-    homepage = http://doc.devpi.net;
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib;{
+    homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

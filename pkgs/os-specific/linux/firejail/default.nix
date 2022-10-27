@@ -1,30 +1,52 @@
-{stdenv, fetchurl, which}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="firejail";
-    version="0.9.60";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/firejail/firejail/firejail-${version}.tar.xz";
-    sha256="1mw2s040wbxaj4lqfm6033wxrxlnix40mqc2bsfran5sj2gxd3sh";
-  };
-  buildInputs = [
-    which
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
-  src = fetchurl {
-    inherit (s) url sha256;
-    name = "${s.name}.tar.bz2";
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libapparmor
+, which
+, xdg-dbus-proxy
+, nixosTests
+}:
+
+stdenv.mkDerivation rec {
+  pname = "firejail";
+  version = "0.9.70";
+
+  src = fetchFromGitHub {
+    owner = "netblue30";
+    repo = "firejail";
+    rev = version;
+    sha256 = "sha256-x1txt0uER66bZN6BD6c/31Zu6fPPwC9kl/3bxEE6Ce8=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libapparmor
+    which
+  ];
+
+  configureFlags = [
+    "--enable-apparmor"
+  ];
+
+  patches = [
+    # Adds the /nix directory when using an overlay.
+    # Required to run any programs under this mode.
+    ./mount-nix-dir-on-overlay.patch
+
+    # By default fbuilder hardcodes the firejail binary to the install path.
+    # On NixOS the firejail binary is a setuid wrapper available in $PATH.
+    ./fbuilder-call-firejail-on-path.patch
+  ];
+
   prePatch = ''
-    # Allow whitelisting ~/.nix-profile
-    substituteInPlace etc/firejail.config --replace \
-      '# follow-symlink-as-user yes' \
-      'follow-symlink-as-user no'
+    # Fix the path to 'xdg-dbus-proxy' hardcoded in the 'common.h' file
+    substituteInPlace src/include/common.h \
+      --replace '/usr/bin/xdg-dbus-proxy' '${xdg-dbus-proxy}/bin/xdg-dbus-proxy'
   '';
 
   preConfigure = ''
@@ -36,23 +58,40 @@ stdenv.mkDerivation {
     sed -e "s@/etc/@$out/etc/@g" -e "/chmod u+s/d" -i Makefile
   '';
 
-  # We need to set the directory for the .local override files back to
-  # /etc/firejail so we can actually override them
+  # The profile files provided with the firejail distribution include `.local`
+  # profile files using relative paths. The way firejail works when it comes to
+  # handling includes is by looking target files up in `~/.config/firejail`
+  # first, and then trying `SYSCONFDIR`. The latter normally points to
+  # `/etc/filejail`, but in the case of nixos points to the nix store. This
+  # makes it effectively impossible to place any profile files in
+  # `/etc/firejail`.
+  #
+  # The workaround applied below is by creating a set of `.local` files which
+  # only contain respective includes to `/etc/firejail`. This way
+  # `~/.config/firejail` still takes precedence, but `/etc/firejail` will also
+  # be searched in second order. This replicates the behaviour from
+  # non-nixos platforms.
+  #
+  # See https://github.com/netblue30/firejail/blob/e4cb6b42743ad18bd11d07fd32b51e8576239318/src/firejail/profile.c#L68-L83
+  # for the profile file lookup implementation.
   postInstall = ''
-    sed -E -e 's@^include (.*)(/firejail/.*.local)$@include /etc\2@g' -i $out/etc/firejail/*.profile
+    for local in $(grep -Eh '^include.*local$' $out/etc/firejail/*{.inc,.profile} | awk '{print $2}' | sort | uniq)
+    do
+      echo "include /etc/firejail/$local" >$out/etc/firejail/$local
+    done
   '';
 
   # At high parallelism, the build sometimes fails with:
   # bash: src/fsec-optimize/fsec-optimize: No such file or directory
   enableParallelBuilding = false;
 
+  passthru.tests = nixosTests.firejail;
+
   meta = {
-    inherit (s) version;
-    description = ''Namespace-based sandboxing tool for Linux'';
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://l3net.wordpress.com/projects/firejail/;
-    downloadPage = "https://sourceforge.net/projects/firejail/files/firejail/";
+    description = "Namespace-based sandboxing tool for Linux";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    homepage = "https://firejail.wordpress.com/";
   };
 }

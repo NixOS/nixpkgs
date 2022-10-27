@@ -64,7 +64,7 @@ in rec {
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
-        "${bundler}/${ruby.gemPath}" \
+        "${bundler}/${ruby.gemPath}/gems/bundler-${bundler.version}" \
         ${lib.escapeShellArg binPaths} \
         ${lib.escapeShellArg groups}
     '';
@@ -76,7 +76,7 @@ in rec {
           bundledByPath = true;
           name = gemName;
           version = version;
-          outPath = path;
+          outPath = "${path}";
           outputs = [ "out" ];
           out = res;
           outputName = "out";

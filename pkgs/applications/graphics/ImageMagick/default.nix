@@ -1,105 +1,136 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libtool
+, bzip2Support ? true, bzip2
+, zlibSupport ? true, zlib
+, libX11Support ? !stdenv.hostPlatform.isMinGW, libX11
+, libXtSupport ? !stdenv.hostPlatform.isMinGW, libXt
+, fontconfigSupport ? true, fontconfig
+, freetypeSupport ? true, freetype
+, ghostscriptSupport ? false, ghostscript
+, libjpegSupport ? true, libjpeg
+, djvulibreSupport ? true, djvulibre
+, lcms2Support ? true, lcms2
+, openexrSupport ? !stdenv.hostPlatform.isMinGW, openexr
+, libjxlSupport ? true, libjxl
+, libpngSupport ? true, libpng
+, liblqr1Support ? true, liblqr1
+, librawSupport ? true, libraw
+, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg, pango
+, libtiffSupport ? true, libtiff
+, libxml2Support ? true, libxml2
+, openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
+, libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
+, libheifSupport ? true, libheif
+, potrace
+, curl
 , ApplicationServices
+, Foundation
+, testers
+, imagemagick
 }:
+
+assert libXtSupport -> libX11Support;
 
 let
   arch =
     if stdenv.hostPlatform.system == "i686-linux" then "i686"
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
-    else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "6.9.10-68";
-    sha256 = "0ldkw6j4x0k7l6ykgpx9hz9cs7dmlapz2lv3lbrgz2nn9znqswxk";
-    patches = [];
-  }
-    # Freeze version on mingw so we don't need to port the patch too often.
-    # FIXME: This version has multiple security vulnerabilities
-    // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
-        version = "6.9.2-0";
-        sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = [(fetchpatch {
-          name = "mingw-build.patch";
-          url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
-            + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        })];
-      };
+    else if stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin" then "aarch64"
+    else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
+    else null;
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "7.1.0-51";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
-    repo = "ImageMagick6";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    repo = "ImageMagick";
+    rev = version;
+    hash = "sha256-u2QUtCQ4LzS60iVOOKWx/itmC9uMxPhNvsNANPHrvpE=";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-frozenpaths" ]
-    ++ [ "--with-gcc-arch=${arch}" ]
-    ++ lib.optional (librsvg != null) "--with-rsvg"
-    ++ lib.optionals (ghostscript != null)
-      [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
-        "--with-gslib"
-      ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW)
-      [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-    ;
+  configureFlags = [
+    "--with-frozenpaths"
+    (lib.withFeatureAs (arch != null) "gcc-arch" arch)
+    (lib.withFeature librsvgSupport "rsvg")
+    (lib.withFeature librsvgSupport "pango")
+    (lib.withFeature liblqr1Support "lqr")
+    (lib.withFeature libjxlSupport "jxl")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeature ghostscriptSupport "gslib")
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    # due to libxml2 being without DLLs ATM
+    "--enable-static" "--disable-shared"
+  ];
 
-  nativeBuildInputs = [ pkgconfig libtool ];
+  nativeBuildInputs = [ pkg-config libtool ];
 
-  buildInputs =
-    [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif libde265 djvulibre
+  buildInputs = [ potrace ]
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional fontconfigSupport fontconfig
+    ++ lib.optional ghostscriptSupport ghostscript
+    ++ lib.optional liblqr1Support liblqr1
+    ++ lib.optional libpngSupport libpng
+    ++ lib.optional librawSupport libraw
+    ++ lib.optional libtiffSupport libtiff
+    ++ lib.optional libxml2Support libxml2
+    ++ lib.optional libheifSupport libheif
+    ++ lib.optional djvulibreSupport djvulibre
+    ++ lib.optional libjxlSupport libjxl
+    ++ lib.optional openexrSupport openexr
+    ++ lib.optionals librsvgSupport [
+      librsvg
+      pango
     ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ openexr librsvg openjpeg ]
-    ++ lib.optional stdenv.isDarwin ApplicationServices;
+    ++ lib.optional openjpegSupport openjpeg
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Foundation
+    ];
 
-  propagatedBuildInputs =
-    [ bzip2 freetype libjpeg lcms2 fftw ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ libX11 libXext libXt libwebp ]
-    ;
-
-  doCheck = false; # fails 6 out of 76 tests
+  propagatedBuildInputs = [ curl ]
+    ++ lib.optional bzip2Support bzip2
+    ++ lib.optional freetypeSupport freetype
+    ++ lib.optional libjpegSupport libjpeg
+    ++ lib.optional lcms2Support lcms2
+    ++ lib.optional libX11Support libX11
+    ++ lib.optional libXtSupport libXt
+    ++ lib.optional libwebpSupport libwebp;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
     moveToOutput "bin/*-config" "$dev"
-    moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
+    moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
-        ${pkgconfig}/bin/pkg-config
-      substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+      substituteInPlace "$file" --replace pkg-config \
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
     done
-  '' + lib.optionalString (ghostscript != null) ''
+  '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do
       sed 's|-lgs|-L${lib.getLib ghostscript}/lib -lgs|' -i $la
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.imagemagick.org/;
+  passthru.tests.version =
+    testers.testVersion { package = imagemagick; };
+
+  meta = with lib; {
+    homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ erictapen dotlambda ];
     license = licenses.asl20;
+    mainProgram = "magick";
   };
 }

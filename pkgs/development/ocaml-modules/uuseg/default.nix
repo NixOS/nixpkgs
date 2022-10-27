@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uucp, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
+, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+}:
 
 let
   pname = "uuseg";
@@ -8,23 +10,36 @@ in
 stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "11.0.0";
+  version = "15.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "17mn8p9pn340kmvfgnl1m64zbpy60r6svkwsdn2lcg3yi2jlbrwp";
+    sha256 = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
-  propagatedBuildInputs = [ uucp uchar ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [  topkg uutf ]
+  ++ lib.optional cmdlinerSupport cmdliner;
+  propagatedBuildInputs = [ uucp ];
 
-  inherit (topkg) buildPhase installPhase;
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
+  buildPhase = ''
+    runHook preBuild
+    ${topkg.run} build \
+      --with-uutf true \
+      --with-cmdliner ${lib.boolToString cmdlinerSupport}
+    runHook postBuild
+  '';
+
+  inherit (topkg) installPhase;
+
+  meta = with lib; {
     description = "An OCaml library for segmenting Unicode text";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "usegtrip";
+    inherit (ocaml.meta) platforms;
   };
 }

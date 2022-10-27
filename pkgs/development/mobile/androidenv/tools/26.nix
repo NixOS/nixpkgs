@@ -3,8 +3,13 @@
 deployAndroidPackage {
   name = "androidsdk";
   inherit os package;
-  buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXrender pkgs.xlibs.libXext pkgs.fontconfig pkgs.freetype pkgs_i686.glibc pkgs_i686.xlibs.libX11 pkgs_i686.xlibs.libXrender pkgs_i686.xlibs.libXext pkgs_i686.fontconfig.lib pkgs_i686.freetype pkgs_i686.zlib pkgs.fontconfig.lib ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optional (os == "linux") (
+      (with pkgs; [ glibc freetype fontconfig fontconfig.lib])
+      ++ (with pkgs.xorg; [ libX11 libXrender libXext ])
+      ++ (with pkgs_i686; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
+    );
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
@@ -27,7 +32,7 @@ deployAndroidPackage {
     # Wrap monitor script
     wrapProgram $PWD/monitor \
       --prefix PATH : ${pkgs.jdk8}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.xlibs.libX11 pkgs.xlibs.libXtst ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.xorg.libX11 pkgs.xorg.libXtst ]}
 
     # Patch all script shebangs
     patchShebangs .
@@ -36,5 +41,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.licenses = lib.licenses.unfree;
+  meta.license = lib.licenses.unfree;
 }

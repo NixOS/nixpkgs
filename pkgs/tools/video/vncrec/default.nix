@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
+{ lib, stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
 , libXaw, libXext, libSM, libICE, libXpm, libXp
 }:
 
 stdenv.mkDerivation {
-  name = "vncrec-0.2"; # version taken from Arch AUR
+  pname = "vncrec";
+  version = "0.2"; # version taken from Arch AUR
 
   src = fetchurl {
     url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";
@@ -22,12 +23,12 @@ stdenv.mkDerivation {
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man"
   ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "VNC recorder";
-    homepage = http://ronja.twibright.com/utils/vncrec/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://ronja.twibright.com/utils/vncrec/";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

@@ -1,26 +1,35 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 
 {
   name = "mailcatcher";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.mailcatcher.enable = true;
 
-      networking.defaultMailServer.directDelivery = true;
-      networking.defaultMailServer.hostName = "localhost:1025";
+      programs.msmtp = {
+        enable = true;
+        accounts.default = {
+          host = "localhost";
+          port = 1025;
+        };
+      };
 
       environment.systemPackages = [ pkgs.mailutils ];
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit('mailcatcher.service');
-    $machine->waitForOpenPort('1025');
-    $machine->succeed('echo "this is the body of the email" | mail -s "subject" root@example.org');
-    $machine->succeed('curl http://localhost:1080/messages/1.source') =~ /this is the body of the email/ or die;
+    machine.wait_for_unit("mailcatcher.service")
+    machine.wait_for_open_port(1025)
+    machine.succeed(
+        'echo "this is the body of the email" | mail -s "subject" root@example.org'
+    )
+    assert "this is the body of the email" in machine.succeed(
+        "curl -f http://localhost:1080/messages/1.source"
+    )
   '';
 })

@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExample mapAttrs optionalString;
+  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
+  opt = options.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
 
   user = "zabbix";
@@ -21,13 +22,16 @@ let
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
     $DB['USER'] = '${cfg.database.user}';
-    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "file_get_contents('${cfg.database.passwordFile}')" else "''"};
+    # NOTE: file_get_contents adds newline at the end of returned string
+    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")" else "''"};
     // Schema name. Used for IBM DB2 and PostgreSQL.
     $DB['SCHEMA'] = ''';
     $ZBX_SERVER = '${cfg.server.address}';
     $ZBX_SERVER_PORT = '${toString cfg.server.port}';
     $ZBX_SERVER_NAME = ''';
     $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+
+    ${cfg.extraConfig}
   '';
 
 in
@@ -36,25 +40,25 @@ in
 
   options.services = {
     zabbixWeb = {
-      enable = mkEnableOption "the Zabbix web interface";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix web interface");
 
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.web;
-        defaultText = "zabbix.web";
-        description = "Which Zabbix package to use.";
+        defaultText = literalExpression "zabbix.web";
+        description = lib.mdDoc "Which Zabbix package to use.";
       };
 
       server = {
         port = mkOption {
           type = types.int;
-          description = "The port of the Zabbix server to connect to.";
+          description = lib.mdDoc "The port of the Zabbix server to connect to.";
           default = 10051;
         };
 
         address = mkOption {
           type = types.str;
-          description = "The IP address or hostname of the Zabbix server to connect to.";
+          description = lib.mdDoc "The IP address or hostname of the Zabbix server to connect to.";
           default = "localhost";
         };
       };
@@ -64,13 +68,13 @@ in
           type = types.enum [ "mysql" "pgsql" "oracle" ];
           example = "mysql";
           default = "pgsql";
-          description = "Database engine to use.";
+          description = lib.mdDoc "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "";
-          description = "Database host address.";
+          description = lib.mdDoc "Database host address.";
         };
 
         port = mkOption {
@@ -79,28 +83,33 @@ in
             if cfg.database.type == "mysql" then config.services.mysql.port
             else if cfg.database.type == "pgsql" then config.services.postgresql.port
             else 1521;
-          description = "Database host port.";
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql" then config.${options.services.mysql.port}
+            else if config.${opt.database.type} == "pgsql" then config.${options.services.postgresql.port}
+            else 1521
+          '';
+          description = lib.mdDoc "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "zabbix";
-          description = "Database name.";
+          description = lib.mdDoc "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "zabbix";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zabbix-dbpassword";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
@@ -108,27 +117,23 @@ in
           type = types.nullOr types.path;
           default = null;
           example = "/run/postgresql";
-          description = "Path to the unix socket file to use for authentication.";
+          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
       };
 
       virtualHost = mkOption {
-        type = types.submodule ({
-          options = import ../web-servers/apache-httpd/per-server-options.nix {
-            inherit lib;
-            forMainServer = false;
-          };
-        });
-        example = {
-          hostName = "zabbix.example.org";
-          enableSSL = true;
-          adminAddr = "webmaster@example.org";
-          sslServerCert = "/var/lib/acme/zabbix.example.org/full.pem";
-          sslServerKey = "/var/lib/acme/zabbix.example.org/key.pem";
-        };
-        description = ''
-          Apache configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = literalExpression ''
+          {
+            hostName = "zabbix.example.org";
+            adminAddr = "webmaster@example.org";
+            forceSSL = true;
+            enableACME = true;
+          }
+        '';
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
 
@@ -142,8 +147,16 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = ''
-          Options for the Zabbix PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+        description = lib.mdDoc ''
+          Options for the Zabbix PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = lib.mdDoc ''
+          Additional configuration to be copied verbatim into {file}`zabbix.conf.php`.
         '';
       };
 
@@ -153,6 +166,10 @@ in
   # implementation
 
   config = mkIf cfg.enable {
+
+    services.zabbixWeb.extraConfig = optionalString ((versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")) ''
+      $DB['DOUBLE_IEEE754'] = 'true';
+    '';
 
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0750 ${user} ${group} - -"
@@ -190,23 +207,21 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${cfg.package}/share/zabbix";
-          extraConfig = ''
-            <Directory "${cfg.package}/share/zabbix">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
-              AllowOverride all
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        }
-      ]) ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${cfg.package}/share/zabbix";
+        extraConfig = ''
+          <Directory "${cfg.package}/share/zabbix">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
+            AllowOverride all
+            Options -Indexes
+            DirectoryIndex index.php
+          </Directory>
+        '';
+      } ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {

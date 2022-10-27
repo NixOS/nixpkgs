@@ -1,33 +1,50 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch, astroid, six, coverage
-, lazy-object-proxy, nose, wrapt
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools-scm
+, six
+, astroid
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "1.1.13";
+  version = "2.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vd4djlxmgznz84gzakkv45avnrcpgl1kir92l1pxyp0z5c0dh2m";
+    sha256 = "sha256-xh4WJG7Pss3ilYQGtMjrwEPJ5tc6qoPJQWc7NeXTp2s=";
   };
 
-  patches = [
-    # Fix tests for astroid 2.2 in python 3. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/gristlabs/asttokens/commit/21caaaa74105c410b3d84c3d8ff0dc2f612aac9a.patch";
-      sha256 = "182xfr0cx4pxx0dv1l50a1c281h8ywir8vvd1zh5iicflivim1nv";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt astroid ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  checkInputs = [ coverage nose ];
+  checkInputs = [
+    astroid
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test is currently failing on Hydra, works locally
+    "test_slices"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with astroid 2.11.0, pins <= 2.5.3
+    "tests/test_astroid.py"
+  ];
+
+  pythonImportsCheck = [ "asttokens" ];
 
   meta = with lib; {
-    homepage = https://github.com/gristlabs/asttokens;
+    homepage = "https://github.com/gristlabs/asttokens";
     description = "Annotate Python AST trees with source text and token information";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];
   };
 }

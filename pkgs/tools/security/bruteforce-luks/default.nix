@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, cryptsetup }:
 
 stdenv.mkDerivation rec {
   pname = "bruteforce-luks";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "0ws5bm5pczhvqrlhl60h8a9rdwk6xlh9wr5ndnkyxvv7m90qpy9b";
+    sha256 = "0yyrda077avdapq1mvavgv5mvj2r94d6p01q56bbnaq4a3h5kfd6";
     rev = version;
     repo = "bruteforce-luks";
     owner = "glv2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Cracks passwords of LUKS encrypted volumes";
     longDescription = ''

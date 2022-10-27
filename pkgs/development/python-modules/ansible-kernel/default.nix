@@ -24,11 +24,11 @@ let
 in
 buildPythonPackage rec {
   pname = "ansible-kernel";
-  version = "0.9.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a59039a1724c0f4f4435316e2ad3383f2328ae61f190e74414a66cc8c4637636";
+    sha256 = "sha256-UJjm9FpmXSznXtaIR2rVv5YJS/H83FvRkNz09vwoe0c=";
   };
 
   propagatedBuildInputs = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An Ansible kernel for Jupyter";
-    homepage = https://github.com/ansible/ansible-jupyter-kernel;
+    homepage = "https://github.com/ansible/ansible-jupyter-kernel";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -51,7 +51,9 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $n++;
         $rootDir = $ARGV[$n];
         die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
+        die "$0: no need to specify `/` with `--root`, it is the default\n" if $rootDir eq "/";
         $rootDir =~ s/\/*$//; # remove trailing slashes
+        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     elsif ($arg eq "--force") {
         $force = 1;
@@ -82,6 +84,15 @@ sub debug {
 }
 
 
+# nixpkgs.system
+my ($status, @systemLines) = runCommand("@nixInstantiate@ --impure --eval --expr builtins.currentSystem");
+if ($status != 0 || join("", @systemLines) =~ /error/) {
+    die "Failed to retrieve current system type from nix.\n";
+}
+chomp(my $system = @systemLines[0]);
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault $system;";
+
+
 my $cpuinfo = read_file "/proc/cpuinfo";
 
 
@@ -91,8 +102,10 @@ sub hasCPUFeature {
 }
 
 
-# Detect the number of CPU cores.
-my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
+sub cpuManufacturer {
+    my $id = shift;
+    return $cpuinfo =~ /^vendor_id\s*:.* $id$/m;
+}
 
 
 # Determine CPU governor to use
@@ -113,6 +126,9 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
+
+push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
 
 
 # Look at the PCI devices and add necessary modules.  Note that most
@@ -183,7 +199,12 @@ sub pciCheck {
         ) )
     {
         # we need e.g. brcmfmac43602-pcie.bin
-        push @imports, "<nixpkgs/nixos/modules/hardware/network/broadcom-43xx.nix>";
+        push @imports, "(modulesPath + \"/hardware/network/broadcom-43xx.nix\")";
+    }
+
+    # In case this is a virtio scsi device, we need to explicitly make this available.
+    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+        push @initrdAvailableKernelModules, "virtio_scsi";
     }
 
     # Can't rely on $module here, since the module may not be loaded
@@ -269,7 +290,7 @@ if (`lsblk -o TYPE` =~ "lvm") {
     push @initrdKernelModules, "dm-snapshot";
 }
 
-my $virt = `systemd-detect-virt`;
+my $virt = `@detectvirt@`;
 chomp $virt;
 
 
@@ -279,10 +300,16 @@ if ($virt eq "oracle") {
     push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
+# Check if we're a Parallels guest. If so, enable the guest additions.
+# It is blocked by https://github.com/systemd/systemd/pull/23859
+if ($virt eq "parallels") {
+    push @attrs, "hardware.parallels.enable = true;";
+    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+}
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
-    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
+    push @imports, "(modulesPath + \"/profiles/qemu-guest.nix\")";
 }
 
 # Also for Hyper-V.
@@ -299,7 +326,7 @@ if ($virt eq "systemd-nspawn") {
 
 # Provide firmware for devices that are not detected by this script,
 # unless we're in a VM/container.
-push @imports, "<nixpkgs/nixos/modules/installer/scan/not-detected.nix>"
+push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
     if $virt eq "none";
 
 
@@ -335,6 +362,9 @@ if (@swaps) {
         next unless -e $swapFilename;
         my $dev = findStableDevPath $swapFilename;
         if ($swapType =~ "partition") {
+            # zram devices are more likely created by configuration.nix, so
+            # ignore them here
+            next if ($swapFilename =~ /^\/dev\/zram/);
             push @swapDevices, "{ device = \"$dev\"; }";
         } elsif ($swapType =~ "file") {
             # swap *files* are more likely specified in configuration.nix, so
@@ -385,7 +415,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
         # Make sure this isn't a btrfs subvolume.
-        my $msg = `btrfs subvol show $rootDir$mountPoint`;
+        my $msg = `@btrfs@ subvol show $rootDir$mountPoint`;
         if ($? != 0 || $msg =~ /ERROR:/s) {
             my $path = $fields[3]; $path = "" if $path eq "/";
             my $base = $fsByDev{$fields[2]};
@@ -423,7 +453,7 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@btrfs@ subvol show $rootDir$mountPoint");
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
@@ -497,8 +527,8 @@ if (-f $fb_modes_file && -r $fb_modes_file) {
     $modes =~ m/([0-9]+)x([0-9]+)/;
     my $console_width = $1, my $console_height = $2;
     if ($console_width > 1920) {
-        push @attrs, "# High-DPI console";
-        push @attrs, 'i18n.consoleFont = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+        push @attrs, "# high-resolution display";
+        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
     }
 }
 
@@ -545,11 +575,13 @@ if (!$noFilesystems) {
     $fsAndSwap .= "swapDevices =" . multiLineList("    ", @swapDevices) . ";\n";
 }
 
+my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
 my $hwConfig = <<EOF;
 # Do not modify this file!  It was generated by ‘nixos-generate-config’
 # and may be overwritten by future invocations.  Please make changes
 # to /etc/nixos/configuration.nix instead.
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 {
   imports =${\multiLineList("    ", @imports)};
@@ -559,33 +591,56 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = lib.mkDefault $cpus;
+$networkingDhcpConfig
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 sub generateNetworkingDhcpConfig {
+    # FIXME disable networking.useDHCP by default when switching to networkd.
     my $config = <<EOF;
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
 EOF
 
     foreach my $path (glob "/sys/class/net/*") {
         my $dev = basename($path);
         if ($dev ne "lo") {
-            $config .= "  networking.interfaces.$dev.useDHCP = true;\n";
+            $config .= "  # networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
         }
     }
 
     return $config;
 }
 
+sub generateXserverConfig {
+    my $xserverEnabled = "@xserverEnabled@";
+
+    my $config = "";
+    if ($xserverEnabled eq "1") {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+EOF
+    } else {
+        $config = <<EOF;
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+EOF
+    }
+}
 
 if ($showHardwareConfig) {
     print STDOUT $hwConfig;
 } else {
-    $outDir = "$rootDir$outDir";
+    if ($outDir eq "/etc/nixos") {
+        $outDir = "$rootDir$outDir";
+    } else {
+        $outDir = File::Spec->rel2abs($outDir);
+        $outDir =~ s/\/*$//; # remove trailing slashes
+    }
 
     my $fn = "$outDir/hardware-configuration.nix";
     print STDERR "writing $fn...\n";
@@ -626,9 +681,16 @@ EOF
 
         my $networkingDhcpConfig = generateNetworkingDhcpConfig();
 
+        my $xserverConfig = generateXserverConfig();
+
+        (my $desktopConfiguration = <<EOF)=~s/^/  /gm;
+@desktopConfiguration@
+EOF
+
         write_file($fn, <<EOF);
 @configuration@
 EOF
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
     }

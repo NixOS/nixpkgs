@@ -6,13 +6,13 @@ let
   cfg = config.services.infinoted;
 in {
   options.services.infinoted = {
-    enable = mkEnableOption "infinoted";
+    enable = mkEnableOption (lib.mdDoc "infinoted");
 
     package = mkOption {
       type = types.package;
       default = pkgs.libinfinity;
-      defaultText = "pkgs.libinfinity";
-      description = ''
+      defaultText = literalExpression "pkgs.libinfinity";
+      description = lib.mdDoc ''
         Package providing infinoted
       '';
     };
@@ -20,7 +20,7 @@ in {
     keyFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Private key to use for TLS
       '';
     };
@@ -28,7 +28,7 @@ in {
     certificateFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Server certificate to use for TLS
       '';
     };
@@ -36,7 +36,7 @@ in {
     certificateChain = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Chain of CA-certificates to which our `certificateFile` is relative.
         Optional for TLS.
       '';
@@ -45,15 +45,15 @@ in {
     securityPolicy = mkOption {
       type = types.enum ["no-tls" "allow-tls" "require-tls"];
       default = "require-tls";
-      description = ''
+      description = lib.mdDoc ''
         How strictly to enforce clients connection with TLS.
       '';
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 6523;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on
       '';
     };
@@ -61,7 +61,7 @@ in {
     rootDirectory = mkOption {
       type = types.path;
       default = "/var/lib/infinoted/documents/";
-      description = ''
+      description = lib.mdDoc ''
         Root of the directory structure to serve
       '';
     };
@@ -69,7 +69,7 @@ in {
     plugins = mkOption {
       type = types.listOf types.str;
       default = [ "note-text" "note-chat" "logging" "autosave" ];
-      description = ''
+      description = lib.mdDoc ''
         Plugins to enable
       '';
     };
@@ -77,7 +77,7 @@ in {
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         File to read server-wide password from
       '';
     };
@@ -88,7 +88,7 @@ in {
         [autosave]
         interval=10
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional configuration to append to infinoted.conf
       '';
     };
@@ -96,7 +96,7 @@ in {
     user = mkOption {
       type = types.str;
       default = "infinoted";
-      description = ''
+      description = lib.mdDoc ''
         What to call the dedicated user under which infinoted is run
       '';
     };
@@ -104,20 +104,22 @@ in {
     group = mkOption {
       type = types.str;
       default = "infinoted";
-      description = ''
+      description = lib.mdDoc ''
         What to call the primary group of the dedicated user under which infinoted is run
       '';
     };
   };
 
   config = mkIf (cfg.enable) {
-    users.users = optional (cfg.user == "infinoted")
-      { name = "infinoted";
-        description = "Infinoted user";
-        group = cfg.group;
+    users.users = optionalAttrs (cfg.user == "infinoted")
+      { infinoted = {
+          description = "Infinoted user";
+          group = cfg.group;
+          isSystemUser = true;
+        };
       };
-    users.groups = optional (cfg.group == "infinoted")
-      { name = "infinoted";
+    users.groups = optionalAttrs (cfg.group == "infinoted")
+      { infinoted = { };
       };
 
     systemd.services.infinoted =
@@ -139,14 +141,14 @@ in {
           install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
           cat >>/var/lib/infinoted/infinoted.conf <<EOF
           [infinoted]
-          ${optionalString (cfg.keyFile != null) ''key-file=${cfg.keyFile}''}
-          ${optionalString (cfg.certificateFile != null) ''certificate-file=${cfg.certificateFile}''}
-          ${optionalString (cfg.certificateChain != null) ''certificate-chain=${cfg.certificateChain}''}
+          ${optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
+          ${optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
+          ${optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
           port=${toString cfg.port}
           security-policy=${cfg.securityPolicy}
           root-directory=${cfg.rootDirectory}
           plugins=${concatStringsSep ";" cfg.plugins}
-          ${optionalString (cfg.passwordFile != null) ''password=$(head -n 1 ${cfg.passwordFile})''}
+          ${optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
 
           ${cfg.extraConfig}
           EOF

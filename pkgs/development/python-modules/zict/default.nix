@@ -1,21 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, heapdict }:
+{ lib, buildPythonPackage, fetchPypi
+, pytest, heapdict, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "zict";
-  version = "1.0.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04532600mnsvzv43l2jvjrn7sflg0wkjqzy7nj7m3vvxm5gd4kg3";
+    sha256 = "sha256-1zZsLiKTMUES3PJDIQhCime5J7AABWGf7vwxDRLYM/M=";
   };
+
+  disabled = pythonOlder "3.6";
 
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ heapdict ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mutable mapping tools.";
-    homepage = https://github.com/dask/zict;
+    homepage = "https://github.com/dask/zict";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

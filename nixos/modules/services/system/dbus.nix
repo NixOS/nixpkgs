@@ -1,6 +1,6 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -11,6 +11,7 @@ let
   homeDir = "/run/dbus";
 
   configDir = pkgs.makeDBusConf {
+    inherit (cfg) apparmor;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
@@ -18,7 +19,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -29,7 +29,7 @@ in
         type = types.bool;
         default = false;
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to start the D-Bus message bus daemon, which is
           required by many other system services and applications.
         '';
@@ -38,25 +38,40 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Packages whose D-Bus configuration files should be included in
           the configuration of the D-Bus system-wide or session-wide
           message bus.  Specifically, files in the following directories
           will be included into their respective DBus configuration paths:
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
+          {file}`«pkg»/etc/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system-services`
+          {file}`«pkg»/etc/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/services`
         '';
       };
 
+      apparmor = mkOption {
+        type = types.enum [ "enabled" "disabled" "required" ];
+        description = lib.mdDoc ''
+          AppArmor mode for dbus.
+
+          `enabled` enables mediation when it's
+          supported in the kernel, `disabled`
+          always disables AppArmor even with kernel support, and
+          `required` fails when AppArmor was not found
+          in the kernel.
+        '';
+        default = "disabled";
+      };
+
       socketActivated = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Make the user instance socket activated.
+        type = types.nullOr types.bool;
+        default = null;
+        visible = false;
+        description = lib.mdDoc ''
+          Removed option, do not use.
         '';
       };
     };
@@ -65,13 +80,18 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.socketActivated != null) (
+      let
+        files = showFiles options.services.dbus.socketActivated.files;
+      in
+        "The option 'services.dbus.socketActivated' in ${files} no longer has"
+        + " any effect and can be safely removed: the user D-Bus session is"
+        + " now always socket activated."
+    );
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
-    environment.etc = singleton
-      { source = configDir;
-        target = "dbus-1";
-      };
+    environment.etc."dbus-1".source = configDir;
 
     users.users.messagebus = {
       uid = config.ids.uids.messagebus;
@@ -111,7 +131,7 @@ in
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
       };
-      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];

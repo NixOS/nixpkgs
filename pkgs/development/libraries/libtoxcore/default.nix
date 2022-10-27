@@ -1,55 +1,48 @@
-{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
-, libvpx, check, libconfig, pkgconfig }:
+{ lib, stdenv, fetchurl, cmake, libsodium, ncurses, libopus, msgpack
+, libvpx, check, libconfig, pkg-config }:
 
-let
-  generic = { version, sha256 }:
-  stdenv.mkDerivation {
-    pname = "libtoxcore";
-    inherit version;
+let buildToxAV = !stdenv.isAarch32;
+in stdenv.mkDerivation rec {
+  pname = "libtoxcore";
+  version = "0.2.18";
 
-    src = fetchFromGitHub {
-      owner  = "TokTok";
-      repo   = "c-toxcore";
-      rev    = "v${version}";
-      inherit sha256;
+  src =
+    # We need the prepared sources tarball.
+    fetchurl {
+      url =
+        "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
+      sha256 = "sha256-8pQFN5mIY1k+KLxqa19W8JZ19s2KKDJre8MbSDbAiUI=";
     };
 
-    cmakeFlags = [
-      "-DBUILD_NTOX=ON"
-      "-DDHT_BOOTSTRAP=ON"
-      "-DBOOTSTRAP_DAEMON=ON"
-    ];
+  cmakeFlags =
+    [ "-DBUILD_NTOX=ON" "-DDHT_BOOTSTRAP=ON" "-DBOOTSTRAP_DAEMON=ON" ]
+    ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
 
-    buildInputs = [
-      libsodium msgpack ncurses libconfig
-    ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
-      libopus libvpx
-    ];
+  buildInputs = [
+    libsodium msgpack ncurses libconfig
+  ] ++ lib.optionals buildToxAV [
+    libopus libvpx
+  ];
 
-    nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-    enableParallelBuilding = true;
+  doCheck = true;
+  checkInputs = [ check ];
 
-    doCheck = false; # hangs, tries to access the net?
-    checkInputs = [ check ];
+  postInstall = ''
+    substituteInPlace $out/lib/pkgconfig/toxcore.pc \
+      --replace '=''${prefix}/' '=' \
 
-    meta = with stdenv.lib; {
-      description = "P2P FOSS instant messaging application aimed to replace Skype";
-      homepage = https://tox.chat;
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ peterhoeg ];
-      platforms = platforms.all;
-    };
-  };
+  '';
+  # We might be getting the wrong pkg-config file anyway:
+  # https://github.com/TokTok/c-toxcore/issues/2334
 
-in {
-  libtoxcore_0_1 = generic {
-    version = "0.1.11";
-    sha256 = "1fya5gfiwlpk6fxhalv95n945ymvp2iidiyksrjw1xw95fzsp1ij";
-  };
-
-  libtoxcore_0_2 = generic {
-    version = "0.2.10";
-    sha256 = "0r5j2s5n8ikayvr1zylvv3ai3smbhm2m0yhpa9lfcsxhvyn9phcn";
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "P2P FOSS instant messaging application aimed to replace Skype";
+    homepage = "https://tox.chat";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg ehmry ];
+    platforms = platforms.all;
   };
 }

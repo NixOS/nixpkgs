@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''do-urlencode'';
-  version = ''20181018-git'';
+  baseName = "do-urlencode";
+  version = "20181018-git";
 
-  description = ''Percent Encoding (aka URL Encoding) library'';
+  description = "Percent Encoding (aka URL Encoding) library";
 
   deps = [ args."alexandria" args."babel" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/do-urlencode/2018-10-18/do-urlencode-20181018-git.tgz'';
-    sha256 = ''1cajd219s515y65kp562c6xczqaq0p4lyp13iv00z6i44rijmfp2'';
+    url = "http://beta.quicklisp.org/archive/do-urlencode/2018-10-18/do-urlencode-20181018-git.tgz";
+    sha256 = "1cajd219s515y65kp562c6xczqaq0p4lyp13iv00z6i44rijmfp2";
   };
 
   packageName = "do-urlencode";

@@ -1,12 +1,16 @@
-{ lib, fetchzip, buildDunePackage, cmdliner }:
+{ lib, fetchFromGitHub, buildDunePackage, cmdliner }:
 
 buildDunePackage rec {
-  version = "1.7.0";
+  version = "1.8.2";
   pname = "ocp-indent";
 
-  src = fetchzip {
-    url = "https://github.com/OCamlPro/ocp-indent/archive/${version}.tar.gz";
-    sha256 = "006x3fsd61vxnxj4chlakyk3b2s10pb0bdl46g0ghf3j8h33x7hc";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocp-indent";
+    rev = version;
+    sha256 = "sha256-IyvURw/6R0eKrnahV1fqLV0iIeypykrmxDbliECgbLc=";
   };
 
   minimumOCamlVersion = "4.02";
@@ -14,7 +18,7 @@ buildDunePackage rec {
   buildInputs = [ cmdliner ];
 
   meta = with lib; {
-    homepage = http://typerex.ocamlpro.com/ocp-indent.html;
+    homepage = "http://typerex.ocamlpro.com/ocp-indent.html";
     description = "A customizable tool to indent OCaml code";
     license = licenses.gpl3;
     maintainers = [ maintainers.jirkamarsik ];

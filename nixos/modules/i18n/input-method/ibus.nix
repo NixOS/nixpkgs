@@ -23,29 +23,35 @@ let
       Name=IBus
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
+      # GNOME will launch ibus using systemd
+      NotShowIn=GNOME;
     '';
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+  ];
+
   options = {
     i18n.inputMethod.ibus = {
       engines = mkOption {
         type    = with types; listOf ibusEngine;
         default = [];
-        example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
+        example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
             engines = concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
+              (map (name: "`${name}`") (attrNames enginesDrv));
           in
-            "Enabled IBus engines. Available engines are: ${engines}.";
+            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = literalExample "''${pkgs.plasma5.plasma-desktop}/lib/libexec/kimpanel-ibus-panel";
-        description = "Replace the IBus panel with another panel.";
+        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
+        description = lib.mdDoc "Replace the IBus panel with another panel.";
       };
     };
   };
@@ -53,9 +59,17 @@ in
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
+    environment.systemPackages = [
+      ibusAutostart
+    ];
+
     # Without dconf enabled it is impossible to use IBus
-    environment.systemPackages = with pkgs; [
-      gnome3.dconf ibusAutostart
+    programs.dconf.enable = true;
+
+    programs.dconf.packages = [ ibusPackage ];
+
+    services.dbus.packages = [
+      ibusPackage
     ];
 
     environment.variables = {
@@ -63,5 +77,12 @@ in
       QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
     };
+
+    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
+      ibusPackage
+    ];
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

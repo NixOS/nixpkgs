@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt
+{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
+, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
+, writeShellScript
 
 # for update.nix
 , writeScript
@@ -12,59 +13,94 @@
 , gnused
 , nix
 }:
+let
+  tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
+    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    pem="$(openssl genpkey -algorithm x25519)"
 
+    printf private_key=descriptor:x25519:
+    echo "$pem" | grep -v " PRIVATE KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+
+    printf public_key=descriptor:x25519:
+    echo "$pem" | openssl pkey -in /dev/stdin -pubout |
+    grep -v " PUBLIC KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.1.6";
+  version = "0.4.7.10";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0wgdid8w7srd218hh4rwslzdx2ickxw1pg18p2wry1r6wi65521a";
+    sha256 = "sha256-ZH5W36Weo22rBSAn/Px2Y5BcgmwDUJNjxFaQDs1DWls=";
   };
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
+    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  patches = [ ./disable-monotonic-timer-tests.patch ];
+
+  configureFlags =
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+    ++
+    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
+  ;
+
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
 
   enableParallelBuilding = true;
-  enableParallelChecking = false; # 4 tests fail randomly
 
-  doCheck = true;
+  # disable tests on aarch64-darwin, the following tests fail there:
+  # oom/circbuf: [forking]
+  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
+  #   [circbuf FAILED]
+  # oom/streambuf: [forking]
+  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
+  #   [streambuf FAILED]
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
+    ln -s ${tor-client-auth-gen} $out/bin/tor-client-auth-gen
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+  passthru = {
+    tests.tor = nixosTests.tor;
+    updateScript = import ./update.nix {
+      inherit lib;
+      inherit
+        writeScript
+        common-updater-scripts
+        bash
+        coreutils
+        curl
+        gnupg
+        gnugrep
+        gnused
+        nix
+      ;
+    };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://www.torproject.org/;
-    repositories.git = https://git.torproject.org/git/tor;
+  meta = with lib; {
+    homepage = "https://www.torproject.org/";
     description = "Anonymizing overlay network";
 
     longDescription = ''
@@ -80,7 +116,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom doublec thoughtpolice joachifm ];
+      [ thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

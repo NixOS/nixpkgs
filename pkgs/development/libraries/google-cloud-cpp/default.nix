@@ -1,62 +1,138 @@
-{ stdenv, clang-tools, grpc, curl, cmake, pkgconfig, fetchFromGitHub, doxygen, protobuf, crc32c, c-ares, fetchurl, openssl, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, abseil-cpp
+, c-ares
+, cmake
+, crc32c
+, curl
+, gbenchmark
+, grpc
+, gtest
+, ninja
+, nlohmann_json
+, openssl
+, pkg-config
+, protobuf
+  # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
+, apis ? [ "*" ]
+, staticOnly ? stdenv.hostPlatform.isStatic
+}:
 let
+  googleapisRev = "d4f3468ef85278428005ed555b3a85db91551ee6";
   googleapis = fetchFromGitHub {
     owner = "googleapis";
     repo = "googleapis";
-    rev = "9c9f778aedde02f9826d2ae5d0f9c96409ba0f25";
-    sha256 = "1gd3nwv8qf503wy6km0ad6akdvss9w5b1k3jqizy5gah1fkirkpi";
+    rev = googleapisRev;
+    hash = "sha256-sIQVFQhE3Ae6ia45apzdgtwzglMM4hFZ8efNAhMO5ZY=";
   };
-  googleapis-cpp-cmakefiles = stdenv.mkDerivation rec {
-    pname = "googleapis-cpp-cmakefiles";
-    version = "0.1.5";
-    src = fetchFromGitHub {
-      owner = "googleapis";
-      repo = "cpp-cmakefiles";
-      rev = "v${version}";
-      sha256 = "02zkcq2wl831ayd9qy009xvfx7q80pgycx7mzz9vknwd0nn6dd0n";
-    };
-
-    nativeBuildInputs = [ cmake pkgconfig ];
-    buildInputs = [ c-ares c-ares.cmake-config grpc openssl protobuf zlib ];
-
-    postPatch = ''
-      sed -e 's,https://github.com/googleapis/googleapis/archive/9c9f778aedde02f9826d2ae5d0f9c96409ba0f25.tar.gz,file://${googleapis},' \
-      -i CMakeLists.txt
-    '';
-  };
-  _nlohmann_json = fetchurl {
-    url = "https://github.com/nlohmann/json/releases/download/v3.4.0/json.hpp";
-    sha256 = "0pw3jpi572irbp2dqclmyhgic6k9rxav5mpp9ygbp9xj48gnvnk3";
-  };
-in stdenv.mkDerivation rec {
+  excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "0.14.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "15wci4m8h6py7fqfziq8mp5m6pxp2h1cbh5rp2k90mk5js4jb9pa";
+    sha256 = "sha256-kobOkohWIDTQaaihhoh/25tZUNv+CjKFwj2xQqO52bA=";
   };
 
-  buildInputs = [ curl crc32c c-ares c-ares.cmake-config googleapis-cpp-cmakefiles grpc protobuf ];
-  nativeBuildInputs = [ clang-tools cmake pkgconfig doxygen ];
-
-  outputs = [ "out" "dev" ];
-
   postPatch = ''
-    sed -e 's,https://github.com/nlohmann/json/releases/download/v3.4.0/json.hpp,file://${_nlohmann_json},' \
-    -i cmake/DownloadNlohmannJson.cmake
+    substituteInPlace external/googleapis/CMakeLists.txt \
+      --replace "https://github.com/googleapis/googleapis/archive/\''${GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
+
+    # https://github.com/googleapis/google-cloud-cpp/issues/8992
+    for file in external/googleapis/config.pc.in google/cloud/{,*/}config.pc.in; do
+      substituteInPlace "$file" \
+        --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
+    done
   '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS:BOOL=ON"
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ] ++ lib.optionals (!doInstallCheck) [
+    # enable these dependencies when doInstallCheck is false because we're
+    # unconditionally building tests and benchmarks
+    #
+    # when doInstallCheck is true, these deps are added to installCheckInputs
+    gbenchmark
+    gtest
   ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    abseil-cpp
+    c-ares
+    crc32c
+    (curl.override { inherit openssl; })
+    grpc
+    nlohmann_json
+    openssl
+    protobuf
+  ];
+
+  doInstallCheck = true;
+
+  preInstallCheck =
+    let
+      # These paths are added to (DY)LD_LIBRARY_PATH because they contain
+      # testing-only shared libraries that do not need to be installed, but
+      # need to be loadable by the test executables.
+      #
+      # Setting (DY)LD_LIBRARY_PATH is only necessary when building shared libraries.
+      additionalLibraryPaths = [
+        "$PWD/google/cloud/bigtable"
+        "$PWD/google/cloud/bigtable/benchmarks"
+        "$PWD/google/cloud/pubsub"
+        "$PWD/google/cloud/spanner"
+        "$PWD/google/cloud/spanner/benchmarks"
+        "$PWD/google/cloud/storage"
+        "$PWD/google/cloud/storage/benchmarks"
+        "$PWD/google/cloud/testing_util"
+      ];
+      ldLibraryPathName = "${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH";
+    in
+    lib.optionalString doInstallCheck (
+      lib.optionalString (!staticOnly) ''
+        export ${ldLibraryPathName}=${lib.concatStringsSep ":" additionalLibraryPaths}
+      '' + ''
+        export GTEST_FILTER="-${lib.concatStringsSep ":" excludedTests.cases}"
+      ''
+    );
+
+  installCheckPhase = lib.optionalString doInstallCheck ''
+    runHook preInstallCheck
+
+    # disable tests that contact the internet
+    ctest --exclude-regex '^(${lib.concatStringsSep "|" excludedTests.whole})'
+
+    runHook postInstallCheck
+  '';
+
+  installCheckInputs = lib.optionals doInstallCheck [
+    gbenchmark
+    gtest
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS:BOOL=${if staticOnly then "OFF" else "ON"}"
+    # unconditionally build tests to catch linker errors as early as possible
+    # this adds a good chunk of time to the build
+    "-DBUILD_TESTING:BOOL=ON"
+    "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+  ] ++ lib.optionals (apis != [ "*" ]) [
+    "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
+  ];
+
+  meta = with lib; {
     license = with licenses; [ asl20 ];
-    homepage = https://github.com/googleapis/google-cloud-cpp;
+    homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
-    maintainers = with maintainers; [ andir flokli ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

@@ -1,8 +1,8 @@
 # This test runs haka and probes it with hakactl
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "haka";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ tvestelind ];
   };
 
@@ -15,10 +15,10 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $haka->waitForUnit("haka.service");
-    $haka->succeed("hakactl status");
-    $haka->succeed("hakactl stop");
+    haka.wait_for_unit("haka.service")
+    haka.succeed("hakactl status")
+    haka.succeed("hakactl stop")
   '';
 })

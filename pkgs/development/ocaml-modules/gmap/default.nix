@@ -1,8 +1,10 @@
-{ lib, buildDunePackage, fetchurl, alcotest }:
+{ lib, buildDunePackage, ocaml, fetchurl, alcotest }:
 
 buildDunePackage rec {
   pname = "gmap";
   version = "0.3.0";
+
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/hannesm/gmap/releases/download/${version}/gmap-${version}.tbz";
@@ -11,9 +13,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.03";
 
-  buildInputs = [ alcotest ];
+  checkInputs = [ alcotest ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "Heterogenous maps over a GADT";

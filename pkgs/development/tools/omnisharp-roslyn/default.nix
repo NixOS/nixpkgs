@@ -1,41 +1,125 @@
-{ stdenv
-, fetchurl
-, mono5
-, makeWrapper
+{ buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, icu
+, lib
+, patchelf
+, stdenv
+, runCommand
+, expect
 }:
-
-stdenv.mkDerivation rec {
-
+let
+  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
+in
+let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.32.19";
-  
-  src = fetchurl {
-    url = "https://github.com/OmniSharp/omnisharp-roslyn/releases/download/v${version}/omnisharp-mono.tar.gz";
-    sha256 = "0flmijar7ih9wp2i585035zhgwpqymr2y778x841bpgv412kxgpz";
+  version = "1.39.1";
+
+  src = fetchFromGitHub {
+    owner = "OmniSharp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "Fd9fS5iSEynZfRwZexDlVndE/zSZdUdugR0VgXXAdmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
+  nugetDeps = ./deps.nix;
 
-  preUnpack = ''
-    mkdir src
-    cd src
-    sourceRoot=.
+  nativeBuildInputs = [
+    patchelf
+  ];
+
+  dotnetInstallFlags = [ "--framework net6.0" ];
+  dotnetBuildFlags = [ "--framework net6.0" ];
+  dotnetFlags = [
+    # These flags are set by the cake build.
+    "-property:PackageVersion=${version}"
+    "-property:AssemblyVersion=${version}.0"
+    "-property:FileVersion=${version}.0"
+    "-property:InformationalVersion=${version}"
+    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
+    "-property:RollForward=LatestMajor"
+  ];
+
+  postPatch = ''
+    # Relax the version requirement
+    substituteInPlace global.json \
+      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+    # Patch the project files so we can compile them properly
+    for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
+      substituteInPlace $project \
+        --replace '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
+    done
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cd ..
-		cp -r src $out/
-    ls -al $out/src
-    makeWrapper ${mono5}/bin/mono $out/bin/omnisharp \
-    --add-flags "$out/src/OmniSharp.exe"
+  dontDotnetFixup = true; # we'll fix it ourselves
+  postFixup = lib.optionalString stdenv.isLinux ''
+    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
+    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
+      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
+      $out/lib/omnisharp-roslyn/OmniSharp
+
+  '' + ''
+    # Now create a wrapper without DOTNET_ROOT
+    # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
+    # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
+    # likely will NOT want the .NET 6 runtime running it (as it'll use that to
+    # detect the SDKs for its own use, so it's better to let it find it in PATH).
+    makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
+      --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
+      --set-default DOTNET_ROOT ${sdk_6_0}
+
+    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
+    rm $out/lib/omnisharp-roslyn/NuGet.*.dll
+    rm $out/lib/omnisharp-roslyn/System.Configuration.ConfigurationManager.dll
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    no-sdk = runCommand "no-sdk" { nativeBuildInputs = [ finalPackage expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "\"ERROR\",\"Name\":\"OmniSharp.MSBuild.Discovery.Providers.SdkInstanceProvider\""
+        expect eof
+        catch wait result
+        if { [lindex $result 3] == 0 } {
+          exit 1
+        }
+      EOF
+      touch $out
+    '';
+
+    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage sdk_6_0 expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "{\"Event\":\"started\","
+        send \x03
+        expect eof
+        catch wait result
+        exit [lindex $result 3]
+      EOF
+      touch $out
+    '';
+  };
+
+  meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
-    platforms = platforms.linux;
+    homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode # dependencies
+    ];
     license = licenses.mit;
-    maintainers = with maintainers; [ tesq0 ];
+    maintainers = with maintainers; [ tesq0 ericdallo corngood mdarocha ];
+    mainProgram = "OmniSharp";
   };
-
-}
+}; in finalPackage

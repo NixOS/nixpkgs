@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs literalExample mkEnableOption mkIf mkOption types;
+  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
 
   cfg = config.services.loki;
 
@@ -12,12 +12,12 @@ let
 
 in {
   options.services.loki = {
-    enable = mkEnableOption "loki";
+    enable = mkEnableOption (lib.mdDoc "loki");
 
     user = mkOption {
       type = types.str;
       default = "loki";
-      description = ''
+      description = lib.mdDoc ''
         User under which the Loki service runs.
       '';
     };
@@ -25,7 +25,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "loki";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the Loki service runs.
       '';
     };
@@ -33,15 +33,15 @@ in {
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/loki";
-      description = ''
+      description = lib.mdDoc ''
         Specify the directory for Loki.
       '';
     };
 
     configuration = mkOption {
-      type = types.attrs;
+      type = (pkgs.formats.json {}).type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Loki in Nix.
       '';
     };
@@ -49,7 +49,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify a configuration file that Loki should use.
       '';
     };
@@ -57,8 +57,8 @@ in {
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = literalExample [ "--server.http-listen-port=3101" ];
-      description = ''
+      example = [ "--server.http-listen-port=3101" ];
+      description = lib.mdDoc ''
         Specify a list of additional command line flags,
         which get escaped and are then passed to Loki.
       '';
@@ -77,6 +77,8 @@ in {
         'services.loki.configFile'.
       '';
     }];
+
+    environment.systemPackages = [ pkgs.grafana-loki ]; # logcli
 
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {

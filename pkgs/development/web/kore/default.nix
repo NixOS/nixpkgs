@@ -1,29 +1,41 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl, curl, postgresql, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "kore";
-  version = "3.3.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = pname;
-    rev = "${version}-release";
-    sha256 = "0jlvry9p1f7284cscfsg04ngbaq038yx3nz815jcr5s3d2jzps3h";
+    rev = version;
+    sha256 = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl curl postgresql yajl ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "ACME=1"
+    "CURL=1"
+    "TASKS=1"
+    "PGSQL=1"
+    "JSONRPC=1"
+    "DEBUG=1"
+  ];
+
+  preBuild = ''
+    make platform.h
+  '';
 
   # added to fix build w/gcc7 and clang5
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
-    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
+    + lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An easy to use web application framework for C";
-    homepage = https://kore.io;
+    homepage = "https://kore.io";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ johnmh ];

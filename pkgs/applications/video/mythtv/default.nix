@@ -1,45 +1,41 @@
-{ stdenv, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
-, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU_combined, alsaLib, freetype
-, perl, pkgconfig , libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
-, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2
-, linuxHeaders, fetchpatch
+{ lib, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
+, perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
+, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "mythtv";
-  version = "29.1";
+  version = "31.0";
 
   src = fetchFromGitHub {
     owner = "MythTV";
     repo = "mythtv";
     rev = "v${version}";
-    sha256 = "0pjxv4bmq8h285jsr02svgaa03614arsyk12fn9d4rndjsi2cc3x";
+    sha256 = "092w5kvc1gjz6jd2lk2jhcazasz2h3xh0i5iq80k8x3znyp4i6v5";
   };
 
   patches = [
-    # Fixes build with exiv2 0.27.1.
-    (fetchpatch {
-      name = "004-exiv2.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-exiv2.patch?h=mythtv&id=76ea37f8556805b205878772ad7874e487c0d946";
-      sha256 = "0mh542f53qgky0w3s2bv0gmcxzvmb10834z3cfff40fby2ffr6k8";
-    })
+    # Disables OS detection used while checking if enforce_wshadow should be disabled.
+    ./disable-os-detection.patch
   ];
 
-  setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
+  setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
-    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU_combined
-    perl alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
+    freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL
+    perl libsamplerate libbluray lzo alsa-lib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
   ];
-  nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
+  nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
 
-  configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
+  configureFlags =
+    [ "--dvb-path=${linuxHeaders}/include" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.mythtv.org/;
+  meta = with lib; {
+    homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.titanous ];
   };

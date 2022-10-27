@@ -1,4 +1,4 @@
-{ stdenv, fetchurl } :
+{ lib, stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
   version = "1.11";
@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   # http://deb.debian.org/debian/pool/main/r/rig/rig_1.11-1.diff.gz
   patches = [ ./rig_1.11-1.diff ];
 
+  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
+
   meta = {
-    homepage = http://rig.sourceforge.net/; 
+    homepage = "http://rig.sourceforge.net/";
     description = "Random identity generator";
     longDescription = ''
       RIG (Random Identity Generator) is a free replacement for a shareware
@@ -24,8 +26,8 @@ stdenv.mkDerivation rec {
       if the Web site/BBS/person you are giving the information to tries to
       cross-check the city, state, zip, or area code, it will check out.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ tomberek ];
-    platforms = with stdenv.lib.platforms; all;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ tomberek ];
+    platforms = with lib.platforms; all;
   };
 }

@@ -14,6 +14,6 @@ imakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseImakeConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseImakeConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=imakeConfigurePhase
 fi

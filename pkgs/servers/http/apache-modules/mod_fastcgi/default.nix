@@ -1,24 +1,15 @@
-{ stdenv, fetchurl, apacheHttpd }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, apacheHttpd }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "mod_fastcgi";
   version = "2.4.7.1";
 
-  apache-24-patch = fetchurl {
-      name = "compile-against-apache24.diff";
-      url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/compile-against-apache24.diff?h=packages/mod_fastcgi&id=81c7cb99d15682df3bdb1edcaeea5259e9e43a42";
-      sha256 = "000qvrf5jb979i37rimrdivcgjijcffgrpkx38c0rn62z9jz61g4";
-    };
-in
-stdenv.mkDerivation {
-  pname = "mod_fastcgi";
-  inherit version;
-
-  src = fetchurl {
-    url = "https://github.com/FastCGI-Archives/mod_fastcgi/archive/${version}.tar.gz";
-    sha256 = "12g6vcfl9jl8rqf8lzrkdxg2ngca310d3d6an563xqcgrkp8ga55";
+  src = fetchFromGitHub {
+    owner = "FastCGI-Archives";
+    repo = "mod_fastcgi";
+    rev = version;
+    hash = "sha256-ovir59kCjKkgbraX23nsmzlMzGdeNTyj3MQd8cgvLsg=";
   };
-
-  patches = [ apache-24-patch ];
 
   buildInputs = [ apacheHttpd ];
 
@@ -28,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/FastCGI-Archives/mod_fastcgi;
+    homepage = "https://github.com/FastCGI-Archives/mod_fastcgi";
     description = "Provide support for the FastCGI protocol";
 
     longDescription = ''
@@ -42,7 +33,6 @@ stdenv.mkDerivation {
       more scalable.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.linux;
   };
 }

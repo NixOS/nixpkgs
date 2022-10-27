@@ -1,30 +1,59 @@
-{ stdenv, fetchurl, perl, libiconv, zlib, popt
-, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD), acl ? null
-, enableCopyDevicesPatch ? false
+{ lib
+, stdenv
+, fetchurl
+, perl
+, libiconv
+, zlib
+, popt
+, enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl
+, acl
+, enableLZ4 ? true
+, lz4
+, enableOpenSSL ? true
+, openssl
+, enableXXHash ? true
+, xxHash
+, enableZstd ? true
+, zstd
+, nixosTests
 }:
 
-assert enableACLs -> acl != null;
-
-let
-  base = import ./base.nix { inherit stdenv fetchurl; };
-in
 stdenv.mkDerivation rec {
-  name = "rsync-${base.version}";
+  pname = "rsync";
+  version = "3.2.6";
 
-  mainSrc = base.src;
+  src = fetchurl {
+    # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
+    url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";
+    sha256 = "sha256-+zNlurJ4N9Qf6vQulnxXvTpHvI8Qdlo2ce/Wo4NUVNM=";
+  };
 
-  patchesSrc = base.upstreamPatchTarball;
+  nativeBuildInputs = [ perl ];
 
-  srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+  buildInputs = [ libiconv zlib popt ]
+    ++ lib.optional enableACLs acl
+    ++ lib.optional enableZstd zstd
+    ++ lib.optional enableLZ4 lz4
+    ++ lib.optional enableOpenSSL openssl
+    ++ lib.optional enableXXHash xxHash;
 
-  buildInputs = [libiconv zlib popt] ++ stdenv.lib.optional enableACLs acl;
-  nativeBuildInputs = [perl];
+  configureFlags = [
+    "--with-nobody-group=nogroup"
 
-  configureFlags = ["--with-nobody-group=nogroup"];
+    # disable the included zlib explicitly as it otherwise still compiles and
+    # links them even.
+    "--with-included-zlib=no"
+  ];
 
-  meta = base.meta // {
-    description = "A fast incremental file transfer utility";
-    maintainers = with stdenv.lib.maintainers; [ peti ehmry kampfschlaefer ];
+  enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) rsyncd; };
+
+  meta = with lib; {
+    description = "Fast incremental file transfer utility";
+    homepage = "https://rsync.samba.org/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
   };
 }

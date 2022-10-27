@@ -1,16 +1,25 @@
-{ stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
+{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
+, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto
+, fetchpatch
+}:
 
-let
+stdenv.mkDerivation rec {
   version = "5.1.6";
-  name = "autofs-${version}";
-in stdenv.mkDerivation {
-  inherit name;
+  pname = "autofs";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
+    url = "mirror://kernel/linux/daemons/autofs/v5/autofs-${version}.tar.xz";
     sha256 = "1vya21mb4izj3khcr3flibv7xc15vvx2v0rjfk5yd31qnzcy7pnx";
   };
+
+  patches = [
+    # glibc 2.34 compat
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/autofs/raw/cc745af5e42396d540d5b3b92fae486e232bf6bd/f/autofs-5.1.7-use-default-stack-size-for-threads.patch";
+      sha256 = "sha256-6ETDFbW7EhHR03xFWF+6OJBgn9NX3WW3bGhTNGodaOc=";
+      excludes = [ "CHANGELOG" ];
+    })
+  ];
 
   preConfigure = ''
     configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH"
@@ -28,21 +37,24 @@ in stdenv.mkDerivation {
     unset STRIP # Makefile.rules defines a usable STRIP only without the env var.
   '';
 
+  # configure script is not finding the right path
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+
   installPhase = ''
     make install SUBDIRS="lib daemon modules man" # all but samples
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 kerberos kmod openldap sssd
-                  openssl cyrus_sasl ];
+  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
+                  openssl cyrus_sasl rpcsvc-proto ];
 
   nativeBuildInputs = [ flex bison ];
 
   meta = {
     description = "Kernel-based automounter";
-    homepage = https://www.kernel.org/pub/linux/daemons/autofs/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
+    license = lib.licenses.gpl2Plus;
     executables = [ "automount" ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

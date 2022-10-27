@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
+{ lib, stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xorgproto, libXi, gmp
 , libXext, libXt, libXaw, libXmu } :
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [(fetchurl {
-    url = https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch;
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-lisp/gcl/files/gcl-2.6.12-gcc5.patch";
     sha256 = "00jbsn0qp8ki2w7dx8caha7g2hr9076xa6bg48j3qqqncff93zdh";
   })];
 
@@ -40,9 +40,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "bindnow" ];
 
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+  # -fcommon: workaround build failure on -fno-common toolchains:
+  #   ld: ./libgclp.a(user_match.o):(.bss+0x18): multiple definition of
+  #     `tf'; ./libpre_gcl.a(main.o):(.bss+0x326d90): first defined here
+  NIX_CFLAGS_COMPILE = "-fgnu89-inline -fcommon";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;

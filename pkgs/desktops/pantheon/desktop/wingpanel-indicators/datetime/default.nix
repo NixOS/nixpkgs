@@ -1,8 +1,9 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
-, pantheon
-, pkgconfig
+, nix-update-script
+, substituteAll
+, pkg-config
 , meson
 , python3
 , ninja
@@ -13,96 +14,67 @@
 , evolution-data-server
 , libical
 , libgee
+, libhandy
 , libxml2
 , libsoup
+, libgdata
 , elementary-calendar
-, elementary-icon-theme
-, wrapGAppsHook
-, fetchurl
 }:
-
-let
-
-  # Terrible workaround https://github.com/elementary/wingpanel-indicator-datetime/issues/122
-  # Evolution Data Server functionality will be broken (events from calendar in indicator)
-  # but at least we don't fail to build.
-  old-evolution-data-server = evolution-data-server.overrideAttrs(old: {
-    src = fetchurl {
-      url = "mirror://gnome/sources/evolution-data-server/${stdenv.lib.versions.majorMinor "3.32.4"}/${old.pname}-3.32.4.tar.xz";
-      sha256 = "0zsc9xwy6ixk3x0dx69ax5isrdw8qxjdxg2i5fr95s40nss7rxl3";
-    };
-  });
-
-in
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.1.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1y7a4xjwl3bpls56ys6g3s6mh5b3qbjm2vw7b6n2i4x7a63c4cbh";
+    sha256 = "sha256-5hg0TH12bEeEPhUUmZz7vS4YTB6t779CXyOCf0c4/X4=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      elementary_calendar = elementary-calendar;
+    })
+  ];
 
   nativeBuildInputs = [
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
-    old-evolution-data-server
+    evolution-data-server
     granite
     gtk3
     libgee
+    libhandy
     libical
     libsoup
     wingpanel
   ];
-
-  patches = [
-    # Use "clock-format" GSettings key that's been moved to granite
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/wingpanel-indicator-datetime/raw/c8d515b76aa812c141212d5515621a6febd781a3/f/00-move-clock-format-settings-to-granite.patch";
-      sha256 = "1sq3aw9ckkm057rnrclnw9lyrxbpl37fyzfnbixi2q3ypr70n880";
-    })
-    # See: https://github.com/elementary/wingpanel-indicator-datetime/pull/117
-    (fetchpatch {
-      url = "https://github.com/elementary/wingpanel-indicator-datetime/commit/4859e72a52d8dac5cad87b192fc912fb013b0ecd.patch";
-      sha256 = "0jfhb5sax4sivdfx7il1rc1dvhy0yfv27qhvwbdy0hza9wf8q9k0";
-    })
-  ];
-
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  # launches elementary-calendar on selection
-  preFixup = ''
-     gappsWrapperArgs+=( --prefix PATH : "${elementary-calendar}/bin" )
-  '';
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Date & Time Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-datetime;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

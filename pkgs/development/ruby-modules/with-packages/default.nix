@@ -57,13 +57,15 @@ let
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = [ selected ruby ];
 
-      unpackPhase = ":";
+      dontUnpack = true;
 
       installPhase = ''
         for i in ${ruby}/bin/* ${gemEnv}/bin/*; do
           rm -f $out/bin/$(basename "$i")
           makeWrapper "$i" $out/bin/$(basename "$i") --set GEM_PATH ${gemEnv}/${ruby.gemPath}
         done
+
+        ln -s ${ruby}/nix-support $out/nix-support
       '';
 
       passthru = {

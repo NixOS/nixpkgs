@@ -4,7 +4,7 @@
 , scipy
 , numpy
 , numba
-, scikitlearn
+, scikit-learn
 , pytest
 , pythonOlder
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     scipy
     numpy
     numba
-    scikitlearn
+    scikit-learn
   ];
 
   checkInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Experimental Gradient Boosting Machines in Python";
-    homepage = https://github.com/ogrisel/pygbm;
+    homepage = "https://github.com/ogrisel/pygbm";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
     broken = true;

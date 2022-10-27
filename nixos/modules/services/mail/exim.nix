@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption singleton types;
+  inherit (lib) literalExpression mkIf mkOption singleton types;
   inherit (pkgs) coreutils;
   cfg = config.services.exim;
 in
@@ -17,13 +17,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Exim mail transfer agent.";
+        description = lib.mdDoc "Whether to enable the Exim mail transfer agent.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Verbatim Exim configuration.  This should not contain exim_user,
           exim_group, exim_path, or spool_directory.
         '';
@@ -32,7 +32,7 @@ in
       user = mkOption {
         type = types.str;
         default = "exim";
-        description = ''
+        description = lib.mdDoc ''
           User to use when no root privileges are required.
           In particular, this applies when receiving messages and when doing
           remote deliveries.  (Local deliveries run as various non-root users,
@@ -44,7 +44,7 @@ in
       group = mkOption {
         type = types.str;
         default = "exim";
-        description = ''
+        description = lib.mdDoc ''
           Group to use when no root privileges are required.
         '';
       };
@@ -52,7 +52,7 @@ in
       spoolDir = mkOption {
         type = types.path;
         default = "/var/spool/exim";
-        description = ''
+        description = lib.mdDoc ''
           Location of the spool directory of exim.
         '';
       };
@@ -60,13 +60,20 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.exim;
-        defaultText = "pkgs.exim";
-        description = ''
+        defaultText = literalExpression "pkgs.exim";
+        description = lib.mdDoc ''
           The Exim derivation to use.
           This can be used to enable features such as LDAP or PAM support.
         '';
       };
 
+      queueRunnerInterval = mkOption {
+        type = types.str;
+        default = "5m";
+        description = lib.mdDoc ''
+          How often to spawn a new queue runner.
+        '';
+      };
     };
 
   };
@@ -87,26 +94,29 @@ in
       systemPackages = [ cfg.package ];
     };
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
       group = cfg.group;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.exim;
     };
 
-    security.wrappers.exim.source = "${cfg.package}/bin/exim";
+    security.wrappers.exim =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${cfg.package}/bin/exim";
+      };
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
-        ExecStart   = "${cfg.package}/bin/exim -bdf -q30m";
+        ExecStart   = "${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";
       };
       preStart = ''

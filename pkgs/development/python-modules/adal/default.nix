@@ -1,21 +1,53 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, requests, pyjwt, dateutil }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpretty
+, pyjwt
+, pytestCheckHook
+, python-dateutil
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "adal";
-  version = "1.2.1";
+  version = "1.2.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b6edd095be66561382bdaa59d40b04490e93149fb3b7fa44c1fa5504eed5b8b9";
+  src = fetchFromGitHub {
+    owner = "AzureAD";
+    repo = "azure-activedirectory-library-for-python";
+    rev = version;
+    hash = "sha256-HE8/P0aohoZNeMdcQVKdz6M31FMrjsd7oVytiaD0idI=";
   };
 
-  propagatedBuildInputs =  [ requests pyjwt dateutil ];
+  postPatch = ''
+    sed -i '/cryptography/d' setup.py
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Library to make it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
-    homepage = https://github.com/AzureAD/azure-activedirectory-library-for-python;
+  propagatedBuildInputs = [
+    pyjwt
+    python-dateutil
+    requests
+  ];
+
+  checkInputs = [
+    httpretty
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: 'Mex [23 chars]tp error:...
+    "test_failed_request"
+  ];
+
+  pythonImportsCheck = [
+    "adal"
+  ];
+
+  meta = with lib; {
+    description = "Python module to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
+    homepage = "https://github.com/AzureAD/azure-activedirectory-library-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ phreedom ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,33 +1,63 @@
-{ stdenv, fetchzip, ocaml, findlib, gen, ppx_tools_versioned }:
+{ lib
+, fetchFromGitHub
+, fetchurl
+, buildDunePackage
+, ocaml
+, gen
+, ppxlib
+, uchar
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "sedlex is not available for OCaml ${ocaml.version}"
-else
+let
+  unicodeVersion = "15.0.0";
+  baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-sedlex-${version}";
-  version = "1.99.5";
+  DerivedCoreProperties = fetchurl {
+    url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
+    sha256 = "sha256-02cpC8CGfmtITGg3BTC90aCLazJARgG4x6zK+D4FYo0=";
+  };
+  DerivedGeneralCategory = fetchurl {
+    url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
+    sha256 = "sha256-/imkXAiCUA5ZEUCqpcT1Bn5qXXRoBhSK80QAxIucBvk=";
+  };
+  PropList = fetchurl {
+    url = "${baseUrl}/ucd/PropList.txt";
+    sha256 = "sha256-4FwKKBHRE9rkq9gyiEGZo+qNGH7huHLYJAp4ipZUC/0=";
+  };
+in
+buildDunePackage rec {
+  pname = "sedlex";
+  version = "2.5";
 
-  src = fetchzip {
-    url = "https://github.com/ocaml-community/sedlex/archive/fb84e1766fc4b29e79ec40029ffee5cdb37b392f.tar.gz";
-    sha256 = "0phnqyn6mpv5byr1kkphl24y9q9fb2k3xg9yb457h5816q6ya72n";
+  minimalOCamlVersion = "4.08";
+
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = "sedlex";
+    rev = "v${version}";
+    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
   };
 
-  buildInputs = [ ocaml findlib ppx_tools_versioned ];
+  propagatedBuildInputs = [
+    gen uchar ppxlib
+  ];
 
-  propagatedBuildInputs = [ gen ];
+  preBuild = ''
+    rm src/generator/data/dune
+    ln -s ${DerivedCoreProperties} src/generator/data/DerivedCoreProperties.txt
+    ln -s ${DerivedGeneralCategory} src/generator/data/DerivedGeneralCategory.txt
+    ln -s ${PropList} src/generator/data/PropList.txt
+  '';
 
-  buildFlags = [ "all" "opt" ];
-
-  createFindlibDestdir = true;
+  doCheck = true;
 
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/ocaml-community/sedlex;
+    homepage = "https://github.com/ocaml-community/sedlex";
+    changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
     description = "An OCaml lexer generator for Unicode";
-    license = stdenv.lib.licenses.mit;
-    inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marsam ];
   };
 }

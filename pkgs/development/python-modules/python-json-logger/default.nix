@@ -1,22 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "0.1.11";
+  version = "2.0.4";
   pname = "python-json-logger";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7a31162f2a01965a5efb94453ce69230ed208468b0bbc7fdfc56e6d8df2e281";
+    sha256 = "sha256-dk12IXX5n8xGML1IU7CWMqy2CmIkrLJ84IzXDwsbgb0=";
   };
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/madzak/python-json-logger;
+  meta = with lib; {
+    homepage = "https://github.com/madzak/python-json-logger";
     description = "A python library adding a json log formatter";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

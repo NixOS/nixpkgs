@@ -1,20 +1,26 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mcpp";
-  version = "2.7.2";
+  version = "2.7.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/mcpp/mcpp-${version}.tar.gz";
-    sha256 = "0r48rfghjm90pkdyr4khxg783g9v98rdx2n69xn8f6c5i0hl96rv";
+  src = fetchFromGitHub {
+    owner = "museoa";
+    repo = "mcpp";
+    rev = finalAttrs.version;
+    hash= "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
   };
 
   configureFlags = [ "--enable-mcpplib" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://mcpp.sourceforge.net/;
-    description = "A portable c preprocessor";
+  meta = with lib; {
+    homepage = "https://github.com/museoa/mcpp";
+    description = "Matsui's C preprocessor";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

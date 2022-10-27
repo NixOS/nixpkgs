@@ -1,28 +1,27 @@
-{ stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
+{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK32 }:
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
-  version = "2.4.7";
+  version = "2.5.9";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "1i33bk3annz4rnjc58knprfajq1pbyjqyrhygqybvl7bsp70c5ri";
+    sha256 = "sha256-flv7tI/SYAxxJsHFa3QUgnO0glAAQF87EgP4wyTWnNU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    cmake
     expat
     openssl
     zlib
     db
-    curl
-    wxGTK
+    (curl.override { inherit openssl; })
+    wxGTK32
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software for using the ARRL Logbook of the World";
-    homepage = https://www.arrl.org/tqsl-download;
+    homepage = "https://www.arrl.org/tqsl-download";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.dpflug ];

@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable `gpsd', a GPS service daemon.
         '';
       };
@@ -29,9 +29,9 @@ in
       device = mkOption {
         type = types.str;
         default = "/dev/ttyUSB0";
-        description = ''
+        description = lib.mdDoc ''
           A device may be a local serial device for GPS input, or a URL of the form:
-               <literal>[{dgpsip|ntrip}://][user:passwd@]host[:port][/stream]</literal>
+               `[{dgpsip|ntrip}://][user:passwd@]host[:port][/stream]`
           in which case it specifies an input source for DGPS or ntrip data.
         '';
       };
@@ -39,7 +39,7 @@ in
       readonly = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the broken-device-safety, otherwise
           known as read-only mode.  Some popular bluetooth and USB
           receivers lock up or become totally inaccessible when
@@ -56,15 +56,15 @@ in
       nowait = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           don't wait for client connects to poll GPS
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 2947;
-        description = ''
+        description = lib.mdDoc ''
           The port where to listen for TCP connections.
         '';
       };
@@ -72,7 +72,7 @@ in
       debugLevel = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           The debugging level.
         '';
       };
@@ -86,17 +86,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "gpsd";
-        inherit uid;
+    users.users.gpsd =
+      { inherit uid;
+        group = "gpsd";
         description = "gpsd daemon user";
         home = "/var/empty";
       };
 
-    users.groups = singleton
-      { name = "gpsd";
-        inherit gid;
-      };
+    users.groups.gpsd = { inherit gid; };
 
     systemd.services.gpsd = {
       description = "GPSD daemon";

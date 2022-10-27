@@ -1,32 +1,35 @@
-{ fetchurl, stdenv, cmake, qt4, fftw }:
+{ stdenv, lib, fetchFromGitHub, cmake, fftw
+, qtbase, qmake, wrapQtAppsHook }:
 
-let
-  rev = "9895036d26";
-in
 stdenv.mkDerivation rec {
-  name = "smartdeblur-git-${rev}";
+  pname = "smartdeblur";
+  version = "unstable-2018-10-29";
 
-  src = fetchurl {
-    url = "https://github.com/Y-Vladimir/SmartDeblur/tarball/${rev}";
-    name = "${name}.tar.gz";
-    sha256 = "126x9x1zhqdarjz9in0p1qhmqg3jwz7frizadjvx723g2ppi33s4";
+  src = fetchFromGitHub {
+    owner = "Y-Vladimir";
+    repo = "SmartDeblur";
+    rev = "5af573c7048ac49ef68e638f3405d3a571b96a8b";
+    sha256 = "151vdd5ld0clw0vgp0fvp2gp2ybwpx9g43dad9fvbvwkg60izs87";
   };
 
-  preConfigure = ''
-    cd src
+  sourceRoot = "${src.name}/src";
+
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  buildInputs = [ qtbase fftw ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 ./SmartDeblur -t $out/bin
+
+    runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
-  buildInputs = [ cmake qt4 fftw ];
-
-  cmakeFlags = "-DUSE_SYSTEM_FFTW=ON";
-
-  meta = {
-    homepage = https://github.com/Y-Vladimir/SmartDeblur;
+  meta = with lib; {
+    homepage = "https://github.com/Y-Vladimir/SmartDeblur";
     description = "Tool for restoring blurry and defocused images";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

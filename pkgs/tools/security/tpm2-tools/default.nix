@@ -1,28 +1,38 @@
 { stdenv, fetchurl, lib
-, cmocka, curl, pandoc, pkgconfig, openssl, tpm2-tss }:
+, pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
+, abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "3.2.0";
+  version = "5.2";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "057gg84zly6gjp6ypj6bv6zzmnr77cqsygl8x0147cylwa1ywydd";
+    sha256 = "sha256-wLQC9qezRW6OskRSEeLUHEbH52ngX+TYkJ/2QRn3pjA=";
   };
 
-  nativeBuildInputs = [ pandoc pkgconfig ];
+  nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [
-    curl openssl tpm2-tss
-    # For unit tests.
-    cmocka
+    curl openssl tpm2-tss libuuid
   ];
 
-  configureFlags = [ "--enable-unit" ];
-  doCheck = true;
+  preFixup = let
+    ldLibraryPath = lib.makeLibraryPath ([
+      tpm2-tss
+    ] ++ (lib.optional abrmdSupport tpm2-abrmd));
+  in ''
+    wrapProgram $out/bin/tpm2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+    wrapProgram $out/bin/tss2 --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+  '';
+
+
+  # Unit tests disabled, as they rely on a dbus session
+  #configureFlags = [ "--enable-unit" ];
+  doCheck = false;
 
   meta = with lib; {
     description = "Command line tools that provide access to a TPM 2.0 compatible device";
-    homepage = https://github.com/tpm2-software/tpm2-tools;
+    homepage = "https://github.com/tpm2-software/tpm2-tools";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];

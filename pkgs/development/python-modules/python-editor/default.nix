@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   version = "1.0.4";
@@ -12,9 +12,9 @@ buildPythonPackage rec {
   # No proper tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that provides the `editor` module for programmatically";
-    homepage = https://github.com/fmoo/python-editor;
+    homepage = "https://github.com/fmoo/python-editor";
     license = licenses.asl20;
   };
 }

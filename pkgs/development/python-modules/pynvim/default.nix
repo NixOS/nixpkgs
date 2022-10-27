@@ -1,36 +1,33 @@
 { buildPythonPackage
 , fetchPypi
 , lib
-, nose
 , msgpack
 , greenlet
-, trollius
 , pythonOlder
 , isPyPy
+, pytest-runner
 }:
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.3.2";
+  version = "0.4.3";
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01dybk4vs452pljn1q3il5z2sd313ki0lgiglc0xmjc6wp290r6g";
+    sha256 = "sha256-OnlTeL3l6AkvvrOhqZvpxhPSaFVC8dsOXG/UZ+7Vbf8=";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  nativeBuildInputs = [
+    pytest-runner
+  ];
 
   # Tests require pkgs.neovim,
   # which we cannot add because of circular dependency.
   doCheck = false;
 
   propagatedBuildInputs = [ msgpack ]
-    ++ lib.optional (!isPyPy) greenlet
-    ++ lib.optional (pythonOlder "3.4") trollius;
+    ++ lib.optional (!isPyPy) greenlet;
 
   meta = {
     description = "Python client for Neovim";

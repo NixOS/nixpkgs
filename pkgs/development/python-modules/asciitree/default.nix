@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Draws ASCII trees";
-    homepage = https://github.com/mbr/asciitree;
+    homepage = "https://github.com/mbr/asciitree";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

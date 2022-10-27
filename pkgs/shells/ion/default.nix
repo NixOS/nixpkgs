@@ -1,26 +1,33 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, libiconv }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ion";
-  version = "1.0.5";
+  version = "unstable-2021-05-10";
 
   src = fetchFromGitHub {
     owner = "redox-os";
     repo = "ion";
-    rev = version;
-    sha256 = "0i0acl5nw254mw8dbfmb4792rr71is98a5wg32yylfnlrk7zlf8z";
+    rev = "1170b84587bbad260a3ecac8e249a216cb1fd5e9";
+    sha256 = "sha256-lI1GwA3XerRJaC/Z8vTZc6GzRDLjv3w768C+Ui6Q+3Q=";
   };
 
-  cargoSha256 = "1hs01b1rhbpafxlhw661k907rznqhcgyng85njkb99bg4lxwxaap";
+  cargoSha256 = "sha256-hURpgxc99iIMtzIlR6Kbfqcbu1uYLDHnfVLqgmMbvFA=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern system shell with simple (and powerful) syntax";
-    homepage = https://github.com/redox-os/ion;
+    homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
-    broken = stdenv.isDarwin;
+  };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    libiconv
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  passthru = {
+    shellPath = "/bin/ion";
   };
 }

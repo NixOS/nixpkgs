@@ -1,40 +1,37 @@
-{ stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
-, mailutils ? null
+{ lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+, aclSupport ? true, acl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "logrotate";
-  version = "3.15.1";
+  version = "3.20.1";
 
   src = fetchFromGitHub {
     owner = "logrotate";
     repo = "logrotate";
     rev = version;
-    sha256 = "0l92zarygp34qnw3p5rcwqsvgz7zmmhi7lgh00vj2jb9zkjbldc0";
+    sha256 = "sha256-IegYAV7Mrw9GKMQOE5Bk0J/2ljfHzPlIipyYm3LrUcU=";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.
-  patchPhase = ''
-    sed -i -e 's,[a-z/]\+gzip,${gzip}/bin/gzip,' \
-           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' configure.ac
-
-    ${stdenv.lib.optionalString (mailutils != null) ''
-    sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
-    ''}
-  '';
-
-  autoreconfPhase = ''
-    ./autogen.sh
-  '';
+  configureFlags = [
+    "--with-compress-command=${gzip}/bin/gzip"
+    "--with-uncompress-command=${gzip}/bin/gunzip"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ popt ];
+  buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
-  meta = {
-    homepage = https://fedorahosted.org/releases/l/o/logrotate/;
+  passthru.tests = {
+    nixos-logrotate = nixosTests.logrotate;
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/logrotate/logrotate";
     description = "Rotates and compresses system logs";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.all;
   };
 }

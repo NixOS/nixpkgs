@@ -11,7 +11,7 @@ buildGoPackage rec {
   rev = "210d2dc333e90c7e3eedf4f2242507a8e83ed4ab";
 
   goPackagePath = "github.com/tsenart/deadcode";
-  excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
+  excludedPackages = "cmd/fillswitch/test-fixtures";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -22,8 +22,8 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "deadcode is a very simple utility which detects unused declarations in a Go package.";
-    homepage = https://github.com/remyoudompheng/go-misc/tree/master/deadcode;
+    description = "Very simple utility which detects unused declarations in a Go package";
+    homepage = "https://github.com/remyoudompheng/go-misc/tree/master/deadcode";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

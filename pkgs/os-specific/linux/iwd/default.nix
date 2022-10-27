@@ -1,29 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
-, fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , ell
 , coreutils
 , docutils
 , readline
+, openssl
 , python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "0.22";
+  version = "1.30";
 
   src = fetchgit {
-    url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "0mjc08ayq2k7sinqanrlm97dn88dxkqkyk2vqqcx1nqjvwvbpbsp";
+    sha256 = "sha256-9uyYXxnxRqWvzrw3QXCOT/ZubQ8/nrB+b60jKn1hAJk=";
   };
+
+  outputs = [ "out" "man" "doc" ]
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
     autoreconfHook
     docutils
-    pkgconfig
+    pkg-config
     python3Packages.wrapPython
   ];
 
@@ -33,7 +36,11 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  pythonPath = [
+  checkInputs = [ openssl ];
+
+  # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
+  # which doesn't cross-compile.
+  pythonPath = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];
@@ -46,17 +53,25 @@ stdenv.mkDerivation rec {
     "--with-dbus-datadir=${placeholder "out"}/share/"
     "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
     "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-networkdir=${placeholder "out"}/lib/systemd/network/"
   ];
 
   postUnpack = ''
+    mkdir -p iwd/ell
+    ln -s ${ell.src}/ell/useful.h iwd/ell/useful.h
+    ln -s ${ell.src}/ell/asn1-private.h iwd/ell/asn1-private.h
     patchShebangs .
   '';
 
+  doCheck = true;
+
   postInstall = ''
-    cp -a test/* $out/bin/
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
   '';
 
   preFixup = ''
@@ -72,11 +87,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
+  meta = with lib; {
+    homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
   };
 }

@@ -1,36 +1,75 @@
-{ stdenv, fetchFromGitHub, python2, git }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, installShellFiles
+, python3Packages
+, asciidoc
+, docbook_xsl
+, docbook_xml_dtd_45
+, git
+, perl
+, xmlto
+}:
 
-let
-  name = "stgit-${version}";
-  version = "0.20";
-in
-stdenv.mkDerivation {
-  inherit name;
+python3Packages.buildPythonApplication rec {
+  pname = "stgit";
+  version = "1.5";
 
   src = fetchFromGitHub {
-    owner = "ctmarinas";
+    owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "0zfrs9f6a84z5gr3k6y81h8jyar7h3q3z9p13cbrq9slljg5r6iw";
+    sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
   };
 
-  buildInputs = [ python2 git ];
+  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 python3Packages.setuptools ];
 
-  makeFlags = "prefix=$$out";
+  format = "other";
 
-  postInstall = ''
-    mkdir -p "$out/etc/bash_completion.d/"
-    ln -s ../../share/stgit/completion/stgit-completion.bash "$out/etc/bash_completion.d/"
+  checkInputs = [ git perl ];
+
+  postPatch = ''
+    for f in Documentation/*.xsl; do
+      substituteInPlace $f \
+        --replace http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl \
+                  ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        --replace http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl \
+                  ${docbook_xsl}/xml/xsl/docbook/html/docbook.xsl
+    done
+
+    substituteInPlace Documentation/texi.xsl \
+      --replace http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
+                ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
+
+    cat > stgit/_version.py <<EOF
+    __version__ = "${version}"
+    EOF
   '';
 
-  doCheck = false;
-  checkTarget = "test";
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "MAN_BASE_URL=${placeholder "out"}/share/man"
+    "XMLTO_EXTRA=--skip-validation"
+  ];
 
-  meta = with stdenv.lib; {
+  buildFlags = [ "all" "doc" ];
+
+  checkTarget = "test";
+  checkFlags = [ "PERL_PATH=${perl}/bin/perl" ];
+
+  installTargets = [ "install" "install-doc" "install-html" ];
+  postInstall = ''
+    installShellCompletion --cmd stg \
+      --fish completion/stg.fish \
+      --bash completion/stgit.bash \
+      --zsh completion/stgit.zsh
+  '';
+
+  meta = with lib; {
     description = "A patch manager implemented on top of Git";
-    homepage = http://procode.org/stgit/;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://stacked-git.github.io/";
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ jshholland ];
   };
 }

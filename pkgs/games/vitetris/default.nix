@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "vitetris";
-  version = "0.58.0";
+  version = "0.59.1";
 
   src = fetchFromGitHub {
     owner = "vicgeralds";
     repo = "vitetris";
     rev = "v${version}";
-    sha256 = "1fvw9yqg1q25x6dlfi4bl3hrrcdgl6wwq29j89aycxwdfxrxs09w";
+    sha256 = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
   };
 
   hardeningDisable = [ "format" ];
 
-  makeFlags = "INSTALL=install";
+  makeFlags = [ "INSTALL=install" ];
 
   meta = {
     description = "Terminal-based Tetris clone by Victor Nilsson";
-    homepage = http://www.victornils.net/tetris/;
+    homepage = "http://www.victornils.net/tetris/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ siers ];
 

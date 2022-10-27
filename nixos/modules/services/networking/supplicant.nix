@@ -39,26 +39,15 @@ let
         bindsTo = deps;
         after = deps;
         before = [ "network.target" ];
-        # Receive restart event after resume
-        partOf = [ "post-resume.target" ];
 
         path = [ pkgs.coreutils ];
 
         preStart = ''
-          ${optionalString (suppl.configFile.path!=null) ''
-            touch -a ${suppl.configFile.path}
-            chmod 600 ${suppl.configFile.path}
+          ${optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
+            (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
           ${optionalString suppl.userControlled.enable ''
-            if ! test -e ${suppl.userControlled.socketDir}; then
-                mkdir -m 0770 -p ${suppl.userControlled.socketDir}
-                chgrp ${suppl.userControlled.group} ${suppl.userControlled.socketDir}
-            fi
-
-            if test "$(stat --printf '%G' ${suppl.userControlled.socketDir})" != "${suppl.userControlled.group}"; then
-                echo "ERROR: bad ownership on ${suppl.userControlled.socketDir}" >&2
-                exit 1
-            fi
+            install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
           ''}
         '';
 
@@ -78,31 +67,31 @@ in
     networking.supplicant = mkOption {
       type = with types; attrsOf (submodule {
         options = {
-  
+
           configFile = {
-  
+
             path = mkOption {
               type = types.nullOr types.path;
               default = null;
-              example = literalExample "/etc/wpa_supplicant.conf";
-              description = ''
-                External <literal>wpa_supplicant.conf</literal> configuration file.
-                The configuration options defined declaratively within <literal>networking.supplicant</literal> have
-                precedence over options defined in <literal>configFile</literal>.
+              example = literalExpression "/etc/wpa_supplicant.conf";
+              description = lib.mdDoc ''
+                External `wpa_supplicant.conf` configuration file.
+                The configuration options defined declaratively within `networking.supplicant` have
+                precedence over options defined in `configFile`.
               '';
             };
-  
+
             writable = mkOption {
               type = types.bool;
               default = false;
-              description = ''
-                Whether the configuration file at <literal>configFile.path</literal> should be written to by
-                <literal>wpa_supplicant</literal>.
+              description = lib.mdDoc ''
+                Whether the configuration file at `configFile.path` should be written to by
+                `wpa_supplicant`.
               '';
             };
-  
+
           };
-  
+
           extraConf = mkOption {
             type = types.lines;
             default = "";
@@ -120,68 +109,68 @@ in
               model_name=NixOS_Unstable
               model_number=2015
             '';
-            description = ''
-              Configuration options for <literal>wpa_supplicant.conf</literal>.
-              Options defined here have precedence over options in <literal>configFile</literal>.
-              NOTE: Do not write sensitive data into <literal>extraConf</literal> as it will
-              be world-readable in the <literal>nix-store</literal>. For sensitive information
-              use the <literal>configFile</literal> instead.
+            description = lib.mdDoc ''
+              Configuration options for `wpa_supplicant.conf`.
+              Options defined here have precedence over options in `configFile`.
+              NOTE: Do not write sensitive data into `extraConf` as it will
+              be world-readable in the `nix-store`. For sensitive information
+              use the `configFile` instead.
             '';
           };
-  
+
           extraCmdArgs = mkOption {
             type = types.str;
             default = "";
             example = "-e/run/wpa_supplicant/entropy.bin";
             description =
-              "Command line arguments to add when executing <literal>wpa_supplicant</literal>.";
+              lib.mdDoc "Command line arguments to add when executing `wpa_supplicant`.";
           };
-  
+
           driver = mkOption {
             type = types.nullOr types.str;
             default = "nl80211,wext";
-            description = "Force a specific wpa_supplicant driver.";
+            description = lib.mdDoc "Force a specific wpa_supplicant driver.";
           };
-  
+
           bridge = mkOption {
             type = types.str;
             default = "";
-            description = "Name of the bridge interface that wpa_supplicant should listen at.";
+            description = lib.mdDoc "Name of the bridge interface that wpa_supplicant should listen at.";
           };
-  
+
           userControlled = {
-  
+
             enable = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
                 This is useful for laptop users that switch networks a lot and don't want
                 to depend on a large package such as NetworkManager just to pick nearby
                 access points.
               '';
             };
-  
+
             socketDir = mkOption {
               type = types.str;
               default = "/run/wpa_supplicant";
-              description = "Directory of sockets for controlling wpa_supplicant.";
+              description = lib.mdDoc "Directory of sockets for controlling wpa_supplicant.";
             };
-  
+
             group = mkOption {
               type = types.str;
               default = "wheel";
               example = "network";
-              description = "Members of this group can control wpa_supplicant.";
+              description = lib.mdDoc "Members of this group can control wpa_supplicant.";
             };
-  
+
           };
         };
       });
 
       default = { };
 
-      example = literalExample ''
+      example = literalExpression ''
         { "wlan0 wlan1" = {
             configFile.path = "/etc/wpa_supplicant.conf";
             userControlled.group = "network";
@@ -195,21 +184,21 @@ in
         }
       '';
 
-      description = ''
-        Interfaces for which to start <command>wpa_supplicant</command>.
+      description = lib.mdDoc ''
+        Interfaces for which to start {command}`wpa_supplicant`.
         The supplicant is used to scan for and associate with wireless networks,
         or to authenticate with 802.1x capable network switches.
 
         The value of this option is an attribute set. Each attribute configures a
-        <command>wpa_supplicant</command> service, where the attribute name specifies
-        the name of the interface that <command>wpa_supplicant</command> operates on.
+        {command}`wpa_supplicant` service, where the attribute name specifies
+        the name of the interface that {command}`wpa_supplicant` operates on.
         The attribute name can be a space separated list of interfaces.
-        The attribute names <literal>WLAN</literal>, <literal>LAN</literal> and <literal>DBUS</literal>
-        have a special meaning. <literal>WLAN</literal> and <literal>LAN</literal> are
-        configurations for universal <command>wpa_supplicant</command> service that is
+        The attribute names `WLAN`, `LAN` and `DBUS`
+        have a special meaning. `WLAN` and `LAN` are
+        configurations for universal {command}`wpa_supplicant` service that is
         started for each WLAN interface or for each LAN interface, respectively.
-        <literal>DBUS</literal> defines a device-unrelated <command>wpa_supplicant</command>
-        service that can be accessed through <literal>D-Bus</literal>.
+        `DBUS` defines a device-unrelated {command}`wpa_supplicant`
+        service that can be accessed through `D-Bus`.
       '';
 
     };
@@ -237,10 +226,10 @@ in
               ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceChars [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
           ${optionalString (hasAttr "WLAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
           ''}
           ${optionalString (hasAttr "LAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';
       })];

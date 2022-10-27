@@ -7,10 +7,10 @@ diff -ur trousers-0.3.11.2.orig/src/tcsd/tcsd_conf.c trousers-0.3.11.2/src/tcsd/
  
 +#ifndef ALLOW_NON_TSS_CONFIG_FILE
  	/* make sure user/group TSS owns the conf file */
- 	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
+ 	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
  		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
 @@ -775,6 +776,7 @@
- 		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
+ 		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
  		return TCSERR(TSS_E_INTERNAL_ERROR);
  	}
 +#endif

@@ -42,12 +42,12 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
 
-    if [ -n "$qtPluginPrefix" ]; then
+    if [ -n "${qtPluginPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
         cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
     fi
 
-    if [ -n "$qtQmlPrefix" ]; then
+    if [ -n "${qtQmlPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
     fi
 }
@@ -59,23 +59,24 @@ xdgDataSubdirs=( \
     "wallpapers" "applications" "desktop-directories" "mime" "appdata" "dbus-1" \
 )
 
-ecmHostPathSeen=( )
+# ecmHostPathsSeen is an associative array of the paths that have already been
+# seen by ecmHostPathHook.
+declare -gA ecmHostPathsSeen
 
-ecmUnseenHostPath() {
-    for pkg in "${ecmHostPathSeen[@]}"
-    do
-        if [ "${pkg:?}" == "$1" ]
-        then
-            return 1
-        fi
-    done
-
-    ecmHostPathSeen+=("$1")
-    return 0
+ecmHostPathIsNotSeen() {
+    if [[ -n "${ecmHostPathsSeen["$1"]:-}" ]]; then
+        # The path has been seen before.
+        return 1
+    else
+        # The path has not been seen before.
+        # Now it is seen, so record it.
+        ecmHostPathsSeen["$1"]=1
+        return 0
+    fi
 }
 
 ecmHostPathHook() {
-    ecmUnseenHostPath "$1" || return 0
+    ecmHostPathIsNotSeen "$1" || return 0
 
     local xdgConfigDir="$1/etc/xdg"
     if [ -d "$xdgConfigDir" ]

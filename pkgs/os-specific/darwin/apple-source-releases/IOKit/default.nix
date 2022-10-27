@@ -1,8 +1,8 @@
-{ stdenv, appleDerivation, IOKitSrcs, xnu }:
+{ lib, appleDerivation', stdenv, IOKitSrcs, xnu, darwin-stubs }:
 
 # Someday it'll make sense to split these out into their own packages, but today is not that day.
-appleDerivation {
-  srcs = stdenv.lib.attrValues IOKitSrcs;
+appleDerivation' stdenv {
+  srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -14,12 +14,15 @@ appleDerivation {
   ];
 
   installPhase = ''
-    ###### IMPURITIES
     mkdir -p $out/Library/Frameworks/IOKit.framework
-    pushd $out/Library/Frameworks/IOKit.framework
-    ln -s /System/Library/Frameworks/IOKit.framework/IOKit
-    ln -s /System/Library/Frameworks/IOKit.framework/Resources
-    popd
+
+    ###### IMPURITIES
+    ln -s /System/Library/Frameworks/IOKit.framework/Resources \
+      $out/Library/Frameworks/IOKit.framework
+
+    ###### STUBS
+    cp ${darwin-stubs}/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit.tbd \
+      $out/Library/Frameworks/IOKit.framework
 
     ###### HEADERS
 
@@ -179,8 +182,8 @@ appleDerivation {
     # video: missing altogether
   '';
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ joelteon copumpkin ];
+  meta = with lib; {
+    maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;
   };

@@ -1,10 +1,10 @@
 # This builder is for FoundationDB's original, somewhat strange visual studio +
 # make build system. In FoundationDB 6.1 and later, there's a new CMake system
 # (which will eventually become the default version.)
-{ stdenv49, lib, fetchurl, fetchFromGitHub
+{ gcc6Stdenv, lib, fetchurl, fetchFromGitHub
 
-, which, findutils, m4, gawk
-, python, openjdk, mono, libressl
+, which, m4
+, python2, openjdk, mono, libressl
 , ...
 }:
 
@@ -12,7 +12,7 @@ let
   # hysterical raisins dictate a version of boost this old. however,
   # we luckily do not need to build anything, we just need the header
   # files.
-  boost152 = stdenv49.mkDerivation {
+  boost152 = gcc6Stdenv.mkDerivation {
     name = "boost-headers-1.52.0";
 
     src = fetchurl {
@@ -21,7 +21,7 @@ let
     };
 
     dontConfigure = true;
-    buildPhase = ":";
+    dontBuild = true;
     installPhase = "mkdir -p $out/include && cp -R boost $out/include/";
   };
 
@@ -33,10 +33,6 @@ let
     # the revision can be inferred from the fdb tagging policy
     , rev    ? "refs/tags/${version}"
 
-    # in theory newer versions of fdb support newer compilers, but they
-    # don't :( maybe one day
-    , stdenv ? stdenv49
-
     # in theory newer versions of fdb support newer boost versions, but they
     # don't :( maybe one day
     , boost ? boost152
@@ -45,7 +41,7 @@ let
     , officialRelease ? true
 
     , patches ? []
-    }: stdenv.mkDerivation {
+    }: gcc6Stdenv.mkDerivation {
         pname = "foundationdb";
         inherit version;
 
@@ -55,7 +51,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python openjdk gawk which m4 findutils mono ];
+        nativeBuildInputs = [ python2 openjdk which m4 mono ];
         buildInputs = [ libressl boost ];
 
         inherit patches;
@@ -88,11 +84,11 @@ let
         makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
-          ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
+          ++ lib.optionals (lib.versionOlder version "6.0") [ "fdb_c" ]
           # Needed environment overrides
           ++ [ "KVRELEASE=1"
                "NOSTRIP=1"
-             ] ++ lib.optional officialRelease [ "RELEASE=true" ];
+             ] ++ lib.optionals officialRelease [ "RELEASE=true" ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -104,7 +100,7 @@ let
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
 
-        '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+        '' + lib.optionalString (lib.versionOlder version "6.0") ''
           # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
@@ -143,9 +139,9 @@ let
 
         outputs = [ "out" "lib" "dev" "pythonsrc" ];
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Open source, distributed, transactional key-value store";
-          homepage    = https://www.foundationdb.org;
+          homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
           maintainers = with maintainers; [ thoughtpolice ];

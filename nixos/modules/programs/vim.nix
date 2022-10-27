@@ -9,15 +9,25 @@ in {
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, installs vim and configures vim to be the default editor
         using the EDITOR environment variable.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.vim;
+      defaultText = literalExpression "pkgs.vim";
+      example = literalExpression "pkgs.vimHugeX";
+      description = lib.mdDoc ''
+        vim package to use.
       '';
     };
   };
 
   config = mkIf cfg.defaultEditor {
-        environment.systemPackages = [ pkgs.vim ];
-        environment.variables = { EDITOR = mkOverride 900 "vim"; };
+    environment.systemPackages = [ cfg.package ];
+    environment.variables = { EDITOR = mkOverride 900 "vim"; };
   };
 }

@@ -1,27 +1,24 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "apcupsd-exporter";
-  version = "unstable-2019-03-14";
-
-  goPackagePath = "github.com/mdlayher/apcupsd_exporter";
-
-  goDeps = ./apcupsd-exporter_deps.nix;
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "apcupsd_exporter";
-    rev = "cbd49be";
-    sha256 = "1h5z295m9bddch5bc8fppn02b31h370yns6026a1d4ygfy3w46y0";
+    rev = "v${version}";
+    sha256 = "sha256-c0LsUqpJbmWQmbmSGdEy7Bbk20my6iWNLeqtU5BjYlw=";
   };
 
-  doCheck = true;
+  vendorSha256 = "sha256-bvLwHLviIAGmxYY1O0wFDWAMginEUklicrbjIbbPuUw=";
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) apcupsd; };
+
+  meta = with lib; {
     description = "Provides a Prometheus exporter for the apcupsd Network Information Server (NIS)";
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ maintainers."1000101" ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ _1000101 mdlayher ];
   };
 }

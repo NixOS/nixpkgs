@@ -1,26 +1,45 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, pytestCheckHook
+, procps
+, tmux
+}:
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.8.2";
+  version = "0.13.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0nh6dvf8g93hv7cma6r8l88k8l20zck6a0ax29mrdg03f9hqdk9a";
+  src = fetchFromGitHub {
+    owner = "tmux-python";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-u08lxVMuyO5CwFbmxn69QqdSWcvGaSMZgizRJlsHa0k=";
   };
 
-  checkInputs = [ pytest ];
-  postPatch = ''
-    sed -i 's/==.*$//' requirements/test.txt
-  '';
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  # No tests in archive
-  doCheck = false;
+  checkInputs = [
+    procps
+    tmux
 
-  meta = with stdenv.lib; {
-    description = "Scripting library for tmux";
-    homepage = https://libtmux.readthedocs.io/;
-    license = licenses.bsd3;
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_test.py" ];
+
+  pythonImportsCheck = [ "libtmux" ];
+
+  meta = with lib; {
+    description = "Typed scripting library / ORM / API wrapper for tmux";
+    homepage = "https://libtmux.git-pull.com/";
+    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }

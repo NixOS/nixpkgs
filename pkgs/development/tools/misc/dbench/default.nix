@@ -1,15 +1,19 @@
-{ stdenv, fetchgit, autoconf, popt, zlib }:
+{ lib, stdenv, fetchgit, autoconf, popt, zlib, rpcsvc-proto, libtirpc }:
 
-stdenv.mkDerivation {
-  name = "dbench-2013-01-01";
+stdenv.mkDerivation rec {
+  pname = "dbench";
+  version = "2013-01-01";
 
   src = fetchgit {
-    url = git://git.samba.org/sahlberg/dbench.git;
+    url = "git://git.samba.org/sahlberg/${pname}.git";
     rev = "65b19870ed8d25bff14cafa1c30beb33f1fb6597";
     sha256 = "16lcbwmmx8z5i73k3dnf54yffrpx7ql3y9k3cpkss9dcyxb1p83i";
   };
 
-  buildInputs = [ autoconf popt zlib ];
+  nativeBuildInputs = [ autoconf rpcsvc-proto ];
+  buildInputs = [ popt zlib libtirpc ];
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
 
   patches = [
     # patch has been also sent upstream and might be included in future versions
@@ -32,9 +36,9 @@ stdenv.mkDerivation {
     ln -s dbench/doc/dbench/loadfiles $out/share/loadfiles
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filesystem benchmark tool based on load patterns";
-    homepage = https://dbench.samba.org/;
+    homepage = "https://dbench.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , django
@@ -7,25 +7,35 @@
 
 buildPythonPackage rec {
   pname = "django-filter";
-  version = "2.2.0";
+  version = "22.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "057xiijig8r2nxrd9gj1nki168422rsh8ap5vkbr9zyp1mzvbpn3";
+    sha256 = "sha256-7Uc7duhPfoOyURuyBQw++zbRNSB9ASjf465LNuNZS6U=";
   };
 
   propagatedBuildInputs = [ django ];
 
+  pythonImportsCheck = [
+    "django_filters"
+  ];
+
   # Tests fail (needs the 'crispy_forms' module not packaged on nixos)
   doCheck = false;
-  checkInputs = [ djangorestframework django mock ];
+
+  checkInputs = [
+    djangorestframework
+    django
+    mock
+  ];
+
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} runtests.py tests
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
     homepage = "https://pypi.org/project/django-filter/";
     license = licenses.bsd3;

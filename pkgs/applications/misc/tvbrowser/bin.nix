@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -8,11 +8,9 @@ let
     comment = "Themeable and easy to use TV Guide";
     desktopName = "TV-Browser";
     genericName = "Electronic TV Program Guide";
-    categories = "AudioVideo;TV;Java;";
-    startupNotify = "true";
-    extraEntries = ''
-      StartupWMClass=tvbrowser-TVBrowser
-    '';
+    categories = [ "AudioVideo" "TV" "Java" ];
+    startupNotify = true;
+    startupWMClass = "tvbrowser-TVBrowser";
   };
 
 in stdenv.mkDerivation rec {
@@ -43,12 +41,13 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/java/${pname}/${pname}.jar" \
-      --run "cd $out/share/java/${pname}"
+      --chdir "$out/share/java/${pname}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic TV Program Guide";
-    homepage = https://www.tvbrowser.org/;
+    homepage = "https://www.tvbrowser.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];

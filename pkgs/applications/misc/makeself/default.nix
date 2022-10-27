@@ -1,22 +1,25 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, which, zstd, pbzip2 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.4.5";
   pname = "makeself";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     rev = "release-${version}";
-    sha256 = "1lw3gx1zpzp2wmzrw5v7k31vfsrdzadqha9ni309fp07g8inrr9n";
+    fetchSubmodules = true;
+    sha256 = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
   };
 
-  # backported from https://github.com/megastep/makeself/commit/77156e28ff21231c400423facc7049d9c60fd1bd
-  patches = [ ./Use-rm-from-PATH.patch ];
+  postPatch = "patchShebangs test";
 
-  postPatch = ''
-    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i makeself.sh
-  '';
+  # Issue #110149: our default /bin/sh apparently has 32-bit math only
+  # (attribute busybox-sandbox-shell), and that causes problems
+  # when running these tests inside build, based on free disk space.
+  doCheck = false;
+  checkTarget = "test";
+  checkInputs = [ which zstd pbzip2 ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/{${pname}-${version},man/man1}}
@@ -26,8 +29,12 @@ stdenv.mkDerivation rec {
     cp makeself-header.sh $out/share/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://megastep.org/makeself;
+  fixupPhase = ''
+    sed -e "s|^HEADER=.*|HEADER=$out/share/${pname}-${version}/makeself-header.sh|" -i $out/bin/makeself
+  '';
+
+  meta = with lib; {
+    homepage = "https://makeself.io";
     description = "Utility to create self-extracting packages";
     license = licenses.gpl2;
     maintainers = [ maintainers.wmertens ];

@@ -1,24 +1,45 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "semver";
-  version = "2.8.1";
+  version = "2.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "k-bx";
+    owner = "python-semver";
     repo = "python-semver";
-    rev = "41775dd5f143dfa6ca94885056c9ef5b3ed4e6e1"; # not tagged in repository
-    sha256 = "1rqaakha4sw06k9h0h4g1wmk66zkmhpq92y2rw0kyfpp6xk1zbk2";
+    rev = version;
+    hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov-on-fail/d" setup.cfg
   '';
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = [
+    # Don't test the documentation
+    "docs/*.rst"
+  ];
+
+  pythonImportsCheck = [
+    "semver"
+  ];
+
+  meta = with lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
-    homepage = https://github.com/k-bx/python-semver;
+    homepage = "https://python-semver.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };

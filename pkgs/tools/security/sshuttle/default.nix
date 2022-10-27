@@ -1,41 +1,48 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper
-, coreutils, iptables, nettools, openssh, procps }:
+{ lib
+, stdenv
+, python3Packages
+, makeWrapper
+, coreutils
+, iptables
+, nettools
+, openssh
+, procps
+}:
 
 python3Packages.buildPythonApplication rec {
-  name = "sshuttle-${version}";
-  version = "0.78.5";
+  pname = "sshuttle";
+  version = "1.1.1";
 
-  src = fetchurl {
-    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
-    url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
   };
 
   patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
-  buildInputs =
-    [ coreutils openssh procps nettools ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
-
-  checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
-
-  postInstall = let
-    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
-  in ''
-  wrapProgram $out/bin/sshuttle \
-    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace '--cov=sshuttle --cov-branch --cov-report=term-missing' ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/sshuttle/sshuttle/;
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
+
+  checkInputs = with python3Packages; [ pytestCheckHook ];
+
+  postInstall = ''
+    wrapProgram $out/bin/sshuttle \
+      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the
       target network (though it does require Python 2.7, Python 3.5 or later at both ends).
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ domenkozar carlosdagos ];
-    platforms = platforms.unix;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ domenkozar carlosdagos SuperSandro2000 ];
   };
 }

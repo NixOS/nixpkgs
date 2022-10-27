@@ -1,40 +1,43 @@
-{ stdenv, fetchpatch, fetchurl, yacc }:
+{ lib
+, stdenv
+, fetchurl
+, bison
+}:
 
-let
-
+stdenv.mkDerivation rec {
+  pname = "as31";
   version = "2.3.1";
 
-in stdenv.mkDerivation {
-  pname = "as31";
-  inherit version;
   src = fetchurl {
-    name = "as31-${version}.tar.gz"; # Nix doesn't like the colons in the URL
-    url = "http://wiki.erazor-zone.de/_media/wiki:projects:linux:as31:as31-${version}.tar.gz";
-    sha256 = "0mbk6z7z03xb0r0ccyzlgkjdjmdzknck4yxxmgr9k7v8f5c348fd";
+    url = "http://wiki.erazor-zone.de/_media/wiki:projects:linux:as31:${pname}-${version}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
+    hash = "sha256-zSEyWHFon5nyq717Mpmdv1XZ5Hz0e8ZABqsP8M83c1U=";
   };
 
-  buildInputs = [ yacc ];
-
   patches = [
-    (fetchpatch {
-       name = "CVE-2012-0808.patch";
-       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=655496;filename=as31-mkstemps.patch;msg=5";
-       sha256 = "0iia4wa8m141bwz4588yxb1dp2qwhapcii382sncm6jvwyngwh21";
-     })
+    # Check return value of getline in run.c
+    ./0000-getline-break.patch
   ];
 
+  postPatch = ''
+    # parser.c is generated from parser.y; it is better to generate it via bison
+    # instead of using the prebuilt one, especially in x86_64
+    rm -f as31/parser.c
+  '';
+
   preConfigure = ''
-    chmod +x ./configure
+    chmod +x configure
   '';
 
-  postConfigure = ''
-    rm as31/parser.c
-  '';
+  nativeBuildInputs = [
+    bison
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://wiki.erazor-zone.de/wiki:projects:linux:as31;
-    description = "An 8031/8051 assembler by Ken Stauffer and Theo Deraadt which produces a variety of object code output formats";
-    maintainers = with maintainers; [ aneeshusa ];
-    platforms = with platforms; unix;
+  meta = with lib; {
+    homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
+    description = "An 8031/8051 assembler";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

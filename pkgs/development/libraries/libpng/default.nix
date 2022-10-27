@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, apngSupport ? true }:
+{ lib, stdenv, fetchurl, zlib, apngSupport ? true }:
 
 assert zlib != null;
 
@@ -8,10 +8,10 @@ let
     url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
     sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2";
   };
-  whenPatched = stdenv.lib.optionalString apngSupport;
+  whenPatched = lib.optionalString apngSupport;
 
 in stdenv.mkDerivation rec {
-  name = "libpng" + whenPatched "-apng" + "-${version}";
+  pname = "libpng" + whenPatched "-apng";
   version = "1.6.37";
 
   src = fetchurl {
@@ -29,11 +29,11 @@ in stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
-    homepage = http://www.libpng.org/pub/png/libpng.html;
+    homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng2;
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat maintainers.fuuzetsu ];
+    maintainers = [ maintainers.vcunat ];
   };
 }

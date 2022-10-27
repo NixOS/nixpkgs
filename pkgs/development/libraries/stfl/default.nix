@@ -1,22 +1,21 @@
-{ stdenv, fetchurl, ncurses, libiconv }:
+{ lib, stdenv, fetchurl, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "stfl-0.24";
+  pname = "stfl";
+  version = "0.24";
 
   src = fetchurl {
-    url = "http://www.clifford.at/stfl/${name}.tar.gz";
+    url = "http://www.clifford.at/stfl/stfl-${version}.tar.gz";
     sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
   };
 
   buildInputs = [ ncurses libiconv ];
 
-  buildPhase = ''
+  preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
-  '' ) + ''
-    make
   '';
 
   installPhase = ''
@@ -27,10 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = http://www.clifford.at/stfl/;
+    homepage = "http://www.clifford.at/stfl/";
     description = "A library which implements a curses-based widget set for text terminals";
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
   };
 }

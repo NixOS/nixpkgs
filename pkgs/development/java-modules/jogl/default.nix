@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ant, jdk, git, xorg, udev, libGL, libGLU }:
+{ lib, stdenv, fetchgit, ant, jdk8, git, xorg, udev, libGL, libGLU }:
 
 {
   jogl_2_3_2 =
@@ -6,7 +6,7 @@
       version = "2.3.2";
 
       gluegen-src = fetchgit {
-        url = git://jogamp.org/srv/scm/gluegen.git;
+        url = "git://jogamp.org/srv/scm/gluegen.git";
         rev = "v${version}";
         sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
         fetchSubmodules = true;
@@ -16,7 +16,7 @@
       inherit version;
 
       src = fetchgit {
-        url = git://jogamp.org/srv/scm/jogl.git;
+        url = "git://jogamp.org/srv/scm/jogl.git";
         rev = "v${version}";
         sha256 = "0msi2gxiqm2yqwkmxqbh521xdrimw1fly20g890r357rcgj8fsn3";
         fetchSubmodules = true;
@@ -28,8 +28,14 @@
           -exec sed -i 's@"libGLU.so"@"${libGLU}/lib/libGLU.so"@' {} \;
       '';
 
-      nativeBuildInputs = [ jdk ant git ];
+      # TODO: upgrade to jdk https://github.com/NixOS/nixpkgs/pull/89731
+      nativeBuildInputs = [ jdk8 ant git ];
       buildInputs = [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
+
+      # Workaround build failure on -fno-common toolchains:
+      #   ld: ../obj/Bindingtest1p1Impl_JNI.o:(.bss+0x8): multiple definition of
+      #     `unsigned_size_t_1'; ../obj/TK_Surface_JNI.o:(.bss+0x8): first defined here
+      NIX_CFLAGS_COMPILE = "-fcommon";
 
       buildPhase = ''
         cp -r ${gluegen-src} $NIX_BUILD_TOP/gluegen
@@ -54,9 +60,9 @@
         cp $NIX_BUILD_TOP/jogl/build/jar/jogl-all{,-natives-linux-amd64}.jar  $out/share/java/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
-        homepage = https://jogamp.org/;
+        homepage = "https://jogamp.org/";
         license = licenses.bsd3;
         platforms = [ "x86_64-linux" ];
       };

@@ -1,21 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "funcy";
-  version = "1.13";
+  version = "1.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hxii7g4fn301vr8wg53jc1jkvbjlbaz1fbpgpn4362xcwzk73wi";
+    sha256 = "40b9b9a88141ae6a174df1a95861f2b82f2fdc17669080788b73a3ed9370e968";
   };
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of fancy functional tools focused on practicality";
     homepage = "https://funcy.readthedocs.org/";
     license = licenses.bsd3;

@@ -1,29 +1,31 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, libeb, lzo
-, qtbase, qtmultimedia, qttools, qtwebengine }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, libeb, lzo
+, qtmultimedia, qttools, qtwebengine, wrapQtAppsHook }:
 
-mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qolibri";
-  version = "2019-07-22";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "qolibri";
-    rev = "b58f9838d39300cba444eba725a369181c5d746b";
-    sha256 = "0kcc6dvbcmq9y7hk8mp23pydiaqz6f0clg64d1f2y04ppphmah42";
+    rev = version;
+    sha256 = "jyLF1MKDVH0Lt8lw+O93b+LQ4J+s42O3hebthJk83hg=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake qttools wrapQtAppsHook ];
   buildInputs = [
-    libeb lzo qtbase qtmultimedia qttools qtwebengine
+    libeb lzo qtmultimedia qtwebengine
   ];
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    install -D $src/qolibri.desktop -t $out/share/applications
+  '';
 
   meta = with lib; {
-    homepage = https://github.com/ludios/qolibri;
+    homepage = "https://github.com/ludios/qolibri";
     description = "EPWING reader for viewing Japanese dictionaries";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2;
   };
 }

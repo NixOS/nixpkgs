@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, pkgconfig, linkFarm, lightdm-enso-os-greeter
-, dbus, pcre, epoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
-, gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, linkFarm, lightdm-enso-os-greeter
+, dbus, pcre, libepoxy, xorg, at-spi2-core, libxklavier, libxkbcommon
+, gtk3, vala, cmake, libgee, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation {
-  version = "0.2.1";
   pname = "lightdm-enso-os-greeter";
+  version = "0.2.1";
 
-  src = fetchgit {
-    url = https://github.com/nick92/Enso-OS;
+  src = fetchFromGitHub {
+    owner = "nick92";
+    repo = "Enso-OS";
     rev = "ed48330bfd986072bd82ac542ed8f8a7365c6427";
-    sha256 = "11jm181jq1vbn83h235avpdxz7pqq6prqyzki5yryy53mkj4kgxz";
+    sha256 = "sha256-v79J5KyjeJ99ifN7nK/B+J7f292qDAEHsmsHLAMKVYY=";
   };
 
   patches = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -27,17 +28,17 @@ stdenv.mkDerivation {
     dbus
     gtk3
     pcre
-    epoxy
+    libepoxy
     libgee
-    libX11
+    xorg.libX11
     lightdm
-    libXdmcp
+    xorg.libXdmcp
     gdk-pixbuf
     clutter-gtk
     libxklavier
     at-spi2-core
     libxkbcommon
-    libpthreadstubs
+    xorg.libpthreadstubs
     librsvg
   ];
 
@@ -55,12 +56,12 @@ stdenv.mkDerivation {
       --replace "pantheon-greeter" "$out/bin/pantheon-greeter"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A fork of pantheon greeter that positions elements in a central and
       vertigal manner and adds a blur effect to the background
     '';
-    homepage = https://github.com/nick92/Enso-OS;
+    homepage = "https://github.com/nick92/Enso-OS";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

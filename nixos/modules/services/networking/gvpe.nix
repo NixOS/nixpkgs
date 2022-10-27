@@ -3,7 +3,7 @@
 {config, pkgs, lib, ...}:
 
 let
-  inherit (lib) mkOption mkIf;
+  inherit (lib) mkOption mkIf types;
 
   cfg = config.services.gvpe;
 
@@ -27,7 +27,7 @@ let
     text = ''
       #! /bin/sh
 
-      export PATH=$PATH:${pkgs.iproute}/sbin
+      export PATH=$PATH:${pkgs.iproute2}/sbin
 
       ip link set $IFNAME up
       ip address add ${cfg.ipAddress} dev $IFNAME
@@ -42,20 +42,18 @@ in
 {
   options = {
     services.gvpe = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run gvpe
-        '';
-      };
+      enable = lib.mkEnableOption (lib.mdDoc "gvpe");
+
       nodename = mkOption {
         default = null;
-        description =''
+        type = types.nullOr types.str;
+        description =lib.mdDoc ''
           GVPE node name
         '';
       };
       configText = mkOption {
         default = null;
+        type = types.nullOr types.lines;
         example = ''
           tcp-port = 655
           udp-port = 655
@@ -70,33 +68,37 @@ in
           on alpha if-up = if-up-0
           on alpha pid-file = /var/gvpe/gvpe.pid
         '';
-        description = ''
+        description = lib.mdDoc ''
           GVPE config contents
         '';
       };
       configFile = mkOption {
         default = null;
+        type = types.nullOr types.path;
         example = "/root/my-gvpe-conf";
-        description = ''
+        description = lib.mdDoc ''
           GVPE config file, if already present
         '';
       };
       ipAddress = mkOption {
         default = null;
-        description = ''
+        type = types.nullOr types.str;
+        description = lib.mdDoc ''
           IP address to assign to GVPE interface
         '';
       };
       subnet = mkOption {
         default = null;
+        type = types.nullOr types.str;
         example = "10.0.0.0/8";
-        description = ''
+        description = lib.mdDoc ''
           IP subnet assigned to GVPE network
         '';
       };
       customIFSetup = mkOption {
         default = "";
-        description = ''
+        type = types.lines;
+        description = lib.mdDoc ''
           Additional commands to apply in ifup script
         '';
       };

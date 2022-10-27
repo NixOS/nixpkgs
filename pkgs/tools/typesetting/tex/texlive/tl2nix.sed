@@ -8,6 +8,9 @@ $a}
 # quote package names, as some start with a number :-/
 s/^name (.*)/name "\1"/
 
+# extract revision
+s/^revision ([0-9]*)$/  revision = \1;/p
+
 # form an attrmap per package
 /^name /s/^name (.*)/\1 = {/p
 /^$/,1i};
@@ -29,3 +32,7 @@ s/^catalogue-version_(.*)/  version = "\1";/p
 # extract deps
 s/^depend ([^.]*)$/  deps."\1" = tl."\1";/p
 
+# extract hyphenation patterns and formats
+# (this may create duplicate lines, use uniq to remove them)
+/^execute\sAddHyphen/i\  hasHyphens = true;
+/^execute\sAddFormat/i\  hasFormats = true;

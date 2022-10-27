@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, zlib, boost }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, zlib, boost }:
 
 let
   glucose' = fetchurl {
@@ -8,13 +8,14 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "aspino-unstable-2017-03-09";
+  pname = "aspino";
+  version = "unstable-2018-03-24";
 
   src = fetchFromGitHub {
     owner = "alviano";
     repo = "aspino";
-    rev = "e31c3b4e5791a454e6602439cb26bd98d23c4e78";
-    sha256 = "0annsjs2prqmv1lbs0lxr7yclfzh47xg9zyiq6mdxcc02rxsi14f";
+    rev = "4d7483e328bdf9a00ef1eb7f2868e7b0f2a82d56";
+    hash = "sha256-R1TpBDGdq+NQQzmzqk0wYaz2Hns3qru0AkAyFPQasPA=";
   };
 
   buildInputs = [ zlib boost ];
@@ -38,13 +39,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SAT/PseudoBoolean/MaxSat/ASP solver using glucose";
-    maintainers = with maintainers; [ gebner ma27 ];
+    maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.asl20;
-    homepage = http://alviano.net/software/maxino/;
+    homepage = "https://alviano.net/software/maxino/";
     # See pkgs/applications/science/logic/glucose/default.nix
     badPlatforms = [ "aarch64-linux" ];
+    # src/MaxSatSolver.cc:280:62: error: ordered comparison between pointer and zero ('unsigned int *' and 'int')
+    broken = (stdenv.isDarwin && stdenv.isx86_64); # broken since 2019-05-07 on hydra
   };
 }

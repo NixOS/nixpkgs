@@ -1,7 +1,7 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
 
 # dependencies
-, glib, libXinerama
+, glib, libXinerama, catch2
 
 # optional features without extra dependencies
 , mpdSupport          ? true
@@ -15,7 +15,7 @@
                             , docbook_xsl ? null , docbook_xml_dtd_44 ? null
 
 , ncursesSupport      ? true      , ncurses       ? null
-, x11Support          ? true      , xlibsWrapper           ? null
+, x11Support          ? true      , freetype, xorg
 , xdamageSupport      ? x11Support, libXdamage    ? null
 , doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
@@ -43,7 +43,6 @@ assert docsSupport         -> docbook2x != null && libxslt != null
 
 assert ncursesSupport      -> ncurses != null;
 
-assert x11Support          -> xlibsWrapper != null;
 assert xdamageSupport      -> x11Support && libXdamage != null;
 assert imlib2Support       -> x11Support && imlib2     != null;
 assert luaSupport          -> lua != null;
@@ -64,17 +63,17 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 assert journalSupport      -> systemd != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.11.5";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "1a75ss48mn9pknrxy33dh5rdgm67a5kpddsyqfhlcn1761kfzzyp";
+    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
   };
 
   postPatch = ''
@@ -85,15 +84,17 @@ stdenv.mkDerivation rec {
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
+
+    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses
-    ++ optional  x11Support         xlibsWrapper
+    ++ optionals x11Support         [ freetype xorg.libICE xorg.libX11 xorg.libXext xorg.libXft xorg.libSM ]
     ++ optional  xdamageSupport     libXdamage
     ++ optional  imlib2Support      imlib2
     ++ optional  luaSupport         lua
@@ -133,8 +134,10 @@ stdenv.mkDerivation rec {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://conky.sourceforge.net/;
+  doCheck = true;
+
+  meta = with lib; {
+    homepage = "http://conky.sourceforge.net/";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;

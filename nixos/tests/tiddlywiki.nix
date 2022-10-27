@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... }: {
+import ./make-test-python.nix ({ ... }: {
   name = "tiddlywiki";
   nodes = {
     default = {
@@ -20,48 +20,50 @@ import ./make-test.nix ({ ... }: {
     };
   };
 
-  testScript = ''
-    startAll;
+  testScript =
+    ''
+      start_all()
 
-    subtest "by default works without configuration", sub {
-      $default->waitForUnit("tiddlywiki.service");
-    };
+      with subtest("by default works without configuration"):
+          default.wait_for_unit("tiddlywiki.service")
 
-    subtest "by default available on port 8080 without auth", sub {
-      $default->waitForUnit("tiddlywiki.service");
-      $default->waitForOpenPort(8080);
-      $default->succeed("curl --fail 127.0.0.1:8080");
-    };
+      with subtest("by default available on port 8080 without auth"):
+          default.wait_for_unit("tiddlywiki.service")
+          default.wait_for_open_port(8080)
+          # we output to /dev/null here to avoid a python UTF-8 decode error
+          # but the check will still fail if the service doesn't respond
+          default.succeed("curl --fail -o /dev/null 127.0.0.1:8080")
 
-    subtest "by default creates empty wiki", sub {
-      $default->succeed("test -f /var/lib/tiddlywiki/tiddlywiki.info");
-    };
+      with subtest("by default creates empty wiki"):
+          default.succeed("test -f /var/lib/tiddlywiki/tiddlywiki.info")
 
-    subtest "configured on port 3000 with basic auth", sub {
-      $configured->waitForUnit("tiddlywiki.service");
-      $configured->waitForOpenPort(3000);
-      $configured->fail("curl --fail 127.0.0.1:3000");
-      $configured->succeed("curl --fail 127.0.0.1:3000 --user somelogin:somesecret");
-    };
+      with subtest("configured on port 3000 with basic auth"):
+          configured.wait_for_unit("tiddlywiki.service")
+          configured.wait_for_open_port(3000)
+          configured.fail("curl --fail -o /dev/null 127.0.0.1:3000")
+          configured.succeed(
+              "curl --fail -o /dev/null 127.0.0.1:3000 --user somelogin:somesecret"
+          )
 
-    subtest "configured with different wikifolder", sub {
-      $configured->succeed("test -f /var/lib/tiddlywiki/tiddlywiki.info");
-    };
+      with subtest("restart preserves changes"):
+          # given running wiki
+          default.wait_for_unit("tiddlywiki.service")
+          # with some changes
+          default.succeed(
+              'curl --fail --request PUT --header \'X-Requested-With:TiddlyWiki\' \
+              --data \'{ "title": "title", "text": "content" }\' \
+              --url 127.0.0.1:8080/recipes/default/tiddlers/somepage '
+          )
+          default.succeed("sleep 2")
 
-    subtest "restart preserves changes", sub {
-      # given running wiki
-      $default->waitForUnit("tiddlywiki.service");
-      # with some changes
-      $default->succeed("curl --fail --request PUT --header 'X-Requested-With:TiddlyWiki' --data '{ \"title\": \"title\", \"text\": \"content\" }' --url 127.0.0.1:8080/recipes/default/tiddlers/somepage ");
-      $default->succeed("sleep 2"); # server syncs to filesystem on timer
+          # when wiki is cycled
+          default.systemctl("restart tiddlywiki.service")
+          default.wait_for_unit("tiddlywiki.service")
+          default.wait_for_open_port(8080)
 
-      # when wiki is cycled
-      $default->systemctl("restart tiddlywiki.service");
-      $default->waitForUnit("tiddlywiki.service");
-      $default->waitForOpenPort(8080);
-
-      # the change is preserved
-      $default->succeed("curl --fail 127.0.0.1:8080/recipes/default/tiddlers/somepage");
-    };
-  '';
+          # the change is preserved
+          default.succeed(
+              "curl --fail -o /dev/null 127.0.0.1:8080/recipes/default/tiddlers/somepage"
+          )
+    '';
 })

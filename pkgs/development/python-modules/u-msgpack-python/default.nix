@@ -2,29 +2,27 @@
 , lib
 , fetchPypi
 , glibcLocales
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "u-msgpack-python";
-  version = "2.5.1";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6c02a0654a5e11f8fad532ed634109ed49cdc929f7b972848773e4e0ce52f30c";
+    sha256 = "b7e7d433cab77171a4c752875d91836f3040306bab5063fb6dbe11f64ea69551";
   };
 
   LC_ALL="en_US.UTF-8";
 
   buildInputs = [ glibcLocales ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";
-    homepage = https://github.com/vsergeev/u-msgpack-python;
+    homepage = "https://github.com/vsergeev/u-msgpack-python";
     license = lib.licenses.mit;
   };
 

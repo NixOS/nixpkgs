@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pytest plugin used to set environment variables";
-    homepage = https://github.com/MobileDynasty/pytest-env;
+    homepage = "https://github.com/MobileDynasty/pytest-env";
     license = licenses.mit;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

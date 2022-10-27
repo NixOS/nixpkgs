@@ -5,37 +5,56 @@
 , isPyPy
 , ipython
 , python
+, scikit-build
+, cmake
+, pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "line_profiler";
-  version = "2.1.2";
+  pname = "line-profiler";
+  version = "3.5.1";
+
+  disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "efa66e9e3045aa7cb1dd4bf0106e07dec9f80bc781a993fbaf8162a36c20af5c";
+    pname = "line_profiler";
+    inherit version;
+    sha256 = "sha256-d0ACCL+9XUNBk4qaOk+1GU9a9/wjstSWyRN1X4MQ6Lg=";
   };
 
-  patches = [ ./python37.patch ];
+  nativeBuildInputs = [
+    cython
+    cmake
+    scikit-build
+  ];
 
-  buildInputs = [ cython ];
+  propagatedBuildInputs = [
+    ipython
+  ];
 
-  propagatedBuildInputs = [ ipython ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  disabled = isPyPy;
+  dontUseCmakeConfigure = true;
 
   preBuild = ''
     rm -f _line_profiler.c
   '';
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "line_profiler"
+  ];
+
+  meta = with lib; {
     description = "Line-by-line profiler";
-    homepage = https://github.com/rkern/line_profiler;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://github.com/pyutils/line_profiler";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

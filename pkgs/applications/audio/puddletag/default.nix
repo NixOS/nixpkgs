@@ -1,37 +1,77 @@
-{ stdenv, fetchFromGitHub, python2Packages, chromaprint }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
-python2Packages.buildPythonApplication rec {
+# As of 2.1, puddletag has started pinning versions of all dependencies that it
+# was built against which is an issue as the chances of us having the exact same
+# versions in nixpkgs are slim to none.
+#
+# There is a difference between explicit and implicit version requirements and
+# we should be able to safely ignore the latter. Therefore use requirements.in
+# which contains just the explicit version dependencies instead of
+# requirements.txt.
+#
+# Additionally, we do need to override some of the explicit requirements through
+# `overrideVersions`. While we technically run the risk of breaking something by
+# ignoring the pinned versions, it's just something we will have to accept
+# unless we want to vendor those versions.
+
+let
+  # NOTE: check if we can drop any of these overrides when bumping the version
+  overrideVersions = [
+    "lxml"
+    "pyparsing"
+    "pyqt5"
+  ];
+
+in
+python3Packages.buildPythonApplication rec {
   pname = "puddletag";
-  version = "1.2.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner  = "keithgg";
-    repo   = "puddletag";
-    rev    = "v${version}";
-    sha256 = "1g6wa91awy17z5b704yi9kfynnvfm9lkrvpfvwccscr1h8s3qmiz";
+    owner = "puddletag";
+    repo = "puddletag";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KaFfpOWI9u2ZC/3kuCLneWOOKSmAaIuHPFHptkKMH/g=";
   };
 
-  setSourceRoot = ''
-    sourceRoot=$(echo */source)
-  '';
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace share/pixmaps share/icons
 
-  disabled = python2Packages.isPy3k; # work to support python 3 has not begun
+    cp requirements.in requirements.txt
+    sed -i requirements.txt -e 's/^chromaprint$//'
+  '' + lib.concatMapStringsSep "\n"
+    (e: ''
+      sed -i requirements.txt -e 's/^${e}.*/${e}/'
+    '')
+    overrideVersions;
 
-  propagatedBuildInputs = [ chromaprint ] ++ (with python2Packages; [
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
+  propagatedBuildInputs = with python3Packages; [
+    pyacoustid
     configobj
+    levenshtein
+    lxml
     mutagen
     pyparsing
-    pyqt4
-  ]);
+    pyqt5
+    rapidfuzz
+  ];
 
-  doCheck = false;   # there are no tests
-  dontStrip = true;  # we are not generating any binaries
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
-  meta = with stdenv.lib; {
+  doCheck = false; # there are no tests
+
+  dontStrip = true; # we are not generating any binaries
+
+  meta = with lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
-    homepage    = https://docs.puddletag.net;
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.linux;
+    homepage = "https://docs.puddletag.net";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ peterhoeg dschrempf ];
+    platforms = platforms.linux;
   };
 }

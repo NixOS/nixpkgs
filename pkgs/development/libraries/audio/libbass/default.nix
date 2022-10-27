@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl }:
+{ lib, stdenv, unzip, fetchurl }:
 
 # Upstream changes files in-place, to update:
 # 1. Check latest version at http://www.un4seen.com/
@@ -9,13 +9,13 @@ let
   allBass = {
     bass = {
       h = "bass.h";
-      version = "2.4.14";
+      version = "2.4.15";
       so = {
         i686_linux = "libbass.so";
         x86_64-linux = "x64/libbass.so";
       };
       urlpath = "bass24-linux.zip";
-      sha256 = "1nyzs08z0djyvz6jx1y9y99y0ksp4sxz9l2x43k1c9irls24xpfy";
+      sha256 = "1lmysxfhy727zskavml3ibg5w876ir88923bm17c21s59w5lh7l8";
     };
 
     bass_fx = {
@@ -55,12 +55,14 @@ let
         install -m644 -t $out/include/ ${bass.h}
       '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Shareware audio library";
-      homepage = https://www.un4seen.com/;
+      homepage = "https://www.un4seen.com/";
       license = licenses.unfreeRedistributable;
       platforms = builtins.attrNames bass.so;
+      # until upstream has stable URLs, this package is prone to always being broken
+      broken = true;
     };
   };
 
-in stdenv.lib.mapAttrs dropBass allBass
+in lib.mapAttrs dropBass allBass

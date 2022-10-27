@@ -1,28 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, hypothesis }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hypothesis
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "priority";
-  version = "1.3.0";
+  version = "2.0.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gpzn9k9zgks0iw5wdmad9b4dry8haiz2sbp6gycpjkzdld9dhbb";
+    sha256 = "c965d54f1b8d0d0b19479db3924c7c36cf672dbf2aec92d43fbdaf4492ba18c0";
   };
 
-  patches = [
-    # https://github.com/python-hyper/priority/pull/135
-    ./deadline.patch
+  pythonImportsCheck = [
+     "priority"
   ];
 
-  checkInputs = [ pytest hypothesis ];
-  checkPhase = ''
-    PYTHONPATH="src:$PYTHONPATH" pytest
-  '';
+  checkInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    homepage = https://python-hyper.org/priority/;
     description = "A pure-Python implementation of the HTTP/2 priority tree";
+    homepage = "https://github.com/python-hyper/priority/";
     license = licenses.mit;
-    maintainers = [ maintainers.qyliss ];
+    maintainers = with maintainers; [ qyliss ];
   };
 }

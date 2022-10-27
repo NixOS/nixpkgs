@@ -7,7 +7,7 @@ let
     # occasionally suffers from pointless hash changes,
     # and having stable sources for older versions has advantages, too.
     urls = map (prefix: prefix + "cc5e14a264912/etc/root.hints") [
-      "https://gitlab.labs.nic.cz/knot/knot-resolver/raw/"
+      "https://gitlab.nic.cz/knot/knot-resolver/raw/"
       "https://raw.githubusercontent.com/CZ-NIC/knot-resolver/"
     ];
     sha256 = "0vdrff4l8s8grif52dnh091s8qydhh88k25zqd9rj66sf1qwcwxl";
@@ -19,7 +19,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dns-root-data-2019-01-11";
+  pname = "dns-root-data";
+  version = "2019-01-11";
 
   buildCommand = ''
     mkdir $out

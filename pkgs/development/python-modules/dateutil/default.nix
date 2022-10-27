@@ -1,26 +1,40 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, six
+}:
+
 buildPythonPackage rec {
   pname = "python-dateutil";
-  version = "2.8.0";
+  version = "2.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e";
+    sha256 = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkPhase = ''
-    py.test dateutil/test
-  '';
+  propagatedBuildInputs = [ six ];
 
-  # Requires fixing
+  # cyclic dependency: tests need freezegun, which depends on python-dateutil
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "dateutil.easter"
+    "dateutil.parser"
+    "dateutil.relativedelta"
+    "dateutil.rrule"
+    "dateutil.tz"
+    "dateutil.utils"
+    "dateutil.zoneinfo"
+  ];
+
+  meta = with lib; {
     description = "Powerful extensions to the standard datetime module";
-    homepage = https://pypi.python.org/pypi/python-dateutil;
-    license = "BSD-style";
+    homepage = "https://github.com/dateutil/dateutil/";
+    license = with licenses; [ asl20 bsd3 ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

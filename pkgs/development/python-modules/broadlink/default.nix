@@ -1,28 +1,37 @@
-{ lib, fetchPypi, buildPythonPackage
-, pyaes, pycrc }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "broadlink";
-  version = "0.9";
+  version = "0.18.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10dnd859yjh1h6qrxhvkslbsj5fh5g654xsq2yqblkkv3xd711rs";
+    hash = "sha256-2ktLSJ1Nsdry8dvWmY/BbhHApTYQMvSjCsNKX3PkocU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace pyaes==1.6.0 pyaes
-    '';
+  propagatedBuildInputs = [
+    cryptography
+  ];
 
-  propagatedBuildInputs = [ pyaes pycrc ];
-
-  # no tests available
+  # Module has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "broadlink"
+  ];
 
   meta = with lib; {
     description = "Python API for controlling Broadlink IR controllers";
-    homepage =  https://github.com/mjg59/python-broadlink;
+    homepage =  "https://github.com/mjg59/python-broadlink";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

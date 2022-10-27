@@ -1,46 +1,76 @@
-{ fetchgit, libcommuni, qtbase, qmake, stdenv }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, libcommuni
+, qmake
+, qtbase
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "communi";
-  version = "3.5.0";
+  version = "3.6.0";
 
-  src = fetchgit {
-    url = "https://github.com/communi/communi-desktop.git";
-    rev = "v${version}";
-    sha256 = "10grskhczh8601s90ikdsbjabgr9ypcp2j7vivjkl456rmg6xbji";
+  src = fetchFromGitHub {
+    owner = "communi";
+    repo = "communi-desktop";
+    # Without https://github.com/communi/communi-desktop/pull/146 fetching fails with
+    #     fatal: unable to connect to github.com:
+    #     github.com[0: 140.82.112.3]: errno=Connection timed out
+    rev = "5d813dc6e64a623cd5d78f024c8a0720a5155a28";
+    hash = "sha256-ci91Bf0EkhlPDO+NcpnMmT/vE41i5RD2mXbRAnMB++M=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ libcommuni qtbase ];
+  buildInputs = [
+    libcommuni
+    qtbase
+  ];
 
-  enableParallelBuilding = true;
+  # libCommuni.dylib is installed in $out/Applications/Communi.app/Contents/Frameworks/ on Darwin
+  # Wrapper hook thinks it's a binary because it's in $out/Applications, wraps it with a shell script
+  # So we manually call the wrapper script on just the binary
+  dontWrapQtApps = stdenv.isDarwin;
 
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
-    qmakeFlags="$qmakeFlags \
-      COMMUNI_INSTALL_PREFIX=$out \
-      COMMUNI_INSTALL_BINS=$out/bin \
-      COMMUNI_INSTALL_PLUGINS=$out/lib/communi/plugins \
-      COMMUNI_INSTALL_ICONS=$out/share/icons/hicolor \
-      COMMUNI_INSTALL_DESKTOP=$out/share/applications \
-      COMMUNI_INSTALL_THEMES=$out/share/communi/themes
-    "
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-    substituteInPlace "$out/share/applications/communi.desktop" \
-      --replace "/usr/bin" "$out/bin"
-  '';
+  qmakeFlags = [
+    "COMMUNI_INSTALL_PREFIX=${placeholder "out"}"
+    "COMMUNI_INSTALL_PLUGINS=${placeholder "out"}/lib/communi/plugins"
+    "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
+    "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
+    "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
+    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${if stdenv.isDarwin then "Applications" else "bin"}"
+  ];
+
+  postInstall =
+    if stdenv.isDarwin then ''
+      # Nix qmake does not add the bundle rpath by default.
+      install_name_tool \
+        -add_rpath @executable_path/../Frameworks \
+        $out/Applications/Communi.app/Contents/MacOS/Communi
+
+      # Do not remove until wrapQtAppsHook doesn't wrap dylibs in app bundles anymore
+      wrapQtApp $out/Applications/Communi.app/Contents/MacOS/Communi
+    '' else ''
+      substituteInPlace "$out/share/applications/communi.desktop" \
+        --replace "/usr/bin" "$out/bin"
+    '';
 
   preFixup = ''
     rm -rf lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and elegant cross-platform IRC client";
-    homepage = https://github.com/communi/communi-desktop;
+    homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.all;

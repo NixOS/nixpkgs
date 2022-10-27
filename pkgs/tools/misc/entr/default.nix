@@ -1,29 +1,27 @@
-{ stdenv, fetchurl, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.3";
+  version = "5.2";
 
   src = fetchurl {
-    url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
-    sha256 = "0ni34sfrssa6njiqm22q2kxv437r6vbs0a6mys8kwwn7vbdw30dh";
+    url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
+    hash = "sha256-I34wnUawdSEMDky3ib/Qycd37d9sswNBw/49vMZYw4A=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile.bsd --replace /bin/echo echo
     substituteInPlace entr.c --replace /bin/cat ${coreutils}/bin/cat
-    substituteInPlace entr.c --replace /usr/bin/clear ${ncurses.out}/bin/clear
     substituteInPlace entr.1 --replace /bin/cat cat
-    substituteInPlace entr.1 --replace /usr/bin/clear clear
   '';
   dontAddPrefix = true;
   doCheck = true;
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://entrproject.org/;
+  meta = with lib; {
+    homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
+    changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub synthetica ];

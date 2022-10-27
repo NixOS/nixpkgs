@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.7.1";
   pname = "hunspell";
 
-  src = fetchurl {
-    url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
-    sha256 = "12mwwqz6qkx7q1lg9vpjiiwh4fk4c8xs6g6g0xa2ia0hp5pbh9xv";
+  src = fetchFromGitHub {
+    owner = "hunspell";
+    repo = "hunspell";
+    rev = "v${version}";
+    sha256 = "sha256-YSJztik0QTZFNR8k8Xu1hakyE16NziDavYVkEUCbtGM=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
@@ -14,20 +16,22 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline ];
   nativeBuildInputs = [ autoreconfHook ];
 
-  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
+  patches = [
+    ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch
+  ];
 
   postPatch = ''
     patchShebangs tests
   '';
 
-  autoreconfFlags = "-vfi";
+  autoreconfFlags = [ "-vfi" ];
 
   configureFlags = [ "--with-ui" "--with-readline" ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://hunspell.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://hunspell.sourceforge.net";
     description = "Spell checker";
     longDescription = ''
       Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
@@ -51,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

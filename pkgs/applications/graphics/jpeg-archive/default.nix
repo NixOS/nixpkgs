@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
+{ lib, stdenv, fetchFromGitHub, mozjpeg, makeWrapper, coreutils, parallel, findutils }:
 
 stdenv.mkDerivation {
   pname = "jpeg-archive";
@@ -21,10 +21,17 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace 'LIBJPEG =' 'LIBJPEG ?='
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: src/util.o:(.bss+0x0): multiple definition of `progname'; /build/ccBZT2Za.o:(.bss+0x20): first defined here
+  # https://github.com/danielgtaylor/jpeg-archive/issues/119
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=$(out)"
     "MOZJPEG_PREFIX=${mozjpeg}"
-    "LIBJPEG=${mozjpeg}/lib/libjpeg.so"
+    "LIBJPEG=${mozjpeg}/lib/libjpeg${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   postInstall = ''
@@ -32,10 +39,10 @@ stdenv.mkDerivation {
       --set PATH "$out/bin:${coreutils}/bin:${parallel}/bin:${findutils}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for archiving photos for saving to long term storage or serving over the web";
     homepage    = "https://github.com/danielgtaylor/jpeg-archive";
-    # license = ...; # mixed?
+    license = licenses.mit;
     maintainers = [ maintainers.srghma ];
     platforms   = platforms.all;
   };

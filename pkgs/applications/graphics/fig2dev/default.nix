@@ -1,26 +1,44 @@
-{ stdenv, fetchurl, ghostscript, libpng } :
+{ lib
+, stdenv
+, fetchurl
+, ghostscript
+, libpng
+, makeWrapper
+, coreutils
+, bc
+, gnugrep
+, gawk
+, gnused
+}:
 
-let
-  version = "3.2.7a";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fig2dev";
-  inherit version;
+  version = "3.2.8b";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
-    sha256 = "0a7vkfl38fvkhg3na5gr9c4fskas9wbs84y9djg85nzwbshik8mx";
+    sha256 = "1jv8rg71dsy00lpg434r5zqs5qrg8mxqvv2gpcjjvmzsm551d2j1";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng ];
 
   GSEXE="${ghostscript}/bin/gs";
 
-  meta = with stdenv.lib; {
+  configureFlags = [ "--enable-transfig" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/fig2ps2tex \
+        --set PATH ${lib.makeBinPath [ coreutils bc gnugrep gawk ]}
+    wrapProgram $out/bin/pic2tpic \
+        --set PATH ${lib.makeBinPath [ gnused ]}
+  '';
+
+  meta = with lib; {
     description = "Tool to convert Xfig files to other formats";
-    homepage = http://mcj.sourceforge.net/;
+    homepage = "http://mcj.sourceforge.net/";
     license = licenses.xfig;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lesuisse ];
   };
 }
-

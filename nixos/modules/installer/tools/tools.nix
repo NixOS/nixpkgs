@@ -14,70 +14,111 @@ let
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
+    inherit (pkgs) runtimeShell;
   };
 
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
+    inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
-    path = makeBinPath [ nixos-enter ];
+    path = makeBinPath [
+      pkgs.jq
+      nixos-enter
+    ];
   };
 
-  nixos-rebuild =
-    let fallback = import ./nix-fallback-paths.nix; in
-    makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
-      nix = config.nix.package.out;
-      nix_x86_64_linux = fallback.x86_64-linux;
-      nix_i686_linux = fallback.i686-linux;
-    };
+  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    path = lib.optionals (lib.elem "btrfs" config.boot.supportedFilesystems) [ pkgs.btrfs-progs ];
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}";
-    inherit (config.system.nixos-generate-config) configuration;
+    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
+    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
+    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
+    xserverEnabled = config.services.xserver.enable;
   };
 
-  nixos-option = makeProg {
-    name = "nixos-option";
-    src = ./nixos-option.sh;
-  };
+  nixos-option =
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
+    then null
+    else pkgs.nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
+    inherit (pkgs) runtimeShell;
     inherit (config.system.nixos) version codeName revision;
+    inherit (config.system) configurationRevision;
+    json = builtins.toJSON ({
+      nixosVersion = config.system.nixos.version;
+    } // optionalAttrs (config.system.nixos.revision != null) {
+      nixpkgsRevision = config.system.nixos.revision;
+    } // optionalAttrs (config.system.configurationRevision != null) {
+      configurationRevision = config.system.configurationRevision;
+    });
   };
 
   nixos-enter = makeProg {
     name = "nixos-enter";
     src = ./nixos-enter.sh;
+    inherit (pkgs) runtimeShell;
   };
 
 in
 
 {
 
-  options.system.nixos-generate-config.configuration = mkOption {
+  options.system.nixos-generate-config = {
+    configuration = mkOption {
+      internal = true;
+      type = types.str;
+      description = lib.mdDoc ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
+
+        This is an internal option. No backward compatibility is guaranteed.
+        Use at your own risk!
+
+        Note that this string gets spliced into a Perl script. The perl
+        variable `$bootLoaderConfig` can be used to
+        splice in the boot loader configuration.
+      '';
+    };
+
+    desktopConfiguration = mkOption {
+      internal = true;
+      type = types.listOf types.lines;
+      default = [];
+      description = lib.mdDoc ''
+        Text to preseed the desktop configuration that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
+
+        This is an internal option. No backward compatibility is guaranteed.
+        Use at your own risk!
+
+        Note that this string gets spliced into a Perl script. The perl
+        variable `$bootLoaderConfig` can be used to
+        splice in the boot loader configuration.
+      '';
+    };
+  };
+
+  options.system.disableInstallerTools = mkOption {
     internal = true;
-    type = types.str;
-    description = ''
-      The NixOS module that <literal>nixos-generate-config</literal>
-      saves to <literal>/etc/nixos/configuration.nix</literal>.
-
-      This is an internal option. No backward compatibility is guaranteed.
-      Use at your own risk!
-
-      Note that this string gets spliced into a Perl script. The perl
-      variable <literal>$bootLoaderConfig</literal> can be used to
-      splice in the boot loader configuration.
+    type = types.bool;
+    default = false;
+    description = lib.mdDoc ''
+      Disable nixos-rebuild, nixos-generate-config, nixos-installer
+      and other NixOS tools. This is useful to shrink embedded,
+      read-only systems which are not expected to be rebuild or
+      reconfigure themselves. Use at your own risk!
     '';
   };
 
-  config = {
+  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
@@ -94,33 +135,69 @@ in
 
       $bootLoaderConfig
         # networking.hostName = "nixos"; # Define your hostname.
+        # Pick only one of the below networking options.
         # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+        # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-      $networkingDhcpConfig
+        # Set your time zone.
+        # time.timeZone = "Europe/Amsterdam";
+
         # Configure network proxy if necessary
         # networking.proxy.default = "http://user:password\@proxy:port/";
         # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
         # Select internationalisation properties.
-        # i18n = {
-        #   consoleFont = "Lat2-Terminus16";
-        #   consoleKeyMap = "us";
-        #   defaultLocale = "en_US.UTF-8";
+        # i18n.defaultLocale = "en_US.UTF-8";
+        # console = {
+        #   font = "Lat2-Terminus16";
+        #   keyMap = "us";
+        #   useXkbConfig = true; # use xkbOptions in tty.
         # };
 
-        # Set your time zone.
-        # time.timeZone = "Europe/Amsterdam";
+      $xserverConfig
+
+      $desktopConfiguration
+        # Configure keymap in X11
+        # services.xserver.layout = "us";
+        # services.xserver.xkbOptions = {
+        #   "eurosign:e";
+        #   "caps:escape" # map caps to escape.
+        # };
+
+        # Enable CUPS to print documents.
+        # services.printing.enable = true;
+
+        # Enable sound.
+        # sound.enable = true;
+        # hardware.pulseaudio.enable = true;
+
+        # Enable touchpad support (enabled default in most desktopManager).
+        # services.xserver.libinput.enable = true;
+
+        # Define a user account. Don't forget to set a password with ‘passwd’.
+        # users.users.alice = {
+        #   isNormalUser = true;
+        #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+        #   packages = with pkgs; [
+        #     firefox
+        #     thunderbird
+        #   ];
+        # };
 
         # List packages installed in system profile. To search, run:
         # \$ nix search wget
         # environment.systemPackages = with pkgs; [
-        #   wget vim
+        #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+        #   wget
         # ];
 
         # Some programs need SUID wrappers, can be configured further or are
         # started in user sessions.
         # programs.mtr.enable = true;
-        # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+        # programs.gnupg.agent = {
+        #   enable = true;
+        #   enableSSHSupport = true;
+        # };
 
         # List services that you want to enable:
 
@@ -133,35 +210,17 @@ in
         # Or disable the firewall altogether.
         # networking.firewall.enable = false;
 
-        # Enable CUPS to print documents.
-        # services.printing.enable = true;
+        # Copy the NixOS configuration file and link it from the resulting system
+        # (/run/current-system/configuration.nix). This is useful in case you
+        # accidentally delete configuration.nix.
+        # system.copySystemConfiguration = true;
 
-        # Enable sound.
-        # sound.enable = true;
-        # hardware.pulseaudio.enable = true;
-
-        # Enable the X11 windowing system.
-        # services.xserver.enable = true;
-        # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = "eurosign:e";
-
-        # Enable touchpad support.
-        # services.xserver.libinput.enable = true;
-
-        # Enable the KDE Desktop Environment.
-        # services.xserver.displayManager.sddm.enable = true;
-        # services.xserver.desktopManager.plasma5.enable = true;
-
-        # Define a user account. Don't forget to set a password with ‘passwd’.
-        # users.users.jane = {
-        #   isNormalUser = true;
-        #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-        # };
-
-        # This value determines the NixOS release with which your system is to be
-        # compatible, in order to avoid breaking some software such as database
-        # servers. You should change this only after NixOS release notes say you
-        # should.
+        # This value determines the NixOS release from which the default
+        # settings for stateful data, like file locations and database versions
+        # on your system were taken. It‘s perfectly fine and recommended to leave
+        # this value at the release version of the first install of this system.
+        # Before changing this value read the documentation for this option
+        # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
         system.stateVersion = "${config.system.nixos.release}"; # Did you read the comment?
 
       }
@@ -172,10 +231,9 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
-        nixos-option
         nixos-version
         nixos-enter
-      ];
+      ] ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;

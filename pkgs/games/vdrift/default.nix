@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU_combined, SDL2, SDL2_image
-, libvorbis, bullet, curl, gettext, writeTextFile
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchsvn
+, pkg-config
+, sconsPackages
+, libGLU
+, libGL
+, SDL2
+, SDL2_image
+, libvorbis
+, bullet
+, curl
+, gettext
+, writeShellScriptBin
 
 , data ? fetchsvn {
     url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
@@ -8,7 +21,7 @@
   }
 }:
 let
-  version = "git";
+  version = "unstable-2017-12-09";
   bin = stdenv.mkDerivation {
     pname = "vdrift";
     inherit version;
@@ -20,8 +33,8 @@ let
       sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
     };
 
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ scons libGLU_combined SDL2 SDL2_image libvorbis bullet curl gettext ];
+    nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
+    buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
 
     patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
 
@@ -34,28 +47,22 @@ let
 
     meta = {
       description = "Car racing game";
-      homepage = http://vdrift.net/;
-      license = stdenv.lib.licenses.gpl2Plus;
-      maintainers = with stdenv.lib.maintainers; [viric];
-      platforms = stdenv.lib.platforms.linux;
+      homepage = "http://vdrift.net/";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [ viric ];
+      platforms = lib.platforms.linux;
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";
-in writeTextFile {
+in
+(writeShellScriptBin "vdrift"  ''
+  export VDRIFT_DATA_DIRECTORY="${data}"
+  exec ${bin}/bin/vdrift "$@"
+'').overrideAttrs (_: {
   name = wrappedName;
-  text = ''
-    export VDRIFT_DATA_DIRECTORY="${data}"
-    exec ${bin}/bin/vdrift "$@"
-  '';
-  destination = "/bin/vdrift";
-  executable = true;
-  checkPhase = ''
-    ${stdenv.shell} -n $out/bin/vdrift
-  '';
-} // {
   meta = bin.meta // {
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
   unwrapped = bin;
   inherit bin data;
-}
+})

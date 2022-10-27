@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL, which, installTool ? false }:
+{ lib, stdenv, fetchFromGitHub, SDL, which, installTool ? false }:
 
 stdenv.mkDerivation rec {
   pname = "azimuth";
@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ SDL ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" ];
+
   preConfigure = ''
-    cat Makefile
     substituteInPlace data/azimuth.desktop \
       --replace Exec=azimuth "Exec=$out/bin/azimuth" \
       --replace "Version=%AZ_VERSION_NUMBER" "Version=${version}"
@@ -41,10 +42,10 @@ stdenv.mkDerivation rec {
       bosses to tangle with.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://mdsteele.games/azimuth/index.html;
-    maintainers = with stdenv.lib.maintainers; [ marius851000 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    homepage = "https://mdsteele.games/azimuth/index.html";
+    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = lib.platforms.linux;
   };
 
 }

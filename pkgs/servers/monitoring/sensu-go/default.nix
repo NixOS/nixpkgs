@@ -1,33 +1,35 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 let
-  generic = { subPackages, pname, postInstall ? "" }:
-    buildGoPackage rec {
+  generic = { subPackages, pname, postInstall ? "", mainProgram }:
+    buildGoModule rec {
       inherit pname;
-      version = "5.11.0";
-      shortRev = "dd8f160"; # for internal version info
-
-      goPackagePath = "github.com/sensu/sensu-go";
+      version = "6.8.2";
+      shortRev = "3a1ac58"; # for internal version info
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
-        rev = version;
-        sha256 = "05dx0nxcjl6fy68br2a37j52iz71kvqnqp29swcif2nwvq7w8mxx";
+        rev = "v${version}";
+        sha256 = "sha256-1blHYUwZHaAdWN7xag+aSPP2GEBmJ+HKK10pKXiNDxY=";
       };
 
       inherit subPackages postInstall;
 
-      buildFlagsArray = let
+      vendorSha256 = "sha256-Eiebn4BfdI1VhjzdCl3XT/zoFNUbaC1X0v+tGSfNCOE=";
+
+      doCheck = false;
+
+      ldflags = let
         versionPkg = "github.com/sensu/sensu-go/version";
-      in ''
-        -ldflags=
-          -X ${versionPkg}.Version=${version}
-          -X ${versionPkg}.BuildSHA=${shortRev}
-      '';
+      in [
+        "-X ${versionPkg}.Version=${version}"
+        "-X ${versionPkg}.BuildSHA=${shortRev}"
+      ];
 
       meta = {
-        homepage = https://sensu.io;
+        inherit mainProgram;
+        homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ thefloweringash ];
@@ -53,15 +55,18 @@ in
       ) > ''${!outputBin}/share/zsh/site-functions/_sensuctl
 
     '';
+    mainProgram = "sensuctl";
   };
 
   sensu-go-backend = generic {
     pname = "sensu-go-backend";
     subPackages = [ "cmd/sensu-backend" ];
+    mainProgram = "sensu-backend";
   };
 
   sensu-go-agent = generic {
     pname = "sensu-go-agent";
     subPackages = [ "cmd/sensu-agent" ];
+    mainProgram = "sensu-agent";
   };
 }

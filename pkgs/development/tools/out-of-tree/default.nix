@@ -1,29 +1,29 @@
-{ stdenv, buildGoPackage, fetchgit, qemu, docker, which, makeWrapper }:
+{ lib, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "out-of-tree";
-  version = "1.1.1";
+  version = "1.4.0";
 
-  buildInputs = [ makeWrapper ];
-
-  goPackagePath = "code.dumpstack.io/tools/${pname}";
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "048jda3vng11mg62fd3d8vs9yjsp569zlfylnkqv8sb6wd1qn66d";
+    sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
+
+  doCheck = false;
 
   postFixup = ''
-    wrapProgram $bin/bin/out-of-tree \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ qemu docker which ]}"
+    wrapProgram $out/bin/out-of-tree \
+      --prefix PATH : "${lib.makeBinPath [ qemu docker which ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "kernel {module, exploit} development tool";
-    homepage = https://out-of-tree.io;
+    homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.agpl3Plus;
   };

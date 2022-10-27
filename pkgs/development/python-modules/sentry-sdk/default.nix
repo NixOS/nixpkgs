@@ -1,22 +1,161 @@
-{ stdenv, buildPythonPackage, fetchPypi, urllib3, certifi, django, flask, tornado, sanic, aiohttp, bottle, rq, falcon, pyramid, celery }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# runtime
+, certifi
+, urllib3
+
+# optionals
+, aiohttp
+, apache-beam
+, blinker
+, botocore
+, bottle
+, celery
+, chalice
+, django
+, falcon
+, flask
+, flask-login
+, httpx
+, pure-eval
+, pyramid
+, pyspark
+, rq
+, sanic
+, sqlalchemy
+, tornado
+, trytond
+, werkzeug
+
+# tests
+, asttokens
+, executing
+, gevent
+, jsonschema
+, mock
+, pyrsistent
+, pytest-forked
+, pytest-localserver
+, pytest-watch
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "0.8.0";
+  version = "1.10.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f5819df450d7b0696be69a0c6d70a09e4890a3844ee8ccb7a461794135bd5965";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "sentry-python";
+    rev = version;
+    hash = "sha256-wNI92LVGFN+7LPxnrezPeF7dSS5UgwCuF62/ux3rik4=";
   };
 
-  checkInputs = [ django flask tornado sanic aiohttp bottle rq falcon pyramid celery ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    beam = [
+      apache-beam
+    ];
+    bottle = [
+      bottle
+    ];
+    celery = [
+      celery
+    ];
+    chalice = [
+      chalice
+    ];
+    django = [
+      django
+    ];
+    falcon = [
+      falcon
+    ];
+    flask = [
+      flask
+      blinker
+    ];
+    httpx = [
+      httpx
+    ];
+    pyspark = [
+      pyspark
+    ];
+    pure_eval = [
+      asttokens
+      executing
+      pure-eval
+    ];
+    quart = [
+      # quart missing
+      blinker
+    ];
+    rq = [
+      rq
+    ];
+    sanic = [
+      sanic
+    ];
+    sqlalchemy = [
+      sqlalchemy
+    ];
+    tornado = [
+      tornado
+    ];
+  };
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    asttokens
+    executing
+    gevent
+    jsonschema
+    mock
+    pure-eval
+    pyrsistent
+    pytest-forked
+    pytest-localserver
+    pytest-watch
+    pytestCheckHook
+  ];
+
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # Issue with the asseration
+    "test_auto_enabling_integrations_catches_import_error"
+  ];
+
+  disabledTestPaths = [
+    # Varius integration tests fail every once in a while when we
+    # upgrade depencies, so don't bother testing them.
+    "tests/integrations/"
+  ] ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
+    # test crashes on aarch64
+    "tests/test_transport.py"
+  ];
+
+  pythonImportsCheck = [
+    "sentry_sdk"
+  ];
+
+  meta = with lib; {
+    description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ fab gebner ];
   };
 }

@@ -1,65 +1,99 @@
-{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg, libav, mono, stdenv }:
-
-with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "roon-server";
-  version = "100600401";
+{ alsa-lib
+, alsa-utils
+, autoPatchelfHook
+, cifs-utils
+, fetchurl
+, ffmpeg
+, freetype
+, icu66
+, krb5
+, lib
+, libtasn1
+, lttng-ust_2_12
+, makeWrapper
+, openssl
+, stdenv
+}:
+let
+  version = "2.0-1128";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+in
+stdenv.mkDerivation {
+  pname = "roon-server";
+  inherit version;
 
   src = fetchurl {
-    url = "http://download.roonlabs.com/updates/stable/RoonServer_linuxx64_${version}.tar.bz2";
-    sha256 = "121mmdh35q4bpgsqhcps6a6q1f4ld9v4hq9gp181bf2n779pk8sh";
+    url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+    hash = "sha256-PR3LR7u9X6eUAyoAW1tXv3LzqoVz3RQ0MZwdF0iAXJ8=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  dontConfigure = true;
+  dontBuild = true;
 
-    # Check script
-    sed -i '3i PATH=$PATH:${makeBinPath [ cifs-utils ffmpeg libav ]}' check.sh
-    sed -i '/check_ulimit$/d' check.sh
+  buildInputs = [
+    alsa-lib
+    freetype
+    krb5
+    libtasn1
+    lttng-ust_2_12
+    stdenv.cc.cc.lib
+  ];
 
-    # Start script
-    sed -i '3i PATH=$PATH:${makeBinPath [ alsaUtils cifs-utils ffmpeg libav ]}' start.sh
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
-    # Debug logging
-    sed -i '/--debug--gc=sgen --server/exec "$HARDLINK" --debug --gc=sgen --server "$SCRIPT.exe" "$@" -storagetrace -watchertrace' Appliance/RoonAppliance
+  installPhase =
+    let
+      # NB: While this might seem like odd behavior, it's what Roon expects. The
+      # tarball distribution provides scripts that do a bunch of nonsense on top
+      # of what wrapBin is doing here, so consider it the lesser of two evils.
+      # I didn't bother checking whether the symlinks are really necessary, but
+      # I wouldn't put it past Roon to have custom code based on the binary
+      # name, so we're playing it safe.
+      wrapBin = binPath: ''
+        (
+          binDir="$(dirname "${binPath}")"
+          binName="$(basename "${binPath}")"
+          dotnetDir="$out/RoonDotnet"
 
-    # Binaries
-    sed -i '/# boost ulimit/,+2 d' Appliance/RAATServer
-    sed -i '/# boost ulimit/,+2 d' Appliance/RoonAppliance
-    sed -i '/# boost ulimit/,+2 d' Server/RoonServer
-    sed -i '/ln -sf/ d' Appliance/RAATServer
-    sed -i '/ln -sf/ d' Appliance/RoonAppliance
-    sed -i '/ln -sf/ d' Server/RoonServer
-    mkdir -p $out/opt
-    mv * $out/opt
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonServer
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonAppliance
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RAATServer
+          ln -sf "$dotnetDir/dotnet" "$dotnetDir/$binName"
+          rm "${binPath}"
+          makeWrapper "$dotnetDir/$binName" "${binPath}" \
+            --add-flags "$binDir/$binName.dll" \
+            --argv0 "$binName" \
+            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
+            --prefix PATH : "$dotnetDir" \
+            --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
+            --chdir "$binDir" \
+            --set DOTNET_ROOT "$dotnetDir"
+        )
+      '';
+    in
+    ''
+      runHook preInstall
+      mkdir -p $out
+      mv * $out
 
-    runHook postInstall
-  '';
+      rm $out/check.sh
+      rm $out/start.sh
+      rm $out/VERSION
 
-  preFixup = ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib" \
-      $out/opt/RoonMono/bin/mono-sgen
+      ${wrapBin "$out/Appliance/RAATServer"}
+      ${wrapBin "$out/Appliance/RoonAppliance"}
+      ${wrapBin "$out/Server/RoonServer"}
 
-    # Checkers
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib" \
-      $out/opt/Appliance/check_alsa
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/opt/Appliance/check_bincompat
-  '';
+      mkdir -p $out/bin
+      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --chdir "$out"
 
-  meta = {
-    description = "The music player for music lovers.";
-    homepage    = https://roonlabs.com;
-    license     = licenses.unfree;
-    maintainers = with maintainers; [ steell ];
-    platforms   = platforms.linux;
+      runHook postInstall
+    '';
+
+  meta = with lib; {
+    description = "The music player for music lovers";
+    changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
+    homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ lovesegfault steell ];
+    platforms = [ "x86_64-linux" ];
   };
 }

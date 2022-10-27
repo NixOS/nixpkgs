@@ -1,69 +1,89 @@
-{ fetchFromGitHub, libGLU, llvmPackages, qtbase, qtscript, qtxmlpatterns }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, libGLU
+, qtbase
+, qtscript
+, qtxmlpatterns
+, lib3ds
+, bzip2
+, muparser
+, eigen
+, glew
+, gmp
+, levmar
+, qhull
+, cmake
+, cgal_5
+, boost17x
+, mpfr
+, xercesc
+}:
 
-let
-  meshlabRev = "d596d7c086c51fbdfb56050f9c30b55dd0286d4c";
-  vcglibRev = "6c3c940e34327322507c703889f9f1cfa73ab183";
-  # ^ this should be the latest commit in the vcglib devel branch at the time of the meshlab revision
+mkDerivation rec {
+  pname = "meshlab";
+  version = "2022.02";
 
-  stdenv = llvmPackages.stdenv; # only building with clang seems to be tested upstream
-in stdenv.mkDerivation {
-  name = "meshlab-20180627-beta";
+  src = fetchFromGitHub {
+    owner = "cnr-isti-vclab";
+    repo = "meshlab";
+    rev = "Meshlab-${version}";
+    sha256 = "sha256-MP+jkiV6yS1T1eWClxM56kZWLXwu0g4w/zBHy6CSL6Y=";
+    fetchSubmodules = true; # for vcglib
+  };
 
-  srcs =
-    [
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "meshlab";
-        rev = meshlabRev;
-        sha256 = "0xi7wiyy0yi545l5qvccbqahlcsf70mhx829gf7bq29640si4rax";
-        name = "meshlab-${meshlabRev}";
-      })
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "vcglib";
-        rev = vcglibRev;
-        sha256 = "0jfgjvf21y9ncmyr7caipy3ardhig7hh9z8miy885c99b925hhwd";
-        name = "vcglib-${vcglibRev}";
-      })
-    ];
+  buildInputs = [
+    libGLU
+    qtbase
+    qtscript
+    qtxmlpatterns
+    lib3ds
+    bzip2
+    muparser
+    eigen
+    glew
+    gmp
+    levmar
+    qhull
+    cgal_5
+    boost17x
+    mpfr
+    xercesc
+  ];
 
-  sourceRoot = "meshlab-${meshlabRev}";
+  nativeBuildInputs = [ cmake ];
 
-  hardeningDisable = [ "format" ];
-  enableParallelBuilding = true;
-
-  patches = [ ./fix-20180627-beta.patch ];
-
-  buildPhase = ''
-    # MeshLab has ../vcglib hardcoded everywhere, so move the source dir
-    mv ../vcglib-${vcglibRev} ../vcglib
-
-    cd src
-    export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
-    export QMAKESPEC="linux-clang"
-
-    pushd external
-    qmake -recursive external.pro
-    buildPhase
-    popd
-    qmake -recursive meshlab_full.pro
-    buildPhase
+  preConfigure = ''
+    substituteAll ${./meshlab.desktop} scripts/Linux/resources/meshlab.desktop
+    cmakeDir=$PWD/src
+    mkdir ../build
+    cd ../build
   '';
 
-  installPhase = ''
-    mkdir -p $out/opt/meshlab $out/bin
-    cp -Rv distrib/* $out/opt/meshlab
-    ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
-    ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
-  '';
+  cmakeFlags = [
+    "-DALLOW_BUNDLED_EIGEN=OFF"
+    "-DALLOW_BUNDLED_GLEW=OFF"
+    "-DALLOW_BUNDLED_LIB3DS=OFF"
+    "-DALLOW_BUNDLED_MUPARSER=OFF"
+    "-DALLOW_BUNDLED_QHULL=OFF"
+    # disable when available in nixpkgs
+    "-DALLOW_BUNDLED_OPENCTM=ON"
+    "-DALLOW_BUNDLED_SSYNTH=ON"
+    "-DALLOW_BUNDLED_BOOST=OFF"
+    # some plugins are disabled unless these are on
+    "-DALLOW_BUNDLED_NEWUOA=ON"
+    "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
 
-  buildInputs = [ libGLU llvmPackages.openmp qtbase qtscript qtxmlpatterns ];
+  postFixup = ''
+    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+  '';
 
   meta = {
-    description = "A system for processing and editing 3D triangular meshes.";
-    homepage = http://www.meshlab.net/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "A system for processing and editing 3D triangular meshes";
+    homepage = "https://www.meshlab.net/";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ viric ];
+    platforms = with lib.platforms; linux;
   };
 }

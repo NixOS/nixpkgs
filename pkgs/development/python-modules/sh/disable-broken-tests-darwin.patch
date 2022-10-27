@@ -1,49 +1,48 @@
-From 264f2f6a04d25156bba43524a6b172d2e99c53f4 Mon Sep 17 00:00:00 2001
-From: Ben Wolsieffer <benwolsieffer@gmail.com>
-Date: Fri, 21 Dec 2018 17:39:45 -0500
-Subject: [PATCH] Disable tests that fail on OSX.
+From c596ad546fe7460b57a62799837757eb641309c1 Mon Sep 17 00:00:00 2001
+From: Sirio Balmelli <sirio@b-ad.ch>
+Date: Mon, 20 Jul 2020 19:51:20 +0200
+Subject: [PATCH] Disable tests that fail on Darwin (macOS) or with sandboxing
 
-Some of the failures are due to the use of GNU ls.
----
- test.py | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/test.py b/test.py
-index 68ef40c..2f53360 100644
+Signed-off-by: Sirio Balmelli <sirio@b-ad.ch>
 --- a/test.py
 +++ b/test.py
-@@ -352,6 +352,7 @@ exit(3)
+@@ -377,6 +377,7 @@ exit(3)
          self.assertEqual(sed(_in="one test three", e="s/test/two/").strip(),
-                 "one two three")
+                          "one two three")
  
-+    @not_osx
++    @not_macos
      def test_ok_code(self):
          from sh import ls, ErrorReturnCode_1, ErrorReturnCode_2
  
-@@ -498,6 +499,7 @@ while True:
-         self.assertEqual(out, match)
+@@ -982,6 +983,7 @@ print(sys.argv[1])
+         now = time.time()
+         self.assertGreater(now - start, sleep_time)
  
- 
-+    @not_osx
-     def test_environment(self):
-         """ tests that environments variables that we pass into sh commands
-         exist in the environment, and on the sh module """
-@@ -861,6 +863,7 @@ print(sys.argv[1])
-         self.assertTrue(now - start > sleep_time)
- 
- 
-+    @not_osx
++    @not_macos
      def test_background_exception(self):
          from sh import ls, ErrorReturnCode_1, ErrorReturnCode_2
-         p = ls("/ofawjeofj", _bg=True) # should not raise
-@@ -2036,6 +2039,7 @@ else:
-         self.assertEqual(p, "test")
+         p = ls("/ofawjeofj", _bg=True, _bg_exc=False)  # should not raise
+@@ -1779,6 +1781,7 @@ exit(49)
+         p = python(py.name, _ok_code=49, _bg=True)
+         self.assertEqual(49, p.exit_code)
  
++    @not_macos
+     def test_cwd(self):
+         from sh import pwd
+         from os.path import realpath
+@@ -2777,6 +2780,7 @@ print("cool")
+     # on osx.  so skip it for now if osx
+     @not_macos
+     @requires_progs("lsof")
++    @skipUnless(False, "Flaky on Hydra")
+     def test_no_fd_leak(self):
+         import sh
+         import os
+@@ -2879,6 +2883,7 @@ print("hi")
+         python(py.name, _in=stdin)
  
-+    @not_osx
-     def test_signal_exception(self):
-         from sh import SignalException_15
+     @requires_utf8
++    @skipUnless(False, "Does not work in sandbox")
+     def test_unicode_path(self):
+         from sh import Command
  
--- 
-2.20.0
-

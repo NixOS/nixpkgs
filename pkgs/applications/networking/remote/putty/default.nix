@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
-, gtk2, halibut, ncurses, perl
+{ stdenv, lib, fetchurl, autoconf, automake, pkg-config, libtool
+, gtk2, halibut, ncurses, perl, darwin
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.71";
+  version = "0.76";
   pname = "putty";
 
   src = fetchurl {
@@ -11,18 +11,15 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "1f66iss0kqk982azmxbk4xfm2i1csby91vdvly6cr04pz3i1r4rg";
+    sha256 = "0gvi8phabszqksj2by5jrjmshm7bpirhgavz0dqyz1xaimxdjz2l";
   };
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
-    sed -e '/AM_PATH_GTK(/d' \
-        -e '/AC_OUTPUT/iAM_PROG_CC_C_O' \
-        -e '/AC_OUTPUT/iAM_PROG_AR' -i configure.ac
     ./mkauto.sh
     cd unix
   '' + lib.optionalString stdenv.hostPlatform.isWindows ''
@@ -38,10 +35,10 @@ stdenv.mkDerivation rec {
     done
   '' else null;
 
-  nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
+  nativeBuildInputs = [ autoconf automake halibut libtool perl pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk2 ncurses
-  ];
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -51,7 +48,7 @@ stdenv.mkDerivation rec {
       platforms, along with an xterm terminal emulator.
       It is written and maintained primarily by Simon Tatham.
     '';
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/putty/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
   };

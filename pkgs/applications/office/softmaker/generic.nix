@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, makeDesktopItem, makeWrapper
+{ lib, stdenv, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
 
   # Dynamic Libraries
 , curl, libGL, libX11, libXext, libXmu, libXrandr, libXrender
@@ -6,6 +6,9 @@
   # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
 , coreutils, libredirect
+
+  # Extra utilities used by the SoftMaker applications.
+, gnugrep, util-linux, which
 
 , pname, version, edition, suiteName, src, archive
 
@@ -17,10 +20,14 @@ let
     inherit makeDesktopItem pname suiteName;
   };
   shortEdition = builtins.substring 2 2 edition;
-in stdenv.mkDerivation rec {
-  inherit pname version edition shortEdition src;
+in stdenv.mkDerivation {
+  inherit pname src;
+
+  version = "${edition}.${version}";
+
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
     makeWrapper
   ];
 
@@ -56,13 +63,17 @@ in stdenv.mkDerivation rec {
     # procedure fails. This works around that by rewriting /bin/ls
     # to the proper path.
     #
+    # In addition, it expects some common utilities (which, whereis)
+    # to be in the path.
+    #
     # SoftMaker Office restarts itself upon some operations, such
     # changing the theme and unlocking. Unfortunately, we do not
     # have control over its environment then and it will fail
     # with an error.
-    lsIntercept = ''
+    extraWrapperArgs = ''
       --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls"
+      --set NIX_REDIRECTS "/bin/ls=${coreutils}/bin/ls" \
+      --prefix PATH : "${lib.makeBinPath [ coreutils gnugrep util-linux which ]}"
     '';
   in ''
     runHook preInstall
@@ -74,11 +85,11 @@ in stdenv.mkDerivation rec {
     # their resource path.
     mkdir -p $out/bin
     makeWrapper $out/share/${pname}${edition}/planmaker $out/bin/${pname}-planmaker \
-      ${lsIntercept}
+      ${extraWrapperArgs}
     makeWrapper $out/share/${pname}${edition}/presentations $out/bin/${pname}-presentations \
-      ${lsIntercept}
+      ${extraWrapperArgs}
     makeWrapper $out/share/${pname}${edition}/textmaker $out/bin/${pname}-textmaker \
-      ${lsIntercept}
+      ${extraWrapperArgs}
 
     for size in 16 32 48 64 96 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps
@@ -96,10 +107,9 @@ in stdenv.mkDerivation rec {
       done
     done
 
-    # Add desktop items
-    ${desktopItems.planmaker.buildCommand}
-    ${desktopItems.presentations.buildCommand}
-    ${desktopItems.textmaker.buildCommand}
+    # freeoffice 973 misses the 96x96 application icons, giving broken symbolic links
+    # remove broken symbolic links
+    find $out -xtype l -ls -exec rm {} \;
 
     # Add mime types
     install -D -t $out/share/mime/packages ${pname}/mime/softmaker-*office*${shortEdition}.xml
@@ -107,11 +117,14 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  desktopItems = builtins.attrValues desktopItems;
+
+  meta = with lib; {
     description = "An office suite with a word processor, spreadsheet and presentation program";
     homepage = "https://www.softmaker.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

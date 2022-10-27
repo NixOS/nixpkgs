@@ -1,23 +1,57 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, perl, cracklib, python }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, perl
+, cracklib
+, enablePAM ? stdenv.hostPlatform.isLinux
+, pam
+, enablePython ? false
+, python
+}:
+
+# python binding generates a shared library which are unavailable with musl build
+assert enablePython -> !stdenv.hostPlatform.isStatic;
 
 stdenv.mkDerivation rec {
   pname = "libpwquality";
-  version = "1.4.1";
+  version = "1.4.4";
+
+  outputs = [ "out" "dev" "lib" "man" ] ++ lib.optionals enablePython [ "py" ];
 
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
     rev = "${pname}-${version}";
-    sha256 = "150gk1d0gq9cig3ylyns7fgihgm3qb1basncahgyh1kzxplrdqm7";
+    sha256 = "sha256-7gAzrx5VP1fEBwAt6E5zGM8GyuPRR+JxYifYfirY+U8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook perl ];
-  buildInputs = [ cracklib python ];
+  patches = [
+    # ensure python site-packages goes in $py output
+    ./python-binding-prefix.patch
+  ];
+
+  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ python ];
+  buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
+
+  configureFlags = lib.optionals (!enablePython) [ "--disable-python-bindings" ];
 
   meta = with lib; {
+    homepage = "https://github.com/libpwquality/libpwquality";
     description = "Password quality checking and random password generation library";
-    homepage = https://github.com/libpwquality/libpwquality;
-    license = licenses.bsd3;
+    longDescription = ''
+      The libpwquality library purpose is to provide common functions for
+      password quality checking and also scoring them based on their apparent
+      randomness. The library also provides a function for generating random
+      passwords with good pronounceability. The library supports reading and
+      parsing of a configuration file.
+
+      In the package there are also very simple utilities that use the library
+      function and PAM module that can be used instead of pam_cracklib. The
+      module supports all the options of pam_cracklib.
+    '';
+    license = with licenses; [ bsd3 /* or */ gpl2Plus ];
+    maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
   };
 }

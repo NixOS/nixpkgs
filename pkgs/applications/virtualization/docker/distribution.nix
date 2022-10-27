@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "distribution";
-  version = "2.6.2";
+  version = "2.8.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/docker/distribution";
@@ -11,10 +11,10 @@ buildGoPackage rec {
     owner = "docker";
     repo = "distribution";
     inherit rev;
-    sha256 = "0nj4xd72mik4pj8g065cqb0yjmgpj5ppsqf2k5ibz9f68c39c00b";
+    sha256 = "sha256-M8XVeIvD7LtWa9l+6ovwWu5IwFGYt0xDfcIwcU/KH/E=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = [ maintainers.globin ];

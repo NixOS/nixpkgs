@@ -52,7 +52,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the smokeping service";
+        description = lib.mdDoc "Enable the smokeping service";
       };
       alertConfig = mkOption {
         type = types.lines;
@@ -60,7 +60,7 @@ in
           to = root@localhost
           from = smokeping@localhost
         '';
-        example = literalExample ''
+        example = ''
           to = alertee@address.somewhere
           from = smokealert@company.xy
 
@@ -70,20 +70,22 @@ in
           pattern = >0%,*12*,>0%,*12*,>0%
           comment = loss 3 times  in a row;
         '';
-        description = "Configuration for alerts.";
+        description = lib.mdDoc "Configuration for alerts.";
       };
       cgiUrl = mkOption {
         type = types.str;
         default = "http://${cfg.hostName}:${toString cfg.port}/smokeping.cgi";
-        defaultText = "http://\${hostName}:\${toString port}/smokeping.cgi";
+        defaultText = literalExpression ''"http://''${hostName}:''${toString port}/smokeping.cgi"'';
         example = "https://somewhere.example.com/smokeping.cgi";
-        description = "URL to the smokeping cgi.";
+        description = lib.mdDoc "URL to the smokeping cgi.";
       };
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = "Full smokeping config supplied by the user. Overrides " +
-          "and replaces any other configuration supplied.";
+        description = lib.mdDoc ''
+          Full smokeping config supplied by the user. Overrides
+          and replaces any other configuration supplied.
+        '';
       };
       databaseConfig = mkOption {
         type = types.lines;
@@ -100,7 +102,7 @@ in
               MIN  0.5 144   720
 
         '';
-        example = literalExample ''
+        example = ''
           # near constant pings.
           step     = 30
           pings    = 20
@@ -113,63 +115,80 @@ in
               MAX  0.5 144   7200
               MIN  0.5 144   7200
         '';
-        description = ''Configure the ping frequency and retention of the rrd files.
+        description = lib.mdDoc ''Configure the ping frequency and retention of the rrd files.
           Once set, changing the interval will require deletion or migration of all
           the collected data.'';
       };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Any additional customization not already included.";
+        description = lib.mdDoc "Any additional customization not already included.";
       };
       hostName = mkOption {
         type = types.str;
-        default = config.networking.hostName;
+        default = config.networking.fqdn;
+        defaultText = literalExpression "config.networking.fqdn";
         example = "somewhere.example.com";
-        description = "DNS name for the urls generated in the cgi.";
+        description = lib.mdDoc "DNS name for the urls generated in the cgi.";
       };
       imgUrl = mkOption {
         type = types.str;
-        default = "http://${cfg.hostName}:${toString cfg.port}/cache";
-        defaultText = "http://\${hostName}:\${toString port}/cache";
+        default = "cache";
+        defaultText = literalExpression ''"cache"'';
         example = "https://somewhere.example.com/cache";
-        description = "Base url for images generated in the cgi.";
+        description = lib.mdDoc ''
+          Base url for images generated in the cgi.
+
+          The default is a relative URL to ensure it works also when e.g. forwarding
+          the GUI port via SSH.
+        '';
       };
       linkStyle = mkOption {
         type = types.enum ["original" "absolute" "relative"];
         default = "relative";
         example = "absolute";
-        description = "DNS name for the urls generated in the cgi.";
+        description = lib.mdDoc "DNS name for the urls generated in the cgi.";
       };
       mailHost = mkOption {
         type = types.str;
         default = "";
         example = "localhost";
-        description = "Use this SMTP server to send alerts";
+        description = lib.mdDoc "Use this SMTP server to send alerts";
       };
       owner = mkOption {
         type = types.str;
         default = "nobody";
-        example = "Joe Admin";
-        description = "Real name of the owner of the instance";
+        example = "Bob Foobawr";
+        description = lib.mdDoc "Real name of the owner of the instance";
       };
       ownerEmail = mkOption {
         type = types.str;
         default = "no-reply@${cfg.hostName}";
+        defaultText = literalExpression ''"no-reply@''${hostName}"'';
         example = "no-reply@yourdomain.com";
-        description = "Email contact for owner";
+        description = lib.mdDoc "Email contact for owner";
       };
       package = mkOption {
         type = types.package;
         default = pkgs.smokeping;
-        defaultText = "pkgs.smokeping";
-        description = "Specify a custom smokeping package";
+        defaultText = literalExpression "pkgs.smokeping";
+        description = lib.mdDoc "Specify a custom smokeping package";
+      };
+      host = mkOption {
+        type = types.nullOr types.str;
+        default = "localhost";
+        example = "192.0.2.1"; # rfc5737 example IP for documentation
+        description = lib.mdDoc ''
+          Host/IP to bind to for the web server.
+
+          Setting it to `null` skips passing the -h option to thttpd,
+          which makes it bind to all interfaces.
+        '';
       };
       port = mkOption {
         type = types.int;
         default = 8081;
-        example = 8081;
-        description = "TCP port to use for the web server.";
+        description = lib.mdDoc "TCP port to use for the web server.";
       };
       presentationConfig = mkOption {
         type = types.lines;
@@ -210,12 +229,13 @@ in
           "Last 10 Days"    10d
           "Last 360 Days"   360d
         '';
-        description = "presentation graph style";
+        description = lib.mdDoc "presentation graph style";
       };
       presentationTemplate = mkOption {
         type = types.str;
         default = "${pkgs.smokeping}/etc/basepage.html.dist";
-        description = "Default page layout for the web UI.";
+        defaultText = literalExpression ''"''${pkgs.smokeping}/etc/basepage.html.dist"'';
+        description = lib.mdDoc "Default page layout for the web UI.";
       };
       probeConfig = mkOption {
         type = types.lines;
@@ -223,46 +243,53 @@ in
           + FPing
           binary = ${config.security.wrapperDir}/fping
         '';
-        description = "Probe configuration";
+        defaultText = literalExpression ''
+          '''
+            + FPing
+            binary = ''${config.security.wrapperDir}/fping
+          '''
+        '';
+        description = lib.mdDoc "Probe configuration";
       };
       sendmail = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/wrappers/bin/sendmail";
-        description = "Use this sendmail compatible script to deliver alerts";
+        description = lib.mdDoc "Use this sendmail compatible script to deliver alerts";
       };
       smokeMailTemplate = mkOption {
         type = types.str;
         default = "${cfg.package}/etc/smokemail.dist";
-        description = "Specify the smokemail template for alerts.";
+        defaultText = literalExpression ''"''${package}/etc/smokemail.dist"'';
+        description = lib.mdDoc "Specify the smokemail template for alerts.";
       };
       targetConfig = mkOption {
         type = types.lines;
         default = ''
-					probe = FPing
-					menu = Top
-					title = Network Latency Grapher
-					remark = Welcome to the SmokePing website of xxx Company. \
-									 Here you will learn all about the latency of our network.
-					+ Local
-					menu = Local
-					title = Local Network
-					++ LocalMachine
-					menu = Local Machine
-					title = This host
-					host = localhost
+          probe = FPing
+          menu = Top
+          title = Network Latency Grapher
+          remark = Welcome to the SmokePing website of xxx Company. \
+                   Here you will learn all about the latency of our network.
+          + Local
+          menu = Local
+          title = Local Network
+          ++ LocalMachine
+          menu = Local Machine
+          title = This host
+          host = localhost
         '';
-        description = "Target configuration";
+        description = lib.mdDoc "Target configuration";
       };
       user = mkOption {
         type = types.str;
         default = "smokeping";
-        description = "User that runs smokeping and (optionally) thttpd";
+        description = lib.mdDoc "User that runs smokeping and (optionally) thttpd. A group of the same name will be created as well.";
       };
       webService = mkOption {
         type = types.bool;
         default = true;
-        description = "Enable a smokeping web interface";
+        description = lib.mdDoc "Enable a smokeping web interface";
       };
     };
 
@@ -276,43 +303,73 @@ in
       }
     ];
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
-      fping6.source = "${pkgs.fping}/bin/fping6";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
     environment.systemPackages = [ pkgs.fping ];
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       isNormalUser = false;
       isSystemUser = true;
-      uid = config.ids.uids.smokeping;
+      group = cfg.user;
       description = "smokeping daemon user";
       home = smokepingHome;
       createHome = true;
+      # When `cfg.webService` is enabled, `thttpd` makes SmokePing available
+      # under `${cfg.host}:${cfg.port}/smokeping.fcgi` as per the `ln -s` below.
+      # We also want that going to `${cfg.host}:${cfg.port}` without `smokeping.fcgi`
+      # makes it easy for the user to find SmokePing.
+      # However `thttpd` does not seem to support easy redirections from `/` to `smokeping.fcgi`
+      # and only allows directory listings or `/` -> `index.html` resolution if the directory
+      # has `chmod 755` (see https://acme.com/software/thttpd/thttpd_man.html#PERMISSIONS,
+      # " directories should be 755 if you want to allow indexing").
+      # Otherwise it shows `403 Forbidden` on `/`.
+      # Thus, we need to make `smokepingHome` (which is given to `thttpd -d` below) `755`.
+      homeMode = "755";
     };
+    users.groups.${cfg.user} = {};
     systemd.services.smokeping = {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
+        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
         rm -f ${smokepingHome}/cropper
         ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        cp ${cgiHome} ${smokepingHome}/smokeping.fcgi
+        rm -f ${smokepingHome}/smokeping.fcgi
+        ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      wantedBy = [ "multi-user.target"];
+      requiredBy = [ "multi-user.target"];
       requires = [ "smokeping.service"];
-      partOf = [ "smokeping.service"];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
-      script = ''thttpd -u ${cfg.user} -c "**.fcgi" -d ${smokepingHome} -p ${builtins.toString cfg.port} -D -nos'';
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        Restart = "always";
+        ExecStart = lib.concatStringsSep " " (lib.concatLists [
+          [ "${pkgs.thttpd}/bin/thttpd" ]
+          [ "-u ${cfg.user}" ]
+          [ ''-c "**.fcgi"'' ]
+          [ "-d ${smokepingHome}" ]
+          (lib.optional (cfg.host != null) "-h ${cfg.host}")
+          [ "-p ${builtins.toString cfg.port}" ]
+          [ "-D -nos" ]
+        ]);
+      };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    nh2
+  ];
 }
 

@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 86abc6958..a72f7b792 100644
+--- a/Makefile
++++ b/Makefile
+@@ -187,7 +192,7 @@ endif
+ endif
+ 
+ ifeq ($(CONFIG),clang)
+-CXX = clang
++CXX = clang++
+ LD = clang++
+ CXXFLAGS += -std=$(CXXSTD) -Os
+ ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H"

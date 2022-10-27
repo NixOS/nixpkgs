@@ -1,9 +1,9 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchurl
 , ncurses
 , libuuid
-, pkgconfig
+, pkg-config
 , libjpeg
 , zlib
 , libewf
@@ -35,18 +35,18 @@ assert enableQt -> qwt != null;
     zlib
     libewf
   ]
-  ++ stdenv.lib.optional enableNtfs ntfs3g
-  ++ stdenv.lib.optional enableExtFs e2fsprogs
-  ++ stdenv.lib.optional enableQt [ qtbase qttools qwt ];
+  ++ lib.optional enableNtfs ntfs3g
+  ++ lib.optional enableExtFs e2fsprogs
+  ++ lib.optionals enableQt [ qtbase qttools qwt ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.cgsecurity.org/wiki/Main_Page;
-    downloadPage = https://www.cgsecurity.org/wiki/TestDisk_Download;
-    description = "Testdisk / Photorec - Data recovery utilities";
+  meta = with lib; {
+    homepage = "https://www.cgsecurity.org/wiki/Main_Page";
+    downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
+    description = "Data recovery utilities";
     longDescription = ''
       TestDisk is a powerful free data recovery software. It was primarily
       designed to help recover lost partitions and/or make non-booting disks
@@ -61,8 +61,8 @@ assert enableQt -> qwt != null;
       it will still work even if your media's file system has been severely
       damaged or reformatted.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = with maintainers; [ fgaz eelco ];
   };
 }

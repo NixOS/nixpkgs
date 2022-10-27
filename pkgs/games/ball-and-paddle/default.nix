@@ -1,10 +1,11 @@
-{ fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
+{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "ballandpaddle-0.8.1";
+  pname = "ballandpaddle";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "mirror://gnu/ballandpaddle/${name}.tar.gz";
+    url = "mirror://gnu/ballandpaddle/ballandpaddle-${version}.tar.gz";
     sha256 = "0zgpydad0mj7fbkippw3n9hlda6nac084dq5xfbsks9jn1xd30ny";
   };
 
@@ -31,14 +32,14 @@ stdenv.mkDerivation rec {
       with Guile.  Follow the example level sets and the documentation.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/ballandpaddle/;
+    homepage = "https://www.gnu.org/software/ballandpaddle/";
 
     maintainers = [ ];
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
 
-    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }

@@ -1,25 +1,49 @@
-{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre2
+, sqlite
+, ncurses
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "lnav-${meta.version}";
+  pname = "lnav";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${meta.version}";
-    sha256 = "0z8bsr0falxlkmd1b5gy871vyafyih0sw7lgg858lqnbsy0q2m4i";
-    inherit name;
+    rev = "v${version}";
+    sha256 = "sha256-W0NXmdbrarSmLOLpl9bt9kYjjDBtejGgh0QYeGFVMNQ=";
   };
 
-  buildInputs = [
+  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace "SUBDIRS = tools src test" "SUBDIRS = tools src"
+  '';
+
+  enableParallelBuilding = true;
+
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
     autoconf
     automake
     zlib
+    curl.dev
+  ];
+  buildInputs = [
     bzip2
     ncurses
-    pcre-cpp
+    pcre2
     readline
     sqlite
     curl
@@ -29,8 +53,8 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tstack/lnav;
+  meta = with lib; {
+    homepage = "https://github.com/tstack/lnav";
     description = "The Logfile Navigator";
     longDescription = ''
       The log file navigator, lnav, is an enhanced log file viewer that takes
@@ -43,8 +67,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.5";
-    maintainers = [ maintainers.dochang ];
+    maintainers = with maintainers; [ dochang ma27 ];
     platforms = platforms.unix;
   };
 

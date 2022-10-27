@@ -1,32 +1,20 @@
-From a33e8018092e4a91dbc45e15bbeff760b3418512 Mon Sep 17 00:00:00 2001
-From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
-Date: Wed, 13 Sep 2017 16:53:38 +0300
-Subject: [PATCH] Ignore hard link counts
-
----
- diffoscope/comparators/directory.py | 2 ++
- 1 file changed, 2 insertions(+)
-
 diff --git a/diffoscope/comparators/directory.py b/diffoscope/comparators/directory.py
-index 3b195bc..9071bb3 100644
+index 5f34d62..36999a3 100644
 --- a/diffoscope/comparators/directory.py
 +++ b/diffoscope/comparators/directory.py
-@@ -66,6 +66,7 @@ else:
-         FILE_RE = re.compile(r'^\s*File:.*$')
-         DEVICE_RE = re.compile(r'Device: [0-9a-f]+h/[0-9]+d\s+')
-         INODE_RE = re.compile(r'Inode: [0-9]+\s+')
-+        LINKS_RE = re.compile(r'Links: [0-9]+\s+')
-         ACCESS_TIME_RE = re.compile(r'^Access: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
-         CHANGE_TIME_RE = re.compile(r'^Change: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
- 
-@@ -74,6 +75,7 @@ else:
-             line = Stat.FILE_RE.sub('', line)
-             line = Stat.DEVICE_RE.sub('', line)
-             line = Stat.INODE_RE.sub('', line)
-+            line = Stat.LINKS_RE.sub('', line)
-             line = Stat.ACCESS_TIME_RE.sub('', line)
-             line = Stat.CHANGE_TIME_RE.sub('', line)
-             return line.encode('utf-8')
--- 
-2.13.0
-
+@@ -77,6 +77,7 @@ else:
+         FILE_RE = re.compile(r"^\s*File:.*$")
+         DEVICE_RE = re.compile(r"Device: [0-9a-f]+h/[0-9]+d\s+")
+         INODE_RE = re.compile(r"Inode: [0-9]+\s+")
++        LINKS_RE = re.compile(r"Links: [0-9]+\s+")
+         ACCESS_TIME_RE = re.compile(r"^Access: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$")
+         CHANGE_TIME_RE = re.compile(r"^Change: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$")
+         BIRTH_TIME_RE = re.compile(r"^\s*Birth:.*$")
+@@ -86,6 +87,7 @@ else:
+             line = Stat.FILE_RE.sub("", line)
+             line = Stat.DEVICE_RE.sub("", line)
+             line = Stat.INODE_RE.sub("", line)
++            line = Stat.LINKS_RE.sub("", line)
+             line = Stat.ACCESS_TIME_RE.sub("", line)
+             line = Stat.CHANGE_TIME_RE.sub("", line)
+             line = Stat.BIRTH_TIME_RE.sub("", line)

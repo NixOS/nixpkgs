@@ -1,0 +1,37 @@
+diff a/configure.pri b/configure.pri
+--- a/configure.pri
++++ b/configure.pri
+@@ -439,8 +439,6 @@ defineTest(qtwebengine_isWindowsPlatformSupported) {
+ 
+ defineTest(qtwebengine_isMacOsPlatformSupported) {
+     !qtwebengine_isMinXcodeVersion(10, 0, 0) {
+-        qtwebengine_platformError("requires at least version 10.0.0, but using Xcode version $${QMAKE_XCODE_VERSION}.")
+-        return(false)
+     }
+     !clang|intel_icc {
+         qtwebengine_platformError("requires Clang.")
+@@ -449,12 +447,6 @@ defineTest(qtwebengine_isMacOsPlatformSupported) {
+     # We require macOS 10.13 (darwin version 17.0.0) or newer.
+     darwin_major_version = $$section(QMAKE_HOST.version, ., 0, 0)
+     lessThan(darwin_major_version, 17) {
+-        qtwebengine_platformError("requires macOS version 10.13 or newer.")
+-        return(false)
+-    }
+-    !qtwebengine_isMinOSXSDKVersion(10, 13): {
+-        qtwebengine_platformError("requires a macOS SDK version of 10.13 or newer. Current version is $${WEBENGINE_OSX_SDK_PRODUCT_VERSION}.")
+-        return(false)
+     }
+     return(true)
+ }
+diff a/src/buildtools/config/mac_osx.pri b/src/buildtools/config/mac_osx.pri
+--- a/src/buildtools/config/mac_osx.pri
++++ b/src/buildtools/config/mac_osx.pri
+@@ -5,8 +5,6 @@ load(functions)
+ # otherwise query for it.
+ QMAKE_MAC_SDK_VERSION = $$eval(QMAKE_MAC_SDK.$${QMAKE_MAC_SDK}.SDKVersion)
+ isEmpty(QMAKE_MAC_SDK_VERSION) {
+-     QMAKE_MAC_SDK_VERSION = $$system("/usr/bin/xcodebuild -sdk $${QMAKE_MAC_SDK} -version SDKVersion 2>/dev/null")
+-     isEmpty(QMAKE_MAC_SDK_VERSION): error("Could not resolve SDK version for \'$${QMAKE_MAC_SDK}\'")
+ }
+ 
+ # chromium/build/mac/find_sdk.py expects the SDK version (mac_sdk_min) in Major.Minor format.

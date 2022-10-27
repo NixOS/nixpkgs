@@ -1,27 +1,27 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , flask
 , jinja2
 , speaklater
-, Babel
+, babel
 , pytz
 }:
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.12.2";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86";
+    sha256 = "f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
   };
 
-  propagatedBuildInputs = [ flask jinja2 speaklater Babel pytz ];
+  propagatedBuildInputs = [ flask jinja2 speaklater babel pytz ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adds i18n/l10n support to Flask applications";
-    homepage = https://github.com/mitsuhiko/flask-babel;
+    homepage = "https://github.com/mitsuhiko/flask-babel";
     license = licenses.bsd0;
     maintainers = with maintainers; [ matejc ];
   };

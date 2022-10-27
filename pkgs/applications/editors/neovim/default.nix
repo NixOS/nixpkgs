@@ -1,15 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
-, libuv, lua, ncurses, pkgconfig
-, unibilium, xsel, gperf
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, libuv, lua, ncurses, pkg-config
+, unibilium, gperf
 , libvterm-neovim
-, withJemalloc ? true, jemalloc
+, tree-sitter
+, CoreServices
 , glibcLocales ? null, procps ? null
 
-# now defaults to false because some tests can be flaky (clipboard etc)
+# now defaults to false because some tests can be flaky (clipboard etc), see
+# also: https://github.com/neovim/neovim/issues/16233
 , doCheck ? false
+, nodejs ? null, fish ? null, python3 ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   neovimLuaEnv = lua.withPackages(ps:
@@ -18,16 +21,18 @@ let
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+
+  pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.4.2";
+    version = "0.8.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "13w446plvgl219lhj29jyimhiqvs1y1byrz4qpdmxgyddmx9xqss";
+      sha256 = "sha256-mVeVjkP8JpTi2aW59ZuzQPi5YvEySVAtxko7xxAx/es=";
     };
 
     patches = [
@@ -38,20 +43,25 @@ in
     ];
 
     dontFixCmake = true;
-    enableParallelBuilding = true;
+
+    inherit lua;
 
     buildInputs = [
       gperf
       libtermkey
       libuv
       libvterm-neovim
-      lua.pkgs.luv.libluv
+      # This is actually a c library, hence it's not included in neovimLuaEnv,
+      # see:
+      # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
+      # and it's definition at: pkgs/development/lua-modules/overrides.nix
+      lua.pkgs.libluv
       msgpack
       ncurses
       neovimLuaEnv
+      tree-sitter
       unibilium
-    ] ++ optional withJemalloc jemalloc
-      ++ optional stdenv.isDarwin libiconv
+    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -66,7 +76,14 @@ in
     nativeBuildInputs = [
       cmake
       gettext
-      pkgconfig
+      pkg-config
+    ];
+
+    # extra programs test via `make functionaltest`
+    checkInputs = [
+      fish
+      nodejs
+      pyEnv      # for src/clint.py
     ];
 
 
@@ -78,33 +95,19 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DGPERF_PRG=${gperf}/bin/gperf"
-      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
+      # Don't use downloaded dependencies. At the end of the configurePhase one
+      # can spot that cmake says this option was "not used by the project".
+      # That's because all dependencies were found and
+      # third-party/CMakeLists.txt is not read at all.
+      "-DUSE_BUNDLED=OFF"
     ]
-    # FIXME: this is verry messy and strange.
-    ++ optional (!stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv}/lib/lua/${lua.luaversion}/luv.so"
-    ++ optional (stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv.libluv}/lib/lua/${lua.luaversion}/libluv.dylib"
-    ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
-    # triggers on buffer overflow bug while running tests
-    hardeningDisable = [ "fortify" ];
-
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=${jemalloc}/lib
+    preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
-    '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
-      install_name_tool -change libjemalloc.1.dylib \
-                ${jemalloc}/lib/libjemalloc.1.dylib \
-                $out/bin/nvim
-    '';
-
-    # export PATH=$PWD/build/bin:${PATH}
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
@@ -119,7 +122,8 @@ in
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage    = https://www.neovim.io;
+      homepage    = "https://www.neovim.io";
+      mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
       # Contributions committed after b17d96 are licensed under Apache 2.0 unless

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, perl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, nixosTests, perl }:
 
 stdenv.mkDerivation rec {
   pname = "fakechroot";
@@ -21,13 +21,38 @@ stdenv.mkDerivation rec {
       # and are uninteresting as well as unimportant for our purposes (since NEWS never leaves the build env).
       excludes = [ "NEWS.md" ];
     })
+
+    # glibc 2.33 compat (https://github.com/dex4er/fakechroot/pull/85/)
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/commit/534e6d555736b97211523970d378dfb0db2608e9.patch";
+      sha256 = "sha256-bUlGJZvOSrATPt8bxGqU1UETTUD9V/HhJyA5ZxsOLQU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/commit/75d7e6fa191c11a791faff06a0de86eaa7801d05.patch";
+      sha256 = "sha256-vWN7zFkKlBd/F+h/66z21RiZqkSCn3UIzy9NHV7TYDg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/commit/693a3597ea7fccfb62f357503ff177bd3e3d5a89.patch";
+      sha256 = "sha256-bFXsT0hWocJFbtS1cpzo7oIy/x66iUw6QE1/cEoZ+3k=";
+    })
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/commit/e7c1f3a446e594a4d0cce5f5d499c9439ce1d5c5.patch";
+      sha256 = "sha256-eX6kB4U1ZlXoRtkSVEIBTRjO/cTS/7z5a9S366DiRMg=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dex4er/fakechroot;
+  passthru = {
+    tests = {
+      # A lightweight *unit* test that exercises fakeroot and fakechroot together:
+      nixos-etc = nixosTests.etc.test-etc-fakeroot;
+    };
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
     license = licenses.lgpl21;
     maintainers = with maintainers; [offline];

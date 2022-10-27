@@ -1,35 +1,36 @@
-{ stdenv, fetchurl, texinfo, libXext, xorgproto, libX11
-, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+{ lib, stdenv, fetchurl, texinfo6_5, libXext, xorgproto, libX11
+, libXpm, libXt, libXcursor, alsa-lib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc
-, libXxf86vm, openal, libGLU_combined }:
+, libXxf86vm, openal, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version="4.4.2";
+  version="4.4.3.1";
 
   src = fetchurl {
     url = "https://github.com/liballeg/allegro5/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
+    sha256 = "1m6lz35nk07dli26kkwz3wa50jsrxs1kb6w1nj14a911l34xn6gc";
   };
 
   patches = [
-    ./allegro4-mesa-18.2.5.patch
     ./nix-unstable-sandbox-fix.patch
+    ./encoding.patch
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
-    libXxf86vm openal libGLU_combined
+    texinfo6_5 libXext xorgproto libX11 libXpm libXt libXcursor
+    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
+    libXxf86vm openal libGLU libGL
   ];
 
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game programming library";
-    homepage = https://liballeg.org/;
+    homepage = "https://liballeg.org/";
     license = licenses.free; # giftware
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

@@ -1,7 +1,5 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio
-, utillinux
-, writeTextFile
+{ lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
 }:
 
 let
@@ -15,10 +13,15 @@ let
     echo "}" >> $out
   '').outPath;
 in {
+  lib,
   # Allow overriding stdenv on each buildLinux call
   stdenv,
   # The kernel version
   version,
+  # Position of the Linux build expression
+  pos ? null,
+  # Additional kernel make flags
+  extraMakeFlags ? [],
   # The version of the kernel module directory
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
@@ -29,12 +32,18 @@ in {
   configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
+
+  # for module compatibility
+  isZen      ? false,
+  isLibre    ? false,
+  isHardened ? false,
+
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
   # ignored
@@ -42,25 +51,15 @@ in {
 }:
 
 let
-  inherit (stdenv.lib)
+  inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = [ perl ]
+    ++ optional (lib.versionAtLeast version "4.14") libelf
+    ++ optional (lib.versionAtLeast version "5.13") zstd;
 
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!${stdenv.shell} -e
-    mkdir -p $4
-    cp -av $2 $4
-    cp -av $3 $4
-  ''; };
-
-  commonMakeFlags = [
-    "O=$(buildRoot)"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.platform ? kernelMakeFlags)
-    stdenv.hostPlatform.platform.kernelMakeFlags;
-
-  drvAttrs = config_: platform: kernelPatches: configfile:
+  drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
         isSet = attr: hasAttr (attrName attr) config;
@@ -80,13 +79,20 @@ let
 
       isModular = config.isYes "MODULES";
 
+      buildDTBs = kernelConf.DTB or false;
+
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL")) &&
-        (stdenv.lib.versionOlder version "4.14");
+        (lib.versionOlder version "4.14");
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
-      passthru = {
+      passthru = rec {
         inherit version modDirVersion config kernelPatches configfile
           moduleBuildDependencies stdenv;
+        inherit isZen isHardened isLibre;
+        isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
+        baseVersion = lib.head (lib.splitString "-rc" version);
+        kernelOlder = lib.versionOlder baseVersion;
+        kernelAtLeast = lib.versionAtLeast baseVersion;
       };
 
       inherit src;
@@ -94,17 +100,29 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionAtLeast version "4.13" && lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
-        ++ optional (stdenv.lib.versionAtLeast version "5.2" && stdenv.lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
+        ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
-        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-            echo "stripping FHS paths in \`$mf'..."
-            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-        done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
-        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
+
+        # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
+        # FIXME: remove when no longer needed
+        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
+
+        # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
+        # This way kernels can be bit-by-bit reproducible depending on settings
+        # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
+        # See also https://kernelnewbies.org/BuildId
+        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
+
+        # Some linux-hardened patches now remove certain files in the scripts directory, so we cannot
+        # patch all scripts until after patches are applied.
+        # However, scripts/ld-version.sh is still ran when generating a configfile for a kernel, so it needs
+        # to be patched prior to patchPhase
+        patchShebangs scripts/ld-version.sh
       '';
 
       postPatch = ''
@@ -113,11 +131,21 @@ let
         # the buildFlags, but that would require also patching the kernel's
         # toplevel Makefile to add a variable export. This would be likely to
         # cause future patch conflicts.
-        if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
-          substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
-            --replace NIXOS_RANDSTRUCT_SEED \
-            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
-        fi
+        for file in scripts/gen-randstruct-seed.sh scripts/gcc-plugins/gen-random-seed.sh; do
+          if [ -f "$file" ]; then
+            substituteInPlace "$file" \
+              --replace NIXOS_RANDSTRUCT_SEED \
+              $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+            break
+          fi
+        done
+
+        patchShebangs scripts
+
+        # also patch arch-specific install scripts
+        for i in $(find arch -name install.sh); do
+            patchShebangs "$i"
+        done
       '';
 
       configurePhase = ''
@@ -154,32 +182,88 @@ let
 
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
-        platform.kernelTarget
+        kernelConf.target
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ] ++ optional isModular "modules"
+        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
+      ++ extraMakeFlags;
 
       installFlags = [
-        "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
+      ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
+
+      preInstall = let
+        # All we really need to do here is copy the final image and System.map to $out,
+        # and use the kernel's modules_install, firmware_install, dtbs_install, etc. targets
+        # for the rest. Easy, right?
+        #
+        # Unfortunately for us, the obvious way of getting the built image path,
+        # make -s image_name, does not work correctly, because some architectures
+        # (*cough* aarch64 *cough*) change KBUILD_IMAGE on the fly in their install targets,
+        # so we end up attempting to install the thing we didn't actually build.
+        #
+        # Thankfully, there's a way out that doesn't involve just hardcoding everything.
+        #
+        # The kernel has an install target, which runs a pretty simple shell script
+        # (located at scripts/install.sh or arch/$arch/boot/install.sh, depending on
+        # which kernel version you're looking at) that tries to do something sensible.
+        #
+        # (it would be great to hijack this script immediately, as it has all the
+        #   information we need passed to it and we don't need it to try and be smart,
+        #   but unfortunately, the exact location of the scripts differs between kernel
+        #   versions, and they're seemingly not considered to be public API at all)
+        #
+        # One of the ways it tries to discover what "something sensible" actually is
+        # is by delegating to what's supposed to be a user-provided install script
+        # located at ~/bin/installkernel.
+        #
+        # (the other options are:
+        #   - a distribution-specific script at /sbin/installkernel,
+        #        which we can't really create in the sandbox easily
+        #   - an architecture-specific script at arch/$arch/boot/install.sh,
+        #        which attempts to guess _something_ and usually guesses very wrong)
+        #
+        # More specifically, the install script exec's into ~/bin/installkernel, if one
+        # exists, with the following arguments:
+        #
+        # $1: $KERNELRELEASE - full kernel version string
+        # $2: $KBUILD_IMAGE - the final image path
+        # $3: System.map - path to System.map file, seemingly hardcoded everywhere
+        # $4: $INSTALL_PATH - path to the destination directory as specified in installFlags
+        #
+        # $2 is exactly what we want, so hijack the script and use the knowledge given to it
+        # by the makefile overlords for our own nefarious ends.
+        #
+        # Note that the makefiles specifically look in ~/bin/installkernel, and
+        # writeShellScriptBin writes the script to <store path>/bin/installkernel,
+        # so HOME needs to be set to just the store path.
+        #
+        # FIXME: figure out a less roundabout way of doing this.
+        installkernel = buildPackages.writeShellScriptBin "installkernel" ''
+          cp -av $2 $4
+          cp -av $3 $4
+        '';
+      in ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+        export HOME=${installkernel}
+      '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (
-        if platform ? kernelInstallTarget then platform.kernelInstallTarget
-        else if platform.kernelTarget == "uImage" then "uinstall"
-        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
-        else "install"
-      ) ];
+      installTargets = [
+        (kernelConf.installTarget or (
+          /**/ if kernelConf.target == "uImage" then "uinstall"
+          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+          else "install"))
+      ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
-        make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
-      '' else "") + (if isModular then ''
+      '') + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -230,20 +314,19 @@ let
         rm -fR drivers
 
         # Keep all headers
-        find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.h' -print0 | xargs -0 -r chmod u-w
 
         # Keep linker scripts (they are required for out-of-tree modules on aarch64)
-        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
+        find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
         # Keep root and arch-specific Makefiles
-        chmod u-w Makefile
-        chmod u-w arch/$arch/Makefile*
+        chmod u-w Makefile arch/"$arch"/Makefile*
 
         # Keep whole scripts dir
         chmod u-w -R scripts
 
         # Delete everything not kept
-        find . -type f -perm -u=w -print0 | xargs -0 rm
+        find . -type f -perm -u=w -print0 | xargs -0 -r rm
 
         # Delete empty directories
         find -empty -type d -delete
@@ -262,12 +345,11 @@ let
           "The Linux kernel" +
           (if kernelPatches == [] then "" else
             " (with patches: "
-            + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
+            + lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
-        license = stdenv.lib.licenses.gpl2;
-        homepage = https://www.kernel.org/;
-        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
-        maintainers = [
+        license = lib.licenses.gpl2Only;
+        homepage = "https://www.kernel.org/";
+        maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
@@ -276,33 +358,37 @@ let
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
+assert (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") -> libelf != null;
+assert lib.versionAtLeast version "5.8" -> elfutils != null;
+
+stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
   pname = "linux";
   inherit version;
 
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
-      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
-      ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
+      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+      ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
+      # Removed util-linuxMinimal since it should not be a dependency.
+      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
-  makeFlags = commonMakeFlags ++ [
+  makeFlags = [
+    "O=$(buildRoot)"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
+    ++ extraMakeFlags;
 
-  karch = stdenv.hostPlatform.platform.kernelArch;
-})
+  karch = stdenv.hostPlatform.linuxArch;
+} // (optionalAttrs (pos != null) { inherit pos; }))

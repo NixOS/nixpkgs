@@ -1,65 +1,67 @@
-{ stdenv
-, isPy3k
+{ lib
+, pythonOlder
 , buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, sympy
-, matplotlib
-, networkx
-, ply
-, pillow
-, cffi
-, requests
-, requests_ntlm
-, IBMQuantumExperience
-, jsonschema
-, psutil
-, cmake
-, llvmPackages 
+, fetchFromGitHub
+  # Python Inputs
+, qiskit-aer
+, qiskit-ibmq-provider
+, qiskit-ignis
+, qiskit-terra
+  # Optional inputs
+, withOptionalPackages ? true
+, qiskit-finance
+, qiskit-machine-learning
+, qiskit-nature
+, qiskit-optimization
+  # Check Inputs
+, pytestCheckHook
 }:
 
+let
+  optionalQiskitPackages = [
+    qiskit-finance
+    qiskit-machine-learning
+    qiskit-nature
+    qiskit-optimization
+  ];
+in
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.7.3";
+  # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
+  version = "0.37.0";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "63e7a7c3033fe955d715cc825b3fb61d27c25ad66e1761493ca2243b5dbfb4f9";
+  src = fetchFromGitHub {
+    owner = "Qiskit";
+    repo = "qiskit";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-TsDDiSWSjk2iXaxFjGXQxPFEPCR242dR26H0cpA6ZxY=";
   };
 
-  buildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp;
-
   propagatedBuildInputs = [
-    numpy
-    matplotlib
-    networkx
-    ply
-    scipy
-    sympy
-    pillow
-    cffi
-    requests
-    requests_ntlm
-    IBMQuantumExperience
-    jsonschema
-    psutil
+    qiskit-aer
+    qiskit-ibmq-provider
+    qiskit-ignis
+    qiskit-terra
+  ] ++ lib.optionals withOptionalPackages optionalQiskitPackages;
+
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [
+    "qiskit"
+    "qiskit.circuit"
+    "qiskit.ignis"
+    "qiskit.providers.aer"
+    "qiskit.providers.ibmq"
   ];
 
-  # Pypi's tarball doesn't contain tests
-  doCheck = false;
-
-  meta = {
-    description = "Quantum Software Development Kit for writing quantum computing experiments, programs, and applications";
-    homepage    = https://github.com/QISKit/qiskit-terra;
-    license     = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [
-      pandaman
-    ];
-    # Needs to be updated and have its new dependencies added
-    broken = true;
+  meta = with lib; {
+    description = "Software for developing quantum computing programs";
+    homepage = "https://qiskit.org";
+    downloadPage = "https://github.com/QISKit/qiskit/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ drewrisinger pandaman ];
   };
 }

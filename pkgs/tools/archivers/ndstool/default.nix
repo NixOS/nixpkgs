@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   pname = "ndstool";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = https://github.com/devkitPro/ndstool;
+    homepage = "https://github.com/devkitPro/ndstool";
     description = "A tool to unpack and repack nds rom";
-    maintainers = [ stdenv.lib.maintainers.marius851000 ];
-    license = stdenv.lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.marius851000 ];
+    license = lib.licenses.gpl3;
   };
 }

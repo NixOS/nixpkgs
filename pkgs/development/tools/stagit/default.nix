@@ -1,24 +1,24 @@
-{ stdenv, libgit2, fetchgit }:
+{ lib, stdenv, libgit2, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "stagit";
-  version = "0.9.1";
+  version = "1.2";
 
   src = fetchgit {
-    url = git://git.codemadness.org/stagit;
+    url = "git://git.codemadness.org/stagit";
     rev = version;
-    sha256 = "0gh28spkry9wbmdj0hmvz3680fvbyzab9cifhj1p76f4fz27rnv9";
+    sha256 = "sha256-mVYR8THGGfaTsx3aaSbQBxExRo87K47SD+PU5cZ8z58=";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [ libgit2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "git static site generator";
-    homepage = https://git.codemadness.org/stagit/;
+    homepage = "https://git.codemadness.org/stagit/file/README.html";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 sikmir ];
   };
 }

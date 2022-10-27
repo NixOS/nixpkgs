@@ -1,56 +1,140 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkgconfig, gobject-introspection, vala
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, gtk3, gnome3
-, dbus, xvfb_run, libxml2
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, enableGlade ? false
+, glade
+, xvfb-run
+, gdk-pixbuf
+, librsvg
+, libxml2
 , hicolor-icon-theme
+, at-spi2-atk
+, at-spi2-core
+, gnome
+, libhandy
+, runCommand
 }:
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "0.0.11";
+  version = "1.8.0";
 
-  outputs = [ "out" "dev" "devdoc" "glade" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ] ++ lib.optionals enableGlade [
+    "glade"
+  ];
   outputBin = "dev";
 
-  src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0622zp5wrvn5bvgardijxd11y76g1i54fs32y03dw9nrar7i6vb0";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-bCVCwFeJJLDCm3rmy0TrJt846wHW1e89fQsIJXYyMOg=";
   };
 
-  nativeBuildInputs = [
-    meson ninja pkgconfig gobject-introspection vala
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+  depsBuildBuild = [
+    pkg-config
   ];
-  buildInputs = [ gnome3.gnome-desktop gtk3 gnome3.glade libxml2 ];
-  checkInputs = [ dbus xvfb_run hicolor-icon-theme ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    gi-docgen
+    meson
+    ninja
+    pkg-config
+    vala
+  ] ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
+  ];
+
+  buildInputs = [
+    gdk-pixbuf
+    gtk3
+  ] ++ lib.optionals enableGlade [
+    glade
+  ];
+
+  checkInputs = [
+    xvfb-run
+    at-spi2-atk
+    at-spi2-core
+    librsvg
+    hicolor-icon-theme
+  ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dglade_catalog=enabled"
-    "-Dintrospection=enabled"
+    "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
   ];
 
+  # Uses define_variable in pkg-config, but we still need it to use the glade output
   PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
   PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${hicolor-icon-theme}/share" \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+    runHook preCheck
+
+    testEnvironment=(
+      # Disable portal since we cannot run it in tests.
+      HDY_DISABLE_PORTAL=1
+
+      "XDG_DATA_DIRS=${lib.concatStringsSep ":" [
+        # HdySettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
+        # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
+        # See hdy_settings_constructed function in https://gitlab.gnome.org/GNOME/libhandy/-/commit/bb68249b005c445947bfb2bee66c91d0fe9c41a4
+        (glib.getSchemaDataDirPath gsettings-desktop-schemas)
+
+        # Some tests require icons
+        "${hicolor-icon-theme}/share"
+      ]}"
+    )
+    env "''${testEnvironment[@]}" xvfb-run \
       meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
-    description = "A library full of GTK widgets for mobile phones";
-    homepage = https://source.puri.sm/Librem5/libhandy;
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  } // lib.optionalAttrs (!enableGlade) {
+    glade =
+      let
+        libhandyWithGlade = libhandy.override {
+          enableGlade = true;
+        };
+      in runCommand "${libhandy.name}-glade" {} ''
+        cp -r "${libhandyWithGlade.glade}" "$out"
+        chmod -R +w "$out"
+        sed -e "s#${libhandyWithGlade.out}#${libhandy.out}#g" -e "s#${libhandyWithGlade.glade}#$out#g" -i $(find "$out" -type f)
+      '';
+  };
+
+  meta = with lib; {
+    changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
+    description = "Building blocks for modern adaptive GNOME apps";
+    homepage = "https://gitlab.gnome.org/GNOME/libhandy";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }

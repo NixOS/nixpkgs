@@ -1,35 +1,79 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, mock, tornado, pyopenssl, cryptography
-, idna, certifi, ipaddress, pysocks }:
+{ lib
+, brotli
+, brotlicffi
+, buildPythonPackage
+, certifi
+, cryptography
+, fetchPypi
+, idna
+, isPyPy
+, mock
+, pyopenssl
+, pysocks
+, pytest-freezegun
+, pytest-timeout
+, pytestCheckHook
+, python-dateutil
+, tornado
+, trustme
+}:
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.24.3";
+  version = "1.26.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2393a695cd12afedd0dcb26fe5d50d0cf248e5a66f75dbd89a3d4eb333a61af4";
+    hash = "sha256-P6ls9CPmmHmX/DJq6N85bbKot8ZndH1H3djsupH0p04=";
   };
 
-  outputs = [ "out" "dev" ];
+  # FIXME: remove backwards compatbility hack
+  propagatedBuildInputs = passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
-  NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
-    "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
-    "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"
+  checkInputs = [
+    python-dateutil
+    mock
+    pytest-freezegun
+    pytest-timeout
+    pytestCheckHook
+    tornado
+    trustme
   ];
 
-  checkPhase = ''
-    nosetests -v --cover-min-percentage 1
-  '';
-
+  # Tests in urllib3 are mostly timeout-based instead of event-based and
+  # are therefore inherently flaky. On your own machine, the tests will
+  # typically build fine, but on a loaded cluster such as Hydra random
+  # timeouts will occur.
+  #
+  # The urllib3 test suite has two different timeouts in their test suite
+  # (see `test/__init__.py`):
+  # - SHORT_TIMEOUT
+  # - LONG_TIMEOUT
+  # When CI is in the env, LONG_TIMEOUT will be significantly increased.
+  # Still, failures can occur and for that reason tests are disabled.
   doCheck = false;
 
-  checkInputs = [ pytest mock tornado ];
-  propagatedBuildInputs = [ pyopenssl cryptography idna certifi ipaddress pysocks ];
+  preCheck = ''
+    export CI # Increases LONG_TIMEOUT
+  '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "urllib3"
+  ];
+
+  passthru.optional-dependencies = {
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    # Use carefully since pyopenssl is not supported aarch64-darwin
+    secure = [ certifi cryptography idna pyopenssl ];
+    socks = [ pysocks ];
+  };
+
+  meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";
-    homepage = https://github.com/shazow/urllib3;
+    homepage = "https://github.com/shazow/urllib3";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

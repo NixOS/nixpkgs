@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitLab, bash }:
+{ lib, stdenv, fetchurl, fetchFromGitLab, bash }:
 
 let
   # Fetch explicitly, otherwise build will try to do so
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ bash ];
   doCheck = true;
-  
+
   meta = {
     description = "A general purpose fuzzer";
     longDescription = "Radamsa is a general purpose data fuzzer. It reads data from given sample files, or standard input if none are given, and outputs modified data. It is usually used to generate malformed data for testing programs.";
-    homepage =  https://gitlab.com/akihe/radamsa;
-    maintainers = [ stdenv.lib.maintainers.markWot ];
-    platforms = stdenv.lib.platforms.all;
+    homepage =  "https://gitlab.com/akihe/radamsa";
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
 }

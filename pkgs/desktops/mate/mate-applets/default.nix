@@ -1,46 +1,77 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, glib, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, dbus-glib
+, glib
+, gtk3
+, gtksourceview3
+, gucharmap
+, libmateweather
+, libnl
+, libwnck
+, libgtop
+, libxml2
+, libnotify
+, mate-panel
+, polkit
+, upower
+, wirelesstools
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
-  version = "1.22.2";
+  version = "1.26.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1c32rkkry6kka2arrx5psjj037j79icp5jr1s0qh596dvsgxciqc";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "Orj2HbN23DM85MGHIsY6B/qz6OEnK34OCXrUWXsXwsI=";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    gettext
     itstool
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
+    dbus-glib
     gtk3
     gtksourceview3
-    gnome3.gucharmap
-    libwnck3
+    gucharmap
+    hicolor-icon-theme
     libgtop
-    libxml2
+    libmateweather
+    libnl
     libnotify
+    libwnck
+    libxml2
+    mate-panel
     polkit
     upower
     wirelesstools
-    mate.libmateweather
-    mate.mate-panel
-    hicolor-icon-theme
   ];
 
   configureFlags = [ "--enable-suid=no" ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
     description = "Applets for use with the MATE panel";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

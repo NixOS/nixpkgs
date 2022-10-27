@@ -1,22 +1,35 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, curl, gnutls, libgcrypt, libuuid, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, curl, gnutls, libgcrypt, libuuid, fuse, boost }:
 
-stdenv.mkDerivation rec {
-  pname = "blobfuse";
-  version = "1.0.2";
-
+let
+  version = "1.3.7";
   src = fetchFromGitHub {
     owner  = "Azure";
     repo   = "azure-storage-fuse";
-    rev    = "v${version}";
-    sha256 = "1qh04z1fsj1l6l12sz9yl2sy9hwlrnzac54hwrr7wvsgv90n9gbp";
+    rev    = "blobfuse-${version}-Linux";
+    sha256 = "sha256-yihIuS4AG489U7eBi/p7H6S7Cg54kkQeNVCexxQZ60A=";
   };
+  cpplite = stdenv.mkDerivation rec {
+    pname = "cpplite";
+    inherit version src;
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=catch-value" ];
+    sourceRoot = "source/cpplite";
+    patches = [ ./install-adls.patch ];
 
-  buildInputs = [ curl gnutls libgcrypt libuuid fuse ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+    cmakeFlags = [ "-DBUILD_ADLS=ON" "-DUSE_OPENSSL=OFF" ];
 
-  meta = with stdenv.lib; {
+    buildInputs = [ curl libuuid gnutls ];
+    nativeBuildInputs = [ cmake pkg-config ];
+  };
+in stdenv.mkDerivation rec {
+  pname = "blobfuse";
+  inherit version src;
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
+
+  buildInputs = [ curl gnutls libgcrypt libuuid fuse boost cpplite ];
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  meta = with lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
     license = licenses.mit;
     maintainers = with maintainers; [ jbgi ];

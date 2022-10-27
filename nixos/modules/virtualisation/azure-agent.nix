@@ -17,12 +17,12 @@ let
 
     patches = [ ./azure-agent-entropy.patch ];
 
-    buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
+    nativeBuildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
                     nettools # for hostname
                     procps # for pidof
                     shadow # for useradd, usermod
-                    utillinux # for (u)mount, fdisk, sfdisk, mkswap
+                    util-linux # for (u)mount, fdisk, sfdisk, mkswap
                     parted
                   ];
     pythonPath = [ pythonPackages.pyasn1 ];
@@ -48,7 +48,7 @@ let
 
   provisionedHook = pkgs.writeScript "provisioned-hook" ''
     #!${pkgs.runtimeShell}
-    ${config.systemd.package}/bin/systemctl start provisioned.target
+    /run/current-system/systemd/bin/systemctl start provisioned.target
   '';
 
 in
@@ -60,15 +60,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = "Whether to enable the Windows Azure Linux Agent.";
+      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = "Whether to enable verbose logging.";
+      description = lib.mdDoc "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 
@@ -76,7 +76,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } {
       assertion = config.networking.networkmanager.enable == false;
@@ -146,15 +146,11 @@ in
 
     services.logrotate = {
       enable = true;
-      config = ''
-        /var/log/waagent.log {
-            compress
-            monthly
-            rotate 6
-            notifempty
-            missingok
-        }
-      '';
+      settings."/var/log/waagent.log" = {
+        compress = true;
+        frequency = "monthly";
+        rotate = 6;
+      };
     };
 
     systemd.targets.provisioned = {

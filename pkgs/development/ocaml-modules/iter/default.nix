@@ -1,23 +1,28 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, mdx, qtest, result }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, dune-configurator
+, mdx, qtest, result
+}:
 
 buildDunePackage rec {
   pname = "iter";
-  version = "1.2.1";
+  version = "1.4";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
-    rev = version;
-    sha256 = "0j2sg50byn0ppmf6l36ksip7zx1d3gv7sc4hbbxs2rmx39jr7vxh";
+    rev = "v${version}";
+    sha256 = "sha256-Kk92GM7IVXOSVBkeN6wj67Q3UGCyuOOVi2umpn1AZTo=";
   };
 
-  buildInputs = lib.optionals doCheck [ mdx qtest ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ result ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [ mdx.bin qtest ];
 
   meta = {
-    homepage = https://github.com/c-cube/sequence;
+    homepage = "https://github.com/c-cube/sequence";
     description = "Simple sequence (iterator) datatype and combinators";
     longDescription = ''
       Simple sequence datatype, intended to transfer a finite number of

@@ -1,5 +1,15 @@
+# shellcheck shell=bash
+__nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
+
+if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
+    echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
+    echo "Please install Bash 4 or greater to continue."
+    exit 1
+fi
+
+shopt -s inherit_errexit
 
 if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
@@ -17,10 +27,6 @@ fi
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
-    local oldOpts="-u"
-    shopt -qo nounset || oldOpts="+u"
-    set -u # May be called from elsewhere, so do `set -u`.
-
     local hookName="$1"
     shift
     local hooksSlice="${hookName%Hook}Hooks[@]"
@@ -30,10 +36,8 @@ runHook() {
     # undefined.
     for hook in "_callImplicitHook 0 $hookName" ${!hooksSlice+"${!hooksSlice}"}; do
         _eval "$hook" "$@"
-        set -u # To balance `_eval`
     done
 
-    set "$oldOpts"
     return 0
 }
 
@@ -41,10 +45,6 @@ runHook() {
 # Run all hooks with the specified name, until one succeeds (returns a
 # zero exit code). If none succeed, return a non-zero exit code.
 runOneHook() {
-    local oldOpts="-u"
-    shopt -qo nounset || oldOpts="+u"
-    set -u # May be called from elsewhere, so do `set -u`.
-
     local hookName="$1"
     shift
     local hooksSlice="${hookName%Hook}Hooks[@]"
@@ -56,10 +56,8 @@ runOneHook() {
             ret=0
             break
         fi
-        set -u # To balance `_eval`
     done
 
-    set "$oldOpts"
     return "$ret"
 }
 
@@ -70,17 +68,13 @@ runOneHook() {
 # environment variables) and from shell scripts (as functions). If you
 # want to allow multiple hooks, use runHook instead.
 _callImplicitHook() {
-    set -u
     local def="$1"
     local hookName="$2"
     if declare -F "$hookName" > /dev/null; then
-        set +u
         "$hookName"
     elif type -p "$hookName" > /dev/null; then
-        set +u
         source "$hookName"
     elif [ -n "${!hookName:-}" ]; then
-        set +u
         eval "${!hookName}"
     else
         return "$def"
@@ -96,13 +90,10 @@ _callImplicitHook() {
 # command can take them
 _eval() {
     if declare -F "$1" > /dev/null 2>&1; then
-        set +u
         "$@" # including args
     else
-        set +u
         eval "$1"
     fi
-    # `run*Hook` reenables `set -u`
 }
 
 
@@ -134,14 +125,12 @@ exitHandler() {
     set +e
 
     if [ -n "${showBuildStats:-}" ]; then
-        times > "$NIX_BUILD_TOP/.times"
-        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
-        # Print the following statistics:
-        # - user time for the shell
-        # - system time for the shell
-        # - user time for all child processes
-        # - system time for all child processes
-        echo "build time elapsed: " "${times[@]}"
+        read -r -d '' -a buildTimes < <(times)
+        echo "build times:"
+        echo "user time for the shell             ${buildTimes[0]}"
+        echo "system time for the shell           ${buildTimes[1]}"
+        echo "user time for all child processes   ${buildTimes[2]}"
+        echo "system time for all child processes ${buildTimes[3]}"
     fi
 
     if (( "$exitCode" != 0 )); then
@@ -155,14 +144,14 @@ exitHandler() {
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
-            exit 0
+            return 0
         fi
 
     else
         runHook exitHook
     fi
 
-    exit "$exitCode"
+    return "$exitCode"
 }
 
 trap "exitHandler" EXIT
@@ -176,7 +165,8 @@ addToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
-    if [ -d "$dir" ]; then
+    if [[ -d "$dir" && "${!varName:+${delimiter}${!varName}${delimiter}}" \
+          != *"${delimiter}${dir}${delimiter}"* ]]; then
         export "${varName}=${!varName:+${!varName}${delimiter}}${dir}"
     fi
 }
@@ -190,12 +180,12 @@ addToSearchPath() {
 # so it is defined here but tried after the hook.
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
-        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
         if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
         fi
         if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
         fi
     fi
 }
@@ -209,6 +199,34 @@ isELF() {
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
+}
+
+# Return success if the specified file is a Mach-O object.
+isMachO() {
+    local fn="$1"
+    local fd
+    local magic
+    exec {fd}< "$fn"
+    read -r -n 4 -u "$fd" magic
+    exec {fd}<&-
+
+    # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
+    # If we use the $'string' syntax instead of 'echo -ne' then 'declare' will print the raw characters and break nix.
+    # See https://github.com/NixOS/nixpkgs/pull/138334 and https://github.com/NixOS/nix/issues/5262.
+
+    # https://opensource.apple.com/source/lldb/lldb-310.2.36/examples/python/mach_o.py.auto.html
+    if [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xcf") || "$magic" = $(echo -ne "\xcf\xfa\xed\xfe") ]]; then
+        # MH_MAGIC_64 || MH_CIGAM_64
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xce") || "$magic" = $(echo -ne "\xce\xfa\xed\xfe") ]]; then
+        # MH_MAGIC || MH_CIGAM
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xca\xfe\xba\xbe") || "$magic" = $(echo -ne "\xbe\xba\xfe\xca") ]]; then
+        # FAT_MAGIC || FAT_CIGAM
+        return 0;
+    else
+        return 1;
+    fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -238,12 +256,13 @@ printWords() {
 # Initialisation.
 
 
-# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
-# build tools to provide a deterministic substitute for the "current"
-# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
-# confuses some applications.
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some build tools
+# to provide a deterministic substitute for the "current" time. Note that
+# 315532800 = 1980-01-01 12:00:00. We use this date because python's wheel
+# implementation uses zip archive and zip does not support dates going back to
+# 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=1}
+: ${SOURCE_DATE_EPOCH:=315532800}
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -266,6 +285,8 @@ for i in $initialPath; do
         addToSearchPath HOST_PATH "$i/bin"
     fi
 done
+
+unset i
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "initial path: $PATH"
@@ -296,11 +317,11 @@ declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
 declare -a pkgsHostHost pkgsHostTarget
 declare -a pkgsTargetTarget
 
-declare -ra pkgBuildAccumVars=(pkgsBuildBuild pkgsBuildHost pkgsBuildTarget)
-declare -ra pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
-declare -ra pkgTargetAccumVars=(pkgsTargetTarget)
+declare -a pkgBuildAccumVars=(pkgsBuildBuild pkgsBuildHost pkgsBuildTarget)
+declare -a pkgHostAccumVars=(pkgsHostHost pkgsHostTarget)
+declare -a pkgTargetAccumVars=(pkgsTargetTarget)
 
-declare -ra pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
+declare -a pkgAccumVarVars=(pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars)
 
 
 # Hooks
@@ -309,11 +330,15 @@ declare -a envBuildBuildHooks envBuildHostHooks envBuildTargetHooks
 declare -a envHostHostHooks envHostTargetHooks
 declare -a envTargetTargetHooks
 
-declare -ra pkgBuildHookVars=(envBuildBuildHook envBuildHostHook envBuildTargetHook)
-declare -ra pkgHostHookVars=(envHostHostHook envHostTargetHook)
-declare -ra pkgTargetHookVars=(envTargetTargetHook)
+declare -a pkgBuildHookVars=(envBuildBuildHook envBuildHostHook envBuildTargetHook)
+declare -a pkgHostHookVars=(envHostHostHook envHostTargetHook)
+declare -a pkgTargetHookVars=(envTargetTargetHook)
 
-declare -ra pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
+declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
+
+# those variables are declared here, since where and if they are used varies
+# shellcheck disable=SC2034
+declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
 
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
@@ -329,26 +354,26 @@ addEnvHooks() {
 
 # Propagated dep files
 
-declare -ra propagatedBuildDepFiles=(
+declare -a propagatedBuildDepFiles=(
     propagated-build-build-deps
     propagated-native-build-inputs # Legacy name for back-compat
     propagated-build-target-deps
 )
-declare -ra propagatedHostDepFiles=(
+declare -a propagatedHostDepFiles=(
     propagated-host-host-deps
     propagated-build-inputs # Legacy name for back-compat
 )
-declare -ra propagatedTargetDepFiles=(
+declare -a propagatedTargetDepFiles=(
     propagated-target-target-deps
 )
-declare -ra propagatedDepFilesVars=(
+declare -a propagatedDepFilesVars=(
     propagatedBuildDepFiles
     propagatedHostDepFiles
     propagatedTargetDepFiles
 )
 
 # Platform offsets: build = -1, host = 0, target = 1
-declare -ra allPlatOffsets=(-1 0 1)
+declare -a allPlatOffsets=(-1 0 1)
 
 
 # Mutually-recursively find all build inputs. See the dependency section of the
@@ -356,14 +381,14 @@ declare -ra allPlatOffsets=(-1 0 1)
 # implements.
 findInputs() {
     local -r pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
-    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
-    local varRef="$varVar[\$targetOffset - \$hostOffset]"
+    local varVar="${pkgAccumVarVars[hostOffset + 1]}"
+    local varRef="$varVar[$((targetOffset - hostOffset))]"
     local var="${!varRef}"
     unset -v varVar varRef
 
@@ -388,36 +413,35 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
-    local -i mapOffsetResult
     function mapOffset() {
-        local -ri inputOffset="$1"
-        if (( "$inputOffset" <= 0 )); then
-            local -ri outputOffset="$inputOffset + $hostOffset"
+        local -r inputOffset="$1"
+        local -n outputOffset="$2"
+        if (( inputOffset <= 0 )); then
+            outputOffset=$((inputOffset + hostOffset))
         else
-            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
+            outputOffset=$((inputOffset - 1 + targetOffset))
         fi
-        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
     # dependencies we are currently exploring.
-    local -i relHostOffset
+    local relHostOffset
     for relHostOffset in "${allPlatOffsets[@]}"; do
         # `+ 1` so we start at 0 for valid index
-        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
+        local files="${propagatedDepFilesVars[relHostOffset + 1]}"
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        mapOffset relHostOffset
-        local -i hostOffsetNext="$mapOffsetResult"
+        local hostOffsetNext
+        mapOffset "$relHostOffset" hostOffsetNext
 
         # Ensure we're in bounds relative to the package currently
         # being built.
-        [[ "${allPlatOffsets[*]}" = *"$hostOffsetNext"*  ]] || continue
+        (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
         # Target offset relative to the *host* offset of the package
         # whose immediate dependencies we are currently exploring.
-        local -i relTargetOffset
+        local relTargetOffset
         for relTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$relHostOffset" <= "$relTargetOffset" )) || continue
 
@@ -427,12 +451,12 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            mapOffset relTargetOffset
-            local -i targetOffsetNext="$mapOffsetResult"
+            local targetOffsetNext
+            mapOffset "$relTargetOffset" targetOffsetNext
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
-            [[ "${allPlatOffsets[*]}" = *"$targetOffsetNext"* ]] || continue
+            (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
@@ -482,29 +506,29 @@ done
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
     if [ -f "$pkg" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$pkg"
-        set "$oldOpts"
     fi
 
     # Only dependencies whose host platform is guaranteed to match the
     # build platform are included here. That would be `depsBuild*`,
     # and legacy `nativeBuildInputs`, in general. If we aren't cross
     # compiling, however, everything can be put on the PATH. To ease
-    # the transition, we do include everything in thatcase.
+    # the transition, we do include everything in that case.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
-    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
+    if [[ -z "${strictDeps-}" || "$hostOffset" -le -1 ]]; then
         addToSearchPath _PATH "$pkg/bin"
+    fi
+
+    if (( hostOffset <= -1 )); then
+        addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
@@ -512,22 +536,18 @@ activatePackage() {
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$pkg/nix-support/setup-hook"
-        set "$oldOpts"
     fi
 }
 
 _activatePkgs() {
-    local -i hostOffset targetOffset
+    local hostOffset targetOffset
     local pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
-        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[hostOffset + 1]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
-            (( "$hostOffset" <= "$targetOffset" )) || continue
+            (( hostOffset <= targetOffset )) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
@@ -549,14 +569,14 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local -i depHostOffset depTargetOffset
+    local depHostOffset depTargetOffset
     local pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
-        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
-        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
+        local hookVar="${pkgHookVarVars[depHostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[depHostOffset + 1]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
-            (( "$depHostOffset" <= "$depTargetOffset" )) || continue
+            (( depHostOffset <= depTargetOffset )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
 
@@ -568,12 +588,12 @@ _addToEnv() {
                 #
                 # TODO(@Ericson2314): Don't special-case native compilation
                 for pkg in \
-                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
-                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
-                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
-                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
-                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
-                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                    "${pkgsBuildBuild[@]}" \
+                    "${pkgsBuildHost[@]}" \
+                    "${pkgsBuildTarget[@]}" \
+                    "${pkgsHostHost[@]}" \
+                    "${pkgsHostTarget[@]}" \
+                    "${pkgsTargetTarget[@]}"
                 do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
@@ -594,6 +614,13 @@ _addToEnv() {
 
 # Run the package-specific hooks set by the setup-hook scripts.
 _addToEnv
+
+
+# Unset setup-specific declared variables
+unset allPlatOffsets
+unset pkgBuildAccumVars pkgHostAccumVars pkgTargetAccumVars pkgAccumVarVars
+unset pkgBuildHookVars pkgHostHookVars pkgTargetHookVars pkgHookVarVars
+unset propagatedDepFilesVars
 
 
 _addRpathPrefix "$out"
@@ -619,13 +646,16 @@ fi
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
 HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
+export XDG_DATA_DIRS="${_XDG_DATA_DIRS-}${_XDG_DATA_DIRS:+${XDG_DATA_DIRS:+:}}${XDG_DATA_DIRS-}"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
     echo "final host path: $HOST_PATH"
+    echo "final data dirs: $XDG_DATA_DIRS"
 fi
 
 unset _PATH
 unset _HOST_PATH
+unset _XDG_DATA_DIRS
 
 
 # Make GNU Make produce nested output.
@@ -636,26 +666,21 @@ export NIX_INDENT_MAKE=1
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
 
-if [ -z "${NIX_BUILD_CORES:-}" ]; then
-  NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
-  NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
-  if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
-    :
-  else
-    NIX_BUILD_CORES="1"
-  fi
+NIX_BUILD_CORES="${NIX_BUILD_CORES:-1}"
+if ((NIX_BUILD_CORES <= 0)); then
+  guess=$(nproc 2>/dev/null || true)
+  ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
 fi
 export NIX_BUILD_CORES
 
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
-if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -719,9 +744,11 @@ substituteStream() {
     printf "%s" "${!var}"
 }
 
+# put the content of a file in a variable
+# fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 $1; then
+    if IFS='' read -r -d '' $1 ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -745,9 +772,18 @@ substitute() {
 }
 
 substituteInPlace() {
-    local fileName="$1"
-    shift
-    substitute "$fileName" "$fileName" "$@"
+    local -a fileNames=()
+    for arg in "$@"; do
+        if [[ "$arg" = "--"* ]]; then
+            break
+        fi
+        fileNames+=("$arg")
+        shift
+    done
+
+    for file in "${fileNames[@]}"; do
+        substitute "$file" "$file" "$@"
+    done
 }
 
 _allFlags() {
@@ -797,7 +833,7 @@ substituteAllInPlace() {
 # the environment used for building.
 dumpVars() {
     if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        export > "$NIX_BUILD_TOP/env-vars" || true
+        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
     fi
 }
 
@@ -805,14 +841,17 @@ dumpVars() {
 # Utility function: echo the base name of the given path, with the
 # prefix `HASH-' removed, if present.
 stripHash() {
-    local strippedName
+    local strippedName casematchOpt=0
     # On separate line for `set -e`
-    strippedName="$(basename "$1")"
-    if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
-        echo "$strippedName" | cut -c34-
+    strippedName="$(basename -- "$1")"
+    shopt -q nocasematch && casematchOpt=1
+    shopt -u nocasematch
+    if [[ "$strippedName" =~ ^[a-z0-9]{32}- ]]; then
+        echo "${strippedName:33}"
     else
         echo "$strippedName"
     fi
+    if (( casematchOpt )); then shopt -s nocasematch; fi
 }
 
 
@@ -832,12 +871,12 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf -
+                xz -d < "$fn" | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn"
+                tar xf "$fn" --warning=no-timestamp
                 ;;
             *)
                 return 1
@@ -959,7 +998,18 @@ patchPhase() {
 
 
 fixLibtool() {
-    sed -i -e 's^eval sys_lib_.*search_path=.*^^' "$1"
+    local search_path
+    for flag in $NIX_LDFLAGS; do
+        case $flag in
+            -L*)
+                search_path+=" ${flag#-L}"
+                ;;
+        esac
+    done
+
+    sed -i "$1" \
+        -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
+        -e 's^eval sys_lib_.+search_path=.*^^'
 }
 
 
@@ -975,28 +1025,46 @@ configurePhase() {
     fi
 
     if [ -z "${dontFixLibtool:-}" ]; then
+        export lt_cv_deplibs_check_method="${lt_cv_deplibs_check_method-pass_all}"
         local i
         find . -iname "ltmain.sh" -print0 | while IFS='' read -r -d '' i; do
             echo "fixing libtool script $i"
             fixLibtool "$i"
         done
+
+        # replace `/usr/bin/file` with `file` in any `configure`
+        # scripts with vendored libtool code.  Preserve mtimes to
+        # prevent some packages (e.g. libidn2) from spontaneously
+        # autoreconf'ing themselves
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
+        find . \
+          -executable \
+          -type f \
+          -name configure \
+          -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+          -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+          -exec sed -i s_/usr/bin/file_file_g {} \;    \
+          -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+        rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
-    # Add --disable-dependency-tracking to speed up some builds.
-    if [ -z "${dontAddDisableDepTrack:-}" ]; then
-        if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+    if [[ -f "$configureScript" ]]; then
+        # Add --disable-dependency-tracking to speed up some builds.
+        if [ -z "${dontAddDisableDepTrack:-}" ]; then
+            if grep -q dependency-tracking "$configureScript"; then
+                configureFlags="--disable-dependency-tracking $configureFlags"
+            fi
         fi
-    fi
 
-    # By default, disable static builds.
-    if [ -z "${dontDisableStatic:-}" ]; then
-        if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+        # By default, disable static builds.
+        if [ -z "${dontDisableStatic:-}" ]; then
+            if grep -q enable-static "$configureScript"; then
+                configureFlags="--disable-static $configureFlags"
+            fi
         fi
     fi
 
@@ -1004,7 +1072,7 @@ configurePhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
+            $configureFlags "${configureFlagsArray[@]}"
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1032,10 +1100,10 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $buildFlags "${buildFlagsArray[@]}"
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1051,7 +1119,7 @@ checkPhase() {
     runHook preCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom checkPhase, doing nothing"
         runHook postCheck
         return
     fi
@@ -1071,10 +1139,10 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
             ${checkTarget}
         )
 
@@ -1099,8 +1167,8 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        $makeFlags "${makeFlagsArray[@]}"
+        $installFlags "${installFlagsArray[@]}"
         ${installTargets:-install}
     )
 
@@ -1196,7 +1264,7 @@ installCheckPhase() {
     runHook preInstallCheck
 
     if [[ -z "${foundMakefile:-}" ]]; then
-        echo "no Makefile or custom buildPhase, doing nothing"
+        echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
        && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
@@ -1205,10 +1273,10 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $installCheckFlags "${installCheckFlagsArray[@]}"
             ${installCheckTarget:-installcheck}
         )
 
@@ -1227,7 +1295,7 @@ distPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
+        $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
@@ -1262,21 +1330,30 @@ showPhaseHeader() {
 }
 
 
+showPhaseFooter() {
+    local phase="$1"
+    local startTime="$2"
+    local endTime="$3"
+    local delta=$(( endTime - startTime ))
+    (( $delta < 30 )) && return
+
+    local H=$((delta/3600))
+    local M=$((delta%3600/60))
+    local S=$((delta%60))
+    echo -n "$phase completed in "
+    (( $H > 0 )) && echo -n "$H hours "
+    (( $M > 0 )) && echo -n "$M minutes "
+    echo "$S seconds"
+}
+
+
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         source "$buildCommandPath"
-        set "$oldOpts"
         return
     fi
     if [ -n "${buildCommand:-}" ]; then
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         eval "$buildCommand"
-        set "$oldOpts"
         return
     fi
 
@@ -1289,6 +1366,7 @@ genericBuild() {
 
     for curPhase in $phases; do
         if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
+        if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
         if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
@@ -1304,15 +1382,20 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
+        local startTime=$(date +"%s")
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
-        local oldOpts="-u"
-        shopt -qo nounset || oldOpts="+u"
-        set +u
         eval "${!curPhase:-$curPhase}"
-        set "$oldOpts"
+
+        local endTime=$(date +"%s")
+
+        showPhaseFooter "$curPhase" "$startTime" "$endTime"
 
         if [ "$curPhase" = unpackPhase ]; then
+            # make sure we can cd into the directory
+            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
             cd "${sourceRoot:-.}"
         fi
     done
@@ -1331,5 +1414,7 @@ runHook userHook
 
 dumpVars
 
-# Disable nounset for nix-shell.
-set +u
+# Restore the original options for nix-shell
+[[ $__nixpkgs_setup_set_original == *e* ]] || set +e
+[[ $__nixpkgs_setup_set_original == *u* ]] || set +u
+unset -v __nixpkgs_setup_set_original

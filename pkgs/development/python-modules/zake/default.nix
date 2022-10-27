@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , kazoo
 , six
 , testtools
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,15 +18,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ kazoo six ];
   buildInputs = [ testtools ];
-  checkPhase = ''
+  checkInputs = [ unittestCheckHook ];
+  preCheck = ''
     # Skip test - fails with our new kazoo version
     substituteInPlace zake/tests/test_client.py \
       --replace "test_child_watch_no_create" "_test_child_watch_no_create"
-
-    ${python.interpreter} -m unittest discover zake/tests
   '';
 
-  meta = with stdenv.lib; {
+  unittestFlagsArray = [ "zake/tests" ];
+
+  meta = with lib; {
     homepage = "https://github.com/yahoo/Zake";
     description = "A python package that works to provide a nice set of testing utilities for the kazoo library";
     license = licenses.asl20;

@@ -1,41 +1,55 @@
-{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch
-, fetchPypi
-, gpgme, flake8, pytest, pytestcov, pep8-naming, pytest-ordering }:
+{ lib
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, six
+, enum34
+, pyasn1
+, cryptography
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pgpy";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "SecurityInnovation";
     repo = "PGPy";
-    rev = version;
-    sha256 = "1v2b1dyq1sl48d2gw7vn4hv6sasd9ihpzzcq8yvxj9dgfak2y663";
+    rev = "v${version}";
+    hash = "sha256-iuga6vZ7eOl/wNVuLnhDVeUPJPibGm8iiyTC4dOA7A4=";
   };
+
+  patches = [
+    # Fixes the issue in https://github.com/SecurityInnovation/PGPy/issues/402.
+    # by pulling in https://github.com/SecurityInnovation/PGPy/pull/403.
+    (fetchpatch {
+      name = "crytography-38-support.patch";
+      url = "https://github.com/SecurityInnovation/PGPy/commit/d84597eb8417a482433ff51dc6b13060d4b2e686.patch";
+      hash = "sha256-dviXCSGtPguROHVZ1bt/eEfpATjehm8jZ5BeVjxdb8U=";
+    })
+  ];
 
   propagatedBuildInputs = [
     six
     pyasn1
     cryptography
-    singledispatch
-  ] ++ lib.optional (!isPy3k) enum34;
-
-  checkInputs = [
-    gpgme
-    flake8
-    pytest
-    pytestcov
-    pep8-naming
-    pytest-ordering
+  ] ++ lib.optionals (pythonOlder "3.4") [
+    enum34
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assertions contains extra: IDEA has been deprecated
+    "test_encrypt_bad_cipher"
+  ];
 
   meta = with lib; {
-    homepage = https://github.com/SecurityInnovation/PGPy;
+    homepage = "https://github.com/SecurityInnovation/PGPy";
     description = "Pretty Good Privacy for Python 2 and 3";
     longDescription = ''
       PGPy is a Python (2 and 3) library for implementing Pretty Good Privacy
@@ -43,6 +57,6 @@ buildPythonPackage rec {
       4880.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu dotlambda ];
   };
 }

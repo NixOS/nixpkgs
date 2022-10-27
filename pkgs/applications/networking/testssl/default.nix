@@ -1,30 +1,29 @@
 { stdenv, fetchFromGitHub, makeWrapper, lib
-, dnsutils, coreutils, openssl, nettools, utillinux, procps }:
+, dnsutils, coreutils, openssl, nettools, util-linux, procps }:
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0rc5";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
-    rev = version;
-    sha256 = "14b9n0h4f2dsa292wi9gnan5ncgqblis6wyh5978lhjzi1d7gyds";
+    rev = "v${version}";
+    sha256 = "sha256-gkDtJlAC7woM2HyYDXntD1+bEuqHTEipqrn2EZjxnH8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    coreutils # for pwd and printf
+    coreutils # for printf
     dnsutils  # for dig
     nettools  # for hostname
     openssl   # for openssl
     procps    # for ps
-    utillinux # for hexdump
+    util-linux # for hexdump
   ];
 
   postPatch = ''
     substituteInPlace testssl.sh                                               \
-      --replace /bin/pwd                    pwd                                \
       --replace TESTSSL_INSTALL_DIR:-\"\"   TESTSSL_INSTALL_DIR:-\"$out\"      \
       --replace PROG_NAME=\"\$\(basename\ \"\$0\"\)\" PROG_NAME=\"testssl.sh\"
   '';
@@ -36,14 +35,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI tool to check a server's TLS/SSL capabilities";
     longDescription = ''
       CLI tool which checks a server's service on any port for the support of
       TLS/SSL ciphers, protocols as well as recent cryptographic flaws and more.
     '';
-    homepage = https://testssl.sh/;
-    license = licenses.gpl2;
+    homepage = "https://testssl.sh/";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ etu ];
   };
 }

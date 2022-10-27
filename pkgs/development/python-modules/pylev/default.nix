@@ -1,23 +1,29 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+}:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "pylev";
-  version = "1.3.0";
+  version = "1.4.0";
 
-  # No tests in PyPi tarball
   src = fetchFromGitHub {
     owner = "toastdriven";
     repo = "pylev";
-    # Can't use a tag because it's missing
-    # https://github.com/toastdriven/pylev/issues/10
-    # rev = "v${version};
-    rev = "72e3d490515c3188e2acac9c15ea1b466f9ff938";
-    sha256 = "18dg1rfnqgfl6x4vafiq4la9d7f65xak19gcvngslq0bm1z6hyd8";
+    rev = "v${version}";
+    sha256 = "0fgxjdnvnvavnxmxxd0fl5jyr2f31g3a26bwyxcpy56mgpd095c1";
   };
 
+  checkPhase = ''
+    ${python.interpreter} -m unittest tests
+  '';
+
+  pythonImportsCheck = [ "pylev" ];
+
   meta = with lib; {
-    homepage = https://github.com/toastdriven/pylev;
-    description = "A pure Python Levenshtein implementation that's not freaking GPL'd";
+    description = "Python Levenshtein implementation";
+    homepage = "https://github.com/toastdriven/pylev";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

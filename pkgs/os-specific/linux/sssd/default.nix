@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
-  pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson,
+  python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
+  pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
+  libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
+  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
+  nixosTests,
   withSudo ? false }:
 
 let
@@ -12,19 +13,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "1.16.4";
+  version = "2.8.0";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/released/sssd/${pname}-${version}.tar.gz";
-    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
+  src = fetchFromGitHub {
+    owner = "SSSD";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-i2RRvIFQLuFw9Q3pLOgomvCH9j8h3JAailoIww1dnLs=";
   };
+
+  postPatch = ''
+    patchShebangs ./sbus_generate.sh.in
+  '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=${ldap}/lib/python2.7/site-packages
+    export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -34,7 +41,6 @@ stdenv.mkDerivation rec {
       --enable-pammoddir=$out/lib/security
       --with-os=fedora
       --with-pid-path=/run
-      --with-python2-bindings
       --with-python3-bindings
       --with-syslog=journald
       --without-selinux
@@ -43,17 +49,18 @@ stdenv.mkDerivation rec {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
-  '' + stdenv.lib.optionalString withSudo ''
+  '' + lib.optionalString withSudo ''
     configureFlagsArray+=("--with-sudo")
   '';
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba nfs-utils doxygen python python3 popt
-                  talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
+                  samba nfs-utils p11-kit python3 popt
+                  talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson ];
+                  libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
+                  nss_wrapper ncurses Po4a http-parser jansson jose ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
@@ -80,12 +87,20 @@ stdenv.mkDerivation rec {
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
+  postFixup = ''
+    for f in $out/bin/sss{ctl,_cache,_debuglevel,_override,_seed}; do
+      wrapProgram $f --prefix LDB_MODULES_PATH : $out/modules/ldb
+    done
+  '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
+
+  meta = with lib; {
     description = "System Security Services Daemon";
-    homepage = https://fedorahosted.org/sssd/;
-    license = licenses.gpl3;
+    homepage = "https://sssd.io/";
+    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.e-user ];
+    maintainers = with maintainers; [ e-user illustris ];
   };
 }

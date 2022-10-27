@@ -1,29 +1,48 @@
-{ stdenv, python2Packages, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+}:
 
-with python2Packages; buildPythonApplication rec {
+with python3.pkgs;
+
+buildPythonApplication rec {
   pname = "nrfutil";
-  version = "5.2.0";
+  version = "6.1.6";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
     rev = "v${version}";
-    sha256 = "1hajjgz8r4fjbwqr22p5dvb6k83dpxf8k7mhx20gkbrrx9ivqh79";
+    sha256 = "sha256-UiGNNJxNSpIzpeYMlzocLG2kuetl8xti5A3n6zz0lcY=";
   };
 
-  propagatedBuildInputs = [ pc-ble-driver-py six pyserial enum34 click ecdsa
-    protobuf tqdm piccata pyspinel intelhex pyyaml crcmod libusb1 ipaddress ];
+  propagatedBuildInputs = [
+    click
+    crcmod
+    ecdsa
+    libusb1
+    intelhex
+    pc-ble-driver-py
+    piccata
+    protobuf
+    pyserial
+    pyspinel
+    pyyaml
+    tqdm
+  ];
 
-  checkInputs = [ nose behave ];
+  checkInputs = [
+    behave
+    nose
+  ];
 
   postPatch = ''
-    # remove version bound on pyyaml
-    sed -i /pyyaml/d requirements.txt
-
     mkdir test-reports
+    substituteInPlace requirements.txt --replace "libusb1==1.9.3" "libusb1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device Firmware Update tool for nRF chips";
     homepage = "https://github.com/NordicSemiconductor/pc-nrfutil";
     license = licenses.unfreeRedistributable;

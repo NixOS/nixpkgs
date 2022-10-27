@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libnfnetlink }:
+{ lib, stdenv, fetchurl, libnfnetlink }:
 
 stdenv.mkDerivation rec {
   pname = "minissdpd";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small daemon to speed up UPnP device discoveries";
     longDescription = ''
       MiniSSDPd receives NOTIFY packets and stores (caches) that information
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       the machine. Software must be patched in order to take advantage of
       MiniSSDPd, and MiniSSDPd must be started before any other UPnP program.
     '';
-    homepage = http://miniupnp.free.fr/minissdpd.html;
-    downloadPage = http://miniupnp.free.fr/files/;
+    homepage = "http://miniupnp.free.fr/minissdpd.html";
+    downloadPage = "http://miniupnp.free.fr/files/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

@@ -1,28 +1,41 @@
-{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security
-}:
+{ lib, stdenv, fetchFromGitHub, pkg-config, openssl, rustPlatform, libiconv
+, Security, makeWrapper, bash }:
 
 rustPlatform.buildRustPackage rec {
   pname = "websocat";
-  version = "1.3.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner  = "vi";
-    repo   = "websocat";
-    rev    = "v${version}";
-    sha256 = "1gf2snr12vnx2mhsrwkb5274r1pvdrf8m3bybrqbh8s9wd83nrh6";
+    owner = "vi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FomP5ykHc5oAA7zF7r+PXHf30KaTmYTmVm6Mwf/tPdQ=";
   };
 
-  cargoBuildFlags = [ "--features=ssl" ];
-  cargoSha256 = "1zqfvbihf8xwgh092n9wzm3mdgbv0n99gjsfk9przqj2vh7wfvh2";
+  cargoSha256 = "sha256-YVI1+WsDMoznRTjnzwlPTdJMRPsQFYtzssoU0sQwQfA=";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  meta = with stdenv.lib; {
+  buildFeatures = [ "ssl" ];
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR=1;
+
+  # The wrapping is required so that the "sh-c" option of websocat works even
+  # if sh is not in the PATH (as can happen, for instance, when websocat is
+  # started as a systemd service).
+  postInstall = ''
+    wrapProgram $out/bin/websocat \
+      --prefix PATH : ${lib.makeBinPath [ bash ]}
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/vi/websocat";
     description = "Command-line client for WebSockets (like netcat/socat)";
-    homepage    = https://github.com/vi/websocat;
-    license     = with licenses; [ mit ];
-    maintainers = [ maintainers.thoughtpolice ];
-    platforms   = platforms.all;
+    changelog = "https://github.com/vi/websocat/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice Br1ght0ne ];
   };
 }

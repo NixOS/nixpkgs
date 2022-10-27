@@ -1,24 +1,24 @@
-{ stdenv, fetchMavenArtifact }:
+{ lib, stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
   pname = "postgresql-jdbc";
-  version = "42.2.5";
+  version = "42.5.0";
 
   src = fetchMavenArtifact {
     artifactId = "postgresql";
     groupId = "org.postgresql";
-    sha256 = "1p0cbb7ka41xxipzjy81hmcndkqynav22xyipkg7qdqrqvw4dykz";
+    sha256 = "sha256-pNGLWrGuuShaixezZfQk8mhEUinKv45BIRXbYVK33uM=";
     inherit version;
   };
 
-  phases = [ "installPhase" ];
-
   installPhase = ''
+    runHook preInstall
     install -m444 -D $src/share/java/*postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://jdbc.postgresql.org/;
+  meta = with lib; {
+    homepage = "https://jdbc.postgresql.org/";
     description = "JDBC driver for PostgreSQL allowing Java programs to connect to a PostgreSQL database";
     license = licenses.bsd2;
     platforms = platforms.unix;

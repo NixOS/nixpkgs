@@ -1,18 +1,20 @@
-{ stdenv, fetchgit, pkgconfig, dbus, libnotify, udisks2, gdk-pixbuf }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, dbus, libnotify, udisks2, gdk-pixbuf }:
 
 stdenv.mkDerivation {
-  name = "usermount-0.1";
+  pname = "usermount";
+  version = "0.1";
 
-  src = fetchgit {
-    url = "https://github.com/tom5760/usermount.git";
+  src = fetchFromGitHub {
+    owner = "tom5760";
+    repo = "usermount";
     rev = "0d6aba3c1f8fec80de502f5b92fd8b28041cc8e4";
-    sha256 = "0gpp0vwiwr7kgbhh26jspv3255662mnvnav6g8i2h0qxar8hf8w2";
+    sha256 = "sha256-giMHUVYdAygiemYru20VxpQixr5aGgHhevNkHvkG9z4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libnotify udisks2 gdk-pixbuf ];
 
-  NIX_CFLAGS_COMPILE = [ "-DENABLE_NOTIFICATIONS" ];
+  NIX_CFLAGS_COMPILE = "-DENABLE_NOTIFICATIONS";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,10 +22,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/tom5760/usermount;
+    homepage = "https://github.com/tom5760/usermount";
     description = "A simple tool to automatically mount removable drives using UDisks2 and D-Bus";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

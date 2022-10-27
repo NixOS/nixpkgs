@@ -1,28 +1,36 @@
-{ stdenv, fetchurl, libffcall, gtk2, pkgconfig }:
+{ lib
+, stdenv
+, fetchurl
+, glib
+, gtk3
+, libffcall
+, pkg-config
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  v = "2.3.1";
-  name = "gtk-server-${v}";
+  pname = "gtk-server";
+  version = "2.4.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtk-server/${name}-sr.tar.gz";
-    sha256 = "0z8ng5rhxc7fpsj3d50h25wkgcnxjfy030jm8r9w9m729w2c9hxb";
+    url = "https://www.gtk-server.org/stable/gtk-server-${version}.tar.gz";
+    sha256 = "0vlx5ibvc7hyc8yipjgvrx1azvmh42i9fv1khg3dvn09nrdkrc7f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libffcall gtk2 ];
+  preConfigure = ''
+    cd src
+  '';
 
-  configureOptions = [ "--with-gtk2" ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  buildInputs = [ libffcall glib gtk3 ];
 
-  NIX_LDFLAGS = [
-    "-ldl"
-  ];
+  configureOptions = [ "--with-gtk3" ];
 
-  meta = {
+  meta = with lib; {
+    homepage = "http://www.gtk-server.org/";
     description = "gtk-server for interpreted GUI programming";
-    homepage = http://www.gtk-server.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.tohl];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = platforms.linux;
   };
 }

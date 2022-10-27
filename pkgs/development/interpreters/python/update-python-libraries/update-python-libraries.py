@@ -6,17 +6,16 @@ You can pass in multiple files or paths.
 
 You'll likely want to use
 ``
-  $ ./update-python-libraries ../../pkgs/development/python-modules/*
+  $ ./update-python-libraries ../../pkgs/development/python-modules/**/default.nix
 ``
-to update all libraries in that folder.
+to update all non-pinned libraries in that folder.
 """
 
 import argparse
-import logging
 import os
+import pathlib
 import re
 import requests
-import toolz
 from concurrent.futures import ThreadPoolExecutor as Pool
 from packaging.version import Version as _Version
 from packaging.version import InvalidVersion
@@ -33,6 +32,8 @@ EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
 PRERELEASES = False
 
 GIT = "git"
+
+NIXPGKS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -101,8 +102,22 @@ def _replace_value(attribute, value, text):
     new_text = text.replace(old_line, new_line)
     return new_text
 
+
 def _fetch_page(url):
     r = requests.get(url)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+    else:
+        raise ValueError("request for {} failed".format(url))
+
+
+def _fetch_github(url):
+    headers = {}
+    token = os.environ.get('GITHUB_API_TOKEN')
+    if token:
+        headers["Authorization"] = f"token {token}"
+    r = requests.get(url, headers=headers)
+
     if r.status_code == requests.codes.ok:
         return r.json()
     else:
@@ -116,11 +131,45 @@ SEMVER = {
 }
 
 
+def _determine_latest_version(current_version, target, versions):
+    """Determine latest version, given `target`.
+    """
+    current_version = Version(current_version)
+
+    def _parse_versions(versions):
+        for v in versions:
+            try:
+                yield Version(v)
+            except InvalidVersion:
+                pass
+
+    versions = _parse_versions(versions)
+
+    index = SEMVER[target]
+
+    ceiling = list(current_version[0:index])
+    if len(ceiling) == 0:
+        ceiling = None
+    else:
+        ceiling[-1]+=1
+        ceiling = Version(".".join(map(str, ceiling)))
+
+    # We do not want prereleases
+    versions = SpecifierSet(prereleases=PRERELEASES).filter(versions)
+
+    if ceiling is not None:
+        versions = SpecifierSet(f"<{ceiling}").filter(versions)
+
+    return (max(sorted(versions))).raw_version
+
+
 def _get_latest_version_pypi(package, extension, current_version, target):
     """Get latest version and hash from PyPI."""
     url = "{}/{}/json".format(INDEX, package)
     json = _fetch_page(url)
-    version = json['info']['version']
+
+    versions = json['releases'].keys()
+    version = _determine_latest_version(current_version, target, versions)
 
     try:
         releases = json['releases'][version]
@@ -132,13 +181,53 @@ def _get_latest_version_pypi(package, extension, current_version, target):
             sha256 = release['digests']['sha256']
             break
     else:
-        logging.error("Release not found for extension: {}".format(extension))
         sha256 = None
-    return version, sha256
+    return version, sha256, None
 
 
 def _get_latest_version_github(package, extension, current_version, target):
-    raise ValueError("updating from GitHub is not yet supported.")
+    def strip_prefix(tag):
+        return re.sub("^[^0-9]*", "", tag)
+
+    def get_prefix(string):
+        matches = re.findall(r"^([^0-9]*)", string)
+        return next(iter(matches), "")
+
+    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+    # this allows us to work with packages which live outside of python-modules
+    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
+    try:
+        homepage = subprocess.check_output(
+            ["nix", "eval", "-f", f"{NIXPGKS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
+            .decode('utf-8')
+    except Exception as e:
+        raise ValueError(f"Unable to determine homepage: {e}")
+    owner_repo = homepage[len("https://github.com/"):]  # remove prefix
+    owner, repo = owner_repo.split("/")
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases"
+    all_releases = _fetch_github(url)
+    releases = list(filter(lambda x: not x['prerelease'], all_releases))
+
+    if len(releases) == 0:
+        raise ValueError(f"{homepage} does not contain any stable releases")
+
+    versions = map(lambda x: strip_prefix(x['tag_name']), releases)
+    version = _determine_latest_version(current_version, target, versions)
+
+    release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
+    prefix = get_prefix(release['tag_name'])
+    try:
+        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
+            .decode('utf-8').strip()
+    except:
+        # this may fail if they have both a branch and a tag of the same name, attempt tag name
+        tag_url = str(release['tarball_url']).replace("tarball","tarball/refs/tags")
+        sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url], stderr=subprocess.DEVNULL)\
+            .decode('utf-8').strip()
+
+
+    return version, sha256, prefix
 
 
 FETCHERS = {
@@ -153,7 +242,9 @@ DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
 
 FORMATS = {
     'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
-    'wheel'             :   'whl'
+    'wheel'             :   'whl',
+    'pyproject'         :   'tar.gz',
+    'flit'              :   'tar.gz'
 }
 
 def _determine_fetcher(text):
@@ -192,8 +283,8 @@ def _determine_extension(text, fetcher):
         if extension is None:
             if src_format is None:
                 src_format = 'setuptools'
-            elif src_format == 'flit':
-                raise ValueError("Don't know how to update a Flit package.")
+            elif src_format == 'other':
+                raise ValueError("Don't know how to update a format='other' package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
@@ -203,7 +294,9 @@ def _determine_extension(text, fetcher):
             raise ValueError('url does not point to PyPI.')
 
     elif fetcher == 'fetchFromGitHub':
-        raise ValueError('updating from GitHub is not yet implemented.')
+        if "fetchSubmodules" in text:
+            raise ValueError("fetchFromGitHub fetcher doesn't support submodules")
+        extension = "tar.gz"
 
     return extension
 
@@ -214,8 +307,8 @@ def _update_package(path, target):
     with open(path, 'r') as f:
         text = f.read()
 
-    # Determine pname.
-    pname = _get_unique_value('pname', text)
+    # Determine pname. Many files have more than one pname
+    pnames = _get_values('pname', text)
 
     # Determine version.
     version = _get_unique_value('version', text)
@@ -225,7 +318,18 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256 = FETCHERS[fetcher](pname, extension, version, target)
+    # Attempt a fetch using each pname, e.g. backports-zoneinfo vs backports.zoneinfo
+    successful_fetch = False
+    for pname in pnames:
+        try:
+            new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
+            successful_fetch = True
+            break
+        except ValueError:
+            continue
+
+    if not successful_fetch:
+        raise ValueError(f"Unable to find correct package using these pnames: {pnames}")
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
@@ -236,7 +340,33 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
-    text = _replace_value('sha256', new_sha256, text)
+    # hashes from pypi are 16-bit encoded sha256's, normalize it to sri to avoid merge conflicts
+    # sri hashes have been the default format since nix 2.4+
+    sri_hash = subprocess.check_output(["nix", "--extra-experimental-features", "nix-command", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+
+
+    # fetchers can specify a sha256, or a sri hash
+    try:
+        text = _replace_value('sha256', sri_hash, text)
+    except ValueError:
+        text = _replace_value('hash', sri_hash, text)
+
+    if fetcher == 'fetchFromGitHub':
+        # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
+        # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
+        regex = '(rev\s+=\s+[^;]*;)'
+        regex = re.compile(regex)
+        matches = regex.findall(text)
+        n = len(matches)
+
+        if n == 0:
+            raise ValueError("Unable to find rev value for {}.".format(pname))
+        else:
+            # forcefully rewrite rev, incase tagging conventions changed for a release
+            match = matches[0]
+            text = text.replace(match, f'rev = "refs/tags/{prefix}${{version}}";')
+            # incase there's no prefix, just rewrite without interpolation
+            text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)
@@ -278,11 +408,11 @@ def _update(path, target):
         return False
 
 
-def _commit(path, pname, old_version, new_version, **kwargs):
+def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwargs):
     """Commit result.
     """
 
-    msg = f'python: {pname}: {old_version} -> {new_version}'
+    msg = f'{pkgs_prefix}{pname}: {old_version} -> {new_version}'
 
     try:
         subprocess.check_call([GIT, 'add', path])
@@ -296,10 +426,15 @@ def _commit(path, pname, old_version, new_version, **kwargs):
 
 def main():
 
-    parser = argparse.ArgumentParser()
+    epilog = """
+environment variables:
+  GITHUB_API_TOKEN\tGitHub API token used when updating github packages
+    """
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, epilog=epilog)
     parser.add_argument('package', type=str, nargs='+')
     parser.add_argument('--target', type=str, choices=SEMVER.keys(), default='major')
     parser.add_argument('--commit', action='store_true', help='Create a commit for each package update')
+    parser.add_argument('--use-pkgs-prefix', action='store_true', help='Use python3Packages.${pname}: instead of python: ${pname}: when making commits')
 
     args = parser.parse_args()
     target = args.target
@@ -310,17 +445,23 @@ def main():
 
     # Use threads to update packages concurrently
     with Pool() as p:
-        results = list(p.map(lambda pkg: _update(pkg, target), packages))
+        results = list(filter(bool, p.map(lambda pkg: _update(pkg, target), packages)))
 
     logging.info("Finished updating packages.")
+
+    commit_options = {}
+    if args.use_pkgs_prefix:
+        logging.info("Using python3Packages. prefix for commits")
+        commit_options["pkgs_prefix"] = "python3Packages."
 
     # Commits are created sequentially.
     if args.commit:
         logging.info("Committing updates...")
-        list(map(lambda x: _commit(**x), filter(bool, results)))
+        # list forces evaluation
+        list(map(lambda x: _commit(**x, **commit_options), results))
         logging.info("Finished committing updates")
 
-    count = sum(map(bool, results))
+    count = len(results)
     logging.info("{} package(s) updated".format(count))
 
 

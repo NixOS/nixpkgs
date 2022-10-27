@@ -1,25 +1,29 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 with lib;
 let
   cfg = config.services.matomo;
+  fpm = config.services.phpfpm.pools.${pool};
 
   user = "matomo";
   dataDir = "/var/lib/${user}";
   deprecatedDataDir = "/var/lib/piwik";
 
   pool = user;
-  # it's not possible to use /run/phpfpm/${pool}.sock because /run/phpfpm/ is root:root 0770,
-  # and therefore is not accessible by the web server.
-  phpSocket = "/run/phpfpm-${pool}.sock";
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn =
-    let
-      join = hostName: domain: hostName + optionalString (domain != null) ".${domain}";
-     in join config.networking.hostName config.networking.domain;
+  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
 
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
+    (mkRenamedOptionModule [ "services" "piwik" "webServerUser" ] [ "services" "matomo" "webServerUser" ])
+    (mkRemovedOptionModule [ "services" "piwik" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (mkRemovedOptionModule [ "services" "matomo" "phpfpmProcessManagerConfig" ] "Use services.phpfpm.pools.<name>.settings")
+    (mkRenamedOptionModule [ "services" "piwik" "nginx" ] [ "services" "matomo" "nginx" ])
+    (mkRenamedOptionModule [ "services" "matomo" "periodicArchiveProcessingUrl" ] [ "services" "matomo" "hostname" ])
+  ];
+
   options = {
     services.matomo = {
       # NixOS PR for database setup: https://github.com/NixOS/nixpkgs/pull/6963
@@ -28,7 +32,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Matomo web analytics with php-fpm backend.
           Either the nginx option or the webServerUser option is mandatory.
         '';
@@ -36,21 +40,21 @@ in {
 
       package = mkOption {
         type = types.package;
-        description = ''
+        description = lib.mdDoc ''
           Matomo package for the service to use.
           This can be used to point to newer releases from nixos-unstable,
           as they don't get backported if they are not security-relevant.
         '';
         default = pkgs.matomo;
-        defaultText = "pkgs.matomo";
+        defaultText = literalExpression "pkgs.matomo";
       };
 
       webServerUser = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
-        description = ''
-          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for Matomo if the nginx
+        description = lib.mdDoc ''
+          Name of the web server user that forwards requests to {option}`services.phpfpm.pools.<name>.socket` the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
@@ -60,33 +64,29 @@ in {
       periodicArchiveProcessing = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable periodic archive processing, which generates aggregated reports from the visits.
 
           This means that you can safely disable browser triggers for Matomo archiving,
           and safely enable to delete old visitor logs.
           Before deleting visitor logs,
-          make sure though that you run <literal>systemctl start matomo-archive-processing.service</literal>
+          make sure though that you run `systemctl start matomo-archive-processing.service`
           at least once without errors if you have already collected data before.
         '';
       };
 
-      phpfpmProcessManagerConfig = mkOption {
+      hostname = mkOption {
         type = types.str;
-        default = ''
-          ; default phpfpm process manager settings
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-
-          ; log worker's stdout, but this has a performance hit
-          catch_workers_output = yes
+        default = "${user}.${fqdn}";
+        defaultText = literalExpression ''
+          if config.${options.networking.domain} != null
+          then "${user}.''${config.${options.networking.fqdn}}"
+          else "${user}.''${config.${options.networking.hostName}}"
         '';
-        description = ''
-          Settings for phpfpm's process manager. You might need to change this depending on the load for Matomo.
+        example = "matomo.yourdomain.org";
+        description = lib.mdDoc ''
+          URL of the host, without https prefix. You may want to change it if you
+          run Matomo on a different URL than matomo.yourdomain.
         '';
       };
 
@@ -103,19 +103,21 @@ in {
         )
         );
         default = null;
-        example = {
-          serverAliases = [
-            "matomo.\${config.networking.domain}"
-            "stats.\${config.networking.domain}"
-          ];
-          enableACME = false;
-        };
-        description = ''
+        example = literalExpression ''
+          {
+            serverAliases = [
+              "matomo.''${config.networking.domain}"
+              "stats.''${config.networking.domain}"
+            ];
+            enableACME = false;
+          }
+        '';
+        description = lib.mdDoc ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
-            If enabled, then by default, the <option>serverName</option> is
-            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
+            If enabled, then by default, the {option}`serverName` is
+            `''${user}.''${config.networking.hostName}.''${config.networking.domain}`,
             SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';
@@ -171,12 +173,26 @@ in {
         fi
         chown -R ${user}:${user} ${dataDir}
         chmod -R ug+rwX,o-rwx ${dataDir}
+
+        if [ -e ${dataDir}/current-package ]; then
+          CURRENT_PACKAGE=$(readlink ${dataDir}/current-package)
+          NEW_PACKAGE=${cfg.package}
+          if [ "$CURRENT_PACKAGE" != "$NEW_PACKAGE" ]; then
+            # keeping tmp arround between upgrades seems to bork stuff, so delete it
+            rm -rf ${dataDir}/tmp
+          fi
+        elif [ -e ${dataDir}/tmp ]; then
+          # upgrade from 4.4.1
+          rm -rf ${dataDir}/tmp
+        fi
+        ln -sfT ${cfg.package} ${dataDir}/current-package
         '';
       script = ''
             # Use User-Private Group scheme to protect Matomo data, but allow administration / backup via 'matomo' group
             # Copy config folder
             chmod g+s "${dataDir}"
             cp -r "${cfg.package}/share/config" "${dataDir}/"
+            mkdir -p "${dataDir}/misc"
             chmod -R u+rwX,g+rwX,o-rwx "${dataDir}"
 
             # check whether user setup has already been done
@@ -203,7 +219,7 @@ in {
         UMask = "0007";
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
-        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${user}.${fqdn}";
+        ExecStart = "${cfg.package}/bin/matomo-console core:archive --url=https://${cfg.hostname}";
       };
     };
 
@@ -233,15 +249,24 @@ in {
       else if (cfg.webServerUser != null) then cfg.webServerUser else "";
     in {
       ${pool} = {
-        listen = phpSocket;
-        extraConfig = ''
-          listen.owner = ${socketOwner}
-          listen.group = root
-          listen.mode = 0600
-          user = ${user}
-          env[PIWIK_USER_PATH] = ${dataDir}
-          ${cfg.phpfpmProcessManagerConfig}
+        inherit user;
+        phpOptions = ''
+          error_log = 'stderr'
+          log_errors = on
         '';
+        settings = mapAttrs (name: mkDefault) {
+          "listen.owner" = socketOwner;
+          "listen.group" = "root";
+          "listen.mode" = "0660";
+          "pm" = "dynamic";
+          "pm.max_children" = 75;
+          "pm.start_servers" = 10;
+          "pm.min_spare_servers" = 5;
+          "pm.max_spare_servers" = 20;
+          "pm.max_requests" = 500;
+          "catch_workers_output" = true;
+        };
+        phpEnv.PIWIK_USER_PATH = dataDir;
       };
     };
 
@@ -250,7 +275,7 @@ in {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      "${user}.${fqdn}" = mkMerge [ cfg.nginx {
+      "${cfg.hostname}" = mkMerge [ cfg.nginx {
         # don't allow to override the root easily, as it will almost certainly break Matomo.
         # disadvantage: not shown as default in docs.
         root = mkForce "${cfg.package}/share";
@@ -264,15 +289,15 @@ in {
         };
         # allow index.php for webinterface
         locations."= /index.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # allow matomo.php for tracking
         locations."= /matomo.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # allow piwik.php for tracking (deprecated name)
         locations."= /piwik.php".extraConfig = ''
-          fastcgi_pass unix:${phpSocket};
+          fastcgi_pass unix:${fpm.socket};
         '';
         # Any other attempt to access any php files is forbidden
         locations."~* ^.+\\.php$".extraConfig = ''

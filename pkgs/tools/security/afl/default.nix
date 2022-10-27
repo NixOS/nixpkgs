@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, makeWrapper
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, which, libcgroup
 }:
 
@@ -9,17 +9,19 @@ let
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
   afl = stdenv.mkDerivation rec {
     pname = "afl";
-    version = "2.52b";
+    version = "2.57b";
 
-    src = fetchurl {
-      url    = "http://lcamtuf.coredump.cx/afl/releases/${pname}-${version}.tgz";
-      sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "0fqj3g6ds1f21kxz7m9mc1fspi9r4jg9jcmi60inwxijrc5ncvr6";
     };
     enableParallelBuilding = true;
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
-    nativeBuildInputs = [ makeWrapper which ];
+    nativeBuildInputs = [ makeWrapper which llvm.dev ];
     buildInputs = [ llvm ];
 
     makeFlags = [ "PREFIX=$(out)" ];
@@ -45,6 +47,11 @@ let
       # has totally different semantics in that case(?) - and also set a
       # proper AFL_CC and AFL_CXX so we don't pick up the wrong one out
       # of $PATH.
+      # first though we need to replace the afl-clang-fast++ symlink with
+      # a real copy to prevent wrapProgram skipping the symlink and confusing
+      # nix's cc wrapper
+      rm $out/bin/afl-clang-fast++
+      cp $out/bin/afl-clang-fast $out/bin/afl-clang-fast++
       for x in $out/bin/afl-clang-fast $out/bin/afl-clang-fast++; do
         wrapProgram $x \
           --prefix AFL_PATH : "$out/lib/afl" \
@@ -66,10 +73,10 @@ let
         also useful for seeding other, more labor or resource-intensive
         testing regimes down the road.
       '';
-      homepage    = "http://lcamtuf.coredump.cx/afl/";
-      license     = stdenv.lib.licenses.asl20;
+      homepage    = "https://lcamtuf.coredump.cx/afl/";
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with stdenv.lib.maintainers; [ thoughtpolice ris ];
+      maintainers = with lib.maintainers; [ thoughtpolice ris ];
     };
   };
 in afl

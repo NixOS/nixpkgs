@@ -1,33 +1,30 @@
-{ stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkgconfig
-, intltool, gtk3, json-glib, curl, glib, autoconf-archive, appstream-glib }:
-
+{ lib, stdenv, wrapGAppsHook, fetchFromGitHub, pkg-config, gtk3, json-glib, curl
+, glib, appstream-glib, desktop-file-utils, meson, ninja, geoip, gettext
+, libappindicator, libmrss, libproxy }:
 
 stdenv.mkDerivation rec {
   pname = "transmission-remote-gtk";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gtk";
     repo = "transmission-remote-gtk";
     rev = version;
-    sha256 = "1pipc1f94jdppv597mqmcj2kw2rdvaqcbl512v7z8vir76p1a7gk";
+    sha256 = "4/ID12JukDDvJzWupc76r7W8Us5erwv8oXZhDnB6VDk=";
   };
 
-  preConfigure = "./autogen.sh";
+  nativeBuildInputs =
+    [ desktop-file-utils wrapGAppsHook meson ninja pkg-config appstream-glib ];
 
-  nativeBuildInputs= [
-    autoconf automake libtool wrapGAppsHook
-    pkgconfig intltool autoconf-archive
-    appstream-glib
-  ];
+  buildInputs =
+    [ gtk3 json-glib curl glib gettext libmrss geoip libproxy libappindicator ];
 
-  buildInputs = [ gtk3 json-glib curl glib ];
+  doCheck = false; # Requires network access
 
-  doCheck = false; # fails with style validation error
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK remote control for the Transmission BitTorrent client";
-    homepage = https://github.com/ajf8/transmission-remote-gtk;
+    homepage =
+      "https://github.com/transmission-remote-gtk/transmission-remote-gtk";
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;

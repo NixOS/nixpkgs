@@ -1,32 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pbr, six, futures, monotonic
-, pytest, sphinx, tornado
+{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
+, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools-scm
+, pytest, sphinx, tornado, typeguard
 }:
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "5.0.4";
+  version = "8.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06sp12cn8zcb7rqklq91f6mxhvrdq5cs0p3pdiazacqcmvvwbhx0";
+    sha256 = "43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [ pbr setuptools-scm ];
   propagatedBuildInputs = [ six ]
-    ++ lib.optionals isPy27 [ futures monotonic ];
+    ++ lib.optionals isPy27 [ futures monotonic typing ];
 
-  checkInputs = [ pytest sphinx tornado ];
-  checkPhase = (if isPy27 then ''
+  checkInputs = [ pytest sphinx tornado ]
+    ++ lib.optionals isPy3k [ typeguard ];
+  checkPhase = if isPy27 then ''
     pytest --ignore='tenacity/tests/test_asyncio.py'
   '' else ''
     pytest
-  '') + ''
-    sphinx-build -a -E -W -b doctest doc/source doc/build
   '';
 
   meta = with lib; {
-    homepage = https://github.com/jd/tenacity;
+    homepage = "https://github.com/jd/tenacity";
     description = "Retrying library for Python";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakewaksbaum ];

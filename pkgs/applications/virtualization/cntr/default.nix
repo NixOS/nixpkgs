@@ -1,24 +1,25 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
-  version = "1.2.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "0lmbsnjia44h4rskqkv9yc7xb6f3qjgbg8kcr9zqnr7ivr5fjcxg";
+    sha256 = "sha256-z+0bSxoLJTK4e5xS4CHZ2hNUI56Ci1gbWJsRcN6ZqZA=";
   };
 
-  cargoSha256 = "0xkwza9fx61pvlsm0s3dxc9i09mqp6c9df8w63fyiq7174vjxryx";
+  cargoSha256 = "sha256-3e5wDne6Idu+kDinHPcAKHfH/d4DrGg90GkiMbyF280=";
 
-  meta = with stdenv.lib; {
+  passthru.tests = nixosTests.cntr;
+
+  meta = with lib; {
     description = "A container debugging tool based on FUSE";
-    homepage = https://github.com/Mic92/cntr;
+    homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
-    # aarch64 support will be fixed soon
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];
   };
 }

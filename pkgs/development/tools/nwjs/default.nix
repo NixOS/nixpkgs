@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, buildEnv, makeWrapper
+{ stdenv, lib, fetchurl, buildEnv, makeWrapper
 
-, xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
-, gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
+, xorg, alsa-lib, at-spi2-core, dbus, glib, gtk3, atk, pango, freetype
+, fontconfig , gdk-pixbuf, cairo, mesa, nss, nspr, expat, systemd
+, libcap, libdrm, libxkbcommon
 , libnotify
 , ffmpeg, libxcb, cups
 , sqlite, udev
@@ -15,12 +16,13 @@ let
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
-      xorg.libX11 xorg.libXrender glib /*gtk2*/ gtk3 atk pango cairo gdk-pixbuf
-      freetype fontconfig xorg.libXcomposite alsaLib xorg.libXdamage
-      xorg.libXext xorg.libXfixes nss nspr gconf expat dbus
+      xorg.libX11 xorg.libXrender glib gtk3 atk at-spi2-core pango cairo gdk-pixbuf
+      freetype fontconfig xorg.libXcomposite alsa-lib xorg.libXdamage
+      xorg.libXext xorg.libXfixes mesa nss nspr expat dbus
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr
-      xorg.libXScrnSaver cups
-      libcap libnotify
+      xorg.libXScrnSaver xorg.libxshmfence cups
+      libcap libdrm libnotify
+      libxkbcommon
       # libnw-specific (not chromium dependencies)
       ffmpeg libxcb
       # chromium runtime deps (dlopen’d)
@@ -33,27 +35,25 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nwjs";
-  version = "0.33.4";
+  version = "0.54.1";
 
   src = if sdk then fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-sdk-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "1hi6xispxvyb6krm5j11mv8509dwpw5ikpbkvq135gsk3gm29c9y" else
-      "00p4clbfinrj5gp2i84a263l3h00z8g7mnx61qwmr0z02kvswz9s";
+      "sha256-1qeU4+EIki0M7yJPkRuzFwMdswfDOni5gltdmM6A/ds=" else
+      "sha256-wDEGePE9lrKa6OAzeiDLhVj992c0TJgiMHb8lJ4PF80=";
   } else fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "09zd6gja3l20xx03h2gawpmh9f8nxqjp8qdkds5nz9kbbckhkj52" else
-      "0nlpdz76k1p1pq4xygfr2an91m0d7p5fjyg2xhiggyy8b7sp4964";
+      "sha256-TACEM06K2t6dDXRD44lSW7GRi77yzSW4BZJw8gT+fl4=" else
+      "sha256-yX9knqFV5VQTT3TJDmQoDgt17NqH8fLt+bLQAqKleTU=";
   };
-
-  phases = [ "unpackPhase" "installPhase" ];
 
   # we have runtime deps like sqlite3 that should remain
   dontPatchELF = true;
 
   installPhase =
-    let ccPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+    let ccPath = lib.makeLibraryPath [ stdenv.cc.cc ];
     in ''
       mkdir -p $out/share/nwjs
       cp -R * $out/share/nwjs
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
 
-      ln -s ${systemd.lib}/lib/libudev.so $out/share/nwjs/libudev.so.0
+      ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
       libpath="$out/share/nwjs/lib/"
       for f in "$libpath"/*.so; do
@@ -81,13 +81,16 @@ in stdenv.mkDerivation rec {
 
       mkdir -p $out/bin
       ln -s $out/share/nwjs/nw $out/bin
+
+      mkdir $out/lib
+      ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app runtime based on Chromium and node.js";
-    homepage = https://nwjs.io/;
+    homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;

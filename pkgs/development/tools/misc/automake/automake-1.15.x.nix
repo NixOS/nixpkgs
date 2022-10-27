@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.15";
+  pname = "automake";
+  version = "1.15.1";
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "0dl6vfi2lzz8alnklwxzfz624b95hb1ipjvd3mk177flmddcf24r";
+    url = "mirror://gnu/automake/automake-${version}.tar.xz";
+    sha256 = "1bzd9g32dfm4rsbw93ld9x7b5nc1y6i4m6zp032qf1i28a8s6sxg";
   };
 
   nativeBuildInputs = [ autoconf perl ];
   buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;
+
+  patches = [ ./help2man-SOURCE_DATE_EPOCH-support.patch ];
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
@@ -28,9 +31,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.15";
-    homepage = https://www.gnu.org/software/automake/;
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU Automake is a tool for automatically generating
@@ -38,6 +41,6 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

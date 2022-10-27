@@ -1,22 +1,34 @@
-{ fetchurl, stdenv, openssl, pkgconfig, db, zlib, cyrus_sasl, perl }:
+{ lib, stdenv, fetchurl, pkg-config, perl
+, openssl, db, cyrus_sasl, zlib
+, Security
+}:
 
 stdenv.mkDerivation rec {
-  name = "isync-1.3.1";
+  pname = "isync";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/isync/${name}.tar.gz";
-    sha256 = "1sphd30jplii58y2zmw365bckm6pszmapcy905zhjll1sm1ldjv8";
+    url = "mirror://sourceforge/isync/${pname}-${version}.tar.gz";
+    sha256 = "1zq0wwvmqsl9y71546dr0aygzn9gjjfiw19hlcq87s929y4p6ckw";
   };
 
-  nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ openssl db cyrus_sasl zlib ];
+  nativeBuildInputs = [ pkg-config perl ];
+  buildInputs = [ openssl db cyrus_sasl zlib ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
-    homepage = http://isync.sourceforge.net/;
+  meta = with lib; {
+    homepage = "http://isync.sourceforge.net/";
+    # https://sourceforge.net/projects/isync/
+    changelog = "https://sourceforge.net/p/isync/isync/ci/v${version}/tree/NEWS";
     description = "Free IMAP and MailDir mailbox synchronizer";
+    longDescription = ''
+      mbsync (formerly isync) is a command line application which synchronizes
+      mailboxes. Currently Maildir and IMAP4 mailboxes are supported. New
+      messages, message deletions and flag changes can be propagated both ways.
+    '';
     license = licenses.gpl2Plus;
-
-    maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.unix;
+    maintainers = with maintainers; [ primeos lheckemann ];
+    mainProgram = "mbsync";
   };
 }

@@ -1,30 +1,29 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "v0.3.1";
-  rev = version;
+  version = "0.6.1";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "cantino";
     repo = "mcfly";
-    sha256 = "0pmyw21zns4zn7pffji4yvbj63fx3g15cx81pk4bs6lzyz5zbdc2";
+    rev = "v${version}";
+    sha256 = "sha256-rim2ndXjoqIn5P60D5+FFuq0CDAOf29xCJ7rfemMzVU=";
   };
 
-  preInstall = ''
-    mkdir -p $out/share/mcfly
-    cp mcfly.bash $out/share/mcfly/
-    chmod +x $out/share/mcfly/mcfly.bash
+  postPatch = ''
+    substituteInPlace mcfly.bash --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.zsh  --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
-  cargoSha256 = "1bf65kagvhsi6lg8187ihi5j45hkq9d8v6j7rzmmfhngdzvcfr69";
+  cargoSha256 = "sha256-W1SPunH4fgam1JDI+JnLoAKCwx1RLY2JotNSyZAQoSY=";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/cantino/mcfly;
-    description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now.";
+  meta = with lib; {
+    homepage = "https://github.com/cantino/mcfly";
+    description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now";
+    changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = [ maintainers.melkor333 ];
   };
 }

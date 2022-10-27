@@ -1,14 +1,14 @@
 { mkDerivation, stdenv, lib, fetchurl, rpmextract, autoPatchelfHook , libuuid
-, libXtst, libXfixes, glib, gst_all_1, alsaLib, freetype, fontconfig , libXext
+, libXtst, libXfixes, glib, gst_all_1, alsa-lib, freetype, fontconfig , libXext
 , libGL, libpng, libXScrnSaver, libxcb, xorg, libpulseaudio, libdrm
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "11.1.0.0508";
+  version = "12.1.1.0257";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "1j7mzvf349yxb42m8syh73gpvil01hy1a2wrr0rdzb2ijfnkxyaa";
+    sha256 = "1xm41v324zq1x5awgb7fr238f7ml7vq6jrfh84358i5shgha1g2k";
   };
 
   nativeBuildInputs = [
@@ -16,7 +16,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    libuuid libXtst libXScrnSaver libXfixes alsaLib freetype fontconfig libXext
+    libuuid libXtst libXScrnSaver libXfixes alsa-lib freetype fontconfig libXext
     libGL libpng libxcb libpulseaudio libdrm
     glib  # For libgobject
     stdenv.cc.cc  # For libstdc++
@@ -50,6 +50,7 @@ mkDerivation rec {
   meta = {
     description = "Client for HPE's MyRoom web conferencing solution";
     maintainers = with lib.maintainers; [ johnazoidberg ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 
 with lib;
 
@@ -11,8 +11,8 @@ with lib;
     { services.radarr.enable = true; };
 
   testScript = ''
-    $machine->waitForUnit('radarr.service');
-    $machine->waitForOpenPort('7878');
-    $machine->succeed("curl --fail http://localhost:7878/");
+    machine.wait_for_unit("radarr.service")
+    machine.wait_for_open_port(7878)
+    machine.succeed("curl --fail http://localhost:7878/")
   '';
 })

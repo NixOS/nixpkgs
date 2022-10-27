@@ -1,43 +1,35 @@
-{ stdenv, fetchurl, zlib, ocaml, findlib, ocamlbuild, zarith, ncurses }:
+{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "3.12";
-
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then {
-    version = "1.13";
-    url = https://github.com/xavierleroy/cryptokit/archive/release113.tar.gz;
-    sha256 = "1f4jjnp2a911nqw0hbijyv9vygkk6kw5zx75qs49hfm3by6ij8rq";
-    inherit zarith;
-  } else {
-    version = "1.10";
-    url = http://forge.ocamlcore.org/frs/download.php/1493/cryptokit-1.10.tar.gz;
-    sha256 = "1k2f2ixm7jcsgrzn9lz1hm9qqgq71lk9lxy3v3cwsd8xdrj3jrnv";
-    zarith = null;
-  };
-in
-
-stdenv.mkDerivation {
+buildDunePackage rec {
   pname = "cryptokit";
-  inherit (param) version;
+  version = "1.17";
 
-  src = fetchurl {
-    inherit (param) url sha256;
+  minimalOCamlVersion = "4.08";
+
+  src = fetchFromGitHub {
+    owner = "xavierleroy";
+    repo = "cryptokit";
+    rev = "release${lib.replaceStrings ["."] [""] version}";
+    sha256 = "sha256:1xi7kcigxkfridjas2zwldsfc21wi31cgln071sbmv4agh3dqbyw";
   };
 
-  buildInputs = [ zlib ocaml findlib ocamlbuild ncurses ];
-  propagatedBuildInputs = [ param.zarith ];
+  # dont do autotools configuration, but do trigger findlib's preConfigure hook
+  configurePhase = ''
+    runHook preConfigure
+    runHook postConfigure
+  '';
 
-  buildFlags = "setup.data build";
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ zarith zlib ];
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
+  doCheck = true;
 
   meta = {
-    homepage = http://pauillac.inria.fr/~xleroy/software.html;
+    homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "A library of cryptographic primitives for OCaml";
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.lgpl2Only;
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

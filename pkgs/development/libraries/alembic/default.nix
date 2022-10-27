@@ -1,23 +1,21 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
 
 stdenv.mkDerivation rec
 {
   pname = "alembic";
-  version = "1.7.11";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     rev = version;
-    sha256 = "1lalbqn4cwf0vp4hiq72gwpd7kq501j21rnjb380mv26pk7r2ivz";
+    sha256 = "sha256-QnqUD8KmMDmEZ1REoKN70SwVICOdyGPZsB/lU9nojj4=";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake ];
   buildInputs = [ openexr hdf5-threadsafe ];
-
-  enableParallelBuilding = true;
 
   buildPhase = ''
     cmake -DUSE_HDF5=ON -DCMAKE_INSTALL_PREFIX=$out/ -DUSE_TESTS=OFF .
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec
     mv $out/include $dev/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
     license = licenses.bsd3;

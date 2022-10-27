@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, which, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick, darwin }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, which
+, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick
+, Foundation
+}:
 
-
-stdenv.mkDerivation rec{
-  version = "1.2.1";
+stdenv.mkDerivation rec {
+  version = "1.12.3";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
     rev = version;
-    sha256 = "19dck47v4hd07q9742mgb928h7y1y9638qlh2rzsvqsfqvqmxh85";
+    sha256 = "sha256-Aejm3VR4f69jDdG16vud2sj/9jQ8n5f34oed1SGEcXo=";
   };
 
   nativeBuildInputs = [ autoconf
                         automake
                         libtool
-                        pkgconfig
+                        pkg-config
                         which
                         libxslt
                         libxml2
@@ -23,7 +25,8 @@ stdenv.mkDerivation rec{
                         docbook_xsl
                       ];
 
-  buildInputs = [ glib imagemagick ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  buildInputs = [ glib imagemagick ]
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   patches = [ ./xmlcatalog_patch.patch ];
 
@@ -35,9 +38,9 @@ stdenv.mkDerivation rec{
                      "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
                    ];
 
-  meta = with stdenv.lib; {
-    description = "Terminal graphics for the 21st century.";
-    homepage = https://hpjansson.org/chafa/;
+  meta = with lib; {
+    description = "Terminal graphics for the 21st century";
+    homepage = "https://hpjansson.org/chafa/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];

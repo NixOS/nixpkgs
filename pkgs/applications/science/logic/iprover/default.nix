@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, ocaml, eprover, zlib }:
+{ lib, stdenv, fetchurl, ocaml, eprover, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "iprover";
-  version = "2018_Jul_24_11h";
+  version = "3.1";
 
   src = fetchurl {
-    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover_${version}.tar.gz";
-    sha256 = "1iqim11flzm56aaysasl5whajcv1gq31hkidaqfr8ww7kwl1h06p";
+    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
+    sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 
   buildInputs = [ ocaml eprover zlib ];
 
-  preConfigure = ''patchShebangs .'';
+  preConfigure = "patchShebangs .";
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
     chmod a+x  "$out"/bin/iprover
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An automated first-order logic theorem prover";
-    homepage = http://www.cs.man.ac.uk/~korovink/iprover/;
+    homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
     maintainers = with maintainers; [ raskin gebner ];
     platforms = platforms.linux;
     license = licenses.gpl3;

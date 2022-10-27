@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
 let
   version = "6.30.223.271";
@@ -7,8 +7,8 @@ let
     x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
   };
 
-  arch = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
-  tarballVersion = stdenv.lib.replaceStrings ["."] ["_"] version;
+  arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
+  tarballVersion = lib.replaceStrings ["."] ["_"] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
 in
 stdenv.mkDerivation {
@@ -35,11 +35,22 @@ stdenv.mkDerivation {
     ./linux-4.12.patch
     ./linux-4.15.patch
     ./linux-5.1.patch
+    # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
+    ./linux-5.6.patch
+    # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
+    ./linux-5.9.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/33b4bd2b9e30679b03f5d7aa2741911d914dcf94/trunk/012-linux517.patch
+    ./linux-5.17.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/2e1fd240f9ce06f500feeaa3e4a9675e65e6b967/trunk/013-linux518.patch
+    ./linux-5.18.patch
+    # source: https://gist.github.com/joanbm/207210d74637870c01ef5a3c262a597d
+    ./linux-6.0.patch
+    ./pedantic-fix.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
 
-  makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+  makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
   unpackPhase = ''
     sourceRoot=broadcom-sta
@@ -57,9 +68,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
-    homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ phreedom ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

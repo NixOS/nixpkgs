@@ -1,67 +1,146 @@
-{ stdenv, fetchurl, gettext, meson, ninja, pkgconfig, gobject-introspection, python3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
-, libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd, dbus
-, substituteAll }:
+{ stdenv
+, lib
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkg-config
+, asciidoc
+, gobject-introspection
+, python3
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, libxml2
+, glib
+, wrapGAppsNoGuiHook
+, sqlite
+, libxslt
+, libstemmer
+, gnome
+, icu
+, libuuid
+, libsoup
+, libsoup_3
+, json-glib
+, systemd
+, dbus
+, writeText
+}:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.1";
+  version = "3.4.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1888vyz2l5n46ywb70fryd0qipyh3x5n6q0mk56jzbb5whk8fx5n";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "s7OAyVcdfHQjtfQB5KLy143kcUOwNessEoHiQjxZIYs=";
   };
 
-  nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext libxslt wrapGAppsHook gobject-introspection
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
-    python3 # for data-generators
-    systemd # used for checks to install systemd user service
-    dbus # used for checks and pkgconfig to install dbus service/s
-  ];
-
-  buildInputs = [
-    glib libxml2 sqlite upower icu networkmanager libsoup libuuid json-glib libstemmer
-  ];
-
-  mesonFlags = [
-    # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
-    "-Dfunctional_tests=false"
-    "-Ddocs=true"
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
-    })
-  ];
-
   postPatch = ''
-    patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
   '';
 
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    gettext
+    libxslt
+    wrapGAppsNoGuiHook
+    gobject-introspection
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    glib
+    libxml2
+    sqlite
+    icu
+    libsoup
+    libsoup_3
+    libuuid
+    json-glib
+    libstemmer
+    dbus
+  ] ++ lib.optionals stdenv.isLinux [
+    systemd
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
+  ] ++ (
+    let
+      # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+      '';
+    in
+    [
+      "--cross-file=${crossFile}"
+    ]
+  ) ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd_user_services=false"
+  ];
+
+  doCheck = true;
+
+  preCheck =
+    let
+      linuxDot0 = lib.optionalString stdenv.isLinux ".0";
+      darwinDot0 = lib.optionalString stdenv.isDarwin ".0";
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
+      export HOME=$(mktemp -d)
+
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running functional tests, the library is not yet installed,
+      # though, so we need to replace the absolute path with a local one during build.
+      # We are using a symlink that will be overridden during installation.
+      mkdir -p $out/lib
+      ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0${darwinDot0}${extension} $out/lib/libtracker-sparql-3.0${darwinDot0}${extension}${linuxDot0}
+    '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test \
+        --timeout-multiplier 2 \
+        --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    # Clean up out symlinks
+    rm -r $out/lib
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
-      versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tracker;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = gnome3.maintainers;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

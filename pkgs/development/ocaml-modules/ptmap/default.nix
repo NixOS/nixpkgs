@@ -1,43 +1,30 @@
-{ stdenv, fetchzip, ocaml, findlib, obuild }:
+{ lib, buildDunePackage, fetchurl
+, seq
+, stdlib-shims
+}:
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.07"
-  then {
-    version = "2.0.4";
-    sha256 = "05a391m1l04zigi6ghywj7f5kxy2w6186221k7711wmg56m94yjw";
-  } else {
-    version = "2.0.3";
-    sha256 = "19xykhqk7q25r1pj8rpfj53j2r9ls8mxi1w5m2wqshrf20gf078h";
-  }
-; in
+buildDunePackage rec {
+  pname = "ptmap";
+  version = "2.0.5";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-ptmap-${param.version}";
+  useDune2 = true;
 
-  src = fetchzip {
-    url = "https://github.com/backtracking/ptmap/archive/v${param.version}.tar.gz";
-    inherit (param) sha256;
+  src = fetchurl {
+    url = "https://github.com/backtracking/ptmap/releases/download/${version}/ptmap-${version}.tbz";
+    sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";
   };
 
-  buildInputs = [ ocaml findlib obuild ];
+  strictDeps = true;
 
-  createFindlibDestdir = true;
+  buildInputs = [ stdlib-shims ];
+  propagatedBuildInputs = [ seq ];
 
-  buildPhase = ''
-    substituteInPlace ptmap.obuild --replace 'build-deps: qcheck' ""
-    obuild configure
-    obuild build lib-ptmap
-  '';
-
-  installPhase = ''
-    obuild install --destdir $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  doCheck = true;
 
   meta = {
-    homepage = https://www.lri.fr/~filliatr/software.en.html;
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://www.lri.fr/~filliatr/software.en.html";
     description = "Maps over integers implemented as Patricia trees";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ volth ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ ];
   };
 }

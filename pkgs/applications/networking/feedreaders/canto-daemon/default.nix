@@ -1,19 +1,23 @@
-{ stdenv, fetchFromGitHub, python3Packages, }:
+{ lib, fetchFromGitHub, python3Packages, }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.9.7";
+  version = "0.9.8";
   pname = "canto-daemon";
 
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-next";
     rev = "v${version}";
-    sha256 = "1si53r8cd4avfc56r315zyrghkppnjd6n125z1agfv59i7hdmk3n";
+    sha256 = "0fmsdn28z09bvivdkqcla5bnalky7k744iir25z70bv4pz1jcvnk";
   };
 
   propagatedBuildInputs = with python3Packages; [ feedparser ];
 
-  meta = {
+  doCheck = false;
+
+  pythonImportsCheck = [ "canto_next" ];
+
+  meta = with lib; {
     description = "Daemon for the canto Atom/RSS feed reader";
     longDescription = ''
       Canto is an Atom/RSS feed reader for the console that is meant to be
@@ -23,9 +27,9 @@ python3Packages.buildPythonApplication rec {
       unreadable white text. An interface with almost infinite customization
       and extensibility using the excellent Python programming language.
     '';
-    homepage = https://codezen.org/canto-ng/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    homepage = "https://codezen.org/canto-ng/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers;[ devhell ];
   };
 }

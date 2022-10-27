@@ -1,25 +1,34 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click, ecdsa, fido2, intelhex, pyserial, pyusb, requests}:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, click
+, cryptography
+, ecdsa
+, fido2
+, intelhex
+, pyserial
+, pyusb
+, requests
+}:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.15";
+  version = "0.1.1";
   format = "flit";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = pname;
     rev = version;
-    sha256 = "14na9s65hxzx141bdv0j7rx1wi3cv85jzpdivsq1rwp6hdhiazr1";
+    sha256 = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
-
-  # TODO: remove ASAP
-  patchPhase = ''
-    substituteInPlace pyproject.toml --replace "fido2 == 0.7.0" "fido2 >= 0.7.0"
-  '';
 
   propagatedBuildInputs = [
     click
+    cryptography
     ecdsa
     fido2
     intelhex
@@ -28,10 +37,25 @@
     requests
   ];
 
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
+  pythonImportsCheck = [
+    "solo"
+    "solo.cli"
+    "solo.commands"
+    "solo.fido2"
+    "solo.operations"
+  ];
+
   meta = with lib; {
-    description = "Python tool and library for SoloKeys";
-    homepage = "https://github.com/solokeys/solo-python";
+    description = "Python tool and library for SoloKeys Solo 1";
+    homepage = "https://github.com/solokeys/solo1-cli";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
+    # not compatible with fido2 >= 1.0.0
+    # https://github.com/solokeys/solo1-cli/issues/157
+    broken = versionAtLeast fido2.version "1.0.0";
   };
 }

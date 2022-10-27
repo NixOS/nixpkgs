@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
+{ lib, fetchurl, buildDunePackage, ppxlib }:
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";
-  version = "1.0.0";
-
-  minimumOCamlVersion = "4.01";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "0qy0wa3rd5yh1612jijadi1yddfslpsmmmf69phi2dhr3vmkhza7";
+    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "sha256-/mMj5UT22KQGVy1sjgEoOgPzyCYyeDPtWJYNDvQ9nlk=";
   };
 
-  buildInputs = [ ocaml-migrate-parsetree ];
+  minimumOCamlVersion = "4.07";
+  useDune2 = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/flowtype/ocaml-ppx_gen_rec;
-    description = "ocaml preprocessor that generates a recursive module";
+  buildInputs = [ ppxlib ];
+
+  meta = with lib; {
+    homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
+    description = "A ppx rewriter that transforms a recursive module expression into a struct.";
     license = licenses.mit;
-    maintainers = [ maintainers.frontsideair ];
+    maintainers = with maintainers; [ frontsideair ];
   };
 }

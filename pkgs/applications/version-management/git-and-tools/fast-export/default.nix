@@ -1,16 +1,18 @@
-{stdenv, fetchgit, mercurial, makeWrapper}:
+{lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
-  version = "190107";
+  version = "220921";
 
-  src = fetchgit {
-    url = git://repo.or.cz/fast-export.git;
+  src = fetchFromGitHub {
+    owner = "frej";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "14azfps9jd5anivcvfwflgsvqdyy6gm9jy284kzx2ng9f7871d14";
+    sha256 = "sha256-8tAh17Cp1L0kyV5+HoFnh9mINCBNCNBv1gqsMd6U3FQ=";
   };
 
-  buildInputs = [mercurial.python mercurial makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [mercurial.python mercurial];
 
   installPhase = ''
     binPath=$out/bin
@@ -27,14 +29,37 @@ stdenv.mkDerivation rec {
 
     for script in $out/bin/*.sh; do
       wrapProgram $script \
-        --prefix PATH : "${mercurial.python}/bin":$libexec \
+        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+  # deliberately not adding git or hg into installCheckInputs - package should
+  # be able to work without them in runtime env
+  installCheckPhase = ''
+    mkdir repo-hg
+    pushd repo-hg
+    ${mercurial}/bin/hg init
+    echo foo > bar
+    ${mercurial}/bin/hg add bar
+    ${mercurial}/bin/hg commit --message "baz"
+    popd
+
+    mkdir repo-git
+    pushd repo-git
+    ${git}/bin/git init
+    ${git}/bin/git config core.ignoreCase false  # for darwin
+    $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
+    for s in "foo" "bar" "baz" ; do
+      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+    done
+    popd
+  '';
+
+  meta = with lib; {
     description = "Import mercurial into git";
-    homepage = https://repo.or.cz/w/fast-export.git;
+    homepage = "https://repo.or.cz/w/fast-export.git";
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
     platforms = platforms.unix;

@@ -15,7 +15,11 @@ let
 
     listen:
     (
-      { host: "${cfg.listenAddress}"; port: "${toString cfg.port}"; }
+      ${
+        concatMapStringsSep ",\n"
+        (addr: ''{ host: "${addr}"; port: "${toString cfg.port}"; }'')
+        cfg.listenAddresses
+      }
     );
 
     ${cfg.appendConfig}
@@ -27,69 +31,68 @@ let
       { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
       { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
       { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-      { name: "ssl"; host: "localhost"; port: "443"; probe: "builtin"; },
+      { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
       { name: "anyprot"; host: "localhost"; port: "443"; probe: "builtin"; }
     );
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
+  ];
+
   options = {
     services.sslh = {
-      enable = mkEnableOption "sslh";
+      enable = mkEnableOption (lib.mdDoc "sslh");
 
       verbose = mkOption {
         type = types.bool;
         default = false;
-        description = "Verbose logs.";
+        description = lib.mdDoc "Verbose logs.";
       };
 
       timeout = mkOption {
         type = types.int;
         default = 2;
-        description = "Timeout in seconds.";
+        description = lib.mdDoc "Timeout in seconds.";
       };
 
       transparent = mkOption {
         type = types.bool;
         default = false;
-        description = "Will the services behind sslh (Apache, sshd and so on) see the external IP and ports as if the external world connected directly to them";
+        description = lib.mdDoc "Will the services behind sslh (Apache, sshd and so on) see the external IP and ports as if the external world connected directly to them";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = "Listening address or hostname.";
+      listenAddresses = mkOption {
+        type = types.coercedTo types.str singleton (types.listOf types.str);
+        default = [ "0.0.0.0" "[::]" ];
+        description = lib.mdDoc "Listening addresses or hostnames.";
       };
 
       port = mkOption {
         type = types.int;
         default = 443;
-        description = "Listening port.";
+        description = lib.mdDoc "Listening port.";
       };
 
       appendConfig = mkOption {
         type = types.str;
         default = defaultAppendConfig;
-        description = "Verbatim configuration file.";
+        description = lib.mdDoc "Verbatim configuration file.";
       };
     };
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.users.${user} = {
-        description = "sslh daemon user";
-        isSystemUser = true;
-      };
-
       systemd.services.sslh = {
         description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          User                 = user;
-          Group                = "nogroup";
+          DynamicUser          = true;
+          User                 = "sslh";
           PermissionsStartOnly = true;
           Restart              = "always";
           RestartSec           = "1s";
@@ -129,7 +132,7 @@ in
           { table = "mangle"; command = "OUTPUT ! -o lo -p tcp -m connmark --mark 0x02/0x0f -j CONNMARK --restore-mark --mask 0x0f"; }
         ];
       in {
-        path = [ pkgs.iptables pkgs.iproute pkgs.procps ];
+        path = [ pkgs.iptables pkgs.iproute2 pkgs.procps ];
 
         preStart = ''
           # Cleanup old iptables entries which might be still there

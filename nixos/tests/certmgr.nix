@@ -3,30 +3,30 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 let
   mkSpec = { host, service ? null, action }: {
     inherit action;
     authority = {
       file = {
-        group = "nobody";
-        owner = "nobody";
-        path = "/tmp/${host}-ca.pem";
+        group = "nginx";
+        owner = "nginx";
+        path = "/var/ssl/${host}-ca.pem";
       };
       label = "www_ca";
       profile = "three-month";
       remote = "localhost:8888";
     };
     certificate = {
-      group = "nobody";
-      owner = "nobody";
-      path = "/tmp/${host}-cert.pem";
+      group = "nginx";
+      owner = "nginx";
+      path = "/var/ssl/${host}-cert.pem";
     };
     private_key = {
-      group = "nobody";
+      group = "nginx";
       mode = "0600";
-      owner = "nobody";
-      path = "/tmp/${host}-key.pem";
+      owner = "nginx";
+      path = "/var/ssl/${host}-key.pem";
     };
     request = {
       CN = host;
@@ -56,6 +56,8 @@ let
 
         services.cfssl.enable = true;
         systemd.services.cfssl.after = [ "cfssl-init.service" "networking.target" ];
+
+        systemd.tmpfiles.rules = [ "d /var/ssl 777 root root" ];
 
         systemd.services.cfssl-init = {
           description = "Initialize the cfssl CA";
@@ -87,8 +89,8 @@ let
           enable = true;
           virtualHosts = lib.mkMerge (map (host: {
             ${host} = {
-              sslCertificate = "/tmp/${host}-cert.pem";
-              sslCertificateKey = "/tmp/${host}-key.pem";
+              sslCertificate = "/var/ssl/${host}-cert.pem";
+              sslCertificateKey = "/var/ssl/${host}-key.pem";
               extraConfig = ''
                 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
               '';
@@ -123,17 +125,19 @@ in
       )));
     };
     testScript = ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-ca.pem');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-key.pem');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-cert.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-ca.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-key.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-cert.pem');
-      $machine->waitForUnit('nginx.service');
-      $machine->succeed('[ "1" -lt "$(journalctl -u nginx | grep "Starting Nginx" | wc -l)" ]');
-      $machine->succeed('curl --cacert /tmp/imp.example.org-ca.pem https://imp.example.org');
-      $machine->succeed('curl --cacert /tmp/decl.example.org-ca.pem https://decl.example.org');
+      machine.wait_for_unit("cfssl.service")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-key.pem")
+      machine.wait_until_succeeds("ls /var/ssl/decl.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-key.pem")
+      machine.wait_until_succeeds("ls /var/ssl/imp.example.org-cert.pem")
+      machine.wait_for_unit("nginx.service")
+      assert 1 < int(machine.succeed('journalctl -u nginx | grep "Starting Nginx" | wc -l'))
+      machine.succeed("curl --cacert /var/ssl/imp.example.org-ca.pem https://imp.example.org")
+      machine.succeed(
+          "curl --cacert /var/ssl/decl.example.org-ca.pem https://decl.example.org"
+      )
     '';
   };
 
@@ -143,8 +147,8 @@ in
       test = mkSpec { host = "command.example.org"; action = "touch /tmp/command.executed"; };
     };
     testScript = ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('stat /tmp/command.executed');
+      machine.wait_for_unit("cfssl.service")
+      machine.wait_until_succeeds("stat /tmp/command.executed")
     '';
   };
 

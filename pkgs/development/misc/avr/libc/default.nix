@@ -1,32 +1,29 @@
-{ stdenv, fetchurl, automake, autoconf }:
+{ lib, stdenv, fetchurl, automake, autoconf }:
 
-let
-  version = "2.0.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avr-libc";
-  inherit version;
+  version = "2.1.0";
 
   src = fetchurl {
-    url = https://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2;
-    sha256 = "15svr2fx8j6prql2il2fc0ppwlv50rpmyckaxx38d3gxxv97zpdj";
+    url = "https://download.savannah.gnu.org/releases/avr-libc/avr-libc-${version}.tar.bz2";
+    sha256 = "1s2lnqsbr1zs7dvsbyyckay52lm8mbjjaqf3cyx5qpcbq3jwx10b";
   };
 
   nativeBuildInputs = [ automake autoconf ];
 
   # Make sure we don't strip the libraries in lib/gcc/avr.
-  stripDebugList = "bin";
+  stripDebugList = [ "bin" ];
   dontPatchELF = true;
 
   passthru = {
     incdir = "/avr/include";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a C runtime library for AVR microcontrollers";
-    homepage = https://savannah.nongnu.org/projects/avr-libc/;
+    homepage = "https://github.com/avrdudes/avr-libc";
     license = licenses.bsd3;
     platforms = [ "avr-none" ];
-    maintainers = with maintainers; [ mguentner ];
+    maintainers = with maintainers; [ mguentner emilytrau ];
   };
 }

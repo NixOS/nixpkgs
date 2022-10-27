@@ -1,22 +1,29 @@
-{stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
+{lib, stdenv, git, perl, ncurses, coreutils, fetchFromGitHub, makeWrapper, ...}:
 
 stdenv.mkDerivation rec {
   pname = "diff-so-fancy";
-  version = "1.2.7";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
-    sha256 = "0y5cp236gi6h7llzai5d27086l4zz58mz1zs01r97xnnmjs9vw21";
+    sha256 = "sha256-/xdBvq2u1s5/yzjwr3MLxpaD1CNktcPijXJTKW3Bc4c=";
   };
 
-  # Perl is needed here for patchShebangs
-  nativeBuildInputs = [ perl makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  buildPhase = null;
+  buildInputs = [
+    perl # needed for patchShebangs
+  ];
+
+  dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/diff-so-fancy
 
     # diff-so-fancy executable searches for it's library relative to
@@ -32,10 +39,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${git}/bin" \
       --prefix PATH : "${coreutils}/bin" \
       --prefix PATH : "${ncurses.out}/bin"
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/so-fancy/diff-so-fancy;
+  meta = with lib; {
+    homepage = "https://github.com/so-fancy/diff-so-fancy";
     description = "Good-looking diffs filter for git";
     license = licenses.mit;
     platforms = platforms.all;
@@ -43,6 +52,6 @@ stdenv.mkDerivation rec {
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ma27 ];
   };
 }

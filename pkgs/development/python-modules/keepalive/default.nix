@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,10 +15,11 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive";
     homepage = "https://github.com/wikier/keepalive";
     license = licenses.asl20;
+    broken = true; # uses use_2to3, which is no longer supported for setuptools>=58
   };
 
 }

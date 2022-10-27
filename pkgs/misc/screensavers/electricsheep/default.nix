@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
-, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU_combined
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, ffmpeg, lua5_1, curl
+, libpng, xorg, pkg-config, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
 , glee }:
 
 stdenv.mkDerivation rec {
   pname = "electricsheep";
-  version = "2.7b33-2017-10-20";
+  version = "3.0.2-2019-10-05";
 
   src = fetchFromGitHub {
     owner = "scottdraves";
     repo = pname;
-    rev = "c02c19b9364733fc73826e105fc983a89a8b4f40";
-    sha256 = "1z49l53j1lhk7ahdy96lm9r0pklwpf2i5s6y2l2rn6l4z8dxkjmk";
+    rev = "37ba0fd692d6581f8fe009ed11c9650cd8174123";
+    sha256 = "sha256-v/+2dxOY/p6wNAywcFHUAfsZEJw31Syu2MacN/KeyWg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    wxGTK30 libav lua5_1 curl libpng xorg.libXrender
-    flam3 libgtop boost tinyxml freeglut libGLU_combined glee
+    wxGTK30 ffmpeg lua5_1 curl libpng xorg.libXrender
+    flam3 libgtop boost tinyxml freeglut libGLU libGL glee
   ];
 
   preAutoreconf = ''
@@ -29,15 +29,19 @@ stdenv.mkDerivation rec {
     "CPPFLAGS=-I${glee}/include/GL"
   ];
 
+  makeFlags = [
+    ''CXXFLAGS+="-DGL_GLEXT_PROTOTYPES"''
+  ];
+
   preBuild = ''
     sed -i "s|/usr|$out|" Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
-    homepage = https://electricsheep.org/;
-    maintainers = with maintainers; [ nand0p fpletz ];
+    homepage = "https://electricsheep.org/";
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = licenses.gpl1;
+    license = licenses.gpl2Only;
   };
 }

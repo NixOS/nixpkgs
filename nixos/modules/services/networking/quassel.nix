@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.quassel;
+  opt = options.services.quassel;
   quassel = cfg.package;
   user = if cfg.user != null then cfg.user else "quassel";
 in
@@ -16,17 +17,12 @@ in
 
     services.quassel = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the Quassel IRC client daemon.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "the Quassel IRC client daemon");
 
       certificateFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the certificate used for SSL connections with clients.
         '';
       };
@@ -34,7 +30,7 @@ in
       requireSSL = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Require SSL for connections from clients.
         '';
       };
@@ -42,39 +38,45 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.quasselDaemon;
-        defaultText = "pkgs.quasselDaemon";
-        description = ''
+        defaultText = literalExpression "pkgs.quasselDaemon";
+        description = lib.mdDoc ''
           The package of the quassel daemon.
         '';
-        example = literalExample "pkgs.quasselDaemon";
       };
 
       interfaces = mkOption {
+        type = types.listOf types.str;
         default = [ "127.0.0.1" ];
-        description = ''
-          The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]',
-          only clients on the local host can connect to it; if `[ 0.0.0.0 ]', clients
+        description = lib.mdDoc ''
+          The interfaces the Quassel daemon will be listening to.  If `[ 127.0.0.1 ]`,
+          only clients on the local host can connect to it; if `[ 0.0.0.0 ]`, clients
           can access it from any network interface.
         '';
       };
 
       portNumber = mkOption {
+        type = types.port;
         default = 4242;
-        description = ''
+        description = lib.mdDoc ''
           The port number the Quassel daemon will be listening to.
         '';
       };
 
       dataDir = mkOption {
-        default = ''/home/${user}/.config/quassel-irc.org'';
-        description = ''
+        default = "/home/${user}/.config/quassel-irc.org";
+        defaultText = literalExpression ''
+          "/home/''${config.${opt.user}}/.config/quassel-irc.org"
+        '';
+        type = types.str;
+        description = lib.mdDoc ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';
       };
 
       user = mkOption {
         default = null;
-        description = ''
+        type = types.nullOr types.str;
+        description = lib.mdDoc ''
           The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';
       };
@@ -92,17 +94,21 @@ in
         message = "Quassel needs a certificate file in order to require SSL";
       }];
 
-    users.users = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.users = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         description = "Quassel IRC client daemon";
         group = "quassel";
         uid = config.ids.uids.quassel;
-      }];
+      };
+    };
 
-    users.groups = mkIf (cfg.user == null) [
-      { name = "quassel";
+    users.groups = optionalAttrs (cfg.user == null) {
+      quassel = {
+        name = "quassel";
         gid = config.ids.gids.quassel;
-      }];
+      };
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${user} - - -"

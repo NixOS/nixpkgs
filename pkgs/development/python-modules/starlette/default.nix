@@ -1,51 +1,79 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiofiles
-, graphene
+, anyio
+, contextlib2
 , itsdangerous
 , jinja2
+, python-multipart
 , pyyaml
 , requests
-, ujson
-, pytest
-, python
-, uvicorn
-, isPy27
-, darwin
+, aiosqlite
+, databases
+, pytestCheckHook
+, pythonOlder
+, trio
+, typing-extensions
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.12.7";
-  disabled = isPy27;
+  version = "0.20.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0zf7nwma801a9hvwwq4xy3rrkca9vydj30s3bnngmm4dvkk575c4";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
   };
+
+  postPatch = ''
+    # remove coverage arguments to pytest
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     aiofiles
-    graphene
+    anyio
     itsdangerous
     jinja2
+    python-multipart
     pyyaml
     requests
-    ujson
-    uvicorn
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    contextlib2
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -c """
-from starlette.applications import Starlette
-app = Starlette(debug=True)
-"""
-  '';
+  checkInputs = [
+    aiosqlite
+    databases
+    pytestCheckHook
+    trio
+    typing-extensions
+  ];
+
+  disabledTests = [
+    # asserts fail due to inclusion of br in Accept-Encoding
+    "test_websocket_headers"
+    "test_request_headers"
+  ];
+
+  pythonImportsCheck = [
+    "starlette"
+  ];
 
   meta = with lib; {
-    homepage = https://www.starlette.io/;
+    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

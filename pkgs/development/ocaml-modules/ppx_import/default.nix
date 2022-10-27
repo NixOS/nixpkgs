@@ -1,31 +1,43 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, ounit, ppx_deriving, ppx_tools_versioned
+{ lib
+, fetchurl
+, buildDunePackage
+, ounit
+, ppx_deriving
+, ppx_sexp_conv
+, ppxlib
 }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
-then throw "ppx_import is not available for OCaml ${ocaml.version}"
-else
+lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
+  "ppx_import is not available with ppxlib-${ppxlib.version}"
 
 buildDunePackage rec {
   pname = "ppx_import";
-  version = "1.5-3";
+  version = "1.9.1";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = "ppx_import";
-    rev = "bd627d5afee597589761d6fee30359300b5e1d80";
-    sha256 = "1f9bphif1izhyx72hvwpkd9kxi9lfvygaicy6nbxyp6qgc87z4nm";
+  useDune2 = true;
+
+  minimalOCamlVersion = "4.05";
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_import/releases/download/${version}/ppx_import-${version}.tbz";
+    sha256 = "1li1f9b1i0yhjy655k74hgzhd05palz726zjbhwcy3iqxvi9id6i";
   };
 
-  buildInputs = [ ounit ppx_deriving ];
-  propagatedBuildInputs = [ ppx_tools_versioned ];
+  propagatedBuildInputs = [
+    ppxlib
+  ];
+
+  checkInputs = [
+    ounit
+    ppx_deriving
+    ppx_sexp_conv
+  ];
 
   doCheck = true;
-  checkTarget = "test";
 
   meta = {
-    description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
+    description = "A syntax extension for importing declarations from interface files";
     license = lib.licenses.mit;
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-ppx/ppx_import";
   };
 }

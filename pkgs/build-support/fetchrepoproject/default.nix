@@ -1,21 +1,22 @@
-{ stdenvNoCC, gitRepo, cacert, copyPathsToStore }:
+{ lib, stdenvNoCC, gitRepo, cacert, copyPathsToStore }:
 
 { name, manifest, rev ? "HEAD", sha256
 # Optional parameters:
-, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
+, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? "", manifestName ? ""
 , localManifests ? [], createMirror ? false, useArchive ? false
 }:
 
 assert repoRepoRev != "" -> repoRepoURL != "";
 assert createMirror -> !useArchive;
 
-with stdenvNoCC.lib;
+with lib;
 
 let
   extraRepoInitFlags = [
     (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
     (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
     (optionalString (referenceDir != "") "--reference=${referenceDir}")
+    (optionalString (manifestName != "") "--manifest-name=${manifestName}")
   ];
 
   repoInitFlags = [

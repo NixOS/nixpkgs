@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "acpi";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01ahldvf0gc29dmbd5zi4rrnrw2i1ajnf30sx2vyaski3jv099fp";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Show battery status and other ACPI information";
     longDescription = ''
       Linux ACPI client is a small command-line
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
       the "old" `apm' command on ACPI systems.  It includes
       battery and thermal information.
     '';
-    homepage = https://sourceforge.net/projects/acpiclient/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://sourceforge.net/projects/acpiclient/";
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ];
   };

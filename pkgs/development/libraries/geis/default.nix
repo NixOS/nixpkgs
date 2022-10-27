@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig
+{ lib, stdenv, fetchurl
+, pkg-config
 , python3Packages
 , wrapGAppsHook
 , atk
@@ -10,15 +10,12 @@
 , gobject-introspection
 , grail
 , gtk3
-, libX11
-, libXext
-, libXi
-, libXtst
+, xorg
 , pango
 , xorgserver
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "geis";
@@ -29,16 +26,16 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" "-Wno-error=pointer-compare" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation -Wno-error=pointer-compare";
 
   hardeningDisable = [ "format" ];
 
   pythonPath = with python3Packages;
     [ pygobject3  ];
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook python3Packages.wrapPython];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython];
   buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
-    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+    gtk3 xorg.libX11 xorg.libXext xorg.libXi xorg.libXtst pango python3Packages.python xorgserver
   ];
 
   patchPhase = ''
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for input gesture recognition";
-    homepage = https://launchpad.net/geis;
+    homepage = "https://launchpad.net/geis";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

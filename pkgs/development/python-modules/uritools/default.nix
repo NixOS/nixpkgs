@@ -1,19 +1,29 @@
-{ stdenv, buildPythonPackage, fetchPypi, ipaddress }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "2.2.0";
+  version = "4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "80e8e23cafad54fd85811b5d9ba0fc595d933f5727c61c3937945eec09f99e2b";
+    sha256 = "420d94c1ff4bf90c678fca9c17b8314243bbcaa992c400a95e327f7f622e1edf";
   };
 
-  propagatedBuildInputs = [ ipaddress ];
+  pythonImportsCheck = [
+    "uritools"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
+    homepage = "https://github.com/tkem/uritools/";
     license = licenses.mit;
-    maintainers = [ maintainers.rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs ];
   };
 }

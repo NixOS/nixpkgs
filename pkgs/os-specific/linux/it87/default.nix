@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
-  version = "2018-08-14";
+  version = "unstable-2022-02-26";
 
-  # The original was deleted from github, but this seems to be an active fork
+  # Original is no longer maintained.
+  # This is the same upstream as the AUR uses.
   src = fetchFromGitHub {
-    owner = "hannesha";
+    owner = "frankcrawford";
     repo = "it87";
-    rev = "5515f5b78838cb6be551943ffef5d1792012724c";
-    sha256 = "1ygi4mwds4q7byhg8gqnh3syamdj5rpjy3jj012k7vl54gdgrmgm";
+    rev = "c93d61adadecb009c92f3258cd3ff14a66efb193";
+    sha256 = "sha256-wVhs//iwZUUGRTk1DpV/SnA7NZ7cFyYbsUbtazlxb6Q=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -26,11 +27,11 @@ stdenv.mkDerivation rec {
     "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Patched module for IT87xx superio chip sensors support";
-    homepage = https://github.com/hannesha/it87;
-    license = licenses.gpl2;
+    homepage = "https://github.com/hannesha/it87";
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = teams.lumiguide.members;
   };
 }

@@ -1,40 +1,74 @@
-{ stdenv, fetchurl, ncurses, zlib, pkgconfig, imlib2
-, x11Support ? !stdenv.isDarwin, libX11, libXext
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, imlib2
+, xorg
+, ncurses
+, pkg-config
+, zlib
+, x11Support ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
-  name = "libcaca-0.99.beta19";
+  pname = "libcaca";
+  version = "0.99.beta20";
 
-  src = fetchurl {
-    urls = [
-      "http://fossies.org/linux/privat/${name}.tar.gz"
-      "http://caca.zoy.org/files/libcaca/${name}.tar.gz"
-    ];
-    sha256 = "1x3j6yfyxl52adgnabycr0n38j9hx2j74la0hz0n8cnh9ry4d2qj";
+  src = fetchFromGitHub {
+    owner = "cacalabs";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-N0Lfi0d4kjxirEbIjdeearYWvStkKMyV6lgeyNKXcVw=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    ncurses
+    zlib
+    (imlib2.override { inherit x11Support; })
+  ] ++ lib.optionals x11Support [
+    xorg.libX11
+    xorg.libXext
+  ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
   configureFlags = [
     (if x11Support then "--enable-x11" else "--disable-x11")
-    ];
+  ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional (!x11Support) "-DX_DISPLAY_MISSING";
-
-  enableParallelBuilding = true;
-
-  propagatedBuildInputs = [ ncurses zlib pkgconfig (imlib2.override { inherit x11Support; }) ]
-    ++ stdenv.lib.optionals x11Support [ libX11 libXext];
+  NIX_CFLAGS_COMPILE = lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 
   postInstall = ''
     mkdir -p $dev/bin
     mv $bin/bin/caca-config $dev/bin/caca-config
   '';
 
-  meta = {
-    homepage = http://libcaca.zoy.org/;
+  meta = with lib; {
+    homepage = "http://caca.zoy.org/wiki/libcaca";
     description = "A graphics library that outputs text instead of pixels";
-    license = stdenv.lib.licenses.wtfpl;
-    platforms = stdenv.lib.platforms.unix;
+    longDescription = ''
+      libcaca is a graphics library that outputs text instead of pixels, so that
+      it can work on older video cards or text terminals. It is not unlike the
+      famous ​AAlib library, with the following improvements:
+
+      - Unicode support
+      - 2048 available colours (some devices can only handle 16)
+      - dithering of colour images
+      - advanced text canvas operations (blitting, rotations)
+
+      Libcaca works in a text terminal (and should thus work on all Unix systems
+      including Mac OS X) using the S-Lang or ncurses libraries. It also works
+      natively on DOS and Windows.
+
+      Libcaca was written by Sam Hocevar and Jean-Yves Lamoureux.
+    '';
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.unix;
   };
 }

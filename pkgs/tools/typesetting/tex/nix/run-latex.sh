@@ -41,15 +41,21 @@ showError() {
     exit 1
 }
 
+pass=0
+
 runLaTeX() {
+    ((pass=pass+1))
+    echo "PASS $pass..."
     if ! $latex $latexFlags $rootName >$tmpFile 2>&1; then showError; fi
     runNeeded=
     if fgrep -q \
         -e "LaTeX Warning: Label(s) may have changed." \
         -e "Rerun to get citations correct." \
+        -e "Please rerun LaTeX." \
         "$tmpFile"; then
         runNeeded=1
     fi
+    echo
 }
 
 echo
@@ -60,10 +66,7 @@ if test -n "$copySources"; then
 fi
 
 
-echo "PASS 1..."
 runLaTeX
-echo
-
 
 for auxFile in $(find . -name "*.aux"); do
     # Run bibtex to process all bibliographies.  There may be several
@@ -88,11 +91,8 @@ for auxFile in $(find . -name "*.aux"); do
     fi
 done
 
-
 if test "$runNeeded"; then
-    echo "PASS 2..."
     runLaTeX
-    echo
 fi
 
 
@@ -104,20 +104,18 @@ if test -f $rootNameBase.idx; then
     makeindex $makeindexFlags $rootNameBase.idx
     runNeeded=1
     echo
-fi    
-
-
-if test "$runNeeded"; then
-    echo "PASS 3..."
-    runLaTeX
-    echo
 fi
 
+# We check that pass is less than 2 to catch situations where the document is
+# simple enough (no bibtex, etc.) so that it would otherwise require only one
+# pass but also contains a ToC.
+# In essence this check ensures that we do at least two passes on all documents.
+if test "$runNeeded" = 1 -o "$pass" -lt 2 ; then
+    runLaTeX
+fi
 
 if test "$runNeeded"; then
-    echo "PASS 4..."
     runLaTeX
-    echo
 fi
 
 

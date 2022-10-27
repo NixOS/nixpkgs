@@ -1,34 +1,39 @@
-{ stdenv, fetchurl
-, ninja, libxml2, libxslt, readline, perl, gmp, mpfr, boost
+{ lib, stdenv, fetchurl
+, perl, gmp, mpfr, flint, boost
 , bliss, ppl, singular, cddlib, lrs, nauty
-, ant, openjdk
+, ninja, ant, openjdk
 , perlPackages
 , makeWrapper
 }:
 
+# polymake compiles its own version of sympol and atint because we
+# don't have those packages. other missing optional dependencies:
+# javaview, libnormaliz, scip, soplex, jreality.
+
 stdenv.mkDerivation rec {
   pname = "polymake";
-  version = "3.2.rc4";
+  version = "4.7";
 
   src = fetchurl {
-    url = "https://polymake.org/lib/exe/fetch.php/download/polymake-3.2r4.tar.bz2";
-    sha256 = "02jpkvy1cc6kc23vkn7nkndzr40fq1gkb3v257bwyi1h5d37fyqy";
+    # "The minimal version is a packager friendly version which omits
+    # the bundled sources of cdd, lrs, libnormaliz, nauty and jReality."
+    url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${version}-minimal.tar.bz2";
+    sha256 = "sha256-1qv+3gIsbM1xHh02S3ybkcvVkKS3OZDNNWfJt2nybmE=";
   };
 
   buildInputs = [
-    libxml2 libxslt readline perl gmp mpfr boost
+    perl gmp mpfr flint boost
     bliss ppl singular cddlib lrs nauty
     openjdk
-  ] ++
-  (with perlPackages; [
-    XMLLibXML XMLLibXSLT XMLWriter TermReadLineGnu TermReadKey
+  ] ++ (with perlPackages; [
+    JSON TermReadLineGnu TermReadKey XMLSAX
   ]);
 
   nativeBuildInputs = [
     makeWrapper ninja ant perl
   ];
 
-  ninjaFlags = "-C build/Opt";
+  ninjaFlags = [ "-C" "build/Opt" ];
 
   postInstall = ''
     for i in "$out"/bin/*; do
@@ -36,12 +41,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    inherit version;
+  meta = with lib; {
     description = "Software for research in polyhedral geometry";
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = teams.sage.members;
+    platforms = platforms.linux;
     homepage = "https://www.polymake.org/doku.php";
   };
 }

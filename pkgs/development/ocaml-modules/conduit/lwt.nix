@@ -1,14 +1,14 @@
-{ stdenv, buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt }:
-
-if !stdenv.lib.versionAtLeast conduit.version "1.0"
-then conduit
-else
+{ buildDunePackage, ppx_sexp_conv, conduit, lwt, sexplib }:
 
 buildDunePackage {
-	pname = "conduit-lwt";
-	inherit (conduit) version src meta;
+  pname = "conduit-lwt";
+  inherit (conduit) version src;
 
-	buildInputs = [ ppx_sexp_conv ];
+  buildInputs = [ ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ conduit ocaml_lwt ];
+  propagatedBuildInputs = [ conduit lwt sexplib ];
+
+  meta = conduit.meta // {
+    description = "A network connection establishment library for Lwt";
+  };
 }

@@ -1,45 +1,78 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, vala, glib, liboauth, gtk3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, libxml2, gnome3, gobject-introspection, libsoup, totem-pl-parser }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gettext
+, vala
+, glib
+, liboauth
+, gtk3
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, libxml2
+, gnome
+, gobject-introspection
+, libsoup_3
+, totem-pl-parser
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "grilo";
-  version = "0.3.10"; # if you change minor, also change ./setup-hook.sh
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.3.15"; # if you change minor, also change ./setup-hook.sh
 
   outputs = [ "out" "dev" "man" "devdoc" ];
   outputBin = "dev";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1s7ilyywf18q26aj5c4709kfizqywjlnacp4jzmj9v9i9kkv4i3y";
-  };
-
   setupHook = ./setup-hook.sh;
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "81Ks9zZlZpk0JwY2/t5mtS2mgB/iD2OMQEirJnhXey0=";
+  };
 
   mesonFlags = [
     "-Denable-gtk-doc=true"
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext gobject-introspection vala
-    gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
-  buildInputs = [ glib liboauth gtk3 libxml2 libsoup totem-pl-parser ];
+
+  buildInputs = [
+    glib
+    liboauth
+    gtk3
+    libxml2
+    libsoup_3
+    totem-pl-parser
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Grilo;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
-    maintainers = gnome3.maintainers;
-    license = licenses.lgpl2;
+    maintainers = teams.gnome.members;
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };
 }

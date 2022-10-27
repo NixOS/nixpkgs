@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xercesc }:
+{ lib, stdenv, fetchurl, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "xqilla";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xerces=${xercesc}" ];
 
-  meta = with stdenv.lib; {
-    description = "XQilla is an XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library.";
+  meta = with lib; {
+    description = "An XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";
     license     = licenses.asl20 ;
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.all;

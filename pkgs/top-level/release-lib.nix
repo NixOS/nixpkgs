@@ -27,6 +27,7 @@ rec {
     pkgs_x86_64_linux = packageSet' { system = "x86_64-linux"; };
     pkgs_i686_linux = packageSet' { system = "i686-linux"; };
     pkgs_aarch64_linux = packageSet' { system = "aarch64-linux"; };
+    pkgs_aarch64_darwin = packageSet' { system = "aarch64-darwin"; };
     pkgs_armv6l_linux = packageSet' { system = "armv6l-linux"; };
     pkgs_armv7l_linux = packageSet' { system = "armv7l-linux"; };
     pkgs_x86_64_darwin = packageSet' { system = "x86_64-darwin"; };
@@ -39,6 +40,7 @@ rec {
       if system == "x86_64-linux" then pkgs_x86_64_linux
       else if system == "i686-linux" then pkgs_i686_linux
       else if system == "aarch64-linux" then pkgs_aarch64_linux
+      else if system == "aarch64-darwin" then pkgs_aarch64_darwin
       else if system == "armv6l-linux" then pkgs_armv6l_linux
       else if system == "armv7l-linux" then pkgs_armv7l_linux
       else if system == "x86_64-darwin" then pkgs_x86_64_darwin
@@ -101,7 +103,7 @@ rec {
   forAllSystems = genAttrs supportedSystems;
 
 
-  # Generate attributes for all sytems matching at least one of the given
+  # Generate attributes for all systems matching at least one of the given
   # patterns
   forMatchingSystems = metaPatterns: genAttrs (supportedMatches metaPatterns);
 
@@ -142,24 +144,18 @@ rec {
   /* Recursively map a (nested) set of derivations to an isomorphic
      set of meta.platforms values. */
   packagePlatforms = mapAttrs (name: value:
-    let res = builtins.tryEval (
       if isDerivation value then
         value.meta.hydraPlatforms
-          or (supportedMatches (value.meta.platforms or [ "x86_64-linux" ]))
+          or (lib.subtractLists (value.meta.badPlatforms or [])
+               (value.meta.platforms or [ "x86_64-linux" ]))
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
         packagePlatforms value
       else
-        []);
-    in if res.success then res.value else []
+        []
     );
 
 
   /* Common platform groups on which to test packages. */
   inherit (platforms) unix linux darwin cygwin all mesaPlatforms;
-
-  /* Platform groups for specific kinds of applications. */
-  x11Supported = linux;
-  gtkSupported = linux;
-  ghcSupported = linux;
 
 }

@@ -1,35 +1,56 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libcanberra-gtk3,
-  libnotify, libwnck3, gtk3, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, libcanberra-gtk3
+, libnotify
+, libwnck
+, gtk3
+, libxml2
+, mate-desktop
+, mate-panel
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
-  version = "1.22.1";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0f8m3m94iqj2x61dzwwvwq2qlsl2ma8pqr6rfns5pzd0nj0waz0m";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1fmr6hlcy2invp2yxqfqgpdx1dp4qa8xskjq2rm6v4gmz20nag5j";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
+    libxml2 # for xmllint
     wrapGAppsHook
   ];
 
   buildInputs = [
     libcanberra-gtk3
     libnotify
-    libwnck3
+    libwnck
     gtk3
+    mate-desktop
+    mate-panel
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  meta = with stdenv.lib; {
-    description = "Notification daemon for MATE";
-    homepage = https://github.com/mate-desktop/mate-notification-daemon;
-    license = licenses.gpl2;
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname; };
+
+  meta = with lib; {
+    description = "Notification daemon for MATE Desktop";
+    homepage = "https://github.com/mate-desktop/mate-notification-daemon";
+    license = with licenses; [ gpl2Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

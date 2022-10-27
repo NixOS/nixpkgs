@@ -1,20 +1,41 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "1.2";
+  version = "2.3.4";
+  format = "setuptools";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ibf1wipidz57giy53dh7mh68f2hz38x8f4wdq88mvxj5pr7jhbp";
+    sha256 = "15b4b18346259392b0d27598f240e9390fafbff882137a9c48a1e0104fb17f78";
   };
 
-  # frozendict does not come with tests
-  doCheck = false;
+  pythonImportsCheck = [
+    "frozendict"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/slezica/python-frozendict;
-    description = "An immutable dictionary";
-    license = licenses.mit;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    pushd test
+  '';
+
+  postCheck = ''
+    popd
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    description = "A simple immutable dictionary";
+    license = licenses.lgpl3Only;
   };
 }

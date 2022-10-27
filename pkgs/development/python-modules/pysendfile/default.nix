@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -19,7 +20,8 @@ buildPythonPackage rec {
     ${python.executable} test/test_sendfile.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/giampaolo/pysendfile";
     description = "A Python interface to sendfile(2)";
     license = licenses.mit;

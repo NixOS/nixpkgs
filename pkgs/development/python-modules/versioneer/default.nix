@@ -1,25 +1,33 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-
   pname = "versioneer";
-  version = "0.18";
+  version = "0.26";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dgkzg1r7mjg91xp81sv9z4mabyxl39pkd11jlc1200md20zglga";
+    hash = "sha256-hPxymqKW0dJmRaj2LxeAGYhf9vmhBzsppKIoJwrFJXs=";
   };
 
   # Couldn't get tests to work because, for instance, they used virtualenv and
   # pip.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "versioneer"
+  ];
+
+  meta = with lib; {
     description = "Version-string management for VCS-controlled trees";
-    homepage = https://github.com/warner/python-versioneer;
+    homepage = "https://github.com/warner/python-versioneer";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jluttine ];
   };
-
 }

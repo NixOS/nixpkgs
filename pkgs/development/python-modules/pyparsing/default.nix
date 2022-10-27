@@ -1,19 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
-buildPythonPackage rec {
-    pname = "pyparsing";
-    version = "2.3.1";
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, flit-core
+, jinja2
+, pytestCheckHook
+, railroad-diagrams
+}:
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a";
+let
+  pyparsing = buildPythonPackage rec {
+    pname = "pyparsing";
+    version = "3.0.9";
+    format = "pyproject";
+
+    src = fetchFromGitHub {
+      owner = "pyparsing";
+      repo = pname;
+      rev = "pyparsing_${version}";
+      sha256 = "sha256-aCRyJQyLf8qQ6NO41q+HC856TjIHzIt0vyVBLV+3teE=";
     };
 
-    # Not everything necessary to run the tests is included in the distribution
-    doCheck = false;
+    nativeBuildInputs = [
+      flit-core
+    ];
 
-    meta = with stdenv.lib; {
-      homepage = http://pyparsing.wikispaces.com/;
+    # circular dependencies with pytest if enabled by default
+    doCheck = false;
+    checkInputs = [
+      jinja2
+      pytestCheckHook
+      railroad-diagrams
+    ];
+
+    pythonImportsCheck = [ "pyparsing" ];
+
+    passthru.tests = {
+      check = pyparsing.overridePythonAttrs (_: { doCheck = true; });
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/pyparsing/pyparsing";
       description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
       license = licenses.mit;
+      maintainers = with maintainers; [ kamadorueda ];
     };
-}
+  };
+in
+pyparsing

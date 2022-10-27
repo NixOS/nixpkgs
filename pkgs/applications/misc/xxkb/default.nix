@@ -1,41 +1,57 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
-, svgSupport ? false, librsvg, glib, gdk-pixbuf, pkgconfig
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, libXt
+, libXext
+, libXpm
+, imake
+, gccmakedep
+, svgSupport ? false
+, librsvg
+, glib
+, gdk-pixbuf
+, pkg-config
 }:
 
-assert svgSupport ->
-  librsvg != null && glib != null && gdk-pixbuf != null && pkgconfig != null;
-
 stdenv.mkDerivation rec {
-  name = "xxkb-1.11.1";
+  pname = "xxkb";
+  version = "1.11.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xxkb/${name}-src.tar.gz";
+    url = "mirror://sourceforge/xxkb/xxkb-${version}-src.tar.gz";
     sha256 = "0hl1i38z9xnbgfjkaz04vv1n8xbgfg88g5z8fyzyb2hxv2z37anf";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
+  nativeBuildInputs = [ imake gccmakedep pkg-config ];
+
   buildInputs = [
-    libX11 libXt libXext libXpm
-  ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkgconfig ];
+    libX11
+    libXt
+    libXext
+    libXpm
+  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf ];
 
   outputs = [ "out" "man" ];
 
-  imakeFlags = stdenv.lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
+  imakeFlags = lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
+    "CONFDIR=${placeholder "out"}/etc/X11"
     "PIXMAPDIR=${placeholder "out"}/share/xxkb"
+    "LIBDIR=${placeholder "out"}/lib/X11"
     "XAPPLOADDIR=${placeholder "out"}/etc/X11/app-defaults"
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
-  meta = {
+  meta = with lib; {
     description = "A keyboard layout indicator and switcher";
-    homepage = http://xxkb.sourceforge.net/;
-    license = stdenv.lib.licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://xxkb.sourceforge.net/";
+    license = licenses.artistic2;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.linux;
   };
 }

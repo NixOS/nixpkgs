@@ -1,50 +1,85 @@
 { akonadi-contacts
 , cmake
-, fetchgit
+, fetchFromGitLab
+, fetchsvn
+, gnupg
 , gpgme
 , kcontacts
+, kf5gpgmepp
 , lib
+, libsecret
 , mimetic
 , mkDerivation
-, pkgconfig
+, pkg-config
 , qgpgme
 , qtbase
 , qtkeychain
 , qttools
 , qtwebkit
+, qttranslations
+, substituteAll
+, withI18n ? false
 }:
 
-mkDerivation rec {
-  pname = "trojita";
-  version = "0.7.20190618";
-
-  src = fetchgit {
-    url = "https://anongit.kde.org/trojita.git";
-    rev = "90b417b131853553c94ff93aef62abaf301aa8f1";
-    sha256 = "0xpxq5bzqaa68lkz90wima5q2m0mdcn0rvnigb66lylb4n20mnql";
+let
+  l10n = fetchsvn {
+    url = "svn://anonsvn.kde.org/home/kde/trunk/l10n-kf5";
+    rev = "1566642";
+    sha256 = "0y45fjib153za085la3hqpryycx33dkj3cz8kwzn2w31kvldfl1q";
   };
+in mkDerivation rec {
+  pname = "trojita";
+  version = "unstable-2022-08-22";
+
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "pim";
+    repo = "trojita";
+    rev = "91087933c5e7a03a8097c0ffe5f7289abcfc123b";
+    sha256 = "sha256-15G9YjT3qBKbeOKfb/IgXOO+DaJaTULP9NJn/MFYZS8=";
+  };
+
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.patch;
+    inherit qttranslations;
+  });
 
   buildInputs = [
     akonadi-contacts
     gpgme
     kcontacts
+    libsecret
     mimetic
     qgpgme
     qtbase
     qtkeychain
     qtwebkit
+    mimetic
+    kf5gpgmepp
   ];
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
+    gnupg
   ];
+
+  postPatch = "echo ${version} > src/trojita-version"
+    + lib.optionalString withI18n ''
+    mkdir -p po
+    for f in `find ${l10n} -name "trojita_common.po"`; do
+      cp $f po/trojita_common_$(echo $f | cut -d/ -f5).po
+    done
+  '';
 
   meta = with lib; {
     description = "A Qt IMAP e-mail client";
     homepage = "http://trojita.flaska.net/";
     license = with licenses; [ gpl2 gpl3 ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
+
 }

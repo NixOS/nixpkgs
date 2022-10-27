@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "free";
+  pname = "free";
   version = "2017-07-03";
 
   ipkgName = "idris-free";
@@ -17,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Free Monads and useful constructions to work with them";
-    homepage = https://github.com/idris-hackers/idris-free;
+    homepage = "https://github.com/idris-hackers/idris-free";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.brainrape ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost
+{ stdenv, lib, fetchFromGitHub, cmake, boost, tbb
 , gmp, llvm, clang, sqlite, python3
 , ocamlPackages, mpfr, ppl, doxygen, graphviz
 }:
@@ -10,25 +10,26 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ikos";
-  version = "2.1";
+  pname = "ikos";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
-    repo = name;
+    repo = "ikos";
     rev = "v${version}";
-    sha256 = "09nf47hpk5w5az4c0hcr5hhwvpz8zg1byyg185542cpzbq1xj8cb";
+    sha256 = "0k3kp1af0qx3l1x6a4sl4fm8qlwchjvwkvs2ck0fhfnc62q2im5f";
   };
 
-  buildInputs = [ cmake boost gmp clang llvm sqlite python
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost tbb gmp clang llvm sqlite python
                   ocamlPackages.apron mpfr ppl doxygen graphviz ];
 
-  cmakeFlags = "-DAPRON_ROOT=${ocamlPackages.apron}";
+  cmakeFlags = [ "-DAPRON_ROOT=${ocamlPackages.apron}" ];
 
   postBuild = "make doc";
 
   meta = with lib; {
-    homepage = https://github.com/NASA-SW-VnV/ikos;
+    homepage = "https://github.com/NASA-SW-VnV/ikos";
     description = "Static analyzer for C/C++ based on the theory of Abstract Interpretation";
     license = licenses.nasa13;
     maintainers = with maintainers; [ atnnn ];

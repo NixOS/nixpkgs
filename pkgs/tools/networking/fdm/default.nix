@@ -1,32 +1,26 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
 
-let
-
-  baseName = "fdm";
-  version = "1.9.0.20170124";
-
-in
-
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation rec {
+  pname = "fdm";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "nicm";
-    repo = baseName;
-    rev = "cae4ea37b6b296d1b2e48f62934ea3a7f6085e33";
-    sha256 = "048191wdv1yprwinipmx2152gvd2iq1ssv7xfb1bzh6zirh1ya3n";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-w7jgFq/uWGTF8+CsQCwXKu3eJ7Yjp1WWY4DGQhpBFmQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl tdb zlib flex bison ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ ninjin raskin ];
     platforms = with platforms; linux;
-    homepage = https://github.com/nicm/fdm;
-    downloadPage = https://github.com/nicm/fdm/releases;
+    homepage = "https://github.com/nicm/fdm";
+    downloadPage = "https://github.com/nicm/fdm/releases";
     license = licenses.isc;
   };
 }

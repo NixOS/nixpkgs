@@ -1,11 +1,36 @@
-{ mkDerivation, extra-cmake-modules, qtbase, kio, ki18n, kconfig
-, kdbusaddons, knotifications, krunner, kwindowsystem, kactivities
+{ mkDerivation
+, extra-cmake-modules
+, qtbase
+, kfilemetadata
+, kio
+, ki18n
+, kconfig
+, kdbusaddons
+, knotifications
+, kpurpose
+, krunner
+, kwindowsystem
+, kactivities
+, plasma-workspace
 }:
 
 mkDerivation {
-  name = "plasma-browser-integration";
+  pname = "plasma-browser-integration";
   nativeBuildInputs = [
-    extra-cmake-modules qtbase kio ki18n kconfig kdbusaddons
-    knotifications krunner kwindowsystem kactivities
+    extra-cmake-modules
+  ];
+  buildInputs = [
+    qtbase
+    kfilemetadata
+    kio
+    ki18n
+    kconfig
+    kdbusaddons
+    knotifications
+    kpurpose
+    krunner
+    kwindowsystem
+    kactivities
+    plasma-workspace
   ];
 }

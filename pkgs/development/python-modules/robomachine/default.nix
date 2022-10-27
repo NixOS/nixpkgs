@@ -1,12 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
 
 buildPythonPackage rec {
   pname = "RoboMachine";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "242cfd9be0f7591138eaeba03c9c190f894ce045e1767ab7b90eca330259fc45";
+    sha256 = "4251d405759a38f1e665acc245dcbcdec319376718169a73c57560183370fe0e";
   };
 
   propagatedBuildInputs = [ pyparsing robotframework allpairspy ];
@@ -20,9 +20,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true;
     description = "Test data generator for Robot Framework";
-    homepage = https://github.com/mkorpela/RoboMachine;
+    homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;
     maintainers = with maintainers; [ bjornfor ];
   };

@@ -1,28 +1,40 @@
-{ fetchFromBitbucket, stdenv, boost, cmake, libGLU_combined }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cmake
+, libGL
+, libGLU
+, libX11
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "unstable-2019-06-12";
+  version = "unstable-2022-07-27";
 
-  src = fetchFromBitbucket {
-    owner = "Coin3D";
+  src = fetchFromGitHub {
+    owner = "coin3d";
     repo = "coin";
-    rev = "8d860d7ba112b22c4e9b289268fd8b3625ab81d3";
-    sha256 = "1cpncljqvw28k5wvpgchv593nayhby5gwpvbnyllc9hb9ms816xn";
+    rev = "4c67945a58d2a6e5adb4d2332ab08007769130ef";
+    hash = "sha256-lXS7GxtoPsZe2SJfr0uY99Q0ZtYG0KFlauY1PBuFleo=";
   };
-
-  postPatch = ''
-    sed -i /cpack.d/d CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost libGLU_combined ];
 
-  meta = {
-    homepage = "https://bitbucket.org/Coin3D/coin/wiki/Home";
-    license = stdenv.lib.licenses.gpl2Plus;
+  buildInputs = [
+    boost
+    libGL
+    libGLU
+    libX11
+  ];
+
+  cmakeFlags = [ "-DCOIN_USE_CPACK=OFF" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/coin3d/coin";
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ gebner viric ];
+    platforms = platforms.linux;
   };
-}
+})

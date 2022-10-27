@@ -1,105 +1,226 @@
-{ mkDerivation
+{ stdenv
 , lib
-, qtbase
 , fetchFromGitHub
-, fftwSinglePrec
-, ruby
-, libffi
-, aubio
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
 , cmake
-, pkgconfig
-, boost
-, bash
-, jack2Full
-, supercollider
-, qscintilla
+, pkg-config
+, catch2_3
+, qtbase
+, qtsvg
+, qttools
 , qwt
+, qscintilla
+, kissfftFloat
+, crossguid
+, reproc
+, platform-folders
+, ruby
+, erlang
+, elixir
+, beamPackages
+, alsa-lib
+, rtmidi
+, boost
+, aubio
+, jack2
+, supercollider-with-sc3-plugins
+, parallel
+
+, withTauWidget ? false
+, qtwebengine
+
+, withImGui ? false
+, gl3w
+, SDL2
+, fmt
 }:
 
-let
-
-  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
-
-in
-
-mkDerivation rec {
-  version = "3.1.0";
+stdenv.mkDerivation rec {
   pname = "sonic-pi";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
-    owner = "samaaron";
-    repo = "sonic-pi";
+    owner = "sonic-pi-net";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0gi4a73szaa8iz5q1gxgpsnyvhhghcfqm6bfwwxbix4m5csbfgh9";
+    hash = "sha256-R+nmjIIDLoGOoCkDvJqejE1DaweHSAV8M2RvdwN5qAQ=";
   };
 
-  buildInputs = [
-    bash
+  mixFodDeps = beamPackages.fetchMixDeps {
+    inherit version;
+    pname = "mix-deps-${pname}";
+    mixEnv = "test";
+    src = "${src}/app/server/beam/tau";
+    sha256 = "sha256-MvwUyVTS23vQKLpGxz46tEVCs/OyYk5dDaBlv+kYg1M=";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    copyDesktopItems
     cmake
-    pkgconfig
-    qtbase
-    qscintilla
-    qwt
-    ruby
-    libffi
-    aubio
-    supercollider_single_prec
-    boost
+    pkg-config
+    erlang
+    elixir
+    beamPackages.hex
   ];
 
-  dontUseCmakeConfigure = true;
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ] ++ lib.optionals withTauWidget [
+    qtwebengine
+  ] ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
-  preConfigure = ''
-    patchShebangs .
-    substituteInPlace app/gui/qt/mainwindow.cpp \
-      --subst-var-by ruby "${ruby}/bin/ruby" \
-      --subst-var out
+  checkInputs = [
+    parallel
+    ruby
+    supercollider-with-sc3-plugins
+    jack2
+  ];
+
+  cmakeFlags = [
+    "-DUSE_SYSTEM_LIBS=ON"
+    "-DBUILD_IMGUI_INTERFACE=${if withImGui then "ON" else "OFF"}"
+    "-DWITH_QT_GUI_WEBENGINE=${if withTauWidget then "ON" else "OFF"}"
+  ];
+
+  doCheck = true;
+
+  postPatch = ''
+    # Fix shebangs on files in app and bin scripts
+    patchShebangs app bin
   '';
 
-  buildPhase = ''
-    export SONIC_PI_HOME=$TMPDIR
-    export AUBIO_LIB=${aubio}/lib/libaubio.so
+  preConfigure = ''
+    # Set build environment
+    export SONIC_PI_HOME="$TMPDIR/spi"
 
-    pushd app/server/ruby/bin
-      ./compile-extensions.rb
-      ./i18n-tool.rb -t
+    export HEX_HOME="$TEMPDIR/hex"
+    export HEX_OFFLINE=1
+    export MIX_REBAR3='${beamPackages.rebar3}/bin/rebar3'
+    export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
+    export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
+    export MIX_HOME="$TEMPDIR/mix"
+    export MIX_DEPS_PATH="$TEMPDIR/deps"
+    export MIX_ENV=prod
+
+    # Copy Mix dependency sources
+    echo 'Copying ${mixFodDeps} to Mix deps'
+    cp --no-preserve=mode -R '${mixFodDeps}' "$MIX_DEPS_PATH"
+
+    # Change to project base directory
+    cd app
+
+    # Prebuild Ruby vendored dependencies and Qt docs
+    ./linux-prebuild.sh -o
+
+    # Append CMake flag depending on the value of $out
+    cmakeFlags+=" -DAPP_INSTALL_ROOT=$out/app"
+  '';
+
+  postBuild = ''
+    # Build BEAM server
+    ../linux-post-tau-prod-release.sh -o
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    # BEAM tests
+    pushd ../server/beam/tau
+      MIX_ENV=test TAU_ENV=test mix test
     popd
 
-    pushd app/gui/qt
-      cp -f ruby_help.tmpl ruby_help.h
-      ../../server/ruby/bin/qt-doc.rb -o ruby_help.h
-
-      substituteInPlace SonicPi.pro \
-        --replace "LIBS += -lrt -lqt5scintilla2" \
-                  "LIBS += -lrt -lqscintilla2 -lqwt"
-
-      lrelease SonicPi.pro
-      qmake SonicPi.pro
-
-      make
+    # Ruby tests
+    pushd ../server/ruby
+      rake test
     popd
+
+    # API tests
+    pushd api-tests
+      # run JACK parallel to tests and quit both when one exits
+      SONIC_PI_ENV=test parallel --no-notice -j2 --halt now,done=1 ::: 'jackd -rd dummy' 'ctest --verbose'
+    popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    cp -r . $out
+
+    # Run Linux release script
+    ../linux-release.sh
+
+    # Copy dist directory to output
+    mkdir $out
+    cp -r linux_dist/* $out/
+
+    # Copy icon
+    install -Dm644 ../gui/qt/images/icon-smaller.png $out/share/icons/hicolor/256x256/apps/sonic-pi.png
+
     runHook postInstall
   '';
 
   # $out/bin/sonic-pi is a shell script, and wrapQtAppsHook doesn't wrap them.
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp "$out/bin/sonic-pi" \
-      --prefix PATH : ${ruby}/bin:${bash}/bin:${supercollider}/bin:${jack2Full}/bin \
-      --set AUBIO_LIB "${aubio}/lib/libaubio.so"
+    # Wrap Qt GUI (distributed binary)
+    wrapQtApp $out/bin/sonic-pi \
+      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+
+    # If ImGui was built
+    if [ -e $out/app/build/gui/imgui/sonic-pi-imgui ]; then
+      # Wrap ImGui into bin
+      makeWrapper $out/app/build/gui/imgui/sonic-pi-imgui $out/bin/sonic-pi-imgui \
+        --inherit-argv0 \
+        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+    fi
+
+    # Remove runtime Erlang references
+    for file in $(grep -FrIl '${erlang}/lib/erlang' $out/app/server/beam/tau); do
+      substituteInPlace "$file" --replace '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
+    done
   '';
 
-  meta = {
-    homepage = http://sonic-pi.net/;
+  stripDebugList = [ "app" "bin" ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sonic-pi";
+      exec = "sonic-pi";
+      icon = "sonic-pi";
+      desktopName = "Sonic Pi";
+      comment = meta.description;
+      categories = [ "Audio" "AudioVideo" "Education" ];
+    })
+  ];
+
+  meta = with lib; {
+    homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Phlogistique kamilchm ];
-    platforms = lib.platforms.linux;
-    broken = true;
+    license = licenses.mit;
+    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt lilyinstarlight ];
+    platforms = platforms.linux;
   };
 }

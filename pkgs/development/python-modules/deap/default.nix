@@ -1,21 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, numpy, matplotlib }:
+{ lib, buildPythonPackage, fetchPypi, numpy, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "102r11pxb36xkq5bjv1lpkss77v278f5xdv6lvkbjdvqryydf3yd";
+    sha256 = "sha256-h3LxsP/wQtXlFrCuusLHBiQwRap9DejguGWPOAGBzzE=";
   };
 
   propagatedBuildInputs = [ numpy matplotlib ];
 
+  checkInputs = [ nose ];
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests --verbosity=3
+    nosetests --verbosity=3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas.";
     homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3;

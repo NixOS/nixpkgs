@@ -1,29 +1,37 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, piqi, camlp4 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims, num }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.5";
+  version = "0.7.7";
   pname = "piqi-ocaml";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/alavrik/piqi-ocaml/archive/v${version}.tar.gz";
-    sha256 = "0ngz6y8i98i5v2ma8nk6mc83pdsmf2z0ks7m3xi6clfg3zqbddrv";
+  src = fetchFromGitHub {
+    owner = "alavrik";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1913jpsb8mvqi8609j4g4sm5jhg50dq0xqxgy8nmvknfryyc89nm";
   };
 
-  patches = [ (fetchpatch {
-    url = https://github.com/alavrik/piqi-ocaml/commit/336e8fdb84e77f4105e9bbb5ab545b8729101308.patch;
-    sha256 = "071s4xjyr6xx95v6az2lbl2igc87n7z5jqnnbhfq2pidrxakd0la";
-  })];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ piqi stdlib-shims ];
 
-  buildInputs = [ ocaml findlib piqi camlp4 ];
+  checkInputs  = [ num ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
-  installPhase = "DESTDIR=$out make install";
+  installPhase = ''
+    runHook preInstall
+    DESTDIR=$out make install
+    runHook postInstall
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = http://piqi.org;
+  meta = with lib; {
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
+    homepage = "https://piqi.org";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];
+    mainProgram = "piqic-ocaml";
   };
 }

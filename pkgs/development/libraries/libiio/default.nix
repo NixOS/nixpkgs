@@ -1,49 +1,80 @@
-{ stdenv, fetchFromGitHub
-, cmake, flex, bison
-, libxml2, python
-, libusb1, runtimeShell
+{ stdenv
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, libxml2
+, python
+, libusb1
+, avahi
+, libaio
+, runtimeShell
+, lib
+, pkg-config
+, CFNetwork
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.18";
-
-  src = fetchFromGitHub {
-    owner  = "analogdevicesinc";
-    repo   = "libiio";
-    rev    = "refs/tags/v${version}";
-    sha256 = "1cmg3ipam101iy9yncwz2y48idaqaw4fg7i9i4c8vfjisfcycnkk";
-  };
+  version = "0.24";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake flex bison ];
-  buildInputs = [ libxml2 libusb1 ];
+  src = fetchFromGitHub {
+    owner = "analogdevicesinc";
+    repo = "libiio";
+    rev = "v${version}";
+    sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
+  };
+
+  # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
+  # fixed properly
+  patches = [ ./cmake-fix-libxml2-find-package.patch ];
+
+  nativeBuildInputs = [
+    cmake
+    flex
+    bison
+    pkg-config
+  ];
+
+  buildInputs = [
+    python
+    libxml2
+    libusb1
+    avahi
+  ] ++ lib.optional python.isPy3k python.pkgs.setuptools
+    ++ lib.optional stdenv.isLinux libaio
+    ++ lib.optionals stdenv.isDarwin [ CFNetwork CoreServices ];
+
+  cmakeFlags = [
+    "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
+    "-DPYTHON_BINDINGS=on"
+    # osx framework is disabled,
+    # the linux-like directory structure is used for proper output splitting
+    "-DOSX_PACKAGE=off"
+    "-DOSX_FRAMEWORK=off"
+  ];
 
   postPatch = ''
+    # Hardcode path to the shared library into the bindings.
+    sed "s#@libiio@#$lib/lib/libiio${stdenv.hostPlatform.extensions.sharedLibrary}#g" ${./hardcode-library-path.patch} | patch -p1
+
     substituteInPlace libiio.rules.cmakein \
       --replace /bin/sh ${runtimeShell}
   '';
 
-  # since we can't expand $out in cmakeFlags
-  preConfigure = ''
-    cmakeFlags="$cmakeFlags -DUDEV_RULES_INSTALL_DIR=$out/etc/udev/rules.d"
-  '';
-
   postInstall = ''
-    mkdir -p $python/lib/${python.libPrefix}/site-packages/
-    touch $python/lib/${python.libPrefix}/site-packages/
-    cp ../bindings/python/iio.py $python/lib/${python.libPrefix}/site-packages/
-
-    substitute ../bindings/python/iio.py $python/lib/${python.libPrefix}/site-packages/iio.py \
-      --replace 'libiio.so.0' $lib/lib/libiio.so.0
+    # Move Python bindings into a separate output.
+    moveToOutput ${python.sitePackages} "$python"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
-    homepage    = https://github.com/analogdevicesinc/libiio;
-    license     = licenses.lgpl21;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/analogdevicesinc/libiio";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

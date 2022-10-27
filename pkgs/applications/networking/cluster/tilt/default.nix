@@ -1,28 +1,27 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tilt";
   /* Do not use "dev" as a version. If you do, Tilt will consider itself
-     running in development environment and try to serve assets from the
-     source tree, which is not there once build completes.  */
-  version = "0.10.13";
+    running in development environment and try to serve assets from the
+    source tree, which is not there once build completes.  */
+  version = "0.30.9";
 
   src = fetchFromGitHub {
-    owner  = "windmilleng";
+    owner  = "tilt-dev";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "02xlqgmmn1a7pz6sliharz8l9fbn2raxqkm75qxdqs1ncbvgc65k";
+    sha256 = "sha256-vZthFaIsgpZ2aap9kRSH//AHHnOpekPIkwpz9Tt0lI4=";
   };
-
-  goPackagePath = "github.com/windmilleng/tilt";
+  vendorSha256 = null;
 
   subPackages = [ "cmd/tilt" ];
 
-  buildFlagsArray = ("-ldflags=-X main.version=${version} -X main.date=2019-10-04");
+  ldflags = [ "-X main.version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
-    homepage = https://tilt.dev/;
+    homepage = "https://tilt.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ anton-dessiatov ];
   };

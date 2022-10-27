@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, autoPatchelfHook
+{ lib, stdenv, fetchurl, autoPatchelfHook
 , ncurses5, zlib, gmp
+, makeWrapper
+, less
 }:
 
 stdenv.mkDerivation rec {
   pname = "unison-code-manager";
-  milestone_id = "M1d";
+  milestone_id = "M4";
   version = "1.0.${milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "0cgkqwniw2fclsxgx6b1kgjmylqnn67kjs61iygzbpip8nvcm7pv";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
+      sha256 = "A8i1jH9+W89M+XbmYx0knJsP5c/EdVE2T9L/EIL0USU=";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "0rpz40d23daad16r2s4appiay3brbk0awp38yamavlr6dh23c9ws";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
+      sha256 = "OqtJiKAsefw2fVjhtsYUe+qLPqXBPFkHUaMh26EJBJ4=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -23,19 +25,23 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
+    mv ui $out/ui
+    wrapProgram $out/bin/ucm \
+      --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
+      --set UCM_WEB_UI "$out/ui"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, statically-typed purely functional language";
-    homepage = http://unisonweb.org/posts/;
-    license = licenses.free;
+    homepage = "https://unisonweb.org/";
+    license = with licenses; [ mit bsd3 ];
     maintainers = [ maintainers.virusdave ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 }

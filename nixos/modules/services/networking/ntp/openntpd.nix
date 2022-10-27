@@ -19,10 +19,11 @@ in
   ###### interface
 
   options.services.openntpd = {
-    enable = mkEnableOption "OpenNTP time synchronization server";
+    enable = mkEnableOption (lib.mdDoc "OpenNTP time synchronization server");
 
     servers = mkOption {
       default = config.services.ntp.servers;
+      defaultText = literalExpression "config.services.ntp.servers";
       type = types.listOf types.str;
       inherit (options.services.ntp.servers) description;
     };
@@ -34,8 +35,8 @@ in
         listen on 127.0.0.1
         listen on ::1
       '';
-      description = ''
-        Additional text appended to <filename>openntpd.conf</filename>.
+      description = lib.mdDoc ''
+        Additional text appended to {file}`openntpd.conf`.
       '';
     };
 
@@ -43,7 +44,7 @@ in
       type = with types; separatedString " ";
       default = "";
       example = "-s";
-      description = ''
+      description = lib.mdDoc ''
         Extra options used when launching openntpd.
       '';
     };
@@ -60,12 +61,13 @@ in
 
     environment.etc."ntpd.conf".text = configFile;
 
-    users.users = singleton {
-      name = "ntp";
-      uid = config.ids.uids.ntp;
+    users.users.ntp = {
+      isSystemUser = true;
+      group = "ntp";
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
+    users.groups.ntp = {};
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";

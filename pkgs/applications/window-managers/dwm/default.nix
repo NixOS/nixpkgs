@@ -1,30 +1,48 @@
-{stdenv, fetchurl, libX11, libXinerama, libXft, patches ? []}:
+{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, writeText, patches ? [ ], conf ? null}:
 
-let
-  name = "dwm-6.2";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  pname = "dwm";
+  version = "6.4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/dwm/${name}.tar.gz";
-    sha256 = "03hirnj8saxnsfqiszwl2ds7p0avg20izv9vdqyambks00p2x44p";
+    url = "https://dl.suckless.org/dwm/${pname}-${version}.tar.gz";
+    sha256 = "sha256-+pwNaaWESFB2z8GICf1wXlwggNr7E9XnKaNkbKdwOm4=";
   };
 
   buildInputs = [ libX11 libXinerama libXft ];
 
-  prePatch = ''sed -i "s@/usr/local@$out@" config.mk'';
+  prePatch = ''
+    sed -i "s@/usr/local@$out@" config.mk
+  '';
 
   # Allow users set their own list of patches
   inherit patches;
 
-  buildPhase = " make ";
+  # Allow users to set the config.def.h file containing the configuration
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf
+        then conf else writeText "config.def.h" conf;
+    in
+    lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
-  meta = {
-    homepage = https://suckless.org/;
-    description = "Dynamic window manager for X";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  meta = with lib; {
+    homepage = "https://dwm.suckless.org/";
+    description = "An extremely fast, small, and dynamic window manager for X";
+    longDescription = ''
+      dwm is a dynamic window manager for X. It manages windows in tiled,
+      monocle and floating layouts. All of the layouts can be applied
+      dynamically, optimising the environment for the application in use and the
+      task performed.
+      Windows are grouped by tags. Each window can be tagged with one or
+      multiple tags. Selecting certain tags displays all windows with these
+      tags.
+    '';
+    license = licenses.mit;
+    maintainers = with maintainers; [ viric neonfuz ];
+    platforms = platforms.all;
   };
 }

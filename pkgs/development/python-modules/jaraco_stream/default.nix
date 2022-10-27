@@ -1,13 +1,17 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, six }:
+{ buildPythonPackage, fetchPypi, setuptools-scm, six }:
 
 buildPythonPackage rec {
   pname = "jaraco.stream";
-  version = "2.0";
+  version = "3.0.3";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2e9d507d8cf04a3ff916b57eaf46bacb8a9f8895b55ead853de9c47b8f5daa4";
+    sha256 = "3af4b0441090ee65bd6dde930d29f93f50c4a2fe6048e2a9d288285f5e4dc441";
   };
+
+  pythonNamespaces = [ "jaraco" ];
+
   doCheck = false;
-  buildInputs = [ setuptools_scm ];
+  buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 }

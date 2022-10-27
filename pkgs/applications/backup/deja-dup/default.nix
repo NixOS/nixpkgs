@@ -1,20 +1,35 @@
-{ stdenv, fetchFromGitLab, substituteAll, meson, ninja, pkgconfig, vala_0_40, gettext
-, gnome3, libnotify, itstool, glib, gtk3, libxml2, gnome-online-accounts
-, coreutils, libpeas, libsecret, pcre, libxkbcommon, wrapGAppsHook
-, libpthreadstubs, libXdmcp, epoxy, at-spi2-core, dbus, libgpgerror
-, appstream-glib, desktop-file-utils, duplicity
+{ lib, stdenv
+, fetchFromGitLab
+, substituteAll
+, meson
+, ninja
+, pkg-config
+, vala
+, gettext
+, itstool
+, desktop-file-utils
+, glib
+, gtk4
+, coreutils
+, libsoup_3
+, libsecret
+, libadwaita
+, wrapGAppsHook4
+, libgpg-error
+, json-glib
+, duplicity
 }:
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "38.3";
+  version = "43.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "1bnvmdlm67k1b6115x75j3nl92x5yl4psq5pna2w6cg9npxdd3fa";
+    sha256 = "sha256-8eqrBQrMvS4cta5RP0ibo4Zc3B8hlkftxaRyvb6JuEY=";
   };
 
   patches = [
@@ -22,47 +37,43 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit coreutils;
     })
-    ./hardcode-gsettings.patch
   ];
 
-  postPatch = ''
-    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
-  '';
-
   nativeBuildInputs = [
-    meson ninja pkgconfig vala_0_40 gettext itstool
-    appstream-glib desktop-file-utils libxml2 wrapGAppsHook
+    meson
+    ninja
+    pkg-config
+    vala
+    gettext
+    itstool
+    desktop-file-utils
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-   libnotify libpeas glib gtk3 libsecret
-   pcre libxkbcommon libpthreadstubs libXdmcp epoxy gnome3.nautilus
-   at-spi2-core dbus gnome-online-accounts libgpgerror
+    libsoup_3
+    glib
+    gtk4
+    libsecret
+    libadwaita
+    libgpg-error
+    json-glib
   ];
 
-  propagatedUserEnvPkgs = [ duplicity ];
+  mesonFlags = [
+    "-Dduplicity_command=${duplicity}/bin/duplicity"
+  ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
-
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
-
-  postFixup = ''
-    # Unwrap accidentally wrapped library
-    mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \
       of backing up the Right Way (encrypted, off-site, and regular) \
       and uses duplicity as the backend.
     '';
-    homepage = https://wiki.gnome.org/Apps/DejaDup;
+    homepage = "https://wiki.gnome.org/Apps/DejaDup";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar joncojonathan ];
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
 }

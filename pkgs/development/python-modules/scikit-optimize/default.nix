@@ -1,43 +1,42 @@
 { lib
+, isPy27
 , buildPythonPackage
 , fetchFromGitHub
+, matplotlib
 , numpy
 , scipy
-, scikitlearn
+, scikit-learn
 , pyaml
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "scikit-optimize";
-  version = "0.6";
+  version = "0.9.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-optimize";
     repo = "scikit-optimize";
     rev = "v${version}";
-    sha256 = "1srbb20k8ddhpcfxwdflapfh6xfyrd3dnclcg3bsfq1byrcmv0d4";
+    sha256 = "0hsq6pmryimxc275yrcy4bv217bx7ma6rz0q6m4138bv4zgq18d1";
   };
 
   propagatedBuildInputs = [
+    matplotlib
     numpy
     scipy
-    scikitlearn
+    scikit-learn
     pyaml
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  # remove --ignore at next release > 0.6
-  checkPhase = ''
-    pytest skopt --ignore skopt/tests/test_searchcv.py
-  '';
 
   meta = with lib; {
     description = "Sequential model-based optimization toolbox";
-    homepage = https://scikit-optimize.github.io/;
+    homepage = "https://scikit-optimize.github.io/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

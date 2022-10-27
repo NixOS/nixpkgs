@@ -1,32 +1,41 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper, xdg-utils, installShellFiles, git }:
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.16.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "0f1gi4mlcxjvz2sgh0hzzsqxg5gfvq2ay7xjd0y1kz3pp8kxja7i";
+    sha256 = "sha256-VCvjP/bSd/0ywvNWPsseXn/SPkdp+BsXc/jTvB11EOk=";
   };
 
   subPackages = [ "." ];
 
-  modSha256 = "0bw47dd1b46ywsian2b957a4ipm77ncidipzri9ra39paqlv7abb";
+  vendorSha256 = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
-    mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
-    export LAB_CORE_HOST=a LAB_CORE_USER=b LAB_CORE_TOKEN=c
-    $out/bin/lab completion bash > $out/share/bash-completion/completions/lab
-    $out/bin/lab completion zsh > $out/share/zsh/site-functions/_lab
+    # make xdg-open overrideable at runtime
+    wrapProgram $out/bin/lab \
+      --prefix PATH ":" "${lib.makeBinPath [ git ]}" \
+      --suffix PATH ":" "${lib.makeBinPath [ xdg-utils ]}"
+    installShellCompletion --cmd lab \
+      --bash <($out/bin/lab completion bash) \
+      --fish <($out/bin/lab completion fish) \
+      --zsh <($out/bin/lab completion zsh)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
-    homepage = https://zaquestion.github.io/lab;
+    homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
-    maintainers = with maintainers; [ marsam dtzWill ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
   };
 }

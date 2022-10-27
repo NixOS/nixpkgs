@@ -1,29 +1,42 @@
-{ stdenv, buildPythonPackage, fetchPypi, libspatialindex, numpy }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, libspatialindex
+, numpy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "Rtree";
-  version = "0.8.3";
+  pname = "rtree";
+  version = "1.0.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0jc62jbcqqpjcwcly7l9zk25bg72mrxmjykpvfiscgln00qczfbc";
+    pname = "Rtree";
+    inherit version;
+    sha256 = "sha256-0Eg0ghITRrCTuaQlGNQPkhrfRFkVt66jB+smdoyDloI=";
   };
 
-  propagatedBuildInputs = [ libspatialindex ];
-
-  patchPhase = ''
-    substituteInPlace rtree/core.py --replace \
-      "find_library('spatialindex_c')" "'${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}'"
+  postPatch = ''
+    substituteInPlace rtree/finder.py --replace \
+      'find_library("spatialindex_c")' '"${libspatialindex}/lib/libspatialindex_c${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  # Tests appear to be broken due to mysterious memory unsafe issues. See #36760
-  doCheck = false;
-  checkInputs = [ numpy ];
+  buildInputs = [ libspatialindex ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    numpy
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "rtree" ];
+
+  meta = with lib; {
     description = "R-Tree spatial index for Python GIS";
-    homepage = https://toblerity.org/rtree/;
-    license = licenses.lgpl21;
+    homepage = "https://toblerity.org/rtree/";
+    license = licenses.mit;
     maintainers = with maintainers; [ bgamari ];
   };
 }

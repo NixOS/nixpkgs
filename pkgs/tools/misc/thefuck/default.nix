@@ -1,37 +1,44 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication
+{ lib, stdenv, fetchFromGitHub, buildPythonApplication
 , colorama, decorator, psutil, pyte, six
-, pytest, pytest-mock
+, go, mock, pytestCheckHook, pytest-mock
 }:
 
 buildPythonApplication rec {
   pname = "thefuck";
-  version = "3.29";
+  version = "3.32";
 
   src = fetchFromGitHub {
     owner = "nvbn";
     repo = pname;
     rev = version;
-    sha256 = "1qhxwjjgrzpqrqjv7l2847ywpln76lyd6j8bl9gz2r6kl0fx2fqs";
+    sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
   propagatedBuildInputs = [ colorama decorator psutil pyte six ];
 
-  checkInputs = [ pytest pytest-mock ];
+  checkInputs = [ go mock pytestCheckHook pytest-mock ];
 
-  checkPhase = ''
-    export HOME=$TMPDIR
-    export LANG=en_US.UTF-8
-    export XDG_CACHE_HOME=$TMPDIR/cache
-    export XDG_CONFIG_HOME=$TMPDIR/config
-    py.test
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_settings_defaults"
+    "test_from_file"
+    "test_from_env"
+    "test_settings_from_args"
+    "test_get_all_executables_exclude_paths"
+    "test_with_blank_cache"
+    "test_with_filled_cache"
+    "test_when_etag_changed"
+    "test_for_generic_shell"
+    "test_on_first_run"
+    "test_on_run_after_other_commands"
+    "test_when_cant_configure_automatically"
+    "test_when_already_configured"
+    "test_when_successfully_configured"
+  ];
 
-  doCheck = false; # The above is only enough for tests to pass outside the sandbox.
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/nvbn/thefuck;
-    description = "Magnificent app which corrects your previous console command.";
+  meta = with lib; {
+    homepage = "https://github.com/nvbn/thefuck";
+    description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

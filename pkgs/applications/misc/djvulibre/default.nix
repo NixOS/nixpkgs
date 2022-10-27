@@ -1,33 +1,41 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , libjpeg
 , libtiff
 , librsvg
 , libiconv
+, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "djvulibre";
-  version = "3.5.27";
+  version = "3.5.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
-    sha256 = "0psh3zl9dj4n4r3lx25390nx34xz0bg0ql48zdskhq354ljni5p6";
+    sha256 = "1p1fiygq9ny8aimwc4vxwjc6k9ykgdsq1sq06slfbzalfvm0kl7w";
   };
 
   outputs = [ "bin" "dev" "out" ];
 
+  strictDeps = true;
+  nativeBuildInputs = [
+    librsvg
+  ];
+
   buildInputs = [
     libjpeg
     libtiff
-    librsvg
     libiconv
+    bash
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "http://djvu.sourceforge.net";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Anton-Latukha ];
     platforms = platforms.all;
   };

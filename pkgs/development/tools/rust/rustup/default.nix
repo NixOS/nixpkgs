@@ -1,34 +1,57 @@
-{ stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform
-, pkgconfig, curl, Security, CoreServices }:
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, pkg-config
+, openssl
+, curl
+, zlib
+, Security
+, CoreServices
+, libiconv
+, xz
+}:
+
+let
+  libPath = lib.makeLibraryPath [
+    zlib # libz.so.1
+  ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.20.2";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
-    repo = "rustup.rs";
+    repo = "rustup";
     rev = version;
-    sha256 = "0vfrfjfg5x1g44w03rdci2ky7s3s7rljdcmmp5h6pdvhzrd234aj";
+    sha256 = "sha256-zCr8xu0j/pBsdJEAYTCGrEouA8QumBnyhM4YLFZJqZI=";
   };
 
-  cargoSha256 = "1lsv1d99dn6mngaqhd3lw90cr3zg4gq08wi0adxkkhaikc9jjdwh";
+  cargoSha256 = "sha256-FDVZn2PjqxovQmmandJICkidurhoXCAxo3bibuxQSMY=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
   buildInputs = [
-    curl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+    (curl.override { inherit openssl; })
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
+
+  checkFeatures = [ ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; } ''
-       export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-       substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-         --subst-var patchelf \
-         --subst-var dynamicLinker
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
+      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+        --subst-var patchelf \
+        --subst-var dynamicLinker \
+        --subst-var libPath
     '')
   ];
 
@@ -39,12 +62,14 @@ rustPlatform.buildRustPackage rec {
     mv rustup-init rustup
     binlinks=(
       cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
-      cargo-clippy clippy-driver cargo-miri
+      cargo-clippy clippy-driver cargo-miri rust-gdbgui
     )
     for link in ''${binlinks[@]}; do
       ln -s rustup $link
     done
     popd
+
+    wrapProgram $out/bin/rustup --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .rustup
     export HOME=$(mktemp -d)
@@ -61,11 +86,10 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
-    homepage = https://www.rustup.rs/;
+    homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.all;
   };
 }

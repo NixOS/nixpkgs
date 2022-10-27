@@ -1,15 +1,21 @@
-{ stdenv, fetchgit, buildPythonPackage
-, srht, redis, pyyaml, buildsrht
-, writeText }:
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, redis
+, pyyaml
+, buildsrht
+}:
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.14.2";
+  version = "0.22.22";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "scm.sr.ht";
     rev = version;
-    sha256 = "1xi4l1ycdglfm22ybawh5nbwgday0nfb1vqsjqvp2y7ysizwdxc1";
+    sha256 = "sha256-iSzzyI8HZOpOb4dyt520MV/wds14fNag2+UOF09KS7w=";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -25,27 +31,13 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  # No actual? tests but seems like it needs this anyway
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
+  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "scmsrht" ];
 
-      [builds.sr.ht]
-      origin=http://builds.sr.ht.local
-      oauth-client-id=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/git.sr.ht;
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
     description = "Shared support code for sr.ht source control services.";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

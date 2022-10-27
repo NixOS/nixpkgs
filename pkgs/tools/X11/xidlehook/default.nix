@@ -1,9 +1,19 @@
-{ lib, stdenv, rustPlatform, fetchFromGitLab
-, xlibsWrapper, xorg, libpulseaudio, pkgconfig, patchelf, Security }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitLab
+, python3
+, xlibsWrapper
+, xorg
+, libpulseaudio
+, pkg-config
+, patchelf
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xidlehook";
-  version = "0.7.1";
+  version = "0.10.0";
 
   doCheck = false;
 
@@ -12,14 +22,16 @@ rustPlatform.buildRustPackage rec {
     repo = "xidlehook";
     rev = version;
 
-    sha256 = "04bb81iwxznkr1zq1q8dql9qklzm9qy7837a71b02ywp3fc6v5b2";
+    sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
   };
 
-  cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
-  cargoSha256 = "0xnz2s8vh5njqs4a1qm98ydh8pywxvnnpym0z94fsifyfdjlsfm4";
+  cargoSha256 = "1y7m61j07gvqfqz97mda39nc602sv7a826c06m8l22i7z380xfms";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkgconfig patchelf ];
+  nativeBuildInputs = [ pkg-config patchelf python3 ];
+
+  buildNoDefaultFeatures = !stdenv.isLinux;
+  buildFeatures = lib.optional (!stdenv.isLinux) "pulse";
 
   postFixup = lib.optionalString stdenv.isLinux ''
     RPATH="$(patchelf --print-rpath $out/bin/xidlehook)"
@@ -28,9 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "xautolock rewrite in Rust, with a few extra features";
-    homepage = https://github.com/jD91mZM2/xidlehook;
+    homepage = "https://github.com/jD91mZM2/xidlehook";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin;
   };
 }

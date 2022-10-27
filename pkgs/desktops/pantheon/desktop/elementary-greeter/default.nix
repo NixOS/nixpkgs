@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -12,7 +13,8 @@
 , gtk3
 , granite
 , libgee
-, elementary-settings-daemon
+, libhandy
+, gnome-settings-daemon
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
@@ -28,21 +30,87 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0";
-
-  repoName = "greeter";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "greeter";
     rev = version;
-    sha256 = "01c8acarxwpakyq69xm4bjwppjf8v3ijmns8masd8raxligb2v8b";
+    sha256 = "sha256-CY+dPSyQ/ovSdI80uEipDdnWy1KjbZnwpn9sd8HrbPQ=";
   };
 
+  patches = [
+    ./sysconfdir-install.patch
+    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    (substituteAll {
+      src = ./hardcode-fallback-background.patch;
+      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}";
+    })
+  ];
+
+  nativeBuildInputs = [
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    accountsservice
+    clutter-gtk # else we get could not generate cargs for mutter-clutter-2
+    elementary-icon-theme
+    gnome-settings-daemon
+    gdk-pixbuf
+    granite
+    gtk3
+    libgee
+    libhandy
+    lightdm
+    mutter
+  ];
+
+  mesonFlags = [
+    # A hook does this but after wrapGAppsHook so the files never get wrapped.
+    "--sbindir=${placeholder "out"}/bin"
+    # baked into the program for discovery of the greeter configuration
+    "--sysconfdir=/etc"
+    "-Dgsd-dir=${gnome-settings-daemon}/libexec/" # trailing slash is needed
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # dbus-launch needed in path
+      --prefix PATH : "${dbus}/bin"
+
+      # for `io.elementary.wingpanel -g`
+      --prefix PATH : "${wingpanel-with-indicators}/bin"
+
+      # for the compositor
+      --prefix PATH : "$out/bin"
+
+      # the GTK theme is hardcoded
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+
+      # the icon theme is hardcoded
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+
+  postFixup = ''
+    # Use NixOS default wallpaper
+    substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
+      --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
+      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
+
+    substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
+      --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
+  '';
+
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{
@@ -51,77 +119,12 @@ stdenv.mkDerivation rec {
     }];
   };
 
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkgconfig
-    vala
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    accountsservice
-    clutter-gtk # else we get could not generate cargs for mutter-clutter-2
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-settings-daemon
-    gdk-pixbuf
-    granite
-    gtk3
-    libgee
-    lightdm
-    mutter
-    wingpanel-with-indicators
-  ];
-
-  mesonFlags = [
-    # A hook does this but after wrapGAppsHook so the files never get wrapped.
-    "--sbindir=${placeholder "out"}/bin"
-    # baked into the program for discovery of the greeter configuration
-    "--sysconfdir=/etc"
-    # We use the patched gnome-settings-daemon
-    "-Dubuntu-patched-gsd=true"
-    "-Dgsd-dir=${elementary-settings-daemon}/libexec/" # trailing slash is needed
-  ];
-
-  patches = [
-    ./sysconfdir-install.patch
-    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
-    (substituteAll {
-      src = ./hardcode-fallback-background.patch;
-      default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
-    })
-  ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # dbus-launch needed in path
-      --prefix PATH : "${dbus}/bin"
-
-      # for `wingpanel -g`
-      --prefix PATH : "${wingpanel-with-indicators}/bin"
-
-      # for the compositor
-      --prefix PATH : "$out/bin"
-    )
-  '';
-
-  postFixup = ''
-    # Use NixOS default wallpaper
-    substituteInPlace $out/etc/lightdm/io.elementary.greeter.conf \
-      --replace "#default-wallpaper=/usr/share/backgrounds/elementaryos-default" \
-      "default-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
-
-    substituteInPlace $out/share/xgreeters/io.elementary.greeter.desktop \
-      --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LightDM Greeter for Pantheon";
-    homepage = https://github.com/elementary/greeter;
+    homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.greeter";
   };
 }

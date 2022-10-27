@@ -1,27 +1,55 @@
-{ stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
-, sassc, nodejs
-, writeText }:
+{ lib
+, fetchFromSourcehut
+, fetchNodeModules
+, buildPythonPackage
+, pgpy
+, flask
+, bleach
+, misaka
+, humanize
+, html5lib
+, markdown
+, psycopg2
+, pygments
+, requests
+, sqlalchemy
+, cryptography
+, beautifulsoup4
+, sqlalchemy-utils
+, prometheus-client
+, celery
+, alembic
+, importlib-metadata
+, mistletoe
+, minio
+, sassc
+, nodejs
+, redis
+}:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.54.2";
+  version = "0.69.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "1m9nblm0ygjjdzcf79jk5v8p74dgyby15mqkggw9i3smz9r3afim";
+    sha256 = "sha256-s/I0wxtPggjTkkTZnhm77PxdQjiT0Vq2MIk7JMvdupc=";
+    fetchSubmodules = true;
   };
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
     nodejs = nodejs;
-    sha256 = "0axl50swhcw8llq8z2icwr4nkr5qsw2riih0a040f9wx4xiw4p6p";
+    sha256 = "sha256-IWKahdWv3qJ5DNyb1GB9JWYkZxghn6wzZe68clYXij8=";
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
   nativeBuildInputs = [
@@ -35,18 +63,24 @@ buildPythonPackage rec {
     bleach
     misaka
     humanize
+    html5lib
     markdown
     psycopg2
     pygments
     requests
+    mistletoe
     sqlalchemy
-    flask_login
+    cryptography
     beautifulsoup4
     sqlalchemy-utils
+    prometheus-client
 
     # Unofficial runtime dependencies?
     celery
     alembic
+    importlib-metadata
+    minio
+    redis
   ];
 
   PKGVER = version;
@@ -55,20 +89,11 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
+  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/srht;
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

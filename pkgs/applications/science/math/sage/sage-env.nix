@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , writeTextFile
-, python
 , sagelib
+, sage-docbuild
 , env-locations
 , gfortran
 , bash
@@ -15,9 +15,14 @@
 , pkg-config
 , pari
 , gap
-, ecl
-, maxima-ecl
+, maxima
 , singular
+, fflas-ffpack
+, givaro
+, gd
+, libpng
+, linbox
+, m4ri
 , giac
 , palp
 , rWrapper
@@ -35,17 +40,19 @@
 , lcalc
 , rubiks
 , flintqs
-, openblasCompat
+, blas
+, lapack
 , flint
 , gmp
 , mpfr
-, pynac
 , zlib
 , gsl
 , ntl
 , jdk
 , less
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This generates a `sage-env` shell file that will be sourced by sage on startup.
 # It sets up various environment variables, telling sage where to find its
@@ -56,11 +63,6 @@ let
     "@sage-local@"
     "@sage-local@/build"
     pythonEnv
-    # empty python env to add python wrapper that clears PYTHONHOME (see
-    # wrapper.nix). This is necessary because sage will call the python3 binary
-    # (from python2 code). The python2 PYTHONHOME (again set in wrapper.nix)
-    # will then confuse python3, if it is not overwritten.
-    python3.buildEnv
     gfortran # for inline fortran
     stdenv.cc # for cython
     bash
@@ -71,8 +73,8 @@ let
     pkg-config
     pari
     gap
-    ecl
-    maxima-ecl
+    maxima.lisp-compiler
+    maxima
     singular
     giac
     palp
@@ -101,18 +103,38 @@ writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
   text = ''
-    export PKG_CONFIG_PATH='${lib.concatStringsSep ":" (map (pkg: "${pkg}/lib/pkgconfig") [
-        # This is only needed in the src/sage/misc/cython.py test and I'm not
-        # sure if there's really a usecase for it outside of the tests. However
-        # since singular and openblas are runtime dependencies anyways, it doesn't
-        # really hurt to include.
+    export PKG_CONFIG_PATH='${lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+        # This should only be needed during build. However, since the  doctests
+        # also test the cython build (for example in src/sage/misc/cython.py),
+        # it is also needed for the testsuite to pass. We could fix the
+        # testsuite instead, but since all the packages are also runtime
+        # dependencies it doesn't really hurt to include them here.
         singular
-        openblasCompat
-      ])
+        blas lapack
+        fflas-ffpack givaro
+        gd
+        libpng zlib
+        gsl
+        linbox
+        m4ri
+      ]
     }'
     export SAGE_ROOT='${sagelib.src}'
-    export SAGE_LOCAL='@sage-local@'
+  '' +
+    # TODO: is using pythonEnv instead of @sage-local@ here a good
+    # idea? there is a test in src/sage/env.py that checks if the values
+    # SAGE_ROOT and SAGE_LOCAL set here match the ones set in env.py.
+    # we fix up env.py's SAGE_ROOT in sage-src.nix (which does not
+    # have access to sage-with-env), but env.py autodetects
+    # SAGE_LOCAL to be pythonEnv.
+    # setting SAGE_LOCAL to pythonEnv also avoids having to create
+    # python3, ipython, ipython3 and jupyter symlinks in
+    # sage-with-env.nix.
+  ''
+    export SAGE_LOCAL='${pythonEnv}'
+
     export SAGE_SHARE='${sagelib}/share'
+    export SAGE_ENV_CONFIG_SOURCED=1 # sage-env complains if sage-env-config is not sourced beforehand
     orig_path="$PATH"
     export PATH='${runtimepath}'
 
@@ -129,6 +151,7 @@ writeTextFile rec {
 
     # needed for cython
     export CC='${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc'
+    export CXX='${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++'
     # cython needs to find these libraries, otherwise will fail with `ld: cannot find -lflint` or similar
     export LDFLAGS='${
       lib.concatStringsSep " " (map (pkg: "-L${pkg}/lib") [
@@ -138,7 +161,6 @@ writeTextFile rec {
         gmp
         mpfr
         pari
-        pynac
         zlib
         eclib
         gsl
@@ -154,18 +176,19 @@ writeTextFile rec {
         glpk
         flint
         gap
-        pynac
         mpfr.dev
       ])
     }'
+    export CXXFLAGS=$CFLAGS
 
-    export SAGE_LIB='${sagelib}/${python.sitePackages}'
+    export SAGE_LIB='${sagelib}/${python3.sitePackages}'
 
-    export SAGE_EXTCODE='${sagelib.src}/src/ext'
+    export SAGE_EXTCODE='${sagelib.src}/src/sage/ext_data'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular giac]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
-} // {
-  lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support
+} // { # equivalent of `passthru`, which `writeTextFile` doesn't support
+  lib = sagelib;
+  docbuild = sage-docbuild;
 }

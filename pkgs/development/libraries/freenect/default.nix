@@ -1,27 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libusb, pkgconfig, freeglut, libGLU_combined, libXi, libXmu
+{ stdenv, lib, fetchFromGitHub, cmake, libusb1, pkg-config, freeglut, libGLU, libGL, libXi, libXmu
 , GLUT, Cocoa
  }:
 
 stdenv.mkDerivation rec {
   pname = "freenect";
-  version = "0.5.7";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "OpenKinect";
     repo = "libfreenect";
     rev = "v${version}";
-    sha256 = "0vnc7z2avckh4mccqq6alsd2z7xvsh3kaslc5b0gnfxw0j269gl6";
+    sha256 = "sha256-G9Pa3EOUrHyfx+FyZZLsKTSk7MBpHtpJm7m/uSAoKTo=";
   };
 
-  buildInputs = [ libusb freeglut libGLU_combined libXi libXmu ]
+  buildInputs = [ libusb1 freeglut libGLU libGL libXi libXmu ]
     ++ lib.optionals stdenv.isDarwin [ GLUT Cocoa ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  # see https://aur.archlinux.org/cgit/aur.git/commit/PKGBUILD?h=libfreenect&id=0d17db49ba64bcb9e3a4eed61cf55c9a5ceb97f1
+  patchPhase = lib.concatMapStrings (x: ''
+    substituteInPlace ${x} --replace "{GLUT_LIBRARY}" "{GLUT_LIBRARIES}"
+  '') [ "examples/CMakeLists.txt" "wrappers/cpp/CMakeLists.txt" ];
 
   meta = {
     description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and macOS";
-    inherit version;
-    homepage = http://openkinect.org;
+    homepage = "http://openkinect.org";
     license = with lib.licenses; [ gpl2 asl20 ];
     maintainers = with lib.maintainers; [ bennofs ];
     platforms = with lib.platforms; linux ++ darwin ;

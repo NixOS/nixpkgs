@@ -1,34 +1,79 @@
-{stdenv, fetchurl, pkgconfig, xorg, libpng, xineLib, readline, ncurses, curl
-, lirc, shared-mime-info, libjpeg }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, curl
+, libjpeg
+, libpng
+, lirc
+, ncurses
+, pkg-config
+, readline
+, shared-mime-info
+, xine-lib
+, xlibsWrapper
+, xorg
+}:
 
 stdenv.mkDerivation rec {
-  name = "xine-ui-0.99.10";
+  pname = "xine-ui";
+  version = "0.99.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xine/${name}.tar.xz";
-    sha256 = "0i3jzhiipfs5p1jbxviwh42zcfzag6iqc6yycaan0vrqm90an86a";
+    url = "mirror://sourceforge/xine/${pname}-${version}.tar.xz";
+    sha256 = "sha256-sjgtB1xysbEAOeDpAxDMhsjZEDWMU1We2C09WEIB9cU=";
   };
 
-  nativeBuildInputs = [ pkgconfig shared-mime-info ];
+  patches = [
+    (fetchpatch {
+      # Fix build on aarch64
+      name = "xine-ui_FTBS_aarch64.patch";
+      url = "https://salsa.debian.org/debian/xine-ui/-/raw/b2f04f64947a8975a805950e7e67b15cb44007ef/debian/patches/backport/0003-Fix-build.patch";
+      sha256 = "03f8nkm7q11v5vssl1bj500ja4ljz4y752mfk22k2g4djkwimx62";
+    })
+  ];
 
-  buildInputs =
-    [ xineLib libpng readline ncurses curl lirc libjpeg
-      xorg.xlibsWrapper xorg.libXext xorg.libXv xorg.libXxf86vm xorg.libXtst xorg.xorgproto
-      xorg.libXinerama xorg.libXi xorg.libXft
-    ];
-
-  patchPhase = ''sed -e '/curl\/types\.h/d' -i src/xitk/download.c'';
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    shared-mime-info
+  ];
+  buildInputs = [
+    curl
+    libjpeg
+    libpng
+    lirc
+    ncurses
+    readline
+    xine-lib
+    xlibsWrapper
+  ] ++ (with xorg; [
+    libXext
+    libXft
+    libXi
+    libXinerama
+    libXtst
+    libXv
+    libXxf86vm
+    xorgproto
+  ]);
 
   configureFlags = [ "--with-readline=${readline.dev}" ];
 
   LIRC_CFLAGS="-I${lirc}/include";
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";
-#NIX_LDFLAGS = "-lXext -lgcc_s";
 
-  meta = with stdenv.lib; {
-    homepage = http://www.xine-project.org/;
-    description = "Xlib-based interface to Xine, a video player";
+  postInstall = ''
+    substituteInPlace $out/share/applications/xine.desktop \
+      --replace "MimeType=;" "MimeType="
+  '';
+
+  meta = with lib; {
+    homepage = "http://xine.sourceforge.net/";
+    description = "Xlib-based frontend for Xine video player";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
   };
 }

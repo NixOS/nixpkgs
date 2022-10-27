@@ -1,33 +1,31 @@
-{ stdenv, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
 
 let
-  inherit (python3Packages) buildPythonApplication pyqt5 sip pyinotify;
+  inherit (python3Packages) buildPythonApplication pyqt5 sip_4 pyinotify qtpy;
 
 in buildPythonApplication rec {
   pname = "git-cola";
-  version = "3.5";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    rev = "v${version}";
-    sha256 = "09b60jbpdr4czx7h4vqahqmmi7m9vn77jlkpjfhys7crrdnxjp9i";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5PE2Ey9IwNzxl4mk7tzaSWXiTmRFlxDO5MhoIYAwEag=";
   };
 
   buildInputs = [ git gettext ];
-  propagatedBuildInputs = [ pyqt5 sip pyinotify ];
+  propagatedBuildInputs = [ pyqt5 sip_4 pyinotify qtpy ];
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/git-cola
-    wrapQtApp $out/bin/git-dag
-
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/git-cola/git-cola;
+  meta = with lib; {
+    homepage = "https://github.com/git-cola/git-cola";
     description = "A sleek and powerful Git GUI";
     license = licenses.gpl2;
     platforms = platforms.linux;

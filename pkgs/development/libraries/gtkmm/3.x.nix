@@ -1,34 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome, glib, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.1";
+  version = "3.24.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zfj89spr8ianib5y10wcw63ybdmyjy58a15vqs0m8jq4knl5znx";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "HXo1r5xc7MrLJE7jwt65skVyDYUQrFx+b0tvmUfmeJw=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ epoxy ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+    glib
+    gdk-pixbuf # for gdk-pixbuf-pixdata
+  ];
+  buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
-
-  enableParallelBuilding = true;
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=764521
   doCheck = false;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "${pname}3";
+      versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''
@@ -41,11 +48,11 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = https://gtkmm.org/;
+    homepage = "https://gtkmm.org/";
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ raskin vcunat ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
   };
 }

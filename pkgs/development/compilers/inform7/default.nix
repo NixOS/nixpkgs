@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, coreutils, perl, gnutar, gzip }:
+{ lib, stdenv, fetchzip, coreutils, perl, gnutar, gzip }:
 let
   version = "6M62";
 in stdenv.mkDerivation {
@@ -21,9 +21,10 @@ in stdenv.mkDerivation {
       --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
 
-  meta = with stdenv.lib; {
-    description = "A design system for interactive fiction.";
-    homepage = http://inform7.com/;
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "A design system for interactive fiction";
+    homepage = "http://inform7.com/";
     license = licenses.artistic2;
     maintainers = with maintainers; [ mbbx6spp ];
     platforms = platforms.unix;

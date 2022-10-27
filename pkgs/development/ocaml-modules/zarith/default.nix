@@ -1,38 +1,34 @@
-{ stdenv, fetchurl
-, ocaml, findlib, pkgconfig, perl
+{ lib, stdenv, fetchFromGitHub
+, ocaml, findlib, pkg-config
 , gmp
 }:
 
-let source =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then {
-    version = "1.9.1";
-    url = https://github.com/ocaml/Zarith/archive/release-1.9.1.tar.gz;
-    sha256 = "0pfa271476dic5pvn6kxz3dfswxs6kqm2cxmhdx5xq2ayca05gj9";
-  } else {
-    version = "1.3";
-    url = http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz;
-    sha256 = "1mx3nxcn5h33qhx4gbg0hgvvydwlwdvdhqcnvfwnmf9jy3b8frll";
-  };
-in
+if lib.versionOlder ocaml.version "4.04"
+then throw "zarith is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-zarith-${version}";
-  inherit (source) version;
-  src = fetchurl { inherit (source) url sha256; };
+  pname = "ocaml${ocaml.version}-zarith";
+  version = "1.12";
+  src = fetchFromGitHub {
+    owner = "ocaml";
+    repo = "Zarith";
+    rev = "release-${version}";
+    sha256 = "1jslm1rv1j0ya818yh23wf3bb6hz7qqj9pn5fwl45y9mqyqa01s9";
+  };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib perl ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
   propagatedBuildInputs = [ gmp ];
+  strictDeps = true;
 
-  patchPhase = "patchShebangs ./z_pp.pl";
-  configurePhase = ''
-    ./configure -installdir $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
+  configureFlags = [ "-installdir ${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
 
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, arbitrary precision OCaml integers";
     homepage    = "http://forge.ocamlcore.org/projects/zarith";
     license     = licenses.lgpl2;

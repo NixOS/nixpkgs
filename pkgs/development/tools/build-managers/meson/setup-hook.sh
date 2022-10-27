@@ -1,13 +1,8 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "${dontAddPrefix-}" ]; then
         mesonFlags="--prefix=$prefix $mesonFlags"
-    fi
-
-    # Build release by default.
-    if [ -n "@isCross@" ]; then
-      crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
@@ -25,7 +20,7 @@ mesonConfigurePhase() {
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
-    CC=@cc@/bin/cc CXX=@cc@/bin/c++ meson build $mesonFlags "${mesonFlagsArray[@]}"
+    meson setup build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then
@@ -36,7 +31,7 @@ mesonConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi

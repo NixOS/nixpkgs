@@ -6,41 +6,61 @@
 , keyring
 , beautifulsoup4
 , html5lib
+, matplotlib
+, pillow
 , pytest
 , pytest-astropy
+, pytestCheckHook
+, pyvo
 , astropy-helpers
+, setuptools
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.3.9";
+  version = "0.4.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zw3xp2rfc6h2v569iqsyvzhfnzp7bfjb7jrj61is1hrqw1cqjrb";
+    sha256 = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
   };
 
-  # Fix tests using conftest.py from HEAD in the upstream GitHub
-  # repository.
-  patches = [ ./conftest-astropy-3-fix.patch ];
+  disabled = !isPy3k;
 
-  propagatedBuildInputs = [ astropy requests keyring beautifulsoup4 html5lib ];
+  propagatedBuildInputs = [
+    astropy
+    requests
+    keyring
+    beautifulsoup4
+    html5lib
+    pyvo
+  ];
 
-  nativeBuildInputs = [ astropy-helpers ];
-
-  checkInputs = [ pytest pytest-astropy ];
+  nativeBuildInputs = [ astropy-helpers setuptools ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
+  checkInputs = [
+    matplotlib
+    pillow
+    pytest
+    pytest-astropy
+    pytestCheckHook
+  ];
+
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.
-  checkPhase = ''
+  preCheck = ''
+    export HOME=$TMPDIR
     cd build/lib
-    HOME=$TMPDIR pytest
   '';
+
+  pythonImportsCheck = [ "astroquery" ];
 
   meta = with pkgs.lib; {
     description = "Functions and classes to access online data resources";

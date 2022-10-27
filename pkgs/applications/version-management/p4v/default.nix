@@ -1,48 +1,38 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl, xkeyboard_config, wrapQtAppsHook }:
+{ stdenv
+, fetchurl
+, lib
+, callPackage
+, libsForQt5
+}:
 
-stdenv.mkDerivation rec {
-  pname = "p4v";
-  version = "2017.3.1601999";
-
-  src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "9ded42683141e1808535ec3e87d3149f890315c192d6e97212794fd54862b9a4";
+let
+  # Upstream replaces minor versions, so use archived URLs.
+  srcs = {
+    "x86_64-linux" = fetchurl {
+      url = "https://web.archive.org/web/20220902181457id_/https://ftp.perforce.com/perforce/r22.2/bin.linux26x86_64/p4v.tgz";
+      sha256 = "8fdade4aafe25f568a61cfd80823aa90599c2a404b7c6b4a0862c84b07a9f8d2";
+    };
+    "x86_64-darwin" = fetchurl {
+      url = "https://web.archive.org/web/20220902194716id_/https://ftp.perforce.com/perforce/r22.2/bin.macosx1015x86_64/P4V.dmg";
+      sha256 = "c4a9460c0f849be193c68496c500f8a785c740f5bea5b5e7f617969c20be3cd7";
+    };
   };
 
-  dontBuild = true;
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  mkDerivation =
+    if stdenv.isDarwin then callPackage ./darwin.nix { }
+    else libsForQt5.callPackage ./linux.nix { };
+in mkDerivation {
+  pname = "p4v";
+  version = "2022.2.2336701";
 
-  ldLibraryPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtmultimedia
-      qtscript
-      qtsensors
-      qtwebkit
-      openssl
-  ];
-
-  dontWrapQtApps = true;
-  installPhase = ''
-    mkdir $out
-    cp -r bin $out
-    mkdir -p $out/lib/p4v
-    cp -r lib/p4v/P4VResources $out/lib/p4v
-
-    for f in $out/bin/*.bin ; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
-
-      wrapQtApp $f \
-        --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
-        --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
-    done
-  '';
+  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   meta = {
-    description = "Perforce Visual Client";
-    homepage = https://www.perforce.com;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.nioncode ];
+    description = "Perforce Helix Visual Client";
+    homepage = "https://www.perforce.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = builtins.attrNames srcs;
+    maintainers = with lib.maintainers; [ impl nathyong nioncode ];
   };
 }

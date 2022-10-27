@@ -1,4 +1,5 @@
 { buildPythonPackage
+, addOpenGLRunpath
 , fetchPypi
 , fetchFromGitHub
 , Mako
@@ -9,35 +10,44 @@
 , decorator
 , appdirs
 , six
-, cudatoolkit
+, cudaPackages
 , python
 , mkDerivation
-, stdenv
-, isPy3k
+, lib
 }:
 let
   compyte = import ./compyte.nix {
     inherit mkDerivation fetchFromGitHub;
   };
+
+  inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2018.1.1";
+  version = "2022.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49d575fca3fd3c95467c3b0fb51967ad17d0c4cc18e078a6748309af4de36a8d";
+    sha256 = "sha256-rNkDDZPnbmCxIuM60WvPAbsTRPTDBN7f8c0r/7DzE6M=";
   };
 
-  preConfigure = ''
+  preConfigure = with lib.versions; ''
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
-                          --boost-python-libname=boost_python${stdenv.lib.optionalString isPy3k "3"}
+                          --boost-python-libname=boost_python${major python.version}${minor python.version} \
+                          --cuda-root=${cudatoolkit}
   '';
 
   postInstall = ''
     ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte
+  '';
+
+  postFixup = ''
+    find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting opengl runpath for $lib..."
+      addOpenGLRunpath "$lib"
+    done
   '';
 
   # Requires access to libcuda.so.1 which is provided by the driver
@@ -46,6 +56,10 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -60,8 +74,8 @@ buildPythonPackage rec {
     Mako
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/inducer/pycuda/;
+  meta = with lib; {
+    homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python.";
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];

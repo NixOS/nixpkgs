@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "nuttcp";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp nuttcp $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network performance measurement tool";
     longDescription = ''
       nuttcp is a network performance measurement tool intended for use by
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       and loss percentage (for UDP transfers).
     '';
     license = licenses.gpl2;
-    homepage = http://nuttcp.net/;
+    homepage = "http://nuttcp.net/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };

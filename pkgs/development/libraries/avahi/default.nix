@@ -1,78 +1,130 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
-, expat, gettext, intltool, glib, libiconv
-, gtk3Support ? false, gtk3 ? null
-, qt4 ? null
-, qt4Support ? false
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, pkg-config
+, libdaemon
+, dbus
+, perlPackages
+, expat
+, gettext
+, glib
+, libiconv
+, libevent
+, nixosTests
+, gtk3Support ? false
+, gtk3 ? null
+, qt5 ? null
+, qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
-, withPython ? false }:
-
-assert qt4Support -> qt4 != null;
+, withPython ? false
+}:
 
 stdenv.mkDerivation rec {
-  name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
-  version = "0.7";
+  pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
-    sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
+    sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
   patches = [
-    ./no-mkdir-localstatedir.patch
+    # CVE-2021-36217 / CVE-2021-3502
     (fetchpatch {
-      name ="CVE-2017-6519-CVE-2018-100084.patch";
-      url = https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch;
-      sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
+      url = "https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch";
+      sha256 = "sha256-BXWmrLWUvDxKPoIPRFBpMS3T4gijRw0J+rndp6iDybU=";
+    })
+    # CVE-2021-3468
+    (fetchpatch {
+      url = "https://github.com/lathiat/avahi/commit/447affe29991ee99c6b9732fc5f2c1048a611d3b.patch";
+      sha256 = "sha256-qWaCU1ZkCg2PmijNto7t8E3pYRN/36/9FrG8okd6Gu8=";
     })
   ];
 
-  buildInputs = [ libdaemon dbus glib expat libiconv ]
-    ++ (with perlPackages; [ perl XMLParser ])
-    ++ (stdenv.lib.optional gtk3Support gtk3)
-    ++ (stdenv.lib.optional qt4Support qt4);
+  depsBuildBuild = [
+    pkg-config
+  ];
 
-  propagatedBuildInputs =
-    stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    glib
+  ];
 
-  nativeBuildInputs = [ pkgconfig gettext intltool glib ];
+  buildInputs = [
+    libdaemon
+    dbus
+    glib
+    expat
+    libiconv
+    libevent
+  ] ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]) ++ lib.optionals gtk3Support [
+    gtk3
+  ] ++ lib.optionals qt5Support [
+    qt5
+  ];
 
-  configureFlags =
-    [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-      (stdenv.lib.enableFeature gtk3Support "gtk3")
-      "--${if qt4Support then "enable" else "disable"}-qt4"
-      (stdenv.lib.enableFeature withPython "python")
-      "--localstatedir=/var" "--with-distro=none"
-      # A systemd unit is provided by the avahi-daemon NixOS module
-      "--with-systemdsystemunitdir=no" ]
-    ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
+  propagatedBuildInputs = lib.optionals withPython (with python.pkgs; [
+    python
+    pygobject3
+    dbus-python
+  ]);
+
+  configureFlags = [
+    "--disable-gdbm"
+    "--disable-mono"
+    # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
+    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+    (lib.enableFeature gtk3Support "gtk3")
+    (lib.enableFeature qt5Support "qt5")
+    (lib.enableFeature withPython "python")
+    "--localstatedir=/var"
+    "--runstatedir=/run"
+    "--sysconfdir=/etc"
+    "--with-distro=none"
+    # A systemd unit is provided by the avahi-daemon NixOS module
+    "--with-systemdsystemunitdir=no"
+  ] ++ lib.optionals withLibdnssdCompat [
+    "--enable-compat-libdns_sd"
+  ] ++ lib.optionals stdenv.isDarwin [
     # autoipd won't build on darwin
-    ++ stdenv.lib.optional stdenv.isDarwin "--disable-autoipd";
+    "--disable-autoipd"
+  ];
 
-  NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
+  installFlags = [
+    # Override directories to install into the package.
+    # Replace with runstatedir once is merged https://github.com/lathiat/avahi/pull/377
+    "avahi_runtime_dir=${placeholder "out"}/run"
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c
   '';
 
   postInstall =
-    # Maintain compat for mdnsresponder and howl
-    stdenv.lib.optionalString withLibdnssdCompat ''
+    # Maintain compat for mdnsresponder
+    lib.optionalString withLibdnssdCompat ''
       ln -s avahi-compat-libdns_sd/dns_sd.h "$out/include/dns_sd.h"
     '';
-  /*  # these don't exist (anymore?)
-    ln -s avahi-compat-howl $out/include/howl
-    ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
-  */
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    smoke-test = nixosTests.avahi;
+    smoke-test-resolved = nixosTests.avahi-with-resolved;
+  };
+
+  meta = with lib; {
     description = "mDNS/DNS-SD implementation";
-    homepage    = http://avahi.org;
-    license     = licenses.lgpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://avahi.org";
+    license = licenses.lgpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lovek323 globin ];
 
     longDescription = ''

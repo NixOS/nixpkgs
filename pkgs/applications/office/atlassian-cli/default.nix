@@ -1,15 +1,14 @@
-{ stdenv, fetchzip, jre }:
+{ lib, stdenv, fetchzip, jre }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-cli";
-  version = "8.5.0";
-  
+  version = "9.6.0";
+
   src = fetchzip {
     url  = "https://bobswift.atlassian.net/wiki/download/attachments/16285777/${pname}-${version}-distribution.zip";
-    sha256  = "0c9jq7q0bx0db0zhdh89bv1ijfg7cddbx04v451vl8caqcyhkfgz";
-    extraPostFetch = "chmod go-w $out";
+    sha256  = "sha256-55ydhprVC9NdDMUrKbpSAEQBb9zRYgwOc7k8aP4R89A=";
   };
-  
+
   tools = [
     "agile"
     "bamboo"
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     "trello"
     "upm"
   ];
-  
+
   installPhase = ''
     mkdir -p $out/{bin,share/doc/atlassian-cli}
     cp -r lib $out/share/java
@@ -38,11 +37,12 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/$tool
     done
   '';
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "An integrated family of CLI’s for various Atlassian applications";
-    homepage = https://bobswift.atlassian.net/wiki/spaces/ACLI/overview;
+    homepage = "https://bobswift.atlassian.net/wiki/spaces/ACLI/overview";
     license = licenses.unfreeRedistributable;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ twey ];
     inherit (jre.meta) platforms;
   };

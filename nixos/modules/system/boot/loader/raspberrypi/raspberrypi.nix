@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.boot.loader.raspberryPi;
 
-  inherit (pkgs.stdenv.hostPlatform) platform;
-
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
@@ -20,7 +18,7 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
-  optional = pkgs.stdenv.lib.optionalString;
+  optional = pkgs.lib.optionalString;
 
   configTxt =
     pkgs.writeText "config.txt" (''
@@ -50,25 +48,24 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create files with the system generations in
-          <literal>/boot</literal>.
-          <literal>/boot/old</literal> will hold files from old generations.
+          `/boot`.
+          `/boot/old` will hold files from old generations.
         '';
       };
 
       version = mkOption {
         default = 2;
         type = types.enum [ 0 1 2 3 4 ];
-        description = ''
-        '';
+        description = lib.mdDoc "";
       };
 
       uboot = {
         enable = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Enable using uboot as bootmanager for the raspberry pi.
           '';
         };
@@ -77,7 +74,7 @@ in
           default = 20;
           example = 10;
           type = types.int;
-          description = ''
+          description = lib.mdDoc ''
             Maximum number of configurations in the boot menu.
           '';
         };
@@ -87,9 +84,9 @@ in
       firmwareConfig = mkOption {
         default = null;
         type = types.nullOr types.lines;
-        description = ''
-          Extra options that will be appended to <literal>/boot/config.txt</literal> file.
-          For possible values, see: https://www.raspberrypi.org/documentation/configuration/config-txt/
+        description = lib.mdDoc ''
+          Extra options that will be appended to `/boot/config.txt` file.
+          For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
         '';
       };
     };
@@ -103,6 +100,6 @@ in
 
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = platform.kernelTarget;
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gmp, mpir, cddlib}:
+{lib, stdenv, fetchurl, gmp, mpir, cddlib}:
 stdenv.mkDerivation rec {
   pname = "gfan";
   version = "0.6.2";
@@ -8,20 +8,23 @@ stdenv.mkDerivation rec {
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patches = [
+    ./gfan-0.6.2-cddlib-prefix.patch
+  ];
+
+  postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
   '';
 
-  buildFlags = [ "CC=cc" "CXX=c++" "cddnoprefix=1" ];
-  installFlags = [ ''PREFIX=$(out)'' ];
+  buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++" ];
+  installFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ gmp mpir cddlib ];
 
   meta = {
-    inherit version;
-    description = ''A software package for computing Gröbner fans and tropical varieties'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    homepage = http://home.math.au.dk/jensen/software/gfan/gfan.html;
+    description = "A software package for computing Gröbner fans and tropical varieties";
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
+    homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };
 }

@@ -1,75 +1,145 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, simplejson
-, mock
-, glibcLocales
-, html5lib
 , pythonOlder
-, enum34
-, python
-, docutils
-, jinja2
-, pygments
+, fetchFromGitHub
+, fetchpatch
+
+# propagatedBuildInputs
+, babel
 , alabaster
-, Babel
-, snowballstemmer
-, six
-, sqlalchemy
-, whoosh
+, docutils
 , imagesize
+, importlib-metadata
+, jinja2
+, packaging
+, pygments
 , requests
+, snowballstemmer
+, sphinxcontrib-apidoc
+, sphinxcontrib-applehelp
+, sphinxcontrib-devhelp
+, sphinxcontrib-htmlhelp
+, sphinxcontrib-jsmath
+, sphinxcontrib-qthelp
+, sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
-, typing
-, setuptools
+
+# check phase
+, cython
+, html5lib
+, pytestCheckHook
+, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "1.8.3";
-  src = fetchPypi {
-    pname = "Sphinx";
-    inherit version;
-    sha256 = "c4cb17ba44acffae3d3209646b6baec1e215cad3065e852c68cc569d4df1b9f8";
+  version = "5.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "sphinx-doc";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dTgQNMRIn7ETm+1HgviOkWWOCmLX7Ez6DM9ChlI32mY=";
+    postFetch = ''
+      cd $out
+      mv tests/roots/test-images/testimäge.png \
+        tests/roots/test-images/testimæge.png
+      patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
+    '';
   };
-  LC_ALL = "en_US.UTF-8";
 
-  checkInputs = [ pytest ];
-  buildInputs = [ simplejson mock glibcLocales html5lib ] ++ lib.optional (pythonOlder "3.4") enum34;
-  # Disable two tests that require network access.
-  checkPhase = ''
-    cd tests; ${python.interpreter} run.py --ignore py35 -k 'not test_defaults and not test_anchors_ignored'
-  '';
-  propagatedBuildInputs = [
-    docutils
-    jinja2
-    pygments
-    alabaster
-    Babel
-    setuptools
-    snowballstemmer
-    six
-    sqlalchemy
-    whoosh
-    imagesize
-    requests
-    sphinxcontrib-websupport
-  ] ++ lib.optional (pythonOlder "3.5") typing;
-
-  # Lots of tests. Needs network as well at some point.
-  doCheck = false;
-
-  # https://github.com/NixOS/nixpkgs/issues/22501
-  # Do not run `python sphinx-build arguments` but `sphinx-build arguments`.
   postPatch = ''
-    substituteInPlace sphinx/make_mode.py --replace "sys.executable, " ""
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
   '';
 
-  meta = {
-    description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
-    homepage = http://sphinx.pocoo.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nand0p ];
+  propagatedBuildInputs = [
+    babel
+    alabaster
+    docutils
+    imagesize
+    jinja2
+    packaging
+    pygments
+    requests
+    snowballstemmer
+    sphinxcontrib-applehelp
+    sphinxcontrib-devhelp
+    sphinxcontrib-htmlhelp
+    sphinxcontrib-jsmath
+    sphinxcontrib-qthelp
+    sphinxcontrib-serializinghtml
+    # extra[docs]
+    sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    cython
+    html5lib
+    pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typed-ast
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTests = [
+    # requires network access
+    "test_anchors_ignored"
+    "test_defaults"
+    "test_defaults_json"
+    "test_latex_images"
+
+    # requires imagemagick (increases build closure size), doesn't
+    # test anything substantial
+    "test_ext_imgconverter"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
+    "test_inspect_main_url"
+    "test_auth_header_uses_first_match"
+    "test_linkcheck_allowed_redirects"
+    "test_linkcheck_request_headers"
+    "test_linkcheck_request_headers_no_slash"
+    "test_follows_redirects_on_HEAD"
+    "test_get_after_head_raises_connection_error"
+    "test_invalid_ssl"
+    "test_connect_to_selfsigned_with_tls_verify_false"
+    "test_connect_to_selfsigned_with_tls_cacerts"
+    "test_connect_to_selfsigned_with_requests_env_var"
+    "test_connect_to_selfsigned_nonexistent_cert_file"
+    "test_TooManyRedirects_on_HEAD"
+    "test_too_many_requests_retry_after_int_del"
+    "test_too_many_requests_retry_after_HTTP_date"
+    "test_too_many_requests_retry_after_without_header"
+    "test_too_many_requests_user_timeout"
+    "test_raises_for_invalid_status"
+    "test_auth_header_no_match"
+    "test_follows_redirects_on_GET"
+    "test_connect_to_selfsigned_fails"
+  ];
+
+  meta = with lib; {
+    description = "Python documentation generator";
+    longDescription = ''
+      A tool that makes it easy to create intelligent and beautiful
+      documentation for Python projects
+    '';
+    homepage = "https://www.sphinx-doc.org";
+    license = licenses.bsd3;
+    maintainers = teams.sphinx.members;
   };
 }

@@ -1,50 +1,137 @@
-{ stdenv, fetchurl, rpmextract, patchelf, libnotify, libcap, cairo, pango, fontconfig, udev, dbus
-, gtk2, atk, expat, gdk-pixbuf, freetype, nspr, glib, nss, gconf, libX11, libXrender, libXtst, libXdamage
-, libXi, libXext, libXfixes, libXcomposite, alsaLib, bash
+{ stdenv
+, lib
+, fetchurl
+, rpmextract
+, libnotify
+, libuuid
+, cairo
+, cups
+, pango
+, fontconfig
+, udev
+, dbus
+, gtk3
+, atk
+, at-spi2-atk
+, expat
+, gdk-pixbuf
+, freetype
+, nspr
+, glib
+, nss
+, libX11
+, libXrandr
+, libXrender
+, libXtst
+, libXdamage
+, libxcb
+, libXcursor
+, libXi
+, libXext
+, libXfixes
+, libXft
+, libXcomposite
+, libXScrnSaver
+, alsa-lib
+, pulseaudio
+, makeWrapper
+, xdg-utils
 }:
+
+let
+  getFirst = n: v: builtins.concatStringsSep "." (lib.take n (lib.splitString "." v));
+in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "1.36.9";
+  version = "2.30.1.18";
 
-  src =
-    fetchurl {
-      url = "https://swdl.bluejeans.com/desktop/linux/1.36/${version}/bluejeans-${version}.x86_64.rpm";
-      sha256 = "0sbv742pzqd2cxn3kq10lfi16jah486i9kyrmi8l1rpb9fhyw2m1";
-    };
+  src = fetchurl {
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
+    sha256 = "sha256-V/3nmindkuTmUsuAuc0UxldAQe7jfeXWSZWPTXTyLq8=";
+  };
 
-  nativeBuildInputs = [ patchelf rpmextract ];
+  nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
-       [ libnotify libcap cairo pango fontconfig gtk2 atk expat gdk-pixbuf dbus udev.lib
-         freetype nspr glib stdenv.cc stdenv.cc.cc.lib nss gconf libX11 libXrender libXtst libXdamage
-         libXi libXext libXfixes libXcomposite alsaLib
-       ];
+    lib.makeLibraryPath
+      [
+        libnotify
+        libuuid
+        cairo
+        cups
+        pango
+        fontconfig
+        gtk3
+        atk
+        at-spi2-atk
+        expat
+        gdk-pixbuf
+        dbus
+        (lib.getLib udev)
+        freetype
+        nspr
+        glib
+        stdenv.cc.cc.lib
+        nss
+        libX11
+        libXrandr
+        libXrender
+        libXtst
+        libXdamage
+        libxcb
+        libXcursor
+        libXi
+        libXext
+        libXfixes
+        libXft
+        libXcomposite
+        libXScrnSaver
+        alsa-lib
+        pulseaudio
+      ];
+
+  localtime64_stub = ./localtime64_stub.c;
 
   buildCommand = ''
     mkdir -p $out/bin/
     cd $out
     rpmextract $src
+    mv usr/share share
+    rmdir usr
+
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      opt/bluejeans/bluejeans-bin
-    patchelf \
-      --set-rpath ${libPath} \
-      opt/bluejeans/bluejeans-bin
-    patchelf \
       --replace-needed libudev.so.0 libudev.so.1 \
-      opt/bluejeans/bluejeans-bin
-    ln -s $out/opt/bluejeans/bluejeans $out/bin/bluejeans
-    chmod +x $out/bin/bluejeans
-    patchShebangs $out
+      opt/BlueJeans/bluejeans-v2
+
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      opt/BlueJeans/resources/BluejeansHelper
+
+    cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
+
+    # make xdg-open overrideable at runtime
+    makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
+      --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+
+    substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
+      --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
+
+    patchShebangs "$out"
   '';
 
-  meta = with stdenv.lib; {
-    description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day.";
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
+    description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
+

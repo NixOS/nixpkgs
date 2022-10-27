@@ -1,40 +1,55 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, lxqt-build-tools
+, json-glib
+, libexif
+, libfm-qt
+, menu-cache
+, qtbase
+, qttools
+, qtx11extras
+, gitUpdater
+}:
 
 mkDerivation rec {
-  # pname = "lxqt-archiver";
-  pname = "lxqt-archiver-unstable";
-  version = "2019-09-25";
+  pname = "lxqt-archiver";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
-    rev = "62501255434b2ba6a8fd043a5af13dc0df038a5b";
-    sha256 = "1af58k68karmnay7xgngzlmcgkmvx6hay5m1xbl5id9hh16n20in";
+    rev = version;
+    sha256 = "ay0nWCe/uMsJFFtBAQnsuxR6I/8q3xv6zK/qYr3BQyw=";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 
   buildInputs = [
     json-glib
+    libexif
     libfm-qt
+    menu-cache
     qtbase
     qttools
     qtx11extras
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   hardeningDisable = [ "format" ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
-    homepage = https://github.com/lxqt/lxqt-archiver/;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
+    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
   };
 }

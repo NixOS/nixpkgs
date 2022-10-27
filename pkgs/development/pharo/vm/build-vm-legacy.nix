@@ -1,4 +1,21 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, makeWrapper, ... }:
+{ lib, stdenv
+, fetchurl
+, cmake
+, bash
+, unzip
+, glibc
+, openssl
+, gcc
+, libGLU
+, libGL
+, freetype
+, xorg
+, alsa-lib
+, cairo
+, libuuid
+, libnsl
+, makeWrapper
+, ... }:
 
 { name, src, ... }:
 
@@ -6,14 +23,28 @@ stdenv.mkDerivation rec {
 
   inherit name src;
 
-  pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
+  pharo-share = import ./share.nix { inherit lib stdenv fetchurl unzip; };
 
   hardeningDisable = [ "format" "pic" ];
 
-  # Building
+  nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
+
+  buildInputs = [ bash glibc openssl libGLU libGL freetype
+                  xorg.libX11 xorg.libICE xorg.libSM alsa-lib cairo pharo-share libnsl ];
+
+  LD_LIBRARY_PATH = lib.makeLibraryPath
+    [ cairo libGLU libGL freetype openssl libuuid alsa-lib
+      xorg.libICE xorg.libSM ];
+
   preConfigure = ''
     cd build/
   '';
+
+  # -fcommon is a workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: CMakeFiles/pharo.dir/build/pharo-vm-2016.02.18/src/vm/gcc3x-cointerp.c.o:(.bss+0x88): multiple definition of
+  #     `sendTrace'; CMakeFiles/pharo.dir/build/pharo-vm-2016.02.18/src/vm/cogit.c.o:(.bss+0x84): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     mkdir -p "$prefix/lib/$name"
@@ -46,12 +77,9 @@ stdenv.mkDerivation rec {
     ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ cairo libGLU_combined freetype openssl libuuid alsaLib xorg.libICE xorg.libSM ];
-  nativeBuildInputs = [ unzip cmake gcc makeWrapper ];
-  buildInputs = [ bash glibc openssl libGLU_combined freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
-
-  meta = {
+  meta = with lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
+    homepage = "https://pharo.org";
     longDescription = ''
       Pharo's goal is to deliver a clean, innovative, free open-source
       Smalltalk-inspired environment. By providing a stable and small core
@@ -65,13 +93,12 @@ stdenv.mkDerivation rec {
       Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
       packaging (ppa:pharo/stable)' project.
     '';
-    homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.lukego ];
+    license = licenses.mit;
+    maintainers = [ maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)
-    platforms = stdenv.lib.filter
-      (system: with stdenv.lib.systems.elaborate { inherit system; };
+    platforms = lib.filter
+      (system: with lib.systems.elaborate { inherit system; };
          isUnix && !isDarwin)
-      stdenv.lib.platforms.mesaPlatforms;
+      lib.platforms.mesaPlatforms;
   };
 }

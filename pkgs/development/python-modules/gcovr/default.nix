@@ -1,20 +1,28 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , jinja2
+, lxml
+, pygments
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "4.1";
+  version = "5.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca94c337f2d9a70db177ec4330534fad7b2b772beda625c1ec071fbcf1361e22";
+    hash = "sha256-IXGVCF7JQ0YpGoe3sebZz97u5WKz4PmjKyXJUws7zo8=";
   };
 
   propagatedBuildInputs = [
     jinja2
+    lxml
+    pygments
   ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
@@ -22,10 +30,16 @@ buildPythonPackage rec {
   # See also: https://github.com/gcovr/gcovr/issues/206
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "A Python script for summarizing gcov data";
-    license = licenses.bsd0;
-    homepage = https://www.gcovr.com/;
-  };
+  pythonImportsCheck = [
+    "gcovr"
+    "gcovr.workers"
+    "gcovr.configuration"
+  ];
 
+  meta = with lib; {
+    description = "Python script for summarizing gcov data";
+    homepage = "https://www.gcovr.com/";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
+  };
 }

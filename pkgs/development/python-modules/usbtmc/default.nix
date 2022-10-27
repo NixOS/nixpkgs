@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, buildPythonPackage, pyusb }:
+{ lib, fetchFromGitHub, buildPythonPackage, pyusb }:
 
 buildPythonPackage rec {
   pname = "usbtmc";
   version = "0.8";
 
-  src = fetchurl {
-    url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";
-    sha256 = "14f4j77ljr45crnjwlp1dqbxwa45s20y2fpq5rg59r60w15al4yw";
+  src = fetchFromGitHub {
+    owner = "python-ivi";
+    repo = "python-usbtmc";
+    rev = "v${version}";
+    sha256 = "sha256-69kqBTqnVqdWC2mqlXylzb9VkdhwTGZI0Ykf6lqbypI=";
   };
 
   propagatedBuildInputs = [ pyusb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python implementation of the USBTMC instrument control protocol";
-    homepage = http://alexforencich.com/wiki/en/python-usbtmc/start;
+    homepage = "http://alexforencich.com/wiki/en/python-usbtmc/start";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

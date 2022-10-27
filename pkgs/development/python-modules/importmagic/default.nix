@@ -1,7 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,12 +16,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  doCheck = false;  # missing json file from tarball
+  checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "importmagic" ];
+
+  meta = with lib; {
     description = "Python Import Magic - automagically add, remove and manage imports";
-    homepage = https://github.com/alecthomas/importmagic;
+    homepage = "https://github.com/alecthomas/importmagic";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ onny ];
   };
 
 }

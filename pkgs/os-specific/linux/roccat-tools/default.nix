@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
+, harfbuzz, runtimeShell, coreutils, kmod
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +19,15 @@ stdenv.mkDerivation rec {
       /return/c \
         return g_build_path("/", g_get_user_data_dir(), "roccat", NULL);
     }' libroccat/roccat_helper.c
+
+    substituteInPlace udev/90-roccat-kone.rules \
+      --replace "/bin/sh" "${runtimeShell}" \
+      --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
+      --replace "/bin/echo" "${coreutils}/bin/echo"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
   buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DUDEVDIR=\${out}/lib/udev/rules.d"
@@ -32,10 +36,19 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-I${harfbuzz.dev}/include/harfbuzz"
+
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: ryos_talk.c.o:(.bss+0x0): multiple definition of `RyosWriteCheckWait';
+    #     ryos_custom_lights.c.o:(.bss+0x0): first defined here
+    "-fcommon"
+  ];
+
   meta = {
     description = "Tools to configure ROCCAT devices";
-    homepage = http://roccat.sourceforge.net/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "http://roccat.sourceforge.net/";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

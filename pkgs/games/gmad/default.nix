@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, premake4, bootil }:
+{ lib, stdenv, fetchFromGitHub, premake4, bootil }:
 
 stdenv.mkDerivation rec {
-  name = "gmad-unstable-2015-04-16";
+  pname = "gmad";
+  version = "unstable-2020-02-24";
 
   meta = {
     description = "Garry's Mod Addon Creator and Extractor";
-    homepage = https://github.com/garrynewman/gmad;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.abigailbuccaneer ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/Facepunch/gmad";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.abigailbuccaneer ];
+    platforms = lib.platforms.all;
   };
 
   src = fetchFromGitHub {
-    owner = "garrynewman";
+    owner = "Facepunch";
     repo = "gmad";
-    rev = "377f3458bf1ecb8a1a2217c2194773e3c2a2dea0";
-    sha256="0myi9njr100gxhxk1vrzr2sbij5kxl959sq0riiqgg01div338g0";
+    rev = "5236973a2fcbb3043bdd3d4529ce68b6d938ad93";
+    sha256="04an17nvnj38mpi0w005v41ib8ynb5qhgrdkmsda4hq7l1gn276s";
   };
 
   buildInputs = [ premake4 bootil ];
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     else if stdenv.isDarwin then "gmad_osx"
     else "gmad";
 
-  premakeFlags = "--bootil_lib=${bootil}/lib --bootil_inc=${bootil}/include";
+  premakeFlags = [ "--bootil_lib=${bootil}/lib" "--bootil_inc=${bootil}/include" ];
 
   installPhase = ''
     mkdir -p $out/bin

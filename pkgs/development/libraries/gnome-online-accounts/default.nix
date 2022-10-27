@@ -1,51 +1,104 @@
-{ stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk3, wrapGAppsHook
-, webkitgtk, json-glib, librest, libsecret, gtk-doc, gobject-introspection
-, gettext, icu, glib-networking
-, libsoup, docbook_xsl, docbook_xml_dtd_412, gnome3, gcr, kerberos
+{ stdenv
+, lib
+, fetchFromGitLab
+, pkg-config
+, vala
+, glib
+, meson
+, ninja
+, libxslt
+, gtk3
+, enableBackend ? stdenv.isLinux
+, webkitgtk_4_1
+, json-glib
+, librest_1_0
+, libxml2
+, libsecret
+, gtk-doc
+, gobject-introspection
+, gettext
+, icu
+, glib-networking
+, libsoup_3
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, gnome
+, gcr
+, libkrb5
+, gvfs
+, dbus
+, wrapGAppsHook
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.34.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.46.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0mvz6wrw03zyp5sm46znkipncagb257xam29mfi06ixmxvjbqky4";
+  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
+
+  # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-online-accounts";
+    rev = version;
+    sha256 = "sha256-qVd55fmhY05zJ871OWc3hd1eWjYbYJuxlE/T2i3VCUA=";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
-
-  configureFlags = [
-    "--enable-media-server"
-    "--enable-kerberos"
-    "--enable-lastfm"
-    "--enable-todoist"
-    "--enable-gtk-doc"
-    "--enable-documentation"
+  mesonFlags = [
+    "-Dfedora=false" # not useful in NixOS or for NixOS users.
+    "-Dgoabackend=${lib.boolToString enableBackend}"
+    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Dman=${lib.boolToString enableBackend}"
+    "-Dmedia_server=true"
   ];
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig gobject-introspection vala gettext wrapGAppsHook
-    libxslt docbook_xsl docbook_xml_dtd_412 gtk-doc
-  ];
-  buildInputs = [
-    glib gtk3 webkitgtk json-glib librest libsecret glib-networking icu libsoup
-    gcr kerberos
+    dbus # used for checks and pkg-config to install dbus service/s
+    docbook_xml_dtd_412
+    docbook-xsl-nons
+    gettext
+    gobject-introspection
+    gtk-doc
+    libxslt
+    meson
+    ninja
+    pkg-config
+    vala
+    wrapGAppsHook
   ];
 
+  buildInputs = [
+    gcr
+    glib
+    glib-networking
+    gtk3
+    gvfs # OwnCloud, Google Drive
+    icu
+    json-glib
+    libkrb5
+    librest_1_0
+    libxml2
+    libsecret
+    libsoup_3
+  ] ++ lib.optionals enableBackend [
+    webkitgtk_4_1
+  ];
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
+      versionPolicy = "odd-unstable";
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
-  meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
+    description = "Single sign-on framework for GNOME";
+    platforms = platforms.unix;
+    license = licenses.lgpl2Plus;
+    maintainers = teams.gnome.members;
   };
 }

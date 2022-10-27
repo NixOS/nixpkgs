@@ -1,50 +1,87 @@
-{ stdenv, fetchFromGitHub, python2, cdparanoia, cdrdao, flac
-, sox, accuraterip-checksum, utillinux, substituteAll }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, libcdio-paranoia
+, cdrdao
+, libsndfile
+, flac
+, sox
+, util-linux
+, testers
+, whipper
+}:
 
-python2.pkgs.buildPythonApplication rec {
-  name = "whipper-${version}";
-  version = "0.7.3";
+let
+  bins = [ libcdio-paranoia cdrdao flac sox util-linux ];
+in python3.pkgs.buildPythonApplication rec {
+  pname = "whipper";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
     repo = "whipper";
     rev = "v${version}";
-    sha256 = "0ypbgc458i7yvbyvg6wg6agz5yzlwm1v6zw7fmyq9h59xsv27mpr";
+    sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
   };
 
-  pythonPath = with python2.pkgs; [
-    pygobject3 musicbrainzngs urllib3 chardet
-    pycdio setuptools mutagen CDDB
-    requests
-  ];
-
-  checkInputs = with python2.pkgs; [
-    twisted
-  ];
-
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit cdparanoia;
+    (fetchpatch {
+      # Use custom YAML subclass to be compatible with ruamel_yaml>=0.17
+      # https://github.com/whipper-team/whipper/pull/543
+      url = "https://github.com/whipper-team/whipper/commit/3ce5964dfe8be1e625c3e3b091360dd0bc34a384.patch";
+      sha256 = "0n9dmib884y8syvypsg88j0h71iy42n1qsrh0am8pwna63sl15ah";
     })
   ];
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao utillinux flac sox ])
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+    docutils
+    setuptoolsCheckHook
   ];
 
-  # some tests require internet access
-  # https://github.com/JoeLametta/whipper/issues/291
-  doCheck = false;
+  propagatedBuildInputs = with python3.pkgs; [
+    musicbrainzngs
+    mutagen
+    pycdio
+    pygobject3
+    ruamel-yaml
+    discid
+    pillow
+    setuptools
+  ];
 
-  preCheck = ''
-    HOME=$TMPDIR
+  buildInputs = [ libsndfile ];
+
+  checkInputs = with python3.pkgs; [
+    twisted
+  ] ++ bins;
+
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath bins)
+  ];
+
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/whipper-team/whipper;
+  preCheck = ''
+    # disable tests that require internet access
+    # https://github.com/JoeLametta/whipper/issues/291
+    substituteInPlace whipper/test/test_common_accurip.py \
+      --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
+    export HOME=$TMPDIR
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = whipper;
+    command = "HOME=$TMPDIR whipper --version";
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/whipper-team/whipper";
     description = "A CD ripper aiming for accuracy over speed";
-    maintainers = with maintainers; [ rycee ];
+    maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

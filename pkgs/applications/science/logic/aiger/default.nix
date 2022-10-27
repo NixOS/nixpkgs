@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, picosat }:
+{ lib, stdenv, fetchurl, picosat }:
 
 stdenv.mkDerivation rec {
   pname = "aiger";
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "And-Inverter Graph (AIG) utilities";
-    homepage    = http://fmv.jku.at/aiger/;
-    license     = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    homepage    = "http://fmv.jku.at/aiger/";
+    license     = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms   = lib.platforms.unix;
   };
 }

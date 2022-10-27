@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+{ lib, stdenv, fetchFromGitLab, dpkg, gawk, perl, wget, coreutils, util-linux
+, gnugrep, gnupg1, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
     coreutils
     dpkg
     gawk
     gnugrep
+    gnupg1
     gnused
     gnutar
     gzip
@@ -15,13 +16,14 @@ let binPath = stdenv.lib.makeBinPath [
   ];
 in stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.116";
+  version = "1.0.127";
 
-  src = fetchurl {
-    # git clone git://git.debian.org/d-i/debootstrap.git
-    # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.gz";
-    sha256 = "06gh7hks8flpg327wnrwwmp7h9s6knz2kk794s5wpd91iwnjfcyb";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-KKH9F0e4HEO2FFh1/V5UIY5C95ZOUm4nUhVUGqpZWaI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace debootstrap \
       --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
-      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${utillinux}/bin/unshare ' \
+      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
       --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
       --replace '#!/bin/sh' '#!/bin/bash' \
       --subst-var-by VERSION ${version}
@@ -57,9 +59,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to create a Debian system in a chroot";
-    homepage = https://wiki.debian.org/Debootstrap;
+    homepage = "https://wiki.debian.org/Debootstrap";
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber ];
     platforms = platforms.linux;

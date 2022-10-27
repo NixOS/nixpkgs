@@ -1,39 +1,69 @@
-{ stdenv, fetchurl, pkgconfig, removeReferencesTo
-, zlib, libjpeg, libpng, libtiff, pam, dbus, systemd, acl, gmp, darwin
-, libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, removeReferencesTo
+, zlib
+, libjpeg
+, libpng
+, libtiff
+, pam
+, dbus
+, enableSystemd ? stdenv.isLinux
+, systemd
+, acl
+, gmp
+, darwin
+, libusb1 ? null
+, gnutls ? null
+, avahi ? null
+, libpaper ? null
 , coreutils
+, nixosTests
 }:
 
-### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
-### works at least for your platform.
-
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 
   # After 2.2.6, CUPS requires headers only available in macOS 10.12+
-  version = if stdenv.isDarwin then "2.2.6" else "2.2.12";
+  version = if stdenv.isDarwin then "2.2.6" else "2.4.2";
 
-  passthru = { inherit version; };
-
-  src = fetchurl {
+  src = fetchurl (if stdenv.isDarwin then {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = if version == "2.2.6"
-             then "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20"
-             else "1a4sgx5y7z16flmpnchd2ix294bnzy0v8mdkd96a4j27kr2anq8g";
-  };
+    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
+  } else {
+    url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+  });
 
   outputs = [ "out" "lib" "dev" "man" ];
+
+  patches = lib.optionals (version == "2.2.6") [
+    ./0001-TargetConditionals.patch
+    (fetchpatch {
+      name = "CVE-2022-26691.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/de4f8c196106033e4c372dce3e91b9d42b0b9444.patch";
+      sha256 = "sha256-IKOtV7bCS6PstwK6YqnYRYTeH562jWwkley86p+6Of8=";
+      excludes = [ "CHANGES.md" ];
+    })
+    (fetchpatch {
+      name = "CVE-2022-26691-fix-comment.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/411b6136f450a583ee08c3880fa09dbe837eb3f1.patch";
+      sha256 = "sha256-dVopmr34c9N5H2ZZz52rXVnHQBuDTNo8M40x9455+jQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
   '';
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
-  buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
+  buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
+    ++ optional enableSystemd systemd
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
@@ -49,7 +79,7 @@ stdenv.mkDerivation rec {
     "--enable-dbus"
     "--enable-pam"
     "--with-dbusdir=${placeholder "out"}/share/dbus-1"
-  ] ++ optional (libusb != null) "--enable-libusb"
+  ] ++ optional (libusb1 != null) "--enable-libusb"
     ++ optional (gnutls != null) "--enable-ssl"
     ++ optional (avahi != null) "--enable-avahi"
     ++ optional (libpaper != null) "--enable-libpaper"
@@ -110,18 +140,8 @@ stdenv.mkDerivation rec {
       sed -e "/^cups_serverbin=/s|$lib|$out|" \
           -i "$dev/bin/cups-config"
 
-      # Rename systemd files provided by CUPS
       for f in "$out"/lib/systemd/system/*; do
-        substituteInPlace "$f" \
-          --replace "$lib/$libexec" "$out/$libexec" \
-          --replace "org.cups.cupsd" "cups" \
-          --replace "org.cups." ""
-
-        if [[ "$f" =~ .*cupsd\..* ]]; then
-          mv "$f" "''${f/org\.cups\.cupsd/cups}"
-        else
-          mv "$f" "''${f/org\.cups\./}"
-        fi
+        substituteInPlace "$f" --replace "$lib/$libexec" "$out/$libexec"
       done
     '' + optionalString stdenv.isLinux ''
       # Use xdg-open when on Linux
@@ -129,10 +149,12 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
+  passthru.tests.nixos = nixosTests.printing;
+
   meta = {
-    homepage = https://cups.org/;
+    homepage = "https://openprinting.github.io/cups/";
     description = "A standards-based printing system for UNIX";
-    license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
+    license = licenses.asl20;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
   };

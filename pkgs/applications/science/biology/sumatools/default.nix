@@ -1,10 +1,10 @@
-{ gccStdenv, fetchFromGitLab, zlib }:
+{ lib, gccStdenv, fetchFromGitLab, zlib }:
 
 let
   stdenv = gccStdenv;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and exact comparison and clustering of sequences";
-    homepage = https://metabarcoding.org/sumatra;
+    homepage = "https://metabarcoding.org/sumatra";
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
   };
@@ -22,7 +22,7 @@ in rec {
       rev = "sumalib_v${version}";
       sha256 = "0hwkrxzfz7m5wdjvmrhkjg8kis378iaqr5n4nhdhkwwhn8x1jn5a";
     };
-    makeFlags = "PREFIX=$(out)";
+    makeFlags = [ "PREFIX=$(out)" ];
     inherit meta;
   };
 
