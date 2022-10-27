@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -121,6 +122,10 @@ in stdenv.mkDerivation rec {
     mv /build/source/matrices $test
     rmdir $out/bin
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.hipsparse;
+  };
 
   meta = with lib; {
     description = "ROCm SPARSE marshalling library";
