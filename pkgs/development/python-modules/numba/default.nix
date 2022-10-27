@@ -23,14 +23,14 @@
 let
   inherit (cudaPackages) cudatoolkit;
 in buildPythonPackage rec {
-  version = "0.56.2";
+  version = "0.56.3";
   pname = "numba";
   format = "setuptools";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NJLwpdCeJX/FIfU3emxrkH7sGSDRRznwskWLnSmUalo=";
+    hash = "sha256-B6LYoUnsxuyk71xyFuWFEdSBhIVOB7f1nQwy+rB0Lo8=";
   };
 
   postPatch = ''
