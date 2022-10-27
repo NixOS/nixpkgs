@@ -6,6 +6,7 @@
 , dbus
 , efl
 , python3Packages
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapPythonPrograms
   '';
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "A user interface for the connman network connection manager";
