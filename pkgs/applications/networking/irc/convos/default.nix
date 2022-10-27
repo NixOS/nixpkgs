@@ -6,13 +6,13 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "7.02";
+  version = "7.06";
 
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i8lDK5/Whi5uo2/Qqh5jgJGLuuHn7kdrfvr+9Ktzp/8=";
+    sha256 = "sha256-Oxm2+SHpofvKTqjXsAQpM0IqCDUuQCdgWPAfLhAZp4Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -49,6 +49,9 @@ perlPackages.buildPerlPackage rec {
     #
     substituteInPlace t/web-register-open-to-public.t \
       --replace '!127.0.0.1!' '!localhost!'
+
+    # Another online test fails, so remove this.
+    rm t/irc-reconnect.t
 
     # A webirc test fails to resolve "localhost" likely due to sandboxing, we
     # remove this test.
