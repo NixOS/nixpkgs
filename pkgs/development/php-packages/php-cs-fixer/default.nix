@@ -27,7 +27,7 @@ mkDerivation {
   meta = with lib; {
     description = "A tool to automatically fix PHP coding standards issues";
     license = licenses.mit;
-    homepage = "http://cs.sensiolabs.org/";
+    homepage = "https://cs.symfony.com/";
     maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
   };
 }
