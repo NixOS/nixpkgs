@@ -584,6 +584,7 @@ let
           "Label"
           "PreferredLifetime"
           "Scope"
+          "RouteMetric"
           "HomeAddress"
           "DuplicateAddressDetection"
           "ManageTemporaryAddress"
@@ -592,6 +593,7 @@ let
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
+        (assertInt "RouteMetric")
         (assertValueOneOf "HomeAddress" boolValues)
         (assertValueOneOf "DuplicateAddressDetection" ["ipv4" "ipv6" "both" "none"])
         (assertValueOneOf "ManageTemporaryAddress" boolValues)

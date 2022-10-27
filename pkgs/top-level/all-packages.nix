@@ -450,9 +450,7 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  datalad = callPackage ../applications/version-management/datalad {
-    python3 = python39;  # `boto` currently broken with Python3.10
-  };
+  datalad = callPackage ../applications/version-management/datalad { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
@@ -16095,6 +16093,7 @@ with pkgs;
 
   inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
     antlr4_9
+    antlr4_10
     antlr4_11;
 
   antlr4 = antlr4_8;
@@ -17298,9 +17297,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pahole = callPackage ../development/tools/misc/pahole {
-    libbpf = libbpf_1;
-  };
+  pahole = callPackage ../development/tools/misc/pahole {};
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
@@ -22742,7 +22739,9 @@ with pkgs;
     wt3
     wt4;
 
-  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
+  wxformbuilder = callPackage ../development/tools/wxformbuilder {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   wxGTK = wxGTK28;
 
@@ -25569,6 +25568,8 @@ with pkgs;
   sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
+
+  shortcat = callPackage ../os-specific/darwin/shortcat { };
 
   sinit = callPackage ../os-specific/linux/sinit {
     rcinit = "/etc/rc.d/rc.init";
@@ -37735,6 +37736,8 @@ with pkgs;
   gortr = callPackage ../servers/gortr {};
 
   stayrtr = callPackage ../servers/stayrtr {};
+
+  sunshine = callPackage ../servers/sunshine {};
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
