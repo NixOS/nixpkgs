@@ -14,8 +14,8 @@
   "bin": {
     "yarn2nix": "bin/yarn2nix.js"
   },
-  "engines" : {
-    "node" : ">=8.0.0"
+  "engines": {
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
