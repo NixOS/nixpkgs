@@ -984,6 +984,8 @@ let
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
 
+    ocamline = callPackage ../development/ocaml-modules/ocamline { };
+
     jsonrpc = callPackage ../development/ocaml-modules/ocaml-lsp/jsonrpc.nix { };
     lsp = callPackage ../development/ocaml-modules/ocaml-lsp/lsp.nix { };
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
