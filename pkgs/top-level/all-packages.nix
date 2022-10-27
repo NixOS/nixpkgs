@@ -16095,6 +16095,7 @@ with pkgs;
 
   inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
     antlr4_9
+    antlr4_10
     antlr4_11;
 
   antlr4 = antlr4_8;
