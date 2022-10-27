@@ -1,4 +1,4 @@
-{ stdenv
+{ gcc10Stdenv
 , git
 , lib
 , fetchFromGitHub
@@ -12,7 +12,7 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+gcc10Stdenv.mkDerivation rec {
   pname = "arangodb";
   version = "3.10.0";
 
