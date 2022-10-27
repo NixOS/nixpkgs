@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.7.6.5";
+  version = "1.7.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R+DauHpRbAuZks1bDJCDSOTH2WQwTRBrIn+tKK4DIZ4=";
+    sha256 = "sha256-+TPwQE8+gIvIYHRayzt5zU/jHqGaIIiaZF+QBBW+YPE=";
   };
 
   propagatedBuildInputs = [
