@@ -27,6 +27,7 @@ let
     , system-sendmail
     , valgrind
     , xcbuild
+    , libxcrypt
 
     , version
     , hash
@@ -198,7 +199,7 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c libxcrypt ]
             ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
