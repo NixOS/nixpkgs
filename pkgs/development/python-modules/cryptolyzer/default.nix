@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "cryptolyzer";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchPypi {
     pname = "CryptoLyzer";
     inherit version;
-    sha256 = "sha256-FbxSjKxhzlpj3IezuLCQvoeZMG1q+OE/yn5vB/XE1rI=";
+    sha256 = "sha256-Bo8w9ijJu9IWdgr8OQws2iErzmuxUhs9YE6NAydPYgM=";
   };
 
   propagatedBuildInputs = [
