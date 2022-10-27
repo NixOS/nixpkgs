@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "nkdfu";
-  version = "0.1";
+  version = "0.2";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Y8GonfCBi3BNMhZ99SN6/SDSa0+dbfPIMPoVzALwH5A=";
+    sha256 = "sha256-8l913dOCxHKFtpQ83p9RV3sUlu0oT5PVi14FSuYJ9fg=";
   };
 
   propagatedBuildInputs = [
