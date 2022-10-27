@@ -45,6 +45,9 @@ gcc10Stdenv.mkDerivation rec {
     "-DUSE_MAINTAINER_MODE=OFF"
     "-DUSE_GOOGLE_TESTS=off"
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+
+    # avoid reading /proc/cpuinfo for feature detection
+    "-DTARGET_ARCHITECTURE=generic"
   ];
 
   meta = with lib; {
