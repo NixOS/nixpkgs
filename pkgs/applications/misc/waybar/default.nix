@@ -29,7 +29,7 @@
 , traySupport     ? true,  libdbusmenu-gtk3
 , udevSupport     ? true,  udev
 , upowerSupport   ? true,  upower
-, withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
+, withMediaPlayer ? false, glib, gobject-introspection, python3, python310Packages, playerctl
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
     playerctl
-    python38Packages.pygobject3
+    python310Packages.pygobject3
   ];
   strictDeps = false;
 
