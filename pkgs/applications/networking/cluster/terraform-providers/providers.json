@@ -868,13 +868,13 @@
     "version": "1.0.1"
   },
   "openstack": {
-    "hash": "sha256-I2Rl/Z6KHEkhaoslqMD+ZQ8vOnIwLDDJIP3P/3sTWcw=",
+    "hash": "sha256-k5UyK9jmjZzHw8AwmDRtyCyJgILAcCK+nN+hklJ9VFw=",
     "owner": "terraform-provider-openstack",
     "provider-source-address": "registry.terraform.io/terraform-provider-openstack/openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.48.0",
-    "vendorHash": "sha256-XB8odOjqSVg/TJApHCZnlReJYTyD89u7axSilMlIALk=",
-    "version": "1.48.0"
+    "rev": "v1.49.0",
+    "vendorHash": "sha256-hHwFm+gSMjN4YQEFd/dd50G0uZsxzqi21tHDf4mPBLY=",
+    "version": "1.49.0"
   },
   "opentelekomcloud": {
     "hash": "sha256-oqagD7YK/HyAoeI5WBrHuAmWiLoz/1441zne8vqN3A8=",
