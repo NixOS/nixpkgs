@@ -41,7 +41,11 @@ gcc10Stdenv.mkDerivation rec {
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
   '';
 
-  cmakeFlags = [ "-DUSE_MAINTAINER_MODE=OFF" ];
+  cmakeFlags = [
+    "-DUSE_MAINTAINER_MODE=OFF"
+    "-DUSE_GOOGLE_TESTS=off"
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+  ];
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";
