@@ -1054,7 +1054,7 @@ self: super: builtins.intersectAttrs super {
   # Make sure that Cabal 3.8.* can be built as-is
   Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # cabal-install switched to build type simple in 3.2.0.0
