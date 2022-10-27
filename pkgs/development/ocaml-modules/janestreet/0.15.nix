@@ -849,6 +849,13 @@ with self;
     propagatedBuildInputs = [ base ppx_jane ];
   };
 
+  redis-async = janePackage {
+    pname = "redis-async";
+    hash = "0pccf4gkm880yyk8x4kgy5rwblkbscxav2sbis13abpms9vr7jfn";
+    meta.description = "Redis client for Async applications";
+    propagatedBuildInputs = [ async bignum core core_kernel ppx_jane ];
+  };
+
   resource_cache = janePackage {
     pname = "resource_cache";
     hash = "13wzx8ixgbb7jj5yrps890irw2wvkchnihsn7rfrcvnvrjzzjshm";
