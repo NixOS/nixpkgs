@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "chiavdf";
-  version = "1.0.7";
+  version = "1.0.8";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-956517eGqRSLg+Y4ybmASiZoypgpYn/D9lbPA4Rcfts=";
+    hash = "sha256-ilT7tCdX8ak3qmpXJ0LITf0ZGAdFSN4tm6GKw06A/m8=";
   };
 
   patches = [
