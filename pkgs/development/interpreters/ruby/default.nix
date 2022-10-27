@@ -91,10 +91,12 @@ let
         enableParallelBuilding = true;
 
         patches =
-          (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops fetchpatch;
-            patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny}
+          (ops useRailsExpress
+            (import ./patchsets.nix {
+              inherit patchSet;
+              version = ver.majMinTiny;
+            })
+          )
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           ++ ops (!atLeast30 && rubygemsSupport) [
