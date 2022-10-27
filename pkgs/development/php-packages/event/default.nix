@@ -23,10 +23,7 @@ buildPecl {
   internalDeps = [ php.extensions.sockets ];
 
   meta = with lib; {
-    description = ''
-      This is an extension to efficiently schedule I/O, time and signal based
-      events using the best I/O notification mechanism available for specific platform.
-    '';
+    description = "Efficiently schedule I/O, time and signal based events using the best I/O notification mechanism available";
     license = licenses.php301;
     homepage = "https://bitbucket.org/osmanov/pecl-event/";
     maintainers = teams.php.members;
