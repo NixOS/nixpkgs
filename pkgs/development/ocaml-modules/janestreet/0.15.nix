@@ -656,6 +656,16 @@ with self;
     propagatedBuildInputs = [ base_quickcheck ppx_bin_prot ppx_disable_unused_warnings ppx_expect ppx_fixed_literal ppx_ignore_instrumentation ppx_log ppx_module_timer ppx_optcomp ppx_optional ppx_pipebang ppx_stable ppx_string ppx_typerep_conv ppx_variants_conv ];
   };
 
+  ppx_jsonaf_conv = janePackage {
+    pname = "ppx_jsonaf_conv";
+    version = "0.15.1";
+    hash = "0wprs7qmscklyskj4famhaqqisi6jypy414aqba14qdyi43w0cv3";
+    minimumOCamlVersion = "4.08";
+    meta.description =
+      "[@@deriving] plugin to generate Jsonaf conversion functions";
+    propagatedBuildInputs = [ base jsonaf ppx_jane ppxlib ];
+  };
+
   ppx_js_style = janePackage {
     pname = "ppx_js_style";
     hash = "0q2p9pvmlncgv0hprph95xiv7s6q44ynvp4yl4dckf1qx68rb3ba";
