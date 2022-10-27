@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-effects";
-  version = "0.2.2";
+  version = "0.3.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "aiolifx_effects";
-    sha256 = "sha256-qkXJDYdJ+QyQWn/u7g6t4QJG1uSqle+a5RhTkPPsHKo=";
+    sha256 = "sha256-6mFsQMrsEMhO9drsMMRhv8QY+eDPuskpJyazx3vG7Ko=";
   };
 
   propagatedBuildInputs = [ aiolifx ];
