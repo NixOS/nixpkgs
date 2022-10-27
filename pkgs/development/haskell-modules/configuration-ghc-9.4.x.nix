@@ -67,19 +67,12 @@ in {
   cabal-install = doJailbreak super.cabal-install;
   cabal-install-solver = doJailbreak super.cabal-install-solver;
 
-  # Test failure due to new Cabal 3.8 version. Since the failure only pertains
-  # to a change in how Cabal internally represents some platforms and we depend
-  # on the type of representation anywhere, this failure is harmless. Can be
-  # removed after https://github.com/NixOS/cabal2nix/pull/571 is merged.
-  # TODO(@sternenseemann): merge and release a fixed version
-  distribution-nixpkgs = dontCheck super.distribution-nixpkgs;
   cabal2nix =
     # cabal2nix depends on foundation, which is broken on aarch64-linux.
     # https://github.com/haskell-foundation/foundation/issues/571
     overrideCabal
       (drv: { badPlatforms = [ "aarch64-linux" ]; })
-      (dontCheck super.cabal2nix);
-  cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
+      super.cabal2nix;
 
   doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
