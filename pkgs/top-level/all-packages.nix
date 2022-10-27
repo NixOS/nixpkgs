@@ -37202,6 +37202,8 @@ with pkgs;
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
+  vhs = callPackage ../applications/misc/vhs { };
+
   vgmstream = callPackage ../applications/audio/vgmstream { };
 
   viddy = callPackage ../tools/misc/viddy { };
