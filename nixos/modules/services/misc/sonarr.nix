@@ -40,7 +40,7 @@ in
         type = types.package;
         default = pkgs.sonarr;
         defaultText = literalExpression "pkgs.sonarr";
-        description = ''
+        description = lib.mdDoc ''
           Sonarr package to use.
         '';
       };
