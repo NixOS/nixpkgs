@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, efl, python3Packages, dbus, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, dbus
+, efl
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   pname = "econnman";
@@ -9,11 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
   };
 
-  nativeBuildInputs = [ makeWrapper pkg-config python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3Packages.wrapPython
+  ];
 
-  buildInputs = [ efl python3Packages.python dbus ];
+  buildInputs = [
+    dbus
+    efl
+    python3Packages.python
+  ];
 
-  pythonPath = [ python3Packages.pythonefl python3Packages.dbus-python ];
+  pythonPath = [
+    python3Packages.dbus-python
+    python3Packages.pythonefl
+  ];
 
   postInstall = ''
     wrapPythonPrograms
