@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.8.4";
+  version = "1.8.5.post1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
+    sha256 = "sha256-7zvnBcPqwoKigFjmxuVQNBmyUPSCMg3yFyq8vqZCyDE=";
   };
 
   nativeBuildInputs = [
