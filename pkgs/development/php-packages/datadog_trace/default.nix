@@ -7,7 +7,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-AYRBzE0Detg/IHXYutZUfPRMtfthxdkSjqD0M+VcTpY=";
   };
 
