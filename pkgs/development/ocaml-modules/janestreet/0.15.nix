@@ -338,11 +338,36 @@ with self;
     propagatedBuildInputs = [ base ];
   };
 
+  file_path = janePackage {
+    pname = "file_path";
+    minimumOCamlVersion = "4.11";
+    hash = "0vjvxviryywwwfdazcijwhpajp2d4mavlki7lj4qaafjrw62x14k";
+    meta.description =
+      "A library for typed manipulation of UNIX-style file paths";
+    propagatedBuildInputs = [
+      async
+      core
+      core_kernel
+      core_unix
+      expect_test_helpers_async
+      expect_test_helpers_core
+      ppx_jane
+    ];
+  };
+
   fuzzy_match = janePackage {
     pname = "fuzzy_match";
     hash = "0s5w81698b07l5m11nwx8xbjcpmp54dnf5fcrnlva22jrlsf14h4";
     meta.description = "A library for fuzzy string matching";
     propagatedBuildInputs = [ core ppx_jane ];
+  };
+
+  fzf = janePackage {
+    pname = "fzf";
+    minimumOCamlVersion = "4.08";
+    hash = "1ha0i6dx5bgwzbdi4rn98wjwi2imv5p2i7qs7hy0c6cmg88xbdry";
+    meta.description = "A library for running the fzf command line tool";
+    propagatedBuildInputs = [ async core_kernel ppx_jane ];
   };
 
   higher_kinded = janePackage {
@@ -631,6 +656,16 @@ with self;
     propagatedBuildInputs = [ base_quickcheck ppx_bin_prot ppx_disable_unused_warnings ppx_expect ppx_fixed_literal ppx_ignore_instrumentation ppx_log ppx_module_timer ppx_optcomp ppx_optional ppx_pipebang ppx_stable ppx_string ppx_typerep_conv ppx_variants_conv ];
   };
 
+  ppx_jsonaf_conv = janePackage {
+    pname = "ppx_jsonaf_conv";
+    version = "0.15.1";
+    hash = "0wprs7qmscklyskj4famhaqqisi6jypy414aqba14qdyi43w0cv3";
+    minimumOCamlVersion = "4.08";
+    meta.description =
+      "[@@deriving] plugin to generate Jsonaf conversion functions";
+    propagatedBuildInputs = [ base jsonaf ppx_jane ppxlib ];
+  };
+
   ppx_js_style = janePackage {
     pname = "ppx_js_style";
     hash = "0q2p9pvmlncgv0hprph95xiv7s6q44ynvp4yl4dckf1qx68rb3ba";
@@ -812,6 +847,13 @@ with self;
     hash = "004nqcmwll0vy47mb3d3jlk21cc6adcjy62dkv2k966n9jkh472h";
     meta.description = "A library which provides traversal of records with an applicative";
     propagatedBuildInputs = [ base ppx_jane ];
+  };
+
+  redis-async = janePackage {
+    pname = "redis-async";
+    hash = "0pccf4gkm880yyk8x4kgy5rwblkbscxav2sbis13abpms9vr7jfn";
+    meta.description = "Redis client for Async applications";
+    propagatedBuildInputs = [ async bignum core core_kernel ppx_jane ];
   };
 
   resource_cache = janePackage {

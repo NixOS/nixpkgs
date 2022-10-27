@@ -450,9 +450,7 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  datalad = callPackage ../applications/version-management/datalad {
-    python3 = python39;  # `boto` currently broken with Python3.10
-  };
+  datalad = callPackage ../applications/version-management/datalad { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
@@ -17309,9 +17307,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pahole = callPackage ../development/tools/misc/pahole {
-    libbpf = libbpf_1;
-  };
+  pahole = callPackage ../development/tools/misc/pahole {};
 
   panopticon = callPackage ../development/tools/analysis/panopticon {};
 
@@ -22752,7 +22748,9 @@ with pkgs;
     wt3
     wt4;
 
-  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
+  wxformbuilder = callPackage ../development/tools/wxformbuilder {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   wxGTK = wxGTK28;
 

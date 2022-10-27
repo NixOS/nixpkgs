@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.70.0";
+  version = "0.70.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k+DdShvCp6GmLaZBYKJ0zORWl26hVn2YWR2pbi0mWuY=";
+    sha256 = "sha256-H0YBy/6lMCuWkCIIyPGF5bGLJZtTWLyTzzkr9ZhxxbY=";
   };
 
   patches = [
@@ -47,11 +47,6 @@ stdenv.mkDerivation rec {
       name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       sha256 = "FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
-    })
-    # error: implicit declaration of function 'cfmakeraw' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/1f1f177ff797ac2bb453168951135865cfded900.patch";
-      sha256 = "sha256-VRVhq8JAshtcFejJkNUpMilo7tLgcojlEnCTrAtGVa0=";
     })
   ];
 
