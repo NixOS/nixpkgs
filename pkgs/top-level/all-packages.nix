@@ -22742,7 +22742,9 @@ with pkgs;
     wt3
     wt4;
 
-  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
+  wxformbuilder = callPackage ../development/tools/wxformbuilder {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   wxGTK = wxGTK28;
 
