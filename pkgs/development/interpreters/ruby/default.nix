@@ -11,14 +11,16 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  generic = { version, sha256 }: let
+  rvmPatchsets = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
+  patchsets = import ./patchsets.nix { inherit rvmPatchsets; };
+
+  generic = { version, sha256, railsExpressPatches }: let
     ver = version;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     self = lib.makeOverridable (
@@ -91,10 +93,7 @@ let
         enableParallelBuilding = true;
 
         patches =
-          (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops fetchpatch;
-            patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny}
+          (ops useRailsExpress railsExpressPatches)
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
           ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
           ++ ops (!atLeast30 && rubygemsSupport) [
@@ -259,18 +258,21 @@ in {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_2_7 = generic {
+  ruby_2_7 = generic rec {
     version = rubyVersion "2" "7" "6" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
+    railsExpressPatches = patchsets.${version.majMinTiny};
   };
 
-  ruby_3_0 = generic {
+  ruby_3_0 = generic rec {
     version = rubyVersion "3" "0" "4" "";
     sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+    railsExpressPatches = patchsets.${version.majMinTiny};
   };
 
-  ruby_3_1 = generic {
+  ruby_3_1 = generic rec {
     version = rubyVersion "3" "1" "2" "";
     sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
+    railsExpressPatches = patchsets.${version.majMinTiny};
   };
 }
