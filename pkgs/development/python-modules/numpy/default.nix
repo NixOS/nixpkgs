@@ -40,14 +40,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.23.3";
+  version = "1.23.4";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-Ub9JwM0dUr4KJAqmbzRYr8S5XYmT0tBPDZH6YMEK9s0=";
+    hash = "sha256-7SzJKvDvrSAZhjjGm7D8KHCljav7putyLJM7SFVsaGw=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
