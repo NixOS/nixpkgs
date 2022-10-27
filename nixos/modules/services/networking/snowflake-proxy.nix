@@ -71,7 +71,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @mount @obsolete @reboot @swap @privileged @resources";
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
     };

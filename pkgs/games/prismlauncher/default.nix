@@ -10,6 +10,7 @@
 , xorg
 , libpulseaudio
 , qtbase
+, qtsvg
 , libGL
 , quazip
 , glfw
@@ -41,9 +42,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ extra-cmake-modules ghc_filesystem cmake file jdk wrapQtAppsHook ];
-  buildInputs = [ qtbase zlib quazip tomlplusplus ];
+  buildInputs = [ qtbase qtsvg zlib quazip tomlplusplus ];
 
-  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
+  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+    ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
   dontWrapQtApps = true;
 
   postUnpack = ''

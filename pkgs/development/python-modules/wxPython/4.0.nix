@@ -12,7 +12,6 @@
 , ncurses
 , libintl
 , wxGTK
-, wxmac
 , IOKit
 , Carbon
 , Cocoa
@@ -36,8 +35,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkg-config which doxygen setuptools ]
-  ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
+  nativeBuildInputs = [ pkg-config which doxygen setuptools wxGTK ];
 
   buildInputs = [ ncurses libintl ]
   ++ (if stdenv.isDarwin
@@ -64,6 +62,9 @@ buildPythonPackage rec {
         ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
         ("appsvc",     None)
       ]}'
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # Remove the OSX-Only wx.webkit module
+    sed -i "s/makeETGRule(.*'WXWEBKIT')/pass/" wscript
   '';
 
   buildPhase = ''
@@ -74,7 +75,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py install --skip-build --prefix=$out
   '';
 
-  passthru = { wxWidgets = if stdenv.isDarwin then wxmac else wxGTK; };
+  passthru = { wxWidgets = wxGTK; };
 
 
   meta = {

@@ -314,6 +314,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
@@ -763,6 +771,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>adguardhome</literal> module no longer uses
+          <literal>host</literal> and <literal>port</literal> options,
+          use <literal>settings.bind_host</literal> and
+          <literal>settings.bind_port</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The default <literal>kops</literal> version is now 1.25.1 and
           support for 1.22 and older has been dropped.
         </para>
@@ -883,6 +899,15 @@
           config file’s path has also moved from
           <literal>~/.local/share/polymc/polymc.cfg</literal> to
           <literal>~/.local/share/PrismLauncher/prismlauncher.cfg</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>bloat</literal> package has been updated from
+          unstable-2022-03-31 to unstable-2022-10-25, which brings a
+          breaking change. See
+          <link xlink:href="https://git.freesoftwareextremist.com/bloat/commit/?id=887ed241d64ba5db3fd3d87194fb5595e5ad7d73">this
+          upstream commit message</link> for details.
         </para>
       </listitem>
       <listitem>

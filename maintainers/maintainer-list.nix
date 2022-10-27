@@ -326,10 +326,10 @@
     name = "Maxwell Huang-Hobbs";
   };
   adjacentresearch = {
-     email = "nate@adjacentresearch.xyz";
-     github = "0xperp";
-     githubId = 96147421;
-     name = "0xperp";
+    email = "nate@adjacentresearch.xyz";
+    github = "0xperp";
+    githubId = 96147421;
+    name = "0xperp";
   };
   adnelson = {
     email = "ithinkican@gmail.com";
@@ -528,10 +528,10 @@
     name = "Aksh Gupta";
   };
   alapshin = {
-      email = "alapshin@fastmail.com";
-      github = "alapshin";
-      githubId = 321946;
-      name = "Andrei Lapshin";
+    email = "alapshin@fastmail.com";
+    github = "alapshin";
+    githubId = 321946;
+    name = "Andrei Lapshin";
   };
   albakham = {
     email = "dev@geber.ga";
@@ -5760,7 +5760,7 @@
     githubId = 40234257;
     name = "ilkecan bozdogan";
   };
-  not-my-segfault =  {
+  not-my-segfault = {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
     github = "not-my-segfault";
@@ -10755,6 +10755,15 @@
       fingerprint = "B00F E582 FD3F 0732 EA48  3937 F558 14E4 D687 4375";
     }];
   };
+  PlayerNameHere = {
+    name = "Dixon Sean Low Yan Feng";
+    email = "dixonseanlow@protonmail.com";
+    github = "PlayerNameHere";
+    githubId = 56017218;
+    keys = [{
+      fingerprint = "E6F4 BFB4 8DE3 893F 68FC  A15F FF5F 4B30 A41B BAC8";
+    }];
+  };
   plchldr = {
     email = "mail@oddco.de";
     github = "plchldr";
@@ -10766,6 +10775,12 @@
     github = "plcplc";
     githubId = 358550;
     name = "Philip Lykke Carlsen";
+  };
+  pleshevskiy = {
+    email = "dmitriy@pleshevski.ru";
+    github = "pleshevskiy";
+    githubId = 7839004;
+    name = "Dmitriy Pleshevskiy";
   };
   plumps = {
     email = "maks.bronsky@web.de";
@@ -14076,11 +14091,11 @@
     name = "Urban Skudnik";
   };
   usrfriendly = {
-      name = "Arin Lares";
-      email = "arinlares@gmail.com";
-      github = "usrfriendly";
-      githubId = 2502060;
-    };
+    name = "Arin Lares";
+    email = "arinlares@gmail.com";
+    github = "usrfriendly";
+    githubId = 2502060;
+  };
   utdemir = {
     email = "me@utdemir.com";
     github = "utdemir";

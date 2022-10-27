@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
     rev = "refs/tags/${version}";
-    hash = "sha256-De/dxZLNTJT6DuTa/piavNsLhr6lsPKqR5rQNrvwXGQ=";
+    hash = "sha256-5SnjAkIrsgyEQ9nrBfe1jL+y4cxFzRVao2PM3VPIz8c=";
   };
 
   propagatedBuildInputs = [

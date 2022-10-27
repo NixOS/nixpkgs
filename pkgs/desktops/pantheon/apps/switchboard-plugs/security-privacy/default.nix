@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jT8aYE36ZAeB9ng3RojVqxzmLtzpbsNRHPuDQ03XKcI=";
+    sha256 = "sha256-k8IQumV8rjV3U4ACm5FxCqzSdwqKBaGAqsv45hsP/7c=";
   };
 
   nativeBuildInputs = [

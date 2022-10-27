@@ -50,7 +50,7 @@ let
 
       kafka.wait_until_succeeds(
           "${kafkaPackage}/bin/kafka-topics.sh --create "
-          + "--zookeeper zookeeper1:2181 --partitions 1 "
+          + "--bootstrap-server localhost:9092 --partitions 1 "
           + "--replication-factor 1 --topic testtopic"
       )
       kafka.succeed(
@@ -58,19 +58,12 @@ let
           + "${kafkaPackage}/bin/kafka-console-producer.sh "
           + "--broker-list localhost:9092 --topic testtopic"
       )
-    '' + (if name == "kafka_0_9" then ''
-      assert "test 1" in kafka.succeed(
-          "${kafkaPackage}/bin/kafka-console-consumer.sh "
-          + "--zookeeper zookeeper1:2181 --topic testtopic "
-          + "--from-beginning --max-messages 1"
-      )
-    '' else ''
       assert "test 1" in kafka.succeed(
           "${kafkaPackage}/bin/kafka-console-consumer.sh "
           + "--bootstrap-server localhost:9092 --topic testtopic "
           + "--from-beginning --max-messages 1"
       )
-    '');
+    '';
   }) { inherit system; });
 
 in with pkgs; {
