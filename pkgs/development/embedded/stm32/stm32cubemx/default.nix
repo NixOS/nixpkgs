@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
+  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems ];
   desktopItems = [
     (makeDesktopItem {
       name = "stm32CubeMX";
@@ -30,9 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildCommand = ''
-    mkdir -p $out/{bin,opt/STM32CubeMX}
+    mkdir -p $out/{bin,opt/STM32CubeMX,share/applications}
+
     cp -r $src/MX/. $out/opt/STM32CubeMX/
     chmod +rx $out/opt/STM32CubeMX/STM32CubeMX
+
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
     ${jdk11}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
@@ -52,6 +54,19 @@ stdenv.mkDerivation rec {
           $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
       fi
     done;
+
+    cat << EOF > $out/share/applications/stm32cubemx.desktop
+    [Desktop Entry]
+    Name=STM32CubeMX
+    Exec=stm32cubemx %F
+    Terminal=false
+    Type=Application
+    Icon=stm32cubemx
+    StartupWMClass=STM32CubeMX
+    Comment=A graphical tool for configuring STM32 microcontrollers and microprocessors
+    MimeType=x-scheme-handler/sgnl;x-scheme-handler/signalcaptcha;
+    Categories=Programming;
+    EOF
   '';
 
   meta = with lib; {
