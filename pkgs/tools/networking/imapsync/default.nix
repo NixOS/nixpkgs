@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imapsync";
-  version = "2.200";
+  version = "2.229";
 
   src = fetchFromGitHub {
     owner = "imapsync";
     repo = "imapsync";
     rev = "imapsync-${version}";
-    sha256 = "sha256-EM8nT9v6ZHpEG33/ibPqvfgFoAF36nhq6Y+RUWK4vR0=";
+    sha256 = "sha256-nlNePOV3Y0atEPSRByRo3dHj/WjIaefEDeWdMKTo4gc=";
   };
 
   postPatch = ''
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     NTLM
     PackageStash
     PackageStashXS
+    ProcProcessTable
     Readonly
     RegexpCommon
     SysMemInfo

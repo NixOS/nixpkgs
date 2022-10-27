@@ -4,12 +4,12 @@
 
 buildDunePackage rec {
   pname = "bls12-381";
-  version = "4.0.0";
+  version = "5.0.0";
   src = fetchFromGitLab {
     owner = "dannywillems";
     repo = "ocaml-bls12-381";
     rev = version;
-    sha256 = "sha256-K9AsYUAUdk4XnspUalJKX5kycDFwO8PZx4bGaD3qZv8=";
+    sha256 = "sha256-Hy/I+743HSToZgGPFFiAbx7nrybHsE2PwycDsu3DuHM=";
   };
 
   minimalOCamlVersion = "4.08";

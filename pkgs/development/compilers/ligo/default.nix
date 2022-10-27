@@ -9,12 +9,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.53.0";
+  version = "0.54.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-WNiN9UrwXCwfxWnR5oPm9sGWelQCpooCXh43T2QaOnI=";
+    sha256 = "sha256-Iq72gDaS05yhxAYjIUrqiCwBkx5aWbVpYPcQlgojhNU=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +78,7 @@ ocamlPackages.buildDunePackage rec {
     ipaddr
     bls12-381
     bls12-381-legacy
+    bls12-381-signature
     ptime
     mtime
     lwt_log
