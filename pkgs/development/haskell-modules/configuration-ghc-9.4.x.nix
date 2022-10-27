@@ -10,7 +10,6 @@ in
 
 with haskellLib;
 self: super: let
-  doctest_0_20_broken = p: checkAgainAfter self.doctest "0.20.0" "doctest broken on 9.4" (dontCheck p);
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -82,21 +81,8 @@ in {
       (dontCheck super.cabal2nix);
   cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
 
-  # build fails on due to ghc api changes
-  # unfinished PR that doesn't yet compile:
-  # https://github.com/sol/doctest/pull/375
-  doctest = markBroken super.doctest_0_20_0;
+  doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
-  http-types = doctest_0_20_broken super.http-types;
-  iproute = doctest_0_20_broken super.iproute;
-  foldl = doctest_0_20_broken super.foldl;
-  prettyprinter-ansi-terminal = doctest_0_20_broken super.prettyprinter-ansi-terminal;
-  pretty-simple = doctest_0_20_broken super.pretty-simple;
-  http-date = doctest_0_20_broken super.http-date;
-  network-byte-order = doctest_0_20_broken super.network-byte-order;
-  co-log-core = doctest_0_20_broken (doJailbreak super.co-log-core);
-  xml-conduit = doctest_0_20_broken (dontCheck super.xml-conduit);
-  validation-selective = doctest_0_20_broken (dontCheck super.validation-selective);
 
   double-conversion = markBroken super.double-conversion;
   blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
@@ -114,7 +100,6 @@ in {
   # Jailbreaks & Version Updates
 
   aeson = self.aeson_2_1_1_0;
-  aeson-diff = doctest_0_20_broken (dontCheck super.aeson-diff);
   lens-aeson = self.lens-aeson_1_2_2;
 
   assoc = doJailbreak super.assoc;
@@ -153,7 +138,7 @@ in {
 
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/GetShopTV/swagger2/pull/242
-  swagger2 = doctest_0_20_broken (dontCheck (doJailbreak super.swagger2));
+  swagger2 = doJailbreak super.swagger2;
 
   base-orphans = dontCheck super.base-orphans;
 
