@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-metadata";
-  version = "2.0.2";
+  version = "2.0.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/NL0FvFb4pWUNSezyLoWpErlpxQZOckMPcXOnRZ88qU=";
+    sha256 = "sha256-Sgm3WCpLgwe+fGBLw5LTO5zAODGl7WL5vD0I5LxyElA=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
