@@ -338,6 +338,23 @@ with self;
     propagatedBuildInputs = [ base ];
   };
 
+  file_path = janePackage {
+    pname = "file_path";
+    minimumOCamlVersion = "4.11";
+    hash = "0vjvxviryywwwfdazcijwhpajp2d4mavlki7lj4qaafjrw62x14k";
+    meta.description =
+      "A library for typed manipulation of UNIX-style file paths";
+    propagatedBuildInputs = [
+      async
+      core
+      core_kernel
+      core_unix
+      expect_test_helpers_async
+      expect_test_helpers_core
+      ppx_jane
+    ];
+  };
+
   fuzzy_match = janePackage {
     pname = "fuzzy_match";
     hash = "0s5w81698b07l5m11nwx8xbjcpmp54dnf5fcrnlva22jrlsf14h4";
