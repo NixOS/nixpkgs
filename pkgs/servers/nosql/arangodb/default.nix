@@ -43,7 +43,7 @@ gcc10Stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_MAINTAINER_MODE=OFF"
-    "-DUSE_GOOGLE_TESTS=off"
+    "-DUSE_GOOGLE_TESTS=OFF"
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
