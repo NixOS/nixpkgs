@@ -11907,7 +11907,7 @@ self: super: with self; {
 
   wxPython_4_1 = callPackage ../development/python-modules/wxPython/4.1.nix {
     inherit (pkgs.darwin.apple_sdk.frameworks) AGL AudioToolbox AVFoundation AVKit Carbon Cocoa CoreMedia CoreFoundation IOKit Kernel OpenGL Security WebKit;
-    wxGTK = pkgs.wxGTK31-gtk3.override {
+    wxGTK = pkgs.wxGTK31.override {
       withWebKit = true;
     };
   };

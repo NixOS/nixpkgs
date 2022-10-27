@@ -2,7 +2,8 @@
 , lib
 , fetchFromSourcehut
 , cmake
-, wxGTK
+, wxGTK31
+, gtk3
 , pkg-config
 , python3
 , gettext
@@ -123,8 +124,8 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK
-    wxGTK.gtk
+    wxGTK31
+    gtk3
   ] ++ lib.optionals stdenv.isLinux [
     at-spi2-core
     dbus
