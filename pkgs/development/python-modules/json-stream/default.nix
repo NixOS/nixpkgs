@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
-  version = "1.5.1";
+  version = "1.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-htajifmbXtivUwsORzBzJA68nJCACcL75kiBysVYCxY=";
+    hash = "sha256-5viV1IGQtTnEMePYYj7YaL7m0ABdWyE75u4mJW7yDrw=";
   };
 
   nativeBuildInputs = [
