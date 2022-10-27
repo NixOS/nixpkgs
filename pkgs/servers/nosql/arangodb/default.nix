@@ -14,10 +14,30 @@
 , snappy
 , lzo
 , which
+, targetArchitecture ? null
 }:
 
-gcc10Stdenv.mkDerivation rec {
+let
   pname = "arangodb";
+
+  default_arch =
+    if gcc10Stdenv.isx86_64
+    then "haswell"
+    else if gcc10Stdenv.isAarch64
+    then "zen"
+    else "none";
+
+  target_arch =
+    if isNull targetArchitecture
+    then
+      lib.warn
+        "${pname} target architecture not specified, choosing ${default_arch}"
+        default_arch
+    else targetArchitecture;
+in
+
+gcc10Stdenv.mkDerivation rec {
+  inherit pname;
   version = "3.10.0";
 
   src = fetchFromGitHub {
@@ -51,7 +71,7 @@ gcc10Stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
-    "-DTARGET_ARCHITECTURE=generic"
+    "-DTARGET_ARCHITECTURE=${target_arch}"
   ];
 
   meta = with lib; {
