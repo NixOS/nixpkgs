@@ -21167,6 +21167,8 @@ with pkgs;
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
 
+  nanomq = callPackage ../servers/mqtt/nanomq { };
+
   mps = callPackage ../development/libraries/mps { stdenv = gcc10StdenvCompat; };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
