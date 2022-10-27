@@ -458,6 +458,7 @@ broken-packages:
   - Bravo
   - brians-brain
   - brick-dropdownmenu
+  - brick-panes
   - bricks-internal
   - brillig
   - broccoli
@@ -876,6 +877,7 @@ broken-packages:
   - couchdb-conduit
   - couch-hs
   - counter
+  - country
   - courier
   - court
   - coverage
@@ -2280,6 +2282,7 @@ broken-packages:
   - hnn
   - hnop
   - hoauth
+  - hoauth2-providers
   - hoauth2-tutorial
   - hobbes
   - hobbits
@@ -2418,6 +2421,7 @@ broken-packages:
   - hslogger-reader
   - hslogger-template
   - hs-logo
+  - hslua-list
   - hsluv-haskell
   - hsmagick
   - HSmarty
@@ -2556,6 +2560,7 @@ broken-packages:
   - hw-playground-linear
   - hwsl2
   - hx
+  - hxmppc
   - HXQ
   - hxt-cache
   - hxt-pickle-utils
@@ -2626,6 +2631,7 @@ broken-packages:
   - imports
   - impossible
   - imprint
+  - incipit
   - indentation-core
   - index-core
   - indexed-containers
@@ -3414,6 +3420,7 @@ broken-packages:
   - mzv
   - n2o-protocols
   - nagios-plugin-ekg
+  - named-binary-tag
   - named-lock
   - named-servant
   - named-sop
@@ -3584,6 +3591,7 @@ broken-packages:
   - Omega
   - om-elm
   - om-fail
+  - om-http
   - om-http-logging
   - omnifmt
   - on-a-horse
@@ -4141,6 +4149,7 @@ broken-packages:
   - quibble-core
   - QuickAnnotate
   - quickcheck-arbitrary-template
+  - quickcheck-lockstep
   - quickcheck-property-comb
   - quickcheck-property-monad
   - quickcheck-rematch
@@ -4951,6 +4960,7 @@ broken-packages:
   - swagger
   - swagger-petstore
   - swagger-test
+  - swarm
   - swearjure
   - swf
   - swift-lda
@@ -5077,6 +5087,7 @@ broken-packages:
   - test-framework-skip
   - test-framework-testing-feat
   - test-framework-th-prime
+  - test-lib
   - testloop
   - testpack
   - testpattern
@@ -5357,6 +5368,7 @@ broken-packages:
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
+  - union
   - union-map
   - uniprot-kb
   - uniqueid
