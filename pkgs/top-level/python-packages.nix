@@ -5567,6 +5567,8 @@ self: super: with self; {
 
   mdformat = callPackage ../development/python-modules/mdformat { };
 
+  mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
+
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   mdurl = callPackage ../development/python-modules/mdurl { };
