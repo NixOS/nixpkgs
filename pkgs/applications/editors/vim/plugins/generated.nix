@@ -3453,6 +3453,18 @@ final: prev:
     meta.homepage = "https://github.com/ThePrimeagen/harpoon/";
   };
 
+  haskell-tools-nvim = buildVimPluginFrom2Nix {
+    pname = "haskell-tools.nvim";
+    version = "2022-10-26";
+    src = fetchFromGitHub {
+      owner = "MrcJkb";
+      repo = "haskell-tools.nvim";
+      rev = "f7f740901a667322bb0f70a50d405448afdf40c1";
+      sha256 = "1ncfpw0fyvg6xbvac6j0cwz0258q1hkvf5ci4ygp7apppymj5h80";
+    };
+    meta.homepage = "https://github.com/MrcJkb/haskell-tools.nvim/";
+  };
+
   haskell-vim = buildVimPluginFrom2Nix {
     pname = "haskell-vim";
     version = "2021-01-19";
