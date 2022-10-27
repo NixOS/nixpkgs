@@ -314,6 +314,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
