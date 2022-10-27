@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/econnman/${pname}-${version}.tar.gz";
-    sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
+    url = "http://download.enlightenment.org/rel/apps/econnman/${pname}-${version}.tar.xz";
+    sha256 = "sha256-DM6HaB+ufKcPHmPP4K5l/fF7wzRycFQxfiXjiXYZ7YU=";
   };
 
   nativeBuildInputs = [
