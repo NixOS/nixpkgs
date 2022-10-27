@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.2";
+  version = "5.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/rhhoQtsO7AHAQY7N+Svx1T4IX8PCcQigFhr1qxxK1w=";
+    sha256 = "sha256-fM/N/qT8SwoCyiwx3n/NGGvrnP+CB4AOFKtm95x3OvY=";
   };
 
   # We have many test failures on various parts of the package:
