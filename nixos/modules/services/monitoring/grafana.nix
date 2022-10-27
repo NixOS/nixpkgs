@@ -473,7 +473,6 @@ in {
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "admin";
               type = types.str;
             };
 
@@ -485,7 +484,6 @@ in {
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "SW2YcwTIb9zpOOhoPsMm";
               type = types.str;
             };
           };
@@ -1240,6 +1238,14 @@ in {
       {
         assertion = cfg.provision.alerting.muteTimings.settings == null || cfg.provision.alerting.muteTimings.path == null;
         message = "Cannot set both mute timings settings and mute timings path";
+      }
+      {
+        assertion = cfg.settings.security.admin_password == "admin";
+        message = "The default adminstrator user named 'admin' uses the insecure default password 'admin'";
+      }
+      {
+        assertion = cfg.settings.security.secret_key == "SW2YcwTIb9zpOOhoPsMm";
+        message = "The default, publicly known and insecure signing key 'SW2YcwTIb9zpOOhoPsMm' is used.";
       }
     ];
 
