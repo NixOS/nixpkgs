@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.8.4";
+  version = "2.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
