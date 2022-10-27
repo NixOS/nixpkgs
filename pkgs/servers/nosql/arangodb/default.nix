@@ -41,14 +41,7 @@ stdenv.mkDerivation rec {
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
   '';
 
-  cmakeFlags = [
-    # disable "maintainer mode"
-    "-DUSE_MAINTAINER_MODE=OFF"
-
-    # avoid using builder's /proc/cpuinfo
-    "-DHAVE_SSE42=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-    "-DASM_OPTIMIZATIONS=${if stdenv.hostPlatform.sse4_2Support then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ "-DUSE_MAINTAINER_MODE=OFF" ];
 
   meta = with lib; {
     homepage = "https://www.arangodb.com";
