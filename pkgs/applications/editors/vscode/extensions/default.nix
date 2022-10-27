@@ -1164,11 +1164,16 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.8.0";
-          sha256 = "sha256-VD1g4DJfA0vDJ0cyHFDEtCEqQo0nXfPC5vknEU91cPk=";
+          version = "0.11.0";
+          sha256 = "sha256-okvwyD0m2r8ar85VtuBUNMUZGGrCfJ4DB9v7aSX5PjM=";
         };
         meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
+          description = "Elixir support with debugger, autocomplete, and more. Powered by ElixirLS.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=JakeBecker.elixir-ls";
+          homepage = "https://github.com/elixir-lsp/elixir-ls";
           license = licenses.mit;
+          maintainers = with maintainers; [ datafoo ];
         };
       };
 
