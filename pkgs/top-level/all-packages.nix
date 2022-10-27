@@ -11334,6 +11334,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  russ = callPackage ../applications/networking/feedreaders/russ {
+    inherit (darwin.apple_sdk.frameworks) AppKit Security;
+  };
+
   rust-code-analysis = callPackage ../development/tools/rust-code-analysis { };
 
   rust-motd = callPackage ../tools/misc/rust-motd {
