@@ -13,6 +13,7 @@
 , libhandy
 , systemd
 , vte
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     libhandy
     systemd
     vte
+    xorg.libX11
   ];
 
   mesonFlags = [
