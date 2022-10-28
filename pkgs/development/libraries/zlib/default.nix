@@ -21,7 +21,7 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "zlib";
   version = "1.2.13";
 
@@ -47,6 +47,12 @@ stdenv.mkDerivation (rec {
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
+
+  dontConfigure = stdenv.hostPlatform.libc == "msvcrt";
+
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
 
   # For zlib's ./configure (as of verion 1.2.11), the order
   # of --static/--shared flags matters!
@@ -119,20 +125,10 @@ stdenv.mkDerivation (rec {
     "SHARED_MODE=1"
   ];
 
-  passthru = {
-    inherit version;
-  };
-
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preConfigure = ''
-    export CHOST=${stdenv.hostPlatform.config}
-  '';
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  dontConfigure = true;
-})
+}
