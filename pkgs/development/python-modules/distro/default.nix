@@ -1,23 +1,38 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.7.0";
+  version = "1.8.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FRrsz2DCFkApMrUuQO5HepOfjViJiSc3igKrvoUsHDk=";
+    sha256 = "sha256-AuER0dxqUKu47ta/McPkjtiwgw0eoqG3jGF2XCUT/dg=";
   };
 
-  # tests are very targeted at individual linux distributions
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  # Tests are very targeted at individual Linux distributions
   doCheck = false;
 
-  pythonImportsCheck = [ "distro" ];
+  pythonImportsCheck = [
+    "distro"
+  ];
 
   meta = with lib; {
+    description = "Library to gather information about the OS it runs on";
     homepage = "https://github.com/nir0s/distro";
-    description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }
