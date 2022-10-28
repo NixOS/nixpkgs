@@ -1,9 +1,9 @@
-{ lib, stdenv
+{ lib, stdenv, fetchurl
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradle_6
+, gradle
 , jdk
 , perl
 
@@ -27,30 +27,39 @@
 
 let
   pname = "mindustry";
-  # Note: when raising the version, ensure that all SNAPSHOT versions in
-  # build.gradle are replaced by a fixed version
-  # (the current one at the time of release) (see postPatch).
-  version = "126.2";
+  version = "139";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "URmjmfzQAVVl6erbh3+FVFdN7vGTNwYKPtcrwtt9vkg=";
+    sha256 = "CYIzLEHxAebbr0kAm6Rqqy+hb7D0Wdrpbrv/Kbdor9U=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "pUUak5P9t4RmSdT+/oH/8oo6l7rjIN08XDJ06TcUn8I=";
+    sha256 = "noD1NIOYJ6bo1WrlnksWYu4xTvrR/RCKTplqeTki1U0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
-    # this is never pinned in upstream, see https://github.com/Anuken/Arc/issues/39
-    rev = "b33dfc5178fcb2613ee68136f4a4869cadc0b06a";
-    sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
+    # This is pinned in Arc's arc-core/build.gradle
+    rev = "v0.8";
+    sha256 = "4PY1guLAiE5Att+ZDZpBgXBm2gVxetvjXMXO6EyF5x0=";
+  };
+  freetypeSource = fetchurl {
+    url = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz";
+    sha256 = "1b4dcngjcly9n80hnyr4d5s6qp8bspabfs7v3h07gb13pdg7kasy";
+  };
+  glewSource = fetchurl {
+    url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
+    sha256 = "1lbbjxl3a8vdillvv7654m6mp34lfkncvig5a8iwdmjpm214s29q";
+  };
+  SDLmingwSource = fetchurl {
+    url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
+    sha256 = "1lbbjxl3a8vdillvv7654m6mp34lfkncvig5a8iwdmjpm214s29q";
   };
 
   patches = [
@@ -81,13 +90,8 @@ let
     sed -i '/robo(vm|VM)/d' build.gradle
     rm ios/build.gradle
 
-    # Pin 'SNAPSHOT' versions
-    sed -i 's/com.github.anuken:packr:-SNAPSHOT/com.github.anuken:packr:034efe51781d2d8faa90370492133241bfb0283c/' build.gradle
-
     popd
   '';
-
-  gradle = (gradle_6.override (old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -113,7 +117,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "+7vSwQT6LwHgKE9DubISznq4G4DgvlnD7WaF1KywBzU=";
+    outputHash = "ytj9xNYhjZIqIDAGEVAU9CrOm5r3c0/qXT86boi9Bd0=";
   };
 
 in
@@ -124,8 +128,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # ensure the prebuilt shared objects don't accidentally get shipped
-    rm Arc/natives/natives-desktop/libs/libarc*.so
-    rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
   '' + cleanupMindustrySrc;
 
   buildInputs = lib.optionals enableClient [
@@ -149,18 +153,30 @@ stdenv.mkDerivation rec {
     export GRADLE_USER_HOME=$(mktemp -d)
 
     # point to offline repo
+    sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
     sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
+    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
+    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
+    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
+
 
     pushd Mindustry
   '' + optionalString enableClient ''
+
+    pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+    gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
     glewlib=${lib.getLib glew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
       --add-needed $sdllib
+    # Put the freshly-built libraries where the pre-built libraries used to be:
+    cp arc-core/libs/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    popd
+
     gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
   '' + optionalString enableServer ''
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}

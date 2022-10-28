@@ -4,13 +4,13 @@ Date: Fri, 8 Jan 2021 04:49:14 +0100
 Subject: [PATCH] fix include path for SDL2 on linux
 
 ---
- .../src/main/java/arc/backend/sdl/jni/SDL.java            | 8 --------
+ .../src/arc/backend/sdl/jni/SDL.java            | 8 --------
  1 file changed, 8 deletions(-)
 
-diff --git a/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java b/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java
+diff --git a/backends/backend-sdl/src/arc/backend/sdl/jni/SDL.java b/backends/backend-sdl/src/arc/backend/sdl/jni/SDL.java
 index 62d9286a..2853119d 100644
---- a/Arc/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java
-+++ b/Arc/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java
+--- a/Arc/backends/backend-sdl/src/arc/backend/sdl/jni/SDL.java
++++ b/Arc/backends/backend-sdl/src/arc/backend/sdl/jni/SDL.java
 @@ -8,16 +8,8 @@ import java.nio.*;
  public class SDL{
      /*JNI
