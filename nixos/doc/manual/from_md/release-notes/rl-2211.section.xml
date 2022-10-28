@@ -896,6 +896,23 @@
       </listitem>
       <listitem>
         <para>
+          The option <literal>overrideStrategy</literal> was added to
+          the different systemd unit options
+          (<literal>systemd.services.&lt;name&gt;</literal>,
+          <literal>systemd.sockets.&lt;name&gt;</literal>, …) to allow
+          enforcing the creation of a dropin file, rather than the main
+          unit file, by setting it to <literal>asDropin</literal>. This
+          is useful in cases where the existence of the main unit file
+          is not known to Nix at evaluation time, for example when the
+          main unit file is provided by adding a package to
+          <literal>systemd.packages</literal>. See the fix proposed in
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135557#issuecomment-1295392470">NixOS’s
+          systemd abstraction doesn’t work with systemd template
+          units</link> for an example.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>polymc</literal> package has been removed due to
           a rogue maintainer. It has been replaced by
           <literal>prismlauncher</literal>, a fork by the rest of the
