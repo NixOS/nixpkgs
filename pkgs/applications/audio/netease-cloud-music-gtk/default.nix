@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchFromGitHub
 , rustPlatform
 , meson
@@ -22,26 +21,18 @@
 
 stdenv.mkDerivation rec {
   pname = "netease-cloud-music-gtk";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "gmg137";
     repo = pname;
     rev = version;
-    hash = "sha256-0pmuzdRQBdUS4ORh3zJQWb/hbhk7SY3P4QMwoy4Mgp8=";
+    hash = "sha256-A3mvf6TZ3+aiWA6rg9G5NMaDKvO0VQzwIM1t0MaTpTc=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "add-cargo-lock-for-2.0.2.patch";
-      url = "https://github.com/gmg137/netease-cloud-music-gtk/commit/21b5d40d49e661fe7bd35ed10bb8b883ef7fcd9f.patch";
-      hash = "sha256-pSgc+yJQMNyLPYUMc1Kp/Kr+++2tH8srIM5PgVeoZ+E=";
-    })
-  ];
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    hash = "sha256-7Z5i5Xqtk4ZbBXSVYg1e05ENa2swC88Ctd2paE60Yyo=";
+    inherit src;
+    hash = "sha256-Y7rZTbg0zd/eoo6E8TmV8JJPs1N0bLlBjvB6W07Kelg=";
   };
 
   nativeBuildInputs = [
