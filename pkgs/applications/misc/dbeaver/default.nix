@@ -19,20 +19,18 @@
 , javaPackages
 }:
 
-(javaPackages.mavenfod.override {
-  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
-}) rec {
+javaPackages.mavenfod rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnSha256
+  version = "22.2.3"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    sha256 = "sha256-CY3Er+EmHA7fpOzwbo9vbcqkGW2AwLSB31RiEpRciaw=";
   };
 
-  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+  mvnSha256 = "4O8Tc3OhrHOtMpAOkvj75OwsVvw+OrOtnQOqks7nO3o=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [

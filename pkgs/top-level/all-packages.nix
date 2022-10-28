@@ -5700,15 +5700,7 @@ with pkgs;
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
-  dbeaver = callPackage ../applications/misc/dbeaver {
-    jdk = jdk11; # AlgorithmId.md5WithRSAEncryption_oid was removed in jdk15
-
-    # TODO: remove once maven uses JDK 11
-    # error: org/eclipse/tycho/core/p2/P2ArtifactRepositoryLayout has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0
-    maven = maven.override {
-      jdk = jdk11;
-    };
-  };
+  dbeaver = callPackage ../applications/misc/dbeaver { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
