@@ -89,6 +89,8 @@ pythonPackages.callPackage
         };
 
       format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
+
+      hooks = python.pkgs.callPackage ./hooks { };
     in
     buildPythonPackage {
       pname = normalizePackageName name;
@@ -103,18 +105,18 @@ pythonPackages.callPackage
       dontStrip = format == "wheel";
 
       nativeBuildInputs = [
-        pythonPackages.poetry2nixFixupHook
+        hooks.poetry2nixFixupHook
       ]
       ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
       ++ lib.optionals (format == "wheel") [
-        pythonPackages.wheelUnpackHook
+        hooks.wheelUnpackHook
         pythonPackages.pipInstallHook
         pythonPackages.setuptools
       ]
       ++ lib.optionals (format == "pyproject") [
-        pythonPackages.removePathDependenciesHook
-        pythonPackages.removeGitDependenciesHook
-        pythonPackages.pipBuildHook
+        hooks.removePathDependenciesHook
+        hooks.removeGitDependenciesHook
+        hooks.pipBuildHook
       ];
 
       buildInputs = (
