@@ -7901,6 +7901,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
   };
 
+  telescope_hoogle = buildVimPluginFrom2Nix {
+    pname = "telescope_hoogle";
+    version = "2022-10-27";
+    src = fetchFromGitHub {
+      owner = "luc-tielen";
+      repo = "telescope_hoogle";
+      rev = "6322f74655a2773974377a8fc8d170c00f24938f";
+      sha256 = "1pjq5bwnrxb3qhvvqd9v996hqfkbg5ah7qmbzrq1287h13m5jy2n";
+    };
+    meta.homepage = "https://github.com/luc-tielen/telescope_hoogle/";
+  };
+
   template-string-nvim = buildVimPluginFrom2Nix {
     pname = "template-string.nvim";
     version = "2022-08-18";
