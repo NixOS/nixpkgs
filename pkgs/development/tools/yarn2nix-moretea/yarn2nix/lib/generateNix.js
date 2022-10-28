@@ -1,4 +1,5 @@
 const R = require('ramda')
+const ssri = require('ssri')
 
 const urlToName = require('./urlToName')
 const { execFileSync } = require('child_process')
@@ -68,10 +69,22 @@ function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
   }`
 }
 
+function algoAndHash(sri, sha1OrRev) {
+    if(sri) {
+	const integrity = ssri.parse(sri)
+	// pick strongest algorithm of those available
+	const algo = integrity.pickAlgorithm()
+	// if >1 hash for this algo, we arbitrarily choose the first one
+	return [algo, integrity[algo][0]
+    } else {
+	return ['sha1', sha1OrRev]
+    }
+}
+
 function fetchLockedDep(builtinFetchGit) {
   return function (pkg) {
     const { integrity, nameWithVersion, resolved } = pkg
-
+    const hashes = ssri.parse(integrity)
     if (!resolved) {
       console.error(
         `yarn2nix: can't find "resolved" field for package ${nameWithVersion}, you probably required it using "file:...", this feature is not supported, ignoring`,
@@ -103,7 +116,7 @@ function fetchLockedDep(builtinFetchGit) {
       return fetchgit(fileName, urlForGit, rev, branch || 'master', builtinFetchGit)
     }
 
-    const [algo, hash] = integrity ? integrity.split('-') : ['sha1', sha1OrRev]
+    const [algo, hash] = algoAndHash(integrity, sha1OrRev)
 
     return `    {
       name = "${fileName}";
