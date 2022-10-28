@@ -1,5 +1,6 @@
 [
   ./config/debug-info.nix
+  ./config/dotd.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
