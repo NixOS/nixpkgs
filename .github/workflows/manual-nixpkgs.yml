@@ -22,7 +22,7 @@ jobs:
         with:
           # explicitly enable sandbox
           extra_nix_config: sandbox = true
-      - uses: cachix/cachix-action@v11
+      - uses: cachix/cachix-action@v12
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
