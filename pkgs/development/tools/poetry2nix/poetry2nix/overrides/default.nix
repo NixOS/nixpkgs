@@ -385,7 +385,7 @@ lib.composeManyExtensions [
           (
             old: {
               nativeBuildInputs = (old.nativeBuildInputs or [ ])
-                ++ lib.optionals (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
+                ++ lib.optional (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
                 ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
                 (with pkgs.rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
@@ -1061,9 +1061,9 @@ lib.composeManyExtensions [
 
           buildInputs = old.buildInputs or [ ] ++ [
             pkgs.which
-          ] ++ lib.optionals enableGhostscript [
+          ] ++ lib.optional enableGhostscript [
             pkgs.ghostscript
-          ] ++ lib.optionals stdenv.isDarwin [
+          ] ++ lib.optional stdenv.isDarwin [
             Cocoa
           ];
 
@@ -1080,7 +1080,7 @@ lib.composeManyExtensions [
 
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkg-config
-          ] ++ lib.optionals (lib.versionAtLeast super.matplotlib.version "3.5.0") [
+          ] ++ lib.optional (lib.versionAtLeast super.matplotlib.version "3.5.0") [
             self.setuptools-scm
             self.setuptools-scm-git-archive
           ];
@@ -2030,7 +2030,8 @@ lib.composeManyExtensions [
         if old.format != "wheel" then {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++
             [ pkgs.gfortran ] ++
-            lib.optionals (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ];
+            lib.optional (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ] ++
+            lib.optional (lib.versionAtLeast super.scipy.version "1.9.0") [ self.meson-python pkg-config ];
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.pybind11 ];
           setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
           enableParallelBuilding = true;
@@ -2039,7 +2040,7 @@ lib.composeManyExtensions [
             sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
             export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
           '';
-          preBuild = ''
+          preBuild = lib.optional (lib.versionOlder super.scipy.version "1.9.0") ''
             ln -s ${self.numpy.cfg} site.cfg
           '';
         } else old
