@@ -17628,6 +17628,8 @@ with pkgs;
 
   spruce = callPackage ../development/tools/misc/spruce {};
 
+  sqlboiler = callPackage ../development/tools/database/sqlboiler { };
+
   sqlc = callPackage ../development/tools/database/sqlc { };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
