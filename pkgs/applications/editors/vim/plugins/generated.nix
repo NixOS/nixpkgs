@@ -13212,6 +13212,18 @@ final: prev:
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
   };
 
+  yuck-vim = buildVimPluginFrom2Nix {
+    pname = "yuck.vim";
+    version = "2021-08-09";
+    src = fetchFromGitHub {
+      owner = "elkowar";
+      repo = "yuck.vim";
+      rev = "6dc3da77c53820c32648cf67cbdbdfb6994f4e08";
+      sha256 = "0890cyxnnvbbhv1irm0nxl5x7a49h1327cmhl1gmayigd4jym7ln";
+    };
+    meta.homepage = "https://github.com/elkowar/yuck.vim/";
+  };
+
   zeavim-vim = buildVimPluginFrom2Nix {
     pname = "zeavim.vim";
     version = "2019-06-07";
