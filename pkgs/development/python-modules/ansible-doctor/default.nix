@@ -12,6 +12,7 @@
 , poetry-core
 , python-json-logger
 , pythonOlder
+, pythonRelaxDepsHook
 , ruamel-yaml
 }:
 
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -46,19 +48,17 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  postInstall = ''
-    rm $out/lib/python*/site-packages/LICENSE
-  '';
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace 'Jinja2 = "3.1.2"' 'Jinja2 = "*"' \
-      --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
-      --replace 'environs = "9.5.0"' 'environs = "*"' \
-      --replace 'jsonschema = "4.15.0"' 'jsonschema = "*"' \
-      --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"' \
-      --replace 'python-json-logger = "2.0.4"' 'python-json-logger = "*"'
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  pythonRelaxDeps = [
+    "colorama"
+  ];
+
+  postInstall = ''
+    rm $out/lib/python*/site-packages/LICENSE
   '';
 
   # Module has no tests
