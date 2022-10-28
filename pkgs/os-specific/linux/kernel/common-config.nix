@@ -78,6 +78,7 @@ let
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
+      X86_AMD_PSTATE                   = whenAtLeast "5.17" module;
     };
 
     external-firmware = {

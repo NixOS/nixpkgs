@@ -8,8 +8,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "18.11.0";
-  sha256 = "sha256-i5ZD3G/OecHpk3nbDOZOQ2AeLi1ziQFf6JhcxMzQzhc=";
+  version = "19.0.0";
+  sha256 = "sha256-C3LSB6WBXxznskezPL+aLIb20BJT+jmQyXROJdl1BQ0=";
   patches = [
     (fetchpatch {
       # Fixes cross compilation to aarch64-linux by reverting https://github.com/nodejs/node/pull/43200
@@ -19,7 +19,7 @@ buildNodejs {
       revert = true;
     })
 
-    ./disable-darwin-v8-system-instrumentation.patch
+    ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
   ];
 }

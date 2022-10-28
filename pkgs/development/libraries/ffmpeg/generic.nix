@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   configureFlags = filter (v: v != null) ([
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+      "--pkg-config=${pkg-config.targetPrefix}pkg-config"
     # License
       "--enable-gpl"
       "--enable-version3"

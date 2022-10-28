@@ -46,9 +46,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (bareMetal) [
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    # The compiler-rt build infrastructure sniffs supported platforms on Darwin
-    # and finds i386;x86_64;x86_64h. We only build for x86_64, so linking fails
-    # when it tries to use libc++ and libc++api for i386.
+    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
   ];
@@ -60,6 +58,7 @@ stdenv.mkDerivation {
     ./find-darwin-sdk-version.patch # don't test for macOS being >= 10.15
     ./gnu-install-dirs.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
+    ./X86-support-extension.patch # backported from LLVM 11
   ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
@@ -69,6 +68,8 @@ stdenv.mkDerivation {
   # a flag and turn the flag off during the stdenv build.
   postPatch = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
+      --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
+    substituteInPlace cmake/config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
@@ -88,8 +89,16 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+    ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
+    ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  ''
+  # See https://reviews.llvm.org/D37278 for why android exception
+  + lib.optionalString (stdenv.hostPlatform.isx86_32 && !stdenv.hostPlatform.isAndroid) ''
+    for f in $out/lib/*/*builtins-i?86*; do
+      ln -s "$f" $(echo "$f" | sed -e 's/builtins-i.86/builtins-i386/')
+    done
   '';
 
   meta = llvm_meta // {
