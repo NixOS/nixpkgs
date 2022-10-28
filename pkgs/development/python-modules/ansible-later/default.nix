@@ -15,6 +15,7 @@
 , python-json-logger
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , toolz
 , unidiff
@@ -49,6 +50,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -71,6 +73,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-mock
     pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "colorama"
   ];
 
   postInstall = ''
