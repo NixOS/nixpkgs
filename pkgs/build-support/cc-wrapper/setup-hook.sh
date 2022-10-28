@@ -69,12 +69,10 @@ ccWrapper_addCVars () {
     getHostRoleEnvHook
 
     if [ -d "$1/include" ]; then
-        (! echo "$NIX_CFLAGS_COMPILE" | grep -q -F "$1/include") &&
         export NIX_CFLAGS_COMPILE${role_post}+=" -isystem $1/include"
     fi
 
     if [ -d "$1/Library/Frameworks" ]; then
-        (! echo "$NIX_CFLAGS_COMPILE" | grep -q -F "$1/Library/Frameworks") &&
         export NIX_CFLAGS_COMPILE${role_post}+=" -iframework $1/Library/Frameworks"
     fi
 }
