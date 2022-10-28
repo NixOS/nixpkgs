@@ -6476,6 +6476,8 @@ with pkgs;
 
   fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
+  fcitx5-material-color = callPackage ../tools/inputmethods/fcitx5/fcitx5-material-color.nix { };
+
   fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
     abseil-cpp = abseil-cpp.override {
       cxxStandard = "17";
