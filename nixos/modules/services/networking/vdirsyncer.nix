@@ -106,7 +106,7 @@ in
             forceDiscover = mkOption {
               type = types.bool;
               default = false;
-              description = literalMD ''
+              description = mdDoc ''
                 Run `yes | vdirsyncer discover` prior to `vdirsyncer sync`
               '';
             };
