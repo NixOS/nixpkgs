@@ -7,11 +7,11 @@
 # Use update.sh to update all checksums.
 
 let
-  version = "8.8.278.14";
+  version = "8.8.278.17";
   v8Src = fetchgit {
     url = "https://chromium.googlesource.com/v8/v8";
     rev = version;
-    sha256 = "0w6zldyas9w6p394876ssn3pnr5rjzjy1a5dcsmdkfj51m4rlg8m";
+    sha256 = "191b936c36vcnzcjxq9zr37g9jgpj0qfbr0yv9zscsbn656b2zxr";
   };
 
   git_url = "https://chromium.googlesource.com";
