@@ -28,10 +28,10 @@ let
 in
   assert oldVer -> stdenv.isDarwin; # reduce likelihood of using old libxml2 unintentionally
 
-stdenv.mkDerivation rec {
+let
+libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = if oldVer then "2.10.1" else
-    "2.10.2";
+  version = "2.10.3";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -39,9 +39,8 @@ stdenv.mkDerivation rec {
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = if oldVer then "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8" else
-      "0kCr5tqcZcsZAN2b86NQHM+Is8Khy5gxfQPyct2lsmU=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+    sha256 = "XSzD14vsPb4hKp1/pimtolp9qSivQyyTBg/1wX7iipw=";
   };
 
   patches = [
@@ -145,4 +144,15 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
   };
-}
+};
+in
+if oldVer then
+  libxml.overrideAttrs (attrs: rec {
+    version = "2.10.1";
+    src = fetchurl {
+      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+      sha256 = "21a9e13cc7c4717a6c36268d0924f92c3f67a1ece6b7ff9d588958a6db9fb9d8";
+    };
+  })
+else
+  libxml
