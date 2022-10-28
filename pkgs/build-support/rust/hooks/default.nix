@@ -70,13 +70,17 @@ in {
 
         # Target platform
         rustTarget = ''
-          [target."${rust.toRustTarget stdenv.buildPlatform}"]
+          [host."${rust.toRustTarget stdenv.buildPlatform}"]
           "linker" = "${ccForBuild}"
-          ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-            [target."${shortTarget}"]
-            "linker" = "${ccForHost}"
-          ''}
+          "rustflags" = [ "-C", "target-feature=${if stdenv.buildPlatform.isStatic then "+" else "-"}crt-static" ]
+
+          [target."${rust.toRustTarget stdenv.hostPlatform}"]
+          "linker" = "${ccForHost}"
           "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
+
+          [unstable]
+          host-config = true
+          target-applies-to-host = true
         '';
       };
     } ./cargo-setup-hook.sh) {};
