@@ -30154,9 +30154,9 @@ with pkgs;
   MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex {
-    wxGTK30 = wxGTK30.override {
+    inherit (darwin) libobjc;
+    wxGTK = wxGTK32.override {
       withWebKit = true;
-      withGtk2 = false;
     };
   };
 
