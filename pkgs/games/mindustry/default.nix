@@ -83,14 +83,14 @@ let
   };
 
   cleanupMindustrySrc = ''
-    pushd Mindustry
+    # Ensure the prebuilt shared objects don't accidentally get shipped
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
 
     # Remove unbuildable iOS stuff
-    sed -i '/^project(":ios"){/,/^}/d' build.gradle
-    sed -i '/robo(vm|VM)/d' build.gradle
-    rm ios/build.gradle
-
-    popd
+    sed -i '/^project(":ios"){/,/^}/d' Mindustry/build.gradle
+    sed -i '/robo(vm|VM)/d' Mindustry/build.gradle
+    rm Mindustry/ios/build.gradle
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -126,11 +126,7 @@ assert lib.assertMsg (enableClient || enableServer)
 stdenv.mkDerivation rec {
   inherit pname version unpackPhase patches;
 
-  postPatch = ''
-    # ensure the prebuilt shared objects don't accidentally get shipped
-    rm -r Arc/natives/natives-*/libs/*
-    rm -r Arc/backends/backend-*/libs/*
-  '' + cleanupMindustrySrc;
+  postPatch = cleanupMindustrySrc;
 
   buildInputs = lib.optionals enableClient [
     SDL2
