@@ -16,6 +16,7 @@
 , libGL
 , libGLU
 , libpulseaudio
+, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -30,6 +31,7 @@
 , pkg-config
 , python3
 , SDL2
+, substituteAll
 , udev
 , vulkan-loader
 , wayland
@@ -37,20 +39,13 @@
 }:
 
 let
-  version = "1.12.0";
-  libretroCoreInfo = fetchFromGitHub {
-    owner = "libretro";
-    repo = "libretro-core-info";
-    hash = "sha256-ByATDM0V40UJxigqVLyTWkHY5tiCC2dvZebksl8GsUI=";
-    rev = "v${version}";
-  };
   runtimeLibs =
     lib.optional withVulkan vulkan-loader ++
     lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  inherit version;
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
@@ -60,18 +55,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./use-fixed-paths.patch
+    (substituteAll {
+      src = ./use-fixed-path-for-libretro_core_info.patch;
+      libretro_info_path = libretro-core-info;
+    })
   ];
-
-  postPatch = ''
-    substituteInPlace "frontend/drivers/platform_unix.c" \
-      --subst-var-by libretro_directory "$out/lib" \
-      --subst-var-by libretro_info_path "$out/share/libretro/info" \
-      --subst-var-by out "$out"
-    substituteInPlace "frontend/drivers/platform_darwin.m" \
-      --subst-var-by libretro_directory "$out/lib" \
-      --subst-var-by libretro_info_path "$out/share/libretro/info"
-  '';
 
   nativeBuildInputs = [ pkg-config ] ++
     lib.optional withWayland wayland ++
@@ -121,12 +109,7 @@ stdenv.mkDerivation rec {
     "--enable-kms"
   ];
 
-  postInstall = ''
-    # TODO: ideally each core should have its own core information
-    mkdir -p $out/share/libretro/info
-    cp -r ${libretroCoreInfo}/* $out/share/libretro/info
-  '' +
-  lib.optionalString (runtimeLibs != [ ]) ''
+  postInstall = lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
   '';

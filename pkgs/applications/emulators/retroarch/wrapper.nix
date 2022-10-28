@@ -3,14 +3,17 @@
 , makeWrapper
 , retroarch
 , symlinkJoin
+, writeTextDir
 , cores ? [ ]
 }:
 
 let
+  # All cores should be located in the same path after symlinkJoin,
+  # but let's be safe here
   coresPath = lib.lists.unique (map (c: c.libretroCore) cores);
   wrapperArgs = lib.strings.escapeShellArgs
     (lib.lists.flatten
-      (map (corePath: [ "--add-flags" "-L ${placeholder "out" + corePath}" ]) coresPath));
+      (map (p: [ "--add-flags" "-L ${placeholder "out" + p}" ]) coresPath));
 in
 symlinkJoin {
   name = "retroarch-with-cores-${lib.getVersion retroarch}";
@@ -26,11 +29,10 @@ symlinkJoin {
 
   postBuild = ''
     # remove core specific binaries
-    find $out/bin -name 'retroarch-*' -delete
-    # wrapProgram can't operate on symlinks
-    rm $out/bin/retroarch
-    makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
-      ${wrapperArgs}
+    find $out/bin -name 'retroarch-*' -type l -delete
+
+    # wrap binary to load cores from the proper location(s)
+    wrapProgram $out/bin/retroarch ${wrapperArgs}
   '';
 
   meta = with retroarch.meta; {
@@ -39,7 +41,7 @@ symlinkJoin {
       RetroArch is the reference frontend for the libretro API.
     ''
     + lib.optionalString (cores != [ ]) ''
-      The following cores are included: ${lib.concatStringsSep ", " (map (x: x.core) cores)}
+      The following cores are included: ${lib.concatStringsSep ", " (map (c: c.core) cores)}
     '';
     mainProgram = "retroarch";
   };
