@@ -21,11 +21,6 @@ buildGoModule rec {
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation IOKit ];
-  # upstream currently doesn't work with the version of the macOS SDK
-  # we're building against in nix-darwin without a patch.
-  # this patch has been submitted upstream at https://github.com/prometheus/node_exporter/pull/2327
-  # and only needs to be carried until it lands in a new release.
-  patches = lib.optionals stdenv.isDarwin [ ./node-exporter/node-exporter-darwin.patch ];
 
   excludedPackages = [ "docs/node-mixin" ];
 
