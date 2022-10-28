@@ -5934,7 +5934,9 @@ with pkgs;
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
   slade = callPackage ../applications/misc/slade {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32.override {
+      withWebKit = true;
+    };
   };
 
   sladeUnstable = callPackage ../applications/misc/slade/git.nix {
