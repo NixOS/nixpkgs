@@ -46,35 +46,53 @@ function prefetchgit(url, rev) {
 }
 
 function fetchgit(fileName, url, rev, branch, builtinFetchGit) {
+  const repo = builtinFetchGit
+    ? `builtins.fetchGit ({
+         url = "${url}";
+         ref = "${branch}";
+         rev = "${rev}";
+       } // (if builtins.compareVersions "2.4pre" builtins.nixVersion < 0 then {
+         # workaround for https://github.com/NixOS/nix/issues/5128
+         allRefs = true;
+       } else {}))`
+    : `fetchgit {
+         url = "${url}";
+         rev = "${rev}";
+         sha256 = "${prefetchgit(url, rev)}";
+       }`;
+
   return `    {
     name = "${fileName}";
     path =
-      let${
-        builtinFetchGit
-          ? `
-        repo = builtins.fetchGit ({
-          url = "${url}";
-          ref = "${branch}";
-          rev = "${rev}";
-        } // (if builtins.compareVersions "2.4pre" builtins.nixVersion < 0 then {
-          # workaround for https://github.com/NixOS/nix/issues/5128
-          allRefs = true;
-        } else {}));
-      `
-          : `
-        repo = fetchgit {
-          url = "${url}";
-          rev = "${rev}";
-          sha256 = "${prefetchgit(url, rev)}";
-        };
-      `
-      }in
-        runCommand "${fileName}" { buildInputs = [gnutar]; } ''
-          # Set u+w because tar-fs can't unpack archives with read-only dirs
-          # https://github.com/mafintosh/tar-fs/issues/79
-          tar cf $out --mode u+w -C \${repo} .
-        '';
+      let repo = ${repo};
+      in runCommand "${fileName}" { buildInputs = [gnutar]; } ''
+        # Set u+w because tar-fs can't unpack archives with read-only dirs
+        # https://github.com/mafintosh/tar-fs/issues/79
+        tar cf $out --mode u+w -C \${repo} .
+      '';
   }`;
+}
+
+/**
+ * Parse an integrity hash out of an SSRI string.
+ *
+ * Provides a default and uses the "best" supported algorithm if there are multiple.
+ */
+function parseIntegrity(maybeIntegrity, fallbackHash) {
+  if (!maybeIntegrity && fallbackHash) {
+    return { algo: "sha1", hash: fallbackHash };
+  }
+
+  const integrities = ssri.parse(maybeIntegrity);
+  for (const key in integrities) {
+    if (!/^sha(1|256|512)$/.test(key)) {
+      delete integrities[key];
+    }
+  }
+
+  algo = integrities.pickAlgorithm();
+  hash = integrities[algo][0].digest;
+  return { algo, hash };
 }
 
 function fetchLockedDep(builtinFetchGit) {
@@ -124,14 +142,7 @@ function fetchLockedDep(builtinFetchGit) {
       );
     }
 
-    // Pull out integrity hash, providing a default and using the "best" algorithm if there are multiple.
-    let algo = "sha1";
-    let hash = sha1OrRev;
-    if (integrity) {
-      const integrities = ssri.parse(integrity);
-      algo = integrities.pickAlgorithm();
-      hash = integrities[algo][0].hexDigest();
-    }
+    const { algo, hash } = parseIntegrity(integrity, sha1OrRev);
 
     return `    {
       name = "${fileName}";
