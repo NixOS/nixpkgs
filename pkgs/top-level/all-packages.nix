@@ -34849,6 +34849,8 @@ with pkgs;
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
+  plasma-active-window-control = libsForQt5.callPackage ../applications/misc/plasma-active-window-control { };
+
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
   plasma-theme-switcher = libsForQt5.callPackage ../applications/misc/plasma-theme-switcher {};
