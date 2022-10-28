@@ -33,9 +33,12 @@
     }: let
       pythonPackages = let
         ensurePythonModules = items: let
+          exceptions = [
+            stdenv
+          ];
           providesSetupHook = lib.attrByPath [ "provides" "setupHook"] false;
-          notValid = value: (lib.isDerivation value) && !((pythonPackages.hasPythonModule value) || (providesSetupHook value));
-          func = name: value: if !(notValid value) then value else throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
+          valid = value: !((lib.isDerivation value) && !((pythonPackages.hasPythonModule value) || (providesSetupHook value))) || (lib.elem value exceptions);
+          func = name: value: if (valid value) then value else throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
         in lib.mapAttrs func items;
       in ensurePythonModules (callPackage
         # Function that when called

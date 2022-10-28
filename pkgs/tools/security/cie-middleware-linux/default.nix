@@ -20,14 +20,13 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.4.3.3";
+  version = "1.4.4.0";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
-    # use the podofo-vanilla branch
-    rev = "531acc54609eaeccbdd4ef881d7d7e7e0fe0af17";
-    sha256 = "sha256-hUpEkiEQu0R+aCo4bfZfVLLib0o6v2RQJVIte3n+IAk=";
+    rev = "${version}-podofo";
+    sha256 = "sha256-Kyr9OTiY6roJ/wVJS/1aWfrrzDNQbuRTJQqo0akbMUU=";
   };
 
   # Shared libraries needed by the Java application
@@ -59,7 +58,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-gsb4aH/au7IDh1PX/qY+8o7CmjKJUHpmEa0vYhbAnP0=";
+    outputHash = "sha256-WzT5vYF9yCMU2A7EkLZyjgWrN3gD7pnkPXc3hDFqpD8=";
   };
 
 in
