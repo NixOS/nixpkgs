@@ -33,13 +33,13 @@ lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (sin
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2022-08-26";
+  version = "2022-10-27";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kvu6Zv5vmyDasBt6eOBqexv0n5vi6OzpG5We1eSbW0o=";
+    sha256 = "sha256-jOrTasnkNExCgvST+09JOQ0iosjoEu3aoj3C1pNHTgY=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
