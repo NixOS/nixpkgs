@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
-  version = "1.1";
+  version = "1.2";
 
   outputs = [ "out" "man" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${version}";
-    sha256 = "EPAPWY6/Bh8I1eLslKJAofLn0IAizmGn00Q5PJPtdRw=";
+    sha256 = "sha256-U9Fj3OcBe32C0PKhI05eF/6jikHAvdyvXH16IY0rWxI=";
   };
 
   postPatch = ''
