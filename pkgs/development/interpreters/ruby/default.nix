@@ -11,7 +11,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
@@ -93,7 +92,7 @@ let
         patches =
           (ops useRailsExpress
             (import ./patchsets.nix {
-              inherit patchSet;
+              inherit fetchFromGitHub;
               version = ver.majMin;
             })
           )
