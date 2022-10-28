@@ -23816,6 +23816,8 @@ with pkgs;
     ffmpeg = ffmpeg_4;
   };
 
+  pigallery2 = callPackage ../servers/web-apps/pigallery2 { };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
