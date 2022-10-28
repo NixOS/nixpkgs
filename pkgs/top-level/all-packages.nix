@@ -14503,15 +14503,14 @@ with pkgs;
 
   openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
-  openjdk18-bootstrap = javaPackages.compiler.openjdk18-bootstrap;
-  openjdk18 = javaPackages.compiler.openjdk18;
-  openjdk18_headless = javaPackages.compiler.openjdk18.headless;
-  jdk18 = openjdk18;
-  jdk18_headless = openjdk18_headless;
+  openjdk19 = javaPackages.compiler.openjdk19;
+  openjdk19_headless = javaPackages.compiler.openjdk19.headless;
+  jdk19 = openjdk19;
+  jdk19_headless = openjdk19_headless;
 
   /* default JDK */
-  jdk = jdk17;
-  jdk_headless = jdk17_headless;
+  jdk = jdk19;
+  jdk_headless = jdk19_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -14523,6 +14522,9 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
+  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk17;
+  };
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
   openjdk = jdk;
@@ -29746,7 +29748,7 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk18;
+    jdk = javaPackages.compiler.openjdk18;
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
