@@ -26185,6 +26185,10 @@ with pkgs;
 
   hack-font = callPackage ../data/fonts/hack { };
 
+  hackgen-font = callPackage ../data/fonts/hackgen { };
+
+  hackgen-nf-font = callPackage ../data/fonts/hackgen/nerdfont.nix { };
+
   helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
 
   helvum = callPackage ../applications/audio/helvum { };
