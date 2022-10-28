@@ -17,6 +17,7 @@
 , tomlkit
 , typing-extensions
 , argcomplete
+, nix-update-script
 }:
 
 buildPythonApplication rec {
@@ -79,6 +80,10 @@ buildPythonApplication rec {
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
   ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
