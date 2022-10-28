@@ -111,13 +111,13 @@
     "version": "4.36.1"
   },
   "azuread": {
-    "hash": "sha256-rj/ODxmuK0Ro1KVHh4onR/evtUdKzay9BpQDgrx+eNA=",
+    "hash": "sha256-mjll5ANx063JLSbqohPOhor3GNeI1MUKgUKQ/f5XFk8=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azuread",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.29.0",
+    "rev": "v2.30.0",
     "vendorHash": null,
-    "version": "2.29.0"
+    "version": "2.30.0"
   },
   "azurerm": {
     "hash": "sha256-ASZs5raOUCMRI+GzncADLtCtc5QJvPfGoQ67n8DiMMg=",
