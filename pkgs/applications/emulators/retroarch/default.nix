@@ -41,9 +41,8 @@ let
   libretroCoreInfo = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-core-info";
-    sha256 = "sha256-9Sfp/JkMJIe34YGNRxf93fONOBuQxR2pduoJU+xtuF0=";
-    # Upstream didn't tag a new libretro-core-info in 1.12.0 release
-    rev = "v1.11.1";
+    hash = "sha256-ByATDM0V40UJxigqVLyTWkHY5tiCC2dvZebksl8GsUI=";
+    rev = "v${version}";
   };
   runtimeLibs =
     lib.optional withVulkan vulkan-loader ++
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-doLWNA8aTAllxx3zABtvZaegBQEPIi8276zbytPSdBU=";
+    hash = "sha256-doLWNA8aTAllxx3zABtvZaegBQEPIi8276zbytPSdBU=";
     rev = "v${version}";
   };
 
