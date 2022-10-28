@@ -912,7 +912,8 @@ with self;
 
   sexplib0 = janePackage {
     pname = "sexplib0";
-    hash = "0jag0bz2173b0n7hx013fhghydhh92arqjlrcnf5x025bw8nz66v";
+    version = "0.15.1";
+    hash = "sha256-6K0yrCbVFcUalN4cQuDI1TvWvNDjfXXRDhJKUskbqRY=";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Library containing the definition of S-expressions and some base converters";
   };
