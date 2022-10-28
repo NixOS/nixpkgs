@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
+    mainProgram = "retroarch";
     # FIXME: error while building in macOS:
     # "Undefined symbols for architecture <arch>"
     # See also retroarch/wrapper.nix that is also broken in macOS
