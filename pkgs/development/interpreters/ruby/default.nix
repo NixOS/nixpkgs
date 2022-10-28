@@ -93,7 +93,7 @@ let
           (ops useRailsExpress
             (import ./patchsets.nix {
               inherit fetchFromGitHub;
-              version = ver.majMin;
+              version = ver.majMinTiny;
             })
           )
           ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
