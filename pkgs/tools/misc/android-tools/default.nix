@@ -28,12 +28,29 @@ stdenv.mkDerivation rec {
     ./android-tools-kernel-headers-6.0.diff
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i 's/usb_linux/usb_osx/g' vendor/CMakeLists.{adb,fastboot}.txt
+    sed -i 's/libselinux libsepol/ /g;s#selinux/libselinux/include##g' vendor/CMakeLists.{fastboot,mke2fs}.txt
+    sed -z -i 's/add_library(libselinux.*selinux\/libsepol\/include)//g' vendor/CMakeLists.fastboot.txt
+    sed -i 's/e2fsdroid//g' vendor/CMakeLists.txt
+    sed -z -i 's/add_executable(e2fsdroid.*e2fsprogs\/misc)//g' vendor/CMakeLists.mke2fs.txt
+  '';
+
   nativeBuildInputs = [ cmake perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 fmt_7 ];
   propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
   GOFLAGS = [ "-mod=vendor" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-D_DARWIN_C_SOURCE"
+  ];
+
+  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-framework CoreFoundation"
+    "-framework IOKit"
+  ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -63,7 +80,7 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
     license = with licenses; [ asl20 unicode-dfs-2015 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }
