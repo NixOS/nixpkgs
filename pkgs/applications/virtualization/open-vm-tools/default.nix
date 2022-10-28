@@ -22,6 +22,7 @@
 , libXrandr
 , libXtst
 , libxcrypt
+, libxml2
 , pkg-config
 , glib
 , gdk-pixbuf-xlib
@@ -34,6 +35,7 @@
 , libdrm
 , udev
 , util-linux
+, xmlsec
 , withX ? true
 }:
 
@@ -67,12 +69,14 @@ stdenv.mkDerivation rec {
     libmspack
     libtirpc
     libxcrypt
+    libxml2
     openssl
     pam
     procps
     rpcsvc-proto
     udev
     xercesc
+    xmlsec
   ] ++ lib.optionals withX [
     gdk-pixbuf-xlib
     gtk3
@@ -87,14 +91,20 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
-    sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
-    sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
-    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
-    sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
+    sed -i Makefile.am \
+      -e 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,'
+    sed -i scripts/Makefile.am \
+      -e 's,^confdir = ,confdir = ''${prefix},' \
+      -e 's,usr/bin,''${prefix}/usr/bin,'
+    sed -i services/vmtoolsd/Makefile.am \
+      -e 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' \
+      -e 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),'
+    sed -i vgauth/service/Makefile.am \
+      -e 's,/etc/vmware-tools/vgauth/schemas,''${prefix}/etc/vmware-tools/vgauth/schemas,' \
+      -e 's,$(DESTDIR)/etc/vmware-tools/vgauth.conf,''${prefix}/etc/vmware-tools/vgauth.conf,'
 
-    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-    sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+    # don't abort on any warning
+    sed -i 's,CFLAGS="$CFLAGS -Werror",,' configure.ac
 
     # Make reboot work, shutdown is not in /sbin on NixOS
     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
@@ -109,18 +119,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-kernel-modules"
-    "--without-xmlsecurity"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     "--with-fuse=fuse3"
   ] ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
-
-  NIX_CFLAGS_COMPILE = builtins.toString [
-    # fix build with gcc9
-    "-Wno-error=address-of-packed-member"
-    "-Wno-error=format-overflow"
-  ];
 
   preConfigure = ''
     mkdir -p ${placeholder "out"}/lib/udev/rules.d
