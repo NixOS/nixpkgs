@@ -1,19 +1,20 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+
+, openssl
 }:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.49.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MShlKtrorqXRInQ01dEzVeLDRDua9PISkficF02PrBI=";
+    sha256 = "sha256-WTDUkC+TFVkT/D36hDusqxwidy6O+iMInBpTumdCaw4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,12 +26,14 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  vendorSha256 = "sha256-MusEvYNaMM0kqHSDdenPKo4IrIFmvPHSCRzciKMFiew=";
+  vendorSha256 = "sha256-bpWUo6YA0TkIyDg27mv88X1fh+1Wal362Sqi7loo/Zs=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
+
+  subPackages = [ "." ];
+  excludedPackages = "test/integration";
 
   ldflags = [
     "-s"
@@ -49,8 +52,44 @@ buildGoModule rec {
     ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  # Tests require a running Docker instance
-  doCheck = false;
+  checkInputs = [ openssl ];
+  preCheck = ''
+    # test all dirs (except excluded)
+    unset subPackages
+    # test goldenfiles expect no version
+    unset ldflags
+
+    # patch utility script
+    patchShebangs grype/db/test-fixtures/tls/generate-x509-cert-pair.sh
+
+    # remove tests that depend on docker
+    substituteInPlace test/cli/cmd_test.go \
+      --replace "TestCmd" "SkipCmd"
+    substituteInPlace grype/pkg/provider_test.go \
+      --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
+      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
+    substituteInPlace grype/presenter/cyclonedxvex/presenter_test.go \
+      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
+    substituteInPlace grype/presenter/sarif/presenter_test.go \
+      --replace "Test_imageToSarifReport" "Skip_imageToSarifReport" \
+      --replace "TestSarifPresenterImage" "SkipSarifPresenterImage"
+
+    # remove tests that depend on git
+    substituteInPlace test/cli/db_validations_test.go \
+      --replace "TestDBValidations" "SkipDBValidations"
+    substituteInPlace test/cli/registry_auth_test.go \
+      --replace "TestRegistryAuth" "SkipRegistryAuth"
+    substituteInPlace test/cli/sbom_input_test.go \
+      --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
+      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument" \
+      --replace "TestAttestationInput_AsArgument" "SkipAttestationInput_AsArgument"
+    substituteInPlace test/cli/subprocess_test.go \
+      --replace "TestSubprocessStdin" "SkipSubprocessStdin"
+
+    # segfault
+    rm grype/db/v5/namespace/cpe/namespace_test.go
+  '';
 
   postInstall = ''
     installShellCompletion --cmd grype \
