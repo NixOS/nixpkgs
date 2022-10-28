@@ -4,6 +4,7 @@
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, fetchpatch
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -31,6 +32,13 @@ let
       name = "${old.pname}-${version}";
       hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
     };
+    patches = [
+      (fetchpatch {
+        name = "turn-off-hard-errors-for-lints.patch";
+        url = "https://github.com/deltachat/deltachat-core-rust/commit/7598c50dbaa2abcbd417d96a02743269f666597b.patch";
+        hash = "sha256-Xss44v6Wf6mL3FK9hH+oFYZ0fBA9rSh4wDrr7nSUibQ=";
+      })
+    ];
   });
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {

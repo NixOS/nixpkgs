@@ -2431,10 +2431,6 @@ self: super: {
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
 
-  # Too strict bounds on hspec, fixed on main branch, but unreleased
-  colourista = assert super.colourista.version == "0.1.0.1";
-    doJailbreak super.colourista;
-
   # 2022-02-26: https://github.com/emilypi/base64/issues/39
   base64 = dontCheck super.base64;
 
@@ -2548,32 +2544,9 @@ self: super: {
   # Remove once version 1.* is released
   monad-bayes = doJailbreak super.monad-bayes;
 
-  crypt-sha512 = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-    # Test failure after libxcrypt migration, reported upstrem at
-    # https://github.com/phadej/crypt-sha512/issues/13
-    doCheck = false;
-  }) super.crypt-sha512;
-
-  nano-cryptr = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.nano-cryptr;
-
-  Unixutils = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.Unixutils;
-
-  xmonad-utils = overrideCabal (drv: {
-    librarySystemDepends = [
-      pkgs.libxcrypt
-    ];
-  }) super.xmonad-utils;
+  # Test failure after libxcrypt migration, reported upstrem at
+  # https://github.com/phadej/crypt-sha512/issues/13
+  crypt-sha512 = dontCheck super.crypt-sha512;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse

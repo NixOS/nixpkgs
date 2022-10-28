@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, mdx }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, mdx, gitUpdater }:
 
 buildDunePackage rec {
   pname = "printbox";
@@ -19,6 +19,8 @@ buildDunePackage rec {
 
   # mdx is not available for OCaml < 4.08
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://github.com/c-cube/printbox/";

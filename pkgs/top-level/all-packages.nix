@@ -10484,6 +10484,8 @@ with pkgs;
 
   proot = callPackage ../tools/system/proot { };
 
+  protoscope = callPackage ../development/tools/protoscope { };
+
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
   inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })

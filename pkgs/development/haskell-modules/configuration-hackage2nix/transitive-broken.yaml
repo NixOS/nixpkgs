@@ -739,6 +739,8 @@ dont-distribute-packages:
  - battleships
  - bayes-stack
  - bbi
+ - bcp47
+ - bcp47-orphans
  - bdcs
  - bdcs-api
  - beam-automigrate
@@ -1100,6 +1102,7 @@ dont-distribute-packages:
  - cursedcsv
  - cv-combinators
  - cypher
+ - dahdit
  - dapi
  - darcs-benchmark
  - darcs-beta
@@ -2103,6 +2106,7 @@ dont-distribute-packages:
  - hmt-diagrams
  - hnormalise
  - ho-rewriting
+ - hoauth2-providers-tutorial
  - hob
  - hogre
  - hogre-examples
@@ -2780,6 +2784,7 @@ dont-distribute-packages:
  - mysql-haskell-nem
  - mysql-haskell-openssl
  - mysql-simple-typed
+ - mywork
  - n2o-web
  - nakadi-client
  - named-servant-client
@@ -2865,6 +2870,8 @@ dont-distribute-packages:
  - ohloh-hs
  - ois-input-manager
  - olwrapper
+ - om-kubernetes
+ - om-legion
  - online
  - online-csv
  - opc-xml-da-client
@@ -3903,6 +3910,7 @@ dont-distribute-packages:
  - vector-text
  - venzone
  - verdict-json
+ - verifiable-expressions
  - vessel
  - vflow-types
  - vfr-waypoints
