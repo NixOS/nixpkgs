@@ -1489,7 +1489,8 @@ with pkgs;
   basiliskii = callPackage ../applications/emulators/basiliskii { };
 
   bochs = callPackage ../applications/emulators/bochs {
-    wxGTK = wxGTK30;
+    inherit (darwin) libobjc;
+    wxGTK = wxGTK32;
   };
 
   box64 = callPackage ../applications/emulators/box64 { };
