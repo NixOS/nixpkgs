@@ -1093,6 +1093,9 @@
   "asynctest": [
     "setuptools"
   ],
+  "asyncua": [
+    "setuptools"
+  ],
   "asyncwhois": [
     "setuptools"
   ],
@@ -1701,6 +1704,9 @@
   "backports-weakref": [
     "setuptools",
     "setuptools-scm"
+  ],
+  "backports-zoneinfo": [
+    "setuptools"
   ],
   "bagit": [
     "setuptools",
@@ -3695,6 +3701,9 @@
   "django-cleanup": [
     "setuptools"
   ],
+  "django-cockroachdb": [
+    "setuptools"
+  ],
   "django-colorful": [
     "setuptools"
   ],
@@ -4743,6 +4752,9 @@
     "setuptools"
   ],
   "fasttext": [
+    "setuptools"
+  ],
+  "faust-streaming": [
     "setuptools"
   ],
   "favicon": [
@@ -8348,6 +8360,10 @@
     "setuptools"
   ],
   "mkdocs": [
+    {
+      "buildSystem": "hatchling",
+      "from": "1.4.1"
+    },
     "setuptools"
   ],
   "mkdocs-autorefs": [
@@ -8454,6 +8470,9 @@
     "setuptools"
   ],
   "mockupdb": [
+    "setuptools"
+  ],
+  "mode-streaming": [
     "setuptools"
   ],
   "moderngl": [
@@ -10597,6 +10616,9 @@
   "psycopg2": [
     "setuptools"
   ],
+  "psycopg2-binary": [
+    "setuptools"
+  ],
   "psycopg2cffi": [
     "setuptools"
   ],
@@ -11417,6 +11439,9 @@
   "pygls": [
     "setuptools",
     "setuptools-scm"
+  ],
+  "pygltflib": [
+    "setuptools"
   ],
   "pygmars": [
     "setuptools",
@@ -13372,6 +13397,9 @@
   "python-sat": [
     "setuptools"
   ],
+  "python-schema-registry-client": [
+    "setuptools"
+  ],
   "python-simple-hipchat": [
     "setuptools"
   ],
@@ -14532,6 +14560,9 @@
   "s3-credentials": [
     "setuptools"
   ],
+  "s3cmd": [
+    "setuptools"
+  ],
   "s3fs": [
     "setuptools"
   ],
@@ -14690,6 +14721,9 @@
   "scikit-optimize": [
     "setuptools"
   ],
+  "scikit-spatial": [
+    "poetry"
+  ],
   "scikit-survival": [
     "cython",
     "setuptools",
@@ -14716,6 +14750,9 @@
     "setuptools"
   ],
   "scmrepo": [
+    "setuptools"
+  ],
+  "scooby": [
     "setuptools"
   ],
   "scour": [
@@ -15888,6 +15925,9 @@
     "setuptools"
   ],
   "svgwrite": [
+    "setuptools"
+  ],
+  "svix-ksuid": [
     "setuptools"
   ],
   "swagger-spec-validator": [
@@ -17608,6 +17648,9 @@
     "setuptools"
   ],
   "wsgitools": [
+    "setuptools"
+  ],
+  "wslink": [
     "setuptools"
   ],
   "wsnsimpy": [
