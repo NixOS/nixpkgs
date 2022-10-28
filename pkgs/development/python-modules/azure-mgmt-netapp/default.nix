@@ -11,8 +11,9 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
   version = "9.0.1";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
