@@ -886,13 +886,13 @@
     "version": "1.31.6"
   },
   "opsgenie": {
-    "hash": "sha256-hdLKa2usoDedzOlzPQrADJOqIxtANqTeTamn/DakRh4=",
+    "hash": "sha256-DhECesGkBaQuk43pF4xk6zln+FzgL+1A1rSm0sqg7XQ=",
     "owner": "opsgenie",
     "provider-source-address": "registry.terraform.io/opsgenie/opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.15",
+    "rev": "v0.6.16",
     "vendorHash": null,
-    "version": "0.6.15"
+    "version": "0.6.16"
   },
   "ovh": {
     "hash": "sha256-QaJZQU6bnjXoTCxfP1NcsPqegFyZ6JwP2QgN7zrE0z0=",
