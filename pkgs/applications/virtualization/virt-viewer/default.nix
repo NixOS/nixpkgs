@@ -29,7 +29,7 @@
 
 assert spiceSupport -> (
   gdbm != null
-  && libcap != null
+  && (stdenv.isLinux -> libcap != null)
   && spice-gtk_libsoup2 != null
   && spice-protocol != null
 );
@@ -76,12 +76,13 @@ stdenv.mkDerivation rec {
     libvirt-glib
     libxml2
     vte
-  ] ++ optionals spiceSupport [
+  ] ++ optionals spiceSupport ([
     gdbm
-    libcap
     spice-gtk_libsoup2
     spice-protocol
-  ];
+  ] ++ optionals stdenv.isLinux [
+    libcap
+  ]);
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
@@ -94,8 +95,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin atemu ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };
   passthru = {
