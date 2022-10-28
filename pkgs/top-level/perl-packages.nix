@@ -12503,11 +12503,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.39";
+    version = "12.49";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-QDq1KTpEcl8EWj9a/bxF0TwghUulH30O5yDV0wsxy6I=";
+      hash = "sha256-l21p2ak+pe9GSWOatsGQ9YvyZfAFfKV3xB38rzexcVs=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -12531,7 +12531,7 @@ let
       homepage = "https://exiftool.org/";
 
       license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = [ maintainers.kiloreux ];
+      maintainers = with maintainers; [ kiloreux anthonyroussel ];
       mainProgram = "exiftool";
     };
   };
