@@ -12764,7 +12764,7 @@ with pkgs;
   hitch = callPackage ../servers/hitch { };
 
   veracrypt = callPackage ../applications/misc/veracrypt {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   vlan = callPackage ../tools/networking/vlan { };
@@ -16348,7 +16348,7 @@ with pkgs;
   bloop = callPackage ../development/tools/build-managers/bloop { };
 
   bossa = callPackage ../development/embedded/bossa {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK30-gtk3;
   };
 
   bossa-arduino = callPackage ../development/embedded/bossa/arduino.nix { };
@@ -29024,7 +29024,7 @@ with pkgs;
   inherit (nodePackages) hueadm;
 
   hugin = callPackage ../applications/graphics/hugin {
-    wxGTK = wxGTK30;
+    wxGTK = wxGTK32;
   };
 
   haunt = callPackage ../applications/misc/haunt { };
@@ -35901,7 +35901,9 @@ with pkgs;
     inherit (linuxPackages) nvidia_x11;
   };
 
-  wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
+  wxmaxima = callPackage ../applications/science/math/wxmaxima {
+    wxGTK = wxGTK32;
+  };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
   gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
@@ -35987,7 +35989,9 @@ with pkgs;
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
-  golly = callPackage ../applications/science/misc/golly { wxGTK = wxGTK30; };
+  golly = callPackage ../applications/science/misc/golly {
+    wxGTK = wxGTK32;
+  };
 
   megam = callPackage ../applications/science/misc/megam {
     inherit (ocaml-ng.ocamlPackages_4_07) ocaml;
