@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/makepkg \
       --prefix PATH : ${lib.makeBinPath [ binutils ]}
     wrapProgram $out/bin/pacman-key \
-      --prefix PATH : ${lib.makeBinPath [ gnupg ]}
+      --prefix PATH : ${lib.makeBinPath [ "${placeholder "out"}" gnupg ]}
   '';
 
   meta = with lib; {
