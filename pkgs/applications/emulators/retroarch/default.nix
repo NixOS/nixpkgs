@@ -170,7 +170,6 @@ stdenv.mkDerivation rec {
     mainProgram = "retroarch";
     # FIXME: error while building in macOS:
     # "Undefined symbols for architecture <arch>"
-    # See also retroarch/wrapper.nix that is also broken in macOS
     broken = stdenv.isDarwin;
   };
 }
