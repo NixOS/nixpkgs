@@ -3,18 +3,21 @@
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "2.2.1";
+  version = "2.2.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
     rev = "v${version}";
-    sha256 = "sha256-z04xxoCw0eBtkt++y/1yUsAPaLlAGUtWBdRBM74ul1c=";
+    hash = "sha256-YqUxkpFl2G/LFLtFWqocXbFvgVhqqiquoWNIIO9c/6o=";
   };
 
   nativeBuildInputs = [
@@ -36,4 +39,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
-
