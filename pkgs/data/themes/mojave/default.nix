@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchurl
 , glib
@@ -29,16 +29,16 @@ lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-06-07";
+  version = "2022-10-21";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-OEqB2PSZ5KoxXAUhlyT1PRUzckVz+jTCIoAqP8gVqTk=";
+      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
     })
   ]
   ++
@@ -114,9 +114,9 @@ stdenv.mkDerivation rec {
       install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
     ''}
 
-    # Replace duplicate files with hardlinks to the first file in each
+    # Replace duplicate files with soft links to the first file in each
     # set of duplicates, reducing the installed size in about 53%
-    jdupes -L -r $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';

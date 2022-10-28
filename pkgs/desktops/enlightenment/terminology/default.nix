@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, efl
+, nixosTests
+, directoryListingUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -25,6 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.terminology;
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "Powerful terminal emulator based on EFL";

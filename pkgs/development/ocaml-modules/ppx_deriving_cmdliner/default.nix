@@ -5,6 +5,7 @@
 , cmdliner
 , ppx_deriving
 , ppxlib
+, gitUpdater
 }:
 
 buildDunePackage rec {
@@ -30,6 +31,8 @@ buildDunePackage rec {
   checkInputs = [
     alcotest
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Ppx_deriving plugin for generating command line interfaces from types for OCaml";
