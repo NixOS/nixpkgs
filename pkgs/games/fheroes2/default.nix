@@ -1,8 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
 
-# updater only
-, nix-update-script
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -43,8 +42,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      url = "https://github.com/ihhub/fheroes2.git";
     };
   };
 
