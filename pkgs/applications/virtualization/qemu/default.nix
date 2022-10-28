@@ -14,7 +14,7 @@
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
 , ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
