@@ -79,11 +79,11 @@ stdenv.mkDerivation {
     "--http-log-path=/var/log/nginx/access.log"
     "--error-log-path=/var/log/nginx/error.log"
     "--pid-path=/var/log/nginx/nginx.pid"
-    "--http-client-body-temp-path=/var/cache/nginx/client_body"
-    "--http-proxy-temp-path=/var/cache/nginx/proxy"
-    "--http-fastcgi-temp-path=/var/cache/nginx/fastcgi"
-    "--http-uwsgi-temp-path=/var/cache/nginx/uwsgi"
-    "--http-scgi-temp-path=/var/cache/nginx/scgi"
+    "--http-client-body-temp-path=/tmp/nginx_client_body"
+    "--http-proxy-temp-path=/tmp/nginx_proxy"
+    "--http-fastcgi-temp-path=/tmp/nginx_fastcgi"
+    "--http-uwsgi-temp-path=/tmp/nginx_uwsgi"
+    "--http-scgi-temp-path=/tmp/nginx_scgi"
   ] ++ optionals withDebug [
     "--with-debug"
   ] ++ optionals withKTLS [
