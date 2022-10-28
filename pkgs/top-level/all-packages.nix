@@ -1745,6 +1745,8 @@ with pkgs;
       retroarch = retroarchBare;
     });
 
+  libretro-core-info = callPackage ../applications/emulators/retroarch/libretro-core-info.nix { };
+
   kodi-retroarch-advanced-launchers =
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
