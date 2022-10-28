@@ -3,6 +3,7 @@
 with lib;
 
 let
+  nixosConfig = config;
   ids = config.ids;
   cfg = config.users;
 
@@ -114,7 +115,11 @@ let
       group = mkOption {
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
-        default = "";
+        default = name;
+        defaultText = lib.literalMD ''
+          For normal users: if users.solitaryByDefault then <user_name> else "users"
+          For system users: <user_name>
+        '';
         description = lib.mdDoc "The user's primary group.";
       };
 
@@ -362,12 +367,14 @@ let
           shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
         }
         (mkIf config.isNormalUser {
-          group = mkDefault "users";
           createHome = mkDefault true;
           home = mkDefault "/home/${config.name}";
           homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
+        })
+        (mkIf (config.isNormalUser && !nixosConfig.users.solitaryByDefault) {
+          group = mkDefault "users";
         })
         # If !mutableUsers, setting ‘initialPassword’ is equivalent to
         # setting ‘password’ (and similarly for hashed passwords).
@@ -584,6 +591,16 @@ in {
       '';
     };
 
+    users.solitaryByDefault = mkOption {
+      type = types.bool;
+      default = lib.versionAtLeast nixosConfig.system.stateVersion "24.11";
+      description = lib.mdDoc ''
+        Whether normal users should default to a primary group named after
+        them. When disabled, normal users default to the "users" group. System
+        users always default to a group named after them.
+      '';
+    };
+
     # systemd initrd
     boot.initrd.systemd.users = mkOption {
       description = ''
@@ -659,31 +676,36 @@ in {
       };
     };
 
-    users.groups = {
-      root.gid = ids.gids.root;
-      wheel.gid = ids.gids.wheel;
-      disk.gid = ids.gids.disk;
-      kmem.gid = ids.gids.kmem;
-      tty.gid = ids.gids.tty;
-      floppy.gid = ids.gids.floppy;
-      uucp.gid = ids.gids.uucp;
-      lp.gid = ids.gids.lp;
-      cdrom.gid = ids.gids.cdrom;
-      tape.gid = ids.gids.tape;
-      audio.gid = ids.gids.audio;
-      video.gid = ids.gids.video;
-      dialout.gid = ids.gids.dialout;
-      nogroup.gid = ids.gids.nogroup;
-      users.gid = ids.gids.users;
-      nixbld.gid = ids.gids.nixbld;
-      utmp.gid = ids.gids.utmp;
-      adm.gid = ids.gids.adm;
-      input.gid = ids.gids.input;
-      kvm.gid = ids.gids.kvm;
-      render.gid = ids.gids.render;
-      sgx.gid = ids.gids.sgx;
-      shadow.gid = ids.gids.shadow;
-    };
+    users.groups = mkMerge [
+      {
+        root.gid = ids.gids.root;
+        wheel.gid = ids.gids.wheel;
+        disk.gid = ids.gids.disk;
+        kmem.gid = ids.gids.kmem;
+        tty.gid = ids.gids.tty;
+        floppy.gid = ids.gids.floppy;
+        uucp.gid = ids.gids.uucp;
+        lp.gid = ids.gids.lp;
+        cdrom.gid = ids.gids.cdrom;
+        tape.gid = ids.gids.tape;
+        audio.gid = ids.gids.audio;
+        video.gid = ids.gids.video;
+        dialout.gid = ids.gids.dialout;
+        nogroup.gid = ids.gids.nogroup;
+        users.gid = ids.gids.users;
+        nixbld.gid = ids.gids.nixbld;
+        utmp.gid = ids.gids.utmp;
+        adm.gid = ids.gids.adm;
+        input.gid = ids.gids.input;
+        kvm.gid = ids.gids.kvm;
+        render.gid = ids.gids.render;
+        sgx.gid = ids.gids.sgx;
+        shadow.gid = ids.gids.shadow;
+      }
+      # Create per-user primary groups
+      (lib.optionalAttrs nixosConfig.users.solitaryByDefault
+        (lib.mapAttrs' (_: user: { name = user.group; value = { gid = lib.mkDefault user.uid; }; }) nixosConfig.users.users))
+    ];
 
     system.activationScripts.users = if !config.systemd.sysusers.enable then {
       supportsDryActivation = true;
