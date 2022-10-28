@@ -285,6 +285,7 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = let
     relaxedConstraints = [
+      "aiohttp"
       "attrs"
       "awesomeversion"
       "bcrypt"
