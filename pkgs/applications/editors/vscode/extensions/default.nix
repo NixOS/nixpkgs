@@ -1222,10 +1222,16 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.46.6822";
-            sha256 = "sha256-L71mC0190ZubqNVliu7es4SDsBTGVokePpcNupABI8Q=";
+            version = "1.56.7152";
+            sha256 = "sha256-9WEvTcVY/yMF00GJVj4h57aWhfBYTSatbw10DjjAaAM=";
           };
-          meta = { license = lib.licenses.unfree; };
+          meta = with lib; {
+            description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
+            homepage = "https://github.com/features/copilot";
+            license = licenses.unfree;
+            maintainers = with maintainers; [ Zimmi48 ];
+          };
         };
 
         github-vscode-theme = buildVscodeMarketplaceExtension {
