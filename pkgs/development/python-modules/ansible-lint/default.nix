@@ -9,6 +9,7 @@
 , filelock
 , flaky
 , jsonschema
+, pip
 , pythonOlder
 , pytest
 , pytest-xdist
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     enrich
     filelock
     jsonschema
+    pip
     pytest # yes, this is an actual runtime dependency
     pyyaml
     rich
