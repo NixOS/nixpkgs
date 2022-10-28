@@ -26052,6 +26052,8 @@ with pkgs;
 
   hack-font = callPackage ../data/fonts/hack { };
 
+  hackgen-font = callPackage ../data/fonts/hackgen { };
+
   helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
 
   helvum = callPackage ../applications/audio/helvum { };
