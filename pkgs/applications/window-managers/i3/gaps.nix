@@ -2,13 +2,13 @@
 
 i3.overrideAttrs (oldAttrs : rec {
   pname = "i3-gaps";
-  version = "4.21";
+  version = "4.21.1";
 
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "i3";
     rev = version;
-    sha256 = "sha256-douSRvnyDbi2gDJfu9VZmmTyYfy+FrFWHgyAyPyBWdM=";
+    sha256 = "sha256-+JxJjvzEuAA4CH+gufzAzIqd5BSvHtPvLm2zTfXc/xk=";
   };
 
   meta = with lib; {
