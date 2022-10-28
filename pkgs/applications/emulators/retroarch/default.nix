@@ -10,6 +10,7 @@
 , dbus
 , fetchFromGitHub
 , ffmpeg_4
+, flac
 , Foundation
 , freetype
 , gamemode
@@ -26,6 +27,7 @@
 , libxml2
 , libXxf86vm
 , makeWrapper
+, mbedtls
 , mesa
 , nvidia_cg_toolkit
 , pkg-config
@@ -34,6 +36,7 @@
 , udev
 , vulkan-loader
 , wayland
+, zlib
 }:
 
 let
@@ -79,12 +82,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4
+    flac
     freetype
     libGL
     libGLU
     libxml2
+    mbedtls
     python3
     SDL2
+    zlib
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
   lib.optional withVulkan vulkan-loader ++
@@ -109,6 +115,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-update_cores"
+    "--disable-builtinmbedtls"
+    "--disable-builtinzlib"
+    "--disable-builtinflac"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"
