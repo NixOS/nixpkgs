@@ -4558,6 +4558,18 @@ final: prev:
     meta.homepage = "https://github.com/marko-cerovac/material.nvim/";
   };
 
+  material-vim = buildVimPluginFrom2Nix {
+    pname = "material.vim";
+    version = "2022-09-14";
+    src = fetchFromGitHub {
+      owner = "kaicataldo";
+      repo = "material.vim";
+      rev = "81d5d0bb30677b0846a2721a600f2f45db6d10a7";
+      sha256 = "1j23wi0hh5h0pc0rk5dxvsc60k484h5haa2gfxzahjqd7kzil4y8";
+    };
+    meta.homepage = "https://github.com/kaicataldo/material.vim/";
+  };
+
   mayansmoke = buildVimPluginFrom2Nix {
     pname = "mayansmoke";
     version = "2010-10-18";
