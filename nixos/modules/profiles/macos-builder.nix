@@ -23,6 +23,7 @@ in
       ];
       # swraid's default depends on stateVersion
       config.boot.swraid.enable = false;
+      config.users.solitaryByDefault = true;
       options.boot.isContainer = lib.mkOption { default = false; internal = true; };
     }
   ];

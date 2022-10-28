@@ -11,6 +11,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       initialPassword = "pass2";
       isNormalUser = true;
       homeMode = "750";
+      group = "users";
     };
   };
 
@@ -22,6 +23,8 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_until_tty_matches("1", "Password: ")
     machine.send_chars("pass1\n")
     machine.succeed('[ "$(stat -c %a /home/alice)" == "700" ]')
+    machine.succeed('[ "$(stat -c %G /home/alice)" == "alice" ]')
     machine.succeed('[ "$(stat -c %a /home/bob)" == "750" ]')
+    machine.succeed('[ "$(stat -c %G /home/bob)" == "users" ]')
   '';
 })

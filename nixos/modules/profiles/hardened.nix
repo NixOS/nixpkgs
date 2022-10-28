@@ -10,6 +10,9 @@
 
 with lib;
 
+let
+  normalUsers = lib.filterAttrs (n: v: v.isNormalUser) config.users.users;
+in
 {
   meta = {
     maintainers = [ maintainers.joachifm maintainers.emily ];
@@ -17,7 +20,11 @@ with lib;
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
 
-  nix.settings.allowed-users = mkDefault [ "@users" ];
+  nix.settings.allowed-users = mkDefault (
+    if config.users.solitaryByDefault then
+      lib.mapAttrsToList (n: v: v.name) normalUsers
+    else [ "@users" ]
+  );
 
   environment.memoryAllocator.provider = mkDefault "scudo";
   environment.variables.SCUDO_OPTIONS = mkDefault "ZeroContents=1";
