@@ -10069,6 +10069,8 @@ with pkgs;
 
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
+  paper-note = callPackage ../applications/office/paper-note { };
+
   paperoni = callPackage ../tools/text/paperoni {
     inherit (darwin.apple_sdk.frameworks) Security;
     openssl = openssl_1_1;
