@@ -25866,6 +25866,8 @@ with pkgs;
 
   alegreya-sans = callPackage ../data/fonts/alegreya-sans { };
 
+  alkalami = callPackage ../data/fonts/alkalami { };
+
   amber-theme = callPackage ../data/themes/amber { };
 
   amiri = callPackage ../data/fonts/amiri { };
@@ -26622,6 +26624,8 @@ with pkgs;
   rose-pine-gtk-theme = callPackage ../data/themes/rose-pine-gtk { };
 
   route159 = callPackage ../data/fonts/route159 { };
+
+  ruwudu = callPackage ../data/fonts/ruwudu { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
