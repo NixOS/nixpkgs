@@ -372,7 +372,7 @@ in {
         User = user;
         WorkingDirectory = "${bookstack}";
         RuntimeDirectory = "bookstack/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
       path = [ pkgs.replace-secret ];
       script =
