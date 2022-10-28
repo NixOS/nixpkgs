@@ -22098,41 +22098,42 @@ with pkgs;
   skjold = callPackage ../development/tools/skjold { };
 
   skawarePackages = recurseIntoAttrs rec {
-    cleanPackaging = callPackage ../build-support/skaware/clean-packaging.nix { };
-    buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix {
+    buildManPages = callPackage ../development/skaware-packages/build-skaware-man-pages.nix { };
+    buildPackage = callPackage ../development/skaware-packages/build-skaware-package.nix {
       inherit cleanPackaging;
     };
-    buildManPages = callPackage ../build-support/skaware/build-skaware-man-pages.nix { };
+    cleanPackaging = callPackage ../development/skaware-packages/clean-packaging.nix { };
 
-    skalibs = callPackage ../development/libraries/skalibs { };
-    skalibs_2_10 = callPackage ../development/libraries/skalibs/2_10.nix { };
-    execline = callPackage ../tools/misc/execline { };
-
-    execline-man-pages = callPackage ../data/documentation/execline-man-pages {
+    execline = callPackage ../development/skaware-packages/execline { };
+    execline-man-pages = callPackage ../development/skaware-packages/execline-man-pages {
       inherit buildManPages;
     };
 
-    s6 = callPackage ../tools/system/s6 { };
-    s6-dns = callPackage ../tools/networking/s6-dns { };
-    s6-linux-init = callPackage ../os-specific/linux/s6-linux-init { };
-    s6-linux-utils = callPackage ../os-specific/linux/s6-linux-utils { };
-    s6-networking = callPackage ../tools/networking/s6-networking { };
-    s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
-    s6-rc = callPackage ../tools/system/s6-rc { };
-    s6-man-pages = callPackage ../data/documentation/s6-man-pages {
-      inherit buildManPages;
-    };
-    s6-networking-man-pages = callPackage ../data/documentation/s6-networking-man-pages {
-      inherit buildManPages;
-    };
-    s6-portable-utils-man-pages = callPackage ../data/documentation/s6-portable-utils-man-pages {
-      inherit buildManPages;
-    };
+    mdevd = callPackage ../development/skaware-packages/mdevd { };
+    nsss = callPackage ../development/skaware-packages/nsss { };
+    sdnotify-wrapper = callPackage ../development/skaware-packages/sdnotify-wrapper { };
+    utmps = callPackage ../development/skaware-packages/utmps { };
 
-    mdevd = callPackage ../os-specific/linux/mdevd { };
-    nsss = callPackage ../development/libraries/nsss { };
-    utmps = callPackage ../development/libraries/utmps { };
-    sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
+    skalibs = callPackage ../development/skaware-packages/skalibs { };
+    skalibs_2_10 = callPackage ../development/skaware-packages/skalibs/2_10.nix { };
+
+    s6 = callPackage ../development/skaware-packages/s6 { };
+    s6-dns = callPackage ../development/skaware-packages/s6-dns { };
+    s6-linux-init = callPackage ../development/skaware-packages/s6-linux-init { };
+    s6-linux-utils = callPackage ../development/skaware-packages/s6-linux-utils { };
+    s6-networking = callPackage ../development/skaware-packages/s6-networking { };
+    s6-portable-utils = callPackage ../development/skaware-packages/s6-portable-utils { };
+    s6-rc = callPackage ../development/skaware-packages/s6-rc { };
+
+    s6-man-pages = callPackage ../development/skaware-packages/s6-man-pages {
+      inherit buildManPages;
+    };
+    s6-networking-man-pages = callPackage ../development/skaware-packages/s6-networking-man-pages {
+      inherit buildManPages;
+    };
+    s6-portable-utils-man-pages = callPackage ../development/skaware-packages/s6-portable-utils-man-pages {
+      inherit buildManPages;
+    };
   };
 
   inherit (skawarePackages)
