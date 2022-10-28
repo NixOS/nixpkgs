@@ -1657,6 +1657,22 @@ let
         };
       };
 
+      maximedenes.vscoq = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "maximedenes";
+          name = "vscoq";
+          version = "0.3.6";
+          sha256 = "sha256-b0gCaEzt5yAj53oLFZSXSD3bum9J1fYes/uf9+OlUek=";
+        };
+        meta = with lib; {
+          description = "VsCoq is an extension for Visual Studio Code (VS Code) and VSCodium with support for the Coq Proof Assistant.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=maximedenes.vscoq";
+          homepage = "https://github.com/coq-community/vscoq";
+          license = licenses.mit;
+          maintainers = with maintainers; [ Zimmi48 ];
+        };
+      };
+
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "git-graph";
