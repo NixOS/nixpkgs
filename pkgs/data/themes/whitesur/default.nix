@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , glib
 , gnome-shell
 , gnome-themes-extra
@@ -87,6 +88,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "MacOS Big Sur like theme for Gnome desktops";
