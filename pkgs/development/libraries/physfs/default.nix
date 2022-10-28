@@ -25,10 +25,11 @@ let
     '';
 
     meta = with lib; {
-      homepage = "http://icculus.org/physfs/";
+      homepage = "https://icculus.org/physfs/";
       description = "Library to provide abstract access to various archives";
-      license = licenses.free;
-      platforms = platforms.unix;
+      changelog = "https://github.com/icculus/physfs/releases/tag/release-${version}";
+      license = licenses.zlib;
+      platforms = platforms.all;
     };
   };
 
