@@ -112,7 +112,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
           enable = true;
           role = "agent";
           serverAddr = "https://192.168.1.3:6443";
-          extraFlags = lib.toString [
+          extraFlags = builtins.toString [
             "--pause-image" "test.local/pause:local"
             "--node-ip" "192.168.1.2"
           ];
@@ -142,11 +142,9 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
       server.wait_until_succeeds("k3s kubectl get node agent")
 
       for m in machines:
-      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-      + lib.optionalString (!pkgs.stdenv.isAarch64) ''m.succeed("k3s check-config")'' + ''
-          m.succeed(
-              "${pauseImage} | k3s ctr image import -"
-          )
+          ${ # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
+             lib.optionalString (!pkgs.stdenv.isAarch64) "m.succeed(\"k3s check-config\")" }
+          m.succeed("${pauseImage} | k3s ctr image import -")
 
       server.succeed("k3s kubectl cluster-info")
       # Also wait for our service account to show up; it takes a sec
