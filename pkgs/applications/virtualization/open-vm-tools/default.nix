@@ -1,8 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
-, bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
-, libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst, libxcrypt
-, pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
-, libdrm, udev, util-linux
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, autoreconfHook
+, bash
+, fuse3
+, libmspack
+, openssl
+, pam
+, xercesc
+, icu
+, libdnet
+, procps
+, libtirpc
+, rpcsvc-proto
+, libX11
+, libXext
+, libXinerama
+, libXi
+, libXrender
+, libXrandr
+, libXtst
+, libxcrypt
+, pkg-config
+, glib
+, gdk-pixbuf-xlib
+, gtk3
+, gtkmm3
+, iproute2
+, dbus
+, systemd
+, which
+, libdrm
+, udev
+, util-linux
 , withX ? true
 }:
 
@@ -11,9 +42,9 @@ stdenv.mkDerivation rec {
   version = "12.1.0";
 
   src = fetchFromGitHub {
-    owner  = "vmware";
-    repo   = "open-vm-tools";
-    rev    = "stable-${version}";
+    owner = "vmware";
+    repo = "open-vm-tools";
+    rev = "stable-${version}";
     hash = "sha256-PgrLu0Bm9Vom5WNl43312QFWKojdXDAGn3Nvj4hzPrQ=";
   };
 
@@ -21,29 +52,59 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
-  buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc libxcrypt openssl pam procps rpcsvc-proto udev xercesc ]
-      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    fuse3
+    glib
+    icu
+    libdnet
+    libdrm
+    libmspack
+    libtirpc
+    libxcrypt
+    openssl
+    pam
+    procps
+    rpcsvc-proto
+    udev
+    xercesc
+  ] ++ lib.optionals withX [
+    gdk-pixbuf-xlib
+    gtk3
+    gtkmm3
+    libX11
+    libXext
+    libXinerama
+    libXi
+    libXrender
+    libXrandr
+    libXtst
+  ];
 
   postPatch = ''
-     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
-     sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
-     sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
-     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
-     sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
+    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
+    sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+    sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
+    sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
+    sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
 
-     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
-     sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+    # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
+    sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
 
-     # Make reboot work, shutdown is not in /sbin on NixOS
-     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+    # Make reboot work, shutdown is not in /sbin on NixOS
+    sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
 
-     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
-     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
+    # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
+    sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
 
-     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
-      --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
-      --replace "/bin/mount" "${util-linux}/bin/mount"
+    substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
+     --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+     --replace "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [
@@ -79,7 +140,7 @@ stdenv.mkDerivation rec {
       better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms =  [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ joamaki ];
   };
 }
