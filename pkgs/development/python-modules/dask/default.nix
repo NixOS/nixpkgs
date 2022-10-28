@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.9.1";
+  version = "2022.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-4Tok9eYhi2FF+8bpKnwKT3KIRGHIMtxczTkZ6qD8x7g=";
+    hash = "sha256-nOgAA0lsQiB3S4woP9bet36z33YAf2Wek2uZ5cpQHxQ=";
   };
 
   propagatedBuildInputs = [
