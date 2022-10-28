@@ -31,11 +31,6 @@ symlinkJoin {
     rm $out/bin/retroarch
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       ${wrapperArgs}
-  '' + lib.optionalString stdenv.isDarwin ''
-    # wrapProgram can't operate on symlinks
-    rm $out/Applications/RetroArch.app/Contents/MacOS/retroarch
-    makeWrapper ${retroarch}/bin/retroarch $out/Applications/RetroArch.app/Contents/MacOS/retroarch \
-      ${wrapperArgs}
   '';
 
   meta = with retroarch.meta; {
