@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
+, fftw, fftwFloat, fftwLongDouble, numpy, cython }:
 
 buildPythonPackage rec {
   version = "0.13.0";
@@ -15,11 +15,18 @@ buildPythonPackage rec {
     export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
   '';
 
+  nativeBuildInputs = [
+    cython
+  ];
+
   buildInputs = [ fftw fftwFloat fftwLongDouble];
 
-  propagatedBuildInputs = [ numpy scipy cython dask ];
+  propagatedBuildInputs = [ numpy ];
 
-  # Tests cannot import pyfftw. pyfftw works fine though.
+  preCheck = ''
+    cd "$out"
+  '';
+  # No tests in sdist.
   doCheck = false;
   pythonImportsCheck = [ "pyfftw" ];
 
