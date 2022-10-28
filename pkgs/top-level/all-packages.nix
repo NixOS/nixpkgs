@@ -30883,7 +30883,7 @@ with pkgs;
 
   libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
 
-  openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
+  openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
