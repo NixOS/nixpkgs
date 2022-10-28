@@ -25578,6 +25578,8 @@ with pkgs;
 
   fan2go = callPackage ../os-specific/linux/fan2go { };
 
+  fanctl = callPackage ../os-specific/linux/fanctl { };
+
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
   ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
