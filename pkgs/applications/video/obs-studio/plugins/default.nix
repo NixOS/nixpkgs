@@ -12,7 +12,7 @@
 
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
-  obs-hyperion = callPackage ./obs-hyperion/default.nix { };
+  obs-hyperion = libsForQt5.callPackage ./obs-hyperion/default.nix { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
