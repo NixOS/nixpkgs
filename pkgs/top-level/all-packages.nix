@@ -4045,7 +4045,7 @@ with pkgs;
   # the new one.
   pgf1 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-1.x.nix { };
 
-  pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
+  pgf2 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-2.x.nix { };
 
   pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
 
