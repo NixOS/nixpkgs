@@ -137,18 +137,18 @@
   }
   {
     pname = "microsoft.netcore.app.host.linux-x64";
-    version = "3.1.21";
+    version = "3.1.25";
     src = fetchurl {
-      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.21/microsoft.netcore.app.host.linux-x64.3.1.21.nupkg";
-      sha256 = "01kbhi29lhv6mg1zfsyakz3z8hfbxnc0kxy0fczl8xqviik9svx7";
+      url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/microsoft.netcore.app.host.linux-x64/3.1.25/microsoft.netcore.app.host.linux-x64.3.1.25.nupkg";
+      sha256 = "1dxk7v29wr736hlz8nfm2xv8dxmdl59w8w56kqjrvdw1lvgm411v";
     };
   }
   {
     pname = "microsoft.netcore.app.host.linux-arm64";
-    version = "3.1.21";
+    version = "3.1.25";
     src = fetchurl {
-      url = "https://globalcdn.nuget.org/packages/microsoft.netcore.app.host.linux-arm64.3.1.21.nupkg";
-      sha256 = "0mv79mv0g539437jy4cxvkic7iqgh2xs1nlpd8bzx7jha27g5mlr";
+      url = "https://globalcdn.nuget.org/packages/microsoft.netcore.app.host.linux-arm64.3.1.25.nupkg";
+      sha256 = "1xp56v22il0cmg6r113yv9rprgyppmvphx400zagdgac8a536ywq";
     };
   }
   {
