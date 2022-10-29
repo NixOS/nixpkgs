@@ -3,11 +3,8 @@
 , fetchFromGitLab
 , meson
 , ninja
-, cmake
 , pkg-config
-, python3
 , vala
-, glib
 , gtk4
 , libgee
 , libadwaita
@@ -31,10 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson
-    glib
     ninja
     vala
-    python3
     pkg-config
     wrapGAppsHook4
     appstream-glib
