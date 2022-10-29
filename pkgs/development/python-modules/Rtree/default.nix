@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "rtree";
-  version = "1.0.0";
+  version = "1.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Rtree";
     inherit version;
-    sha256 = "sha256-0Eg0ghITRrCTuaQlGNQPkhrfRFkVt66jB+smdoyDloI=";
+    sha256 = "sha256-IiEhaZwwOmQGXYSb9wOLHsq8N7Zcf6NAvts47w6AVCk=";
   };
 
   postPatch = ''
