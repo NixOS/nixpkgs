@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 98564a6c45884e021349c5c6dc235c7ba0ba6f44
-  ref: refs/tags/6.2.23
+  revision: 1c805324f10bafa3a99fcd0315cc99ef83430b23
+  ref: refs/tags/6.2.24
   specs:
-    metasploit-framework (6.2.23)
+    metasploit-framework (6.2.24)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -129,23 +129,23 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.649.0)
-    aws-sdk-core (3.164.0)
+    aws-partitions (1.652.0)
+    aws-sdk-core (3.166.0)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.525.0)
-      aws-sigv4 (~> 1.1)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.341.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-ec2 (1.343.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.71.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-iam (1.73.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.58.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-kms (1.59.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.116.0)
-      aws-sdk-core (~> 3, >= 3.127.0)
+    aws-sdk-s3 (1.117.1)
+      aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
@@ -280,7 +280,7 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.1)
-    pdf-reader (2.10.0)
+    pdf-reader (2.11.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -436,4 +436,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.3.22
+   2.3.23
