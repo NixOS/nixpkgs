@@ -4042,15 +4042,21 @@ with pkgs;
 
   # Keep the old PGF since some documents don't render properly with
   # the new one.
-  pgf1 = callPackage ../tools/typesetting/tex/pgf/1.x.nix { };
+  pgf1 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-1.x.nix { };
 
-  pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
+  pgf2 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-2.x.nix { };
 
-  pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
+  pgf3 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-3.x.nix { };
 
   pgf = pgf2;
 
-  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
+  pgf-pie = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-pie.nix { };
+
+  pgf-umlcd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlcd.nix { };
+
+  pgf-umlsd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlsd.nix { };
+
+  pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
