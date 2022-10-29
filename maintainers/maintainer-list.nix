@@ -4428,6 +4428,13 @@
     githubId = 9959940;
     name = "Andreas Fehn";
   };
+  felipeqq2 = {
+    name = "Felipe Silva";
+    email = "felipeqq2@outlook.com";
+    github = "felipeqq2";
+    githubId = 71830138;
+    keys = [{ fingerprint = "F5F0 2BCE 3580 BF2B 707A  AA8C 2FD3 4A9E 2671 91B8"; }];
+  };
   felixscheinost = {
     name = "Felix Scheinost";
     email = "felix.scheinost@posteo.de";
