@@ -88,12 +88,14 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/mysql/libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
   buildInputs = [
     armadillo
-    arrow-cpp
     c-blosc
     brunsli
     cfitsio
@@ -124,7 +126,6 @@ stdenv.mkDerivation rec {
     lz4
     libmysqlclient
     netcdf
-    openexr
     openjpeg
     openssl
     pcre2
@@ -138,11 +139,15 @@ stdenv.mkDerivation rec {
     libtiff
     tiledb
     libwebp
-    xercesc
     zlib
     zstd
     python3
     python3.pkgs.numpy
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # tests for formats enabled by these packages fail on macos
+    arrow-cpp
+    openexr
+    xercesc
   ] ++ lib.optional stdenv.isDarwin libiconv;
 
   postInstall = ''
