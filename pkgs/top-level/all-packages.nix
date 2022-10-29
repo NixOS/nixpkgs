@@ -4025,6 +4025,45 @@ with pkgs;
 
   fsql = callPackage ../tools/misc/fsql { };
 
+  ### TOOLS/TYPESETTING/TEX
+
+  auctex = callPackage ../tools/typesetting/tex/auctex { };
+
+  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
+
+  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
+
+  dblatexFull = dblatex.override { enableAllFeatures = true; };
+
+  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
+
+  lkproof = callPackage ../tools/typesetting/tex/lkproof { };
+
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
+
+  # Keep the old PGF since some documents don't render properly with
+  # the new one.
+  pgf1 = callPackage ../tools/typesetting/tex/pgf/1.x.nix { };
+
+  pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
+
+  pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
+
+  pgf = pgf2;
+
+  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
+
+  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
+
+  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
+
+  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
+
+  texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
+
+  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
+  texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
+
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
   };
@@ -5065,8 +5104,6 @@ with pkgs;
 
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
-
-  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
@@ -8592,8 +8629,6 @@ with pkgs;
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
-  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
-
   mhonarc = perlPackages.MHonArc;
 
   minica = callPackage ../tools/security/minica { };
@@ -8738,8 +8773,6 @@ with pkgs;
   jump = callPackage ../tools/system/jump {};
 
   latex2html = callPackage ../tools/misc/latex2html { };
-
-  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
 
@@ -10440,8 +10473,6 @@ with pkgs;
 
   ppl = callPackage ../development/libraries/ppl { };
 
-  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
-
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
@@ -11864,8 +11895,6 @@ with pkgs;
   textadept = callPackage ../applications/editors/textadept { };
 
   texworks = libsForQt5.callPackage ../applications/editors/texworks { };
-
-  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
   tf2pulumi = callPackage ../development/tools/tf2pulumi { };
 
@@ -36126,8 +36155,6 @@ with pkgs;
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
-  auctex = callPackage ../tools/typesetting/tex/auctex { };
-
   areca = callPackage ../applications/backup/areca {
     jdk = jdk8;
     jre = jre8;
@@ -36243,10 +36270,6 @@ with pkgs;
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
-
-  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
-
-  dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
@@ -36757,8 +36780,6 @@ with pkgs;
 
   i3a = callPackage ../misc/i3a { };
 
-  lkproof = callPackage ../tools/typesetting/tex/lkproof { };
-
   lice = python3Packages.callPackage ../tools/misc/lice {};
 
   m33-linux = callPackage ../misc/drivers/m33-linux { };
@@ -36813,18 +36834,6 @@ with pkgs;
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
   pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
-
-  pgf = pgf2;
-
-  # Keep the old PGF since some documents don't render properly with
-  # the new one.
-  pgf1 = callPackage ../tools/typesetting/tex/pgf/1.x.nix { };
-
-  pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
-
-  pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
-
-  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
@@ -37103,15 +37112,7 @@ with pkgs;
 
   timeular = callPackage ../applications/office/timeular {};
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
   tewi-font = callPackage ../data/fonts/tewi { };
-
-  texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
-
-  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs
-    (callPackage ../tools/typesetting/tex/texlive { });
 
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
