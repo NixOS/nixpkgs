@@ -22,13 +22,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  postConfigure = ''
-    substituteInPlace Makefile.am \
-      --replace "-L/usr/local/lib -Wl,-rpath /usr/local/lib" ""
-    substituteInPlace configure.ac \
-      --replace "/usr/share/consolefonts" "$out/share/consolefonts"
-  '';
-
   meta = with lib; {
     description = "Console-based Audio Visualizer for Alsa";
     homepage = "https://github.com/karlstav/cava";
