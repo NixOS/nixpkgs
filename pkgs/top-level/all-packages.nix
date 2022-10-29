@@ -735,6 +735,8 @@ with pkgs;
 
   flare-floss = callPackage ../tools/security/flare-floss { };
 
+  flare-signal = callPackage ../applications/networking/instant-messengers/flare-signal { };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro { };
