@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-    libadwaita
-    libgee
-    gtksourceview5
     blueprint-compiler
   ];
 
   buildInputs = [
     gtk4
+    libadwaita
+    libgee
+    gtksourceview5
   ];
 
   postInstall = ''
