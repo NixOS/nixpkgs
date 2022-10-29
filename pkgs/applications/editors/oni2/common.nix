@@ -4,8 +4,8 @@
 , ripgrep, fontconfig, libGL, libGLU, ncurses, acl, harfbuzz, libjpeg, expat
 , icu58, libpng
 # Build
-, jq, perl, makeWrapper, bash, which, nasm, python2, gn, ninja, cmake, clang
-, fixup_yarn_lock, callPackage }:
+, jq, perl, makeWrapper, bash, which, nasm, python3Minimal, gn, ninja, cmake
+, clang, fixup_yarn_lock, callPackage }:
 
 { variant, version, rev, sha256, fetchDepsSha256, license }:
 
@@ -31,7 +31,7 @@ let
       gitMinimal
       curlMinimal
       cacert
-      python2
+      python3Minimal
       perl
       unzip
       yarn
@@ -98,7 +98,7 @@ in stdenv.mkDerivation (rec {
     perl
     which
     nasm
-    python2
+    python3Minimal
     gn
     ninja
     cmake
