@@ -4055,6 +4055,8 @@ with pkgs;
 
   pgf-umlcd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlcd.nix { };
 
+  pgf-umlsd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlsd.nix { };
+
   pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
