@@ -1427,6 +1427,8 @@ with pkgs;
 
   ttchat = callPackage ../tools/misc/ttchat { };
 
+  unflac = callPackage ../tools/audio/unflac { };
+
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin {
