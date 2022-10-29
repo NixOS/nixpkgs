@@ -4019,6 +4019,8 @@ with pkgs;
 
   frawk = callPackage ../tools/text/frawk { };
 
+  frei = callPackage ../tools/misc/frei { };
+
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
