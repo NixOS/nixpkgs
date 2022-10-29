@@ -6248,6 +6248,8 @@ with pkgs;
 
   conform = callPackage ../applications/version-management/git-and-tools/conform { };
 
+  easeprobe = callPackage ../tools/misc/easeprobe { };
+
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_14;
   };
