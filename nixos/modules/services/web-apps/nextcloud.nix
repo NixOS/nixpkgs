@@ -13,7 +13,12 @@ let
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all;
-        enabled
+        # disable default openssl extension
+        (lib.filter (e: e.pname != "openssl") enabled)
+        # use OpenSSL 1.1 for RC4 NextCloud encryption if user
+        # has acknowledged the brokeness of the ciphers (RC4).
+        # TODO: remove when https://github.com/nextcloud/server/issues/32003 is fixed.
+        ++ (if cfg.enableBrokenCiphersForSSE then [ cfg.phpPackage.extensions.openssl-legacy ] else [ cfg.phpPackage.extensions.openssl ])
         ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
@@ -80,6 +85,36 @@ in {
 
   options.services.nextcloud = {
     enable = mkEnableOption (lib.mdDoc "nextcloud");
+
+    enableBrokenCiphersForSSE = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        This option uses OpenSSL PHP extension linked against OpenSSL 1.x rather
+        than latest OpenSSL (≥ 3), this is not recommended except if you need
+        it.
+
+        Server-side encryption in NextCloud uses RC4 ciphers, a broken cipher
+        since ~2004.
+
+        This cipher has been disabled in OpenSSL ≥ 3 and requires
+        a specific legacy profile to re-enable it.
+
+        If you upgrade to a NextCloud using OpenSSL ≥ 3 and have
+        server-side encryption configured, you will not be able to access
+        your files anymore, enabling this option can restore access to your files.
+
+        Unless you are using external storage,
+        it is advised to [disable server-side encryption](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption) as it is unclear
+        it provides any amount of security beyond encryption for external storage.
+        If you know more about this feature and is keen on it,
+        please chime in <https://github.com/NixOS/nixpkgs/pull/198470> or open
+        an issue in nixpkgs.
+
+        In the future, NextCloud may move to AES-256-GCM, by then,
+        this option will be deprecated.
+      '';
+    };
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
@@ -649,6 +684,16 @@ in {
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
+        ++ (optional cfg.enableBrokenCiphersForSSE ''
+          You're using PHP's openssl extension built against OpenSSL 1.1.
+          This is only necessary if you're using NextCloud's server-side encryption.
+          Please keep in mind that it's using the broken RC4 cipher.
+
+          In order to disable this option and remove this warning,
+          server-side encryption has to be disabled, see <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
+
+          For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
+        '')
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either

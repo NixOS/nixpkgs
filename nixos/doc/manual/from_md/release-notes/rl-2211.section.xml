@@ -609,6 +609,22 @@
       </listitem>
       <listitem>
         <para>
+          The NextCloud NixOS module uses OpenSSL 3.x for its PHP’s
+          openssl extension, this breaks RC4-based server-side
+          encryption in NextCloud, making all your files unreadable upon
+          upgrade. Upon testing, we could not trigger any cases of
+          <emphasis role="strong">data loss</emphasis>, but we
+          <emphasis role="strong">cannot guarantee</emphasis> that for
+          every accidental OpenSSL upgrade. To restore functionality,
+          <link linkend="opt-services.nextcloud.enableBrokenCiphersForSSE"><literal>services.nextcloud.enableBrokenCiphersForSSE</literal></link>
+          has to be set to <literal>true</literal>. NextCloud is
+          planning to implement AES-256-GCM server-side encryption in
+          the future through
+          <link xlink:href="https://github.com/nextcloud/server/pull/25551">https://github.com/nextcloud/server/pull/25551</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>coq</literal> package and versioned variants
           starting at <literal>coq_8_14</literal> no longer include
           CoqIDE, which is now available through
