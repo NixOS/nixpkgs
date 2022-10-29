@@ -138,6 +138,8 @@ let
         fi
       ''}
 
+      export SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1
+
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness)
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
