@@ -9394,6 +9394,12 @@
     githubId = 11706080;
     name = "Moritz Clasmeier";
   };
+  mtoohey = {
+    name = "Matthew Toohey";
+    email = "contact@mtoohey.com";
+    github = "mtoohey31";
+    githubId = 36740602;
+  };
   MtP = {
     email = "marko.nixos@poikonen.de";
     github = "MtP76";
