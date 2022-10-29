@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://xiph.org/flac/";
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
+    changelog = "https://xiph.org/flac/changelog.html";
     platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ruuda ];
