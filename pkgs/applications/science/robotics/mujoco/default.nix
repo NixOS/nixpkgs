@@ -113,10 +113,10 @@ stdenv.mkDerivation rec {
     ln -s ${tinyxml2} build/_deps/tinyxml2-src
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
     homepage = "https://mujoco.org/";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.samuela ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ samuela ];
   };
 }
