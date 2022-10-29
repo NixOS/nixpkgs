@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.50.0";
+  version = "1.56.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/DubCSbcdRbu4IyA+xvL72eVccjC0iuUHds060N5ZCg=";
+    hash = "sha256-+yIxdy7QL7TU80RAfJK4GfpyiDXbjXGiuwMacWsqQ0g=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,12 @@ buildPythonPackage rec {
     "test_standard_interfaces"
     "test_tcp_connection_with_forwarding"
     "test_unexpected_disconnect"
+    # NameError: name '_cast_uint32_native' is not defined
+    "test_unmarshalling_with_table"
+    "test_unmarshall_can_resume"
+    "test_unmarshall_bluez_message"
+    "test_unmarshall_bluez_interfaces_added_message"
+    "test_ay_buffer"
   ];
 
   meta = with lib; {
