@@ -16113,7 +16113,7 @@ with pkgs;
 
   arpa2common = callPackage ../development/libraries/arpa2common { };
 
-  asn2quickder = python2Packages.callPackage ../development/tools/asn2quickder {};
+  asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
