@@ -637,7 +637,7 @@ in
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             '' + ''
               export KEYCLOAK_ADMIN=admin
-              export KEYCLOAK_ADMIN_PASSWORD=${cfg.initialAdminPassword}
+              export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
               kc.sh start --optimized
             '';
           };
