@@ -2620,6 +2620,8 @@ self: super: with self; {
 
   dlinfo = callPackage ../development/python-modules/dlinfo { };
 
+  dlms-cosem = callPackage ../development/python-modules/dlms-cosem { };
+
   dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
