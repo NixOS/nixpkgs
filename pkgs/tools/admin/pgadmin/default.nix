@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.14";
+  version = "6.15";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-M3Tu+69Gmc0FfqtGTtJ6j014QARd2efJ4dq0vK2IMr8=";
+    sha256 = "sha256-S//Rfi8IiBo+lL0BCFVBw+hy2Tw37B349Gcpq2knqSM=";
   };
 
   yarnDeps = mkYarnModules {
@@ -38,7 +38,6 @@ let
     passlib
     pytz
     simplejson
-    six
     sqlparse
     wtforms
     flask-paranoid
@@ -75,7 +74,7 @@ let
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # flask 2.2 is incompatible with pgadmin 6.14
+    # flask 2.2 is incompatible with pgadmin 6.15
     # https://redmine.postgresql.org/issues/7651
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.1.3";
@@ -84,7 +83,7 @@ let
         sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
-    # pgadmin 6.14 is incompatible with the major flask-security-too update to 5.0.x
+    # pgadmin 6.15 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
