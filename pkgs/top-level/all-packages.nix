@@ -4053,6 +4053,8 @@ with pkgs;
 
   pgf-pie = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-pie.nix { };
 
+  pgf-umlcd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlcd.nix { };
+
   pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
