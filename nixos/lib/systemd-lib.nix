@@ -187,11 +187,14 @@ in rec {
         done
       done
 
-      # Symlink all units defined by systemd.units. If these are also
-      # provided by systemd or systemd.packages, then add them as
+      # Symlink units defined by systemd.units where override strategy
+      # shall be automatically detected. If these are also provided by
+      # systemd or systemd.packages, then add them as
       # <unit-name>.d/overrides.conf, which makes them extend the
       # upstream unit.
-      for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -208,6 +211,16 @@ in rec {
        else
           ln -fs $i/$fn $out/
         fi
+      done
+
+      # Symlink units defined by systemd.units which shall be
+      # treated as drop-in file.
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
+        fn=$(basename $i/*)
+        mkdir -p $out/$fn.d
+        ln -s $i/$fn $out/$fn.d/overrides.conf
       done
 
       # Create service aliases from aliases option.
@@ -340,7 +353,7 @@ in rec {
     '';
 
   targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -349,7 +362,7 @@ in rec {
     };
 
   serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Service]
@@ -371,7 +384,7 @@ in rec {
     };
 
   socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Socket]
@@ -382,7 +395,7 @@ in rec {
     };
 
   timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Timer]
@@ -391,7 +404,7 @@ in rec {
     };
 
   pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Path]
@@ -400,7 +413,7 @@ in rec {
     };
 
   mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Mount]
@@ -409,7 +422,7 @@ in rec {
     };
 
   automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Automount]
@@ -418,7 +431,7 @@ in rec {
     };
 
   sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Slice]

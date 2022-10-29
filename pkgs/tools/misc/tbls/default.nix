@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "tbls";
-  version = "1.56.4";
+  version = "1.56.5";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     rev = "v${version}";
-    hash = "sha256-b9cYt7s7tbPQZtT5/3MY2zDeASd32FP0f5sN34w/fmI=";
+    hash = "sha256-gS3LOE6TiRMWXKjOO6D9YGMYsg/dGgoSNwZgwHLulrE=";
   };
 
   vendorHash = "sha256-pmnSeQHZEtsshldfq6D/r5pMYA5ivMWkzjOq2/WseYU=";

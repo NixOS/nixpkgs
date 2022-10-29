@@ -15702,4 +15702,10 @@
     githubId = 5228243;
     name = "waelwindows";
   };
+  wuyoli = {
+    name = "wuyoli";
+    email = "wuyoli@tilde.team";
+    github = "wuyoli";
+    githubId = 104238274;
+  };
 }

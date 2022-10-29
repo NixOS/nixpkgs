@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SefgXJUe0fh4BW7vOIKW6O26oEngq/1+dAYStBfkKao=";
+    sha256 = "sha256-/y3BHWCErBZT3u/Es44nxkDDsin8XN4P5MAMuixd2KM=";
   };
 
   vendorSha256 = "sha256-NwDaPpjkQogXE37RGS3zEALlp3NuXP9RW//vbwM6y0A=";

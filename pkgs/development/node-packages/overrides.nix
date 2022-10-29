@@ -191,6 +191,12 @@ final: prev: {
 
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = ''
+      installShellCompletion --cmd gt \
+        --bash <($out/bin/gt completion) \
+        --zsh <($out/bin/gt completion)
+    '';
   };
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
