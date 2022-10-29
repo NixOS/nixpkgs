@@ -24348,6 +24348,8 @@ with pkgs;
 
   tailscale = callPackage ../servers/tailscale { };
 
+  tailspin = callPackage ../tools/misc/tailspin { };
+
   thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
