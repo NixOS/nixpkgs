@@ -802,6 +802,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>cassandra_2_1</literal> and
+          <literal>cassandra_2_2</literal> have been removed. Please
+          update to <literal>cassandra_3_11</literal> or
+          <literal>cassandra_3_0</literal>. See the
+          <link xlink:href="https://github.com/apache/cassandra/blob/cassandra-3.11.14/NEWS.txt">changelog</link>
+          for more information about the upgrade process.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>mysql57</literal> has been removed. Please update to
           <literal>mysql80</literal> or <literal>mariadb</literal>. See
           the
