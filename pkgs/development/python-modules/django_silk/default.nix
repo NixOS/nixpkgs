@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.0.1";
+  version = "5.0.2";
 
   # pypi tarball doesn't include test project
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
-    rev = version;
-    hash = "sha256-U2lj0B85cf2xu0o7enuLJB5YKaIt6gMvn+TgxleLslk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LzcbRZ9NLTkDTZ2eW+uXYqPbWDSdLZAJcYdD8JLuiDc=";
   };
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but django's
