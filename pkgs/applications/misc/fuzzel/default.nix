@@ -17,7 +17,6 @@
 , pngSupport ? true
 # Optional dependencies
 , cairo
-, librsvg
 , libpng
 }:
 
@@ -51,22 +50,21 @@ stdenv.mkDerivation rec {
     tllist
     fcft
   ] ++ lib.optional enableCairo cairo
-    ++ lib.optional pngSupport libpng
-    ++ lib.optional svgSupport librsvg;
+    ++ lib.optional pngSupport libpng;
 
   mesonBuildType = "release";
 
   mesonFlags = [
     "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
     "-Dpng-backend=${if pngSupport then "libpng" else "none"}"
-    "-Dsvg-backend=${if svgSupport then "librsvg" else "none"}"
+    "-Dsvg-backend=${if svgSupport then "nanosvg" else "none"}"
   ];
 
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fionera polykernel ];
+    license = with licenses; [ mit zlib ];
+    maintainers = with maintainers; [ fionera polykernel erikrodrgz ];
     platforms = with platforms; linux;
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
   };
