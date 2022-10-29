@@ -183,7 +183,7 @@ in
         DynamicUser = true;
         ReadWritePaths = cfg.settings.DatabaseDirectory;
         RuntimeDirectory = "geoipupdate";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
         CapabilityBoundingSet = "";
         PrivateDevices = true;
         PrivateMounts = true;
