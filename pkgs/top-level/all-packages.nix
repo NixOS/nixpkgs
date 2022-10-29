@@ -4051,7 +4051,7 @@ with pkgs;
 
   pgf = pgf2;
 
-  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
+  pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
