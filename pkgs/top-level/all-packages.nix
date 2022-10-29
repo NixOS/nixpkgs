@@ -7838,6 +7838,8 @@ with pkgs;
 
   ibniz = callPackage ../tools/graphics/ibniz { };
 
+  ica-securestore = callPackage ../tools/security/ica-securestore { };
+
   ica-securestore-pkcs11 = callPackage ../tools/security/ica-securestore/pkcs11.nix { };
 
   icecast = callPackage ../servers/icecast { };
