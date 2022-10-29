@@ -2088,7 +2088,7 @@ with pkgs;
 
   inherit (callPackages ../servers/nosql/arangodb {
     stdenv = gcc8Stdenv;
-  }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
+  }) arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
   # arcanist currently crashes with some workflows on php8.1, use 8.0

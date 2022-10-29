@@ -50,13 +50,10 @@ let
       license = licenses.asl20;
       platforms = platforms.linux;
       maintainers = [ maintainers.flosse ];
+      
     };
   };
 in {
-  arangodb_3_3 = common {
-    version = "3.3.24";
-    sha256 = "18175789j4y586qvpcsaqxmw7d6vc3s29qm1fja5c7wzimx6ilyp";
-  };
   arangodb_3_4 = common {
     version = "3.4.8";
     sha256 = "0vm94lf1i1vvs04vy68bkkv9q43rsaf1y3kfs6s3jcrs3ay0h0jn";
