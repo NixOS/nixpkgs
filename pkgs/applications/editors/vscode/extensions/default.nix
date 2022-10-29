@@ -582,8 +582,8 @@ let
         mktplcRef = {
           name = "catppuccin-vsc";
           publisher = "catppuccin";
-          version = "2.1.0";
-          sha256 = "sha256-1pX9NQxW2Rm9p912Pn7QmLmXPI7EmiXTnCLWsIQNFhY=";
+          version = "2.2.1";
+          sha256 = "sha256-vS+hz3RxG71F5QoO4LQOgOgFh6GQ8QX/+4mMD0KC1kA=";
         };
         meta = with lib; {
           description = "Soothing pastel theme for VSCode";
@@ -1731,8 +1731,8 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.6.1";
-          sha256 = "sha256-5/Tqpn/7byl+z2ATflgKV1+rhdqj+XMEZNbGwDmGwLQ=";
+          version = "0.7.0";
+          sha256 = "sha256-MLBPhDBU8vPVvbde3fdwhxKvQa8orUMKAAXoOfNrbh4=";
         };
         meta = with lib; {
           description = "direnv support for Visual Studio Code";

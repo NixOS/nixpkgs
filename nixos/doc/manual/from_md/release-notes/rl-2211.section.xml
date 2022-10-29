@@ -876,6 +876,18 @@
       </listitem>
       <listitem>
         <para>
+          ZFS module will not allow hibernation by default, this is a
+          safety measure to prevent data loss cases like the ones
+          described at
+          <link xlink:href="https://github.com/openzfs/zfs/issues/260">OpenZFS/260</link>
+          and
+          <link xlink:href="https://github.com/openzfs/zfs/issues/12842">OpenZFS/12842</link>.
+          Use the <literal>boot.zfs.allowHibernation</literal> option to
+          configure this behaviour.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Redis module now disables RDB persistence when
           <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
           instead of using the Redis default.
