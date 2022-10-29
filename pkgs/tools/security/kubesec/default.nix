@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "kubesec";
-  version = "2.11.5";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SxXYtIoyKe9/M3Ct1qy2QC6pYpt9GOefGsC5nUCoTEA=";
+    sha256 = "sha256-0irZ3mCpXDWc/RovTK9d7AT/Gfbyt1R4WjCJFZ5RFdg=";
   };
-  vendorSha256 = "sha256-pq4s/Rqu1I1nrTxy5Cn1rt5HO6z7ziKz/9LLpXLYpPc=";
+  vendorSha256 = "sha256-sRIGehDuAjtpOAYYtqANua8LSzl/+WolZimMxlkG5X8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
