@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
         "https://github.com/Netatalk/Netatalk/commit/916b515705cf7ba28dc53d13202811c6e1fe6a9e.patch";
       sha256 = "sha256-DAABpYjQPJLsQBhmtP30gA357w0Qn+AsnFgAeyDC/Rg=";
     })
+    (fetchpatch {
+      name = "fix-afpd-segfault.patch";
+      url = "https://github.com/Netatalk/Netatalk/commit/9d0c21298363e8174cdfca657e66c4d10819507b.patch";
+      sha256 = "sha256-a6kKUSOyMEz7gFg1KSeGnL1znu4TQx86tdn4DYH5r+E=";
+    })
   ];
 
   freeBSDPatches = [
