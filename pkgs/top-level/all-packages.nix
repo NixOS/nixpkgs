@@ -21229,6 +21229,8 @@ with pkgs;
 
   mueval = callPackage ../development/tools/haskell/mueval { };
 
+  mujoco = callPackage ../applications/science/robotics/mujoco { };
+
   muparser = callPackage ../development/libraries/muparser {
     inherit (darwin.stubs) setfile;
   };
