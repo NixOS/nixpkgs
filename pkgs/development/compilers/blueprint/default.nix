@@ -25,9 +25,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-  ];
-
-  buildInputs = [
     python3
   ];
 
