@@ -4373,6 +4373,12 @@
     githubId = 1276854;
     name = "Florian Peter";
   };
+  farnoy = {
+    email = "jakub@okonski.org";
+    github = "farnoy";
+    githubId = 345808;
+    name = "Jakub Okoński";
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
