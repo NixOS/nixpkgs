@@ -416,6 +416,7 @@ package-maintainers:
     - rel8
     - regex-rure
     - jacinda
+    - citeproc
     # owothia
     - irc-client
     - chatter
