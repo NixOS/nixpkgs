@@ -394,7 +394,7 @@ in {
         User = user;
         WorkingDirectory = snipe-it;
         RuntimeDirectory = "snipe-it/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
       path = [ pkgs.replace-secret ];
       script =

@@ -137,7 +137,7 @@ in {
         PrivateTmp = true;
         WorkingDirectory = appDir;
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
