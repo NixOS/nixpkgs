@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python2, perl, snappy, lzo, which, catch2, catch }:
 
 let
-  common = { version, sha256 }: stdenv.mkDerivation {
+  common = { version, sha256, knownVulnerabilities ? [] }: stdenv.mkDerivation {
     pname = "arangodb";
     inherit version;
 
@@ -50,16 +50,18 @@ let
       license = licenses.asl20;
       platforms = platforms.linux;
       maintainers = [ maintainers.flosse ];
-      
+      inherit knownVulnerabilities;
     };
   };
 in {
   arangodb_3_4 = common {
     version = "3.4.8";
     sha256 = "0vm94lf1i1vvs04vy68bkkv9q43rsaf1y3kfs6s3jcrs3ay0h0jn";
+    knownVulnerabilities = [ "CVE-2021-25938" "Upstream support ended on 2020-12-31" ];
   };
   arangodb_3_5 = common {
     version = "3.5.1";
     sha256 = "1jw3j7vaq3xgkxiqg0bafn4b2169jq7f3y0l7mrpnrpijn77rkrv";
+    knownVulnerabilities = [ "CVE-2021-25938" "Upstream support ended on 2020-06-21" ];
   };
 }
