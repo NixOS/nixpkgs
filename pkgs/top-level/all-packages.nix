@@ -13,23 +13,22 @@ with pkgs;
 {
   # A module system style type tag
   #
-  # Allows the nixpkgs fixpoint, usually known as `pkgs`
-  # to be distinguished nominally.
+  # Allows the nixpkgs fixpoint, usually known as `pkgs` to be distinguished
+  # nominally.
   #
   #     pkgs._type == "pkgs"
   #     pkgs.pkgsStatic._type == "pkgs"
   #
   # Design note:
-  # While earlier stages of nixpkgs fixpoint construction
-  # are supertypes of this stage, they're generally not
-  # usable in places where a `pkgs` is expected.
-  # (earlier stages being the various `super` variables
-  #  that precede all-packages.nix)
+  # While earlier stages of nixpkgs fixpoint construction are supertypes of this
+  # stage, they're generally not usable in places where a `pkgs` is expected.
+  # (earlier stages being the various `super` variables that precede
+  # all-packages.nix)
   _type = "pkgs";
 
-  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
-  # it uses GCC compiled with multilib support; on i686-linux, it's
-  # just the plain stdenv.
+  # A stdenv capable of building 32-bit binaries.
+  # On x86_64-linux, it uses GCC compiled with multilib support; on i686-linux,
+  # it's just the plain stdenv.
   stdenv_32bit = lowPrio (if stdenv.hostPlatform.is32bit then stdenv else multiStdenv);
 
   stdenvNoCC = stdenv.override (
@@ -39,8 +38,8 @@ with pkgs;
       # TODO: This is a hack to use stdenvNoCC to produce a CF when cross
       # compiling. It's not very sound. The cross stdenv has:
       #   extraBuildInputs = [ targetPackages.darwin.apple_sdks.frameworks.CoreFoundation ]
-      # and uses stdenvNoCC. In order to make this not infinitely recursive, we need to exclude
-      # this extraBuildInput.
+      # and uses stdenvNoCC. In order to make this not infinitely recursive, we
+      # need to exclude this extraBuildInput.
       extraBuildInputs = [];
     }
   );
@@ -83,7 +82,6 @@ with pkgs;
 
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
-
 
   ### Helper functions.
   inherit lib config overlays;
@@ -6384,8 +6382,6 @@ with pkgs;
     boost  = if stdenv.isDarwin then boost else boost15x;
   };
 
-  execline = skawarePackages.execline;
-
   executor = with python3Packages; toPythonApplication executor;
 
   exif = callPackage ../tools/graphics/exif { };
@@ -9463,10 +9459,6 @@ with pkgs;
 
   netselect = callPackage ../tools/networking/netselect { };
 
-  nettee = callPackage ../tools/networking/nettee {
-    inherit (skawarePackages) cleanPackaging;
-  };
-
   networkmanager = callPackage ../tools/networking/networkmanager { };
 
   networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
@@ -11066,16 +11058,6 @@ with pkgs;
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
-
-  s6-dns = skawarePackages.s6-dns;
-
-  s6-linux-init = skawarePackages.s6-linux-init;
-
-  s6-linux-utils = skawarePackages.s6-linux-utils;
-
-  s6-networking = skawarePackages.s6-networking;
-
-  s6-portable-utils = skawarePackages.s6-portable-utils;
 
   sacad = callPackage ../tools/misc/sacad { };
 
@@ -21322,8 +21304,6 @@ with pkgs;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
-  nsss = skawarePackages.nsss;
-
   ntbtls = callPackage ../development/libraries/ntbtls { };
 
   ntk = callPackage ../development/libraries/audio/ntk { };
@@ -22082,8 +22062,6 @@ with pkgs;
 
   SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
 
-  sdnotify-wrapper = skawarePackages.sdnotify-wrapper;
-
   sdrplay = callPackage ../applications/radio/sdrplay {};
 
   sdrpp = callPackage ../applications/radio/sdrpp {
@@ -22153,45 +22131,71 @@ with pkgs;
 
   skjold = callPackage ../development/tools/skjold { };
 
-  skalibs = skawarePackages.skalibs;
-  skalibs_2_10 = skawarePackages.skalibs_2_10;
-
   skawarePackages = recurseIntoAttrs rec {
-    cleanPackaging = callPackage ../build-support/skaware/clean-packaging.nix { };
-    buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix {
+    buildManPages = callPackage ../development/skaware-packages/build-skaware-man-pages.nix { };
+    buildPackage = callPackage ../development/skaware-packages/build-skaware-package.nix {
       inherit cleanPackaging;
     };
-    buildManPages = callPackage ../build-support/skaware/build-skaware-man-pages.nix { };
+    cleanPackaging = callPackage ../development/skaware-packages/clean-packaging.nix { };
 
-    skalibs = callPackage ../development/libraries/skalibs { };
-    skalibs_2_10 = callPackage ../development/libraries/skalibs/2_10.nix { };
-    execline = callPackage ../tools/misc/execline { };
-
-    execline-man-pages = callPackage ../data/documentation/execline-man-pages {
+    execline = callPackage ../development/skaware-packages/execline { };
+    execline-man-pages = callPackage ../development/skaware-packages/execline-man-pages {
       inherit buildManPages;
     };
 
-    s6 = callPackage ../tools/system/s6 { };
-    s6-dns = callPackage ../tools/networking/s6-dns { };
-    s6-linux-init = callPackage ../os-specific/linux/s6-linux-init { };
-    s6-linux-utils = callPackage ../os-specific/linux/s6-linux-utils { };
-    s6-networking = callPackage ../tools/networking/s6-networking { };
-    s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
-    s6-rc = callPackage ../tools/system/s6-rc { };
-    s6-man-pages = callPackage ../data/documentation/s6-man-pages {
-      inherit buildManPages;
-    };
-    s6-networking-man-pages = callPackage ../data/documentation/s6-networking-man-pages {
-      inherit buildManPages;
-    };
-    s6-portable-utils-man-pages = callPackage ../data/documentation/s6-portable-utils-man-pages {
-      inherit buildManPages;
-    };
+    mdevd = callPackage ../development/skaware-packages/mdevd { };
+    nsss = callPackage ../development/skaware-packages/nsss { };
+    sdnotify-wrapper = callPackage ../development/skaware-packages/sdnotify-wrapper { };
+    utmps = callPackage ../development/skaware-packages/utmps { };
 
-    mdevd = callPackage ../os-specific/linux/mdevd { };
-    nsss = callPackage ../development/libraries/nsss { };
-    utmps = callPackage ../development/libraries/utmps { };
-    sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
+    skalibs = callPackage ../development/skaware-packages/skalibs { };
+    skalibs_2_10 = callPackage ../development/skaware-packages/skalibs/2_10.nix { };
+
+    s6 = callPackage ../development/skaware-packages/s6 { };
+    s6-dns = callPackage ../development/skaware-packages/s6-dns { };
+    s6-linux-init = callPackage ../development/skaware-packages/s6-linux-init { };
+    s6-linux-utils = callPackage ../development/skaware-packages/s6-linux-utils { };
+    s6-networking = callPackage ../development/skaware-packages/s6-networking { };
+    s6-portable-utils = callPackage ../development/skaware-packages/s6-portable-utils { };
+    s6-rc = callPackage ../development/skaware-packages/s6-rc { };
+
+    s6-man-pages = callPackage ../development/skaware-packages/s6-man-pages {
+      inherit buildManPages;
+    };
+    s6-networking-man-pages = callPackage ../development/skaware-packages/s6-networking-man-pages {
+      inherit buildManPages;
+    };
+    s6-portable-utils-man-pages = callPackage ../development/skaware-packages/s6-portable-utils-man-pages {
+      inherit buildManPages;
+    };
+  };
+
+  inherit (skawarePackages)
+    execline
+    execline-man-pages
+    mdevd
+    nsss
+    s6
+    s6-dns
+    s6-linux-init
+    s6-linux-utils
+    s6-man-pages
+    s6-networking
+    s6-networking-man-pages
+    s6-portable-utils
+    s6-portable-utils-man-pages
+    s6-rc
+    sdnotify-wrapper
+    skalibs
+    skalibs_2_10
+    utmps;
+
+  kgt = callPackage ../development/tools/kgt {
+    inherit (skawarePackages) cleanPackaging;
+  };
+
+  nettee = callPackage ../tools/networking/nettee {
+    inherit (skawarePackages) cleanPackaging;
   };
 
   slang = callPackage ../development/libraries/slang { };
@@ -22594,8 +22598,6 @@ with pkgs;
   uthash = callPackage ../development/libraries/uthash { };
 
   uthenticode = callPackage ../development/libraries/uthenticode { };
-
-  utmps = skawarePackages.utmps;
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
@@ -24268,10 +24270,6 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  s6 = skawarePackages.s6;
-
-  s6-rc = skawarePackages.s6-rc;
-
   supervise = callPackage ../tools/system/supervise { };
 
   spamassassin = callPackage ../servers/mail/spamassassin { };
@@ -25205,8 +25203,6 @@ with pkgs;
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
-  inherit (skawarePackages) mdevd;
-
   metastore = callPackage ../os-specific/linux/metastore { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -26115,8 +26111,6 @@ with pkgs;
 
   envypn-font = callPackage ../data/fonts/envypn-font { };
 
-  execline-man-pages = skawarePackages.execline-man-pages;
-
   ezra-sil = callPackage ../data/fonts/ezra-sil { };
 
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
@@ -26752,12 +26746,6 @@ with pkgs;
   inter = callPackage ../data/fonts/inter { };
 
   open-fonts = callPackage ../data/fonts/open-fonts { };
-
-  s6-man-pages = skawarePackages.s6-man-pages;
-
-  s6-networking-man-pages = skawarePackages.s6-networking-man-pages;
-
-  s6-portable-utils-man-pages = skawarePackages.s6-portable-utils-man-pages;
 
   scientifica = callPackage ../data/fonts/scientifica { };
 
@@ -29562,10 +29550,6 @@ with pkgs;
 
   kexi = libsForQt514.callPackage ../applications/office/kexi { };
 
-  kgt = callPackage ../development/tools/kgt {
-    inherit (skawarePackages) cleanPackaging;
-  };
-
   khronos = callPackage ../applications/office/khronos { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
@@ -30908,7 +30892,7 @@ with pkgs;
 
   libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
 
-  openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
+  openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
