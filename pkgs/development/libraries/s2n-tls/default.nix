@@ -1,7 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , openssl
+, nix
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
 
@@ -38,6 +40,10 @@ stdenv.mkDerivation rec {
         --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 implementation of the TLS/SSL protocols";
