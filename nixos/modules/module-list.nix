@@ -174,6 +174,7 @@
   ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
+  ./programs/ica-securestore.nix
   ./programs/iftop.nix
   ./programs/iotop.nix
   ./programs/java.nix
