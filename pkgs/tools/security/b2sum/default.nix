@@ -2,15 +2,15 @@
 
 with lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "b2sum";
-  version = "unstable-2018-06-11";
+  version = "20190724";
 
   src = fetchFromGitHub {
     owner = "BLAKE2";
     repo = "BLAKE2";
-    rev = "320c325437539ae91091ce62efec1913cd8093c2";
-    sha256 = "E60M9oP/Sdfg/L3ZxUcDtUXhFz9oP72IybdtVUJh9Sk=";
+    rev = "${version}";
+    sha256 = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
   };
 
   sourceRoot = "source/b2sum";
