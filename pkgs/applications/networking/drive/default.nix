@@ -1,20 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "drive";
-  version = "0.3.8.1";
-
-  goPackagePath = "github.com/odeke-em/drive";
-  subPackages = [ "cmd/drive" ];
+  version = "unstable-2021-02-08";
 
   src = fetchFromGitHub {
     owner = "odeke-em";
     repo = "drive";
-    rev = "v${version}";
-    sha256 = "1b9cgc148rg5irg4jas10zv9i2km75x1zin25hld340dmpjcpi82";
+    rev = "bede608f250a9333d55c43396fc5e72827e806fd";
+    sha256 = "sha256-M+XdynUWiICVnHXpmnMvuyoTPFPo0l1EhDkoVlRjpWk=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-F/ikdr7UCVlNv2yiEemyB7eIkYi3mX+rJvSfX488RFc=";
+
+  ldflags = [ "-s" "-w" ];
+
+  subPackages = [ "cmd/drive" ];
 
   meta = with lib; {
     homepage = "https://github.com/odeke-em/drive";
