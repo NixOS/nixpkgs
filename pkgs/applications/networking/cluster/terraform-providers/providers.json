@@ -1039,13 +1039,13 @@
     "version": "1.7.10"
   },
   "signalfx": {
-    "hash": "sha256-ke/35QtsYNW+6HVjBrx6hQ+CO2zhZsVLlryWTgI1vRE=",
+    "hash": "sha256-alLC61bEaFiVtoH0Fczj7G0m70ie1RNvTBR+MgYZGkQ=",
     "owner": "splunk-terraform",
     "provider-source-address": "registry.terraform.io/splunk-terraform/signalfx",
     "repo": "terraform-provider-signalfx",
-    "rev": "v6.17.0",
-    "vendorHash": "sha256-hxYQF1sZOS5x6sZtUJg13A6SPZG6Ql20vAs8VDQegqQ=",
-    "version": "6.17.0"
+    "rev": "v6.18.0",
+    "vendorHash": "sha256-ESUNfkllwkS1NcAD30tO90VQcHR5XhdIeyXXHmU/byc=",
+    "version": "6.18.0"
   },
   "skytap": {
     "hash": "sha256-EAimiuQJOt12baZSjDKI+c9UjJd8e26ouOAZIZezw/I=",
