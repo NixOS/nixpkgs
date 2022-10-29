@@ -8,7 +8,6 @@
 , python3
 , vala
 , glib
-, gtk3
 , gtk4
 , libgee
 , libadwaita
@@ -32,35 +31,33 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson
+    glib
     ninja
     vala
+    python3
     pkg-config
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-  ];
-
-  buildInputs = [
-    cmake
-    glib
-    python3
-    gtk3
-    gtk4
     libadwaita
     libgee
     gtksourceview5
     blueprint-compiler
   ];
 
+  buildInputs = [
+    gtk4
+  ];
+
   postInstall = ''
-    ln -s $out/bin/io.posidon.paper $out/bin/paper
+    ln -s $out/bin/io.posidon.Paper $out/bin/paper
   '';
 
   meta = with lib; {
     description = "Take notes in Markdown";
     homepage = "https://posidon.io/paper/";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ j0lol ];
   };
 }
