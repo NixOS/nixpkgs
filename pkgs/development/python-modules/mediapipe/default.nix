@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchurl
+, curl
 , python3
 , pythonOlder
 , pythonAtLeast
@@ -27,13 +29,20 @@ let
 in
 
 buildPythonPackage rec {
-  
+
   inherit pname version;
   disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
   format = "wheel";
   doCheck = false;
 
-  src = let
+
+  poseHeavy = fetchurl {
+    url="https://storage.googleapis.com/mediapipe-assets/pose_landmark_heavy.tflite";
+    sha256="sha256-WeQtcbzUTL26vEGfD/dmhllf0mVBlWa9QAnvcD6o4f4=";
+  }; 
+
+  src =
+    let
       pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
       binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}";
     in
@@ -48,8 +57,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pythonRelaxDepsHook autoPatchelfHook ];
 
   pythonRemoveDeps = [ "opencv-contrib-python" ];
-    
-  pythonRelaxDeps = ["protobuf"];
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   propagatedBuildInputs = with python.pkgs;[
     opencv4
@@ -59,6 +68,12 @@ buildPythonPackage rec {
     absl-py
     matplotlib
   ];
+
+
+  postInstall = ''
+  cp ${poseHeavy} $out/${python.sitePackages}/mediapipe/modules/pose_landmark/pose_landmark_heavy.tflite
+  '';
+
 
   pythonImportsCheck = [ "mediapipe" ];
 
