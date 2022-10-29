@@ -1105,6 +1105,8 @@ self: super: {
 
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal (drv: {
+    # https://github.com/NixOS/nixpkgs/issues/198495
+    doCheck = pkgs.postgresql.doCheck;
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
   }) super.beam-postgres;
 
@@ -1127,6 +1129,8 @@ self: super: {
           sed -i test/PostgreSQL/Test.hs \
             -e s^host=localhost^^
         '';
+        # https://github.com/NixOS/nixpkgs/issues/198495
+        doCheck = pkgs.postgresql.doCheck;
         # Match the test suite defaults (or hardcoded values?)
         preCheck = drv.preCheck or "" + ''
           PGUSER=esqutest
@@ -1267,6 +1271,8 @@ self: super: {
           sed -i test/PgInit.hs \
             -e s^'host=" <> host <> "'^^
         '';
+        # https://github.com/NixOS/nixpkgs/issues/198495
+        doCheck = pkgs.postgresql.doCheck;
         preCheck = drv.preCheck or "" + ''
           PGDATABASE=test
           PGUSER=test
@@ -1471,6 +1477,8 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [
       pkgs.postgresql pkgs.postgresqlTestHook
     ];
+    # https://github.com/NixOS/nixpkgs/issues/198495
+    doCheck = pkgs.postgresql.doCheck;
     preCheck = drv.preCheck or "" + ''
       # empty string means use default connection
       export DATABASE_URL=""

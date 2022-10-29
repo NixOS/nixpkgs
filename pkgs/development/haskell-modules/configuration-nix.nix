@@ -901,7 +901,11 @@ self: super: builtins.intersectAttrs super {
       '';
     }) super.nvfetcher);
 
-  rel8 = addTestToolDepend pkgs.postgresql super.rel8;
+  rel8 = pkgs.lib.pipe super.rel8 [
+    (addTestToolDepend pkgs.postgresql)
+    # https://github.com/NixOS/nixpkgs/issues/198495
+    (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
+  ];
 
   cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
