@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
 , buildPackages
 , cmake
 , glib
@@ -20,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.15";
+  version = "3.0.16";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-7M5GBteFKmKCB6556XXV4s6iIC/+3c3Ck17s/QX3Jus=";
+    sha256 = "sha256-3D/0leI3LLKDFOXkKSrmMamLoaXdi/2Z4iPUXqgwtg8=";
   };
 
   strictDeps = true;
@@ -75,17 +74,6 @@ stdenv.mkDerivation rec {
     # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
-
-    # Fixes tests with 32-bit time_t
-    # Remove with next version update (v3.0.16+)
-    (fetchurl {
-      url = "https://github.com/libical/libical/commit/4adc6f1d2b39a1cc3363b57215e12fa81076498b.patch";
-      sha256 = "1k3hav0z86kc1xd1sk23b57aqqjk4gf73574w7f1m66cyz98bxr3";
-    })
-    (fetchurl {
-      url = "https://github.com/libical/libical/commit/cce20bd051408b00521385c0bfb616ba068450d3.patch";
-      sha256 = "097hqmagl0q5p38r1kvx0592cfac2y7jbdqlis6m8gbs812pbqfc";
-    })
   ];
 
   # Using install check so we do not have to manually set
