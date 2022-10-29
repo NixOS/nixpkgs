@@ -1391,7 +1391,6 @@ broken-packages:
   - extended-containers
   - extensible-effects-concurrent
   - extensible-skeleton
-  - extensions
   - Extra
   - extractelf
   - ez3
