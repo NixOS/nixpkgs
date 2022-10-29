@@ -804,13 +804,13 @@
     "version": "1.12.8"
   },
   "nsxt": {
-    "hash": "sha256-oXcT1VmwC9a+U0vM5O9y2As2PbzPr95LrUB6KlFKcMc=",
+    "hash": "sha256-TOoRtCKdR1fBjk39dbMgBd7pDJGfjvkQAqfpJzWRwRg=",
     "owner": "vmware",
     "provider-source-address": "registry.terraform.io/vmware/nsxt",
     "repo": "terraform-provider-nsxt",
-    "rev": "v3.2.8",
+    "rev": "v3.2.9",
     "vendorHash": null,
-    "version": "3.2.8"
+    "version": "3.2.9"
   },
   "null": {
     "hash": "sha256-2YM3btZInUlIwp1VkasuugZZ8FervpRviUlx60vhVak=",
