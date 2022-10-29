@@ -2,7 +2,9 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, zlib
 , curl
+, libssh2
 , openssl
 , stdenv
 , CoreFoundation
@@ -23,12 +25,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-JrlEWgKbTqQG/JYFqBR53eB58fa29c/+vIdSNGoS5Y0=";
 
-  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
-  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ pkg-config (lib.getDev curl) (lib.getDev libssh2) zlib ];
+  buildInputs = [ openssl curl libssh2 stdenv.cc.cc.lib ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     libiconv
     Security
   ];
+  NIX_LDFLAGS = "-lc -lm -lgcc ";
+  LIBSSH2_SYS_USE_PKG_CONFIG = "1";
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";
