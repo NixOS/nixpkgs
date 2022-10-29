@@ -2,7 +2,9 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, ciso8601
 , fetchFromGitHub
+, orjson
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -10,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiopyarr";
-  version = "22.9.0";
+  version = "22.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -19,11 +21,13 @@ buildPythonPackage rec {
     owner = "tkdrob";
     repo = pname;
     rev = version;
-    hash = "sha256-nJjqpk4GcgXJhFZd4E3vSmyNP+RkOASEd4Ipemx6cAc=";
+    hash = "sha256-FpBKhxFFMG5WgQ3TCAcg1P+cGVGU7LiJ+Zr4kL2Nl88=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    ciso8601
+    orjson
   ];
 
   checkInputs = [
