@@ -23,19 +23,19 @@ stdenv.mkDerivation rec {
     # unvendor brotli
     (fetchpatch {
       url = "https://cgit.freebsd.org/ports/plain/graphics/brunsli/files/patch-CMakeLists.txt";
-      hash = "sha256-SqmkmL8r/KGvELq2em4ZLkCaKgZywZ/4fcC/enZ1nEI=";
+      extraPrefix = "";
+      hash = "sha256-/WPOG9OcEDj9ObBSXEM8Luq4Rix+PS2MvsYyHhK5mns=";
     })
     (fetchpatch {
       url = "https://cgit.freebsd.org/ports/plain/graphics/brunsli/files/patch-brunsli.cmake";
-      hash = "sha256-UmXK+NBd0+5AZX2oWnrpOnzHD7c3ghSO7oERWLOYjbA=";
+      extraPrefix = "";
+      hash = "sha256-+HXA9Tin+l2St7rRUEBM0AfhAjSoFxz8UX7hsg12aFg=";
     })
   ];
 
   postPatch = ''
     rm -r third_party
   '';
-
-  patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [
     cmake
