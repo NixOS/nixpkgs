@@ -71,5 +71,6 @@ in
       license = licenses.gpl3;
       maintainers = with maintainers; [ ashkitten sersorrel ];
       platforms = [ "x86_64-linux" ];
+      mainProgram = "XIVLauncher.Core";
     };
   }
