@@ -6660,7 +6660,14 @@ with pkgs;
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
-  flashrom = callPackage ../tools/misc/flashrom { };
+  flashrom = callPackage ../tools/misc/flashrom {
+    # Disable dependencies that are not needed
+    libftdi1 = libftdi1.override {
+      cppSupport = false;
+      pythonSupport = false;
+      docSupport = false;
+    };
+  };
 
   flent = python3Packages.callPackage ../applications/networking/flent { };
 

@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 pciutils ]
-    ++ lib.optional jlinkSupport libjaylink;
+  buildInputs = [
+    libftdi1
+    libusb1
+    pciutils
+  ]
+  ++ lib.optional jlinkSupport libjaylink;
 
   patches = [
     # remove when updating from 1.2
