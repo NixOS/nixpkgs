@@ -7009,6 +7009,8 @@ with pkgs;
 
   git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
 
+  git-get = callPackage ../applications/version-management/git-and-tools/git-get { };
+
   git-gone = callPackage ../applications/version-management/git-and-tools/git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
