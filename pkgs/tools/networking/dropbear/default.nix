@@ -16,11 +16,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "dropbear";
-  version = "2020.81";
+  version = "2022.82";
 
   src = fetchurl {
     url = "https://matt.ucc.asn.au/dropbear/releases/dropbear-${version}.tar.bz2";
-    sha256 = "0fy5ma4cfc2pk25mcccc67b2mf1rnb2c06ilb7ddnxbpnc85s8s8";
+    sha256 = "sha256-OgONK7wCvyi73SDAEgkfdBo+xcvkYGkYEdcUh2qtddE=";
   };
 
   dontDisableStatic = enableStatic;
