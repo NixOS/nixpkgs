@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , alsa-lib
+, copyDesktopItems
 , CoreAudioKit
 , expat
 , fetchFromGitHub
+, fetchurl
 , flac
 , fontconfig
 , ForceFeedback
@@ -33,14 +35,11 @@
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "MAME";
-    exec = "mame${lib.optionalString stdenv.is64bit "64"}";
-    desktopName = "MAME";
-    genericName = "MAME is a multi-purpose emulation framework";
-    categories = [ "System" "Emulator" ];
+  # Get icon from Arch Linux package
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/614b24ef3856cb52b5cafc386b0f77923cbc9156/trunk/mame.svg";
+    sha256 = "sha256-F8RCyTPXZBdeTOHeUKgMDC3dXXM8rwnDzV5rppesQ/Q=";
   };
-
   dest = "$out/opt/mame";
 in
 stdenv.mkDerivation rec {
@@ -53,8 +52,6 @@ stdenv.mkDerivation rec {
     rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
     sha256 = "sha256-im6y/E0pQxruX2kNXZLE3fHq+zXfsstnOoC1QvH4fd4=";
   };
-
-  hardeningDisable = [ "fortify" ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -97,7 +94,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
   ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
-  nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    installShellFiles
+    makeWrapper
+    pkg-config
+    python3
+    which
+  ];
 
   patches = [
     # MAME is now generating the PDF documentation on its release script since commit:
@@ -116,7 +120,23 @@ stdenv.mkDerivation rec {
       --subst-var-by mame ${dest}
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "MAME";
+      desktopName = "MAME";
+      exec = "mame";
+      icon = "mame";
+      type = "Application";
+      genericName = "MAME is a multi-purpose emulation framework";
+      comment = "Play vintage games using the MAME emulator";
+      categories = [ "Game" "Emulator" ];
+      keywords = [ "Game" "Emulator" "Arcade" ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
@@ -126,11 +146,11 @@ stdenv.mkDerivation rec {
     install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
 
     installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
+    install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
 
     mv artwork plugins samples ${dest}
-  '' + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share
-    ln -s ${desktopItem}/share/applications $out/share
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
@@ -146,7 +166,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];
