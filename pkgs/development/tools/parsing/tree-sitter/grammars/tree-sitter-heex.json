@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/connorlay/tree-sitter-heex",
-  "rev": "961bc4d2937cfd24ceb0a5a6b2da607809f8822e",
-  "date": "2022-06-13T09:15:37-07:00",
-  "path": "/nix/store/5qackjn309ls9qja23wkwhqiid9rc6l3-tree-sitter-heex",
-  "sha256": "1by6c4gcqxy9czvwabbmlfr1hlw8z2w7f623llbag956scp2b9al",
+  "rev": "52b804b1cb2d57e58d90090326d3ef9bd19cf16c",
+  "date": "2022-10-18T07:22:45-07:00",
+  "path": "/nix/store/7f1xgx8l68lz8jwvni65j4kcxpl68b36-tree-sitter-heex",
+  "sha256": "0qiwzkb2ksp2cb87zsda5zwwsbpbqzgvnmysalbm3x0c81gnzv3y",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
