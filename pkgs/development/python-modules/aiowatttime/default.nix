@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiowatttime";
-  version = "2021.10.0";
+  version = "2022.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cWXhQMgRYBzOVgUQWONIwWFB5n/f0lqkSjUb9IoPwtI=";
+    sha256 = "sha256-rqmsUvVwXC/XkR/v2d9d3t7u6Poms4ORiOci41ajXIo=";
   };
 
   nativeBuildInputs = [
