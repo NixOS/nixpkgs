@@ -13305,6 +13305,12 @@
     githubId = 102685;
     name = "Thomas Friese";
   };
+  taylor1791 = {
+    email = "nixpkgs@tayloreverding.com";
+    github = "taylor1791";
+    githubId = 555003;
+    name = "Taylor Everding";
+  };
   tazjin = {
     email = "mail@tazj.in";
     github = "tazjin";
