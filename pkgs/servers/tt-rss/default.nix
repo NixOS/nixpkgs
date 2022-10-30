@@ -2,13 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "unstable-2022-08-01";
-  rev = "cd26dbe64c9b14418f0b2d826a38a35c6bf8a270";
+  version = "unstable-2022-10-15";
 
   src = fetchgit {
     url = "https://git.tt-rss.org/fox/tt-rss.git";
-    rev = "ed2cbeffcc456a86726b52d37c977a35b895968c";
-    sha256 = "0ab1q316y4f432z2kwn86kc144awk529cild7b4jbffh2ydlj3r4";
+    rev = "602e8684258062937d7f554ab7889e8e02318c96";
+    sha256 = "sha256-vgRaxo998Gx9rVeZZl52jppK1v11jpEK0J0NoDMT44I=";
   };
 
   installPhase = ''
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "22.08" > $out/version_static.txt
+    echo "22.10" > $out/version_static.txt
 
     runHook postInstall
   '';
