@@ -4747,6 +4747,8 @@ with pkgs;
 
   precice-config-visualizer = callPackage ../tools/misc/precice-config-visualizer { };
 
+  proxmox-backup-client = callPackage ../applications/backup/proxmox-backup-client { };
+
   pueue = callPackage ../applications/misc/pueue {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
