@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "6.1.0";
+  version = "7.0.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aebd069f3e05667fe9c7b9fa4b1771fe42a4710ce1058ce0236936ce06fa5394";
+    sha256 = "sha256-8UzuUokDw7AdO48SCc1JhCL3Hj0NLZLFuTPt07l3ICI=";
   };
 
   # By default it attempts to build Windows-only functionality
