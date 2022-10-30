@@ -114,6 +114,12 @@ let
       IOSCHED_BFQ = whenAtLeast "4.12" module;
     };
 
+
+    timer = {
+      # Enable Full Dynticks System.
+      NO_HZ_FULL = yes;
+    };
+
     # Enable NUMA.
     numa = {
       NUMA  = option yes;
