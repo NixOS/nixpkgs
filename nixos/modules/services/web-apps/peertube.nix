@@ -67,7 +67,9 @@ let
     node ~/dist/server/tools/peertube.js $@
   '';
 
-  nginxCommonHeaders = ''
+  nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
+    add_header Strict-Transport-Security      'max-age=63072000; includeSubDomains';
+  '' + ''
     add_header Access-Control-Allow-Origin    '*';
     add_header Access-Control-Allow-Methods   'GET, OPTIONS';
     add_header Access-Control-Allow-Headers   'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
@@ -487,6 +489,8 @@ in {
           extraConfig = ''
             client_max_body_size                        12G;
             add_header X-File-Maximum-Size              8G always;
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
           '';
         };
 
@@ -497,6 +501,8 @@ in {
           extraConfig = ''
             client_max_body_size                        6M;
             add_header X-File-Maximum-Size              4M always;
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
           '';
         };
 
@@ -560,6 +566,8 @@ in {
           priority = 1320;
           extraConfig = ''
             add_header Cache-Control                    'public, max-age=604800, immutable';
+          '' + lib.optionalString cfg.enableWebHttps ''
+            add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
           '';
         };
 
@@ -718,6 +726,10 @@ in {
             rewrite ^/static/webseed/(.*)$              /$1 break;
           '';
         };
+
+        extraConfig = lib.optionalString cfg.enableWebHttps ''
+          add_header Strict-Transport-Security          'max-age=63072000; includeSubDomains';
+        '';
       };
     };
 
