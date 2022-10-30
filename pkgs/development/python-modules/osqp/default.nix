@@ -24,6 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-svoXquQqftSY7CYbM/Jiu0s2BefoRkBiFZ2froF/DWE=";
   };
 
+  postPatch = ''
+    sed -i 's/sp.random/np.random/g' src/osqp/tests/*.py
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontUseCmakeConfigure = true;
