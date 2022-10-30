@@ -151,6 +151,16 @@ in {
       ];
     };
 
+    linux_rt_5_15 = callPackage ../os-specific/linux/kernel/linux-rt-5.15.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.export-rt-sched-migrate
+      ];
+    };
+
+    linux_5_16 = throw "linux 5.16 was removed because it has reached its end of life upstream";
+
     linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
 
     linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
@@ -531,6 +541,7 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
+     linux_rt_5_15 = packagesFor kernels.linux_rt_5_15;
      linux_rt_6_0 = packagesFor kernels.linux_rt_6_0;
   };
 
@@ -586,7 +597,7 @@ in {
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_0;
     linux_mptcp = packages.linux_mptcp_95;
-    linux_rt_default = packages.linux_rt_5_4;
+    linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_0;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
