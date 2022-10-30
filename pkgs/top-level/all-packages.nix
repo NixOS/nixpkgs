@@ -7140,6 +7140,8 @@ with pkgs;
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
+  gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
+
   gitsign = callPackage ../tools/security/gitsign { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
