@@ -52,10 +52,9 @@ buildPythonPackage rec {
     patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
-  nativeBuildInputs = [
-    sassc
-    nodejs
-  ];
+  # We need to pass these inputs through to dependent services but we also don't want to pass through hooks, because we
+  # don't want non-idempotent hooks to run more than once (which would be possible because hooks get put in nativeBuildInputs)
+  nativeBuildInputs = passthru.sharedNativeBuildInputs;
 
   propagatedBuildInputs = [
     pgpy
@@ -91,6 +90,11 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
   pythonImportsCheck = [ "srht" ];
+
+  passthru.sharedNativeBuildInputs = [
+    sassc
+    nodejs
+  ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";

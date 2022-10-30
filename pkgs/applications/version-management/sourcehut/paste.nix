@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace "all: api" ""
   '';
 
-  nativeBuildInputs = srht.nativeBuildInputs;
+  nativeBuildInputs = srht.sharedNativeBuildInputs;
 
   propagatedBuildInputs = [
     srht

@@ -54,7 +54,7 @@ buildPythonPackage rec {
       --replace "all: api worker" ""
   '';
 
-  nativeBuildInputs = srht.nativeBuildInputs;
+  nativeBuildInputs = srht.sharedNativeBuildInputs;
 
   propagatedBuildInputs = [
     srht
