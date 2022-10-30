@@ -2559,6 +2559,9 @@ self: super: {
     testTarget = "regex-tdfa-unittest";
   } super.regex-tdfa;
 
+  # Missing test files https://github.com/qrilka/xlsx/issues/165
+  xlsx = dontCheck super.xlsx;
+
   # 2022-09-01:
   # Restrictive upper bound on base.
   # Remove once version 1.* is released
