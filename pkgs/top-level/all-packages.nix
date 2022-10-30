@@ -35706,6 +35706,8 @@ with pkgs;
 
   monosat = callPackage ../applications/science/logic/monosat {};
 
+  nusmv = callPackage ../applications/science/logic/nusmv { };
+
   nuXmv = callPackage ../applications/science/logic/nuXmv {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
