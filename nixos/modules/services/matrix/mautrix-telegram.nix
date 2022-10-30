@@ -19,6 +19,10 @@ in {
         apply = recursiveUpdate default;
         inherit (settingsFormat) type;
         default = {
+          homeserver = {
+            software = "standard";
+          };
+
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
             database_opts = {};
@@ -81,7 +85,7 @@ in {
         description = lib.mdDoc ''
           {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          [example-config.yaml](https://github.com/tulir/mautrix-telegram/blob/master/example-config.yaml).
+          [example-config.yaml](https://github.com/mautrix/telegram/blob/master/mautrix_telegram/example-config.yaml).
 
           Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
