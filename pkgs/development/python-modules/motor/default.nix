@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.1.0";
+  version = "3.1.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Wc0C4sO33v/frBtZVV2u9ESunHKyJI+eQ59l72h2eFk=";
+    sha256 = "sha256-PD41ZyUFY4fYaO4Fo7kiTWcn1a6LOd81K3PWAAagmr4=";
   };
 
   propagatedBuildInputs = [ pymongo ];
