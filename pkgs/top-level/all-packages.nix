@@ -28856,6 +28856,8 @@ with pkgs;
 
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
+  gickup = callPackage ../applications/version-management/gickup { };
+
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };
