@@ -107,7 +107,7 @@ in {
         PrivateTmp = true;
         WorkingDirectory = pkgs.mx-puppet-discord;
         StateDirectory = baseNameOf dataDir;
-        UMask = 0027;
+        UMask = "0027";
 
         ExecStart = ''
           ${pkgs.mx-puppet-discord}/bin/mx-puppet-discord \

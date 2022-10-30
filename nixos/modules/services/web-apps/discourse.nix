@@ -798,13 +798,13 @@ in
           "public"
           "sockets"
         ];
-        RuntimeDirectoryMode = 0750;
+        RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
           "tmp"
         ];
-        StateDirectoryMode = 0750;
+        StateDirectoryMode = "0750";
         LogsDirectory = "discourse";
         TimeoutSec = "infinity";
         Restart = "on-failure";

@@ -6,8 +6,7 @@ let
       pname = "miniupnpc";
       inherit version;
       src = fetchurl {
-        name = "${pname}-${version}.tar.gz";
-        url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
+        url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -24,7 +23,7 @@ let
       '';
 
       meta = with lib; {
-        homepage = "http://miniupnp.free.fr/";
+        homepage = "https://miniupnp.tuxfamily.org/";
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
         platforms = with platforms; linux ++ freebsd ++ darwin;
         license = licenses.bsd3;
@@ -32,8 +31,8 @@ let
     };
 in {
   miniupnpc_2 = generic {
-    version = "2.1.20190625";
-    sha256 = "1yqp0d8x5ldjfma5x2vhpg1aaafdg0470ismccixww3rzpbza8w7";
+    version = "2.2.4";
+    sha256 = "0jrc84lkc7xb53rb8dbswxrxj21ndj1iiclmk3r9wkp6xm55w6j8";
   };
   miniupnpc_1 = generic {
     version = "1.9.20160209";

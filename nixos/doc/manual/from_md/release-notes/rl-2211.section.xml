@@ -876,6 +876,18 @@
       </listitem>
       <listitem>
         <para>
+          ZFS module will not allow hibernation by default, this is a
+          safety measure to prevent data loss cases like the ones
+          described at
+          <link xlink:href="https://github.com/openzfs/zfs/issues/260">OpenZFS/260</link>
+          and
+          <link xlink:href="https://github.com/openzfs/zfs/issues/12842">OpenZFS/12842</link>.
+          Use the <literal>boot.zfs.allowHibernation</literal> option to
+          configure this behaviour.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Redis module now disables RDB persistence when
           <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
           instead of using the Redis default.
@@ -892,6 +904,23 @@
         <para>
           The <literal>networking.wireguard</literal> module now can set
           the mtu on interfaces and tag its packets with an fwmark.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option <literal>overrideStrategy</literal> was added to
+          the different systemd unit options
+          (<literal>systemd.services.&lt;name&gt;</literal>,
+          <literal>systemd.sockets.&lt;name&gt;</literal>, …) to allow
+          enforcing the creation of a dropin file, rather than the main
+          unit file, by setting it to <literal>asDropin</literal>. This
+          is useful in cases where the existence of the main unit file
+          is not known to Nix at evaluation time, for example when the
+          main unit file is provided by adding a package to
+          <literal>systemd.packages</literal>. See the fix proposed in
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135557#issuecomment-1295392470">NixOS’s
+          systemd abstraction doesn’t work with systemd template
+          units</link> for an example.
         </para>
       </listitem>
       <listitem>

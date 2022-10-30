@@ -6,18 +6,17 @@
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
 , alsa-lib
-, AppKit
 , dbus
 , fetchFromGitHub
 , ffmpeg_4
-, Foundation
+, flac
 , freetype
 , gamemode
 , libdrm
 , libGL
 , libGLU
-, libobjc
 , libpulseaudio
+, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -26,53 +25,41 @@
 , libxml2
 , libXxf86vm
 , makeWrapper
+, mbedtls
 , mesa
 , nvidia_cg_toolkit
 , pkg-config
 , python3
 , SDL2
+, substituteAll
 , udev
 , vulkan-loader
 , wayland
+, zlib
 }:
 
 let
-  version = "1.12.0";
-  libretroCoreInfo = fetchFromGitHub {
-    owner = "libretro";
-    repo = "libretro-core-info";
-    sha256 = "sha256-9Sfp/JkMJIe34YGNRxf93fONOBuQxR2pduoJU+xtuF0=";
-    # Upstream didn't tag a new libretro-core-info in 1.12.0 release
-    rev = "v1.11.1";
-  };
   runtimeLibs =
     lib.optional withVulkan vulkan-loader ++
     lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  inherit version;
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-doLWNA8aTAllxx3zABtvZaegBQEPIi8276zbytPSdBU=";
+    hash = "sha256-doLWNA8aTAllxx3zABtvZaegBQEPIi8276zbytPSdBU=";
     rev = "v${version}";
   };
 
   patches = [
-    ./use-fixed-paths.patch
+    (substituteAll {
+      src = ./use-fixed-path-for-libretro_core_info.patch;
+      libretro_info_path = libretro-core-info;
+    })
   ];
-
-  postPatch = ''
-    substituteInPlace "frontend/drivers/platform_unix.c" \
-      --subst-var-by libretro_directory "$out/lib" \
-      --subst-var-by libretro_info_path "$out/share/libretro/info" \
-      --subst-var-by out "$out"
-    substituteInPlace "frontend/drivers/platform_darwin.m" \
-      --subst-var-by libretro_directory "$out/lib" \
-      --subst-var-by libretro_info_path "$out/share/libretro/info"
-  '';
 
   nativeBuildInputs = [ pkg-config ] ++
     lib.optional withWayland wayland ++
@@ -80,17 +67,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg_4
+    flac
     freetype
     libGL
     libGLU
     libxml2
+    mbedtls
     python3
     SDL2
+    zlib
   ] ++
   lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
   lib.optional withVulkan vulkan-loader ++
   lib.optional withWayland wayland ++
-  lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
   lib.optionals stdenv.isLinux [
     alsa-lib
     dbus
@@ -110,6 +99,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-update_cores"
+    "--disable-builtinmbedtls"
+    "--disable-builtinzlib"
+    "--disable-builtinflac"
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"
@@ -117,38 +109,12 @@ stdenv.mkDerivation rec {
     "--enable-kms"
   ];
 
-  postInstall = ''
-    # TODO: ideally each core should have its own core information
-    mkdir -p $out/share/libretro/info
-    cp -r ${libretroCoreInfo}/* $out/share/libretro/info
-  '' +
-  lib.optionalString (runtimeLibs != [ ]) ''
+  postInstall = lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
-  '' +
-  lib.optionalString stdenv.isDarwin ''
-    # https://github.com/libretro/RetroArch/blob/master/retroarch-apple-packaging.sh
-    app=$out/Applications/RetroArch.app
-    mkdir -p $app/Contents/MacOS
-    cp -r pkg/apple/OSX/* $app/Contents
-    cp $out/bin/retroarch $app/Contents/MacOS
-    # FIXME: using Info_Metal.plist results in input not working
-    # mv $app/Contents/Info_Metal.plist $app/Contents/Info.plist
-
-    substituteInPlace $app/Contents/Info.plist \
-      --replace '${"\${EXECUTABLE_NAME}"}' 'RetroArch' \
-      --replace '$(PRODUCT_BUNDLE_IDENTIFIER)' 'com.libretro.RetroArch' \
-      --replace '${"\${PRODUCT_NAME}"}' 'RetroArch' \
-      --replace '${"\${MACOSX_DEPLOYMENT_TARGET}"}' '10.13'
-
-    cp media/retroarch.icns $app/Contents/Resources/
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
-
-  # Workaround for the following error affecting newer versions of Clang:
-  # ./config.def.h:xxx:x: error: 'TARGET_OS_TV' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ];
 
   passthru.tests = nixosTests.retroarch;
 
@@ -159,9 +125,11 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
-    # FIXME: error while building in macOS:
-    # "Undefined symbols for architecture <arch>"
-    # See also retroarch/wrapper.nix that is also broken in macOS
+    mainProgram = "retroarch";
+    # If you want to (re)-add support for macOS, see:
+    # https://docs.libretro.com/development/retroarch/compilation/osx/
+    # and
+    # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
     broken = stdenv.isDarwin;
   };
 }

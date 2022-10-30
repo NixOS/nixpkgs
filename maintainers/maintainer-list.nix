@@ -6000,6 +6000,12 @@
     github = "j0hax";
     githubId = 3802620;
   };
+  j0lol = {
+    name = "Jo";
+    email = "me@j0.lol";
+    github = "j0lol";
+    githubId = 24716467;
+  };
   j4m3s = {
     name = "James Landrein";
     email = "github@j4m3s.eu";
@@ -7374,6 +7380,12 @@
     github = "koslambrou";
     githubId = 2037002;
     name = "Konstantinos";
+  };
+  kototama = {
+    email = "kototama@posteo.jp";
+    github = "kototama";
+    githubId = 128620;
+    name = "Kototama";
   };
   kouyk = {
     email = "skykinetic@stevenkou.xyz";

@@ -1724,10 +1724,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  retroarchBare = callPackage ../applications/emulators/retroarch {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
-  };
+  retroarchBare = callPackage ../applications/emulators/retroarch { };
 
   retroarchFull = retroarch.override {
     cores = builtins.filter
@@ -1746,6 +1743,8 @@ with pkgs;
     (callPackage ../applications/emulators/retroarch/cores.nix {
       retroarch = retroarchBare;
     });
+
+  libretro-core-info = callPackage ../applications/emulators/retroarch/libretro-core-info.nix { };
 
   kodi-retroarch-advanced-launchers =
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
@@ -4025,6 +4024,51 @@ with pkgs;
 
   fsql = callPackage ../tools/misc/fsql { };
 
+  ### TOOLS/TYPESETTING/TEX
+
+  auctex = callPackage ../tools/typesetting/tex/auctex { };
+
+  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
+
+  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
+
+  dblatexFull = dblatex.override { enableAllFeatures = true; };
+
+  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
+
+  lkproof = callPackage ../tools/typesetting/tex/lkproof { };
+
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
+
+  # Keep the old PGF since some documents don't render properly with
+  # the new one.
+  pgf1 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-1.x.nix { };
+
+  pgf2 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-2.x.nix { };
+
+  pgf3 = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-3.x.nix { };
+
+  pgf = pgf2;
+
+  pgf-pie = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-pie.nix { };
+
+  pgf-umlcd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlcd.nix { };
+
+  pgf-umlsd = callPackage ../tools/typesetting/tex/pgf-tikz/pgf-umlsd.nix { };
+
+  pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
+
+  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
+
+  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
+
+  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
+
+  texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
+
+  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
+  texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
+
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
   };
@@ -5065,8 +5109,6 @@ with pkgs;
 
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
-
-  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
@@ -8592,8 +8634,6 @@ with pkgs;
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
 
-  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
-
   mhonarc = perlPackages.MHonArc;
 
   minica = callPackage ../tools/security/minica { };
@@ -8738,8 +8778,6 @@ with pkgs;
   jump = callPackage ../tools/system/jump {};
 
   latex2html = callPackage ../tools/misc/latex2html { };
-
-  latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
 
@@ -10073,6 +10111,8 @@ with pkgs;
 
   pamtester = callPackage ../tools/security/pamtester { };
 
+  paper-note = callPackage ../applications/office/paper-note { };
+
   paperless-ngx = callPackage ../applications/office/paperless-ngx { };
 
   paperoni = callPackage ../tools/text/paperoni {
@@ -10122,13 +10162,11 @@ with pkgs;
 
   percona-xtrabackup = percona-xtrabackup_8_0;
   percona-xtrabackup_2_4 = callPackage ../tools/backup/percona-xtrabackup/2_4.nix {
-    stdenv = gcc10StdenvCompat;
     boost = boost159;
     openssl = openssl_1_1;
   };
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
-    stdenv = gcc10StdenvCompat;
-    boost = boost170;
+    boost = boost177;
     openssl = openssl_1_1;
   };
 
@@ -10439,8 +10477,6 @@ with pkgs;
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
   ppl = callPackage ../development/libraries/ppl { };
-
-  pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
   ppp = callPackage ../tools/networking/ppp { };
 
@@ -11864,8 +11900,6 @@ with pkgs;
   textadept = callPackage ../applications/editors/textadept { };
 
   texworks = libsForQt5.callPackage ../applications/editors/texworks { };
-
-  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
   tf2pulumi = callPackage ../development/tools/tf2pulumi { };
 
@@ -16113,7 +16147,7 @@ with pkgs;
 
   arpa2common = callPackage ../development/libraries/arpa2common { };
 
-  asn2quickder = python2Packages.callPackage ../development/tools/asn2quickder {};
+  asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder {};
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
@@ -21197,6 +21231,8 @@ with pkgs;
   };
 
   mueval = callPackage ../development/tools/haskell/mueval { };
+
+  mujoco = callPackage ../applications/science/robotics/mujoco { };
 
   muparser = callPackage ../development/libraries/muparser {
     inherit (darwin.stubs) setfile;
@@ -32778,7 +32814,7 @@ with pkgs;
   wordgrinder = callPackage ../applications/office/wordgrinder { };
 
   workrave = callPackage ../applications/misc/workrave {
-    inherit (python27Packages) cheetah;
+    inherit (python3Packages) jinja2;
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
   };
 
@@ -36124,8 +36160,6 @@ with pkgs;
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
-  auctex = callPackage ../tools/typesetting/tex/auctex { };
-
   areca = callPackage ../applications/backup/areca {
     jdk = jdk8;
     jre = jre8;
@@ -36241,10 +36275,6 @@ with pkgs;
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
-
-  dblatex = callPackage ../tools/typesetting/tex/dblatex { };
-
-  dblatexFull = dblatex.override { enableAllFeatures = true; };
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
@@ -36755,8 +36785,6 @@ with pkgs;
 
   i3a = callPackage ../misc/i3a { };
 
-  lkproof = callPackage ../tools/typesetting/tex/lkproof { };
-
   lice = python3Packages.callPackage ../tools/misc/lice {};
 
   m33-linux = callPackage ../misc/drivers/m33-linux { };
@@ -36811,18 +36839,6 @@ with pkgs;
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
   pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
-
-  pgf = pgf2;
-
-  # Keep the old PGF since some documents don't render properly with
-  # the new one.
-  pgf1 = callPackage ../tools/typesetting/tex/pgf/1.x.nix { };
-
-  pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
-
-  pgf3 = callPackage ../tools/typesetting/tex/pgf/3.x.nix { };
-
-  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
@@ -37101,15 +37117,7 @@ with pkgs;
 
   timeular = callPackage ../applications/office/timeular {};
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
   tewi-font = callPackage ../data/fonts/tewi { };
-
-  texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
-
-  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs
-    (callPackage ../tools/typesetting/tex/texlive { });
 
   ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
 
