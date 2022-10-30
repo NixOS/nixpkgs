@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-vi-mode";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "jeffreytse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "EOYqHh0rcgoi26eopm6FTl81ehak5kXMmzNcnJDH8/E=";
+    sha256 = "sha256-KQ7UKudrpqUwI6gMluDTVN0qKpB15PI5P1YHHCBIlpg=";
   };
 
   strictDeps = true;
