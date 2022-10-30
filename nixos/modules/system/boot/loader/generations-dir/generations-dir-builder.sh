@@ -51,6 +51,7 @@ addEntry() {
     local path="$1"
     local generation="$2"
     local outdir=/boot/system-$generation
+    local defaultdir=/boot/default
 
     if ! test -e $path/kernel -a -e $path/initrd; then
         return
@@ -77,12 +78,13 @@ addEntry() {
       cp "$initrd" /boot/nixos-initrd
       cp "$(readlink -f "$path/init")" /boot/nixos-init
 
-      mkdir -p /boot/default
-      # ln -sfT: overrides target even if it exists.
-      ln -sfT $(readlink -f $path) /boot/default/system
-      ln -sfT $(readlink -f $path/init) /boot/default/init
-      ln -sfT $extraLnArgs $initrd /boot/default/initrd
-      ln -sfT $extraLnArgs $kernel /boot/default/kernel
+      # Clean up the /boot/default directory created by earlier
+      # versions of generations-dir.
+      if test -d $defaultdir -a ! -L $defaultdir; then
+        rm -Rf $defaultdir
+      fi
+
+      ln -sfrT $outdir $defaultdir
     fi
 }
 
