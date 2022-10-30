@@ -88,7 +88,6 @@ let
     # Sourcehut services
     srht
     buildsrht
-    dispatchsrht
     gitsrht
     hgsrht
     hubsrht
@@ -109,13 +108,13 @@ in
 {
   options.services.sourcehut = {
     enable = mkEnableOption (lib.mdDoc ''
-      sourcehut - git hosting, continuous integration, mailing list, ticket tracking,
-      task dispatching, wiki and account management services
+      sourcehut - git hosting, continuous integration, mailing list, ticket tracking, wiki
+      and account management services
     '');
 
     services = mkOption {
       type = with types; listOf (enum
-        [ "builds" "dispatch" "git" "hg" "hub" "lists" "man" "meta" "pages" "paste" "todo" ]);
+        [ "builds" "git" "hg" "hub" "lists" "man" "meta" "pages" "paste" "todo" ]);
       defaultText = "locally enabled services";
       description = lib.mdDoc ''
         Services that may be displayed as links in the title bar of the Web interface.
@@ -298,32 +297,6 @@ in
             '';
             type = types.path;
             apply = s: "<" + toString s;
-          };
-        };
-
-        options."dispatch.sr.ht" = commonServiceSettings "dispatch" // {
-        };
-        options."dispatch.sr.ht::github" = {
-          oauth-client-id = mkOptionNullOrStr "OAuth client id.";
-          oauth-client-secret = mkOptionNullOrStr "OAuth client secret.";
-        };
-        options."dispatch.sr.ht::gitlab" = {
-          enabled = mkEnableOption (lib.mdDoc "GitLab integration");
-          canonical-upstream = mkOption {
-            type = types.str;
-            description = lib.mdDoc "Canonical upstream.";
-            default = "gitlab.com";
-          };
-          repo-cache = mkOption {
-            type = types.str;
-            description = lib.mdDoc "Repository cache directory.";
-            default = "./repo-cache";
-          };
-          "gitlab.com" = mkOption {
-            type = with types; nullOr str;
-            description = lib.mdDoc "GitLab id and secret.";
-            default = null;
-            example = "GitLab:application id:secret";
           };
         };
 
@@ -1021,11 +994,6 @@ in
       ];
     })
 
-    (import ./service.nix "dispatch" {
-      inherit configIniOfService;
-      port = 5005;
-    })
-
     (import ./service.nix "git" (let
       baseService = {
         path = [ cfg.git.package ];
@@ -1416,6 +1384,10 @@ in
     (mkRenamedOptionModule [ "services" "sourcehut" "address" ]
                            [ "services" "sourcehut" "listenAddress" ])
 
+    (mkRemovedOptionModule [ "services" "sourcehut" "dispatch" ] ''
+        dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/
+        for more information.
+    '')
   ];
 
   meta.doc = ./sourcehut.xml;

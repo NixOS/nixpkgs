@@ -575,6 +575,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.sourcehut.dispatch</literal> and the
+          corresponding package
+          (<literal>sourcehut.dispatchsrht</literal>) have been removed
+          due to
+          <link xlink:href="https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/">upstream
+          deprecation</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>p4</literal> package now only includes the
           open-source Perforce Helix Core command-line client and APIs.
           It no longer installs the unfree Helix Core Server binaries
