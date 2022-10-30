@@ -525,6 +525,14 @@ in
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
+      # For nautilus to show audio/video file properties
+      environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = map (x: "${x}/lib/gstreamer-1.0") [
+        pkgs.gst_all_1.gst-libav
+        pkgs.gst_all_1.gst-plugins-bad
+        pkgs.gst_all_1.gst-plugins-good
+        pkgs.gst_all_1.gst-plugins-ugly
+      ];
+
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"
       ];
