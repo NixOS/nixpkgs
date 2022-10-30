@@ -1,8 +1,18 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch
-, cmake, boost
-, portmidi, sqlite
-, freetype, libpng, pngpp, zlib
-, wxGTK30, wxsqlite3
+{ lib
+, stdenv
+, pkg-config
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost
+, portmidi
+, sqlite
+, freetype
+, libpng
+, pngpp
+, zlib
+, wxGTK30-gtk3
+, wxsqlite3
 }:
 
 stdenv.mkDerivation rec {
@@ -25,14 +35,28 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lenmus/lenmus/commit/6613d20d4051effc782203c9c6d92962a3f66b5f.patch";
       sha256 = "01vvzzpamv90jpqbbq1f2m2b4gb9xab9z70am8i41d90nqvg6agn";
     })
+    (fetchpatch {
+      url = "https://github.com/lenmus/lenmus/commit/37ee8ac9c8faff65a14e8f7ed2bc22e6dc48d91f.patch";
+      includes = [ "src/app/lenmus_midi_wizard.cpp" ];
+      sha256 = "sha256-nlT6ZbSCIXUk2Ufv/SDn2A0Rt+s/7m+7l9HOoQmaIhc=";
+    })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
     boost
-    portmidi sqlite
-    freetype libpng pngpp zlib
-    wxGTK30 wxsqlite3
+    portmidi
+    sqlite
+    freetype
+    libpng
+    pngpp
+    zlib
+    wxGTK30-gtk3
+    wxsqlite3
   ];
 
   meta = with lib; {
@@ -46,6 +70,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers;  [ ramkromberg ];
     platforms = with platforms; linux;
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }
