@@ -30611,7 +30611,10 @@ with pkgs;
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = callPackage ../tools/misc/nncp { };
+  nncp = (
+    if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.callPackage
+    else callPackage) ../tools/misc/nncp { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
