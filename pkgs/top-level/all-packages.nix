@@ -35165,6 +35165,10 @@ with pkgs;
 
   minimap2 = callPackage ../applications/science/biology/minimap2 { };
 
+  mmseqs2 = callPackage ../applications/science/biology/mmseqs2 {
+    inherit (llvmPackages) openmp;
+  };
+
   mosdepth = callPackage ../applications/science/biology/mosdepth { };
 
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
