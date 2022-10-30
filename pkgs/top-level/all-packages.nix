@@ -15228,6 +15228,8 @@ with pkgs;
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
+  inherit (nodePackages) typescript;
+
   bupc = callPackage ../development/compilers/bupc { };
 
   uasm = callPackage ../development/compilers/uasm { };
