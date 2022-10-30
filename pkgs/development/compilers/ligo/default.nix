@@ -9,12 +9,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.54.0";
+  version = "0.54.1";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-Iq72gDaS05yhxAYjIUrqiCwBkx5aWbVpYPcQlgojhNU=";
+    sha256 = "sha256-P4oScKsf2A6qtkzpep8lewqSMM9A+vHyN5VaH7+/6xQ=";
     fetchSubmodules = true;
   };
 
