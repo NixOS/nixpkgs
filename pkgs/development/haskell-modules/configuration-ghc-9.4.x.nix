@@ -61,12 +61,6 @@ in {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # Too strict bound on base
-  # https://github.com/haskell/cabal/issues/8509
-  # Requested versions of Cabal, Cabal-syntax and process match GHC 9.4's for now
-  cabal-install = doJailbreak super.cabal-install;
-  cabal-install-solver = doJailbreak super.cabal-install-solver;
-
   cabal2nix =
     # cabal2nix depends on foundation, which is broken on aarch64-linux.
     # https://github.com/haskell-foundation/foundation/issues/571
