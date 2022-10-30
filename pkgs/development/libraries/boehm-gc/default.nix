@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  # `gctest` fails under emulation on aarch64-darwin
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  # `gctest` fails under emulation on aarch64-darwin and on powerpc64le-linux
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64) && !stdenv.hostPlatform.isPower64;
 
   enableParallelBuilding = true;
 
