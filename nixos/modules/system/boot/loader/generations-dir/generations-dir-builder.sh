@@ -58,17 +58,19 @@ addEntry() {
 
     local kernel=$(readlink -f $path/kernel)
     local initrd=$(readlink -f $path/initrd)
+    local extraLnArgs=""
 
     if test -n "@copyKernels@"; then
         copyToKernelsDir $kernel; kernel=$result
         copyToKernelsDir $initrd; initrd=$result
+        extraLnArgs="-r"
     fi
 
     mkdir -p $outdir
     ln -sf $(readlink -f $path) $outdir/system
     ln -sf $(readlink -f $path/init) $outdir/init
-    ln -sf $initrd $outdir/initrd
-    ln -sf $kernel $outdir/kernel
+    ln -sf $extraLnArgs $initrd $outdir/initrd
+    ln -sf $extraLnArgs $kernel $outdir/kernel
 
     if test $(readlink -f "$path") = "$default"; then
       cp "$kernel" /boot/nixos-kernel
@@ -79,8 +81,8 @@ addEntry() {
       # ln -sfT: overrides target even if it exists.
       ln -sfT $(readlink -f $path) /boot/default/system
       ln -sfT $(readlink -f $path/init) /boot/default/init
-      ln -sfT $initrd /boot/default/initrd
-      ln -sfT $kernel /boot/default/kernel
+      ln -sfT $extraLnArgs $initrd /boot/default/initrd
+      ln -sfT $extraLnArgs $kernel /boot/default/kernel
     fi
 }
 
