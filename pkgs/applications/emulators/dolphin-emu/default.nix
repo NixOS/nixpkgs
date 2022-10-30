@@ -6,7 +6,7 @@
 , bluez
 , ffmpeg
 , libao
-, gtk2
+, gtk3
 , glib
 , libGLU
 , libGL
@@ -21,7 +21,7 @@
 , fetchFromGitHub
 , libusb1
 , libevdev
-, wxGTK30
+, wxGTK30-gtk3
 , soundtouch
 , miniupnpc
 , mbedtls
@@ -43,29 +43,33 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with soundtouch 2.1.2
+    # Fix FTBFS with glibc 2.26
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/dolphin-emu/raw/a1b91fdf94981e12c8889a02cba0ec2267d0f303/f/dolphin-emu-5.0-soundtouch-exception-fix.patch";
-      name = "dolphin-emu-5.0-soundtouch-exception-fix.patch";
-      sha256 = "0yd3l46nja5qiknnl30ryad98f3v8911jwnr67hn61dzx2kwbbaw";
+      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/02_glibc-2.26.patch";
+      name = "02_glibc-2.26.patch";
+      sha256 = "sha256-LBXT3rf5klwmX9YQXt4/iv06GghsWZprNhLGYlKiDqk=";
     })
-    # Fix build with gcc 8
+    # Fix FTBFS with GCC 8
     (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/9b7b4aeac1b60dcf28bdcafbed6bc498b2aeb0ad/debian/patches/03_gcc8.patch";
+      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/03_gcc8.patch";
       name = "03_gcc8.patch";
-      sha256 = "1da95gb8c95kd5cjhdvg19cv2z863lj3va5gx3bqc7g8r36glqxr";
+      sha256 = "sha256-uWP6zMjoHYbX6K+oPSQdBn2xWQpvNyhZabMkhtYrSbU=";
+    })
+    # Fix FTBFS with SoundTouch 2.1.2
+    (fetchpatch {
+      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/05_soundtouch-2.1.2.patch";
+      name = "05_soundtouch-2.1.2.patch";
+      sha256 = "sha256-Y7CNM6GQC9GRhlOBLZlxkIpj1CFhIwA5L8lGXur/bwY=";
+    })
+    # Use GTK+3 wxWidgets backend
+    (fetchpatch {
+      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/8c952b1fcd46259e9d8cce836df433e0a8b88f8c/debian/patches/06_gtk3.patch";
+      name = "06_gtk3.patch";
+      sha256 = "sha256-pu5Q0+8kNwmpf2DoXCXHFqxF0EGTnFXJipkBz1Vh2cs=";
     })
   ];
 
-  postPatch = ''
-    substituteInPlace Source/Core/VideoBackends/OGL/RasterFont.cpp \
-      --replace " CHAR_WIDTH " " CHARWIDTH "
-  '';
-
   cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
     "-DENABLE_LTO=True"
   ];
 
@@ -80,7 +84,7 @@ stdenv.mkDerivation rec {
     libao
     libGLU
     libGL
-    gtk2
+    gtk3
     glib
     gettext
     libpthreadstubs
@@ -97,7 +101,7 @@ stdenv.mkDerivation rec {
     portaudio
     libusb1
     libpulseaudio
-    wxGTK30
+    wxGTK30-gtk3
     soundtouch
     miniupnpc
     mbedtls
@@ -117,6 +121,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ MP2E ashkitten ];
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
