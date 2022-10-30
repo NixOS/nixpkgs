@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchgit
+, fetchzip
 , alsa-lib
 , aubio
 , boost
@@ -65,6 +66,13 @@ stdenv.mkDerivation rec {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
     hash = "sha256-eLF9n71tjdPA+ks0B8UonmPZqRgcZEA7ok79+m9PioU=";
+  };
+
+  bundledContent = fetchzip {
+    url = "https://web.archive.org/web/20221026200824/http://stuff.ardour.org/loops/ArdourBundledMedia.zip";
+    hash = "sha256-IbPQWFeyMuvCoghFl1ZwZNNcSvLNsH84rGArXnw+t7A=";
+    # archive does not contain a single folder at the root
+    stripRoot = false;
   };
 
   patches = [
@@ -165,6 +173,9 @@ stdenv.mkDerivation rec {
         "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
     done
     install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+
+    # install additional bundled beats, chords and progressions
+    cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
   '' + lib.optionalString videoSupport ''
     # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
     wrapProgram "$out/bin/ardour${lib.versions.major version}" \
