@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-thunk";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
