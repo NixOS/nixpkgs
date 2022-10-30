@@ -1100,10 +1100,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19ynyc7wzl71hn7jw467xr188v0az679l54167slm3jh5mx6rijf";
+      sha256 = "03qiz6kbk260v3613z4wrk8iy1mi06j631fglcskfxyhf18lpy05";
       type = "gem";
     };
-    version = "6.0.7";
+    version = "6.0.8";
   };
   hashie = {
     groups = ["default"];
@@ -1324,6 +1324,17 @@
       type = "gem";
     };
     version = "0.1.4";
+  };
+  jekyll-favicon = {
+    dependencies = ["jekyll" "mini_magick" "rexml"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dyksm4i11n0qshd7wh6dvk8d0fc70dd32ir2dxs6igxq0gd6hi1";
+      type = "gem";
+    };
+    version = "1.1.0";
   };
   jekyll-feed = {
     dependencies = ["jekyll"];
@@ -1752,10 +1763,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0rsgvdyh828k6bz95b4391ydv6710d4dsdrrfr684glks7599ldf";
+      sha256 = "1jbqw7hkx08i5dj74fwfdc16980hsj3mhrxp4mmjxsdzw1kndrvp";
       type = "gem";
     };
-    version = "3.2.3";
+    version = "3.2.4";
   };
   liquid = {
     groups = ["default"];
