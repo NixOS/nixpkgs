@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pname = "todosrht-api";
     modRoot = "api";
     vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip;});
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
     srht
