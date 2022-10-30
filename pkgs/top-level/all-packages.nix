@@ -8106,6 +8106,8 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
+  jd-cli = callPackage ../tools/security/jd-cli { };
+
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
 
   jd-gui = callPackage ../tools/security/jd-gui { };
@@ -15235,6 +15237,8 @@ with pkgs;
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
+  inherit (nodePackages) typescript;
+
   bupc = callPackage ../development/compilers/bupc { };
 
   uasm = callPackage ../development/compilers/uasm { };
@@ -21614,7 +21618,7 @@ with pkgs;
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
   inherit (callPackage ../development/libraries/physfs {
-    inherit (darwin.apple_sdk.frameworks) Foundation Carbon;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   })
     physfs_2
     physfs;
@@ -22825,8 +22829,6 @@ with pkgs;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
-  wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
-  wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
   wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
     inherit (darwin.stubs) setfile;
@@ -31811,14 +31813,14 @@ with pkgs;
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
   };
 
   super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
@@ -32102,7 +32104,7 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
-  tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
+  tenacity = callPackage ../applications/audio/tenacity { };
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
