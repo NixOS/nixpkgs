@@ -4224,6 +4224,7 @@ with pkgs;
   };
 
   amoco = callPackage ../tools/security/amoco { };
+  adiak  = callPackage ../development/libraries/adiak { };
 
   anbox = callPackage ../os-specific/linux/anbox {
     protobuf = protobuf_21;
@@ -4640,6 +4641,8 @@ with pkgs;
   calamares-nixos-extensions = callPackage ../tools/misc/calamares-nixos-extensions { };
 
   calendar-cli = callPackage ../tools/networking/calendar-cli { };
+
+  caliper  = callPackage ../development/libraries/caliper { };
 
   cameradar = callPackage ../tools/security/cameradar { };
 
