@@ -14224,7 +14224,7 @@ with pkgs;
   intercal = callPackage ../development/compilers/intercal { };
 
   iroh = callPackage ../applications/networking/iroh {
-    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration;
+    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
   };
 
   irony-server = callPackage ../development/tools/irony-server {

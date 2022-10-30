@@ -8,6 +8,7 @@
 , rocksdb
 , Security
 , DiskArbitration
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     Security
     DiskArbitration
+    Foundation
   ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
