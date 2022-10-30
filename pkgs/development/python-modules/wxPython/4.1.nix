@@ -13,6 +13,7 @@
 , ncurses
 , pango
 , wxGTK
+, gtk3
 , AGL
 , AudioToolbox
 , AVFoundation
@@ -70,7 +71,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     which
     doxygen
-    wxGTK.gtk
+    gtk3
     pkg-config
     setuptools
   ] ++ lib.optionals stdenv.isLinux [
@@ -78,7 +79,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    wxGTK.gtk
+    gtk3
     ncurses
   ] ++ lib.optionals stdenv.isLinux [
     libXinerama
@@ -120,7 +121,7 @@ buildPythonPackage rec {
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace wx/lib/wxcairo/wx_pycairo.py \
       --replace '_dlls = dict()' '_dlls = {k: ctypes.CDLL(v) for k, v in [
-        ("gdk",        "${wxGTK.gtk}/lib/libgtk-x11-3.0.so"),
+        ("gdk",        "${gtk3}/lib/libgtk-x11-3.0.so"),
         ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
         ("cairoLib = None", "cairoLib = ctypes.CDLL('${cairo}/lib/libcairo.so')"),
         ("appsvc",     None)

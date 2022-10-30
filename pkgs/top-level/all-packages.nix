@@ -1423,6 +1423,8 @@ with pkgs;
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
 
+  toast = callPackage ../development/tools/toast { };
+
   topicctl = callPackage ../tools/misc/topicctl { };
 
   ttchat = callPackage ../tools/misc/ttchat { };
@@ -17337,7 +17339,6 @@ with pkgs;
     patchelf_0_13
   else
     patchelf_0_14;
-  patchelf_0_9 = callPackage ../development/tools/misc/patchelf/0.9.nix { };
   patchelf_0_13 = callPackage ../development/tools/misc/patchelf/0.13.nix {
     patchelf = patchelf_0_14;
   };
@@ -22818,8 +22819,6 @@ with pkgs;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
-  wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
-  wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
   wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
     inherit (darwin.stubs) setfile;
@@ -31804,14 +31803,14 @@ with pkgs;
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
   };
 
   super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
@@ -32093,7 +32092,7 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
-  tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
+  tenacity = callPackage ../applications/audio/tenacity { };
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
@@ -37199,6 +37198,8 @@ with pkgs;
   vaultwarden-vault = callPackage ../tools/security/vaultwarden/vault.nix { };
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
+
+  vhs = callPackage ../applications/misc/vhs { };
 
   vgmstream = callPackage ../applications/audio/vgmstream { };
 

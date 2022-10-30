@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "tlambert03";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hh1HG4VVcNXo62M/4mU3ZcSQNHmalcIDprkwD6/WRf8=";
+    hash = "sha256-KCdX+pMUAQxeQRZhkrdGCKGjBaB1Ode/r1W8LJQPxyM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
