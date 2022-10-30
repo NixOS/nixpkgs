@@ -7360,9 +7360,6 @@ with pkgs;
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp {
     openssl = openssl_1_1;
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "14";
-    };
   };
 
   google-java-format = callPackage ../development/tools/google-java-format { };
