@@ -1,5 +1,16 @@
 # shellcheck shell=bash disable=SC2206
 
+sconsConfigurePhase() {
+    runHook preConfigure
+
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "scons/setup-hook: enabled parallel building"
+    fi
+
+    runHook postConfigure
+}
+
 sconsBuildPhase() {
     runHook preBuild
 
@@ -69,6 +80,10 @@ sconsCheckPhase() {
 
     runHook postCheck
 }
+
+if [ -z "${dontUseSconsConfigure-}" ] && [ -z "${configurePhase-}" ]; then
+    configurePhase=sconsConfigurePhase
+fi
 
 if [ -z "${dontUseSconsBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=sconsBuildPhase
