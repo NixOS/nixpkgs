@@ -17,17 +17,24 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-25Rytq5PupaLQJ3DL67iDdZQiQZdqpPgjSG3lqZdZXg=";
+    hash = "sha256-25Rytq5PupaLQJ3DL67iDdZQiQZdqpPgjSG3lqZdZXg=";
   };
 
   propagatedBuildInputs = [
-    argcomplete
-    pyyaml
     requests
     requests-toolbelt
   ];
 
-  # tests rely on a gitlab instance on a local docker setup
+  passthru.optional-dependencies = {
+    autocompletion = [
+      argcomplete
+    ];
+    yaml = [
+      pyyaml
+    ];
+  };
+
+  # Tests rely on a gitlab instance on a local docker setup
   doCheck = false;
 
   pythonImportsCheck = [
@@ -37,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ nyanloutre ];
   };
 }
