@@ -39,12 +39,12 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.4.42";
+  version = "1.4.41"; # TODO: check python3Packages.fastapi when updating to >= 1.4.42
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F35BkUxHbtHht3/QWWbqiMCUBT4XqFMDxM4Af4jv82M=";
+    hash = "sha256-ApL3DReX48VOhi5vMK5HQBRki8nHI+FKL9pzCtsKl5E=";
   };
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
