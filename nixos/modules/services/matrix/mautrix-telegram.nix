@@ -19,6 +19,10 @@ in {
         apply = recursiveUpdate default;
         inherit (settingsFormat) type;
         default = {
+          homeserver = {
+            software = "standard";
+          };
+
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
             database_opts = {};
