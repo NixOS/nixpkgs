@@ -7,13 +7,13 @@
 
 mkDerivation rec {
   pname = "proxmark3-rrg";
-  version = "4.14831";
+  version = "4.15864";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${version}";
-    sha256 = "sha256-s0D04V6vlGW7SVkJwzMKaVfXQoT3Wi0lu7RC61Es89A=";
+    sha256 = "sha256-vFebyXKC/vf8W8fGkTpSGTA0ZmfwnXSuuiOjV/u9240=";
   };
 
   nativeBuildInputs = [ pkg-config gcc-arm-embedded ];
