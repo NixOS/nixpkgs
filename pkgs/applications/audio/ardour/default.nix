@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
   pname = "ardour";
   version = "7.1";
 
-  # don't fetch releases from the GitHub mirror, they are broken
+  # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
+  # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
