@@ -13057,6 +13057,8 @@ with pkgs;
 
   yj = callPackage ../development/tools/yj { };
 
+  zarchive = callPackage ../tools/archivers/zarchive { };
+
   zprint = callPackage ../development/tools/zprint { };
 
   yle-dl = callPackage ../tools/misc/yle-dl {};
