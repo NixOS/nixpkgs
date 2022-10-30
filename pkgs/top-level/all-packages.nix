@@ -4645,6 +4645,8 @@ with pkgs;
 
   nsync = callPackage ../development/libraries/nsync { };
 
+  nsz = with python3.pkgs; toPythonApplication nsz;
+
   nwipe = callPackage ../tools/security/nwipe { };
 
   nx2elf = callPackage ../tools/compression/nx2elf { };
