@@ -7,16 +7,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WZUoUvu7GaiBOaRAOGRCXrLe6u3DRbI6CDTAf5jryGc=";
+    sha256 = "sha256-CEsnZ0V85eOH+bjtico5yo9kS6eMT7Dx3H6wiDUjQm4=";
   };
 
-  cargoHash = "sha256-81ZW61JX40W0D/cmYogR3RJH2dvEKW1K7sIsl2io/7E=";
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
+  cargoHash = "sha256-z+2G/hD1zYOoJrYFB0eEP6y9MoV2OfdkJVt6je94EkU=";
   buildInputs = [ protobuf ];
 
   PROTOC = "${protobuf}/bin/protoc";

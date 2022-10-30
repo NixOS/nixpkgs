@@ -2944,7 +2944,8 @@
     "switch_as_x" = ps: with ps; [
     ];
     "switchbee" = ps: with ps; [
-    ]; # missing inputs: pyswitchbee
+      pyswitchbee
+    ];
     "switchbot" = ps: with ps; [
       pyswitchbot
       aiohttp-cors
@@ -4174,6 +4175,7 @@
     "surepetcare"
     "switch"
     "switch_as_x"
+    "switchbee"
     "switchbot"
     "switcher_kis"
     "syncthing"

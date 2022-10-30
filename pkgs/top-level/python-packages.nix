@@ -8616,6 +8616,8 @@ self: super: with self; {
     inherit (pkgs) bash subversion apr aprutil expat neon openssl;
   };
 
+  pyswitchbee = callPackage ../development/python-modules/pyswitchbee { };
+
   pyswitchbot = callPackage ../development/python-modules/pyswitchbot { };
 
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
