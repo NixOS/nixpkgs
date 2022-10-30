@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f2dc1f02d..739b8ae99 100644
+index d87a7052d..837867551 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -153,19 +153,8 @@ endif()
@@ -12,7 +12,7 @@ index f2dc1f02d..739b8ae99 100644
 -    message(STATUS "Found harfbuzz native cmake")
 -    list(APPEND MAPNIK_OPTIONAL_LIBS harfbuzz::harfbuzz)
 -else()
--    # Use pkg-config when harfbuzz is not found. 
+-    # Use pkg-config when harfbuzz is not found.
 -    # It might be possible that in future version harfbuzz could only be found via pkg-config.
 -    # harfbuzz related discussion: https://github.com/harfbuzz/harfbuzz/issues/2653
 -    message(STATUS "harfbuzz not found via cmake. Searching via pkg-config...")
