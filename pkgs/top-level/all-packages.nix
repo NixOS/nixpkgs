@@ -12579,6 +12579,8 @@ with pkgs;
 
   xplr = callPackage ../applications/misc/xplr {};
 
+  xray = callPackage ../tools/networking/xray { };
+
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
 
   testdisk-qt = testdisk.override { enableQt = true; };
