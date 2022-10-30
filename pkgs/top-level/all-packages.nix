@@ -13587,6 +13587,22 @@ with pkgs;
 
   cotton = callPackage ../development/tools/cotton { };
 
+  crosstool-ng = callPackage ../development/compilers/crosstool-ng { };
+
+  crosstool-ng-fetcher = callPackage ../development/compilers/crosstool-ng/fetcher.nix { };
+
+  crosstoolNgToolchains = callPackage ../development/compilers/crosstool-ng/toolchains.nix { };
+
+  crosstoolNgGcc = builtins.mapAttrs (name: value: wrapCCWith {
+    cc = value;
+    libc = value;
+    bintools = bintools.override {
+      libc = value;
+      # do not override dynamic linker
+      sharedLibraryLoader = null;
+    };
+  }) crosstoolNgToolchains;
+
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
   })
