@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "3.0";
+  version = "3.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wyN7dlAbQwqvES8qEJ4Zo+fDMM/Lh9tNjf215Ywop10=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bteJD+pvuyx/9jZJMLA8imX98vc5C0kx/PYRrBnPEvA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
