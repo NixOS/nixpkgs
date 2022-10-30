@@ -18,26 +18,19 @@
 }:
 
 let
-  pname = "arangodb";
-
-  default_arch =
-    if gcc10Stdenv.isx86_64
+  defaultTargetArchitecture =
+    if gcc10Stdenv.targetPlatform.isx86
     then "haswell"
-    else if gcc10Stdenv.isAarch64
-    then "zen"
-    else "none";
+    else "core";
 
-  target_arch =
+  targetArch =
     if isNull targetArchitecture
-    then
-      lib.warn
-        "${pname} target architecture not specified, choosing ${default_arch}"
-        default_arch
+    then defaultTargetArchitecture
     else targetArchitecture;
 in
 
 gcc10Stdenv.mkDerivation rec {
-  inherit pname;
+  pname = "arangodb";
   version = "3.10.0";
 
   src = fetchFromGitHub {
@@ -71,7 +64,7 @@ gcc10Stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
-    "-DTARGET_ARCHITECTURE=${target_arch}"
+    "-DTARGET_ARCHITECTURE=${targetArch}"
   ];
 
   meta = with lib; {
