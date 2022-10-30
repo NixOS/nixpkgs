@@ -74,9 +74,11 @@ addEntry() {
     ln -sf $extraLnArgs $kernel $outdir/kernel
 
     if test $(readlink -f "$path") = "$default"; then
-      cp "$kernel" /boot/nixos-kernel
-      cp "$initrd" /boot/nixos-initrd
-      cp "$(readlink -f "$path/init")" /boot/nixos-init
+      if test -n "@copyDefault@"; then
+        cp "$kernel" /boot/nixos-kernel
+        cp "$initrd" /boot/nixos-initrd
+        cp "$(readlink -f "$path/init")" /boot/nixos-init
+      fi
 
       # Clean up the /boot/default directory created by earlier
       # versions of generations-dir.
