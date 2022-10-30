@@ -21066,7 +21066,6 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true;
     };
-    boost = boost175;
   };
 
   manticoresearch = callPackage ../servers/search/manticoresearch { };
