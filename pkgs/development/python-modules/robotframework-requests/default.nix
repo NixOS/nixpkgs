@@ -8,12 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.3";
+  version = "0.9.4";
   pname = "robotframework-requests";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C754uOezq5vsSWilG/N5XiZxABp4Cyt+vyriFSmI2jU=";
+    sha256 = "sha256-4AlDuFJsOL7Vw8ZhyBPsnVohBpYb2R2gBocSwqDUnoI=";
   };
 
   buildInputs = [ unittest2 ];
