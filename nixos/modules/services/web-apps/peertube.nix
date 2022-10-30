@@ -69,6 +69,8 @@ let
 
   nginxCommonHeaders = lib.optionalString cfg.enableWebHttps ''
     add_header Strict-Transport-Security      'max-age=63072000; includeSubDomains';
+  '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+    add_header Alt-Svc                        'h3=":443"; ma=86400';
   '' + ''
     add_header Access-Control-Allow-Origin    '*';
     add_header Access-Control-Allow-Methods   'GET, OPTIONS';
@@ -491,6 +493,8 @@ in {
             add_header X-File-Maximum-Size              8G always;
           '' + lib.optionalString cfg.enableWebHttps ''
             add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
@@ -503,6 +507,8 @@ in {
             add_header X-File-Maximum-Size              4M always;
           '' + lib.optionalString cfg.enableWebHttps ''
             add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
@@ -568,6 +574,8 @@ in {
             add_header Cache-Control                    'public, max-age=604800, immutable';
           '' + lib.optionalString cfg.enableWebHttps ''
             add_header Strict-Transport-Security        'max-age=63072000; includeSubDomains';
+          '' + lib.optionalString config.services.nginx.virtualHosts.${cfg.localDomain}.http3 ''
+            add_header Alt-Svc                          'h3=":443"; ma=86400';
           '';
         };
 
