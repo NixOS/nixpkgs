@@ -374,7 +374,7 @@ in {
     systemd.services.peertube-init-db = lib.mkIf cfg.database.createLocally {
       description = "Initialization database for PeerTube daemon";
       after = [ "network.target" "postgresql.service" ];
-      wantedBy = [ "multi-user.target" ];
+      requires = [ "postgresql.service" ];
 
       script = let
         psqlSetupCommands = pkgs.writeText "peertube-init.sql" ''
@@ -403,7 +403,9 @@ in {
     systemd.services.peertube = {
       description = "PeerTube daemon";
       after = [ "network.target" ]
-        ++ lib.optionals cfg.redis.createLocally [ "redis.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
+        ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
+      requires = lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [ "postgresql.service" "peertube-init-db.service" ];
       wantedBy = [ "multi-user.target" ];
 
