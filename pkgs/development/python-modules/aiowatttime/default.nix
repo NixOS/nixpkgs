@@ -15,13 +15,13 @@ buildPythonPackage rec {
   version = "2022.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rqmsUvVwXC/XkR/v2d9d3t7u6Poms4ORiOci41ajXIo=";
+    hash = "sha256-rqmsUvVwXC/XkR/v2d9d3t7u6Poms4ORiOci41ajXIo=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +39,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Ignore the examples directory as the files are prefixed with test_
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "aiowatttime" ];
+  pythonImportsCheck = [
+    "aiowatttime"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with WattTime";
