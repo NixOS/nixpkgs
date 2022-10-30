@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -8,7 +9,7 @@
 , libxml2
 , libjack2
 , libsndfile
-, wxGTK30
+, wxGTK30-gtk3
 , libsigcxx
 , libsamplerate
 , rubberband
@@ -34,14 +35,19 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config which libtool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    which
+    libtool
+  ];
 
   buildInputs = [
     liblo
     libxml2
     libjack2
     libsndfile
-    wxGTK30
+    wxGTK30-gtk3
     libsigcxx
     libsamplerate
     rubberband
