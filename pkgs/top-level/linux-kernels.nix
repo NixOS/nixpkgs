@@ -164,6 +164,14 @@ in {
       ];
     };
 
+    linux_rt_6_0 = callPackage ../os-specific/linux/kernel/linux-rt-6.0.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.export-rt-sched-migrate
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -523,6 +531,7 @@ in {
      # realtime kernel packages
      linux_rt_5_4 = packagesFor kernels.linux_rt_5_4;
      linux_rt_5_10 = packagesFor kernels.linux_rt_5_10;
+     linux_rt_6_0 = packagesFor kernels.linux_rt_6_0;
   };
 
   rpiPackages = {
@@ -578,7 +587,7 @@ in {
     linux_latest = packages.linux_6_0;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
-    linux_rt_latest = packages.linux_rt_5_10;
+    linux_rt_latest = packages.linux_rt_6_0;
     linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
