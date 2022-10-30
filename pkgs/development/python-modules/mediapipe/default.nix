@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchurl
-, curl
 , python3
 , pythonOlder
 , pythonAtLeast
