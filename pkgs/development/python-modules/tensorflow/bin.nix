@@ -98,14 +98,16 @@ in buildPythonPackage {
     (
       cd unpacked/tensorflow*
       # Adjust dependency requirements:
-      # - Relax flatbuffers, gast and tensorflow-estimator version requirements that don't match what we have packaged
+      # - Relax flatbuffers, gast, protobuf, tensorboard, and tensorflow-estimator version requirements that don't match what we have packaged
       # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
       # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
       sed -i *.dist-info/METADATA \
         -e "/Requires-Dist: flatbuffers/d" \
         -e "/Requires-Dist: gast/d" \
-        -e "/Requires-Dist: libclang/d" \
         -e "/Requires-Dist: keras/d" \
+        -e "/Requires-Dist: libclang/d" \
+        -e "/Requires-Dist: protobuf/d" \
+        -e "/Requires-Dist: tensorboard/d" \
         -e "/Requires-Dist: tensorflow-estimator/d" \
         -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
     )
