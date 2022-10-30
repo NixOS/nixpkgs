@@ -19476,7 +19476,7 @@ with pkgs;
     nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
   });
 
-  icu = icu71;
+  icu = icu72;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
