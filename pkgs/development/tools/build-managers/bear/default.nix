@@ -9,7 +9,6 @@
 , gtest
 , spdlog
 , c-ares
-, abseil-cpp
 , zlib
 , sqlite
 , re2
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     gtest
     spdlog
     c-ares
-    abseil-cpp
     zlib
     sqlite
     re2
