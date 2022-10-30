@@ -746,6 +746,7 @@ broken-packages:
   - codo-notation
   - coin
   - coinbase-pro
+  - cointracking-imports
   - collada-output
   - collapse-util
   - collections
@@ -5686,6 +5687,7 @@ broken-packages:
   - xleb
   - xls
   - xlsior
+  - xlsx-tabular
   - xlsx-templater
   - xml2json
   - xml-conduit-decode

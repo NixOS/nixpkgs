@@ -812,6 +812,7 @@ dont-distribute-packages:
  - blubber
  - bluetile
  - blunt
+ - bnb-staking-csvs
  - bno055-haskell
  - bogre-banana
  - boilerplate
@@ -3538,6 +3539,7 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
+ - solana-staking-csvs
  - solga-swagger
  - solr
  - souffle-dsl
