@@ -16,7 +16,6 @@
 , pyyaml
 , uvicorn
 , httpx
-# Check Inputs
 , pytestCheckHook
 , pytest-asyncio
 , pytest-timeout
@@ -30,7 +29,8 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.61.1";
+  version = "0.63";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -38,18 +38,13 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HVzMyF4ujYK12UQ25il/XROPo+iBldsMxOTx+duoc5o=";
+    sha256 = "sha256-kzehFvGSmGo2TAtiNZCjRVv/kaiE+shniNnD0gO58b4=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' "" \
-      --replace "click>=7.1.1,<8.1.0" "click>=7.1.1,<8.2.0" \
-      --replace "click-default-group~=1.2.2" "click-default-group" \
-      --replace "hupper~=1.9" "hupper" \
-      --replace "Jinja2>=2.10.3,<3.1.0" "Jinja2" \
-      --replace "pint~=0.9" "pint" \
-      --replace "uvicorn~=0.11" "uvicorn"
+      --replace "click-default-group-wheel>=1.2.2" "click-default-group"
   '';
 
   propagatedBuildInputs = [

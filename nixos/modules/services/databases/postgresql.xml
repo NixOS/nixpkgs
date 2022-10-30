@@ -72,16 +72,20 @@ Type "help" for help.
 { config, pkgs, ... }:
 {
   <xref linkend="opt-environment.systemPackages" /> = [
-    (pkgs.writeScriptBin "upgrade-pg-cluster" ''
+    (let
+      # XXX specify the postgresql package you'd like to upgrade to.
+      # Do not forget to list the extensions you need.
+      newPostgres = pkgs.postgresql_13.withPackages (pp: [
+        # pp.plv8
+      ]);
+    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux
       # XXX it's perhaps advisable to stop all services that depend on postgresql
       systemctl stop postgresql
 
-      # XXX replace `&lt;new version&gt;` with the psqlSchema here
-      export NEWDATA="/var/lib/postgresql/&lt;new version&gt;"
+      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
 
-      # XXX specify the postgresql package you'd like to upgrade to
-      export NEWBIN="${pkgs.postgresql_13}/bin"
+      export NEWBIN="${newPostgres}/bin"
 
       export OLDDATA="${config.<xref linkend="opt-services.postgresql.dataDir"/>}"
       export OLDBIN="${config.<xref linkend="opt-services.postgresql.package"/>}/bin"
@@ -127,12 +131,25 @@ Type "help" for help.
    </listitem>
    <listitem>
     <para>
-     After the upgrade it's advisable to analyze the new cluster (as <literal>su -l postgres</literal> in the
-     <xref linkend="opt-services.postgresql.dataDir" />, in this example <filename>/var/lib/postgresql/13</filename>):
+     After the upgrade it's advisable to analyze the new cluster.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       For PostgreSQL ≥ 14, use the <literal>vacuumdb</literal> command printed by the upgrades script.
+      </para>
+     </listitem>
+     <listitem>
+       <para>
+        For PostgreSQL &lt; 14, run (as <literal>su -l postgres</literal> in the <xref linkend="opt-services.postgresql.dataDir" />, in this example <filename>/var/lib/postgresql/13</filename>):
 <programlisting>
 <prompt>$ </prompt>./analyze_new_cluster.sh
 </programlisting>
-     <warning><para>The next step removes the old state-directory!</para></warning>
+       </para>
+     </listitem>
+    </itemizedlist>
+    <para>
+      <warning><para>The next step removes the old state-directory!</para></warning>
 <programlisting>
 <prompt>$ </prompt>./delete_old_cluster.sh
 </programlisting>
