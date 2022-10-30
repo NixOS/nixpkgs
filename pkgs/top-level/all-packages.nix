@@ -14223,6 +14223,10 @@ with pkgs;
 
   intercal = callPackage ../development/compilers/intercal { };
 
+  iroh = callPackage ../applications/networking/iroh {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   irony-server = callPackage ../development/tools/irony-server {
     # The repository of irony to use -- must match the version of the employed emacs
     # package.  Wishing we could merge it into one irony package, to avoid this issue,

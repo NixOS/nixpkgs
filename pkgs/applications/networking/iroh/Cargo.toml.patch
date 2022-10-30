@@ -1,0 +1,20 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index c22aa7d..7c1dcf2 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -25,7 +25,7 @@ members = [
+ resolver = "2"
+ 
+ [patch.crates-io]
+-libp2p = { git = "https://github.com/dignifiedquire/rust-libp2p", branch = "iroh-0-50" }
++libp2p = { git = "https://github.com/dignifiedquire/rust-libp2p", rev = "5785247" }
+ # libp2p = { path = "../rust-libp2p" }
+ 
+ [profile.ci]
+@@ -33,4 +33,4 @@ inherits = 'release'
+ lto = true
+ panic = 'abort'
+ incremental = false
+-codegen-units = 8
+\ No newline at end of file
++codegen-units = 8
