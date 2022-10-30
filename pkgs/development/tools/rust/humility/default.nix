@@ -1,7 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, libusb
+, libusb1
 , libftdi
 , cargo-readme
 , pkg-config
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   version = "unstable-2022-09-15";
 
   nativeBuildInputs = [ pkg-config cargo-readme ];
-  buildInputs = [ libusb libftdi ];
+  buildInputs = [ libusb1 libftdi ];
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
