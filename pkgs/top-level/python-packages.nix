@@ -5702,6 +5702,8 @@ self: super: with self; {
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
+  mitmproxy-wireguard = callPackage ../development/python-modules/mitmproxy-wireguard { };
+
   mitogen = callPackage ../development/python-modules/mitogen { };
 
   mixpanel = callPackage ../development/python-modules/mixpanel { };
