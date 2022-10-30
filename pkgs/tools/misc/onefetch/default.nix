@@ -2,6 +2,7 @@
 , rustPlatform
 , lib
 , stdenv
+, cmake
 , pkg-config
 , zstd
 , CoreFoundation
@@ -12,26 +13,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.12.0";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nSvqAXzA/4CSnOMCZri2ks58bW+9v+SoyIIzb+K5S88=";
+    sha256 = "sha256-ydRdnzOI9syfF2ox9vHA9Q0j8C7ZNb0b7CJfqUprPA0=";
   };
 
-  cargoPatches = [
-    # enable pkg-config feature of zstd
-    ./zstd-pkg-config.patch
-  ];
-
-  cargoSha256 = "sha256-uSef6x5QkXKwajglbwyoIsUFGbz0zntVM1ko0FZqnck=";
+  cargoSha256 = "sha256-rZC1CAEWx8l1EQNRs1KAfVgGgBut1hxg6Ug4780O3dw=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zstd ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+
+  checkInputs = [
+    cmake
+  ];
+
+  checkFlags = [
+    "--skip=info::tests::test_style_subtitle"
+  ];
 
   meta = with lib; {
     description = "Git repository summary on your terminal";
