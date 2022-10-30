@@ -132,6 +132,11 @@ self: super: {
   servant = doJailbreak super.servant;
   servant-swagger = doJailbreak super.servant-swagger;
 
+  # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
+  # https://github.com/haskell-infra/hackage-trustees/issues/347
+  # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
+  language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
+
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/haskell-servant/servant/pull/1607/files
   servant-docs = doJailbreak super.servant-docs;
