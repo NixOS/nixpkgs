@@ -7,6 +7,7 @@
 , llvmPackages
 , rocksdb
 , Security
+, DiskArbitration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.clang
   ];
   buildInputs = [
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    DiskArbitration
+  ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
