@@ -22819,8 +22819,6 @@ with pkgs;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
-  wxGTK31-gtk2 = wxGTK31.override { withGtk2 = true; };
-  wxGTK31-gtk3 = wxGTK31.override { withGtk2 = false; };
 
   wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
     inherit (darwin.stubs) setfile;
@@ -31805,14 +31803,14 @@ with pkgs;
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
   super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
   };
 
   super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override {
+    wxGTK31 = wxGTK31.override {
       # https://github.com/supermerill/SuperSlicer/issues/1093
       withEGL = false;
     };
@@ -32096,7 +32094,7 @@ with pkgs;
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
 
-  tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
+  tenacity = callPackage ../applications/audio/tenacity { };
 
   tendermint = callPackage ../tools/networking/tendermint { };
 
