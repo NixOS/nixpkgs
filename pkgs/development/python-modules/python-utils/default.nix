@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.3.3";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-U6yamXbG8CUrNnFmGTBpHUelZSgoaNyB2CdUSH9WdMA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O/+jvdzzxUFaQdAfUM9p40fPPDNN+stTauCD993HH6Y=";
   };
 
   # disable coverage and linting
