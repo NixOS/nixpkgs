@@ -89,6 +89,11 @@ in rec {
         NixOS, setting this option instead causes the equivalent
         inverse `.wants` symlink to be present,
         establishing the same desired relationship in a stateless way.
+
+        Note that for user units (`systemd.user.<name>.*`)
+        the standard way to make a unit start by default
+        at login of the user `<name>`
+        is to set this option to `[ "default.target" ]`.
       '';
     };
 
