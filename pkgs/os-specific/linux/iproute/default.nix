@@ -6,11 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.19.0";
+  version = "6.0.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "JrejTWp/0vekLis5xakMthusUi0QlgZ//rGV5Wk9d5E=";
+    hash = "sha256-UjE56ecq7JljdPot50vkxT0t0FWJSIk00h/5e64ZWAo=";
   };
 
   patches = [
@@ -27,12 +29,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = ''
-    # Don't try to create /var/lib/arpd:
-    sed -e '/ARPDDIR/d' -i Makefile
-  '';
-
-  outputs = [ "out" "dev" ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -49,11 +48,12 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
-  nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libelf libmnl ];
-
   enableParallelBuilding = true;
+
+  preConfigure = ''
+    # Don't try to create /var/lib/arpd:
+    sed -e '/ARPDDIR/d' -i Makefile
+  '';
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }
