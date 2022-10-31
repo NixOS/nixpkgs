@@ -232,7 +232,7 @@ in {
     };
 
     linux_xanmod = xanmodKernels.lts;
-    linux_xanmod_stable = xanmodKernels.current;
+    linux_xanmod_stable = throw "linux_xanmod_stable was removed because it has reached its end of life upstream";
     linux_xanmod_latest = xanmodKernels.next;
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -581,7 +581,7 @@ in {
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
-    linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
+    linux_xanmod_stable = throw "linux_xanmod_stable was removed because it has reached its end of life upstream";
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 

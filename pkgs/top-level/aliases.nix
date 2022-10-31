@@ -836,6 +836,8 @@ mapAliases ({
   linux_rpi2 = linuxKernel.kernels.linux_rpi2;
   linux_rpi3 = linuxKernel.kernels.linux_rpi3;
   linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linux_xanmod_stable = throw "linux_xanmod_stable was removed because it has reached its end of life upstream";
+  linuxPackages_xanmod_stable = throw "linuxPackages_xanmod_stable was removed because it has reached its end of life upstream";
   linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option"; # Added 2022-11-01
   linuxPackages_xanmod_tt = throw "linuxPackages_xanmod_tt was removed because upstream no longer offers this option"; # Added 2022-11-01
 

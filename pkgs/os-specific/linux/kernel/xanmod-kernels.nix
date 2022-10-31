@@ -8,12 +8,6 @@ let
     variant = "lts";
   };
 
-  currentVariant = {
-    version = "5.19.13";
-    hash = "sha256-BzQH4c24CtE3R5HNe2sOc3McVkRmf/RKOOjuf1W4YfE=";
-    variant = "current";
-  };
-
   nextVariant = {
     version = "6.0.0";
     hash = "sha256-E7T8eHwMKYShv4KWdCbHQmpn+54edJoKdimZY3GFbPU=";
@@ -61,6 +55,5 @@ let
 in
 {
   lts = xanmodKernelFor ltsVariant;
-  current = xanmodKernelFor currentVariant;
   next = xanmodKernelFor nextVariant;
 }
