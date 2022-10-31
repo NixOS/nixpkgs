@@ -76,6 +76,7 @@ in rec {
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
+        (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolEscape")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvols")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.luksroot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.lvm")
