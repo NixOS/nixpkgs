@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZAe47Oxw5n6OM/PRKz7OR8yzi/c9jnXeOYNjCbs0j1E=";
+    hash = "sha256-5Mc70yi9Yj+8ye81v9NbKZnNoD5PQmBVAiYF5IM5ix8=";
   };
 
   postPatch = ''
@@ -44,8 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to control SwitchBee smart home device";
     homepage = "https://github.com/jafar-atili/pySwitchbee/";
-    # https://github.com/jafar-atili/pySwitchbee/issues/1
-    license = with licenses; [ unfree ];
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

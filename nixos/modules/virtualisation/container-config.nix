@@ -16,6 +16,9 @@ with lib;
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.startWhenNeeded = mkDefault true;
 
+    # containers do not need to setup devices
+    services.udev.enable = false;
+
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = lib.mkDefault "${pkgs.coreutils}/bin/true";
 

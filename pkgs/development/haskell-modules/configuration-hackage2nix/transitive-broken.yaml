@@ -234,6 +234,7 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
+ - LPPaver
  - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
@@ -811,6 +812,7 @@ dont-distribute-packages:
  - blubber
  - bluetile
  - blunt
+ - bnb-staking-csvs
  - bno055-haskell
  - bogre-banana
  - boilerplate
@@ -922,6 +924,7 @@ dont-distribute-packages:
  - cheapskate-terminal
  - check-pvp
  - chevalier-common
+ - chiasma-test
  - chitauri
  - choose-exe
  - chorale-geo
@@ -1346,6 +1349,8 @@ dont-distribute-packages:
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
+ - eventuo11y-batteries
+ - eventuo11y-json
  - every-bit-counts
  - exception-monads-fd
  - exference
@@ -1555,7 +1560,7 @@ dont-distribute-packages:
  - gi-ges
  - gi-gsk
  - gi-gstpbutils
- - gi-gtk_4_0_5
+ - gi-gtk_4_0_6
  - gipeda
  - git-config
  - git-fmt
@@ -2134,6 +2139,7 @@ dont-distribute-packages:
  - hpaste
  - hpc-tracer
  - hplayground
+ - hpqtypes-effectful
  - hpqtypes-extras
  - hprotoc-fork
  - hps
@@ -2173,6 +2179,7 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
+ - hslua-module-zip
  - hsnsq
  - hspec-expectations-pretty
  - hspec-pg-transact
@@ -2224,6 +2231,7 @@ dont-distribute-packages:
  - huzzy
  - hw-all
  - hw-aws-sqs-conduit
+ - hw-kafka-avro
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -2278,7 +2286,6 @@ dont-distribute-packages:
  - indentation-parsec
  - indentation-trifecta
  - indexation
- - indieweb-algorithms
  - indigo
  - infernu
  - infinity
@@ -2446,6 +2453,7 @@ dont-distribute-packages:
  - lambdiff
  - lang
  - language-Modula2
+ - language-avro
  - language-boogie
  - language-ecmascript-analysis
  - language-eiffel
@@ -2653,7 +2661,6 @@ dont-distribute-packages:
  - metar-http
  - metronome
  - micro-gateway
- - microformats2-parser
  - microformats2-types
  - midimory
  - mighttpd
@@ -2715,6 +2722,8 @@ dont-distribute-packages:
  - morpheus-graphql-cli
  - morpheus-graphql-client
  - morpheus-graphql-code-gen
+ - morpheus-graphql-code-gen-utils
+ - morpheus-graphql-server
  - morpheus-graphql-subscriptions
  - morphisms-functors-inventory
  - mortred
@@ -2994,6 +3003,7 @@ dont-distribute-packages:
  - pisigma
  - pitchtrack
  - pkgtreediff
+ - pkgtreediff_0_6_0
  - planet-mitchell
  - playlists-http
  - plocketed
@@ -3272,6 +3282,7 @@ dont-distribute-packages:
  - ribosome-host
  - ribosome-host-test
  - ribosome-root
+ - ribosome-test
  - ridley-extras
  - rio-process-pool
  - riot
@@ -3473,7 +3484,7 @@ dont-distribute-packages:
  - skeletons
  - sketch-frp-copilot
  - skylark-client
- - skylighting_0_13
+ - skylighting_0_13_1
  - slate
  - slidemews
  - slip32
@@ -3528,6 +3539,7 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
+ - solana-staking-csvs
  - solga-swagger
  - solr
  - souffle-dsl
