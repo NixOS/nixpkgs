@@ -1,12 +1,16 @@
 {lib, stdenv, fetchurl, xz, dpkg
-, libxslt, docbook_xsl, makeWrapper
+, libxslt, docbook_xsl, makeWrapper, writeScript
 , python3Packages
-, perlPackages, curl, gnupg, diffutils
+, perlPackages, curl, gnupg, diffutils, nano
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
 let
   inherit (python3Packages) python setuptools;
+  sensible-editor = writeScript "sensible-editor" ''
+    #!/bin/sh
+    exec ''${EDITOR-${nano}/bin/nano} "$@"
+  '';
 in stdenv.mkDerivation rec {
   version = "2.16.8";
   pname = "debian-devscripts";
@@ -31,6 +35,7 @@ in stdenv.mkDerivation rec {
       -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
       -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
       -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
+      -e "s@sensible-editor@${sensible-editor}@g" \
       -i {} +
     sed -e "s@/usr/share/sgml/[^ ]*/manpages/docbook.xsl@${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl@" -i scripts/Makefile
     sed -r \
@@ -53,7 +58,7 @@ in stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/lib/python3.4/site-packages" \
+        --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages" \
         --prefix PATH : "${dpkg}/bin"
     done
   '';
