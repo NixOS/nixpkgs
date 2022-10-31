@@ -305,13 +305,11 @@ rec {
 
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
   };
 
   # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
     useLLVM = true;
   };
 
