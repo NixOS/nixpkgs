@@ -264,6 +264,7 @@ broken-packages:
   - avatar-generator
   - aviation-units
   - avl-static
+  - avro
   - avro-piper
   - avr-shake
   - avwx
@@ -745,6 +746,7 @@ broken-packages:
   - codo-notation
   - coin
   - coinbase-pro
+  - cointracking-imports
   - collada-output
   - collapse-util
   - collections
@@ -1149,6 +1151,7 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
+  - dnf-repo
   - dns-patterns
   - dnsrbl
   - dnssd
@@ -1257,6 +1260,7 @@ broken-packages:
   - edit
   - edit-lenses
   - editline
+  - effectful-st
   - effect-handlers
   - effective-aspects
   - effect-monad
@@ -1357,6 +1361,8 @@ broken-packages:
   - eventful-sql-common
   - eventsource-api
   - eventstore
+  - eventuo11y
+  - eventuo11y-dsl
   - evoke
   - ewe
   - exact-cover
@@ -1391,7 +1397,6 @@ broken-packages:
   - extended-containers
   - extensible-effects-concurrent
   - extensible-skeleton
-  - extensions
   - Extra
   - extractelf
   - ez3
@@ -2351,6 +2356,7 @@ broken-packages:
   - hquantlib
   - hquery
   - hR
+  - h-raylib
   - hreq-core
   - h-reversi
   - hricket
@@ -3340,6 +3346,7 @@ broken-packages:
   - monoid-owns
   - monoidplus
   - monoids
+  - monomer-hagrid
   - monopati
   - monus
   - monzo
@@ -3591,6 +3598,7 @@ broken-packages:
   - Omega
   - om-elm
   - om-fail
+  - om-fork
   - om-http
   - om-http-logging
   - omnifmt
@@ -4107,6 +4115,7 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
+  - purescript
   - purescript-tsd-gen
   - pure-zlib
   - pushbullet
@@ -5007,7 +5016,6 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
-  - taffybar
   - tag-bits
   - tagged-exception-core
   - tagged-timers
@@ -5365,6 +5373,9 @@ broken-packages:
   - unescaping-print
   - unfix-binders
   - unfoldable
+  - unicode-data-names
+  - unicode-data-scripts
+  - unicode-data-security
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
@@ -5676,6 +5687,7 @@ broken-packages:
   - xleb
   - xls
   - xlsior
+  - xlsx-tabular
   - xlsx-templater
   - xml2json
   - xml-conduit-decode

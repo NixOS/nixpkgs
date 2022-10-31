@@ -27,6 +27,10 @@
 # If you have an override of this kind, see configuration-common.nix instead.
 { pkgs, haskellLib }:
 
+let
+  inherit (pkgs) lib;
+in
+
 with haskellLib;
 
 # All of the overrides in this set should look like:
@@ -788,6 +792,16 @@ self: super: builtins.intersectAttrs super {
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
 
+  citeproc = lib.pipe super.citeproc [
+    enableSeparateBinOutput
+    # Enable executable being built and add missing dependencies
+    (enableCabalFlag "executable")
+    (addBuildDepends [ self.aeson-pretty ])
+    # TODO(@sternenseemann): we may want to enable that for improved performance
+    # Is correctness good enough since 0.5?
+    (disableCabalFlag "icu")
+  ];
+
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {
     # ihaskell's cabal file forces building a shared executable, which we need
@@ -887,7 +901,11 @@ self: super: builtins.intersectAttrs super {
       '';
     }) super.nvfetcher);
 
-  rel8 = addTestToolDepend pkgs.postgresql super.rel8;
+  rel8 = pkgs.lib.pipe super.rel8 [
+    (addTestToolDepend pkgs.postgresql)
+    # https://github.com/NixOS/nixpkgs/issues/198495
+    (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
+  ];
 
   cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
@@ -1054,7 +1072,7 @@ self: super: builtins.intersectAttrs super {
   # Make sure that Cabal 3.8.* can be built as-is
   Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # cabal-install switched to build type simple in 3.2.0.0

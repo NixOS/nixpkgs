@@ -7,6 +7,8 @@
 , pyyaml
 , ruamel-yaml
 , toml
+, tomli
+, tomli-w
 }:
 
 buildPythonPackage rec {
@@ -14,7 +16,7 @@ buildPythonPackage rec {
   version = "6.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
@@ -23,16 +25,37 @@ buildPythonPackage rec {
     hash = "sha256-IE2qyRzvrOTymwga+hCwE785sAVTqQtcN1DL/uADpbQ=";
   };
 
-  propagatedBuildInputs = [
-    msgpack
-    pyyaml
-    ruamel-yaml
-    toml
-  ];
+  passthru.optional-dependencies = {
+    all = [
+      msgpack
+      ruamel-yaml
+      toml
+    ];
+    yaml = [
+      ruamel-yaml
+    ];
+    ruamel-yaml = [
+      ruamel-yaml
+    ];
+    PyYAML = [
+      pyyaml
+    ];
+    tomli = [
+      tomli-w
+    ] ++ lib.optionals (pythonOlder "3.11") [
+      tomli
+    ];
+    toml = [
+      toml
+    ];
+    msgpack = [
+      msgpack
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.all;
 
   pythonImportsCheck = [
     "box"
