@@ -1,15 +1,28 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gnome-shell
 , gtk-engine-murrine
 , gtk_engines
 , sassc
 , gitUpdater
+, themeVariants ? [] # default: doder (blue)
+, colorVariants ? [] # default: all
+, sizeVariants ? [] # default: standard
+, tweaks ? []
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "vimix-gtk-themes";
+
+in
+lib.checkListOfEnum "${pname}: theme variants" [ "doder" "beryl" "ruby" "amethyst" "grey" ] themeVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+lib.checkListOfEnum "${pname}: tweaks" [ "flat" "grey" "mix" "translucent" ] tweaks
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
   version = "2022-10-30";
 
   src = fetchFromGitHub {
@@ -39,7 +52,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
-    name= HOME="$TMPDIR" ./install.sh --all --dest $out/share/themes
+    name= HOME="$TMPDIR" ./install.sh \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (sizeVariants != []) "--size " + builtins.toString sizeVariants} \
+      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      --dest $out/share/themes
     rm $out/share/themes/*/{AUTHORS,LICENSE}
     runHook postInstall
   '';
