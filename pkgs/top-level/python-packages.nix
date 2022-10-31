@@ -752,6 +752,8 @@ self: super: with self; {
 
   aurorapy = callPackage ../development/python-modules/aurorapy { };
 
+  austin-python = callPackage ../development/python-modules/austin-python { };
+
   autarco = callPackage ../development/python-modules/autarco { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };
