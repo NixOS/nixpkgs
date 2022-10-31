@@ -21078,6 +21078,8 @@ with pkgs;
 
   luabind_luajit = luabind.override { lua = luajit; };
 
+  luabridge = callPackage ../development/libraries/luabridge { };
+
   luksmeta = callPackage ../development/libraries/luksmeta {
     asciidoc = asciidoc-full;
   };
@@ -23711,6 +23713,8 @@ with pkgs;
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
   memcached = callPackage ../servers/memcached {};
+
+  merecat = callPackage ../servers/http/merecat { };
 
   meteor = callPackage ../servers/meteor { };
 

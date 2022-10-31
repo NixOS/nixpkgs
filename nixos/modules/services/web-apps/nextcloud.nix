@@ -148,6 +148,15 @@ in {
       default = 2;
       description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
+    logType = mkOption {
+      type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
+      default = "syslog";
+      description = lib.mdDoc ''
+        Logging backend to use.
+        systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+        See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
+      '';
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -758,7 +767,7 @@ in {
               'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => 'syslog',
+              'log_type' => '${cfg.logType}',
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
