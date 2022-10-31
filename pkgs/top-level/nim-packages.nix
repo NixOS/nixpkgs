@@ -58,6 +58,8 @@ lib.makeScope newScope (self:
 
     regex = callPackage ../development/nim-packages/regex { };
 
+    result = callPackage ../development/nim-packages/nim-result { };
+
     rocksdb = callPackage ../development/nim-packages/rocksdb {
       inherit (pkgs) rocksdb;
     };
