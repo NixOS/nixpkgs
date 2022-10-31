@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    sha256 = "sha256-AiX6ruiyyWt33G49dD9ozFXq+3efEMzJoeWVfP5UGGo=";
+    sha256 = "sha256-od8uL2xvIGFtftob3P0VQ+SPkwQgU68OxS6hk34c4+U=";
   };
 
-  cargoSha256 = "sha256-Uvc/1CE8eaYfelJ3U8zxF2HVx9P7G1ZVQB5tCvQDTac=";
+  cargoSha256 = "sha256-1ba0FqegYNbRis7Nwl2RONHOxq0iuLah8a1QlWs4HfE=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
