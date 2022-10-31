@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, testers
 , autoreconfHook, libbfd, libiberty, libunwind, zlib
 , austin  # For testVersion
+, python3Packages  # For austin-python
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +37,19 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  # TODO: run test suite in checkPhase. This requires currently unavailable
-  # dependencies, and has some slightly annoying circular dependencies
-  # (uses austin-python).
+  checkInputs = with python3Packages; [
+    (austin-python.override { austin = null; })
+    flaky
+    pycparser
+    pytest
+  ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    NIX_HARDENING_ENABLE="" NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC" \
+      pytest -k "not test_cli_permissions"
+  '';
 
   passthru = {
     tests.austin-version = testers.testVersion {

@@ -2,7 +2,7 @@
 , lib
 , buildPythonPackage
 
-, austin
+, austin ? null  # Avoid circular dependency between austin / austin-python.
 , fetchFromGitHub
 , hatchling
 , hatch-vcs
@@ -33,8 +33,11 @@ buildPythonPackage rec {
     # Fixup paths to dependencies usually found in PATH.
     substituteInPlace austin/tools/resolve.py \
       --replace '"addr2line"' '"${stdenv.cc.bintools}/bin/addr2line"'
-    substituteInPlace austin/__init__.py \
-      --replace 'return self.BINARY' 'return "${austin}/bin/austin"'
+    ${if austin == null then ""
+      else ''
+        substituteInPlace austin/__init__.py \
+          --replace 'return self.BINARY' 'return "${austin}/bin/austin"'
+      ''}
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -55,6 +58,8 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
+
+  doCheck = austin != null;
 
   pythonRelaxDeps = [ "protobuf" ];
 
