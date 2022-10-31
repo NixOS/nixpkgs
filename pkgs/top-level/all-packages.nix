@@ -16309,6 +16309,8 @@ with pkgs;
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  austin = callPackage ../development/tools/profiling/austin { };
+
   automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
 
   aviator = callPackage ../development/tools/misc/aviator { };
