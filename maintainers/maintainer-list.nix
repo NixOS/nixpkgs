@@ -1481,6 +1481,12 @@
     githubId = 35324;
     name = "Badi' Abdul-Wahid";
   };
+  baduhai = {
+    email = "baduhai@pm.me";
+    github = "baduhai";
+    githubId = 31864305;
+    name = "William";
+  };
   baitinq = {
     email = "manuelpalenzuelamerino@gmail.com";
     name = "Baitinq";
