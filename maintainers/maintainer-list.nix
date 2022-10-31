@@ -15732,4 +15732,11 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  sourceindex = {
+    name = "Sebastian Wendel";
+    email = "nix@sourceindex.de";
+    matrix = "@swendel:curious.bio";
+    github = "sourceindex";
+    githubId = 919570;
+  };
 }
