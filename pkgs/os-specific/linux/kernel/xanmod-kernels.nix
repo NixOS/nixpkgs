@@ -20,13 +20,6 @@ let
     variant = "next";
   };
 
-  ttVariant = {
-    version = "5.15.54";
-    suffix = "xanmod1-tt";
-    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
-    variant = "tt";
-  };
-
   xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
@@ -56,12 +49,6 @@ let
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
-    } // lib.optionalAttrs (variant == "tt") {
-      # removed options
-      CFS_BANDWIDTH = lib.mkForce (option no);
-      RT_GROUP_SCHED = lib.mkForce (option no);
-      SCHED_AUTOGROUP = lib.mkForce (option no);
-      SCHED_CORE = lib.mkForce (option no);
     };
 
     extraMeta = {
@@ -76,5 +63,4 @@ in
   lts = xanmodKernelFor ltsVariant;
   current = xanmodKernelFor currentVariant;
   next = xanmodKernelFor nextVariant;
-  tt = xanmodKernelFor ttVariant;
 }
