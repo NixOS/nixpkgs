@@ -10028,6 +10028,8 @@ with pkgs;
 
   os-prober = callPackage ../tools/misc/os-prober {};
 
+  osh-tool = callPackage ../development/tools/osh-tool {};
+
   oshka = callPackage ../development/tools/oshka {};
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
