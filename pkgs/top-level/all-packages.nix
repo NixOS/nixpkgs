@@ -18306,7 +18306,9 @@ with pkgs;
 
   coercer = callPackage ../tools/security/coercer { };
 
-  cogl = callPackage ../development/libraries/cogl { };
+  cogl = callPackage ../development/libraries/cogl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
