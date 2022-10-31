@@ -349,7 +349,7 @@ in
 
     services.udev.extraRules = nixosRules;
 
-    services.udev.packages = [ extraUdevRules extraHwdbFile ];
+    services.udev.packages = [ udev extraUdevRules extraHwdbFile ];
 
     services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.util-linux udev ];
 
