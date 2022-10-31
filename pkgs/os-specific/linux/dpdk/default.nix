@@ -91,6 +91,6 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
-    broken = mod && kernel.kernelAtLeast "5.18";
+    broken = mod && kernel.isHardened;
   };
 }
