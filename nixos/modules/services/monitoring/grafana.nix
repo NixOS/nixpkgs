@@ -408,7 +408,7 @@ in {
 
             socket = mkOption {
               description = lib.mdDoc "Path where the socket should be created when protocol=socket. Make sure that Grafana has appropriate permissions before you change this setting.";
-              default = "";
+              default = "/run/grafana/grafana.sock";
               type = types.str;
             };
           };
