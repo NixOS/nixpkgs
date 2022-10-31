@@ -21,7 +21,17 @@ in stdenv.mkDerivation rec {
 
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
-    substituteInPlace Tuprules.tup --replace 'pcre-config' 'pkg-config libpcre'
+
+    for f in Tupfile Tuprules.tup src/tup/server/Tupfile build.sh; do
+      substituteInPlace "$f" \
+        --replace "pkg-config"  "${stdenv.cc.targetPrefix}pkg-config" \
+        --replace "pcre-config" "${stdenv.cc.targetPrefix}pkg-config libpcre"
+    done
+
+    cat << EOF > tup.config
+    CONFIG_CC=${stdenv.cc.targetPrefix}cc
+    CONFIG_AR=${stdenv.cc.targetPrefix}ar
+    EOF
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
