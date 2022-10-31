@@ -4,6 +4,7 @@
 , gnome-shell
 , gtk-engine-murrine
 , gtk_engines
+, jdupes
 , sassc
 , gitUpdater
 , themeVariants ? [] # default: doder (blue)
@@ -34,6 +35,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     gnome-shell  # needed to determine the gnome-shell version
+    jdupes
     sassc
   ];
 
@@ -59,6 +61,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
       --dest $out/share/themes
     rm $out/share/themes/*/{AUTHORS,LICENSE}
+    jdupes --quiet --link-soft --recurse $out/share
     runHook postInstall
   '';
 
