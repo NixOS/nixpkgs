@@ -1503,6 +1503,8 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
+  cemu = callPackage ../applications/emulators/cemu { };
+
   cen64 = callPackage ../applications/emulators/cen64 { };
 
   citra-canary = callPackage ../applications/emulators/citra {
