@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "purs";
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
