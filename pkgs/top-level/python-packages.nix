@@ -754,6 +754,8 @@ self: super: with self; {
 
   austin-python = callPackage ../development/python-modules/austin-python { };
 
+  austin-tui = callPackage ../development/python-modules/austin-tui { };
+
   autarco = callPackage ../development/python-modules/autarco { };
 
   auth0-python = callPackage ../development/python-modules/auth0-python { };

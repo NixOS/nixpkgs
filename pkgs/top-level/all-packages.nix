@@ -16311,6 +16311,8 @@ with pkgs;
 
   austin = callPackage ../development/tools/profiling/austin { };
 
+  austin-tui = with python3Packages; toPythonApplication austin-tui;
+
   automaticcomponenttoolkit = callPackage ../development/tools/misc/automaticcomponenttoolkit { };
 
   aviator = callPackage ../development/tools/misc/aviator { };
