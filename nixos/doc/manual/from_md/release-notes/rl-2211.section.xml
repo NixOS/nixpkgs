@@ -716,6 +716,16 @@
       </listitem>
       <listitem>
         <para>
+          The
+          <link xlink:href="https://ce-programming.github.io/CEmu">CEmu
+          TI-84 Plus CE emulator</link> package has been renamed to
+          <literal>cemu-ti</literal>. The
+          <link xlink:href="https://cemu.info">Cemu Wii U
+          emulator</link> is now packaged as <literal>cemu</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>systemd-networkd</literal> v250 deprecated, renamed,
           and moved some sections and settings which leads to the
           following breaking module changes:
