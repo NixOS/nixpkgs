@@ -36992,6 +36992,8 @@ with pkgs;
 
   satysfi = callPackage ../tools/typesetting/satysfi { };
 
+  sauce = callPackage ../tools/graphics/sauce { };
+
   sc-controller = python3Packages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
   };
