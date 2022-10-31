@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--bin" "xprite-native" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    # error[E0034]: multiple applicable items in scope
+    # multiple `clamp` found
+    # https://github.com/NixOS/nixpkgs/issues/146949
+    broken = true;
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;
