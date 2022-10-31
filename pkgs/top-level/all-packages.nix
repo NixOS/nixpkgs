@@ -3429,7 +3429,7 @@ with pkgs;
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
-  cloudflare-dyndns = python3Packages.cloudflare-dyndns;
+  cloudflare-dyndns = with python3Packages; toPythonApplication cloudflare-dyndns;
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 

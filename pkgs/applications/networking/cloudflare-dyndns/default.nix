@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , attrs
 , click
 , cloudflare
@@ -11,7 +11,7 @@
 , requests
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "cloudflare-dyndns";
   version = "4.1";
   format = "pyproject";
