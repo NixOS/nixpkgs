@@ -70,6 +70,8 @@ lib.makeScope newScope (self:
 
     segmentation = callPackage ../development/nim-packages/segmentation { };
 
+    shell = callPackage ../development/nim-packages/shell { };
+
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
