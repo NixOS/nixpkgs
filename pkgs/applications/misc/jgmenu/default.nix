@@ -11,6 +11,7 @@
 , enableXfcePanelApplet ? false
 , xfce
 , gtk3
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
       wrapProgram $f --prefix PATH : $out/bin
     done
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/johanmalm/jgmenu";
