@@ -31775,6 +31775,8 @@ with pkgs;
 
   maestral-gui = libsForQt5.callPackage ../applications/networking/maestral-qt { };
 
+  maestro = callPackage ../development/mobile/maestro { };
+
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   insync = callPackage ../applications/networking/insync { };
