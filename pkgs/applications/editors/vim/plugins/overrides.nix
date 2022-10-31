@@ -67,7 +67,7 @@
 , CoreServices
 
   # nvim-treesitter dependencies
-, tree-sitter
+, callPackage
 
   # sved dependencies
 , glib
@@ -652,23 +652,9 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  # Usage:
-  # pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
-  # or for all grammars:
-  # pkgs.vimPlugins.nvim-treesitter.withPlugins (_: tree-sitter.allGrammars)
-  nvim-treesitter = super.nvim-treesitter.overrideAttrs (old: {
-    passthru.withPlugins =
-      grammarFn: self.nvim-treesitter.overrideAttrs (_: {
-        postPatch =
-          let
-            grammars = tree-sitter.withPlugins grammarFn;
-          in
-          ''
-            rm -r parser
-            ln -s ${grammars} parser
-          '';
-      });
-  });
+  nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
+    callPackage ./nvim-treesitter/overrides.nix { } self super
+  );
 
   octo-nvim = super.octo-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
