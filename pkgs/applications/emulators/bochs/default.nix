@@ -1,26 +1,26 @@
 { lib
 , stdenv
 , fetchurl
+, SDL2
+, curl
 , docbook_xml_dtd_45
 , docbook_xsl
-, libtool
-, pkg-config
-, curl
-, readline
-, wget
-, libobjc
-, enableX11 ? !stdenv.isDarwin
+, gtk3
 , libGL
 , libGLU
 , libX11
 , libXpm
-, enableSdl2 ? true
-, SDL2
-, enableTerm ? true
+, libobjc
+, libtool
 , ncurses
-, enableWx ? !stdenv.isDarwin
+, pkg-config
+, readline
+, wget
 , wxGTK
-, gtk3
+, enableSDL2 ? true
+, enableTerm ? true
+, enableWx ? !stdenv.isDarwin
+, enableX11 ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${finalAttrs.pname}/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
@@ -43,20 +43,20 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     readline
     wget
-  ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
+  ] ++ lib.optionals enableSDL2 [
+    SDL2
+  ] ++ lib.optionals enableTerm [
+    ncurses
+  ] ++ lib.optionals enableWx [
+    gtk3
+    wxGTK
   ] ++ lib.optionals enableX11 [
     libGL
     libGLU
     libX11
     libXpm
-  ] ++ lib.optionals enableSdl2 [
-    SDL2
-  ] ++ lib.optionals enableTerm [
-    ncurses
-  ] ++ lib.optionals enableWx [
-    wxGTK
-    gtk3
+  ] ++ lib.optionals stdenv.isDarwin [
+    libobjc
   ];
 
   configureFlags = [
@@ -114,6 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-voodoo"
     "--enable-x86-64"
     "--enable-x86-debugger"
+  ] ++ lib.optionals enableSDL2 [
+    "--with-sdl2"
+  ] ++ lib.optionals enableTerm [
+    "--with-term"
+  ] ++ lib.optionals enableWx [
+    "--with-wx"
+  ] ++ lib.optionals enableX11 [
+    "--with-x"
+    "--with-x11"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "--enable-e1000"
     "--enable-es1370"
@@ -121,15 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-plugins"
     "--enable-pnic"
     "--enable-sb16"
-  ] ++ lib.optionals enableX11 [
-    "--with-x"
-    "--with-x11"
-  ] ++ lib.optionals enableSdl2 [
-    "--with-sdl2"
-  ] ++ lib.optionals enableTerm [
-    "--with-term"
-  ] ++ lib.optionals enableWx [
-    "--with-wx"
   ];
 
   enableParallelBuilding = true;
