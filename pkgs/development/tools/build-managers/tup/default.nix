@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre }:
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre ];
+  buildInputs = [ fuse pcre sqlite ];
 
   patches = [ ./fusermount-setuid.patch ];
 
@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
     cat << EOF > tup.config
     CONFIG_CC=${stdenv.cc.targetPrefix}cc
     CONFIG_AR=${stdenv.cc.targetPrefix}ar
+    CONFIG_TUP_USE_SYSTEM_SQLITE=y
     EOF
   '';
 
