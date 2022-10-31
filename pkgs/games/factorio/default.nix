@@ -3,6 +3,7 @@
 , libSM, libICE, libXext, factorio-utils
 , releaseType
 , mods ? []
+, mods-dat ? null
 , versionsJson ? ./versions.json
 , username ? "", token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
@@ -130,7 +131,7 @@ let
     fi
   '';
 
-  modDir = factorio-utils.mkModDirDrv mods;
+  modDir = factorio-utils.mkModDirDrv mods mods-dat;
 
   base = with actual; {
     pname = "factorio-${releaseType}";
