@@ -1,7 +1,7 @@
 {lib, stdenv, fetchurl, xz, dpkg
 , libxslt, docbook_xsl, makeWrapper, writeScript
 , python3Packages
-, perlPackages, curl, gnupg, diffutils, nano
+, perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
 
@@ -12,17 +12,23 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in stdenv.mkDerivation rec {
-  version = "2.16.8";
+  version = "2.22.2";
   pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
+    hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils ] ++
+  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils pkg-config bash-completion help2man ] ++
     (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
+
+  postPatch = ''
+    substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
+    substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
+    patchShebangs scripts
+  '';
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
