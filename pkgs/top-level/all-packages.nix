@@ -29838,6 +29838,8 @@ with pkgs;
 
   legit = callPackage ../applications/version-management/git-and-tools/legit { };
 
+  legitify = callPackage ../development/tools/legitify { };
+
   lens = callPackage ../applications/networking/cluster/lens { };
 
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
