@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnumake";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.gz";
-    sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
+    sha256 = "sha256-WB9NToctp0s5Qch0IViYp9NYAvA3Mr3M7h1KeXkQXRg=";
   };
 
   # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
