@@ -5,7 +5,6 @@
 , cmake
 , cython_3
 , ninja
-, rapidfuzz-capi
 , scikit-build
 , setuptools
 , jarowinkler
@@ -20,9 +19,9 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "2.6.0";
+  version = "2.13.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
@@ -30,14 +29,13 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EplQodBTdZCqhM+6nCovpnqDJ6zvu+jG5muVMLIxdKI=";
+    hash = "sha256-IeH4Lk0WAQhZFBRuQobC8qOCZPJJiK5U09VYWOK9MOY=";
   };
 
   nativeBuildInputs = [
     cmake
     cython_3
     ninja
-    rapidfuzz-capi
     scikit-build
     setuptools
   ];
