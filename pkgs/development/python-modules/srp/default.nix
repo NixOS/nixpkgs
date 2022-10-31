@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "srp";
-  version = "1.0.19";
+  version = "1.0.20";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SOZT6MP1kJCbpAcwbrLoRgosfR+GxWvOWc9Cr1T/XSo=";
+    hash = "sha256-LbRTvc4mue6tNnp7V4MHTvgOhIK/MMAUCnuJg2oFRwc=";
   };
 
   propagatedBuildInputs = [
