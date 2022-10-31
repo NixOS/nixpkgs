@@ -3,6 +3,7 @@
 , buildPgxExtension
 , postgresql
 , stdenv
+, nixosTests
 }:
 
 buildPgxExtension rec {
@@ -20,6 +21,10 @@ buildPgxExtension rec {
 
   cargoSha256 = "sha256-ukjJ11LmfG+k8D20rj68i43gOWUN80nf3hIAjUWXihI=";
   buildAndTestSubdir = "extension";
+
+  passthru.tests = {
+    timescaledb_toolkit = nixosTests.timescaledb;
+  };
 
   # tests take really long
   doCheck = false;
