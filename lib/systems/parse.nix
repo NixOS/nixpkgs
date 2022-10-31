@@ -290,7 +290,11 @@ rec {
     # the normalized name for macOS.
     macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios      = { execFormat = macho;   families = { inherit darwin; }; };
-    freebsd  = { execFormat = elf;     families = { inherit bsd; }; };
+    # A tricky thing about FreeBSD is that there is no stable ABI across
+    # versions. That means that putting in the version as part of the
+    # config string is paramount.
+    freebsd12 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 12; };
+    freebsd13 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 13; };
     linux    = { execFormat = elf;     families = { }; };
     netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
     none     = { execFormat = unknown; families = { }; };
@@ -431,6 +435,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
       else if (elemAt l 2 == "mmixware")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
+      else if hasPrefix "freebsd" (elemAt l 2)
+        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
@@ -485,10 +491,13 @@ rec {
 
   mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
 
+  kernelName = kernel:
+    kernel.name + toString (kernel.version or "");
+
   doubleFromSystem = { cpu, kernel, abi, ... }:
     /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
     else if kernel.families ? darwin then "${cpu.name}-darwin"
-    else "${cpu.name}-${kernel.name}";
+    else "${cpu.name}-${kernelName kernel}";
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optExecFormat =
@@ -496,7 +505,7 @@ rec {
                           gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
         kernel.execFormat.name;
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
-  in "${cpu.name}-${vendor.name}-${kernel.name}${optExecFormat}${optAbi}";
+  in "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 

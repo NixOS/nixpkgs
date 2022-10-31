@@ -44,8 +44,8 @@ $ nix-env -qa hello --json
                 "mips32-linux",
                 "x86_64-darwin",
                 "i686-cygwin",
-                "i686-freebsd",
-                "x86_64-freebsd",
+                "i686-freebsd13",
+                "x86_64-freebsd13",
                 "i686-openbsd",
                 "x86_64-openbsd"
             ],
