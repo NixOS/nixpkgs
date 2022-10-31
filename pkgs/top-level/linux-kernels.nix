@@ -233,7 +233,7 @@ in {
 
     linux_xanmod = xanmodKernels.lts;
     linux_xanmod_stable = throw "linux_xanmod_stable was removed because it has reached its end of life upstream";
-    linux_xanmod_latest = xanmodKernels.next;
+    linux_xanmod_latest = xanmodKernels.main;
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;

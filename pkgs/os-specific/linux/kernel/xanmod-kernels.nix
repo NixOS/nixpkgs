@@ -8,10 +8,10 @@ let
     variant = "lts";
   };
 
-  nextVariant = {
-    version = "6.0.0";
-    hash = "sha256-E7T8eHwMKYShv4KWdCbHQmpn+54edJoKdimZY3GFbPU=";
-    variant = "next";
+  mainVariant = {
+    version = "6.0.6";
+    hash = "sha256-JMfAtiPDgoVF+ypeFXev06PL39ZM2H7m07IxpasjAoM=";
+    variant = "main";
   };
 
   xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
@@ -55,5 +55,5 @@ let
 in
 {
   lts = xanmodKernelFor ltsVariant;
-  next = xanmodKernelFor nextVariant;
+  main = xanmodKernelFor mainVariant;
 }
