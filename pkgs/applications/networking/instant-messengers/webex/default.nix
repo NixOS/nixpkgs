@@ -25,6 +25,7 @@
 , udev
 , libxcb
 , libxkbcommon
+, libxcrypt
 , lshw
 , mesa
 , nspr
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
     udev
     libxcb
     libxkbcommon
+    libxcrypt
     libX11
     libXcomposite
     libXcursor

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+}:
 
 stdenv.mkDerivation rec {
   version = "5.6.0";
@@ -10,6 +12,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-flexible-array-member.patch";
+      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
+      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'

@@ -10,11 +10,14 @@
 , libaio
 , runtimeShell
 , lib
+, pkg-config
+, CFNetwork
+, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.23";
+  version = "0.24";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -22,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "analogdevicesinc";
     repo = "libiio";
     rev = "v${version}";
-    sha256 = "0awny9zb43dcnxa5jpxay2zxswydblnbn4x6vi5mlw1r48pzhjf8";
+    sha256 = "sha256-c5HsxCdp1cv5BGTQ/8dc8J893zk9ntbfAudLpqoQ1ow=";
   };
 
   # Revert after https://github.com/NixOS/nixpkgs/issues/125008 is
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     cmake
     flex
     bison
+    pkg-config
   ];
 
   buildInputs = [
@@ -40,12 +44,17 @@ stdenv.mkDerivation rec {
     libxml2
     libusb1
     avahi
-    libaio
-  ] ++ lib.optional python.isPy3k python.pkgs.setuptools;
+  ] ++ lib.optional python.isPy3k python.pkgs.setuptools
+    ++ lib.optional stdenv.isLinux libaio
+    ++ lib.optionals stdenv.isDarwin [ CFNetwork CoreServices ];
 
   cmakeFlags = [
     "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"
     "-DPYTHON_BINDINGS=on"
+    # osx framework is disabled,
+    # the linux-like directory structure is used for proper output splitting
+    "-DOSX_PACKAGE=off"
+    "-DOSX_FRAMEWORK=off"
   ];
 
   postPatch = ''
@@ -65,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "API for interfacing with the Linux Industrial I/O Subsystem";
     homepage = "https://github.com/analogdevicesinc/libiio";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

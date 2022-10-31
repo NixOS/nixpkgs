@@ -315,7 +315,7 @@ in
   };
 
   grpc = attrs: {
-    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
+    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     NIX_CFLAGS_COMPILE = toString [
@@ -543,6 +543,10 @@ in
 
   puma = attrs: {
     buildInputs = [ openssl ];
+  };
+
+  "pygments.rb" = attrs: {
+    buildInputs = [ python3 ];
   };
 
   rack = attrs: {

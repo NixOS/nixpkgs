@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var"
                      "--disable-doc" "--disable-man"
                      "--disable-update-ipsets" ] ++
-                   lib.optional onlyQOS [ "--disable-firehol" ];
+                   lib.optionals onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {
     description = "A firewall for humans";

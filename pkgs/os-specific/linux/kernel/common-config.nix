@@ -411,6 +411,7 @@ let
       XFS_QUOTA     = option yes;
       XFS_POSIX_ACL = option yes;
       XFS_RT        = option yes; # XFS Realtime subvolume support
+      XFS_ONLINE_SCRUB = option yes;
 
       OCFS2_DEBUG_MASKLOG = option no;
 

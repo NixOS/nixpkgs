@@ -66,6 +66,11 @@ mkDerivation {
     mobile-broadband-provider-info
     openconnect
   ];
+
+  cmakeFlags = [
+    "-DBUILD_MOBILE=ON"
+  ];
+
   patches = [
     (substituteAll {
       src = ./0002-openvpn-binary-path.patch;

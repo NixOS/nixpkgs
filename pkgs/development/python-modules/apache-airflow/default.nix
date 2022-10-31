@@ -20,7 +20,7 @@
 , deprecated
 , dill
 , flask
-, flask_login
+, flask-login
 , flask-appbuilder
 , flask-caching
 , flask-session
@@ -159,7 +159,7 @@ buildPythonPackage rec {
     flask-caching
     flask-session
     flask-wtf
-    flask_login
+    flask-login
     GitPython
     graphviz
     gunicorn
@@ -238,12 +238,17 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $PYTHONPATH"
   ];
 
+  postInstall = ''
+    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    # Needed for pythonImportsCheck below
+    export HOME=$(mktemp -d)
+  '';
+
   pythonImportsCheck = [
     "airflow"
   ] ++ providerImports;
 
-  checkPhase = ''
-    export HOME=$(mktemp -d)
+  preCheck = ''
     export AIRFLOW_HOME=$HOME
     export AIRFLOW__CORE__UNIT_TEST_MODE=True
     export AIRFLOW_DB="$HOME/airflow.db"
@@ -261,10 +266,6 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.isDarwin [
     "bash_operator_kill" # psutil.AccessDenied
   ];
-
-  postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
-  '';
 
   # Updates yarn.lock and package.json
   passthru.updateScript = writeScript "update.sh" ''
@@ -292,6 +293,18 @@ buildPythonPackage rec {
     # update provider dependencies
     ./update-providers.py
   '';
+
+  # Note on testing the web UI:
+  # You can (manually) test the web UI as follows:
+  #
+  #   nix shell .#python3Packages.apache-airflow
+  #   airflow db init
+  #   airflow reset -y # WARNING: this will wipe any existing db state you might have!
+  #   airflow standalone
+  #
+  # Then navigate to the localhost URL using the credentials printed, try
+  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
+  # see if they report success.
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";

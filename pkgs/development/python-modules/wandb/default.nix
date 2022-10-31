@@ -23,7 +23,6 @@
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, python-dateutil
 , pythonOlder
 , pythonRelaxDepsHook
 , torch
@@ -40,16 +39,16 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.21";
+  version = "0.13.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
-    repo = "client";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jKb2pNmCW4MYz6ncsMNg7o5giCI2bpKER/kb8lfJekI=";
+    hash = "sha256-+3fLExLQChXKx1LCnNvPLNTUzopP+D+6tOikFrjdysY=";
   };
 
   patches = [
@@ -73,7 +72,6 @@ buildPythonPackage rec {
     promise
     protobuf
     psutil
-    python-dateutil
     pyyaml
     requests
     sentry-sdk
@@ -109,11 +107,26 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
-    "tests/unit_tests/integrations/test_keras.py"
-    "tests/unit_tests/integrations/test_torch.py"
+    "tests/unit_tests_old/test_cli.py"
+    "tests/unit_tests_old/test_data_types.py"
+    "tests/unit_tests_old/test_file_stream.py"
+    "tests/unit_tests_old/test_file_upload.py"
+    "tests/unit_tests_old/test_footer.py"
+    "tests/unit_tests_old/test_internal_api.py"
+    "tests/unit_tests_old/test_keras.py"
+    "tests/unit_tests_old/test_metric_internal.py"
+    "tests/unit_tests_old/test_public_api.py"
+    "tests/unit_tests_old/test_report_api.py"
+    "tests/unit_tests_old/test_runtime.py"
+    "tests/unit_tests_old/test_sender.py"
+    "tests/unit_tests_old/test_tb_watcher.py"
+    "tests/unit_tests_old/test_time_resolution.py"
+    "tests/unit_tests_old/test_wandb_agent.py"
+    "tests/unit_tests_old/test_wandb_artifacts.py"
+    "tests/unit_tests_old/test_wandb_integration.py"
+    "tests/unit_tests_old/test_wandb_run.py"
     "tests/unit_tests/test_cli.py"
     "tests/unit_tests/test_data_types.py"
-    "tests/unit_tests/test_file_stream.py"
     "tests/unit_tests/test_file_upload.py"
     "tests/unit_tests/test_footer.py"
     "tests/unit_tests/test_internal_api.py"
@@ -125,31 +138,15 @@ buildPythonPackage rec {
     "tests/unit_tests/test_mode_disabled.py"
     "tests/unit_tests/test_model_workflows.py"
     "tests/unit_tests/test_mp_full.py"
+    "tests/unit_tests/test_plots.py"
     "tests/unit_tests/test_public_api.py"
-    "tests/unit_tests/test_redir.py"
     "tests/unit_tests/test_runtime.py"
     "tests/unit_tests/test_sender.py"
     "tests/unit_tests/test_start_method.py"
     "tests/unit_tests/test_tb_watcher.py"
     "tests/unit_tests/test_telemetry_full.py"
-    "tests/unit_tests/test_util.py"
-    "tests/unit_tests/wandb_agent_test.py"
-    "tests/unit_tests/wandb_artifacts_test.py"
-    "tests/unit_tests/wandb_integration_test.py"
-    "tests/unit_tests/wandb_run_test.py"
-    "tests/unit_tests/wandb_settings_test.py"
-    "tests/unit_tests/wandb_sweep_test.py"
-    "tests/unit_tests/wandb_tensorflow_test.py"
-    "tests/unit_tests/wandb_verify_test.py"
     "tests/unit_tests/test_tpu.py"
-    "tests/unit_tests/test_plots.py"
-    "tests/unit_tests/test_report_api.py"
-
-    # Requires metaflow, which is not yet packaged.
-    "tests/unit_tests/integrations/test_metaflow.py"
-
-    # Fails and borks the pytest runner as well.
-    "tests/unit_tests/wandb_test.py"
+    "tests/unit_tests/test_util.py"
 
     # Tries to access /homeless-shelter
     "tests/unit_tests/test_tables.py"
@@ -157,7 +154,7 @@ buildPythonPackage rec {
 
   # Disable test that fails on darwin due to issue with python3Packages.psutil:
   # https://github.com/giampaolo/psutil/issues/1219
-  disabledTests = lib.optional stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin [
     "test_tpu_system_stats"
   ];
 

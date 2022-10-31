@@ -3,11 +3,20 @@
 rec {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "105.0.3";
+    version = "106.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "8a60ed26f3a6e3fafb1eb13a8daf067056d011a17835310f8ce814b86121014796e790f611058aea75334428529028a2e29ba81d9d2653e09517dc7c3cf48e76";
+      sha512 = "2aad75c05c3398c19842be46dcde275581344b09f0c65b51a630cef201545996ee00f8020f52a0d7b6416d9ad52cbd5c71b8f1cdf47cd18e4abf1ba21f7cdb93";
     };
+
+    # This patch could be applied anywhere (just rebuild, no effect)
+    extraPatches = lib.optionals stdenv.isAarch64 [
+      (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1791275
+        name = "no-sysctl-aarch64.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/0efaf5a00aaceeed679885e4cd393bd9a5fcd0ff";
+        hash = "sha256-wS/KufeLFxCexQalGGNg8+vnQhzDiL79OLt8FtL/JJ8=";
+      })
+    ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -28,11 +37,11 @@ rec {
 
   firefox-esr-102 = buildMozillaMach rec {
     pname = "firefox-esr-102";
-    version = "102.3.0esr";
+    version = "102.4.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "35357791f4de8b474780083a22fb52b7846b8012cbf01403f2b9526151d11c196ce0f9fba8e0f16d8235d7259af6fba1bc3acbb5b7e79129a28f390467aa7556";
+      sha512 = "30d9e6ef04fd86516e2cea3c797ec99af4c96b08576bb3409c0026da4fd1218167f89a007109e1fa4e2571f98f2dbe5ab58a26473533d45301f75b90ec3dbf28";
     };
 
     meta = {

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, libogg }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, doxygen
+, graphviz
+, libogg
+}:
 
 stdenv.mkDerivation rec {
   pname = "flac";
@@ -10,9 +18,25 @@ stdenv.mkDerivation rec {
     sha256 = "91303c3e5dfde52c3e94e75976c0ab3ee14ced278ab8f60033a3a12db9209ae6";
   };
 
-  buildInputs = [ libogg ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+    graphviz
+  ];
 
-  #doCheck = true; # takes lots of time
+  buildInputs = [
+    libogg
+  ];
+
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  CFLAGS = [ "-O3" "-funroll-loops" ];
+  CXXFLAGS = [ "-O3" ];
+
+  # doCheck = true; # takes lots of time
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 

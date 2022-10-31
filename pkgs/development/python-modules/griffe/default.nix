@@ -1,6 +1,6 @@
 { lib
 , aiofiles
-, buildPythonApplication
+, buildPythonPackage
 , cached-property
 , fetchFromGitHub
 , git
@@ -9,9 +9,9 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "griffe";
-  version = "0.22.0";
+  version = "0.22.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = version;
-    hash = "sha256-GqPXVi+SsfO0ufUJzEZ5eUzwJmM/wylLA1KMv+WaIsU=";
+    hash = "sha256-mkYtfO+wZ4vIdpCzum9uwoKMv1Xn0few8ywbvrEwxj8=";
   };
 
   nativeBuildInputs = [

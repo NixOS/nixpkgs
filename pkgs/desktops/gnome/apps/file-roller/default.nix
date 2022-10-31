@@ -21,7 +21,6 @@
 , libarchive
 , libportal-gtk3
 , nautilus
-, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -59,13 +58,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs data/set-mime-type-entry.py
-  '';
-
-  preFixup = ''
-    # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
-    gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
-    )
   '';
 
   passthru = {

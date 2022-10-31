@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-nomad";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-1PXAdXafkPOIVzaWjW/RlWHwYhMqPoj0Hj5JmOMUj8A=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   cargoHash = "sha256-ULcdJRla1JwI0y6ngW9xQXjNw2wO48HuAczsNIsJJK0=";
 

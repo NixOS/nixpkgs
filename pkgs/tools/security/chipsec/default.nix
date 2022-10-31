@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   setupPyBuildFlags = [
     "--build-lib=$CHIPSEC_BUILD_LIB"
-  ] ++ lib.optional (!withDriver) [
+  ] ++ lib.optionals (!withDriver) [
     "--skip-driver"
   ];
 

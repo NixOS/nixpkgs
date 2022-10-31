@@ -2030,7 +2030,8 @@ lib.composeManyExtensions [
         if old.format != "wheel" then {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++
             [ pkgs.gfortran ] ++
-            lib.optional (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ];
+            lib.optional (lib.versionAtLeast super.scipy.version "1.7.0") [ self.pythran ] ++
+            lib.optional (lib.versionAtLeast super.scipy.version "1.9.0") [ self.meson-python pkg-config ];
           propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.pybind11 ];
           setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
           enableParallelBuilding = true;
@@ -2039,7 +2040,7 @@ lib.composeManyExtensions [
             sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
             export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
           '';
-          preBuild = ''
+          preBuild = lib.optional (lib.versionOlder super.scipy.version "1.9.0") ''
             ln -s ${self.numpy.cfg} site.cfg
           '';
         } else old

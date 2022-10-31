@@ -4,13 +4,24 @@ let
 in
 with lib;
 {
-  options.services.mullvad-vpn.enable = mkOption {
-    type = types.bool;
-    default = false;
-    description = lib.mdDoc ''
-      This option enables Mullvad VPN daemon.
-      This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
-    '';
+  options.services.mullvad-vpn = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        This option enables Mullvad VPN daemon.
+        This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.mullvad;
+      defaultText = literalExpression "pkgs.mullvad";
+      description = lib.mdDoc ''
+        The Mullvad package to use. `pkgs.mullvad` only provides the CLI tool, `pkgs.mullvad-vpn` provides both the CLI and the GUI.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -39,12 +50,12 @@ with lib;
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {
-        ExecStart = "${pkgs.mullvad}/bin/mullvad-daemon -v --disable-stdout-timestamps";
+        ExecStart = "${cfg.package}/bin/mullvad-daemon -v --disable-stdout-timestamps";
         Restart = "always";
         RestartSec = 1;
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ ymarkus ];
+  meta.maintainers = with maintainers; [ patricksjackson ymarkus ];
 }

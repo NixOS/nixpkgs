@@ -31,11 +31,15 @@ buildBazelPackage rec {
     ./remove-unused-deps.patch
   ];
 
-  bazelFlags = [ "--//bazel:use_local_flex_bison" ];
+  bazelFlags = [
+    "--//bazel:use_local_flex_bison"
+    "--javabase=@bazel_tools//tools/jdk:remote_jdk11"
+    "--host_javabase=@bazel_tools//tools/jdk:remote_jdk11"
+  ];
 
   fetchAttrs = {
     # Fixed output derivation hash after bazel fetch
-    sha256 = "sha256-XoLdlEeoDJlyWlnXZADHOKu06zKHgHJfgey8UhOt+LM=";
+    sha256 = "sha256-45PINJ7VtL5Jl/nAQNkiSCt8wUwtytNfgeNMZaz3Y9U=";
   };
 
   nativeBuildInputs = [
@@ -45,14 +49,23 @@ buildBazelPackage rec {
   ];
 
   postPatch = ''
-    patchShebangs bazel/build-version.py \
-      common/util/create_version_header.sh \
+    patchShebangs\
+      bazel/build-version.py \
+      bazel/sh_test_with_runfiles_lib.sh \
+      common/lsp/dummy-ls_test.sh \
       common/parser/move_yacc_stack_symbols.sh \
-      common/parser/record_syntax_error.sh
+      common/parser/record_syntax_error.sh \
+      common/tools/patch_tool_test.sh \
+      common/tools/verible-transform-interactive.sh \
+      common/tools/verible-transform-interactive-test.sh \
+      common/util/create_version_header.sh \
+      kythe-browse.sh \
+      verilog/tools
   '';
 
   removeRulesCC = false;
   bazelTarget = ":install-binaries";
+  bazelTestTargets = [ "//..." ];
   bazelBuildFlags = [
     "-c opt"
   ];

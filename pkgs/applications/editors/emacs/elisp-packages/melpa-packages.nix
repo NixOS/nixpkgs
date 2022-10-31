@@ -277,9 +277,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -552,6 +553,13 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
         });
 
         mozc = super.mozc.overrideAttrs (attrs: {

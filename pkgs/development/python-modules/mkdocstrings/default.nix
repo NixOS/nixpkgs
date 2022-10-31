@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , jinja2
 , markdown
@@ -12,7 +12,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocstrings";
   version = "0.19.0";
   format = "pyproject";

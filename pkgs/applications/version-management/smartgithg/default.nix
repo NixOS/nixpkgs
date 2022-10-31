@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre} \
-    ) \
+    )
+    # add missing shebang for start script
+    sed -i $out/bin/smartgit \
+      -e '1i#!/bin/bash'
   '';
 
   installPhase = ''

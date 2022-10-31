@@ -61,7 +61,7 @@ edk2 = buildStdenv.mkDerivation {
   ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
   makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+    ++ lib.optionals (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 

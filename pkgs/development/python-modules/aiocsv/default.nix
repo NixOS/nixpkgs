@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiocsv";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MKuranowski";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-lh+yHyHU+XrK4nk1xxrxgF5zGH7lP9jHdJ+m9ncfprw=";
+    hash = "sha256-cgPD9JdauPIHOdCNxsWInJWytj4niXozFAzJxKn52bE=";
   };
 
   nativeBuildInputs = [

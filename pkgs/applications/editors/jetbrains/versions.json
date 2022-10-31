@@ -3,11 +3,11 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
-      "version": "2022.2.3",
-      "sha256": "e0338107115231c4b354870dfcf537ba6ad1741a0d310e4e50c48dfc24ff9cce",
-      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.3.tar.gz",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.35"
+      "version": "2022.2.4",
+      "sha256": "d88794c698d7bf4d970ba102b85166d5f8c3cb08c4ed5b4cbc150bb505320fab",
+      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.4.tar.gz",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.21"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -30,11 +30,11 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
-      "version": "2022.2.3",
-      "sha256": "fda47d9939b95d8995d1a375443025599cd74b1b5a2966273477ecfafa9ce4f1",
-      "url": "https://download.jetbrains.com/go/goland-2022.2.3.tar.gz",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.25"
+      "version": "2022.2.4",
+      "sha256": "e39aaae39e6021e87cece7622c51860d23e2a5b5ac2683fb67d369ec7d609084",
+      "url": "https://download.jetbrains.com/go/goland-2022.2.4.tar.gz",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.24"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -75,20 +75,20 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.tar.gz",
-      "version": "2022.2.2",
-      "sha256": "2f361c5f59c685c9f8d1385029ed753eabe5b688a82acef6e83a50f0d2b9d7a8",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.2.tar.gz",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "cb03d44599a03419c0c63fc917846fca28c9ea664ed2b2a1c36240dcffb2a387",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.3.tar.gz",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.tar.gz",
-      "version": "2022.2.2",
-      "sha256": "b7bfb86026fba669bb22429ab0840afba5047680202762070cfbb1f181d53d0e",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.2.tar.gz",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "c73750a2e27ed2410741a739071a920cca9844608a81f07735ed2e35a024cca1",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.3.tar.gz",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -122,11 +122,11 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.dmg",
-      "version": "2022.2.3",
-      "sha256": "d7e0dcbb3c28f383d1365f5cb6d2b55afbb8c638fd9f100b8040f72b394a1aed",
-      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.3.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.35"
+      "version": "2022.2.4",
+      "sha256": "b72fae2bee3bd10374d10a4efb86888d289931080d5321385ede30373d31a55a",
+      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.4.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.21"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -149,11 +149,11 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
-      "version": "2022.2.3",
-      "sha256": "f2e9f2455cf2e13f3b7ed28c18507aa758742c533cb1c07a1ebe62172a939b47",
-      "url": "https://download.jetbrains.com/go/goland-2022.2.3.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.25"
+      "version": "2022.2.4",
+      "sha256": "456957075636f7f9ccffbd8d3bd37d2218547289a2cbce043bb9e32c436654f6",
+      "url": "https://download.jetbrains.com/go/goland-2022.2.4.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.24"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -194,20 +194,20 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}.dmg",
-      "version": "2022.2.2",
-      "sha256": "a7fbc83ea01e96c79a75fd061669fa0156b770e92c1153a03681fb67ee4a59ea",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.2.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "01eec651f6e8d92e1bfe5688aeb179ad5eb92e77ef77d102793d4848f8efc0d4",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.3.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.dmg",
-      "version": "2022.2.2",
-      "sha256": "9b2f5841fa5741881600fbf3b0d5686f2593a6771bb70454d4cb0cc3acd1e43a",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.2.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "920326a35589fee80e70b84d23184daf1d3efc8ecf4ec8c273c2bf2ec764a5b7",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.3.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "rider": {
       "update-channel": "Rider RELEASE",
@@ -241,11 +241,11 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.dmg",
-      "version": "2022.2.3",
-      "sha256": "d921c83ee6b444520e7fdb9fdae4ec0e67cea6dfcaa720e6b36d85c17a4df39c",
-      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.3-aarch64.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.35"
+      "version": "2022.2.4",
+      "sha256": "2b95358770cd56b94b46e4bcb86080e2c97771c0f34ad50543de206bb3c81d47",
+      "url": "https://download.jetbrains.com/cpp/CLion-2022.2.4-aarch64.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.21"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -268,11 +268,11 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.dmg",
-      "version": "2022.2.3",
-      "sha256": "c3c790a45b36af006f743a70fb114782a9c4a2076d025de65894d0f39b0f48a5",
-      "url": "https://download.jetbrains.com/go/goland-2022.2.3-aarch64.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.25"
+      "version": "2022.2.4",
+      "sha256": "f1b1bb4f28a09b23a185fc2437792a3125b2c8856fa533c9bcb09b7eef16fe09",
+      "url": "https://download.jetbrains.com/go/goland-2022.2.4-aarch64.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.24"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -313,20 +313,20 @@
     "pycharm-community": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-community-{version}-aarch64.dmg",
-      "version": "2022.2.2",
-      "sha256": "8a6f1440cfc9aa47a89a8dda7d19bf50c9790fc12153f97d11e975327703d6e0",
-      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.2-aarch64.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "6b87c85f6b5b3262904b34d0bbb6775d2654610685a8bca9977b147644b113ea",
+      "url": "https://download.jetbrains.com/python/pycharm-community-2022.2.3-aarch64.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "pycharm-professional": {
       "update-channel": "PyCharm RELEASE",
       "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.dmg",
-      "version": "2022.2.2",
-      "sha256": "30915c13c4ba2907f083dfa092bc3734e98a4ab83e2180221e52b9b04a93a1e2",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.2-aarch64.dmg",
-      "version-major-minor": "2022.1",
-      "build_number": "222.4167.33"
+      "version": "2022.2.3",
+      "sha256": "59d9553ab01de9460984f082c12fb0586aeb84eb00a4501bab358e516f1f6847",
+      "url": "https://download.jetbrains.com/python/pycharm-professional-2022.2.3-aarch64.dmg",
+      "version-major-minor": "2022.2",
+      "build_number": "222.4345.23"
     },
     "rider": {
       "update-channel": "Rider RELEASE",

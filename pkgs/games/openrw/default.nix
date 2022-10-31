@@ -8,7 +8,6 @@
 , bullet
 , glm
 , libmad
-, xlibsWrapper
 , openal
 , SDL2
 , boost
@@ -36,7 +35,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {

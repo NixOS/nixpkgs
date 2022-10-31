@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   # CMake does not set CMAKE_LIBRARY_ARCHITECTURE variable in Nix, which breaks architecture-independent library path generation
   patches = [ ./fix-install-path.patch ];
 
-  buildInputs = lib.optional enableUnicodeHelp [ icu.dev ];
+  buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];
   cmakeFlags = [ "-DCXXOPTS_BUILD_EXAMPLES=OFF" ]
     ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
-  nativeBuildInputs = [ cmake ] ++ lib.optional enableUnicodeHelp [ pkg-config ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;
 

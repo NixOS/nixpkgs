@@ -61,6 +61,7 @@ let
     in rec {
         buildEnv = callPackage ./wrapper.nix {
           lua = self;
+          makeWrapper = makeBinaryWrapper;
           inherit (luaPackages) requiredLuaModules;
         };
         withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};

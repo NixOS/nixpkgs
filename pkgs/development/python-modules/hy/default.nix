@@ -61,7 +61,14 @@ buildPythonPackage rec {
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
-    withPackages = python-packages: python.withPackages (ps: (python-packages ps) ++ [ ps.hy ]);
+    withPackages = python-packages:
+      (python.withPackages
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+          name = "${hy.name}-env";
+          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
+            mainProgram = "hy";
+          };
+        });
   };
 
   meta = with lib; {

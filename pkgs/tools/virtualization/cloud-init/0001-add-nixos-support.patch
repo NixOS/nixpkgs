@@ -1,27 +1,12 @@
-From 269cc4c9558549f340ec186d9246654564b2f633 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
-Date: Tue, 18 Aug 2020 10:22:36 +0100
-Subject: [PATCH] add nixos support
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
----
- cloudinit/distros/__init__.py |   1 +
- cloudinit/distros/nixos.py    | 103 ++++++++++++++++++++++++++++++++++
- 2 files changed, 104 insertions(+)
- create mode 100644 cloudinit/distros/nixos.py
-
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
-index 2537608f..c533b585 100755
+index 4a468cf8..c60c899b 100644
 --- a/cloudinit/distros/__init__.py
 +++ b/cloudinit/distros/__init__.py
-@@ -47,6 +47,7 @@ OSFAMILIES = {
-     'gentoo': ['gentoo'],
-     'redhat': ['amazon', 'centos', 'fedora', 'rhel'],
-     'suse': ['opensuse', 'sles'],
-+    'nixos': ['nixos'],
+@@ -55,6 +55,7 @@ OSFAMILIES = {
+         "virtuozzo",
+     ],
+     "suse": ["opensuse", "sles"],
++    "nixos": ["nixos"],
  }
  
  LOG = logging.getLogger(__name__)
@@ -134,6 +119,3 @@ index 00000000..d53d2a61
 +
 +    def update_package_sources(self):
 +        raise NotImplementedError()
--- 
-2.28.0
-

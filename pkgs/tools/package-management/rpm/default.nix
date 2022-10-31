@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

@@ -63,7 +63,7 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 

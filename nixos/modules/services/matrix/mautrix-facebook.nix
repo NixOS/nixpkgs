@@ -25,6 +25,7 @@ in {
         default = {
           homeserver = {
             address = "http://localhost:8008";
+            software = "standard";
           };
 
           appservice = rec {

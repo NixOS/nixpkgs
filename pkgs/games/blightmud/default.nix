@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ alsa-lib openssl ] ++ lib.optional withTTS [ speechd ];
+  buildInputs = [ alsa-lib openssl ] ++ lib.optionals withTTS [ speechd ];
 
   checkFlags =
     let

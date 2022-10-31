@@ -304,12 +304,13 @@ let
       # ExecReload = ...;
       ###
 
-      Environment=if cfg.backend == "podman" then "PODMAN_SYSTEMD_UNIT=podman-${name}.service" else {};
-      Type=if cfg.backend == "podman" then "notify" else {};
-      NotifyAccess=if cfg.backend == "podman" then "all" else {};
       TimeoutStartSec = 0;
       TimeoutStopSec = 120;
       Restart = "always";
+    } // optionalAttrs (cfg.backend == "podman") {
+      Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+      Type="notify";
+      NotifyAccess="all";
     };
   };
 

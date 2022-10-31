@@ -1,4 +1,4 @@
-{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook }:
+{ pkgs, nodePackages, makeWrapper, nixosTests, nodejs, stdenv, lib, fetchFromGitHub, fetchurl, autoPatchelfHook, matrix-sdk-crypto-nodejs }:
 
 let
   ourNodePackages = import ./node-composition.nix {
@@ -23,9 +23,15 @@ ourNodePackages.package.override {
 
   dontAutoPatchelf = true;
 
+  postRebuild = ''
+    npm run build
+  '';
+
   postInstall = ''
     makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
       --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
+
+      cp -rv ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs $out/lib/node_modules/matrix-appservice-irc/node_modules/@matrix-org/
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;

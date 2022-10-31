@@ -12,7 +12,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.43.1"
+VERSION="3.44.3"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.

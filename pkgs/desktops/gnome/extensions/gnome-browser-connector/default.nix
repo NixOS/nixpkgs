@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitLab
+, fetchurl
 , meson
 , ninja
 , python3
@@ -14,16 +14,13 @@ let
 in
 buildPythonApplication rec {
   pname = "gnome-browser-connector";
-  version = "42.0";
+  version = "42.1";
 
   format = "other";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "nE0sIghT";
-    repo = "gnome-browser-connector";
-    rev = "v${version}";
-    sha256 = "pYbV/qCmSrM2nrrKxbxHnJYMDOiW0aeNbFlsm5kKWdk=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-browser-connector/${lib.versions.major version}/gnome-browser-connector-${version}.tar.xz";
+    sha256 = "vZcCzhwWNgbKMrjBPR87pugrJHz4eqxgYQtBHfFVYhI=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +49,12 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gnome-browser-connector";
+    };
+  };
 
   meta = with lib; {
     description = "Native host connector for the GNOME Shell browser extension";

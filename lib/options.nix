@@ -322,10 +322,16 @@ rec {
   showOption = parts: let
     escapeOptionPart = part:
       let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
+        # We assume that these are "special values" and not real configuration data.
+        # If it is real configuration data, it is rendered incorrectly.
+        specialIdentifiers = [
+          "<name>"          # attrsOf (submodule {})
+          "*"               # listOf (submodule {})
+          "<function body>" # functionTo
+        ];
+      in if builtins.elem part specialIdentifiers
          then part
-         else escaped;
+         else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 

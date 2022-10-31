@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.0.1";
+  version = "1.0.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "fpHMfxnPnGJSfJe4kJ28+704QjjRwYddOZAB17QxXno=";
+    sha256 = "zmPsWdTbM+T50X0BsVTn1Aw/5N6sL5hIQiRG5WSG1eg=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "-Ddemos=true"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libshumate";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

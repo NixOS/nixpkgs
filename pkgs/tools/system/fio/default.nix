@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ python3.pkgs.six ];
 
-  makeWrapperArgs = lib.optional withGnuplot [
+  makeWrapperArgs = lib.optionals withGnuplot [
     "--prefix PATH : ${lib.makeBinPath [ gnuplot ]}"
   ];
 

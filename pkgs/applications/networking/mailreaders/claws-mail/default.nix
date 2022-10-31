@@ -98,22 +98,17 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-DhqcoNuNKp4FiuMM3H/JGXeSFOw8Vu4Min+IzCOBeo4=";
+    hash = "sha256-sYnnAMGJb14N6wt21L+oIOt6wZNe4Qqpr7raPPU6A0Q=";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [
     ./mime.patch
-    # fix build with perl 5.36+
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/claws-mail/trunk/20cope_with_fix_for_1009149.patch";
-      hash = "sha256-/WBslmoFvja2v2GEBntxvNtG0I3xtkUUqXO5gl5pqqs=";
-    })
   ];
 
   preConfigure = ''
@@ -124,6 +119,8 @@ in stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'm4_esyscmd([./get-git-version])' '${version}'
     substituteInPlace src/procmime.c \
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';

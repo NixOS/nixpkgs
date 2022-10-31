@@ -624,6 +624,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  neo-tree-nvim = super.neo-tree-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim nui-nvim ];
+  });
+
   noice-nvim = super.noice-nvim.overrideAttrs(old: {
     dependencies = with self; [ nui-nvim nvim-notify ];
   });
@@ -675,8 +679,6 @@ self: super: {
   });
 
   inherit parinfer-rust;
-
-  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''
@@ -1005,7 +1007,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-AY14YEdMpHXmiHwEA9hwSwwwJ8hYIomAuIuCJv1OUDw=";
+          cargoSha256 = "sha256-MzacdTuCaBIAyWxH+Uza1KToGZgGPcwMCe5JtQ+68/M=";
         };
       in
       ''

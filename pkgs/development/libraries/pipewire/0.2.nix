@@ -49,6 +49,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://pipewire.org/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

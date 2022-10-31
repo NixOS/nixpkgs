@@ -14,7 +14,6 @@
   extra,
   fetchzip,
   filepath,
-  generic-optics,
   hermes-json,
   HUnit,
   lib,
@@ -38,10 +37,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.0";
+  version = "2.0.0.3";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.0.tar.gz";
-    sha256 = "033582nzyi0hfis062cnz8lgx918lk1bmzfimsd78a9zzxn20frg";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.3.tar.gz";
+    sha256 = "0mgg309vncjvx80mhqcyb7kk1918nfl02d38jczm9lsrlrmdafd9";
   };
   isLibrary = true;
   isExecutable = true;
@@ -57,7 +56,6 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
     hermes-json
     lock-file
     MemoTrie
@@ -86,7 +84,6 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
     hermes-json
     lock-file
     MemoTrie
@@ -116,7 +113,6 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
     hermes-json
     HUnit
     lock-file

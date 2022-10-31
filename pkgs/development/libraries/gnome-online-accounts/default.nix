@@ -8,6 +8,7 @@
 , ninja
 , libxslt
 , gtk3
+, enableBackend ? stdenv.isLinux
 , webkitgtk_4_1
 , json-glib
 , librest_1_0
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
   version = "3.46.0";
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -46,8 +47,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
-    "-Dgtk_doc=true"
-    "-Dman=true"
+    "-Dgoabackend=${lib.boolToString enableBackend}"
+    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Dman=${lib.boolToString enableBackend}"
     "-Dmedia_server=true"
   ];
 
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
     libxml2
     libsecret
     libsoup_3
+  ] ++ lib.optionals enableBackend [
     webkitgtk_4_1
   ];
 
@@ -94,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
     description = "Single sign-on framework for GNOME";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };
