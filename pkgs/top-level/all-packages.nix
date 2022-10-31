@@ -7081,6 +7081,10 @@ with pkgs;
 
   git-credential-1password = callPackage ../applications/version-management/git-and-tools/git-credential-1password { };
 
+  git-credential-keepassxc = callPackage ../applications/version-management/git-and-tools/git-credential-keepassxc {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
+
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
   git-crypt = callPackage ../applications/version-management/git-and-tools/git-crypt { };
