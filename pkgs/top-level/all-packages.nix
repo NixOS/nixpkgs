@@ -35161,11 +35161,11 @@ with pkgs;
 
   n3 = callPackage ../applications/science/biology/N3 { };
 
-  neuron = callPackage ../applications/science/biology/neuron { python = null; };
+  neuron = callPackage ../applications/science/biology/neuron { };
 
-  neuron-mpi = neuron.override {useMpi = true; };
+  neuron-mpi = neuron.override { useMpi = true; };
 
-  neuron-full = neuron-mpi.override { python = python2; };
+  neuron-full = neuron-mpi.override { usePython = true; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 

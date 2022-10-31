@@ -6073,9 +6073,9 @@ self: super: with self; {
 
   networkx = callPackage ../development/python-modules/networkx { };
 
-  neuron-mpi = pkgs.neuron-mpi.override { inherit python; };
+  neuron-mpi = toPythonModule (pkgs.neuron-mpi.override { python3 = python; usePython = true; });
 
-  neuron = pkgs.neuron.override { inherit python; };
+  neuron = toPythonModule (pkgs.neuron.override { python3 = python; usePython = true; });
 
   neuronpy = callPackage ../development/python-modules/neuronpy { };
 

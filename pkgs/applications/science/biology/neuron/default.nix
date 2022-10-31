@@ -1,77 +1,55 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
 , pkg-config
-, automake
-, autoconf
-, libtool
-, ncurses
+, bison
+, cmake
+, flex
 , readline
-, which
-, python ? null
+, python3
+, usePython ? false
 , useMpi ? false
 , mpi
-, iv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "neuron${lib.optionalString useMpi "-mpi"}";
-  version = "7.5";
+  version = "8.2.1";
 
-  nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
-  buildInputs = [ ncurses readline python iv ]
-    ++ lib.optional useMpi mpi;
-
-  src = fetchurl {
-    url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
-    sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
+  src = fetchFromGitHub {
+    owner = "neuronsimulator";
+    repo = "nrn";
+    rev = version;
+    fetchSubmodules = true;
+    sha256 = "sha256-nQBwEZxEE3spV2cifmJIha9YUkXwsyg9WEZAWp9bDqA=";
   };
 
-  patches = (lib.optionals (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ bison flex readline ]
+    ++ lib.optional useMpi mpi
+    ++ lib.optional usePython python3.pkgs.cython;
 
-  # With LLVM 3.8 and above, clang (really libc++) gets upset if you attempt to redefine these...
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/gnu/neuron_gnu_builtin.h \
-      --replace 'double abs(double arg);' "" \
-      --replace 'float abs(float arg);' "" \
-      --replace 'short abs(short arg);' "" \
-      --replace 'long abs(long arg);' ""
-  '' + lib.optionalString stdenv.isDarwin ''
-    # we are darwin, but we don't have all the quirks the source wants to compensate for
-    substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
-    for f in src/nrnpython/*.[ch] ; do
-      substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
-    done
+  cmakeFlags = [
+    "-DNRN_ENABLE_INTERVIEWS=OFF"
+    "-DPYTHON_EXECUTABLE=${python3}/bin/python"
+    "-DNRN_ENABLE_PYTHON=${if usePython then "ON" else "OFF"}"
+    "-DNRN_ENABLE_RX3D=${if usePython then "ON" else "OFF"}"
+    "-DNRN_ENABLE_MPI=${if useMpi then "ON" else "OFF"}"
+  ];
+
+  postInstall = ''
+    # neuron install symlinks to $out/$arch for compatibility
+    # remove it
+    rm -rf $out/${stdenv.buildPlatform.uname.processor}
   '';
 
-  enableParallelBuilding = true;
-
-  ## neuron install by default everything under prefix/${host_arch}/*
-  ## override this to support nix standard file hierarchy
-  ## without issues: install everything under prefix/
-  preConfigure = ''
-    ./build.sh
-    export prefix="''${prefix} --exec-prefix=''${out}"
-  '';
-
-  configureFlags = with lib;
-                    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
-                    ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
-                    ++ (if useMpi then ["--with-mpi" "--with-paranrn"]
-                        else ["--without-mpi"]);
-
-
-  postInstall = lib.optionalString (python != null) ''
-    ## standardise python neuron install dir if any
-    if [[ -d $out/lib/python ]]; then
-        mkdir -p ''${out}/${python.sitePackages}
-        mv ''${out}/lib/python/*  ''${out}/${python.sitePackages}/
-    fi
-  '';
-
-  propagatedBuildInputs = [ readline ncurses which libtool ];
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "nrniv --version";
+  };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
 
     longDescription = "NEURON is a simulation environment for developing and exercising models of
@@ -80,15 +58,9 @@ stdenv.mkDerivation rec {
                 potential close to the membrane), and where cell membrane properties are complex,
                 involving many ion-specific channels, ion accumulation, and second messengers";
 
-    sourceProvenance = with sourceTypes; [
-      fromSource
-    ] ++ lib.optionals (python != null) [
-      binaryNativeCode  # "geometry3d" bundled libraries
-    ];
-    license     = licenses.bsd3;
-    homepage    = "http://www.neuron.yale.edu/neuron";
+    license = licenses.bsd3;
+    homepage = "http://www.neuron.yale.edu/neuron";
     maintainers = [ maintainers.adev ];
-    # source claims it's only tested for x86 and powerpc
-    platforms   = platforms.x86_64 ++ platforms.i686;
+    platforms = platforms.unix;
   };
-}
+})
