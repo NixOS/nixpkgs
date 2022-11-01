@@ -12478,6 +12478,18 @@ final: prev:
     meta.homepage = "https://github.com/bronson/vim-trailing-whitespace/";
   };
 
+  vim-tridactyl = buildVimPluginFrom2Nix {
+    pname = "vim-tridactyl";
+    version = "2022-02-10";
+    src = fetchFromGitHub {
+      owner = "tridactyl";
+      repo = "vim-tridactyl";
+      rev = "f2eaa5d32614f6c35dad268dd4ed7ff33cae5070";
+      sha256 = "139kl89k5alh8bpa4wywsmvjnxlxzsdbhxn2w8rvclhwgrhkzvgd";
+    };
+    meta.homepage = "https://github.com/tridactyl/vim-tridactyl/";
+  };
+
   vim-tsx = buildVimPluginFrom2Nix {
     pname = "vim-tsx";
     version = "2017-03-16";
