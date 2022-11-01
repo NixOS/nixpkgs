@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , plumbum
 , pytestCheckHook
 , pythonOlder
@@ -8,17 +9,21 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "5.1.0";
-  format = "setuptools";
+  version = "5.2.3";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Xeot4QEgTZjvdO0ydmKjccp6zwC93Yp/HkRlSgyDf8k=";
+    hash = "sha256-SDt6Oh+8qRIdM02FEFM+Xw1y/bBn66D6KbOrhGVs6ng=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     plumbum
@@ -31,6 +36,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Disable tests that requires network access
     "test_api"
+    "test_close_timeout"
+    "test_deploy"
+    "test_listing"
     "test_pruning"
     "test_rpyc"
     # Test is outdated

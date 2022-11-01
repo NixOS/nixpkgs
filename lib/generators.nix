@@ -378,7 +378,7 @@ rec {
 
     attr = let attrFilter = name: value: name != "_module" && value != null;
     in ind: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
-      (name: value: lib.optional (attrFilter name value) [
+      (name: value: lib.optionals (attrFilter name value) [
       (key "\t${ind}" name)
       (expr "\t${ind}" value)
     ]) x));

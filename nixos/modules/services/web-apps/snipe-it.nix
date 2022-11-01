@@ -394,7 +394,7 @@ in {
         User = user;
         WorkingDirectory = snipe-it;
         RuntimeDirectory = "snipe-it/cache";
-        RuntimeDirectoryMode = 0700;
+        RuntimeDirectoryMode = "0700";
       };
       path = [ pkgs.replace-secret ];
       script =
@@ -454,25 +454,43 @@ in {
 
           # migrate db
           ${pkgs.php}/bin/php artisan migrate --force
+
+          # A placeholder file for invalid barcodes
+          invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"
+          [ ! -e "$invalid_barcode_location" ] \
+              && cp ${snipe-it}/share/snipe-it/invalid_barcode.gif "$invalid_barcode_location"
         '';
     };
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
-      "d ${cfg.dataDir}/bootstrap                  0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/bootstrap/cache            0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage                    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/app                0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/fonts              0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework          0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/cache    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/sessions 0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
-      "d ${cfg.dataDir}/storage/private_uploads    0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}                              0710 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap                    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/bootstrap/cache              0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public                       0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads               0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/accessories   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/assets        0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/avatars       0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/barcodes      0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/categories    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/companies     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/components    0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/consumables   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/departments   0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/locations     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/manufacturers 0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/models        0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/public/uploads/suppliers     0750 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage                      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/app                  0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/fonts                0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/cache      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/sessions   0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/framework/views      0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/logs                 0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/uploads              0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/private_uploads      0700 ${user} ${group} - -"
     ];
 
     users = {

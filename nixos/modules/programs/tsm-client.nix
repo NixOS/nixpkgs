@@ -223,7 +223,7 @@ let
       description = lib.mdDoc ''
         The TSM client derivation to be
         added to the system environment.
-        It will called with `.override`
+        It will be used with `.override`
         to add paths to the client system-options file.
       '';
     };

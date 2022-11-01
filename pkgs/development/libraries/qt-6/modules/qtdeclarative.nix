@@ -32,4 +32,8 @@ qtModule {
     "bin/qmlscene"
     "bin/qmltestrunner"
   ];
+
+  NIX_CFLAGS_COMPILE = [
+    "-fmacro-prefix-map=${qtbase.dev}=qtbase.dev"
+  ];
 }

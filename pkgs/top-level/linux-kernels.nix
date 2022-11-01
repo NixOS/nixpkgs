@@ -232,9 +232,9 @@ in {
     };
 
     linux_xanmod = xanmodKernels.lts;
-    linux_xanmod_stable = xanmodKernels.current;
-    linux_xanmod_latest = xanmodKernels.next;
-    linux_xanmod_tt = xanmodKernels.tt;
+    linux_xanmod_stable = xanmodKernels.main;
+    linux_xanmod_latest = xanmodKernels.main;
+    linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
@@ -249,6 +249,7 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = hardenedKernelFor kernels.linux_5_19 { };
+    linux_6_0_hardened = hardenedKernelFor kernels.linux_6_0 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -575,13 +576,14 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_19 { });
+    linux_6_0_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_0 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
     linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
-    linux_xanmod_tt = recurseIntoAttrs (packagesFor kernels.linux_xanmod_tt);
+    linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
     hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
 

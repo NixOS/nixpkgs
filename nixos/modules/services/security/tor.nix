@@ -816,13 +816,13 @@ in
         always create a container/VM with a separate Tor daemon instance.
       '' ++
       flatten (mapAttrsToList (n: o:
-        optional (o.settings.HiddenServiceVersion == 2) [
+        optionals (o.settings.HiddenServiceVersion == 2) [
           (optional (o.settings.HiddenServiceExportCircuitID != null) ''
             HiddenServiceExportCircuitID is used in the HiddenService: ${n}
             but this option is only for v3 hidden services.
           '')
         ] ++
-        optional (o.settings.HiddenServiceVersion != 2) [
+        optionals (o.settings.HiddenServiceVersion != 2) [
           (optional (o.settings.HiddenServiceAuthorizeClient != null) ''
             HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
             but this option is only for v2 hidden services.

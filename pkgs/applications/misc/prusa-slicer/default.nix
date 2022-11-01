@@ -28,13 +28,13 @@
 , qhull
 , systemd
 , tbb
-, wxGTK31-gtk3
+, wxGTK31
 , xorg
 , fetchpatch
-, wxGTK31-gtk3-override ? null
+, wxGTK31-override ? null
 }:
 let
-  wxGTK31-gtk3-prusa = wxGTK31-gtk3.overrideAttrs (old: rec {
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {
@@ -45,7 +45,7 @@ let
       fetchSubmodules = true;
     };
   });
-  wxGTK31-gtk3-override' = if wxGTK31-gtk3-override == null then wxGTK31-gtk3-prusa else wxGTK31-gtk3-override;
+  wxGTK31-override' = if wxGTK31-override == null then wxGTK31-prusa else wxGTK31-override;
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     pcre
     systemd
     tbb
-    wxGTK31-gtk3-override'
+    wxGTK31-override'
     xorg.libX11
   ] ++ checkInputs;
 

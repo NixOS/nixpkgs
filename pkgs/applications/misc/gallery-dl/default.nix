@@ -1,17 +1,24 @@
 { lib, buildPythonApplication, fetchPypi, requests, yt-dlp, pytestCheckHook }:
 
 buildPythonApplication rec {
-  pname = "gallery_dl";
-  version = "1.23.2";
+  pname = "gallery-dl";
+  version = "1.23.5";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-/jkzwFBBwkfymxmD6bXj0ZAlN4RV+UERg2kRtDyIV94=";
+    inherit version;
+    pname = "gallery_dl";
+    sha256 = "sha256-NhnuW7rq5Dgrnkw/nUO/pFg/Sh2D/d9gFCIb+gQy5QE=";
   };
 
-  propagatedBuildInputs = [ requests yt-dlp ];
+  propagatedBuildInputs = [
+    requests
+    yt-dlp
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [
     # requires network access
@@ -20,6 +27,10 @@ buildPythonApplication rec {
 
     # incompatible with pytestCheckHook
     "--ignore=test/test_ytdl.py"
+  ];
+
+  pythonImportsCheck = [
+    "gallery_dl"
   ];
 
   meta = with lib; {

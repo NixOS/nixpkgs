@@ -29,7 +29,9 @@ rec {
     };
   };
 
-  # Make a full-blown test
+  # Make a full-blown test (legacy)
+  # For an official public interface to the tests, see
+  # https://nixos.org/manual/nixos/unstable/index.html#sec-calling-nixos-tests
   makeTest =
     { machine ? null
     , nodes ? {}
@@ -48,7 +50,8 @@ rec {
           else builtins.unsafeGetAttrPos "testScript" t)
     , extraPythonPackages ? (_ : [])
     , interactive ? {}
-    } @ t:
+    } @ t: let
+    testConfig =
       (evalTest {
         imports = [
           { _file = "makeTest parameters"; config = t; }
@@ -60,6 +63,9 @@ rec {
           }
         ];
       }).config;
+    in
+      testConfig.test   # For nix-build
+        // testConfig;  # For all-tests.nix
 
   simpleTest = as: (makeTest as).test;
 

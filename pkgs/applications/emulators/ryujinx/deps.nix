@@ -159,7 +159,7 @@
   (fetchNuGet { pname = "SkiaSharp.NativeAssets.WebAssembly"; version = "2.88.1-preview.1"; sha256 = "0mwj2yl4gn40lry03yqkj7sbi1drmm672dv88481sgah4c21lzrq"; })
   (fetchNuGet { pname = "SkiaSharp.NativeAssets.Win32"; version = "2.88.0"; sha256 = "135ni4rba4wy4wyzy9ip11f3dwb1ipn38z9ps1p9xhw8jc06y5vp"; })
   (fetchNuGet { pname = "SkiaSharp.NativeAssets.Win32"; version = "2.88.1-preview.1"; sha256 = "1k50abd147pif9z9lkckbbk91ga1vv6k4skjz2n7wpll6fn0fvlv"; })
-  (fetchNuGet { pname = "SPB"; version = "0.0.4-build24"; sha256 = "13wfjx5n540mlxlvys39g2rajrqbycdkyci2pcp3wygkqn4d87hm"; })
+  (fetchNuGet { pname = "SPB"; version = "0.0.4-build27"; sha256 = "16i10lp4w7gi5rzjs9v9vns858n735ixcb83kl2qqq9qwyrnv8mw"; })
   (fetchNuGet { pname = "Svg.Custom"; version = "0.5.14"; sha256 = "1wjghs2n5hk7zszzk2p2a8m6ga2gc8sfd5mdqi15sbfkmwg2nbw7"; })
   (fetchNuGet { pname = "Svg.Model"; version = "0.5.14"; sha256 = "1xilk95bmnsl93sbr7pah0jrjrnccf1ikcn8s7rkm0yjkj382hc8"; })
   (fetchNuGet { pname = "Svg.Skia"; version = "0.5.14"; sha256 = "02wv040wi8ijw9mwg3c84f8bfyfv9n99ji8q1v2bs11b463zsyd1"; })

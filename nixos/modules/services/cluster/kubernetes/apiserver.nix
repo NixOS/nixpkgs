@@ -18,7 +18,8 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
-    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecureBindAddress" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "insecurePort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
     (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
@@ -162,18 +163,6 @@ in
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
-    };
-
-    insecureBindAddress = mkOption {
-      description = lib.mdDoc "The IP address on which to serve the --insecure-port.";
-      default = "127.0.0.1";
-      type = str;
-    };
-
-    insecurePort = mkOption {
-      description = lib.mdDoc "Kubernetes apiserver insecure listening port. (0 = disabled)";
-      default = 0;
-      type = int;
     };
 
     kubeletClientCaFile = mkOption {
@@ -376,8 +365,6 @@ in
                 "--proxy-client-cert-file=${cfg.proxyClientCertFile}"} \
               ${optionalString (cfg.proxyClientKeyFile != null)
                 "--proxy-client-key-file=${cfg.proxyClientKeyFile}"} \
-              --insecure-bind-address=${cfg.insecureBindAddress} \
-              --insecure-port=${toString cfg.insecurePort} \
               ${optionalString (cfg.runtimeConfig != "")
                 "--runtime-config=${cfg.runtimeConfig}"} \
               --secure-port=${toString cfg.securePort} \

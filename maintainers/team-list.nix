@@ -182,6 +182,8 @@ with lib.maintainers; {
     members = [
       cole-h
       grahamc
+      hoverbear
+      lheckemann
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
@@ -673,7 +675,6 @@ with lib.maintainers; {
     # Verify additions by approval of an already existing member of the team.
     members = [
       balsoft
-      mkaito
     ];
     scope = "Group registration for Serokell employees who collectively maintain packages.";
     shortName = "Serokell employees";

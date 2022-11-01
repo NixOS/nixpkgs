@@ -112,6 +112,11 @@ stdenv.mkDerivation rec {
       revert = true;
     })
     ./9pfs-use-GHashTable-for-fid-table.patch
+    (fetchpatch {
+      name = "CVE-2022-3165.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/d307040b18bfcb1393b910f1bae753d5c12a4dc7.patch";
+      sha256 = "sha256-YPhm580lBNuAv7G1snYccKZ2V5ycdV8Ri8mTw5jjFBc=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
@@ -152,8 +157,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
-    ++ lib.optional stdenv.isDarwin "--enable-hvf"
+    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
     ++ lib.optional stdenv.isLinux "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"

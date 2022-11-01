@@ -5,7 +5,7 @@
 , gnome
 , gtk4
 , libadwaita
-, wrapGAppsHook
+, wrapGAppsHook4
 , gjs
 , gobject-introspection
 , libgweather
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     gobject-introspection
     gjs
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
@@ -70,6 +72,6 @@ stdenv.mkDerivation rec {
     description = "Access current weather conditions and forecasts";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

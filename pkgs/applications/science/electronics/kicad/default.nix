@@ -2,7 +2,8 @@
 , fetchFromGitLab
 , gnome
 , dconf
-, wxGTK31-gtk3
+, wxGTK31
+, gtk3
 , makeWrapper
 , gsettings-desktop-schemas
 , hicolor-icon-theme
@@ -103,7 +104,7 @@ let
     if srcOverridep "libVersion" then srcs.libVersion
     else versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxGTK31-gtk3;
+  wxGTK = wxGTK31;
   python = python3;
   wxPython = python.pkgs.wxPython_4_1;
 
@@ -143,7 +144,7 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
+    "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"

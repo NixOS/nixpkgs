@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -52,6 +53,7 @@
 , writeText
 , xorg
 , zlib
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -202,6 +204,8 @@ stdenv.mkDerivation rec {
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libecore_audio.so
     patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "Enlightenment foundation libraries";

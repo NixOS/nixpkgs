@@ -22,6 +22,7 @@ let
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ln -s ${cfg.fontsDir} $out/share/wordpress/wp-content/fonts
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -92,6 +93,15 @@ let
           description = lib.mdDoc ''
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
+          '';
+        };
+
+        fontsDir = mkOption {
+          type = types.path;
+          default = "/var/lib/wordpress/${name}/fonts";
+          description = lib.mdDoc ''
+            This directory is used to download fonts from a remote location, e.g.
+            to host google fonts locally.
           '';
         };
 

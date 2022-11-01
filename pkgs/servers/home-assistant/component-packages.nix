@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.10.3";
+  version = "2022.10.5";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -635,10 +635,10 @@
       zeroconf
     ];
     "dlib_face_detect" = ps: with ps; [
-      face_recognition
+      face-recognition
     ];
     "dlib_face_identify" = ps: with ps; [
-      face_recognition
+      face-recognition
     ];
     "dlink" = ps: with ps; [
     ]; # missing inputs: pyW215
@@ -1028,7 +1028,8 @@
       afsapi
     ];
     "fully_kiosk" = ps: with ps; [
-    ]; # missing inputs: python-fullykiosk
+      python-fullykiosk
+    ];
     "futurenow" = ps: with ps; [
       pyfnip
     ];
@@ -1276,12 +1277,12 @@
       sqlalchemy
     ];
     "homekit" = ps: with ps; [
-      hap-python
       pyqrcode
       pyturbojpeg
       aiohttp-cors
       base36
       fnvhash
+      hap-python
       ha-ffmpeg
       ifaddr
       zeroconf
@@ -1605,7 +1606,8 @@
     ]; # missing inputs: lacrosse-view
     "lametric" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: demetriek
+      demetriek
+    ];
     "landisgyr_heat_meter" = ps: with ps; [
       ultraheat-api
     ];
@@ -2356,7 +2358,8 @@
       pillow
     ];
     "prusalink" = ps: with ps; [
-    ]; # missing inputs: pyprusalink
+      pyprusalink
+    ];
     "ps4" = ps: with ps; [
     ]; # missing inputs: pyps4-2ndscreen
     "pulseaudio_loopback" = ps: with ps; [
@@ -2369,7 +2372,7 @@
       aiohttp-cors
     ];
     "pushbullet" = ps: with ps; [
-      pushbullet
+      pushbullet-py
     ];
     "pushover" = ps: with ps; [
       pushover-complete
@@ -2942,7 +2945,8 @@
     "switch_as_x" = ps: with ps; [
     ];
     "switchbee" = ps: with ps; [
-    ]; # missing inputs: pyswitchbee
+      pyswitchbee
+    ];
     "switchbot" = ps: with ps; [
       pyswitchbot
       aiohttp-cors
@@ -3420,7 +3424,8 @@
     ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: withings-api
+      withings-api
+    ];
     "wiz" = ps: with ps; [
       aiohttp-cors
       ifaddr
@@ -3800,6 +3805,7 @@
     "fritzbox_callmonitor"
     "fronius"
     "frontend"
+    "fully_kiosk"
     "garages_amsterdam"
     "gdacs"
     "generic"
@@ -3913,6 +3919,7 @@
     "konnected"
     "kraken"
     "kulersky"
+    "lametric"
     "landisgyr_heat_meter"
     "lastfm"
     "launch_library"
@@ -4051,6 +4058,7 @@
     "prometheus"
     "prosegur"
     "proximity"
+    "prusalink"
     "pure_energie"
     "push"
     "pushbullet"
@@ -4169,6 +4177,7 @@
     "surepetcare"
     "switch"
     "switch_as_x"
+    "switchbee"
     "switchbot"
     "switcher_kis"
     "syncthing"
@@ -4267,6 +4276,7 @@
     "whois"
     "wiffi"
     "wilight"
+    "withings"
     "wiz"
     "wled"
     "workday"

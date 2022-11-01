@@ -43,6 +43,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # https://github.com/natekspencer/pylitterbot/issues/73
+    substituteInPlace pyproject.toml \
+      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
+  '';
+
   pytestFlagsArray = [
     "--asyncio-mode=legacy"
   ];

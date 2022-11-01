@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
+, pam, libxcrypt, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
 , buildPackages, pruneLibtoolFiles, nixosTests }:
 
 with lib;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext libkrb5 ]
+    [ openssl db gettext libkrb5 libxcrypt ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
-  installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+  installFlags = lib.optionals stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   passthru.tests = {
     inherit (nixosTests) parsedmarc postfix;

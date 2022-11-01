@@ -1,28 +1,28 @@
-{ lib, fetchFromGitHub, buildPythonPackage, aioredis, aiofiles, django_3
-, fastapi, msgpack, pynacl, typing-extensions
+{ lib, fetchFromGitHub, buildPythonPackage, aiofiles, django_3
+, fastapi, msgpack, pynacl, redis, typing-extensions
 , withLdap ? true, python-ldap }:
 
 buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.9.1";
+  version = "0.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
     rev = "v${version}";
-    sha256 = "sha256-mYXy0N7ohNk3K2XNB6JvULF6lhL5dV8yBvooR6RuV1E=";
+    sha256 = "sha256-z6aiXSWdLcDfOpqC5epsclXWxJq59MqWDQOnnFqGwz4=";
   };
 
   patches = [ ./secret.patch ];
 
   propagatedBuildInputs = [
-    aioredis
     aiofiles
     django_3
     fastapi
     msgpack
     pynacl
+    redis
     typing-extensions
   ] ++ lib.optional withLdap python-ldap;
 

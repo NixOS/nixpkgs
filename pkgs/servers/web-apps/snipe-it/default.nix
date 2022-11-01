@@ -7,25 +7,33 @@ let
     noDev = true; # Disable development dependencies
   }).overrideAttrs (attrs : {
     installPhase = attrs.installPhase + ''
+      # Before symlinking the following directories, copy the invalid_barcode.gif
+      # to a different location. The `snipe-it-setup` oneshot service will then
+      # copy the file back during bootstrap.
+      mkdir -p $out/share/snipe-it
+      cp $out/public/uploads/barcodes/invalid_barcode.gif $out/share/snipe-it/
+
       rm -R $out/storage $out/public/uploads $out/bootstrap/cache
       ln -s ${dataDir}/.env $out/.env
       ln -s ${dataDir}/storage $out/
       ln -s ${dataDir}/public/uploads $out/public/uploads
       ln -s ${dataDir}/bootstrap/cache $out/bootstrap/cache
+
       chmod +x $out/artisan
+
       substituteInPlace config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
     '';
   });
 
 in package.override rec {
   pname = "snipe-it";
-  version = "6.0.11";
+  version = "6.0.12";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-r9F3/Lyb7eTeywe1BTgYd3v9ENGzh6ab3WOMdd8aalc=";
+    sha256 = "sha256-1/v2kCXedhtiqyO6d7kpmAnWGidXM1djlpbBr7/AyQI=";
   };
 
   meta = with lib; {

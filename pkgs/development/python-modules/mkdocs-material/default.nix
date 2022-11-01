@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , jinja2
 , markdown
@@ -11,7 +11,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-material";
   version = "8.4.3";
   format = "setuptools";

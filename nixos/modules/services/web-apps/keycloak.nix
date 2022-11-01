@@ -616,7 +616,7 @@ in
               Group = "keycloak";
               DynamicUser = true;
               RuntimeDirectory = "keycloak";
-              RuntimeDirectoryMode = 0700;
+              RuntimeDirectoryMode = "0700";
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
             };
             script = ''

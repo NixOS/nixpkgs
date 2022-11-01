@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.9.4";
+  version = "0.10.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0yvjzmz2vqc63l8911jflqf5aww7wxsav2yal5wg9ci9hzq6dl7j";
+    sha256 = "sha256-gC4/oQpK9m6/p1DY2Kabk5l7vsS9iafW3E5dgO723B8=";
   };
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "1jk2vcm2z6r1xd6md98jzpcy7kdwp5p2fzxvvaz9qscyfnx28x17";
+  cargoSha256 = "sha256-aNEfKHpNWDHebioUkEq6D0aL3Jf9NQXBuoWvpB7uO5U=";
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim

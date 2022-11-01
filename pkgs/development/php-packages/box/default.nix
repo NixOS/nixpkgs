@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "box";
-  version = "3.16.0";
+  version = "4.1.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
-    sha256 = "sha256-9QjijzCdfpWjGb3NXxPc+7GOuRy3psrJtpvHeZ14vfk=";
+    sha256 = "sha256-DtrTsCocCpLngiEPrKBrFeU+OnND8AoI83g+Y7+zHzs=";
   };
 
   dontUnpack = true;

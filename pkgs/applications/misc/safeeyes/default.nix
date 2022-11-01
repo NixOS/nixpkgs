@@ -8,6 +8,7 @@
 , wlrctl
 , gtk3
 , xprintidle
+, xprop
 , wrapGAppsHook
 , babel
 , psutil
@@ -58,7 +59,7 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle ]}
+      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle xprop ]}
     )
   '';
 

@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1y8nxz20agmrdcl25wry8lnpg86zbkkkkiscljwd7g7a831hlb9z";
+    sha256 = "sha256-jFocERr2cW7zdLiYfAay5Dh1issKAHp6vRWYWR1Axcg=";
   };
 
-  cargoSha256 = "sha256-NXVwydEn4hX/4NorDx6eE+sWQXj1jwZgzpDE3wg8OkU=";
+  cargoSha256 = "sha256-mH8tu8koprmHo6JJ9AwYMexy2SFR2yukZmFT060cuZ4=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

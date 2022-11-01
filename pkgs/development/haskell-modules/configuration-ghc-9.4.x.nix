@@ -10,7 +10,6 @@ in
 
 with haskellLib;
 self: super: let
-  doctest_0_20_broken = p: checkAgainAfter self.doctest "0.20.0" "doctest broken on 9.4" (dontCheck p);
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 in {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -62,36 +61,15 @@ in {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # Too strict bound on base
-  # https://github.com/haskell/cabal/issues/8509
-  # Requested versions of Cabal, Cabal-syntax and process match GHC 9.4's for now
-  cabal-install = doJailbreak super.cabal-install;
-  cabal-install-solver = doJailbreak super.cabal-install-solver;
+  cabal2nix =
+    # cabal2nix depends on foundation, which is broken on aarch64-linux.
+    # https://github.com/haskell-foundation/foundation/issues/571
+    overrideCabal
+      (drv: { badPlatforms = [ "aarch64-linux" ]; })
+      super.cabal2nix;
 
-  # Test failure due to new Cabal 3.8 version. Since the failure only pertains
-  # to a change in how Cabal internally represents some platforms and we depend
-  # on the type of representation anywhere, this failure is harmless. Can be
-  # removed after https://github.com/NixOS/cabal2nix/pull/571 is merged.
-  # TODO(@sternenseemann): merge and release a fixed version
-  distribution-nixpkgs = dontCheck super.distribution-nixpkgs;
-  cabal2nix = dontCheck super.cabal2nix;
-  cabal2nix-unstable = dontCheck super.cabal2nix-unstable;
-
-  # build fails on due to ghc api changes
-  # unfinished PR that doesn't yet compile:
-  # https://github.com/sol/doctest/pull/375
-  doctest = markBroken super.doctest_0_20_0;
+  doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
-  http-types = doctest_0_20_broken super.http-types;
-  iproute = doctest_0_20_broken super.iproute;
-  foldl = doctest_0_20_broken super.foldl;
-  prettyprinter-ansi-terminal = doctest_0_20_broken super.prettyprinter-ansi-terminal;
-  pretty-simple = doctest_0_20_broken super.pretty-simple;
-  http-date = doctest_0_20_broken super.http-date;
-  network-byte-order = doctest_0_20_broken super.network-byte-order;
-  co-log-core = doctest_0_20_broken (doJailbreak super.co-log-core);
-  xml-conduit = doctest_0_20_broken (dontCheck super.xml-conduit);
-  validation-selective = doctest_0_20_broken (dontCheck super.validation-selective);
 
   double-conversion = markBroken super.double-conversion;
   blaze-textual = checkAgainAfter super.double-conversion "2.0.4.1" "double-conversion fails to build; required for testsuite" (dontCheck super.blaze-textual);
@@ -100,6 +78,8 @@ in {
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
   invariant = jailbreakForCurrentVersion super.invariant "0.5.6";
   implicit-hie-cradle = jailbreakForCurrentVersion super.implicit-hie-cradle "0.5.0.0";
+  # https://github.com/co-log/co-log-core/pull/22#issuecomment-1294040208
+  co-log-core = jailbreakForCurrentVersion super.co-log-core "0.3.1.0";
 
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
@@ -109,7 +89,6 @@ in {
   # Jailbreaks & Version Updates
 
   aeson = self.aeson_2_1_1_0;
-  aeson-diff = doctest_0_20_broken (dontCheck super.aeson-diff);
   lens-aeson = self.lens-aeson_1_2_2;
 
   assoc = doJailbreak super.assoc;
@@ -148,7 +127,7 @@ in {
 
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/GetShopTV/swagger2/pull/242
-  swagger2 = doctest_0_20_broken (dontCheck (doJailbreak super.swagger2));
+  swagger2 = doJailbreak super.swagger2;
 
   base-orphans = dontCheck super.base-orphans;
 
@@ -224,4 +203,25 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
+  ghc-check = dontHaddock super.ghc-check;
+
+  # 2022-10-06: plugins disabled for hls 1.8.0.0 based on
+  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
+  haskell-language-server = super.haskell-language-server.override {
+    hls-refactor-plugin = null;
+    hls-class-plugin = null;
+    hls-eval-plugin = null;
+    hls-floskell-plugin = null;
+    hls-fourmolu-plugin = null;
+    hls-gadt-plugin = null;
+    hls-hlint-plugin = null;
+    hls-ormolu-plugin = null;
+    hls-rename-plugin = null;
+    hls-stylish-haskell-plugin = null;
+    hls-tactics-plugin = null;
+    hls-haddock-comments-plugin = null;
+    hls-retrie-plugin = null;
+    hls-splice-plugin = null;
+  };
 }

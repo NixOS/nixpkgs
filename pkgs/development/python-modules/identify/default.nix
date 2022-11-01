@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.5.6";
+  version = "2.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DAVCQQmL6ABMjygKm48knZL+smovES5CWv149GoDp34=";
+    sha256 = "sha256-QI4NtNPkR3mD/UVFeKimo5pgBmnRKaxQ6JiwPDbjh/0=";
   };
 
   checkInputs = [

@@ -19,13 +19,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.15.2";
+  version = "2.16.2";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wLzdRgbmQObxbSNs6sVTNtyL+Yy7zgZ68nUkzML7JkA=";
+    hash = "sha256-BwB6Ogowv8ZCSyi3bfjWc4bMLV+fQohnc7GzxHPLmj8=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,9 @@ buildPythonPackage rec {
     babel
     jupyter_server
     tomli
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optional (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
   checkInputs = [
     openapi-core
@@ -71,8 +74,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of server components for JupyterLab and JupyterLab like applications";
-    homepage = "https://jupyter.org";
+    homepage = "https://jupyterlab-server.readthedocs.io/";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

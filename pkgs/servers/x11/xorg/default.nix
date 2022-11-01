@@ -936,22 +936,6 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
-    pname = "libXaw3d";
-    version = "1.6.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
-      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcomposite = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     pname = "libXcomposite";
     version = "0.4.5";
@@ -1082,11 +1066,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     pname = "libXft";
-    version = "2.3.4";
+    version = "2.3.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXft-2.3.4.tar.bz2";
-      sha256 = "1pdbr6gzfvixc791pjf42i9gg8wvfq6cpq6sdca04h4i42mxmpjp";
+      url = "mirror://xorg/individual/lib/libXft-2.3.6.tar.xz";
+      sha256 = "08ihq0in7iy5bwrx71nhnlkj7k1ic34brjcqs2wbnf69kwqyg9k0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1992,7 +1976,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, libxcrypt, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     pname = "xdm";
     version = "1.1.12";
     builder = ./builder.sh;
@@ -2003,7 +1987,7 @@ lib.makeScope newScope (self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
+    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt libxcrypt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 

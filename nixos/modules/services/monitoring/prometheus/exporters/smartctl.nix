@@ -50,7 +50,7 @@ in {
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkOverride 100 (
+      DeviceAllow = lib.mkOverride 50 (
         if cfg.devices != [] then
           cfg.devices
         else [
@@ -66,10 +66,7 @@ in {
       ProtectProc = "invisible";
       ProcSubset = "pid";
       SupplementaryGroups = [ "disk" ];
-      SystemCallFilter = [
-        "@system-service"
-        "~@privileged @resources"
-      ];
+      SystemCallFilter = [ "@system-service" "~@privileged" ];
     };
   };
 }

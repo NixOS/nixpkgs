@@ -248,7 +248,7 @@ let
         taffybar
         tamarin-prover
         taskell
-        termonad-with-packages
+        termonad
         tldr-hs
         tweet-hs
         update-nix-fetchgit
@@ -359,13 +359,7 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = [
-        compilerNames.ghc884
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        # https://github.com/haskell/haskell-language-server/issues/3190
-      ];
+      haskell-language-server = released;
       hoogle = released;
       hlint = [
         compilerNames.ghc884
@@ -398,6 +392,9 @@ let
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
+        compilerNames.ghc924
+      ];
+      purescript = [
         compilerNames.ghc924
       ];
       purescript-cst = [

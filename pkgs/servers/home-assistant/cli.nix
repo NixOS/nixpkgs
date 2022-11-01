@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "home-assistant-cli";
     rev = version;
-    hash = "sha256-gtyW5FnpzUv/3TuBZ0LJXPxeQAkl7bf8M+K6RNATVm0=";
+    hash = "sha256-4OeHJ7icDZUOC5K4L0F0Nd9lbJPgdW4LCU0wniLvJ1Q=";
   };
 
   postPatch = ''

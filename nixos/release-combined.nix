@@ -55,6 +55,7 @@ in rec {
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
+        (onFullSupported "nixos.tests.acme")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosUsb")
         (onFullSupported "nixos.tests.boot-stage1")

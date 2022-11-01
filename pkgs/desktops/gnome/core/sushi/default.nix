@@ -8,7 +8,7 @@
 , gnome
 , gtksourceview4
 , gjs
-, libsoup
+, libsoup_3
 , webkitgtk_4_1
 , icu
 , wrapGAppsHook
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gtksourceview4
     gdk-pixbuf
     librsvg
-    libsoup
+    libsoup_3
     webkitgtk_4_1
     libepoxy
     gst_all_1.gstreamer

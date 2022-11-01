@@ -15,7 +15,7 @@
 , e2fsprogs
 , libsoup
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , gpgme
 , which
 , makeWrapper
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [

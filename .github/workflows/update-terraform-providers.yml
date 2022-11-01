@@ -23,7 +23,7 @@ jobs:
       - name: setup
         id: setup
         run: |
-          echo ::set-output name=title::"terraform-providers: update $(date -u +"%Y-%m-%d")"
+          echo "title=terraform-providers: update $(date -u +"%Y-%m-%d")" >> $GITHUB_OUTPUT
       - name: update terraform-providers
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

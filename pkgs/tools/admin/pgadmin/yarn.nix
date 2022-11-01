@@ -1610,6 +1610,14 @@
       };
     }
     {
+      name = "_babel_runtime___runtime_7.19.0.tgz";
+      path = fetchurl {
+        name = "_babel_runtime___runtime_7.19.0.tgz";
+        url  = "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz";
+        sha512 = "eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==";
+      };
+    }
+    {
       name = "_babel_template___template_7.14.5.tgz";
       path = fetchurl {
         name = "_babel_template___template_7.14.5.tgz";
@@ -2143,6 +2151,30 @@
         name = "_projectstorm_react_diagrams___react_diagrams_6.6.1.tgz";
         url  = "https://registry.yarnpkg.com/@projectstorm/react-diagrams/-/react-diagrams-6.6.1.tgz";
         sha512 = "tLSXfEf/dGFUN8JCCRMrYyIBhhn+eVw24xQodmtcReJxQpKa31EWh9CmJ6UEg7xUnabMG9f2plOPyJqyFssGTA==";
+      };
+    }
+    {
+      name = "_react_dnd_asap___asap_5.0.2.tgz";
+      path = fetchurl {
+        name = "_react_dnd_asap___asap_5.0.2.tgz";
+        url  = "https://registry.yarnpkg.com/@react-dnd/asap/-/asap-5.0.2.tgz";
+        sha512 = "WLyfoHvxhs0V9U+GTsGilGgf2QsPl6ZZ44fnv0/b8T3nQyvzxidxsg/ZltbWssbsRDlYW8UKSQMTGotuTotZ6A==";
+      };
+    }
+    {
+      name = "_react_dnd_invariant___invariant_4.0.2.tgz";
+      path = fetchurl {
+        name = "_react_dnd_invariant___invariant_4.0.2.tgz";
+        url  = "https://registry.yarnpkg.com/@react-dnd/invariant/-/invariant-4.0.2.tgz";
+        sha512 = "xKCTqAK/FFauOM9Ta2pswIyT3D8AQlfrYdOi/toTPEhqCuAs1v5tcJ3Y08Izh1cJ5Jchwy9SeAXmMg6zrKs2iw==";
+      };
+    }
+    {
+      name = "_react_dnd_shallowequal___shallowequal_4.0.2.tgz";
+      path = fetchurl {
+        name = "_react_dnd_shallowequal___shallowequal_4.0.2.tgz";
+        url  = "https://registry.yarnpkg.com/@react-dnd/shallowequal/-/shallowequal-4.0.2.tgz";
+        sha512 = "/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==";
       };
     }
     {
@@ -4831,6 +4863,14 @@
         name = "discontinuous_range___discontinuous_range_1.0.0.tgz";
         url  = "https://registry.yarnpkg.com/discontinuous-range/-/discontinuous-range-1.0.0.tgz";
         sha512 = "c68LpLbO+7kP/b1Hr1qs8/BJ09F5khZGTxqxZuhzxpmwJKOgRFHJWIb9/KmqnqHhLdO55aOxFH/EGBvUQbL/RQ==";
+      };
+    }
+    {
+      name = "dnd_core___dnd_core_16.0.1.tgz";
+      path = fetchurl {
+        name = "dnd_core___dnd_core_16.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/dnd-core/-/dnd-core-16.0.1.tgz";
+        sha512 = "HK294sl7tbw6F6IeuK16YSBUoorvHpY8RHO+9yFfaJyCDVb6n7PRcezrOEOa2SBCqiYpemh5Jx20ZcjKdFAVng==";
       };
     }
     {
@@ -8454,7 +8494,7 @@
       path = fetchurl {
         name = "moment_timezone___moment_timezone_0.5.37.tgz";
         url  = "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz";
-        sha256 = "1w1sq8m21v1widzhy1dfrf2ngv9a5yhq06igjsjlpl23vxmfmfir";
+        sha1 = "rfl/cZxORY/bEuK06HuL7J9O7x4=";
       };
     }
     {
@@ -10034,6 +10074,22 @@
         '';
   }
     {
+      name = "react_dnd_html5_backend___react_dnd_html5_backend_16.0.1.tgz";
+      path = fetchurl {
+        name = "react_dnd_html5_backend___react_dnd_html5_backend_16.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-16.0.1.tgz";
+        sha512 = "Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==";
+      };
+    }
+    {
+      name = "react_dnd___react_dnd_16.0.1.tgz";
+      path = fetchurl {
+        name = "react_dnd___react_dnd_16.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/react-dnd/-/react-dnd-16.0.1.tgz";
+        sha512 = "QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==";
+      };
+    }
+    {
       name = "react_dom___react_dom_16.14.0.tgz";
       path = fetchurl {
         name = "react_dom___react_dom_16.14.0.tgz";
@@ -10295,6 +10351,14 @@
         name = "redent___redent_4.0.0.tgz";
         url  = "https://registry.yarnpkg.com/redent/-/redent-4.0.0.tgz";
         sha512 = "tYkDkVVtYkSVhuQ4zBgfvciymHaeuel+zFKXShfDnFP5SyVEP7qo70Rf1jTOTCx3vGNAbnEi/xFkcfQVMIBWag==";
+      };
+    }
+    {
+      name = "redux___redux_4.2.0.tgz";
+      path = fetchurl {
+        name = "redux___redux_4.2.0.tgz";
+        url  = "https://registry.yarnpkg.com/redux/-/redux-4.2.0.tgz";
+        sha512 = "oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==";
       };
     }
     {
@@ -12239,8 +12303,8 @@
       let
         repo = fetchgit {
           url = "https://github.com/EnterpriseDB/wcDocker/";
-          rev = "40d025e0d86ee3cf058a52e01d2042113f134cdd";
-          sha256 = "0978f184lh2fkcxl6fjpn210vip8ci1plpdbsvd0ziz4b3zz8h45";
+          rev = "b4d58f29b3a308ab555085ee444fa7010aa4b991";
+          sha256 = "03hb9n6wkmj9dzs8fiv03krmy2kxhr1yqmqbrrza9jafbcbrap97";
         };
       in
         runCommand "wcDocker" { buildInputs = [gnutar]; } ''

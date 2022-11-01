@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.82.0";
+  version = "1.83.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JIl2WeveDoAHzqJ2cqMxpWeNf4yQC9fIdfECOJywJ2A=";
+    sha256 = "sha256-bc13aIo2gCHZfBRbi5CoPLcCGoNJgTuWJbCwqX/QgtU=";
   };
 
   vendorSha256 = null;
@@ -36,6 +36,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ yorickvp ivan ];
     changelog = "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v${version}";
-    platforms = [ "x86_64-linux" ];
   };
 }

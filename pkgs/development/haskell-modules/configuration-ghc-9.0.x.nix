@@ -53,12 +53,12 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
   cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # Jailbreaks & Version Updates
@@ -147,4 +147,7 @@ self: super: {
 
   # 2022-05-31: weeder 2.3.0 requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;
+
+  # Restrictive upper bound on base and containers
+  sv2v = doJailbreak super.sv2v;
 }

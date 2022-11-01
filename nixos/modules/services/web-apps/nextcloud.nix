@@ -148,6 +148,15 @@ in {
       default = 2;
       description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
+    logType = mkOption {
+      type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
+      default = "syslog";
+      description = lib.mdDoc ''
+        Logging backend to use.
+        systemd requires the php-systemd package to be added to services.nextcloud.phpExtraExtensions.
+        See the [nextcloud documentation](https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/logging_configuration.html) for details.
+      '';
+    };
     https = mkOption {
       type = types.bool;
       default = false;
@@ -156,7 +165,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud23" "nextcloud24" ];
+      relatedPackages = [ "nextcloud24" "nextcloud25" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -637,10 +646,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
-        ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
+        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -661,19 +669,13 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud24
+          else if versionOlder stateVersion "22.11" then nextcloud24
+          else nextcloud25
         );
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "24" then pkgs.php80
-        # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
-        #
-        # https://github.com/nextcloud/twofactor_totp/issues/1192
-        #
-        # else if versionOlder cfg.package.version "24" then pkgs.php80
-        # else pkgs.php81;
-        else pkgs.php80;
+        else pkgs.php81;
     }
 
     { assertions = [
@@ -765,7 +767,7 @@ in {
               'datadirectory' => '${datadir}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
-              'log_type' => 'syslog',
+              'log_type' => '${cfg.logType}',
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}

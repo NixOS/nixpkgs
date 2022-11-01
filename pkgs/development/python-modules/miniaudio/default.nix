@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.52";
+  version = "1.53";
 
   disabled = pythonOlder "3.6";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qy2FKzg02M1MwUwuPKmK8uGhCrR19Hyzg2YRmlHl67s=";
+    sha256 = "sha256-TB4V41GN48Q2ocsDM1uIyRziY+y8njRNoPxZpTqk+Tk=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [

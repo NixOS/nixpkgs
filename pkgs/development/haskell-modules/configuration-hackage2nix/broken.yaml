@@ -264,6 +264,7 @@ broken-packages:
   - avatar-generator
   - aviation-units
   - avl-static
+  - avro
   - avro-piper
   - avr-shake
   - avwx
@@ -387,7 +388,6 @@ broken-packages:
   - bind-marshal
   - binembed
   - bins
-  - binsm
   - bio
   - BiobaseBlast
   - BiobaseNewick
@@ -459,6 +459,7 @@ broken-packages:
   - Bravo
   - brians-brain
   - brick-dropdownmenu
+  - brick-panes
   - bricks-internal
   - brillig
   - broccoli
@@ -745,6 +746,7 @@ broken-packages:
   - codo-notation
   - coin
   - coinbase-pro
+  - cointracking-imports
   - collada-output
   - collapse-util
   - collections
@@ -860,7 +862,6 @@ broken-packages:
   - control-monad-failure-mtl
   - Control-Monad-ST2
   - contstuff
-  - copilot-c99
   - copilot-sbv
   - copr
   - coquina
@@ -878,6 +879,7 @@ broken-packages:
   - couchdb-conduit
   - couch-hs
   - counter
+  - country
   - courier
   - court
   - coverage
@@ -972,7 +974,6 @@ broken-packages:
   - database-study
   - data-check
   - data-combinator-gen
-  - data-compat
   - data-concurrent-queue
   - data-construction
   - data-constructors
@@ -1150,6 +1151,7 @@ broken-packages:
   - djinn-th
   - dmcc
   - dmenu
+  - dnf-repo
   - dns-patterns
   - dnsrbl
   - dnssd
@@ -1258,6 +1260,7 @@ broken-packages:
   - edit
   - edit-lenses
   - editline
+  - effectful-st
   - effect-handlers
   - effective-aspects
   - effect-monad
@@ -1341,7 +1344,6 @@ broken-packages:
   - ert
   - escape-artist
   - escoger
-  - espial
   - esqueleto-pgcrypto
   - ess
   - essence-of-live-coding-gloss-example
@@ -1359,6 +1361,8 @@ broken-packages:
   - eventful-sql-common
   - eventsource-api
   - eventstore
+  - eventuo11y
+  - eventuo11y-dsl
   - evoke
   - ewe
   - exact-cover
@@ -1393,7 +1397,6 @@ broken-packages:
   - extended-containers
   - extensible-effects-concurrent
   - extensible-skeleton
-  - extensions
   - Extra
   - extractelf
   - ez3
@@ -1769,7 +1772,6 @@ broken-packages:
   - glue
   - gluturtle
   - g-npm
-  - gnuidn
   - goa
   - goal-core
   - goatee
@@ -2001,7 +2003,6 @@ broken-packages:
   - haskell-igraph
   - haskell-import-graph
   - haskell-in-space
-  - haskellish
   - haskell-kubernetes
   - HaskellLM
   - haskell-lsp
@@ -2064,6 +2065,7 @@ broken-packages:
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
+  - hasql-transaction-io
   - hastache
   - haste
   - haste-prim
@@ -2285,6 +2287,7 @@ broken-packages:
   - hnn
   - hnop
   - hoauth
+  - hoauth2-providers
   - hoauth2-tutorial
   - hobbes
   - hobbits
@@ -2353,6 +2356,7 @@ broken-packages:
   - hquantlib
   - hquery
   - hR
+  - h-raylib
   - hreq-core
   - h-reversi
   - hricket
@@ -2423,6 +2427,7 @@ broken-packages:
   - hslogger-reader
   - hslogger-template
   - hs-logo
+  - hslua-list
   - hsluv-haskell
   - hsmagick
   - HSmarty
@@ -2510,7 +2515,6 @@ broken-packages:
   - http-client-request-modifiers
   - http-client-session
   - http-client-streams
-  - http-client-websockets
   - http-conduit-browser
   - http-conduit-downloader
   - http-directory
@@ -2562,6 +2566,7 @@ broken-packages:
   - hw-playground-linear
   - hwsl2
   - hx
+  - hxmppc
   - HXQ
   - hxt-cache
   - hxt-pickle-utils
@@ -2632,6 +2637,7 @@ broken-packages:
   - imports
   - impossible
   - imprint
+  - incipit
   - indentation-core
   - index-core
   - indexed-containers
@@ -3340,6 +3346,7 @@ broken-packages:
   - monoid-owns
   - monoidplus
   - monoids
+  - monomer-hagrid
   - monopati
   - monus
   - monzo
@@ -3420,6 +3427,7 @@ broken-packages:
   - mzv
   - n2o-protocols
   - nagios-plugin-ekg
+  - named-binary-tag
   - named-lock
   - named-servant
   - named-sop
@@ -3590,6 +3598,8 @@ broken-packages:
   - Omega
   - om-elm
   - om-fail
+  - om-fork
+  - om-http
   - om-http-logging
   - omnifmt
   - on-a-horse
@@ -3965,6 +3975,7 @@ broken-packages:
   - PortFusion
   - portray-pretty
   - portray-prettyprinter
+  - posit
   - positron
   - posix-acl
   - posix-api
@@ -4104,6 +4115,7 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
+  - purescript
   - purescript-tsd-gen
   - pure-zlib
   - pushbullet
@@ -4146,6 +4158,7 @@ broken-packages:
   - quibble-core
   - QuickAnnotate
   - quickcheck-arbitrary-template
+  - quickcheck-lockstep
   - quickcheck-property-comb
   - quickcheck-property-monad
   - quickcheck-rematch
@@ -4430,6 +4443,8 @@ broken-packages:
   - sandman
   - sarasvati
   - sat
+  - satchmo-backends
+  - satchmo-minisat
   - Saturnin
   - satyros
   - savage
@@ -4452,7 +4467,6 @@ broken-packages:
   - scottish
   - scotty-binding-play
   - scotty-blaze
-  - scotty-form
   - scotty-format
   - scotty-params-parser
   - scotty-resource
@@ -4472,6 +4486,7 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
+  - SDL-mpeg
   - sdr
   - seacat
   - seakale
@@ -4700,7 +4715,6 @@ broken-packages:
   - smiles
   - smoothie
   - smsaero
-  - smt2-parser
   - smt-lib
   - SmtLib
   - smtlib2
@@ -4726,7 +4740,6 @@ broken-packages:
   - snaplet-mandrill
   - snaplet-mongodb-minimalistic
   - snaplet-postgresql-simple
-  - snaplet-purescript
   - snaplet-redis
   - snaplet-sass
   - snaplet-scoped-session
@@ -4943,7 +4956,6 @@ broken-packages:
   - supervisors
   - supplemented
   - surjective
-  - sv2v
   - sv-core
   - SVD2HS
   - svfactor
@@ -4957,6 +4969,7 @@ broken-packages:
   - swagger
   - swagger-petstore
   - swagger-test
+  - swarm
   - swearjure
   - swf
   - swift-lda
@@ -5003,7 +5016,6 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
-  - taffybar
   - tag-bits
   - tagged-exception-core
   - tagged-timers
@@ -5083,6 +5095,7 @@ broken-packages:
   - test-framework-skip
   - test-framework-testing-feat
   - test-framework-th-prime
+  - test-lib
   - testloop
   - testpack
   - testpattern
@@ -5360,9 +5373,13 @@ broken-packages:
   - unescaping-print
   - unfix-binders
   - unfoldable
+  - unicode-data-names
+  - unicode-data-scripts
+  - unicode-data-security
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
+  - union
   - union-map
   - uniprot-kb
   - uniqueid
@@ -5430,12 +5447,10 @@ broken-packages:
   - uuagc-diagrams
   - uu-cco
   - uuid-aeson
-  - uuid-bytes
   - uvector
   - uxadt
   - vabal-lib
   - vacuum
-  - vado
   - validated-types
   - Validation
   - validations
@@ -5672,6 +5687,7 @@ broken-packages:
   - xleb
   - xls
   - xlsior
+  - xlsx-tabular
   - xlsx-templater
   - xml2json
   - xml-conduit-decode

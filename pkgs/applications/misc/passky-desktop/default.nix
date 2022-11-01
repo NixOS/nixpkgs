@@ -2,16 +2,16 @@
 
 let
   pname = "passky-desktop";
-  version = "5.0.0";
+  version = "7.1.0";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/Rabbit-Company/Passky-Desktop/releases/download/v${version}/Passky-${version}.AppImage";
-      sha256 = "19sy9y2bcxrf10ifszinh4yn32q3032h3d1qxm046zffzl069807";
+      sha256 = "1xnhrmmm018mmyzjq05mhbf673f0n81fh1k3kbfarbgk2kbwpq6y";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/Rabbit-Company/Passky-Desktop/releases/download/v${version}/Passky-${version}.dmg";
-      sha256 = "sha256-lclJOaYe+2XeKhJb2WcOAzjBMzK3YEmlS4rXuRUJYU0=";
+      sha256 = "0mm7hk4v7zvpjdqyw3nhk33x72j0gh3f59bx3q18azlm4dr61r2d";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

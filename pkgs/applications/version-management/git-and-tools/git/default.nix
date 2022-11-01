@@ -28,7 +28,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.37.3";
+  version = "2.38.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "sha256-gUZB1/YWWc+8F4JdBGJJnKFAPjn/U9dqhRIFDmSD6Ho=";
+    sha256 = "sha256-kj6t4msYFN540GvajgqfXai3xLMEs/kFD/tGTwMQMgo=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -338,6 +338,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Flaky tests:
     disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
+
+    # Fails reproducibly on ZFS on Linux with formD normalization
+    disable_test t0021-conversion
+    disable_test t3910-mac-os-precompose
 
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available

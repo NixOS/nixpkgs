@@ -7,7 +7,7 @@
 , pkg-config
 # not native
 , gdal
-, wxGTK31-gtk3
+, wxGTK31
 , proj
 , dxflib
 , curl
@@ -56,7 +56,7 @@ mkDerivation rec {
     libsvm
     hdf5
     gdal
-    wxGTK31-gtk3
+    wxGTK31
     proj
     libharu
     opencv

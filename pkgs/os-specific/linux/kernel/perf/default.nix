@@ -74,9 +74,11 @@ stdenv.mkDerivation {
   installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
   preFixup = ''
-    # pull in 'objdump' into PATH to make annotations work
+    # Pull in 'objdump' into PATH to make annotations work.
+    # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
+    # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
-      --prefix PATH : "${binutils-unwrapped}/bin"
+      --prefix PATH : ${lib.makeBinPath ([ binutils-unwrapped ] ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]))}
   '';
 
   meta = with lib; {
