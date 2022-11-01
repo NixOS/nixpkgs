@@ -31888,6 +31888,8 @@ with pkgs;
 
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
+  lightdm-mobile-greeter = callPackage ../applications/display-managers/lightdm-mobile-greeter { };
+
   lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter {
     conf = config.lightdm-tiny-greeter.conf or "";
   };
