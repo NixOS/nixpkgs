@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.21.1ubuntu2.1";
+  version = "1.21.9ubuntu1";
 
   src = fetchurl {
     url = "mirror://ubuntu/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "sha256-YvVQbQn2MhOIOE43VO0H1QsKIYCsjNAFzKMoFeSrqZk=";
+    sha256 = "sha256-TW1QQEqzf2RgV+1RneBlm+jpdZ12bbXSZLoc+LGPuxY=";
   };
 
   configureFlags = [
