@@ -24044,12 +24044,6 @@ with pkgs;
 
   nginx-sso = callPackage ../servers/nginx-sso { };
 
-  percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix {
-    stdenv = gcc10StdenvCompat;
-    openssl = openssl_1_1;
-  };
-  percona-server = percona-server56;
-
   immudb = callPackage ../servers/nosql/immudb { };
 
   influxdb = callPackage ../servers/nosql/influxdb { };

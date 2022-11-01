@@ -852,6 +852,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>percona-server56</literal> has been removed. Please
+          migrate to <literal>mysql</literal> or
+          <literal>mariadb</literal> if possible.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>stylua</literal> no longer accepts
           <literal>lua52Support</literal> and
           <literal>luauSupport</literal> overrides, use
