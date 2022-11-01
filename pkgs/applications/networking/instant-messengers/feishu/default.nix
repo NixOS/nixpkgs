@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     cups
     libXdamage
     libdrm
+    libgcrypt
     libxshmfence
     mesa
     nspr
