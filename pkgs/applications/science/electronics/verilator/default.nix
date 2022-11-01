@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , perl, flex, bison, python3, autoconf
+, which, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -16,20 +17,21 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   buildInputs = [ perl ];
   nativeBuildInputs = [ flex bison python3 autoconf ];
+  checkInputs = [ which ];
 
-  # these tests need some interpreter paths patched early on...
-  # see https://github.com/NixOS/nix/issues/1205
-  doCheck = false;
+  doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
-  preConfigure = ''
-    autoconf
-  '';
+  preConfigure = "autoconf";
 
-  postPatch = ''
+  preCheck = ''
     patchShebangs \
       src/flexfix \
-      src/vlcovgen
+      src/vlcovgen \
+      bin/verilator \
+      bin/verilator_coverage \
+      test_regress/driver.pl \
+      test_regress/t/*.pl
   '';
 
   meta = with lib; {
