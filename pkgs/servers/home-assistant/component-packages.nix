@@ -1605,7 +1605,8 @@
     ]; # missing inputs: lacrosse-view
     "lametric" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: demetriek
+      demetriek
+    ];
     "landisgyr_heat_meter" = ps: with ps; [
       ultraheat-api
     ];
@@ -3914,6 +3915,7 @@
     "konnected"
     "kraken"
     "kulersky"
+    "lametric"
     "landisgyr_heat_meter"
     "lastfm"
     "launch_library"
