@@ -14,6 +14,9 @@ let
   watchDir = "watchdir";
   settingsFormat = pkgs.formats.json {};
   settingsFile = settingsFormat.generate "settings.json" cfg.settings;
+  bootstrapFile = builtins.toFile "dht.bootstrap" (lib.concatMapStrings
+    (node: "${node.host} ${toString node.port}\n")
+    cfg.dhtBootstrapNodes);
 in
 {
   imports = [
@@ -249,6 +252,29 @@ in
           For instance, SSH sessions may time out more easily.
         '';
       };
+
+      dhtBootstrapNodes = mkOption {
+        type = with types;
+          listOf (submodule {
+            options = {
+              host = mkOption { type = str; description = "Hostname or IP address."; };
+              port = mkOption { type = port; description = "Port number."; };
+            };
+          });
+        default = [ ];
+        description = "List of nodes from which to bootstap into the DHT.";
+        example = literalExpression ''
+          [
+            { host = "dht.transmissionbt.com";
+              port = 6881;
+            }
+            { host = config.services.magnetico.crawler.address;
+              port = config.services.magnetico.crawler.port;
+            }
+          ]
+        '';
+      };
+
     };
   };
 
@@ -286,6 +312,9 @@ in
           ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
           install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
            '${cfg.home}/${settingsDir}/settings.json'
+          ${lib.optionalString (cfg.dhtBootstrapNodes != [ ]) ''
+            ln -sf ${bootstrapFile} ${cfg.home}/${settingsDir}
+          ''}
         '')];
         ExecStart="${pkgs.transmission}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
