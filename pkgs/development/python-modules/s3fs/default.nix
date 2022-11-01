@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2022.8.2";
+  version = "2022.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PKBwGomp4SWijekIKdGflvQd2x2LQ3kHbCntgsSvhs0=";
+    hash = "sha256-6N64DyC9CyBZFBuHT9udauuMzjUxLqXywCsiWnigBAY=";
   };
 
   buildInputs = [
@@ -42,8 +42,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    homepage = "https://github.com/dask/s3fs/";
     description = "A Pythonic file interface for S3";
+    homepage = "https://github.com/fsspec/s3fs";
+    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };
