@@ -1,25 +1,34 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "kubemqctl";
-  version = "3.5.1";
+  version = "3.6.1";
+
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0daqvd1y6b87xvnpdl2k0sa91zdmp48r0pgp6dvnb2l44ml8a4z0";
+    sha256 = "sha256-z6Xvxw2mPiwgRQJhwgDt3YmmVu8aLVwP8ih2aOtGS3o=";
   };
+
+  vendorSha256 = "sha256-vRI/KTgxvNiVmIWf3XgA0T7IW+IRb5UAYCGtAUEVt+w=";
+
+  patches = [
+    # Add missing go.sum
+    (fetchpatch {
+      url = "https://github.com/kubemq-io/kubemqctl/pull/22/commits/18db7fc8aa8dfdfdea4077cf471d8469740c63ca.patch";
+      sha256 = "sha256-nLme6uFqGdkp/w/s8EIo/vekDbZBzhgbdzNRn/wg5yA=";
+    })
+  ];
 
   ldflags = [ "-w" "-s" "-X main.version=${version}" ];
 
   doCheck = false; # TODO tests are failing
 
-  vendorSha256 = "1agn6i7cnsb5igvvbjzlaa5fgssr5h7h25y440q44bk16jxk6s74";
-
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/kubemq-io/kubemqctl";
     description = "Kubemqctl is a command line interface (CLI) for Kubemq Kubernetes Message Broker.";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ brianmcgee ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ brianmcgee ];
   };
 }
