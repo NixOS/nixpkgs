@@ -6069,6 +6069,8 @@ self: super: with self; {
 
   nessclient = callPackage ../development/python-modules/nessclient { };
 
+  nest = toPythonModule(pkgs.nest-mpi.override { withPython = true; python3 = python; });
+
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   nested-lookup = callPackage ../development/python-modules/nested-lookup { };
