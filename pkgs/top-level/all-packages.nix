@@ -36343,6 +36343,10 @@ with pkgs;
 
   n3 = callPackage ../applications/science/biology/N3 { };
 
+  nest = callPackage ../applications/science/biology/nest { };
+
+  nest-mpi = callPackage ../applications/science/biology/nest { withMpi = true; };
+
   neuron = callPackage ../applications/science/biology/neuron { python = null; };
 
   neuron-mpi = neuron.override {useMpi = true; };
