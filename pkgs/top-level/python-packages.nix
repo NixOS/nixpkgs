@@ -12132,8 +12132,6 @@ self: super: with self; {
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
 
-  yutto = callPackage ../tools/misc/yutto { };
-
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
   z3 = (toPythonModule (pkgs.z3.override {

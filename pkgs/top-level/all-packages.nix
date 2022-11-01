@@ -33199,7 +33199,7 @@ with pkgs;
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
 
-  yutto = with python3.pkgs; toPythonApplication yutto;
+  yutto = callPackage ../tools/misc/yutto { };
 
   yuview = libsForQt5.yuview;
 
