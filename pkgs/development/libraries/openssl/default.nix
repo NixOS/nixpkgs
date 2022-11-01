@@ -185,7 +185,7 @@ let
 in {
 
 
-  openssl_1_1 = common rec {
+  openssl_1_1 = common {
     version = "1.1.1s";
     sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
     patches = [
@@ -194,8 +194,6 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
-    ] ++ lib.optionals (stdenv.isDarwin && (builtins.substring 5 5 version) < "m") [
-      ./1.1/macos-yosemite-compat.patch
     ];
     withDocs = true;
   };
