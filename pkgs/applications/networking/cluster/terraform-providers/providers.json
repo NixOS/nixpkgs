@@ -651,13 +651,13 @@
     "version": "1.14.0"
   },
   "kubernetes": {
-    "hash": "sha256-E8ew1MwQa1DVYZH//ePjZXLQdyRN7Q0yomH0ma0neks=",
+    "hash": "sha256-93cGlfYUH4VTdDYbtGySOUw5Kak7hKs0gxLCT0Bxca4=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.14.0",
+    "rev": "v2.15.0",
     "vendorHash": null,
-    "version": "2.14.0"
+    "version": "2.15.0"
   },
   "launchdarkly": {
     "hash": "sha256-AsFtlCIGvlG8c+PilhMhaMowaea/g1+IXYzEiIIbZ44=",
