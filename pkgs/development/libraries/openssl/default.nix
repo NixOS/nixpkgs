@@ -213,8 +213,8 @@ in {
 
 
   openssl_1_1 = common rec {
-    version = "1.1.1q";
-    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
+    version = "1.1.1s";
+    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
