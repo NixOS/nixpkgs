@@ -9245,10 +9245,9 @@ with pkgs;
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  inherit (callPackage ../tools/networking/miniupnpc
-            { inherit (darwin) cctools; })
-    miniupnpc_1 miniupnpc_2;
-  miniupnpc = miniupnpc_1;
+  miniupnpc = callPackage ../tools/networking/miniupnpc {
+    inherit (darwin) cctools;
+  };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
@@ -28789,7 +28788,7 @@ with pkgs;
   gum = callPackage ../applications/misc/gum { };
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
-    inherit miniupnpc_2 swftools;
+    inherit miniupnpc swftools;
     inherit (qt5) wrapQtAppsHook;
   };
 
@@ -33300,21 +33299,18 @@ with pkgs;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
     boost = boost17x;
-    miniupnpc = miniupnpc_2;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind = callPackage ../applications/blockchains/bitcoin {
     boost = boost17x;
-    miniupnpc = miniupnpc_2;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
     boost = boost17x;
-    miniupnpc = miniupnpc_2;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -33402,13 +33398,11 @@ with pkgs;
   };
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements {
-    miniupnpc = miniupnpc_2;
     withGui = true;
     boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
-    miniupnpc = miniupnpc_2;
     withGui = false;
     boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -33567,7 +33561,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  particl-core = callPackage ../applications/blockchains/particl-core { miniupnpc = miniupnpc_2; };
+  particl-core = callPackage ../applications/blockchains/particl-core { };
 
   quorum = callPackage ../applications/blockchains/quorum { };
 
