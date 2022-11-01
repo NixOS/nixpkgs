@@ -59,14 +59,13 @@ stdenv.mkDerivation rec {
     "--enable-kms-egl-platform"
     "--enable-wayland-egl-platform"
     "--enable-wayland-egl-server"
-  ] ++ lib.optionals gstreamerSupport [
-    "--enable-cogl-gst"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
     "--enable-gles1"
     "--enable-gles2"
   ] ++ lib.optionals stdenv.isDarwin [
     "--disable-glx"
     "--without-x"
+  ] ++ lib.optionals gstreamerSupport [
+    "--enable-cogl-gst"
   ];
 
   # TODO: this shouldn't propagate so many things
