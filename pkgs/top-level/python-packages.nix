@@ -4053,6 +4053,8 @@ self: super: with self; {
 
   gym = callPackage ../development/python-modules/gym { };
 
+  gym-notices = callPackage ../development/python-modules/gym-notices { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   h11 = callPackage ../development/python-modules/h11 { };
