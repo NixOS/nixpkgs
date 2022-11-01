@@ -62,6 +62,11 @@ patchShebangs() {
         fi
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
+            # Support the simple case where env is invoked with only the “-S”
+            # option.
+            if [[ $arg0 == "-S" ]]; then
+                read -r arg0 args <<< "${args}"
+            fi
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
             # - environment variables: foo=bar

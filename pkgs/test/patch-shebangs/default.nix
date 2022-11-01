@@ -29,9 +29,22 @@ let
         assertion = "grep \"^#!$NIX_STORE/path/to/sh\" $out/bin/test > /dev/null";
       };
     };
+
+    handles-env-S = stdenv.mkDerivation {
+      name = "handles-env-S";
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        echo "#!/usr/bin/env -S bash -e -ux" > $out/bin/test
+        chmod +x $out/bin/test
+      '';
+      passthru = {
+        assertion = "grep -E \"^#!$NIX_STORE/[^/]+/bin/bash -e -ux\" $out/bin/test > /dev/null";
+      };
+    };
   };
 in runCommand "patch-shebangs-test" {
-  passthru = { inherit (tests) bad-shebang ignores-nix-store; };
+  passthru = { inherit (tests) bad-shebang ignores-nix-store handles-env-S; };
   meta.platforms = lib.platforms.all;
 } ''
   validate() {
