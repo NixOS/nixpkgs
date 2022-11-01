@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-1WOlAm/HXSL6QK0Kd1mnFEZxxpMseTG+6WzgMNWt+RA=";
   };
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace src/Settings.cpp src/GuiMidiSetupDialog.cpp \
       --replace "/usr/share/soundfonts" "${soundfont-fluid}/share/soundfonts" \
       --replace "FluidR3_GM.sf2" "FluidR3_GM2-2.sf2"
