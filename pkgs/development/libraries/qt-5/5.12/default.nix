@@ -81,7 +81,11 @@ let
         sha256 = "0crkw3j1iwdc1pbf5dhar0b4q3h5gs2q1sika8m12y02yk3ns697";
       })
     ];
-    qtdeclarative = [ ./qtdeclarative.patch ];
+    qtdeclarative = [
+      ./qtdeclarative.patch
+      # prevent headaches from stale qmlcache data
+      ./qtdeclarative-default-disable-qmlcache.patch
+    ];
     qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];

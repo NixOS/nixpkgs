@@ -16,6 +16,10 @@ qtModule {
     "-DQT6_INSTALL_PREFIX=${placeholder "out"}"
     "-DQT_INSTALL_PREFIX=${placeholder "out"}"
   ];
+  patches = [
+    # prevent headaches from stale qmlcache data
+    ../patches/qtdeclarative-default-disable-qmlcache.patch
+  ];
   postInstall = ''
     substituteInPlace "$out/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake" \
       --replace ''\'''${QT6_INSTALL_PREFIX}' "$dev"
