@@ -14,7 +14,7 @@
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , recurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
-, fetchFromSavannah, fetchFromBitbucket
+, fetchFromSavannah, fetchFromBitbucket, tzdata
 
   # macOS dependencies for NS and macPort
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
@@ -235,6 +235,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
   postFixup = lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
       patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
+      wrapProgram $out/bin/emacs --set TZDIR ${tzdata}/share/zoneinfo
   '';
 
   passthru = {
