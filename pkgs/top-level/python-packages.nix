@@ -5259,6 +5259,8 @@ self: super: with self; {
 
   lightning = callPackage ../development/python-modules/lightning { };
 
+  lightning-utilities = callPackage ../development/python-modules/lightning-utilities { };
+
   lightparam = callPackage ../development/python-modules/lightparam { };
 
   lightwave = callPackage ../development/python-modules/lightwave { };
