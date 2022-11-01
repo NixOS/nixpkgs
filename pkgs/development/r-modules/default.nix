@@ -1324,10 +1324,6 @@ let
     Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
       propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
     });
-
-    RNifti = old.RNifti.overrideDerivation (attrs: {
-      patches = [ ./patches/RNifti.patch ];
-    });
   };
 in
   self
