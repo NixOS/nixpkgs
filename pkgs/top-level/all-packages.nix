@@ -23608,6 +23608,21 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  ical2orgpy = callPackage ../applications/misc/ical2orgpy {
+    inherit (python3Packages)
+    buildPythonApplication
+    pytestCheckHook
+    pbr
+    click
+    future
+    icalendar
+    pytz
+    tzlocal
+    recurring-ical-events
+    freezegun
+    pyyaml;
+  };
+
   ic-keysmith = callPackage ../tools/security/ic-keysmith { };
 
   icecream = callPackage ../servers/icecream { };
