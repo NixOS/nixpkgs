@@ -16480,7 +16480,7 @@ with pkgs;
   # packageOverrides to set extraConfig.
   #
   # Example using Nix daemon (i.e. multiuser Nix install or on NixOS):
-  #    packageOverrides = pkgs: {
+  #   packageOverrides = pkgs: {
   #     ccacheWrapper = pkgs.ccacheWrapper.override {
   #       extraConfig = ''
   #         export CCACHE_COMPRESS=1
@@ -16488,6 +16488,7 @@ with pkgs;
   #         export CCACHE_UMASK=007
   #       '';
   #     };
+  #   }
   # You can use a different directory, but whichever directory you choose
   # should be owned by user root, group nixbld with permissions 0770.
   ccacheWrapper = makeOverridable ({ extraConfig, cc }:
@@ -16723,16 +16724,17 @@ with pkgs;
 
   # distccWrapper: wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
-  #    replaceStdenv = { pkgs }: pkgs.distccStdenv;
+  #   replaceStdenv = { pkgs }: pkgs.distccStdenv;
   # But if you build in chroot, a default 'nix' will create
   # a new net namespace, and won't have network access.
   # You can use an override in packageOverrides to set extraConfig:
-  #    packageOverrides = pkgs: {
+  #   packageOverrides = pkgs: {
   #     distccWrapper = pkgs.distccWrapper.override {
   #       extraConfig = ''
   #         DISTCC_HOSTS="myhost1 myhost2"
   #       '';
   #     };
+  #   }
   #
   distccWrapper = makeOverridable ({ extraConfig ? "" }:
     wrapCC (distcc.links extraConfig)) {};
