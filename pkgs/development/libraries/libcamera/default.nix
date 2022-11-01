@@ -85,6 +85,17 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
 
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
+
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
