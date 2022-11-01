@@ -17845,6 +17845,8 @@ with pkgs;
 
   nap = callPackage ../development/tools/nap { };
 
+  nex = callPackage ../development/tools/parsing/nex {};
+
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
