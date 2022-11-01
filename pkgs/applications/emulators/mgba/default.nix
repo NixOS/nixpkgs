@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, copyDesktopItems
 , ffmpeg
 , imagemagick
 , libedit
@@ -11,7 +10,6 @@
 , libepoxy
 , libzip
 , lua
-, makeDesktopItem
 , minizip
 , pkg-config
 , qtbase
@@ -33,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     pkg-config
     wrapQtAppsHook
   ];
@@ -51,19 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "mgba";
-      exec = "mgba-qt";
-      icon = "mgba";
-      comment = "A Game Boy Advance Emulator";
-      desktopName = "mgba";
-      genericName = "Game Boy Advance Emulator";
-      categories = [ "Game" "Emulator" ];
-      startupNotify = false;
-    })
   ];
 
   meta = with lib; {
