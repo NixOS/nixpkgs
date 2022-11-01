@@ -236,7 +236,7 @@ in (buildEnv {
       faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -ini -jobname=tex -progname=tex tex.ini
       cd -
     fi
-    if [[ -d share/texmf-var/web2c/luahbtex ]]
+    if [[ -f share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
     then
       cd share/texmf-var/web2c/luahbtex
       faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
