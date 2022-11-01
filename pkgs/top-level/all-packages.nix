@@ -14743,6 +14743,8 @@ with pkgs;
 
   nasmfmt = callPackage ../development/tools/nasmfmt { };
 
+  nqc = callPackage ../development/compilers/nqc { };
+
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
   obliv-c = callPackage ../development/compilers/obliv-c
