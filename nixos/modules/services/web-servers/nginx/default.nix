@@ -357,7 +357,8 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${acmeLocation}
+          ${optionalString (!(hasSSL && vhost.forceSSL)) acmeLocation}
+          ${optionalString (!vhost.forceSSL) acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             location / {
@@ -997,6 +998,13 @@ in
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+        '';
+      }
+
+      {
+        assertion = all (host: !(host.enableACME && host.onlySSL)) (attrValues virtualHosts);
+        message = ''
+          Option services.nginx.service.virtualHosts.<name>.enableACME requires an active host with port 80.
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
