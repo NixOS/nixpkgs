@@ -1084,13 +1084,13 @@
     "version": "0.7.1"
   },
   "spotinst": {
-    "hash": "sha256-D/cLkMAZwjJoaliUmfiLAn6uY1rNt1vu6QS5mQmBQ0s=",
+    "hash": "sha256-mcj16B7VM5mc5UUXSLdcGApPac6xPU86H0lgpeR1FMs=",
     "owner": "spotinst",
     "provider-source-address": "registry.terraform.io/spotinst/spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.85.1",
-    "vendorHash": "sha256-BDYX/4D3R2A1w3k14mON/2KZUg2kPbwePXQQpVanqdU=",
-    "version": "1.85.1"
+    "rev": "v1.86.0",
+    "vendorHash": "sha256-INJLhHiMs/bk3Y8/shtQaW10bUnuhCXdTa8wCNZf0+U=",
+    "version": "1.86.0"
   },
   "stackpath": {
     "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
