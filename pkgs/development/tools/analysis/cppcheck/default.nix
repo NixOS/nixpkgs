@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "danmar";
     repo = "cppcheck";
     rev = version;
-    sha256 = "sha256-8vwuNK7qQg+pkUnWpEe8272BuHJUaidm8MoGsXVt1X8=";
+    hash = "sha256-bKZOAGInks26NmzlKo1T8NREO9xoF8ZsssNDzyTJwlU=";
   };
 
   buildInputs = [ pcre
