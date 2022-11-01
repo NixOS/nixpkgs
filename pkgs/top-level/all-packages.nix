@@ -1503,6 +1503,8 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
+  cemu = callPackage ../applications/emulators/cemu { };
+
   cen64 = callPackage ../applications/emulators/cen64 { };
 
   citra-canary = callPackage ../applications/emulators/citra {
@@ -13070,6 +13072,8 @@ with pkgs;
 
   yj = callPackage ../development/tools/yj { };
 
+  zarchive = callPackage ../tools/archivers/zarchive { };
+
   zprint = callPackage ../development/tools/zprint { };
 
   yle-dl = callPackage ../tools/misc/yle-dl {};
@@ -18203,6 +18207,8 @@ with pkgs;
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
   cachix = haskell.lib.compose.justStaticExecutables haskellPackages.cachix;
+
+  cubeb = callPackage ../development/libraries/audio/cubeb { };
 
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
@@ -36440,7 +36446,7 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hyfetch = python3Packages.callPackage ../tools/misc/hyfetch { };
+  hyfetch = callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;
