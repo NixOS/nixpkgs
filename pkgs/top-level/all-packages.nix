@@ -5129,6 +5129,8 @@ with pkgs;
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
+  bomber-go = callPackage ../development/tools/bomber-go { };
+
   bomutils = callPackage ../tools/archivers/bomutils { };
 
   boofuzz= callPackage ../tools/security/boofuzz { };
