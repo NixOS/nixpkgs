@@ -33,6 +33,10 @@ let
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
 
+      # Google's Multigenerational LRU framework
+      LRU_GEN = yes;
+      LRU_GEN_ENABLED = yes;
+
       # FQ-PIE Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_PIE = yes;
@@ -43,6 +47,11 @@ let
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
+
+      # Preemptive Full Tickless Kernel at 500Hz
+      HZ = freeform "500";
+      HZ_500 = yes;
+      HZ_1000 = no;
     };
 
     extraMeta = {
