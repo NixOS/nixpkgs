@@ -552,13 +552,13 @@
     "version": "3.2.0"
   },
   "huaweicloud": {
-    "hash": "sha256-QBRnlBR+gPMy9gtM2P93Lot4GDW94z7B4BgYs+lT5IQ=",
+    "hash": "sha256-cr7xV7Z4UU+kRykVSOKeuXDiHQPL4CsCJVXf2uTZOms=",
     "owner": "huaweicloud",
     "provider-source-address": "registry.terraform.io/huaweicloud/huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.41.1",
+    "rev": "v1.42.0",
     "vendorHash": null,
-    "version": "1.41.1"
+    "version": "1.42.0"
   },
   "huaweicloudstack": {
     "hash": "sha256-WSJDp+LFjVPquQVMgib/YZV35kktLH2vMCIZJWqakXs=",
