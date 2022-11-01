@@ -1365,6 +1365,8 @@ with pkgs;
 
   license-generator = callPackage ../tools/misc/license-generator { };
 
+  linuxdeployqt = libsForQt5.callPackage ../development/tools/linuxdeployqt { };
+
   linux-router = callPackage ../tools/networking/linux-router { };
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
