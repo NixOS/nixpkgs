@@ -10,7 +10,7 @@
 , wrapQtAppsHook ? null
 , boost
 , libevent
-, miniupnpc_2
+, miniupnpc
 , zeromq
 , zlib
 , db53
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ boost libevent miniupnpc_2 zeromq zlib ]
+  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ lib.optionals withWallet [ db53 sqlite ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
