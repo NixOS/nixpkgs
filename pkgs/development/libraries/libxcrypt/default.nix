@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
-  version = "4.4.29";
+  version = "4.4.30";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
-    sha256 = "sha256-de48/0ghSYxSNWOCxKHfV5mhvw1WrF6pTZVCt87p94Y=";
+    sha256 = "sha256-s2Z/C6hdqtavJGukCQ++UxY62TyLaioSV9IqeLt87ro=";
   };
 
   outputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) login shadow;
