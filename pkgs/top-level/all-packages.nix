@@ -1431,6 +1431,8 @@ with pkgs;
 
   mnc = callPackage ../tools/misc/mnc { };
 
+  mgmt = callPackage ../applications/system/mgmt {};
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   nominatim = callPackage ../servers/nominatim { };
