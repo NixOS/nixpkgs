@@ -2,6 +2,7 @@
 , fetchFromSourcehut
 , buildPythonPackage
 , srht
+, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
+    pyyaml
   ];
 
   preBuild = ''
