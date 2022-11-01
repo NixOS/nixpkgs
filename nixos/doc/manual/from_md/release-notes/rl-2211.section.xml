@@ -376,6 +376,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
+          a small and easy HTTP server based on thttpd. Available as
+          <link linkend="opt-services.merecat.enable">services.merecat</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
           IMAP/SMTP autodiscover server. Available as
           <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
@@ -712,6 +719,16 @@
           being abandoned by the upstream. It is recommended to use
           <literal>awscli</literal> or <literal>awscli2</literal>
           instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="https://ce-programming.github.io/CEmu">CEmu
+          TI-84 Plus CE emulator</link> package has been renamed to
+          <literal>cemu-ti</literal>. The
+          <link xlink:href="https://cemu.info">Cemu Wii U
+          emulator</link> is now packaged as <literal>cemu</literal>.
         </para>
       </listitem>
       <listitem>

@@ -1503,6 +1503,8 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
+  cemu = callPackage ../applications/emulators/cemu { };
+
   cen64 = callPackage ../applications/emulators/cen64 { };
 
   citra-canary = callPackage ../applications/emulators/citra {
@@ -1583,7 +1585,7 @@ with pkgs;
 
   maiko = callPackage ../applications/emulators/maiko { };
 
-  mame = libsForQt514.callPackage ../applications/emulators/mame {
+  mame = libsForQt5.callPackage ../applications/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
   };
 
@@ -4018,6 +4020,8 @@ with pkgs;
 
   frawk = callPackage ../tools/text/frawk { };
 
+  frei = callPackage ../tools/misc/frei { };
+
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -4482,6 +4486,9 @@ with pkgs;
   mandown = callPackage ../tools/misc/mandown { };
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
+
+  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono-v5;
+  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).Mono-NF-v5;
 
   marl = callPackage ../development/libraries/marl {};
 
@@ -5212,9 +5219,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
 
-  cemu = qt5.callPackage ../applications/science/math/cemu {
-    stdenv = gcc9Stdenv;
-  };
+  cemu-ti = qt5.callPackage ../applications/science/math/cemu-ti { };
 
   cider = callPackage ../applications/audio/cider { };
 
@@ -9309,6 +9314,8 @@ with pkgs;
 
   monit = callPackage ../tools/system/monit { };
 
+  monocraft = callPackage ../data/fonts/monocraft { };
+
   monolith = callPackage ../tools/backup/monolith {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13058,6 +13065,8 @@ with pkgs;
   };
 
   yj = callPackage ../development/tools/yj { };
+
+  zarchive = callPackage ../tools/archivers/zarchive { };
 
   zprint = callPackage ../development/tools/zprint { };
 
@@ -18193,6 +18202,8 @@ with pkgs;
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
   cachix = haskell.lib.compose.justStaticExecutables haskellPackages.cachix;
 
+  cubeb = callPackage ../development/libraries/audio/cubeb { };
+
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
@@ -21069,6 +21080,8 @@ with pkgs;
 
   luabind_luajit = luabind.override { lua = luajit; };
 
+  luabridge = callPackage ../development/libraries/luabridge { };
+
   luksmeta = callPackage ../development/libraries/luksmeta {
     asciidoc = asciidoc-full;
   };
@@ -23702,6 +23715,8 @@ with pkgs;
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
   memcached = callPackage ../servers/memcached {};
+
+  merecat = callPackage ../servers/http/merecat { };
 
   meteor = callPackage ../servers/meteor { };
 
@@ -34427,6 +34442,8 @@ with pkgs;
 
   randtype = callPackage ../games/randtype { };
 
+  raylib-games = callPackage ../games/raylib-games { };
+
   redeclipse = callPackage ../games/redeclipse { };
 
   rftg = callPackage ../games/rftg { };
@@ -36423,7 +36440,7 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hyfetch = python3Packages.callPackage ../tools/misc/hyfetch { };
+  hyfetch = callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;

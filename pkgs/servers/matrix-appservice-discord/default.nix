@@ -1,4 +1,4 @@
-{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
+{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs, removeReferencesTo }:
 
 assert lib.versionAtLeast nodejs.version "12.0.0";
 
@@ -30,6 +30,7 @@ in mkYarnPackage rec {
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
+        find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${nodeSources}" {} \;
      '';
     };
   };
