@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , bison
 , pam
+, libxcrypt
 
 , withPAM ? true
 , withTimestamp ? true
@@ -38,7 +39,9 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bison ];
-  buildInputs = [ pam ];
+  buildInputs = [ ]
+    ++ lib.optional withPAM pam
+    ++ lib.optional (!withPAM) libxcrypt;
 
   meta = with lib; {
     description = "Executes the given command as another user";
