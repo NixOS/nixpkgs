@@ -85,6 +85,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui bobby285271 ];
   };
 }
