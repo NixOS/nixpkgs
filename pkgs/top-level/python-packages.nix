@@ -11937,6 +11937,8 @@ self: super: with self; {
   };
 
 
+  x-wr-timezone = callPackage ../development/python-modules/x-wr-timezone { };
+
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 
   x256 = callPackage ../development/python-modules/x256 { };
