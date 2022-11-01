@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
 , mock
 , nose2
 , pytz
@@ -10,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
     rev = version;
-    sha256 = "sha256-2sodExb66+Y+aPvm+DkibPt0Bvwqjii+EoBWaopdq+E=";
+    sha256 = "sha256-9ADFtCrSJ4Y2QQY5YC/BMvoVZs2vaYHkhIM/rBlZm4I=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    freezegun
     mock
     nose2
     pytz
