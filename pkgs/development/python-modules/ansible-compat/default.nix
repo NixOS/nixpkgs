@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "A python package containing functions that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }
