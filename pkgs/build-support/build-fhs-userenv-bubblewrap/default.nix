@@ -9,6 +9,7 @@ args @ {
 , meta ? {}
 , passthru ? {}
 , extraBwrapArgs ? []
+, extraBeforeLaunchCommand ? ""
 , unshareUser ? true
 , unshareIpc ? true
 , unsharePid ? true
@@ -176,6 +177,7 @@ let
       ${concatStringsSep "\n  " extraBwrapArgs}
       ${init runScript}/bin/${name}-init ${initArgs}
     )
+    ${extraBeforeLaunchCommand}
     exec "''${cmd[@]}"
   '';
 
