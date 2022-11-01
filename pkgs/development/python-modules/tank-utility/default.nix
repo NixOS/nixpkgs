@@ -24,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-2cxAaSyreIzQzCUtiolEV7JbGFKL8Mob3337J0jlMsU=";
   };
 
+  postPatch = ''
+    # urllib3[secure] is not picked-up
+    substituteInPlace setup.py \
+      --replace "urllib3[secure]" "urllib3"
+  '';
+
   propagatedBuildInputs = [
     requests
     urllib3
@@ -31,11 +37,10 @@ buildPythonPackage rec {
   ] ++ urllib3.optional-dependencies.secure;
 
   checkInputs = [
-    responses
     mock
     pytestCheckHook
+    responses
   ];
-
 
   pythonImportsCheck = [
     "tank_utility"

@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "libpyfoscam";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2E6zQT86UEOKoFnAfXfeWt352HIdOQZBGy5vR0WQO6Y=";
+    hash = "sha256-FLPerVzx2+3f5biiqt0JHJjBuMIalUBkY+bGb2ShVao=";
   };
 
   # tests need access to a camera
