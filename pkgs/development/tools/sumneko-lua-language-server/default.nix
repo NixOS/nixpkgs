@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath='~/.cache/sumneko_lua/log' \
-      --metapath='~/.cache/sumneko_lua/meta'"
+      --logpath='\$XDG_CACHE_HOME/sumneko_lua/log' \
+      --metapath='\$XDG_CACHE_HOME/sumneko_lua/meta'"
 
     runHook postInstall
   '';

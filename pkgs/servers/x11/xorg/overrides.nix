@@ -738,6 +738,7 @@ self: super:
             buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = lib.platforms.unix;
+            meta.broken = stdenv.isDarwin;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
 
     in attrs //
