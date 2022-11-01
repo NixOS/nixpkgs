@@ -26043,6 +26043,8 @@ with pkgs;
 
   crimson = callPackage ../data/fonts/crimson {};
 
+  crimson-pro = callPackage ../data/fonts/crimson-pro {};
+
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts {});
 
   # solve collision for nix-env before https://github.com/NixOS/nix/pull/815
