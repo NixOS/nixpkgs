@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.7";
+  version  = "0.8";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1g05ncsnk57kcqm9wsv6sz8b24kyzj8r5rfpa1wfwj8qkjzx3vji";
+    hash = "sha256-XvWj6fZxzXeRA5oCAqIIwlfjrJcHnDrjeiPExEQKSkY=";
     repo = "vis";
     owner = "martanne";
   };
@@ -29,10 +29,6 @@ stdenv.mkDerivation rec {
     acl
     libselinux
   ];
-
-  postPatch = ''
-    patchShebangs ./configure
-  '';
 
   postInstall = ''
     wrapProgram $out/bin/vis \
@@ -58,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A vim like editor";
+    description = "A vi-like editor based on Plan 9's structural regular expressions";
     homepage = "https://github.com/martanne/vis";
     license = licenses.isc;
     maintainers = with maintainers; [ vrthra ramkromberg ];
