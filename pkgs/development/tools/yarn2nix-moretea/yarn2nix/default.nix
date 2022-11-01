@@ -58,7 +58,6 @@ in rec {
     "--offline"
     "--frozen-lockfile"
     "--ignore-engines"
-    "--ignore-scripts"
   ];
 
   mkYarnModules = {
@@ -70,6 +69,7 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? [ ],
+    ignoreScripts ? true,
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -141,7 +141,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ yarnFlags)}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ lib.optional ignoreScripts "--ignore-scripts" ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -413,7 +413,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
