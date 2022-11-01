@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.12.1";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5P6EXXAAS1Q2eNQuj/5JrDg0lPHfA5K4WaYfKaaXm9s=";
+    hash = "sha256-DGTGUMnkEQcwGR44WhmBpTBMcRcAtVIpM4YVnnlakE8=";
   };
 
   propagatedBuildInputs = [
@@ -90,6 +90,10 @@ buildPythonPackage rec {
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
+    # countourpy is not available at the moment
+    "test_plot_kde"
+    "test_plot_kde_2d"
+    "test_plot_pair"
   ];
 
   pythonImportsCheck = [
