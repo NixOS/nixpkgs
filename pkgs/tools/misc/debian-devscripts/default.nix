@@ -7,8 +7,7 @@
 
 let
   inherit (python3Packages) python setuptools;
-  sensible-editor = writeScript "sensible-editor" ''
-    #!/bin/sh
+  sensible-editor = writeShellScript "sensible-editor" ''
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in stdenv.mkDerivation rec {
@@ -20,15 +19,15 @@ in stdenv.mkDerivation rec {
     hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils pkg-config bash-completion help2man ] ++
-    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
-
   postPatch = ''
     substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
     substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
     patchShebangs scripts
   '';
+
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ xz dpkg libxslt python setuptools curl gnupg diffutils bash-completion help2man ] ++
+    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -64,7 +63,7 @@ in stdenv.mkDerivation rec {
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --prefix PERL5LIB : "$out/share/devscripts" \
-        --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages" \
+        --prefix PYTHONPATH : "$out/${python.sitePackages}" \
         --prefix PATH : "${dpkg}/bin"
     done
   '';
