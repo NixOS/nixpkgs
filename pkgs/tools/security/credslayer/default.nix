@@ -48,5 +48,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ShellCode33/CredSLayer";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    # Upstream issue https://github.com/ShellCode33/CredSLayer/issues/16
+    # This package works only with pyshark < 0.5
+    broken = true;
   };
 }
