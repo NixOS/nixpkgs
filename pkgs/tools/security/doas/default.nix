@@ -32,10 +32,17 @@ stdenv.mkDerivation rec {
     # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
     # /run/wrappers/bin
     ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+
+    # Standard environment supports "dontDisableStatic" knob, but has no
+    # equivalent for "--disable-shared", so I have to patch "configure"
+    # script instead.
+    ./disable-shared.patch
   ];
 
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' GNUmakefile
+  '' + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+    sed -i 's/-lpam/-lpam -laudit/' configure
   '';
 
   nativeBuildInputs = [ bison ];
