@@ -46,7 +46,11 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
-      --replace "mccabe>=0.6.0,<0.7.0" "mccabe"
+      --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
+      --replace "flake8>=4.0.0,<4.1.0" "flake8" \
+      --replace "mccabe>=0.6.0,<0.7.0" "mccabe" \
+      --replace "pycodestyle>=2.8.0,<2.9.0" "pycodestyle" \
+      --replace "pyflakes>=2.4.0,<2.5.0" "pyflakes"
   '';
 
   preBuild = ''
