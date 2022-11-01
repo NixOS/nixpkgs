@@ -1,29 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , packaging
 , pluggy
 , py
 , six
 , virtualenv
 , setuptools-scm
-, toml
+, tomli
 , filelock
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "3.26.0";
-
-  buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ packaging pluggy py six virtualenv toml filelock ];
-
-  doCheck = false;
+  version = "3.27.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RPPDR8aMLGh5nX1E8YCPnTlvyKGlAMvGJCUzdceuEH4=";
+    hash = "sha256-0slF8CoD1FATdKPVQwh3OA3rabIYsd+bfx0vKhC++vk=";
   };
+
+  buildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    packaging
+    pluggy
+    py
+    six
+    virtualenv
+    filelock
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Virtualenv-based automation of test activities";
