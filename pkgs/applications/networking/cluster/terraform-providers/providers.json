@@ -1165,13 +1165,13 @@
     "version": "0.9.0"
   },
   "tls": {
-    "hash": "sha256-q3zt+5zd/bJ42sWbFwuE+rDyHHcZoVBZF4c61aJJkMs=",
+    "hash": "sha256-DBOkfvT0+mlgaWiBHggZUKvHL8jLZjQjRi0xFZKgcoM=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tls",
     "repo": "terraform-provider-tls",
-    "rev": "v4.0.3",
-    "vendorHash": "sha256-tW4e+QETPSykMEosahs68VeagToqWWe4ZUQN49gpHHM=",
-    "version": "4.0.3"
+    "rev": "v4.0.4",
+    "vendorHash": "sha256-k7aW5ZD6pAtdT6tTXy8YaJlFS5WR5FzPd9eINgPBYJM=",
+    "version": "4.0.4"
   },
   "triton": {
     "deleteVendor": true,
