@@ -62,11 +62,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=node::tests::test_fetch_providers_grpc_dht"
-    "--skip=node::tests::test_fetch_providers_mem_dht"
-    "--skip=node::tests::test_fetch_providers_uds_dht"
-    "--skip=resolver::tests::test_resolve_dnslink"
-    "--skip=resolver::tests::test_resolve_txt_record"
+    "--skip=node::tests::test_fetch_providers_"
+    "--skip=resolver::tests::test_resolve_"
     "--skip=lock::test::test_locks"
   ];
 
@@ -75,6 +72,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/n0-computer/iroh";
     changelog = "https://github.com/n0-computer/iroh/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [ _0x4A6F flokli ];
   };
 }
