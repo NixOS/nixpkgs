@@ -25210,7 +25210,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Hypervisor;
   };
 
-  libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
+  libkrun-sev = libkrun.override { sevVariant = true; };
 
   libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
