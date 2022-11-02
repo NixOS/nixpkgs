@@ -13444,6 +13444,12 @@ with pkgs;
   temurin-bin-18 = javaPackages.compiler.temurin-bin.jdk-18;
   temurin-jre-bin-18 = javaPackages.compiler.temurin-bin.jre-18;
 
+  temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
+  temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
+
+  temurin-bin-18 = javaPackages.compiler.temurin-bin.jdk-18;
+  temurin-jre-bin-18 = javaPackages.compiler.temurin-bin.jre-18;
+
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
 
