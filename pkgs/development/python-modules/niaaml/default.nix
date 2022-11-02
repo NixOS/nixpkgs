@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukapecnik";
     repo = "NiaAML";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-B87pI1EpZj1xECrgTmzN5S35Cy1nPowBRyu1IDb5zCE=";
   };
 
