@@ -33,7 +33,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "waybar";
+  pname = "waybar-hyprland";
   version = "0.9.14";
 
   src = fetchFromGitHub {
