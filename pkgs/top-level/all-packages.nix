@@ -29268,6 +29268,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  waybar-hyprland = callPackage ../applications/misc/waybar-hyprland {};
+
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
