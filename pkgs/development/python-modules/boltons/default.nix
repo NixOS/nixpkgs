@@ -34,6 +34,9 @@ buildPythonPackage rec {
     })
   ];
 
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [
     "boltons"
   ];
