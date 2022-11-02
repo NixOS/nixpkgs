@@ -23105,6 +23105,11 @@ with pkgs;
     jdk = jdk8;
   };
 
+  swt-jdk8-gtk3 = callPackage ../development/libraries/java/swt {
+    gtk = gtk3;
+    jdk = jdk8;
+  };
+
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
