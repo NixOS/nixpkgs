@@ -397,6 +397,7 @@
 , "wrangler"
 , "wring"
 , "write-good"
+, "wscat"
 , "@yaegassy/coc-nginx"
 , "yaml-language-server"
 , "yalc"
