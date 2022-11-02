@@ -9009,6 +9009,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  nagelfar = callPackage ../development/tools/nagelfar { };
+
   nats-top = callPackage ../tools/system/nats-top { };
 
   natscli = callPackage ../tools/system/natscli { };
