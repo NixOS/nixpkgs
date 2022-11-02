@@ -77,7 +77,6 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     nspr
-    nss
     libxcb
     pango
     libXScrnSaver
