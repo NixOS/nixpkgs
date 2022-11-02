@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cnico";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/G92WkWUr3T5T7VVzMERFVmLDfLz6m9rlZLQZCBQbCI=";
+    sha256 = "sha256-aTDZB1kUlvvxoio7EAl2KPHW/JkCcuIEPD4T4NN6FX8=";
   };
 
   nativeBuildInputs = [
