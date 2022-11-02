@@ -232,6 +232,7 @@
   ./programs/vim.nix
   ./programs/wavemon.nix
   ./programs/waybar.nix
+  ./programs/waybar-hyprland.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/wshowkeys.nix
