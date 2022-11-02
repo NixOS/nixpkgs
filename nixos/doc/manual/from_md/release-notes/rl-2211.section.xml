@@ -876,6 +876,16 @@
           longer accepted.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The Syncthing service now only allows absolute paths—starting
+          with <literal>/</literal> or <literal>~/</literal>—for
+          <literal>services.syncthing.folders.&lt;name&gt;.path</literal>.
+          In a future release other paths will be allowed again and
+          interpreted relative to
+          <literal>services.syncthing.dataDir</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">

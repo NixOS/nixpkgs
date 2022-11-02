@@ -212,10 +212,18 @@ in {
             };
 
             path = mkOption {
-              type = types.str;
+              # TODO for release 23.05: allow relative paths again and set
+              # working directory to cfg.dataDir
+              type = types.str // {
+                check = x: types.str.check x && (substring 0 1 x == "/" || substring 0 2 x == "~/");
+                description = types.str.description + " starting with / or ~/";
+              };
               default = name;
               description = lib.mdDoc ''
                 The path to the folder which should be shared.
+                Only absolute paths (starting with `/`) and paths relative to
+                the [user](#opt-services.syncthing.user)'s home directory
+                (starting with `~/`) are allowed.
               '';
             };
 
@@ -405,7 +413,8 @@ in {
         example = "yourUser";
         description = mdDoc ''
           The user to run Syncthing as.
-          By default, a user named `${defaultUser}` will be created.
+          By default, a user named `${defaultUser}` will be created whose home
+          directory is [dataDir](#opt-services.syncthing.dataDir).
         '';
       };
 
