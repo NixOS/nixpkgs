@@ -15,21 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libkrun";
-  version = "1.3.0";
+  version = "1.4.6";
 
   src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qVyEqiqaQ8wfZhL5u+Bsaa1yXlgHUitSj5bo7FJ5Y8c=";
+    hash = "sha256-hy0qd5JMqaHUxM7rH7HOkIccMbWLnmwh3226yR1HWOM=";
   } else fetchurl {
     url = "https://github.com/containers/libkrun/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
-    hash = "sha256-RBqeGUhB6Sdt+JujyQBW/76mZwnT0LNs9AMYr8+OCVU=";
+    hash = "sha256-Fvl3HnBEfN4umBBn0Jgyuky98eJURG0bUClfqcPCNVk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-jxSzhj1iU8qY+sZEVCYTaUqpaA4egjJi9qxrapASQF0=";
+    hash = "sha256-mnWySP4X1AWsCuobC3uGV81Xp1RckTzQf6EGXD4E608=";
   };
 
   nativeBuildInputs = with rustPlatform; [
