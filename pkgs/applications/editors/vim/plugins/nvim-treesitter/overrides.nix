@@ -49,5 +49,7 @@ in
 
     withAllGrammars = withPlugins (_: allGrammars);
   };
+
+  meta.maintainers = with lib.maintainers; [ figsoda ];
 }
 
