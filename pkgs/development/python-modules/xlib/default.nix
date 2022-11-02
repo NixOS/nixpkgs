@@ -13,18 +13,14 @@
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
     rev = version;
-    sha256 = "155p9xhsk01z9vdml74h07svlqy6gljnx9c6qbydcr14lwghwn06";
+    hash = "sha256-ATe03X9DZWftuGCm1FyEjcCUttbAMWENMQ6wZsruBPA=";
   };
-
-  patches = [
-    ./fix-no-protocol-specified.patch
-  ];
 
   nativeBuildInputs = [ setuptools-scm ];
   buildInputs = [ xorg.libX11 ];
