@@ -8,6 +8,12 @@ in
 {
   options.services.dendrite = {
     enable = lib.mkEnableOption (lib.mdDoc "matrix.org dendrite");
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.dendrite;
+      defaultText = lib.literalExpression "pkgs.dendrite";
+      description = lib.mdDoc "Which Dendrite package to use.";
+    };
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;
