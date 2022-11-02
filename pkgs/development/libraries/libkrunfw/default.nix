@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" ];
   };
 }
