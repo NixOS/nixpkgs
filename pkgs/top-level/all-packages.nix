@@ -456,6 +456,8 @@ with pkgs;
 
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
+  dinghy = with python3Packages; toPythonApplication dinghy;
+
   deadcode = callPackage ../development/tools/deadcode { };
 
   deadnix = callPackage ../development/tools/deadnix { };
