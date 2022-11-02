@@ -13,12 +13,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
       services.invoiceplane.webserver = "caddy";
       services.invoiceplane.sites = {
         "site1.local" = {
-          #database.name = "invoiceplane1";
+          database.name = "invoiceplane1";
           database.createLocally = true;
           enable = true;
         };
         "site2.local" = {
-          #database.name = "invoiceplane2";
+          database.name = "invoiceplane2";
           database.createLocally = true;
           enable = true;
         };
