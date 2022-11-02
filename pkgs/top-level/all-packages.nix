@@ -25738,6 +25738,8 @@ with pkgs;
 
   tiptop = callPackage ../os-specific/linux/tiptop { };
 
+  tiptop-py = callPackage ../tools/system/tiptop-py { };
+
   tpacpi-bat = callPackage ../os-specific/linux/tpacpi-bat { };
 
   trickster = callPackage ../servers/trickster/trickster.nix {};
