@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitLab
 , cairo
 , cmake
@@ -43,27 +42,19 @@ let
     owner = "poppler";
     repo = "test";
     rev = "920c89f8f43bdfe8966c8e397e7f67f5302e9435";
-    sha256 = "sha256-ySP7zcVI3HW4lk8oqVMPTlFh5pgvBwqcE0EXE71iWos=";
+    hash = "sha256-ySP7zcVI3HW4lk8oqVMPTlFh5pgvBwqcE0EXE71iWos=";
   };
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
+  version = "22.11.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-tJMyhyFALyXLdSP5zcL318WfRa2Zm951xjyQYE2w8gs=";
+    hash = "sha256-CTuphE7XdChVFzYcFeIaMbpN8nikmSY9RAPMp08tqCg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-38784.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/27354e9d9696ee2bc063910a6c9a6b27c5184a52.patch";
-      sha256 = "sha256-M12zaHxcgQB/37tHffllqzd+Juq9BH5gpKVGaRY00vI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
