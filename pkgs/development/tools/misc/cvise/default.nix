@@ -32,6 +32,11 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    substituteInPlace CMakeLists.txt \
+      --replace " -Werror " " "
+
     # 'cvise --command=...' generates a script with hardcoded shebang.
     substituteInPlace cvise.py \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
