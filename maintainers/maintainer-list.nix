@@ -5720,6 +5720,12 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  icedborn = {
+    name = "IceDBorn";
+    email = "github.envenomed@dralias.com";
+    github = "IceDBorn";
+    githubId = 51162078;
+  };
   icewind1991 = {
     name = "Robin Appelman";
     email = "robin@icewind.nl";
