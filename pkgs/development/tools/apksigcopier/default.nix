@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "apksigcopier";
-    rev = "v${version}";
-    sha256 = "07ldq3q1x2lpb15q5s5i1pbg89sn6ah45amskm9pndqlh16z9k2x";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-58NoYe26GsNE0jpSRt4sIkTJ2iR4VVnvthOfi7QFfN0=";
   };
 
   nativeBuildInputs = [
