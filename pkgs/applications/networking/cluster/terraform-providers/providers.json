@@ -147,13 +147,14 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "hash": "sha256-tVvpWXKJyhiuyFnDMPvTPBhWUx169PjvZL2iQXDuK1s=",
+    "deleteVendor": true,
+    "hash": "sha256-mM4wikawrXdePX2ZemsjyoHrf0LQ0gwoUspcbvBUSeA=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.16.2",
-    "vendorHash": null,
-    "version": "1.16.2"
+    "rev": "v1.16.3",
+    "vendorHash": "sha256-UxVRz0Nhz6jqXPlAAJZ+GJFu30JJ4hYvVi5OlXInE0g=",
+    "version": "1.16.3"
   },
   "bigip": {
     "hash": "sha256-uSe+J4AlW8Dt96BVF1ZI/yrgWUbZsl64b/D+k5ysHC0=",
@@ -231,13 +232,13 @@
     "version": "1.20.0"
   },
   "cloudflare": {
-    "hash": "sha256-uItV3BTB3bY8NrjD63oUWZMB0gEscEN4Y6aDTuDQW7c=",
+    "hash": "sha256-DqGHPD1CnkIkABB0sB90zE/mVxo0aXQwu4Et7apuM1A=",
     "owner": "cloudflare",
     "provider-source-address": "registry.terraform.io/cloudflare/cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v3.26.0",
-    "vendorHash": "sha256-pifWJoCbV0bIDzDihdvpC3k5d615HTsYHqVV3s50euk=",
-    "version": "3.26.0"
+    "rev": "v3.27.0",
+    "vendorHash": "sha256-tpOyqFpO1jMEfXkXgodGEnFVGMqeAqsU5oou60lqcUE=",
+    "version": "3.27.0"
   },
   "cloudfoundry": {
     "hash": "sha256-VfGB0NkT36oYT5F1fh1N/2rlZdfhk+K76AXNh0NkO50=",
@@ -633,13 +634,13 @@
     "version": "4.0.1"
   },
   "ksyun": {
-    "hash": "sha256-sfvmDByxAQbbdPHb9l5tIT5dyu8eA3r63i5FZJYEYTI=",
+    "hash": "sha256-xmBpDYN1MRQ9cyIOqHMAD7RucRkOKmwnmzjIsjxA7VQ=",
     "owner": "kingsoftcloud",
     "provider-source-address": "registry.terraform.io/kingsoftcloud/ksyun",
     "repo": "terraform-provider-ksyun",
-    "rev": "v1.3.55",
+    "rev": "v1.3.56",
     "vendorHash": "sha256-miHKAz+ONXtuC1DNukcyZbbaYReY69dz9Zk6cJdORdQ=",
-    "version": "1.3.55"
+    "version": "1.3.56"
   },
   "kubectl": {
     "hash": "sha256-UkUwWi7Z9cSMyZakD6JxMl+qdczAYfZQgwroCUjFIUM=",
@@ -714,13 +715,14 @@
     "version": "2.0.3"
   },
   "lxd": {
-    "hash": "sha256-rNqlPyKpBNaIRtiNHB8U8jowWhqdQtDIMxreZ5Dfm3E=",
+    "hash": "sha256-x0f8kP7OsgSD8d9vu99vp7Xq3szwLKxoAZdUCJc8B7A=",
     "owner": "terraform-lxd",
     "provider-source-address": "registry.terraform.io/terraform-lxd/lxd",
+    "proxyVendor": true,
     "repo": "terraform-provider-lxd",
-    "rev": "v1.7.2",
-    "vendorHash": "sha256-ervfG/BAaF4M+BXsp0eCDM6nPWQOS3pthClhArsUoYc=",
-    "version": "1.7.2"
+    "rev": "v1.7.3",
+    "vendorHash": "sha256-omaslX89hMAdIppBfILsGO6133Q3UgihgiJcy/Gn83M=",
+    "version": "1.7.3"
   },
   "mailgun": {
     "hash": "sha256-Yi258SIFSdD+JSi5oX74bhBFYYGYQfSAyYD07eO8MmM=",
