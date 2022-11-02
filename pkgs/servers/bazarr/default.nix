@@ -11,15 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ClVHThhcf4QkYhgJevTKroBe0z0YZX83qKFB0thH6eM=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ]))
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}
-    makeWrapper "${
-      (python3.withPackages
-        (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ])).interpreter
-    }" \
+    makeWrapper "$(command -v python3)" \
       $out/bin/bazarr \
       --add-flags "$out/share/${pname}-${version}/bazarr.py" \
       --suffix PATH : ${lib.makeBinPath [ unrar ffmpeg ]}
