@@ -77,6 +77,9 @@ stdenv.mkDerivation rec {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    "-Dwerror=false"
     ];
 
   # Fixes error on a deprecated declaration
