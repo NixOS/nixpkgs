@@ -62,8 +62,8 @@ let self = stdenv.mkDerivation rec {
     homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
     license = with licenses; [
-      lgpl3
-      gpl2
+      lgpl3Only
+      gpl2Only
     ];
 
     longDescription =
