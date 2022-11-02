@@ -722,6 +722,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>trace</literal> binary from
+          <literal>perf-linux</literal> package has been removed, due to
+          being a duplicate of the <literal>perf</literal> binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>aws</literal> package has been removed due to
           being abandoned by the upstream. It is recommended to use
           <literal>awscli</literal> or <literal>awscli2</literal>
