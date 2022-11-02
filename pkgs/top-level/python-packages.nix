@@ -6476,6 +6476,8 @@ in {
 
   privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea-ldap-proxy { };
 
+  pyjwt1 = callPackage ../development/python-modules/pyjwt/1.nix { };
+
   proboscis = callPackage ../development/python-modules/proboscis { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
