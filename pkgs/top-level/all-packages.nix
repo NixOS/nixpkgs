@@ -1224,6 +1224,8 @@ with pkgs;
 
   agi = callPackage ../tools/graphics/agi { };
 
+  agola = callPackage ../development/tools/continuous-integration/agola { };
+
   agrep = callPackage ../tools/text/agrep { };
 
   aha = callPackage ../tools/text/aha { };
@@ -4755,6 +4757,8 @@ with pkgs;
   precice = callPackage ../development/libraries/precice { };
 
   precice-config-visualizer = callPackage ../tools/misc/precice-config-visualizer { };
+
+  proxmox-backup-client = callPackage ../applications/backup/proxmox-backup-client { };
 
   pueue = callPackage ../applications/misc/pueue {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -32137,6 +32141,8 @@ with pkgs;
   temporal = callPackage ../applications/networking/cluster/temporal { };
 
   temporal-cli = callPackage ../applications/networking/cluster/temporal-cli { };
+
+  temporalite = callPackage ../applications/networking/cluster/temporalite { };
 
   tenacity = callPackage ../applications/audio/tenacity { };
 
