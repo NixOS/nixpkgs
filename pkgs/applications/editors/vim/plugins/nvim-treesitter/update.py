@@ -4,10 +4,10 @@
 import json
 import re
 import subprocess
-from os import getenv
+from os import environ
 from os.path import dirname, join
 
-lockfile = json.load(open(join(getenv("NVIM_TREESITTER"), "lockfile.json")))
+lockfile = json.load(open(join(environ["NVIM_TREESITTER"], "lockfile.json")))
 
 configs = json.loads(
     subprocess.check_output(
@@ -98,8 +98,7 @@ def generate_grammar(item):
     location = info.get("location")
     if location:
         generated += f"""
-    location = "{location}";
-"""
+    location = "{location}";"""
 
     generated += """
   };
