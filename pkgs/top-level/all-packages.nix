@@ -35857,7 +35857,9 @@ with pkgs;
 
   modelio = callPackage ../applications/science/engineering/modelio {
     inherit (eclipses) eclipse-sdk;
-    gtk = lib.getDev gtk3;
+    # gtk = lib.getDev gtk2;
+    gtk = gtk2;
+    swt = swt_jdk8;
   };
   
   moda = callPackage ../applications/science/engineering/moda {

@@ -20,8 +20,10 @@
 , jre8
 , libXtst
 , perl
-, python
-, swt_jdk8
+, python2
+, swt
+# , swt_jdk8
+# , swt-jdk8-gtk3
 , webkitgtk
 }:
 
@@ -41,9 +43,9 @@ let
   });
   maven = maven360;
 
-  swt-jdk8-gtk3 = swt_jdk8.overrideAttrs (oldAttrs: {
-    gtk = gtk;
-  });
+  # swt-jdk8-gtk3 = swt_jdk8.overrideAttrs (oldAttrs: {
+  #   gtk = gtk;
+  # });
 in (javaPackages.mavenfod.override {
   inherit maven;
 }) rec {
@@ -92,14 +94,15 @@ in (javaPackages.mavenfod.override {
     glib # libglib2
     glibc # libc6
     # gtk2 # libgtk2
-    gtk # libgtk2
+    gtk
     # java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException javax/xml/bind/JAXBException
     openjdk8 # java 8
     libXtst # libxtst6
     perl # plugins/.*.pl
-    python # modelio/{app,platform}/.*.py
+    python2 # modelio/{app,platform}/.*.py
     # javascript # {{modelio/{app,platform}},{doc/plugins}}/.*.js
-    swt-jdk8-gtk3 #
+    # swt-jdk8-gtk3 #
+    swt
     webkitgtk # libwebkitgtk-1.0
   ];
 
@@ -123,8 +126,9 @@ in (javaPackages.mavenfod.override {
 
     makeWrapper $out/modelio $out/bin/modelio \
       --prefix PATH : ${openjdk8}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gcc glib gtk swt-jdk8-gtk3 webkitgtk ])} \
-      --prefix SWT_GTK3 : 1 \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ gcc glib gtk swt webkitgtk ])} \
+      --prefix SWT_GTK2 : 1 \
+      --prefix SWT_GTK3 : 0 \
       --prefix SWT_WEBKIT2 : 1 \
       --prefix LIBOVERLAY_SCROLLBAR : 0 \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
