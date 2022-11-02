@@ -3,11 +3,26 @@
 self: super:
 
 let
-  builtGrammars = callPackage ./generated.nix {
+  generatedGrammars = callPackage ./generated.nix {
     buildGrammar = callPackage ../../../../../development/tools/parsing/tree-sitter/grammar.nix { };
   };
 
-  allGrammars = lib.filter lib.isDerivation (lib.attrValues builtGrammars);
+  generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
+
+  builtGrammars = generatedGrammars // lib.listToAttrs
+    (lib.concatLists (lib.mapAttrsToList
+      (k: v:
+        let
+          replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
+        in
+        map (lib.flip lib.nameValuePair v)
+          ([ ("tree-sitter-${k}") ] ++ lib.optionals (k != replaced) [
+            replaced
+            "tree-sitter-${replaced}"
+          ]))
+      generatedDerivations));
+
+  allGrammars = lib.attrValues generatedDerivations;
 
   # Usage:
   # pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [ p.c p.java ... ])
