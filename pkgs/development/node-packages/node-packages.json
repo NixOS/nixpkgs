@@ -247,6 +247,7 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
+, {"photoprism-frontend": "../../servers/photoprism"}
 , "pkg"
 , "pm2"
 , "pnpm"

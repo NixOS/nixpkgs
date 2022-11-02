@@ -4730,6 +4730,8 @@ with pkgs;
 
   photon = callPackage ../tools/networking/photon { };
 
+  photoprism = callPackage ../servers/photoprism { };
+
   piglit = callPackage ../tools/graphics/piglit { };
 
   pika = callPackage ../applications/graphics/pika { };
