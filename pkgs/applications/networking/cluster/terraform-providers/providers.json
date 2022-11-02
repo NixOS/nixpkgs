@@ -715,13 +715,14 @@
     "version": "2.0.3"
   },
   "lxd": {
-    "hash": "sha256-rNqlPyKpBNaIRtiNHB8U8jowWhqdQtDIMxreZ5Dfm3E=",
+    "hash": "sha256-x0f8kP7OsgSD8d9vu99vp7Xq3szwLKxoAZdUCJc8B7A=",
     "owner": "terraform-lxd",
     "provider-source-address": "registry.terraform.io/terraform-lxd/lxd",
+    "proxyVendor": true,
     "repo": "terraform-provider-lxd",
-    "rev": "v1.7.2",
-    "vendorHash": "sha256-ervfG/BAaF4M+BXsp0eCDM6nPWQOS3pthClhArsUoYc=",
-    "version": "1.7.2"
+    "rev": "v1.7.3",
+    "vendorHash": "sha256-omaslX89hMAdIppBfILsGO6133Q3UgihgiJcy/Gn83M=",
+    "version": "1.7.3"
   },
   "mailgun": {
     "hash": "sha256-Yi258SIFSdD+JSi5oX74bhBFYYGYQfSAyYD07eO8MmM=",
