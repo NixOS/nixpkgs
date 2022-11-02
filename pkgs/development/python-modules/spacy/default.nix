@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
   checkInputs = [

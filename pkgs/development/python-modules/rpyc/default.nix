@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
@@ -49,6 +50,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "rpyc"
   ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";

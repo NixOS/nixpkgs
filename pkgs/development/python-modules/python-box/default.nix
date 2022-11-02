@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "6.0.2";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
-    rev = version;
-    hash = "sha256-IE2qyRzvrOTymwga+hCwE785sAVTqQtcN1DL/uADpbQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-42VDZ4aASFFWhRY3ApBQ4dq76eD1flZtxUM9hpA9iiI=";
   };
 
   passthru.optional-dependencies = {

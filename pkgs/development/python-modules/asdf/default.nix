@@ -3,7 +3,8 @@
 , asdf-transform-schemas
 , astropy
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , importlib-resources
 , jmespath
 , jsonschema
@@ -25,10 +26,32 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MuKmmlPRcB/EYW6AD7Pa/4G7rYAYMqe/Vj47Ycn+Pf4=";
+  src = fetchFromGitHub {
+    owner = "asdf-format/";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-u8e7ot5NDRqQFH0eLVnGinBQmQD73BlR5K9HVjA7SIg=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  patches = [
+    # Fix default validation, https://github.com/asdf-format/asdf/pull/1203
+    (fetchpatch {
+      name = "default-validation.patch";
+      url = "https://github.com/asdf-format/asdf/commit/6f79f620b4632e20178d9bd53528702605d3e976.patch";
+      sha256 = "sha256-h/dYhXRCf5oIIC+u6+8C91mJnmEzuNmlEzqc0UEhLy0=";
+      excludes = [
+          "CHANGES.rst"
+      ];
+    })
+  ];
+
+  postPatch = ''
+    # https://github.com/asdf-format/asdf/pull/1203
+    substituteInPlace pyproject.toml \
+      --replace "'jsonschema >=4.0.1, <4.10.0'," "'jsonschema >=4.0.1',"
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -60,6 +83,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "asdf"
+  ];
+
+  disabledTests = [
+    "config.rst"
   ];
 
   meta = with lib; {

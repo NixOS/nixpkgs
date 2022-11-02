@@ -1,27 +1,28 @@
 { lib
 , stdenv
-, buildPythonPackage
-, python
-, fetchPypi
-, pytestCheckHook
-, blis
-, catalogue
-, cymem
-, cython
-, contextvars
-, dataclasses
 , Accelerate
+, blis
+, buildPythonPackage
+, catalogue
+, confection
+, contextvars
 , CoreFoundation
 , CoreGraphics
 , CoreVideo
+, cymem
+, cython
+, dataclasses
+, fetchPypi
 , hypothesis
 , mock
 , murmurhash
 , numpy
 , plac
-, pythonOlder
 , preshed
 , pydantic
+, pytestCheckHook
+, python
+, pythonOlder
 , srsly
 , tqdm
 , typing-extensions
@@ -37,13 +38,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
+    hash = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
-  '';
 
   buildInputs = [
     cython
@@ -57,14 +53,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     blis
     catalogue
+    confection
     cymem
     murmurhash
     numpy
     plac
     preshed
+    pydantic
     srsly
     tqdm
-    pydantic
     wasabi
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
@@ -93,7 +90,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Practical Machine Learning for NLP in Python";
+    description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
