@@ -633,13 +633,13 @@
     "version": "4.0.1"
   },
   "ksyun": {
-    "hash": "sha256-sfvmDByxAQbbdPHb9l5tIT5dyu8eA3r63i5FZJYEYTI=",
+    "hash": "sha256-xmBpDYN1MRQ9cyIOqHMAD7RucRkOKmwnmzjIsjxA7VQ=",
     "owner": "kingsoftcloud",
     "provider-source-address": "registry.terraform.io/kingsoftcloud/ksyun",
     "repo": "terraform-provider-ksyun",
-    "rev": "v1.3.55",
+    "rev": "v1.3.56",
     "vendorHash": "sha256-miHKAz+ONXtuC1DNukcyZbbaYReY69dz9Zk6cJdORdQ=",
-    "version": "1.3.55"
+    "version": "1.3.56"
   },
   "kubectl": {
     "hash": "sha256-UkUwWi7Z9cSMyZakD6JxMl+qdczAYfZQgwroCUjFIUM=",
