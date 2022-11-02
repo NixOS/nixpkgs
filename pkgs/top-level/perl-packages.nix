@@ -26137,13 +26137,13 @@ let
 
   Tirex = buildPerlPackage rec {
     pname = "Tirex";
-    version = "0.6.1";
+    version = "0.7.0";
 
     src = fetchFromGitHub {
       owner = "openstreetmap";
       repo = "tirex";
       rev = "v${version}";
-      hash = "sha256-8GXhF2v04ZSF0h0WNKPp4bgYcvPYCml6HtCbikFxUzc=";
+      hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
     };
 
     buildInputs = [
@@ -26158,6 +26158,7 @@ let
     ];
 
     installPhase = ''
+      install -m 755 -d $out/usr/libexec
       make install DESTDIR=$out INSTALLOPTS=""
       mv $out/$out/lib $out/$out/share $out
       rmdir $out/$out $out/nix/store $out/nix
