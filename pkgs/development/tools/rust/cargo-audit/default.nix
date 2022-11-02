@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fSdh8yCV+2AdAtF4eO2z8+uxOAf2N0IxqIFLw4B8dKE=";
+    sha256 = "sha256-8L2E8Gj34n0aVfP3XVdm5+zHbHw7Ayg9Ptb/igdVr2U=";
   };
 
-  cargoSha256 = "sha256-YCEQaUcTmZ9zTdGcDQkaVI0Dc8oIBvt840s3x9PUlrg=";
+  cargoSha256 = "sha256-h0MnJPD1zxkfAvcsrKuR5eJK68mXi+TIIZqutBiBEaM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  buildFeatures = [ "binary-scanning" "fix" ];
+  buildFeatures = [ "fix" ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

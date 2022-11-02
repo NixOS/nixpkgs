@@ -1,25 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , rustPlatform
 , setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.3.1";
+  version = "0.4";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cher-nov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IhzwQrWu8k308ZZhWz4Z3FHAkSLTXiCydyiy0MPN8NI=";
+    hash = "sha256-2HP1mKGPr8wOL5B0APJks3EVBicX2iMFI7vLJGTa1PM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-M2ySVqfgpgHktLh4t5Sh1UTBCzajlQiDku4O9azHJwk=";
+    hash = "sha256-AqSVFOB9Lfvk9h3GtoYlEOXBEt7YZYLhCDNKM9upQ2U=";
   };
 
   nativeBuildInputs = with rustPlatform;[
