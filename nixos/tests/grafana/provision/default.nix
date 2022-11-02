@@ -28,29 +28,6 @@ let
   };
 
   extraNodeConfs = {
-    provisionOld = {
-      services.grafana.provision = {
-        datasources = [{
-          name = "Test Datasource";
-          type = "testdata";
-          access = "proxy";
-          uid = "test_datasource";
-        }];
-
-        dashboards = [{ options.path = "/var/lib/grafana/dashboards"; }];
-
-        notifiers = [{
-          uid = "test_notifiers";
-          name = "Test Notifiers";
-          type = "email";
-          settings = {
-            singleEmail = true;
-            addresses = "test@test.com";
-          };
-        }];
-      };
-    };
-
     provisionNix = {
       services.grafana.provision = {
         datasources.settings = {
@@ -172,57 +149,46 @@ in {
   testScript = ''
     start_all()
 
-    nodeOld = ("Nix (old format)", provisionOld)
     nodeNix = ("Nix (new format)", provisionNix)
     nodeYaml = ("Nix (YAML)", provisionYaml)
 
-    for nodeInfo in [nodeOld, nodeNix, nodeYaml]:
-        with subtest(f"Should start provision node: {nodeInfo[0]}"):
-            nodeInfo[1].wait_for_unit("grafana.service")
-            nodeInfo[1].wait_for_open_port(3000)
+    for description, machine in [nodeNix, nodeYaml]:
+        with subtest(f"Should start provision node: {description}"):
+            machine.wait_for_unit("grafana.service")
+            machine.wait_for_open_port(3000)
 
-        with subtest(f"Successful datasource provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful datasource provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
             )
 
-        with subtest(f"Successful dashboard provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful dashboard provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
             )
 
-
-
-    with subtest(f"Successful notifiers provision with {nodeOld[0]}"):
-        nodeOld[1].succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/alert-notifications/uid/test_notifiers | grep Test\ Notifiers"
-        )
-
-
-
-    for nodeInfo in [nodeNix, nodeYaml]:
-        with subtest(f"Successful rule provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful rule provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
             )
 
-        with subtest(f"Successful contact point provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful contact point provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
             )
 
-        with subtest(f"Successful policy provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful policy provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
             )
 
-        with subtest(f"Successful template provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest(f"Successful template provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/templates | grep Test\ Template"
             )
 
-        with subtest("Successful mute timings provision with {nodeInfo[0]}"):
-            nodeInfo[1].succeed(
+        with subtest("Successful mute timings provision with {description}"):
+            machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
             )
   '';
