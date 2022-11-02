@@ -67,7 +67,7 @@ let
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       inherit (stdenv.hostPlatform) gcc isAarch32;
-    in sharedConfigureFlags ++ [
+    in sharedConfigureFlags ++ optionals (versionOlder version "19") [
       "--without-dtrace"
     ] ++ (optionals isCross [
       "--cross-compiling"

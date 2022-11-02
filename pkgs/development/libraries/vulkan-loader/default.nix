@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
-  version = "1.3.224.1";
+  version = "1.3.231.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Loader";
       rev = "sdk-${version}";
-      hash = "sha256-lmdImPeosHbAbEzPVW4K9Wkz/mF6gr8MVroGf0bDEPc=";
+      hash = "sha256-HWaa3JT0znhvqbvZdcsAwy8Dr6HDQp4rgpVmMOuCo0s=";
     });
 
   patches = [ ./fix-pkgconfig.patch ];

@@ -178,6 +178,18 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   inherit (common) src prePatch;
 
+  patches = [
+    # improves reproducibility of fmt files. This patch has been proposed upstream,
+    # but they are considering some other approaches as well. This is fairly
+    # conservative so we can safely apply it until they make a decision
+    # https://mailman.ntg.nl/pipermail/dev-luatex/2022-April/006650.html
+    (fetchpatch {
+      name = "reproducible_exception_strings.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
+      sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
+    })
+  ];
+
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;

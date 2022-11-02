@@ -14,13 +14,13 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "faad2";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
-    rev = builtins.replaceStrings [ "." ] [ "_" ] version;
-    sha256 = "0q52kdd95ls6ihzyspx176wg9x22425v5qsknrmrjq30q25qmmlg";
+    rev = version;
+    sha256 = "sha256-k7y12OwCn3YkNZY9Ov5Y9EQtlrZh6oFUzM27JDR960w=";
   };
 
   configureFlags = []

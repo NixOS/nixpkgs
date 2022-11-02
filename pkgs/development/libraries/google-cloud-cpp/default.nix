@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, abseil-cpp
 , c-ares
 , cmake
 , crc32c
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    abseil-cpp
     c-ares
     crc32c
     (curl.override { inherit openssl; })
