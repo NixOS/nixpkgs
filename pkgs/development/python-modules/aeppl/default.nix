@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aeppl";
-  version = "0.0.35";
+  version = "0.0.38";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HUcLa/9fTUBJYszo1SiG08t7DQiNSd8EsINkJpAeLsY=";
+    hash = "sha256-B9ZZEzGW4i0RRUaTAYiQ7+7pe4ArpSGcp/x4B6G7EYo=";
   };
 
   propagatedBuildInputs = [

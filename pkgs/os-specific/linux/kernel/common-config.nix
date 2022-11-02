@@ -114,6 +114,12 @@ let
       IOSCHED_BFQ = whenAtLeast "4.12" module;
     };
 
+
+    timer = {
+      # Enable Full Dynticks System.
+      NO_HZ_FULL = yes;
+    };
+
     # Enable NUMA.
     numa = {
       NUMA  = option yes;
@@ -544,7 +550,7 @@ let
       CGROUP_RDMA    = whenAtLeast "4.11" yes;
 
       MEMCG                    = yes;
-      MEMCG_SWAP               = yes;
+      MEMCG_SWAP               = whenOlder "6.1" yes;
 
       BLK_DEV_THROTTLING        = yes;
       CFQ_GROUP_IOSCHED         = whenOlder "5.0" yes; # Removed in 5.0-RC1

@@ -48,13 +48,13 @@
     "version": "3.0.0"
   },
   "alicloud": {
-    "hash": "sha256-CyubHE3YFGDt4T4dJ6ZHgvQ6V/nIHK/LODkl7Qm65Sk=",
+    "hash": "sha256-IP5TCFi4NEjnBa9rKCZI6TVFAAyjfsZbmc+PgkwgvIo=",
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.189.0",
+    "rev": "v1.190.0",
     "vendorHash": null,
-    "version": "1.189.0"
+    "version": "1.190.0"
   },
   "ansible": {
     "hash": "sha256-3nha5V4rNgVzgqliebmbC5e12Lj/zlCsyyiIVFlmUrY=",
@@ -450,24 +450,24 @@
     "version": "3.18.0"
   },
   "google": {
-    "hash": "sha256-gm3Ltq1fpgiaWuR8bdMaj3I9sNSJIfW+/nSn3TKxlxs=",
+    "hash": "sha256-LyPvK1IPCCfYcRfh9nPyPBZh1cU3sSkUb6tYKUko2C4=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.41.0",
-    "vendorHash": "sha256-PWSok1sTU/57Xeri4Un5B9Fbwg8gBP6Quy5oIZrjxUI=",
-    "version": "4.41.0"
+    "rev": "v4.42.0",
+    "vendorHash": "sha256-Hzl95NLEZlvTBpCGJYzF5rtHWfYe26TwW0pbtqWmxOo=",
+    "version": "4.42.0"
   },
   "google-beta": {
-    "hash": "sha256-zeCz6B5WmNJVirWOPU+8HYab9hTwxX490Pk1gX/0jd8=",
+    "hash": "sha256-Yi5nFjnYXFztqQURX3LIdmFNam7Ebhp0jTTXyTcX28Q=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google-beta",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.41.0",
-    "vendorHash": "sha256-PWSok1sTU/57Xeri4Un5B9Fbwg8gBP6Quy5oIZrjxUI=",
-    "version": "4.41.0"
+    "rev": "v4.42.0",
+    "vendorHash": "sha256-Hzl95NLEZlvTBpCGJYzF5rtHWfYe26TwW0pbtqWmxOo=",
+    "version": "4.42.0"
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -543,22 +543,22 @@
     "version": "1.0.4"
   },
   "http": {
-    "hash": "sha256-ZIV4OrfwUtWuQyp9Uw/sA7tW7JlG2+bAUu8TamyTPbs=",
+    "hash": "sha256-04OMH0+fT4QOV34YdE67avnbC3GoK7xyMGxpILNM7Jk=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/http",
     "repo": "terraform-provider-http",
-    "rev": "v3.1.0",
-    "vendorHash": "sha256-LPd5TQbuauXKMXraHsJd5uIdn357CveRyaLmavtMHSA=",
-    "version": "3.1.0"
+    "rev": "v3.2.0",
+    "vendorHash": "sha256-diQ5bYFywVZXziRKiKdIU4grg93vF68bkbMrRpM/vQc=",
+    "version": "3.2.0"
   },
   "huaweicloud": {
-    "hash": "sha256-QBRnlBR+gPMy9gtM2P93Lot4GDW94z7B4BgYs+lT5IQ=",
+    "hash": "sha256-cr7xV7Z4UU+kRykVSOKeuXDiHQPL4CsCJVXf2uTZOms=",
     "owner": "huaweicloud",
     "provider-source-address": "registry.terraform.io/huaweicloud/huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.41.1",
+    "rev": "v1.42.0",
     "vendorHash": null,
-    "version": "1.41.1"
+    "version": "1.42.0"
   },
   "huaweicloudstack": {
     "hash": "sha256-WSJDp+LFjVPquQVMgib/YZV35kktLH2vMCIZJWqakXs=",
@@ -651,13 +651,13 @@
     "version": "1.14.0"
   },
   "kubernetes": {
-    "hash": "sha256-E8ew1MwQa1DVYZH//ePjZXLQdyRN7Q0yomH0ma0neks=",
+    "hash": "sha256-93cGlfYUH4VTdDYbtGySOUw5Kak7hKs0gxLCT0Bxca4=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.14.0",
+    "rev": "v2.15.0",
     "vendorHash": null,
-    "version": "2.14.0"
+    "version": "2.15.0"
   },
   "launchdarkly": {
     "hash": "sha256-AsFtlCIGvlG8c+PilhMhaMowaea/g1+IXYzEiIIbZ44=",
@@ -1030,13 +1030,13 @@
     "version": "3.8.5"
   },
   "sentry": {
-    "hash": "sha256-dNyUp+gXrOvMQu5tEnv2dOsXihyd19gdYakIo7+h3pY=",
+    "hash": "sha256-D6w2HfgIcNFfDXeqzuerK8msrFF7vajk80MUxbUxA+A=",
     "owner": "jianyuan",
     "provider-source-address": "registry.terraform.io/jianyuan/sentry",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.9.4",
-    "vendorHash": "sha256-ohPZpFCjawaymVHZoCstPeu+p0erRnfnpbjipT6Sp20=",
-    "version": "0.9.4"
+    "rev": "v0.10.0",
+    "vendorHash": "sha256-OxapqNRE5Poz6qsFjDv5G5zzivbBldzjC7kbwG2Cswg=",
+    "version": "0.10.0"
   },
   "shell": {
     "hash": "sha256-LTWEdXxi13sC09jh+EFZ6pOi1mzuvgBz5vceIkNE/JY=",
@@ -1066,13 +1066,13 @@
     "version": "0.15.0"
   },
   "snowflake": {
-    "hash": "sha256-i96scuSP7I8rcyncUkpBoxxM0D4zp9rNHqWwb9WLbhA=",
+    "hash": "sha256-XjLsRS7n3p0lNVEPx6b+h5TCzK+1Kws/72FNgy3sVbE=",
     "owner": "Snowflake-Labs",
     "provider-source-address": "registry.terraform.io/Snowflake-Labs/snowflake",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.46.0",
-    "vendorHash": "sha256-43q1SrV7tEt0x7iRUAgBFg1oh8+B9i1i59nlR8kbLIY=",
-    "version": "0.46.0"
+    "rev": "v0.49.0",
+    "vendorHash": "sha256-n6ov9eTlNF/jNDTDOZuuqyFfuv8lDZHKP/5jhFauwY8=",
+    "version": "0.49.0"
   },
   "sops": {
     "hash": "sha256-6FuThi6iuuUGcMhswAk3Z6Lxth/2nuI57A02Xu2s+/U=",
@@ -1084,13 +1084,13 @@
     "version": "0.7.1"
   },
   "spotinst": {
-    "hash": "sha256-D/cLkMAZwjJoaliUmfiLAn6uY1rNt1vu6QS5mQmBQ0s=",
+    "hash": "sha256-mcj16B7VM5mc5UUXSLdcGApPac6xPU86H0lgpeR1FMs=",
     "owner": "spotinst",
     "provider-source-address": "registry.terraform.io/spotinst/spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.85.1",
-    "vendorHash": "sha256-BDYX/4D3R2A1w3k14mON/2KZUg2kPbwePXQQpVanqdU=",
-    "version": "1.85.1"
+    "rev": "v1.86.0",
+    "vendorHash": "sha256-INJLhHiMs/bk3Y8/shtQaW10bUnuhCXdTa8wCNZf0+U=",
+    "version": "1.86.0"
   },
   "stackpath": {
     "hash": "sha256-nTR9HgSmuNCt7wxE4qqIH2+HA2igzqVx0lLRx6FoKrE=",
@@ -1165,13 +1165,13 @@
     "version": "0.9.0"
   },
   "tls": {
-    "hash": "sha256-q3zt+5zd/bJ42sWbFwuE+rDyHHcZoVBZF4c61aJJkMs=",
+    "hash": "sha256-DBOkfvT0+mlgaWiBHggZUKvHL8jLZjQjRi0xFZKgcoM=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tls",
     "repo": "terraform-provider-tls",
-    "rev": "v4.0.3",
-    "vendorHash": "sha256-tW4e+QETPSykMEosahs68VeagToqWWe4ZUQN49gpHHM=",
-    "version": "4.0.3"
+    "rev": "v4.0.4",
+    "vendorHash": "sha256-k7aW5ZD6pAtdT6tTXy8YaJlFS5WR5FzPd9eINgPBYJM=",
+    "version": "4.0.4"
   },
   "triton": {
     "deleteVendor": true,

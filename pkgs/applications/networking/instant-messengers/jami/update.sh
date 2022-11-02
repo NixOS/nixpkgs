@@ -13,7 +13,7 @@ echo "Latest version: ${version}"
 
 update-source-version jami-daemon "$version" --file=$jami_dir/default.nix
 
-src=$(nix-build --no-out-link -A jami-libclient.src)
+src=$(nix-build --no-out-link -A jami-daemon.src)
 
 config_dir="$jami_dir/config"
 mkdir -p $config_dir
@@ -47,7 +47,7 @@ echo "${pjsip_patches}" > "$config_dir/pjsip_patches"
 
 # Update pjsip version
 pjsip_version=$(sed -n -E 's/.*PJPROJECT_VERSION := ([0-9a-f]+).*/\1/p' ${src}/daemon/contrib/src/pjproject/rules.mak)
-update-source-version jami-daemon.pjsip "$pjsip_version" --file=pkgs/applications/networking/instant-messengers/jami/daemon.nix
+update-source-version jami.pjsip-jami "$pjsip_version" --file=$jami_dir/default.nix
 
 pjsip_rules="${src}/daemon/contrib/src/pjproject/rules.mak"
 

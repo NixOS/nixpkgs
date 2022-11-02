@@ -2277,6 +2277,8 @@ self: super: with self; {
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
+  demetriek = callPackage ../development/python-modules/demetriek { };
+
   demjson3 = callPackage ../development/python-modules/demjson3 { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
@@ -4052,6 +4054,8 @@ self: super: with self; {
   gviz-api = callPackage ../development/python-modules/gviz-api { };
 
   gym = callPackage ../development/python-modules/gym { };
+
+  gym-notices = callPackage ../development/python-modules/gym-notices { };
 
   gyp = callPackage ../development/python-modules/gyp { };
 
@@ -6282,6 +6286,8 @@ self: super: with self; {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
+
+  nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
@@ -12131,8 +12137,6 @@ self: super: with self; {
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
-
-  yutto = callPackage ../tools/misc/yutto { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
