@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "kail";
@@ -17,7 +17,9 @@ buildGoModule rec {
     sha256 = "0b4abzk8lc5qa04ywkl8b5hb9jmxhyi2dpgbl27gmw81525wjnj7";
   };
 
-  vendorSha256 = "09s7sq23hglcb2rsi9igzql39zs4238f3jfmvxz9a8v41da225np";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-YB1J8Kplo2jcDgCp3eTDAQOaIz8rwJdXWIBReGdY/Yc=";
 
   meta = with lib; {
     description = "Kubernetes log viewer";
