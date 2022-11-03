@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 , cmake
 , rocm-cmake
 , rocm-opencl-runtime
@@ -118,6 +119,10 @@ in stdenv.mkDerivation rec {
     mv ../doc/html $docs/share/doc/miopengemm
     mv ../doc/pdf/miopengemm.pdf $docs/share/doc/miopengemm
   '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.miopengemm;
+  };
 
   meta = with lib; {
     description = "OpenCL general matrix multiplication API for ROCm";
