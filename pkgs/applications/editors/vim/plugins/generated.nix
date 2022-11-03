@@ -4558,6 +4558,18 @@ final: prev:
     meta.homepage = "https://github.com/marko-cerovac/material.nvim/";
   };
 
+  material-vim = buildVimPluginFrom2Nix {
+    pname = "material.vim";
+    version = "2022-09-14";
+    src = fetchFromGitHub {
+      owner = "kaicataldo";
+      repo = "material.vim";
+      rev = "81d5d0bb30677b0846a2721a600f2f45db6d10a7";
+      sha256 = "1j23wi0hh5h0pc0rk5dxvsc60k484h5haa2gfxzahjqd7kzil4y8";
+    };
+    meta.homepage = "https://github.com/kaicataldo/material.vim/";
+  };
+
   mayansmoke = buildVimPluginFrom2Nix {
     pname = "mayansmoke";
     version = "2010-10-18";
@@ -5084,6 +5096,18 @@ final: prev:
       sha256 = "06k0r92qhgp1sb1jacfwxqbzn69cw604s5qla4q32a38a2spbmcr";
     };
     meta.homepage = "https://github.com/kassio/neoterm/";
+  };
+
+  neotest = buildVimPluginFrom2Nix {
+    pname = "neotest";
+    version = "2022-10-27";
+    src = fetchFromGitHub {
+      owner = "nvim-neotest";
+      repo = "neotest";
+      rev = "0be9899e859da147ad28c23a30a1df2081c16741";
+      sha256 = "08f7d8w82jk5jd2w4wrh8x4gyw0msv7m82cpzd1ahijg917818pd";
+    };
+    meta.homepage = "https://github.com/nvim-neotest/neotest/";
   };
 
   neotest-haskell = buildVimPluginFrom2Nix {
@@ -5828,6 +5852,18 @@ final: prev:
       sha256 = "0xl3crhgkzmas8zdcycgk11am3wx0az4jh7fh5n4lsjip8895p4s";
     };
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
+  };
+
+  nvim-luadev = buildVimPluginFrom2Nix {
+    pname = "nvim-luadev";
+    version = "2022-01-26";
+    src = fetchFromGitHub {
+      owner = "bfredl";
+      repo = "nvim-luadev";
+      rev = "2a2c242bd751c289cfc1bc27f357925f68eba098";
+      sha256 = "0prwzxgg6fqkfmqqs41c1c81lch2x4qrs7287l5b104rz3alcinn";
+    };
+    meta.homepage = "https://github.com/bfredl/nvim-luadev/";
   };
 
   nvim-luapad = buildVimPluginFrom2Nix {
@@ -7875,6 +7911,18 @@ final: prev:
       sha256 = "1vs8jgxam37qrxsxgda2fw4b1qb720wvzjwyq9d5c0hbzv7iqz2b";
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope.nvim/";
+  };
+
+  telescope_hoogle = buildVimPluginFrom2Nix {
+    pname = "telescope_hoogle";
+    version = "2022-10-27";
+    src = fetchFromGitHub {
+      owner = "luc-tielen";
+      repo = "telescope_hoogle";
+      rev = "6322f74655a2773974377a8fc8d170c00f24938f";
+      sha256 = "1pjq5bwnrxb3qhvvqd9v996hqfkbg5ah7qmbzrq1287h13m5jy2n";
+    };
+    meta.homepage = "https://github.com/luc-tielen/telescope_hoogle/";
   };
 
   template-string-nvim = buildVimPluginFrom2Nix {

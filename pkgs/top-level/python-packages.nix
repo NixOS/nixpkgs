@@ -6111,6 +6111,8 @@ self: super: with self; {
     enablePython = true; # ... and its Python bindings
   })).python;
 
+  niaaml = callPackage ../development/python-modules/niaaml { };
+
   niaarm = callPackage ../development/python-modules/niaarm { };
 
   niapy = callPackage ../development/python-modules/niapy { };
