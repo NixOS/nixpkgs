@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "imgcat";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "0x7a1izsbrbfph7wa9ny9r4a8lp6z15qpb6jf8wsxshiwnkjyrig";
   };
 
-  vendorSha256 = "191gi4c5jk8p9xvbm1cdhk5yi8q2cp2jvjq1sgxqw1ad0lppwhg2";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-9AhYg258ry1rz3cRHbbjkNHKyE1NreQFV59gW+4ndHQ=";
 
   meta = with lib; {
     description = "A tool to output images as RGB ANSI graphics on the terminal";
