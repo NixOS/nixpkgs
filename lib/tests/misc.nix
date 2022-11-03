@@ -741,7 +741,7 @@ runTests {
     };
     expected = rec {
       int = "42";
-      float = "~0.133700";
+      float = "0.1337";
       bool = "true";
       emptystring = ''""'';
       string = ''"fn\''${o}\"r\\d"'';

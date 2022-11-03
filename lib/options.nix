@@ -218,7 +218,7 @@ rec {
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
-  optionAttrSetToDocList' = prefix: options:
+  optionAttrSetToDocList' = _: options:
     concatMap (opt:
       let
         docOption = rec {
@@ -234,9 +234,8 @@ rec {
           readOnly = opt.readOnly or false;
           type = opt.type.description or "unspecified";
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; }
+        // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
+        // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
@@ -256,6 +255,9 @@ rec {
      efficient: the XML representation of derivations is very large
      (on the order of megabytes) and is not actually used by the
      manual generator.
+
+     This function was made obsolete by renderOptionValue and is kept for
+     compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -263,6 +265,17 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
+
+
+  /* Ensures that the given option value (default or example) is a `_type`d string
+     by rendering Nix values to `literalExpression`s.
+  */
+  renderOptionValue = v:
+    if v ? _type && v ? text then v
+    else literalExpression (lib.generators.toPretty {
+      multiline = true;
+      allowPrettyValues = true;
+    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
