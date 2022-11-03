@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, updateGolangSysHook
 }:
 buildGoModule rec {
   pname = "lifecycled";
@@ -13,7 +14,9 @@ buildGoModule rec {
     sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
   };
 
-  vendorSha256 = "sha256-q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-KmrGTCKjFSK9mZWgox+EBVK6aQ7xUs9fAvCnNCY5eDY=";
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system
