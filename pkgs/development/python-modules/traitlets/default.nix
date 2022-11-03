@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.4.0";
+  version = "5.5.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PyxOQ14nFZL+Q5DxdG6laDbjoID4Tngz8PgB2WE/7Dk=";
+    sha256 = "sha256-sSL5/y8vbBcJ2rKJoFVVvgEch4KOkRwM9AdLhct4Cnk=";
   };
 
   nativeBuildInputs = [ hatchling ];
