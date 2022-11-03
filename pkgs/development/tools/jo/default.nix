@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jo";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner  = "jpmens";
     repo = "jo";
     rev = version;
-    sha256 ="sha256-aATCeJV0x+XHOQbwulutxivPzGVQ0mJj90vA+6IM124=";
+    sha256 ="sha256-uJUbe593k7ENfbKCFhmm4Io0CPB109LF9EH8Qw0BFiY=";
   };
 
   enableParallelBuilding = true;
