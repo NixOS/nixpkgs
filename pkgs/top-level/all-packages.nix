@@ -14825,6 +14825,10 @@ with pkgs;
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  composable_kernel = callPackage ../development/libraries/composable_kernel {
+    inherit (llvmPackages) openmp;
+  };
+
   rgxg = callPackage ../tools/text/rgxg { };
 
   rocclr = callPackage ../development/libraries/rocclr { };
