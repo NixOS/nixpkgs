@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "wally-cli";
@@ -6,7 +6,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config updateGolangSysHook ];
 
   buildInputs = [ libusb1 ];
 
@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
   };
 
-  vendorSha256 = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
+  vendorSha256 = "sha256-FLF3myDaGkfzMviEiHGmVoFexbXSH3PpX4R7kIlZmNI=";
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
