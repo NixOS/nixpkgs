@@ -108,6 +108,7 @@ extra-packages:
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
+  - brick == 1.3                        # 2022-11-03: needed by swarm 0.1.1.0
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
   - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
