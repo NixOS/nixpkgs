@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "shopify-themekit";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-7uUKyaLzeiioW0TsEu82lJU0DoM1suwVcmacY1X0SEM=";
   };
 
-  vendorSha256 = "sha256-8QpkYj0fQb4plzvk6yCrZho8rq9VBiLft/EO3cczciI=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-bKdksrkPWZ7gmxXChug3JKVR0wIPOv7NEhVre5mDaA8=";
 
   ldflags = [ "-s" "-w" ];
 
