@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "awsls";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-iy9tohmVUtNXYVfe6pZ+pbbLlcK6Fu1GgzTWMD+3xP0=";
   };
 
-  vendorSha256 = "sha256-ZyMO+KCqoePF6MqHFt8X4tZR4nBhuSPgJDrX+emM6jc=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-LQWi0pIVPRPtxY1zFbrMBQwrgxTiXKQTfHjlvMY+77s=";
 
   ldflags =
     let t = "github.com/jckuester/awsls/internal";
