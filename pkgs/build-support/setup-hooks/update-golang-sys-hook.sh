@@ -1,6 +1,6 @@
-preConfigureHooks+=(_updateGolangSys)
+preConfigureHooks+=(updateGolangSys)
 
-_updateGolangSys() {
+updateGolangSys() {
     sed -i '/golang.org\/x\/sys/d' go.mod
     cat >>go.mod <<EOF
 require (
