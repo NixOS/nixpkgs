@@ -1,6 +1,8 @@
 { lib
+, blinker
 , buildPythonPackage
 , fetchPypi
+, flask
 , pythonOlder
 , webob
 }:
@@ -21,11 +23,18 @@ buildPythonPackage rec {
     webob
   ];
 
+  passthru.optional-dependencies = {
+    flask = [
+      blinker
+      flask
+    ];
+  };
+
   pythonImportsCheck = [
     "bugsnag"
   ];
 
-  # no tests
+  # Module ha no tests
   doCheck = false;
 
   meta = with lib; {
