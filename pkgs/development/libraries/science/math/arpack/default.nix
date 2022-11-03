@@ -1,5 +1,13 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, gfortran, blas, lapack, eigen }:
+, gfortran, blas, lapack, eigen
+, useMpi ? false
+, mpi
+, openssh
+}:
+
+# MPI version can only be built with LP64 interface.
+# See https://github.com/opencollab/arpack-ng#readme
+assert useMpi -> !blas.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "arpack";
@@ -27,13 +35,16 @@ stdenv.mkDerivation rec {
     blas
     lapack
     eigen
-  ];
+  ] ++ lib.optional useMpi mpi;
+
+  checkInputs = lib.optional useMpi openssh;
 
   doCheck = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
+    "-DMPI=${if useMpi then "ON" else "OFF"}"
   ];
 
   preCheck = ''
