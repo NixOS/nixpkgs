@@ -7,6 +7,14 @@
     , os ? "linux"
     , arch ? "x86_64"
     , readonly ? false
+    , readonlyPaths ? []
+    , user ? { uid = 0; gid = 0; }
+    , capabilities ? {}
+    , namespaces ? [ "pid" "network" "mount" "ipc" "uts" ]
+    , uidMappings ? []
+    , gidMappings ? []
+    , sysctl ? {}
+    , terminal ? false
     }:
   let
     sysMounts = {
@@ -52,14 +60,14 @@
       };
 
       linux = {
-        namespaces = map (type: { inherit type; }) [ "pid" "network" "mount" "ipc" "uts" ];
+        inherit uidMappings gidMappings readonlyPaths sysctl;
+        namespaces = map (type: { inherit type; }) namespaces;
       };
 
       root = { path = "rootfs"; inherit readonly; };
 
       process = {
-        inherit args;
-        user = { uid = 0; gid = 0; };
+        inherit args capabilities user terminal;
         cwd = "/";
       };
 
