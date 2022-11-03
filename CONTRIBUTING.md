@@ -37,6 +37,7 @@ Below is a short excerpt of some points in there:
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
+* Package name and version must follow [the nixpkgs manual guidelines](https://nixos.org/manual/nixpkgs/unstable/#sec-package-naming).
 * `meta.description` should:
   * Be capitalized.
   * Not start with the package name.
