@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pyproject-metadata";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "pyproject";
 
   src = fetchPypi rec {
     inherit pname version;
-    hash = "sha256-6YN9I3V8XJ//+19/N8+be8LZc30OlZt/XV8YmVFulww=";
+    hash = "sha256-tfsJVDpkqRFl3+hXlnWfnkFe3Clr602zPR7PeGaoYr0=";
   };
 
   nativeBuildInputs = [
