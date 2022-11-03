@@ -14859,6 +14859,10 @@ with pkgs;
 
   rocminfo = callPackage ../development/tools/rocminfo { };
 
+  miopengemm = callPackage ../development/libraries/miopengemm {
+    inherit (llvmPackages_rocm) clang;
+  };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
