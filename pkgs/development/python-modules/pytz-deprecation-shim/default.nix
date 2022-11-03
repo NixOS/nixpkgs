@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_localize_explicit_is_dst"
+    "test_localize_is_dst_none"
   ];
 
   meta = with lib; {
