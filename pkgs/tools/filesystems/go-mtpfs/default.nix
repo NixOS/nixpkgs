@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "go-mtpfs";
@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-HVfB8/MImgZZLx4tcrlYOfQjpAdHMHshEaSsd+n758w=";
   };
 
-  vendorSha256 = "sha256-OrAEvD2rF0Y0bvCD9TUv/E429lASsvC3uK3qNvbg734=";
+  vendorSha256 = "sha256-ESh3k1rYLz49VVepoIroMTSYcZjzZ38Diby4oMUqzL0=";
 
   ldflags = [ "-s" "-w" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config updateGolangSysHook ];
   buildInputs = [ libusb1 ];
 
   preCheck = ''
