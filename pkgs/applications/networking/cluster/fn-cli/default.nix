@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
+{ lib, buildGoModule, fetchFromGitHub, docker, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "fn";
@@ -11,9 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-HeyWMzxSga6T2/BRVwrmgb3utjnVTJk3zhhcVfq8/Cc=";
   };
 
-  vendorSha256 = null;
+  deleteVendor = true;
+
+  vendorSha256 = "sha256-p68t5uHZZUX21v3h71Es+8MsqyZwrfMQtFZUdIoiJto=";
 
   subPackages = ["."];
+
+  nativeBuildInputs = [ updateGolangSysHook ];
 
   buildInputs = [
     docker
