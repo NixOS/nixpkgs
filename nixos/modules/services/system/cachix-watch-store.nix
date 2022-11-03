@@ -9,41 +9,41 @@ in
   meta.maintainers = [ lib.maintainers.jfroche lib.maintainers.domenkozar ];
 
   options.services.cachix-watch-store = {
-    enable = mkEnableOption (lib.mdDoc "Cachix Watch Store: https://docs.cachix.org");
+    enable = mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
 
     cacheName = mkOption {
       type = types.str;
-      description = lib.mdDoc "Cachix binary cache name";
+      description = "Cachix binary cache name";
     };
 
     cachixTokenFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Required file that needs to contain the cachix auth token.
       '';
     };
 
     compressionLevel = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for XZ compression (between 0 and 9)";
+      description = "The compression level for XZ compression (between 0 and 9)";
       default = null;
     };
 
     jobs = mkOption {
       type = types.nullOr types.int;
-      description = lib.mdDoc "Number of threads used for pushing store paths";
+      description = "Number of threads used for pushing store paths";
       default = null;
     };
 
     host = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc "Cachix host to connect to";
+      description = "Cachix host to connect to";
     };
 
     verbose = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Enable verbose output";
+      description = "Enable verbose output";
       default = false;
     };
 
@@ -51,7 +51,7 @@ in
       type = types.package;
       default = pkgs.cachix;
       defaultText = literalExpression "pkgs.cachix";
-      description = lib.mdDoc "Cachix Client package to use.";
+      description = "Cachix Client package to use.";
     };
 
   };
