@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , git
 , ghq
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -16,13 +17,14 @@ buildGoModule rec {
     sha256 = "07cixz5wlzzb4cwcrncg2mz502wlhd3awql5js1glw9f6qfwc5in";
   };
 
-  vendorSha256 = "0k5xl55vzpl64gwsgaff92jismpx6y7l2ia0kx7gamd1vklf0qwh";
+  vendorSha256 = "sha256-oYtosCZwZAAxUipSC/ftngdT9QdgUT/EyssTCerKAmc=";
 
   doCheck = false;
 
   nativeBuildInputs = [
     git
     ghq
+    updateGolangSysHook
   ];
 
   ldflags = [
