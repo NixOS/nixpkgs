@@ -402,18 +402,19 @@
       <varlistentry>
         <term>
           <literal>types.submodule</literal>
-          <emphasis><literal>o</literal></emphasis>
+          <emphasis><literal>module</literal></emphasis>
         </term>
         <listitem>
           <para>
-            A set of sub options
-            <emphasis><literal>o</literal></emphasis>.
-            <emphasis><literal>o</literal></emphasis> can be an
-            attribute set, a function returning an attribute set, or a
-            path to a file containing such a value. Submodules are used
-            in composed types to create modular options. This is
-            equivalent to
+            A nested module evaluation, containing its own set of
+            options. <literal>module</literal> can either be a single
+            module (in the form of an attribute set, a function, or a
+            path), or as a list of modules (which then gets processed
+            just like a list assigned to <literal>imports</literal>).
+            This type is equivalent to
             <literal>types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }</literal>.
+            Submodules can be used in composed types to create multiple
+            occurrences of the submodule.
           </para>
         </listitem>
       </varlistentry>

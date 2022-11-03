@@ -197,13 +197,16 @@ merging is handled.
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
 
-`types.submodule` *`o`*
+`types.submodule` *`module`*
 
-:   A set of sub options *`o`*. *`o`* can be an attribute set, a function
-    returning an attribute set, or a path to a file containing such a
-    value. Submodules are used in composed types to create modular
-    options. This is equivalent to
+:   A nested module evaluation, containing its own set of options.
+    `module` can either be a single module (in the form of an attribute
+    set, a function, or a path), or as a list of modules (which then
+    gets processed just like a list assigned to `imports`). This type is
+    equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
+    Submodules can be used in composed types to create multiple
+    occurrences of the submodule. 
 
 `types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
 
