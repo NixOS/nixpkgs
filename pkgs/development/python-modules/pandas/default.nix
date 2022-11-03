@@ -5,6 +5,7 @@
 , python
 , pythonOlder
 , cython
+, matplotlib
 , numpy
 , python-dateutil
 , pytz
@@ -28,13 +29,13 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.4";
+  version = "1.5.1";
   format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q2wNc4YXtnUYPl8o2zK1FItpStm7oKQMPqJtlrQx22c=";
+    hash = "sha256-JJzsXypbIglkQL2FwzEGthAuBnIgSr0tXAFBBkWYBO4=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -48,9 +49,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    glibcLocales
     hypothesis
     jinja2
+    matplotlib
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
