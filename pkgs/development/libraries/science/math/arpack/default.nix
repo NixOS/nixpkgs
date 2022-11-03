@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
+  passthru = { inherit (blas) isILP64; };
+
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     description = ''
