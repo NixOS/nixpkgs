@@ -20,7 +20,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "naiquevin";
+    owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
     hash = "sha256-ivqu9b+4FhGa5y+WnKRk4nF6MR4Vj62pSs2d7ycIZMc=";
@@ -38,7 +38,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    graphviz = [ graphviz ];
+    graphviz = [
+      graphviz
+    ];
   };
 
   checkInputs = [
@@ -54,7 +56,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line utility to show dependency tree of packages";
-    homepage = "https://github.com/naiquevin/pipdeptree";
+    homepage = "https://github.com/tox-dev/pipdeptree";
+    changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ charlesbaynham ];
   };
