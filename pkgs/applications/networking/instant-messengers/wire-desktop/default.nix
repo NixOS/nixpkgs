@@ -24,12 +24,12 @@ let
 
   version = {
     x86_64-darwin = "3.29.4477";
-    x86_64-linux = "3.29.2997";
+    x86_64-linux = "3.28.2946";
   }.${system} or throwSystem;
 
   sha256 = {
     x86_64-darwin = "19snbd53hjfcqgnz24r85a34fr120b1wps4pv4vymnkxjld2wifc";
-    x86_64-linux = "0f5kkp93za4yr6ywdgph8zr6ivrbxq2gbskl8jysxawk1pz92pqf";
+    x86_64-linux = "03f1qz0mwn6f14w4g1w72sd5idfyvmv18r5y1h279p56x0i919kq";
   }.${system} or throwSystem;
 
   meta = with lib; {
