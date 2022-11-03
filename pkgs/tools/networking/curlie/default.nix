@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, curlie, testers }:
+{ buildGoModule, fetchFromGitHub, lib, curlie, testers, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "curlie";
@@ -11,11 +11,9 @@ buildGoModule rec {
     hash = "sha256-3EKxuEpFm+lp2myMfymYYY9boSXGOF2iAdjtGKnjJK0=";
   };
 
-  patches = [
-    ./bump-golang-x-sys.patch
-  ];
+  nativeBuildInputs = [ updateGolangSysHook ];
 
-  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
+  vendorSha256 = "sha256-sumBuj0gI97gDM+kYsrpyzY2xpfUHUnJSgZtvwLXbAg=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
