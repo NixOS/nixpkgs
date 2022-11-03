@@ -60,6 +60,7 @@ buildPythonPackage rec {
     flask
     flask-babel
     flask-jwt-extended
+    flask_login
     flask-openid
     flask_sqlalchemy
     flask_wtf
