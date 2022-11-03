@@ -28,10 +28,6 @@ rustPlatform.buildRustPackage rec {
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
-  # vaultwarden depends on rocket v0.5.0-dev, which requires nightly features.
-  # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
-  RUSTC_BOOTSTRAP = 1;
-
   buildFeatures = dbBackend;
 
   passthru.tests = nixosTests.vaultwarden;
