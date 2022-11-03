@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     name = "CVE-2022-27419";
     url = "https://github.com/merbanan/rtl_433/commit/37455483889bd1c641bdaafc493d1cc236b74904.patch";
     sha256 = "172jndh8x5nlcbx2jp5y8fgfxsawwfz95037pcjp170gf93ijy88";
+  }) ( fetchpatch {
+    name = "CVE-2022-25051";
+    url = "https://github.com/merbanan/rtl_433/commit/2dad7b9fc67a1d0bfbe520fbd821678b8f8cc7a8.patch";
+    sha256 = "sha256-IfxwdnuA7WbaVdxMTln069mA5hKNuPz+XYQaNA4YY24=";
   })];
 
   nativeBuildInputs = [ pkg-config cmake ];
