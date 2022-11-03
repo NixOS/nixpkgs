@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "mdr";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-ibM3303pXnseAFP9qFTOzj0G/SxRPX+UeRfbJ+MCABk=";
   };
 
-  vendorSha256 = "sha256-5jzU4EybEGKoEXCFhnu7z4tFRS9fgf2wJXhkvigRM0E=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-PrakjpL7fTU3N/ujLvzEbnjc1yGFIJ6KvowPo+MIoWY=";
 
   ldflags = [
     "-s"
