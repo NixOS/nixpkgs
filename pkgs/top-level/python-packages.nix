@@ -10954,6 +10954,8 @@ self: super: with self; {
 
   textual = callPackage ../development/python-modules/textual { };
 
+  testbook = callPackage ../development/python-modules/testbook { };
+
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
 
   testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
