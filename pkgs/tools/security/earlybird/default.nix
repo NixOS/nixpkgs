@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, updateGolangSysHook
 }:
 buildGoModule {
   pname = "earlybird";
@@ -15,7 +16,9 @@ buildGoModule {
     sha256 = "UZXHYBwBmb9J1HrE/htPZcKvZ+7mc+oXnUtzgBmBgN4=";
   };
 
-  vendorSha256 = "oSHBR1EvK/1+cXqGNCE9tWn6Kd/BwNY3m5XrKCAijhA=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-bRCzlq+hlzLmrzCdHHtXYRFVDpDgEN6Hlt/gCr2Pfig=";
 
   meta = with lib; {
     description = "A sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
