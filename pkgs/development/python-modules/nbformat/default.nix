@@ -2,7 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fastjsonschema
-, flit-core
+, hatchling
+, hatch-nodejs-version
 , pytestCheckHook
 , glibcLocales
 , ipython_genutils
@@ -15,16 +16,17 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.5.0";
+  version = "5.7.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nr4w5sOz5bR9Of8KOJehrPUj0r+vy04tBM23D4pmxQc=";
+    sha256 = "sha256-HUdgwVwaBCae9crzdb6LmN0vaW5eueYD7Cvwkfmw0/M=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    hatchling
+    hatch-nodejs-version
   ];
 
   LC_ALL="en_US.utf8";
