@@ -22956,6 +22956,7 @@ with pkgs;
 
   yubihsm-connector = callPackage ../tools/security/yubihsm-connector { };
 
+  yubikey-manager4 = callPackage ../tools/misc/yubikey-manager/4.nix { };
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
