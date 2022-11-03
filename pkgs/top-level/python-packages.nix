@@ -12148,6 +12148,8 @@ self: super: with self; {
 
   zake = callPackage ../development/python-modules/zake { };
 
+  zamg = callPackage ../development/python-modules/zamg { };
+
   zarr = callPackage ../development/python-modules/zarr { };
 
   zc-buildout = callPackage ../development/python-modules/buildout { };
