@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "awsrm";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-KAujqYDtZbCBRO5WK9b9mxqe84ZllbBoO2tLnDH/bdo=";
   };
 
-  vendorSha256 = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-bEBUEk2LVVEJ2tbtVrZ5siXfPkfyVqGU5aOKCOVZ4V8=";
 
   ldflags =
     let t = "github.com/jckuester/awsrm/internal";
