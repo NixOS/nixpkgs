@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "kpt";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-PG4SzycXRguKyaQ7LDnTtxF3EgqcjfjeEWD5rROXBPI=";
   };
 
-  vendorSha256 = "sha256-CoXlUX9hkP8gijA/vg19AS9030w95A2oKGD1wjzO8ak=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-YViBjumSGOa7lRuKuZBUWJPa62U5eSi+mXtZWg/4fb4=";
 
   subPackages = [ "." ];
 
