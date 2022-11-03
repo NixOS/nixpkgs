@@ -12,6 +12,7 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , python-daemon
 , pyyaml
 , six
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   pname = "ansible-runner";
   version = "2.3.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
