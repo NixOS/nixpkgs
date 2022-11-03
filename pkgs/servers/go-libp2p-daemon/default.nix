@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule {
   pname = "go-libp2p-daemon";
@@ -11,7 +11,9 @@ buildGoModule {
     sha256 = "1f3gjkmpqngajjpijpjdmkmsjfm9bdgakb5r28fnc6w9dmfyj51x";
   };
 
-  vendorSha256 = "0g25r7wd1hvnwxxq18mpx1r1wig6dnlnvzkpvgw79q6nymxlppmv";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-avbDJb31hDt0XAKOHpL6UZFEeJ5NErCQ6bWamcyuQ3U=";
 
   doCheck = false;
 
