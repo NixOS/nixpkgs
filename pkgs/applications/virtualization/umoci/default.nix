@@ -4,6 +4,7 @@
 , go-md2man
 , installShellFiles
 , bash
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -17,13 +18,15 @@ buildGoModule rec {
     sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
   };
 
-  vendorSha256 = null;
+  deleteVendor = true;
+
+  vendorSha256 = "sha256-hgA7ulzxzhxssyNrzhK1RRwZDLI5H0aG4n9Sj+zqItc=";
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [ go-md2man installShellFiles updateGolangSysHook ];
 
   postInstall = ''
     make docs SHELL="$SHELL"
