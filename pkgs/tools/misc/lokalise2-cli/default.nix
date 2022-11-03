@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "lokalise2-cli";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-U8XN7cH64ICVxcjmIWBeelOT3qQlGt6MhOPgUWkCPF0=";
   };
 
-  vendorSha256 = "sha256-PM3Jjgq6mbM6iVCXRos9UsqqFNaXOqq713GZ2R9tQww=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-XlOCB4BN1H/3nfoaB6I84q8F/6YAwklkEY6TwORnPv4=";
 
   doCheck = false;
 
