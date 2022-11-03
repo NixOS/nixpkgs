@@ -2877,6 +2877,18 @@ final: prev:
     meta.homepage = "https://github.com/bogado/file-line/";
   };
 
+  firenvim = buildVimPluginFrom2Nix {
+    pname = "firenvim";
+    version = "2022-11-02";
+    src = fetchFromGitHub {
+      owner = "glacambre";
+      repo = "firenvim";
+      rev = "eeaddd0b503f841fa24f60cebd14fa93d2b33f77";
+      sha256 = "03sp9v8avqm6f12bki45d996aph9gvy4i1rz6qfka6ilhmpw3nj5";
+    };
+    meta.homepage = "https://github.com/glacambre/firenvim/";
+  };
+
   flake8-vim = buildVimPluginFrom2Nix {
     pname = "flake8-vim";
     version = "2020-10-20";
