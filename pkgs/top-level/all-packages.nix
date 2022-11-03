@@ -456,6 +456,8 @@ with pkgs;
 
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
+  dinghy = with python3Packages; toPythonApplication dinghy;
+
   deadcode = callPackage ../development/tools/deadcode { };
 
   deadnix = callPackage ../development/tools/deadnix { };
@@ -1430,6 +1432,8 @@ with pkgs;
   topicctl = callPackage ../tools/misc/topicctl { };
 
   ttchat = callPackage ../tools/misc/ttchat { };
+
+  unflac = callPackage ../tools/audio/unflac { };
 
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
@@ -23549,9 +23553,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    buildGoModule = buildGo118Module; # tests fail with 1.19
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent {};
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
@@ -31795,9 +31797,13 @@ with pkgs;
 
   synology-drive-client = callPackage ../applications/networking/synology-drive-client { };
 
+  synology-cloud-sync-decryption-tool = callPackage ../applications/networking/synology-cloud-sync-decryption-tool { };
+
   maestral = with python3Packages; toPythonApplication maestral;
 
   maestral-gui = libsForQt5.callPackage ../applications/networking/maestral-qt { };
+
+  maestro = callPackage ../development/mobile/maestro { };
 
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
