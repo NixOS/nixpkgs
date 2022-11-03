@@ -2635,4 +2635,12 @@ in {
 
   # 2022-10-04: Needs newer tasty-dejafu than (currently) in stackage
   rec-def = super.rec-def.override { tasty-dejafu = self.tasty-dejafu_2_1_0_0; };
+
+  # 2022-11-03: Builds with brick 1.3 which in turn works with text-zipper 0.12
+  # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
+  swarm = doJailbreak (super.swarm.override {
+    brick = doJailbreak (dontCheck (super.brick_1_3.override {
+      text-zipper = super.text-zipper_0_12;
+    }));
+  });
 })

@@ -4969,7 +4969,6 @@ broken-packages:
   - swagger
   - swagger-petstore
   - swagger-test
-  - swarm
   - swearjure
   - swf
   - swift-lda
