@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "ssmsh";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-juyTCtcuFIlKyLxDrK5tRRzCMwoSXG4EUA32E/Z4y5c=";
   };
 
-  vendorSha256 = "sha256-dqUMwnHRsR8n4bHEKoePyuqr8sE4NWPpuYo5SwOw0Rw=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-fzYVP8ita/ZZV9gUt9ptndO0+7ugWZOaCMace2Wsw1w=";
 
   doCheck = true;
 
