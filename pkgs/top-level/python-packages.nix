@@ -8572,6 +8572,8 @@ self: super: with self; {
 
   pysnooper = callPackage ../development/python-modules/pysnooper { };
 
+  pysnooz = callPackage ../development/python-modules/pysnooz { };
+
   pysnow = callPackage ../development/python-modules/pysnow { };
 
   pysocks = callPackage ../development/python-modules/pysocks { };
