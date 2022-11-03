@@ -348,6 +348,13 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
+# doRename works when `warnings` does not exist.
+checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
+# doRename adds a warning.
+checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. has been renamed to `c\.d\.e.\."$' \
+  config.result \
+  ./doRename-warnings.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
