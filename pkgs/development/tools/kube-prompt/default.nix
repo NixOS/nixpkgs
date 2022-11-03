@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -14,7 +15,9 @@ buildGoModule rec {
     sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 
-  vendorSha256 = "sha256-wou5inOX8vadEBCIBccwSRjtzf0GH1abwNdUu4JBvyM=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-WS63Eub5v8JACXTAh+ca/BYzq/Moc+y8ej4lKNFctjQ=";
 
   meta = with lib; {
     description = "An interactive kubernetes client featuring auto-complete";
