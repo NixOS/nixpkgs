@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -11,9 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-qYceijC/u8G9vr7uhApWWyWD9P65pLJCTjePEvh+oXA=";
   };
 
-  vendorSha256 = "sha256-CBPvtc3K9hr1oEmC+yUe3kPSWx20k6eMRqoxsf3NfCE=";
+  vendorSha256 = "sha256-l65JlC+eUaabU5oSaWjqAARjdE0CfIcM/YERX8+5zO4=";
 
-  nativeBuildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata updateGolangSysHook ];
 
   preBuild = ''
     make assets
