@@ -151,7 +151,7 @@ in
     package = lib.mkOption {
       type = types.package;
       default = pkgs.invidious;
-      defaultText = "pkgs.invidious";
+      defaultText = lib.literalExpression "pkgs.invidious";
       description = lib.mdDoc "The Invidious package to use.";
     };
 

@@ -67,7 +67,7 @@ in
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
-          [ "<pluginDir>" "pkgs.<plugins-name>"]
+          [ "<pluginDir>" pkgs.<plugins-name> ]
         '';
       };
 

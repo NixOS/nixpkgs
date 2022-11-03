@@ -116,7 +116,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Wheter to open ports in the firewall";
+        description = lib.mdDoc "Whether to open ports in the firewall";
       };
 
       dataDir = mkOption {

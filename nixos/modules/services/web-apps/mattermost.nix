@@ -106,7 +106,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.mattermost;
-        defaultText = "pkgs.mattermost";
+        defaultText = lib.literalExpression "pkgs.mattermost";
         description = lib.mdDoc "Mattermost derivation to use.";
       };
 
@@ -238,7 +238,7 @@ in
         package = mkOption {
           type = types.package;
           default = pkgs.matterircd;
-          defaultText = "pkgs.matterircd";
+          defaultText = lib.literalExpression "pkgs.matterircd";
           description = lib.mdDoc "matterircd derivation to use.";
         };
         parameters = mkOption {

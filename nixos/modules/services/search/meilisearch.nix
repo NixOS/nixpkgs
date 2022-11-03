@@ -21,7 +21,7 @@ in
     package = mkOption {
       description = lib.mdDoc "The package to use for meilisearch. Use this if you require specific features to be enabled. The default package has no features.";
       default = pkgs.meilisearch;
-      defaultText = "pkgs.meilisearch";
+      defaultText = lib.literalExpression "pkgs.meilisearch";
       type = types.package;
     };
 

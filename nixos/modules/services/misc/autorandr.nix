@@ -258,7 +258,7 @@ in {
         type = hooksModule;
         description = lib.mdDoc "Global hook scripts";
         default = { };
-        example = ''
+        example = literalExpression ''
           {
             postswitch = {
               "notify-i3" = "''${pkgs.i3}/bin/i3-msg restart";
@@ -279,7 +279,7 @@ in {
                     exit 1
                 esac
                 echo "Xft.dpi: $DPI" | ''${pkgs.xorg.xrdb}/bin/xrdb -merge
-              '''
+              ''';
             };
           }
         '';
