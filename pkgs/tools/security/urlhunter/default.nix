@@ -1,6 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -14,7 +15,9 @@ buildGoModule rec {
     sha256 = "sha256-lX5zh+fYVSyWPUOnfRNMGZPsiuxjKBSpluPUMN9mZ+k=";
   };
 
-  vendorSha256 = "sha256-JDDxarFROBhdi76mY6udn++lReKLdju/JBpj3JhGdQA=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-z1i+rdAt72p+4IuoHdL77ZhFjOBP84gnNsFvkRuO91w=";
 
   meta = with lib; {
     description = "Recon tool that allows searching shortened URLs";
