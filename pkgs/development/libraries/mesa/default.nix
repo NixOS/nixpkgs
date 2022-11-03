@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, buildPackages
+{ stdenv, lib, fetchurl
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
@@ -9,6 +9,7 @@
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, vulkanLayers ? [ "device-select" "overlay" ]
 , OpenGL, Xplugin
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , enableGalliumNine ? stdenv.isLinux
@@ -35,7 +36,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.2.1";
+  version = "22.2.2";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -50,7 +51,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0079beac0a33f45e7e0aec59e6913eafbc4268a3f1e2e330017440494f91b13c";
+    sha256 = "2de11fb74fc5cc671b818e49fe203cea0cd1d8b69756e97cdb06a2f4e78948f9";
   };
 
   # TODO:
@@ -119,7 +120,8 @@ self = stdenv.mkDerivation {
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
   ] ++ optional enablePatentEncumberedCodecs
-    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec";
+    "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
+  ++ optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
@@ -195,6 +197,11 @@ self = stdenv.mkDerivation {
     # move libOSMesa to $osmesa, as it's relatively big
     mkdir -p $osmesa/lib
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
+  '' + lib.optionalString (vulkanLayers != []) ''
+    mv -t $drivers/lib $out/lib/libVkLayer*
+    for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
+      substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
+    done
   '';
 
   postFixup = optionalString stdenv.isLinux ''

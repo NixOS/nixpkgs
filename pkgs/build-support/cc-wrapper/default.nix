@@ -274,9 +274,7 @@ stdenv.mkDerivation {
 
   setupHooks = [
     ../setup-hooks/role.bash
-  ] ++ lib.optional (cc.langC or true)
-        # Temporary hack; see https://github.com/NixOS/nixpkgs/pull/191724#issuecomment-1278602576
-        (if stdenv.isLinux then ./setup-hook.sh else ./setup-hook-nonlinux.sh)
+  ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
     ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
 
   postFixup =

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.85.1";
+  version = "0.85.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pMKWaj81rDX+zPHGvHakMDWN8+SU2qBAStk7HqENaig=";
+    hash = "sha256-j3Set+xWNcRqbn90DJOJQhMrJYI3msvWHlFvN1habP0=";
   };
 
   nativeBuildInputs = [

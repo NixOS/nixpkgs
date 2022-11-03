@@ -2,7 +2,7 @@
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
-, pkg-config, openssl
+, pkg-config, openssl, xz
 , libiconv
 , which, libffi
 , withBundledLLVM ? false
@@ -40,6 +40,13 @@ in stdenv.mkDerivation rec {
   # Running `strip -S` when cross compiling can harm the cross rlibs.
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
+
+  # The Rust pkg-config crate does not support prefixed pkg-config executables[1],
+  # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
+  # environment variables.
+  # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
+  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.buildPlatform)}" =
+    "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
@@ -148,9 +155,11 @@ in stdenv.mkDerivation rec {
   # use it for the normal build. This disables cmake in Nix.
   dontUseCmakeConfigure = true;
 
+  depsBuildBuild = [ pkgsBuildHost.stdenv.cc pkg-config ];
+
   nativeBuildInputs = [
     file python3 rustPlatform.rust.rustc cmake
-    which libffi removeReferencesTo pkg-config
+    which libffi removeReferencesTo pkg-config xz
   ];
 
   buildInputs = [ openssl ]
@@ -201,7 +210,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
-    maintainers = with maintainers; [ madjar cstrahan globin havvy ];
+    maintainers = with maintainers; [ cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
   };

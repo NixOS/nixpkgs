@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yamlpath";
-  version = "3.6.7";
+  version = "3.6.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wwkimball";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-lz8n3c+NohZnkbAoF/9rHsGzXW5PWPOsJKUFqqenIRg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-g4Pw0IWLY/9nG2eqbiknWCZjJNGbmV42KEviIENXYYA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

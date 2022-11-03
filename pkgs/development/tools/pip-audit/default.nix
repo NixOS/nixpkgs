@@ -25,14 +25,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.4.4";
+  version = "2.4.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xOcBOk+ac1djfCLKqrCTS+WnOXFf1niRUWN5hItO0v0=";
+    hash = "sha256-S3v2utDLZOY7RXOnMQV8Zo7h6vMPyiwlws/EftXFpTM=";
   };
 
   nativeBuildInputs = [

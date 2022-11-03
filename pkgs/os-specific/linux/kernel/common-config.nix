@@ -78,6 +78,7 @@ let
       INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
+      X86_AMD_PSTATE                   = whenAtLeast "5.17" module;
     };
 
     external-firmware = {
@@ -117,7 +118,7 @@ let
 
     timer = {
       # Enable Full Dynticks System.
-      NO_HZ_FULL = yes;
+      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
     };
 
     # Enable NUMA.

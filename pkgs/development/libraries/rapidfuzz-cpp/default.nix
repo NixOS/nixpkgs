@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
     "-DRAPIDFUZZ_BUILD_TESTING=ON"
   ];
 
+  CXXFLAGS = lib.optionals stdenv.cc.isClang [
+    # error: no member named 'fill' in namespace 'std'
+    "-include algorithm"
+  ];
+
   checkInputs = [
     catch2_3
   ];
