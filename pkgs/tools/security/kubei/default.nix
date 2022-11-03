@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -14,7 +15,9 @@ buildGoModule rec {
     sha256 = "sha256-QUPRw8fQ6ahBLZox6m4+feYIrcgDnCTe72nMF8iAV+Y=";
   };
 
-  vendorSha256 = "sha256-uWDQf0zcTTPBthK60bmGJBP/m+yUu5PvYAbwyd0dcWE=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-Q1lVORPsGAuGhGI6SyjpmlCOB11qJAybMBmdciUlh6Y=";
 
   meta = with lib; {
     description = "Kubernetes runtime scanner";
