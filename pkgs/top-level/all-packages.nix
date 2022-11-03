@@ -1035,6 +1035,8 @@ with pkgs;
     meta.platforms = lib.platforms.darwin;
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
 
+  updateGolangSysHook = makeSetupHook { } ../build-support/setup-hooks/update-golang-sys-hook.sh;
+
   writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
 
   desktopToDarwinBundle = makeSetupHook {
