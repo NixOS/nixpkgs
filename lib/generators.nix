@@ -278,8 +278,11 @@ rec {
         mapAny 0;
 
   /* Pretty print a value, akin to `builtins.trace`.
-    * Should probably be a builtin as well.
-    */
+   * Should probably be a builtin as well.
+   * The pretty-printed string should be suitable for rendering default values
+   * in the NixOS manual. In particular, it should be as close to a valid Nix expression
+   * as possible.
+   */
   toPretty = {
     /* If this option is true, attrsets like { __pretty = fn; val = …; }
        will use fn to convert val to a pretty printed representation.
@@ -294,7 +297,7 @@ rec {
             introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
-    else if isFloat    v then "~${toString v}"
+    else if isFloat    v then toString v
     else if isString   v then
       let
         lines = filter (v: ! isList v) (builtins.split "\n" v);
@@ -328,7 +331,7 @@ rec {
                          else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
-      if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
+      if allowPrettyValues && v ? __pretty && v ? val
          then v.__pretty v.val
       else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
