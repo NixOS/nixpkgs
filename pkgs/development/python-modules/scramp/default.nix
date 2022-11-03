@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "scramp";
-  version = "1.4.3";
+  version = "1.4.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
-    hash = "sha256-BKZam2zLS/SK6rqiUkoeFpQ0bO4pU8CKVNhOM1fv10Y=";
+    hash = "sha256-WOyv1fLSXG7p+WKs2QSwlsh8FSK/lxp6I1hPY0VIkKo=";
   };
 
   nativeBuildInputs = [
