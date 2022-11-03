@@ -14825,6 +14825,10 @@ with pkgs;
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  clang-ocl = callPackage ../development/libraries/clang-ocl {
+    inherit (llvmPackages_rocm) clang;
+  };
+
   rgxg = callPackage ../tools/text/rgxg { };
 
   rocclr = callPackage ../development/libraries/rocclr { };
