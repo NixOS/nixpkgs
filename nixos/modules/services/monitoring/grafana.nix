@@ -284,6 +284,10 @@ in {
     (mkRemovedOptionModule [ "services" "grafana" "auth" "google" "clientSecretFile" ] ''
       This option has been removed. Use 'services.grafana.settings.google.client_secret' with file provider instead.
     '')
+    (mkRemovedOptionModule [ "services" "grafana" "extraOptions" ] ''
+      This option has been removed. Use 'services.grafana.settings' instead. For a detailed migration guide, please
+      review the release notes of NixOS 22.11.
+    '')
 
     (mkRemovedOptionModule [ "services" "grafana" "auth" "azuread" "tenantId" ] "This option has been deprecated upstream.")
   ];
