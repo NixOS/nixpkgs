@@ -4,6 +4,7 @@
 , stdenv
 , testers
 , mynewt-newtmgr
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -17,7 +18,9 @@ buildGoModule rec {
     sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
-  vendorSha256 = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-oBr+nSHRV1sQQCZ4opMAOlQyK7iszmO15aa8t9U8TXM=";
 
   passthru.tests.version = testers.testVersion {
     package = mynewt-newtmgr;
