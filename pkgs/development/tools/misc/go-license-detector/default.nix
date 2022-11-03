@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, git }:
+{ lib, buildGoModule, fetchFromGitHub, git, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "go-license-detector";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "sha256-MubQpxpUCPDBVsEz4NmY8MFEoECXQtzAaZJ89vv5bDc=";
   };
 
-  vendorSha256 = "sha256-a9yCnGg+4f+UoHbGG8a47z2duBD3qXcAzPKnE4PQsvM=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-dj1c8LbIgtWf+Mkagklm5UFnT4NX3JVzOYOmm4K9xTM=";
 
   checkInputs = [ git ];
 
