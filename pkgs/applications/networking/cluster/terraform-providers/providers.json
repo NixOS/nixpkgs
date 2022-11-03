@@ -349,13 +349,13 @@
     "version": "0.14.1"
   },
   "docker": {
-    "hash": "sha256-hUKe9VjaNbiPhbxyFKly5PlKWngU2pl6ygwRJSokxr8=",
+    "hash": "sha256-/vz4rjENlVl9gqtxfqCV+k2SgsHZBcmA9Mz10Y2ay/E=",
     "owner": "kreuzwerker",
     "provider-source-address": "registry.terraform.io/kreuzwerker/docker",
     "repo": "terraform-provider-docker",
-    "rev": "v2.22.0",
-    "vendorHash": "sha256-9dsmWkIYrN+GDd/r7kKYUyj+77hKuVilfpVUMpQMseo=",
-    "version": "2.22.0"
+    "rev": "v2.23.0",
+    "vendorHash": "sha256-0JRJAwc4LbPXi6GJdrIGwuIaCzaP5MtIMuijYoOEjYA=",
+    "version": "2.23.0"
   },
   "elasticsearch": {
     "hash": "sha256-+cktPArBOysc4V+uR3KWsVlxtxSIbuVMCmPSU21xF/U=",
