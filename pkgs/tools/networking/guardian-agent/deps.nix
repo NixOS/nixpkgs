@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "04f50cda93cbb67f2afa353c52f342100e80e625";
-      sha256 = "0hmfsz9y1ingwsn482hlzzmzs7kr3cklm0ana0mbdk70isw2bxnw";
+      rev = "v0.1.0";
+      sha256 = "sha256-Lv7tHLADCIJTSyKGz+WQ05QSpXnZGSDeNixX8hiiF8Q=";
     };
   }
   {
