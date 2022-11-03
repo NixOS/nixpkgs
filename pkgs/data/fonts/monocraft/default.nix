@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monocraft";
-  version = "1.2";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "IdreesInc";
     repo = "Monocraft";
     rev = "v${version}";
-    sha256 = "sha256-frg7LcMv6zWPWxkr6RIl01fC68THELbb45mJVqefXC0=";
+    sha256 = "sha256-YF0uPCc+dajJtG6mh/JpoSr6GirAhif5L5sp6hFmKLE=";
   };
 
   dontConfigure = true;
