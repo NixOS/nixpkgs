@@ -3527,6 +3527,8 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
+  swayimg = callPackage ../tools/wayland/swayimg { };
+
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
