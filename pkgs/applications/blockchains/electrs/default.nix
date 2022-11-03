@@ -33,6 +33,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "An efficient re-implementation of Electrum Server in Rust";
     homepage = "https://github.com/romanz/electrs";
