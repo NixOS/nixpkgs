@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, updateGolangSysHook
 }:
 
 buildGoModule rec {
@@ -15,7 +16,9 @@ buildGoModule rec {
     sha256 = "1hxk2jggj8lww97lwmks46i001p5ycnxnck8yya6d0fd3ayxvw2w";
   };
 
-  vendorSha256 = "1s0azy5b5hi5h24vs6a9f1n70l980vkid28ihqh10zq6ajmds2z3";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-qJCIvwTcDPeb5/4BdssbuzAnny5ngbIyFS346HdDPYM=";
 
   subPackages = [ "cmd/zgrab2" ];
 
