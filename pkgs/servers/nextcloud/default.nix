@@ -48,8 +48,8 @@ in {
   '';
 
   nextcloud24 = generic {
-    version = "24.0.6";
-    sha256 = "b26dff9980a47e7e722805fdbbf87e07f59a3817b03ecc32698e028e9baf0301";
+    version = "24.0.7";
+    sha256 = "a1c7344a4eb27260a9f6f6e6f586bdc4fb35e1e9330e1a6e8d46c05634db6384";
   };
 
   nextcloud25 = generic {
