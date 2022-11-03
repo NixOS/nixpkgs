@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pnAdlCCqWzR0W8dF9CE48K8yHMVIx3egZlXvibxU18A=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
