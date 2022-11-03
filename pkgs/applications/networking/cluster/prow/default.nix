@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "prow-unstable";
@@ -13,7 +13,9 @@ buildGoModule rec {
     sha256 = "0mc3ynmbf3kidibdy8k3v3xjlvmxl8w7zm1z2m0skmhd0y4bpmk4";
   };
 
-  vendorSha256 = "16fdc5r28andm8my4fxj0f1yygx6j2mvn92i6xdfhbcra0lvr4ql";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-en74fqCRwvwD+CIforCVtSncwsWrBWFeeOR+eXeJcD4=";
 
   doCheck = false;
 
