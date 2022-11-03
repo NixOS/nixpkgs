@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, olm }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, olm, updateGolangSysHook }:
 
 buildGoModule {
   pname = "go-neb";
@@ -12,9 +12,11 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+  nativeBuildInputs = [ updateGolangSysHook ];
+
   buildInputs = [ olm ];
 
-  vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
+  vendorSha256 = "sha256-TgOiMcUTmeFJ3yB9z5ovPaoys3PdbMIeP8J6+4GThBk=";
 
   doCheck = false;
 
