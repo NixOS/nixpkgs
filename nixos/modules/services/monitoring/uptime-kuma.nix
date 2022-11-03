@@ -13,9 +13,8 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.uptime-kuma";
         default = pkgs.uptime-kuma;
-        defaultText = "pkgs.uptime-kuma";
+        defaultText = literalExpression "pkgs.uptime-kuma";
         description = lib.mdDoc "Uptime Kuma package to use.";
       };
 

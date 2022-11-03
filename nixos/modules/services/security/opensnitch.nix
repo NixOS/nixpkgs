@@ -91,7 +91,7 @@ in {
             InterceptUnknown = mkOption {
               type = types.bool;
               description = mdDoc ''
-                Wheter to intercept spare connections.
+                Whether to intercept spare connections.
               '';
             };
 
