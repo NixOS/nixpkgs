@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "webwormhole";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "D10xmBwmEbeR3nU4CmppFBzdeE4Pm2+o/Vb5Yd+pPtM=";
   };
 
-  vendorSha256 = "sha256-yK04gjDO6JSDcJULcbJBBuPBhx792JNn+B227lDUrWk=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-n1MgsOWeVkPTYhK5HUYvEcvf0rDEjkSd+Yyr7Nkh8hk=";
 
   meta = with lib; {
     description = "Send files using peer authenticated WebRTC";
