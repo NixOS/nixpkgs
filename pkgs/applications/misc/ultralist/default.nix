@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "ultralist";
@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-GGBW6rpwv1bVbLTD//cU8jNbq/27Ls0su7DymCJTSmY=";
   };
 
-  vendorSha256 = null;
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  deleteVendor = true;
+
+  vendorSha256 = "sha256-xmJSqeEo8dqbqVSoP7JasIJq9RUrKE0Cma2jSY4Gq+M=";
 
   meta = with lib; {
     description = "Simple GTD-style todo list for the command line";
