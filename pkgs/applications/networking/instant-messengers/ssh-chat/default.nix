@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "ssh-chat";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "LgrqIuM/tLC0JqDai2TLu6G/edZ5Q7WFXjX5bzc0Bcc=";
   };
 
-  vendorSha256 = "QTUBorUAsWDOpNP3E/Y6ht7ZXZViWBbrMPtLl7lHtgE=";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-T8/Y7JnMXI31QeNE2Y5jCuvdzclZ3pMOOSMph51MlbQ=";
 
   meta = with lib; {
     description = "Chat over SSH";
