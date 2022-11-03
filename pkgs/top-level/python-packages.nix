@@ -2909,6 +2909,8 @@ self: super: with self; {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  energyflip-client = callPackage ../development/python-modules/energyflip-client { };
+
   energyflow = callPackage ../development/python-modules/energyflow { };
 
   enhancements = callPackage ../development/python-modules/enhancements { };
