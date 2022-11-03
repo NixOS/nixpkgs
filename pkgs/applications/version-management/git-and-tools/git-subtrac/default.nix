@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "git-subtrac";
@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "0p1n29k2a2rpznwxlwzkmx38ic6g041k9vx7msvick7cydn417fx";
   };
 
-  vendorSha256 = "0m64grnmhjvfsw7a56474s894sgd24rvcp5kamhzzyc4q556hqny";
+  nativeBuildInputs = [ updateGolangSysHook ];
+
+  vendorSha256 = "sha256-2MEumCgQ1l/JgTlxpAKdK+uVlncraiy6DX4xfFLq3aI=";
 
   doCheck = false;
 
