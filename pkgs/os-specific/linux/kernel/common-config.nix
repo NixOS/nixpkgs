@@ -118,7 +118,7 @@ let
 
     timer = {
       # Enable Full Dynticks System.
-      NO_HZ_FULL = yes;
+      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
     };
 
     # Enable NUMA.

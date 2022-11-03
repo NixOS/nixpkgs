@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
     "--openssldir=etc/ssl"
-    "enable-ktls"
   ] ++ lib.optionals withCryptodev [
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
