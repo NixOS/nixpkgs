@@ -73,6 +73,11 @@ stdenv.mkDerivation {
   separateDebugInfo = true;
   installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
+  postInstall =''
+    # Same as perf. Remove.
+    rm -f $out/bin/trace
+  '';
+
   preFixup = ''
     # Pull in 'objdump' into PATH to make annotations work.
     # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
