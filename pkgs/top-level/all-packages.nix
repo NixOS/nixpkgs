@@ -2493,6 +2493,8 @@ with pkgs;
 
   crcpp = callPackage ../development/libraries/crcpp { };
 
+  cloneit = callPackage ../tools/misc/cloneit { };
+
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue {
