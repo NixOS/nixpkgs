@@ -1,10 +1,10 @@
-{ lib, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
+{ lib, buildGoModule, fetchgit, qemu, docker, which, makeWrapper, updateGolangSysHook }:
 
 buildGoModule rec {
   pname = "out-of-tree";
   version = "1.4.0";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper updateGolangSysHook ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
   };
 
-  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
+  vendorSha256 = "sha256-uUEx/4ea43Ri3i3tRh5IJBjIiKZmSOzVjuc/ixU7EDc=";
 
   doCheck = false;
 
