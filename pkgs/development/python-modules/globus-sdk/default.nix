@@ -8,7 +8,6 @@
 , pythonOlder
 , requests
 , responses
-, six
 , typing-extensions
 }:
 
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     mypy
     pytestCheckHook
     responses
-    six
   ];
 
   postPatch = ''
