@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "odo";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "odo";
     rev = "v${version}";
-    sha256 = "sha256-+QLRm01JTV7nnMiIvitdkm38E08TsmU6EfrNTUCTddY=";
+    sha256 = "sha256-nevwmw2d8HARRwOy8dPsjtjQj+W3psknphcmebRjrNE=";
   };
 
   vendorSha256 = null;
