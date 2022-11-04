@@ -3,7 +3,7 @@ import json
 import subprocess as sub
 import os
 import sys
-from typing import Iterator, Any, Literal, TypedDict
+from typing import Iterator, Any, Literal
 from tempfile import NamedTemporaryFile
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
@@ -166,26 +166,18 @@ def checkTreeSitterRepos(latest_github_repos: set[str]) -> None:
         sys.exit(f"These repositories are neither known nor ignored:\n{unknown}")
 
 
-Grammar = TypedDict(
-    "Grammar",
-    {
-        "nixRepoAttrName": str,
-        "orga": str,
-        "repo": str
-    }
-)
+NixRepoAttrName = str
 
 
 def printAllGrammarsNixFile() -> None:
     """Print a .nix file that imports all grammars."""
-    allGrammars: list[dict[str, Grammar]] = jsonArg["allGrammars"]
+    repoAttrNames: list[NixRepoAttrName] = jsonArg["repoAttrNames"]
     outputDir: Dir = jsonArg["outputDir"]
 
     def file() -> Iterator[str]:
         yield "{ lib }:"
         yield "{"
-        for grammar in allGrammars:
-            n = grammar["nixRepoAttrName"]
+        for n in repoAttrNames:
             yield f"  {n} = lib.importJSON ./{n}.json;"
         yield "}"
         yield ""

@@ -118,10 +118,12 @@ let
 
     # finally, write a default.nix that calls all grammars
     ${updateImpl} print-all-grammars-nix-file "$(< ${
-        jsonFile "all-grammars.json" {
-          inherit
-            allGrammars
-            outputDir;
+        jsonFile "repo-attr-names.json" {
+          repoAttrNames =
+            map
+              ({nixRepoAttrName, ...}: nixRepoAttrName)
+              allGrammars;
+          inherit outputDir;
         }
     })"
   '';
