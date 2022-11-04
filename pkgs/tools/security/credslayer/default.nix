@@ -7,12 +7,13 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "credslayer";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ShellCode33";
     repo = "CredSLayer";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-gryV9MHULY6ZHy6YDFQDIkZsfIX8La0tHT0vrrQJNDQ=";
+    hash = "sha256-gryV9MHULY6ZHy6YDFQDIkZsfIX8La0tHT0vrrQJNDQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -24,7 +25,9 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/tests.py" ];
+  pytestFlagsArray = [
+    "tests/tests.py"
+  ];
 
   disabledTests = [
     # Requires a telnet setup
@@ -36,7 +39,9 @@ python3.pkgs.buildPythonApplication rec {
     "test_ntlmssp"
   ];
 
-  pythonImportsCheck = [ "credslayer" ];
+  pythonImportsCheck = [
+    "credslayer"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/credslayer \
@@ -48,8 +53,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ShellCode33/CredSLayer";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
-    # Upstream issue https://github.com/ShellCode33/CredSLayer/issues/16
-    # This package works only with pyshark < 0.5
-    broken = true;
   };
 }
