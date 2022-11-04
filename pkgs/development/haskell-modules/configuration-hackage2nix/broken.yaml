@@ -2137,7 +2137,6 @@ broken-packages:
   - heidi
   - hein
   - heist-async
-  - heist-emanote
   - helisp
   - helix
   - hell
@@ -5027,7 +5026,6 @@ broken-packages:
   - tagsoup-selection
   - tai
   - tai64
-  - tailwind
   - tak
   - takahashi
   - Takusen
