@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-6EAykJ0yWeU1EBR5+7JjWGUVBE1DKW+W8yJOt0smkaE=";
+    sha256 = "sha256-ellfBZWOkvlRauuwug96C7P/WjQ6dXiDnT0b3KH5zRM=";
   };
 
   nativeBuildInputs = [
