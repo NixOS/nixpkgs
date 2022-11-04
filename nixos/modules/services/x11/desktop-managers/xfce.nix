@@ -106,7 +106,7 @@ in
       xfce4-taskmanager
       xfce4-terminal
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
+      ++ optional config.services.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
       ++ optionals config.hardware.pulseaudio.enable [
         pavucontrol
