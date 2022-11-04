@@ -1,17 +1,21 @@
 { python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps
-, stdenv }:
+, stdenv, pyOpenSSLSupport ? !(stdenv.isDarwin && stdenv.isAarch64) }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.0.0";
+  version = "4.0.9";
   format = "pyproject";
 
   src = fetchFromGitHub {
     repo = "yubikey-manager";
     rev = "refs/tags/${version}";
     owner = "Yubico";
-    sha256 = "sha256-ZQQhRiUsQwLaOY8NCzSc/PTmRewTL0ECBKj7Uj+6Gn8=";
+    sha256 = "sha256-MwM/b1QP6pkyBjz/r6oC4sW1mKC0CKMay45a0wCktk0=";
   };
+
+  patches = lib.optionals (!pyOpenSSLSupport) [
+    ./remove-pyopenssl-tests.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -30,7 +34,8 @@ python3Packages.buildPythonPackage rec {
       pyusb
       six
       fido2
-      keyring
+    ] ++ lib.optionals pyOpenSSLSupport [
+      pyopenssl
     ]) ++ [
       libu2f-host
       libusb1
@@ -58,7 +63,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    description = "Command line tool for configuring any YubiKey over all USB transports";
+    description = "Previous release of command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;

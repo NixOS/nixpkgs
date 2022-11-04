@@ -3,11 +3,11 @@
 , lib
 , fetchurl
 # native
-, autoreconfHook
+, cmake
 , pkg-config
 # not native
 , gdal
-, wxGTK31
+, wxGTK32
 , proj
 , dxflib
 , curl
@@ -31,24 +31,20 @@
 
 mkDerivation rec {
   pname = "saga";
-  version = "7.9.1";
+  version = "8.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/SAGA%20-%20${lib.versions.major version}/SAGA%20-%20${version}/saga-${version}.tar.gz";
-    sha256 = "sha256-Jq1LhBSeJuq9SlNl/ko5I8+jnjZnLMfGYNNUnzVWo7w=";
+    sha256 = "sha256-v6DPwV20fcsznrEaFJk0/ewU4z3cTjzYYuLkyMwSLV0=";
   };
 
+  sourceRoot = "saga-${version}/saga-gis";
+
   nativeBuildInputs = [
-    # Upstream's gnerated ./configure is not reliable
-    autoreconfHook
+    cmake
     pkg-config
   ];
-  configureFlags = [
-    "--with-system-svm"
-    # hdf is no detected otherwise
-    "HDF5_LIBS=-l${hdf5}/lib"
-    "HDF5_CFLAGS=-I${hdf5.dev}/include"
-  ];
+
   buildInputs = [
     curl
     dxflib
@@ -56,7 +52,7 @@ mkDerivation rec {
     libsvm
     hdf5
     gdal
-    wxGTK31
+    wxGTK32
     proj
     libharu
     opencv
@@ -77,9 +73,9 @@ mkDerivation rec {
     sqlite
   ];
 
-  enableParallelBuilding = true;
-
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
+  cmakeFlags = [
+    "-DOpenMP_SUPPORT=${if stdenv.isDarwin then "OFF" else "ON"}"
+  ];
 
   meta = with lib; {
     description = "System for Automated Geoscientific Analyses";

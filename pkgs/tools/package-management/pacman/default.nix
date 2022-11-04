@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-DbYUVuVqpJ4mDokcCwJb4hAxnmKxVSHynT6TsA079zE=";
+    hash = "sha256-fY4+jFEhrsCWXfcfWb7fRgUsbPFPljZcRBHsPeCkwaU=";
   };
 
   nativeBuildInputs = [
