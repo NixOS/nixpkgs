@@ -158,7 +158,7 @@ in
     networking.interfaces.vboxnet0.ipv4.addresses = [{ address = "192.168.56.1"; prefixLength = 24; }];
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
-    networking.networkmanager.unmanaged = ["vboxnet0"];
+    services.networkmanager.unmanaged = ["vboxnet0"];
   }) (mkIf config.networking.useNetworkd {
     systemd.network.networks."40-vboxnet0".extraConfig = ''
       [Link]
