@@ -375,7 +375,7 @@ in
 
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
-        ++ lib.optional config.networking.networkmanager.enable plasma-nm
+        ++ lib.optional config.services.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
@@ -527,7 +527,7 @@ in
       assertions = [
         {
           # The user interface breaks without NetworkManager
-          assertion = config.networking.networkmanager.enable;
+          assertion = config.services.networkmanager.enable;
           message = "Plasma Mobile requires NetworkManager.";
         }
         {
@@ -576,7 +576,7 @@ in
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
-      networking.networkmanager.enable = true;
+      services.networkmanager.enable = true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
