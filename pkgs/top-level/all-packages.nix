@@ -36139,7 +36139,7 @@ with pkgs;
 
   sq = callPackage ../development/tools/sq { };
 
-  stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
+  stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
 
   stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 
