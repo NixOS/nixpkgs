@@ -754,7 +754,7 @@ runTests {
       emptylist = "[ ]";
       attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
       emptyattrs = "{ }";
-      drv = "<derivation ${deriv.drvPath}>";
+      drv = "<derivation ${deriv.name}>";
     };
   };
 
