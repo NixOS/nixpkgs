@@ -35,7 +35,7 @@ writeTextFile rec {
     export GRAPHS_DATA_DIR='${graphs}/share/graphs'
     export ELLCURVE_DATA_DIR='${elliptic_curves}/share/ellcurves'
     export POLYTOPE_DATA_DIR='${polytopes_db}/share/reflexive_polytopes'
-    export GAP_ROOT_DIR='${gap}/share/gap/build-dir'
+    export GAP_ROOT_DIR='${gap}/share/gap'
     export ECLDIR='${maxima.lisp-compiler}/lib/${maxima.lisp-compiler.pname}-${maxima.lisp-compiler.version}/'
     export COMBINATORIAL_DESIGN_DATA_DIR="${combinatorial_designs}/share/combinatorial_designs"
     export CREMONA_MINI_DATA_DIR="${elliptic_curves}/share/cremona"
