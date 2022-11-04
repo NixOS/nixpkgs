@@ -8841,6 +8841,8 @@ with pkgs;
 
   lemmeknow = callPackage ../tools/misc/lemmeknow { };
 
+  lemmy-help = callPackage ../tools/misc/lemmy-help { };
+
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
