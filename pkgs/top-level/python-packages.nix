@@ -4371,6 +4371,8 @@ self: super: with self; {
 
   ibm-watson = callPackage ../development/python-modules/ibm-watson { };
 
+  ical = callPackage ../development/python-modules/ical { };
+
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
