@@ -2773,6 +2773,12 @@
     githubId = 40290417;
     name = "Seb Blair";
   };
+  considerate = {
+    email = "viktor.kronvall@gmail.com";
+    github = "considerate";
+    githubId = 217918;
+    name = "Viktor Kronvall";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
