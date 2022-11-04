@@ -5134,6 +5134,18 @@ final: prev:
     meta.homepage = "https://github.com/MrcJkb/neotest-haskell/";
   };
 
+  neotest-rust = buildVimPluginFrom2Nix {
+    pname = "neotest-rust";
+    version = "2022-10-31";
+    src = fetchFromGitHub {
+      owner = "rouge8";
+      repo = "neotest-rust";
+      rev = "8ed2537f013835b71a7deaba720f489e32fabc3f";
+      sha256 = "0brx6k0z1visfhzkjdf3x523rbsxfrgbxrymmxd6zyjfpl8bhwx3";
+    };
+    meta.homepage = "https://github.com/rouge8/neotest-rust/";
+  };
+
   neovim-ayu = buildVimPluginFrom2Nix {
     pname = "neovim-ayu";
     version = "2022-10-22";
