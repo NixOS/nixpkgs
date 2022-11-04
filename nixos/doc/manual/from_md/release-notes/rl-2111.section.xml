@@ -561,6 +561,14 @@
           <link xlink:href="options.html#opt-services.prometheus.exporters.smartctl.enable">services.prometheus.exporters.smartctl</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.twingate.com/docs/linux">twingate</link>,
+          a high performance, easy to use zero trust solution that
+          enables access to private resources from any device with
+          better security than a VPN.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
