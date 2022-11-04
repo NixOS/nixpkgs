@@ -9,6 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lyHQYU4aXQ/muAyaigStqO/ULL393SOelagFmuKDqm8=";
   };
 
+  # utmp.h is deprecated on aarch64-darwin
+  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+    for file in login.*; do
+      substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
+    done
+  '';
+
   buildInputs = [ libxcrypt ];
 
   preConfigure = ''
