@@ -27514,7 +27514,7 @@ with pkgs;
       inherit (gnome2) libglade;
   };
 
-  calcmysky = libsForQt5.callPackage ../applications/science/astronomy/calcmysky { };
+  calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
