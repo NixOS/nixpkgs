@@ -1233,6 +1233,17 @@
       </listitem>
       <listitem>
         <para>
+          PowerDNS has been updated from <literal>4.6.x</literal> to
+          <literal>4.7.x</literal>. Please be sure to review the
+          <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#to-4-7-0-or-master">Upgrade
+          Notes</link> provided by upstream before upgrading. Worth
+          specifically noting is that the new Catalog Zones feature
+          comes with a mandatory schema change for the gsql database
+          backends, which has to be manually applied.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus

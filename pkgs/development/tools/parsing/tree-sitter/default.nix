@@ -28,7 +28,7 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
   version = "0.20.7";
   sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
@@ -42,9 +42,7 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
-  };
+  update-all-grammars = callPackage ./update.nix {};
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 

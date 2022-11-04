@@ -28,6 +28,9 @@ ourNodePackages.package.override {
   '';
 
   postInstall = ''
+    # Compile typescript
+    npm run build
+
     makeWrapper '${nodejs}/bin/node' "$out/bin/matrix-appservice-irc" \
       --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
 
@@ -39,7 +42,7 @@ ourNodePackages.package.override {
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rhysmdnz ];
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
     platforms = platforms.linux;

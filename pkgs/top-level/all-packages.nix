@@ -8841,6 +8841,8 @@ with pkgs;
 
   lemmeknow = callPackage ../tools/misc/lemmeknow { };
 
+  lemmy-help = callPackage ../tools/misc/lemmy-help { };
+
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -14952,6 +14954,7 @@ with pkgs;
   };
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
   cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
+  cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
   cargo-hack = callPackage ../development/tools/rust/cargo-hack { };
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
   cargo-llvm-cov = callPackage ../development/tools/rust/cargo-llvm-cov { };
@@ -15215,6 +15218,8 @@ with pkgs;
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
   spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
+
+  spirv-llvm-translator_14 = callPackage ../development/compilers/spirv-llvm-translator { llvm = llvm_14; };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper {
     jdk = oraclejdk;
@@ -27511,6 +27516,8 @@ with pkgs;
       inherit (gnome2) libglade;
   };
 
+  calcmysky = libsForQt5.callPackage ../applications/science/astronomy/calcmysky { };
+
   calcurse = callPackage ../applications/misc/calcurse { };
 
   calculix = callPackage ../applications/science/math/calculix {};
@@ -35270,6 +35277,8 @@ with pkgs;
 
   seqtk = callPackage ../applications/science/biology/seqtk { };
 
+  seqkit = callPackage ../applications/science/biology/seqkit { };
+
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
   somafm-cli = callPackage ../tools/misc/somafm-cli { };
@@ -35856,6 +35865,10 @@ with pkgs;
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
   symfpu = callPackage ../applications/science/logic/symfpu {};
+
+  uhdm = callPackage ../applications/science/logic/uhdm {};
+
+  surelog = callPackage ../applications/science/logic/surelog {};
 
   mcy = callPackage ../applications/science/logic/mcy {};
 
