@@ -46,6 +46,7 @@
   tree-sitter-jsdoc = lib.importJSON ./tree-sitter-jsdoc.json;
   tree-sitter-json = lib.importJSON ./tree-sitter-json.json;
   tree-sitter-json5 = lib.importJSON ./tree-sitter-json5.json;
+  tree-sitter-jsonc = lib.importJSON ./tree-sitter-jsonc.json;
   tree-sitter-jsonnet = lib.importJSON ./tree-sitter-jsonnet.json;
   tree-sitter-julia = lib.importJSON ./tree-sitter-julia.json;
   tree-sitter-kotlin = lib.importJSON ./tree-sitter-kotlin.json;

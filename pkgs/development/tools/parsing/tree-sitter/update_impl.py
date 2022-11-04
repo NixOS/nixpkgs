@@ -55,7 +55,17 @@ def curl_github_args(token: str | None, url: str) -> Args:
     yield url
 
 
-def curl_result(output: bytes) -> Any | Literal["not found"]:
+def curl_gitlab_args(url: str) -> Args:
+    """Query the gitlab API via curl"""
+    yield bins["curl"]
+    if not debug:
+        yield "--silent"
+    # follow redirects
+    yield "--location"
+    yield url
+
+
+def github_curl_result(output: bytes) -> Any | Literal["not found"]:
     """Parse the curl result of the github API"""
     res: Any = json.loads(output)
     match res:
@@ -66,6 +76,12 @@ def curl_result(output: bytes) -> Any | Literal["not found"]:
             if "Not Found" in message:
                 return "not found"
     # if the result is another type, we can pass it on
+    return res
+
+
+def gitlab_curl_result(output: bytes) -> Any:
+    """Parse the curl result of the gitlab API"""
+    res: Any = json.loads(output)
     return res
 
 
@@ -99,6 +115,7 @@ GithubRepo = TypedDict(
 
 GitlabRepo = TypedDict(
     "GitlabRepo", {
+        "nixRepoAttrName": str,
         "projectId": str
     }
 )
@@ -109,7 +126,6 @@ FetchRepoArg = TypedDict(
         "outputDir": Dir,
         "nixRepoAttrName": str
     }
-
 )
 
 
@@ -120,11 +136,9 @@ def fetchRepo() -> None:
         log(f"Fetching repo {arg}")
     match arg["type"]:
         case "github":
-            repo = cast(GithubRepo, jsonArg)
-            res = fetchGithubRepo(repo)
+            res = fetchGithubRepo(cast(GithubRepo, jsonArg))
         case "gitlab":
-            # repo = cast(GitlabRepo, jsonArg)
-            critical("gitlab repos not yet implemented")
+            res = fetchGitlabRepo(cast(GitlabRepo, jsonArg))
         case other:
             critical(f'''Do not yet know how to handle the repo type "{other}"''')
     attrName = jsonArg["nixRepoAttrName"]
@@ -148,7 +162,7 @@ def fetchGithubRepo(r: GithubRepo) -> bytes:
         )
     )
     release: str
-    match curl_result(out):
+    match github_curl_result(out):
         case "not found":
             # github sometimes returns an empty list even tough there are releases
             log(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD")
@@ -167,6 +181,44 @@ def fetchGithubRepo(r: GithubRepo) -> bytes:
     )
 
 
+def fetchGitlabRepo(r: GitlabRepo) -> bytes:
+    projectId = r["projectId"]
+    nixRepoAttrName = r["nixRepoAttrName"]
+    out = run_cmd(
+        curl_gitlab_args(
+            url=f"https://gitlab.com/api/v4/projects/{quote(projectId)}/repository/tags?order_by=version&sort=desc"
+        )
+    )
+    release: str
+    projectName = f'''"{nixRepoAttrName}" (Gitlab projectId: {projectId})'''
+    match gitlab_curl_result(out):
+        case list([]):
+            log(f"uh-oh, no release find for for {projectName}, using HEAD")
+            release = "HEAD"
+        case list([{"name": tag_name}, *_]):
+            release = tag_name
+        case _:
+            critical(f"tag list for {projectName} did not have a `name` field: {out.decode()}")
+    out = run_cmd(
+        curl_gitlab_args(
+            url=f"https://gitlab.com/api/v4/projects/{quote(projectId)}"
+        )
+    )
+    url: str
+    match gitlab_curl_result(out):
+        case {"http_url_to_repo": url}:
+            url = url
+        case _:
+            critical(f"repository result for {projectName} did not have a `http_url_to_repo` field: {out.decode()}")
+    log(f"Fetching latest release ({release}) of {projectName} …")
+    return run_cmd(
+        nix_prefetch_git_args(
+            url,
+            version_rev=release
+        )
+    )
+
+
 def fetchOrgaLatestRepos(orga: str) -> set[str]:
     """fetch the latest (100) repos from the given github organization"""
     token: str | None = os.environ.get("GITHUB_TOKEN", None)
@@ -176,7 +228,7 @@ def fetchOrgaLatestRepos(orga: str) -> set[str]:
             url=f"https://api.github.com/orgs/{quote(orga)}/repos?per_page=100"
         )
     )
-    match curl_result(out):
+    match github_curl_result(out):
         case "not found":
             critical(f"github organization {orga} not found")
         case list(repos):

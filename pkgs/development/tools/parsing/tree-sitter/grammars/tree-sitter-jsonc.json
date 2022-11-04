@@ -1,0 +1,11 @@
+{
+  "url": "https://gitlab.com/WhyNotHugo/tree-sitter-jsonc.git",
+  "rev": "02b01653c8a1c198ae7287d566efa86a135b30d5",
+  "date": "2021-03-07T20:32:20+01:00",
+  "path": "/nix/store/hqh4kxw3fp9hr3yglsxv9d2kvcvpzdfa-tree-sitter-jsonc",
+  "sha256": "0mc68i7shwmn88iv3lcqyjvrhy3b62h02k272is7chk2yiw3crw9",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

@@ -341,3 +341,6 @@ repo = "tree-sitter-smithy"
 type = "github"
 orga = "sourcegraph"
 repo = "tree-sitter-jsonnet"
+[otherGrammars.tree-sitter-jsonc]
+type = "gitlab"
+projectId = "24426815"
