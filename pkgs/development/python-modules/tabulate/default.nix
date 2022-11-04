@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , nose
 }:
 
@@ -13,10 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-AJWxK/WWbeUpwP6x+ghnFnGzNo7sd9fverEUviwGizw=";
   };
 
+  format = "pyproject";
   checkInputs = [ nose ];
-
-  # Tests: cannot import common (relative import).
-  doCheck = false;
+  buildInputs = [ setuptools ];
 
   meta = {
     description = "Pretty-print tabular data";
