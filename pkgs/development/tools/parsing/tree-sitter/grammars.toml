@@ -1,0 +1,270 @@
+# Grammar list:
+# https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
+
+# Grammars we want to fetch from the tree-sitter github orga
+knownTreeSitterOrgGrammarRepos = [
+  "tree-sitter-javascript",
+  "tree-sitter-c",
+  "tree-sitter-json",
+  "tree-sitter-cpp",
+  "tree-sitter-ruby",
+  "tree-sitter-go",
+  "tree-sitter-c-sharp",
+  "tree-sitter-python",
+  "tree-sitter-typescript",
+  "tree-sitter-rust",
+  "tree-sitter-bash",
+  "tree-sitter-php",
+  "tree-sitter-java",
+  "tree-sitter-scala",
+  "tree-sitter-ocaml",
+  "tree-sitter-julia",
+  "tree-sitter-agda",
+  "tree-sitter-fluent",
+  "tree-sitter-html",
+  "tree-sitter-haskell",
+  "tree-sitter-regex",
+  "tree-sitter-css",
+  "tree-sitter-verilog",
+  "tree-sitter-jsdoc",
+  "tree-sitter-ql",
+  "tree-sitter-ql-dbscheme",
+  "tree-sitter-embedded-template",
+  "tree-sitter-tsq",
+  "tree-sitter-toml",
+]
+# repos of the tree-sitter github orga we want to ignore (not grammars)
+ignoredTreeSitterOrgRepos = [
+  "tree-sitter",
+  "tree-sitter-cli",
+  # this is the haskell language bindings, tree-sitter-haskell is the grammar
+  "haskell-tree-sitter",
+  # this is the ruby language bindings, tree-sitter-ruby is the grammar
+  "ruby-tree-sitter.old",
+  # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
+  "rust-tree-sitter",
+  # this is the nodejs language bindings, tree-sitter-javascript is the grammar
+  "node-tree-sitter",
+  # this is the python language bindings, tree-sitter-python is the grammar
+  "py-tree-sitter",
+  # afl fuzzing for tree sitter
+  "afl-tree-sitter",
+  # archived
+  "highlight-schema",
+  # website
+  "tree-sitter.github.io",
+  # not maintained
+  "tree-sitter-razor",
+  # rust library for constructing arbitrary graph structures from source code
+  "tree-sitter-graph",
+  # abandoned
+  "tree-sitter-swift",
+]
+
+# Additional grammars that are not in the official github orga.
+# If you need a grammar that already exists in the official orga,
+# make sure to give it a different name.
+[otherGrammars.tree-sitter-beancount]
+orga = "polarmutex"
+repo = "tree-sitter-beancount"
+[otherGrammars.tree-sitter-clojure]
+orga = "sogaiu"
+repo = "tree-sitter-clojure"
+[otherGrammars.tree-sitter-comment]
+orga = "stsewd"
+repo = "tree-sitter-comment"
+[otherGrammars.tree-sitter-dart]
+orga = "usernobody14"
+repo = "tree-sitter-dart"
+[otherGrammars.tree-sitter-elisp]
+orga = "wilfred"
+repo = "tree-sitter-elisp"
+[otherGrammars.tree-sitter-nix]
+orga = "cstrahan"
+repo = "tree-sitter-nix"
+[otherGrammars.tree-sitter-latex]
+orga = "latex-lsp"
+repo = "tree-sitter-latex"
+[otherGrammars.tree-sitter-lua]
+orga = "MunifTanjim"
+repo = "tree-sitter-lua"
+[otherGrammars.tree-sitter-fennel]
+orga = "travonted"
+repo = "tree-sitter-fennel"
+[otherGrammars.tree-sitter-make]
+orga = "alemuller"
+repo = "tree-sitter-make"
+[otherGrammars.tree-sitter-markdown]
+orga = "MDeiml"
+repo = "tree-sitter-markdown"
+[otherGrammars.tree-sitter-rego]
+orga = "FallenAngel97"
+repo = "tree-sitter-rego"
+[otherGrammars.tree-sitter-rst]
+orga = "stsewd"
+repo = "tree-sitter-rst"
+[otherGrammars.tree-sitter-svelte]
+orga = "Himujjal"
+repo = "tree-sitter-svelte"
+[otherGrammars.tree-sitter-sql]
+orga = "m-novikov"
+repo = "tree-sitter-sql"
+[otherGrammars.tree-sitter-vim]
+orga = "vigoux"
+repo = "tree-sitter-viml"
+[otherGrammars.tree-sitter-yaml]
+orga = "ikatyang"
+repo = "tree-sitter-yaml"
+[otherGrammars.tree-sitter-zig]
+orga = "maxxnino"
+repo = "tree-sitter-zig"
+[otherGrammars.tree-sitter-fish]
+orga = "ram02z"
+repo = "tree-sitter-fish"
+[otherGrammars.tree-sitter-dot]
+orga = "rydesun"
+repo = "tree-sitter-dot"
+[otherGrammars.tree-sitter-norg]
+orga = "nvim-neorg"
+repo = "tree-sitter-norg"
+[otherGrammars.tree-sitter-commonlisp]
+orga = "thehamsta"
+repo = "tree-sitter-commonlisp"
+[otherGrammars.tree-sitter-cuda]
+orga = "thehamsta"
+repo = "tree-sitter-cuda"
+[otherGrammars.tree-sitter-glsl]
+orga = "thehamsta"
+repo = "tree-sitter-glsl"
+[otherGrammars.tree-sitter-dockerfile]
+orga = "camdencheek"
+repo = "tree-sitter-dockerfile"
+[otherGrammars.tree-sitter-ledger]
+orga = "cbarrete"
+repo = "tree-sitter-ledger"
+[otherGrammars.tree-sitter-gomod]
+orga = "camdencheek"
+repo = "tree-sitter-go-mod"
+[otherGrammars.tree-sitter-gowork]
+orga = "omertuc"
+repo = "tree-sitter-go-work"
+[otherGrammars.tree-sitter-graphql]
+orga = "bkegley"
+repo = "tree-sitter-graphql"
+[otherGrammars.tree-sitter-pgn]
+orga = "rolandwalker"
+repo = "tree-sitter-pgn"
+[otherGrammars.tree-sitter-perl]
+orga = "ganezdragon"
+repo = "tree-sitter-perl"
+[otherGrammars.tree-sitter-kotlin]
+orga = "fwcd"
+repo = "tree-sitter-kotlin"
+[otherGrammars.tree-sitter-scss]
+orga = "serenadeai"
+repo = "tree-sitter-scss"
+[otherGrammars.tree-sitter-erlang]
+orga = "abstractmachineslab"
+repo = "tree-sitter-erlang"
+[otherGrammars.tree-sitter-elixir]
+orga = "elixir-lang"
+repo = "tree-sitter-elixir"
+[otherGrammars.tree-sitter-surface]
+orga = "connorlay"
+repo = "tree-sitter-surface"
+[otherGrammars.tree-sitter-heex]
+orga = "connorlay"
+repo = "tree-sitter-heex"
+[otherGrammars.tree-sitter-supercollider]
+orga = "madskjeldgaard"
+repo = "tree-sitter-supercollider"
+[otherGrammars.tree-sitter-tlaplus]
+orga = "tlaplus-community"
+repo = "tree-sitter-tlaplus"
+[otherGrammars.tree-sitter-glimmer]
+orga = "alexlafroscia"
+repo = "tree-sitter-glimmer"
+[otherGrammars.tree-sitter-pug]
+orga = "zealot128"
+repo = "tree-sitter-pug"
+[otherGrammars.tree-sitter-vue]
+orga = "ikatyang"
+repo = "tree-sitter-vue"
+[otherGrammars.tree-sitter-elm]
+orga = "elm-tooling"
+repo = "tree-sitter-elm"
+[otherGrammars.tree-sitter-yang]
+orga = "hubro"
+repo = "tree-sitter-yang"
+[otherGrammars.tree-sitter-query]
+orga = "nvim-treesitter"
+repo = "tree-sitter-query"
+[otherGrammars.tree-sitter-sparql]
+orga = "bonabeavis"
+repo = "tree-sitter-sparql"
+[otherGrammars.tree-sitter-gdscript]
+orga = "prestonknopp"
+repo = "tree-sitter-gdscript"
+[otherGrammars.tree-sitter-godot-resource]
+orga = "prestonknopp"
+repo = "tree-sitter-godot-resource"
+[otherGrammars.tree-sitter-turtle]
+orga = "bonabeavis"
+repo = "tree-sitter-turtle"
+[otherGrammars.tree-sitter-devicetree]
+orga = "joelspadin"
+repo = "tree-sitter-devicetree"
+[otherGrammars.tree-sitter-r]
+orga = "r-lib"
+repo = "tree-sitter-r"
+[otherGrammars.tree-sitter-bibtex]
+orga = "latex-lsp"
+repo = "tree-sitter-bibtex"
+[otherGrammars.tree-sitter-fortran]
+orga = "stadelmanma"
+repo = "tree-sitter-fortran"
+[otherGrammars.tree-sitter-cmake]
+orga = "uyha"
+repo = "tree-sitter-cmake"
+[otherGrammars.tree-sitter-janet-simple]
+orga = "sogaiu"
+repo = "tree-sitter-janet-simple"
+[otherGrammars.tree-sitter-json5]
+orga = "joakker"
+repo = "tree-sitter-json5"
+[otherGrammars.tree-sitter-pioasm]
+orga = "leo60228"
+repo = "tree-sitter-pioasm"
+[otherGrammars.tree-sitter-hjson]
+orga = "winston0410"
+repo = "tree-sitter-hjson"
+[otherGrammars.tree-sitter-llvm]
+orga = "benwilliamgraham"
+repo = "tree-sitter-llvm"
+[otherGrammars.tree-sitter-http]
+orga = "ntbbloodbath"
+repo = "tree-sitter-http"
+[otherGrammars.tree-sitter-prisma]
+orga = "victorhqc"
+repo = "tree-sitter-prisma"
+[otherGrammars.tree-sitter-org-nvim]
+orga = "milisims"
+repo = "tree-sitter-org"
+[otherGrammars.tree-sitter-hcl]
+orga = "MichaHoffmann"
+repo = "tree-sitter-hcl"
+[otherGrammars.tree-sitter-scheme]
+orga = "6cdh"
+repo = "tree-sitter-scheme"
+[otherGrammars.tree-sitter-tiger]
+orga = "ambroisie"
+repo = "tree-sitter-tiger"
+[otherGrammars.tree-sitter-nickel]
+orga = "nickel-lang"
+repo = "tree-sitter-nickel"
+[otherGrammars.tree-sitter-smithy]
+orga = "indoorvivants"
+repo = "tree-sitter-smithy"
+[otherGrammars.tree-sitter-jsonnet]
+orga = "sourcegraph"
+repo = "tree-sitter-jsonnet"
