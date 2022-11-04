@@ -8,15 +8,16 @@
   gtk3,
   openssl,
   xdg-user-dirs,
+  keybinder3
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.0.5.3";
+  version = "0.0.6.2";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-linux-x86.tar.gz";
-    sha256 = "sha256-0dhJkgu6MojhrPjeq8ABgV5kUXMKi1CXJs8o8g6QSMw=";
+    sha256 = "sha256-LOrXGFctAaiz2z9M8ghrXsQ+qygwNPyYragmL/EjlDQ=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
       gtk3
       openssl
+      keybinder3
   ];
 
   dontBuild = true;
