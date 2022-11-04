@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.27.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nvQimTCzcmTI37hFqf0aZvVUS01dy6alxkTTkY9nNPU=";
+    sha256 = "sha256-HlaCssoDySmjLqvsILnE8+SZc0oHtD0SvgjmT0hUPvs=";
   };
-  cargoSha256 = "sha256-1TrzF9h6OHfDzkKL+zQTf5dIMzB820WFtFi9pFQIgig=";
+  cargoSha256 = "sha256-iP9TPWQlZGLrpRIMnySqiy2LX2y5XXfWqBbSrSQ+BD4=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
