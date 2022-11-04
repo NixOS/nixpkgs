@@ -2569,9 +2569,6 @@ self: super: {
     testTarget = "regex-tdfa-unittest";
   } super.regex-tdfa;
 
-  # Missing test files https://github.com/qrilka/xlsx/issues/165
-  xlsx = dontCheck super.xlsx;
-
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
