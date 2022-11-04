@@ -21,6 +21,7 @@ fetchzip {
 
     mv $out/OTF $out/share/fonts/opentype
     mv $out/TTF $out/share/fonts/truetype
+    mv $out/LICENSE.txt $out/share/fonts/$name-LICENSE.txt
 
     rm -r $out/{EOT,WOFF,WOFF2}
   '';
