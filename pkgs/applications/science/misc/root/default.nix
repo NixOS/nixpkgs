@@ -5,6 +5,7 @@
 , makeWrapper
 , cmake
 , git
+, davix
 , ftgl
 , gl2ps
 , glew
@@ -22,6 +23,7 @@
 , lz4
 , xz
 , openblas
+, openssl
 , pcre
 , nlohmann_json
 , pkg-config
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
   buildInputs = [
+    davix
     ftgl
     gl2ps
     glew
@@ -80,6 +83,7 @@ stdenv.mkDerivation rec {
     xz
     gsl
     openblas
+    openssl
     xxHash
     libAfterImage
     giflib
@@ -140,7 +144,7 @@ stdenv.mkDerivation rec {
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
-    "-Ddavix=OFF"
+    "-Ddavix=ON"
     "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
     "-Dfftw3=OFF"
@@ -164,7 +168,7 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Droot7=OFF"
     "-Dsqlite=OFF"
-    "-Dssl=OFF"
+    "-Dssl=ON"
     "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
