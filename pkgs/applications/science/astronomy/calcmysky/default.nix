@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [ glm eigen qtbase ];
 
+  cmakeFlags = [ "-DQT_VERSION=6" ];
+
   doCheck = true;
 
   meta = with lib;{
