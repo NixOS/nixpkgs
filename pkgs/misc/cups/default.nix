@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gmp ];
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = lib.optionals stdenv.isLinux [ "build" "host" ];
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
