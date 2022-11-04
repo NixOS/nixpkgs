@@ -35863,6 +35863,10 @@ with pkgs;
 
   symfpu = callPackage ../applications/science/logic/symfpu {};
 
+  uhdm = callPackage ../applications/science/logic/uhdm {};
+
+  surelog = callPackage ../applications/science/logic/surelog {};
+
   mcy = callPackage ../applications/science/logic/mcy {};
 
   lingeling = callPackage ../applications/science/logic/lingeling {};
