@@ -74,7 +74,7 @@ py.pkgs.buildPythonApplication rec {
         with open(SUPERUSER_PASSWORD_FILE, "r") as file:
             SUPERUSER_PASSWORD = file.readline()
     if SUPERUSER_EMAIL and SUPERUSER_PASSWORD:
-        if User.objects.filter(email=SUPERUSER_EMAIL).count()==0:
+        if User.objects.filter(email=SUPERUSER_EMAIL).count() == 0:
             user = _make_user(SUPERUSER_EMAIL);
             user.set_password(SUPERUSER_PASSWORD);
             user.is_staff = True;
