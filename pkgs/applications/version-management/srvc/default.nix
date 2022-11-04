@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-sjMg5XMnAQZjp6z9prtRq+0pyNQ1oTm0/KWOZPxDW4w=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   meta = with lib; {
     description = "Sysrev version control";
