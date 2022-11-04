@@ -3,6 +3,7 @@
 , protobuf
 , rustPlatform
 , fetchFromGitHub
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,12 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jS6wAswGqgfmpPV6qERhqn1IhpcBSDNh8HDdPo04F0A=";
 
-  buildInputs = [ protobuf ];
+  nativeBuildInputs = [ protobuf ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   PROTOC = "${protobuf}/bin/protoc";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Signal Messenger client for terminal";
     homepage = "https://github.com/boxdot/gurk-rs";
     license = licenses.agpl3Only;
