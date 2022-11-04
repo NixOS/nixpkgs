@@ -3527,6 +3527,8 @@ with pkgs;
 
   swaysome = callPackage ../tools/wayland/swaysome { };
 
+  swayimg = callPackage ../tools/wayland/swayimg { };
+
   swaytools = python3Packages.callPackage ../tools/wayland/swaytools { };
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
@@ -23342,12 +23344,6 @@ with pkgs;
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
-  cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
   cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
@@ -24053,12 +24049,6 @@ with pkgs;
   };
 
   nginx-sso = callPackage ../servers/nginx-sso { };
-
-  percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix {
-    stdenv = gcc10StdenvCompat;
-    openssl = openssl_1_1;
-  };
-  percona-server = percona-server56;
 
   immudb = callPackage ../servers/nosql/immudb { };
 

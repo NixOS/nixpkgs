@@ -722,6 +722,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>trace</literal> binary from
+          <literal>perf-linux</literal> package has been removed, due to
+          being a duplicate of the <literal>perf</literal> binary.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>aws</literal> package has been removed due to
           being abandoned by the upstream. It is recommended to use
           <literal>awscli</literal> or <literal>awscli2</literal>
@@ -835,6 +842,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>cassandra_2_1</literal> and
+          <literal>cassandra_2_2</literal> have been removed. Please
+          update to <literal>cassandra_3_11</literal> or
+          <literal>cassandra_3_0</literal>. See the
+          <link xlink:href="https://github.com/apache/cassandra/blob/cassandra-3.11.14/NEWS.txt">changelog</link>
+          for more information about the upgrade process.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>mysql57</literal> has been removed. Please update to
           <literal>mysql80</literal> or <literal>mariadb</literal>. See
           the
@@ -855,6 +872,13 @@
         <para>
           <literal>k3s</literal> supports <literal>clusterInit</literal>
           option, and it is enabled by default, for servers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>percona-server56</literal> has been removed. Please
+          migrate to <literal>mysql</literal> or
+          <literal>mariadb</literal> if possible.
         </para>
       </listitem>
       <listitem>
@@ -1164,6 +1188,13 @@
           <link xlink:href="options.html#opt-systemd.oomd.enableSystemSlice">systemd.oomd.enableSystemSlice</link>,
           and
           <link xlink:href="options.html#opt-systemd.oomd.enableUserServices">systemd.oomd.enableUserServices</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>tt-rss</literal> service performs two database
+          migrations when you first use its web UI after upgrade.
+          Consider backing up its database before updating.
         </para>
       </listitem>
       <listitem>

@@ -8,13 +8,12 @@
 , pythonOlder
 , requests
 , responses
-, six
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.13.0";
+  version = "3.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-d8c/kMfDMz5Z9O7OtAz2hAXQHqTlJ8oKcL9Yk+6MsA4=";
+    hash = "sha256-lCqiBlyf0cUqsmSlCmt+jXTBGsXyCioZ232zd5rVqiA=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     mypy
     pytestCheckHook
     responses
-    six
   ];
 
   postPatch = ''

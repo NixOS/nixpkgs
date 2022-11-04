@@ -173,6 +173,8 @@ mapAliases ({
   cargo-download = throw "cargo-download has been removed from nixpkgs as it is unmaintained, use cargo-clone instead"; # Added 2022-10-11
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead"; # Added 2020-08-20
   casperjs = throw "casperjs has been removed, it was abandoned by upstream and broken";
+  cassandra_2_1 = throw "cassandra_2_1 has been removed, please use cassandra_3_11 instead"; # Added 2022-10-29
+  cassandra_2_2 = throw "cassandra_2_2 has been removed, please use cassandra_3_11 instead"; # Added 2022-10-29
   catfish = xfce.catfish; # Added 2019-12-22
   ccnet = throw "ccnet has been removed because seafile does not depend on it anymore"; # Added 2021-03-25
   cde-gtk-theme = throw "cde-gtk-theme has been removed from nixpkgs as it shipped with python2 scripts that didn't work anymore"; # Added 2022-01-12
@@ -1067,6 +1069,8 @@ mapAliases ({
   pdfstudio = throw "'pdfstudio' has been replaced with 'pdfstudio<year>', where '<year>' is the year from the PDF Studio version number, because each license is specific to a given year"; # Added 2022-09-04
   peach = asouldocs; # Added 2022-08-28
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
+  percona-server = percona-server56; # Added 2022-11-01
+  percona-server56 = throw "'percona-server56' has been dropped due to lack of maintenance, no upstream support and security issues"; # Added 2022-11-01
   perlXMLParser = throw "'perlXMLParser' has been renamed to/replaced by 'perlPackages.XMLParser'"; # Converted to throw 2022-02-22
   perlArchiveCpio = throw "'perlArchiveCpio' has been renamed to/replaced by 'perlPackages.ArchiveCpio'"; # Converted to throw 2022-02-22
   pgadmin = pgadmin4;
