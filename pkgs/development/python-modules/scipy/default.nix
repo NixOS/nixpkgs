@@ -2,6 +2,7 @@
 , stdenv
 , fetchPypi
 , python
+, pythonOlder
 , buildPythonPackage
 , cython
 , gfortran
@@ -14,6 +15,7 @@
 , pytest-xdist
 , numpy
 , pybind11
+, libxcrypt
 }:
 
 buildPythonPackage rec {
@@ -28,7 +30,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
-  buildInputs = [ numpy.blas pybind11 ];
+  buildInputs = [
+    numpy.blas
+    pybind11
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
