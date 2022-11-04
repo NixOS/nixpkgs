@@ -17,6 +17,9 @@
 , writeText
 , gstreamer
 , gst-plugins-base
+, gst-plugins-good
+, gst-libav
+, gst-vaapi
 , gtk3
 , dconf
 , buildPackages
@@ -67,7 +70,7 @@ let
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
+        inherit gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
       };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
