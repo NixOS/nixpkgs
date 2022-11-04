@@ -1166,12 +1166,12 @@ in {
   config = mkIf cfg.enable {
     warnings = let
       usesFileProvider = opt: defaultValue: builtins.match "^${defaultValue}$|^\\$__file\\{.*}$" opt != null;
-    in flatten [
+    in
       (optional (
         ! usesFileProvider cfg.settings.database.password "" ||
         ! usesFileProvider cfg.settings.security.admin_password "admin"
       ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
-      (optional (
+      ++ (optional (
         let
           checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
           datasourcesUsed = optionals (cfg.provision.datasources.settings != null) cfg.provision.datasources.settings.datasources;
@@ -1181,16 +1181,15 @@ in {
           It is not possible to use file provider in provisioning; please provision
           datasources via `services.grafana.provision.datasources.path` instead.
         '')
-      (optional (
+      ++ (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
       ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
-      (optional (
+      ++ (optional (
         cfg.provision.notifiers != []
         ) ''
             Notifiers are deprecated upstream and will be removed in Grafana 10.
             Use `services.grafana.provision.alerting.contactPoints` instead.
-        '')
-    ];
+        '');
 
     environment.systemPackages = [ cfg.package ];
 
