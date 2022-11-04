@@ -12,6 +12,8 @@
 , gpgSupport   ? false
 , gpgmeSupport ? true
 , imapSupport  ? true
+, pop3Support  ? true
+, smtpSupport  ? true
 , withSidebar  ? true
 , gssSupport   ? true
 , writeScript
@@ -44,9 +46,9 @@ stdenv.mkDerivation rec {
     (lib.enableFeature headerCache  "hcache")
     (lib.enableFeature gpgmeSupport "gpgme")
     (lib.enableFeature imapSupport  "imap")
+    (lib.enableFeature smtpSupport  "smtp")
+    (lib.enableFeature pop3Support  "pop")
     (lib.enableFeature withSidebar  "sidebar")
-    "--enable-smtp"
-    "--enable-pop"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
