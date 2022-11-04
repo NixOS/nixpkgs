@@ -1309,6 +1309,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   deploy to NixOS.
                 </para>
               </listitem>
+              <listitem>
+                <para>
+                  <xref linkend="opt-services.grafana.provision.notifiers" />
+                  is not affected by this change because this feature
+                  will is deprecated by Grafana and will probably
+                  removed in Grafana 10. It’s recommended to use
+                  <literal>services.grafana.provision.alerting.contactPoints</literal>
+                  instead.
+                </para>
+              </listitem>
             </itemizedlist>
           </listitem>
         </itemizedlist>
