@@ -17719,6 +17719,8 @@ with pkgs;
 
   strace = callPackage ../development/tools/misc/strace { };
 
+  strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
+
   stylua = callPackage ../development/tools/stylua { };
 
   summon = callPackage ../development/tools/summon { };
