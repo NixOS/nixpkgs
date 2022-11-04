@@ -1394,8 +1394,6 @@ self: super: with self; {
 
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
 
-  bsblan = callPackage ../development/python-modules/bsblan { };
-
   bson = callPackage ../development/python-modules/bson { };
 
   bsuite = callPackage ../development/python-modules/bsuite { };
