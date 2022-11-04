@@ -51,6 +51,7 @@ let
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
         patches = [
           ./patches/qtbase-qmake-pkg-config.patch
+          ./patches/qtbase-tzdir.patch
         ];
       };
 
