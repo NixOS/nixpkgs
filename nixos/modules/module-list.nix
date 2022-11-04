@@ -82,6 +82,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/usb-wwan.nix
+  ./hardware/usb-storage.nix
   ./hardware/onlykey/default.nix
   ./hardware/opentabletdriver.nix
   ./hardware/sata.nix

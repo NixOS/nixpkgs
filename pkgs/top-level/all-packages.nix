@@ -4865,7 +4865,9 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
-  srvc = callPackage ../applications/version-management/srvc { };
+  srvc = callPackage ../applications/version-management/srvc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -7205,6 +7207,8 @@ with pkgs;
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
+  gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
+
   gitsign = callPackage ../tools/security/gitsign { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
@@ -7317,7 +7321,9 @@ with pkgs;
 
   gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
 
-  gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
+  gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
 
@@ -8302,6 +8308,8 @@ with pkgs;
   kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
+
+  kestrel = callPackage ../tools/security/kestrel { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
@@ -28942,6 +28950,8 @@ with pkgs;
   gonic = callPackage ../servers/gonic {
     inherit (darwin.apple_sdk.frameworks) AppKit AudioToolbox;
   };
+
+  goodvibes = callPackage ../applications/audio/goodvibes { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
