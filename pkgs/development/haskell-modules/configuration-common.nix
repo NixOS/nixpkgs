@@ -2642,4 +2642,10 @@ in {
 
   # 2022-10-04: Needs newer tasty-dejafu than (currently) in stackage
   rec-def = super.rec-def.override { tasty-dejafu = self.tasty-dejafu_2_1_0_0; };
+
+  # 2022-11-04: The situation around heist-emanote is quite terrible.
+  # It‘s simply a heist fork because heist is unmaintained.
+  # Upstream jailbreak is unreleased: https://github.com/srid/heist/commit/988692ea850b3cbe966c7dc4dd26ba1d49647706
+  heist-emanote = doJailbreak (dontCheck super.heist-emanote);
+
 })
