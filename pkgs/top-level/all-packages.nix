@@ -4865,7 +4865,9 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
-  srvc = callPackage ../applications/version-management/srvc { };
+  srvc = callPackage ../applications/version-management/srvc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
