@@ -375,7 +375,7 @@ let
           # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
           "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
         else
-          "sha256-3nAjP6WH6xhvVyA6ZGZ6ZpsTTUCQohNIiQhVn1eWpr8=";
+          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
     };
 
     buildAttrs = {
