@@ -25,12 +25,12 @@
   };
   bash = buildGrammar {
     language = "bash";
-    version = "f1a86d3";
+    version = "77cf8a7";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-bash";
-      rev = "f1a86d3cc5aeeb67e0e52442e893af7f813025b4";
-      hash = "sha256-zzHA+kGw67WFyPVFRWRyKmhAjxp5jkv0K2yhGxNfFM4=";
+      rev = "77cf8a7cab8904baf1a721762e012644ac1d4c7b";
+      hash = "sha256-UPMJ7iL8Y0NkAHtPDrkTjG1qFwr8rXuGqvsG+LTWqEY=";
     };
   };
   beancount = buildGrammar {
@@ -503,12 +503,12 @@
   };
   help = buildGrammar {
     language = "help";
-    version = "8df3266";
+    version = "49cdef5";
     source = fetchFromGitHub {
       owner = "neovim";
       repo = "tree-sitter-vimdoc";
-      rev = "8df3266b423d24c9ac3f3b4b9928e65eb1e5e741";
-      hash = "sha256-t9SHuymK5pYlryWGpORGPYLgPZ3xBx0XH69s5RtRnEI=";
+      rev = "49cdef52ded4a886bf34bc474876b09f9270d48f";
+      hash = "sha256-szNY2yw5i9pgF+MpaEAkP8BgSYEe6nrFW+17sbSZ6Yc=";
     };
   };
   hjson = buildGrammar {
@@ -693,12 +693,12 @@
   };
   lua = buildGrammar {
     language = "lua";
-    version = "887dfd4";
+    version = "fb30e8c";
     source = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tree-sitter-lua";
-      rev = "887dfd4e83c469300c279314ff1619b1d0b85b91";
-      hash = "sha256-5i+UN6Es+K7KDD1qz3ZrVn8IfGdTswcISUyV2sGtY9M=";
+      rev = "fb30e8cb605e2ebd6c643e6981325a63fbbde320";
+      hash = "sha256-gT2WHH3rkFzb6iER0ryVU7bqVbh36RbTI9HSWMh3DsI=";
     };
   };
   m68k = buildGrammar {
@@ -731,7 +731,6 @@
       hash = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
     };
     location = "tree-sitter-markdown";
-
   };
   markdown_inline = buildGrammar {
     language = "markdown_inline";
@@ -743,7 +742,6 @@
       hash = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
     };
     location = "tree-sitter-markdown-inline";
-
   };
   menhir = buildGrammar {
     language = "menhir";
@@ -815,7 +813,6 @@
       hash = "sha256-gTmRBFFCBrA48Yn1MO2mMQPpa6u3uv5McC4BDuMXKuM=";
     };
     location = "ocaml";
-
   };
   ocaml_interface = buildGrammar {
     language = "ocaml_interface";
@@ -827,7 +824,6 @@
       hash = "sha256-gTmRBFFCBrA48Yn1MO2mMQPpa6u3uv5McC4BDuMXKuM=";
     };
     location = "interface";
-
   };
   ocamllex = buildGrammar {
     language = "ocamllex";
@@ -1163,14 +1159,14 @@
   };
   swift = buildGrammar {
     language = "swift";
-    version = "c88b5d7";
+    version = "d7808f0";
     source = fetchFromGitHub {
       owner = "alex-pinkus";
       repo = "tree-sitter-swift";
       nativeBuildInputs = [ nodejs tree-sitter ];
       postFetch = "pushd $out && tree-sitter generate && popd";
-      rev = "c88b5d73f193f5b0762b1a5f0299a275e6a728fb";
-      hash = "sha256-OfFMGxL72SPZW4AtHoThhYtjmKWabStLKAB9TxmjMDw=";
+      rev = "d7808f030a44dc8768948042baa7566949785e2f";
+      hash = "sha256-7Gjpf2isOpeOV3ZMTMibK+F4C4v8ywOPin2Wv86s+AM=";
     };
   };
   sxhkdrc = buildGrammar {
@@ -1245,7 +1241,6 @@
       hash = "sha256-Nx+K7Ic/ePKAXPIMlrRn6zELYE59f/FnnZ/LM5ELaU8=";
     };
     location = "tsx";
-
   };
   turtle = buildGrammar {
     language = "turtle";
@@ -1259,12 +1254,12 @@
   };
   twig = buildGrammar {
     language = "twig";
-    version = "6a01f20";
+    version = "035f549";
     source = fetchFromGitHub {
       owner = "gbprod";
       repo = "tree-sitter-twig";
-      rev = "6a01f20e73038300d205d370212c361949be3035";
-      hash = "sha256-M+57mGl4Sgn0yUGAyxHxE6ShR+E/ki4m8/x/f/KHetA=";
+      rev = "035f549ec8c043e734f04341d7ccdc669bb2ba91";
+      hash = "sha256-XSE0E6a9o+WpvmMIXHu0N89VqzaIk9eFHofKAPHtT20=";
     };
   };
   typescript = buildGrammar {
@@ -1277,7 +1272,6 @@
       hash = "sha256-Nx+K7Ic/ePKAXPIMlrRn6zELYE59f/FnnZ/LM5ELaU8=";
     };
     location = "typescript";
-
   };
   v = buildGrammar {
     language = "v";
@@ -1289,7 +1283,6 @@
       hash = "sha256-d1NeZixsN9992Q1UC5ZKGN4LNxlsvdL91QW2K8d1J9Y=";
     };
     location = "tree_sitter_v";
-
   };
   vala = buildGrammar {
     language = "vala";
