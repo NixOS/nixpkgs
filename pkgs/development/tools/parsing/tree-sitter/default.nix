@@ -23,13 +23,8 @@
 , extraGrammars ? { }
 }:
 
-# TODO: move to carnix or https://github.com/kolloch/crate2nix
 let
-  # to update:
-  # 1) change all these hashes
-  # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
-  # 4) run the ./result script that is output by that (it updates ./grammars)
+  # to update: see ./README.md
   version = "0.20.7";
   sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
   cargoSha256 = "sha256-V4frCaU5QzTx3ujdaplw7vNkosbzyXHQvE+T7ntVOtU=";
