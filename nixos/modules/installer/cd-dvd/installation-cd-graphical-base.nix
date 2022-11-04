@@ -25,7 +25,7 @@ with lib;
   services.xserver.enable = true;
 
   # Provide networkmanager for easy wireless configuration.
-  networking.networkmanager.enable = true;
+  services.networkmanager.enable = true;
   networking.wireless.enable = mkImageMediaOverride false;
 
   # KDE complains if power management is disabled (to be precise, if
