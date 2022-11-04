@@ -16706,7 +16706,7 @@ with pkgs;
       then targetPackages.stdenv.cc.cc
     else gcc.cc;
 
-  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
+  libstdcxx = callPackage ../development/libraries/gcc/libstdc++ { };
 
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
