@@ -1396,6 +1396,22 @@ let
           )
         '';
       };
+
+    zfs = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "7327ded7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-zfs-exporter.service")
+        wait_for_unit("zfs.target")
+        wait_for_open_port(9134)
+        wait_until_succeeds("curl -f localhost:9134/metrics | grep 'zfs_scrape_collector_success{.*} 1'")
+      '';
+    };
   };
 in
 mapAttrs
