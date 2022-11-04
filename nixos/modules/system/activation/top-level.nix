@@ -125,16 +125,6 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
-  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
-     Call can be replaced by argument when that's merged.
-  */
-  tmpFixupSubmoduleBoundary = subopts:
-    lib.mkOption {
-      type = lib.types.submoduleWith {
-        modules = [ { options = subopts; } ];
-      };
-    };
-
 in
 
 {
@@ -173,7 +163,7 @@ in
       '';
     };
 
-    system.build = tmpFixupSubmoduleBoundary {
+    system.build = {
       installBootLoader = mkOption {
         internal = true;
         # "; true" => make the `$out` argument from switch-to-configuration.pl
