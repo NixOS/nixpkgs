@@ -31,6 +31,7 @@
 , systemtap
 , numactl
 , zlib
+, babeltrace
 , withGtk ? false
 , gtk2
 , withZstd ? true
@@ -121,6 +122,7 @@ stdenv.mkDerivation {
     numactl
     python3
     perl
+    babeltrace
   ] ++ (if (lib.versionAtLeast kernel.version "5.19")
   then [ libbfd libopcodes ]
   else [ libbfd_2_38 libopcodes_2_38 ])
