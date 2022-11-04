@@ -9,6 +9,11 @@ let
 
   generatedDerivations = lib.filterAttrs (_: lib.isDerivation) generatedGrammars;
 
+  # add aliases so grammars from `tree-sitter` are overwritten in `withPlugins`
+  # for example, for ocaml_interface, the following aliases will be added
+  #   ocaml-interface
+  #   tree-sitter-ocaml-interface
+  #   tree-sitter-ocaml_interface
   builtGrammars = generatedGrammars // lib.listToAttrs
     (lib.concatLists (lib.mapAttrsToList
       (k: v:
