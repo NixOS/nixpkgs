@@ -48,7 +48,10 @@ in
       };
 
       copyDefault = mkOption {
-        default = true;
+        default = versionOlder config.system.stateVersion "24.05";
+        defaultText = literalExpression ''
+          versionOlder config.system.stateVersion "24.05"
+        '';
         type = types.bool;
         description = ''
           Whether to copy the default system profile boot files to a second set
