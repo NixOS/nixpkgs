@@ -25903,6 +25903,8 @@ with pkgs;
 
   twa = callPackage ../tools/networking/twa { };
 
+  twingate = callPackage ../applications/networking/twingate { };
+
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
