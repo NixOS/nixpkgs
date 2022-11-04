@@ -79,7 +79,7 @@ in
       assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } {
-      assertion = config.networking.networkmanager.enable == false;
+      assertion = config.services.networkmanager.enable == false;
       message = "Windows Azure Linux Agent is not compatible with NetworkManager";
     } ];
 
