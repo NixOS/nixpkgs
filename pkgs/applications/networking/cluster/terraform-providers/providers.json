@@ -914,13 +914,13 @@
     "version": "0.22.0"
   },
   "pagerduty": {
-    "hash": "sha256-S55TSm3aFe9ACo+ysNRnyQ/U55C2KoZroQEHVBXsSPI=",
+    "hash": "sha256-vkfsQxjlYSOl0VJBWvFCxVz7o+XgxDMkwFMomdl+iWQ=",
     "owner": "PagerDuty",
     "provider-source-address": "registry.terraform.io/PagerDuty/pagerduty",
     "repo": "terraform-provider-pagerduty",
-    "rev": "v2.6.3",
+    "rev": "v2.6.4",
     "vendorHash": null,
-    "version": "2.6.3"
+    "version": "2.6.4"
   },
   "panos": {
     "hash": "sha256-mscWNK113W7CVKI+qPGYX3irQI3YhkLdXox4pddOdF0=",
