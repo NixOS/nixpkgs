@@ -16,6 +16,7 @@ let
 
   allGrammars =
     let
+      # All grammars in the tree sitter orga we know of
       treeSitterOrgaGrammars =
         lib.listToAttrs (map
           (repo:
@@ -28,8 +29,18 @@ let
             })
           grammarsToml.knownTreeSitterOrgGrammarRepos);
 
+      merged =
+        mergeAttrsUnique
+          grammarsToml.otherGrammars
+          treeSitterOrgaGrammars;
     in
-    mergeAttrsUnique grammarsToml.otherGrammars treeSitterOrgaGrammars;
+      # a list of {nixRepoAttrName, orga, repo}
+      lib.mapAttrsToList
+        (nixRepoAttrName: attrs: attrs // {
+          inherit nixRepoAttrName;
+        })
+        merged;
+
 
   # TODO: move to lib
   mergeAttrsUnique = left: right:
@@ -44,8 +55,6 @@ let
     left // right;
 
 
-
-  jsonFile = name: val: (formats.json { }).generate name val;
 
   # implementation of the updater
   updateImpl = passArgs "updateImpl-with-args" {
@@ -70,7 +79,11 @@ let
       ${script} "$@"
   '';
 
+  # a list of nix values as a newline-separated json string,
+  # one entry per line
   jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON {});
+  # a pretty-printed value as json file
+  jsonFile = name: val: (formats.json { }).generate name val;
 
   # Run the given script for each of the attr list.
   # The attrs are passed to the script as a json value.
@@ -83,9 +96,14 @@ let
   # This will depend on your local environment, but that is intentional.
   outputDir = "${toString ./.}/grammars";
 
+  # final script
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
-   ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
+
+    # first make sure we know about all upsteam repos
+    ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
+
+    # Then write one json file for each prefetched repo, in parallel
     echo "writing files to ${outputDir}" 1>&2
     mkdir -p "${outputDir}"
     ${forEachParallel
@@ -93,23 +111,17 @@ let
         (writeShellScript "fetch-repo" ''
             ${updateImpl} fetch-repo "$1"
         '')
-        (lib.mapAttrsToList
-          (nixRepoAttrName: attrs: attrs // {
-            inherit
-              nixRepoAttrName
-              outputDir;
-          })
+        (map
+          (grammar: grammar // { inherit outputDir; })
           allGrammars)
     }
+
+    # finally, write a default.nix that calls all grammars
     ${updateImpl} print-all-grammars-nix-file "$(< ${
         jsonFile "all-grammars.json" {
-          allGrammars =
-            (lib.mapAttrsToList
-              (nixRepoAttrName: attrs: attrs // {
-                inherit nixRepoAttrName;
-              })
-              allGrammars);
-          inherit outputDir;
+          inherit
+            allGrammars
+            outputDir;
         }
     })"
   '';
