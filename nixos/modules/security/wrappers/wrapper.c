@@ -16,6 +16,10 @@
 #include <syscall.h>
 #include <byteswap.h>
 
+#ifndef SOURCE_PROG
+#error SOURCE_PROG should be defined via preprocessor commandline
+#endif
+
 #define ASSERT(expr) ((expr) ? (void) 0 : assert_failure(#expr))
 
 extern char **environ;
@@ -177,11 +181,10 @@ int main(int argc, char **argv) {
         fprintf(stderr, "cannot readlink /proc/self/exe: %s", strerror(-self_path_size));
     }
 
+    // TODO: Determine if this is still useful, in particular if
+    // make_caps_ambient somehow relies on these properties.
     // Make sure that we are being executed from the right location,
-    // i.e., `safe_wrapper_dir'.  This is to prevent someone from creating
-    // hard link `X' from some other location, along with a false
-    // `X.real' file, to allow arbitrary programs from being executed
-    // with elevated capabilities.
+    // i.e., `safe_wrapper_dir'.
     int len = strlen(wrapper_dir);
     if (len > 0 && '/' == wrapper_dir[len - 1])
       --len;
@@ -202,23 +205,6 @@ int main(int argc, char **argv) {
     // And, of course, we shouldn't be writable.
     ASSERT(!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
-    // Read the path of the real (wrapped) program from <self>.real.
-    char real_fn[PATH_MAX + 10];
-    int real_fn_size = snprintf(real_fn, sizeof(real_fn), "%s.real", self_path);
-    ASSERT(real_fn_size < sizeof(real_fn));
-
-    int fd_self = open(real_fn, O_RDONLY);
-    ASSERT(fd_self != -1);
-
-    char source_prog[PATH_MAX];
-    len = read(fd_self, source_prog, PATH_MAX);
-    ASSERT(len != -1);
-    ASSERT(len < sizeof(source_prog));
-    ASSERT(len > 0);
-    source_prog[len] = 0;
-
-    close(fd_self);
-
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the
     // capabilities too!
@@ -228,10 +214,10 @@ int main(int argc, char **argv) {
     }
     free(self_path);
 
-    execve(source_prog, argv, environ);
+    execve(SOURCE_PROG, argv, environ);
     
     fprintf(stderr, "%s: cannot run `%s': %s\n",
-        argv[0], source_prog, strerror(errno));
+        argv[0], SOURCE_PROG, strerror(errno));
 
     return 1;
 }
