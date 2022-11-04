@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     make prefix="$out" install
-    cp -r contrib $out
   '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
