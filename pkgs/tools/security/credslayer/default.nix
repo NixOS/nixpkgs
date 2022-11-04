@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "credslayer";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ShellCode33";
     repo = "CredSLayer";
     rev = "v${version}";
-    sha256 = "1rbfy0h9c2gra1r2b39kngj3m7g177nmzzs5xy9np8lxixrh17pc";
+    hash = "sha256-gryV9MHULY6ZHy6YDFQDIkZsfIX8La0tHT0vrrQJNDQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -47,9 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Extract credentials and other useful info from network captures";
     homepage = "https://github.com/ShellCode33/CredSLayer";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
-    # Upstream issue https://github.com/ShellCode33/CredSLayer/issues/16
-    # This package works only with pyshark < 0.5
-    broken = true;
+    maintainers = with maintainers; [ fab gador ];
   };
 }
