@@ -11,22 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "karlender";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitLab {
-    owner = "loers";
-    repo = "karlender";
+    owner = "floers";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YF46C+Vz7eGl4lqOQXqiQqaa6ieo1p8l6QCh4oNSJEg=";
+    hash = "sha256-dgxhXxtwQvaWMLCh8ac67L+R6jnJQdFzoyWKyrboPTk=";
   };
 
-  cargoSha256 = "sha256-Kx5K2tp5PAQWac8LVrmOsk8Qf9m34SJ1vyfv7Ef2Wr0=";
+  cargoHash = "sha256-DsayK3wk2BVG2tqijWWQqUv5uPb/lcZXmwy8pbmd430=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
     glib
   ];
+
   buildInputs = [
     gtk4
     libadwaita
@@ -52,7 +53,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Mobile-friendly GTK calendar application";
-    homepage = "https://gitlab.com/loers/karlender";
+    homepage = "https://gitlab.com/floers/karlender";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chuangzhu ];
     platforms = platforms.linux;
