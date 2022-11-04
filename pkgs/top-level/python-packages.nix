@@ -4371,6 +4371,8 @@ self: super: with self; {
 
   ibm-watson = callPackage ../development/python-modules/ibm-watson { };
 
+  ical = callPackage ../development/python-modules/ical { };
+
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
@@ -8748,6 +8750,8 @@ self: super: with self; {
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
   pytest-freezegun = callPackage ../development/python-modules/pytest-freezegun { };
+
+  pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
