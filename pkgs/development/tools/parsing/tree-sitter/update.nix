@@ -14,6 +14,7 @@ let
   grammarsToml = builtins.fromTOML (builtins.readFile ./grammars.toml);
 
 
+  # a list of {nixRepoAttrName, type, <type-specific>}
   allGrammars =
     let
       # All grammars in the tree sitter orga we know of
@@ -23,6 +24,7 @@ let
             {
               name = repo;
               value = {
+                type = "github";
                 orga = "tree-sitter";
                 inherit repo;
               };
@@ -34,7 +36,6 @@ let
           grammarsToml.otherGrammars
           treeSitterOrgaGrammars;
     in
-      # a list of {nixRepoAttrName, orga, repo}
       lib.mapAttrsToList
         (nixRepoAttrName: attrs: attrs // {
           inherit nixRepoAttrName;
