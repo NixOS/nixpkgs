@@ -808,6 +808,22 @@
       </listitem>
       <listitem>
         <para>
+          The NixOS option <literal>nix.settings.max-jobs</literal> has
+          been changed from auto to 1. This default is the same as
+          documented in manpage for nix.conf.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The build environments do not set the maximum system load for
+          make and ninja (see (treewide: drop
+          -l$NIX_BUILD_CORES)[https://github.com/NixOS/nixpkgs/pull/192447]).
+          Please check Nix configurations <literal>max-jobs</literal>
+          and <literal>cores</literal> to prevent high system loads.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>

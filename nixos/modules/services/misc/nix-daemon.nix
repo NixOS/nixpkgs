@@ -484,12 +484,11 @@ in
           options = {
             max-jobs = mkOption {
               type = types.either types.int (types.enum [ "auto" ]);
-              default = "auto";
+              default = 1;
               example = 64;
               description = lib.mdDoc ''
                 This option defines the maximum number of jobs that Nix will try to
-                build in parallel. The default is auto, which means it will use all
-                available logical cores. It is recommend to set it to the total
+                build in parallel. The special value auto causes Nix to use the
                 number of logical cores in your system (e.g., 16 for two CPUs with 4
                 cores each and hyper-threading).
               '';
