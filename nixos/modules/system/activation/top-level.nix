@@ -59,7 +59,6 @@ let
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
-      echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
@@ -105,8 +104,6 @@ let
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
-
-    configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
