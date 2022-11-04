@@ -55,7 +55,7 @@ let
   builtGrammars =
     let
       change = name: grammar:
-        callPackage ./grammar.nix { } {
+        callPackage ./build-grammar.nix { } {
           language = if grammar ? language then grammar.language else name;
           inherit version;
           source = if grammar ? src then grammar.src else fetchGrammar grammar;
