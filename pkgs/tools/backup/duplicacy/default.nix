@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "A new generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ ffinkdevs ];
+    maintainers = with maintainers; [ ffinkdevs devusb ];
   };
 }
