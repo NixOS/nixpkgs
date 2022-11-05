@@ -4,16 +4,7 @@ with lib;
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
-  format = pkgs.formats.yaml {};
-  configFile = format.generate "smartctl-exporter.yml" {
-    smartctl_exporter = {
-      bind_to = "${cfg.listenAddress}:${toString cfg.port}";
-      url_path = "/metrics";
-      smartctl_location = "${pkgs.smartmontools}/bin/smartctl";
-      collect_not_more_than_period = cfg.maxInterval;
-      devices = cfg.devices;
-    };
-  };
+  deviceArgs = concatMapStringsSep " " (device: "--smartctl.device=${device}") cfg.devices;
 in {
   port = 9633;
 
@@ -60,7 +51,7 @@ in {
         ]
       );
       ExecStart = ''
-        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter -config ${configFile}
+        ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter --web.listen-address="${cfg.listenAddress}:${toString cfg.port}" --smartctl.path="${pkgs.smartmontools}/bin/smartctl" --smartctl.interval="${cfg.maxInterval}" ${deviceArgs}
       '';
       PrivateDevices = lib.mkForce false;
       ProtectProc = "invisible";
