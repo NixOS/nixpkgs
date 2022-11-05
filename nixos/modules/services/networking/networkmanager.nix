@@ -136,7 +136,7 @@ in {
 
   options = {
 
-    networking.networkmanager = {
+    services.networkmanager = {
 
       enable = mkOption {
         type = types.bool;
