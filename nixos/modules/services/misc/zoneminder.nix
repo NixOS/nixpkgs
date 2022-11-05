@@ -283,7 +283,8 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
-          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
+          phpPackage = pkgs.php.withExtensions (
+            { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
           '';
