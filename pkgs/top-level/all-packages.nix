@@ -1622,6 +1622,8 @@ with pkgs;
 
   simplenes = callPackage ../applications/emulators/simplenes { };
 
+  snekim = callPackage ../games/snekim { };
+
   snes9x = callPackage ../applications/emulators/snes9x { };
 
   snes9x-gtk = callPackage ../applications/emulators/snes9x {
@@ -14467,8 +14469,6 @@ with pkgs;
   nrpl = callPackage ../development/tools/nrpl { };
 
   nimlsp = callPackage ../development/tools/misc/nimlsp { };
-
-  nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
 
   neko = callPackage ../development/compilers/neko { };
 
