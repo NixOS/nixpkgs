@@ -11,6 +11,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , libxcrypt
 
 # passthru
@@ -48,10 +49,10 @@ stdenv.mkDerivation rec {
     libsodium
     libtool
     openssl
-  ] ++ lib.optionals (stdenv.isLinux) [
-    libxcrypt # causes linking issues on *-darwin
-    systemdMinimal
-  ];
+  ]
+  # causes linking issues on *-darwin
+  ++ lib.optional (stdenv.isLinux) libxcrypt
+  ++ lib.optional systemdSupport systemdMinimal;
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
