@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.5.6";
+  version = "1.5.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-w04wvmzWcp92slPIc2f1En+52J9Z/XvjGHHntCeuTd0=";
+    hash = "sha256-BIUUg+Y6bbgjnIWPU/bZO2axSLSzIsRJwyu7lBVQz/Q=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
