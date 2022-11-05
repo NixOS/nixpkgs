@@ -509,6 +509,15 @@
       </listitem>
       <listitem>
         <para>
+          Deprecated settings <literal>logrotate.paths</literal> and
+          <literal>logrotate.extraConfig</literal> have been removed.
+          Please convert any uses to
+          <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>isPowerPC</literal> predicate, found on
           <literal>platform</literal> attrsets
           (<literal>hostPlatform</literal>,
