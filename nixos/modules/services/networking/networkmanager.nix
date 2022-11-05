@@ -386,8 +386,10 @@ in {
     (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
-    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
-    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "useDnsmasq" ]
+      [ "networking" "networkmanager" "dns" ])
+    (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
       vector. There seem to be very rare cases where this might be useful.
