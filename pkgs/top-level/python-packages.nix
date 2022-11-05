@@ -9373,6 +9373,8 @@ self: super: with self; {
 
   pywal = callPackage ../development/python-modules/pywal { };
 
+  pywalfox = callPackage ../development/python-modules/pywalfox { };
+
   pywatchman = callPackage ../development/python-modules/pywatchman { };
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };

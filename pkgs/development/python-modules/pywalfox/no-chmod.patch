@@ -1,0 +1,18 @@
+diff --git a/pywalfox/install.py b/pywalfox/install.py
+index 8fdddb5..230d75a 100644
+--- a/pywalfox/install.py
++++ b/pywalfox/install.py
+@@ -207,13 +207,11 @@ def linux_setup(manifest_path_key):
+     """Linux installation."""
+     manifest_path = MANIFEST_TARGET_PATHS_LINUX[manifest_path_key]
+     copy_manifest(manifest_path, BIN_PATH_UNIX)
+-    set_executable_permissions(BIN_PATH_UNIX)
+ 
+ def darwin_setup(manifest_path_key):
+     """MacOS installation."""
+     manifest_path = MANIFEST_TARGET_PATHS_DARWIN[manifest_path_key]
+     copy_manifest(manifest_path, BIN_PATH_UNIX)
+-    set_executable_permissions(BIN_PATH_UNIX)
+ 
+ def start_setup(global_install):
+     """

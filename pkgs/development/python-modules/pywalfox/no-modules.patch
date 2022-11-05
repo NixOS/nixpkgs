@@ -1,0 +1,10 @@
+diff --git a/pywalfox/bin/main.sh b/pywalfox/bin/main.sh
+index dd37a41..0ffff27 100755
+--- a/pywalfox/bin/main.sh
++++ b/pywalfox/bin/main.sh
+@@ -7,4 +7,4 @@ if [[ ${#macOS} > 0  ]]; then
+     pywalfox start
+ fi
+
+-python -m pywalfox start || python3 -m pywalfox start || python2.7 -m pywalfox start || python3.9 -m pywalfox start
++pywalfox start
