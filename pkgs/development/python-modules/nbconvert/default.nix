@@ -51,6 +51,12 @@ buildPythonPackage rec {
       url = "https://github.com/jupyter/nbconvert/commit/d3900ed4527f024138dc3a8658c6a1b1dfc43c09.patch";
       hash = "sha256-AFE1Zhw29JMLB0Sj17zHcOfy7VEFqLekO8NYbyMLrdI=";
     })
+
+    (fetchpatch {
+      name = "fix-test-default-config-jupyter-core-4.11.2.patch";
+      url = "https://github.com/jupyter/nbconvert/commit/7227d68acde5e3f2959dd5f4db30af1ee4b222b7.patch";
+      hash = "sha256-hrPgvTubig7grEo0F9QIcfxaz5X3p/C2U7Gnhp/uTWY=";
+    })
   ];
 
   postPatch = ''
