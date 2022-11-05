@@ -18154,6 +18154,10 @@ with pkgs;
 
   belr = callPackage ../development/libraries/belr { };
 
+  bencode = callPackage ../development/libraries/bencode {
+    stdenv = gcc10StdenvCompat;
+  };
+
   bencodetools = callPackage ../development/libraries/bencodetools { };
 
   beignet = callPackage ../development/libraries/beignet {
