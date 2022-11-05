@@ -20,7 +20,7 @@ let
       # All grammars in the tree sitter orga we know of
       treeSitterOrgaGrammars =
         lib.listToAttrs (map
-          (repo:
+          ({repo, ...}:
             {
               name = repo;
               value = {
@@ -65,9 +65,12 @@ let
         printf = "${coreutils}/bin/printf";
       };
       inherit (grammarsToml)
-        knownTreeSitterOrgGrammarRepos
         ignoredTreeSitterOrgRepos
         ;
+      knownTreeSitterOrgGrammarRepos =
+        map
+          ({repo, ...}: repo)
+          grammarsToml.knownTreeSitterOrgGrammarRepos;
     }
     (writers.writePython3 "updateImpl" {
         flakeIgnore = ["E501"];

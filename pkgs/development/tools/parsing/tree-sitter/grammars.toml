@@ -1,38 +1,6 @@
 # Grammar list:
 # https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md
 
-# Grammars we want to fetch from the tree-sitter github orga
-knownTreeSitterOrgGrammarRepos = [
-  "tree-sitter-javascript",
-  "tree-sitter-c",
-  "tree-sitter-json",
-  "tree-sitter-cpp",
-  "tree-sitter-ruby",
-  "tree-sitter-go",
-  "tree-sitter-c-sharp",
-  "tree-sitter-python",
-  "tree-sitter-typescript",
-  "tree-sitter-rust",
-  "tree-sitter-bash",
-  "tree-sitter-php",
-  "tree-sitter-java",
-  "tree-sitter-scala",
-  "tree-sitter-ocaml",
-  "tree-sitter-julia",
-  "tree-sitter-agda",
-  "tree-sitter-fluent",
-  "tree-sitter-html",
-  "tree-sitter-haskell",
-  "tree-sitter-regex",
-  "tree-sitter-css",
-  "tree-sitter-verilog",
-  "tree-sitter-jsdoc",
-  "tree-sitter-ql",
-  "tree-sitter-ql-dbscheme",
-  "tree-sitter-embedded-template",
-  "tree-sitter-tsq",
-  "tree-sitter-toml",
-]
 # repos of the tree-sitter github orga we want to ignore (not grammars)
 ignoredTreeSitterOrgRepos = [
   "tree-sitter",
@@ -60,6 +28,67 @@ ignoredTreeSitterOrgRepos = [
   # abandoned
   "tree-sitter-swift",
 ]
+
+# Grammars we want to fetch from the tree-sitter github orga
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-javascript"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-c"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-json"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-cpp"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-ruby"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-go"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-c-sharp"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-python"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-typescript"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-rust"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-bash"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-php"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-java"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-scala"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-ocaml"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-julia"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-agda"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-fluent"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-html"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-haskell"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-regex"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-css"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-verilog"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-jsdoc"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-ql"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-ql-dbscheme"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-embedded-template"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-tsq"
+[[knownTreeSitterOrgGrammarRepos]]
+repo = "tree-sitter-toml"
+
 
 # Additional grammars that are not in the official github orga.
 # If you need a grammar that already exists in the official orga,
