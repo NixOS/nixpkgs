@@ -5105,6 +5105,8 @@ with pkgs;
 
   oci-cli = callPackage ../tools/admin/oci-cli { };
 
+  oci-seccomp-bpf-hook = callPackage ../os-specific/linux/oci-seccomp-bpf-hook { };
+
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
 
   ocrfeeder = callPackage ../applications/graphics/ocrfeeder { };
