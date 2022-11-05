@@ -82,7 +82,14 @@ stdenv.mkDerivation rec {
     ./CVE-2022-32206.patch
     ./CVE-2022-32207.patch
     ./CVE-2022-32208.patch
+    ./CVE-2022-35252.patch.bin
+    # CVE-2022-35260 not applicable to 7.83.1
+    ./CVE-2022-32221.patch
+    ./CVE-2022-42915.patch
+    ./CVE-2022-42916.patch
   ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
+
+  patchFlags = [ "-p1" "--binary" ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
