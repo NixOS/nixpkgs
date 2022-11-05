@@ -12,6 +12,7 @@
 , version
   # source for the language grammar
 , source
+  # subdirectory inside of source that contains the actual grammar, or `null` of none.
 , location ? null
 }:
 
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
   pname = "${language}-grammar";
   inherit version;
 
-  src = if location == null then source else "${source}/${location}";
+  src =
+    if location == null
+    then source
+    else "${source}/${location}";
 
   buildInputs = [ tree-sitter ];
 

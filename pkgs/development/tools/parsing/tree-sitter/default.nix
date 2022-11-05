@@ -47,11 +47,12 @@ let
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
+
   builtGrammars =
     let
       change = name: grammar:
         callPackage ./build-grammar.nix { } {
-          language = if grammar ? language then grammar.language else name;
+          language = name;
           inherit version;
           source = if grammar ? src then grammar.src else fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
@@ -60,11 +61,10 @@ let
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown-inline"; }; };
     in
     lib.mapAttrs change (grammars);
 
