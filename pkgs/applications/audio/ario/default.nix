@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , pkg-config
 , intltool
 , avahi
@@ -24,7 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
   };
 
-  nativeBuildInputs = [ pkg-config gettext intltool wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gettext
+    intltool
+    wrapGAppsHook
+  ];
+
   buildInputs = [
     avahi
     curl
@@ -35,6 +43,12 @@ stdenv.mkDerivation rec {
     libxml2
     taglib
   ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    for file in $out/lib/ario/plugins/*.dylib; do
+      ln -s $file $out/lib/ario/plugins/$(basename $file .dylib).so
+    done
+  '';
 
   meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";

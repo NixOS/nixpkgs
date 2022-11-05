@@ -25686,7 +25686,6 @@ with pkgs;
   swiftdefaultapps = callPackage ../os-specific/darwin/swiftdefaultapps { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
-    openssl = openssl_1_1;
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
 
