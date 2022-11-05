@@ -5,6 +5,7 @@
 , fetchpatch
 , python
 , ipython
+, hatchling
 , traitlets
 , glibcLocales
 , mock
@@ -14,23 +15,21 @@
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.9.2";
+  version = "4.11.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1puuuf+xKLjNJlf88nA/icdp0Wc8hRgSEZ46Kg6TrZo=";
+    sha256 = "sha256-wpCbm8fcp1VgpsWueMNP0wXt4xzYZNo8DQuy7Ymqkzc=";
   };
+  format = "pyproject";
+
+  buildInputs = [ hatchling ];
 
   checkInputs = [ pytestCheckHook mock glibcLocales nose ];
   propagatedBuildInputs = [ ipython traitlets ];
 
   patches = [
-    # install jupyter_core/*.py files
-    (fetchpatch {
-      url = "https://github.com/jupyter/jupyter_core/pull/253/commits/3bbeaebec0a53520523162d5e8d5c6ca02b1b782.patch";
-      sha256 = "sha256-QeAfj7wLz4egVUPMAgrZ9Wn/Tv60LrIXLgHGVoH41wQ=";
-    })
     ./tests_respect_pythonpath.patch
   ];
 
