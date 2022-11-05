@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-D8kwrHo58zksVjB13VtzoVqmz++FRfJ4zI2CT+YeBVE=";
   };
 
+  patches = [
+    # Fix compilation on aarch64-darwin
+    # See https://github.com/unicorn-engine/unicorn/issues/1730
+    ./tests_unit_endian_aarch64.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -28,6 +34,13 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     IOKit
   ];
+
+  cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Some x86 tests are interrupted by signal 10
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;test_x86"
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Lightweight multi-platform CPU emulator library";
