@@ -3,13 +3,13 @@
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "Dummerle";
     repo = "Rare";
     rev = version;
-    sha256 = "sha256-mL23tq5Fvd/kXAr7PZ+le5lRXwV3rKG/s8GuXE+S11M=";
+    sha256 = "sha256-M+OMsyamh4WHIx7Pv2sLylOrnSmYrv1aEm3atqXrDaw=";
   };
 
   nativeBuildInputs = [

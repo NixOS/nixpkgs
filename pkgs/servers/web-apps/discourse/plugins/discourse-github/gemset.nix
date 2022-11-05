@@ -16,20 +16,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1a6q8k82vfqyzlnrs6r6d82fyz5fminc8p57mr5xkdabs0m2y3mx";
+      sha256 = "0mqv17hfmph4ylmb2bqyccy64gsgpmzapq5yrmf5yjsqkvw9rxbv";
       type = "gem";
     };
-    version = "2.5.2";
+    version = "2.6.0";
   };
   faraday-net_http = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0yicplzlh5da8pr64286zga3my86cjsb2y9dqlzsacpw8hbkmjvw";
+      sha256 = "13b717ddw90iaf4vijy06srmkvrfbzsnyjap93yll0nibad4dbxq";
       type = "gem";
     };
-    version = "3.0.0";
+    version = "3.0.1";
   };
   octokit = {
     dependencies = ["faraday" "sawyer"];
