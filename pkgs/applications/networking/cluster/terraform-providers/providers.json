@@ -1058,13 +1058,13 @@
     "version": "6.18.0"
   },
   "skytap": {
-    "hash": "sha256-EAimiuQJOt12baZSjDKI+c9UjJd8e26ouOAZIZezw/I=",
+    "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
     "owner": "skytap",
     "provider-source-address": "registry.terraform.io/skytap/skytap",
     "repo": "terraform-provider-skytap",
-    "rev": "v0.15.0",
+    "rev": "v0.15.1",
     "vendorHash": null,
-    "version": "0.15.0"
+    "version": "0.15.1"
   },
   "snowflake": {
     "hash": "sha256-XjLsRS7n3p0lNVEPx6b+h5TCzK+1Kws/72FNgy3sVbE=",
