@@ -2526,10 +2526,9 @@ sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
       <listitem>
         <para>
           The logrotate module also has been updated to freeform syntax:
-          <link linkend="opt-services.logrotate.paths">services.logrotate.paths</link>
-          and
-          <link linkend="opt-services.logrotate.extraConfig">services.logrotate.extraConfig</link>
-          will work, but issue deprecation warnings and
+          <literal>services.logrotate.paths</literal> and
+          <literal>services.logrotate.extraConfig</literal> will work,
+          but issue deprecation warnings and
           <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
           should now be used instead.
         </para>
