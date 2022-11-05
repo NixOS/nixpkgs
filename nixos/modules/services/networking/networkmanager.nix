@@ -384,6 +384,9 @@ in {
 
   imports = [
     (mkRenamedOptionModule
+      [ "networking" "networkmanager" ]
+      [ "services" "networkmanager" ])
+    (mkRenamedOptionModule
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
     (mkRenamedOptionModule
