@@ -9,7 +9,6 @@
 , fixup_yarn_lock
 , nodejs
 , jitsi-meet
-, applyPatches
 , conf ? { }
 }:
 
@@ -25,14 +24,11 @@ in stdenv.mkDerivation rec {
   pname = "element-web";
   inherit (pinData) version;
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "vector-im";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = pinData.webSrcHash;
-    };
-    patches = [ ./regenerate-element-web-yarn.lock.diff ];
+  src = fetchFromGitHub {
+    owner = "vector-im";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = pinData.webSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
