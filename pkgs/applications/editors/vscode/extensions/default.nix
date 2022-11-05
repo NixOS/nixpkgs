@@ -1244,10 +1244,16 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.46.6822";
-            sha256 = "sha256-L71mC0190ZubqNVliu7es4SDsBTGVokePpcNupABI8Q=";
+            version = "1.56.7152";
+            sha256 = "sha256-9WEvTcVY/yMF00GJVj4h57aWhfBYTSatbw10DjjAaAM=";
           };
-          meta = { license = lib.licenses.unfree; };
+          meta = with lib; {
+            description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
+            homepage = "https://github.com/features/copilot";
+            license = licenses.unfree;
+            maintainers = with maintainers; [ Zimmi48 ];
+          };
         };
 
         github-vscode-theme = buildVscodeMarketplaceExtension {
@@ -1676,6 +1682,22 @@ let
           changelog = "https://marketplace.visualstudio.com/items/mattn.lisp/changelog";
           license = licenses.mit;
           maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
+      maximedenes.vscoq = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "maximedenes";
+          name = "vscoq";
+          version = "0.3.6";
+          sha256 = "sha256-b0gCaEzt5yAj53oLFZSXSD3bum9J1fYes/uf9+OlUek=";
+        };
+        meta = with lib; {
+          description = "VsCoq is an extension for Visual Studio Code (VS Code) and VSCodium with support for the Coq Proof Assistant.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=maximedenes.vscoq";
+          homepage = "https://github.com/coq-community/vscoq";
+          license = licenses.mit;
+          maintainers = with maintainers; [ Zimmi48 ];
         };
       };
 
@@ -2465,8 +2487,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.10.1";
-          sha256 = "sha256-FeYkSML6QYtuIHIbAovOqlPwkKfNkHr7IdMCWwkynQ0=";
+          version = "2.11.0";
+          sha256 = "sha256-ZYbkCe/FdSxmipV9TTq0AF/Ft01+LTUeo3sVyKMP3iQ=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

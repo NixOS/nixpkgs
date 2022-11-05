@@ -4,29 +4,27 @@
 , python3
 , readline
 , stdenv
-, which
 , yosys
 , zlib
 , yosys-symbiflow
+, uhdm
+, surelog
 }: let
 
   src = fetchFromGitHub {
-    owner  = "SymbiFlow";
-    repo   = "yosys-symbiflow-plugins";
-    rev    = "35c6c33811a8de7c80dff6a7bcf7aa6ec9b21233";
-    hash   = "sha256-g5dX9+R+gWt8e7Bhbbg60O9qa+Vi6Ar0M1sHhYlAre8=";
+    owner  = "chipsalliance";
+    repo   = "yosys-f4pga-plugins";
+    rev    = "27208ce08200a5e89e3bd4f466bc68824df38c32";
+    hash   = "sha256-S7txjzlIp+idWIfp/DDOznluA3aMFfosMUt5dvi+g44=";
   };
 
-  version = "2022.01.06";
+  version = "2022.09.27";
 
   # Supported symbiflow plugins.
   #
   # The following are disabled:
   #
   # "ql-qlf" builds but fails to load the plugin, so is not currently supported.
-  #
-  # "UHDM" doesn't currently build, as the work to package UHDM and surelog has
-  # not (yet) been undertaken.
   plugins = [
     "design_introspection"
     "fasm"
@@ -36,7 +34,7 @@
     # "ql-qlf"
     "sdc"
     "xdc"
-    # "UHDM"
+    "systemverilog"
   ];
 
   static_gtest = gtest.dev.overrideAttrs (old: {
@@ -50,8 +48,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   inherit src version plugin;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which python3 ];
-  buildInputs = [ yosys readline zlib ] ;
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ yosys readline zlib uhdm surelog ];
 
   # xdc has an incorrect path to a test which has yet to be patched
   doCheck = plugin != "xdc";
@@ -102,5 +100,3 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ollieB thoughtpolice ];
   };
 }))
-
-

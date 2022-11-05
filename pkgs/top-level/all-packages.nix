@@ -4865,7 +4865,9 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
-  srvc = callPackage ../applications/version-management/srvc { };
+  srvc = callPackage ../applications/version-management/srvc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
@@ -7195,6 +7197,8 @@ with pkgs;
     gitlabEnterprise = true;
   };
 
+  gitlab-clippy = callPackage ../development/tools/rust/gitlab-clippy { };
+
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
@@ -7319,7 +7323,9 @@ with pkgs;
 
   gnupg-pkcs11-scd = callPackage ../tools/security/gnupg-pkcs11-scd { };
 
-  gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
+  gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
 
@@ -8834,6 +8840,8 @@ with pkgs;
   leela = callPackage ../tools/graphics/leela { };
 
   lemmeknow = callPackage ../tools/misc/lemmeknow { };
+
+  lemmy-help = callPackage ../tools/misc/lemmy-help { };
 
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14869,6 +14877,8 @@ with pkgs;
 
   rocminfo = callPackage ../development/tools/rocminfo { };
 
+  rocmlir = callPackage ../development/libraries/rocmlir { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
@@ -14944,8 +14954,10 @@ with pkgs;
   };
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
   cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
+  cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
   cargo-hack = callPackage ../development/tools/rust/cargo-hack { };
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
+  cargo-llvm-cov = callPackage ../development/tools/rust/cargo-llvm-cov { };
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
   cargo-lock = callPackage ../development/tools/rust/cargo-lock { };
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
@@ -15206,6 +15218,8 @@ with pkgs;
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
 
   spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
+
+  spirv-llvm-translator_14 = callPackage ../development/compilers/spirv-llvm-translator { llvm = llvm_14; };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper {
     jdk = oraclejdk;
@@ -21587,7 +21601,9 @@ with pkgs;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
-  wolfssl = callPackage ../development/libraries/wolfssl { };
+  wolfssl = callPackage ../development/libraries/wolfssl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   openssl = openssl_3;
 
@@ -22976,6 +22992,7 @@ with pkgs;
 
   yubihsm-connector = callPackage ../tools/security/yubihsm-connector { };
 
+  yubikey-manager4 = callPackage ../tools/misc/yubikey-manager/4.nix { };
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
@@ -27499,6 +27516,8 @@ with pkgs;
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
   };
+
+  calcmysky = libsForQt5.callPackage ../applications/science/astronomy/calcmysky { };
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
@@ -35259,6 +35278,8 @@ with pkgs;
 
   seqtk = callPackage ../applications/science/biology/seqtk { };
 
+  seqkit = callPackage ../applications/science/biology/seqkit { };
+
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
   somafm-cli = callPackage ../tools/misc/somafm-cli { };
@@ -35845,6 +35866,10 @@ with pkgs;
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
   symfpu = callPackage ../applications/science/logic/symfpu {};
+
+  uhdm = callPackage ../applications/science/logic/uhdm {};
+
+  surelog = callPackage ../applications/science/logic/surelog {};
 
   mcy = callPackage ../applications/science/logic/mcy {};
 
