@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8en64QefQ+r92fgXzbP9MNcJ7cCTtdXa2lekYbLbMAg=";
+    sha256 = "sha256-F4WPLrxiMiDQEg0fqNQo0DPd50nEvDWzPYGmatf5NIA=";
   };
 
   passthru = {
