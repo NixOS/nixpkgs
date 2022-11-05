@@ -290,6 +290,7 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - ema
+    - emanote
     - generic-optics
     - ghcid
     - ghcide
