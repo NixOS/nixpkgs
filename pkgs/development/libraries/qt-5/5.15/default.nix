@@ -56,7 +56,11 @@ let
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
     ];
-    qtdeclarative = [ ./qtdeclarative.patch ];
+    qtdeclarative = [
+      ./qtdeclarative.patch
+      # prevent headaches from stale qmlcache data
+      ./qtdeclarative-default-disable-qmlcache.patch
+    ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = lib.optionals stdenv.isDarwin [

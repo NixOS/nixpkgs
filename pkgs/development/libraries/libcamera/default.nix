@@ -19,14 +19,14 @@
 , systemd # for libudev
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "unstable-2022-09-15";
+  version = "0.0.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "74ab3f778c848b20cbf8fe299170756ff6ebab1a";
-    hash = "sha256-w0I4L6xXTBUdqj30LpVW/KZW6bdoUeoW9lnMOW0OLJY=";
+    rev = "v${version}";
+    hash = "sha256-u5FnfXBCjwSp8QBrH8KIkVGV32/9pff41ZWjWXOwuMI=";
   };
 
   postPatch = ''
@@ -77,6 +77,9 @@ stdenv.mkDerivation {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    "-Dwerror=false"
     ];
 
   # Fixes error on a deprecated declaration
@@ -84,6 +87,17 @@ stdenv.mkDerivation {
 
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
 
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";

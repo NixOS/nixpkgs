@@ -19489,8 +19489,11 @@ with pkgs;
   icu71 = callPackage ../development/libraries/icu/71.nix ({
     nativeBuildRoot = buildPackages.icu71.override { buildRootOnly = true; };
   });
+  icu72 = callPackage ../development/libraries/icu/72.nix ({
+    nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
+  });
 
-  icu = icu71;
+  icu = icu72;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -25706,6 +25709,7 @@ with pkgs;
       enableMinimal = true;
       guiSupport = false;
     };
+    libbpf = libbpf_1;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
