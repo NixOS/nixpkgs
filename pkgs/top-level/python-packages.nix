@@ -238,6 +238,8 @@ self: super: with self; {
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
+  aiolifx-themes = callPackage ../development/python-modules/aiolifx-themes { };
+
   aiolimiter = callPackage ../development/python-modules/aiolimiter { };
 
   aiolip = callPackage ../development/python-modules/aiolip { };
@@ -1393,8 +1395,6 @@ self: super: with self; {
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
-
-  bsblan = callPackage ../development/python-modules/bsblan { };
 
   bson = callPackage ../development/python-modules/bson { };
 
@@ -5433,6 +5433,8 @@ self: super: with self; {
 
   mac_alias = callPackage ../development/python-modules/mac_alias { };
 
+  mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
+
   macfsevents = callPackage ../development/python-modules/macfsevents {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
   };
@@ -6487,6 +6489,8 @@ self: super: with self; {
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
+
+  oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 

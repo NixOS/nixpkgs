@@ -1,16 +1,17 @@
 { lib
+, bluetooth-data-tools
+, bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
 , home-assistant-bluetooth
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, sensor-state-data
 }:
 
 buildPythonPackage rec {
-  pname = "sensor-state-data";
-  version = "2.10.1";
+  pname = "oralb-ble";
+  version = "0.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,11 +20,17 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pCo9CMX+CQBFuK5rbMHsxQEdBHvp1EZA7A9Ykm68NCw=";
+    hash = "sha256-Iuu44H8fCbJysoSJLBtlJ1XE5Ad2caWihj3UZytWK3o=";
   };
 
   nativeBuildInputs = [
     poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    bluetooth-data-tools
+    bluetooth-sensor-state-data
+    home-assistant-bluetooth
   ];
 
   checkInputs = [
@@ -32,17 +39,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=oralb_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "sensor_state_data"
+    "oralb_ble"
   ];
 
   meta = with lib; {
-    description = "Models for storing and converting Sensor Data state";
-    homepage = "https://github.com/bluetooth-devices/sensor-state-data";
-    license = with licenses; [ asl20 ];
+    description = "Library for Oral B BLE devices";
+    homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }
