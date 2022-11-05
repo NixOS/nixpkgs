@@ -122,7 +122,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.5";
+  version = "251.7";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -139,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
+    sha256 = "sha256-Sa5diyNFyYtREo1xSCcufAW83ZZGZvueoDVuQ2r8wno=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -243,12 +243,14 @@ stdenv.mkDerivation {
           opt = condition: pkg: if condition then pkg else null;
         in
         [
-          # bpf compilation support
-          { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+          # bpf compilation support. We use libbpf 1 now.
+          { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
+          { name = "libbpf.so.0"; pkg = null; }
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
           { name = "libqrencode.so.4"; pkg = null; }
+          { name = "libqrencode.so.3"; pkg = null; }
 
           # We did not provide libpwquality before so it is safe to disable it for
           # now.
