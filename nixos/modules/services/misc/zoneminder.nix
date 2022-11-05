@@ -326,6 +326,7 @@ in {
           fi
 
           ${zoneminder}/bin/zmupdate.pl -nointeractive
+          ${zoneminder}/bin/zmupdate.pl --nointeractive -f
         '';
         serviceConfig = {
           User = user;
