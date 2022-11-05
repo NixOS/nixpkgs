@@ -4961,6 +4961,15 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
+  gekoke = {
+    email = "gekoke@lazycantina.xyz";
+    github = "gekoke";
+    githubId = 63151928;
+    name = "gekoke";
+    keys = [{
+      fingerprint = "EE8A 78FE 4028 C843 C581  AFBC B4BE 4DE6 F6F2 9B82";
+    }];
+  };
   genofire = {
     name = "genofire";
     email = "geno+dev@fireorbit.de";
