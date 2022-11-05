@@ -55,9 +55,11 @@ with lib;
       for either "root" or "nixos" with `passwd` or add an ssh key
       to /home/nixos/.ssh/authorized_keys be able to login.
 
-      If you need a wireless connection, type
-      `sudo systemctl start wpa_supplicant` and configure a
-      network using `wpa_cli`. See the NixOS manual for details.
+      **Enable WiFi**
+
+       - `sudo nmtui connect`
+
+      See the NixOS manual for details.
     '' + optionalString config.services.xserver.enable ''
 
       Type `sudo systemctl start display-manager' to
@@ -74,15 +76,20 @@ with lib;
       permitRootLogin = "yes";
     };
 
-    # Enable wpa_supplicant, but don't start it by default.
-    networking.wireless.enable = mkDefault true;
-    networking.wireless.userControlled.enable = true;
-    systemd.services.wpa_supplicant.wantedBy = mkOverride 50 [];
+    # Enable networkmanager, but don't start it by default.
+    networking.wireless.enable = mkDefault false;
+    networking.networkmanager.enable = mkDefault true;
+    systemd.services.NetworkManager.wantedBy = mkOverride 50 [];
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
     # (yet) have swap set up.
     environment.variables.GC_INITIAL_HEAP_SIZE = "1M";
+
+    # Ship the networkmanager package for an improved wifi user experience
+    # when configuring wifi on the command line via:
+    # - `sudo nmtui connect`
+    environment.systemPackages = [pkgs.networkmanager];
 
     # Make the installer more likely to succeed in low memory
     # environments.  The kernel's overcommit heustistics bite us

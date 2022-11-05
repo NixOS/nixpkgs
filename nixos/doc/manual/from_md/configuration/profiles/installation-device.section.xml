@@ -18,7 +18,7 @@
     user, while passwordless login as both <literal>root</literal> and
     <literal>nixos</literal> is possible. Passwordless
     <literal>sudo</literal> is enabled too.
-    <link linkend="opt-networking.wireless.enable">wpa_supplicant</link>
+    <link linkend="opt-networking.networkmanager.enable">NetworkManager</link>
     is enabled, but configured to not autostart.
   </para>
   <para>

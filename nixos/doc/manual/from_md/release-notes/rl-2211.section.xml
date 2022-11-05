@@ -177,6 +177,15 @@
           official announcement.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The installation device profile (e.g. used for the ISO
+          installer) has now a friendlier way to discover and connect to
+          wifi networks from the command line via
+          <literal>nmtui connect</literal> &amp;
+          <literal>nmtui</literal>
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-new-services">
