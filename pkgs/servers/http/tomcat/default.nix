@@ -32,13 +32,13 @@ let
 in {
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.53";
-    sha256 = "1zdnbb0bfbi7762lz69li0wf48jbfz1mv637jzcl42vbsxp4agkv";
+    versionMinor = "0.68";
+    sha256 = "sha256-rxsv8zEIIbTel4CqIuncS5pellGwgHamKRa0KgzsOF0=";
   };
 
   tomcat10 = common {
     versionMajor = "10";
-    versionMinor = "0.11";
-    sha256 = "1hjvsxxxavni7bis1hm56281ffmf4x0zdh65zqkrnhqa1rbs0lg2";
+    versionMinor = "0.27";
+    sha256 = "sha256-N2atmOdhVrGx88eXOc9Wziq8kn7IWzTeFyFpir/5HLc=";
   };
 }
