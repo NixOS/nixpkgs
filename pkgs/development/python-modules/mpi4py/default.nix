@@ -41,11 +41,13 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  nativeBuildInputs = [ mpi openssh ];
+  nativeBuildInputs = [ mpi ];
+
+  checkInputs = [ openssh ];
 
   meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";
-    homepage = "https://bitbucket.org/mpi4py/mpi4py/";
-    license = licenses.bsd3;
+    homepage = "https://github.com/mpi4py/mpi4py";
+    license = licenses.bsd2;
   };
 }
