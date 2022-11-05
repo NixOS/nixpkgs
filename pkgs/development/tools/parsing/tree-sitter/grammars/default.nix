@@ -17,6 +17,7 @@
   tree-sitter-devicetree = lib.importJSON ./tree-sitter-devicetree.json;
   tree-sitter-dockerfile = lib.importJSON ./tree-sitter-dockerfile.json;
   tree-sitter-dot = lib.importJSON ./tree-sitter-dot.json;
+  tree-sitter-eex = lib.importJSON ./tree-sitter-eex.json;
   tree-sitter-elisp = lib.importJSON ./tree-sitter-elisp.json;
   tree-sitter-elixir = lib.importJSON ./tree-sitter-elixir.json;
   tree-sitter-elm = lib.importJSON ./tree-sitter-elm.json;
