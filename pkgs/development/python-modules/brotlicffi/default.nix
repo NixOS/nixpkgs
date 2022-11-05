@@ -30,6 +30,8 @@ buildPythonPackage rec {
     cffi
   ];
 
+  outputs = [ "out" "dev" ];
+
   preBuild = ''
     export USE_SHARED_BROTLI=1
   '';
