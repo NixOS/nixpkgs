@@ -21,7 +21,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
+    hash = "sha256-a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
   };
 
   outputs = [ "out" "dev" ];
