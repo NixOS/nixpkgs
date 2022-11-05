@@ -38,8 +38,12 @@ rustPlatform.buildRustPackage rec {
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
-  checkFlags = [ "--skip favorites::favorites_default_to_git_if_not_defined" ]
-      ++ lib.optionals stdenv.isDarwin [ "--skip git::utils::should_canonicalize" ];
+  checkFlags = [
+      "--skip favorites::favorites_default_to_git_if_not_defined"
+      # Probably git 2.38.1 releated failure
+      # Upstream issue https://github.com/cargo-generate/cargo-generate/issues/777
+      "--skip basics::it_loads_a_submodule"
+    ] ++ lib.optionals stdenv.isDarwin [ "--skip git::utils::should_canonicalize" ];
 
   meta = with lib; {
     description = "cargo, make me a project";
