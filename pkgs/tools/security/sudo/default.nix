@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , buildPackages
 , coreutils
 , pam
@@ -15,20 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.12";
+  version = "1.9.12p1";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-3hVzOIgXDFaDTar9NL+YPbEPshA5dC/Pw5a9MhaNY2I=";
+    hash = "sha256-R1oYqOs9qLKRfOqwY6a69R6gkSjDxH4+DjOrdJe6t9g=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-43995.patch";
-      url = "https://github.com/sudo-project/sudo/commit/bd209b9f16fcd1270c13db27ae3329c677d48050.patch";
-      sha256 = "sha256-JUdoStoSyv6KBPsyzxuMIxqwZMZsjUPj8zUqOSvmZ1A=";
-    })
-  ];
 
   prePatch = ''
     # do not set sticky bit in nix store

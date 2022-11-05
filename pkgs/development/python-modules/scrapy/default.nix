@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.7.0";
+  version = "2.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-Ssvg8fX7XqkTU1EriVjtMEvCX2373ig5oNh6SUNRWLk=";
+    hash = "sha256-MPpAg1PSSx35ed8upK+9GbSuAvsiB/IY0kYzLx4c8U4=";
   };
 
   nativeBuildInputs = [

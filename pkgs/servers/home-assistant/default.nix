@@ -41,26 +41,15 @@ let
         };
       });
 
-      bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.0";
-        postPatch = null;
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.cattrs ];
+      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.3";
         src = fetchFromGitHub {
-          owner = "liudger";
-          repo = "python-bsblan";
-          rev = "v.${version}";
-          hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
+          owner = "allenporter";
+          repo = "gcal_sync";
+          rev = "refs/tags/${version}";
+          hash = "sha256-5PoKdJBrNhPfcDxmprc/1jX7weIs7HSxFzzvjKOjGbY=";
         };
-      });
-
-      blebox-uniapi = super.blebox-uniapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.2";
-        src = fetchFromGitHub {
-          owner = "blebox";
-          repo = "blebox_uniapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-0Yiooy7YSUFjqqcyH2fPQ6AWuR0EJxfRRZTw/6JGcMA=";
-        };
+        doCheck = false; # requires aiohttp>=1.0.0
       });
 
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
@@ -84,16 +73,6 @@ let
         };
       });
 
-      iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.1";
-        src = fetchFromGitHub {
-          owner = "flz";
-          repo = "iaqualink-py";
-          rev = "v${version}";
-          hash = "sha256-GDJwPBEU7cteAdYj7eo5tAo0G8AVcQR7KSxLNLhU/XU=";
-        };
-      });
-
       # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
@@ -113,9 +92,6 @@ let
         doCheck = false; # requires aiohttp>=1.0.0
       });
       aioopenexchangerates = super.aioopenexchangerates.overridePythonAttrs (oldAttrs: {
-        doCheck = false; # requires aiohttp>=1.0.0
-      });
-      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
         doCheck = false; # requires aiohttp>=1.0.0
       });
       hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
@@ -159,6 +135,12 @@ let
           rev = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
+      });
+
+      pydaikin = super.pydaikin.overridePythonAttrs (oldAttrs: rec {
+        disabledTests = [
+          "test_power_sensors"
+        ];
       });
 
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
@@ -254,7 +236,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.10.5";
+  hassVersion = "2022.11.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -272,7 +254,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-y2X6tiR3TLbQ1tYUUuu8D0i5j+P0FnDWJ1mSlGPwIuY=";
+    hash = "sha256-2zpNrkRYsmJEq+4L0J6wJodmda5r8NWgYVtYwAHKSps=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
