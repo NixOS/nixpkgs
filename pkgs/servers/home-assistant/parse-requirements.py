@@ -168,8 +168,8 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         return None
 
 
-def get_pkg_version(package: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
-    pkg = packages.get(f"{PKG_SET}.{package}", None)
+def get_pkg_version(attr_path: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+    pkg = packages.get(attr_path, None)
     if not pkg:
         return None
     return pkg["version"]
@@ -198,12 +198,14 @@ def main() -> None:
                 extras = name[name.find("[")+1:name.find("]")].split(",")
                 name = name[:name.find("[")]
             attr_path = name_to_attr_path(name, packages)
-            if our_version := get_pkg_version(name, packages):
-                if Version.parse(our_version) < Version.parse(required_version):
-                    outdated[name] = {
-                      'wanted': required_version,
-                      'current': our_version
-                    }
+            if attr_path:
+                if our_version := get_pkg_version(attr_path, packages):
+                    attr_name = attr_path.split(".")[-1]
+                    if Version.parse(our_version) < Version.parse(required_version):
+                        outdated[attr_name] = {
+                          'wanted': required_version,
+                          'current': our_version
+                        }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
                 pname = attr_path[len(PKG_SET + "."):]
