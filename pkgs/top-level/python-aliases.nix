@@ -41,6 +41,7 @@ mapAliases ({
   Babel = babel; # added 2022-05-06
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
+  bsblan = python-bsblan; # added 2022-11-04
   bt_proximity = bt-proximity; # added 2021-07-02
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   class-registry = phx-class-registry; # added 2021-10-05

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.83";
+  version = "0.0.84";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
-    hash = "sha256-N+DSaPohwkMJ+YjbnUi7k8GQ+YFd6Ng8n0yesEnOnRA=";
+    hash = "sha256-x8DOUQjjOlLaIhsLLbGNEE+MYBcMD+VsmcCDU0XxxcE=";
   };
 
   propagatedBuildInputs = [
