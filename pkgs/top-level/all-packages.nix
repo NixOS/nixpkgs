@@ -20073,7 +20073,9 @@ with pkgs;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
-  wolfssl = callPackage ../development/libraries/wolfssl { };
+  wolfssl = callPackage ../development/libraries/wolfssl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   openssl = openssl_1_1;
 
