@@ -70,10 +70,12 @@ in
         Packages providing extra SANE backends to enable.
 
         ::: {.note}
-        The example contains the package for HP scanners.
+        The example contains the package for HP scanners, and the package for
+        Apple AirScan and Microsoft WSD support (supports many
+        vendors/devices).
         :::
       '';
-      example = literalExpression "[ pkgs.hplipWithPlugin ]";
+      example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
     };
 
     hardware.sane.disabledDefaultBackends = mkOption {
