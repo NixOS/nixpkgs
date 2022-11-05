@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "PyGithub";
-  version = "1.56";
+  version = "1.57";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-L6xrv3dAT/sWt/7ZeDy3P095g7Lpht52LkfCVYNLkbA=";
+    sha256 = "sha256-7CNvSOwDXXcJ082/Fmgr6OtTQeA30yDjt/Oq2nx4vEk=";
   };
 
   propagatedBuildInputs = [
