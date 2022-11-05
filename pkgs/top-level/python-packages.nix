@@ -5431,6 +5431,8 @@ self: super: with self; {
 
   mac_alias = callPackage ../development/python-modules/mac_alias { };
 
+  mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
+
   macfsevents = callPackage ../development/python-modules/macfsevents {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
   };
