@@ -38,6 +38,8 @@ in stdenv.mkDerivation rec {
   # We need both binary from "capnproto" and library files.
   nativeBuildInputs = [ cmake pandoc capnproto ];
   buildInputs = [ capnproto sqlite boost zlib rapidjson ];
+  cmakeFlags = [ "-DLAMINAR_VERSION=${version}" ];
+
   preBuild = ''
     mkdir -p js css
     cp  ${js.vue}         js/vue.min.js
