@@ -61,13 +61,6 @@ in {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  cabal2nix =
-    # cabal2nix depends on foundation, which is broken on aarch64-linux.
-    # https://github.com/haskell-foundation/foundation/issues/571
-    overrideCabal
-      (drv: { badPlatforms = [ "aarch64-linux" ]; })
-      super.cabal2nix;
-
   doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
 
