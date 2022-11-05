@@ -4,22 +4,25 @@
 , pkg-config
 , cmake
 , IOKit
+, cctools
 }:
 
 stdenv.mkDerivation rec {
   pname = "unicorn";
-  version = "2.0.0-rc7";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = pname;
     rev = version;
-    hash = "sha256-qlxtFCJBmouPuUEu8RduZM+rbOr52sGjdb8ZRHWmJ/w=";
+    hash = "sha256-D8kwrHo58zksVjB13VtzoVqmz++FRfJ4zI2CT+YeBVE=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    cctools
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
