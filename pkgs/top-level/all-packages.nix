@@ -36056,7 +36056,7 @@ with pkgs;
 
   msieve = callPackage ../applications/science/math/msieve { };
 
-  weka = callPackage ../applications/science/math/weka { };
+  weka = callPackage ../applications/science/math/weka { jre = openjdk11; };
 
   yad = callPackage ../tools/misc/yad { };
 
