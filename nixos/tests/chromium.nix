@@ -166,6 +166,8 @@ mapAttrs (channel: chromiumPkg: makeTest {
         clipboard = machine.succeed(
             ru("${pkgs.xclip}/bin/xclip -o")
         )
+        if url == "chrome://gpu":
+            clipboard = ""  # TODO: We cannot copy the text via Ctrl+a
         print(f"{description} window content:\n{clipboard}")
         with machine.nested(description):
             yield clipboard
@@ -246,11 +248,10 @@ mapAttrs (channel: chromiumPkg: makeTest {
         machine.screenshot("after_copy_from_chromium")
 
 
-    if major_version < "107":
-        # TODO: Fix the chrome://gpu test for M107+
-        with test_new_win("gpu_info", "chrome://gpu", "chrome://gpu"):
-            # To check the text rendering (catches regressions like #131074):
-            machine.wait_for_text("Graphics Feature Status")
+    with test_new_win("gpu_info", "chrome://gpu", "GPU Internals"):
+        # To check the text rendering (catches regressions like #131074):
+        machine.wait_for_text("Graphics Feature Status")
+        # TODO: Fix copying all of the text to the clipboard
 
 
     with test_new_win("version_info", "chrome://version", "About Version") as clipboard:
