@@ -11,15 +11,20 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "22.0.0";
+  version = "22.1.0";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    sha256 = "sha256-ZgsbFCWqxKG+odlBaKhdmfCzFEyGndQ5DSdinQCH8b8=";
+    sha256 = "sha256-eoO3snLdWVIi1nL1zimqAw8fuDdjDvIp9i5y45XOiWg=";
   };
 
-  outputs = [ "out" "dev" ];
+  postPatch = ''
+    # remove cryptography pin
+    sed "/cryptography/ s/,<[0-9]*//g" setup.py
+  '';
 
   # Seems to fail unpredictably on Darwin. See https://hydra.nixos.org/build/49877419/nixlog/1
   # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
