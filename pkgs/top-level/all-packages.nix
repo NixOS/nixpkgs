@@ -23857,6 +23857,8 @@ with pkgs;
   # Alternative lisp-modules implementation
   lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
 
+  # Lisp modules implementation without quicklisp nor pre-build step
+  lispPackagesLite = callPackage ../development/lisp-modules-lite {};
 
   ### DEVELOPMENT / PERL MODULES
 
