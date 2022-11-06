@@ -14847,6 +14847,14 @@ with pkgs;
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  composable_kernel = callPackage ../development/libraries/composable_kernel {
+    inherit (llvmPackages) openmp;
+  };
+
+  clang-ocl = callPackage ../development/libraries/clang-ocl {
+    inherit (llvmPackages_rocm) clang;
+  };
+
   rgxg = callPackage ../tools/text/rgxg { };
 
   rocclr = callPackage ../development/libraries/rocclr { };
@@ -14854,6 +14862,12 @@ with pkgs;
   hip = callPackage ../development/compilers/hip {
     inherit (llvmPackages_rocm) clang llvm;
   };
+
+  hipcub = callPackage ../development/libraries/hipcub { };
+
+  hipsparse = callPackage ../development/libraries/hipsparse { };
+
+  rccl = callPackage ../development/libraries/rccl { };
 
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
@@ -14882,6 +14896,24 @@ with pkgs;
   rocminfo = callPackage ../development/tools/rocminfo { };
 
   rocmlir = callPackage ../development/libraries/rocmlir { };
+
+  rocprim = callPackage ../development/libraries/rocprim { };
+
+  rocsparse = callPackage ../development/libraries/rocsparse { };
+
+  rocfft = callPackage ../development/libraries/rocfft { };
+
+  tensile = python3Packages.callPackage ../development/libraries/tensile { };
+
+  rocblas = callPackage ../development/libraries/rocblas {
+    inherit (llvmPackages_rocm) llvm;
+  };
+
+  miopengemm = callPackage ../development/libraries/miopengemm {
+    inherit (llvmPackages_rocm) clang;
+  };
+
+  rocthrust = callPackage ../development/libraries/rocthrust { };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
