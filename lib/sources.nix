@@ -140,7 +140,7 @@ let
       origSrc = if isFiltered then src.origSrc else src;
     in lib.cleanSourceWith {
       filter = (path: type:
-        let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+        let relPath = lib.removePrefix (origSrc + "/") (path);
         in lib.any (re: match re relPath != null) regexes);
       inherit src;
     };
@@ -175,12 +175,12 @@ let
   */
   commitIdFromGitRepo =
     let readCommitFromFile = file: path:
-        let fileName       = toString path + "/" + file;
-            packedRefsName = toString path + "/packed-refs";
+        let fileName       = path + "/" + file;
+            packedRefsName = path + "/packed-refs";
             absolutePath   = base: path:
               if lib.hasPrefix "/" path
               then path
-              else toString (/. + "${base}/${path}");
+              else /. + "${base}/${path}";
         in if pathIsRegularFile path
            # Resolve git worktrees. See gitrepository-layout(5)
            then
@@ -226,7 +226,7 @@ let
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
 
-  canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
+  canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext src);
 
   # -------------------------------------------------------------------------- #
   # Internal functions

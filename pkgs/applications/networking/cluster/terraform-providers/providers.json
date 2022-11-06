@@ -1058,22 +1058,22 @@
     "version": "6.18.0"
   },
   "skytap": {
-    "hash": "sha256-EAimiuQJOt12baZSjDKI+c9UjJd8e26ouOAZIZezw/I=",
+    "hash": "sha256-JII4czazo6Di2sad1uFHMKDO2gWgZlQE8l/+IRYHQHU=",
     "owner": "skytap",
     "provider-source-address": "registry.terraform.io/skytap/skytap",
     "repo": "terraform-provider-skytap",
-    "rev": "v0.15.0",
+    "rev": "v0.15.1",
     "vendorHash": null,
-    "version": "0.15.0"
+    "version": "0.15.1"
   },
   "snowflake": {
-    "hash": "sha256-XjLsRS7n3p0lNVEPx6b+h5TCzK+1Kws/72FNgy3sVbE=",
+    "hash": "sha256-Hoaqj3hksiWm60cSr8OPqAvS29SMVLtwkSWXZvpBePA=",
     "owner": "Snowflake-Labs",
     "provider-source-address": "registry.terraform.io/Snowflake-Labs/snowflake",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.49.0",
+    "rev": "v0.50.0",
     "vendorHash": "sha256-n6ov9eTlNF/jNDTDOZuuqyFfuv8lDZHKP/5jhFauwY8=",
-    "version": "0.49.0"
+    "version": "0.50.0"
   },
   "sops": {
     "hash": "sha256-6FuThi6iuuUGcMhswAk3Z6Lxth/2nuI57A02Xu2s+/U=",
@@ -1112,13 +1112,13 @@
     "version": "2.0.5"
   },
   "sumologic": {
-    "hash": "sha256-DvEd1OdLmUEEmk0zl7jiTjdk/3Fp1Z/3KCpYRpxHTn4=",
+    "hash": "sha256-lhMPA4ub3NlaYs0pX6FkWuR3LQxytrQxu9DjAjDja2Q=",
     "owner": "SumoLogic",
     "provider-source-address": "registry.terraform.io/SumoLogic/sumologic",
     "repo": "terraform-provider-sumologic",
-    "rev": "v2.19.1",
+    "rev": "v2.19.2",
     "vendorHash": "sha256-W+dV6rmyOqCeQboYvpxYoNZixv2+uBd2+sc9BvTE+Ag=",
-    "version": "2.19.1"
+    "version": "2.19.2"
   },
   "tailscale": {
     "hash": "sha256-/qC8TOtoVoBTWeAFpt2TYE8tlYBCCcn/mzVQ/DN51YQ=",
@@ -1130,13 +1130,13 @@
     "version": "0.13.5"
   },
   "tencentcloud": {
-    "hash": "sha256-lWePRU8kmOjOq9giCMdU5Aeb74WR/s6wIzShjzDBFjc=",
+    "hash": "sha256-DvH8+Be2AVwsNoDrNlCG8/Uve2EKcuan3qUsJynreHw=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.7",
+    "rev": "v1.78.8",
     "vendorHash": null,
-    "version": "1.78.7"
+    "version": "1.78.8"
   },
   "tfe": {
     "hash": "sha256-MDlRwB2iVi/Rv7/UtukI6mIDImz8Gnpm5Qv5R6EDpiU=",

@@ -109,6 +109,11 @@ in mkLicense lset) ({
     fullName = "Apache License 2.0";
   };
 
+  bitstreamVera = {
+    spdxId = "Bitstream-Vera";
+    fullName = "Bitstream Vera Font License";
+  };
+
   bola11 = {
     url = "https://blitiri.com.ar/p/bola/";
     fullName = "Buena Onda License Agreement 1.1";

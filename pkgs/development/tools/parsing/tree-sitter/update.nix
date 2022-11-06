@@ -224,6 +224,10 @@ let
       orga = "connorlay";
       repo = "tree-sitter-surface";
     };
+    "tree-sitter-eex" = {
+      orga = "connorlay";
+      repo = "tree-sitter-eex";
+    };
     "tree-sitter-heex" = {
       orga = "connorlay";
       repo = "tree-sitter-heex";

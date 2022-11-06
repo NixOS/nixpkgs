@@ -613,7 +613,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 24;
+        latest = 25;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.

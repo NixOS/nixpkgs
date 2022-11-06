@@ -25685,7 +25685,6 @@ with pkgs;
   swiftdefaultapps = callPackage ../os-specific/darwin/swiftdefaultapps { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
-    openssl = openssl_1_1;
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
 
@@ -33176,7 +33175,9 @@ with pkgs;
 
   xmenu = callPackage ../applications/misc/xmenu { };
 
-  xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
+  xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   xmp = callPackage ../applications/audio/xmp { };
 

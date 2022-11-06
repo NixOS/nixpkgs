@@ -13,6 +13,13 @@ stdenv.mkDerivation {
     sha256 = "E60M9oP/Sdfg/L3ZxUcDtUXhFz9oP72IybdtVUJh9Sk=";
   };
 
+  # Use the generic C implementation rather than the SSE optimised version on non-x86 platforms
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    substituteInPlace makefile \
+      --replace "#FILES=b2sum.c ../ref/" "FILES=b2sum.c ../ref/" \
+      --replace "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
+  '';
+
   sourceRoot = "source/b2sum";
 
   buildInputs = [ openmp ];
@@ -25,7 +32,6 @@ stdenv.mkDerivation {
     homepage = "https://blake2.net";
     license = with licenses; [ asl20 cc0 openssl ];
     maintainers = with maintainers; [ kirelagin ];
-    # "This code requires at least SSE2."
-    platforms = [ "x86_64-linux" "i686-linux" ] ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

@@ -319,6 +319,7 @@
   ./services/backup/zfs-replication.nix
   ./services/backup/znapzend.nix
   ./services/blockchain/ethereum/geth.nix
+  ./services/blockchain/ethereum/erigon.nix
   ./services/backup/zrepl.nix
   ./services/cluster/corosync/default.nix
   ./services/cluster/hadoop/default.nix
