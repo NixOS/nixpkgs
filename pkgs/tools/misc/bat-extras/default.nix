@@ -139,6 +139,7 @@ in
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
   batman = script "batman" [ util-linux ];
+  batpipe = script "batpipe" [ less ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]
     ++ optionalDep withShFmt shfmt
