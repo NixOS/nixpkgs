@@ -25016,7 +25016,9 @@ with pkgs;
 
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
-  humility = callPackage ../development/tools/rust/humility {};
+  humility = callPackage ../development/tools/rust/humility {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
