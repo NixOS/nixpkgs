@@ -211,7 +211,7 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString config.virtualisation.bootPartitionSize}M"
               ${if cfg.useEFIBoot then ''
                 efiVars=$out/efi-vars.fd
                 cp ${cfg.efi.variables} $efiVars
@@ -364,6 +364,16 @@ in
         description =
           lib.mdDoc ''
             The disk to be used for the root filesystem.
+          '';
+      };
+
+    virtualisation.bootPartitionSize =
+      mkOption {
+        type = types.ints.positive;
+        default = 60;
+        description =
+          lib.mdDoc ''
+            The partition size in megabytes of the boot partition.
           '';
       };
 
