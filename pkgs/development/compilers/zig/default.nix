@@ -9,17 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "zig";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
+    hash = "sha256-DNs937N7PLQimuM2anya4npYXcj6cyH+dRS7AiOX7tw=";
   };
-
-  # Fix index out of bounds reading RPATH (cherry-picked from 0.10-dev)
-  patches = [ ./rpath.patch ];
 
   nativeBuildInputs = [
     cmake
