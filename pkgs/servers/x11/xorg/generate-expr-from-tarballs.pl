@@ -250,9 +250,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -336,6 +336,6 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 EOF
 }
 
-print OUT "})\n";
+print OUT "}\n";
 
 close OUT;

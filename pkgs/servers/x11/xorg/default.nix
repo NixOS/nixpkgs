@@ -1,7 +1,7 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -1976,7 +1976,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, libxcrypt, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     pname = "xdm";
     version = "1.1.12";
     builder = ./builder.sh;
@@ -1987,7 +1987,7 @@ lib.makeScope newScope (self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt libxcrypt ];
+    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -3559,4 +3559,4 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
-})
+}
