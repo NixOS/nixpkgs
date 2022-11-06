@@ -1,32 +1,25 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "duplicacy";
-  version = "2.7.2";
-
-  goPackagePath = "github.com/gilbertchen/duplicacy";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "gilbertchen";
     repo = "duplicacy";
     rev = "v${version}";
-    sha256 = "0j37sqicj7rl982czqsl3ipxw7k8k4smcr63s0yklxwz7ch3353c";
+    sha256 = "sha256-7VCgXUmmAlmv0UwSM3Hs9t586gJWvFWsP/0BJXze1r4=";
   };
-  goDeps = ./deps.nix;
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    go build duplicacy/duplicacy_main.go
-  '';
 
-  installPhase = ''
-    install -D duplicacy_main $out/bin/duplicacy
-  '';
+  vendorSha256 = "sha256-3vzx2SCgJAhSwW8DRtkQ6pywquFwwou0HZ6a1dmHhPY=";
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://duplicacy.com";
     description = "A new generation cloud backup tool";
     platforms = platforms.linux ++ platforms.darwin;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ ffinkdevs ];
+    maintainers = with maintainers; [ ffinkdevs devusb ];
   };
 }

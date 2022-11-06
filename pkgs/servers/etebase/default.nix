@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub, buildPythonPackage, aiofiles, django_3
 , fastapi, msgpack, pynacl, redis, typing-extensions
-, withLdap ? true, python-ldap }:
+, withLdap ? true, python-ldap
+, withPostgres ? true, psycopg2 }:
 
 buildPythonPackage rec {
   pname = "etebase-server";
@@ -24,7 +25,8 @@ buildPythonPackage rec {
     pynacl
     redis
     typing-extensions
-  ] ++ lib.optional withLdap python-ldap;
+  ] ++ lib.optional withLdap python-ldap
+    ++ lib.optional withPostgres psycopg2;
 
   installPhase = ''
     mkdir -p $out/bin $out/lib

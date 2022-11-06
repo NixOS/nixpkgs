@@ -108,6 +108,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
+     mesa # for libgbm
   ])));
 
   patches = [ ]

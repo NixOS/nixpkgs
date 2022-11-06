@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , gnome
 , dconf
-, wxGTK31
+, wxGTK32
 , gtk3
 , makeWrapper
 , gsettings-desktop-schemas
@@ -104,9 +104,9 @@ let
     if srcOverridep "libVersion" then srcs.libVersion
     else versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxGTK31;
+  wxGTK = wxGTK32;
   python = python3;
-  wxPython = python.pkgs.wxPython_4_1;
+  wxPython = python.pkgs.wxPython_4_2;
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
@@ -224,11 +224,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
-    # despite that, nipkgs' wxGTK for darwin is "wxmac"
-    # and wxPython_4_0 does not account for this
-    # adjusting this package to downgrade to python2Packages.wxPython (wxPython 3),
-    # seems like more trouble than fixing wxPython_4_0 would be
-    # additionally, libngspice is marked as linux only, though it should support darwin
 
     hydraPlatforms = if (with3d) then [ ] else platforms;
     # We can't download the 3d models on Hydra,
