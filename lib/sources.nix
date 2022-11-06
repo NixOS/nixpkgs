@@ -175,8 +175,8 @@ let
   */
   commitIdFromGitRepo =
     let readCommitFromFile = file: path:
-        let fileName       = toString path + "/" + file;
-            packedRefsName = toString path + "/packed-refs";
+        let fileName       = path + "/${file}";
+            packedRefsName = path + "/packed-refs";
             absolutePath   = base: path:
               if lib.hasPrefix "/" path
               then path
