@@ -33,10 +33,14 @@ buildPythonPackage rec {
     # developers' hardware
     "test_architecture"
     # https://github.com/joblib/threadpoolctl/issues/128
-    "test_threadpool_limits_by_prefix"
-    "test_controller_info_actualized"
     "test_command_line_command_flag"
     "test_command_line_import_flag"
+    "test_controller_info_actualized"
+    "test_set_threadpool_limits_by_api"
+    "test_set_threadpool_limits_no_limit"
+    "test_threadpool_limits_by_prefix"
+    "test_threadpool_limits_function_with_side_effect"
+    "test_threadpool_limits_manual_restore"
   ];
 
   pythonImportsCheck = [
