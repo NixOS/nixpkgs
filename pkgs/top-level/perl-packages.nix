@@ -9214,6 +9214,20 @@ let
     };
   };
 
+  FileFindRuleVCS = buildPerlPackage {
+    pname = "File-Find-Rule-VCS";
+    version = "1.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADAMK/File-Find-Rule-VCS-1.08.tar.gz";
+      sha256 = "15a857b9869f474314e1497aa8ef3a8563bf83275f98121dad57aabae11acb9a";
+    };
+    propagatedBuildInputs = [ FileFindRule TextGlob ];
+    meta = {
+      description = "Exclude files/directories for Version Control Systems";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileFinder = buildPerlPackage {
     pname = "File-Finder";
     version = "0.53";
