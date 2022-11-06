@@ -11,6 +11,7 @@
 , makeDesktopItem
 , webkitgtk
 , wrapGAppsHook
+, writeScript
 }:
 let
   desktopItem = makeDesktopItem {
@@ -58,6 +59,13 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/buchen/portfolio/tags" | jq '.[0].name' --raw-output)"
+    update-source-version portfolio "$version"
   '';
 
   meta = with lib; {
