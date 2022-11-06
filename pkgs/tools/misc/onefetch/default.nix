@@ -1,14 +1,14 @@
-{ fetchFromGitHub
+{ lib
 , rustPlatform
-, lib
-, stdenv
+, fetchFromGitHub
 , cmake
 , pkg-config
 , zstd
+, stdenv
 , CoreFoundation
-, libiconv
 , libresolv
 , Security
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,25 +22,34 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ydRdnzOI9syfF2ox9vHA9Q0j8C7ZNb0b7CJfqUprPA0=";
   };
 
-  cargoSha256 = "sha256-rZC1CAEWx8l1EQNRs1KAfVgGgBut1hxg6Ug4780O3dw=";
+  cargoSha256 = "sha256-IprUSNxoojagXUO/I7WDGJMG0U541ioe4qgLT4hqmbY=";
 
-  nativeBuildInputs = [ pkg-config ];
+  cargoPatches = [
+    # enable pkg-config feature of zstd
+    ./zstd-pkg-config.patch
+  ];
+
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
 
   checkInputs = [
-    cmake
+    git
   ];
 
-  checkFlags = [
-    "--skip=info::tests::test_style_subtitle"
-  ];
+  preCheck = ''
+    git init
+    git config user.email nixbld@example.com
+    git add .
+    git commit -m test
+  '';
 
   meta = with lib; {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
+    changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne kloenk SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk SuperSandro2000 ];
   };
 }
