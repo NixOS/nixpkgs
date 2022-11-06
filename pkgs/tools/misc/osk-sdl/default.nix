@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , stdenv
 , cryptsetup
 , dejavu_fonts
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     SDL2
     SDL2_ttf
   ];
+
+  passthru.tests = nixosTests.systemd-initrd-luks-osk-sdl;
 
   meta = with lib; {
     description = "SDL2 On-screen Keyboard";
