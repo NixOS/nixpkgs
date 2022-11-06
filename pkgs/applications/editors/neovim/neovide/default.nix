@@ -31,16 +31,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-PViSiK6+H79MLIOFe26cNqUZ6gZdqDC/S+ksTrbOm54=";
+    sha256 = "sha256-CcBiCcfOJzuq0DnokTUHpMdo7Ry29ugQ+N7Hk0R+cQE=";
   };
 
-  cargoSha256 = "sha256-GvueDUY4Hzfih/MyEfhdz/QNVd9atTC8SCF+PyuJJic=";
+  cargoSha256 = "sha256-bS7yBnxAWPoTTabxI6W5Knl1DFiDztYSkEPJMa8bqlY=";
 
   SKIA_SOURCE_DIR =
     let
