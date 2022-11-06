@@ -70,7 +70,7 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  encodings = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
+  encodings = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     pname = "encodings";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -80,7 +80,7 @@ self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ ];
     meta.platforms = lib.platforms.unix;
   }) {};

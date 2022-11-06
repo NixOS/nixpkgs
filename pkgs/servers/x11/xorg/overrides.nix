@@ -41,10 +41,6 @@ self: super:
     '';
   });
 
-  encodings = super.encodings.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.mkfontscale ];
-  });
-
   editres = super.editres.overrideAttrs (attrs: {
     hardeningDisable = [ "format" ];
   });
