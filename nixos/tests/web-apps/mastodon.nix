@@ -56,6 +56,9 @@ in
     };
 
     server = { pkgs, ... }: {
+
+      virtualisation.memorySize = 2048;
+
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
