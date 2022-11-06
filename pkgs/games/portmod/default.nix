@@ -3,20 +3,20 @@
 , jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
 
 let
-  version = "2.1.0";
+  version = "2.4.2";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    sha256 = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
+    sha256 = "sha256-zD2DfuHu0tRzO0fYKiB8MOQvxJWDfpXFTwvidx6LOC8==";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
     inherit src version;
     pname = "portmod-rust";
 
-    cargoHash = "sha256-3EfMMpSWSYsB3nXaoGGDuKQ9duyCKzbrT6oeATnzqLE=";
+    cargoHash = "sha256-fVazs5+/d9b90FOh45lPQdCCRnR3Co9KfaOllSk8WJw=";
 
     nativeBuildInputs = [ python3Packages.python ];
 
@@ -84,6 +84,8 @@ python3Packages.buildPythonApplication rec {
     "test_sync"
     "test_manifest"
     "test_add_repo"
+    "test_scan_sources"
+    "test_unpack"
   ];
 
   # for some reason, installPhase doesn't copy the compiled binary
