@@ -11,7 +11,7 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
-, nodejs-16_x
+, nodejs_16
 , pkg-config
 , python3
 , rustPlatform
@@ -22,7 +22,7 @@ let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs-16_x; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
 
   version = "2023.3.2";
   src = fetchFromGitHub {

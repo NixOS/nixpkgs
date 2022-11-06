@@ -2,7 +2,7 @@
 
 {pkgs ? import <nixpkgs> {
     inherit system;
-  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-14_x"}:
+  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_14"}:
 
 let
   globalBuildInputs = pkgs.lib.attrValues (import ./supplement.nix {
