@@ -70,12 +70,13 @@ in rec {
   };
 
   wayland = fetchFromGitLab rec {
-    version = "7.0-rc2";
-    sha256 = "sha256-FU9L8cyIIfFQ+8f/AUg7IT+RxTpyNTuSfL0zBnur0SA=";
+    # https://gitlab.collabora.com/alf/wine/-/tree/wayland
+    version = "7.20";
+    sha256 = "sha256-UrukAnlfrr6eeVwFSEOWSVSfyMHbMT1o1tfXxow61xY=";
     domain = "gitlab.collabora.com";
     owner = "alf";
     repo = "wine";
-    rev = "95f0154c96a4b7d81e783ee5ba2f5d9cc7cda351";
+    rev = "1dc9821ef0b6109c74d0c95cd5418caf7f9feaf1";
 
     inherit (unstable) gecko32 gecko64;
 
