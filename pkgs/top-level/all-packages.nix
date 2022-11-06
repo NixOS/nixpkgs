@@ -1357,7 +1357,7 @@ with pkgs;
 
   kanata = callPackage ../tools/system/kanata { };
 
-  kanata-with-cmd = callPackage ../tools/system/kanata { withCmd = true; };
+  kanata-with-cmd = kanata.override { withCmd = true; };
 
   ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
 
