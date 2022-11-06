@@ -84,13 +84,13 @@ let
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-odwYUGfgoRrGbLpOh8SuQzYby8Ya6hKSn0rdHp+RS/U=";
+    sha256 = "sha256-QoVL6WJjX6+sN5S/iqV3kcfQ5fWTXkTnf6NpZcw3bGo=";
     fetchSubmodules = true;
   };
 
