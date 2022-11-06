@@ -213,8 +213,8 @@ rec {
     # Default value to return if revision can not be determined
     default:
     let
-      revisionFile = "${toString ./..}/.git-revision";
-      gitRepo      = "${toString ./..}/.git";
+      revisionFile = ./.. + "/.git-revision";
+      gitRepo      = ./.. + "/.git";
     in if lib.pathIsGitRepo gitRepo
        then lib.commitIdFromGitRepo gitRepo
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
