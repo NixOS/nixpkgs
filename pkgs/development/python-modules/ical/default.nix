@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.1.0";
+  version = "4.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pZtjGWmEVcHSCgiVTKoEaRvec02cz3x93W+UXx3J8gE=";
+    hash = "sha256-yPFFOhAscLvhKo7sgXtH1HwcDYq8kWKHzrr3ep857Io=";
   };
 
   propagatedBuildInputs = [
