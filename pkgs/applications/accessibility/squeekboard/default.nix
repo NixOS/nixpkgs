@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "A virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin tomfitzhenry ];
     platforms = platforms.linux;
   };
 }
