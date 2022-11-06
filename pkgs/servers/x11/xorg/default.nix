@@ -99,6 +99,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -116,6 +117,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -133,6 +135,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -150,6 +153,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -167,6 +171,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -200,6 +205,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -217,6 +223,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -234,6 +241,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -251,6 +259,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -268,6 +277,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -285,6 +295,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -302,6 +313,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -319,6 +331,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -336,6 +349,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -353,6 +367,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -370,6 +385,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -387,6 +403,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -404,6 +421,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -421,6 +439,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -438,6 +457,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -455,6 +475,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -472,6 +493,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -489,6 +511,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -506,6 +529,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -523,6 +547,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -540,6 +565,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -557,6 +583,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -574,6 +601,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -591,6 +619,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -608,6 +637,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -625,6 +655,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -642,6 +673,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -691,6 +723,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -708,6 +741,7 @@ self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
