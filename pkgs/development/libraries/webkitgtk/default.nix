@@ -5,6 +5,7 @@
 , perl
 , python3
 , ruby
+, gi-docgen
 , bison
 , gperf
 , cmake
@@ -12,7 +13,6 @@
 , pkg-config
 , gettext
 , gobject-introspection
-, libnotify
 , gnutls
 , libgcrypt
 , libgpg-error
@@ -65,17 +65,18 @@
 , systemdSupport ? stdenv.isLinux
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.36.7";
+  version = "2.38.2";
+  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "5.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   separateDebugInfo = stdenv.isLinux;
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DCYM8rMvBIHQF2cN/tG2HlVJZ80GcZVgbJ+etf5zF0M=";
+    url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8+uCiZZR9YO02Zys0Wr3hKGncQ/OnntoB71szekJ/j4=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     ruby
+    gi-docgen
     glib # for gdbus-codegen
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -136,7 +138,6 @@ stdenv.mkDerivation rec {
     libidn
     libintl
     lcms2
-    libnotify
     libpthreadstubs
     libtasn1
     libwebp
@@ -162,7 +163,7 @@ stdenv.mkDerivation rec {
     # (We pick just that one because using the other headers from `sdk` is not
     # compatible with our C++ standard library. This header is already in
     # the standard library on aarch64)
-    runCommand "${pname}_headers" { } ''
+    runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
@@ -221,6 +222,11 @@ stdenv.mkDerivation rec {
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
@@ -231,4 +237,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     broken = stdenv.isDarwin;
   };
-}
+})
