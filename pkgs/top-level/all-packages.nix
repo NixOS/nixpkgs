@@ -33840,6 +33840,8 @@ with pkgs;
 
   brutalmaze = callPackage ../games/brutalmaze { };
 
+  bsatool2 = callPackage ../games/bsatool2 { };
+
   bsdgames = callPackage ../games/bsdgames { };
 
   btanks = callPackage ../games/btanks { };

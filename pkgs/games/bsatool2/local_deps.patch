@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b410c6f..6920160 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,12 +10,7 @@ find_package(LZ4 REQUIRED)
+ include_directories(${LZ4_INCLUDE_DIR})
+ find_package(OpenSSL REQUIRED COMPONENTS SSL)
+ 
+-include(FetchContent)
+-FetchContent_Declare(argparse
+-    GIT_REPOSITORY https://github.com/p-ranav/argparse.git
+-    GIT_TAG	   "v2.6"
+-)
+-FetchContent_MakeAvailable(argparse)
++find_package(argparse REQUIRED)
+ 
+ # Main executable
+ add_executable(bsatool2 bsatool.cpp)
+@@ -24,7 +19,6 @@ add_subdirectory(components)
+ 
+ target_link_libraries(bsatool2
+   components
+-  argparse
+ )
+ 
+ install(TARGETS bsatool2 DESTINATION bin)
+diff --git a/components/CMakeLists.txt b/components/CMakeLists.txt
+index 2ae8c64..222ab19 100644
+--- a/components/CMakeLists.txt
++++ b/components/CMakeLists.txt
+@@ -1,11 +1,6 @@
+ project (Components)
+ 
+-include(FetchContent)
+-FetchContent_Declare(ZStrGitRepo
+-  GIT_REPOSITORY    "https://github.com/mateidavid/zstr"
+-  GIT_TAG           "v1.0.6"
+-)
+-FetchContent_MakeAvailable(ZStrGitRepo)
++find_package(zstr REQUIRED)
+ 
+ add_library(components STATIC bsa/bsa_file.cpp bsa/memorystream.cpp
+     files/constrainedfilestream.cpp files/lowlevelfile.cpp)
