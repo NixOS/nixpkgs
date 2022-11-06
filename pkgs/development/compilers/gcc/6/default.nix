@@ -48,7 +48,7 @@ assert langGo -> langCC;
 assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -72,7 +72,7 @@ let majorVersion = "6";
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isx86_32) (fetchpatch {
         url = "https://git.alpinelinux.org/aports/plain/main/gcc/gcc-6.1-musl-libssp.patch?id=5e4b96e23871ee28ef593b439f8c07ca7c7eb5bb";
         sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
@@ -217,7 +217,7 @@ stdenv.mkDerivation ({
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ;
 
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross.package;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
@@ -235,7 +235,7 @@ stdenv.mkDerivation ({
       lib
       stdenv
       targetPackages
-      crossStageStatic libcCross
+      crossStageStatic libcCross threadsCross
       version
 
       gmp mpfr libmpc isl

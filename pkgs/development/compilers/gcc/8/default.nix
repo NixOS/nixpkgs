@@ -32,7 +32,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 
 # threadsCross is just for MinGW
-assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -59,8 +59,7 @@ let majorVersion = "8";
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
-
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
       ++ [ ../libsanitizer-no-cyclades-9.patch ];
 
     /* Cross-gcc settings (build == host != target) */
@@ -168,7 +167,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ;
 
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != {}) threadsCross.package;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
@@ -186,7 +185,7 @@ stdenv.mkDerivation ({
       lib
       stdenv
       targetPackages
-      crossStageStatic libcCross
+      crossStageStatic libcCross threadsCross
       version
 
       gmp mpfr libmpc isl
