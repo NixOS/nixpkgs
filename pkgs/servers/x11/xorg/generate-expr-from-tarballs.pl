@@ -154,7 +154,7 @@ while (<>) {
         push @nativeRequires, "bdftopcf";
     }
 
-    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
+    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/ || $file =~ /XORG_FONT_REQUIRED_PROG\(MKFONTSCALE/) {
         push @nativeRequires, "mkfontscale";
     }
 
