@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.5.1";
+  version = "2.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cN7nyjdnU/ls3HNhC2m1sunRrmZFT5pFZr+kEBcwHkU=";
+    hash = "sha256-35qM6u3I8yH1E8mrlaeFjhliOVTkMXH13b8S6e9ROig=";
   };
 
   propagatedBuildInputs = [
