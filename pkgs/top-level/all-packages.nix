@@ -482,6 +482,8 @@ with pkgs;
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
+  figma-linux = callPackage ../applications/graphics/figma-linux {};
+
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
   frece = callPackage ../development/tools/frece { };
