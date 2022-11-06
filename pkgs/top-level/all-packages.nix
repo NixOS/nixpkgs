@@ -4310,6 +4310,8 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
+
   hysteria = callPackage ../tools/networking/hysteria { };
 
   hyx = callPackage ../tools/text/hyx { };
