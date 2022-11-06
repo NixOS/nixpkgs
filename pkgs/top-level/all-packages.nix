@@ -3447,7 +3447,7 @@ with pkgs;
 
   clingo = callPackage ../applications/science/logic/potassco/clingo.nix { };
 
-  clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { stdenv = gcc10StdenvCompat; };
+  clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
