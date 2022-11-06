@@ -521,6 +521,7 @@ unsupported-platforms:
   sensei:                                       [ platforms.darwin ]
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
   Unixutils-shadow:                             [ platforms.darwin ]
