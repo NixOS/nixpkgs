@@ -61,16 +61,5 @@ in {
 
         phone.wait_for_text("All Apps")
         phone.screenshot("03launcher")
-
-    with subtest("Check that we can launch an app"):
-        phone.send_chars("settings\n\n", delay=0.2)
-
-        phone.wait_for_text("Network")
-        phone.screenshot("04settings")
-
-    with subtest("Check that we can summon the on-screen keyboard"):
-        phone.succeed("busctl call --machine=nixos@.host --user sm.puri.OSK0 /sm/puri/OSK0 sm.puri.OSK0 SetVisible b true")
-        phone.wait_for_text("123") # Button label for the number layer
-        phone.screenshot("05keyboard")
   '';
 })
