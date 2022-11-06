@@ -32,6 +32,7 @@ buildPythonPackage rec {
       sha256 = "sha256-QeAfj7wLz4egVUPMAgrZ9Wn/Tv60LrIXLgHGVoH41wQ=";
     })
     ./tests_respect_pythonpath.patch
+    ./4.9.2-CVE-2022-39286.patch
   ];
 
   preCheck = ''
