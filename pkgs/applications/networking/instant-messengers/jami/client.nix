@@ -21,17 +21,17 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
-, withWebengine ? true
+# https://git.jami.net/savoirfairelinux/jami-client-qt/-/issues/881
+# , withWebengine ? false
 }:
 
 stdenv.mkDerivation {
-  pname = "jami-client-qt";
+  pname = "jami-client";
   inherit version src;
 
   sourceRoot = "source/client-qt";
 
   preConfigure = ''
-    python gen-resources.py
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
 
@@ -56,15 +56,15 @@ stdenv.mkDerivation {
     qtmultimedia
     qtsvg
     qtwebchannel
-  ] ++ lib.optionals withWebengine [
+  # ] ++ lib.optionals withWebengine [
     qtwebengine
   ];
 
   cmakeFlags = [
-    "-DRING_BUILD_DIR=${jami-daemon}/include"
-    "-DRING_XML_INTERFACES_DIR=${jami-daemon}/share/dbus-1/interfaces"
-  ] ++ lib.optionals (!withWebengine) [
-    "-DWITH_WEBENGINE=false"
+    "-DLIBJAMI_INCLUDE_DIR=${jami-daemon}/include/jami"
+    "-DLIBJAMI_XML_INTERFACES_DIR=${jami-daemon}/share/dbus-1/interfaces"
+  # ] ++ lib.optionals (!withWebengine) [
+  #   "-DWITH_WEBENGINE=false"
   ];
 
   qtWrapperArgs = [
