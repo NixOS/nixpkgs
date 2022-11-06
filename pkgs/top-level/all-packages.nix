@@ -1076,6 +1076,8 @@ with pkgs;
     { name = "validate-pkg-config"; deps = [ findutils pkg-config ]; }
     ../build-support/setup-hooks/validate-pkg-config.sh;
 
+  patchPpdFilesHook = callPackage ../build-support/setup-hooks/patch-ppd-files {};
+
   #package writers
   writers = callPackage ../build-support/writers {};
 
@@ -36359,6 +36361,12 @@ with pkgs;
   epson-201106w = callPackage ../misc/drivers/epson-201106w { };
 
   epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
+
+  foomatic-db = callPackage ../misc/cups/drivers/foomatic-db {};
+  foomatic-db-engine = callPackage ../misc/cups/drivers/foomatic-db-engine {};
+  foomatic-db-nonfree = callPackage ../misc/cups/drivers/foomatic-db-nonfree {};
+  foomatic-db-ppds = callPackage ../misc/cups/drivers/foomatic-db-ppds {};
+  foomatic-db-ppds-withNonfreeDb = callPackage ../misc/cups/drivers/foomatic-db-ppds { withNonfreeDb = true; };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
