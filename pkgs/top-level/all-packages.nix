@@ -28500,7 +28500,9 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs { };
+  gurk-rs = callPackage ../applications/networking/instant-messengers/gurk-rs {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   gjay = callPackage ../applications/audio/gjay { };
 
