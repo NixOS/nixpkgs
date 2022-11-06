@@ -7,17 +7,17 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  installPhase =''
-      mkdir -p $out/bin $out/lib/minecraft
-      cp -v $src $out/lib/minecraft/server.jar
+  installPhase = ''
+    mkdir -p $out/bin $out/lib/minecraft
+    cp -v $src $out/lib/minecraft/server.jar
 
-      cat > $out/bin/minecraft-server << EOF
-      #!/bin/sh
-      exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
-      EOF
+    cat > $out/bin/minecraft-server << EOF
+    #!/bin/sh
+    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
+    EOF
 
-      chmod +x $out/bin/minecraft-server
-    '';
+    chmod +x $out/bin/minecraft-server
+  '';
 
   dontUnpack = true;
 
