@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 , cmake, perl, go, python3
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2, fmt_7
+, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
 }:
 
 let
@@ -9,22 +9,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "31.0.3p1";
+  version = "33.0.3";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    sha256 = "1f2svy381r798hjinrc2xiwz13gkkqxfill343zvv8jqkn8rzxhf";
+    hash = "sha256-jOF02reB1d69Ke0PllciMfd3vuGbjvPBZ+M9PqdnC8U=";
   };
 
   patches = [
-    # fmt 8 breaks the build but we can use fmt 7 from Nixpkgs:
-    (fetchpatch {
-      # Vendor google's version of fmtlib
-      url = "https://github.com/nmeum/android-tools/commit/21061c1dfb006c22304053c1f6f9e48ae4cbe25a.patch";
-      sha256 = "17mcsgfc3i8xq4hck0ppnzafh15aljxy7j2q4djcmwnvrkv9kx3s";
-      revert = true;
-      excludes = [ "vendor/fmtlib" ];
-    })
     ./android-tools-kernel-headers-6.0.diff
   ];
 
@@ -37,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake perl go ];
-  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 fmt_7 ];
+  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
   propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
