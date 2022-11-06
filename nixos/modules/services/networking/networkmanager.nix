@@ -476,6 +476,7 @@ in {
     };
 
     systemd.services.NetworkManager-wait-online = {
+      serviceConfig.TimeoutSec = 10;
       wantedBy = [ "network-online.target" ];
     };
 
