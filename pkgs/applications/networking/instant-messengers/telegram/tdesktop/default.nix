@@ -27,7 +27,7 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm
+, glibmm_2_68
 , webkitgtk_4_1
 , jemalloc
 , rnnoise
@@ -74,7 +74,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.2.4";
+  version = "4.3.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -83,7 +83,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-X2ZbjlL3YbPdXSgS+wqZL3FUW2xQ0DhqiOO5MR1QyLY=";
+    sha256 = "1ji9351vcvydkcrdwqx22j1nhl9vysd6ajvghaqxdirvqypiygj0";
   };
 
   postPatch = ''
@@ -131,7 +131,7 @@ env.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm
+    glibmm_2_68
     webkitgtk_4_1
     jemalloc
     rnnoise
