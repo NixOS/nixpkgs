@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
+{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1, modloader }:
 stdenv.mkDerivation {
-  pname = "minecraft-server";
+  pname = "minecraft-server-${modloader}";
   inherit version;
 
   src = fetchurl { inherit url sha1; };

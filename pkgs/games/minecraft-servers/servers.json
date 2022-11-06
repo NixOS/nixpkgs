@@ -124,5 +124,155 @@
     "version": "1.2.5",
     "javaVersion": 8,
     "modloader": "vanilla"
+  },
+
+  "forge-1.19": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.2-43.1.1/forge-1.19.2-43.1.1-installer.jar",
+    "sha1": "k7l9yb9gqilaisy03ahcwgnw2y3yf36y",
+    "version": "1.19.2",
+    "javaVersion": 17,
+    "modloader": "forge"
+  },
+  "forge-1.18": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.18.2-40.1.0/forge-1.18.2-40.1.0-installer.jar",
+    "sha1": "7gy3bb46lhnwkbf3v87rbz72bacsm5h4",
+    "version": "1.18.2",
+    "javaVersion": 17,
+    "modloader": "forge"
+  },
+  "forge-1.17": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.17.1-37.1.1/forge-1.17.1-37.1.1-installer.jar",
+    "sha1": "pjlq0jqngnrsmphknb0s3b5f6slc6ryk",
+    "version": "1.17.1",
+    "javaVersion": 16,
+    "modloader": "forge"
+  },
+  "forge-1.16": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.16.5-36.2.34/forge-1.16.5-36.2.34-installer.jar",
+    "sha1": "j03gpscrahy9lnzv4mza93bn7ibsq3pq",
+    "version": "1.16.5",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.15": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.15.2-31.2.57/forge-1.15.2-31.2.57-installer.jar",
+    "sha1": "ifnsmshw8b4i27xrwzxh01n5f1wvf4hp",
+    "version": "1.15.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.14": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.14.4-28.2.26/forge-1.14.4-28.2.26-installer.jar",
+    "sha1": "kqwznxi72hqddy7a1j0aqwk8wbphk4ik",
+    "version": "1.14.4",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.13": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.13.2-25.0.223/forge-1.13.2-25.0.223-installer.jar",
+    "sha1": "gfkaj30g2g92bvrza8mpnia7ldw28h6m",
+    "version": "1.13.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.12": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2859/forge-1.12.2-14.23.5.2859-installer.jar",
+    "sha1": "3p0sw90k77f93jkd2bm6qxrng4pkygxw",
+    "version": "1.12.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.11": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.11.2-13.20.1.2588/forge-1.11.2-13.20.1.2588-installer.jar",
+    "sha1": "ljnzwwp76rqayyf51yy85bcn85s9a29x",
+    "version": "1.11.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.10": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.10.2-12.18.3.2511/forge-1.10.2-12.18.3.2511-installer.jar",
+    "sha1": "0xqsfwlxq9x6c807x9a9c8cfdcgb4475",
+    "version": "1.10.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.9": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.9.4-12.17.0.2317-1.9.4/forge-1.9.4-12.17.0.2317-1.9.4-installer.jar",
+    "sha1": "n3lqgi4b3iglygk3rajr9dyplklp6vz5",
+    "version": "1.9.4",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.8": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-installer.jar",
+    "sha1": "894i7ak8bmbydjx0ik6dk1m6z3frc1z4",
+    "version": "1.8.9",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.7": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/forge-1.7.10-10.13.4.1614-1.7.10-installer.jar",
+    "sha1": "qslh4mq3d120kplkx7rc8yz2qhmbjick",
+    "version": "1.7.10",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.6": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.6.4-9.11.1.1345/forge-1.6.4-9.11.1.1345-installer.jar",
+    "sha1": "zm70k3ijvs9j4dn20b748agxszr4qf1f",
+    "version": "1.6.4",
+    "javaVersion": 8,
+    "modloader": "forge"
+  },
+  "forge-1.5": {
+    "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.5.2-7.8.1.738/forge-1.5.2-7.8.1.738-installer.jar",
+    "sha1": "gl80fr0qygllw4m9jhdimqlvrp035j08",
+    "version": "1.5.2",
+    "javaVersion": 8,
+    "modloader": "forge"
+  }, 
+
+  "fabric-1.19": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.19.2/0.14.10/0.11.1/server/jar",
+    "sha1": "3w4b5p9b6m0dbcvv75imfbqb4y8g0bd1",
+    "version": "1.19.2",
+    "javaVersion": 17,
+    "modloader": "fabric"
+  },
+  "fabric-1.18": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.18.2/0.14.10/0.11.1/server/jar",
+    "sha1": "kqzi55rn17zkchhlks6zi6w1rblrjqyh",
+    "version": "1.18.2",
+    "javaVersion": 17,
+    "modloader": "fabric"
+  },
+  "fabric-1.17": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.17.1/0.14.10/0.11.1/server/jar",
+    "sha1": "rggh5lvhhs1d4f6khicl507sb6ysxvad",
+    "version": "1.17.1",
+    "javaVersion": 16,
+    "modloader": "fabric"
+  },
+  "fabric-1.16": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.16.5/0.14.10/0.11.1/server/jar",
+    "sha1": "kmf5prn8jx8i49awf8aa3mkw000i6zkp",
+    "version": "1.16.5",
+    "javaVersion": 8,
+    "modloader": "fabric"
+  },
+  "fabric-1.15": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.15.2/0.14.10/0.11.1/server/jar",
+    "sha1": "50p9iwcwjkrm40p48g5s38c6xb52qmgc",
+    "version": "1.15.2",
+    "javaVersion": 8,
+    "modloader": "fabric"
+  },
+  "fabric-1.14": {
+    "url": "https://meta.fabricmc.net/v2/versions/loader/1.14.4/0.14.10/0.11.1/server/jar",
+    "sha1": "wy9nkk5a0iphy1isv268a5ib1sdlkld2",
+    "version": "1.14.4",
+    "javaVersion": 8,
+    "modloader": "fabric"
   }
 }
+

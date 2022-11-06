@@ -12,7 +12,7 @@ let
     (server: value: {
       name = "${escapeVersion server}";
       value = callPackage ./derivation.nix {
-        inherit (value) version url sha1;
+        inherit (value) version url sha1 modloader;
         jre_headless = getJavaVersion (if value.javaVersion == null then 8 else value.javaVersion); # versions <= 1.6 will default to 8
       };
     })
