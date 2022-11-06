@@ -23,10 +23,11 @@
 , libliftoff
 , lib
 , makeBinaryWrapper
+, cmake
 }:
 let
   pname = "gamescope";
-  version = "3.11.39";
+  version = "3.11.48";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
     owner = "Plagman";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-MpJczFZk0syt/CMwAhA7H+01G8E4syFsJGnzD/RneQQ=";
+    hash = "sha256-/a0fW0NVIrg9tuK+mg+D+IOcq3rJJxKdFwspM1ZRR9M=";
   };
 
   patches = [ ./use-pkgconfig.patch ];
@@ -45,6 +46,7 @@ stdenv.mkDerivation {
     pkg-config
     ninja
     makeBinaryWrapper
+    cmake
   ];
 
   buildInputs = [

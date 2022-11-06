@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation {
   pname = "stb";
   version = "unstable-2021-09-10";
@@ -14,8 +17,24 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/include/stb
     cp *.h $out/include/stb/
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    mkdir -p $out/lib/pkgconfig
+
+    cat << EOF > $out/lib/pkgconfig/stb.pc
+    prefix=$out
+    includedir=$out/include
+
+    Cflags: -I$out/include/stb
+    Description: Single-file public domain libraries for C/C++
+    Name: stb
+    Version: 1
+    EOF
   '';
 
   meta = with lib; {
