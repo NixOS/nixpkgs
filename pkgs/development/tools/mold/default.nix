@@ -48,7 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ azahi nitsky ];
     platforms = platforms.unix;
-    # https://github.com/NixOS/nixpkgs/pull/189712#issuecomment-1237791234
-    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

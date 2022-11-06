@@ -2,6 +2,7 @@
 , stdenv
 , autopep8
 , buildPythonPackage
+, docstring-to-markdown
 , fetchFromGitHub
 , flake8
 , flaky
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,30 +40,32 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-tW2w94HI6iy8vcDb5pIL79bAO6BJp9q6SMAXgiVobm0=";
+    sha256 = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
       --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
-      --replace "flake8>=4.0.0,<4.1.0" "flake8" \
-      --replace "mccabe>=0.6.0,<0.7.0" "mccabe" \
-      --replace "pycodestyle>=2.8.0,<2.9.0" "pycodestyle" \
-      --replace "pyflakes>=2.4.0,<2.5.0" "pyflakes"
+      --replace "flake8>=5.0.0,<5.1.0" "flake8" \
+      --replace "mccabe>=0.7.0,<0.8.0" "mccabe" \
+      --replace "pycodestyle>=2.9.0,<2.10.0" "pycodestyle" \
+      --replace "pyflakes>=2.5.0,<2.6.0" "pyflakes"
   '';
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
-  '';
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
+    docstring-to-markdown
     jedi
     pluggy
     python-lsp-jsonrpc
-    setuptools
-    setuptools-scm
     ujson
   ];
 
