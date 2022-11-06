@@ -1,14 +1,14 @@
 { lib, stdenvNoCC, fetchFromGitHub, python3 }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "mpv_thumbnail_script";
-  version = "0.4.9";
+  pname = "mpv-thumbnail-script";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
-    repo = pname;
+    repo = "mpv_thumbnail_script";
     rev = version;
-    sha256 = "0dgfrb8ypc5vlq35kzn423fm6l6348ivl85vb6j3ccc9a51xprw3";
+    sha256 = "sha256-0nqV8vY3cBOJkLRoQ33Cc+4+vSK45i9yWbhKiQIuVSw=";
   };
 
   nativeBuildInputs = [ python3 ];
