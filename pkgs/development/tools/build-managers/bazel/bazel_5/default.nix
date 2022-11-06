@@ -26,12 +26,12 @@
 }:
 
 let
-  version = "5.2.0";
+  version = "5.3.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "sha256-ggqU27FAce1tjCZs8MCA7LJlpe6mUwdXlInEZiwtWCo=";
+    hash = "sha256-OICtkZWS0ePkDFBvE7Ms0KLibxKdh8troXDxgB19e4I=";
   };
 
   # Update with `eval $(nix-build -A bazel_5.updater)`,
