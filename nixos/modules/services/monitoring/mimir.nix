@@ -25,6 +25,13 @@ in {
         Specify a configuration file that Mimir should use.
       '';
     };
+
+    package = mkOption {
+      default = pkgs.mimir;
+      defaultText = lib.literalExpression "pkgs.mimir";
+      type = types.package;
+      description = lib.mdDoc ''Mimir package to use.'';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -53,7 +60,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.mimir}/bin/mimir --config.file=${conf}";
+        ExecStart = "${cfg.package}/bin/mimir --config.file=${conf}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";
