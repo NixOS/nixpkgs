@@ -234,11 +234,13 @@ let
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "sha256-Z9GDWGv+1YFyJjudyshZfeRJsKShoA1kIbNR3h3GxPQ="
-        else if stdenv.isDarwin then
-          "sha256-i3wiJHD4+pgTvDMhnYiQo9pdxxKItgYnc4/4wGt2NXM="
-        else
-          "sha256-liRxmjwm0OmVMfgoGXx+nGBdW2fzzP/d4zmK6A59HAM=";
+          "sha256-FO3mvxr+c3kWOhIRRdJ0gBOHrPr2LKrtjZvYaPp8Xu0="
+        else {
+          x86_64-linux = "sha256-s4fJhjxr9Nj8EMfNFoKDE68AVN7ETsvuuCZ4bJVS1Eo=";
+          aarch64-linux = "sha256-MgkQ8BwIP77dwbYyEyb59WUcOE7jWthHcDJZFNceS4o=";
+          x86_64-darwin = "sha256-xF36ctkzH/LGvKhrcrqVDz5tUqFnYsFaOzjf3aJUTtU=";
+          aarch64-darwin = "sha256-/C6HUTHvRd+3LL4repJWWQq+2UXgO5za4xXZhhNxNrM=";
+        }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     };
 
     buildAttrs = {
