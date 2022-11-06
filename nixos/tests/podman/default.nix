@@ -73,8 +73,10 @@ import ../make-test-python.nix (
           podman.succeed("podman stop sleeping")
           podman.succeed("podman rm sleeping")
 
-      # create systemd session for rootless
+      # start systemd session for rootless
       podman.succeed("loginctl enable-linger alice")
+      podman.succeed(su_cmd("whoami"))
+      podman.sleep(1)
 
       with subtest("Run container rootless with runc"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
