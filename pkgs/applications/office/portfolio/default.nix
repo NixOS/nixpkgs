@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
+    mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };
 }
