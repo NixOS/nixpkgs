@@ -4158,6 +4158,15 @@
     githubId = 147284;
     name = "Jason Felice";
   };
+  ercao = {
+    email = "vip@ercao.cn";
+    github = "ercao";
+    githubId = 51725284;
+    name = "ercao";
+    keys = [{
+      fingerprint = "F3B0 36F7 B0CB 0964 3C12  D3C7 FFAB D125 7ECF 0889";
+    }];
+  };
   erdnaxe = {
     email = "erdnaxe@crans.org";
     github = "erdnaxe";
