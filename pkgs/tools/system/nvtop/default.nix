@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${version}";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb ];
+    maintainers = with maintainers; [ willibutz gbtb anthonyroussel ];
     mainProgram = "nvtop";
   };
 }
