@@ -297,17 +297,19 @@ rec {
     else if isFloat    v then "~${toString v}"
     else if isString   v then
       let
-        # Separate a string into its lines
-        newlineSplits = filter (v: ! isList v) (builtins.split "\n" v);
-        # For a '' string terminated by a \n, which happens when the closing '' is on a new line
-        multilineResult = "''" + introSpace + concatStringsSep introSpace (lib.init newlineSplits) + outroSpace + "''";
-        # For a '' string not terminated by a \n, which happens when the closing '' is not on a new line
-        multilineResult' = "''" + introSpace + concatStringsSep introSpace newlineSplits + "''";
-        # For single lines, replace all newlines with their escaped representation
-        singlelineResult = "\"" + libStr.escape [ "\"" ] (concatStringsSep "\\n" newlineSplits) + "\"";
-      in if multiline && length newlineSplits > 1 then
-        if lib.last newlineSplits == "" then multilineResult else multilineResult'
-      else singlelineResult
+        lines = filter (v: ! isList v) (builtins.split "\n" v);
+        escapeSingleline = libStr.escape [ "\\" "\"" "\${" ];
+        escapeMultiline = libStr.replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+        singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
+        multilineResult = let
+          escapedLines = map escapeMultiline lines;
+          # The last line gets a special treatment: if it's empty, '' is on its own line at the "outer"
+          # indentation level. Otherwise, '' is appended to the last line.
+          lastLine = lib.last escapedLines;
+        in "''" + introSpace + concatStringsSep introSpace (lib.init escapedLines)
+                + (if lastLine == "" then outroSpace else introSpace + lastLine) + "''";
+      in
+        if multiline && length lines > 1 then multilineResult else singlelineResult
     else if true  ==   v then "true"
     else if false ==   v then "false"
     else if null  ==   v then "null"
