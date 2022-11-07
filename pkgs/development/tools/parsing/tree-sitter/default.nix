@@ -20,8 +20,12 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
+
+# REMOVED
 , extraGrammars ? { }
 }:
+
+assert lib.assertMsg (extraGrammars == {}) "The `extraGrammars` for tree-sitter was removed, because the schema of extraGrammars was underspecified & undocumented. If you need support, please open an issue and ping @Profpatsch";
 
 let
   # to update: see ./README.md
@@ -42,6 +46,8 @@ let
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
   # TODO: use linkFarm
+
+  # All grammar definitions’ source repositories.
   grammars =
     runCommand "grammars" { } ''
       mkdir $out
@@ -49,7 +55,7 @@ let
          (import ./grammars { inherit lib; })
          [
           (lib.mapAttrsToList
-            (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"))
+            (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n"))
           lib.concatStrings
          ]}
     '';
@@ -60,10 +66,10 @@ let
         callPackage ./build-grammar.nix { } {
           language = name;
           inherit version;
-          source = if grammar ? src then grammar.src else fetchGrammar grammar;
+          source = fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
         };
-      grammars' = import ./grammars { inherit lib; } // extraGrammars;
+      grammars' = import ./grammars { inherit lib; };
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
