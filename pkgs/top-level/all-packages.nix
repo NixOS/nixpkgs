@@ -31208,6 +31208,8 @@ with pkgs;
 
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
 
+  purple-mattermost = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-mattermost { };
+
   purple-mm-sms = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-mm-sms { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
