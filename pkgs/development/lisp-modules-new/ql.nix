@@ -60,6 +60,9 @@ let
     trivial-ssh-libssh2 = pkg: {
       nativeLibs = [ libssh2 ];
     };
+    mssql = pkg: {
+      nativeLibs = [ freetds ];
+    };
     sqlite = pkg: {
       nativeLibs = [ sqlite ];
     };

@@ -58,6 +58,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
     pname = "php-${pname}";
+    meta.mainProgram = args.meta.mainProgram or pname;
   });
 
   # Function to build an extension which is shipped as part of the php

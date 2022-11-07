@@ -963,6 +963,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>mastodon</literal> now automatically removes remote
+          media attachments older than 30 days. This is configurable
+          through <literal>services.mastodon.mediaAutoRemove</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Redis module now disables RDB persistence when
           <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
           instead of using the Redis default.
