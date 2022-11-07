@@ -14,7 +14,8 @@ buildGoModule rec {
     sha256 = "02s03sha8vwp7dsaw3z446pskhb6wmy0hyj0mhpbx58sf147rkig";
   };
 
-  vendorSha256 = "0vpkzykfg1rq4qi1v5lsa0drpil9i6ccfw96k48ppi9hiwzpq94w";
+  proxyVendor = true; # fix vendor with go > 1.17, should be able to remove when package is bumped
+  vendorSha256 = "sha256-Spf4v9rA8Nsz8U/FevTu+iA2dKluHuKyH8AheOErrqk=";
 
   meta = with lib; {
     description = "Phishing tool for red teams and pentesters";
