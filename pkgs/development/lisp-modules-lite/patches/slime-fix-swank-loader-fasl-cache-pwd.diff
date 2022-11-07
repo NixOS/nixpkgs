@@ -1,0 +1,15 @@
+Slime mucks with .fasl files and doesn't know about our "keep everything in the
+current directory" convention.
+diff --git i/swank-loader.lisp w/swank-loader.lisp
+index 4d20ab1d..e53e7d23 100644
+--- i/swank-loader.lisp
++++ w/swank-loader.lisp
+@@ -163,7 +163,7 @@ Return nil if nothing appropriate is available."
+                  ,@(if *load-truename* (cdr (pathname-directory *load-truename*)))))
+    (user-homedir-pathname)))
+ 
+-(defvar *fasl-directory* (default-fasl-dir)
++(defvar *fasl-directory* (uiop:getcwd)
+   "The directory where fasl files should be placed.")
+ 
+ (defun binary-pathname (src-pathname binary-dir)

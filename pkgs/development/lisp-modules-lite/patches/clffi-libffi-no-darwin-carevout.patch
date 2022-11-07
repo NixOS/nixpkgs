@@ -1,0 +1,14 @@
+diff --git i/libffi/libffi-types.lisp w/libffi/libffi-types.lisp
+index 7fe9e0d..b183f89 100644
+--- i/libffi/libffi-types.lisp
++++ w/libffi/libffi-types.lisp
+@@ -43,9 +43,6 @@
+ 
+ (pkg-config-cflags "libffi" :optional t)
+ 
+-#+darwin
+-(include "ffi/ffi.h")
+-#-darwin
+ (include "ffi.h")
+ 
+ (cenum status

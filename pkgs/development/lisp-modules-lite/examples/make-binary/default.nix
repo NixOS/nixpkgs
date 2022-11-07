@@ -9,7 +9,7 @@ lispDerivation {
   lispSystem = "demo";
   version = "0.0.1";
   src = ./.;
-  buildPhase = sbcl "build.lisp";
+  # Binary is automatically built using ASDF’s :build-operation "program-op"
   installPhase = ''
     mkdir -p "$out/bin"
     cp dist/demo "$out/bin/"
