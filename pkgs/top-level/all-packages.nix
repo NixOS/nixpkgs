@@ -16731,6 +16731,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  devbox = callPackage ../development/tools/devbox { };
+
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
