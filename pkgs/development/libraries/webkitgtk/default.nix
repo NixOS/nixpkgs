@@ -73,7 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  separateDebugInfo = stdenv.isLinux;
+  # https://github.com/NixOS/nixpkgs/issues/153528
+  # Can't be linked within a 4GB address space.
+  separateDebugInfo = stdenv.isLinux && !stdenv.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
