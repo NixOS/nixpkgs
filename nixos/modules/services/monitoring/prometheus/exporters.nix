@@ -54,6 +54,7 @@ let
     "openldap"
     "openvpn"
     "pihole"
+    "podman"
     "postfix"
     "postgres"
     "process"
