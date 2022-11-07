@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
         This thumbnailer was designed to be as fast and lightweight as possible.
         The only dependencies are ffmpeg and libpng.
     ";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.jagajaga ];
   };
