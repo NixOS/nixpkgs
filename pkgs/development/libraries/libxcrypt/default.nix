@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) login shadow;
   };
 
+  patches = [ ./0001-Fix-warning-about-truncating-conversion.patch ];
+
   meta = with lib; {
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";

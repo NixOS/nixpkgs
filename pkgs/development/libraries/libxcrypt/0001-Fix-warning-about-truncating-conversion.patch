@@ -1,0 +1,25 @@
+From 239664bf18fc2bc093d8dbaa1fb0a0307651897f Mon Sep 17 00:00:00 2001
+From: Moinak Bhattacharyya <moinakb001@gmail.com>
+Date: Mon, 7 Nov 2022 03:40:23 -0600
+Subject: [PATCH] Fix warning about truncating conversion
+
+---
+ lib/alg-yescrypt-opt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/alg-yescrypt-opt.c b/lib/alg-yescrypt-opt.c
+index 60a6ccd..dacc73b 100644
+--- a/lib/alg-yescrypt-opt.c
++++ b/lib/alg-yescrypt-opt.c
+@@ -514,7 +514,7 @@ static volatile uint64_t Smask2var = Smask2;
+ #define PWXFORM_SIMD(X) { \
+ 	uint64_t x; \
+ 	FORCE_REGALLOC_1 \
+-	uint32_t lo = x = EXTRACT64(X) & Smask2reg; \
++	uint32_t lo = (uint32_t)(x = EXTRACT64(X) & Smask2reg); \
+ 	FORCE_REGALLOC_2 \
+ 	uint32_t hi = x >> 32; \
+ 	X = _mm_mul_epu32(HI32(X), X); \
+-- 
+2.38.1
+
