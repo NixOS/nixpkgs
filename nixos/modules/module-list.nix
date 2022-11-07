@@ -186,6 +186,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/mdevctl.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
   ./programs/msmtp.nix
