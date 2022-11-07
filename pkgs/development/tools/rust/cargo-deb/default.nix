@@ -5,6 +5,7 @@
 , rust
 , libiconv
 , Security
+, dpkg
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [ dpkg ];
 
   cargoSha256 = "sha256-PJLKEcbWlGqfi7RxWO4mwxByMD/qeK0MWy+r61WSKzo=";
 
