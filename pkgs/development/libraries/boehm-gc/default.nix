@@ -30,6 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
+  # this stanza can be dropped when a release fixes this issue:
+  # https://github.com/ivmai/bdwgc/issues/376
+  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
+                             lib.versionAtLeast finalAttrs.version "8.2.2")
+    [
+      # do not use /proc primitives to track dirty bits; see:
+      # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
+      # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+      "CFLAGS_EXTRA=-DNO_SOFT_VDB"
+    ];
+
   # `gctest` fails under emulation on aarch64-darwin
   doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
