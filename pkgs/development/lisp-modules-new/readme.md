@@ -27,6 +27,11 @@ result/bin/sbcl
 nix-shell --run 'sbcl --script ql-import.lisp'
 ```
 
+#### Test build of packages
+```
+(cd test;  sbcl --script test.lisp ccl)
+```
+
 ## Documentation
 
 See `doc` directory.
