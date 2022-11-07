@@ -18439,6 +18439,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  cyrus-sasl-xoauth2 = callPackage ../development/libraries/cyrus-sasl-xoauth2 { };
+
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
   db = db5;
