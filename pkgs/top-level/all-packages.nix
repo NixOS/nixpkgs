@@ -24296,6 +24296,7 @@ with pkgs;
   };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };
+  prometheus-podman-exporter = callPackage ../servers/monitoring/prometheus/podman-exporter.nix { };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
   prometheus-process-exporter = callPackage ../servers/monitoring/prometheus/process-exporter.nix { };
