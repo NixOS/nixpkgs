@@ -1185,9 +1185,12 @@ rec {
         ];
 
         fakeRootCommands = ''
-          # Allows any user to create new directories in the Nix store (for the build result)
-          mkdir -p .${storeDir}
-          chmod a+w+t .${storeDir}
+          # Effectively a single-user installation of Nix, giving the user full
+          # control over the Nix store. Needed for building the derivation this
+          # shell is for, but also in case one wants to use Nix inside the
+          # image
+          mkdir -p ./nix/{store,var/nix} ./etc/nix
+          chown -R ${toString uid}:${toString gid} ./nix ./etc/nix
 
           # Gives the user control over the build directory
           mkdir -p .${sandboxBuildDir}
