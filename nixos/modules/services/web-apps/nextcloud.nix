@@ -88,7 +88,8 @@ in {
 
     enableBrokenCiphersForSSE = mkOption {
       type = types.bool;
-      default = false;
+      # Workaround can be removed at backport-time for 22.11.
+      default = !(versionOlder stateVersion "22.11");
       description = lib.mdDoc ''
         This option uses OpenSSL PHP extension linked against OpenSSL 1.x rather
         than latest OpenSSL (≥ 3), this is not recommended except if you need
