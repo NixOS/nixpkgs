@@ -26,6 +26,9 @@ buildGoModule rec {
     ./skip_test_requiring_network.patch
     # Skip TestWorkspaceGit which requires .git and commits.
     ./skip_test_requiring_dotgit.patch
+    # Remove reliance of tests on file protocol which is disabled in git by default now
+    # Rebased upstream change https://github.com/bufbuild/buf/commit/bcaa77f8bbb8f6c198154c7c8d53596da4506dab
+    ./buf-tests-dont-use-file-transport.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
