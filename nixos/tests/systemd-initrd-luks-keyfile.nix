@@ -12,6 +12,7 @@ in {
   nodes.machine = { pkgs, ... }: {
     # Use systemd-boot
     virtualisation = {
+      bootPartitionSize = 120;
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
       useEFIBoot = true;

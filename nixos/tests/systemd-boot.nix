@@ -10,6 +10,7 @@ let
   common = {
     virtualisation.useBootLoader = true;
     virtualisation.useEFIBoot = true;
+    virtualisation.bootPartitionSize = 120;
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
