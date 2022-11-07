@@ -645,6 +645,15 @@
       </listitem>
       <listitem>
         <para>
+          ppd files in <literal>pkgs.cups-drv-rastertosag-gdi</literal>
+          are now gzipped. If you refer to such a ppd file with its path
+          (e.g. via
+          <link xlink:href="options.html#opt-hardware.printers.ensurePrinters">hardware.printers.ensurePrinters</link>)
+          you will need to append <literal>.gz</literal> to the path.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           xow package removed along with the
           <literal>hardware.xow</literal> module, due to the project
           being deprecated in favor of <literal>xone</literal>, which is

@@ -21,6 +21,7 @@
 , psutil
 , pygments
 , pylint
+, pylint-venv
 , pyls-spyder
 , pyopengl
 , pyqtwebengine
@@ -45,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.3.3";
+  version = "5.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vWhwn07zgHX7/7uAz0ekNwnAiKLECCBzBq47TtTaHfE=";
+    hash = "sha256-nZ+rw5qALSdu+nbaAtGA7PLW6XjcjeZvuPd4a5WtZkw=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     numpydoc
     psutil
     pygments
+    pylint-venv
     pyls-spyder
     pyopengl
     pyqtwebengine

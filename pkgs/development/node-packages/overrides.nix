@@ -364,6 +364,10 @@ final: prev: {
     '';
   };
 
+  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
+    meta.broken = true; # use the top-level package instead
+  };
+
   pnpm = prev.pnpm.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
 
