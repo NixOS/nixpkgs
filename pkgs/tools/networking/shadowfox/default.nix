@@ -11,7 +11,8 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  vendorSha256 = "sha256-llseW3k8ygTXwkSpnRfQEnX3OVj2zdL8JDpIoRcC9kE=";
+  proxyVendor = true; # fix vendor with go > 1.17, should be able to remove when package is bumped
+  vendorSha256 = "sha256-tiea/kP0FjD7OQHZNr07Cbrw7JTXs9O1ihQYoV38S6M=";
 
   doCheck = false;
 
