@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bkueng/qMasterPassword";
     license = licenses.gpl3;
-    maintainers = with lib.maintainers; [ tadeokondrak ];
+    maintainers = with lib.maintainers; [ tadeokondrak teutat3s ];
     platforms = platforms.all;
   };
 }
