@@ -82,25 +82,23 @@ let
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
   withPlugins = grammarFn:
-    let
-      grammars = grammarFn builtGrammars;
-    in
-    linkFarm "grammars"
+    lib.pipe builtGrammars [
+      grammarFn
       (map
         (drv:
-          let
-            name = lib.strings.getName drv;
-          in
           {
-            name =
-              (lib.strings.replaceStrings [ "-" ] [ "_" ]
-                (lib.strings.removePrefix "tree-sitter-"
-                  (lib.strings.removeSuffix "-grammar" name)))
-              + ".so";
+            name = lib.pipe drv [
+              lib.strings.getName
+              (lib.strings.removeSuffix "-grammar")
+              (lib.strings.removePrefix "tree-sitter-")
+              (lib.strings.replaceStrings [ "-" ] [ "_" ])
+              (name: name + ".so")
+            ];
             path = "${drv}/parser";
           }
-        )
-        grammars);
+        ))
+      (linkFarm "grammars")
+    ];
 
   allGrammars = builtins.attrValues builtGrammars;
 
