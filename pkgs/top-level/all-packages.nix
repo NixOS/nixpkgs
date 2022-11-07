@@ -27255,6 +27255,8 @@ with pkgs;
 
   aacgain = callPackage ../applications/audio/aacgain { };
 
+  aaxtomp3 = callPackage ../applications/audio/aaxtomp3 {};
+
   abcde = callPackage ../applications/audio/abcde {
     inherit (python3Packages) eyeD3;
   };
