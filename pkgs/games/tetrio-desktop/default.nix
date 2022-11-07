@@ -13,6 +13,9 @@
 , gtk3
 , libpulseaudio
 , systemd
+, callPackage
+, withTetrioPlus ? false
+, tetrio-plus ? callPackage ./tetrio-plus.nix { }
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +69,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  postInstall = lib.strings.optionalString withTetrioPlus ''
+      cp ${tetrio-plus} $out/opt/TETR.IO/resources/app.asar
+    '';
 
   postFixup = ''
     wrapProgram $out/opt/TETR.IO/tetrio-desktop \
