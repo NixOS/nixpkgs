@@ -21086,6 +21086,8 @@ with pkgs;
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
+  litehtml = callPackage ../development/libraries/litehtml { };
+
   live555 = callPackage ../development/libraries/live555 { };
 
   log4cpp = callPackage ../development/libraries/log4cpp { };
