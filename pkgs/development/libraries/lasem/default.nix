@@ -1,5 +1,18 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, gobject-introspection, glib, gdk-pixbuf
-, libxml2, cairo, pango, gnome }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, intltool
+, bison
+, flex
+, gobject-introspection
+, glib
+, gdk-pixbuf
+, libxml2
+, cairo
+, pango
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "lasem";
@@ -12,10 +25,20 @@ stdenv.mkDerivation rec {
     sha256 = "0fds3fsx84ylsfvf55zp65y8xqjj5n8gbhcsk02vqglivk7izw4v";
   };
 
-  nativeBuildInputs = [ pkg-config intltool gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    bison
+    flex
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
-    glib gdk-pixbuf libxml2 cairo pango
+    glib
+    gdk-pixbuf
+    libxml2
+    cairo
+    pango
   ];
 
   enableParallelBuilding = true;
@@ -28,12 +51,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     description = "SVG and MathML rendering library";
-
     homepage = "https://wiki.gnome.org/Projects/Lasem";
-    license = lib.licenses.gpl2Plus;
-
-    platforms = lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = teams.gnome.members;
+    platforms = platforms.unix;
   };
 }
