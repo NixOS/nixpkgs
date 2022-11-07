@@ -28,6 +28,9 @@ buildPythonPackage rec {
     ifaddr
   ];
 
+  # OSError: [Errno 48] Address already in use
+  doCheck = !stdenv.isDarwin;
+
   checkInputs = [
     pytest-asyncio
     pytestCheckHook
