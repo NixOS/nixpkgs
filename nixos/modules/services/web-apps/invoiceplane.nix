@@ -25,6 +25,7 @@ let
     ENCRYPTION_KEY=
     ENCRYPTION_CIPHER=AES-256
     SETUP_COMPLETED=false
+    REMOVE_INDEXPHP=true
   '';
 
   extraConfig = hostName: cfg: pkgs.writeText "extraConfig.php" ''
@@ -331,7 +332,7 @@ in
           serviceConfig = {
             Type = "oneshot";
             User = user;
-            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/index.php/invoices/cron/recur/${cfg.cron.key}";
+            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
           };
         })
     )) eachSite);
@@ -344,9 +345,8 @@ in
       virtualHosts = mapAttrs' (hostName: cfg: (
         nameValuePair "http://${hostName}" {
           extraConfig = ''
-            root    * ${pkg hostName cfg}
+            root * ${pkg hostName cfg}
             file_server
-
             php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
           '';
         }
