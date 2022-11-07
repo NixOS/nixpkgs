@@ -2,17 +2,17 @@
 , mpg123, ffmpeg, libvorbis, libao, jansson, speex
 }:
 let
-  vgmstreamVersion = "r1702-5596-00bdb165b";
+  vgmstreamVersion = "r1800-5942-d0d2c1181";
 in
 stdenv.mkDerivation rec {
   pname = "vgmstream";
-  version = "unstable-2022-02-21";
+  version = "unstable-2022-10-29";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
-    rev = "00bdb165ba6b55420bbd5b21f54c4f7a825d15a0";
-    sha256 = "18g1yqlnf48hi2xn2z2wajnjljpdbfdqmcmi7y8hi1r964ypmfcr";
+    rev = "d0d2c1181fb7f6bb8cd464ad46332939f466ed58";
+    sha256 = "006a9vjn014ypmzn2vb8di5jvsr16959zqz8x5wpzmsmq3iwnbn3";
   };
 
   passthru.updateScript = ./update.sh;
