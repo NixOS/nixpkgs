@@ -4,7 +4,9 @@ This page documents how to import packages from Quicklisp.
 
 ## Nix dumper
 
-Run:
+1. Update the Quicklisp `:dist-url` in *import/main.lisp*
+
+2. Run:
 
 ```
 $ nix-shell

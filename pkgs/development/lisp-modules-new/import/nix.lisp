@@ -7,8 +7,8 @@
   (:import-from :org.lispbuilds.nix/util :replace-regexes)
   (:export
    :nix-eval
-   :system-master
    :nixify-symbol
+   :system-master
    :make-pname
    :*nix-attrs-depth*))
 

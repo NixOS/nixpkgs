@@ -13061,9 +13061,12 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
-  abcl = callPackage ../development/compilers/abcl {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  abcl = mkLisp {
+    pkg = callPackage ../development/compilers/abcl {
+      jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+      jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    };
+    faslExt = "abcl";
   };
 
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
@@ -13200,8 +13203,11 @@ with pkgs;
 
   cc65 = callPackage ../development/compilers/cc65 { };
 
-  ccl = callPackage ../development/compilers/ccl {
+  ccl = mkLisp {
+    pkg = callPackage ../development/compilers/ccl {
     inherit (buildPackages.darwin) bootstrap_cmds;
+    };
+    faslExt = "lx64fsl";
   };
 
   cdb = callPackage ../development/tools/database/cdb {
@@ -13364,7 +13370,10 @@ with pkgs;
 
   dictu = callPackage ../development/compilers/dictu { };
 
-  ecl = callPackage ../development/compilers/ecl { };
+  ecl = mkLisp {
+    pkg = callPackage ../development/compilers/ecl { };
+    faslExt = "fas";
+  };
   ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
   eli = callPackage ../development/compilers/eli { };
@@ -14844,7 +14853,7 @@ with pkgs;
   sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.1.11.nix {};
   sbcl_2_2_4 = callPackage ../development/compilers/sbcl/2.2.4.nix {};
   sbcl_2_2_6 = callPackage ../development/compilers/sbcl/2.2.6.nix {};
-  sbcl = sbcl_2_2_6;
+  sbcl = mkLisp { pkg = sbcl_2_2_6; };
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -15132,7 +15141,13 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  clisp = callPackage ../development/interpreters/clisp { };
+  clisp = mkLisp {
+    pkg = callPackage ../development/interpreters/clisp { };
+    faslExt = "fas";
+    flags = "-E UTF-8";
+    loadFlags = "-i";
+    evalFlags = "-x";
+  };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
 
   clojupyter = callPackage ../applications/editors/jupyter-kernels/clojupyter {
@@ -22738,7 +22753,7 @@ with pkgs;
   quicklispPackages = quicklispPackagesSBCL;
 
   # Alternative lisp-modules implementation
-  lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
+  mkLisp = recurseIntoAttrs (callPackage ../development/lisp-modules-new {});
 
 
   ### DEVELOPMENT / PERL MODULES

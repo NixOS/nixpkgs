@@ -18,6 +18,7 @@
    :init-file (resource "init" "sql")
    :url "packages.sqlite"))
 
+;; Check http://beta.quicklisp.org/dist/quicklisp.txt for updates
 (defvar *quicklisp*
   (make-instance
    'quicklisp-repository

@@ -11,7 +11,7 @@ let
 
   extras = {
     "cl+ssl" = pkg: {
-      nativeLibs = [ openssl_1_1 ];
+      nativeLibs = [ openssl ];
     };
     cl-cffi-gtk-glib = pkg: {
       nativeLibs = [ glib ];
@@ -117,7 +117,7 @@ let
       nativeLibs = [ rdkafka ];
     };
     cl-async-ssl = pkg: {
-      nativeLibs = [ openssl_1_1 ];
+      nativeLibs = [ openssl ];
     };
     osicat = pkg: {
       LD_LIBRARY_PATH = "${pkg}/posix/";
@@ -133,7 +133,7 @@ let
     if builtins.pathExists ./imported.nix
     then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
     else {};
-
+ 
   builtQlpkgs = mapAttrs (n: v: build v) qlpkgs;
 
   build = pkg:

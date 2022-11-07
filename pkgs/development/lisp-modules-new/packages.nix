@@ -1,4 +1,4 @@
-{ build-asdf-system, lisp, quicklispPackagesFor, fixupFor, pkgs, ... }:
+{ build-asdf-system, asdf, pkg, flags, loadFlags, evalFlags, faslExt, program, quicklispPackagesFor, fixupFor, pkgs, ... }:
 
 let
 
@@ -30,7 +30,7 @@ let
             export CLASSPATH=${makeSearchPath "share/java/*" o.javaLibs}:$CLASSPATH
             export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
             export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)/__fasls:${storeDir}:${storeDir}"
-            ${o.lisp} ${o.buildScript}
+            ${o.pkg}/bin/${o.program} ${o.flags or ""} ${o.loadFlags} ${o.buildScript}
           '';
           installPhase = ''
             mkdir -pv $out
@@ -45,27 +45,16 @@ let
     });
 
   # A little hacky
-  isJVM = hasSuffix "abcl" (head (splitString " " lisp));
+  isJVM = pkg.pname == "abcl";
 
   # Makes it so packages imported from Quicklisp can be re-used as
   # lispLibs ofpackages in this file.
-  ql = quicklispPackagesFor { inherit lisp; fixup = fixupFor packages; };
-
-  packages = rec {
-
-  asdf = build-with-compile-into-pwd {
-    pname = "asdf";
-    version = "3.3.5.3";
-    src = pkgs.fetchzip {
-      url = "https://gitlab.common-lisp.net/asdf/asdf/-/archive/3.3.5.3/asdf-3.3.5.3.tar.gz";
-      sha256 = "0aw200awhg58smmbdmz80bayzmbm1a6547gv0wmc8yv89gjqldbv";
-    };
-    systems = [ "asdf" "uiop" ];
+  ql = quicklispPackagesFor {
+    inherit pkg program flags evalFlags loadFlags faslExt;
+    fixup = fixupFor packages;
   };
 
-  uiop = asdf.overrideLispAttrs(o: {
-    pname = "uiop";
-  });
+  packages = rec {
 
   cffi = let
     jna = pkgs.fetchMavenArtifact {
@@ -89,12 +78,13 @@ let
     javaLibs = optionals isJVM [ jna ];
   };
 
-  cffi-libffi = ql.cffi-libffi.overrideLispAttrs (o: {
+  cffi-libffi = build-asdf-system {
+    inherit (ql.cffi-libffi) pname version asds lispLibs nativeLibs nativeBuildInputs;
     src = pkgs.fetchzip {
       url = "https://github.com/cffi/cffi/archive/3f842b92ef808900bf20dae92c2d74232c2f6d3a.tar.gz";
       sha256 = "1jilvmbbfrmb23j07lwmkbffc6r35wnvas5s4zjc84i856ccclm2";
     };
-  });
+  };
 
   cl-unicode = build-with-compile-into-pwd {
     pname = "cl-unicode";
@@ -145,7 +135,6 @@ let
     lispLibs = ql.cl-liballegro-nuklear.lispLibs ++ [ ql.cl-liballegro ];
     patches = [ ./patches/cl-liballegro-nuklear-missing-dll.patch ];
   };
-
 
   tuple = build-asdf-system {
     pname = "tuple";
@@ -238,7 +227,6 @@ let
     lispLibs = [ lessp rollback ] ++ [ ql.local-time ];
   };
 
-
   cl-fuse = build-with-compile-into-pwd {
     inherit (ql.cl-fuse) pname version src lispLibs;
     nativeBuildInputs = [ pkgs.fuse ];
@@ -273,12 +261,12 @@ let
   };
 
   mathkit = build-asdf-system {
-    inherit (ql.mathkit) pname version src asds lisp;
+    inherit (ql.mathkit) pname version src asds ;
     lispLibs = ql.mathkit.lispLibs ++ [ ql.sb-cga ];
   };
 
   nyxt-gtk = build-asdf-system {
-    inherit (ql.nyxt) pname lisp;
+    inherit (ql.nyxt) pname;
     version = "2.2.4";
 
     lispLibs = ql.nyxt.lispLibs ++ (with ql; [
@@ -290,8 +278,9 @@ let
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [
+      pkgs.makeWrapper
+
       # needed for GSETTINGS_SCHEMAS_PATH
       pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
@@ -300,7 +289,7 @@ let
     ];
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (require :asdf)
+      (load "${asdf}")
       (asdf:load-system :nyxt/gtk-application)
       (sb-ext:save-lisp-and-die "nyxt" :executable t
                                        #+sb-core-compression :compression
@@ -309,6 +298,7 @@ let
     '';
 
     # Run with WEBKIT_FORCE_SANDBOX=0 if getting a runtime error in webkitgtk-2.34.4
+    # TODO(kasper): use wrapGAppsHook
     installPhase = ql.nyxt.installPhase + ''
       rm -v $out/nyxt
       mkdir -p $out/bin
@@ -330,6 +320,22 @@ let
       sha256 = "0mzikv4abq9yqlj6dsji1wh34mjizr5prv6mvzzj29z1485fh1bj";
     };
     version = "f19162e76";
+  });
+
+  # Quicklisp missing dependency data:
+  # https://github.com/marijnh/Postmodern/blob/6a8eb691dbdd9ef780ada0c5a05ab5cf94e6f4f9/s-sql.asd#L23
+  s-sql_slash_tests = ql.s-sql_slash_tests.overrideLispAttrs (o: {
+    lispLibs = o.lispLibs ++ [
+      ql.cl-postgres_slash_tests
+    ];
+  });
+
+  # Quicklisp missing dependency data:
+  # https//github.com/marijnh/Postmodern/blob/6a8eb691dbdd9ef780ada0c5a05ab5cf94e6f4f9/simple-date.asd#L25
+  simple-date_slash_postgres-glue = ql.simple-date_slash_postgres-glue.overrideLispAttrs (o: {
+    lispLibs = o.lispLibs ++ [
+      ql.cl-postgres_slash_tests
+    ];
   });
 
   };

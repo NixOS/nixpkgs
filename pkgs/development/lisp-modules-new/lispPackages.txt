@@ -194,18 +194,6 @@ fn
 form-fiddle
 fset
 generic-cl
-generic-cl_dot_arithmetic
-generic-cl_dot_collector
-generic-cl_dot_comparison
-generic-cl_dot_container
-generic-cl_dot_internal
-generic-cl_dot_iterator
-generic-cl_dot_lazy-seq
-generic-cl_dot_map
-generic-cl_dot_math
-generic-cl_dot_object
-generic-cl_dot_sequence
-generic-cl_dot_set
 gettext
 global-vars
 glsl-docs
@@ -264,6 +252,7 @@ local-time
 log4cl
 lparallel
 lquery
+ltk
 marshal
 md5
 metabang-bind

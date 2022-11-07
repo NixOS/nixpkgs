@@ -15,24 +15,29 @@
 
 let
 
-  pkgs = import ../../../../default.nix {};
+  pkgs = import (builtins.fetchTarball {
+    url = "https://github.com/nixos/nixpkgs/archive/21.11.tar.gz";
+    sha256 = "162dywda2dvfj1248afxc45kcrg83appjd0nmdb541hl7rnncf02";
+  }) {};
 
   sbcl = "${pkgs.sbcl}/bin/sbcl --script";
 
-  alexandria = pkgs.lispPackages_new.build-asdf-system {
+  nix-cl = import ../. {};
+
+  alexandria = nix-cl.build-asdf-system {
     pname = "alexandria";
     version = "v1.4";
-    src = pkgs.fetchzip {
+    src = builtins.fetchTarball {
       url = "https://gitlab.common-lisp.net/alexandria/alexandria/-/archive/v1.4/alexandria-v1.4.tar.gz";
       sha256 = "0r1adhvf98h0104vq14q7y99h0hsa8wqwqw92h7ghrjxmsvz2z6l";
     };
     lisp = sbcl;
   };
 
-  bordeaux-threads = pkgs.lispPackages_new.build-asdf-system {
+  bordeaux-threads = nix-cl.build-asdf-system {
     pname = "bordeaux-threads";
     version = "0.8.8";
-    src = pkgs.fetchzip {
+    src = builtins.fetchTarball {
       url = "http://github.com/sionescu/bordeaux-threads/archive/v0.8.8.tar.gz";
       sha256 = "19i443fz3488v1pbbr9x24y8h8vlyhny9vj6c9jk5prm702awrp6";
     };
