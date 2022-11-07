@@ -1577,6 +1577,10 @@ self: super: {
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
+  hledger_1_27_1 = doDistribute (super.hledger_1_27_1.override {
+    hledger-lib = self.hledger-lib_1_27_1;
+  });
+
   hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
