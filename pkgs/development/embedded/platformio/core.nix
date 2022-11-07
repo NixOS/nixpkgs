@@ -148,6 +148,5 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
-    broken = stdenv.isAarch64;
   };
 }
