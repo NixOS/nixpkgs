@@ -100,10 +100,10 @@ stdenv.mkDerivation {
   name = "hello";
   src = fetchgit {
     url = "https://...";
-    sparseCheckout = ''
-      directory/to/be/included
-      another/directory
-    '';
+    sparseCheckout = [
+      "directory/to/be/included"
+      "another/directory"
+    ];
     sha256 = "0000000000000000000000000000000000000000000000000000";
   };
 }
