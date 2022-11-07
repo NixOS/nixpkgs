@@ -25330,6 +25330,8 @@ with pkgs;
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
+  mdevctl = callPackage ../os-specific/linux/mdevctl { };
+
   metastore = callPackage ../os-specific/linux/metastore { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
