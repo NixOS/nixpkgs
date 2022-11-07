@@ -364,6 +364,18 @@ final: prev: {
     '';
   };
 
+  percollate = prev.percollate.override (oldAttrs: {
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    buildInputs = with pkgs; [ final.node-gyp-build cairo pango pixman pkg-config ];
+    prePatch = ''
+      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+    '';
+    postInstall = ''
+      wrapProgram $out/bin/percollate \
+          --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium}/bin/chromium
+    '';
+  });
+
   photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
     meta.broken = true; # use the top-level package instead
   };
