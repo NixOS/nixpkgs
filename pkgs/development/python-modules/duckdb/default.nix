@@ -19,6 +19,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     cd tools/pythonpkg
+    substituteInPlace setup.py --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

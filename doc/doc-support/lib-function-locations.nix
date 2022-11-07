@@ -38,7 +38,7 @@ let
       substr = builtins.substring prefixLen filenameLen filename;
       in substr;
 
-  removeNixpkgs = removeFilenamePrefix pkgs.path;
+  removeNixpkgs = removeFilenamePrefix (builtins.toString pkgs.path);
 
   liblocations =
     builtins.filter
