@@ -9,6 +9,10 @@ let
     name = "configuration.py";
     text = ''
       STATIC_ROOT = '${staticDir}'
+      MEDIA_ROOT = '${cfg.dataDir}/media'
+      REPORTS_ROOT = '${cfg.dataDir}/reports'
+      SCRIPTS_ROOT = '${cfg.dataDir}/scripts'
+
       ALLOWED_HOSTS = ['*']
       DATABASE = {
         'NAME': 'netbox',
