@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools
+{ stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 , httpSupport ? false
@@ -33,7 +33,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
 
   outputs = [ "out" "fd" ];
 
-  nativeBuildInputs = [ util-linux nasm acpica-tools ];
+  nativeBuildInputs = [ util-linux nasm acpica-tools ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ];
   strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
@@ -43,6 +44,8 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
+
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang "-Qunused-arguments";
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin

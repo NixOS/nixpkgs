@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , edk2
+, llvmPackages
 , util-linux
 , nasm
 , python3
@@ -8,8 +10,11 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
   pname = "edk2-uefi-shell";
   inherit (edk2) version;
 
-  nativeBuildInputs = [ util-linux nasm python3 ];
+  nativeBuildInputs = [ util-linux nasm python3 ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ];
   strictDeps = true;
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-fno-pic" "-Qunused-arguments" ];
 
   # We only have a .efi file in $out which shouldn't be patched or stripped
   dontPatchELF = true;
