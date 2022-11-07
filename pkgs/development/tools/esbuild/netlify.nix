@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
+, netlify-cli
 }:
 
 buildGoModule rec {
@@ -28,6 +29,12 @@ buildGoModule rec {
       hash = "sha256-va/bXRBQf9qgE9LZXcKKAa0ZpMt/QG7BFClJ8bPWG1Y=";
     })
   ];
+
+  passthru = {
+    tests = {
+      inherit netlify-cli;
+    };
+  };
 
   meta = with lib; {
     description = "A fork of esbuild maintained by netlify";
