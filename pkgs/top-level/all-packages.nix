@@ -7078,10 +7078,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-hound = callPackage ../tools/security/git-hound {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  git-hound = callPackage ../tools/security/git-hound { };
 
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 

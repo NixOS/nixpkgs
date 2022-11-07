@@ -14,7 +14,8 @@ buildGoModule rec {
     sha256 = "sha256-HD5OK8HjnLDbyC/TmVI2HfBRIUCyyHTbA3JvKoeXV5E=";
   };
 
-  vendorSha256 = "sha256-qnIcjk2mzG/51ouhrAW6R3ZqoUSL6ZzYCOVZvKS7sBQ=";
+  proxyVendor = true; # fix vendor with go > 1.17, should be able to remove when package is bumped
+  vendorSha256 = "sha256-O3BouYwTJKkPgF3vQdNcgZtR6H3gxoK6Cfw0nSb2c5k=";
 
   meta = with lib; {
     description = "Reconnaissance tool for GitHub code search";
