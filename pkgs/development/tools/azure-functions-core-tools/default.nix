@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.mit;
-    maintainers = with maintainers; [ jshcmpbll ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
