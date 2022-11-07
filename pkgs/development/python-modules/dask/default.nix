@@ -2,6 +2,7 @@
 , stdenv
 , bokeh
 , buildPythonPackage
+, click
 , cloudpickle
 , distributed
 , fastparquet
@@ -26,19 +27,28 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.9.1";
+  version = "2022.10.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-4Tok9eYhi2FF+8bpKnwKT3KIRGHIMtxczTkZ6qD8x7g=";
+    hash = "sha256-zHJR2WjHigUMWtRJW25+gk1fKGKedU53BBjwx5zaodA=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Fix test_repartition_npartitions on platforms other than x86-64
+      url = "https://github.com/dask/dask/commit/65f40ad461c57065f981e6213e33b1d13cc9bc8f.patch";
+      hash = "sha256-KyTSms4ik1kYtL+I/huAxD+zK2AAuPkwmHA9FYk601Y=";
+    })
+  ];
+
   propagatedBuildInputs = [
+    click
     cloudpickle
     fsspec
     packaging
@@ -109,6 +119,8 @@ buildPythonPackage rec {
     "test_read_dir_nometa"
   ] ++ [
     "test_chunksize_files"
+    # TypeError: 'ArrowStringArray' with dtype string does not support reduction 'min'
+    "test_set_index_string"
   ];
 
   __darwinAllowLocalNetworking = true;
