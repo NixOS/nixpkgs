@@ -125,7 +125,6 @@
     "javaVersion": 8,
     "modloader": "vanilla"
   },
-
   "forge-1.19": {
     "url": "https://maven.minecraftforge.net/net/minecraftforge/forge/1.19.2-43.1.1/forge-1.19.2-43.1.1-installer.jar",
     "sha1": "k7l9yb9gqilaisy03ahcwgnw2y3yf36y",
@@ -230,8 +229,7 @@
     "version": "1.5.2",
     "javaVersion": 8,
     "modloader": "forge"
-  }, 
-
+  },
   "fabric-1.19": {
     "url": "https://meta.fabricmc.net/v2/versions/loader/1.19.2/0.14.10/0.11.1/server/jar",
     "sha1": "3w4b5p9b6m0dbcvv75imfbqb4y8g0bd1",
@@ -275,4 +273,3 @@
     "modloader": "fabric"
   }
 }
-
