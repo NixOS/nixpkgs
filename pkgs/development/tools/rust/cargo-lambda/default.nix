@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IK4HVj8Y8Vz+mza8G9C+m5JRfNT3BWWdlbQQkJPu6RI=";
+    sha256 = "sha256-dEJOoV91DIQL7KPbLQrgCKdCF7ZMSZMHVLq6l1sg4F0=";
   };
 
-  cargoSha256 = "sha256-oSqoSvv8IiChtduQQA31wItHcsnRBAQgOCrQN4sjcx8=";
+  cargoSha256 = "sha256-qW4a4VPpPSdt0Z4nRA4/fHpW0cfDxOPQyEAdJidt+0o=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Cargo subcommand to help you work with AWS Lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;
-    maintainers = with maintainers; [ taylor1791 ];
+    maintainers = with maintainers; [ taylor1791 calavera ];
   };
 }

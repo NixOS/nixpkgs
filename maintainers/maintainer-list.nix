@@ -2156,6 +2156,13 @@
     githubId = 51231053;
     name = "Daniel";
   };
+  calavera = {
+    email = "david.calavera@gmail.com";
+    github = "calavera";
+    githubId = 1050;
+    matrix = "@davidcalavera:matrix.org";
+    name = "David Calavera";
+  };
   callahad = {
     email = "dan.callahan@gmail.com";
     github = "callahad";
