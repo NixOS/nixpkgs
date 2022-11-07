@@ -25087,6 +25087,8 @@ with pkgs;
 
   tgt = callPackage ../tools/networking/tgt { };
 
+  tg_history_dumper = callPackage ../tools/misc/tg_history_dumper { };
+
   lkl = callPackage ../applications/virtualization/lkl { };
   lklWithFirewall = callPackage ../applications/virtualization/lkl { firewallSupport = true; };
 
