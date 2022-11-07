@@ -41,12 +41,18 @@ let
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
+  # TODO: use linkFarm
   grammars =
-    runCommand "grammars" { } (''
+    runCommand "grammars" { } ''
       mkdir $out
-    '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars { inherit lib; }))));
+      ${lib.pipe
+         (import ./grammars { inherit lib; })
+         [
+          (lib.mapAttrsToList
+            (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"))
+          lib.concatStrings
+         ]}
+    '';
 
   builtGrammars =
     let
