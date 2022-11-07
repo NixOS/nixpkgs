@@ -887,7 +887,7 @@ Packages may expect or require other utilities to be available at runtime.
 
 Use `--prefix` to explicitly set dependencies in `PATH`.
 
-:::{note}
+::: {.note}
 `--prefix` essentially hard-codes dependencies into the wrapper.
 They cannot be overridden without rebuilding the package.
 :::
