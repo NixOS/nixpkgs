@@ -132,6 +132,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>protonup</literal> has been aliased to and replaced
+          by <literal>protonup-ng</literal> due to upstream not
+          maintaining it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Perl has been updated to 5.36, and its core module
           <literal>HTTP::Tiny</literal> was patched to verify SSL/TLS
           certificates by default.
