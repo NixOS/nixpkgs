@@ -2387,17 +2387,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # GHC 9 support https://github.com/lambdabot/dice/pull/2
-  dice = appendPatch (fetchpatch {
-    name = "dice-ghc9.patch";
-    url = "https://github.com/lambdabot/dice/commit/80d6fd443cb17b21d91b725f994ece6e8274e0a0.patch";
-    excludes = [ ".gitignore" ];
-    sha256 = "sha256-MtS1n7v5D6MRWWzzTyKl3Lqd/NhD1bV+g80wnhZ3P/Y=";
-  }) (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.dice);
-
   # GHC 9 support https://github.com/lambdabot/lambdabot/pull/204
   lambdabot-core = appendPatch ./patches/lambdabot-core-ghc9.patch (overrideCabal (drv: {
     revision = null;
