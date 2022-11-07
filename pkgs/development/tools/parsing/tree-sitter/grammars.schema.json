@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Definition of all tree-sitter grammars we know of.\n\nUsed by both the update script and the default.nix to construct the list of grammars.\n\nGrammar list: https://github.com/tree-sitter/tree-sitter/blob/master/docs/index.md\n",
+  "type": "object",
+  "required": [
+    "ignoredTreeSitterOrgRepos"
+  ],
+  "properties": {
+    "ignoredTreeSitterOrgRepos": {
+      "description": "Repositories in the tree-sitter github org that we want to ignore.\nThese do not contain grammars.\n\nWe want to have a full overview of the tree-sitter organization, so that we can notice when a new grammar is added.\n",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "repo",
+          "reason"
+        ],
+        "properties": {
+          "repo": {
+            "description": "Repository in the tree-sitter github organization which should be ignored.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Reason why this repository is ignored.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "knownTreeSitterOrgGrammarRepos": {
+      "description": "Grammars we want to fetch from the tree-sitter github orga",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "repo"
+        ],
+        "properties": {
+          "repo": {
+            "description": "Repository name in the tree-sitter github organizaiton, containing a grammar. If there is no `grammars` field, this name will also be used as the name of the grammar & the nix attribute.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "otherGrammars": {
+      "description": "Additional grammars that are not in the official github orga.\nIf you need a grammar that already exists in the official orga, make sure to give it a different name.\n",
+      "type": "object",
+      "additionalProperties": {
+        "allOf": [
+          {
+            "description": "A grammar that does not live in the official tree-sitter github orga.",
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of repo to fetch.",
+                "enum": [
+                  "github",
+                  "gitlab"
+                ]
+              }
+            }
+          },
+          {
+            "oneOf": [
+              {
+                "required": [
+                  "orga",
+                  "repo"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "github"
+                  },
+                  "orga": {
+                    "description": "The github organization of this grammar’s repo",
+                    "type": "string"
+                  },
+                  "repo": {
+                    "description": "The github repo",
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "required": [
+                  "projectId"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "gitlab"
+                  },
+                  "projectId": {
+                    "description": "The Gitlab projectId of this repository. It is displayed below the repository name on the web UI.",
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

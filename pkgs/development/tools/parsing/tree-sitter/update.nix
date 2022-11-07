@@ -11,7 +11,7 @@
 
 
 let
-  grammarsToml = builtins.fromTOML (builtins.readFile ./grammars.toml);
+  grammarsJson = lib.importJSON ./grammars.json;
 
 
   # a list of {nixRepoAttrName, type, <type-specific>}
@@ -29,11 +29,11 @@ let
                 inherit repo;
               };
             })
-          grammarsToml.knownTreeSitterOrgGrammarRepos);
+          grammarsJson.knownTreeSitterOrgGrammarRepos);
 
       merged =
         mergeAttrsUnique
-          grammarsToml.otherGrammars
+          grammarsJson.otherGrammars
           treeSitterOrgaGrammars;
     in
       lib.mapAttrsToList
@@ -64,13 +64,13 @@ let
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
         printf = "${coreutils}/bin/printf";
       };
-      inherit (grammarsToml)
+      inherit (grammarsJson)
         ignoredTreeSitterOrgRepos
         ;
       knownTreeSitterOrgGrammarRepos =
         map
           ({repo, ...}: repo)
-          grammarsToml.knownTreeSitterOrgGrammarRepos;
+          grammarsJson.knownTreeSitterOrgGrammarRepos;
     }
     (writers.writePython3 "updateImpl" {
         flakeIgnore = ["E501"];

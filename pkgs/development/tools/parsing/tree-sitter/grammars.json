@@ -1,0 +1,492 @@
+{
+  "$schema": "./grammars.schema.json",
+  "ignoredTreeSitterOrgRepos": [
+    {
+      "repo": "tree-sitter",
+      "reason": "main implementation"
+    },
+    {
+      "repo": "tree-sitter-cli",
+      "reason": "cli implementation"
+    },
+    {
+      "repo": "haskell-tree-sitter",
+      "reason": "this is the haskell language bindings, tree-sitter-haskell is the grammar"
+    },
+    {
+      "repo": "ruby-tree-sitter.old",
+      "reason": "this is the ruby language bindings, tree-sitter-ruby is the grammar"
+    },
+    {
+      "repo": "rust-tree-sitter",
+      "reason": "this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar"
+    },
+    {
+      "repo": "node-tree-sitter",
+      "reason": "this is the nodejs language bindings, tree-sitter-javascript is the grammar"
+    },
+    {
+      "repo": "py-tree-sitter",
+      "reason": "this is the python language bindings, tree-sitter-python is the grammar"
+    },
+    {
+      "repo": "afl-tree-sitter",
+      "reason": "afl fuzzing for tree sitter"
+    },
+    {
+      "repo": "highlight-schema",
+      "reason": "archived"
+    },
+    {
+      "repo": "tree-sitter.github.io",
+      "reason": "website"
+    },
+    {
+      "repo": "tree-sitter-razor",
+      "reason": "not maintained"
+    },
+    {
+      "repo": "tree-sitter-graph",
+      "reason": "rust library for constructing arbitrary graph structures from source code"
+    },
+    {
+      "repo": "tree-sitter-swift",
+      "reason": "abandoned"
+    }
+  ],
+  "knownTreeSitterOrgGrammarRepos": [
+    {
+      "repo": "tree-sitter-javascript"
+    },
+    {
+      "repo": "tree-sitter-c"
+    },
+    {
+      "repo": "tree-sitter-json"
+    },
+    {
+      "repo": "tree-sitter-cpp"
+    },
+    {
+      "repo": "tree-sitter-ruby"
+    },
+    {
+      "repo": "tree-sitter-go"
+    },
+    {
+      "repo": "tree-sitter-c-sharp"
+    },
+    {
+      "repo": "tree-sitter-python"
+    },
+    {
+      "repo": "tree-sitter-typescript"
+    },
+    {
+      "repo": "tree-sitter-rust"
+    },
+    {
+      "repo": "tree-sitter-bash"
+    },
+    {
+      "repo": "tree-sitter-php"
+    },
+    {
+      "repo": "tree-sitter-java"
+    },
+    {
+      "repo": "tree-sitter-scala"
+    },
+    {
+      "repo": "tree-sitter-ocaml"
+    },
+    {
+      "repo": "tree-sitter-julia"
+    },
+    {
+      "repo": "tree-sitter-agda"
+    },
+    {
+      "repo": "tree-sitter-fluent"
+    },
+    {
+      "repo": "tree-sitter-html"
+    },
+    {
+      "repo": "tree-sitter-haskell"
+    },
+    {
+      "repo": "tree-sitter-regex"
+    },
+    {
+      "repo": "tree-sitter-css"
+    },
+    {
+      "repo": "tree-sitter-verilog"
+    },
+    {
+      "repo": "tree-sitter-jsdoc"
+    },
+    {
+      "repo": "tree-sitter-ql"
+    },
+    {
+      "repo": "tree-sitter-ql-dbscheme"
+    },
+    {
+      "repo": "tree-sitter-embedded-template"
+    },
+    {
+      "repo": "tree-sitter-tsq"
+    },
+    {
+      "repo": "tree-sitter-toml"
+    }
+  ],
+  "otherGrammars": {
+    "tree-sitter-beancount": {
+      "type": "github",
+      "orga": "polarmutex",
+      "repo": "tree-sitter-beancount"
+    },
+    "tree-sitter-clojure": {
+      "type": "github",
+      "orga": "sogaiu",
+      "repo": "tree-sitter-clojure"
+    },
+    "tree-sitter-comment": {
+      "type": "github",
+      "orga": "stsewd",
+      "repo": "tree-sitter-comment"
+    },
+    "tree-sitter-dart": {
+      "type": "github",
+      "orga": "usernobody14",
+      "repo": "tree-sitter-dart"
+    },
+    "tree-sitter-elisp": {
+      "type": "github",
+      "orga": "wilfred",
+      "repo": "tree-sitter-elisp"
+    },
+    "tree-sitter-nix": {
+      "type": "github",
+      "orga": "cstrahan",
+      "repo": "tree-sitter-nix"
+    },
+    "tree-sitter-latex": {
+      "type": "github",
+      "orga": "latex-lsp",
+      "repo": "tree-sitter-latex"
+    },
+    "tree-sitter-lua": {
+      "type": "github",
+      "orga": "MunifTanjim",
+      "repo": "tree-sitter-lua"
+    },
+    "tree-sitter-fennel": {
+      "type": "github",
+      "orga": "travonted",
+      "repo": "tree-sitter-fennel"
+    },
+    "tree-sitter-make": {
+      "type": "github",
+      "orga": "alemuller",
+      "repo": "tree-sitter-make"
+    },
+    "tree-sitter-markdown": {
+      "type": "github",
+      "orga": "MDeiml",
+      "repo": "tree-sitter-markdown"
+    },
+    "tree-sitter-rego": {
+      "type": "github",
+      "orga": "FallenAngel97",
+      "repo": "tree-sitter-rego"
+    },
+    "tree-sitter-rst": {
+      "type": "github",
+      "orga": "stsewd",
+      "repo": "tree-sitter-rst"
+    },
+    "tree-sitter-svelte": {
+      "type": "github",
+      "orga": "Himujjal",
+      "repo": "tree-sitter-svelte"
+    },
+    "tree-sitter-sql": {
+      "type": "github",
+      "orga": "m-novikov",
+      "repo": "tree-sitter-sql"
+    },
+    "tree-sitter-vim": {
+      "type": "github",
+      "orga": "vigoux",
+      "repo": "tree-sitter-viml"
+    },
+    "tree-sitter-yaml": {
+      "type": "github",
+      "orga": "ikatyang",
+      "repo": "tree-sitter-yaml"
+    },
+    "tree-sitter-zig": {
+      "type": "github",
+      "orga": "maxxnino",
+      "repo": "tree-sitter-zig"
+    },
+    "tree-sitter-fish": {
+      "type": "github",
+      "orga": "ram02z",
+      "repo": "tree-sitter-fish"
+    },
+    "tree-sitter-dot": {
+      "type": "github",
+      "orga": "rydesun",
+      "repo": "tree-sitter-dot"
+    },
+    "tree-sitter-norg": {
+      "type": "github",
+      "orga": "nvim-neorg",
+      "repo": "tree-sitter-norg"
+    },
+    "tree-sitter-commonlisp": {
+      "type": "github",
+      "orga": "thehamsta",
+      "repo": "tree-sitter-commonlisp"
+    },
+    "tree-sitter-cuda": {
+      "type": "github",
+      "orga": "thehamsta",
+      "repo": "tree-sitter-cuda"
+    },
+    "tree-sitter-glsl": {
+      "type": "github",
+      "orga": "thehamsta",
+      "repo": "tree-sitter-glsl"
+    },
+    "tree-sitter-dockerfile": {
+      "type": "github",
+      "orga": "camdencheek",
+      "repo": "tree-sitter-dockerfile"
+    },
+    "tree-sitter-ledger": {
+      "type": "github",
+      "orga": "cbarrete",
+      "repo": "tree-sitter-ledger"
+    },
+    "tree-sitter-gomod": {
+      "type": "github",
+      "orga": "camdencheek",
+      "repo": "tree-sitter-go-mod"
+    },
+    "tree-sitter-gowork": {
+      "type": "github",
+      "orga": "omertuc",
+      "repo": "tree-sitter-go-work"
+    },
+    "tree-sitter-graphql": {
+      "type": "github",
+      "orga": "bkegley",
+      "repo": "tree-sitter-graphql"
+    },
+    "tree-sitter-pgn": {
+      "type": "github",
+      "orga": "rolandwalker",
+      "repo": "tree-sitter-pgn"
+    },
+    "tree-sitter-perl": {
+      "type": "github",
+      "orga": "ganezdragon",
+      "repo": "tree-sitter-perl"
+    },
+    "tree-sitter-kotlin": {
+      "type": "github",
+      "orga": "fwcd",
+      "repo": "tree-sitter-kotlin"
+    },
+    "tree-sitter-scss": {
+      "type": "github",
+      "orga": "serenadeai",
+      "repo": "tree-sitter-scss"
+    },
+    "tree-sitter-erlang": {
+      "type": "github",
+      "orga": "abstractmachineslab",
+      "repo": "tree-sitter-erlang"
+    },
+    "tree-sitter-elixir": {
+      "type": "github",
+      "orga": "elixir-lang",
+      "repo": "tree-sitter-elixir"
+    },
+    "tree-sitter-surface": {
+      "type": "github",
+      "orga": "connorlay",
+      "repo": "tree-sitter-surface"
+    },
+    "tree-sitter-heex": {
+      "type": "github",
+      "orga": "connorlay",
+      "repo": "tree-sitter-heex"
+    },
+    "tree-sitter-supercollider": {
+      "type": "github",
+      "orga": "madskjeldgaard",
+      "repo": "tree-sitter-supercollider"
+    },
+    "tree-sitter-tlaplus": {
+      "type": "github",
+      "orga": "tlaplus-community",
+      "repo": "tree-sitter-tlaplus"
+    },
+    "tree-sitter-glimmer": {
+      "type": "github",
+      "orga": "alexlafroscia",
+      "repo": "tree-sitter-glimmer"
+    },
+    "tree-sitter-pug": {
+      "type": "github",
+      "orga": "zealot128",
+      "repo": "tree-sitter-pug"
+    },
+    "tree-sitter-vue": {
+      "type": "github",
+      "orga": "ikatyang",
+      "repo": "tree-sitter-vue"
+    },
+    "tree-sitter-elm": {
+      "type": "github",
+      "orga": "elm-tooling",
+      "repo": "tree-sitter-elm"
+    },
+    "tree-sitter-yang": {
+      "type": "github",
+      "orga": "hubro",
+      "repo": "tree-sitter-yang"
+    },
+    "tree-sitter-query": {
+      "type": "github",
+      "orga": "nvim-treesitter",
+      "repo": "tree-sitter-query"
+    },
+    "tree-sitter-sparql": {
+      "type": "github",
+      "orga": "bonabeavis",
+      "repo": "tree-sitter-sparql"
+    },
+    "tree-sitter-gdscript": {
+      "type": "github",
+      "orga": "prestonknopp",
+      "repo": "tree-sitter-gdscript"
+    },
+    "tree-sitter-godot-resource": {
+      "type": "github",
+      "orga": "prestonknopp",
+      "repo": "tree-sitter-godot-resource"
+    },
+    "tree-sitter-turtle": {
+      "type": "github",
+      "orga": "bonabeavis",
+      "repo": "tree-sitter-turtle"
+    },
+    "tree-sitter-devicetree": {
+      "type": "github",
+      "orga": "joelspadin",
+      "repo": "tree-sitter-devicetree"
+    },
+    "tree-sitter-r": {
+      "type": "github",
+      "orga": "r-lib",
+      "repo": "tree-sitter-r"
+    },
+    "tree-sitter-bibtex": {
+      "type": "github",
+      "orga": "latex-lsp",
+      "repo": "tree-sitter-bibtex"
+    },
+    "tree-sitter-fortran": {
+      "type": "github",
+      "orga": "stadelmanma",
+      "repo": "tree-sitter-fortran"
+    },
+    "tree-sitter-cmake": {
+      "type": "github",
+      "orga": "uyha",
+      "repo": "tree-sitter-cmake"
+    },
+    "tree-sitter-janet-simple": {
+      "type": "github",
+      "orga": "sogaiu",
+      "repo": "tree-sitter-janet-simple"
+    },
+    "tree-sitter-json5": {
+      "type": "github",
+      "orga": "joakker",
+      "repo": "tree-sitter-json5"
+    },
+    "tree-sitter-pioasm": {
+      "type": "github",
+      "orga": "leo60228",
+      "repo": "tree-sitter-pioasm"
+    },
+    "tree-sitter-hjson": {
+      "type": "github",
+      "orga": "winston0410",
+      "repo": "tree-sitter-hjson"
+    },
+    "tree-sitter-llvm": {
+      "type": "github",
+      "orga": "benwilliamgraham",
+      "repo": "tree-sitter-llvm"
+    },
+    "tree-sitter-http": {
+      "type": "github",
+      "orga": "ntbbloodbath",
+      "repo": "tree-sitter-http"
+    },
+    "tree-sitter-prisma": {
+      "type": "github",
+      "orga": "victorhqc",
+      "repo": "tree-sitter-prisma"
+    },
+    "tree-sitter-org-nvim": {
+      "type": "github",
+      "orga": "milisims",
+      "repo": "tree-sitter-org"
+    },
+    "tree-sitter-hcl": {
+      "type": "github",
+      "orga": "MichaHoffmann",
+      "repo": "tree-sitter-hcl"
+    },
+    "tree-sitter-scheme": {
+      "type": "github",
+      "orga": "6cdh",
+      "repo": "tree-sitter-scheme"
+    },
+    "tree-sitter-tiger": {
+      "type": "github",
+      "orga": "ambroisie",
+      "repo": "tree-sitter-tiger"
+    },
+    "tree-sitter-nickel": {
+      "type": "github",
+      "orga": "nickel-lang",
+      "repo": "tree-sitter-nickel"
+    },
+    "tree-sitter-smithy": {
+      "type": "github",
+      "orga": "indoorvivants",
+      "repo": "tree-sitter-smithy"
+    },
+    "tree-sitter-jsonnet": {
+      "type": "github",
+      "orga": "sourcegraph",
+      "repo": "tree-sitter-jsonnet"
+    },
+    "tree-sitter-jsonc": {
+      "type": "gitlab",
+      "projectId": "24426815"
+    }
+  }
+}
