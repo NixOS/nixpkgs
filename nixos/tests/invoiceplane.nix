@@ -46,37 +46,37 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
         with subtest("Finish InvoicePlane setup"):
           machine.succeed(
-            f"curl -sSfL --cookie-jar cjar {site_name}/index.php/setup/language"
+            f"curl -sSfL --cookie-jar cjar {site_name}/setup/language"
           )
           csrf_token = machine.succeed(
             "grep ip_csrf_cookie cjar | cut -f 7 | tr -d '\n'"
           )
           machine.succeed(
-            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&ip_lang=english&btn_continue=Continue' {site_name}/index.php/setup/language"
+            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&ip_lang=english&btn_continue=Continue' {site_name}/setup/language"
           )
           csrf_token = machine.succeed(
             "grep ip_csrf_cookie cjar | cut -f 7 | tr -d '\n'"
           )
           machine.succeed(
-            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/index.php/setup/prerequisites"
+            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/setup/prerequisites"
           )
           csrf_token = machine.succeed(
             "grep ip_csrf_cookie cjar | cut -f 7 | tr -d '\n'"
           )
           machine.succeed(
-            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/index.php/setup/configure_database"
+            f"curl -sSfL --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/setup/configure_database"
           )
           csrf_token = machine.succeed(
             "grep ip_csrf_cookie cjar | cut -f 7 | tr -d '\n'"
           )
           machine.succeed(
-            f"curl -sSfl --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/index.php/setup/install_tables"
+            f"curl -sSfl --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/setup/install_tables"
           )
           csrf_token = machine.succeed(
             "grep ip_csrf_cookie cjar | cut -f 7 | tr -d '\n'"
           )
           machine.succeed(
-            f"curl -sSfl --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/index.php/setup/upgrade_tables"
+            f"curl -sSfl --cookie cjar --cookie-jar cjar -d '_ip_csrf={csrf_token}&btn_continue=Continue' {site_name}/setup/upgrade_tables"
           )
   '';
 })
