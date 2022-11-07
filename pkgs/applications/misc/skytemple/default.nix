@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gobject-introspection
 , gtk3
-, gtksourceview3
+, gtksourceview4
 , webkitgtk
 , wrapGAppsHook
 , python3Packages
@@ -10,19 +10,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.3.11.post1";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-H3apAb5viupj7cNsiHsTMDBAhK5sUzpV4aOn5KVu6mI=";
+    hash = "sha256-NK0yLxs7/pVpl9LCz6ggYsaUDuEAj6edBEPC+4yCxNM=";
   };
 
   buildInputs = [
     gobject-introspection
     gtk3
-    gtksourceview3
+    gtksourceview4
     # webkitgkt is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     skytemple-icons
     skytemple-ssb-debugger
     tilequant
-  ];
+  ] ++ skytemple-files.optional-dependencies.spritecollab;
 
   doCheck = false; # there are no tests
 
