@@ -49,21 +49,26 @@ buildFHSUserEnv {
     ];
   in pkgs: with pkgs; [
     alsa-lib
+    alsa-plugins
     bash
     cairo
     coreutils
     cups
     dbus
+    freealut
     freetype
     fribidi
     giflib
     glib
     gnutls
+    gst_all_1.gst-plugins-base
     gtk3
     lcms2
     libevdev
+    libgcrypt
     libGLU
     libglvnd
+    libgpg-error
     libjpeg
     libkrb5
     libmpeg2
@@ -83,16 +88,19 @@ buildFHSUserEnv {
     libxkbcommon
     libxml2
     mpg123
+    ncurses
     ocl-icd
     openldap
     pipewire
     samba4
     sane-backends
     SDL2
+    sqlite
     udev
     udev
     unixODBC
     util-linux
+    v4l-utils
     vulkan-loader
     wayland
     zlib
