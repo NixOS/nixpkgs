@@ -2768,6 +2768,8 @@ with pkgs;
 
   itch = callPackage ../games/itch {};
 
+  itd = callPackage ../applications/misc/itd { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
