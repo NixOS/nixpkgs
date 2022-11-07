@@ -31,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
   # `gctest` fails under emulation on aarch64-darwin
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  # https://github.com/NixOS/nixpkgs/pull/191339#issuecomment-1250205225
+  doCheck = !(stdenv.isDarwin && stdenv.buildPlatform.isAarch64 && stdenv.hostPlatform.isx86_64);
 
   enableParallelBuilding = true;
 
