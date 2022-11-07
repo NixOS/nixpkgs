@@ -2098,10 +2098,7 @@ with pkgs;
 
   arandr = callPackage ../tools/X11/arandr { };
 
-  inherit (callPackages ../servers/nosql/arangodb {
-    stdenv = gcc8Stdenv;
-  }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
-  arangodb = arangodb_3_4;
+  arangodb = callPackage ../servers/nosql/arangodb { };
 
   # arcanist currently crashes with some workflows on php8.1, use 8.0
   arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
