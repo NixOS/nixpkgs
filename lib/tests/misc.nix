@@ -727,7 +727,7 @@ runTests {
       float = 0.1337;
       bool = true;
       emptystring = "";
-      string = ''fno"rd'';
+      string = "fn\${o}\"r\\d";
       newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
@@ -735,7 +735,7 @@ runTests {
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       emptylist = [];
-      attrs = { foo = null; "foo bar" = "baz"; };
+      attrs = { foo = null; "foo b/ar" = "baz"; };
       emptyattrs = {};
       drv = deriv;
     };
@@ -744,7 +744,7 @@ runTests {
       float = "~0.133700";
       bool = "true";
       emptystring = ''""'';
-      string = ''"fno\"rd"'';
+      string = ''"fn\''${o}\"r\\d"'';
       newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
@@ -752,7 +752,7 @@ runTests {
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
       emptyattrs = "{ }";
       drv = "<derivation ${deriv.name}>";
     };
@@ -799,8 +799,8 @@ runTests {
       newlinestring = "\n";
       multilinestring = ''
         hello
-        there
-        test
+        ''${there}
+        te'''st
       '';
       multilinestring' = ''
         hello
@@ -827,8 +827,8 @@ runTests {
       multilinestring = ''
         '''
           hello
-          there
-          test
+          '''''${there}
+          te''''st
         ''''';
       multilinestring' = ''
         '''
