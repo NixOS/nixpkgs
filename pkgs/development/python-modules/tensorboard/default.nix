@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pushd unpacked/tensorboard-${version}
 
     substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<0.6,>=0.4.1)" \
+      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<1.0,>=0.4.1)" \
       --replace "protobuf (<3.20,>=3.9.2)" "protobuf (>=3.9.2)"
 
     popd
