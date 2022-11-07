@@ -30,10 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 
-  # this stanza can be dropped when a release fixes this issue:
-  # https://github.com/ivmai/bdwgc/issues/376
+  # This stanza can be dropped when a release fixes this issue:
+  #   https://github.com/ivmai/bdwgc/issues/376
+  # The version is checked with == instead of versionAtLeast so we
+  # don't forget to disable the fix (and if the next release does
+  # not fix the problem the test failure will be a reminder to
+  # extend the set of versions requiring the workaround).
   makeFlags = if (stdenv.hostPlatform.isPower64 &&
-                  lib.versionAtLeast finalAttrs.version "8.2.2")
+                  finalAttrs.version == "8.2.2")
     then [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
