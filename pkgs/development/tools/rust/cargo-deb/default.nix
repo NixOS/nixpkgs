@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
-  version = "1.30.0";
+  version = "1.41.0";
 
   src = fetchFromGitHub {
-    owner = "mmstick";
+    owner = "kornelski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rAmG6Aj0D9dHVueh1BN1Chhit+XFhqGib1WTvMDy0LI=";
+    sha256 = "sha256-2N7KFkR0HZHvEO6ud88MyvPi4epyq0ISMXz+RPWNDoQ=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "sha256-MEpyEdjLWNZvqE7gJLvQ169tgmJRzec4vqQI9fF3xr8=";
+  cargoSha256 = "sha256-PJLKEcbWlGqfi7RxWO4mwxByMD/qeK0MWy+r61WSKzo=";
 
   preCheck = ''
     substituteInPlace tests/command.rs \
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";
-    homepage = "https://github.com/mmstick/cargo-deb";
+    homepage = "https://github.com/kornelski/cargo-deb";
     license = licenses.mit;
     # test failures:
     #   control::tests::generate_scripts_generates_maintainer_scripts_for_unit
