@@ -30019,6 +30019,8 @@ with pkgs;
 
   lingot = callPackage ../applications/audio/lingot { };
 
+  litebrowser = callPackage ../applications/networking/browsers/litebrowser { };
+
   littlegptracker = callPackage ../applications/audio/littlegptracker {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
