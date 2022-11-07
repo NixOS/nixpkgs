@@ -3091,6 +3091,12 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  danielsiepmann = {
+    email = "coding@daniel-siepmann.de";
+    github = "danielsiepmann";
+    githubId = 354250;
+    name = "Daniel Siepmann";
+  };
   danth = {
     name = "Daniel Thwaites";
     email = "danthwaites30@btinternet.com";
