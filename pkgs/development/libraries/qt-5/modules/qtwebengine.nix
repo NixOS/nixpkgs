@@ -44,7 +44,8 @@ qtModule {
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
 
-  postPatch = ''
+  postPatch =
+    lib.optionalString (lib.versionAtLeast qtCompatVersion "5.15") ''
     # Patch Chromium build tools
     (
       cd src/3rdparty/chromium;
