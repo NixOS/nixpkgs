@@ -11,7 +11,8 @@ buildGoModule rec {
     sha256 = "sha256-FY7o4QULobLY1djfcc2l6awE/v2stN7cc2lffMkjoPc=";
   };
 
-  vendorSha256 = "sha256-+6sxXp0LKegZjEFv1CIQ6xYh+hXLn+o9LggRYamCzpI=";
+  proxyVendor = true; # fix vendor with go > 1.17, should be able to remove when package is bumped
+  vendorSha256 = "sha256-gFA9jxAM0IoWHl16/NrHd7PYdTcZt4y66PtiVe4JveU=";
 
   subPackages = [ "cmd/kfctl" ];
 
