@@ -208,6 +208,7 @@
 , "less-plugin-clean-css"
 , "live-server"
 , "livedown"
+, "localtunnel"
 , "lodash"
 , "lua-fmt"
 , "lv_font_conv"
