@@ -16623,6 +16623,8 @@ with pkgs;
 
   coan = callPackage ../development/tools/analysis/coan { };
 
+  coder = callPackage ../development/tools/coder { };
+
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
