@@ -57,6 +57,7 @@
   kaput-cli = "kaput";
   leetcode-cli = "leetcode";
   less = "lessc";
+  localtunnel = "lt";
   lua-fmt = "luafmt";
   markdownlint-cli = "markdownlint";
   near-cli = "near";
