@@ -391,6 +391,19 @@ let
         '';
       };
 
+  # the target is required to start new peer units when they are added
+  generateInterfaceTarget = name: values:
+    let
+      mkPeerUnit = peer: (peerUnitServiceName name peer.publicKey (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+    in
+    nameValuePair "wireguard-${name}"
+      rec {
+        description = "WireGuard Tunnel - ${name}";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "wireguard-${name}.service" ] ++ map mkPeerUnit values.peers;
+        after = wants;
+      };
+
   generateInterfaceUnit = name: values:
     # exactly one way to specify the private key must be set
     #assert (values.privateKey != null) != (values.privateKeyFile != null);
@@ -409,7 +422,6 @@ let
         after = [ "network-pre.target" ];
         wants = [ "network.target" ];
         before = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
         path = with pkgs; [ kmod iproute2 wireguard-tools ];
 
@@ -540,6 +552,8 @@ in
       // (mapAttrs' generateKeyServiceUnit
       (filterAttrs (name: value: value.generatePrivateKeyFile) cfg.interfaces));
 
-  });
+      systemd.targets = mapAttrs' generateInterfaceTarget cfg.interfaces;
+    }
+  );
 
 }
