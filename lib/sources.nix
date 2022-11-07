@@ -166,14 +166,25 @@ let
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter src; };
 
-  pathIsGitRepo = path: (tryEval (commitIdFromGitRepo path)).success;
+  pathIsGitRepo = path: (commitIdFromGitRepoOrError path)?value;
 
   /*
     Get the commit id of a git repo.
 
     Example: commitIdFromGitRepo <nixpkgs/.git>
   */
-  commitIdFromGitRepo =
+  commitIdFromGitRepo = path:
+    let commitIdOrError = commitIdFromGitRepoOrError path;
+    in commitIdOrError.value or (throw commitIdOrError.error);
+
+  /*
+    Get the commit id of a git repo.
+
+    Returns `{ value = commitHash }` or `{ error = "... message ..." }`.
+
+    Example: commitIdFromGitRepo <nixpkgs/.git>
+  */
+  commitIdFromGitRepoOrError =
     let readCommitFromFile = file: path:
         let fileName       = path + "/${file}";
             packedRefsName = path + "/packed-refs";
@@ -186,7 +197,7 @@ let
            then
              let m   = match "^gitdir: (.*)$" (lib.fileContents path);
              in if m == null
-                then throw ("File contains no gitdir reference: " + path)
+                then { error = "File contains no gitdir reference: " + path; }
                 else
                   let gitDir      = absolutePath (dirOf path) (lib.head m);
                       commonDir'' = if pathIsRegularFile "${gitDir}/commondir"
@@ -204,7 +215,7 @@ let
              let fileContent = lib.fileContents fileName;
                  matchRef    = match "^ref: (.*)$" fileContent;
              in if  matchRef == null
-                then fileContent
+                then { value = fileContent; }
                 else readCommitFromFile (lib.head matchRef) path
 
            else if pathIsRegularFile packedRefsName
@@ -218,10 +229,10 @@ let
                  # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
                  refs = filter isRef (split "\n" fileContent);
              in if refs == []
-                then throw ("Could not find " + file + " in " + packedRefsName)
-                else lib.head (matchRef (lib.head refs))
+                then { error = "Could not find " + file + " in " + packedRefsName; }
+                else { value = lib.head (matchRef (lib.head refs)); }
 
-           else throw ("Not a .git directory: " + path);
+           else { error = "Not a .git directory: " + toString path; };
     in readCommitFromFile "HEAD";
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
