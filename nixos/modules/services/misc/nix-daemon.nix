@@ -206,7 +206,7 @@ in
 
       daemonIOSchedPriority = mkOption {
         type = types.int;
-        default = 0;
+        default = 4;
         example = 1;
         description = lib.mdDoc ''
           Nix daemon process I/O scheduling priority. This priority propagates
