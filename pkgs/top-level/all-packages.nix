@@ -24643,10 +24643,7 @@ with pkgs;
 
   mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
 
-  pg_featureserv = callPackage ../servers/geospatial/pg_featureserv {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  pg_featureserv = callPackage ../servers/geospatial/pg_featureserv { };
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 

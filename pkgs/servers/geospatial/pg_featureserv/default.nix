@@ -11,7 +11,8 @@ buildGoModule rec {
     sha256 = "0lfsbsgcb7z8ljxn1by37rbx02vaprrpacybk1kja1rjli7ik7m9";
   };
 
-  vendorSha256 = "1jqrkx850ghmpnfjhqky93r8fq7q63m5ivs0lzljzbvn7ya75f2r";
+  proxyVendor = true; # fix vendor with go > 1.17, should be able to remove when package is bumped
+  vendorSha256 = "sha256-pUcwd/mtj6vwoJNmXFtTqrOYJg9h1GKl6hndk/tFbm4=";
 
   ldflags = [ "-s" "-w" "-X github.com/CrunchyData/pg_featureserv/conf.setVersion=${version}" ];
 
