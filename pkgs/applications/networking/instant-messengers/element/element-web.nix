@@ -16,7 +16,6 @@ let
   pinData = lib.importJSON ./pin.json;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
-    piwik = false; # disable analytics
   };
 
   unwrapped = stdenv.mkDerivation rec {
