@@ -884,6 +884,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.5.0 to 0.6.0. See the
+          <link xlink:href="https://zrepl.github.io/changelog.html">changelog</link>
+          for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
