@@ -68,6 +68,8 @@ self: super:
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
 
+    configureFlags = attrs.configureFlags or [] ++ [ "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp" ];
+
     inherit tradcpp;
   });
 
