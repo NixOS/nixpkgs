@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "qMasterPassword";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "bkueng";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eUJD9FoGaDzADKm3wZHs5Bhdt7RoM1WTTVNP6xUV7gs=";
+    sha256 = "sha256-VQ1ZkXaZ5sUbtWa/GreTr5uXvnZ2Go6owJ2ZBK25zns=";
   };
 
   buildInputs = [ qtbase libX11 libXtst openssl libscrypt ];
