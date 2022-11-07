@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.7";
+  version = "2.2.8";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "6xOFj1i7Np9He/ZS2Q6baq3dDWEKy+o0VQSeXvrTbfE=";
+    sha256 = "A/PSN6LuKh0WM2QXyaXxe0nPcEXu/qYCHwggu/hdClM=";
   };
 
   patches = lib.optional smimeSupport (fetchpatch {

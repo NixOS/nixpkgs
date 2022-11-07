@@ -11155,7 +11155,7 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
-  safeeyes = with python3.pkgs; toPythonApplication safeeyes;
+  safeeyes = callPackage ../applications/misc/safeeyes { };
 
   sagoin = callPackage ../tools/misc/sagoin { };
 
@@ -25332,6 +25332,8 @@ with pkgs;
 
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
+
+  mdevctl = callPackage ../os-specific/linux/mdevctl { };
 
   metastore = callPackage ../os-specific/linux/metastore { };
 
