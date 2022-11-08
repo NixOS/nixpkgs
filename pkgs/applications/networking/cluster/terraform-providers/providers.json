@@ -544,13 +544,13 @@
     "version": "1.0.4"
   },
   "http": {
-    "hash": "sha256-04OMH0+fT4QOV34YdE67avnbC3GoK7xyMGxpILNM7Jk=",
+    "hash": "sha256-cxAii7doJ9mv1LQWjoPqMgOuu0COIL91llhsm/2MOms=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/http",
     "repo": "terraform-provider-http",
-    "rev": "v3.2.0",
-    "vendorHash": "sha256-diQ5bYFywVZXziRKiKdIU4grg93vF68bkbMrRpM/vQc=",
-    "version": "3.2.0"
+    "rev": "v3.2.1",
+    "vendorHash": "sha256-rxh8Me+eOKPCbfHFT3tRsbM7JU67dBqv2JOiWArI/2Y=",
+    "version": "3.2.1"
   },
   "huaweicloud": {
     "hash": "sha256-cr7xV7Z4UU+kRykVSOKeuXDiHQPL4CsCJVXf2uTZOms=",
