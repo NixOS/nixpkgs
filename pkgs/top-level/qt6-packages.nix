@@ -30,6 +30,8 @@ in
 
   quazip = callPackage ../development/libraries/quazip { };
 
+  qxlsx = callPackage ../development/libraries/qxlsx { };
+
   poppler = callPackage ../development/libraries/poppler {
     lcms = pkgs.lcms2;
     qt6Support = true;
