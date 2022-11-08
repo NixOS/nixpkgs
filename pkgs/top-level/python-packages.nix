@@ -8608,6 +8608,8 @@ self: super: with self; {
 
   pyspcwebgw = callPackage ../development/python-modules/pyspcwebgw { };
 
+  pyspellchecker = callPackage ../development/python-modules/pyspellchecker { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pyspice = callPackage ../development/python-modules/pyspice { };
