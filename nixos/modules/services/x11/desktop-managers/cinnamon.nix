@@ -184,7 +184,7 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
+      # Harmonize Qt5 applications under Cinnamon
       qt5.enable = true;
       qt5.platformTheme = "gnome";
       qt5.style = "adwaita";
