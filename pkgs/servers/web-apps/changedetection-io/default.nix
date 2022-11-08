@@ -31,21 +31,21 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.39.20.4";
+  version = "0.39.21.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    sha256 = "sha256-XhCByQbGWAwWe71jsitpYJnQ2xRIdmhc9mY6Smxmp3w=";
+    sha256 = "sha256-cX2HwlsWOJ34msEnPP38jq+kzSxOM/spe0Ja2lZ/Q7w=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "bs4" "beautifulsoup4" \
-      --replace "cryptography ~= 3.4" "cryptography" \
-      --replace "selenium ~= 4.1.0" "selenium"
+      --replace "cryptography~=3.4" "cryptography" \
+      --replace "selenium~=4.1.0" "selenium"
   '';
 
   propagatedBuildInputs = with py.pkgs; [
@@ -58,6 +58,8 @@ py.pkgs.buildPythonApplication rec {
     feedgen
     flask-login
     flask-restful
+    jinja2
+    jinja2-time
     pytz
     brotli
     requests
