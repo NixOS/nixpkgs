@@ -10,6 +10,7 @@
 , libuuid
 , curl
 , gsoap
+, Security
 , enableTools ? true
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
@@ -32,9 +33,10 @@ stdenv.mkDerivation rec {
     openssl
     libxml2
     boost
-    libuuid
     curl
   ]
+  ++ lib.optional stdenv.isDarwin Security
+  ++ lib.optional (!stdenv.isDarwin) libuuid
   ++ lib.optional (enableThirdPartyCopy) gsoap;
 
   # using the url below since the github release page states
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TOOLS=${boolToUpper enableTools}"
-    "-DEMBEDDED_LIBCURL=false"
+    "-DEMBEDDED_LIBCURL=OFF"
     "-DLIBCURL_BACKEND_BY_DEFAULT=${boolToUpper defaultToLibcurl}"
     "-DENABLE_IPV6=${boolToUpper enableIpv6}"
     "-DENABLE_TCP_NODELAY=${boolToUpper enableTcpNodelay}"
@@ -61,7 +63,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file
