@@ -22,6 +22,7 @@
 , pkgs
 , stdenv
 , fetchpatch
+, patchelf
 
 # build time
 , autoconf
@@ -99,7 +100,7 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport
+, crashreporterSupport ? !privacySupport, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
@@ -264,7 +265,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
-  ++ lib.optionals crashreporterSupport [ dump_syms ]
+  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -537,6 +538,10 @@ buildStdenv.mkDerivation ({
             ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
         done < <(find "$prefix" -type f -print0)
     }
+  '';
+
+  postFixup = lib.optionalString crashreporterSupport ''
+    patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
   doInstallCheck = true;
