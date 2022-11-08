@@ -29986,6 +29986,8 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
   };
 
+  lls = callPackage ../applications/networking/lls { };
+
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
