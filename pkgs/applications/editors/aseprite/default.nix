@@ -2,7 +2,6 @@
 , curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
 , harfbuzzFull, glib, fontconfig, pcre
 , libX11, libXext, libXcursor, libXxf86vm, libGL, libXi
-, unfree ? false
 , cmark
 }:
 
@@ -15,41 +14,34 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "aseprite";
-  version = if unfree then "1.2.40" else "1.1.7";
+  version = "1.2.40";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = if unfree
-      then "sha256-KUdJA6HTAKrLT8xrwFikVDbc5RODysclcsEyQekMRZo="
-      else "sha256-sRFuuY6cmVRE7myelGREMrzaQ09Olq74XP8uoS1NpD0=";
+    hash = "sha256-KUdJA6HTAKrLT8xrwFikVDbc5RODysclcsEyQekMRZo=";
   };
 
   nativeBuildInputs = [
-    cmake pkg-config
-  ] ++ lib.optionals unfree [ ninja ];
+    cmake pkg-config ninja
+  ];
 
   buildInputs = [
     curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
     libX11 libXext libXcursor libXxf86vm
-  ] ++ lib.optionals unfree [
     cmark
     harfbuzzFull glib fontconfig pcre
     skia libGL libXi
   ];
 
-  patches = lib.optionals (!unfree) [
-    ./allegro-glibc-2.30.patch
-  ] ++ lib.optionals unfree [
+  patches = [
     ./shared-libwebp.patch
     ./shared-skia-deps.patch
   ];
 
-  postPatch = if (!unfree) then ''
-    sed -i src/config.h -e "s-\\(#define VERSION\\) .*-\\1 \"$version\"-"
-  '' else ''
+  postPatch = ''
     sed -i src/ver/CMakeLists.txt -e "s-set(VERSION \".*\")-set(VERSION \"$version\")-"
   '';
 
@@ -64,9 +56,6 @@ stdenv.mkDerivation rec {
     "-DUSE_SHARED_PIXMAN=ON"
     "-DUSE_SHARED_TINYXML=ON"
     "-DUSE_SHARED_ZLIB=ON"
-    "-DWITH_DESKTOP_INTEGRATION=ON"
-    "-DWITH_WEBP_SUPPORT=ON"
-  ] ++ lib.optionals unfree [
     "-DUSE_SHARED_CMARK=ON"
     "-DUSE_SHARED_HARFBUZZ=ON"
     "-DUSE_SHARED_WEBP=ON"
@@ -99,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.aseprite.org/";
     description = "Animated sprite editor & pixel art tool";
-    license = if unfree then licenses.unfree else licenses.gpl2;
+    license = licenses.unfree;
     longDescription =
       ''Aseprite is a program to create animated sprites. Its main features are:
 
@@ -113,8 +102,7 @@ stdenv.mkDerivation rec {
           - Multiple editors support.
           - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
           - Onion skinning.
-      '' + lib.optionalString unfree
-      ''
+
         This version is not redistributable: https://dev.aseprite.org/2016/09/01/new-source-code-license/
         Consider supporting the developer: https://aseprite.org/#buy
       '';
