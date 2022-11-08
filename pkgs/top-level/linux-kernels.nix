@@ -95,14 +95,7 @@ in {
 
     linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
 
-    linux_4_9 = callPackage ../os-specific/linux/kernel/linux-4.9.nix {
-      kernelPatches =
-        [ kernelPatches.bridge_stp_helper
-          kernelPatches.request_key_helper_updated
-          kernelPatches.cpu-cgroup-v2."4.9"
-          kernelPatches.modinst_arg_list_too_long
-        ];
-    };
+    linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
 
     linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
       kernelPatches =
@@ -519,7 +512,7 @@ in {
   vanillaPackages = {
     # recurse to build modules for the kernels
     linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
-    linux_4_9 = recurseIntoAttrs (packagesFor kernels.linux_4_9);
+    linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
