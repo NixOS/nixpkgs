@@ -139,7 +139,7 @@ let
       repo = "tree-sitter-svelte";
     };
     "tree-sitter-sql" = {
-      orga = "m-novikov";
+      orga = "derekstride";
       repo = "tree-sitter-sql";
     };
     "tree-sitter-vim" = {
