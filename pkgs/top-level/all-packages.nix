@@ -33232,10 +33232,6 @@ with pkgs;
 
   xnotify = callPackage ../tools/X11/xnotify { };
 
-  xvidcap = callPackage ../applications/video/xvidcap {
-    inherit (gnome2) scrollkeeper libglade;
-  };
-
   xygrib = libsForQt514.callPackage ../applications/misc/xygrib {};
 
   xzgv = callPackage ../applications/graphics/xzgv { };
