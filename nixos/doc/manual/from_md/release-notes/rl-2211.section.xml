@@ -132,6 +132,13 @@
       </listitem>
       <listitem>
         <para>
+          <literal>protonup</literal> has been aliased to and replaced
+          by <literal>protonup-ng</literal> due to upstream not
+          maintaining it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Perl has been updated to 5.36, and its core module
           <literal>HTTP::Tiny</literal> was patched to verify SSL/TLS
           certificates by default.
@@ -455,6 +462,14 @@
           <link xlink:href="https://uptime.kuma.pet/">Uptime
           Kuma</link>, a fancy self-hosted monitoring tool. Available as
           <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
+          fast, simple, hackable OSM map viewer for mobile and desktop
+          Linux. Available as
+          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -803,6 +818,28 @@
             </para>
           </listitem>
         </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>arangodb</literal> versions 3.3, 3.4, and 3.5 have
+          been removed because they are at EOL upstream. The default is
+          now 3.10.0. Support for aarch64-linux has been removed since
+          the target cannot be built reproducibly. By default
+          <literal>arangodb</literal> is now built for the
+          <literal>haswell</literal> architecture. If you wish to build
+          for a different architecture, you may override the
+          <literal>targetArchitecture</literal> argument with a value
+          from
+          <link xlink:href="https://github.com/arangodb/arangodb/blob/207ec6937e41a46e10aea34953879341f0606841/cmake/OptimizeForArchitecture.cmake#L594">this
+          list supported upstream</link>. Some architecture specific
+          optimizations are also conditionally enabled. You may alter
+          this behavior by overriding the
+          <literal>asmOptimizations</literal> parameter. You may also
+          add additional architecture support by adding more
+          <literal>-DHAS_XYZ</literal> flags to
+          <literal>cmakeFlags</literal> via
+          <literal>overrideAttrs</literal>.
+        </para>
       </listitem>
       <listitem>
         <para>
