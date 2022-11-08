@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "1.0.11";
+  version = "1.0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mcaulifn";
     repo = "solcast";
     rev = "v${version}";
-    hash = "sha256-iK3WCpl7K/PUccNkOQK7q4k7JjwHAEydU47c8tb4wvc=";
+    hash = "sha256-azcEbv/4M3UqRyV30yld+6pWbSxbGXiJJHWMDL4xgOM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
