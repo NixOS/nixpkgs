@@ -1499,6 +1499,8 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
+  wtwitch = callPackage ../tools/video/wtwitch {};
+
   wwcd = callPackage ../tools/misc/wwcd { };
 
   writedisk = callPackage ../tools/misc/writedisk { };
