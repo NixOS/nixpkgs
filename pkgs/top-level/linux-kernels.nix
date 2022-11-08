@@ -93,8 +93,6 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream";
-
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
 
     linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
@@ -152,8 +150,6 @@ in {
         kernelPatches.request_key_helper
       ];
     };
-
-    linux_5_16 = throw "linux 5.16 was removed because it has reached its end of life upstream";
 
     linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
 
@@ -511,14 +507,12 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_4 = throw "linux 4.4 was removed because it reached its end of life upstream"; # Added 2022-02-11
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-    linux_5_16 = throw "linux 5.16 was removed because it reached its end of life upstream"; # Added 2022-04-23
     linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
