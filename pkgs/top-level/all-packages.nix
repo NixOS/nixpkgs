@@ -22913,15 +22913,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  wxGTK = wxGTK28;
-
-  wxGTK28 = callPackage ../development/libraries/wxwidgets/wxGTK28.nix { };
-
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix {
-    inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
-  };
-
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
     withGtk2 = true;
     inherit (darwin.stubs) setfile;
