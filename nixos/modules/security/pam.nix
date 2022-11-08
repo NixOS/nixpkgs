@@ -392,6 +392,24 @@ let
         '';
       };
 
+      failDelay = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            If enabled, this will replace the `FAIL_DELAY` setting from `login.defs`.
+            Change the delay on failure per-application.
+            '';
+        };
+
+        delay = mkOption {
+          default = 3000000;
+          type = types.int;
+          example = 1000000;
+          description = lib.mdDoc "The delay time (in microseconds) on failure.";
+        };
+      };
+
       gnupg = {
         enable = mkOption {
           type = types.bool;
@@ -531,6 +549,7 @@ let
               || cfg.enableGnomeKeyring
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
+              || cfg.failDelay.enable
               || cfg.duoSecurity.enable))
             (
               ''
@@ -550,6 +569,9 @@ let
               '' +
               optionalString cfg.gnupg.enable ''
                 auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
+              '' +
+              optionalString cfg.failDelay.enable ''
+                auth optional ${pkgs.pam}/lib/security/pam_faildelay.so delay=${toString cfg.failDelay.delay}
               '' +
               optionalString cfg.googleAuthenticator.enable ''
                 auth required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp

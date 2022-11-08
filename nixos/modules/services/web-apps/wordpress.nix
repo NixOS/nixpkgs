@@ -409,6 +409,8 @@ in
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
+      "d '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
+      "Z '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
     systemd.services = mkMerge [

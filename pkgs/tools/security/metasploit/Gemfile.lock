@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 1c805324f10bafa3a99fcd0315cc99ef83430b23
-  ref: refs/tags/6.2.24
+  revision: 2ab12336a4a6197c88ca4777c016311fa4fb7a3d
+  ref: refs/tags/6.2.25
   specs:
-    metasploit-framework (6.2.24)
+    metasploit-framework (6.2.25)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -129,13 +129,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.652.0)
+    aws-partitions (1.656.0)
     aws-sdk-core (3.166.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.343.0)
+    aws-sdk-ec2 (1.345.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.73.0)
@@ -152,7 +152,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
-    bindata (2.4.13)
+    bindata (2.4.14)
     bson (4.15.0)
     builder (3.2.4)
     concurrent-ruby (1.0.5)
@@ -174,7 +174,7 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubi (1.11.0)
     eventmachine (1.2.7)
-    faker (2.23.0)
+    faker (3.0.0)
       i18n (>= 1.8.11, < 2)
     faraday (2.6.0)
       faraday-net_http (>= 2.0, < 3.1)
@@ -237,7 +237,7 @@ GEM
       activesupport (~> 6.0)
       railties (~> 6.0)
     metasploit-payloads (2.0.97)
-    metasploit_data_models (5.0.5)
+    metasploit_data_models (5.0.6)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
       arel-helpers
@@ -245,7 +245,7 @@ GEM
       metasploit-model (>= 3.1)
       pg
       railties (~> 6.0)
-      recog (~> 2.0)
+      recog
       webrick
     metasploit_payloads-mettle (1.0.20)
     method_source (1.0.0)
@@ -260,7 +260,7 @@ GEM
     net-ldap (0.17.1)
     net-protocol (0.1.3)
       timeout
-    net-smtp (0.3.2)
+    net-smtp (0.3.3)
       net-protocol
     net-ssh (7.0.1)
     network_interface (0.0.2)
@@ -309,7 +309,7 @@ GEM
       thor (~> 1.0)
     rake (13.0.6)
     rb-readline (0.5.5)
-    recog (2.3.23)
+    recog (3.0.3)
       nokogiri
     redcarpet (3.5.1)
     reline (0.3.1)
@@ -359,7 +359,7 @@ GEM
       rex-socket
       rex-text
     rex-struct2 (0.1.3)
-    rex-text (0.2.45)
+    rex-text (0.2.46)
     rex-zip (0.1.4)
       rex-text
     rexml (3.2.5)
@@ -399,7 +399,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2022.5)
+    tzinfo-data (1.2022.6)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -427,7 +427,7 @@ GEM
       activesupport (>= 4.2, < 8.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.6.1)
+    zeitwerk (2.6.5)
 
 PLATFORMS
   ruby
@@ -436,4 +436,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.3.23
+   2.3.24

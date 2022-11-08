@@ -13,6 +13,15 @@ in {
     services.erigon = {
       enable = mkEnableOption (lib.mdDoc "Ethereum implementation on the efficiency frontier");
 
+      group = mkOption {
+        type = types.str;
+        default = "ethereum";
+        description = lib.mdDoc ''
+          Group of the user running the lighthouse process. This is used to share the jwt
+          secret with the execution layer.
+        '';
+      };
+
       settings = mkOption {
         description = lib.mdDoc ''
           Configuration for Erigon
@@ -55,6 +64,19 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users = {
+      users.erigon = {
+        name = "erigon";
+        group = cfg.group;
+        description = "Erigon user";
+        home = "/var/lib/erigon";
+        isSystemUser = true;
+      };
+      groups = mkIf (cfg.group == "ethereum") {
+        ethereum = {};
+      };
+    };
+
     # Default values are the same as in the binary, they are just written here for convenience.
     services.erigon.settings = {
       datadir = mkDefault "/var/lib/erigon";
@@ -77,10 +99,11 @@ in {
 
       serviceConfig = {
         ExecStart = "${pkgs.erigon}/bin/erigon --config ${configFile}";
+        User = "erigon";
+        Group = cfg.group;
         Restart = "on-failure";
         StateDirectory = "erigon";
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectHome = true;
@@ -97,7 +120,6 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
         SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
