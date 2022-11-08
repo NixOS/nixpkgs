@@ -104,5 +104,9 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
+    # The libraries and the binary doesn't work
+    # xrdcp "Could not load authentication handler", libXrdSec-5.so isn't found
+    # See #169677
+    broken = true;
   };
 }
