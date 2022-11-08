@@ -14,6 +14,7 @@ package.override rec {
   };
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
+  passthru.updateScript = ./update.sh;
 
   postInstall = ''
     npm run build
