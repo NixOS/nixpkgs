@@ -6,14 +6,14 @@
 , libusb-compat-0_1
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teensy-loader-cli";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "PaulStoffregen";
     repo = "teensy_loader_cli";
-    rev = "${version}";
+    rev = finalAttrs.version;
     sha256 = "sha256-C9Qhd6LhAES7X0sh4rofjAM+gxwuosahVQHeR76LyIo=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
   };
-}
+})
