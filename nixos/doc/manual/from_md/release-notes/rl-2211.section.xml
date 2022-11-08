@@ -1336,6 +1336,14 @@
           the npm install step prunes dev dependencies.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          boot.kernel.sysctl is defined as a freeformType and adds a
+          custom merge option for <quote>net.core.rmem_max</quote>
+          (taking the highest value defined to avoid conflicts between 2
+          services trying to set that value)
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
