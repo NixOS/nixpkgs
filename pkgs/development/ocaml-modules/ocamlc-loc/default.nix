@@ -12,7 +12,7 @@ buildDunePackage {
     rm -rf vendor/pp
   '';
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [ dyn ];
 
