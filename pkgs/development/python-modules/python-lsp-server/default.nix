@@ -57,7 +57,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools
     setuptools-scm
   ];
 
@@ -66,6 +65,7 @@ buildPythonPackage rec {
     jedi
     pluggy
     python-lsp-jsonrpc
+    setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
   ];
 
@@ -142,6 +142,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pylsp"
+    "pylsp.python_lsp"
   ];
 
   meta = with lib; {
