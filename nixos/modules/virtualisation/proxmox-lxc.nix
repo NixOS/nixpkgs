@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, stdenv, ... }:
 
 with lib;
 
@@ -29,6 +29,13 @@ with lib;
         populated by proxmox.
       '';
     };
+    fileName = mkOption {
+      type = types.str;
+      default = "nixos-system-${stdenv.hostPlatform.system}";
+      description = lib.mdDoc ''
+        The file name of the resulting tarball.
+      '';
+    };
   };
 
   config =
@@ -37,6 +44,8 @@ with lib;
     in
     {
       system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
+        fileName = cfg.fileName;
+
         storeContents = [{
           object = config.system.build.toplevel;
           symlink = "none";
