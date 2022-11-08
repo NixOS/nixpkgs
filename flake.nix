@@ -11,8 +11,7 @@
 
       lib = import ./lib;
 
-      forAllSystems = f: lib.genAttrs lib.systems.flakeExposed (system: f system);
-
+      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
       lib = lib.extend (final: prev: {
