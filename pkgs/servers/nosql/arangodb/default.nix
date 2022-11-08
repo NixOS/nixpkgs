@@ -50,16 +50,16 @@ gcc10Stdenv.mkDerivation rec {
   dontFixCmake = true;
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  preConfigure = ''
-    patchShebangs utils
-  '';
-
   postPatch = ''
     sed -ie 's!/bin/echo!echo!' 3rdParty/V8/gypfiles/*.gypi
 
     # with nixpkgs, it has no sense to check for a version update
     substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
+  '';
+
+  preConfigure = ''
+    patchShebangs utils
   '';
 
   cmakeFlags = [
