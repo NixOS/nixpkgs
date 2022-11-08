@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
-    maintainers = with maintainers; [ numkem iagoq ];
+    maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
   };
