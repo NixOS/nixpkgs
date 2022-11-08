@@ -946,6 +946,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>signald</literal> has been bumped to
+          <literal>0.23.0</literal>. For the upgrade, a migration
+          process is necessary. It can be done by running a command like
+          this before starting <literal>signald.service</literal>:
+        </para>
+        <programlisting>
+signald -d /var/lib/signald/db \
+  --database sqlite:/var/lib/signald/db \
+  --migrate-data
+</programlisting>
+        <para>
+          For further information, please read the upstream changelogs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>stylua</literal> no longer accepts
           <literal>lua52Support</literal> and
           <literal>luauSupport</literal> overrides, use
