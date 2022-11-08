@@ -2,14 +2,14 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "b2sum";
   version = "20190724";
 
   src = fetchFromGitHub {
     owner = "BLAKE2";
     repo = "BLAKE2";
-    rev = "${version}";
+    rev = finalAttrs.version;
     sha256 = "sha256-6BVl3Rh+CRPQq3QxcUlk5ArvjIj/IcPCA2/Ok0Zu7UI=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     # "This code requires at least SSE2."
     platforms = [ "x86_64-linux" "i686-linux" ] ++ platforms.darwin;
   };
-}
+})
