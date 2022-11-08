@@ -32366,6 +32366,10 @@ with pkgs;
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
 
+  torrenttools = callPackage ../tools/misc/torrenttools {
+    fmt = fmt_8;
+  };
+
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
   tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
