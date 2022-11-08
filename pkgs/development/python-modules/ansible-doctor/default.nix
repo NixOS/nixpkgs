@@ -12,12 +12,13 @@
 , poetry-core
 , python-json-logger
 , pythonOlder
+, pythonRelaxDepsHook
 , ruamel-yaml
 }:
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.4.5";
+  version = "1.4.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,11 +27,19 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bqe5dqD9VEgkkIGtpkLnCf3KTziCYb5HQdMJaskALWE=";
+    hash = "sha256-76IYH9IWeHU+PAtpLFGT5f8oG2roY3raW0NC3KUnFls=";
   };
+
+  pythonRelaxDeps = true;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -48,17 +57,6 @@ buildPythonPackage rec {
 
   postInstall = ''
     rm $out/lib/python*/site-packages/LICENSE
-  '';
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace 'Jinja2 = "3.1.2"' 'Jinja2 = "*"' \
-      --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
-      --replace 'environs = "9.5.0"' 'environs = "*"' \
-      --replace 'jsonschema = "4.15.0"' 'jsonschema = "*"' \
-      --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"' \
-      --replace 'python-json-logger = "2.0.4"' 'python-json-logger = "*"'
   '';
 
   # Module has no tests
