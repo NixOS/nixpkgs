@@ -7,19 +7,32 @@
 , libuuid
 , openjdk11
 , gperftools
+, flatbuffers
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "surelog";
-  version = "1.40";
+  version = "1.45";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5nhJilFIJJDCnJUEUgyPNtWSQUgWcvM6LDFgFatAl/k=";
+    hash = "sha256-/SSKcEIhmWDOKN4v3djWTwZ5/nQvR8ibflzSVFDt/rM=";
     fetchSubmodules = true;
   };
+
+  # This prevents race conditions in unit tests that surface since we run
+  # ctest in parallel.
+  # This patch can be removed with the next version of surelog
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/chipsalliance/Surelog/commit/9a54efbd156becf65311a4272104810f36041fa6.patch";
+      sha256 = "sha256-rU1Z/0wlVTgnPLqTN/87n+gI1iJ+6k/+sunVVd0ulhQ=";
+      name = "parallel-test-running.patch";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +47,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libuuid
     gperftools
+    flatbuffers
+  ];
+
+  cmakeFlags = [
+    "-DSURELOG_USE_HOST_FLATBUFFERS=On"
   ];
 
   doCheck = true;
