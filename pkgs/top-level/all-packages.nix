@@ -29552,6 +29552,8 @@ with pkgs;
 
   imhex = callPackage ../applications/editors/imhex { };
 
+  inframap = callPackage ../applications/networking/cluster/inframap {};
+
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inklingreader = callPackage ../tools/misc/inklingreader { };
