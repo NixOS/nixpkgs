@@ -21154,6 +21154,8 @@ with pkgs;
 
   liquidfun = callPackage ../development/libraries/liquidfun { };
 
+  litehtml = callPackage ../development/libraries/litehtml { };
+
   live555 = callPackage ../development/libraries/live555 { };
 
   log4cpp = callPackage ../development/libraries/log4cpp { };
@@ -22914,15 +22916,6 @@ with pkgs;
 
   wxformbuilder = callPackage ../development/tools/wxformbuilder {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  wxGTK = wxGTK28;
-
-  wxGTK28 = callPackage ../development/libraries/wxwidgets/wxGTK28.nix { };
-
-  wxGTK29 = callPackage ../development/libraries/wxwidgets/wxGTK29.nix {
-    inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
@@ -30026,6 +30019,8 @@ with pkgs;
 
   lingot = callPackage ../applications/audio/lingot { };
 
+  litebrowser = callPackage ../applications/networking/browsers/litebrowser { };
+
   littlegptracker = callPackage ../applications/audio/littlegptracker {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
@@ -30616,7 +30611,10 @@ with pkgs;
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = callPackage ../tools/misc/nncp { };
+  nncp = (
+    if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.callPackage
+    else callPackage) ../tools/misc/nncp { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
