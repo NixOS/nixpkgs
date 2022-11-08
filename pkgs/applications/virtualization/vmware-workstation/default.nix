@@ -1,6 +1,7 @@
 { stdenv
 , buildFHSUserEnv
 , fetchurl
+, fetchFromGitHub ? enableMacOSGuests
 , lib
 , zlib
 , gdbm
@@ -21,11 +22,15 @@
 , libX11
 , libXi
 , kmod
+, python2 ? enableMacOSGuests
 , python3
 , autoPatchelfHook
 , makeWrapper
 , sqlite
+, gnutar ? enableMacOSGuests
+, unzip ? enableMacOSGuests
 , enableInstaller ? false
+, enableMacOSGuests ? false
 }:
 
 let
@@ -49,8 +54,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "16.2.3";
-  build = "19376536";
+  version = "16.2.4";
+  build = "20089737";
+
+  # macOS
+  fusionVersion = "12.2.4";
+  fusionBuild = "20071091";
+  unlockerVersion = "3.0.4";
 
   buildInputs = [
     libxslt
@@ -73,15 +83,47 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ sqlite bzip2 ];
+    ++ lib.optionals enableInstaller [ sqlite bzip2 ]
+    ++ lib.optionals enableMacOSGuests [ gnutar python2 unzip ];
 
   src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-1623-LX-New/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-+JE1KnRfawcaBannIyEr1TNZTF7YXRYYaFMVq0/erbM=";
+    url = "https://download3.vmware.com/software/WKST-1624-LX/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
+    sha256 = "sha256-LkZwjbRmMO3JbNsRUU1eM49TAMRvUakBMumkzRHD88A=";
   };
+
+  darwinIsoSrc = if enableMacOSGuests then fetchurl {
+    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/x86/core/com.vmware.fusion.zip.tar";
+    sha256 = "sha256-DNuoeR2VdggRK9Lrvr1yuXh3aGs/L9HMqoYPfCHZEac=";
+  } else null;
+
+  unlockerSrc = if enableMacOSGuests then fetchFromGitHub {
+    owner = "paolo-projects";
+    repo = "unlocker";
+    rev = "${unlockerVersion}";
+    sha256 = "sha256-kpvrRiiygfjQni8z+ju9mPBVqy2gs08Wj4cHxE9eorQ=";
+  } else null;
 
   unpackPhase = ''
     ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
+
+    ${lib.optionalString enableMacOSGuests ''
+      mkdir -p fusion/
+      tar -xvpf "${darwinIsoSrc}" -C fusion/
+      unzip "fusion/com.vmware.fusion.zip" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/darwin.iso" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/darwinPre15.iso" \
+        -d fusion/
+    ''}
+  '';
+
+  patchPhase = lib.optionalString enableMacOSGuests ''
+    cp -R "${unlockerSrc}" unlocker/
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
   '';
 
   installPhase = ''
@@ -226,6 +268,14 @@ stdenv.mkDerivation rec {
        unpacked/vmware-tools-solaris/solaris.iso \
        $out/lib/vmware/isoimages/
 
+    ${lib.optionalString enableMacOSGuests ''
+      echo "Installing VMWare Tools for MacOS"
+      cp -v \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/darwin.iso" \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/darwinPre15.iso" \
+       $out/lib/vmware/isoimages/
+    ''}
+
     ## VMware Player Application
     echo "Installing VMware Player Application"
     unpacked="unpacked/vmware-player-app"
@@ -327,6 +377,10 @@ stdenv.mkDerivation rec {
       sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
     done
 
+    ${lib.optionalString enableMacOSGuests ''
+      python2 unlocker/unlocker.py
+    ''}
+
     # SUID hack
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
@@ -339,6 +393,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ deinferno ];
+    maintainers = with maintainers; [ cawilliamson deinferno ];
   };
 }
