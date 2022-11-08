@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-im6y/E0pQxruX2kNXZLE3fHq+zXfsstnOoC1QvH4fd4=";
   };
 
+  outputs = [ "out" "tools" ];
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
@@ -138,19 +140,31 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
+
+    # mame
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
 
-    mkdir -p $out/bin
-    find ${dest} -maxdepth 1 -executable -type f -exec mv -t $out/bin {} \;
-    install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
-
-    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
+    find ${dest} -maxdepth 1 -executable -type f -delete;
+    install -Dm755 mame -t $out/bin
     install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
 
     mv artwork plugins samples ${dest}
 
+    # mame-tools
+    for _i in castool chdman floptool imgtool jedutil ldresample ldverify nltool nlwav pngcmp regrep romcmp \
+              split srcclean testkeys unidasm; do
+      install -Dm755 $_i -t $tools/bin
+    done
+    mv $tools/bin/{,mame-}split
+
     runHook postInstall
+  '';
+
+  postFixup = ''
+    mkdir -p $tools/share/man
+    mv {$out,$tools}/share/man/man1
   '';
 
   enableParallelBuilding = true;
