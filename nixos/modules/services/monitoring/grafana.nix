@@ -13,9 +13,20 @@ let
   settingsFormatIni = pkgs.formats.ini {};
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
-  datasourceFile = if (cfg.provision.datasources.path == null) then provisioningSettingsFormat.generate "datasource.yaml" cfg.provision.datasources.settings else cfg.provision.datasources.path;
+  mkProvisionCfg = name: attr: provisionCfg:
+    if provisionCfg.path != null
+      then provisionCfg.path
+    else
+      provisioningSettingsFormat.generate "${name}.yaml"
+        (if provisionCfg.settings != null
+          then provisionCfg.settings
+          else {
+            apiVersion = 1;
+            ${attr} = [];
+          });
 
-  dashboardFile = if (cfg.provision.dashboards.path == null) then provisioningSettingsFormat.generate "dashboard.yaml" cfg.provision.dashboards.settings else cfg.provision.dashboards.path;
+  datasourceFile = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
+  dashboardFile = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
 
   notifierConfiguration = {
     apiVersion = 1;
