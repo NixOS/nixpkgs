@@ -17,7 +17,7 @@ let
 
         security = {
           admin_user = "testadmin";
-          admin_password = "snakeoilpwd";
+          admin_password = "$__file{${pkgs.writeText "pwd" "snakeoilpwd"}}";
         };
       };
     };
