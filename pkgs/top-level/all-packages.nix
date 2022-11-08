@@ -18551,6 +18551,8 @@ with pkgs;
     fltk = fltk13;
   };
 
+  dillong = callPackage ../applications/networking/browsers/dillong { };
+
   directfb = callPackage ../development/libraries/directfb { };
 
   discordchatexporter-cli = callPackage ../tools/backup/discordchatexporter-cli { };
