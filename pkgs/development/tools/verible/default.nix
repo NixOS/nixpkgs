@@ -8,6 +8,9 @@
 , python3
 }:
 
+let
+  system = stdenv.hostPlatform.system;
+in
 buildBazelPackage rec {
   pname = "verible";
   version = "0.0-2172-g238b6df6";
@@ -39,7 +42,10 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     # Fixed output derivation hash after bazel fetch
-    sha256 = "sha256-45PINJ7VtL5Jl/nAQNkiSCt8wUwtytNfgeNMZaz3Y9U=";
+    sha256 = {
+      aarch64-linux = "sha256-BnZ/jZ+KF/sNrVSYu1UGxyBe66fWVaIrwiqRQuYGVrY=";
+      x86_64-linux = "sha256-45PINJ7VtL5Jl/nAQNkiSCt8wUwtytNfgeNMZaz3Y9U=";
+    }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
