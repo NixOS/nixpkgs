@@ -14,7 +14,6 @@
 , pyyaml
 , requests
 , requests-oauthlib
-, six
 , slixmpp
 }:
 
@@ -42,7 +41,6 @@ buildPythonPackage rec {
     pyyaml
     requests
     requests-oauthlib
-    six
   ];
 
   checkInputs = [
@@ -56,6 +54,11 @@ buildPythonPackage rec {
   disabledTests = [
     "test_apprise_cli_nux_env"
     "test_plugin_mqtt_general"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
   ];
 
   postInstall = ''
