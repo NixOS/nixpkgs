@@ -8,20 +8,23 @@
 , python3
 }:
 
+let
+  system = stdenv.hostPlatform.system;
+in
 buildBazelPackage rec {
   pname = "verible";
-  version = "0.0-2172-g238b6df6";
+  version = "0.0-2472-ga80124e1";
 
   # These environment variables are read in bazel/build-version.py to create
   # a build string. Otherwise it would attempt to extract it from .git/.
-  GIT_DATE = "2022-08-08";
+  GIT_DATE = "2022-10-21";
   GIT_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
     rev = "v${version}";
-    sha256 = "sha256-iOJhdbipuqqBiYGgk95d1c8bEK6Z16l16GuzYCQRc2g=";
+    sha256 = "sha256:0jpdxqhnawrl80pbc8544pyggdp5s3cbc7byc423d5v0sri2f96v";
   };
 
   patches = [
@@ -38,8 +41,14 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    # Fixed output derivation hash after bazel fetch
-    sha256 = "sha256-45PINJ7VtL5Jl/nAQNkiSCt8wUwtytNfgeNMZaz3Y9U=";
+    # Fixed output derivation hash after bazel fetch.
+    # This varies per platform, probably from the JDK pulled in being part
+    # of the output derivation ? Is there a more robust way to do this ?
+    # (Hashes extracted from the ofborg build logs)
+    sha256 = {
+      aarch64-linux = "sha256-6Udp7sZKGU8gcy6+5WPhkSWunf1sVkha8l5S1UQsC04=";
+      x86_64-linux = "sha256-WfhgbJFaM/ipdd1dRjPeVZ1mK2hotb0wLmKjO7e+BO4=";
+    }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
@@ -63,6 +72,7 @@ buildBazelPackage rec {
       verilog/tools
   '';
 
+  bazel = bazel_4;
   removeRulesCC = false;
   bazelTarget = ":install-binaries";
   bazelTestTargets = [ "//..." ];
@@ -93,6 +103,6 @@ buildBazelPackage rec {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server.";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hzeller ];
+    maintainers = with maintainers; [ hzeller newam ];
   };
 }
