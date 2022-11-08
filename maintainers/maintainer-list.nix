@@ -11976,6 +11976,12 @@
     githubId = 852967;
     name = "Russell O'Connor";
   };
+  rodrgz = {
+    email = "rodrgz@proton.me";
+    github = "rodrgz";
+    githubId = 53882428;
+    name = "Erik Rodriguez";
+  };
   roelvandijk = {
     email = "roel@lambdacube.nl";
     github = "roelvandijk";
