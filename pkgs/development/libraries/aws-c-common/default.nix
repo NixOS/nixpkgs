@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, coreutils
+, nix
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "AWS SDK for C common core";
