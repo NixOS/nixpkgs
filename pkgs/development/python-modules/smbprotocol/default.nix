@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.9.0";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-u3brP3WsnoqRy3R0OQQkIbq+avS7nemx9GKpvTq+vxg=";
+    sha256 = "sha256-Qy5zscN8KW1FY7BjZhkyjsz8U5Bw3qjFG+bkR/goPbo=";
   };
 
   propagatedBuildInputs = [
