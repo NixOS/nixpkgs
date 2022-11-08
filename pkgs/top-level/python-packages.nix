@@ -2175,6 +2175,8 @@ self: super: with self; {
 
   datasette = callPackage ../development/python-modules/datasette { };
 
+  datasette-publish-fly = callPackage ../development/python-modules/datasette-publish-fly { };
+
   datasette-template-sql = callPackage ../development/python-modules/datasette-template-sql { };
 
   datashader = callPackage ../development/python-modules/datashader { };
@@ -10723,6 +10725,8 @@ self: super: with self; {
   striprtf = callPackage ../development/python-modules/striprtf { };
 
   structlog = callPackage ../development/python-modules/structlog { };
+
+  stubserver = callPackage ../development/python-modules/stubserver { };
 
   stumpy = callPackage ../development/python-modules/stumpy { };
 
