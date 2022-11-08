@@ -4830,7 +4830,9 @@ with pkgs;
 
   shab = callPackage ../tools/text/shab { };
 
-  sheldon = callPackage ../tools/misc/sheldon { };
+  sheldon = callPackage ../tools/misc/sheldon {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
