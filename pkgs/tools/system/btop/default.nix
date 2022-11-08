@@ -9,13 +9,12 @@
 stdenv.mkDerivation rec {
   pname = "btop";
   version = "1.2.13";
-  hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = hash;
+    hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
   };
 
   ADDFLAGS = with darwin.apple_sdk.frameworks;
