@@ -1012,6 +1012,24 @@ signald -d /var/lib/signald/db \
           <literal>services.syncthing.dataDir</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.github-runner</literal> and
+          <literal>services.github-runners.&lt;name&gt;</literal> gained
+          the option <literal>serviceOverrides</literal> which allows
+          overriding the systemd <literal>serviceConfig</literal>. If
+          you have been overriding the systemd service configuration
+          (i.e., by defining
+          <literal>systemd.services.github-runner.serviceConfig</literal>),
+          you have to use the <literal>serviceOverrides</literal> option
+          now. Example:
+        </para>
+        <programlisting>
+services.github-runner.serviceOverrides.SupplementaryGroups = [
+  &quot;docker&quot;
+];
+</programlisting>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
@@ -1023,6 +1041,13 @@ signald -d /var/lib/signald/db \
           0.18.0 to 0.19.0, which brings some breaking changes. See the
           <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
           release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Configuring multiple GitHub runners is now possible through
+          <literal>services.github-runners.&lt;name&gt;</literal>. The
+          option <literal>services.github-runner</literal> remains.
         </para>
       </listitem>
       <listitem>
