@@ -344,7 +344,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }
