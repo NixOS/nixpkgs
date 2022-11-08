@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "peep";
-  version = "0.1.4-post.2021-08-17";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ryochack";
     repo = "peep";
-    rev = "0eceafe16ff1f9c6d6784cca75b6f612c38901c4";
-    sha256 = "sha256-HtyT9kFS7derPhiBzICHIz3AvYVcYpUj1OW+t5RivRs=";
+    rev = "55c13d3672cf0002105c04decdd180e9189f1a1c";
+    sha256 = "sha256-6Y7ZI0kIPE7uMMOkXgm75JMEec090xZPBJFJr9DaswA=";
   };
 
-  cargoSha256 = "sha256-sHsmHCMuHc56Mkqk2NUtZgC0RGyqhPvW1fKHkEAhqYk=";
+  cargoSha256 = "sha256-CDWa03H8vWfhx2dwZU5rAV3fSwAGqCIPcvl+lTG4npE=";
 
   meta = with lib; {
     description = "The CLI text viewer tool that works like less command on small pane within the terminal window";
