@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!withFirmware) [
     "-DWITH_APOGEE=off"
     "-DWITH_DSI=off"
-    "-DWITH_QHY=off"
     "-DWITH_ARMADILLO=off"
     "-DWITH_FISHCAMP=off"
     "-DWITH_SBIG=off"
