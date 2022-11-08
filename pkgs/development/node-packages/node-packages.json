@@ -124,6 +124,7 @@
 , "@electron-forge/cli"
 , "eas-cli"
 , "elm-oracle"
+, "elm-test"
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
@@ -208,6 +209,7 @@
 , "less-plugin-clean-css"
 , "live-server"
 , "livedown"
+, "localtunnel"
 , "lodash"
 , "lua-fmt"
 , "lv_font_conv"
