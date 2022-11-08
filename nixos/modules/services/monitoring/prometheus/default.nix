@@ -1822,7 +1822,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
     # prometheus-config-reload will activate after prometheus. However, what we
