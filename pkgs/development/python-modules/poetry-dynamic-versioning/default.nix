@@ -3,7 +3,7 @@
 , dunamai
 , fetchFromGitHub
 , jinja2
-, markupsafe
+, poetry
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.18.0";
+  version = "0.21.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UO2D80cZurfPCtDXAEQ4nOJdhNtIghLtZN7gL+9xbGc=";
+    hash = "sha256-g2tMnc62WN2rihQQT4nz0lUVSY0E4gI4QMImBVZ3EKc=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dunamai
     jinja2
-    markupsafe
+    poetry
     tomlkit
   ];
 
@@ -40,6 +40,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # these require network access
+    "test_integration.py"
     # these require .git, but leaveDotGit = true doesn't help
     "test__get_version__defaults"
     "test__get_version__format_jinja"
