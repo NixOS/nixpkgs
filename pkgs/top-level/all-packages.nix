@@ -5542,6 +5542,8 @@ with pkgs;
 
   artim-dark = callPackage ../data/themes/artim-dark {};
 
+  bbin = callPackage ../development/tools/bbin {};
+
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
