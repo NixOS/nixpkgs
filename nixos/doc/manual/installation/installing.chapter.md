@@ -307,7 +307,7 @@ update /etc/fstab.
     ```
 
 4.  Finally, add a *swap* partition. The size required will vary
-    according to needs, here a 8GiB one is created.
+    according to needs, here a 8GB one is created.
 
     ```ShellSession
     # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
@@ -543,8 +543,8 @@ corresponding configuration Nix expression.
 :::
 ```ShellSession
 # parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary 1MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart primary 1MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
 ```
 :::
 
@@ -554,9 +554,9 @@ corresponding configuration Nix expression.
 :::
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart primary 512MiB -8GiB
-# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
-# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+# parted /dev/sda -- mkpart primary 512MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+# parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 ```
 :::
