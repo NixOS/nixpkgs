@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-j5HjGcIqq93Ca9OBqEgSotoSXyw+q6Fqxa3hKk1ctwQ=";
   };
 
+  postPatch = ''
+    # Avoid blanket -Werror as it triggers on any minor compiler
+    # warnings like deprecated functions or invalid indentat8ion.
+    # Leave fixing these problems to upstream.
+    substituteInPlace CMakeLists.txt --replace ';-Werror;' ';'
+  '';
+
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
@@ -29,10 +36,6 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     qtwayland
-  ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=misleading-indentation"
   ];
 
   meta = with lib; {
