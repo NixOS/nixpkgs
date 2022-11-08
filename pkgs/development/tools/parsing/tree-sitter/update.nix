@@ -31,7 +31,6 @@ let
     "tree-sitter-scala"
     "tree-sitter-ocaml"
     "tree-sitter-julia"
-    "tree-sitter-agda"
     "tree-sitter-fluent"
     "tree-sitter-html"
     "tree-sitter-haskell"
@@ -73,6 +72,8 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # abandoned
+    "tree-sitter-agda"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
