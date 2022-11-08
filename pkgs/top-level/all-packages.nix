@@ -21964,7 +21964,7 @@ with pkgs;
       inherit newScope;
       inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
       inherit bison cups dconf harfbuzz libGL perl gtk3 ninja;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
       inherit buildPackages;
       cmake = cmake.overrideAttrs (attrs: {
         patches = attrs.patches ++ [
@@ -27567,7 +27567,7 @@ with pkgs;
       inherit (gnome2) libglade;
   };
 
-  calcmysky = libsForQt5.callPackage ../applications/science/astronomy/calcmysky { };
+  calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
   calcurse = callPackage ../applications/misc/calcurse { };
 
@@ -36193,7 +36193,7 @@ with pkgs;
 
   sq = callPackage ../development/tools/sq { };
 
-  stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
+  stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
 
   stellarsolver = libsForQt5.callPackage ../development/libraries/science/astronomy/stellarsolver { };
 

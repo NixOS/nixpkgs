@@ -3,13 +3,15 @@
 , fetchFromGitHub
 , cmake
 , perl
+, wrapGAppsHook
 , wrapQtAppsHook
 , qtbase
 , qtcharts
-, qtlocation
+, qtpositioning
 , qtmultimedia
-, qtscript
 , qtserialport
+, qttranslations
+, qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
@@ -19,28 +21,30 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-6EAykJ0yWeU1EBR5+7JjWGUVBE1DKW+W8yJOt0smkaE=";
+    sha256 = "sha256-ellfBZWOkvlRauuwug96C7P/WjQ6dXiDnT0b3KH5zRM=";
   };
 
   nativeBuildInputs = [
     cmake
     perl
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
     qtcharts
-    qtlocation
+    qtpositioning
     qtmultimedia
-    qtscript
     qtserialport
+    qttranslations
+    qtwayland
     qtwebengine
     calcmysky
     qxlsx
@@ -52,6 +56,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
