@@ -11,10 +11,6 @@
 , curl
 , gsoap
 , enableTools ? true
-  # Build the bundled libcurl
-  # and, if defaultToLibCurl,
-  # use instead of an external one
-, useEmbeddedLibcurl ? true
   # Use libcurl instead of libneon
   # Note that the libneon used is bundled in the project
   # See https://github.com/cern-fts/davix/issues/23
@@ -37,7 +33,8 @@ stdenv.mkDerivation rec {
     libxml2
     boost
     libuuid
-  ] ++ lib.optional (defaultToLibcurl && !useEmbeddedLibcurl) curl
+    curl
+  ]
   ++ lib.optional (enableThirdPartyCopy) gsoap;
 
   # using the url below since the github release page states
@@ -56,7 +53,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TOOLS=${boolToUpper enableTools}"
-    "-DEMBEDDED_LIBCURL=${boolToUpper useEmbeddedLibcurl}"
+    "-DEMBEDDED_LIBCURL=false"
     "-DLIBCURL_BACKEND_BY_DEFAULT=${boolToUpper defaultToLibcurl}"
     "-DENABLE_IPV6=${boolToUpper enableIpv6}"
     "-DENABLE_TCP_NODELAY=${boolToUpper enableTcpNodelay}"
