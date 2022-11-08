@@ -156,7 +156,6 @@ in
 
         # theme
         gnome.adwaita-icon-theme
-        hicolor-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
         mint-artwork
@@ -171,6 +170,7 @@ in
       ];
 
       xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
