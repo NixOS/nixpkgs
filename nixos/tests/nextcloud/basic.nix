@@ -37,6 +37,8 @@ in {
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
       ];
 
+      system.stateVersion = "22.11";
+
       services.nextcloud = {
         enable = true;
         datadir = "/var/lib/nextcloud-data";

@@ -15,7 +15,7 @@ let
       (with all;
         # disable default openssl extension
         (lib.filter (e: e.pname != "openssl") enabled)
-        # use OpenSSL 1.1 for RC4 NextCloud encryption if user
+        # use OpenSSL 1.1 for RC4 Nextcloud encryption if user
         # has acknowledged the brokeness of the ciphers (RC4).
         # TODO: remove when https://github.com/nextcloud/server/issues/32003 is fixed.
         ++ (if cfg.enableBrokenCiphersForSSE then [ cfg.phpPackage.extensions.openssl-legacy ] else [ cfg.phpPackage.extensions.openssl ])
@@ -88,32 +88,32 @@ in {
 
     enableBrokenCiphersForSSE = mkOption {
       type = types.bool;
-      # Workaround can be removed at backport-time for 22.11.
-      default = !(versionOlder stateVersion "22.11");
+      default = versionOlder stateVersion "22.11";
+      defaultText = literalExpression "versionOlder system.stateVersion \"22.11\"";
       description = lib.mdDoc ''
-        This option uses OpenSSL PHP extension linked against OpenSSL 1.x rather
+        This option uses OpenSSL PHP extension linked against OpenSSL 1.1 rather
         than latest OpenSSL (≥ 3), this is not recommended except if you need
         it.
 
-        Server-side encryption in NextCloud uses RC4 ciphers, a broken cipher
+        Server-side encryption in Nextcloud uses RC4 ciphers, a broken cipher
         since ~2004.
 
         This cipher has been disabled in OpenSSL ≥ 3 and requires
         a specific legacy profile to re-enable it.
 
-        If you upgrade to a NextCloud using OpenSSL ≥ 3 and have
+        If you upgrade to a Nextcloud using OpenSSL ≥ 3 and have
         server-side encryption configured, you will not be able to access
-        your files anymore, enabling this option can restore access to your files.
+        your files anymore. Enabling this option can restore access to your files.
+        Upon testing we didn't encounter any data corruption when turning
+        this on and off again, but this cannot be guaranteed for
+        each Nextcloud installation.
 
         Unless you are using external storage,
         it is advised to [disable server-side encryption](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption) as it is unclear
         it provides any amount of security beyond encryption for external storage.
-        If you know more about this feature and is keen on it,
-        please chime in <https://github.com/NixOS/nixpkgs/pull/198470> or open
-        an issue in nixpkgs.
 
-        In the future, NextCloud may move to AES-256-GCM, by then,
-        this option will be deprecated.
+        In the future, Nextcloud may move to AES-256-GCM, by then,
+        this option will be removed.
       '';
     };
     hostName = mkOption {
@@ -686,12 +686,17 @@ in {
         ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional cfg.enableBrokenCiphersForSSE ''
-          You're using PHP's openssl extension built against OpenSSL 1.1.
-          This is only necessary if you're using NextCloud's server-side encryption.
+          You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
+          This is only necessary if you're using Nextcloud's server-side encryption.
           Please keep in mind that it's using the broken RC4 cipher.
 
-          In order to disable this option and remove this warning,
-          server-side encryption has to be disabled, see <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
+          If you don't use that feature, you can switch to OpenSSL 3 by declaring
+
+            services.nextcloud.enableBrokenCiphersForSSE = false;
+
+          Otherwise you'd have to disable server-side encryption first in order
+          to be able to safely disable this option and get rid of that warning.
+          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
 
           For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
         '')
