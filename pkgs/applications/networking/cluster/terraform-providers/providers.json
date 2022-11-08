@@ -1195,13 +1195,13 @@
     "version": "1.9.1"
   },
   "ucloud": {
-    "hash": "sha256-O/M864JY7nW+PZ53z26QvOAar5DeqBGk+dfzarfUy+g=",
+    "hash": "sha256-x3+OuRzZdS429v0JNyZkM3v1etUgURSyi9qkt7RhqlI=",
     "owner": "ucloud",
     "provider-source-address": "registry.terraform.io/ucloud/ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.32.4",
+    "rev": "v1.32.5",
     "vendorHash": null,
-    "version": "1.32.4"
+    "version": "1.32.5"
   },
   "utils": {
     "hash": "sha256-6o55uGTaqf3rbqoIGiYi5F4zOkK7D0YP+LdaMmBtw24=",
