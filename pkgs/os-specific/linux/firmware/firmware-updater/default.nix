@@ -10,7 +10,7 @@ flutter2.mkFlutterApp {
 
   vendorHash =
     if stdenv.system == "aarch64-linux"
-    then "sha256-2eleXBlg2jxDDBF5rInyqZa3n14X6UdQn6ND7FTieVA="
+    then "sha256-+ACmcIKXtGtaYBuwc7jY9hEdIS9qxQCbuxRKJQohX5A="
     else "sha256-nPblucEpNCBJYpIqx1My6SWq8CjXYuHDG/uphdcrWjQ=";
 
   src = fetchFromGitHub {
