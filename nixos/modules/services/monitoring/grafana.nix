@@ -72,6 +72,17 @@ let
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
+    imports = [
+      (mkRemovedOptionModule [ "password" ] ''
+        `services.grafana.provision.datasources.settings.datasources.<name>.password` has been removed
+        in Grafana 9. Use `secureJsonData` instead.
+      '')
+      (mkRemovedOptionModule [ "basicAuthPassword" ] ''
+        `services.grafana.provision.datasources.settings.datasources.<name>.basicAuthPassword` has been removed
+        in Grafana 9. Use `secureJsonData` instead.
+      '')
+    ];
+
     options = {
       name = mkOption {
         type = types.str;
@@ -100,28 +111,6 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
-      };
-      password = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc ''
-          Database password, if used. Please note that the contents of this option
-          will end up in a world-readable Nix store. Use the file provider
-          pointing at a reasonably secured file in the local filesystem
-          to work around that. Look at the documentation for details:
-          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
-        '';
-      };
-      basicAuthPassword = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc ''
-          Basic auth password. Please note that the contents of this option
-          will end up in a world-readable Nix store. Use the file provider
-          pointing at a reasonably secured file in the local filesystem
-          to work around that. Look at the documentation for details:
-          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
-        '';
       };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
@@ -600,6 +589,7 @@ in {
                   description = lib.mdDoc "List of datasources to insert/update.";
                   default = [];
                   type = types.listOf grafanaTypes.datasourceConfig;
+                  apply = map (flip builtins.removeAttrs [ "password" "basicAuthPassword" ]);
                 };
 
                 deleteDatasources = mkOption {
@@ -858,7 +848,7 @@ in {
                 };
 
                 contactPoints = mkOption {
-                  description = lib.mdDoc "List of contact points to import or update. Please note that sensitive data will end up in world-readable Nix store.";
+                  description = lib.mdDoc "List of contact points to import or update.";
                   default = [];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
@@ -1165,31 +1155,44 @@ in {
 
   config = mkIf cfg.enable {
     warnings = let
-      usesFileProvider = opt: defaultValue: builtins.match "^${defaultValue}$|^\\$__file\\{.*}$" opt != null;
+      doesntUseFileProvider = opt: defaultValue:
+        let
+          regex = "${optionalString (defaultValue != null) "^${defaultValue}$|"}^\\$__(file|env)\\{.*}$|^\\$[^_\\$][^ ]+$";
+        in builtins.match regex opt == null;
     in
+      # Ensure that no custom credentials are leaked into the Nix store. Unless the default value
+      # is specified, this can be achieved by using the file/env provider:
+      # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
       (optional (
-        ! usesFileProvider cfg.settings.database.password "" ||
-        ! usesFileProvider cfg.settings.security.admin_password "admin"
-      ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
+        doesntUseFileProvider cfg.settings.database.password "" ||
+        doesntUseFileProvider cfg.settings.security.admin_password "admin"
+      ) ''
+        Grafana passwords will be stored as plaintext in the Nix store!
+        Use file/env provider or an env-var instead.
+      '')
+      # Warn about deprecated notifiers.
+      ++ (optional (cfg.provision.notifiers != []) ''
+        Notifiers are deprecated upstream and will be removed in Grafana 10.
+        Use `services.grafana.provision.alerting.contactPoints` instead.
+      '')
+      # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
+      # only uses file/env providers.
       ++ (optional (
         let
-          checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
-          datasourcesUsed = optionals (cfg.provision.datasources.settings != null) cfg.provision.datasources.settings.datasources;
-        in checkOpts datasourcesUsed
-        ) ''
-          Datasource passwords will be stored as plaintext in the Nix store!
-          It is not possible to use file provider in provisioning; please provision
-          datasources via `services.grafana.provision.datasources.path` instead.
-        '')
+          datasourcesToCheck = optionals
+            (cfg.provision.datasources.settings != null)
+            cfg.provision.datasources.settings.datasources;
+          declarationUnsafe = { secureJsonData, ... }:
+            secureJsonData != null
+            && any (flip doesntUseFileProvider null) (attrValues secureJsonData);
+        in any declarationUnsafe datasourcesToCheck
+      ) ''
+        Declarations in the `secureJsonData`-block of a datasource will be leaked to the
+        Nix store unless a file/env-provider or an env-var is used!
+      '')
       ++ (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
-      ++ (optional (
-        cfg.provision.notifiers != []
-        ) ''
-            Notifiers are deprecated upstream and will be removed in Grafana 10.
-            Use `services.grafana.provision.alerting.contactPoints` instead.
-        '');
+      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.");
 
     environment.systemPackages = [ cfg.package ];
 
