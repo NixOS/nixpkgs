@@ -6,7 +6,7 @@
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
-, toml
+, tomli
 }:
 
 buildPythonPackage rec {
@@ -25,8 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ruamel-yaml
-    toml
-  ];
+  ] ++ (if (pythonOlder "3.11") then [tomli] else []);
 
   checkInputs = [
     git
