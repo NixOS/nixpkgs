@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , attrs
 , boto3
 , google-pasta
@@ -27,6 +28,13 @@ buildPythonPackage rec {
     hash = "sha256-hs71bIoByh5S1ncsku+y4X2i0yU65FknJE05lEmnru4=";
   };
 
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    # FIXME: Remove when >= 2.111.0
+    "attrs"
+    "protobuf"
+  ];
+
   propagatedBuildInputs = [
     attrs
     boto3
@@ -40,11 +48,6 @@ buildPythonPackage rec {
     smdebug-rulesconfig
     pandas
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "attrs==20.3.0" "attrs>=20.3.0"
-  '';
 
   postFixup = ''
     [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
