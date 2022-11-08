@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.6.4";
+  version = "1.6.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.4";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Salamek";
     repo = "huawei-lte-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-SwGRMYtJ6C91sOlnZl6UclR8jrWex8wqBoOBITZInGk=";
+    hash = "sha256-LVWhHSHiixjZjakXgGnEIcJkQ0+VU3Xhlh8uY76Prxg=";
   };
 
   postPatch = ''
