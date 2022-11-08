@@ -956,6 +956,8 @@ let
     else
     null;
 
+    ocamlc-loc = callPackage ../development/ocaml-modules/ocamlc-loc { };
+
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
     ocaml_expat =
