@@ -72,6 +72,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ humancalico ];
+    maintainers = with maintainers; [ humancalico happysalada ];
   };
 }
