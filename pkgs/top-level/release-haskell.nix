@@ -53,6 +53,7 @@ let
     ghc8107
     ghc902
     ghc925
+    ghc942
     ghc943
   ];
 
