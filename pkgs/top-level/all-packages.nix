@@ -1285,7 +1285,9 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
-  butler = callPackage ../games/itch/butler.nix { };
+  butler = callPackage ../games/itch/butler.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
