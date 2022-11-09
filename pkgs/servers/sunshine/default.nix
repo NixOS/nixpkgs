@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-SB2DAOYf2izIwwRWEw2wt5L5oCDbb6YOqXw/z/PD1pQ=";
+    sha256 = "sha256-/eekvpjopCivb2FJqh5W1G54GznLwdjk8ANOosdfuxw=";
     fetchSubmodules = true;
   };
 
