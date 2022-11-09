@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.67";
 
   src = fetchurl {
-    url    = "https://www.stunnel.org/archive/${lib.versions.major version}.x/${pname}-${version}.tar.gz";
+    url    = "ftp://ftp.stunnel.org/stunnel/archive/${lib.versions.major version}.x/${pname}-${version}.tar.gz";
     sha256 = "3086939ee6407516c59b0ba3fbf555338f9d52f459bcab6337c0f00e91ea8456";
     # please use the contents of "https://www.stunnel.org/downloads/stunnel-${version}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
