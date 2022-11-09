@@ -9,16 +9,17 @@
 , yosys-symbiflow
 , uhdm
 , surelog
+, flatbuffers
 }: let
 
   src = fetchFromGitHub {
     owner  = "chipsalliance";
     repo   = "yosys-f4pga-plugins";
-    rev    = "27208ce08200a5e89e3bd4f466bc68824df38c32";
-    hash   = "sha256-S7txjzlIp+idWIfp/DDOznluA3aMFfosMUt5dvi+g44=";
+    rev    = "e23ff6db487da9ceea576c53ac33853566c3a84e";
+    hash   = "sha256-HJ4br6lQwRrcnkLgV3aecr3T3zcPzA11MfxhRjwIb0I=";
   };
 
-  version = "2022.09.27";
+  version = "2022.11.07";
 
   # Supported symbiflow plugins.
   #
@@ -60,6 +61,7 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   patches = lib.optional ( plugin == "ql-qlf" ) ./symbiflow-pmgen.patch;
 
   preBuild = ''
+    export LDFLAGS="-L${flatbuffers}/lib"
     mkdir -p ql-qlf-plugin/pmgen
   ''
   + lib.optionalString ( plugin == "ql-qlf" ) ''
@@ -68,8 +70,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   # Providing a symlink avoids the need for patching the test makefile
   postUnpack = ''
-    mkdir -p source/third_party/googletest/googletest/build/
-    ln -s ${static_gtest}/lib source/third_party/googletest/googletest/build/lib
+    mkdir -p source/third_party/googletest/build/
+    ln -s ${static_gtest}/lib source/third_party/googletest/build/lib
   '';
 
   makeFlags = [
