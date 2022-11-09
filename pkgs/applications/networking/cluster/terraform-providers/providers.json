@@ -202,17 +202,6 @@
     "vendorHash": "sha256-VnYRDBneQ+bUzISJM9DJdBEBmjA1WOXPo+kaYBW4w4U=",
     "version": "1.6.2"
   },
-  "checkpoint": {
-    "deleteVendor": true,
-    "hash": "sha256-pErJcwpUGg2cGKWiagjfneUjSDtT+BxLy5JjZvwCUH0=",
-    "owner": "CheckPointSW",
-    "provider-source-address": "registry.terraform.io/CheckPointSW/checkpoint",
-    "proxyVendor": true,
-    "repo": "terraform-provider-checkpoint",
-    "rev": "v2.1.0",
-    "vendorHash": "sha256-6tH/U0qJ83w9qibuF8/TcRAsCke/VnRVRGfHaWsW9+4=",
-    "version": "2.1.0"
-  },
   "ciscoasa": {
     "hash": "sha256-xzc44FEy2MPo51Faq/VFwg411JK9e0kQucpt0vdN8yg=",
     "owner": "CiscoDevNet",

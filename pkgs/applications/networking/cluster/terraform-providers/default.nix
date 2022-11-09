@@ -77,6 +77,7 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       b2 = removed "b2" "2022/06";
+      checkpoint = removed "checkpoint" "2022/11";
       dome9 = removed "dome9" "2022/08";
       ncloud = removed "ncloud" "2022/08";
       opc = archived "opc" "2022/05";
