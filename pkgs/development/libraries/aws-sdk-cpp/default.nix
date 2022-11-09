@@ -15,6 +15,7 @@
 , aws-checksums
 , CoreAudio
 , AudioToolbox
+, nix
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -31,13 +32,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.294";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+    hash = "sha256-CE3viTfT54dpihm0KT2ZlmYZKPsuQA0pZVaOY4F7dfY=";
   };
 
   patches = [
@@ -50,21 +51,6 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/compiler_settings.cmake \
       --replace '"-Werror"' ' '
 
-    # Missing includes for GCC11
-    sed '5i#include <thread>' -i \
-      aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
-      aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
-      aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
-      aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
-      aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
-      aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
-      aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
-      aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
-      aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
-      aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
-      aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
-      aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
-      aws-cpp-sdk-transfer-tests/TransferTests.cpp
     # Flaky on Hydra
     rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
@@ -123,6 +109,11 @@ stdenv.mkDerivation rec {
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru.tests = {
+    inherit nix;
+    inherit (nix) tests;
+  };
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
