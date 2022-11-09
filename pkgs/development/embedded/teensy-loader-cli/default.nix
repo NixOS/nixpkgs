@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm555 teensy_loader_cli $out/bin/teensy-loader-cli
-    install -Dm444 -t $out/share/doc/${pname} *.md *.txt
-    go-md2man -in README.md -out ${pname}.1
+    install -Dm444 -t $out/share/doc/teensy-loader-cli *.md *.txt
+    go-md2man -in README.md -out teensy-loader-cli.1
     installManPage *.1
 
     runHook postInstall
