@@ -502,6 +502,8 @@ with pkgs;
 
   hobbes = callPackage ../development/tools/hobbes { stdenv = gcc10StdenvCompat; };
 
+  honeycomb-refinery = callPackage ../servers/tracing/honeycomb/refinery { };
+
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
