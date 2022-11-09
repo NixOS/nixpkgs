@@ -185,7 +185,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc92 = ghc925;
+    ghc92 = ghc924;
     ghc942 = callPackage ../development/compilers/ghc/9.4.2.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
@@ -360,7 +360,7 @@ in {
       ghc = bh.compiler.ghc925;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
-    ghc92 = ghc925;
+    ghc92 = ghc924;
     ghc942 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc942;
       ghc = bh.compiler.ghc942;
