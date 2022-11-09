@@ -11282,6 +11282,12 @@
     githubId = 18196237;
     name = "Quentin Inkling";
   };
+  quoorex = {
+    email = "nix-maintainer@jz.meteor.li";
+    github = "Quoorex";
+    githubId = 46283604;
+    name = "Quoorex";
+  };
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
