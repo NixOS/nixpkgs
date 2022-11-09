@@ -35998,7 +35998,7 @@ in {
     systems = [ "gsll" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "foreign-array" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "lisp-unit" pkgs) (getAttr "metabang-bind" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) ];
     meta = {
-      # needs "nativeInputs=" with libgslcblas.so
+      # needs "nativeLibs=nixpkgs.gsl" for libgslcblas.so and a way to set CFLAGS="-I gsl/include" or something similar
       broken = true;
     };
   };
