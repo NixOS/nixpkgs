@@ -58,6 +58,7 @@
 , CoreAudio
 , CoreAudioKit
 , CoreServices
+, wrapGAppsHook
 }:
 
 # TODO
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ] ++ optionals stdenv.isLinux [
     linuxHeaders
+    wrapGAppsHook
   ];
 
   buildInputs = [
