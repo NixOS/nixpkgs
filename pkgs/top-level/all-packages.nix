@@ -6612,6 +6612,8 @@ with pkgs;
 
   fluent-bit = callPackage ../tools/misc/fluent-bit { };
 
+  fluent-reader = callPackage ../applications/networking/feedreaders/fluent-reader { };
+
   flux = callPackage ../development/compilers/flux { };
 
   fido2luks = callPackage ../tools/security/fido2luks {};
