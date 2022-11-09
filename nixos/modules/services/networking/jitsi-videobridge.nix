@@ -150,7 +150,7 @@ in
         config = {
           hostName = mkDefault name;
           mucNickname = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-            config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
+            config.networking.fqdnOrHostName
           ));
         };
       }));
