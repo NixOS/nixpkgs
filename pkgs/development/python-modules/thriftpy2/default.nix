@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "thriftpy2";
-  version = "0.4.14";
+  version = "0.4.15";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Thriftpy";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "17f57vsbym4c9yax128bhrwg2zjxcsgl3ja6422y8hyb38v5mdc3";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-1X1roRFQgLJ+rrRuRlHMVtUdj2D68WGdxvid/0chsvI=";
   };
 
   nativeBuildInputs = [
