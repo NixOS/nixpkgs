@@ -123,11 +123,8 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; [
+      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
         desktop-file-utils
-        nixos-artwork.wallpapers.simple-dark-gray
-        onboard
-        sound-theme-freedesktop
 
         # common-files
         cinnamon-common
@@ -152,22 +149,29 @@ in
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
-        orca
 
         # theme
         gnome.adwaita-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
+
+        # other
+        glib # for gsettings
+        xdg-user-dirs
+      ] ++ utils.removePackagesByName [
+        # accessibility
+        onboard
+        orca
+
+        # theme
+        sound-theme-freedesktop
+        nixos-artwork.wallpapers.simple-dark-gray
         mint-artwork
         mint-themes
         mint-x-icons
         mint-y-icons
         vanilla-dmz
-
-        # other
-        glib # for gsettings
-        xdg-user-dirs
-      ];
+      ] config.environment.cinnamon.excludePackages);
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
