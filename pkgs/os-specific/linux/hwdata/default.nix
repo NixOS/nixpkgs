@@ -19,9 +19,6 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
 
-  outputHashMode = "recursive";
-  outputHash = "sha256-SeaMmojpD4vAel+LE/Ukm1kxc2UeZgy0g1PJUuSD1A0=";
-
   meta = with lib; {
     homepage = "https://github.com/vcrhonek/hwdata";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
