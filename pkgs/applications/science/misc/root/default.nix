@@ -127,6 +127,8 @@ stdenv.mkDerivation rec {
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/CMakeLists.txt \
       --replace "-F/System/Library/PrivateFrameworks" ""
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
   cmakeFlags = [
@@ -202,6 +204,6 @@ stdenv.mkDerivation rec {
 
     # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
     # for some context on issues on aarch64.
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }
