@@ -157,13 +157,13 @@
     "version": "1.18.0"
   },
   "bigip": {
-    "hash": "sha256-uSe+J4AlW8Dt96BVF1ZI/yrgWUbZsl64b/D+k5ysHC0=",
+    "hash": "sha256-erJeg7KF3QUi85ueOQTrab2woIC1nkMXRIj/pFm0DGY=",
     "owner": "F5Networks",
     "provider-source-address": "registry.terraform.io/F5Networks/bigip",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.15.2",
+    "rev": "v1.16.0",
     "vendorHash": null,
-    "version": "1.15.2"
+    "version": "1.16.0"
   },
   "bitbucket": {
     "hash": "sha256-0Sts826Yt6xVVwGpqTC1ZAiNB2+7S6z9rPXDGPNpmOk=",
