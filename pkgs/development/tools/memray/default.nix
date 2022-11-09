@@ -66,5 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
+    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
   };
 }
