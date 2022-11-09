@@ -575,7 +575,6 @@
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
-  ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/freeswitch.nix
@@ -1224,6 +1223,7 @@
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
+  ./system/activation/specialisation.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix
   ./system/boot/emergency-mode.nix
