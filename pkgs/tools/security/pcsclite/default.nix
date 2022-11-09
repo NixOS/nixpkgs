@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     "--enable-ipcdir=/run/pcscd"
     "--with-systemdsystemunitdir=${placeholder "bin"}/lib/systemd/system"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--disable-libsystemd"
   ];
 
   postConfigure = ''
