@@ -332,6 +332,35 @@ let
     version = "f19162e76";
   });
 
+  coalton = build-asdf-system {
+    pname = "coalton";
+    version = "2022-10-17";
+    src = pkgs.fetchFromGitHub {
+      owner = "coalton-lang";
+      repo = "coalton";
+      rev = "d91d11d95d70a38d199bf1b4e68ff342f1815d94";
+      sha256 = "sha256-2kAxoAVu0lWealRc9sKTNjzi+7/ovazcefnwVnw8WkY=";
+    };
+    lispLibs = with ql; [ alexandria trivia fset float-features split-sequence uiop
+                          trivial-garbage fiasco yason trivial-benchmark
+                          html-entities ];
+  };
+
+  kons-9 = build-asdf-system {
+    pname = "kons-9";
+    version = "2022-11-05";
+    src = pkgs.fetchFromGitHub {
+      owner = "kaveh808";
+      repo = "kons-9";
+      rev = "308b1215b9fb964d55be528511e68d84e6de2c03";
+      sha256 = "sha256-1GZ+zycQ5xNMHVrNbW7zTL+u69TFQI/dpZBphqekFyo=";
+    };
+    lispLibs = with ql; [
+      closer-mop trivial-main-thread trivial-backtrace cffi cl-opengl
+      cl-glu cl-glfw3 cl-vectors cl-paths-ttf clobber origin
+    ];
+  };
+
   };
 
 in packages
