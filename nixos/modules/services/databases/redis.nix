@@ -105,6 +105,13 @@ in {
               '';
             };
 
+            extraParams = mkOption {
+              type = with types; listOf str;
+              default = [];
+              description = lib.mdDoc "Extra parameters to append to redis-server invocation";
+              example = [ "--sentinel" ];
+            };
+
             bind = mkOption {
               type = with types; nullOr str;
               default = "127.0.0.1";
@@ -340,7 +347,7 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /run/${redisName name}/redis.conf";
+        ExecStart = "${cfg.package}/bin/redis-server /run/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
         ExecStartPre = [("+"+pkgs.writeShellScript "${redisName name}-credentials" (''
             install -o '${conf.user}' -m 600 ${redisConfig conf.settings} /run/${redisName name}/redis.conf
           '' + optionalString (conf.requirePassFile != null) ''
