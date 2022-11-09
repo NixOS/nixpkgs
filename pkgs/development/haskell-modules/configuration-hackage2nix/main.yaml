@@ -455,6 +455,7 @@ unsupported-platforms:
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ platforms.darwin ]
+  ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
