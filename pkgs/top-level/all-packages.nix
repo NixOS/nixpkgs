@@ -12832,11 +12832,11 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish71 varnish72;
+    varnish60 varnish72;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish71Packages varnish72Packages;
+    varnish60Packages varnish72Packages;
 
-  varnishPackages = varnish71Packages;
+  varnishPackages = varnish72Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
@@ -29100,10 +29100,6 @@ with pkgs;
   hactool = callPackage ../tools/compression/hactool { };
 
   hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
-
-  hdr-plus = callPackage ../applications/graphics/hdr-plus {
-    stdenv = clangStdenv;
-  };
 
   hedgedoc-cli = callPackage ../tools/admin/hedgedoc-cli { };
 
