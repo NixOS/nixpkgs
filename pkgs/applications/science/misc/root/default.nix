@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , fetchpatch
 , makeWrapper
 , cmake
@@ -44,7 +44,7 @@
 let
 
   _llvm_9 = llvm_9.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [
+    patches = (prev.patches or [ ]) ++ [
       (fetchpatch {
         url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
         stripLen = 3;
@@ -57,11 +57,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.06";
+  version = "6.26.08";
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-sfc8l2pYClxWyMigFSWCod/FYLTdgOG3VFI3tl5sics=";
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "root";
+    rev = "v${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "sha256-cNd1GvEbO/a+WdDe8EHYGmdlw3TrOT2fWaSk+s7fw7U=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
