@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/lib/0ad        binaries/system/*.so
 
     # Copy icon.
-    install -D build/resources/0ad.png     $out/share/icons/hicolor/128x128/0ad.png
+    install -D build/resources/0ad.png     $out/share/icons/hicolor/128x128/apps/0ad.png
     install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
   '';
 
