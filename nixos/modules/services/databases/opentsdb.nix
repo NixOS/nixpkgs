@@ -15,13 +15,7 @@ in {
 
     services.opentsdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to run OpenTSDB.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "OpenTSDB");
 
       package = mkOption {
         type = types.package;

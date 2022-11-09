@@ -68,13 +68,8 @@ in
 {
   options = {
     services.exhibitor = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable the exhibitor server.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "exhibitor server");
+
       # See https://github.com/soabase/exhibitor/wiki/Running-Exhibitor for what these mean
       # General options for any type of config
       port = mkOption {

@@ -49,11 +49,8 @@ in
 {
   options = {
     services.smokeping = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enable the smokeping service";
-      };
+      enable = mkEnableOption (lib.mdDoc "smokeping service");
+
       alertConfig = mkOption {
         type = types.lines;
         default = ''

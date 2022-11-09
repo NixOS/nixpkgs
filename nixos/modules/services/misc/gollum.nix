@@ -8,11 +8,7 @@ in
 
 {
   options.services.gollum = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc "Enable the Gollum service.";
-    };
+    enable = mkEnableOption (lib.mdDoc "Gollum service");
 
     address = mkOption {
       type = types.str;

@@ -75,7 +75,7 @@ let
 
 in {
   options.services.peertube = {
-    enable = lib.mkEnableOption (lib.mdDoc "Enable Peertube’s service");
+    enable = lib.mkEnableOption (lib.mdDoc "Peertube");
 
     user = lib.mkOption {
       type = lib.types.str;
