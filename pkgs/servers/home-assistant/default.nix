@@ -70,7 +70,7 @@ let
           pname = "pytest-aiohttp";
           hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
-        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        propagatedBuildInputs = with self; [ aiohttp pytest ];
         doCheck = false;
         patches = [];
       });
@@ -259,6 +259,7 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = let
     relaxedConstraints = [
+      "aiohttp"
       "attrs"
       "awesomeversion"
       "bcrypt"
