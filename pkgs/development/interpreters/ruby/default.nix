@@ -188,7 +188,7 @@ let
             ''
           }
           # Remove unnecessary external intermediate files created by gems
-          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          extMakefiles=$(find $out/${passthru.gemPath} -name Makefile)
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
