@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
+    mainProgram = "bwrap";
   };
 }
