@@ -134,7 +134,7 @@ let
 
   qlpkgs =
     if builtins.pathExists ./imported.nix
-    then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
+    then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; nativePkgs = pkgs; }
     else {};
 
   builtQlpkgs = mapAttrs (n: v: build v) qlpkgs;
