@@ -18,7 +18,7 @@ buildDunePackage rec {
     sha256 = "sha256-0FKKYPbSBza/Q6oZniq/UHi5zBjD/i7j5ds3ZDWkBTs=";
   };
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
   propagatedBuildInputs = [ ojs ppxlib ];
   checkInputs = [ js_of_ocaml-compiler nodejs ];

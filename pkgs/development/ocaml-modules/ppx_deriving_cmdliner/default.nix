@@ -12,7 +12,7 @@ buildDunePackage rec {
   pname = "ppx_deriving_cmdliner";
   version = "0.6.1";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
   src = fetchFromGitHub {
     owner = "hammerlab";
