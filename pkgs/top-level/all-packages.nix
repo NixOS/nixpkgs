@@ -2171,7 +2171,6 @@ with pkgs;
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2; };
-    gsl = gsl_1;
   };
 
   async = callPackage ../development/tools/async {};
