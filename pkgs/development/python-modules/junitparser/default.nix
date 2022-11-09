@@ -1,31 +1,27 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , future
-, python
 }:
 
 buildPythonPackage rec {
   pname = "junitparser";
-  version = "1.4.1";
+  version = "2.8.0";
 
-  src = fetchFromGitHub {
-    owner = "gastlygem";
-    repo = pname;
-    rev = version;
-    sha256 = "16xwayr0rbp7xdg7bzmyf8s7al0dhkbmkcnil66ax7r8bznp5lmp";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qNQpCrn7k/IBXg2+9h75O36hEOmQmQh6RT9VyOFIGt8=";
   };
 
   propagatedBuildInputs = [ future ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  # Pypi release does not include the tests folder
+  doCheck = false;
 
   meta = with lib; {
-    description = "A JUnit/xUnit Result XML Parser";
+    description = "Manipulates JUnit/xUnit Result XML files";
     license = licenses.asl20;
-    homepage = "https://github.com/gastlygem/junitparser";
+    homepage = "https://github.com/weiwei/junitparser";
     maintainers = with maintainers; [ multun ];
   };
 }
