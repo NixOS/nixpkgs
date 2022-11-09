@@ -575,7 +575,6 @@
   ./services/misc/etcd.nix
   ./services/misc/etebase-server.nix
   ./services/misc/etesync-dav.nix
-  ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/freeswitch.nix
