@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
-  version = "0.360";
+  version = "0.364";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    sha256 = "sha256-dF1Yeb3xH4keQzcydZ3h3kyuSZ1knW/2YAJ8xvFSoMo=";
+    hash = "sha256-9fGYoyj7vN3j72H+6jv/R0MaWPZ+4UNQhCSWnZRZZS4=";
   };
 
   postPatch = ''
@@ -20,12 +20,13 @@ stdenv.mkDerivation rec {
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
 
   outputHashMode = "recursive";
-  outputHash = "sha256-gkgnHy1XwP87qpQiAm31AIAkxgGm5JYxMBr60kvd+gE=";
+  outputHash = "sha256-SeaMmojpD4vAel+LE/Ukm1kxc2UeZgy0g1PJUuSD1A0=";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/vcrhonek/hwdata";
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lovesegfault ];
   };
 }
