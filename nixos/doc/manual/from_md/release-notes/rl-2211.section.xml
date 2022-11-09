@@ -1191,6 +1191,13 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          The redis module now persists each instance’s configuration
+          file in the state directory, in order to support some more
+          advanced use cases like sentinel.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The udisks2 service, available at
           <literal>services.udisks2.enable</literal>, is now disabled by
           default. It will automatically be enabled through services and
