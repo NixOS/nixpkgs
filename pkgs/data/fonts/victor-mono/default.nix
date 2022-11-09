@@ -21,9 +21,8 @@ fetchzip {
 
     mv $out/OTF $out/share/fonts/opentype
     mv $out/TTF $out/share/fonts/truetype
-    mv $out/LICENSE.txt $out/share/fonts/$name-LICENSE.txt
 
-    rm -r $out/{EOT,WOFF,WOFF2}
+    rm -r $out/{EOT,WOFF,WOFF2,LICENSE.txt}
   '';
 
   sha256 = "sha256-1si0d2lpuXaDcSc3giVMMMbZc/eKbHKU3wmwfYHZ8o0=";
