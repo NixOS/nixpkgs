@@ -96,13 +96,13 @@ in {
     };
 
     listenHttp = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 9000;
       description = lib.mdDoc "listen port for HTTP server.";
     };
 
     listenWeb = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.port;
       default = 9000;
       description = lib.mdDoc "listen port for WEB server.";
     };
@@ -177,7 +177,7 @@ in {
       };
 
       port = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.port;
         default = 5432;
         description = lib.mdDoc "Database host port.";
       };

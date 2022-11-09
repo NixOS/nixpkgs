@@ -186,7 +186,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8081;
         description = lib.mdDoc "TCP port to use for the web server.";
       };

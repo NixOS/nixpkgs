@@ -135,7 +135,7 @@ in {
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 5353;
       description = lib.mdDoc ''
         The DNSCrypt wrapper will listen for DNS queries on this port.
@@ -182,7 +182,7 @@ in {
     };
 
     upstream.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = lib.mdDoc ''
         The port of the upstream DNS server DNSCrypt will "wrap".

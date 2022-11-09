@@ -21,7 +21,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 4567;
       description = lib.mdDoc "Port on which the web server will run.";
     };

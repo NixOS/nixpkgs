@@ -36,7 +36,7 @@ in
       };
 
       proxyPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8123;
         description = lib.mdDoc "TCP port on which Polipo will listen.";
       };
