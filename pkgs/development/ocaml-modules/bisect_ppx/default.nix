@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "sha256-pOeeSxzUF1jXQjA71atSZALdgQ2NB9qpKo5iaDnPwhQ=";
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast ppxlib.version "0.26.0") [
     # Ppxlib >= 0.26.0 compatibility
     # remove when a new version is released
     (fetchpatch {
@@ -26,8 +26,7 @@ buildDunePackage rec {
     })
   ];
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   buildInputs = [
     cmdliner

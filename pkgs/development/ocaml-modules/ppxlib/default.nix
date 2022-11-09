@@ -2,7 +2,8 @@
 , version ?
   if lib.versionAtLeast ocaml.version "4.07"
   then if lib.versionAtLeast ocaml.version "4.08"
-  then "0.28.0" else "0.15.0" else "0.13.0"
+  then if lib.versionAtLeast ocaml.version "4.11"
+  then "0.28.0" else "0.24.0" else "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 , stdlib-shims, ocaml-migrate-parsetree-2
 }:
