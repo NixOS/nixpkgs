@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pycfdns";
-  version = "1.2.2";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bsalfZEkZrBG0/SyEXCWOZyrhOYU/3YJR/78FQTpXYk=";
+    sha256 = "sha256-2vjeoI+IqvCIHb51BLkuTISbG0PxFGHlmpSiCaV+E0w=";
   };
 
   propagatedBuildInputs = [

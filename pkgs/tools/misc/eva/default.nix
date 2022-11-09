@@ -2,15 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eva";
-  version = "0.3.0-2";
+  version = "0.3.1";
 
   src = fetchCrate {
-    inherit pname;
-    version = "0.3.0";
-    sha256 = "sha256-oeNv4rKZAl/gQ8b8Yr7fgQeeszJjzMcf9q1KzYpVS1Y=";
+    inherit pname version;
+    sha256 = "sha256-eX2d9h6zNbheS68j3lyhJW05JZmQN2I2MdcmiZB8Mec=";
   };
 
-  cargoSha256 = "sha256-WBniKff9arVgNFBY2pwB0QgEBvzCL0Dls+6N49V86to=";
+  cargoSha256 = "sha256-gnym2sedyzQzubOtj64Yoh+sKT+sa60w/Z72hby7Pms=";
 
   meta = with lib; {
     description = "A calculator REPL, similar to bc";

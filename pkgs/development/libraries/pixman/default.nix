@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libpng
+, glib /*just passthru*/
+
+# for passthru.tests
+, cairo
+, qemu
+, scribus
+, tigervnc
+, wlroots
+, xwayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "pixman";
@@ -25,6 +39,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = glib.flattenInclude;
+
+  passthru.tests = {
+    inherit cairo qemu scribus tigervnc wlroots xwayland;
+  };
 
   meta = with lib; {
     homepage = "http://pixman.org";

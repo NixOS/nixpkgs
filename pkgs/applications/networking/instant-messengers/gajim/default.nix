@@ -22,11 +22,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "sha256-kXpGaGp9OWdDa1q3hx7nrD1ZeKH5CKlTgZbyuNZ05/8=";
+    sha256 = "sha256-JSV4592s7oKJzxBghtlrvXqCoO6iCRoYNu/eaqPfuLA=";
   };
 
   buildInputs = [

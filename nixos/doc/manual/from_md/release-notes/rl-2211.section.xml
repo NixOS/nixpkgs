@@ -891,6 +891,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>zrepl</literal> package has been updated from
+          0.5.0 to 0.6.0. See the
+          <link xlink:href="https://zrepl.github.io/changelog.html">changelog</link>
+          for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
@@ -934,6 +942,22 @@
           <literal>percona-server56</literal> has been removed. Please
           migrate to <literal>mysql</literal> or
           <literal>mariadb</literal> if possible.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>signald</literal> has been bumped to
+          <literal>0.23.0</literal>. For the upgrade, a migration
+          process is necessary. It can be done by running a command like
+          this before starting <literal>signald.service</literal>:
+        </para>
+        <programlisting>
+signald -d /var/lib/signald/db \
+  --database sqlite:/var/lib/signald/db \
+  --migrate-data
+</programlisting>
+        <para>
+          For further information, please read the upstream changelogs.
         </para>
       </listitem>
       <listitem>
@@ -1326,6 +1350,14 @@
           versions and a new <literal>postRebuild</literal> hook has
           been added for packages to perform extra build steps before
           the npm install step prunes dev dependencies.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          boot.kernel.sysctl is defined as a freeformType and adds a
+          custom merge option for <quote>net.core.rmem_max</quote>
+          (taking the highest value defined to avoid conflicts between 2
+          services trying to set that value)
         </para>
       </listitem>
     </itemizedlist>
