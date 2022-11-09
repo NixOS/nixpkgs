@@ -601,6 +601,7 @@ mapAliases ({
   hardlink = throw "hardlink was merged into util-linux since 2019-06-14."; # Added 2022-08-12
   inherit (harePackages) hare harec; # Added 2022-08-10
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # Added 2022-01-15
+  hdr-plus = throw "hdr-plus has been removed because it is unmaintained, often breaks and no longer consumed as a dependency"; # Added 2022-11-08
   heapster = throw "Heapster is now retired. See https://github.com/kubernetes-retired/heapster/blob/master/docs/deprecation.md"; # Added 2022-04-05
   heimdalFull = throw "'heimdalFull' has been renamed to/replaced by 'heimdal'"; # Converted to throw 2022-02-22
   heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
@@ -1527,6 +1528,7 @@ mapAliases ({
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-07-26
   varnish65 = throw "varnish65 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-09-15
   varnish70 = throw "varnish70 was removed from nixpkgs, because it was superseded upstream. Please switch to a different release"; # Added 2022-03-17
+  varnish71 = throw "varnish71 was removed from nixpkgs, because it was superseded upstream. Please switch to a different release"; # Added 2022-11-08
   vdirsyncerStable  = vdirsyncer; # Added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
   venus = throw "venus has been removed from nixpkgs, as it's unmaintained"; # Added 2021-02-05
   vgo2nix = throw "vgo2nix has been removed, because it was deprecated. Consider using gomod2nix instead"; # added 2022-08-24
