@@ -347,16 +347,24 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /run/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
-        ExecStartPre = [("+"+pkgs.writeShellScript "${redisName name}-credentials" (''
-            install -o '${conf.user}' -m 600 ${redisConfig conf.settings} /run/${redisName name}/redis.conf
-          '' + optionalString (conf.requirePassFile != null) ''
-            {
-              printf requirePass' '
-              cat ${escapeShellArg conf.requirePassFile}
-            } >>/run/${redisName name}/redis.conf
-          '')
-        )];
+        ExecStart = "${cfg.package}/bin/redis-server /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+        ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
+          redisConfVar = "/var/lib/${redisName name}/redis.conf";
+          redisConfRun = "/run/${redisName name}/nixos.conf";
+          redisConfStore = redisConfig conf.settings;
+        in ''
+          touch "${redisConfVar}" "${redisConfRun}"
+          chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+          chmod 0600 "${redisConfVar}" "${redisConfRun}"
+          if [ ! -s ${redisConfVar} ]; then
+            echo 'include "${redisConfRun}"' > "${redisConfVar}"
+          fi
+          echo 'include "${redisConfStore}"' > "${redisConfRun}"
+          ${optionalString (conf.requirePassFile != null) ''
+            {echo -n "requirepass "
+            cat ${escapeShellArg conf.requirePassFile}} >> "${redisConfRun}"
+          ''}
+        '');
         Type = "notify";
         # User and group
         User = conf.user;
