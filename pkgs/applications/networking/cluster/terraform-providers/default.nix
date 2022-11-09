@@ -65,6 +65,9 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
+      netlify = automated-providers.netlify.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      pass = automated-providers.pass.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      tencentcloud = automated-providers.tencentcloud.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
