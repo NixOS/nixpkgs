@@ -54,11 +54,8 @@ in {
 
     hostName = lib.mkOption {
       type = lib.types.str;
-      default = if config.networking.domain != null then
-                  config.networking.fqdn
-                else
-                  config.networking.hostName;
-      defaultText = lib.literalExpression "config.networking.fqdn";
+      default = config.networking.fqdnOrHostName;
+      defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
       example = "snipe-it.example.com";
       description = lib.mdDoc ''
         The hostname to serve Snipe-IT on.

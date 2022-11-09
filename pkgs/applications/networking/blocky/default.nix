@@ -21,6 +21,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-fsMBL9qyhIrV6eAsqpSaNniibMdYRVBnl2KCzStvMGQ=";
 
+  ldflags = [ "-s" "-w" "-X github.com/0xERR0R/blocky/util.Version=${version}" ];
+
   meta = with lib; {
     description = "Fast and lightweight DNS proxy as ad-blocker for local network with many features.";
     homepage = "https://0xerr0r.github.io/blocky";

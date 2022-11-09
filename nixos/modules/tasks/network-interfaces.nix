@@ -473,9 +473,29 @@ in
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = lib.mdDoc ''
         The fully qualified domain name (FQDN) of this host. It is the result
-        of combining networking.hostName and networking.domain. Using this
+        of combining `networking.hostName` and `networking.domain.` Using this
         option will result in an evaluation error if the hostname is empty or
         no domain is specified.
+
+        Modules that accept a mere `networing.hostName` but prefer a fully qualified
+        domain name may use `networking.fqdnOrHostName` instead.
+      '';
+    };
+
+    networking.fqdnOrHostName = mkOption {
+      readOnly = true;
+      type = types.str;
+      default = if cfg.domain == null then cfg.hostName else cfg.fqdn;
+      defaultText = literalExpression ''
+        if cfg.domain == null then cfg.hostName else cfg.fqdn
+      '';
+      description = lib.mdDoc ''
+        Either the fully qualified domain name (FQDN), or just the host name if
+        it does not exists.
+
+        This is a convenience option for modules to read instead of `fqdn` when
+        a mere `hostName` is also an acceptable value; this option does not
+        throw an error when `domain` is unset.
       '';
     };
 

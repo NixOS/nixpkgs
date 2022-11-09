@@ -157,6 +157,61 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 ## Tool specific instructions {#javascript-tool-specific}
 
+### buildNpmPackage {#javascript-buildNpmPackage}
+
+`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
+
+```nix
+{ lib, buildNpmPackage, fetchFromGitHub }:
+
+buildNpmPackage rec {
+  pname = "flood";
+  version = "4.7.0";
+
+  src = fetchFromGitHub {
+    owner = "jesec";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
+  };
+
+  patches = [ ./remove-prepack-script.patch ];
+
+  npmDepsHash = "sha256-s8SpZY/1tKZVd3vt7sA9vsqHvEaNORQBMrSyhWpj048=";
+
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
+  meta = with lib; {
+    description = "A modern web UI for various torrent clients with a Node.js backend and React frontend";
+    homepage = "https://flood.js.org";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ winter ];
+  };
+}
+```
+
+#### Arguments {#javascript-buildNpmPackage-arguments}
+
+* `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
+* `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
+* `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
+* `npmFlags`: Flags to pass to all npm commands.
+* `npmInstallFlags`: Flags to pass to `npm ci`.
+* `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
+* `npmPackFlags`: Flags to pass to `npm pack`.
+
+#### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
+
+`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+
+```console
+$ ls
+package.json package-lock.json index.js
+$ prefetch-npm-deps package-lock.json
+...
+sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+```
+
 ### node2nix {#javascript-node2nix}
 
 #### Preparation {#javascript-node2nix-preparation}
