@@ -33,7 +33,7 @@ in {
     port = mkOption {
       description = lib.mdDoc "Zookeeper Client port.";
       default = 2181;
-      type = types.int;
+      type = types.port;
     };
 
     id = mkOption {

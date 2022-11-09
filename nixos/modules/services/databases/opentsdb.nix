@@ -49,7 +49,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4242;
         description = lib.mdDoc ''
           Which port OpenTSDB listens on.
