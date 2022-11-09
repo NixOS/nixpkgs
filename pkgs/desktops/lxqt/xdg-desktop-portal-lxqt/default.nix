@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "xdg-desktop-portal-lxqt";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "15wld2p07sbf2i2qv86ljm479q0nr9r65wavmabmn3fkzkz5vlgf";
+    sha256 = "oEcFRBIYb/ZJQo9W+yIiq3l3eU1GqUzfDdF/Rvq5SKs=";
   };
 
   nativeBuildInputs = [
