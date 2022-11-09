@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , makeWrapper
+, wrapGAppsHook
 , pkg-config
 , python3
 , gettext
@@ -91,6 +92,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
+    wrapGAppsHook
   ] ++ optionals stdenv.isLinux [
     linuxHeaders
   ];
