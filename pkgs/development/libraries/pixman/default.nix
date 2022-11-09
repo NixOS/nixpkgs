@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   pname = "pixman";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "mirror://xorg/individual/lib/${pname}-${version}.tar.bz2";
     sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://gitlab.freedesktop.org/pixman/pixman/-/issues/63
+      name = "CVE-2022-44638.patch";
+      url = "https://gitlab.freedesktop.org/pixman/pixman/-/commit/a1f88e842e0216a5b4df1ab023caebe33c101395.patch";
+      hash = "sha256-a7voyeqcMGw+PABnVwqiakeFWhobqovNwcOvpIHjYB0=";
+    })
+  ];
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 

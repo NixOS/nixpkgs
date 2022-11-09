@@ -124,19 +124,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "13";
+        patch = "15";
         suffix = "";
       };
-      sha256 = "sha256-ElsMWY8eFdKqZUBug/eS330XHN84wWgDsUmZQxajCA8=";
+      sha256 = "sha256-Etr/aAlSjZ9hVCFpUEI8njDw5HM2y1fGqgtDh91etLI=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "4";
+        patch = "8";
         suffix = "";
       };
-      sha256 = "sha256-gL+SX1cdpDazUhCIbPefbrX6XWxXExa3NWg0NFH3ehk=";
+      sha256 = "sha256-ajDs3lnEcEgBPrWmWMm13sJ3ID0nk2Z/V433Zx9/A/M=";
     };
   };
 
@@ -160,10 +160,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "13";
+      patch = "15";
       suffix = "";
     };
-    sha256 = "sha256-mfEGJ134iZw+jLnXwBzmhsIC7ydZUzAUJxlGk95b74Q=";
+    sha256 = "sha256-WRFHWgesK1PXRuiKBxavbStHNJQZGRNuoNM/ucdblxQ=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -173,10 +173,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "13";
+      patch = "15";
       suffix = "";
     };
-    sha256 = "sha256-bzCQdwEgQKo5/o8MYduMD6HEUTZ2MpnTdcnldW8Jz1c=";
+    sha256 = "sha256-URT8eRiipeIOtarGlrMMNvQSxu8ksT9cnrngVpgtlVA=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -199,9 +199,9 @@ in {
       major = "3";
       minor = "11";
       patch = "0";
-      suffix = "a7";
+      suffix = "";
     };
-    sha256 = "sha256-t8Vt10wvRy1Ja1qNNWvWrZ75sD8mKIwyN9P/aYqwPXQ=";
+    sha256 = "sha256-pX3ILXc1hhe6ZbmEHO4eO0QfOGw3id3AZ27KB38pUcM=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

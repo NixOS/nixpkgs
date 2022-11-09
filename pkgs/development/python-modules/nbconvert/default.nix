@@ -3,6 +3,7 @@
 , buildPythonPackage
 , defusedxml
 , fetchPypi
+, fetchpatch
 , ipywidgets
 , jinja2
 , jupyterlab-pygments
@@ -30,6 +31,11 @@ buildPythonPackage rec {
   # various exporter templates
   patches = [
     ./templates.patch
+    (fetchpatch {
+      name = "fix-test-default-config-jupyter-core-4.11.2.patch";
+      url = "https://github.com/jupyter/nbconvert/commit/7227d68acde5e3f2959dd5f4db30af1ee4b222b7.patch";
+      hash = "sha256-hrPgvTubig7grEo0F9QIcfxaz5X3p/C2U7Gnhp/uTWY=";
+    })
   ];
 
   postPatch = ''
