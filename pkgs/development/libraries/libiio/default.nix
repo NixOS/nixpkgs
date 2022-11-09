@@ -6,7 +6,7 @@
 , libxml2
 , python
 , libusb1
-, avahi
+, avahiSupport ? true, avahi
 , libaio
 , runtimeShell
 , lib
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     python
     libxml2
     libusb1
-    avahi
   ] ++ lib.optional python.isPy3k python.pkgs.setuptools
+    ++ lib.optional avahiSupport avahi
     ++ lib.optional stdenv.isLinux libaio
     ++ lib.optionals stdenv.isDarwin [ CFNetwork CoreServices ];
 
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     # the linux-like directory structure is used for proper output splitting
     "-DOSX_PACKAGE=off"
     "-DOSX_FRAMEWORK=off"
+  ] ++ lib.optionals (!avahiSupport) [
+    "-DHAVE_DNS_SD=OFF"
   ];
 
   postPatch = ''

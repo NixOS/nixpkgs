@@ -5202,7 +5202,9 @@ with pkgs;
 
   cadaver = callPackage ../tools/networking/cadaver { };
 
-  davix = callPackage ../tools/networking/davix { };
+  davix = callPackage ../tools/networking/davix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   davix-copy = davix.override { enableThirdPartyCopy = true; };
 
@@ -30611,10 +30613,7 @@ with pkgs;
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
-  nncp = (
-    if stdenv.isDarwin
-    then darwin.apple_sdk_11_0.callPackage
-    else callPackage) ../tools/misc/nncp { };
+  nncp = darwin.apple_sdk_11_0.callPackage ../tools/misc/nncp { };
 
   notion = callPackage ../applications/window-managers/notion { };
 
@@ -32367,6 +32366,10 @@ with pkgs;
   topydo = callPackage ../applications/misc/topydo {};
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
+
+  torrenttools = callPackage ../tools/misc/torrenttools {
+    fmt = fmt_8;
+  };
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 

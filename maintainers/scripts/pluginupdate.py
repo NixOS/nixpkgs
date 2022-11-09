@@ -342,6 +342,7 @@ class Editor:
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
+        self.nixpkgs_repo = None
 
     def get_current_plugins(self) -> List[Plugin]:
         """To fill the cache"""
@@ -670,16 +671,15 @@ def update_plugins(editor: Editor, args):
 
     autocommit = not args.no_commit
 
-    nixpkgs_repo = None
     if autocommit:
-        nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
+        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
 
     if redirects:
         update()
         if autocommit:
             commit(
-                nixpkgs_repo,
+                editor.nixpkgs_repo,
                 f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )
@@ -692,7 +692,7 @@ def update_plugins(editor: Editor, args):
         plugin, _ = prefetch_plugin(pdesc, )
         if autocommit:
             commit(
-                nixpkgs_repo,
+                editor.nixpkgs_repo,
                 "{drv_name}: init at {version}".format(
                     drv_name=editor.get_drv_name(plugin.normalized_name),
                     version=plugin.version

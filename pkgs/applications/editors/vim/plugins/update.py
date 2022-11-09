@@ -21,9 +21,12 @@ import inspect
 import os
 import sys
 import logging
+import subprocess
 import textwrap
 from typing import List, Tuple
 from pathlib import Path
+
+import git
 
 log = logging.getLogger()
 
@@ -76,8 +79,11 @@ def isNeovimPlugin(plug: pluginupdate.Plugin) -> bool:
 
 
 class VimEditor(pluginupdate.Editor):
+    nvim_treesitter_updated = False
+
     def generate_nix(self, plugins: List[Tuple[PluginDesc, pluginupdate.Plugin]], outfile: str):
         sorted_plugins = sorted(plugins, key=lambda v: v[0].name.lower())
+        nvim_treesitter_rev = pluginupdate.run_nix_expr("(import <localpkgs> { }).vimPlugins.nvim-treesitter.src.rev")
 
         with open(outfile, "w+") as f:
             f.write(HEADER)
@@ -91,6 +97,8 @@ class VimEditor(pluginupdate.Editor):
             for pdesc, plugin in sorted_plugins:
                 content = self.plugin2nix(pdesc, plugin)
                 f.write(content)
+                if plugin.name == "nvim-treesitter" and plugin.commit != nvim_treesitter_rev:
+                    self.nvim_treesitter_updated = True
             f.write("\n}\n")
         print(f"updated {outfile}")
 
@@ -122,6 +130,18 @@ def main():
     parser = editor.create_parser()
     args = parser.parse_args()
     pluginupdate.update_plugins(editor, args)
+
+    if editor.nvim_treesitter_updated:
+        print("updating nvim-treesitter grammars")
+        nvim_treesitter_dir = ROOT.joinpath("nvim-treesitter")
+        subprocess.check_call([nvim_treesitter_dir.joinpath("update.py")])
+
+        if editor.nixpkgs_repo:
+            msg = "vimPlugins.nvim-treesitter: update grammars"
+            print(f"committing to nixpkgs: {msg}")
+            index = editor.nixpkgs_repo.index
+            index.add([str(nvim_treesitter_dir.joinpath("generated.nix"))])
+            index.commit(msg)
 
 
 if __name__ == "__main__":
