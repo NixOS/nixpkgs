@@ -3765,6 +3765,8 @@ self: super: with self; {
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+  google = callPackage ../development/python-modules/google { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
@@ -5615,6 +5617,8 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  megaplan = callPackage ../development/python-modules/megaplan { };
+
   meilisearch = callPackage ../development/python-modules/meilisearch { };
 
   meinheld = callPackage ../development/python-modules/meinheld { };
@@ -7439,6 +7443,8 @@ self: super: with self; {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
+  pyac = callPackage ../development/python-modules/pyac { };
+
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
   pyads = callPackage ../development/python-modules/pyads { };
@@ -8550,6 +8556,8 @@ self: super: with self; {
 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
+  pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm {
@@ -8942,6 +8950,8 @@ self: super: with self; {
   python-dateutil = callPackage ../development/python-modules/dateutil { };
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
+
+  python-debianbts = callPackage ../development/python-modules/python-debianbts { };
 
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
