@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , protobuf
 , git
 , testers
@@ -29,6 +30,11 @@ buildGoModule rec {
     # Remove reliance of tests on file protocol which is disabled in git by default now
     # Rebased upstream change https://github.com/bufbuild/buf/commit/bcaa77f8bbb8f6c198154c7c8d53596da4506dab
     ./buf-tests-dont-use-file-transport.patch
+    # Make TestCyclicImport tests deterministic (see https://github.com/bufbuild/buf/pull/1551)
+    (fetchpatch {
+      url = "https://github.com/bufbuild/buf/commit/75b5ef4c84f5953002dff95a1c66cb82b0e3b06f.patch";
+      sha256 = "sha256-pKF3VXkzttsTTT2r/Z37ug9nnu8gRdkfmv/aTOhAJpw=";
+    })
   ];
 
   nativeBuildInputs = [ installShellFiles ];
