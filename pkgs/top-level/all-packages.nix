@@ -4866,6 +4866,10 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  smokegen = callPackage ../development/libraries/smokegen {};
+
+  smokeqt = callPackage ../development/libraries/smokeqt {};
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
