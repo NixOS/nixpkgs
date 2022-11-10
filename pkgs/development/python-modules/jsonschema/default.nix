@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "An implementation of JSON Schema validation for Python";
     homepage = "https://github.com/python-jsonschema/jsonschema";
+    changelog = "https://github.com/python-jsonschema/jsonschema/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
