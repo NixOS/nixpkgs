@@ -31,4 +31,6 @@ lib.makeScope newScope (self: with self; {
 
   pure = callPackage ./pure.nix { };
 
+  sponge = callPackage ./sponge.nix { };
+
 })
