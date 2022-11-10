@@ -2,9 +2,9 @@
 
 {
   # All the defaults
-  connman = callPackage ./connman.nix { };
+  connman = callPackage ./connman { };
 
-  connmanFull = callPackage ./connman.nix {
+  connmanFull = connman.override {
     # TODO: Why is this in `connmanFull` and not the default build? See TODO in
     # nixos/modules/services/networking/connman.nix (near the assertions)
     enableNetworkManager = true;
@@ -14,7 +14,7 @@
     enableTist = true;
   };
 
-  connmanMinimal = callPackage ./connman.nix {
+  connmanMinimal = connman.override {
     enableOpenconnect = false;
     enableOpenvpn = false;
     enableVpnc = false;
