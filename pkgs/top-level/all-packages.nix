@@ -33701,6 +33701,8 @@ with pkgs;
 
   conmon = callPackage ../applications/virtualization/conmon { };
 
+  conmon-rs = callPackage ../applications/virtualization/conmon-rs { };
+
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
