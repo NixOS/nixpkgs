@@ -12,6 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
 in
 
 {
@@ -65,10 +66,14 @@ in
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme.name = mkDefault "Mint-X";
-        theme.package = mkDefault pkgs.cinnamon.mint-themes;
-        iconTheme.name = mkDefault "Mint-X-Dark";
-        iconTheme.package = mkDefault pkgs.cinnamon.mint-x-icons;
+        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+          name = mkDefault "Mint-X";
+          package = mkDefault pkgs.cinnamon.mint-themes;
+        };
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
+          name = mkDefault "Mint-X-Dark";
+          package = mkDefault pkgs.cinnamon.mint-x-icons;
+        };
       };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
