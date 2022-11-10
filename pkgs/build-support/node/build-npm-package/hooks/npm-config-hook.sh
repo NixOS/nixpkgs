@@ -5,7 +5,7 @@ npmConfigHook() {
 
     echo "Configuring npm"
 
-    export HOME=$TMPDIR
+    export HOME="$TMPDIR"
     export npm_config_nodedir="@nodeSrc@"
 
     local -r cacheLockfile="$npmDeps/package-lock.json"
@@ -50,12 +50,12 @@ npmConfigHook() {
     local cachePath
 
     if [ -z "${makeCacheWritable-}" ]; then
-        cachePath=$npmDeps
+        cachePath="$npmDeps"
     else
         echo "Making cache writable"
         cp -r "$npmDeps" "$TMPDIR/cache"
         chmod -R 700 "$TMPDIR/cache"
-        cachePath=$TMPDIR/cache
+        cachePath="$TMPDIR/cache"
     fi
 
     npm config set cache "$cachePath"
