@@ -1,7 +1,7 @@
 #![warn(clippy::pedantic)]
 
 use crate::cacache::Cache;
-use anyhow::anyhow;
+use anyhow::{anyhow, Context};
 use rayon::prelude::*;
 use serde::Deserialize;
 use std::{
@@ -31,7 +31,7 @@ struct OldPackage {
     dependencies: Option<HashMap<String, OldPackage>>,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize, PartialEq, Eq)]
 struct Package {
     resolved: Option<UrlOrString>,
     integrity: Option<String>,
@@ -53,12 +53,42 @@ impl fmt::Display for UrlOrString {
     }
 }
 
+#[allow(clippy::case_sensitive_file_extension_comparisons)]
 fn to_new_packages(
     old_packages: HashMap<String, OldPackage>,
+    initial_url: &Url,
 ) -> anyhow::Result<HashMap<String, Package>> {
     let mut new = HashMap::new();
 
-    for (name, package) in old_packages {
+    for (name, mut package) in old_packages {
+        if let UrlOrString::Url(v) = &package.version {
+            for (scheme, host) in [
+                ("github", "github.com"),
+                ("bitbucket", "bitbucket.org"),
+                ("gitlab", "gitlab.com"),
+            ] {
+                if v.scheme() == scheme {
+                    package.version = {
+                        let mut new_url = initial_url.clone();
+
+                        new_url.set_host(Some(host))?;
+
+                        if v.path().ends_with(".git") {
+                            new_url.set_path(v.path());
+                        } else {
+                            new_url.set_path(&format!("{}.git", v.path()));
+                        }
+
+                        new_url.set_fragment(v.fragment());
+
+                        UrlOrString::Url(new_url)
+                    };
+
+                    break;
+                }
+            }
+        }
+
         new.insert(
             format!("{name}-{}", package.version),
             Package {
@@ -72,7 +102,7 @@ fn to_new_packages(
         );
 
         if let Some(dependencies) = package.dependencies {
-            new.extend(to_new_packages(dependencies)?);
+            new.extend(to_new_packages(dependencies, initial_url)?);
         }
     }
 
@@ -200,6 +230,10 @@ fn get_ideal_hash(integrity: &str) -> anyhow::Result<&str> {
     }
 }
 
+fn get_initial_url() -> anyhow::Result<Url> {
+    Url::parse("git+ssh://git@a.b").context("initial url should be valid")
+}
+
 fn main() -> anyhow::Result<()> {
     let args = env::args().collect::<Vec<_>>();
 
@@ -229,7 +263,13 @@ fn main() -> anyhow::Result<()> {
     eprintln!("lockfile version: {}", lock.version);
 
     let packages = match lock.version {
-        1 => lock.dependencies.map(to_new_packages).transpose()?,
+        1 => {
+            let initial_url = get_initial_url()?;
+
+            lock.dependencies
+                .map(|p| to_new_packages(p, &initial_url))
+                .transpose()?
+        }
         2 | 3 => lock.packages,
         _ => panic!(
             "We don't support lockfile version {}, please file an issue.",
@@ -297,7 +337,11 @@ fn main() -> anyhow::Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use super::{get_hosted_git_url, get_ideal_hash};
+    use super::{
+        get_hosted_git_url, get_ideal_hash, get_initial_url, to_new_packages, OldPackage, Package,
+        UrlOrString,
+    };
+    use std::collections::HashMap;
     use url::Url;
 
     #[test]
@@ -347,5 +391,37 @@ mod tests {
         ] {
             assert_eq!(get_ideal_hash(input).ok(), expected);
         }
+    }
+
+    #[test]
+    fn git_shorthand_v1() -> anyhow::Result<()> {
+        let old =
+            {
+                let mut o = HashMap::new();
+                o.insert(
+                String::from("sqlite3"),
+                OldPackage {
+                    version: UrlOrString::Url(Url::parse(
+                        "github:mapbox/node-sqlite3#593c9d498be2510d286349134537e3bf89401c4a",
+                    ).unwrap()),
+                    resolved: None,
+                    integrity: None,
+                    dependencies: None,
+                },
+            );
+                o
+            };
+
+        let initial_url = get_initial_url()?;
+
+        let new = to_new_packages(old, &initial_url)?;
+
+        assert_eq!(new.len(), 1, "new packages map should contain 1 value");
+        assert_eq!(new.into_values().next().unwrap(), Package {
+            resolved: Some(UrlOrString::Url(Url::parse("git+ssh://git@github.com/mapbox/node-sqlite3.git#593c9d498be2510d286349134537e3bf89401c4a").unwrap())),
+            integrity: None
+        });
+
+        Ok(())
     }
 }
