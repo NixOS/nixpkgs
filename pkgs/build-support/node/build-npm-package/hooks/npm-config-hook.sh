@@ -96,6 +96,8 @@ npmConfigHook() {
       rm node_modules/.meow
     fi
 
+    patchShebangs node_modules
+
     echo "Finished npmConfigHook"
 }
 
