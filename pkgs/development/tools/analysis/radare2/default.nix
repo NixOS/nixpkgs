@@ -27,30 +27,31 @@
 }:
 
 let
-  # FIXME: Compare revision with https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L20
+  # FIXME: Compare revision with
+  # https://github.com/radareorg/radare2/blob/master/libr/asm/arch/arm/v35arm64/Makefile#L26-L27
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "9ab2b0bedde459dc86e079718333de4a63bbbacb";
-    sha256 = "sha256-2KLtjgCqHzBBlo9ImZ8WJ1bsWy/kdJCjCFxlLE+HxoI=";
+    rev = "c9e7242972837ac11fc94db05fabcb801a8269c9";
+    hash = "sha256-HFQj23GlLAyyzMGnPq40XaPv5qPDHdDlQOo0Hprc9Cs=";
   };
   armv7 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-armv7";
     rev = "dde39f69ffea19fc37e681874b12cb4707bc4f30";
 
-    sha256 = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
+    hash = "sha256-bnWQc0dScM9rhIdzf+iVXvMqYWq/bguEAUQPaZRgdlU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.7.2";
+  version = "5.7.8";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-TZeW+9buJvCOudHsLTMITFpRUlmNpo71efc3xswJoPw=";
+    hash = "sha256-+/9SeILuDCUaYwPhhN6z3vQFicd1Bh8N/yicZTybR5o=";
   };
 
   preBuild = ''
@@ -67,9 +68,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  WITHOUT_PULL = "1";
   makeFlags = [
-    "GITTAP=${version}"
+    "WITHOUT_PULL=1"
+    "R2_GITTAP=${version}"
     "RANLIB=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ranlib"
     "CC=${stdenv.cc.targetPrefix}cc"
     "HOST_CC=${stdenv.cc.targetPrefix}cc"
@@ -110,10 +111,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "unix-like reverse engineering framework and commandline tools";
-    homepage = "https://radare.org/";
+    description = "UNIX-like reverse engineering framework and command-line tools";
+    homepage = "https://radare.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin makefu mic92 arkivm ];
+    maintainers = with maintainers; [ azahi raskin makefu mic92 arkivm ];
     platforms = platforms.unix;
   };
 }
