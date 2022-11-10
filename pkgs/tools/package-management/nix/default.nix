@@ -29,6 +29,11 @@ let
     requiredSystemFeatures = null;
   });
 
+  libstore-link-to-aws-crt-cpp-patch = fetchpatch {
+    url = "https://github.com/NixOS/nix/pull/7294/commits/07f2cb1e8f03784041475c27c2ba0aac7be6c0b7";
+    sha256 = "sha256-xz7QnWVCI12lX1000Zr9UpB93b10t1HS9y/5n5FYf8Q=";
+  };
+
   common = args:
     callPackage
       (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
@@ -44,6 +49,9 @@ in lib.makeExtensible (self: {
       url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
       sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
     };
+    patches = [
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   }).override { boehmgc = boehmgc-nix_2_3; };
 
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
@@ -56,6 +64,9 @@ in lib.makeExtensible (self: {
   nix_2_6 = common {
     version = "2.6.1";
     sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
+    patches = [
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   };
 
   nix_2_7 = common {
@@ -70,29 +81,42 @@ in lib.makeExtensible (self: {
         url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
         sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
       })
+      libstore-link-to-aws-crt-cpp-patch
     ];
   };
 
   nix_2_8 = common {
     version = "2.8.1";
     sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
+    patches = [
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   };
 
   nix_2_9 = common {
     version = "2.9.2";
     sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
+    patches = [
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   };
 
   nix_2_10 = common {
     version = "2.10.3";
     sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
-    patches = [ ./patches/flaky-tests.patch ];
+    patches = [
+      ./patches/flaky-tests.patch
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   };
 
   nix_2_11 = common {
     version = "2.11.0";
     sha256 = "sha256-9+rpYzI+SmxJn+EbYxjGv68Ucp22bdFUSy/4LkHkkDQ=";
-    patches = [ ./patches/flaky-tests.patch ];
+    patches = [
+      ./patches/flaky-tests.patch
+      libstore-link-to-aws-crt-cpp-patch
+    ];
   };
 
   stable = self.nix_2_11;
