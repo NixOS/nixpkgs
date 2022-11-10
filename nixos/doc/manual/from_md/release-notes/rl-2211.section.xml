@@ -610,8 +610,7 @@
       <listitem>
         <para>
           The <literal>openssl</literal>-extension for the PHP
-          interpreter used by <literal>services.nextcloud</literal> is
-          built against OpenSSL 1.1 if
+          interpreter used by Nextcloud is built against OpenSSL 1.1 if
           <xref linkend="opt-system.stateVersion" /> is below
           <literal>22.11</literal>. This is to make sure that people
           using

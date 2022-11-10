@@ -8,10 +8,9 @@ with pkgs.lib;
 foldl
   (matrix: ver: matrix // {
     "basic${toString ver}" = import ./basic.nix { inherit system pkgs; nextcloudVersion = ver; };
-    "with-legacy-openssl${toString ver}" = import ./basic.nix {
+    "openssl-sse${toString ver}" = import ./openssl-sse.nix {
       inherit system pkgs;
       nextcloudVersion = ver;
-      enableBrokenCiphersForSSE = true;
     };
     "with-postgresql-and-redis${toString ver}" = import ./with-postgresql-and-redis.nix {
       inherit system pkgs;
