@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [ hjones2199 snick ];
     platforms = platforms.linux;
   };
 }

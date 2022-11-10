@@ -15802,4 +15802,10 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  snick = {
+    name = "Ido Samuelson";
+    email = "ido.samuelson@gmail.com";
+    github = "realsnick";
+    githubId = 1440852;
+  };
 }
