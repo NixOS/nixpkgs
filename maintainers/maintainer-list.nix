@@ -4820,6 +4820,12 @@
     githubId = 868283;
     name = "Fatih Altinok";
   };
+  fstamour = {
+    email = "fr.st-amour@gmail.com";
+    github = "fstamour";
+    githubId = 2881922;
+    name = "Francis St-Amour";
+  };
   ftrvxmtrx = {
     email = "ftrvxmtrx@gmail.com";
     github = "ftrvxmtrx";
@@ -9425,12 +9431,6 @@
     github = "mpscholten";
     githubId = 2072185;
     name = "Marc Scholten";
-  };
-  mpsyco = {
-    email = "fr.st-amour@gmail.com";
-    github = "fstamour";
-    githubId = 2881922;
-    name = "Francis St-Amour";
   };
   mtrsk = {
     email = "marcos.schonfinkel@protonmail.com";
