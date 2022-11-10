@@ -8,6 +8,15 @@ npmConfigHook() {
     export HOME="$TMPDIR"
     export npm_config_nodedir="@nodeSrc@"
 
+    if [ -z "${npmDeps-}" ]; then
+        echo
+        echo "ERROR: no dependencies were specified"
+        echo 'Hint: set `npmDeps` if using these hooks individually. If this is happening with `buildNpmPackage`, please open an issue.'
+        echo
+
+        exit 1
+    fi
+
     local -r cacheLockfile="$npmDeps/package-lock.json"
     local -r srcLockfile="$PWD/package-lock.json"
 
