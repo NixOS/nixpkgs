@@ -4982,6 +4982,8 @@ self: super: with self; {
     inherit (pkgs) keyutils;
   };
 
+  kgt = callPackage ../development/python-modules/kgt { };
+
   kicad = toPythonModule (pkgs.kicad.override {
     python3 = python;
   }).src;
@@ -5554,6 +5556,8 @@ self: super: with self; {
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
+  matplotx = callPackage ../development/python-modules/matplotx { };
+
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
@@ -5648,6 +5652,8 @@ self: super: with self; {
   meshlabxml = callPackage ../development/python-modules/meshlabxml { };
 
   meshtastic = callPackage ../development/python-modules/meshtastic { };
+
+  meshzoo = callPackage ../development/python-modules/meshzoo { };
 
   meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
     (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
@@ -9969,6 +9975,8 @@ self: super: with self; {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikit-fem = callPackage ../development/python-modules/scikit-fem { };
+
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
@@ -11968,6 +11976,8 @@ self: super: with self; {
 
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
+
+  x21 = callPackage ../development/python-modules/x21 { };
 
   x256 = callPackage ../development/python-modules/x256 { };
 

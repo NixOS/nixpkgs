@@ -10,6 +10,7 @@
 , rich
 , pytestCheckHook
 , pythonOlder
+, matplotx
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dufte
     matplotlib
+    matplotx
     numpy
     pipdate
     rich
@@ -49,6 +51,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
-    broken = true; # missing matplotx dependency
   };
 }
