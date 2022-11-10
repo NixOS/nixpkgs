@@ -32181,6 +32181,10 @@ with pkgs;
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
+  tic80 = callPackage ../development/tools/tic80 {
+    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
+  };
+
   ticpp = callPackage ../development/libraries/ticpp { };
 
   ticker = callPackage ../applications/misc/ticker { };
