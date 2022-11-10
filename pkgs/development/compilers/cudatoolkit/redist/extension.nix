@@ -12,6 +12,7 @@ final: prev: let
     "11.5" = ./manifests/redistrib_11.5.2.json;
     "11.6" = ./manifests/redistrib_11.6.2.json;
     "11.7" = ./manifests/redistrib_11.7.0.json;
+    "11.8" = ./manifests/redistrib_11.8.0.json;
   };
 
   # Function to build a single cudatoolkit redist package

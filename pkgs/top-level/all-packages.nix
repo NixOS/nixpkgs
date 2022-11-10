@@ -1285,7 +1285,9 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
-  butler = callPackage ../games/itch/butler.nix { };
+  butler = callPackage ../games/itch/butler.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
@@ -15984,6 +15986,8 @@ with pkgs;
 
   sparkleshare = callPackage ../applications/version-management/sparkleshare { };
 
+  spark2014 = callPackage ../development/libraries/ada/spark2014 { };
+
   spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix {
     inherit (darwin) libobjc;
   };
@@ -20278,7 +20282,10 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  libftdi = callPackage ../development/libraries/libftdi { };
+  libftdi = callPackage ../development/libraries/libftdi {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit Security;
+  };
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
@@ -20413,9 +20420,7 @@ with pkgs;
 
   libmysofa = callPackage ../development/libraries/audio/libmysofa { };
 
-  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
-    openssl = openssl_1_1;
-  };
+  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {};
 
   libnatpmp = callPackage ../development/libraries/libnatpmp { };
 
@@ -27264,6 +27269,7 @@ with pkgs;
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
+  ardour_6 = callPackage ../applications/audio/ardour/6.nix { };
   ardour = callPackage ../applications/audio/ardour { };
 
   arelle = with python3Packages; toPythonApplication arelle;
