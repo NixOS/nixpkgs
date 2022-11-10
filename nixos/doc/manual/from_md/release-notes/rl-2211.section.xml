@@ -1354,10 +1354,20 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
-          boot.kernel.sysctl is defined as a freeformType and adds a
-          custom merge option for <quote>net.core.rmem_max</quote>
-          (taking the highest value defined to avoid conflicts between 2
-          services trying to set that value)
+          <literal>boot.kernel.sysctl</literal> is defined as a
+          freeformType and adds a custom merge option for
+          <quote>net.core.rmem_max</quote> (taking the highest value
+          defined to avoid conflicts between 2 services trying to set
+          that value).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>mame</literal> package does not ship with its
+          tools anymore in the default output. They were moved to a
+          separate <literal>tools</literal> output instead. For
+          convenience, <literal>mame-tools</literal> package was added
+          for those who want to use it.
         </para>
       </listitem>
     </itemizedlist>

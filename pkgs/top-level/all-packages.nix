@@ -1603,6 +1603,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
   };
 
+  mame-tools = (lib.getOutput "tools" mame);
+
   mednafen = callPackage ../applications/emulators/mednafen {
     inherit (darwin) libiconv;
   };
