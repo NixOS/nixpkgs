@@ -16203,6 +16203,8 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
+  apgdiff = callPackage ../development/tools/database/apgdiff { };
+
   apkg = callPackage ../tools/package-management/apkg { };
 
   augeas = callPackage ../tools/system/augeas { };
