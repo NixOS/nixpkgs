@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fluentbit.io";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
