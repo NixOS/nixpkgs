@@ -1,22 +1,172 @@
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="chap-contributing">
+<chapter xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="chap-contributing">
   <title>Contributing to this manual</title>
+  <warning>
+    <para>
+      Do not edit the XML files in <literal>./from_md/</literal>!
+    </para>
+    <para>
+      The backend system generating the documentation is in the process
+      of switching from DocBook XML to CommonMark, a flavor of Markdown
+      (see
+      <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0072-commonmark-docs.md">RFC0072</link>).
+    </para>
+  </warning>
   <para>
-    The DocBook and CommonMark sources of NixOS’ manual are in the
-    <link xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual">nixos/doc/manual</link>
-    subdirectory of the
-    <link xlink:href="https://github.com/NixOS/nixpkgs">Nixpkgs</link>
-    repository.
+    As NixOS grows, so too does the need for a catalogue and explanation
+    of its extensive functionality. Collecting pertinent information
+    from disparate sources and presenting it in an accessible style
+    would be a worthy contribution to the project.
   </para>
-  <para>
-    You can quickly check your edits with the following:
-  </para>
-  <programlisting>
+  <section xml:id="sec-writing-docs-structure-of-the-manual">
+    <title>Directory structure of the manual</title>
+    <para>
+      The DocBook and CommonMark sources of NixOS’ manual are in the
+      <link xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual">nixos/doc/manual</link>
+      subdirectory of the
+      <link xlink:href="https://github.com/NixOS/nixpkgs">Nixpkgs</link>
+      repository. At the moment of writing, most of the documentation is
+      written in CommonMark and DocBook is used as the glue between the
+      various CommonMark files containing chapters and sections.
+    </para>
+    <para>
+      The documentation as a whole is split into multiple parts, split
+      into chapters with subchapters, which again are split into
+      sections. Each part has its own subdirectory containing the
+      CommonMark files of its chapters and sections and one DocBook XML
+      file gluing the CommonMark files together. The only exception is
+      this chapter on contributing; it remains in the root folder of the
+      manual.
+    </para>
+    <para>
+      The file structure is mirrored in the automatically generated
+      table of contents, though sections are excluded from the table of
+      content.
+    </para>
+  </section>
+  <section xml:id="sec-writing-docs-editing-commonmark">
+    <title>Editing CommonMark</title>
+    <para>
+      Please refer to the website of
+      <link xlink:href="https://commonmark.org/">CommonMark</link> for
+      an introduction into the CommonMark language.
+    </para>
+  </section>
+  <section xml:id="sec-writing-docs-creating-a-topic">
+    <title>Creating a topic file</title>
+    <para>
+      You can use an existing topic as a basis for the new topic or
+      create a topic from scratch.
+    </para>
+    <para>
+      Keep the following guidelines in mind when you create and add a
+      topic:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Store the topic file in the same directory as the
+          <literal>part</literal> to which it belongs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If you include multiple words in the file name, separate the
+          words with a dash. For example:
+          <literal>ipv6-config.md</literal> (or
+          <literal>ipv6-config.xml</literal> when using
+          <literal>meta.doc</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          If the topic is about configuring a NixOS module, then the
+          documentation file can be stored alongside the module
+          definition <literal>nix</literal> file. The file can be
+          automatically included in the manual by using the
+          <literal>meta.doc</literal> attribute. See
+          <xref linkend="sec-meta-attributes" /> This part of the
+          documentation has to be written in DocBook XML as this feature
+          has not transitioned to CommonMark, yet.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Determine whether your topic is a chapter, subchapter or a
+          section. Chapters get a <literal>.chapter.md</literal> suffix,
+          subchapters are part of the chapter file and sections get
+          their separate <literal>.section.md</literal> file.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-writing-docs-adding-a-topic">
+    <title>Adding a topic file to the book</title>
+    <warning>
+      <para>
+        Even though you created a <literal>.md</literal> file in the
+        previous step, all references to a topic file are to the
+        corresponding <literal>.xml</literal> files, which are
+        automatically generated as shown in
+        <xref linkend="sec-writing-docs-building-the-manual" />.
+      </para>
+    </warning>
+    <para>
+      If you created a chapter, open the DocBook XML file in the
+      subdirectory of the part it belongs to.
+    </para>
+    <para>
+      Here we add the chapter <quote>Foo</quote> in
+      <literal>some-part/foo.chapter.md</literal> to the part
+      <quote>Some Part</quote> in
+      <literal>some-part/some-part.xml</literal>:
+    </para>
+    <programlisting>
+ &lt;xi:include href=&quot;../from_md/some-part/foo.chapter.xml&quot; /&gt;
+</programlisting>
+    <para>
+      If you created a section, you add the file to the chapter’s
+      <literal>.md</literal> file in the same directory. Keep in mind,
+      that a section is a direct descendant of a subchapter (indicated
+      by <literal>##</literal> in the chapter file), not a chapter
+      (indicated by <literal>#</literal>).
+    </para>
+    <para>
+      Here we add the section <quote>Bar</quote> in
+      <literal>some-part/bar.section.md</literal> to the chapter
+      <quote>Foo</quote> in <literal>some-part/foo.chapter.md</literal>:
+    </para>
+    <programlisting>
+```{=docbook}
+&lt;xi:include href=&quot;bar.section.xml&quot; /&gt;
+```
+</programlisting>
+  </section>
+  <section xml:id="sec-writing-docs-building-the-manual">
+    <title>Building the manual</title>
+    <para>
+      You can quickly check your edits with the following:
+    </para>
+    <programlisting>
 $ cd /path/to/nixpkgs
 $ ./nixos/doc/manual/md-to-db.sh
 $ nix-build nixos/release.nix -A manual.x86_64-linux
 </programlisting>
-  <para>
-    If the build succeeds, the manual will be in
-    <literal>./result/share/doc/nixos/index.html</literal>.
-  </para>
+    <para>
+      If the build succeeds, the manual will be in
+      <literal>./result/share/doc/nixos/index.html</literal>.
+    </para>
+  </section>
+  <section xml:id="sec-writing-docs-publishing-your-changes">
+    <title>Publishing your changes</title>
+    <para>
+      Once you are done making modifications to the manual, it is
+      important to build it one last time before committing and
+      reviewing that your changes to the final product were incorporated
+      as you intended. Please regard
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</link>
+      in
+      <link xlink:href="https://github.com/NixOS/nixpkgs">Nixpkgs</link>
+      before creating a Pull Request.
+    </para>
+  </section>
 </chapter>
