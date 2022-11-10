@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , buildPackages
@@ -22,6 +23,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Upsp72RorV+5PFPHOK3zCJgVTRZ6fSVVFRope8Bp8/M=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/PROJ/pull/3252
+    (fetchpatch {
+      name = "only-add-find_dependencyCURL-for-static-builds.patch";
+      url = "https://github.com/OSGeo/PROJ/commit/11f4597bbb7069bd5d4391597808703bd96df849.patch";
+      hash = "sha256-4w5Cu2m5VJZr6E2dUVRyWJdED2TyS8cI8G20EwfQ4u0=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
