@@ -31762,6 +31762,8 @@ with pkgs;
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
+  semver = callPackage ../applications/misc/semver { };
+
   sent = callPackage ../applications/misc/sent { };
 
   seq24 = callPackage ../applications/audio/seq24 { };
