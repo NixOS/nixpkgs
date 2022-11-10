@@ -35,6 +35,11 @@ buildGoModule rec {
       url = "https://github.com/bufbuild/buf/commit/75b5ef4c84f5953002dff95a1c66cb82b0e3b06f.patch";
       sha256 = "sha256-pKF3VXkzttsTTT2r/Z37ug9nnu8gRdkfmv/aTOhAJpw=";
     })
+    # Make TestDuplicateSyntheticOneofs check deterministic (see https://github.com/bufbuild/buf/pull/1579)
+    (fetchpatch {
+      url = "https://github.com/bufbuild/buf/commit/9e72aa314e6f02b36793caa5f6068394cbdcb98c.patch";
+      sha256 = "sha256-6NEF3sP1EQ6cQxkH2xRyHxAD0OrXBlQQa05rLK998wo=";
+    })
   ];
 
   nativeBuildInputs = [ installShellFiles ];
