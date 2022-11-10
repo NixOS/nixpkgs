@@ -40,7 +40,7 @@
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
-    name = "d3-flame-graph-templates";
+    pname = "d3-flame-graph-templates";
     version = "4.1.3";
 
     src = fetchurl {
