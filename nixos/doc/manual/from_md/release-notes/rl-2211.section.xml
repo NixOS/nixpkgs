@@ -1390,6 +1390,16 @@ signald -d /var/lib/signald/db \
           for those who want to use it.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          A NixOS module for Firefox has been added which allows
+          preferences and
+          <link xlink:href="https://github.com/mozilla/policy-templates/blob/master/README.md">policies</link>
+          to be set. This also allows extensions to be installed via the
+          <literal>ExtensionSettings</literal> policy. The new options
+          are under <literal>programs.firefox</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
