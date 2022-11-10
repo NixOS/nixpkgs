@@ -13,7 +13,13 @@ stdenv.mkDerivation {
 
   inherit (kernel) src;
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "5.19" && lib.versionOlder kernel.version "5.20") [
+  patches = [
+    # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
+    (fetchpatch {
+      url = "https://github.com/aaronjheng/linux/commit/1500b014203da474a8832a74c97bdf6dcbb99f7e.patch";
+      sha256 = "sha256-e1htZrv6GG+L94elx08eDjGFVkKUxNXU4nnJ7tWjXgE=";
+    })
+  ] ++ lib.optionals (lib.versionAtLeast kernel.version "5.19" && lib.versionOlder kernel.version "5.20") [
     # binutils-2.39 support around init_disassemble_info()
     # API change.
     # Will be included in 5.20.
@@ -73,17 +79,15 @@ stdenv.mkDerivation {
   separateDebugInfo = true;
   installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
-  postInstall =''
+  postInstall = ''
     # Same as perf. Remove.
     rm -f $out/bin/trace
   '';
 
   preFixup = ''
     # Pull in 'objdump' into PATH to make annotations work.
-    # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
-    # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
-      --prefix PATH : ${lib.makeBinPath ([ binutils-unwrapped ] ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]))}
+      --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped ]}
   '';
 
   meta = with lib; {
