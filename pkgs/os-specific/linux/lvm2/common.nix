@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, hash }:
 
 { lib, stdenv
 , fetchpatch
@@ -28,8 +28,11 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    inherit sha256;
+    urls = [
+      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
+      "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
+    ];
+    inherit hash;
   };
 
   nativeBuildInputs = [ pkg-config ];
