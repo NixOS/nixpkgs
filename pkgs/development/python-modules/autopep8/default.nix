@@ -3,7 +3,7 @@
 , buildPythonPackage
 , pycodestyle
 , glibcLocales
-, toml
+, tomli
 , pytestCheckHook
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-8AWCIOTMDvYSGZb8jsHDLwc15Ea+I8Th9pLeC/IxdN0=";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  propagatedBuildInputs = [ pycodestyle tomli ];
 
   checkInputs = [
     glibcLocales
