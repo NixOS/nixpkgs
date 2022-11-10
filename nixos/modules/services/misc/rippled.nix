@@ -98,7 +98,7 @@ let
 
       port = mkOption {
         description = lib.mdDoc "Port where rippled listens.";
-        type = types.int;
+        type = types.port;
       };
 
       protocol = mkOption {
