@@ -89,7 +89,7 @@ let
   defaultFontsConf =
     let genDefault = fonts: name:
       optionalString (fonts != []) ''
-        <alias binding="same">
+        <alias>
           <family>${name}</family>
           <prefer>
           ${concatStringsSep ""
