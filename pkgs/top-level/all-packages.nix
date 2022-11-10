@@ -26947,7 +26947,9 @@ with pkgs;
 
   theano = callPackage ../data/fonts/theano { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme { };
+  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
+    inherit (gnome) adwaita-icon-theme;
+  };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
 
