@@ -12,18 +12,13 @@ let
   extraArgs = rec {
     mkOverride = attrname: version: sha256:
       self: super: {
-        ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        "${attrname}" = super."${attrname}".overridePythonAttrs (oldAttrs: {
           inherit version;
           src = oldAttrs.src.override {
             inherit version sha256;
           };
         });
       };
-    commonOverrides = [
-      (self: super: {
-        jsonschema = super.jsonschema_3;
-      })
-    ];
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };

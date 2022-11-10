@@ -3,25 +3,15 @@
 , version
 , sha256Hash
 , mkOverride
-, commonOverrides
 }:
 
 { lib
 , python3
 , fetchFromGitHub
 , wrapQtAppsHook
-, packageOverrides ? self: super: {}
 }:
 
-let
-  defaultOverrides = commonOverrides ++ [
-  ];
-
-  python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
-  };
-
-in python.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
   inherit version;
 
@@ -36,7 +26,7 @@ in python.pkgs.buildPythonPackage rec {
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     distro
     jsonschema
     psutil
