@@ -8607,6 +8607,8 @@ with pkgs;
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
+  mautrix-discord = callPackage ../servers/mautrix-discord { };
+
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
   mautrix-signal = recurseIntoAttrs (callPackage ../servers/mautrix-signal { });
