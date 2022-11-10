@@ -2626,6 +2626,7 @@ broken-packages:
   - imapget
   - imgur
   - imj-prelude
+  - imm
   - immortal-worker
   - imperative-edsl
   - imperative-edsl-vhdl
@@ -3953,6 +3954,7 @@ broken-packages:
   - polysemy-check
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
+  - polysemy-log-co
   - polysemy-managed
   - polysemy-mocks
   - polysemy-readline
@@ -5077,7 +5079,9 @@ broken-packages:
   - tensorflow
   - tensorflow-opgen
   - tensor-safe
+  - termbox-banana
   - termbox-bindings
+  - termbox-tea
   - termination-combinators
   - termplot
   - term-rewriting
@@ -5332,6 +5336,7 @@ broken-packages:
   - type-int
   - type-interpreter
   - type-level-bst
+  - type-level-kv-list-esqueleto
   - type-level-natural-number-induction
   - type-level-natural-number-operations
   - typelevel-tensor
