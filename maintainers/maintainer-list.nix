@@ -11821,6 +11821,13 @@
     githubId = 521306;
     name = "Rob Glossop";
   };
+  robin = {
+    name = "Robin";
+    email = "robin@robin.town";
+    matrix = "@robin:robin.town";
+    github = "robintown";
+    githubId = 48614497;
+  };
   roblabla = {
     email = "robinlambertz+dev@gmail.com";
     github = "roblabla";
