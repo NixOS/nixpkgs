@@ -12529,7 +12529,7 @@ let
         Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
       '';
       homepage = "https://exiftool.org/";
-
+      changelog = "https://exiftool.org/history.html";
       license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
       maintainers = with maintainers; [ kiloreux anthonyroussel ];
       mainProgram = "exiftool";
