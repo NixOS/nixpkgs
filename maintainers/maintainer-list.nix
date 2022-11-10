@@ -2773,6 +2773,12 @@
     githubId = 40290417;
     name = "Seb Blair";
   };
+  considerate = {
+    email = "viktor.kronvall@gmail.com";
+    github = "considerate";
+    githubId = 217918;
+    name = "Viktor Kronvall";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
@@ -4441,6 +4447,12 @@
     github = "workflow";
     githubId = 1276854;
     name = "Florian Peter";
+  };
+  farnoy = {
+    email = "jakub@okonski.org";
+    github = "farnoy";
+    githubId = 345808;
+    name = "Jakub Okoński";
   };
   fbeffa = {
     email = "beffa@fbengineering.ch";

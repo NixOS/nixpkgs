@@ -983,6 +983,10 @@ with pkgs;
   octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
+  inherit (
+    callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
+  ) patchRcPathBash patchRcPathCsh patchRcPathFish patchRcPathPosix;
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
@@ -1598,6 +1602,8 @@ with pkgs;
   mame = libsForQt5.callPackage ../applications/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
   };
+
+  mame-tools = (lib.getOutput "tools" mame);
 
   mednafen = callPackage ../applications/emulators/mednafen {
     inherit (darwin) libiconv;
@@ -12305,6 +12311,8 @@ with pkgs;
 
   udftools = callPackage ../tools/filesystems/udftools {};
 
+  udpreplay = callPackage ../tools/networking/udpreplay { };
+
   udpt = callPackage ../servers/udpt { };
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
@@ -13634,7 +13642,9 @@ with pkgs;
 
   copper = callPackage ../development/compilers/copper {};
 
-  cotton = callPackage ../development/tools/cotton { };
+  cotton = callPackage ../development/tools/cotton {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
@@ -19556,8 +19566,11 @@ with pkgs;
   icu71 = callPackage ../development/libraries/icu/71.nix ({
     nativeBuildRoot = buildPackages.icu71.override { buildRootOnly = true; };
   });
+  icu72 = callPackage ../development/libraries/icu/72.nix ({
+    nativeBuildRoot = buildPackages.icu72.override { buildRootOnly = true; };
+  });
 
-  icu = icu71;
+  icu = icu72;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -25768,6 +25781,7 @@ with pkgs;
       enableMinimal = true;
       guiSupport = false;
     };
+    libbpf = libbpf_1;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
@@ -26945,7 +26959,9 @@ with pkgs;
 
   theano = callPackage ../data/fonts/theano { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme { };
+  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
+    inherit (gnome) adwaita-icon-theme;
+  };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
 
@@ -33690,6 +33706,8 @@ with pkgs;
   confd = callPackage ../tools/system/confd { };
 
   conmon = callPackage ../applications/virtualization/conmon { };
+
+  conmon-rs = callPackage ../applications/virtualization/conmon-rs { };
 
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 

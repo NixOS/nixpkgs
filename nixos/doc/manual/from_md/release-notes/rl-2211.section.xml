@@ -1250,6 +1250,19 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          The Qt QML disk cache is now disabled by default. This fixes a
+          long-standing issue where updating Qt/KDE apps would sometimes
+          cause them to crash or behave strangely without explanation.
+          Those concerned about the small (~10%) performance hit to
+          application startup can re-enable the cache (and expose
+          themselves to gremlins) by setting the envrionment variable
+          <literal>QML_FORCE_DISK_CACHE</literal> to
+          <literal>1</literal> using e.g. the
+          <literal>environment.sessionVariables</literal> NixOS option.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           systemd-oomd is enabled by default. Depending on which systemd
           units have <literal>ManagedOOMSwap=kill</literal> or
           <literal>ManagedOOMMemoryPressure=kill</literal>, systemd-oomd
@@ -1354,10 +1367,20 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
-          boot.kernel.sysctl is defined as a freeformType and adds a
-          custom merge option for <quote>net.core.rmem_max</quote>
-          (taking the highest value defined to avoid conflicts between 2
-          services trying to set that value)
+          <literal>boot.kernel.sysctl</literal> is defined as a
+          freeformType and adds a custom merge option for
+          <quote>net.core.rmem_max</quote> (taking the highest value
+          defined to avoid conflicts between 2 services trying to set
+          that value).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>mame</literal> package does not ship with its
+          tools anymore in the default output. They were moved to a
+          separate <literal>tools</literal> output instead. For
+          convenience, <literal>mame-tools</literal> package was added
+          for those who want to use it.
         </para>
       </listitem>
     </itemizedlist>
