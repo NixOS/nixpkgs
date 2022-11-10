@@ -2041,7 +2041,6 @@ dont-distribute-packages:
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
- - heist-extra
  - helic
  - helics
  - helics-wai
@@ -2958,6 +2957,7 @@ dont-distribute-packages:
  - persistent-audit
  - persistent-hssqlppp
  - persistent-map
+ - persistent-mtl_0_5_0_0
  - persistent-mysql-haskell
  - persistent-relational-record
  - persona-idp
@@ -3484,7 +3484,7 @@ dont-distribute-packages:
  - skeletons
  - sketch-frp-copilot
  - skylark-client
- - skylighting_0_13_1
+ - skylighting_0_13_1_1
  - slate
  - slidemews
  - slip32
@@ -3584,6 +3584,7 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
+ - stackctl
  - stan
  - starrover2
  - stateful-mtl
