@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lirc";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
-    sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
+    sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
   };
 
   patches = [
