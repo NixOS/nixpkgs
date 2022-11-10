@@ -2,6 +2,8 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, testers
+, lightningcss
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +24,13 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--lib" "--bin=lightningcss" ];
 
   cargoTestFlags = [ "--lib" ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = lightningcss;
+      command = "lightningcss --version";
+    };
+  };
 
   meta = with lib; {
     description = "Extremely fast CSS parser, transformer, and minifier written in Rust";
