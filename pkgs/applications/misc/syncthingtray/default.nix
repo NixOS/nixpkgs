@@ -40,6 +40,17 @@ mkDerivation rec {
     sha256 = "sha256-6s78vytYxU7FWGQRO56qgmtZBlHbXMz3iVAbBXycDmI=";
   };
 
+  patches = [
+    # Fix Exec= path in runtime-generated
+    # ~/.config/autostart/syncthingtray.desktop file - this is required because
+    # we are wrapping the executable. We can't use `substituteAll` because we
+    # can't use `${placeholder "out"}` because that will produce the $out of
+    # the patch derivation itself, and not of syncthing's "out" placeholder.
+    # Hence we use a C definition with NIX_CFLAGS_COMPILE
+    ./use-nix-path-in-autostart.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-DEXEC_NIX_PATH=\"${placeholder "out"}/bin/syncthingtray\"";
+
   buildInputs = [
     qtbase
     cpp-utilities
