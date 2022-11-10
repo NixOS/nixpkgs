@@ -11498,6 +11498,8 @@ with pkgs;
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  snort3 = callPackage ../applications/networking/ids/snort3 { };
+
   so = callPackage ../development/tools/so {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -20017,6 +20019,8 @@ with pkgs;
   libcutl = callPackage ../development/libraries/libcutl { };
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
+
+  libdaq3 = callPackage ../applications/networking/ids/libdaq3 { };
 
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
