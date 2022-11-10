@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
+    "--with-libexecdir=${placeholder "lib"}/libexec"
   ] ++ lib.optional enableCmdlib "--enable-cmdlib"
   ++ lib.optionals enableDmeventd [
     "--enable-dmeventd"
