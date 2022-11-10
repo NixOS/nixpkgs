@@ -990,21 +990,6 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0";
     deprecated = true;
   };
-  fdl11 = {
-    spdxId = "GFDL-1.1";
-    fullName = "GNU Free Documentation License v1.1";
-    deprecated = true;
-  };
-  fdl12 = {
-    spdxId = "GFDL-1.2";
-    fullName = "GNU Free Documentation License v1.2";
-    deprecated = true;
-  };
-  fdl13 = {
-    spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.3";
-    deprecated = true;
-  };
   gpl2 = {
     spdxId = "GPL-2.0";
     fullName = "GNU General Public License v2.0";
