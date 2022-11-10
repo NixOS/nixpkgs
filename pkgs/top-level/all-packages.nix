@@ -1597,6 +1597,8 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
+  ludusavi = callPackage ../applications/backup/ludusavi { };
+
   maiko = callPackage ../applications/emulators/maiko { };
 
   mame = libsForQt5.callPackage ../applications/emulators/mame {
@@ -21338,6 +21340,8 @@ with pkgs;
   moserial = callPackage ../tools/misc/moserial { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
+
+  nanomq = callPackage ../servers/mqtt/nanomq { };
 
   mps = callPackage ../development/libraries/mps { stdenv = gcc10StdenvCompat; };
 

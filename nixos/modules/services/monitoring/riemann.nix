@@ -27,13 +27,8 @@ in {
   options = {
 
     services.riemann = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Enable the Riemann network monitoring daemon.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "Riemann network monitoring daemon");
+
       config = mkOption {
         type = types.lines;
         description = lib.mdDoc ''
