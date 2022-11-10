@@ -81,6 +81,17 @@
 
           hash = "sha256-oIM05TGHstX1D4k2K4TJ+SHB7H/tNKzxzssqf0GJwvY=";
         };
+
+        linkDependencies = makeTest {
+          name = "link-dependencies";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/evcc-io/evcc/0.106.3/package-lock.json";
+            hash = "sha256-6ZTBMyuyPP/63gpQugggHhKVup6OB4hZ2rmSvPJ0yEs=";
+          };
+
+          hash = "sha256-uQx8F5OXKm+fqx6hP6obVYTlQIYcJwtO52j6VQNo7Sk=";
+        };
       };
 
     meta = with lib; {
