@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
 
-  cmakeFlags = [ "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}" ];
+  cmakeFlags = [
+    "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}"
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    "-DSPIRV_WERROR=OFF"
+  ];
 
   # https://github.com/KhronosGroup/SPIRV-Tools/issues/3905
   postPatch = ''
