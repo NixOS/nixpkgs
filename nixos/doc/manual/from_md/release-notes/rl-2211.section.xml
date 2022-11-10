@@ -399,6 +399,12 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://go.mau.fi/mautrix-discord/">mautrix-discord</link>
+          Matrix to Discord hybrid puppeting/relaybot bridge.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
           a small and easy HTTP server based on thttpd. Available as
           <link linkend="opt-services.merecat.enable">services.merecat</link>
