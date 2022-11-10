@@ -3,7 +3,7 @@
 }:
 
 let
-  stableVersion = "2.2.34";
+  stableVersion = "2.2.35.1";
   previewVersion = stableVersion;
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
@@ -27,8 +27,8 @@ let
   };
   mkGui = args: libsForQt5.callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
   mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
-  guiSrcHash = "sha256-1YsVMrUYI46lJZbPjf3jnOFDr9Hp54m8DVMz9y4dvVc=";
-  serverSrcHash = "sha256-h4d9s+QvqN/EFV97rPRhQiyC06wkZ9C2af9gx1Z/x/8=";
+  guiSrcHash = "sha256-iVvADwIp01HeZoDayvH1dilYRHRkRBTBR3Fh395JBq0=";
+  serverSrcHash = "sha256-41dbiSjvmsDNYr9/rRkeQVOnPSVND34xx1SNknCgHfc=";
 
 in {
   guiStable = mkGui {

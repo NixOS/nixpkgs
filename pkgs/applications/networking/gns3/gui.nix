@@ -55,10 +55,8 @@ in python.pkgs.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "sentry-sdk==" "sentry-sdk>=" \
       --replace "psutil==" "psutil>=" \
-      --replace "distro==" "distro>=" \
-      --replace "setuptools==" "setuptools>="
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema"
   '';
 
   meta = with lib; {

@@ -33,15 +33,8 @@ in python.pkgs.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "aiohttp==" "aiohttp>=" \
-      --replace "aiofiles==" "aiofiles>=" \
-      --replace "Jinja2==" "Jinja2>=" \
-      --replace "sentry-sdk==" "sentry-sdk>=" \
-      --replace "async-timeout==" "async-timeout>=" \
       --replace "psutil==" "psutil>=" \
-      --replace "distro==" "distro>=" \
-      --replace "py-cpuinfo==" "py-cpuinfo>=" \
-      --replace "setuptools==" "setuptools>="
+      --replace "jsonschema>=4.17.0,<4.18" "jsonschema"
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -50,6 +43,7 @@ in python.pkgs.buildPythonApplication {
     aiohttp-cors
     async_generator
     distro
+    importlib-resources
     jinja2
     jsonschema
     multidict
