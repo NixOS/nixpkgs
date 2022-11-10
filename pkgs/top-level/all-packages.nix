@@ -18533,7 +18533,6 @@ with pkgs;
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     libkrb5 = if stdenv.isFreeBSD then libheimdal else libkrb5;
-    openssl = openssl_1_1;
   };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -21632,9 +21631,7 @@ with pkgs;
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
-  openldap = callPackage ../development/libraries/openldap {
-    openssl = openssl_1_1;
-  };
+  openldap = callPackage ../development/libraries/openldap { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
