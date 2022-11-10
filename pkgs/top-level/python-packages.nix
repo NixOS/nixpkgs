@@ -8692,6 +8692,8 @@ self: super: with self; {
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
+  pytest-allclose = callPackage ../development/python-modules/pytest-allclose { };
+
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
@@ -8811,6 +8813,8 @@ self: super: with self; {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-plt = callPackage ../development/python-modules/pytest-plt { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
@@ -8838,6 +8842,8 @@ self: super: with self; {
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
+
+  pytest-rng = callPackage ../development/python-modules/pytest-rng { };
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 

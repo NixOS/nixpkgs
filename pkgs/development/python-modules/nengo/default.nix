@@ -1,7 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
 , numpy
 , scipySupport ? false, scipy
 , scikitSupport ? false, scikit-learn
+, pytestCheckHook
+, pytest-allclose
+, matplotlib
+, pytest-plt
+, pytest-rng
 }:
 
 buildPythonPackage rec {
@@ -15,15 +22,18 @@ buildPythonPackage rec {
     sha256 = "12lz8lzirxvwnpa74k9k48c64gs6gi092928rh97siya3i6gjs6i";
   };
 
-  propagatedBuildInputs = [ numpy ]
-    ++ lib.optionals scipySupport [ scipy ]
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+  ] ++ lib.optionals scipySupport [ scipy ]
     ++ lib.optionals scikitSupport [ scikit-learn ];
 
-  # checks req missing:
-  #   pytest-allclose
-  #   pytest-plt
-  #   pytest-rng
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    pytest-allclose
+    pytest-plt
+    pytest-rng
+  ];
 
   pythonImportsCheck = [ "nengo" ];
 
