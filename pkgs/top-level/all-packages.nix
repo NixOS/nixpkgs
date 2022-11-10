@@ -20417,9 +20417,7 @@ with pkgs;
 
   libmysofa = callPackage ../development/libraries/audio/libmysofa { };
 
-  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
-    openssl = openssl_1_1;
-  };
+  libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {};
 
   libnatpmp = callPackage ../development/libraries/libnatpmp { };
 
@@ -26945,7 +26943,9 @@ with pkgs;
 
   theano = callPackage ../data/fonts/theano { };
 
-  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme { };
+  tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
+    inherit (gnome) adwaita-icon-theme;
+  };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
 
