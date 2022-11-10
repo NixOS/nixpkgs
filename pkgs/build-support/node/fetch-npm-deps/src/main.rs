@@ -26,6 +26,8 @@ struct PackageLock {
 #[derive(Deserialize)]
 struct OldPackage {
     version: UrlOrString,
+    #[serde(default)]
+    bundled: bool,
     resolved: Option<UrlOrString>,
     integrity: Option<String>,
     dependencies: Option<HashMap<String, OldPackage>>,
@@ -61,6 +63,13 @@ fn to_new_packages(
     let mut new = HashMap::new();
 
     for (name, mut package) in old_packages {
+        // In some cases, a bundled dependency happens to have the same version as a non-bundled one, causing
+        // the bundled one without a URL to override the entry for the non-bundled instance, which prevents the
+        // dependency from being downloaded.
+        if package.bundled {
+            continue;
+        }
+
         if let UrlOrString::Url(v) = &package.version {
             for (scheme, host) in [
                 ("github", "github.com"),
@@ -404,6 +413,7 @@ mod tests {
                     version: UrlOrString::Url(Url::parse(
                         "github:mapbox/node-sqlite3#593c9d498be2510d286349134537e3bf89401c4a",
                     ).unwrap()),
+                    bundled: false,
                     resolved: None,
                     integrity: None,
                     dependencies: None,
