@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-AZSchcWYg9G7lps6EgupPksXbvKzrs8wlse1jsbC8Rs=";
+    sha256 = "sha256-u+D7DKa2hb6kd6LPcJydkkChsPKW101bJWXx6C87rPs=";
   };
 
-  cargoSha256 = "sha256-UZb5jVO5E4Yin5ua9QVsRzQGa35Onm4s/w7ys31+vX4=";
+  cargoSha256 = "sha256-OxoIWH/eW36fy6xujWHmgAhK6dSodMVASw8rzKFZDSk=";
 
   nativeBuildInputs = [
     mandown
