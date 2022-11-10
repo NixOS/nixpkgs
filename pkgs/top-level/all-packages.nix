@@ -13636,7 +13636,9 @@ with pkgs;
 
   copper = callPackage ../development/compilers/copper {};
 
-  cotton = callPackage ../development/tools/cotton { };
+  cotton = callPackage ../development/tools/cotton {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
