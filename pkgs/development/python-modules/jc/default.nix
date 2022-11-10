@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
   };
 }

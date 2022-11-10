@@ -1,10 +1,11 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , fetchpatch
 , makeWrapper
 , cmake
 , git
+, davix
 , ftgl
 , gl2ps
 , glew
@@ -22,6 +23,7 @@
 , lz4
 , xz
 , openblas
+, openssl
 , pcre
 , nlohmann_json
 , pkg-config
@@ -44,7 +46,7 @@
 let
 
   _llvm_9 = llvm_9.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [
+    patches = (prev.patches or [ ]) ++ [
       (fetchpatch {
         url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
         stripLen = 3;
@@ -57,15 +59,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.26.06";
+  version = "6.26.08";
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-sfc8l2pYClxWyMigFSWCod/FYLTdgOG3VFI3tl5sics=";
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "root";
+    rev = "v${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    sha256 = "sha256-cNd1GvEbO/a+WdDe8EHYGmdlw3TrOT2fWaSk+s7fw7U=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
   buildInputs = [
+    davix
     ftgl
     gl2ps
     glew
@@ -80,6 +85,7 @@ stdenv.mkDerivation rec {
     xz
     gsl
     openblas
+    openssl
     xxHash
     libAfterImage
     giflib
@@ -125,6 +131,8 @@ stdenv.mkDerivation rec {
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/CMakeLists.txt \
       --replace "-F/System/Library/PrivateFrameworks" ""
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
   cmakeFlags = [
@@ -140,7 +148,7 @@ stdenv.mkDerivation rec {
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
-    "-Ddavix=OFF"
+    "-Ddavix=ON"
     "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
     "-Dfftw3=OFF"
@@ -164,7 +172,7 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Droot7=OFF"
     "-Dsqlite=OFF"
-    "-Dssl=OFF"
+    "-Dssl=ON"
     "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
@@ -200,6 +208,6 @@ stdenv.mkDerivation rec {
 
     # See https://github.com/NixOS/nixpkgs/pull/192581#issuecomment-1256860426
     # for some context on issues on aarch64.
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 && stdenv.isLinux;
   };
 }

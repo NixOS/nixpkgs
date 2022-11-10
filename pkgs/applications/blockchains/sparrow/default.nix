@@ -5,7 +5,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , autoPatchelfHook
-, openjdk17
+, openjdk18
 , gtk3
 , gsettings-desktop-schemas
 , writeScript
@@ -20,11 +20,11 @@
 
 let
   pname = "sparrow";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0zk33w664fky3ir6cqm6walc80fjhg9s0hnrllrc2hrxrqnrn88p";
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
+    sha256 = "1rrf5xba733c2vxgd7bf164iswc66ggp64ywh79d0vf188imzmwr";
   };
 
   launcher = writeScript "sparrow" ''
@@ -60,7 +60,7 @@ let
       -m com.sparrowwallet.sparrow
     )
 
-    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk17}/bin/java ''${params[@]} $@
+    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk18}/bin/java ''${params[@]} $@
   '';
 
   torWrapper = writeScript "tor-wrapper" ''
@@ -71,14 +71,14 @@ let
 
   jdk-modules = stdenv.mkDerivation {
     name = "jdk-modules";
-    nativeBuildInputs = [ openjdk17 ];
+    nativeBuildInputs = [ openjdk18 ];
     dontUnpack = true;
 
     buildPhase = ''
       # Extract the JDK's JIMAGE and generate a list of modules.
       mkdir modules
       pushd modules
-      jimage extract ${openjdk17}/lib/openjdk/lib/modules
+      jimage extract ${openjdk18}/lib/openjdk/lib/modules
       ls | xargs -d " " -- echo > ../manifest.txt
       popd
     '';
@@ -93,7 +93,7 @@ let
   sparrow-modules = stdenv.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gnugrep openjdk17 autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [ makeWrapper gnugrep openjdk18 autoPatchelfHook stdenv.cc.cc.lib zlib ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -187,6 +187,7 @@ stdenv.mkDerivation rec {
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
       categories = [ "Finance" ];
+      mimeTypes = [ "application/psbt" "application/bitcoin-transaction" "x-scheme-handler/bitcoin" "x-scheme-handler/auth47" "x-scheme-handler/lightning" ];
     })
   ];
 
@@ -221,6 +222,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability.";

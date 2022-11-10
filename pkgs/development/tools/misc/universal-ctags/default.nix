@@ -38,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libseccomp
     libyaml
     pcre2
     libxml2
     jansson
   ]
-  ++ lib.optional stdenv.isDarwin libiconv;
+  ++ lib.optional stdenv.isDarwin libiconv
+  ++ lib.optional stdenv.isLinux libseccomp;
 
   configureFlags = [ "--enable-tmpdir=/tmp" ];
 
