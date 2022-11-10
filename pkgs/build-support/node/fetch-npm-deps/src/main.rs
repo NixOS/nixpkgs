@@ -6,7 +6,7 @@ use rayon::prelude::*;
 use serde::Deserialize;
 use std::{
     collections::HashMap,
-    env, fs,
+    env, fmt, fs,
     path::Path,
     process::{self, Command},
 };
@@ -25,16 +25,32 @@ struct PackageLock {
 
 #[derive(Deserialize)]
 struct OldPackage {
-    version: String,
-    resolved: Option<String>,
+    version: UrlOrString,
+    resolved: Option<UrlOrString>,
     integrity: Option<String>,
     dependencies: Option<HashMap<String, OldPackage>>,
 }
 
 #[derive(Deserialize)]
 struct Package {
-    resolved: Option<Url>,
+    resolved: Option<UrlOrString>,
     integrity: Option<String>,
+}
+
+#[derive(Debug, Deserialize, PartialEq, Eq)]
+#[serde(untagged)]
+enum UrlOrString {
+    Url(Url),
+    String(String),
+}
+
+impl fmt::Display for UrlOrString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            UrlOrString::Url(url) => url.fmt(f),
+            UrlOrString::String(string) => string.fmt(f),
+        }
+    }
 }
 
 fn to_new_packages(
@@ -46,10 +62,10 @@ fn to_new_packages(
         new.insert(
             format!("{name}-{}", package.version),
             Package {
-                resolved: if let Ok(url) = Url::parse(&package.version) {
-                    Some(url)
+                resolved: if matches!(package.version, UrlOrString::Url(_)) {
+                    Some(package.version)
                 } else {
-                    package.resolved.as_deref().map(Url::parse).transpose()?
+                    package.resolved
                 },
                 integrity: package.integrity,
             },
@@ -230,14 +246,15 @@ fn main() -> anyhow::Result<()> {
     packages
         .unwrap()
         .into_par_iter()
+        .filter(|(dep, _)| !dep.is_empty())
+        .filter(|(_, package)| matches!(package.resolved, Some(UrlOrString::Url(_))))
         .try_for_each(|(dep, package)| {
-            if dep.is_empty() || package.resolved.is_none() {
-                return Ok::<_, anyhow::Error>(());
-            }
-
             eprintln!("{dep}");
 
-            let mut resolved = package.resolved.unwrap();
+            let mut resolved = match package.resolved {
+                Some(UrlOrString::Url(url)) => url,
+                _ => unreachable!(),
+            };
 
             if let Some(hosted_git_url) = get_hosted_git_url(&resolved) {
                 resolved = hosted_git_url;
@@ -263,7 +280,7 @@ fn main() -> anyhow::Result<()> {
                 )
                 .map_err(|e| anyhow!("couldn't insert cache entry for {dep}: {e:?}"))?;
 
-            Ok(())
+            Ok::<_, anyhow::Error>(())
         })?;
 
     fs::write(out.join("package-lock.json"), lock_content)?;
