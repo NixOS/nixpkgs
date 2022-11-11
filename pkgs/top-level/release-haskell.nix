@@ -180,6 +180,7 @@ let
         dhall-nix
         diagrams-builder
         elm2nix
+        emanote
         fffuu
         futhark
         ghcid
