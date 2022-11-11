@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   pname = "feedbackd";
   # Not an actual upstream project release,
   # only a Debian package release that is tagged in the upstream repo
-  version = "0.0.0+git20220520";
+  version = "0.0.1";
 
   outputs = [ "out" "dev" ]
     # remove if cross-compiling gobject-introspection works
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-4ftPC6LnX0kKFYVyH85yCH43B3YjuaZM5rzr8TGgZvc=";
+    hash = "sha256-l1FhECLPq8K9lzQ50sI/aH7fwR9xW1ATyk7EWRmLzuQ=";
   };
 
   nativeBuildInputs = [
