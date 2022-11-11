@@ -13252,6 +13252,8 @@ with pkgs;
     cmake = buildPackages.cmakeMinimal;
   };
 
+  zsv = callPackage ../development/tools/zsv { };
+
   zsync = callPackage ../tools/compression/zsync { };
 
   zxing = callPackage ../tools/graphics/zxing {};
