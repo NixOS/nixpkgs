@@ -623,15 +623,15 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        script = let
-          olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;
-        in ''
-          ${cfg.package}/bin/tootctl media remove --days=${olderThanDays}
-          ${cfg.package}/bin/tootctl preview_cards remove --days=${olderThanDays}
-        '';
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        startAt = cfg.mediaAutoRemove.startAt;
       } // cfgService;
+      script = let
+        olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;
+      in ''
+        ${cfg.package}/bin/tootctl media remove --days=${olderThanDays}
+        ${cfg.package}/bin/tootctl preview_cards remove --days=${olderThanDays}
+      '';
+      startAt = cfg.mediaAutoRemove.startAt;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {
