@@ -47279,20 +47279,20 @@
   "repo": "lifeisfoo/emacs-grails",
   "unstable": {
    "version": [
-    20220407,
-    1847
+    20221110,
+    929
    ],
-   "commit": "350869ecc4f429fc4e26f826d6050d068e724c5d",
-   "sha256": "1zw8hh97jlxjdgi5spsfd40qgahwbcca2cg2wbqyn1pgq4rjdx0i"
+   "commit": "3019f86e555ee94388795a0475cfa213e3897bbb",
+   "sha256": "PpdaJ5ccAEwS7uC7YkDP4++ZexG7goDXsFEcHZhDdJ4="
   },
   "stable": {
    "version": [
     0,
     5,
-    0
+    1
    ],
-   "commit": "350869ecc4f429fc4e26f826d6050d068e724c5d",
-   "sha256": "1zw8hh97jlxjdgi5spsfd40qgahwbcca2cg2wbqyn1pgq4rjdx0i"
+   "commit": "3019f86e555ee94388795a0475cfa213e3897bbb",
+   "sha256": "PpdaJ5ccAEwS7uC7YkDP4++ZexG7goDXsFEcHZhDdJ4="
   }
  },
  {
