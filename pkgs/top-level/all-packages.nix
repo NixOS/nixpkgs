@@ -5362,19 +5362,17 @@ with pkgs;
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
-  inherit (callPackage ../tools/networking/connman {})
+  connmanPackages =
+    recurseIntoAttrs (callPackage ../tools/networking/connman { });
+  inherit (connmanPackages)
     connman
     connmanFull
     connmanMinimal
+    connman_dmenu
+    connman-gtk
+    connman-ncurses
+    connman-notify
   ;
-
-  connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
-
-  connman-ncurses = callPackage ../tools/networking/connman/connman-ncurses { };
-
-  connman-notify = callPackage ../tools/networking/connman/connman-notify { };
-
-  connman_dmenu = callPackage ../tools/networking/connman/connman_dmenu  { };
 
   convertlit = callPackage ../tools/text/convertlit { };
 
