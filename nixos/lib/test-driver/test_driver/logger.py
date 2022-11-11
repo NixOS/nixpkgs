@@ -1,4 +1,4 @@
-from colorama import Style
+from colorama import Style, Fore
 from contextlib import contextmanager
 from typing import Any, Dict, Iterator
 from queue import Queue, Empty
@@ -81,7 +81,11 @@ class Logger:
 
     @contextmanager
     def nested(self, message: str, attributes: Dict[str, str] = {}) -> Iterator[None]:
-        self._eprint(self.maybe_prefix(message, attributes))
+        self._eprint(
+            self.maybe_prefix(
+                Style.BRIGHT + Fore.GREEN + message + Style.RESET_ALL, attributes
+            )
+        )
 
         self.xml.startElement("nest", attrs={})
         self.xml.startElement("head", attributes)

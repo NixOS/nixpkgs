@@ -4,20 +4,23 @@
 , openssh, pcre2, bash
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
-, guiSupport
+, guiSupport ? false
 , withManual ? true
 , pythonSupport ? true
 , withpcre2 ? true
-, sendEmailSupport
-, darwin
+, sendEmailSupport ? false
+, Security, CoreServices
 , nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
+, withSsh ? false
+, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, tests
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -25,60 +28,61 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.35.1";
+  version = "2.38.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
-
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
-stdenv.mkDerivation {
-  pname = "git";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "git"
+    + lib.optionalString svnSupport "-with-svn"
+    + lib.optionalString (!svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2) "-minimal";
   inherit version;
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "100h37cpw49pmlpf6lcpm1xi578gllf6y9in60h5mxj3cj754s6p";
+    sha256 = "sha256-l9346liiueD7wlCOJFAoynWRG9ONFVFhaxSMGqV0Ctk=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
+  separateDebugInfo = true;
 
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 
-  ## Patch
-
   patches = [
     ./docbook2texi.patch
     ./git-sh-i18n.patch
-    ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+  ] ++ lib.optionals withSsh [
+    ./ssh-path.patch
   ];
 
   postPatch = ''
-    for x in connect.c git-gui/lib/remote_add.tcl ; do
-      substituteInPlace "$x" \
-        --subst-var-by ssh "${openssh}/bin/ssh"
-    done
-
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
         --subst-var-by gettext ${gettext}
 
     # ensure we are using the correct shell when executing the test scripts
     patchShebangs t/*.sh
+  '' + lib.optionalString withSsh ''
+    for x in connect.c git-gui/lib/remote_add.tcl ; do
+      substituteInPlace "$x" \
+        --subst-var-by ssh "${openssh}/bin/ssh"
+    done
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper ]
+  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [ curl openssl zlib expat cpio libiconv bash ]
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
-    ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
+    ++ lib.optionals withLibsecret [ glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
@@ -166,8 +170,13 @@ stdenv.mkDerivation {
       cp -a contrib $out/share/git/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
-      mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
+      # only readme, developed in another repo
+      rm -r contrib/hooks/multimail
+      mkdir -p $out/share/git-core/contrib
+      cp -a contrib/hooks/ $out/share/git-core/contrib/
+      substituteInPlace $out/share/git-core/contrib/hooks/pre-auto-gc-battery \
+        --replace ' grep' ' ${gnugrep}/bin/grep' \
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \
@@ -198,6 +207,7 @@ stdenv.mkDerivation {
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+      ln -s $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump
     '' + lib.optionalString perlSupport ''
       # wrap perl commands
       makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
@@ -243,7 +253,7 @@ stdenv.mkDerivation {
       '')
 
    + lib.optionalString withManual ''# Install man pages
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -273,7 +283,7 @@ stdenv.mkDerivation {
   ## InstallCheck
 
   doCheck = false;
-  doInstallCheck = true;
+  inherit doInstallCheck;
 
   installCheckTarget = "test";
 
@@ -330,6 +340,10 @@ stdenv.mkDerivation {
     disable_test t5319-multi-pack-index
     disable_test t6421-merge-partial-clone
 
+    # Fails reproducibly on ZFS on Linux with formD normalization
+    disable_test t0021-conversion
+    disable_test t3910-mac-os-precompose
+
     ${lib.optionalString (!perlSupport) ''
       # request-pull is a Bash script that invokes Perl, so it is not available
       # when NO_PERL=1, and the test should be skipped, but the test suite does
@@ -347,6 +361,8 @@ stdenv.mkDerivation {
     disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -360,8 +376,11 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/git-shell";
     tests = {
+      withInstallCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+        doInstallCheck = true;
+      });
       buildbot-integration = nixosTests.buildbot;
-    };
+    } // tests.fetchgit;
   };
 
   meta = {
@@ -378,4 +397,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
-}
+})

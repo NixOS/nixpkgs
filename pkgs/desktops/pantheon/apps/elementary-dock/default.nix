@@ -12,7 +12,6 @@
 , libXfixes
 , libXi
 , pango
-, gettext
 , pkg-config
 , libxml2
 , bamf
@@ -28,19 +27,18 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "unstable-2021-12-08";
+  version = "unstable-2021-05-07";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "dock";
-    rev = "5e4b5ba2eec3b522e107ad834a59c0f1271d4699";
-    sha256 = "sha256-/Ul21t9VFxhmlQbfx4eY86UKU33hiRfXF9OPHBzPe5o=";
+    rev = "113c3b0bc7744501d2101dd7afc1ef21ba66b326";
+    sha256 = "sha256-YlvdB02/hUGaDyHIHy21bgloHyVy3vHcanyNKnp3YbM=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     libxml2 # xmllint
@@ -67,6 +65,14 @@ stdenv.mkDerivation rec {
     libwnck
     pango
   ];
+
+  postInstall = ''
+    # elementary/dock/master is missing a Meson post
+    # install script that does this. This has been
+    # resolved after the dock rewrite (the `main` branch).
+    # https://github.com/elementary/default-settings/issues/267
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   meta = with lib; {
     description = "Elegant, simple, clean dock";

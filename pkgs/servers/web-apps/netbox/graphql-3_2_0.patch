@@ -1,0 +1,21 @@
+diff --git a/netbox/netbox/graphql/scalars.py b/netbox/netbox/graphql/scalars.py
+index 7d14189dd..0a18e79d2 100644
+--- a/netbox/netbox/graphql/scalars.py
++++ b/netbox/netbox/graphql/scalars.py
+@@ -1,6 +1,6 @@
+ from graphene import Scalar
+ from graphql.language import ast
+-from graphql.type.scalars import MAX_INT, MIN_INT
++from graphql.type.scalars import GRAPHQL_MAX_INT, GRAPHQL_MIN_INT
+ 
+ 
+ class BigInt(Scalar):
+@@ -10,7 +10,7 @@ class BigInt(Scalar):
+     @staticmethod
+     def to_float(value):
+         num = int(value)
+-        if num > MAX_INT or num < MIN_INT:
++        if num > GRAPHQL_MAX_INT or num < GRAPHQL_MIN_INT:
+             return float(num)
+         return num
+ 

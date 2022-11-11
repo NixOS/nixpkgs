@@ -4,6 +4,7 @@
 , bison
 , flex
 , zlib
+, libxcrypt
 , usePAM ? stdenv.hostPlatform.isLinux
 , pam
 , useSSL ? true
@@ -12,15 +13,15 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.29.0";
+  version = "5.32.0";
 
   src = fetchurl {
-    url = "${meta.homepage}dist/monit-${version}.tar.gz";
-    sha256 = "sha256-9mXm3R8mp0tWgomah3k0Fn3islguBIZS7PA2MYR3iF8=";
+    url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
+    sha256 = "sha256-EHcFLUxOhIrEfRT5s3dU1GQZrsvoyaB+H4ackU+vMhY=";
   };
 
   nativeBuildInputs = [ bison flex ];
-  buildInputs = [ zlib.dev ] ++
+  buildInputs = [ zlib.dev libxcrypt ] ++
     lib.optionals useSSL [ openssl ] ++
     lib.optionals usePAM [ pam ];
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature usePAM "pam")
   ] ++ (if useSSL then [
     "--with-ssl-incl-dir=${openssl.dev}/include"
-    "--with-ssl-lib-dir=${openssl.out}/lib"
+    "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
   ] else [
     "--without-ssl"
   ]) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

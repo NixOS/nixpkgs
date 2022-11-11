@@ -4,7 +4,7 @@
 , deprecated
 , oauthlib
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , six
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "3.19.0";
+  version = "3.28.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,15 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atlassian-api";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-SJsqk8TM+5UztN1ZDyYrOjNIWDLhm5XtLxPflIGPxKQ=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-ZKRmjfH3s35DU1Mut63YuN6opKzg2gpyunWYjg/FbHA=";
   };
 
   propagatedBuildInputs = [
     deprecated
     oauthlib
     requests
-    requests_oauthlib
+    requests-oauthlib
     six
   ];
 

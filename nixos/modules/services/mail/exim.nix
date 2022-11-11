@@ -17,13 +17,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Exim mail transfer agent.";
+        description = lib.mdDoc "Whether to enable the Exim mail transfer agent.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Verbatim Exim configuration.  This should not contain exim_user,
           exim_group, exim_path, or spool_directory.
         '';
@@ -32,7 +32,7 @@ in
       user = mkOption {
         type = types.str;
         default = "exim";
-        description = ''
+        description = lib.mdDoc ''
           User to use when no root privileges are required.
           In particular, this applies when receiving messages and when doing
           remote deliveries.  (Local deliveries run as various non-root users,
@@ -44,7 +44,7 @@ in
       group = mkOption {
         type = types.str;
         default = "exim";
-        description = ''
+        description = lib.mdDoc ''
           Group to use when no root privileges are required.
         '';
       };
@@ -52,7 +52,7 @@ in
       spoolDir = mkOption {
         type = types.path;
         default = "/var/spool/exim";
-        description = ''
+        description = lib.mdDoc ''
           Location of the spool directory of exim.
         '';
       };
@@ -61,7 +61,7 @@ in
         type = types.package;
         default = pkgs.exim;
         defaultText = literalExpression "pkgs.exim";
-        description = ''
+        description = lib.mdDoc ''
           The Exim derivation to use.
           This can be used to enable features such as LDAP or PAM support.
         '';
@@ -70,7 +70,7 @@ in
       queueRunnerInterval = mkOption {
         type = types.str;
         default = "5m";
-        description = ''
+        description = lib.mdDoc ''
           How often to spawn a new queue runner.
         '';
       };

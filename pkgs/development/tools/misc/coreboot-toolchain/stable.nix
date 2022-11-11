@@ -35,10 +35,10 @@
     };
   }
   {
-    name = "acpica-unix2-20210331.tar.gz";
+    name = "acpica-unix2-20211217.tar.gz";
     archive = fetchurl {
-      sha256 = "1h98pvc9iy1c49cid0ppjwk5zsy2m1xbvfqb72pkwkrd4rn35arx";
-      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20210331.tar.gz";
+      sha256 = "0521hmaw2zhi0mpgnaf2i83dykfgql4bx98cg7xqy8wmj649z194";
+      url = "https://acpica.org/sites/acpica/files/acpica-unix2-20211217.tar.gz";
     };
   }
   {

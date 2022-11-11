@@ -4,11 +4,12 @@ let
   inherit (lib)
     concatStringsSep
     flip
-    literalDocBook
+    literalMD
     literalExpression
     optionalAttrs
     optionals
     recursiveUpdate
+    mdDoc
     mkEnableOption
     mkIf
     mkOption
@@ -100,14 +101,14 @@ in
 {
   options.services.cassandra = {
 
-    enable = mkEnableOption ''
+    enable = mkEnableOption (lib.mdDoc ''
       Apache Cassandra – Scalable and highly available database.
-    '';
+    '');
 
     clusterName = mkOption {
       type = types.str;
       default = "Test Cluster";
-      description = ''
+      description = mdDoc ''
         The name of the cluster.
         This setting prevents nodes in one logical cluster from joining
         another. All nodes in a cluster must have the same value.
@@ -117,19 +118,19 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = "Run Apache Cassandra under this user.";
+      description = mdDoc "Run Apache Cassandra under this user.";
     };
 
     group = mkOption {
       type = types.str;
       default = defaultUser;
-      description = "Run Apache Cassandra under this group.";
+      description = mdDoc "Run Apache Cassandra under this group.";
     };
 
     homeDir = mkOption {
       type = types.path;
       default = "/var/lib/cassandra";
-      description = ''
+      description = mdDoc ''
         Home directory for Apache Cassandra.
       '';
     };
@@ -139,7 +140,7 @@ in
       default = pkgs.cassandra;
       defaultText = literalExpression "pkgs.cassandra";
       example = literalExpression "pkgs.cassandra_3_11";
-      description = ''
+      description = mdDoc ''
         The Apache Cassandra package to use.
       '';
     };
@@ -147,8 +148,8 @@ in
     jvmOpts = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
-        Populate the JVM_OPT environment variable.
+      description = mdDoc ''
+        Populate the `JVM_OPT` environment variable.
       '';
     };
 
@@ -156,20 +157,20 @@ in
       type = types.nullOr types.str;
       default = "127.0.0.1";
       example = null;
-      description = ''
+      description = mdDoc ''
         Address or interface to bind to and tell other Cassandra nodes
         to connect to. You _must_ change this if you want multiple
         nodes to be able to communicate!
 
-        Set listenAddress OR listenInterface, not both.
+        Set {option}`listenAddress` OR {option}`listenInterface`, not both.
 
         Leaving it blank leaves it up to
-        InetAddress.getLocalHost(). This will always do the Right
-        Thing _if_ the node is properly configured (hostname, name
+        `InetAddress.getLocalHost()`. This will always do the "Right
+        Thing" _if_ the node is properly configured (hostname, name
         resolution, etc), and the Right Thing is to use the address
         associated with the hostname (it might not be).
 
-        Setting listen_address to 0.0.0.0 is always wrong.
+        Setting {option}`listenAddress` to `0.0.0.0` is always wrong.
       '';
     };
 
@@ -177,8 +178,8 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "eth1";
-      description = ''
-        Set listenAddress OR listenInterface, not both. Interfaces
+      description = mdDoc ''
+        Set `listenAddress` OR `listenInterface`, not both. Interfaces
         must correspond to a single address, IP aliasing is not
         supported.
       '';
@@ -188,18 +189,18 @@ in
       type = types.nullOr types.str;
       default = "127.0.0.1";
       example = null;
-      description = ''
+      description = mdDoc ''
         The address or interface to bind the native transport server to.
 
-        Set rpcAddress OR rpcInterface, not both.
+        Set {option}`rpcAddress` OR {option}`rpcInterface`, not both.
 
-        Leaving rpcAddress blank has the same effect as on
-        listenAddress (i.e. it will be based on the configured hostname
+        Leaving {option}`rpcAddress` blank has the same effect as on
+        {option}`listenAddress` (i.e. it will be based on the configured hostname
         of the node).
 
-        Note that unlike listenAddress, you can specify 0.0.0.0, but you
-        must also set extraConfig.broadcast_rpc_address to a value other
-        than 0.0.0.0.
+        Note that unlike {option}`listenAddress`, you can specify `"0.0.0.0"`, but you
+        must also set `extraConfig.broadcast_rpc_address` to a value other
+        than `"0.0.0.0"`.
 
         For security reasons, you should not expose this port to the
         internet. Firewall it if needed.
@@ -210,8 +211,8 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "eth1";
-      description = ''
-        Set rpcAddress OR rpcInterface, not both. Interfaces must
+      description = mdDoc ''
+        Set {option}`rpcAddress` OR {option}`rpcInterface`, not both. Interfaces must
         correspond to a single address, IP aliasing is not supported.
       '';
     };
@@ -233,7 +234,7 @@ in
           <logger name="com.thinkaurelius.thrift" level="ERROR"/>
         </configuration>
       '';
-      description = ''
+      description = mdDoc ''
         XML logback configuration for cassandra
       '';
     };
@@ -241,24 +242,24 @@ in
     seedAddresses = mkOption {
       type = types.listOf types.str;
       default = [ "127.0.0.1" ];
-      description = ''
+      description = mdDoc ''
         The addresses of hosts designated as contact points in the cluster. A
         joining node contacts one of the nodes in the seeds list to learn the
         topology of the ring.
-        Set to 127.0.0.1 for a single node cluster.
+        Set to `[ "127.0.0.1" ]` for a single node cluster.
       '';
     };
 
     allowClients = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = mdDoc ''
         Enables or disables the native transport server (CQL binary protocol).
-        This server uses the same address as the <literal>rpcAddress</literal>,
-        but the port it uses is not <literal>rpc_port</literal> but
-        <literal>native_transport_port</literal>. See the official Cassandra
+        This server uses the same address as the {option}`rpcAddress`,
+        but the port it uses is not `rpc_port` but
+        `native_transport_port`. See the official Cassandra
         docs for more information on these variables and set them using
-        <literal>extraConfig</literal>.
+        {option}`extraConfig`.
       '';
     };
 
@@ -269,8 +270,8 @@ in
         {
           commitlog_sync_batch_window_in_ms = 3;
         };
-      description = ''
-        Extra options to be merged into cassandra.yaml as nix attribute set.
+      description = mdDoc ''
+        Extra options to be merged into {file}`cassandra.yaml` as nix attribute set.
       '';
     };
 
@@ -278,8 +279,8 @@ in
       type = types.lines;
       default = "";
       example = literalExpression ''"CLASSPATH=$CLASSPATH:''${extraJar}"'';
-      description = ''
-        Extra shell lines to be appended onto cassandra-env.sh.
+      description = mdDoc ''
+        Extra shell lines to be appended onto {file}`cassandra-env.sh`.
       '';
     };
 
@@ -287,13 +288,13 @@ in
       type = types.nullOr types.str;
       default = "3w";
       example = null;
-      description = ''
+      description = mdDoc ''
         Set the interval how often full repairs are run, i.e.
-        <literal>nodetool repair --full</literal> is executed. See
-        https://cassandra.apache.org/doc/latest/operating/repair.html
+        {command}`nodetool repair --full` is executed. See
+        <https://cassandra.apache.org/doc/latest/operating/repair.html>
         for more information.
 
-        Set to <literal>null</literal> to disable full repairs.
+        Set to `null` to disable full repairs.
       '';
     };
 
@@ -301,7 +302,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--partitioner-range" ];
-      description = ''
+      description = mdDoc ''
         Options passed through to the full repair command.
       '';
     };
@@ -310,13 +311,13 @@ in
       type = types.nullOr types.str;
       default = "3d";
       example = null;
-      description = ''
+      description = mdDoc ''
         Set the interval how often incremental repairs are run, i.e.
-        <literal>nodetool repair</literal> is executed. See
-        https://cassandra.apache.org/doc/latest/operating/repair.html
+        {command}`nodetool repair` is executed. See
+        <https://cassandra.apache.org/doc/latest/operating/repair.html>
         for more information.
 
-        Set to <literal>null</literal> to disable incremental repairs.
+        Set to `null` to disable incremental repairs.
       '';
     };
 
@@ -324,7 +325,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--partitioner-range" ];
-      description = ''
+      description = mdDoc ''
         Options passed through to the incremental repair command.
       '';
     };
@@ -333,15 +334,15 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "4G";
-      description = ''
-        Must be left blank or set together with heapNewSize.
+      description = mdDoc ''
+        Must be left blank or set together with {option}`heapNewSize`.
         If left blank a sensible value for the available amount of RAM and CPU
         cores is calculated.
 
         Override to set the amount of memory to allocate to the JVM at
         start-up. For production use you may wish to adjust this for your
-        environment. MAX_HEAP_SIZE is the total amount of memory dedicated
-        to the Java heap. HEAP_NEWSIZE refers to the size of the young
+        environment. `MAX_HEAP_SIZE` is the total amount of memory dedicated
+        to the Java heap. `HEAP_NEWSIZE` refers to the size of the young
         generation.
 
         The main trade-off for the young generation is that the larger it
@@ -354,21 +355,21 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "800M";
-      description = ''
-        Must be left blank or set together with heapNewSize.
+      description = mdDoc ''
+        Must be left blank or set together with {option}`heapNewSize`.
         If left blank a sensible value for the available amount of RAM and CPU
         cores is calculated.
 
         Override to set the amount of memory to allocate to the JVM at
         start-up. For production use you may wish to adjust this for your
-        environment. HEAP_NEWSIZE refers to the size of the young
+        environment. `HEAP_NEWSIZE` refers to the size of the young
         generation.
 
         The main trade-off for the young generation is that the larger it
         is, the longer GC pause times will be. The shorter it is, the more
         expensive GC will be (usually).
 
-        The example HEAP_NEWSIZE assumes a modern 8-core+ machine for decent pause
+        The example `HEAP_NEWSIZE` assumes a modern 8-core+ machine for decent pause
         times. If in doubt, and if you do not particularly want to tweak, go with
         100 MB per physical CPU core.
       '';
@@ -378,7 +379,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 4;
-      description = ''
+      description = mdDoc ''
         Set this to control the amount of arenas per-thread in glibc.
       '';
     };
@@ -386,19 +387,19 @@ in
     remoteJmx = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = mdDoc ''
         Cassandra ships with JMX accessible *only* from localhost.
         To enable remote JMX connections set to true.
 
         Be sure to also enable authentication and/or TLS.
-        See: https://wiki.apache.org/cassandra/JmxSecurity
+        See: <https://wiki.apache.org/cassandra/JmxSecurity>
       '';
     };
 
     jmxPort = mkOption {
       type = types.int;
       default = 7199;
-      description = ''
+      description = mdDoc ''
         Specifies the default port over which Cassandra will be available for
         JMX connections.
         For security reasons, you should not expose this port to the internet.
@@ -408,11 +409,11 @@ in
 
     jmxRoles = mkOption {
       default = [ ];
-      description = ''
-        Roles that are allowed to access the JMX (e.g. nodetool)
-        BEWARE: The passwords will be stored world readable in the nix-store.
+      description = mdDoc ''
+        Roles that are allowed to access the JMX (e.g. {command}`nodetool`)
+        BEWARE: The passwords will be stored world readable in the nix store.
                 It's recommended to use your own protected file using
-                <literal>jmxRolesFile</literal>
+                {option}`jmxRolesFile`
 
         Doesn't work in versions older than 3.11 because they don't like that
         it's world readable.
@@ -421,11 +422,11 @@ in
         options = {
           username = mkOption {
             type = types.str;
-            description = "Username for JMX";
+            description = lib.mdDoc "Username for JMX";
           };
           password = mkOption {
             type = types.str;
-            description = "Password for JMX";
+            description = lib.mdDoc "Password for JMX";
           };
         };
       });
@@ -437,9 +438,9 @@ in
         if versionAtLeast cfg.package.version "3.11"
         then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile
         else null;
-      defaultText = literalDocBook ''generated configuration file if version is at least 3.11, otherwise <literal>null</literal>'';
+      defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
       example = "/var/lib/cassandra/jmx.password";
-      description = ''
+      description = lib.mdDoc ''
         Specify your own jmx roles file.
 
         Make sure the permissions forbid "others" from reading the file if

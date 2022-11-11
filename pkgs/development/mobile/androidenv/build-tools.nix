@@ -2,8 +2,9 @@
 
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ autoPatchelfHook makeWrapper ] ++
-    lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgs_i686.glibc pkgs_i686.zlib pkgs_i686.ncurses5 pkgs.libcxx ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgs_i686.glibc pkgs_i686.zlib pkgs_i686.ncurses5 pkgs.libcxx ];
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
       addAutoPatchelfSearchPath $packageBaseDir/lib
@@ -14,8 +15,10 @@ deployAndroidPackage {
       autoPatchelf --no-recurse $packageBaseDir
     ''}
 
-    wrapProgram $PWD/mainDexClasses \
-      --prefix PATH : ${pkgs.jdk8}/bin
+    ${lib.optionalString (lib.toInt (lib.versions.major package.revision) < 33) ''
+      wrapProgram $PWD/mainDexClasses \
+        --prefix PATH : ${pkgs.jdk8}/bin
+    ''}
   '';
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
 }

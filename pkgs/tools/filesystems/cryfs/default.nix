@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-029foKJklyOv8qHvgds/yRZ9n1/iA+U7n4O5FViHCOE=";
+    hash = "sha256-7luTCDjrquG8aBZ841VPwV9/ea8faHGLQtmRahqGTss=";
   };
 
   postPatch = ''
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Cryptographic filesystem for the cloud";
     homepage    = "https://www.cryfs.org/";
-    license     = licenses.lgpl3;
+    changelog   = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
+    license     = licenses.lgpl3Only;
     maintainers = with maintainers; [ peterhoeg c0bw3b ];
     platforms   = platforms.unix;
   };

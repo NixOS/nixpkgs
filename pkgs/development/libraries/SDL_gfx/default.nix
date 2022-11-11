@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/sdlgfx/";
     license = licenses.zlib;
 
-    maintainers = with maintainers; [ bjg ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

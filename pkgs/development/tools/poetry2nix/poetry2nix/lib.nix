@@ -8,8 +8,16 @@ let
     genList (i: if i == idx then value else (builtins.elemAt list i)) (length list)
   );
 
-  # Do some canonicalisation of module names
-  moduleName = name: lib.toLower (lib.replaceStrings [ "_" "." ] [ "-" "-" ] name);
+  # Normalize package names as per PEP 503
+  normalizePackageName = name:
+    let
+      parts = builtins.split "[-_.]+" name;
+      partsWithoutSeparator = builtins.filter (x: builtins.typeOf x == "string") parts;
+    in
+    lib.strings.toLower (lib.strings.concatStringsSep "-" partsWithoutSeparator);
+
+  # Normalize an entire attrset of packages
+  normalizePackageSet = lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair (normalizePackageName name) value);
 
   # Get a full semver pythonVersion from a python derivation
   getPythonVersion = python:
@@ -79,6 +87,7 @@ let
     if lib.strings.hasInfix "manylinux1" f then { pkg = [ ml.manylinux1 ]; str = "1"; }
     else if lib.strings.hasInfix "manylinux2010" f then { pkg = [ ml.manylinux2010 ]; str = "2010"; }
     else if lib.strings.hasInfix "manylinux2014" f then { pkg = [ ml.manylinux2014 ]; str = "2014"; }
+    else if lib.strings.hasInfix "manylinux_" f then { pkg = [ ml.manylinux2014 ]; str = "pep600"; }
     else { pkg = [ ]; str = null; };
 
   # Predict URL from the PyPI index.
@@ -110,8 +119,8 @@ let
     (pkgs.stdenvNoCC.mkDerivation {
       name = file;
       nativeBuildInputs = [
-        pkgs.curl
-        pkgs.jq
+        pkgs.buildPackages.curl
+        pkgs.buildPackages.jq
       ];
       isWheel = lib.strings.hasSuffix "whl" file;
       system = "builtin";
@@ -179,7 +188,7 @@ let
       hasGitIgnore = builtins.pathExists gitIgnore;
       gitIgnores = if hasGitIgnore then [ gitIgnore ] else [ ];
     in
-    lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
+    lib.optionals (builtins.pathExists path && builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
 
   /*
     Provides a source filtering mechanism that:
@@ -219,7 +228,8 @@ let
   };
 
   # Machine tag for our target platform (if available)
-  targetMachine = manyLinuxTargetMachines.${stdenv.targetPlatform.parsed.cpu.name} or null;
+  getTargetMachine = stdenv: manyLinuxTargetMachines.${stdenv.targetPlatform.parsed.cpu.name} or null;
+
 in
 {
   inherit
@@ -231,8 +241,9 @@ in
     getBuildSystemPkgs
     satisfiesSemver
     cleanPythonSources
-    moduleName
+    normalizePackageName
+    normalizePackageSet
     getPythonVersion
-    targetMachine
+    getTargetMachine
     ;
 }

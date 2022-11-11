@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     ./patches/autoconf.patch
   ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: libgtklp.a(libgtklp.o):libgtklp/libgtklp.h:83: multiple definition of `progressBar';
+  #     file.o:libgtklp/libgtklp.h:83: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preConfigure = ''
     substituteInPlace include/defaults.h --replace "netscape" "firefox"
     substituteInPlace include/defaults.h --replace "http://localhost:631/sum.html#STANDARD_OPTIONS" \

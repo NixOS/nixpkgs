@@ -19,13 +19,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.20";
+  version = "0.8.23";
 
   src = fetchFromGitLab {
     owner = "duplicity";
     repo = "duplicity";
     rev = "rel.${version}";
-    sha256 = "13ghra0myq6h6yx8qli55bh8dg91nf1hpd8l7d7xamgrw6b188sm";
+    sha256 = "0my015zc8751smjgbsysmca7hvdm96cjw5zilqn3zq971nmmrksb";
   };
 
   patches = [
@@ -35,13 +35,6 @@ pythonPackages.buildPythonApplication rec {
     # Our Python infrastructure runs test in installCheckPhase so we need
     # to make the testing code stop assuming it is run from the source directory.
     ./use-installed-scripts-in-test.patch
-
-    # https://gitlab.com/duplicity/duplicity/-/merge_requests/64
-    # remove on next release
-    (fetchpatch {
-      url = "https://gitlab.com/duplicity/duplicity/-/commit/5c229a9b42f67257c747fbc0022c698fec405bbc.patch";
-      sha256 = "05v931rnawfv11cyxj8gykmal8rj5vq2ksdysyr2mb4sl81mi7v0";
-    })
   ] ++ lib.optionals stdenv.isLinux [
     # Broken on Linux in Nix' build environment
     ./linux-disable-timezone-test.patch
@@ -77,15 +70,12 @@ pythonPackages.buildPythonApplication rec {
     idna
     pygobject3
     fasteners
-    ipaddress
     lockfile
     paramiko
     pyasn1
     pycrypto
-    pydrive
+    pydrive2
     future
-  ] ++ lib.optionals (!isPy3k) [
-    enum
   ];
 
   checkInputs = [

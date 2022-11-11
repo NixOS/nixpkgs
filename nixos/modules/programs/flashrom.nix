@@ -10,7 +10,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Installs flashrom and configures udev rules for programmers
         used by flashrom. Grants access to users in the "flashrom"
         group.

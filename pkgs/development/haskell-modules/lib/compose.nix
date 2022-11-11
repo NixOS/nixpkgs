@@ -123,7 +123,8 @@ rec {
    */
   doDistribute = overrideCabal (drv: {
     # lib.platforms.all is the default value for platforms (since GHC can cross-compile)
-    hydraPlatforms = drv.platforms or lib.platforms.all;
+    hydraPlatforms = lib.subtractLists (drv.badPlatforms or [])
+      (drv.platforms or lib.platforms.all);
   });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
@@ -299,6 +300,9 @@ rec {
      directly. The effect is that the package is built as if it were published
      on hackage. This can be used as a test for the source distribution,
      assuming the build fails when packaging mistakes are in the cabal file.
+
+     A faster implementation using `cabal-install` is available as
+     `buildFromCabalSdist` in your Haskell package set.
    */
   buildFromSdist = pkg: overrideCabal (drv: {
     src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
@@ -413,24 +417,11 @@ rec {
       in
         builtins.listToAttrs (map toKeyVal haskellPaths);
 
-  addOptparseApplicativeCompletionScripts = exeName: pkg:
-    builtins.trace "addOptparseApplicativeCompletionScripts is deprecated in favor of generateOptparseApplicativeCompletion. Please change ${pkg.name} to use the latter or its plural form."
-    (generateOptparseApplicativeCompletion exeName pkg);
-
   /*
-    Modify a Haskell package to add shell completion scripts for the
-    given executable produced by it. These completion scripts will be
-    picked up automatically if the resulting derivation is installed,
-    e.g. by `nix-env -i`.
-
-    Invocation:
-      generateOptparseApplicativeCompletion command pkg
-
-
-      command: name of an executable
-          pkg: Haskell package that builds the executables
+    INTERNAL function retained for backwards compatibility, use
+    haskell.packages.*.generateOptparseApplicativeCompletions instead!
   */
-  generateOptparseApplicativeCompletion = exeName: overrideCabal (drv: {
+  __generateOptparseApplicativeCompletion = exeName: overrideCabal (drv: {
     postInstall = (drv.postInstall or "") + ''
       bashCompDir="''${!outputBin}/share/bash-completion/completions"
       zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
@@ -449,20 +440,22 @@ rec {
   });
 
   /*
-    Modify a Haskell package to add shell completion scripts for the
-    given executables produced by it. These completion scripts will be
-    picked up automatically if the resulting derivation is installed,
-    e.g. by `nix-env -i`.
-
-    Invocation:
-      generateOptparseApplicativeCompletions commands pkg
-
-
-     commands: name of an executable
-          pkg: Haskell package that builds the executables
+    Retained for backwards compatibility.
+    Use haskell.packages.*.generateOptparseApplicativeCompletions
+    which is cross aware instead.
   */
   generateOptparseApplicativeCompletions = commands: pkg:
-    pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+      (pkgs.lib.foldr __generateOptparseApplicativeCompletion pkg commands);
+
+  /*
+    Retained for backwards compatibility.
+    Use haskell.packages.*.generateOptparseApplicativeCompletions
+    which is cross aware instead.
+  */
+  generateOptparseApplicativeCompletion = command: pkg:
+    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+      (__generateOptparseApplicativeCompletion command pkg);
 
   # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being

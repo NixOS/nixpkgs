@@ -3,8 +3,15 @@
 , gjs
 , gnome
 , gobject-introspection
+, hddtemp
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
 , pulseaudio
 , python3
+, smartmontools
 , substituteAll
 , touchegg
 , vte
@@ -26,10 +33,6 @@ in
 super: lib.trivial.pipe super [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
-  }))
-
-  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
-    meta.maintainers = with lib.maintainers; [ eperuffo jtojnar rhoriguchi ];
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
@@ -55,9 +58,30 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
+        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        netcat = netcat-gnu;
+        nvmecli = nvme-cli;
+      })
+    ];
+  }))
+
   (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
     # Requires gjs
     # https://github.com/NixOS/nixpkgs/issues/136112
+    postPatch = ''
+      for file in *.js; do
+        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
+      done
+    '';
+  }))
+
+  (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
+    # Requires gjs
+    # https://github.com/NixOS/nixpkgs/issues/164865
     postPatch = ''
       for file in *.js; do
         substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"

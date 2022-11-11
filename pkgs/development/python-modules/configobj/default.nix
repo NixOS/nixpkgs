@@ -1,29 +1,38 @@
-{ lib, buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
+, mock
+, pytestCheckHook
+, pythonOlder
 , six
-, mock, pytest
 }:
 
 buildPythonPackage rec {
   pname = "configobj";
   version = "5.0.6";
+  format = "setuptools";
 
-  # Pypi archives don't contain the tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "DiffSK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x97794nk3dfn0i3si9fv7y19jnpnarb34bkdwlz7ii7ag6xihhw";
+    hash = "sha256-HMLYzVMnxvMpb3ORsbKy18oU/NkuRT0isK6NaUk6J3U=";
   };
 
+  propagatedBuildInputs = [
+    six
+  ];
 
-  propagatedBuildInputs = [ six ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest --deselect=tests/test_configobj.py::test_options_deprecation
-  '';
-
-  checkInputs = [ mock pytest ];
+  pythonImportsCheck = [
+    "configobj"
+  ];
 
   meta = with lib; {
     description = "Config file reading, writing and validation";

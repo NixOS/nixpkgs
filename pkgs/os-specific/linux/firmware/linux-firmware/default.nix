@@ -1,13 +1,18 @@
-{ stdenvNoCC, fetchgit, lib }:
+let
+  source = import ./source.nix;
+in {
+  stdenvNoCC,
+  fetchzip,
+  lib,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20211216";
+  version = source.version;
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-Q5TPtSbETDDRVKFfwQOp+GGsTGpTpGU5PQ5QkJCtWcM=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${version}.tar.gz";
+    hash = source.sourceHash;
   };
 
   installFlags = [ "DESTDIR=$(out)" ];
@@ -17,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-nyhxyDVO7tWkCD7fMjwiFNuMSh5e/z5w71CIZw3SJH8=";
+  outputHash = source.outputHash;
 
   meta = with lib; {
     description = "Binary firmware collection packaged by kernel.org";

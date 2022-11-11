@@ -7,22 +7,21 @@
 , setuptools
 , setuptools-scm
 , typing-extensions
-, toml
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.1.2";
+  version = "1.5.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0adb9b503c0ffc4e8fe80b7c617898cefa78049983aaaea7f747e153a3e65d1";
+    sha256 = "sha256-2NrMsU3A6uG2tus+zveWdb03tAZTafecNTk91cVWUsc=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ semantic-version setuptools toml typing-extensions ];
+  propagatedBuildInputs = [ semantic-version setuptools typing-extensions ];
 
   doCheck = false;
   pythonImportsCheck = [ "setuptools_rust" ];

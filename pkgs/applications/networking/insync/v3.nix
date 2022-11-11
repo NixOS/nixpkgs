@@ -3,8 +3,6 @@
 , fetchurl
 , makeWrapper
 , dpkg
-, glibc
-, glib
 , libxcb
 , libGL
 , nss
@@ -67,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = ["x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ benley ];
     homepage = "https://www.insynchq.com";
@@ -79,5 +78,7 @@ stdenv.mkDerivation rec {
 
      There is a 15-day free trial, and it is a paid application after that.
     '';
+    # download URL removed
+    broken = true;
   };
 }

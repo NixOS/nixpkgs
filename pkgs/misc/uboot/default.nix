@@ -1,15 +1,19 @@
 { stdenv
 , lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
 , bc
 , bison
 , dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
 , flex
+, gnutls
+, libuuid
+, meson-tools
+, ncurses
 , openssl
 , swig
-, meson-tools
+, which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
@@ -19,12 +23,12 @@
 }:
 
 let
-  defaultVersion = "2021.10";
+  defaultVersion = "2022.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
+    hash = "sha256-ULRIKlBbwoG6hHDDmaPCbhReKbI1ALw1xQ3r1/pGvfg=";
   };
-  buildUBoot = {
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
@@ -56,6 +60,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc
@@ -66,10 +71,19 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
+      which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+    ];
+
     hardeningDisable = [ "all" ];
+
+    enableParallelBuilding = true;
 
     makeFlags = [
       "DTC=dtc"
@@ -102,18 +116,15 @@ let
       runHook postInstall
     '';
 
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
-
     dontStrip = true;
 
     meta = with lib; {
       homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 
@@ -135,6 +146,12 @@ in {
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
@@ -355,6 +372,13 @@ in {
 
   ubootQemuRiscv64Smode = buildUBoot {
     defconfig = "qemu-riscv64_smode_defconfig";
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
+        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
+      })
+    ];
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
@@ -367,14 +391,6 @@ in {
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
     '';
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
-      # Remove when upgrading to 2022.01
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
-        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
-      })
-    ];
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
   };

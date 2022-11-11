@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "Expose command-line tools over HTTP";
     license = licenses.asl20;
     maintainers = with maintainers; [ nilp0inter ];
+    mainProgram = "kapow";
   };
 }

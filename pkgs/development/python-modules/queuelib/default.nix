@@ -19,7 +19,7 @@ buildPythonPackage rec {
     description = "A collection of persistent (disk-based) queues for Python";
     homepage = "https://github.com/scrapy/queuelib";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett ];
+    maintainers = with maintainers; [ ];
   };
 
 }

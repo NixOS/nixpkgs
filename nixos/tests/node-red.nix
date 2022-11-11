@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   testScript = ''
     start_all()
     nodered.wait_for_unit("node-red.service")
-    nodered.wait_for_open_port("1880")
+    nodered.wait_for_open_port(1880)
 
     client.wait_for_unit("multi-user.target")
 

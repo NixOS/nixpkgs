@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
@@ -31,6 +36,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   enableParallelBuilding = true;
@@ -39,7 +46,8 @@ stdenv.mkDerivation rec {
     description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    mainProgram = "cstool";
+    platforms   = lib.platforms.unix;
   };
 }

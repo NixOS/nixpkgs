@@ -9,19 +9,13 @@
 , withManpage ? false
 }:
 
-with python3.pkgs;
-let
-  notmuch2 = callPackage ./notmuch.nix {
-    inherit notmuch;
-  };
-in
-buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "alot";
   version = "0.10";
 
   outputs = [
     "out"
-  ] ++ lib.optional withManpage [
+  ] ++ lib.optionals withManpage [
     "man"
   ];
 
@@ -46,7 +40,7 @@ buildPythonApplication rec {
     file
     gpgme
     notmuch2
-    python_magic
+    python-magic
     service-identity
     twisted
     urwid

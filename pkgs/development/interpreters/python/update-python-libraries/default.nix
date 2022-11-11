@@ -1,7 +1,8 @@
-{ python3, runCommand, git }:
+{ python3, runCommand, git, nix }:
 
 runCommand "update-python-libraries" {
   buildInputs = [
+    nix
     (python3.withPackages(ps: with ps; [ packaging requests toolz ]))
     git
   ];

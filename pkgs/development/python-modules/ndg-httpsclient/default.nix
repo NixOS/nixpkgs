@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pyasn1
 , pyopenssl
 }:
 
@@ -8,14 +9,18 @@ buildPythonPackage rec {
   version = "0.5.1";
   pname = "ndg-httpsclient";
 
-  propagatedBuildInputs = [ pyopenssl ];
-
   src = fetchFromGitHub {
     owner = "cedadev";
     repo = "ndg_httpsclient";
     rev = version;
     sha256 = "0lhsgs4am4xyjssng5p0vkfwqncczj1dpa0vss4lrhzq86mnn5rz";
   };
+
+
+  propagatedBuildInputs = [
+    pyasn1
+    pyopenssl
+  ];
 
   # uses networking
   doCheck = false;

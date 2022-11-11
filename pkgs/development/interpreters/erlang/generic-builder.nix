@@ -154,7 +154,7 @@ stdenv.mkDerivation ({
         #!${stdenv.shell}
         set -ox errexit
         PATH=${lib.makeBinPath [ common-updater-scripts coreutils git gnused ]}
-        latest=$(list-git-tags https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
+        latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
         if [ "$latest" != "${version}" ]; then
           nixpkgs="$(git rev-parse --show-toplevel)"
           nix_file="$nixpkgs/pkgs/development/interpreters/erlang/R${major}.nix"

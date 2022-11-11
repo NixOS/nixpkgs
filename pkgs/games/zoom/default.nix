@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, perl, expat, xlibsWrapper, freetype }:
+{ lib
+, stdenv
+, fetchurl
+, perl
+, expat
+, fontconfig
+, freetype
+, xorg
+}:
 
 # !!! assert freetype == xorg.freetype
 
@@ -8,14 +16,25 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.logicalshift.co.uk/unix/zoom/zoom-${version}.tar.gz";
-    sha256 = "1g6van7f7sg3zfcz80mncnnbccyg2hnm0hq4x558vpsm0lf7z5pj";
+    hash = "sha256-8pZ/HAVV341K6QRDUC0UzzO2rGW2AvSZ++Pp445V27w=";
   };
 
-  buildInputs = [ perl expat xlibsWrapper freetype ];
+  buildInputs = [
+    perl
+    expat
+    fontconfig
+    freetype
+    xorg.libICE
+    xorg.libSM
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+  ];
 
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2 -fgnu89-inline";
 
   meta = with lib; {
+    homepage = "https://www.logicalshift.co.uk/unix/zoom/";
     description = "Player for Z-Code, TADS and HUGO stories or games";
     longDescription = ''
       Zoom is a player for Z-Code, TADS and HUGO stories or games. These are

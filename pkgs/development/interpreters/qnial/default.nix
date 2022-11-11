@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, makeWrapper, ncurses }:
+{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, makeWrapper, ncurses, libxcrypt }:
 
 stdenv.mkDerivation {
   pname = "qnial";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "vrthra";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper unzip pkg-config ];
 
   preConfigure = ''
     cd build;
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-     pkg-config
      ncurses
+     libxcrypt
   ];
 
   meta = {

@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "etebase";
-  version = "0.31.2";
+  version = "0.31.5";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "etebase-py";
     rev = "v${version}";
-    hash = "sha256-enGmfXW8eV6FgdHfJqXr1orAsGbxDz9xUY6T706sf5U=";
+    hash = "sha256-87t3toMaApnOSPBKfTGGLo2VRLqU8irFac9lg3kA1eE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-4eJvFf6aY+DYkrYgam5Ok9941PX4uQOmtRznEY0+1TE=";
+    hash = "sha256-Qg0aJ6CZaPxGneIs4o402A+fhI/nlJ9X/XdMFqkD/YY=";
   };
 
   format = "pyproject";
@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://www.etebase.com/";
     description = "A Python client library for Etebase";
     license = licenses.bsd3;

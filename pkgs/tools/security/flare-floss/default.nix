@@ -2,44 +2,73 @@
 , python3
 , fetchFromGitHub
 }:
+let
+  py = python3.override {
+    packageOverrides = final: prev: {
+      # required for networkx 2.5.1
+      decorator = prev.decorator.overridePythonAttrs (o: o // rec {
+        version = "4.4.2";
+        src = o.src.override {
+          inherit version;
+          sha256 = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
+        };
+      });
 
-python3.pkgs.buildPythonPackage rec {
+      # flare-floss requires this exact version (newer versions are incompatible)
+      networkx = prev.networkx.overridePythonAttrs (o: o // rec {
+        version = "2.5.1";
+        src = o.src.override {
+          inherit version;
+          sha256 = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
+        };
+      });
+    };
+  };
+in
+py.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "fireeye";
+    owner = "mandiant";
     repo = "flare-floss";
     rev = "v${version}";
-    sha256 = "GMOA1+qM2A/Qw33kOTIINEvjsfqjWQWBXHNemh3IK8w=";
+    fetchSubmodules = true; # for tests
+    sha256 = "sha256-V4OWYcISyRdjf8x93B6h2hJwRgmRmk32hr8TrgRDu8Q=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pyyaml
-    simplejson
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+
+    substituteInPlace floss/main.py \
+      --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
+  '';
+
+  propagatedBuildInputs = with py.pkgs; [
+    halo
+    networkx
+    pydantic
     tabulate
-    vivisect
-    plugnplay
+    tqdm
     viv-utils
-  ];
+    vivisect
+  ] ++ viv-utils.optional-dependencies.flirt;
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with py.pkgs; [
+    pytest-sugar
     pytestCheckHook
+    pyyaml
   ];
 
-  disabledTests = [
-    # test data is in a submodule
-    "test_main"
-  ];
-
-  pythonImportsCheck = [
-    "floss"
-    "floss.plugins"
-  ];
+  postInstall = ''
+    mkdir -p $out/share/flare-floss/
+    cp -r sigs $out/share/flare-floss/
+  '';
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";
-    homepage = "https://github.com/fireeye/flare-floss";
+    homepage = "https://github.com/mandiant/flare-floss";
     license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };

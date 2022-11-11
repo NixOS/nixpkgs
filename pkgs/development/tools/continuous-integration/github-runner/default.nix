@@ -13,7 +13,6 @@
 , linkFarmFromDrvs
 , lttng-ust
 , makeWrapper
-, nodejs-12_x
 , nodejs-16_x
 , openssl
 , stdenv
@@ -22,14 +21,18 @@
 , nuget-to-nix
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
+  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
+  );
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -43,13 +46,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.287.1";
+  version = "2.299.1";
+
+  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-4SPrtX3j8blWTYnSkD2Z7IecZvI4xdAqHRJ1lBM0aAo=";
+    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +87,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Relax the version requirement
     substituteInPlace src/global.json \
-      --replace '6.0.100' '${dotnetSdk.version}'
+      --replace '6.0.300' '${dotnetSdk.version}'
 
     # Disable specific tests
     substituteInPlace src/dir.proj \
@@ -102,10 +107,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    # Set up Nuget dependencies
     export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"
@@ -113,6 +115,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${sdkSource}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -184,18 +187,21 @@ stdenv.mkDerivation rec {
       "EnsureDotnetsdkPowershellDownloadScriptUpToDate"
     ]
     ++ [ "GitHub.Runner.Common.Tests.Listener.RunnerL0.TestRunOnceHandleUpdateMessage" ]
+    # Tests for trimmed runner packages which aim at reducing the update size. Not relevant for Nix.
+    ++ map (x: "GitHub.Runner.Common.Tests.PackagesTrimL0.${x}") [
+      "RunnerLayoutParts_CheckExternalsHash"
+      "RunnerLayoutParts_CheckDotnetRuntimeHash"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     ];
-
   checkInputs = [ git ];
 
   checkPhase = ''
     runHook preCheck
 
     mkdir -p _layout/externals
-    ln -s ${nodejs-12_x} _layout/externals/node12
     ln -s ${nodejs-16_x} _layout/externals/node16
 
     printf 'Disabled tests:\n%s\n' '${lib.concatMapStringsSep "\n" (x: " - ${x}") disabledTests}'
@@ -225,15 +231,21 @@ stdenv.mkDerivation rec {
 
     # Install the helper scripts to bin/ to resemble the upstream package
     mkdir -p $out/bin
-    install -m755 src/Misc/layoutbin/runsvc.sh        $out/bin/
-    install -m755 src/Misc/layoutbin/RunnerService.js $out/lib/
-    install -m755 src/Misc/layoutroot/run.sh          $out/lib/
-    install -m755 src/Misc/layoutroot/config.sh       $out/lib/
-    install -m755 src/Misc/layoutroot/env.sh          $out/lib/
+    install -m755 src/Misc/layoutbin/runsvc.sh                 $out/bin/
+    install -m755 src/Misc/layoutbin/RunnerService.js          $out/lib/
+    install -m755 src/Misc/layoutroot/run.sh                   $out/lib/
+    install -m755 src/Misc/layoutroot/run-helper.sh.template   $out/lib/run-helper.sh
+    install -m755 src/Misc/layoutroot/config.sh                $out/lib/
+    install -m755 src/Misc/layoutroot/env.sh                   $out/lib/
 
     # Rewrite reference in helper scripts from bin/ to lib/
-    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' "$out/lib"
-    substituteInPlace $out/lib/config.sh --replace './bin' "$out/lib"
+    substituteInPlace $out/lib/run.sh    --replace '"$DIR"/bin' '"$DIR"/lib'
+    substituteInPlace $out/lib/config.sh --replace './bin' $out'/lib' \
+      --replace 'source ./env.sh' $out/bin/env.sh
+
+    # Remove uneeded copy for run-helper template
+    substituteInPlace $out/lib/run.sh --replace 'cp -f "$DIR"/run-helper.sh.template "$DIR"/run-helper.sh' ' '
+    substituteInPlace $out/lib/run-helper.sh --replace '"$DIR"/bin/' '"$DIR"/'
 
     # Make paths absolute
     substituteInPlace $out/bin/runsvc.sh \
@@ -244,7 +256,6 @@ stdenv.mkDerivation rec {
     # externals/node{12,16}. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/externals
-    ln -s ${nodejs-12_x} $out/externals/node12
     ln -s ${nodejs-16_x} $out/externals/node16
 
     # Install Nodejs scripts called from workflows
@@ -270,7 +281,7 @@ stdenv.mkDerivation rec {
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
-        ''${@:2}
+        "''${@:2}"
     }
 
     fix_rpath Runner.Listener
@@ -280,10 +291,13 @@ stdenv.mkDerivation rec {
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
-    wrap run.sh
-    wrap env.sh
+    wrap run.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}'
+    wrap env.sh --run 'cd $RUNNER_ROOT'
 
-    wrap config.sh --prefix PATH : ${lib.makeBinPath [ glibc.bin ]}
+    wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
+      --run 'mkdir -p $RUNNER_ROOT' \
+      --prefix PATH : ${lib.makeBinPath [ glibc.bin ]} \
+      --chdir $out
   '';
 
   # Script to create deps.nix file for dotnet dependencies. Run it with
@@ -294,12 +308,12 @@ stdenv.mkDerivation rec {
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
     name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    runtimeInputs = [ dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
     text = ''
       # Disable telemetry data
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      rundir=$(pwd)
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
@@ -316,10 +330,8 @@ stdenv.mkDerivation rec {
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
@@ -328,7 +340,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }

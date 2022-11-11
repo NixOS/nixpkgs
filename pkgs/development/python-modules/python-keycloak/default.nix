@@ -1,36 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, requests
+, poetry-core
 , python-jose
-, httmock
+, pythonOlder
+, requests
+, requests-toolbelt
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "0.26.1";
+  version = "2.6.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
-    rev = version;
-    sha256 = "sha256-YWDj/dLN72XMxDXpSPQvkxHF5xJ15xWJjw3vtfmxlwo=";
+    rev = "v${version}";
+    hash = "sha256-cuj0gJlZDkbJ2HRSMcQvO4nxpjw65CKGEpWCL5sucvg=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    python-jose
-  ];
-
-  checkInputs = [
-    httmock
-  ];
-
-  checkPhase = ''
-    python -m unittest discover
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  pythonImportsCheck = [ "keycloak" ];
+  buildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    python-jose
+    urllib3
+    requests
+    requests-toolbelt
+  ];
+
+  # Test fixtures require a running keycloak instance
+  doTest = false;
+
+  pythonImportsCheck = [
+    "keycloak"
+  ];
 
   meta = with lib; {
     description = "Provides access to the Keycloak API";

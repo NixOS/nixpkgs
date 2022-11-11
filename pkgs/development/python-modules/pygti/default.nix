@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pygti";
-  version = "0.9.2";
+  version = "0.9.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "pygti";
-    rev = "v${version}";
-    sha256 = "0zqa2krsniaqisjr0xqw009wdyy3y48zar9lrwysjsqci7k07d9x";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-5Pc6gAI3xICS+f7tYwC9OVOAHJSW8AGPOvPYs0/6/iI=";
   };
 
   nativeBuildInputs = [

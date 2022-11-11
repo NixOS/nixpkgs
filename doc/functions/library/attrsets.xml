@@ -1474,7 +1474,7 @@ lib.attrsets.zipAttrsWith
  <section xml:id="function-library-lib.attrsets.zipAttrs">
   <title><function>lib.attrsets.zipAttrs</function></title>
 
-  <subtitle><literal>zipAttrsWith :: [ AttrSet ] -> AttrSet</literal>
+  <subtitle><literal>zipAttrs :: [ AttrSet ] -> AttrSet</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />

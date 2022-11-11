@@ -1,26 +1,38 @@
-{ lib, stdenv, fetchurl, ruby, cdparanoia, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, cdparanoia, cddiscid, ruby }:
+
 stdenv.mkDerivation rec {
-  version = "0.6.2";
+  version = "0.8.0rc3";
   pname = "rubyripper";
-  src = fetchurl {
-    url = "https://rubyripper.googlecode.com/files/rubyripper-${version}.tar.bz2";
-    sha256 = "1fwyk3y0f45l2vi3a481qd7drsy82ccqdb8g2flakv58m45q0yl1";
+
+  src = fetchFromGitHub {
+    owner = "bleskodev";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1qfwv8bgc9pyfh3d40bvyr9n7sjc2na61481693wwww640lm0f9f";
   };
 
   preConfigure = "patchShebangs .";
 
   configureFlags = [ "--enable-cli" ];
+
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ruby cdparanoia ];
-  postInstall = ''
-    wrapProgram "$out/bin/rrip_cli" \
-      --prefix PATH : "${ruby}/bin" \
-      --prefix PATH : "${cdparanoia}/bin"
+
+  buildInputs = [
+    cddiscid
+    cdparanoia
+    ruby
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/rrip_cli \
+      --prefix PATH : ${lib.makeBinPath [ cddiscid cdparanoia ruby ]}
   '';
 
   meta = with lib; {
     description = "High quality CD audio ripper";
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    homepage = "https://github.com/bleskodev/rubyripper";
   };
 }

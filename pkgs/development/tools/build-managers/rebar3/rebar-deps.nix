@@ -16,11 +16,11 @@ let
     };
     relx = builder {
       name = "relx";
-      version = "4.6.0";
+      version = "4.7.0";
       src = fetchHex {
         pkg = "relx";
-        version = "4.6.0";
-        sha256 = "sha256-L/gTHGMJPGIcazfcUtGyhIqTiIZYS0twHTW9vkN39Qk=";
+        version = "4.7.0";
+        sha256 = "sha256-oqv6+nC846C5im5RQKyYQpuZgPg1/7RzV/BkVCL8L6M=";
       };
       beamDeps = [ bbmustache ];
     };
@@ -86,11 +86,11 @@ let
     };
     certifi = builder {
       name = "certifi";
-      version = "2.8.0";
+      version = "2.9.0";
       src = fetchHex {
         pkg = "certifi";
-        version = "2.8.0";
-        sha256 = "sha256-asfvwcb4YAsI1iUpLUu/WE4UhHzhtrXETZg9Jz4Ql+o=";
+        version = "2.9.0";
+        sha256 = "sha256-Jm2ka9sG1sbTX955m8so022YXUJK18CLW7SPW1zdRkE";
       };
       beamDeps = [ ];
     };

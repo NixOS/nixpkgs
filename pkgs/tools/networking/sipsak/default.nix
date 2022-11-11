@@ -4,13 +4,17 @@ stdenv.mkDerivation rec {
   pname = "sipsak";
   version = "4.1.2.1";
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    autoreconfHook
     openssl
     c-ares
   ];
 
-  NIX_CFLAGS_COMPILE = "--std=gnu89";
+  # -fcommon: workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: transport.o:/build/source/sipsak.h:323: multiple definition of
+  #     `address'; auth.o:/build/source/sipsak.h:323: first defined here
+  NIX_CFLAGS_COMPILE = "-std=gnu89 -fcommon";
 
   src = fetchFromGitHub {
     owner = "sipwise";

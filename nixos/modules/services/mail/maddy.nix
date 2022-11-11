@@ -139,33 +139,33 @@ in {
   options = {
     services.maddy = {
 
-      enable = mkEnableOption "Maddy, a free an open source mail server";
+      enable = mkEnableOption (lib.mdDoc "Maddy, a free an open source mail server");
 
       user = mkOption {
         default = "maddy";
         type = with types; uniq string;
-        description = ''
+        description = lib.mdDoc ''
           User account under which maddy runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this user will automatically be created
           on system activation, otherwise the sysadmin is responsible for
           ensuring the user exists before the maddy service starts.
-          </para></note>
+          :::
         '';
       };
 
       group = mkOption {
         default = "maddy";
         type = with types; uniq string;
-        description = ''
+        description = lib.mdDoc ''
           Group account under which maddy runs.
 
-          <note><para>
+          ::: {.note}
           If left as the default value this group will automatically be created
           on system activation, otherwise the sysadmin is responsible for
           ensuring the group exists before the maddy service starts.
-          </para></note>
+          :::
         '';
       };
 
@@ -173,7 +173,7 @@ in {
         default = "localhost";
         type = with types; uniq string;
         example = ''example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Hostname to use. It should be FQDN.
         '';
       };
@@ -182,7 +182,7 @@ in {
         default = "localhost";
         type = with types; uniq string;
         example = ''mail.example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Primary MX domain to use. It should be FQDN.
         '';
       };
@@ -195,7 +195,7 @@ in {
           "example.com"
           "other.example.com"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Define list of allowed domains.
         '';
       };
@@ -203,21 +203,22 @@ in {
       config = mkOption {
         type = with types; nullOr lines;
         default = defaultConfig;
-        description = ''
+        description = lib.mdDoc ''
           Server configuration, see
-          <link xlink:href="https://maddy.email">https://maddy.email</link> for
+          [https://maddy.email](https://maddy.email) for
           more information. The default configuration of this module will setup
           minimal maddy instance for mail transfer without TLS encryption.
-          <note><para>
+
+          ::: {.note}
           This should not be used in a production environment.
-          </para></note>
+          :::
         '';
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the configured incoming and outgoing mail server ports.
         '';
       };

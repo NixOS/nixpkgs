@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "zzuf";
@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0li1s11xf32dafxq1jbnc8c63313hy9ry09dja2rymk9mza4x2n9";
   };
 
-  buildInputs = [ autoconf automake libtool pkg-config ];
-
-  preConfigure = "./bootstrap";
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   meta = with lib; {
     description = "Transparent application input fuzzer";

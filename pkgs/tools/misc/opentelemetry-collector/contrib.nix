@@ -1,23 +1,28 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, stdenv
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.43.0";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-ktzP+ugG2sa0v8B1Zp47o8Bmpxv98zQyFyWf9QfQRoQ=";
+    sha256 = "sha256-yrm9tLK9no1H4bh2ghQO1ybohYeEo1EzVa+5dgawlxk=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-0E52YSWlq1ebHA3kR9Qo/6ufug9R+z1cSD9AfbN/Mi0=";
+  vendorSha256 = "sha256-Tartb4Qh10UPdVQG2mGbqXW/Mg9XbD28JRrn128d/4k=";
 
   subPackages = [ "cmd/otelcontribcol" ];
+
+  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
+  # https://github.com/shirou/gopsutil/issues/976
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
 
   ldflags = [
     "-s"
@@ -26,8 +31,6 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
-    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     description = "OpenTelemetry Collector superset with additional community collectors";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
@@ -39,7 +42,10 @@ buildGoModule rec {
       components that are only useful to a relatively small number of users and
       is multiple times larger as a result.
     '';
+    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
+    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+    mainProgram = "otelcontribcol";
   };
 }

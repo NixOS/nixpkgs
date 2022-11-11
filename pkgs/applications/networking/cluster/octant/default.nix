@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "octant";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src =
     let
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
       };
     in
     fetchsrc version {
-      x86_64-linux = "sha256-woBmYDOOh3AQH0RZJtMCrOfjFBrpMPzv22cVZ2/xHZo=";
-      aarch64-linux = "sha256-3YUUdOZULjJZqVJP0aO/d1WulXlpwf012NYJ6Mc2qp8=";
-      x86_64-darwin = "sha256-9lbMyEid4I1fRLkLwGbmrB2OkycnGBPUU5wEdVZoTLo=";
-      aarch64-darwin = "sha256-Q0ZkQX9FpzEc6WC3mRoYfg9oW3fvLB1/Ksa64TDlSgo=";
+      x86_64-linux = "sha256-bYqycTB036J8trojySPNkC+jrw76F7+N4I4puGCyalU=";
+      aarch64-linux = "sha256-DlzSIZCAASPnflXQ8ndPU7/0jXA18U4bGGOfmgLXPr0=";
+      x86_64-darwin = "sha256-FaPyrPzO7AzC6LHQP5c58NjLTqU+ei8vFffT8x6mUhQ=";
+      aarch64-darwin = "sha256-31CYhAsHYIVAenp8hFHYj8LhFf3lSiOTw7gULBu3gio=";
     };
 
   dontConfigure = true;
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
       introspective tooling, cluster navigation, and object management along
       with a plugin system to further extend its capabilities.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];

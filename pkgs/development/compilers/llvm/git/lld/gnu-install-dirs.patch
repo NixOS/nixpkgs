@@ -1,68 +1,46 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d4e561b50d8f..cfa5bdd79c2a 100644
+index dcc649629a4b..58dca54642e4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -6,6 +6,8 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-   set(CMAKE_INCLUDE_CURRENT_DIR ON)
-   set(LLD_BUILT_STANDALONE TRUE)
+@@ -70,13 +70,15 @@ if(LLD_BUILT_STANDALONE)
+   if (NOT LLVM_CONFIG_FOUND)
+     # Pull values from LLVMConfig.cmake.  We can drop this once the llvm-config
+     # path is removed.
+-    set(MAIN_INCLUDE_DIR "${LLVM_INCLUDE_DIR}")
++    set(INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
+     set(LLVM_OBJ_DIR "${LLVM_BINARY_DIR}")
+     # N.B. this is just a default value, the CACHE PATHs below can be overridden.
+     set(MAIN_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../llvm")
++  else()
++    set(INCLUDE_DIRS "${LLVM_BINARY_DIR}/include" "${MAIN_INCLUDE_DIR}")
+   endif()
  
-+  include(GNUInstallDirs)
-+
-   find_program(LLVM_CONFIG_PATH "llvm-config" DOC "Path to llvm-config binary")
-   if(NOT LLVM_CONFIG_PATH)
-     message(FATAL_ERROR "llvm-config not found: specify LLVM_CONFIG_PATH")
-@@ -179,7 +181,7 @@ include_directories(BEFORE
+-  set(LLVM_MAIN_INCLUDE_DIR "${MAIN_INCLUDE_DIR}" CACHE PATH "Path to llvm/include")
++  set(LLVM_INCLUDE_DIRS ${INCLUDE_DIRS} CACHE PATH "Path to llvm/include and any other header dirs needed")
+   set(LLVM_BINARY_DIR "${LLVM_OBJ_ROOT}" CACHE PATH "Path to LLVM build tree")
+   set(LLVM_MAIN_SRC_DIR "${MAIN_SRC_DIR}" CACHE PATH "Path to LLVM source tree")
  
- if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
-   install(DIRECTORY include/
--    DESTINATION include
-+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-     FILES_MATCHING
-     PATTERN "*.h"
-     )
+@@ -95,7 +97,7 @@ if(LLD_BUILT_STANDALONE)
+ 
+   set(PACKAGE_VERSION "${LLVM_PACKAGE_VERSION}")
+ 
+-  include_directories("${LLVM_BINARY_DIR}/include" ${LLVM_INCLUDE_DIRS})
++  include_directories(${LLVM_INCLUDE_DIRS})
+   link_directories(${LLVM_LIBRARY_DIRS})
+ 
+   if(LLVM_INCLUDE_TESTS)
 diff --git a/cmake/modules/AddLLD.cmake b/cmake/modules/AddLLD.cmake
-index 23df41312403..d62372c88de7 100644
+index d3924f7243d4..42a7cd62281c 100644
 --- a/cmake/modules/AddLLD.cmake
 +++ b/cmake/modules/AddLLD.cmake
-@@ -20,9 +20,9 @@ macro(add_lld_library name)
+@@ -18,8 +18,8 @@ macro(add_lld_library name)
      install(TARGETS ${name}
        COMPONENT ${name}
        ${export_to_lldtargets}
 -      LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
 -      ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
--      RUNTIME DESTINATION bin)
-+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
-+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
-+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++      LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
++      ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}"
+       RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
  
      if (${ARG_SHARED} AND NOT CMAKE_CONFIGURATION_TYPES)
-       add_llvm_install_targets(install-${name}
-@@ -54,7 +54,7 @@ macro(add_lld_tool name)
- 
-     install(TARGETS ${name}
-       ${export_to_lldtargets}
--      RUNTIME DESTINATION bin
-+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-       COMPONENT ${name})
- 
-     if(NOT CMAKE_CONFIGURATION_TYPES)
-@@ -69,5 +69,5 @@ endmacro()
- macro(add_lld_symlink name dest)
-   add_llvm_tool_symlink(${name} ${dest} ALWAYS_GENERATE)
-   # Always generate install targets
--  llvm_install_symlink(${name} ${dest} ALWAYS_GENERATE)
-+  llvm_install_symlink(${name} ${dest} ${CMAKE_INSTALL_FULL_BINDIR} ALWAYS_GENERATE)
- endmacro()
-diff --git a/tools/lld/CMakeLists.txt b/tools/lld/CMakeLists.txt
-index 5cff736ff57f..64e775c771b9 100644
---- a/tools/lld/CMakeLists.txt
-+++ b/tools/lld/CMakeLists.txt
-@@ -21,7 +21,7 @@ target_link_libraries(lld
-   )
- 
- install(TARGETS lld
--  RUNTIME DESTINATION bin)
-+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
- 
- if(NOT LLD_SYMLINKS_TO_CREATE)
-   set(LLD_SYMLINKS_TO_CREATE

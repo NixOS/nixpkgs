@@ -1,10 +1,16 @@
 --- a/source/Plugins/Process/Linux/Procfs.h
 +++ b/source/Plugins/Process/Linux/Procfs.h
-@@ -11,21 +11,12 @@
+@@ -10,6 +10,7 @@
  // sys/procfs.h on Android/Linux for all supported architectures.
  
  #include <sys/ptrace.h>
 +#include <asm/ptrace.h>
+ 
+ #include "lldb/lldb-types.h"
+ 
+@@ -17,23 +18,13 @@
+ 
+ #include <vector>
  
 -#ifdef __ANDROID__
 -#if defined(__arm64__) || defined(__aarch64__)
@@ -29,3 +35,6 @@
  #include <sys/procfs.h>
 -#endif // __ANDROID__
 +#endif
+ 
+ namespace lldb_private {
+ namespace process_linux {

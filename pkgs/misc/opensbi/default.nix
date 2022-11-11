@@ -6,14 +6,18 @@
 
 stdenv.mkDerivation rec {
   pname = "opensbi";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "opensbi";
     rev = "v${version}";
-    sha256 = "sha256-OgzcH+RLU680qF3+lUiWFFbif6YtjIknJriGlRqcOGs=";
+    sha256 = "sha256-k6f4/lWY/f7qqk0AFY4tdEi4cDilSv/jngaJYhKFlnY=";
   };
+
+  postPatch = ''
+    patchShebangs ./scripts
+  '';
 
   installFlags = [
     "I=$(out)"

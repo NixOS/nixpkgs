@@ -11,6 +11,7 @@
 , pam
 , libevent
 , libcap_ng
+, libxcrypt
 , curl
 , nspr
 , bash
@@ -30,6 +31,7 @@
 , docbook_xml_dtd_412
 , docbook_xsl
 , findXMLCatalogs
+, dns-root-data
 }:
 
 let
@@ -43,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.6";
+  version = "4.9";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "1zsnsfx18pf5dy1p4jva2sfl0bdfx5y9ls54f9bp70m64r46yf96";
+    sha256 = "sha256-9kLctjXpCVZMqP2Z6kSrQ/YHI7TXbBWO2BKXjEWzmLk=";
   };
 
   strictDeps = true;
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd coreutils
     gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
@@ -77,9 +79,9 @@ stdenv.mkDerivation rec {
         -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
            programs/barf/barf.in \
-           programs/verify/verify.in
+           programs/verify.linux/verify.in
     sed -e 's|\([[:blank:]]\)\(ip6\?tables\(-save\)\? -\)|\1${iptables}/bin/\2|' \
-        -i programs/verify/verify.in
+        -i programs/verify.linux/verify.in
 
     # Prevent the makefile from trying to
     # reload the systemd daemon or create tmpfiles
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
 
     # Fix python script to use the correct python
     sed -e 's/^\(\W*\)installstartcheck()/\1sscmd = "ss"\n\0/' \
-        -i programs/verify/verify.in
+        -i programs/verify.linux/verify.in
 
     # Replace wget with curl to save a dependency
     curlArgs='-s --remote-name-all --output-dir'
@@ -112,6 +114,8 @@ stdenv.mkDerivation rec {
     "INITSYSTEM=systemd"
     "UNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
+    "LINUX_VARIANT=nixos"
+    "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
   ];
 
   # Hack to make install work

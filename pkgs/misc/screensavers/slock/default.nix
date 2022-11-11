@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, writeText
-, xorgproto, libX11, libXext, libXrandr
+, xorgproto, libX11, libXext, libXrandr, libxcrypt
 # default header can be obtained from
 # https://git.suckless.org/slock/tree/config.def.h
 , conf ? null }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sif752303dg33f14k6pgwq2jp1hjyhqv6x4sy3sj281qvdljf5m";
   };
 
-  buildInputs = [ xorgproto libX11 libXext libXrandr ];
+  buildInputs = [ xorgproto libX11 libXext libXrandr libxcrypt ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

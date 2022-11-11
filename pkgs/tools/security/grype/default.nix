@@ -1,47 +1,96 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+
+, openssl
+}:
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.32.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jn28IusHgHHFFrvqZLIvbqCFMhMQ5K/gqC4hVQLffY0=";
+    sha256 = "sha256-RZBO8TpFwRwr1CkGSX06jtAtLiNVHhe+8AJsHwNyPMY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch=$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)
-      substituteInPlace "$out/internal/version/build.go" \
-        --replace 'gitCommit = valueNotProvided' "gitCommit = \"$commit\"" \
-        --replace 'buildDate = valueNotProvided' "buildDate = \"$source_date_epoch\""
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-05/xFjgiqbXy7Y2LTGHcXtvusGgfZ/TwLQHaO8rIjvc=";
+  proxyVendor = true;
+  vendorSha256 = "sha256-tRux9M9vFPj3TqhsF1zSV4V1YKnLVViuQjum9YFr5FU=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  subPackages = [ "." ];
+  excludedPackages = "test/integration";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-X github.com/anchore/grype/internal/version.gitDescription=v${version}"
     "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
   ];
 
   preBuild = ''
     # grype version also displays the version of the syft library used
     # we need to grab it from the go.sum and add an ldflag for it
-    SYFTVERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
-    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFTVERSION"
+    SYFT_VERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
+    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFT_VERSION"
+    ldflags+=" -X github.com/anchore/grype/internal/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  # Tests require a running Docker instance
-  doCheck = false;
+  checkInputs = [ openssl ];
+  preCheck = ''
+    # test all dirs (except excluded)
+    unset subPackages
+    # test goldenfiles expect no version
+    unset ldflags
+
+    # patch utility script
+    patchShebangs grype/db/test-fixtures/tls/generate-x509-cert-pair.sh
+
+    # remove tests that depend on docker
+    substituteInPlace test/cli/cmd_test.go \
+      --replace "TestCmd" "SkipCmd"
+    substituteInPlace grype/pkg/provider_test.go \
+      --replace "TestSyftLocationExcludes" "SkipSyftLocationExcludes"
+    substituteInPlace grype/presenter/cyclonedx/presenter_test.go \
+      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
+    substituteInPlace grype/presenter/cyclonedxvex/presenter_test.go \
+      --replace "TestCycloneDxPresenterImage" "SkipCycloneDxPresenterImage"
+    substituteInPlace grype/presenter/sarif/presenter_test.go \
+      --replace "Test_imageToSarifReport" "Skip_imageToSarifReport" \
+      --replace "TestSarifPresenterImage" "SkipSarifPresenterImage"
+
+    # remove tests that depend on git
+    substituteInPlace test/cli/db_validations_test.go \
+      --replace "TestDBValidations" "SkipDBValidations"
+    substituteInPlace test/cli/registry_auth_test.go \
+      --replace "TestRegistryAuth" "SkipRegistryAuth"
+    substituteInPlace test/cli/sbom_input_test.go \
+      --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
+      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument" \
+      --replace "TestAttestationInput_AsArgument" "SkipAttestationInput_AsArgument"
+    substituteInPlace test/cli/subprocess_test.go \
+      --replace "TestSubprocessStdin" "SkipSubprocessStdin"
+
+    # segfault
+    rm grype/db/v5/namespace/cpe/namespace_test.go
+  '';
 
   postInstall = ''
     installShellCompletion --cmd grype \

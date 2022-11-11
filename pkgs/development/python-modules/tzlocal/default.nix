@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "4.1"; # version needs to be compatible with APScheduler
+  version = "4.2"; # version needs to be compatible with APScheduler
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DygBWsaKXAZyEEAKkZf8XTa6m8P46vHaPL1ZrN/tngk=";
+    sha256 = "ee5842fa3a795f023514ac2d801c4a81d1743bbe642e3940143326b3a00addd7";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tzinfo object for the local timezone";
     homepage = "https://github.com/regebro/tzlocal";
+    changelog = "https://github.com/regebro/tzlocal/blob/${version}/CHANGES.txt";
     license = licenses.cddl;
     maintainers = with maintainers; [ dotlambda ];
   };

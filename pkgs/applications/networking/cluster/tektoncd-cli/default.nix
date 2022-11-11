@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.22.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-AmJN7hnYuhxYNG/qs7yv3phhffYKVaM8f7irhi9wRfA=";
+    sha256 = "sha256-zLPZueKdUNauIzqXOV773SZ/RWg7UuMNeJHr7z6ZJ+E=";
   };
 
   vendorSha256 = null;
@@ -17,13 +17,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # third_party/VENDOR-LICENSE breaks build/check as go files are still included
-  # docs is a tool for generating docs
-  excludedPackages = "\\(third_party\\|cmd/docs\\)";
+  subPackages = [ "cmd/tkn" ];
 
   preCheck = ''
     # some tests try to write to the home dir
     export HOME="$TMPDIR"
+
+    # run all tests
+    unset subPackages
 
     # the tests expect the clientVersion ldflag not to be set
     unset ldflags
@@ -52,12 +53,15 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://tekton.dev";
     changelog = "https://github.com/tektoncd/cli/releases/tag/v${version}";
-    description = "Provides a CLI for interacting with Tekton";
+    description = "Provides a CLI for interacting with Tekton - tkn";
     longDescription = ''
-      The Tekton Pipelines cli project provides a CLI for interacting with Tekton!
-      For your convenience, it is recommended that you install the Tekton CLI, tkn, together with the core component of Tekton, Tekton Pipelines.
+      The Tekton Pipelines cli project provides a CLI for interacting with
+      Tekton! For your convenience, it is recommended that you install the
+      Tekton CLI, tkn, together with the core component of Tekton, Tekton
+      Pipelines.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
+    mainProgram = "tkn";
   };
 }

@@ -16,7 +16,7 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.14"; out = "8.14.0"; }
+    { case = range "8.10" "8.16"; out = "8.14.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }
@@ -24,7 +24,8 @@ mkCoqDerivation rec {
   ] null;
 
   mlPlugin = true;
-  extraBuildInputs = (with coq.ocamlPackages; [ num ocamlbuild ]);
+  nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
+  propagatedBuildInputs = (with coq.ocamlPackages; [ num ]);
 
   postPatch = ''
     for p in Make Makefile.coq.local

@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  version = "2.3.2";
+  version = "4.0.2";
 in
 fetchFromGitHub {
   name = "redhat-official-${version}";
@@ -11,11 +11,13 @@ fetchFromGitHub {
 
   postFetch = ''
     tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype OTF/*.otf
-    install -m444 -Dt $out/share/fonts/truetype TTF/*.ttf
+    for kind in mono proportional; do
+      install -m444 -Dt $out/share/fonts/opentype fonts/$kind/static/otf/*.otf
+      install -m444 -Dt $out/share/fonts/truetype fonts/$kind/static/ttf/*.ttf
+    done
   '';
 
-  sha256 = "1afvxmgif61hb17g8inmxvq30vkzwh30mydlqpf0zgvaaz8qdwmv";
+  sha256 = "sha256-904uQtbAdLx9MJudLk/vVk/+uK0nsPbWbAeXrWxTHm8=";
 
   meta = with lib; {
     homepage = "https://github.com/RedHatOfficial/RedHatFont";

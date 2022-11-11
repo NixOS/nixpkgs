@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kde-rounded-corners";
-  version = "unstable-2021-11-06";
+  version = "unstable-2022-09-17";
 
   src = fetchFromGitHub {
     owner = "matinlotfali";
     repo = "KDE-Rounded-Corners";
-    rev = "8ad8f5f5eff9d1625abc57cb24dc484d51f0e1bd";
-    sha256 = "0xbskf7jd03d2invfz1nnfc82klzvc784snw539n4kn6c6rc381p";
+    rev = "cdf7460d957e82dfd571cf0f2a20fd9553ac4c2e";
+    hash = "sha256-ubocO0Vr3g5kIuGNV6vH+ySP42gFps9gPi5d3EpQVFY=";
   };
 
   postConfigure = ''

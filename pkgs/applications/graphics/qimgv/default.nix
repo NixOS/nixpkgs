@@ -1,7 +1,6 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , pkg-config

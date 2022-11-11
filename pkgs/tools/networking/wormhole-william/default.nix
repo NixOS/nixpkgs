@@ -13,7 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-J6iht3cagcwFekydShgaYJtkNLfEvSDqonkC7+frldM=";
 
-  doCheck = false;
+  preCheck = ''
+    # wormhole_test.go:692: failed to establish connection
+    substituteInPlace wormhole/wormhole_test.go \
+      --replace "TestWormholeDirectoryTransportSendRecvDirect" \
+                "SkipWormholeDirectoryTransportSendRecvDirect"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/psanford/wormhole-william";

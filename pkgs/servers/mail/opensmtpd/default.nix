@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam, nixosTests
+, libasr, libevent, zlib, libressl, db, pam, libxcrypt, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "6.8.0p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ libasr libevent zlib libressl db pam ];
+  buildInputs = [ libasr libevent zlib libressl db pam libxcrypt ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
+    ./cross_fix.diff # TODO: remove when https://github.com/OpenSMTPD/OpenSMTPD/pull/1177 will have made it into a release
   ];
 
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`

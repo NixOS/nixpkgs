@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openldap ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: ../../src/lib/libactive_directory.a(active_directory.o):/build/adtool-1.3.3/src/lib/active_directory.h:31:
+  #     multiple definition of `system_config_file'; adtool.o:/build/adtool-1.3.3/src/tools/../../src/lib/active_directory.h:31: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -35,5 +41,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gp2x.org/adtool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
+    broken = true; # does not link against recent libldap versions and unmaintained since 2017
   };
 }

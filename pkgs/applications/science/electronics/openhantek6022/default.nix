@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "openhantek6022";
-  version = "3.2.4";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenHantek";
     repo = "OpenHantek6022";
     rev = version;
-    sha256 = "sha256-Rb0bd2fnnNWEm1n2EVRB2Leb0Or9vxi5oj+FKNY4GSc=";
+    sha256 = "sha256-8QXFTQQZ5Q1SRQI4jWzRek+3BTuWfGHJIbgvwbZulg8=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

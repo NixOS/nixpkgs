@@ -1,5 +1,11 @@
-{ fetchurl, bash, glibc, lib, stdenv }:
+{ fetchurl, bash, glibc, lib, stdenv, installShellFiles }:
 
+let
+  man-pages = fetchurl {
+    url = "https://salsa.debian.org/debian/daemontools/-/archive/debian/1%250.76-8/daemontools-debian-1%250.76-8.tar.gz?path=debian/daemontools-man";
+    sha256 = "sha256-om5r1ddUx1uObp9LR+SwCLLtm+rRuLoq28OLbhWhdzU=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "daemontools";
   version = "0.76";
@@ -10,6 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./fix-nix-usernamespace-build.patch ];
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
     cd daemontools-${version}
@@ -32,7 +42,14 @@ stdenv.mkDerivation rec {
     for cmd in $(cat package/commands); do
       install -Dm755 "command/$cmd" "$out/bin/$cmd"
     done
+
+    tar -xz --strip-components=2 -f ${man-pages}
+    installManPage daemontools-man/*.8
+    install -v -Dm644 daemontools-man/README $man/share/doc/daemontools/README.man
   '';
+
+  # Keep README.man in the man output (see _multioutDocs())
+  outputDoc = "man";
 
   meta = {
     license = lib.licenses.publicDomain;

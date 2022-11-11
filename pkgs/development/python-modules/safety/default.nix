@@ -1,22 +1,61 @@
-{ lib, buildPythonPackage, fetchPypi, requests, dparse, click, setuptools, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools
+, click
+, requests
+, packaging
+, dparse
+, ruamel-yaml
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "1.10.3";
+  version = "2.2.1";
+
+  disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MOOU0CogrEm39lKS0Z04+pJ6j5WCzf060a27xmxkGtU=";
+    hash = "sha256-2LSMRqxmKLuDRBt93cR1bP4lgqvhOhEu5uTvGjSq0DI=";
   };
 
-  propagatedBuildInputs = [ requests dparse click setuptools ];
+  postPatch = ''
+    substituteInPlace safety/safety.py \
+      --replace "telemetry=True" "telemetry=False"
+    substituteInPlace safety/cli.py \
+      --replace "telemetry', default=True" "telemetry', default=False"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    setuptools
+    click
+    requests
+    packaging
+    dparse
+    ruamel-yaml
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Disable tests depending on online services
-  checkInputs = [ pytestCheckHook ];
-  dontUseSetuptoolsCheck = true;
   disabledTests = [
+    "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_check_live_cached"
+    "test_check_vulnerabilities"
+    "test_license"
+    "test_chained_review"
   ];
 
   preCheck = ''
@@ -24,10 +63,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description =
-      "Safety checks your installed dependencies for known security vulnerabilities";
+    description = "Checks installed dependencies for known vulnerabilities";
     homepage = "https://github.com/pyupio/safety";
+    changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr ];
+    maintainers = with maintainers; [ thomasdesr dotlambda ];
   };
 }

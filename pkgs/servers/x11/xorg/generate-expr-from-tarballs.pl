@@ -57,7 +57,7 @@ while (<>) {
       $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
       die unless defined $1;
       $pkg = $1;
-      $pkg =~ s/-//g;
+      $pkg =~ s/(-|[a-f0-9]{40})//g; # Remove hyphen-minus and SHA-1
       #next unless $pkg eq "xcbutil";
     }
 
@@ -71,8 +71,8 @@ while (<>) {
         next;
     }
 
-    # split by first occurence of hyphen followd by only numbers ends line or another hyphen follows
-    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-))/, $pkgName, 2);
+    # Split by first occurrence of hyphen followed by only numbers, ends line, another hyphen follows, or SHA-1
+    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-)|[a-f0-9]{40})/, $pkgName, 2);
 
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $name;
@@ -154,7 +154,7 @@ while (<>) {
         push @nativeRequires, "bdftopcf";
     }
 
-    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
+    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/ || $file =~ /XORG_FONT_REQUIRED_PROG\(MKFONTSCALE/) {
         push @nativeRequires, "mkfontscale";
     }
 
@@ -190,7 +190,9 @@ while (<>) {
     }
 
     if ($isFont) {
+        push @requires, "fontutil";
         push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
+        push @{$extraAttrs{$pkg}}, "postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`\$PKG_CONFIG' '';";
     }
 
     sub process {
@@ -249,9 +251,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -293,10 +295,22 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
+    sub uniq {
+        my %seen;
+        my @res = ();
+        foreach my $s (@_) {
+            if (!defined $seen{$s}) {
+                $seen{$s} = 1;
+                push @res, $s;
+            }
+        }
+        return @res;
+    }
+
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
     unshift @arguments, "stdenv", "pkg-config", "fetchurl";
-    my $argumentsStr = join ", ", @arguments;
+    my $argumentsStr = join ", ", uniq @arguments;
 
     my $extraAttrsStr = "";
     if (defined $extraAttrs{$pkg}) {
@@ -314,6 +328,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
+    strictDeps = true;
     nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = lib.platforms.unix;
@@ -322,6 +337,6 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 EOF
 }
 
-print OUT "})\n";
+print OUT "}\n";
 
 close OUT;

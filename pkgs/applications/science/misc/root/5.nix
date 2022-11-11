@@ -14,9 +14,10 @@
 , libGL
 , zlib
 , libxml2
+, libxcrypt
 , lz4
 , xz
-, gsl_1
+, gsl
 , xxHash
 , Cocoa
 , OpenGL
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre python2 zlib libxml2 lz4 xz gsl_1 xxHash ]
+  buildInputs = [ pcre python2 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
   ;
@@ -85,6 +86,11 @@ stdenv.mkDerivation rec {
 
     patchShebangs build/unix/
     ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
+
+    # __malloc_hook is deprecated
+    substituteInPlace misc/memstat/src/TMemStatHook.cxx \
+      --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
+                "defined(R__GNU) && (defined(__APPLE__))"
   ''
   # Fix CINTSYSDIR for "build" version of rootcint
   # This is probably a bug that breaks out-of-source builds
@@ -99,6 +105,7 @@ stdenv.mkDerivation rec {
     "-Drpath=ON"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
@@ -137,6 +144,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
+    broken = !stdenv.isx86_64;
     maintainers = with maintainers; [ veprbl ];
     license = licenses.lgpl21;
   };

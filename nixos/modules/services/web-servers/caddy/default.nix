@@ -26,7 +26,7 @@ let
 
   configFile =
     let
-      Caddyfile = pkgs.writeText "Caddyfile" ''
+      Caddyfile = pkgs.writeTextDir "Caddyfile" ''
         {
           ${cfg.globalConfig}
         }
@@ -34,10 +34,11 @@ let
       '';
 
       Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
-        ${cfg.package}/bin/caddy fmt ${Caddyfile} > $out
+        mkdir -p $out
+        ${cfg.package}/bin/caddy fmt ${Caddyfile}/Caddyfile > $out/Caddyfile
       '';
     in
-      if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile;
+      "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
 
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
@@ -52,33 +53,33 @@ in
 
   # interface
   options.services.caddy = {
-    enable = mkEnableOption "Caddy web server";
+    enable = mkEnableOption (lib.mdDoc "Caddy web server");
 
     user = mkOption {
       default = "caddy";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         User account under which caddy runs.
 
-        <note><para>
-          If left as the default value this user will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the user exists before the Caddy service starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
       '';
     };
 
     group = mkOption {
       default = "caddy";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Group account under which caddy runs.
 
-        <note><para>
-          If left as the default value this user will automatically be created
-          on system activation, otherwise you are responsible for
-          ensuring the user exists before the Caddy service starts.
-        </para></note>
+        ::: {.note}
+        If left as the default value this user will automatically be created
+        on system activation, otherwise you are responsible for
+        ensuring the user exists before the Caddy service starts.
+        :::
       '';
     };
 
@@ -86,7 +87,7 @@ in
       default = pkgs.caddy;
       defaultText = literalExpression "pkgs.caddy";
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         Caddy package to use.
       '';
     };
@@ -94,34 +95,31 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/caddy";
-      description = ''
+      description = lib.mdDoc ''
         The data directory for caddy.
 
-        <note>
-          <para>
-            If left as the default value this directory will automatically be created
-            before the Caddy server starts, otherwise you are responsible for ensuring
-            the directory exists with appropriate ownership and permissions.
-          </para>
-          <para>
-            Caddy v2 replaced <literal>CADDYPATH</literal> with XDG directories.
-            See <link xlink:href="https://caddyserver.com/docs/conventions#file-locations"/>.
-          </para>
-        </note>
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise you are responsible for ensuring
+        the directory exists with appropriate ownership and permissions.
+
+        Caddy v2 replaced `CADDYPATH` with XDG directories.
+        See <https://caddyserver.com/docs/conventions#file-locations>.
+        :::
       '';
     };
 
     logDir = mkOption {
       type = types.path;
       default = "/var/log/caddy";
-      description = ''
+      description = lib.mdDoc ''
         Directory for storing Caddy access logs.
 
-        <note><para>
-          If left as the default value this directory will automatically be created
-          before the Caddy server starts, otherwise the sysadmin is responsible for
-          ensuring the directory exists with appropriate ownership and permissions.
-        </para></note>
+        ::: {.note}
+        If left as the default value this directory will automatically be created
+        before the Caddy server starts, otherwise the sysadmin is responsible for
+        ensuring the directory exists with appropriate ownership and permissions.
+        :::
       '';
     };
 
@@ -133,9 +131,9 @@ in
       example = literalExpression ''
         mkForce "level INFO";
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for the default logger. See
-        <link xlink:href="https://caddyserver.com/docs/caddyfile/options#log"/>
+        <https://caddyserver.com/docs/caddyfile/options#log>
         for details.
       '';
     };
@@ -145,7 +143,7 @@ in
       default = configFile;
       defaultText = "A Caddyfile automatically generated by values from services.caddy.*";
       example = literalExpression ''
-        pkgs.writeText "Caddyfile" '''
+        pkgs.writeTextDir "Caddyfile" '''
           example.com
 
           root * /var/www/wordpress
@@ -153,33 +151,40 @@ in
           file_server
         ''';
       '';
-      description = ''
+      description = lib.mdDoc ''
         Override the configuration file used by Caddy. By default,
         NixOS generates one automatically.
       '';
     };
 
     adapter = mkOption {
-      default = "caddyfile";
-      example = "nginx";
-      type = types.str;
-      description = ''
+      default = null;
+      example = literalExpression "nginx";
+      type = with types; nullOr str;
+      description = lib.mdDoc ''
         Name of the config adapter to use.
-        See <link xlink:href="https://caddyserver.com/docs/config-adapters"/>
+        See <https://caddyserver.com/docs/config-adapters>
         for the full list.
 
-        <note><para>
-          Any value other than <literal>caddyfile</literal> is only valid when
-          providing your own <option>configFile</option>.
-        </para></note>
+        If `null` is specified, the `--adapter` argument is omitted when
+        starting or restarting Caddy. Notably, this allows specification of a
+        configuration file in Caddy's native JSON format, as long as the
+        filename does not start with `Caddyfile` (in which case the `caddyfile`
+        adapter is implicitly enabled). See
+        <https://caddyserver.com/docs/command-line#caddy-run> for details.
+
+        ::: {.note}
+        Any value other than `null` or `caddyfile` is only valid when providing
+        your own `configFile`.
+        :::
       '';
     };
 
     resume = mkOption {
       default = false;
       type = types.bool;
-      description = ''
-        Use saved config, if any (and prefer over any specified configuration passed with <literal>--config</literal>).
+      description = lib.mdDoc ''
+        Use saved config, if any (and prefer over any specified configuration passed with `--config`).
       '';
     };
 
@@ -194,11 +199,11 @@ in
           }
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional lines of configuration appended to the global config section
-        of the <literal>Caddyfile</literal>.
+        of the `Caddyfile`.
 
-        Refer to <link xlink:href="https://caddyserver.com/docs/caddyfile/options#global-options"/>
+        Refer to <https://caddyserver.com/docs/caddyfile/options#global-options>
         for details on supported values.
       '';
     };
@@ -213,9 +218,9 @@ in
           root /srv/http
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional lines of configuration appended to the automatically
-        generated <literal>Caddyfile</literal>.
+        generated `Caddyfile`.
       '';
     };
 
@@ -233,7 +238,7 @@ in
           };
         };
       '';
-      description = ''
+      description = lib.mdDoc ''
         Declarative specification of virtual hosts served by Caddy.
       '';
     };
@@ -242,11 +247,11 @@ in
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to the ACME CA's directory. It is strongly recommended to set
         this to Let's Encrypt's staging endpoint for testing or development.
 
-        Set it to <literal>null</literal> if you want to write a more
+        Set it to `null` if you want to write a more
         fine-grained configuration manually.
       '';
     };
@@ -254,7 +259,7 @@ in
     email = mkOption {
       default = null;
       type = with types; nullOr str;
-      description = ''
+      description = lib.mdDoc ''
         Your email address. Mainly used when creating an ACME account with your
         CA, and is highly recommended in case there are problems with your
         certificates.
@@ -267,8 +272,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.adapter != "caddyfile" -> cfg.configFile != configFile;
-        message = "Any value other than 'caddyfile' is only valid when providing your own `services.caddy.configFile`";
+      { assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
+        message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
       }
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
@@ -285,6 +290,9 @@ in
       }
     '';
 
+    # https://github.com/lucas-clemente/quic-go/wiki/UDP-Receive-Buffer-Size
+    boot.kernel.sysctl."net.core.rmem_max" = mkDefault 2500000;
+
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
       wants = map (hostOpts: "acme-finished-${hostOpts.useACMEHost}.target") acmeVHosts;
@@ -298,17 +306,15 @@ in
       serviceConfig = {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter}" ];
-
-        ExecStartPre = "${cfg.package}/bin/caddy validate --config ${cfg.configFile} --adapter ${cfg.adapter}";
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} --force'' ];
+        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-abnormal";
-        SupplementaryGroups = mkIf (length acmeVHosts != 0) [ "acme" ];
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;
@@ -331,9 +337,12 @@ in
 
     security.acme.certs =
       let
-        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
+        certCfg = map (useACMEHost: nameValuePair useACMEHost {
+          group = mkDefault cfg.group;
+          reloadServices = [ "caddy.service" ];
+        }) acmeHosts;
       in
-        listToAttrs reloads;
+        listToAttrs certCfg;
 
   };
 }

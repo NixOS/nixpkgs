@@ -4,7 +4,7 @@
 , mock
 , sphinx
 , six
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,12 +16,10 @@ buildPythonPackage rec {
     sha256 = "ef661775b5722d7b00f67fc229104317d35637a4fb4434bf2c005afdf1da4d09";
   };
 
-  checkInputs = [ mock ];
+  checkInputs = [ unittestCheckHook mock ];
   propagatedBuildInputs = [ sphinx six ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  unittestFlagsArray = [ "-s" "tests" ];
 
   # Test failures https://github.com/sphinx-doc/sphinx-testing/issues/5
   doCheck = false;

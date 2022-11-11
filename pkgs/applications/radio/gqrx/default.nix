@@ -5,11 +5,11 @@
 , qt5
 , gnuradio3_8Minimal
 , thrift
-, log4cpp
 , mpir
 , fftwFloat
 , alsa-lib
 , libjack2
+, wrapGAppsHook
 # drivers (optional):
 , rtl-sdr
 , hackrf
@@ -24,22 +24,23 @@ assert !(pulseaudioSupport && portaudioSupport);
 
 gnuradio3_8Minimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.7";
+  version = "2.15.9";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-4tXWwBkVmNZ4s3d6/n6XBdbh9Fv7821L3vkYmjgv1ds=";
+    sha256 = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     qt5.wrapQtAppsHook
+    wrapGAppsHook
   ];
   buildInputs = [
-    log4cpp
+    gnuradio3_8Minimal.unwrapped.log4cpp
     mpir
     fftwFloat
     alsa-lib
@@ -67,6 +68,12 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     in [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
+
+   # Prevent double-wrapping, inject wrapper args manually instead.
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";

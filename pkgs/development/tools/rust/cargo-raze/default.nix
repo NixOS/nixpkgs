@@ -16,8 +16,12 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1vlywdq0bx6b1k3w1grisca0hvv2s4s88yxq7bil8nhm5ghjgxdr";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl libgit2 openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    libgit2
+    openssl
+    (curl.override { inherit openssl; })
+  ]
+  ++ lib.optional stdenv.isDarwin Security;
 
   # thread 'main' panicked at 'Cannot ping mock server.: "cannot send request to mock server: cannot send request to mock server: failed to resolve host name"'
   # __darwinAllowLocalNetworking does not fix the panic

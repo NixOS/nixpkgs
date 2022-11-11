@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = jdk11.meta.platforms;
     hydraPlatforms = [];

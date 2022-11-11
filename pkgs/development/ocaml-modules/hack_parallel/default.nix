@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage, core, core_kernel, pkg-config, sqlite
-}:
+{ lib, fetchFromGitHub, buildDunePackage, core, core_unix, pkg-config
+, sqlite }:
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
@@ -13,9 +13,11 @@ buildDunePackage rec {
     sha256 = "0qjlkw35r4q2cm0n2x0i73zvx1xgrp6axaia2nm8zxpm49mid629";
   };
 
+  patches = [ ./hack_parallel.patch ];
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ core core_kernel sqlite ];
+  propagatedBuildInputs = [ core core_unix sqlite ];
 
   meta = {
     description =

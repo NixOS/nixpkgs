@@ -10,13 +10,13 @@
 
 buildDotnetModule rec {
   pname = "wasabibackend";
-  version = "1.1.13.0";
+  version = "1.1.13.1";
 
   src = fetchFromGitHub {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
     rev = "v${version}";
-    sha256 = "sha256-zDOk8MurT5NXOr4kvm5mnsphY+eDFWuVBcpeTZpcHOo=";
+    sha256 = "sha256-Hwav7moG6XKAcR7L0Q7CtifP3zCNRfHIihlaFw+dzbk=";
   };
 
   projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
@@ -32,7 +32,7 @@ buildDotnetModule rec {
 
   preConfigure = ''
     makeWrapperArgs+=(
-      --run "cd $out/lib/${pname}"
+      --chdir "$out/lib/${pname}"
     )
   '';
 
@@ -43,6 +43,7 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
     platforms = [ "x86_64-linux" ];

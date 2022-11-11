@@ -1,0 +1,40 @@
+diff --git a/src/qml/qml/qqmltypeloader.cpp b/src/qml/qml/qqmltypeloader.cpp
+index 9e5bc0b0..9219def6 100644
+--- a/src/qml/qml/qqmltypeloader.cpp
++++ b/src/qml/qml/qqmltypeloader.cpp
+@@ -2151,7 +2151,7 @@ void QQmlTypeData::unregisterCallback(TypeDataCallback *callback)
+ 
+ bool QQmlTypeData::tryLoadFromDiskCache()
+ {
+-    if (disableDiskCache() && !forceDiskCache())
++    if (!forceDiskCache())
+         return false;
+ 
+     if (isDebugging())
+@@ -2658,7 +2658,7 @@ void QQmlTypeData::compile(const QQmlRefPointer<QQmlTypeNameCache> &typeNameCach
+         return;
+     }
+ 
+-    const bool trySaveToDisk = (!disableDiskCache() || forceDiskCache()) && !m_document->jsModule.debugMode && !typeRecompilation;
++    const bool trySaveToDisk = (forceDiskCache()) && !m_document->jsModule.debugMode && !typeRecompilation;
+     if (trySaveToDisk) {
+         QString errorString;
+         if (m_compiledData->saveToDisk(url(), &errorString)) {
+@@ -3014,7 +3014,7 @@ QQmlRefPointer<QQmlScriptData> QQmlScriptBlob::scriptData() const
+ 
+ void QQmlScriptBlob::dataReceived(const SourceCodeData &data)
+ {
+-    if (!disableDiskCache() || forceDiskCache()) {
++    if (forceDiskCache()) {
+         QQmlRefPointer<QV4::CompiledData::CompilationUnit> unit = QV4::Compiler::Codegen::createUnitForLoading();
+         QString error;
+         if (unit->loadFromDisk(url(), data.sourceTimeStamp(), &error)) {
+@@ -3077,7 +3077,7 @@ void QQmlScriptBlob::dataReceived(const SourceCodeData &data)
+         qmlGenerator.generate(irUnit);
+     }
+ 
+-    if ((!disableDiskCache() || forceDiskCache()) && !isDebugging()) {
++    if ((forceDiskCache()) && !isDebugging()) {
+         QString errorString;
+         if (unit->saveToDisk(url(), &errorString)) {
+             QString error;

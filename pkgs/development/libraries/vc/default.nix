@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "Vc";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "VcDevel";
     repo = "Vc";
     rev = version;
-    sha256 = "sha256-rh2vcn58xDsbxxABrxneCq6TKIyT51KxGB7sOtHpvYE=";
+    sha256 = "sha256-fv0FHAl0xvAFybR/jwhX2LkozwEDy1TNcbVAmRRnLVU=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,8 +12,10 @@ in fetchFromGitHub {
   sha256 = "sha256-urSTqC3rfDRM8IMG+edwKEe7NPiTuDZph3heGHzLDks=";
 
   postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -Dm644 -t $out/share/fonts/opentype fonts/otf/*
+    install -Dm644 -t $out/share/fonts/opentype $out/fonts/otf/*
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
   meta = with lib; {

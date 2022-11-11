@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
@@ -19,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.16.0";
+  version = "1.20.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,17 +28,22 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-51Grkn6NSR6azTRuq1vdbDg7d3HuQQ+ZJCsM2mSrSHk=";
+    sha256 = "sha256-wx3fKRX/SPYGAFuR9u03JAvVRhtYIPUvW8mAsCdx83I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     cargoUpdateHook = ''
-      cat Cargo.toml.in Cargo.deps > Cargo.toml
+      cat Cargo.toml.in Cargo.deps.newer > Cargo.toml
+      cp Cargo.lock.newer Cargo.lock
     '';
     name = "${pname}-${version}";
-    sha256 = "sha256-vQaiEENxaQxBGYP1br03wSkU7OGOYkJvMBUAOeb3jGk=";
+    sha256 = "sha256-BbNkapqnqEW/NglrCse10Tm80SXYVQWWrOC5dTN6oi0=";
   };
+
+  mesonFlags = [
+    "-Dnewer=true"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     wayland
     wayland-protocols
     libxml2
@@ -66,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "A virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

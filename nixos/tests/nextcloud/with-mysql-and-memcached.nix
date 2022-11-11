@@ -26,6 +26,7 @@ in {
           redis = false;
           memcached = true;
         };
+        database.createLocally = true;
         config = {
           dbtype = "mysql";
           dbname = "nextcloud";
@@ -36,28 +37,6 @@ in {
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
-      };
-
-      services.mysql = {
-        enable = true;
-        settings.mysqld = {
-          bind-address = "127.0.0.1";
-
-          # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
-          # this is a workaround.
-          # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-          innodb_read_only_compressed = 0;
-        };
-        package = pkgs.mariadb;
-
-        initialScript = pkgs.writeText "mysql-init" ''
-          CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'hunter2';
-          CREATE DATABASE IF NOT EXISTS nextcloud;
-          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
-            CREATE TEMPORARY TABLES ON nextcloud.* TO 'nextcloud'@'localhost'
-            IDENTIFIED BY 'hunter2';
-          FLUSH privileges;
-        '';
       };
 
       systemd.services.nextcloud-setup= {

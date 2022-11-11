@@ -26,7 +26,7 @@ let
 in {
   options.services.uptime = {
     configFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The uptime configuration file
 
         If mongodb: server != localhost, please set usesRemoteMongo = true
@@ -44,22 +44,22 @@ in {
     };
 
     usesRemoteMongo = mkOption {
-      description = "Whether the configuration file specifies a remote mongo instance";
+      description = lib.mdDoc "Whether the configuration file specifies a remote mongo instance";
 
       default = false;
 
       type = types.bool;
     };
 
-    enableWebService = mkEnableOption "the uptime monitoring program web service";
+    enableWebService = mkEnableOption (lib.mdDoc "the uptime monitoring program web service");
 
-    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // {
+    enableSeparateMonitoringService = mkEnableOption (lib.mdDoc "the uptime monitoring service") // {
       default = cfg.enableWebService;
       defaultText = literalExpression "config.${opt.enableWebService}";
     };
 
     nodeEnv = mkOption {
-      description = "The node environment to run in (development, production, etc.)";
+      description = lib.mdDoc "The node environment to run in (development, production, etc.)";
 
       type = types.str;
 

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "teamcity-messages";
-  version = "1.30";
+  version = "1.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "JetBrains";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5C9ElCmTH+xSrFQ/x9IRJ89RfSd9cxzkETlOCzwyU8s=";
+    sha256 = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
   };
 
   checkInputs = [

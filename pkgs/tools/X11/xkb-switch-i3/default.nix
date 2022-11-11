@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xkb-switch-i3";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "Zebradil";
     repo = "xkb-switch-i3";
     rev = version;
-    sha256 = "15c19hp0n1k3w15qn97j6wp5b8hbk0mq6x3xjfn6dkkjfz1fl6cn";
+    sha256 = "sha256-oW1oXxYqaLTnVQMBEOFPdzS8EnpoPc68kbGxGXaWUB8=";
     fetchSubmodules = true;
   };
 

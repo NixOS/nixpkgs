@@ -21,12 +21,12 @@ in
       type = types.package;
       default = pkgs.htop;
       defaultText = "pkgs.htop";
-      description = ''
+      description = lib.mdDoc ''
         The htop package that should be used.
       '';
     };
 
-    enable = mkEnableOption "htop process monitor";
+    enable = mkEnableOption (lib.mdDoc "htop process monitor");
 
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);
@@ -35,7 +35,7 @@ in
         hide_kernel_threads = true;
         hide_userland_threads = true;
       };
-      description = ''
+      description = lib.mdDoc ''
         Extra global default configuration for htop
         which is read on first startup only.
         Htop subsequently uses ~/.config/htop/htoprc

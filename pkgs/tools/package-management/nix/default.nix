@@ -24,6 +24,9 @@ let
     customMemoryManagement = false;
   }).overrideDerivation (args: {
     patches = (args.patches or [ ]) ++ [ ./patches/aws-sdk-cpp-TransferManager-ContentEncoding.patch ];
+
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = null;
   });
 
   common = args:
@@ -43,35 +46,56 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
+  # This is the last version of nix where https://github.com/NixOS/nix/issues/6572
+  # is not an unsolved breaking bug. Please keep it until the issue is fixed
+  # and in latest stable nix.
   nix_2_6 = common {
-    version = "2.6.0";
-    sha256 = "sha256-xEPeMcNJVOeZtoN+d+aRwolpW8mFSEQx76HTRdlhPhg=";
+    version = "2.6.1";
+    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
   };
 
-  stable = self.nix_2_6;
+  nix_2_7 = common {
+    version = "2.7.0";
+    sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
+    patches = [
+      # remove when there's a 2.7.1 release
+      # https://github.com/NixOS/nix/pull/6297
+      # https://github.com/NixOS/nix/issues/6243
+      # https://github.com/NixOS/nixpkgs/issues/163374
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
+        sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
+      })
+    ];
+  };
 
-  unstable = lib.lowPrio (common rec {
-    version = "2.7";
-    suffix = "pre20220127_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "558c4ee3e370c9f9a6ea293df54ed6914a999f1c";
-      sha256 = "sha256-hMzKQflpgf3P7OdYKSnD1VMBSnF48XSRjaNX3bUJct4=";
-    };
-  });
+  nix_2_8 = common {
+    version = "2.8.1";
+    sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
+  };
+
+  nix_2_9 = common {
+    version = "2.9.2";
+    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
+  };
+
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [ ./patches/flaky-tests.patch ];
+  };
+
+  nix_2_11 = common {
+    version = "2.11.0";
+    sha256 = "sha256-9+rpYzI+SmxJn+EbYxjGv68Ucp22bdFUSy/4LkHkkDQ=";
+    patches = [ ./patches/flaky-tests.patch ];
+  };
+
+  stable = self.nix_2_11;
+
+  unstable = self.stable;
 })

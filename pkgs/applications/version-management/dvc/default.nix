@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
@@ -9,37 +10,49 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.9.3";
+  version = "2.17.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-nRlgo7Wjs7RgTUxoMYQh5YEsqiJtdWH2ex79rhXagAQ=";
+    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf" \
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
     aiohttp-retry
+    appdirs
     colorama
-    configobj
     configobj
     dictdiffer
     diskcache
     distro
     dpath
+    dvclive
+    dvc-data
+    dvc-render
+    dvc-task
     flatten-dict
     flufl_lock
     funcy
     grandalf
     nanotime
     networkx
+    packaging
     pathspec
     ply
     psutil
@@ -54,33 +67,28 @@ python3.pkgs.buildPythonApplication rec {
     shortuuid
     shtab
     tabulate
-    toml
+    tomlkit
     tqdm
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optional enableGoogle [
+  ] ++ lib.optionals enableGoogle [
+    gcsfs
     google-cloud-storage
-  ] ++ lib.optional enableAWS [
+  ] ++ lib.optionals enableAWS [
+    aiobotocore
     boto3
-  ] ++ lib.optional enableAzure [
-    azure-storage-blob
-  ] ++ lib.optional enableSSH [
-    paramiko
+    s3fs
+  ] ++ lib.optionals enableAzure [
+    azure-identity
+    knack
+  ] ++ lib.optionals enableSSH [
+    bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
-
-  patches = [ ./dvc-daemon.patch ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf>=0.6"
-    substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
-  '';
 
   # Tests require access to real cloud services
   doCheck = false;
@@ -89,6 +97,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai fab ];
+    maintainers = with maintainers; [ cmcdragonkai fab anthonyroussel ];
   };
 }

@@ -1,24 +1,45 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, sigtools
-, six
 , attrs
-, od
+, buildPythonPackage
 , docutils
+, fetchPypi
+, od
 , pygments
-, unittest2
 , pytestCheckHook
+, pythonOlder
+, python-dateutil
+, setuptools
+, sigtools
+, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.2.1";
+  version = "5.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
+    hash = "sha256-/cFpEvAN/Movd38xaE53Y+D9EYg/SFyHeqtlVUo1D0I=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    docutils
+    od
+    sigtools
+  ];
+
+  passthru.optional-dependencies = {
+    datetime = [
+      python-dateutil
+    ];
   };
 
   # repeated_test no longer exists in nixpkgs
@@ -31,15 +52,9 @@ buildPythonPackage rec {
     unittest2
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    docutils
-    od
-    sigtools
-    six
+  pythonImportsCheck = [
+    "clize"
   ];
-
-  pythonImportsCheck = [ "clize" ];
 
   meta = with lib; {
     description = "Command-line argument parsing for Python";

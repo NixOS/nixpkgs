@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [];
+  buildInputs = [ topkg ];
   propagatedBuildInputs = [ astring bos cmdliner rresult ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/webbrowser";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "browse";
     inherit (ocaml.meta) platforms;
   };
 }

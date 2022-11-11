@@ -33,7 +33,6 @@ python3Packages.buildPythonApplication rec {
       GMail account.
     '';
     homepage = "https://lieer.gaute.vetsj.com/";
-    repositories.git = "https://github.com/gauteh/lieer.git";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli kaiha ];
   };

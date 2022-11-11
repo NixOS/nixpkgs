@@ -1,29 +1,26 @@
 { lib
-, bitstring
-, buildPythonApplication
 , fetchFromGitHub
 , fetchpatch
-, flask
-, mido
-, numpy
-, pyserial
-, pytestCheckHook
-, pythonOlder
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cantoolz";
   version = "3.7.0";
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CANToolz";
     repo = "CANToolz";
     rev = "v${version}";
-    sha256 = "0xkj7zyx6pz866q61c84mdagpgdyd633v85hk7qxhamca33rc4yi";
+    sha256 = "sha256-0ROWx1CsKtjxmbCgPYZpvr37VKsEsWCwMehf0/0/cnY=";
   };
 
   patches = [
+    (fetchpatch {
+      # Import Iterable from collections.abc
+      url = "https://github.com/CANToolz/CANToolz/commit/9e818946716a744b3c7356f248e24ea650791d1f.patch";
+      hash = "sha256-BTQ0Io2RF8WpWlLoYfBj8IhL92FRR8ustGClt28/R8c=";
+    })
     (fetchpatch {
       # Replace time.clock() which was removed, https://github.com/CANToolz/CANToolz/pull/30
       url = "https://github.com/CANToolz/CANToolz/pull/30/commits/d75574523d3b273c40fb714532c4de27f9e6dd3e.patch";
@@ -31,7 +28,7 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     flask
     pyserial
     mido
@@ -39,9 +36,19 @@ buildPythonApplication rec {
     bitstring
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [ "test_process" ];
-  pythonImportsCheck = [ "cantoolz" ];
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_process"
+    # Sandbox issue
+    "test_server"
+  ];
+
+  pythonImportsCheck = [
+    "cantoolz"
+  ];
 
   meta = with lib; {
     description = "Black-box CAN network analysis framework";

@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , loguru
+, pydantic
 , poetry-core
 , pythonOlder
 , requests
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.0.11";
+  version = "0.0.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "v${version}";
-    hash = "sha256-aL+n2ut7n6UUyymMEHoFMhRvK9iFRRunYE9ZirKFXhc=";
+    hash = "sha256-V9yN05Bkv5vkHgXZ77ps3d6JS39M5iMuiijOGRBFi0U=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     aiohttp
     requests
     loguru
+    pydantic
   ];
 
   postPatch = ''

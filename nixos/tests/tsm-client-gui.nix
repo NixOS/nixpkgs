@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   enableOCR = true;
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ];
     programs.tsmClient = {
       enable = true;

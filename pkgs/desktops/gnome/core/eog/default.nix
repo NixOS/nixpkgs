@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -12,9 +12,9 @@
 , libportal-gtk3
 , gnome
 , gtk3
+, libhandy
 , glib
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
 , lcms2
 , gdk-pixbuf
@@ -22,27 +22,28 @@
 , shared-mime-info
 , wrapGAppsHook
 , librsvg
+, webp-pixbuf-loader
 , libexif
 , gobject-introspection
-, python3
+, gi-docgen
 }:
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "41.1";
+  version = "43.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-huG5ujnaz3QiavpFermDtBJTuJ9he/VBOcrQiS0C2Kk=";
+    sha256 = "sha256-/tef88oZusYvJxVcm91p7vh1hwuXHm3LCqOMCT0TGXE=";
   };
 
   patches = [
-    # Fix build with latest libportal
-    # https://gitlab.gnome.org/GNOME/eog/-/merge_requests/115
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/eog/-/commit/a06e6325907e136678b0bbe7058c25d688034afd.patch";
-      sha256 = "ttcsfHubfmIbxA51YLnxXDagLLNutXYmoQyMQ4sHRak=";
-    })
+    # Fix path to libeog.so in the gir file.
+    # We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
   ];
 
   nativeBuildInputs = [
@@ -52,15 +53,16 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    libxml2
+    libxml2 # for xmllint for xml-stripblanks
     gobject-introspection
-    python3
+    gi-docgen
   ];
 
   buildInputs = [
     libjpeg
     libportal-gtk3
     gtk3
+    libhandy
     gdk-pixbuf
     glib
     libpeas
@@ -71,12 +73,21 @@ stdenv.mkDerivation rec {
     exempi
     gsettings-desktop-schemas
     shared-mime-info
-    adwaita-icon-theme
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -86,6 +97,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

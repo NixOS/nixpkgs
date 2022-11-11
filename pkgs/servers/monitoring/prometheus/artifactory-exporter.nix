@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "artifactory_exporter";
-  version = "1.9.1";
+  version = "1.9.4";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     owner = "peimanja";
     repo = pname;
     rev = rev;
-    sha256 = "1m68isplrs3zvkg0mans9bgablsif6264x3w475bpnhf68r87v1q";
+    sha256 = "sha256-vrbuKWoKfDrgJEOYsncwJZ8lyAfanbV8jKQDVCZY2Sg=";
   };
 
-  vendorSha256 = "0acwgb0h89parkx75jp057m2hrqyd95vr2zcfqnxbnyy98gxip73";
+  vendorSha256 = "sha256-wKBSAZSE/lSUbkHkyBEkO0wvkrK6fKxXIjF6G+ILqHM=";
 
   subPackages = [ "." ];
 

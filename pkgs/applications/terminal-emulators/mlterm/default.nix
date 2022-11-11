@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem, nixosTests
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
     fcitx
     ibus
+  ] ++ lib.optionals (stdenv.system != "aarch64-linux") [
+    # FIXME Currently broken on aarch64-linux
     uim
   ];
 
@@ -106,11 +108,11 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
-    startupNotify = "false";
+    categories = [ "Application" "System" "TerminalEmulator" ];
+    startupNotify = false;
   };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mlterm;
 
   meta = with lib; {
     description = "Multi Lingual TERMinal emulator";
@@ -118,5 +120,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg atemu ];
     platforms = with platforms; linux ++ darwin;
+    broken = stdenv.system == "aarch64-darwin"; # https://github.com/arakiken/mlterm/issues/51
   };
 }

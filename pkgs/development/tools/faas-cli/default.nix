@@ -1,4 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+, installShellFiles
+, testers
+, faas-cli
+}:
 let
   faasPlatform = platform:
     let cpuName = platform.parsed.cpu.name; in {
@@ -9,42 +18,48 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
-  # When updating version change rev.
-  version = "0.14.2";
-  rev = "b1c09c0243f69990b6c81a17d7337f0fd23e7542";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-OdFd4q5IHu4FjNArcqVt4dNyLWegR4GdAyyCzgNIU+Q=";
+    sha256 = "sha256-kHpZeon85hU1cn2UmLNvC43z2nbWGFt6fWJDljwZANI=";
   };
 
-  CGO_ENABLED = 0;
-
   vendorSha256 = null;
+
+  CGO_ENABLED = 0;
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=${rev}"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"
   ];
 
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/faas-cli" \
+      --prefix PATH : ${lib.makeBinPath [ git ]}
+
+    installShellCompletion --cmd metal \
+      --bash <($out/bin/faas-cli completion --shell bash) \
+      --zsh <($out/bin/faas-cli completion --shell zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    command = "${faas-cli}/bin/faas-cli version --short-version --warn-update=false";
+    package = faas-cli;
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/openfaas/faas-cli";
     description = "Official CLI for OpenFaaS ";
+    homepage = "https://github.com/openfaas/faas-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki ];
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "armv7l-linux"
-      "armv6l-linux"
-    ];
+    maintainers = with maintainers; [ welteki techknowlogick ];
   };
 }

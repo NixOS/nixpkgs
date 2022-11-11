@@ -3,17 +3,21 @@
 , fetchFromGitHub
 , pytestCheckHook
 , urwid
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hachoir";
-  version = "3.1.2";
+  version = "3.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "vstinner";
     repo = pname;
     rev = version;
-    sha256 = "06544qmmimvaznwcjs8wwfih1frdd7anwcw5z07cf69l8p146p0y";
+    hash = "sha256-HlxDwkU0GccO+IUzbtVpLbsAo+Mcacm4/WrXWCsmpBg=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +28,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "hachoir" ];
+  pythonImportsCheck = [
+    "hachoir"
+  ];
 
   meta = with lib; {
     description = "Python library to view and edit a binary stream";

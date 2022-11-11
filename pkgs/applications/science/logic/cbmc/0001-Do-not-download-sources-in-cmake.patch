@@ -1,0 +1,49 @@
+From fbc1488e8da0175e9c9bdf5892f8a65c71f2a266 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Fri, 15 Jul 2022 18:33:15 +0800
+Subject: [PATCH] Do not download sources in cmake
+
+---
+ src/solvers/CMakeLists.txt | 20 +-------------------
+ 1 file changed, 1 insertion(+), 19 deletions(-)
+
+diff --git a/src/solvers/CMakeLists.txt b/src/solvers/CMakeLists.txt
+index 744def486..5b719a78a 100644
+--- a/src/solvers/CMakeLists.txt
++++ b/src/solvers/CMakeLists.txt
+@@ -106,31 +106,13 @@ elseif("${sat_impl}" STREQUAL "glucose")
+ elseif("${sat_impl}" STREQUAL "cadical")
+     message(STATUS "Building solvers with cadical")
+ 
+-    download_project(PROJ cadical
+-        URL https://github.com/arminbiere/cadical/archive/rel-1.4.1.tar.gz
+-        PATCH_COMMAND true
+-        COMMAND CXX=${CMAKE_CXX_COMPILER} ./configure -O3 -s CXXFLAGS=-std=c++14
+-        URL_MD5 b44874501a175106424f4bd5de29aa59
+-    )
+-
+     message(STATUS "Building CaDiCaL")
+-    execute_process(COMMAND make -j WORKING_DIRECTORY ${cadical_SOURCE_DIR})
+ 
+     target_compile_definitions(solvers PUBLIC
+         SATCHECK_CADICAL HAVE_CADICAL
+     )
+ 
+-    add_library(cadical STATIC IMPORTED)
+-
+-    set_target_properties(
+-        cadical
+-        PROPERTIES IMPORTED_LOCATION ${cadical_SOURCE_DIR}/build/libcadical.a
+-    )
+-
+-    target_include_directories(solvers
+-      PUBLIC
+-      ${cadical_SOURCE_DIR}/src
+-    )
++    target_include_directories(solvers PUBLIC ${cadical_INCLUDE_DIR})
+ 
+     target_link_libraries(solvers cadical)
+ elseif("${sat_impl}" STREQUAL "ipasir-cadical")
+-- 
+2.35.1
+

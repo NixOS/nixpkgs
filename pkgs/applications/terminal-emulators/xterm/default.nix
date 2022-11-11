@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "370";
+  version = "374";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    sha256 = "ljxdhAoPD0wHf/KEWG6LH4Pz+YPcpvdPSzYZdbU4jII=";
+    sha256 = "sha256-EdTWJmcNTW17aft0Z+nsIxgX5a0iUC+RZ3aP2IrBvfU=";
   };
 
   strictDeps = true;
@@ -76,7 +76,10 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) xterm; };
+    tests = {
+      customTest = nixosTests.xterm;
+      standardTest = nixosTests.terminal-emulators.xterm;
+    };
 
     updateScript = let
       # Tags that end in letters are unstable

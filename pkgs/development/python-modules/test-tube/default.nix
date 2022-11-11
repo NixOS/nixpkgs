@@ -7,8 +7,8 @@
 , imageio
 , numpy
 , pandas
-, pytorch
-, tensorflow-tensorboard
+, torch
+, tensorboard
 }:
 
 buildPythonPackage rec {
@@ -33,8 +33,8 @@ buildPythonPackage rec {
     imageio
     numpy
     pandas
-    pytorch
-    tensorflow-tensorboard
+    torch
+    tensorboard
   ];
 
   meta = with lib; {

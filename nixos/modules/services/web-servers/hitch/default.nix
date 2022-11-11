@@ -17,11 +17,11 @@ with lib;
 {
   options = {
     services.hitch = {
-      enable = mkEnableOption "Hitch Server";
+      enable = mkEnableOption (lib.mdDoc "Hitch Server");
 
       backend = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The host and port Hitch connects to when receiving
           a connection in the form [HOST]:PORT
         '';
@@ -30,15 +30,15 @@ with lib;
       ciphers = mkOption {
         type = types.str;
         default = "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
-        description = "The list of ciphers to use";
+        description = lib.mdDoc "The list of ciphers to use";
       };
 
       frontend = mkOption {
         type = types.either types.str (types.listOf types.str);
         default = "[127.0.0.1]:443";
-        description = ''
+        description = lib.mdDoc ''
           The port and interface of the listen endpoint in the
-+         form [HOST]:PORT[+CERT].
+          form [HOST]:PORT[+CERT].
         '';
         apply = toList;
       };
@@ -46,33 +46,33 @@ with lib;
       pem-files = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = "PEM files to use";
+        description = lib.mdDoc "PEM files to use";
       };
 
       ocsp-stapling = {
         enabled = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to enable OCSP Stapling";
+          description = lib.mdDoc "Whether to enable OCSP Stapling";
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "hitch";
-        description = "The user to run as";
+        description = lib.mdDoc "The user to run as";
       };
 
       group = mkOption {
         type = types.str;
         default = "hitch";
-        description = "The group to run as";
+        description = lib.mdDoc "The group to run as";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Additional configuration lines";
+        description = lib.mdDoc "Additional configuration lines";
       };
     };
 

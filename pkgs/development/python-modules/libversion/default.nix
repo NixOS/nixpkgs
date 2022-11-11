@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , libversion
 , pkg-config
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -20,6 +21,11 @@ buildPythonPackage rec {
     sha256 = "sha256-p0wtSB+QXAERf+57MMb8cqWoy1bG3XaCpR9GPwYYvJM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
+  '';
+
   nativeBuildInputs = [
     pkg-config
   ];
@@ -27,6 +33,15 @@ buildPythonPackage rec {
   buildInputs = [
     libversion
   ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r libversion
+  '';
 
   pythonImportsCheck = [
     "libversion"

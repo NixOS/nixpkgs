@@ -1,22 +1,23 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.2.15";
+  version = "0.3.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "1kygk7ilv7la36kv4jdn1ird7f3896wgr88kyqf0iagfqkzb2vsb";
+    sha256 = "sha256-z4pLtSx1mg53AHPhT8P7BOEMCWHsieoS3rI0kEyJBcY=";
   };
 
-  cargoSha256 = "1f42cqaqnjwi9k4ihqil6z2dqh5dnf76x54gk7mndzkrfg3rl573";
+  cargoSha256 = "sha256-4YF1fqthnWY6eu6J4SMwFG655KXdFCXmA9wxLyOOAw4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "dist-client" "dist-server" ];
+  # sccache-dist is only supported on x86_64 Linux machines.
+  buildFeatures = lib.optionals (stdenv.system == "x86_64-linux") [ "dist-client" "dist-server" ];
 
   # Tests fail because of client server setup which is not possible inside the pure environment,
   # see https://github.com/mozilla/sccache/issues/460

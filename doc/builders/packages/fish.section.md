@@ -36,7 +36,7 @@ using `buildFishPlugin` and running unit tests with the `fishtape` test runner.
 ## Fish wrapper {#sec-fish-wrapper}
 
 The `wrapFish` package is a wrapper around Fish which can be used to create
-Fish shells initialised with some plugins as well as completions, configuration
+Fish shells initialized with some plugins as well as completions, configuration
 snippets and functions sourced from the given paths. This provides a convenient
 way to test Fish plugins and scripts without having to alter the environment.
 

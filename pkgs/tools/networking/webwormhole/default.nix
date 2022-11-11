@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/saljam/webwormhole";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "ww";
   };
 }

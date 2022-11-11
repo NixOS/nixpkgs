@@ -3,18 +3,24 @@
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "unstable-2021-09-02";
+  version = "unstable-2022-02-18";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = "d92e191dd793b12cee0a0f685f5a8d8252988399";
-    sha256 = "1ysfq3g74b8ivivrdpfi4vm23d3cyc3rfla5i6y8q9aycis9xv6q";
+    rev = "3db9fe895b2fa656bb40ddb7a62e27604a688171";
+    sha256 = "0606pbg391l4s8mpyyalm9zrcnm75fwqdlrxy2gif9n21i2fm3rc";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ffmpeg libpng libjpeg ];
   cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
+
+  # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
+  postPatch = ''
+    substituteInPlace libffmpegthumbnailer.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   meta = with lib;  {
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";

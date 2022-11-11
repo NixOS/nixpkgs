@@ -15,7 +15,7 @@
 }:
 
 mkDerivation {
-  name = "kfilemetadata";
+  pname = "kfilemetadata";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     attr

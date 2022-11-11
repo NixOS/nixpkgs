@@ -38,5 +38,7 @@ buildPythonPackage rec {
     description = "Relaxed test discovery/organization for pytest";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];
+    # see https://github.com/bitprophet/pytest-relaxed/issues/12
+    broken = true;
   };
 }

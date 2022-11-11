@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ montag451 ];
   };
 
-  machine =
+  nodes.machine =
     { lib, ... }:
     {
       virtualisation.vlans = [];

@@ -1,23 +1,35 @@
 { lib, fetchFromGitHub, fetchpatch, python3 }:
-python3.pkgs.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.16.3";
+        src = oldAttrs.src.override {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+        };
+      });
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.10.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-c+YP4pEGvLi7wZsDXrkoqR/isuYfXQmTwQp9gN5jHkQ=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sgZql9373xKT7Hi8M5TIZTOkS2AOFoKA1DXYa2f2IkA=";
   };
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
-
-    substituteInPlace setup.cfg \
-      --replace "irc >=19.0.0, <20.0" "irc"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     irc
     mautrix
@@ -25,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
   ];
 

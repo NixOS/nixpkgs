@@ -1,5 +1,4 @@
-{ mkDerivation, lib, config
-, extra-cmake-modules, kdoctools
+{ mkDerivation, lib, extra-cmake-modules, kdoctools
 , breeze-icons, karchive, kconfig, kcrash, kdbusaddons, ki18n
 , kiconthemes, kitemmodels, khtml, kio, kparts, kpty, kservice, kwidgetsaddons
 , libarchive, libzip

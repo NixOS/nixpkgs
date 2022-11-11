@@ -21,13 +21,13 @@ in {
 
     programs.file-roller = {
 
-      enable = mkEnableOption "File Roller, an archive manager for GNOME";
+      enable = mkEnableOption (lib.mdDoc "File Roller, an archive manager for GNOME");
 
       package = mkOption {
         type = types.package;
         default = pkgs.gnome.file-roller;
         defaultText = literalExpression "pkgs.gnome.file-roller";
-        description = "File Roller derivation to use.";
+        description = lib.mdDoc "File Roller derivation to use.";
       };
 
     };

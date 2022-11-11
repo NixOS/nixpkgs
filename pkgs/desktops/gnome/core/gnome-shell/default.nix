@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -29,7 +30,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -43,9 +44,10 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
+, libadwaita
 , sassc
 , systemd
 , pipewire
@@ -66,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "41.3";
+  version = "43.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Hj36KgvklFQYK0rOd/EdENP1uYjvD8tzK3MTVzlJ3tE=";
+    sha256 = "3wREdl3vG9Cv7pYX0rWRm8ebTbhufnV6wOH3N0jsG9w=";
   };
 
   patches = [
@@ -118,7 +120,6 @@ stdenv.mkDerivation rec {
     sassc
     desktop-file-utils
     libxslt.bin
-    python3
     asciidoc
   ];
 
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
@@ -138,10 +139,11 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
+    libadwaita
     gdm
     geoclue2
     adwaita-icon-theme
@@ -169,6 +171,9 @@ stdenv.mkDerivation rec {
     bash-completion
     gnome-autoar
     json-glib
+
+    # for tools
+    pythonEnv
   ];
 
   mesonFlags = [
@@ -177,14 +182,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs src/data-to-c.pl
-    chmod +x meson/postinstall.py
-    patchShebangs meson/postinstall.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
+    rm data/theme/gnome-shell.css
+  '';
 
-    substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -201,6 +213,8 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

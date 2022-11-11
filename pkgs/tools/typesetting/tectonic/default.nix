@@ -7,39 +7,42 @@
 , harfbuzz
 , openssl
 , pkg-config
-, makeWrapper
+, makeBinaryWrapper
 , biber
+, icu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.8.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
     fetchSubmodules = true;
-    sha256 = "1x6pxzl2fxv0ldfdlgm5x2pcbkny8cf2b4gpk8yj8hhnn1ypim1w";
+    sha256 = "tBX737Yv4TvDo64cDYuALX61vzKjhz6PTMXQhWc5S/I=";
   };
 
-  cargoSha256 = "0v5jc26icz83ssky85c8l92jcmglq9f2jbihfh4yqanpmwbpp5fl";
+  cargoSha256 = "awDVjJLwgpSMbwptmLhczaxB5HqvsdvEOUsLYb/zTUc=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
-  buildInputs = [ fontconfig harfbuzz openssl ]
+  buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
   # Tectonic runs biber when it detects it needs to run it, see:
   # https://github.com/tectonic-typesetting/tectonic/releases/tag/tectonic%400.7.0
   postInstall = ''
     wrapProgram $out/bin/tectonic \
-      --prefix PATH "${lib.getBin biber}/bin"
+      --prefix PATH : "${lib.getBin biber}/bin"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace dist/appimage/tectonic.desktop \
       --replace Exec=tectonic Exec=$out/bin/tectonic
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/
     install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+
+    ln -s $out/bin/tectonic $out/bin/nextonic
   '';
 
   doCheck = true;
@@ -49,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs maintainers.doronbehar ];
+    maintainers = with maintainers; [ lluchs doronbehar ];
   };
 }

@@ -12,41 +12,30 @@ let
     "--config /var/lib/AdGuardHome/AdGuardHome.yaml"
   ] ++ cfg.extraArgs);
 
-  baseConfig = {
-    bind_host = cfg.host;
-    bind_port = cfg.port;
-  };
-
   configFile = pkgs.writeTextFile {
     name = "AdGuardHome.yaml";
-    text = builtins.toJSON (recursiveUpdate cfg.settings baseConfig);
+    text = builtins.toJSON cfg.settings;
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
 
-in {
+in
+{
+
+  imports =
+    let cfgPath = [ "services" "adguardhome" ];
+    in
+    [
+      (mkRenamedOptionModuleWith { sinceRelease = 2211; from = cfgPath ++ [ "host" ]; to = cfgPath ++ [ "settings" "bind_host" ]; })
+      (mkRenamedOptionModuleWith { sinceRelease = 2211; from = cfgPath ++ [ "port" ]; to = cfgPath ++ [ "settings" "bind_port" ]; })
+    ];
+
   options.services.adguardhome = with types; {
-    enable = mkEnableOption "AdGuard Home network-wide ad blocker";
-
-    host = mkOption {
-      default = "0.0.0.0";
-      type = str;
-      description = ''
-        Host address to bind HTTP server to.
-      '';
-    };
-
-    port = mkOption {
-      default = 3000;
-      type = port;
-      description = ''
-        Port to serve HTTP pages on.
-      '';
-    };
+    enable = mkEnableOption (lib.mdDoc "AdGuard Home network-wide ad blocker");
 
     openFirewall = mkOption {
       default = false;
       type = bool;
-      description = ''
+      description = lib.mdDoc ''
         Open ports in the firewall for the AdGuard Home web interface. Does not
         open the port needed to access the DNS resolver.
       '';
@@ -55,32 +44,59 @@ in {
     mutableSettings = mkOption {
       default = true;
       type = bool;
-      description = ''
+      description = lib.mdDoc ''
         Allow changes made on the AdGuard Home web interface to persist between
         service restarts.
       '';
     };
 
     settings = mkOption {
-      type = (pkgs.formats.yaml { }).type;
       default = { };
-      description = ''
+      type = submodule {
+        freeformType = (pkgs.formats.yaml { }).type;
+        options = {
+          schema_version = mkOption {
+            default = pkgs.adguardhome.schema_version;
+            defaultText = literalExpression "pkgs.adguardhome.schema_version";
+            type = int;
+            description = lib.mdDoc ''
+              Schema version for the configuration.
+              Defaults to the `schema_version` supplied by `pkgs.adguardhome`.
+            '';
+          };
+          bind_host = mkOption {
+            default = "0.0.0.0";
+            type = str;
+            description = lib.mdDoc ''
+              Host address to bind HTTP server to.
+            '';
+          };
+          bind_port = mkOption {
+            default = 3000;
+            type = port;
+            description = lib.mdDoc ''
+              Port to serve HTTP pages on.
+            '';
+          };
+        };
+      };
+      description = lib.mdDoc ''
         AdGuard Home configuration. Refer to
-        <link xlink:href="https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file"/>
+        <https://github.com/AdguardTeam/AdGuardHome/wiki/Configuration#configuration-file>
         for details on supported values.
 
-        <note><para>
-          On start and if <option>mutableSettings</option> is <literal>true</literal>,
-          these options are merged into the configuration file on start, taking
-          precedence over configuration changes made on the web interface.
-        </para></note>
+        ::: {.note}
+        On start and if {option}`mutableSettings` is `true`,
+        these options are merged into the configuration file on start, taking
+        precedence over configuration changes made on the web interface.
+        :::
       '';
     };
 
     extraArgs = mkOption {
       default = [ ];
       type = listOf str;
-      description = ''
+      description = lib.mdDoc ''
         Extra command line parameters to be passed to the adguardhome binary.
       '';
     };
@@ -135,6 +151,6 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port ];
   };
 }

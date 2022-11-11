@@ -15,6 +15,7 @@
 , icu
 , itstool
 , libadwaita
+, editorconfig-core-c
 , libxml2
 , pcre
 , appstream-glib
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "41.1";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YZ7FINbgkF1DEWcCTkPc4Nv2o0Xy1IaTUB1w3HYm+GE=";
+    sha256 = "sha256-lzpLDeto+fkaVKTdQVtq/em1rj7mhLx2FHH5QpD59ss=";
   };
 
   nativeBuildInputs = [
@@ -50,16 +51,9 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
+    editorconfig-core-c
     pcre
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
-
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -1,27 +1,38 @@
-{ fetchurl, lib, stdenv, python3Packages, texinfo }:
+{ lib, stdenv, fetchFromGitLab, python3Packages, texinfo }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rubber";
-  version = "1.5.1";
+  version = "1.6.0";
 
-  src = fetchurl {
-    url = "https://launchpad.net/rubber/trunk/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
+  src = fetchFromGitLab {
+    owner = "latex-rubber";
+    repo = "rubber";
+    rev = version;
+    hash = "sha256-7sv9N3PES5N41yYyXNWfaZ6IhLW6SqMiCHdamsSPQzg=";
   };
 
   # I'm sure there is a better way to pass these parameters to the build script...
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pdf  = True' 'pdf = False' \
-      --replace '$base/man'   'share/man' \
+      --replace 'pdf = True' 'pdf = False' \
       --replace '$base/info'  'share/info' \
+      --replace '$base/man'   'share/man' \
       --replace '$base/share' 'share'
+
+    substituteInPlace tests/run.sh \
+      --replace /var/tmp /tmp
   '';
 
   nativeBuildInputs = [ texinfo ];
 
   checkPhase = ''
-    cd tests && ${stdenv.shell} run.sh
+    runHook preCheck
+
+    pushd tests >/dev/null
+    ${stdenv.shell} run.sh
+    popd >/dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {
@@ -36,7 +47,7 @@ python3Packages.buildPythonApplication rec {
       of pdfLaTeX to produce PDF documents.
     '';
     license = licenses.gpl2Plus;
-    homepage = "https://launchpad.net/rubber";
+    homepage = "https://gitlab.com/latex-rubber/rubber";
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
   };

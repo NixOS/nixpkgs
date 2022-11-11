@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metacity";
-  version = "3.42.0";
+  version = "3.46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "2J1nnc/tm17vGPBuLcszp6tUPVOzWPqJzmVZPCMe7rw=";
+    sha256 = "S6d36ThUe/zL+azKCWdXTEZkMCLgVMk6AzQZyzzHwew=";
   };
 
   patches = [

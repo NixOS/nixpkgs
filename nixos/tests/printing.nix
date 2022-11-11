@@ -4,6 +4,7 @@ import ./make-test-python.nix ({pkgs, ... }:
 let
   printingServer = startWhenNeeded: {
     services.printing.enable = true;
+    services.printing.stateless = true;
     services.printing.startWhenNeeded = startWhenNeeded;
     services.printing.listenAddresses = [ "*:631" ];
     services.printing.defaultShared = true;

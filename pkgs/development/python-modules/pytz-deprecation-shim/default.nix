@@ -5,6 +5,7 @@
 , pythonOlder
 , backports-zoneinfo
 , python-dateutil
+, setuptools
 , tzdata
 , hypothesis
 , pytestCheckHook
@@ -23,6 +24,8 @@ buildPythonPackage rec {
     sha256 = "af097bae1b616dde5c5744441e2ddc69e74dfdcb0c263129610d85b87445a59d";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
     backports-zoneinfo
   ]) ++ (lib.optionals (pythonOlder "3.6") [
@@ -39,6 +42,10 @@ buildPythonPackage rec {
 
   # https://github.com/pganssle/pytz-deprecation-shim/issues/27
   doCheck = pythonAtLeast "3.9";
+
+  disabledTests = [
+    "test_localize_explicit_is_dst"
+  ];
 
   meta = with lib; {
     description = "Shims to make deprecation of pytz easier";

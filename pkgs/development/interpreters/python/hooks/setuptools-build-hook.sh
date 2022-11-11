@@ -11,8 +11,11 @@ setuptoolsBuildPhase() {
     if [ -n "$setupPyGlobalFlags" ]; then
         args+="$setupPyGlobalFlags"
     fi
+    if [ -n "$enableParallelBuilding" ]; then
+        setupPyBuildFlags+=" --parallel $NIX_BUILD_CORES"
+    fi
     if [ -n "$setupPyBuildFlags" ]; then
-        args+="build_ext $setupPyBuildFlags"
+        args+=" build_ext $setupPyBuildFlags"
     fi
     eval "@pythonInterpreter@ nix_run_setup $args bdist_wheel"
 

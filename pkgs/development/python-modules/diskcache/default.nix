@@ -43,10 +43,8 @@ buildPythonPackage rec {
     "test_incr_version"
     "test_get_or_set"
     "test_get_many"
-  ];
-
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
+    # see https://github.com/grantjenks/python-diskcache/issues/260
+    "test_cache_write_unpicklable_object"
   ];
 
   pythonImportsCheck = [

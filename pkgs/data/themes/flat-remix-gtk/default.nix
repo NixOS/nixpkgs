@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flat-remix-gtk";
-  version = "20211223";
+  version = "20220627";
 
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jGE5ud7wEEa4JI1QTaCrOnbDwjQtDOFJX2uMo7t7+Js=";
+    sha256 = "sha256-z/ILu8UPbyEN/ejsxZ3CII3y3dI04ZNa1i6nyjKFis8=";
   };
 
   dontBuild = true;

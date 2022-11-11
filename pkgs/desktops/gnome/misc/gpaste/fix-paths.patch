@@ -1,3 +1,5 @@
+diff --git a/src/gnome-shell/extension.js b/src/gnome-shell/extension.js
+index c8773fd6..9efbed67 100644
 --- a/src/gnome-shell/extension.js
 +++ b/src/gnome-shell/extension.js
 @@ -6,6 +6,8 @@
@@ -8,21 +10,25 @@
 +
  imports.gi.versions.Clutter = Config.LIBMUTTER_API_VERSION;
  imports.gi.versions.GLib = '2.0';
- imports.gi.versions.GPaste = '1.0';
+ imports.gi.versions.GPaste = '2';
+diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
+index 32244ab2..74b85572 100644
 --- a/src/gnome-shell/prefs.js
 +++ b/src/gnome-shell/prefs.js
 @@ -6,6 +6,8 @@
  
- const Gettext = imports.gettext;
+ imports.gi.versions.GPasteGtk = '4';
  
 +imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
 +
- //const { GPaste } = imports.gi;
- 
  const ExtensionUtils = imports.misc.extensionUtils;
---- a/src/libgpaste/settings/gpaste-settings.c
-+++ b/src/libgpaste/settings/gpaste-settings.c
-@@ -1013,7 +1013,11 @@
+ 
+ const { GPasteGtk } = imports.gi;
+diff --git a/src/libgpaste/gpaste/gpaste-settings.c b/src/libgpaste/gpaste/gpaste-settings.c
+index 7e53eb64..57c399fc 100644
+--- a/src/libgpaste/gpaste/gpaste-settings.c
++++ b/src/libgpaste/gpaste/gpaste-settings.c
+@@ -1013,7 +1013,11 @@ create_g_settings (void)
      }
      else
      {

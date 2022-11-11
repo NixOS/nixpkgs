@@ -1,26 +1,30 @@
-{ lib, stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "smpeg-svn${version}";
-  version = "390";
+  pname = "smpeg";
+  version = "0.4.5";
 
-  src = fetchsvn {
-    url = "svn://svn.icculus.org/smpeg/trunk";
-    rev = version;
-    sha256 = "0ynwn7ih5l2b1kpzpibns9bb9wzfjak7mgrb1ji0dkn2q5pv6lr0";
+  src = fetchFromGitHub {
+    owner = "icculus";
+    repo = "smpeg";
+    rev = "release_${builtins.replaceStrings ["."] ["_"] version}";
+    sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
   patches = [
     ./format.patch
     ./gcc6.patch
     ./libx11.patch
+    ./gtk.patch
   ];
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
+
   buildInputs = [ SDL gtk2 libGLU libGL ];
 
-  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
+  outputs = [ "out" "dev" ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
@@ -33,11 +37,13 @@ stdenv.mkDerivation rec {
     -e 's,"SDL_audio.h",<SDL/SDL_audio.h>,' \
     -e 's,"SDL_thread.h",<SDL/SDL_thread.h>,' \
     -e 's,"SDL_types.h",<SDL/SDL_types.h>,' \
-      $out/include/smpeg/*.h
+      $dev/include/smpeg/*.h
 
-    wrapProgram $out/bin/smpeg-config \
+    moveToOutput bin/smpeg-config "$dev"
+
+    wrapProgram $dev/bin/smpeg-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
   NIX_LDFLAGS = "-lX11";

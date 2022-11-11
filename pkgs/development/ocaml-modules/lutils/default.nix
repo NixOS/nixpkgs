@@ -21,5 +21,6 @@ buildDunePackage rec {
     homepage = "https://gricad-gitlab.univ-grenoble-alpes.fr/verimag/synchrone/lutils/";
     description = "Tools and libs shared by Verimag/synchronous tools (lustre, lutin, rdbg)";
     license = lib.licenses.cecill21;
+    mainProgram = "gnuplot-rif";
   };
 }

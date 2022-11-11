@@ -10,7 +10,7 @@ with lib;
 
     services.system-config-printer = {
 
-      enable = mkEnableOption "system-config-printer, a service for CUPS administration used by printing interfaces";
+      enable = mkEnableOption (lib.mdDoc "system-config-printer, a service for CUPS administration used by printing interfaces");
 
     };
 
@@ -34,7 +34,8 @@ with lib;
     ];
 
     # for $out/bin/install-printer-driver
-    services.packagekit.enable = true;
+    # TODO: Enable once #177946 is resolved
+    # services.packagekit.enable = true;
 
   };
 

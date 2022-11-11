@@ -2,26 +2,29 @@
 
 buildGoModule rec {
   pname = "kubespy";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "pulumi";
     repo = "kubespy";
-    sha256 = "1xrwhxw2y0zpzsxp1rlm1wd0aqw6jda5ai5y1ards5djqsbsv87g";
+    sha256 = "sha256-ChHrDAmPUjdyiF+XQONQMDN3UZQMM80BR+m+E8o3gnw=";
   };
 
-  vendorSha256 = "0ajhbjs9ijpxp3svvj7pjiac78ps7vkqmqrizq18mllsry0m9pcl";
+  vendorSha256 = "sha256-HmMh5jrRGs4rtN9GLddS9IwITyvVmOrL5TShhQeyxKU=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false;
 
-  # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
-  # postInstall = ''
-  # 	for shell in bash zsh; do
-  # 		$out/bin/kubespy completion $shell > kubespy.$shell
-  # 		installShellCompletion kubespy.$shell
-  # 	done
-  # '';
+  ldflags = [ "-X" "github.com/pulumi/kubespy/version.Version=${version}" ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/kubespy completion $shell > kubespy.$shell
+      installShellCompletion kubespy.$shell
+    done
+  '';
 
   meta = with lib; {
     description = "A tool to observe Kubernetes resources in real time";

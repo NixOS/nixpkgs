@@ -16,7 +16,7 @@ in
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         If true, enable gitweb in lighttpd. Access it at http://yourserver/gitweb
       '';
     };

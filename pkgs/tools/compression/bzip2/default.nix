@@ -10,32 +10,37 @@
 
 stdenv.mkDerivation rec {
   pname = "bzip2";
-  version = "1.0.6.0.2";
+  version = "1.0.8";
 
-  /* We use versions patched to use autotools style properly,
-      saving lots of trouble. */
   src = fetchurl {
-    urls = map
-      (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${pname}-${version}.tar.gz")
-      [
-        "http://ftp.uni-kl.de/pub/linux/suse"
-        "ftp://ftp.hs.uni-hamburg.de/pub/mirrors/suse"
-        "ftp://ftp.mplayerhq.hu/pub/linux/suse"
-        "http://ftp.suse.com/pub" # the original patched version but slow
-      ];
-    sha256 = "sha256-FnhwNy4OHe8d5M6iYCClkxzcB/EHXg0veXwv43ZlxbA=";
+    url = "https://sourceware.org/pub/bzip2/bzip2-${version}.tar.gz";
+    sha256 = "sha256-q1oDF27hBtPw+pDjgdpHjdrkBZGBU8yiSOaCzQxKImk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  patchFlags = ["-p0"];
 
   patches = [
-    ./CVE-2016-3189.patch
-    ./cve-2019-12900.patch
+    (fetchurl {
+      url = "https://ftp.suse.com/pub/people/sbrabec/bzip2/for_downstream/bzip2-1.0.6.2-autoconfiscated.patch";
+      sha256 = "sha256-QMufl6ffJVVVVZespvkCbFpB6++R1lnq1687jEsUjr0=";
+    })
   ];
-
+  # Fix up hardcoded version from the above patch, e.g. seen in bzip2.pc or libbz2.so.1.0.N
   postPatch = ''
-    sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
+    patch <<-EOF
+      --- configure.ac
+      +++ configure.ac
+      @@ -3,3 +3,3 @@
+      -AC_INIT([bzip2], [1.0.6], [Julian Seward <jseward@bzip.org>])
+      +AC_INIT([bzip2], [${version}], [Julian Seward <jseward@bzip.org>])
+       BZIP2_LT_CURRENT=1
+      -BZIP2_LT_REVISION=6
+      +BZIP2_LT_REVISION=${lib.versions.patch version}
+    EOF
   '';
+
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 
@@ -43,6 +48,10 @@ stdenv.mkDerivation rec {
     lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -s $out/lib/libbz2.so.1.0.* $out/lib/libbz2.so.1.0
+  '';
 
   meta = with lib; {
     description = "High-quality data compression program";

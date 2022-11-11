@@ -1,4 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
+  name = "ghostunnel";
   nodes = {
     backend = { pkgs, ... }: {
       services.nginx.enable = true;

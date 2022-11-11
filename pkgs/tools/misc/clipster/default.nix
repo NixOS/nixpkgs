@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation  rec {
   pname = "clipster";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
     rev = version;
-    sha256 = "0582r8840dk4k4jj1zq6kmyh7z9drcng099bj7f4wvr468nb9z1p";
+    sha256 = "sha256-MLLkFsBBQtb7RFQN+uoEmuCn5bnbkYsqoyWGZtTCI2U=";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);

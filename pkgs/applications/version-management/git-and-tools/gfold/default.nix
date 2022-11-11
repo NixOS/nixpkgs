@@ -1,28 +1,43 @@
-{ lib, fetchFromGitHub, gitMinimal, makeWrapper, rustPlatform }:
+{ fetchFromGitHub
+, gitMinimal
+, gfold
+, lib
+, libiconv
+, makeWrapper
+, rustPlatform
+, Security
+, stdenv
+, testers
+}:
 
-rustPlatform.buildRustPackage rec {
+let
   pname = "gfold";
-  version = "3.0.0";
+  version = "4.0.1";
+in
+rustPlatform.buildRustPackage {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "nickgerace";
     repo = pname;
     rev = version;
-    sha256 = "0ss6vfrc6h3jlh5qilh82psd3vdnfawf1wl4cf64mfm4hm9dda63";
+    sha256 = "sha256-XOUXDuKLr8tESG2GJMl1kYsk2JRtQXzQyaO7d44Ajt8=";
   };
 
-  cargoSha256 = "09ywwgxm8l1p0jypp65zpqryjnb2g4gririf1dmqb9148dsj29x2";
+  cargoSha256 = "sha256-jkktXVgHtqQeMU+rPiT4fz0kTIHW07RukxCnFABlzgw=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  postInstall = ''
-    wrapProgram "$out/bin/gfold" --prefix PATH : "${gitMinimal}/bin"
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = gfold;
+    command = "gfold --version";
+    inherit version;
+  };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description =
-      "A tool to help keep track of your Git repositories, written in Rust";
+      "CLI tool to help keep track of your Git repositories, written in Rust";
+    homepage = "https://github.com/nickgerace/gfold";
     license = licenses.asl20;
     maintainers = [ maintainers.shanesveller ];
     platforms = platforms.unix;

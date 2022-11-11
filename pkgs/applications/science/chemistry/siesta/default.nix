@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lz8rfl5xwdj17zn7a30ipi7cgjwqki21a7wg9rdg7iwx27bpnmg";
   };
 
+  postPatch = ''
+    substituteInPlace Src/siesta_init.F --replace '/bin/rm' 'rm'
+  '';
+
   passthru = {
     inherit mpi;
   };
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ blas lapack ]
     ++ lib.optionals useMpi [ mpi scalapack ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;  # Started making trouble with gcc-11
 
   # Must do manualy becuase siesta does not do the regular
   # ./configure; make; make install
@@ -35,17 +39,23 @@ stdenv.mkDerivation rec {
     cp gfortran.make arch.make
   '';
 
-  preBuild = if useMpi then ''
+  preBuild = ''
+    # See https://gitlab.com/siesta-project/siesta/-/commit/a10bf1628e7141ba263841889c3503c263de1582
+    # This may be fixed in the next release.
     makeFlagsArray=(
+        FFLAGS="-fallow-argument-mismatch"
+    )
+    '' + (if useMpi then ''
+    makeFlagsArray+=(
         CC="mpicc" FC="mpifort"
         FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
         COMP_LIBS="" LIBS="-lblas -llapack -lscalapack"
     );
   '' else ''
-    makeFlagsArray=(
+    makeFlagsArray+=(
       COMP_LIBS="" LIBS="-lblas -llapack"
     );
-  '';
+  '');
 
   installPhase = ''
     mkdir -p $out/bin

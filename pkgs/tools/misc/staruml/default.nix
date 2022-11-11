@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, makeWrapper
-, dpkg, patchelf
+{ stdenv, lib, fetchurl
+, dpkg, patchelf, wrapGAppsHook
+, hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr
 , atk, at-spi2-atk, dbus
@@ -30,7 +31,8 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-CUOdpR8RExMLeOX8469egENotMNuPU4z8S1IGqA21z0=";
     };
 
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  nativeBuildInputs = [ wrapGAppsHook dpkg ];
+  buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''
     mkdir pkg
@@ -39,8 +41,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    mv opt/StarUML $out/bin
+    mkdir -p $out/bin
+    mv opt $out
+
+    mv usr/share $out
+    rm -rf $out/share/doc
+
+    substituteInPlace $out/share/applications/staruml.desktop \
+      --replace "/opt/StarUML/staruml" "$out/bin/staruml"
 
     mkdir -p $out/lib
     ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
@@ -48,14 +56,21 @@ stdenv.mkDerivation rec {
 
     patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/bin/staruml
-    wrapProgram $out/bin/staruml \
-      --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}
+      $out/opt/StarUML/staruml
+
+    ln -s $out/opt/StarUML/staruml $out/bin/staruml
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH ':' $out/lib:${LD_LIBRARY_PATH}
+    )
   '';
 
   meta = with lib; {
     description = "A sophisticated software modeler";
     homepage = "https://staruml.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];

@@ -1,16 +1,18 @@
 { lib
 , stdenv
-, ansible
+, ansible-core
 , buildPythonPackage
 , fetchPypi
 , mock
 , openssh
+, pbr
 , pexpect
 , psutil
 , pytest-mock
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , python-daemon
 , pyyaml
 , six
@@ -18,16 +20,22 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.1.1";
+  version = "2.3.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-doRhL3VDxfB/PoE1Zn7rIqnb2Y9iXMaZAbqZJDKe8k8=";
+    hash = "sha256-mcTfu+reRGOXvRqeC/BQhz2KBrWSbVXSQIWyld2/Ecs=";
   };
 
+  nativeBuildInputs = [
+    pbr
+  ];
+
   propagatedBuildInputs = [
-    ansible
+    ansible-core
     psutil
     pexpect
     python-daemon
@@ -36,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    ansible # required to place ansible CLI onto the PATH in tests
+    ansible-core # required to place ansible CLI onto the PATH in tests
     pytestCheckHook
     pytest-mock
     pytest-timeout
@@ -48,6 +56,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
+    # avoid coverage flags
+    rm pytest.ini
   '';
 
   disabledTests = [
@@ -58,7 +68,7 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     # test_process_isolation_settings is currently broken on Darwin Catalina
     # https://github.com/ansible/ansible-runner/issues/413
     "process_isolation_settings"

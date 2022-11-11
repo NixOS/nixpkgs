@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   setupPyBuildFlags = [
     "--build-lib=$CHIPSEC_BUILD_LIB"
-  ] ++ lib.optional (!withDriver) [
+  ] ++ lib.optionals (!withDriver) [
     "--skip-driver"
   ];
 
@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
     maintainers = with maintainers; [ johnazoidberg ];
-    platforms = if withDriver then [ "x86_64-linux" ] else platforms.all;
+    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
   };
 }

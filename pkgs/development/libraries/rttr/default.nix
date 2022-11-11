@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "C++ Reflection Library";
     homepage = "https://www.rttr.org";
     license = licenses.mit;

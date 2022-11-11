@@ -7,7 +7,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, testVersion
+, testers
 , key
 }:
 
@@ -38,7 +38,8 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-1TWySkS8w7L6Q+V946kcLOnM4hL3fieFvLrF5BZAlh4=";
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-GjBUwJxeyJA6vGrPQVtNpcHb4CJlNlY4kHt1PT21xjo=";
   };
 in stdenv.mkDerivation rec {
   inherit pname version src sourceRoot;
@@ -60,7 +61,7 @@ in stdenv.mkDerivation rec {
       comment = meta.description;
       desktopName = "KeY";
       genericName = "KeY";
-      categories = "Science;";
+      categories = [ "Science" ];
     })
   ];
 
@@ -97,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru.tests.version =
-    testVersion {
+    testers.testVersion {
       package = key;
       command = "KeY --help";
     };
@@ -114,7 +115,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = executable-name;
     platforms = platforms.all;
   };
 }
-

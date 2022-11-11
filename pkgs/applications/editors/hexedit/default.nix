@@ -1,20 +1,24 @@
-{ lib, stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "hexedit";
-  version = "1.2.13";
+  version = "1.6";
 
-  src = fetchurl {
-    url = "http://rigaux.org/${pname}-${version}.src.tgz";
-    sha256 = "1mwdp1ikk64cqmagnrrps5jkn3li3n47maiqh2qc1xbp1ains4ka";
+  src = fetchFromGitHub {
+    owner = "pixel";
+    repo = "hexedit";
+    rev = version;
+    sha256 = "sha256-fIgPbr7qmxyEga2YaAD0+NBM8LeDm/tVAq99ub7aiAI=";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
 
-  meta = {
+  meta = with lib; {
     description = "View and edit files in hexadecimal or in ASCII";
-    homepage = "http://prigaux.chez.com/hexedit.html";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.unix;
+    homepage = "http://rigaux.org/hexedit.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ delroth ];
   };
 }

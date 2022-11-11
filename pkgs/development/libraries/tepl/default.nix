@@ -9,17 +9,19 @@
 , gtksourceview4
 , icu
 , pkg-config
+, gtk-doc
+, docbook-xsl-nons
 }:
 
 stdenv.mkDerivation rec {
   pname = "tepl";
-  version = "6.00.0";
+  version = "6.2.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qvs7s86gqyyrzi0r5fbrj8zczlgv8xhdjswgbgc1afwjnl9fqx8";
+    sha256 = "jNaGXCw4GIdgyzjK4z3J4KiI+tGNCwTx1V5laqmJqEQ=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     ninja
     gobject-introspection
     pkg-config
+    gtk-doc
+    docbook-xsl-nons
   ];
 
   buildInputs = [

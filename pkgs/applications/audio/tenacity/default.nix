@@ -2,7 +2,8 @@
 , lib
 , fetchFromSourcehut
 , cmake
-, wxGTK
+, wxGTK31
+, gtk3
 , pkg-config
 , python3
 , gettext
@@ -123,8 +124,8 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK
-    wxGTK.gtk
+    wxGTK31
+    gtk3
   ] ++ lib.optionals stdenv.isLinux [
     at-spi2-core
     dbus
@@ -136,6 +137,11 @@ stdenv.mkDerivation rec {
     libselinux
     libsepol
     util-linux
+  ];
+
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {

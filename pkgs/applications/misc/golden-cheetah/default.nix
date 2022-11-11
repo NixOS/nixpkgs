@@ -12,7 +12,7 @@ let
     desktopName = "GoldenCheetah";
     genericName = "GoldenCheetah";
     comment = "Performance software for cyclists, runners and triathletes";
-    categories = "Utility;";
+    categories = [ "Utility" ];
   };
 in mkDerivation rec {
   pname = "golden-cheetah";

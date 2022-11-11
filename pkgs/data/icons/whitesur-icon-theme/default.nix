@@ -1,42 +1,64 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, hicolor-icon-theme }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, hicolor-icon-theme
+, jdupes
+, boldPanelIcons ? false
+, blackPanelIcons ? false
+, themeVariants ? []
+}:
+
+let
+  pname = "Whitesur-icon-theme";
+in
+lib.checkListOfEnum "${pname}: theme variants" [
+  "default"
+  "purple"
+  "pink"
+  "red"
+  "orange"
+  "yellow"
+  "green"
+  "grey"
+  "nord"
+  "all"
+] themeVariants
 
 stdenvNoCC.mkDerivation rec {
-  pname = "Whitesur-icon-theme";
-  version = "2021-11-08";
+  inherit pname;
+  version = "2022-08-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "LZ0GLJFUUvzsPhU2sBkfy5mPpQHuPzYhbumwFKnogoA=";
+    sha256 = "pcvRD4CUwUT46/kmMbnerj5mqPCcHIRreVIh9wz6Kfg=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [ gtk3 jdupes ];
 
   buildInputs = [ hicolor-icon-theme ];
 
+  # These fixup steps are slow and unnecessary
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
   dontDropIconThemeCache = true;
+
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/icons/WhiteSur{,-dark}/status
-    echo "$out/share/icons/WhiteSur/status $out/share/icons/WhiteSur-dark/status" | xargs -n 1 cp -r src/status/{16,22,24,32,symbolic}
-    echo "$out/share/icons/WhiteSur $out/share/icons/WhiteSur-dark" | xargs -n 1 cp -r ./{COPYING,AUTHORS} src/index.theme src/{actions,animations,apps,categories,devices,emblems,mimes,places} links/{actions,apps,categories,devices,emblems,mimes,places,status}
+    ./install.sh --dest $out/share/icons \
+      --name WhiteSur \
+      --theme ${builtins.toString themeVariants} \
+      ${lib.optionalString boldPanelIcons "--bold"} \
+      ${lib.optionalString blackPanelIcons "--black"}
 
-    # Change icon color for dark theme
-    sed -i "s/#363636/#dedede/g" $out/share/icons/WhiteSur-dark/{actions,devices,places,status}/{16,22,24}/*
-    sed -i "s/#363636/#dedede/g" $out/share/icons/WhiteSur-dark/actions/32/*
-    sed -i "s/#363636/#dedede/g" $out/share/icons/WhiteSur-dark/{actions,apps,categories,emblems,devices,mimes,places,status}/symbolic/*
-
-    for f in actions animations apps categories devices emblems mimes places status; do
-      ln -sf $out/share/icons/WhiteSur/$f $out/share/icons/WhiteSur/$f@2x
-      ln -sf $out/share/icons/WhiteSur-dark/$f $out/share/icons/WhiteSur-dark/$f@2x
-    done
-
-    for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
-    done
+    jdupes --link-soft --recurse $out/share
 
     runHook postInstall
   '';

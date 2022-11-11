@@ -2,6 +2,7 @@
 , runCommand
 , makeWrapper
 , lib
+, stdenv
 , extraPackages ? []
 , buildah
 , runc # Default container runtime
@@ -10,7 +11,6 @@
 , slirp4netns # User-mode networking for unprivileged namespaces
 , fuse-overlayfs # CoW for images, much faster than default vfs
 , util-linux # nsenter
-, cni-plugins # not added to path
 , iptables
 }:
 
@@ -20,6 +20,7 @@ let
   preferLocalBuild = true;
 
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon

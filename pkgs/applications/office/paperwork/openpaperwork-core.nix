@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "speex";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "http://downloads.us.xiph.org/releases/speex/speex-${version}.tar.gz";
-    sha256 = "150047wnllz4r94whb9r73l5qf0z5z3rlhy98bawfbblmkq8mbpa";
+    sha256 = "sha256-S0TU8rOKNwotmKeDKf78VqDPk9HBvnACkhe6rmYo/uo=";
   };
 
   postPatch = ''

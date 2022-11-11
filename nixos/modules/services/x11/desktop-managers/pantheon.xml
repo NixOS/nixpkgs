@@ -3,7 +3,7 @@
          xml:id="chap-pantheon">
  <title>Pantheon Desktop</title>
  <para>
-  Pantheon is the desktop environment created for the elementary OS distribution. It is written from scratch in Vala, utilizing GNOME technologies with GTK 3 and Granite.
+  Pantheon is the desktop environment created for the elementary OS distribution. It is written from scratch in Vala, utilizing GNOME technologies with GTK and Granite.
  </para>
  <section xml:id="sec-pantheon-enable">
   <title>Enabling Pantheon</title>
@@ -89,9 +89,9 @@ switchboard-with-plugs.override {
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry xml:id="sec-pantheon-faq-gnome3-and-pantheon">
+   <varlistentry xml:id="sec-pantheon-faq-gnome-and-pantheon">
     <term>
-     I cannot enable both GNOME 3 and Pantheon.
+     I cannot enable both GNOME and Pantheon.
     </term>
     <listitem>
      <para>

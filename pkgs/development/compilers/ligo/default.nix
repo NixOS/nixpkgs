@@ -1,55 +1,103 @@
 { lib
 , fetchFromGitLab
+, git
 , coq
+, ocamlPackages
 , cacert
+, ocaml-crunch
 }:
 
-coq.ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.34.0";
+  version = "0.54.1";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-MHkIr+XkW/zrRt+Cg48q4fOWTkNGH0hbf+oU7cAivNE=";
+    sha256 = "sha256-P4oScKsf2A6qtkzpep8lewqSMM9A+vHyN5VaH7+/6xQ=";
+    fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  buildInputs = with coq.ocamlPackages; [
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    ocaml-crunch
+    git
+    coq
+    ocamlPackages.crunch
+    ocamlPackages.menhir
+    ocamlPackages.ocaml-recovery-parser
+  ];
+
+  buildInputs = with ocamlPackages; [
     coq
     menhir
     menhirLib
     qcheck
     ocamlgraph
+    bisect_ppx
+    decompress
     ppx_deriving
     ppx_deriving_yojson
     ppx_expect
-    tezos-base
-    tezos-shell-services
-    tezos-010-PtGRANAD-test-helpers
-    tezos-011-PtHangz2-test-helpers
-    tezos-protocol-010-PtGRANAD-parameters
-    tezos-protocol-010-PtGRANAD
-    tezos-protocol-environment
+    ppx_import
+    terminal_size
+    ocaml-recovery-parser
     yojson
     getopt
-    terminal_size
+    core
+    core_unix
     pprint
     linenoise
+    crunch
+    semver
+    lambda-term
+    tar-unix
+    parse-argv
+
+    # Test helpers deps
+    qcheck
+    qcheck-alcotest
+    alcotest-lwt
+
+    # vendored tezos' deps
+    tezos-plonk
+    tezos-bls12-381-polynomial
+    ctypes
+    ctypes_stubs_js
+    class_group_vdf
+    dune-configurator
+    hacl-star
+    hacl-star-raw
+    lwt-canceler
+    ipaddr
+    bls12-381
+    bls12-381-legacy
+    bls12-381-signature
+    ptime
+    mtime
+    lwt_log
+    ringo
+    ringo-lwt
+    secp256k1-internal
+    resto
+    resto-directory
+    resto-cohttp-self-serving-client
+    irmin-pack
+    ezjsonm
     data-encoding
-    bisect_ppx
-    cmdliner
-    core
-    ocaml-recovery-parser
+    pure-splitmix
+    zarith_stubs_js
   ];
 
   checkInputs = [
     cacert
-    coq.ocamlPackages.ca-certs
+    ocamlPackages.ca-certs
   ];
 
   doCheck = false; # Tests fail, but could not determine the reason
@@ -59,7 +107,7 @@ coq.ocamlPackages.buildDunePackage rec {
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }

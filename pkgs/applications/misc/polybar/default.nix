@@ -2,6 +2,7 @@
 , cairo
 , cmake
 , fetchFromGitHub
+, libuv
 , libXdmcp
 , libpthreadstubs
 , libxcb
@@ -43,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polybar";
-  version = "3.5.7";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-h12VW3IY4do4cKz2Fd/QgVTBk+zJO+qXuRUCQUyO/x0=";
+    hash = "sha256-FKkPSAEMzptnjJq3xTk+fpD8XjASQ3smX5imstDyLNE=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
+    libuv
     libXdmcp
     libpthreadstubs
     libxcb
@@ -83,6 +85,14 @@ stdenv.mkDerivation rec {
   ++ lib.optional (i3Support || i3GapsSupport) jsoncpp
   ++ lib.optional i3Support i3
   ++ lib.optional i3GapsSupport i3-gaps;
+
+  patches = [ ./remove-hardcoded-etc.diff ];
+
+  # Replace hardcoded /etc when copying and reading the default config.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "/etc" $out
+    substituteAllInPlace src/utils/file.cpp
+  '';
 
   postInstall =
     if i3Support then ''
@@ -110,7 +120,7 @@ stdenv.mkDerivation rec {
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ];
+    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ckie ];
     platforms = platforms.linux;
   };
 }

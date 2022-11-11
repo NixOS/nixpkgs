@@ -35,6 +35,7 @@ stdenv.mkDerivation {
       variables (overwriting and restoring).
     '';
     homepage = "https://github.com/Tarrasch/zsh-autoenv";
+    mainProgram = "zsh-autoenv-share";
     platforms = lib.platforms.all;
   };
 }

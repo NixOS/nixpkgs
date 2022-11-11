@@ -1,5 +1,5 @@
 { lib, buildDunePackage, base64, benchmark, csv, cmdliner, wodan, afl-persistent
-, io-page-unix, mirage-block-ramdisk, mirage-block-unix }:
+, mirage-block-ramdisk, mirage-block-unix }:
 
 buildDunePackage rec {
   outputs = [ "bin" "out" ];
@@ -12,7 +12,7 @@ buildDunePackage rec {
     benchmark
     cmdliner
     csv
-    io-page-unix
+    /* io-page-unix */
     mirage-block-ramdisk
     mirage-block-unix
     wodan
@@ -22,6 +22,10 @@ buildDunePackage rec {
     moveToOutput bin "''${!outputBin}"
   '';
 
-  meta = wodan.meta // { description = "Wodan clients with Unix integration"; };
+  meta = wodan.meta // {
+    broken = true; # io-page-unix is no longer available
+    description = "Wodan clients with Unix integration";
+    mainProgram = "wodanc";
+  };
 
 }

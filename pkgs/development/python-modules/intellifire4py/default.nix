@@ -1,8 +1,11 @@
 { lib
+, aenum
 , aiohttp
+, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pydantic
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -10,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "0.9.7";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,16 +22,19 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = pname;
     rev = version;
-    hash = "sha256-cNWsKwXVlnZgPjkll1IaEhDHfHNvWCBY6U3B34IdHd0=";
+    hash = "sha256-dn5814eRZ9456Fn7blf1UzXPii4dXu3sjoXBV7CmwSs=";
   };
 
   propagatedBuildInputs = [
+    aenum
     aiohttp
     pydantic
     requests
   ];
 
   checkInputs = [
+    asynctest
+    pytest-mock
     pytestCheckHook
   ];
 

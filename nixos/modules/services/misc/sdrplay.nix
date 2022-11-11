@@ -5,13 +5,13 @@ with lib;
     enable = mkOption {
       default = false;
       example = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the SDRplay API service and udev rules.
 
-        <note><para>
-          To enable integration with SoapySDR and GUI applications like gqrx create an overlay containing
-          <literal>soapysdr-with-plugins = super.soapysdr.override { extraPackages = [ super.soapysdrplay ]; };</literal>
-        </para></note>
+        ::: {.note}
+        To enable integration with SoapySDR and GUI applications like gqrx create an overlay containing
+        `soapysdr-with-plugins = super.soapysdr.override { extraPackages = [ super.soapysdrplay ]; };`
+        :::
       '';
       type = lib.types.bool;
     };

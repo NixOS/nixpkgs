@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.2.0";
-  disabled = pythonOlder "3.6";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rTbekdceC5QK0aiySi/4QUwaEoDfTlLrx2t6Kb9bH7U=";
+    hash = "sha256-nOzS004uduS5C8y4ig0IaYyfk+h94uTiN048X66HO+Q=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +37,9 @@ buildPythonPackage rec {
     cython frozenlist/_frozenlist.pyx
   '';
 
-  pythonImportsCheck = [ "frozenlist" ];
+  pythonImportsCheck = [
+    "frozenlist"
+  ];
 
   meta = with lib; {
     description = "Python module for list-like structure";

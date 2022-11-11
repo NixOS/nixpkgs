@@ -1,58 +1,65 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , click
 , cloudpickle
 , dask
+, fetchPypi
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
+, pythonOlder
+, pyyaml
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
 , zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.12.0";
-  disabled = pythonOlder "3.6";
+  version = "2022.10.2";
+  format = "setuptools";
 
-  # get full repository need conftest.py to run tests
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6119a2cf1fb2d8ac60337915bb9a790af6530afcb5d7a809a3308323b874714";
+    hash = "sha256-U/Clv276uaWrM0XNkT9tPz1OpETuLtvqMxx/75b9Z9A=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dask == 2021.11.2" "dask"
+      --replace "tornado >= 6.0.3, <6.2" "tornado >= 6.0.3"
   '';
 
   propagatedBuildInputs = [
-    bokeh
     click
     cloudpickle
     dask
-    mpi4py
+    jinja2
+    locket
     msgpack
+    packaging
     psutil
     pyyaml
     sortedcontainers
     tblib
     toolz
     tornado
+    urllib3
     zict
   ];
 
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [ "distributed" ];
+  pythonImportsCheck = [
+    "distributed"
+  ];
 
   meta = with lib; {
     description = "Distributed computation in Python";

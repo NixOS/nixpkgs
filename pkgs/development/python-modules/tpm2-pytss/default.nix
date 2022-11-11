@@ -1,36 +1,58 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pkg-config, swig
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, asn1crypto
+, cffi
+, cryptography
+, ibm-sw-tpm2
+, pkgconfig # see nativeBuildInputs
+, pkg-config # see nativeBuildInputs
+, pycparser
+, pytestCheckHook
+, python
+, pyyaml
+, setuptools-scm
 , tpm2-tss
-, cryptography, ibm-sw-tpm2
 }:
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-
-  # Last version on github is 0.2.4, but it looks
-  # like a mistake (it's missing commits from 0.1.9)
-  version = "0.1.9";
-  disabled = pythonOlder "3.5";
+  version = "1.2.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v5Xth0A3tFnLFg54nvWYL2TD201e/GWv+2y5Qc60CmU=";
+    sha256 = "sha256-OgWWTjcj3Qd4dSaCwY+fuRQpLSFn4+9o11kPR9n8a54=";
   };
-  postPatch = ''
-    substituteInPlace tpm2_pytss/config.py --replace \
-      'SYSCONFDIR = CONFIG.get("sysconfdir", "/etc")' \
-      'SYSCONFDIR = "${tpm2-tss}/etc"'
-  '';
 
-  nativeBuildInputs = [ pkg-config swig ];
-  # The TCTI is dynamically loaded from tpm2-tss, we have to provide the library to the end-user
-  propagatedBuildInputs = [ tpm2-tss ];
+  nativeBuildInputs = [
+    cffi
+    pkgconfig # this is the python module
+    pkg-config # this is the actual pkg-config tool
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    tpm2-tss
+  ];
+
+  propagatedBuildInputs = [
+    cffi
+    asn1crypto
+    cryptography
+    pyyaml
+  ];
+
+  # https://github.com/tpm2-software/tpm2-pytss/issues/341
+  doCheck = false;
 
   checkInputs = [
-    cryptography
-    # provide tpm_server used as simulator for the tests
     ibm-sw-tpm2
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "tpm2_pytss" ];
 
   meta = with lib; {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";

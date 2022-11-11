@@ -6,22 +6,29 @@
 , h5py
 , exdown
 , pytestCheckHook
+, rich
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "meshio";
-  version = "5.2.2";
+  version = "5.3.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "209885ac31b00155e43c27859d1aff0ba7f97f319ee7bed453a8b9e1677a4e52";
+    sha256 = "sha256-4kBpLX/yecErE8bl17QDYpqGrStE6SMJWLPwDB7DafA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
     netcdf4
     h5py
+    rich
   ];
 
   checkInputs = [

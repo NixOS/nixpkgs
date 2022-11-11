@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "meteoalertapi";
-  version = "0.2.0";
+  version = "0.3.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rolfberkenbosch";
     repo = "meteoalert-api";
     rev = "v${version}";
-    sha256 = "sha256-EdHqWEkE/uUtz/xjV4k4NvNvtPPU4sJjHGwUM7J+HWs=";
+    sha256 = "sha256-uB2nza9fj7vOWixL4WEQX1N3i2Y80zQPM3x1+gRtg+w=";
   };
 
   propagatedBuildInputs = [

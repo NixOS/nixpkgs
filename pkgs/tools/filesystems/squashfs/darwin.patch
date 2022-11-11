@@ -5,7 +5,7 @@ with BSD-specific changes omitted.
 See also https://github.com/plougher/squashfs-tools/pull/69.
 
 diff --git a/squashfs-tools/action.c b/squashfs-tools/action.c
-index 4b06ccb..3cad2ab 100644
+index ea2f604..9c979f8 100644
 --- a/squashfs-tools/action.c
 +++ b/squashfs-tools/action.c
 @@ -39,6 +39,10 @@
@@ -19,7 +19,7 @@ index 4b06ccb..3cad2ab 100644
  #include "squashfs_fs.h"
  #include "mksquashfs.h"
  #include "action.h"
-@@ -2414,9 +2418,12 @@ static char *get_start(char *s, int n)
+@@ -2415,9 +2419,12 @@ static char *get_start(char *s, int n)
  
  static int subpathname_fn(struct atom *atom, struct action_data *action_data)
  {
@@ -34,7 +34,7 @@ index 4b06ccb..3cad2ab 100644
  
  /*
 diff --git a/squashfs-tools/info.c b/squashfs-tools/info.c
-index fe23d78..5c2f835 100644
+index 216b979..eea2ec9 100644
 --- a/squashfs-tools/info.c
 +++ b/squashfs-tools/info.c
 @@ -144,31 +144,22 @@ void dump_state()
@@ -89,7 +89,7 @@ index fe23d78..5c2f835 100644
  }
  
 diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-index a45b77f..3607448 100644
+index 843f9f4..ed2c3a6 100644
 --- a/squashfs-tools/mksquashfs.c
 +++ b/squashfs-tools/mksquashfs.c
 @@ -35,7 +35,12 @@
@@ -117,7 +117,7 @@ index a45b77f..3607448 100644
  
  #ifndef linux
  #include <sys/sysctl.h>
-@@ -5022,6 +5030,7 @@ static void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
+@@ -5064,6 +5072,7 @@ static void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
  	sigemptyset(&sigmask);
  	sigaddset(&sigmask, SIGQUIT);
  	sigaddset(&sigmask, SIGHUP);
@@ -125,7 +125,7 @@ index a45b77f..3607448 100644
  	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
  		BAD_ERROR("Failed to set signal mask in intialise_threads\n");
  
-@@ -5760,6 +5769,35 @@ static int get_physical_memory()
+@@ -5802,6 +5811,35 @@ static int get_physical_memory()
  	long long page_size = sysconf(_SC_PAGESIZE);
  	int phys_mem;
  
@@ -161,7 +161,7 @@ index a45b77f..3607448 100644
  	if(num_pages == -1 || page_size == -1) {
  		struct sysinfo sys;
  		int res = sysinfo(&sys);
-@@ -5772,6 +5810,7 @@ static int get_physical_memory()
+@@ -5814,6 +5852,7 @@ static int get_physical_memory()
  	}
  
  	phys_mem = num_pages * page_size >> 20;
@@ -170,7 +170,7 @@ index a45b77f..3607448 100644
  	if(phys_mem < SQUASHFS_LOWMEM)
  		BAD_ERROR("Mksquashfs requires more physical memory than is "
 diff --git a/squashfs-tools/read_xattrs.c b/squashfs-tools/read_xattrs.c
-index 4debedf..3257c30 100644
+index 2067f80..ca8b7f4 100644
 --- a/squashfs-tools/read_xattrs.c
 +++ b/squashfs-tools/read_xattrs.c
 @@ -31,13 +31,13 @@
@@ -186,11 +186,11 @@ index 4debedf..3257c30 100644
  
 -#include <stdlib.h>
 -
- extern int read_fs_bytes(int, long long, int, void *);
+ extern int read_fs_bytes(int, long long, long long, void *);
  extern int read_block(int, long long, long long *, int, void *);
  
 diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
-index 727f1d5..c1a6183 100644
+index d434b42..1208e45 100644
 --- a/squashfs-tools/unsquashfs.c
 +++ b/squashfs-tools/unsquashfs.c
 @@ -32,8 +32,12 @@
@@ -206,7 +206,7 @@ index 727f1d5..c1a6183 100644
  #include <sys/types.h>
  #include <sys/time.h>
  #include <sys/resource.h>
-@@ -1175,7 +1179,7 @@ int create_inode(char *pathname, struct inode *i)
+@@ -1182,7 +1186,7 @@ int create_inode(char *pathname, struct inode *i)
  			break;
  		case SQUASHFS_SYMLINK_TYPE:
  		case SQUASHFS_LSYMLINK_TYPE: {
@@ -215,7 +215,7 @@ index 727f1d5..c1a6183 100644
  				{ i->time, 0 },
  				{ i->time, 0 }
  			};
-@@ -1194,8 +1198,7 @@ int create_inode(char *pathname, struct inode *i)
+@@ -1201,8 +1205,7 @@ int create_inode(char *pathname, struct inode *i)
  				goto failed;
  			}
  
@@ -225,7 +225,7 @@ index 727f1d5..c1a6183 100644
  			if(res == -1) {
  				EXIT_UNSQUASH_STRICT("create_inode: failed to"
  					" set time on %s, because %s\n",
-@@ -2683,6 +2686,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size, int cat_
+@@ -2687,6 +2690,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size, int cat_
  		sigemptyset(&sigmask);
  		sigaddset(&sigmask, SIGQUIT);
  		sigaddset(&sigmask, SIGHUP);
@@ -234,7 +234,7 @@ index 727f1d5..c1a6183 100644
  			EXIT_UNSQUASH("Failed to set signal mask in initialise_threads\n");
  
 diff --git a/squashfs-tools/unsquashfs.h b/squashfs-tools/unsquashfs.h
-index 934618b..0e680ab 100644
+index 1099678..5b6a038 100644
 --- a/squashfs-tools/unsquashfs.h
 +++ b/squashfs-tools/unsquashfs.h
 @@ -46,6 +46,10 @@
@@ -249,7 +249,7 @@ index 934618b..0e680ab 100644
  #include "squashfs_fs.h"
  #include "unsquashfs_error.h"
 diff --git a/squashfs-tools/unsquashfs_info.c b/squashfs-tools/unsquashfs_info.c
-index c8e2b9b..7d4f7af 100644
+index e906eaf..f1e68c2 100644
 --- a/squashfs-tools/unsquashfs_info.c
 +++ b/squashfs-tools/unsquashfs_info.c
 @@ -96,31 +96,22 @@ void dump_state()
@@ -304,7 +304,7 @@ index c8e2b9b..7d4f7af 100644
  }
  
 diff --git a/squashfs-tools/unsquashfs_xattr.c b/squashfs-tools/unsquashfs_xattr.c
-index 7742dfe..f8cd3b6 100644
+index 61910e1..73e0090 100644
 --- a/squashfs-tools/unsquashfs_xattr.c
 +++ b/squashfs-tools/unsquashfs_xattr.c
 @@ -27,6 +27,11 @@
@@ -320,7 +320,7 @@ index 7742dfe..f8cd3b6 100644
  
  extern int root_process;
 diff --git a/squashfs-tools/xattr.c b/squashfs-tools/xattr.c
-index 64dfd82..d82d186 100644
+index b1c0089..6d7ed98 100644
 --- a/squashfs-tools/xattr.c
 +++ b/squashfs-tools/xattr.c
 @@ -22,6 +22,14 @@
@@ -353,5 +353,5 @@ index 64dfd82..d82d186 100644
  #include "squashfs_swap.h"
  #include "mksquashfs.h"
 -- 
-2.23.0
+2.35.1
 

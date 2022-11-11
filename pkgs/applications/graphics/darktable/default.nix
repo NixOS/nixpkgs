@@ -14,6 +14,7 @@
 , desktop-file-utils
 , exiv2
 , glib
+, glib-networking
 , ilmbase
 , gtk3
 , intltool
@@ -56,12 +57,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.0";
+  version = "4.0.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "01gp9dg5wr2rg1k8cqs0l3s7ism8a4q8qypgwccd4jh7ip3wfr9f";
+    sha256 = "0bfcag6bj5vcmg4z4xjirs43iafcx89al6jl41i5mrhpjzszh5hl";
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     curl
     exiv2
     glib
+    glib-networking
     gtk3
     ilmbase
     lcms2
@@ -117,15 +119,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DUSE_COLORD=OFF"
     "-DUSE_KWALLET=OFF"
-  ];
-
-  patches = [
-    (fetchpatch {
-      # This is merged in darktable master and will hopefully be in 3.8.1
-      name = "cmake-fix.patch";
-      url = "https://github.com/darktable-org/darktable/commit/58d247f7ebea76c55fa2525beb9f5ce092c6670d.patch";
-      sha256 = "11fn6d2mwlapbf1zbyv6bhgv29kxcwrs7cnbway0rnl9nj8wimf2";
-    })
   ];
 
   # darktable changed its rpath handling in commit

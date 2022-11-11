@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "flexmock";
-  version = "0.11.2";
+  version = "0.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RPcCwNCt3nCFtMev6a2rULAbckrO635Jsp9WMuYyXOg=";
+    hash = "sha256-sf419qXzJUe1zTGhXAYNmrhj3Aiv8BjNc9x40bZR7dQ=";
   };
 
   checkInputs = [

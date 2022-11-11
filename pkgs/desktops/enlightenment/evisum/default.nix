@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , efl
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -26,11 +27,13 @@ stdenv.mkDerivation rec {
     efl
   ];
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "System and process monitor written with EFL";
     homepage = "https://www.enlightenment.org";
     license = with licenses; [ isc ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.enlightenment.members;
   };
 }

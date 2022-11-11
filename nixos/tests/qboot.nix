@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "qboot";
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     virtualisation.bios = pkgs.qboot;
   };
 

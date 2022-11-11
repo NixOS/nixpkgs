@@ -19,8 +19,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Zipkin distributed tracing system";
     homepage = "https://zipkin.io/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.hectorj ];
+    mainProgram = "zipkin-server";
   };
 }

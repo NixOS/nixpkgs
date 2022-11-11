@@ -2,17 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bgpq3";
-  version = "0.1.36";
+  version = "0.1.36.1";
 
   src = fetchFromGitHub {
     owner = "snar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FBtt++w2WzCnSim+r+MVy287w2jmdNEaQIro2KaVeRI=";
+    hash = "sha256-rOpggVlXKaf3KBhfZ2lVooDaQA0iRjSbsLXF02GEyBw=";
   };
-
-  # Fix binary install location. Remove with next upstream release.
-  preInstall = "mkdir -p $out/bin";
 
   meta = with lib; {
     description = "bgp filtering automation tool";

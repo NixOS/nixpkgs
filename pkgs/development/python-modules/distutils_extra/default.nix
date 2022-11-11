@@ -5,17 +5,20 @@
 
 buildPythonPackage rec {
   pname = "distutils-extra";
-  version = "2.45";
+  version = "2.47";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://salsa.debian.org/python-team/modules/python-distutils-extra/-/archive/${version}/python-${pname}-${version}.tar.bz2";
-    sha256 = "1aifizd4nkvdnkwdna7i6xgjcqi1cf228bg8kmnwz67f5rflk3z8";
+    hash = "sha256-vIl50yDVt5AW5lteWYqhAPlu8ErroOOJ1N/sfE2fbBU=";
   };
 
   # Tests are out-dated as the last upstream release is from 2016
   doCheck = false;
 
-  pythonImportsCheck = [ "DistUtilsExtra" ];
+  pythonImportsCheck = [
+    "DistUtilsExtra"
+  ];
 
   meta = with lib; {
     description = "Enhancements to Python's distutils";

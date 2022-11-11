@@ -1,7 +1,7 @@
 { lib, stdenv
-, lapack-reference, openblasCompat, openblas
+, lapack-reference, openblas
 , isILP64 ? false
-, blasProvider ? if isILP64 then openblas else openblasCompat }:
+, blasProvider ? openblas }:
 
 let
   blasFortranSymbols = [
@@ -32,10 +32,13 @@ let
 
 
   blasImplementation = lib.getName blasProvider;
+  blasProvider' = if blasImplementation == "mkl"
+                  then blasProvider
+                  else blasProvider.override { blas64 = isILP64; };
 
 in
 
-assert isILP64 -> (blasImplementation == "openblas" && blasProvider.blas64) || blasImplementation == "mkl";
+assert isILP64 -> blasImplementation == "mkl" || blasProvider'.blas64;
 
 stdenv.mkDerivation {
   pname = "blas";
@@ -43,13 +46,13 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  meta = (blasProvider.meta or {}) // {
+  meta = (blasProvider'.meta or {}) // {
     description = "${lib.getName blasProvider} with just the BLAS C and FORTRAN ABI";
   };
 
   passthru = {
     inherit isILP64;
-    provider = blasProvider;
+    provider = blasProvider';
     implementation = blasImplementation;
   };
 
@@ -62,10 +65,10 @@ stdenv.mkDerivation {
   installPhase = (''
   mkdir -p $out/lib $dev/include $dev/lib/pkgconfig
 
-  libblas="${lib.getLib blasProvider}/lib/libblas${canonicalExtension}"
+  libblas="${lib.getLib blasProvider'}/lib/libblas${canonicalExtension}"
 
   if ! [ -e "$libblas" ]; then
-    echo "$libblas does not exist, ${blasProvider.name} does not provide libblas."
+    echo "$libblas does not exist, ${blasProvider'.name} does not provide libblas."
     exit 1
   fi
 
@@ -79,11 +82,11 @@ stdenv.mkDerivation {
 
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libblas${canonicalExtension} $out/lib/libblas${canonicalExtension}
-  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libblas${canonicalExtension}
+  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libblas${canonicalExtension}
 '' else if stdenv.hostPlatform.isDarwin then ''
   install_name_tool \
     -id $out/lib/libblas${canonicalExtension} \
-    -add_rpath ${lib.getLib blasProvider}/lib \
+    -add_rpath ${lib.getLib blasProvider'}/lib \
     $out/lib/libblas${canonicalExtension}
 '' else "") + ''
 
@@ -99,10 +102,10 @@ Libs: -L$out/lib -lblas
 Cflags: -I$dev/include
 EOF
 
-  libcblas="${lib.getLib blasProvider}/lib/libcblas${canonicalExtension}"
+  libcblas="${lib.getLib blasProvider'}/lib/libcblas${canonicalExtension}"
 
   if ! [ -e "$libcblas" ]; then
-    echo "$libcblas does not exist, ${blasProvider.name} does not provide libcblas."
+    echo "$libcblas does not exist, ${blasProvider'.name} does not provide libcblas."
     exit 1
   fi
 
@@ -111,11 +114,11 @@ EOF
 
 '' + (if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf" then ''
   patchelf --set-soname libcblas${canonicalExtension} $out/lib/libcblas${canonicalExtension}
-  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider}/lib" $out/lib/libcblas${canonicalExtension}
+  patchelf --set-rpath "$(patchelf --print-rpath $out/lib/libcblas${canonicalExtension}):${lib.getLib blasProvider'}/lib" $out/lib/libcblas${canonicalExtension}
 '' else if stdenv.hostPlatform.isDarwin then ''
   install_name_tool \
     -id $out/lib/libcblas${canonicalExtension} \
-    -add_rpath ${lib.getLib blasProvider}/lib \
+    -add_rpath ${lib.getLib blasProvider'}/lib \
     $out/lib/libcblas${canonicalExtension}
 '' else "") + ''
   if [ "$out/lib/libcblas${canonicalExtension}" != "$out/lib/libcblas${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
@@ -135,6 +138,6 @@ EOF
   mkdir -p $out/nix-support
   echo 'export MKL_INTERFACE_LAYER=${lib.optionalString isILP64 "I"}LP64,GNU' > $out/nix-support/setup-hook
   ln -s $out/lib/libblas${canonicalExtension} $out/lib/libmkl_rt${stdenv.hostPlatform.extensions.sharedLibrary}
-  ln -sf ${blasProvider}/include/* $dev/include
+  ln -sf ${blasProvider'}/include/* $dev/include
 '');
 }

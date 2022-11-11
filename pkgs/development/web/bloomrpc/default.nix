@@ -13,8 +13,13 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname src version;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname src version;
+
+  profile = ''
+    export LC_ALL=C.UTF-8
+  '';
 
   multiPkgs = null; # no 32bit needed
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];

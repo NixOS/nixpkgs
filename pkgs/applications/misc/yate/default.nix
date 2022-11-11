@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yate";
-  version = "6.1.0-1";
+  version = "6.4.0-1";
 
   src = fetchurl {
     url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "0xx3i997nsf2wzbv6m5n6adsym0qhgc6xg4rsv0fwqrgisf5327d";
+    hash = "sha256-jCPca/+/jUeNs6hZZLUBl3HI9sms9SIPNGVRanSKA7A=";
   };
 
   # TODO zaptel ? postgres ?
@@ -14,11 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 openssl ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
-  preConfigure =
+  postPatch =
     ''
-      sed -i 's@,/dev/null@@' configure
       patchShebangs configure
+      substituteInPlace configure --replace ",/dev/null" ""
     '';
+
+  enableParallelBuilding = false; # fails to build if true
 
   # --unresolved-symbols=ignore-in-shared-libs makes ld no longer find --library=yate? Why?
   preBuild =
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://yate.null.ro/";
     # Yate's license is GPL with an exception for linking with
     # OpenH323 and PWlib (licensed under MPL).
-    license = ["GPL" "MPL"];
+    license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.marcweber ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

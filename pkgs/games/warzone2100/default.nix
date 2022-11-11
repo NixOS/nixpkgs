@@ -11,6 +11,7 @@
 , SDL2
 , libtheora
 , libvorbis
+, libopus
 , openal
 , openalSoft
 , physfs
@@ -26,7 +27,7 @@
 , vulkan-loader
 , shaderc
 
-, testVersion
+, testers
 , warzone2100
 
 , withVideos ? false
@@ -42,17 +43,18 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.2.4";
+  version  = "4.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-IkD1WkeKas9qtUUTTo9w4cEoGAoX+d+Cr2C5PTUFaEg=";
+    sha256 = "sha256-GdHe8DskEd0G1E388z8GGOtjTqHTMBpFSxf1MNATGN0=";
   };
 
   buildInputs = [
     SDL2
     libtheora
     libvorbis
+    libopus
     openal
     openalSoft
     physfs
@@ -104,7 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    version = testVersion {
+    version = testers.testVersion {
       package = warzone2100;
       # The command always exits with code 1
       command = "(warzone2100 --version || [ $? -eq 1 ])";

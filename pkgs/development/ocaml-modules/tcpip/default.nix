@@ -13,13 +13,13 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "7.0.1";
+  version = "7.1.2";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "0gqj2s9sk3a7f4yavx423a569fvxsrgm0wg58biiv16v37xjaymp";
+    sha256 = "sha256-lraur6NfFD9yddG+y21jlHKt82gLgYBBbedltlgcRm0=";
   };
 
   nativeBuildInputs = [

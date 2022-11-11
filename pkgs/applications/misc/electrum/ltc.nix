@@ -20,7 +20,7 @@
 }:
 
 let
-  version = "4.0.9.3";
+  version = "4.2.2.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -36,25 +36,12 @@ let
     owner = "pooler";
     repo = "electrum-ltc";
     rev = version;
-    sha256 = "sha256-oZjQnrnj8nCaQjrIz8bWNt6Ib8Wu2ZMXHEPfCCy2fjk=";
+    sha256 = "sha256-qu72LIV07pgHqvKv+Kcw9ZmNk6IBz+4/vdJELlT5tE4=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
       mv ./all/electrum_ltc/tests $out
     '';
-  };
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
   };
 
 in
@@ -65,7 +52,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-+oox0BGqkvj0OGOKJF8tUoKdsZFeffNb6rTF8E8mo08=";
+    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -73,19 +60,9 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum_ltc/tests
   '';
 
-  prePatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-
-    # according to upstream, this is fine
-    # https://github.com/spesmilo/electrum/issues/7361
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle<2.9" "qdarkstyle>=2.7"
-  '';
-
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx

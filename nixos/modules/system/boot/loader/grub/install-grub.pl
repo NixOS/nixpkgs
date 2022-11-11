@@ -64,6 +64,8 @@ my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
 my $splashImage = get("splashImage");
 my $splashMode = get("splashMode");
+my $entryOptions = get("entryOptions");
+my $subEntryOptions = get("subEntryOptions");
 my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
@@ -509,7 +511,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig, "--unrestricted");
+addEntry("NixOS - Default", $defaultConfig, $entryOptions);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
@@ -546,7 +548,7 @@ sub addProfile {
     my ($profile, $description) = @_;
 
     # Add entries for all generations of this profile.
-    $conf .= "submenu \"$description\" {\n" if $grubVersion == 2;
+    $conf .= "submenu \"$description\" --class submenu {\n" if $grubVersion == 2;
 
     sub nrFromGen { my ($x) = @_; $x =~ /\/\w+-(\d+)-link/; return $1; }
 
@@ -566,7 +568,7 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
+        addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions);
     }
 
     $conf .= "}\n" if $grubVersion == 2;

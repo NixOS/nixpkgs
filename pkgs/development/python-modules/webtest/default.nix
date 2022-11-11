@@ -1,55 +1,54 @@
 { lib
+, beautifulsoup4
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, webob
-, six
-, beautifulsoup4
-, waitress
-, pyquery
-, wsgiproxy2
 , pastedeploy
+, pyquery
 , pytestCheckHook
+, pythonOlder
+, six
+, waitress
+, webob
+, wsgiproxy2
 }:
 
 buildPythonPackage rec {
-  version = "3.0.0";
   pname = "webtest";
-  disabled = isPy27; # paste.deploy is not longer a valid import
+  version = "3.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "WebTest";
     inherit version;
-    sha256 = "54bd969725838d9861a9fa27f8d971f79d275d94ae255f5c501f53bb6d9929eb";
+    hash = "sha256-VL2WlyWDjZhhqfon+Nlx950nXZSuJV9cUB9Tu22ZKes=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "nose<1.3.0" "nose"
-  '';
-
   propagatedBuildInputs = [
-    webob
-    six
     beautifulsoup4
+    six
     waitress
+    webob
   ];
 
   checkInputs = [
-    pytestCheckHook
     pastedeploy
-    wsgiproxy2
     pyquery
+    pytestCheckHook
+    wsgiproxy2
   ];
 
-  # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "webtest" ];
+  pythonImportsCheck = [
+    "webtest"
+  ];
 
   meta = with lib; {
     description = "Helper to test WSGI applications";
-    homepage = "https://webtest.readthedocs.org/en/latest/";
+    homepage = "https://webtest.readthedocs.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

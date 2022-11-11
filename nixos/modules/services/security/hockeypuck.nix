@@ -7,12 +7,12 @@ in {
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
-    enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
+    enable = lib.mkEnableOption (lib.mdDoc "Hockeypuck OpenPGP Key Server");
 
     port = lib.mkOption {
       default = 11371;
       type = lib.types.port;
-      description = "HKP port to listen on.";
+      description = lib.mdDoc "HKP port to listen on.";
     };
 
     settings = lib.mkOption {
@@ -37,10 +37,10 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration file for hockeypuck, here you can override
-        certain settings (<literal>loglevel</literal> and
-        <literal>openpgp.db.dsn</literal>) by just setting those values.
+        certain settings (`loglevel` and
+        `openpgp.db.dsn`) by just setting those values.
 
         For other settings you need to use lib.mkForce to override them.
 
@@ -49,7 +49,7 @@ in {
         the database yourself.
 
         Example:
-        <literal>
+        ```
           services.postgresql = {
             enable = true;
             ensureDatabases = [ "hockeypuck" ];
@@ -58,7 +58,7 @@ in {
               ensurePermissions."DATABASE hockeypuck" = "ALL PRIVILEGES";
             }];
           };
-        </literal>
+        ```
       '';
     };
   };

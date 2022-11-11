@@ -7,11 +7,13 @@ in fetchzip rec {
 
   url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
   postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/truetype fonts/camingo-code/*.ttf
-    install -m444 -Dt $out/share/doc/${name}    fonts/camingo-code/*.txt
+    install -Dm644 $out/camingo-code/*.ttf -t $out/share/fonts/truetype
+    install -Dm644 $out/camingo-code/*.txt -t $out/share/doc/${name}
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
-  sha256 = "16iqjwwa7pnswvcc4w8nglkd0m0fz50qsz96i1kcpqip3nwwvw7y";
+  sha256 = "sha256-/vDNuR034stmiCZ9jUH5DlTQJn0WccLY5treoziXOJo=";
 
   meta = with lib; {
     homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";

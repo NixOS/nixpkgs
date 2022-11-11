@@ -19,8 +19,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./dont_static_link.patch ];
 
-  # fix build with gcc9
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = [
+    # fix build with gcc9
+    "-Wno-error"
+    # workaround build failure on -fno-common toolchains:
+    #   ld: /build/source/build/futility/vb2_helper.o:(.bss+0x0): multiple definition of
+    #     `vboot_version'; /build/source/build/futility/futility.o:(.bss+0x0): first defined here
+    # TODO: remove it when next release contains:
+    #   https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/df4d2000a22db673a788b8e57e8e7c0cc3cee777
+    "-fcommon"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \

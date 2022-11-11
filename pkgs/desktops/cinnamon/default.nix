@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
   iso-flags-png-320x420 = pkgs.iso-flags.overrideAttrs (p: p // {
@@ -31,8 +31,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
   pix = callPackage ./pix { };
-  xapps = callPackage ./xapps { };
+  xapp = callPackage ./xapp { };
   warpinator = callPackage ./warpinator { };
   xreader = callPackage ./xreader { };
   xviewer = callPackage ./xviewer { };
-})
+}) // lib.optionalAttrs config.allowAliases {
+  # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
+  xapps = pkgs.cinnamon.xapp; # added 2022-07-27
+}

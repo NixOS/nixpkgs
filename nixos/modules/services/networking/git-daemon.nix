@@ -15,7 +15,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Git daemon, which allows public hosting of git repositories
           without any access controls. This is mostly intended for read-only access.
 
@@ -31,7 +31,7 @@ in
         type = types.str;
         default = "";
         example = "/srv/git/";
-        description = ''
+        description = lib.mdDoc ''
           Remap all the path requests as relative to the given path. For example,
           if you set base-path to /srv/git, then if you later try to pull
           git://example.com/hello.git, Git daemon will interpret the path as /srv/git/hello.git.
@@ -41,7 +41,7 @@ in
       exportAll = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Publish all directories that look like Git repositories (have the objects
           and refs subdirectories), even if they do not have the git-daemon-export-ok file.
 
@@ -57,7 +57,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "/srv/git" "/home/user/git/repo2" ];
-        description = ''
+        description = lib.mdDoc ''
           A whitelist of paths of git repositories, or directories containing repositories
           all of which would be published. Paths must not end in "/".
 
@@ -70,31 +70,31 @@ in
         type = types.str;
         default = "";
         example = "example.com";
-        description = "Listen on a specific IP address or hostname.";
+        description = lib.mdDoc "Listen on a specific IP address or hostname.";
       };
 
       port = mkOption {
         type = types.port;
         default = 9418;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       options = mkOption {
         type = types.str;
         default = "";
-        description = "Extra configuration options to be passed to Git daemon.";
+        description = lib.mdDoc "Extra configuration options to be passed to Git daemon.";
       };
 
       user = mkOption {
         type = types.str;
         default = "git";
-        description = "User under which Git daemon would be running.";
+        description = lib.mdDoc "User under which Git daemon would be running.";
       };
 
       group = mkOption {
         type = types.str;
         default = "git";
-        description = "Group under which Git daemon would be running.";
+        description = lib.mdDoc "Group under which Git daemon would be running.";
       };
 
     };

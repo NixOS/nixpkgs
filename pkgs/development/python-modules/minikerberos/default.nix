@@ -5,24 +5,26 @@
 , fetchPypi
 , oscrypto
 , pythonOlder
+, unicrypto
 }:
 
 buildPythonPackage rec {
   pname = "minikerberos";
-  version = "0.2.17";
+  version = "0.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yoPUTwpsk8wimN9DXFFz6ZJi1tI0uAVcfAi5BiwsfJM=";
+    hash = "sha256-xO7d5GCihEzIH/DZziRR1SRpzAywPe99WJXeRyuh7S8=";
   };
 
   propagatedBuildInputs = [
     asn1crypto
     asysocks
     oscrypto
+    unicrypto
   ];
 
   # no tests are published: https://github.com/skelsec/minikerberos/pull/5

@@ -9,17 +9,18 @@
 , SDL2
 , lttng-ust
 , numactl
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2022.118.0";
+  version = "2022.1101.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-/BzoLiQLiBcWqThzDOVb4Y7s6WhcKnCRRhAzUi5Jstk=";
+    sha256 = "sha256-o0QHb8ebXKG0OZaYA9P/0OuOiSml3slYQ7gjyuP/ZyY=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -27,11 +28,9 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  preConfigure = ''
-    dotnetFlags+=(
-      --runtime linux-x64
-    )
-  '';
+  dotnetFlags = [
+    "--runtime linux-x64"
+  ];
 
   runtimeDeps = [
     ffmpeg
@@ -63,7 +62,7 @@ buildDotnetModule rec {
     icon = "osu!";
     comment = meta.description;
     type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   })];
 
   meta = with lib; {
@@ -74,7 +73,7 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ oxalica thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

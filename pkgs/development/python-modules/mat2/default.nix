@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , buildPythonPackage
-, python
+, unittestCheckHook
 , pythonOlder
 , fetchFromGitLab
+, fetchpatch
 , substituteAll
 , bubblewrap
 , exiftool
@@ -16,12 +18,13 @@
 , mutagen
 , pygobject3
 , pycairo
-, dolphinIntegration ? false, plasma5Packages
+, dolphinIntegration ? false
+, plasma5Packages
 }:
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.3";
+  version = "0.13.0";
 
   disabled = pythonOlder "3.5";
 
@@ -30,14 +33,13 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-TW+FwlZ+J1tanPL5WuwXtZJmtYB9LaimeIaPlN/jzqo=";
+    hash = "sha256-H3l8w2F+ZcJ1P/Dg0ZVBJPUK0itLocL7a0jeSrG3Ws8=";
   };
 
   patches = [
     # hardcode paths to some binaries
     (substituteAll ({
       src = ./paths.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
     } // lib.optionalAttrs dolphinIntegration {
@@ -52,6 +54,16 @@ buildPythonPackage rec {
       src = ./fix_poppler.patch;
       poppler_path = "${poppler_gi}/lib/girepository-1.0";
     })
+    # https://0xacab.org/jvoisin/mat2/-/issues/178
+    (fetchpatch {
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/618e0a8e3984fd534b95ef3dbdcb8a76502c90b5.patch";
+      hash = "sha256-l9UFim3hGj+d2uKITiDG1OnqGeo2McBIiRSmK0Vidg8=";
+    })
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    (substituteAll {
+      src = ./bubblewrap-path.patch;
+      bwrap = "${bubblewrap}/bin/bwrap";
+    })
   ];
 
   postPatch = ''
@@ -61,12 +73,12 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
     gdk-pixbuf
-    gobject-introspection
     librsvg
     poppler_gi
   ];
@@ -87,9 +99,9 @@ buildPythonPackage rec {
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -v
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";

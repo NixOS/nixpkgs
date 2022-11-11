@@ -1,22 +1,23 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , poetry-core
-, aiohttp
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
-  version = "3.2.1";
+  version = "4.1.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "garages_amsterdam";
-    rev = "v${version}";
-    sha256 = "16f2742r9p3mrg2nz8lnkgsxabbjga2qnp9vzq59026q6mmfwkm9";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ZWp543msRAgn/fFplEt6saSNbZ2flC5gwjxrll4w0W0=";
   };
 
   postPatch = ''
@@ -35,7 +36,9 @@ buildPythonPackage rec {
   # The only test requires network access
   doCheck = false;
 
-  pythonImportsCheck = [ "garages_amsterdam" ];
+  pythonImportsCheck = [
+    "garages_amsterdam"
+  ];
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";

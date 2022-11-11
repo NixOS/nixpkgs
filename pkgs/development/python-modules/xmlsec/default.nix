@@ -15,17 +15,13 @@
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.12";
+  version = "1.3.13";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c86ac6ce570c9e04f04da0cd5e7d3db346e4b5b1d006311606368f17c756ef9";
+    sha256 = "sha256-kW9deOgEH2zZORq7plnajJSk/vcZbRJtQK8f9Bfyz4Y=";
   };
-
-  # https://github.com/mehcode/python-xmlsec/issues/84#issuecomment-632930116
-  patches = [
-    ./reset-lxml-in-tests.patch
-  ];
 
   nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
 
@@ -33,9 +29,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ lxml ];
 
-  # Full git clone required for test_doc_examples
   checkInputs = [ pytestCheckHook hypothesis ];
-  disabledTestPaths = [ "tests/test_doc_examples.py" ];
+
+  disabledTestPaths = [
+    # Full git clone required for test_doc_examples
+    "tests/test_doc_examples.py"
+    # test_reinitialize_module segfaults python
+    # https://github.com/mehcode/python-xmlsec/issues/203
+    "tests/test_xmlsec.py"
+  ];
 
   pythonImportsCheck = [ "xmlsec" ];
 

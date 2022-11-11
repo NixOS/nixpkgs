@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, qt4, cmake, sqlite }:
-
-stdenv.mkDerivation rec {
+{ lib, mkDerivation, fetchzip, qtbase, qttools, cmake, sqlite }:
+mkDerivation rec {
   pname = "tagainijisho";
-  version = "1.0.3";
+  version = "1.2.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/Gnurou/tagainijisho/releases/download/${version}/tagainijisho-${version}.tar.gz";
-    sha256 = "0kmg1940yiqfm4vpifyj680283ids4nsij9s750nrshwxiwwbqvg";
+    hash = "sha256-NYmvkjGl+lgFh4PPWGxitupYJ2DOyCBAYlITGb3FMj8=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ qt4 sqlite ];
+  buildInputs = [ qtbase qttools sqlite ];
+
+  cmakeFlags = [
+    "-DEMBED_SQLITE=OFF"
+  ];
 
   meta = with lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";

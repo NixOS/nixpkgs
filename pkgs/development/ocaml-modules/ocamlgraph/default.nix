@@ -21,6 +21,6 @@ buildDunePackage rec {
       downloadPage = "https://github.com/backtracking/ocamlgraph";
       description = "Graph library for OCaml";
       license = licenses.gpl2Oss;
-      maintainers = with maintainers; [ kkallio ];
+      maintainers = with maintainers; [ ];
   };
 }

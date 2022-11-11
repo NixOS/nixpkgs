@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     homepage = "https://github.com/pschmitt/roombapy";
     license = licenses.mit;
-    maintainers = with maintainers; [ justinas ];
+    maintainers = [ ];
   };
 }

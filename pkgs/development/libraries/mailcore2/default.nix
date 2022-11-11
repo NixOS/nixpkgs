@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     (
       cd unittest
-      LD_LIBRARY_PATH="$(cd ../src; pwd)" TZ=PST8PDT ./unittestcpp ../../unittest/data
+      TZ=PST8PDT ./unittestcpp ../../unittest/data
     )
   '';
 

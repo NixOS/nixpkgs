@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "2.3.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zzWgAozJrYMFyGWzoDLYbeoY+IPlgzmVhnX7lgM6BXs=";
+    sha256 = "sha256-yB1CdOqWV7hEfUYdtqQ/fd4sNfy7Sp7YJbRQhK5egLk=";
   };
 
   postPatch = ''

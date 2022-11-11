@@ -3,14 +3,13 @@
 let
   pio-pkgs = pkgs:
     let
-      python = pkgs.python3.override {
-        packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { inherit version src; };
-        };
-      };
-    in (with pkgs; [
+      python = pkgs.python3;
+      platformio = python.pkgs.callPackage ./core.nix { inherit version src; };
+    in
+    (with pkgs; [
       zlib
       git
+      xdg-user-dirs
     ]) ++ (with python.pkgs; [
       python
       setuptools
@@ -19,7 +18,8 @@ let
       platformio
     ]);
 
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "platformio";
 
   targetPkgs = pio-pkgs;

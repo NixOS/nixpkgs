@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/esr/irker";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "irkerd";
     platforms = platforms.unix;
   };
 }

@@ -1,33 +1,34 @@
 { buildPythonApplication
-, lib
-, fetchFromGitHub
-, poetry
-, termcolor
-, questionary
 , colorama
 , decli
-, tomlkit
+, fetchFromGitHub
+, git
 , jinja2
-, pyyaml
-, argcomplete
-, typing-extensions
+, lib
 , packaging
-, pytestCheckHook
+, poetry
 , pytest-freezegun
 , pytest-mock
 , pytest-regressions
-, git
+, pytestCheckHook
+, pyyaml
+, questionary
+, termcolor
+, tomlkit
+, typing-extensions
+, argcomplete
+, nix-update-script
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.20.4";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2DhWiUAkAkyNxYB1CGzUB2nGZeCWvFqSztrxasUPSXw=";
+    hash = "sha256-wo1I6QDWLxByHISmkPdass+BcKh0oxR5hD31UN/5+WQ=";
     deepClone = true;
   };
 
@@ -49,6 +50,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
+
   checkInputs = [
     pytestCheckHook
     pytest-freezegun
@@ -58,52 +60,36 @@ buildPythonApplication rec {
     git
   ];
 
-  # NB: These require full git history
+  # the tests require a functional git installation
+  # which requires a valid HOME directory.
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+
+    git config --global user.name "Nix Builder"
+    git config --global user.email "nix-builder@nixos.org"
+    git init .
+  '';
+
+  # NB: These tests require complex GnuPG setup
   disabledTests = [
-    "test_breaking_change_content_v1"
-    "test_breaking_change_content_v1_beta"
-    "test_breaking_change_content_v1_multiline"
-    "test_bump_command_prelease"
-    "test_bump_dry_run"
-    "test_bump_files_only"
-    "test_bump_local_version"
-    "test_bump_major_increment"
-    "test_bump_minor_increment"
-    "test_bump_on_git_with_hooks_no_verify_disabled"
+    "test_bump_minor_increment_signed"
+    "test_bump_minor_increment_signed_config_file"
     "test_bump_on_git_with_hooks_no_verify_enabled"
-    "test_bump_patch_increment"
-    "test_bump_tag_exists_raises_exception"
-    "test_bump_when_bumpping_is_not_support"
-    "test_bump_when_version_inconsistent_in_version_files"
-    "test_bump_with_changelog_arg"
-    "test_bump_with_changelog_config"
-    "test_bump_with_changelog_to_stdout_arg"
-    "test_changelog_config_flag_increment"
-    "test_changelog_config_start_rev_option"
-    "test_changelog_from_start"
-    "test_changelog_from_version_zero_point_two"
-    "test_changelog_hook"
-    "test_changelog_incremental_angular_sample"
-    "test_changelog_incremental_keep_a_changelog_sample"
-    "test_changelog_incremental_keep_a_changelog_sample_with_annotated_tag"
-    "test_changelog_incremental_with_release_candidate_version"
-    "test_changelog_is_persisted_using_incremental"
-    "test_changelog_multiple_incremental_do_not_add_new_lines"
-    "test_changelog_replacing_unreleased_using_incremental"
-    "test_changelog_with_different_cz"
-    "test_get_commits"
-    "test_get_commits_author_and_email"
+    "test_bump_on_git_with_hooks_no_verify_disabled"
+    "test_bump_pre_commit_changelog"
+    "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
-    "test_get_latest_tag_name"
-    "test_is_staging_clean_when_updating_file"
-    "test_none_increment_should_not_call_git_tag_and_error_code_is_not_zero"
-    "test_prevent_prerelease_when_no_increment_detected"
   ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }

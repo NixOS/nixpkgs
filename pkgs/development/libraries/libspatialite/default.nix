@@ -2,6 +2,8 @@
 , stdenv
 , fetchurl
 , pkg-config
+, validatePkgConfig
+, freexl
 , geos
 , librttopo
 , libxml2
@@ -18,13 +20,18 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/${pname}-${version}.tar.gz";
-    sha256 = "sha256-7svJQxHHgBLQWevA+uhupe9u7LEzA+boKzdTwbNAnpg=";
+    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-${version}.tar.gz";
+    hash = "sha256-7svJQxHHgBLQWevA+uhupe9u7LEzA+boKzdTwbNAnpg=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    validatePkgConfig
+    geos # for geos-config
+  ];
 
   buildInputs = [
+    freexl
     geos
     librttopo
     libxml2
@@ -35,12 +42,20 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  configureFlags = [ "--disable-freexl" ];
-
   enableParallelBuilding = true;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}
+  '';
+
+  # Failed tests (linux & darwin):
+  # - check_virtualtable6
+  # - check_drop_rename
+  doCheck = false;
+
+  preCheck = ''
+    export LD_LIBRARY_PATH=$(pwd)/src/.libs
+    export DYLD_LIBRARY_PATH=$(pwd)/src/.libs
   '';
 
   meta = with lib; {

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "smlar-unstable";
-  version = "2020-10-07";
+  version = "2021-11-08";
 
   src = fetchgit {
     url = "git://sigaev.ru/smlar.git";
-    rev = "25a4fef344f5c2b90e6a9d32144ee12b9198487d";
-    sha256 = "14mj63mbkcphrzw6890pb5n8igh27i9g7kh4wjdhgx3g7llbjbdw";
+    rev = "f2522d5f20a46a3605a761d34a3aefcdffb94e71";
+    sha256 = "sha256-AC6w7uYw0OW70pQpWbK1A3rkCnMvTJzTCAdFiY3rO7A=";
   };
 
   buildInputs = [ postgresql ];

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -45,6 +46,14 @@ in stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix build with openssl 3.0
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/transmission/-/raw/debian/3.00-2.1/debian/patches/openssl3-compat.patch";
+      hash = "sha256-v+SDTW/lCtc8B3TuhQB1pmjW/QRAGLtYncaImNNwpes=";
+    })
+  ];
+
   outputs = [ "out" "apparmor" ];
 
   cmakeFlags =
@@ -85,8 +94,6 @@ in stdenv.mkDerivation {
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ;
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
   postInstall = ''
     mkdir $apparmor

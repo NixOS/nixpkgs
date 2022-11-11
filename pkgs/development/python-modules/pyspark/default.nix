@@ -1,16 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, numpy
+, pandas
 , py4j
+, pyarrow
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "3.2.0";
+  version = "3.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfea06179edbfb4bc76a0f470bd3c38e12f00e1023e3ad0373558d07cff102ab";
+    hash = "sha256-6Z+n3pK+QGiEv9gxwyuTBqOpneRM/Dmi7vtu0HRF1fo=";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
@@ -18,12 +25,26 @@ buildPythonPackage rec {
     sed -i "s/'pypandoc'//" setup.py
 
     substituteInPlace setup.py \
-      --replace py4j==0.10.9.2 'py4j>=0.10.9,<0.11'
+      --replace py4j== 'py4j>='
   '';
 
   propagatedBuildInputs = [
     py4j
   ];
+
+  passthru.optional-dependencies = {
+    ml = [
+      numpy
+    ];
+    mllib = [
+      numpy
+    ];
+    sql = [
+      numpy
+      pandas
+      pyarrow
+    ];
+  };
 
   # Tests assume running spark instance
   doCheck = false;
@@ -35,7 +56,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Apache Spark";
     homepage = "https://github.com/apache/spark/tree/master/python";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
-    maintainers = [ maintainers.shlevy ];
+    maintainers = with maintainers; [ shlevy ];
   };
 }

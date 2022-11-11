@@ -1,28 +1,55 @@
 { lib
+, brotli
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
-, brotli
-, ijson
-, nose
+, fetchpatch
 , httpretty
-, requests_oauthlib
-, python_magic
+, ijson
+, poetry-core
+, python-magic
 , pytz
+, pytestCheckHook
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "pysnow";
   version = "0.7.16";
+  format = "pyproject";
 
-  # tests not included in pypi tarball
+
   src = fetchFromGitHub {
     owner = "rbw";
     repo = pname;
     rev = version;
-    sha256 = "0dj90w742klfcjnx7yhp0nzki2mzafqzzr0rk2dp6vxn8h58z8ww";
+    hash = "sha256-nKOPCkS2b3ObmBnk/7FTv4o4vwUX+tOtZI5OQQ4HSTY=";
   };
-  format = "pyproject";
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    ijson
+    python-magic
+    pytz
+    requests-oauthlib
+  ];
+
+  checkInputs = [
+    httpretty
+    pytestCheckHook
+  ];
+
+  patches = [
+    # Switch to peotry-core, https://github.com/rbw/pysnow/pull/183
+    (fetchpatch {
+      name = "switch-to-poetry-core.patch";
+      url = "https://github.com/rbw/pysnow/commit/f214a203432b329df5317f3a25b2c0d9b55a9029.patch";
+      sha256 = "sha256-ViRR+9WStlaQwyrLGk/tMOUAcEMY+kB61ZEKGMQJ30o=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -31,26 +58,15 @@ buildPythonPackage rec {
       --replace 'oauthlib = "^3.1.0"' 'oauthlib = "*"'
   '';
 
-  nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [
-    brotli
-    ijson
-    python_magic
-    pytz
-    requests_oauthlib
+  pythonImportsCheck = [
+    "pysnow"
   ];
-
-  checkInputs = [ nose httpretty ];
-  checkPhase = ''
-    nosetests --cover-package=pysnow --with-coverage --cover-erase
-  '';
-  pythonImportsCheck = [ "pysnow" ];
 
   meta = with lib; {
     description = "ServiceNow HTTP client library written in Python";
     homepage = "https://github.com/rbw/pysnow";
     license = licenses.mit;
-    maintainers = [ maintainers.almac ];
+    maintainers = with maintainers; [ almac ];
   };
 
 }

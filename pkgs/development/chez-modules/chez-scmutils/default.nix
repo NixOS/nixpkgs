@@ -1,13 +1,14 @@
-{ stdenv, lib, fetchgit, chez, chez-srfi, chez-mit }:
+{ stdenv, lib, fetchFromGitHub, chez, chez-srfi, chez-mit }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "chez-scmutils";
-  version = "1.0";
+  version = "0.1";
 
-  src = fetchgit {
-    url = "https://github.com/fedeinthemix/chez-scmutils.git";
-    rev = "5eaeea6289fd239358d7eed99cc9588528fb52b2";
-    sha256 = "0lb05wlf8qpgg8y0gdsyaxg1nbfx1qbaqdjvygrp64ndn8fnhq7l";
+  src = fetchFromGitHub {
+    owner = "fedeinthemix";
+    repo = "chez-scmutils";
+    rev = "v${version}";
+    sha256 = "sha256-9GBoHbLNEnPz81s2rBYO3S0bXldetwc8eu9i5CgvYFE=";
   };
 
   buildInputs = [ chez chez-srfi chez-mit ];

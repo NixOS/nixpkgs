@@ -15,7 +15,7 @@ updateHash()
 
     url="https://github.com/Ombi-app/Ombi/releases/download/v$version/$os-$arch.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
-    sriHash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)"
+    sriHash="$(nix hash to-sri --type sha256 $hash)"
 
     sed -i "s|$hashKey = \"[a-zA-Z0-9\/+-=]*\";|$hashKey = \"$sriHash\";|g" "$dirname/default.nix"
 }
@@ -25,7 +25,7 @@ updateVersion()
     sed -i "s/version = \"[0-9.]*\";/version = \"$1\";/g" "$dirname/default.nix"
 }
 
-currentVersion=$(cd $dirname && nix eval --raw '(with import ../../.. {}; ombi.version)')
+currentVersion=$(cd $dirname && nix eval --raw -f ../../.. ombi.version)
 
 latestTag=$(curl https://api.github.com/repos/Ombi-App/Ombi/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr $latestTag : 'v\(.*\)')"

@@ -5,7 +5,7 @@
 , pkgs
 }:
 build-idris-package  {
-  name = "glfw";
+  pname = "glfw";
   version = "2016-12-05";
 
   idrisDeps = [ effects ];

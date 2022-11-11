@@ -2,20 +2,34 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , attrs
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "matrix_common";
-  version = "1.0.0";
+  pname = "matrix-common";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-ZmiKRoJ8hv1USuJBDzV2U1uIFt2lRxmT+iAOqOShJK4=";
+    pname = "matrix_common";
+    inherit version;
+    sha256 = "sha256-YuEhzM2fJDQXtX7DenbcRK6xmKelxnr9a4J1mS/yq9E=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+  ];
+
+  checkInputs = [
+    unittestCheckHook
+  ];
+
   pythonImportsCheck = [ "matrix_common" ];
 
   meta = with lib; {

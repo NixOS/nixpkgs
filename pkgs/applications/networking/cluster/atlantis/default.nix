@@ -2,20 +2,23 @@
 
 buildGoModule rec {
   pname = "atlantis";
-  version = "0.16.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     rev = "v${version}";
-    sha256 = "sha256-D549pInoK8ispgcn8LYdix19Hp7wO6w2/d2Y1L/9Px8=";
+    sha256 = "sha256-5zchElzEjrIgODRUvQTQwlBz5371iJU5VOpz12Xtbcg=";
   };
 
-  vendorSha256 = null;
-
-  doCheck = false;
+  vendorSha256 = "sha256-n2yzqNjmPDP+8/ipiuUt6BqFYF0Oh0Y0TCdKsqCcrIQ=";
 
   subPackages = [ "." ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/atlantis version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/runatlantis/atlantis";

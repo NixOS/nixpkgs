@@ -1,12 +1,17 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mop";
-  version = "0.2.0";
-  rev = "bc666ec165d08b43134f7ec0bf29083ad5466243";
+  version = "1.0.0";
 
-  goPackagePath = "github.com/michaeldv/mop";
-  goDeps = ./deps.nix;
+  src = fetchFromGitHub {
+    owner = "mop-tracker";
+    repo = "mop";
+    rev = "v${version}";
+    sha256 = "sha256-oe8RG8E7xcp3ZqdDXYvpOVF3AfeSBFMherHD1YYFE/M=";
+  };
+
+  vendorSha256 = "sha256-kLQH7mMmBSsS9av+KnnEuBwiH6hzBOSozrn+1X+8774=";
 
   preConfigure = ''
     for i in *.go **/*.go; do
@@ -16,15 +21,9 @@ buildGoPackage rec {
     mv cmd mop
   '';
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/mop-tracker/mop";
-    sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
-  };
-
   meta = with lib; {
     description = "Simple stock tracker implemented in go";
-    homepage =  "https://github.com/mop-tracker/mop";
+    homepage = "https://github.com/mop-tracker/mop";
     license = licenses.mit;
   };
 }

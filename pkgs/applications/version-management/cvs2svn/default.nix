@@ -1,6 +1,7 @@
 { lib, fetchurl, makeWrapper
 , pypy2Packages
 , cvs, subversion, git, breezy
+, installShellFiles
 }:
 
 pypy2Packages.buildPythonApplication  rec {
@@ -12,7 +13,7 @@ pypy2Packages.buildPythonApplication  rec {
     sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   checkInputs = [ subversion git breezy ];
 
@@ -24,13 +25,15 @@ pypy2Packages.buildPythonApplication  rec {
     for i in bzr svn git; do
       wrapProgram $out/bin/cvs2$i \
           --prefix PATH : "${lib.makeBinPath [ cvs ]}"
+      $out/bin/cvs2$i --man > csv2$i.1
+      installManPage csv2$i.1
     done
   '';
 
   meta = with lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
     homepage = "https://github.com/mhagger/cvs2svn";
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ makefu viraptor ];
     platforms = platforms.unix;
     license = licenses.asl20;
   };

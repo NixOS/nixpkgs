@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
+{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "applgrid";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
 
   # For some reason zlib was only needed after bump to gfortran8
-  buildInputs = [ hoppet lhapdf root5 zlib ];
+  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   patches = [
     ./bad_code.patch

@@ -11,7 +11,7 @@ in
     apcupsdAddress = mkOption {
       type = types.str;
       default = ":3551";
-      description = ''
+      description = lib.mdDoc ''
         Address of the apcupsd Network Information Server (NIS).
       '';
     };
@@ -19,7 +19,7 @@ in
     apcupsdNetwork = mkOption {
       type = types.enum ["tcp" "tcp4" "tcp6"];
       default = "tcp";
-      description = ''
+      description = lib.mdDoc ''
         Network of the apcupsd Network Information Server (NIS): one of "tcp", "tcp4", or "tcp6".
       '';
     };

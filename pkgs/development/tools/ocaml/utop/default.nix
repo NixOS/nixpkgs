@@ -1,26 +1,40 @@
 { lib, stdenv, fetchurl, ocaml, findlib
-, lambdaTerm, cppo, makeWrapper, buildDunePackage
+, lambda-term, cppo, makeWrapper, buildDunePackage
+, zed, logs, lwt, react, lwt_react
 }:
 
-if !lib.versionAtLeast ocaml.version "4.03"
-then throw "utop is not available for OCaml ${ocaml.version}"
-else
+let
+  switch =
+    if lib.versionAtLeast ocaml.version "4.08"
+    then
+      {
+        version = "2.10.0";
+        sha256 = "sha256-R10WovnqYcYCrDJnPuIQx2zHaPchSYfXDAaVMsJ4LQA=";
+        duneVersion = "3";
+        propagatedBuildInputs = [ lambda-term zed logs ];
+      }
+    else
+      {
+        version = "2.9.2";
+        sha256 = "sha256-kvFBCe69TRQIWvZV47SH7ISus9k8afGRw5WLKzKqw08=";
+        duneVersion = "2";
+        propagatedBuildInputs = [ lambda-term ];
+      };
+in
 
 buildDunePackage rec {
   pname = "utop";
-  version = "2.8.0";
 
-  useDune2 = true;
+  inherit (switch) version duneVersion propagatedBuildInputs;
+
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "0mi571ifjzq4wcjarn8q1b7yl8nxjm1jfx3afac224lqwn6bhb2d";
+    sha256 = switch.sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cppo ];
-
-  propagatedBuildInputs = [ lambdaTerm ];
+  nativeBuildInputs = [ makeWrapper cppo ];
 
   postFixup =
    let

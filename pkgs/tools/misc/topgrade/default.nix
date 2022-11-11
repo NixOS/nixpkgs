@@ -1,21 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation, installShellFiles }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, AppKit
+, Cocoa
+, Foundation
+, installShellFiles
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "8.2.0";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
-    owner = "r-darwish";
-    repo = pname;
+    owner = "topgrade-rs";
+    repo = "topgrade";
     rev = "v${version}";
-    sha256 = "sha256-WyiEKC5WUwIGCaxXqiqNyOcGVZgfd2lVFMxQxhgJhMc=";
+    sha256 = "sha256-dcMTjJTcGjE+2sVuNlb3S/MECLMM9mPh27z8Kr+wBEI=";
   };
 
-  cargoSha256 = "sha256-ZcOSHEZHGa1XhGQlW4pR5hBJ2SpSbkKuRS6OSHGg9Lo=";
-
-  buildInputs = lib.optional stdenv.isDarwin Foundation;
+  cargoSha256 = "sha256-UGR0k1bmhRFSKUCpA/DlI0XfMy/JTVWe8nIoiD5QVqc=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit Cocoa Foundation ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-framework" "AppKit" ];
 
   postInstall = ''
     installManPage topgrade.8
@@ -23,8 +33,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Upgrade all the things";
-    homepage = "https://github.com/r-darwish/topgrade";
+    homepage = "https://github.com/topgrade-rs/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Br1ght0ne hugoreeves SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 xyenon ];
   };
 }

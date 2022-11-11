@@ -1,22 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader, QuartzCore }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "0.10.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    rev = "utils-${version}";
-    sha256 = "sha256-bOUcLtT5iPZuUgor2d/pJQ4Y+I1LMzREgj1cwLAvd+s=";
+    rev = "v${version}";
+    hash = "sha256-jHjV2A949m/KyAkkdaP00d5j+V96jRQah4LKs8LcYQk=";
   };
 
-  cargoSha256 = "sha256-SSEG8JApQrgP7RWlXqb+xuy482oQZ5frE2IaVMruuG0=";
+  cargoHash = "sha256-XbEgcPLL3UZ4zdV90AEFI8RlkZAMuLXznlkBcAG/0l8=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
+
+  buildInputs = lib.optional stdenv.isDarwin QuartzCore;
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;

@@ -5,11 +5,12 @@
 , dbus
 , libgcrypt
 , pam
-, python2
+, python3
 , glib
 , libxslt
 , gettext
 , gcr
+, autoreconfHook
 , libcap_ng
 , libselinux
 , p11-kit
@@ -22,19 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "40.0";
+  version = "42.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0cdrlcw814zayhvlaxqs1sm9bqlfijlp22dzzd0g5zg2isq4vlm3";
+    sha256 = "x/TQQMx2prf+Z+CO+RBpEcPIDUD8iMv8jiaEpMlG4+Y=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libxslt
+    # Upstream uses ancient autotools to pre-generate the scripts.
+    autoreconfHook
     docbook-xsl-nons
     docbook_xml_dtd_43
     wrapGAppsHook
@@ -51,8 +54,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  # In 3.20.1, tests do not support Python 3
-  checkInputs = [ dbus python2 ];
+  checkInputs = [ dbus python3 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories

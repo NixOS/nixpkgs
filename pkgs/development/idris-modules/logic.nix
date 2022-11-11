@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "logic";
+  pname = "logic";
   version = "2016-12-02";
 
   idrisDeps = [ bifunctors ];

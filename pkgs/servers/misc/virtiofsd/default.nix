@@ -1,17 +1,21 @@
-{ lib, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
+{ lib, stdenv, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
 
 rustPlatform.buildRustPackage rec {
   pname = "virtiofsd";
-  version = "1.0.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
     rev = "v${version}";
-    sha256 = "010xf482qip91mv91wy9zjdsq0gfg1fd6iclrcry0nfnwlbigbwd";
+    sha256 = "sha256-r8r7rDIFgZqxnudVQqO8kOdfNoMkV2LWiW+yE1qJgJM=";
   };
 
-  cargoSha256 = "0bfvqbmvkf17slra5k0nnva6j6w07769k226qnbzb3947zf4x2ga";
+  cargoSha256 = "sha256-bK+N11SmdXrWU4HlACkOWav/xuwRUvXrbLC394N9urs=";
+
+  LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
+  LIBCAPNG_LINK_TYPE =
+    if stdenv.hostPlatform.isStatic then "static" else "dylib";
 
   buildInputs = [ libcap_ng libseccomp ];
 

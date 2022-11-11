@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
+{ lib, stdenv, fetchFromGitHub, gfortran
 , python3, util-linux, which
 
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    coreutils
     gfortran
-    gnused
     python3
     util-linux
     which
@@ -41,6 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Library targeting Intel Architecture for specialized dense and sparse matrix operations, and deep learning primitives";
     license = licenses.bsd3;
     homepage = "https://github.com/hfp/libxsmm";

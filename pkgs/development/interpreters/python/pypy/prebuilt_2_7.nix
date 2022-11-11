@@ -7,7 +7,6 @@
 # Dependencies
 , bzip2
 , zlib
-, openssl_1_0_2
 , expat
 , ncurses6
 , tcl-8_5
@@ -50,7 +49,6 @@ let
   deps = [
     bzip2
     zlib
-    openssl_1_0_2
     expat
     ncurses6
     tcl-8_5

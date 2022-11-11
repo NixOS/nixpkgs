@@ -3,17 +3,21 @@
 , fetchurl
 , bison
 , cdrtools
-, docbook5
+, docbook_xml_dtd_412
+, docbook-xsl-nons
 , dvdauthor
 , dvdplusrwtools
 , ffmpeg
 , flex
 , fontconfig
 , gettext
+, glib
+, gobject-introspection
 , libexif
-, makeWrapper
+, libjpeg
 , pkg-config
-, wxGTK30
+, wrapGAppsHook
+, wxGTK30-gtk3 # crash with wxGTK30 with GTK2 compat
 , wxSVG
 , xine-ui
 , xmlto
@@ -37,43 +41,50 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    bison
+    docbook_xml_dtd_412
+    docbook-xsl-nons
+    flex
+    gettext
+    gobject-introspection
     pkg-config
+    wrapGAppsHook
+    xmlto
+    zip
   ];
   buildInputs = [
-    bison
     cdrtools
-    docbook5
     dvdauthor
     dvdplusrwtools
     ffmpeg
-    flex
     fontconfig
-    gettext
+    glib
     libexif
-    makeWrapper
+    libjpeg
     wxSVG
-    wxGTK30
+    wxGTK30-gtk3
     xine-ui
-    xmlto
-    zip
  ]
   ++ optionals dvdisasterSupport [ dvdisaster ]
   ++ optionals udevSupport [ udev ]
   ++ optionals dbusSupport [ dbus ]
   ++ optionals thumbnailSupport [ libgnomeui ];
 
+  enableParallelBuilding = true;
 
-  postInstall = let
-    binPath = makeBinPath [
+  preFixup = let
+    binPath = makeBinPath ([
       cdrtools
       dvdauthor
       dvdplusrwtools
-    ]; in
+    ] ++ optionals dvdisasterSupport [ dvdisaster ]);
+    in
     ''
-       wrapProgram $out/bin/dvdstyler --prefix PATH ":" "${binPath}"
-    '';
+      gappsWrapperArgs+=(
+        --prefix PATH : "${binPath}"
+      )
+   '';
 
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";

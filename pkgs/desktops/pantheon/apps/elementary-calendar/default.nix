@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, appstream-glib
-, desktop-file-utils
 , meson
 , ninja
 , pkg-config
@@ -11,14 +10,13 @@
 , vala
 , wrapGAppsHook
 , clutter
-, elementary-icon-theme
 , evolution-data-server
 , folks
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , granite
 , gtk3
-, libchamplain
+, libchamplain_libsoup3
 , libgee
 , libhandy
 , libical
@@ -26,18 +24,32 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
     rev = version;
-    sha256 = "sha256-LaVJ7QLc0UdSLgLIuHP4Anc7kPUelZW9PnIWuqKGtEQ=";
+    sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
   };
 
+  patches = [
+    # build: support evolution-data-server 3.46
+    # https://github.com/elementary/calendar/pull/758
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/62c20e5786accd68b96c423b04e32c043e726cac.patch";
+      sha256 = "sha256-xatxoSwAIHiUA03vvBdM8HSW27vhPLvAxEuGK0gLiio=";
+    })
+
+    # GridDay: Fix day in month in grid with GLib 2.73.1+
+    # https://github.com/elementary/calendar/pull/763
+    (fetchpatch {
+      url = "https://github.com/elementary/calendar/commit/20b0983c85935bedef065b786ec8bbca55ba7d9e.patch";
+      sha256 = "sha256-Tw9uNqqRAC+vOp7EWzZVeDmZxt3hTGl9UIP21FcunqA=";
+    })
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -48,14 +60,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter
-    elementary-icon-theme
     evolution-data-server
     folks
     geoclue2
-    geocode-glib
+    geocode-glib_2
     granite
     gtk3
-    libchamplain
+    libchamplain_libsoup3
     libgee
     libhandy
     libical

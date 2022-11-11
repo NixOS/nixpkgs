@@ -46,6 +46,7 @@ in mkDerivation {
   meta = with lib; {
     description = "For converting between different versions of .dwg and .dxf";
     homepage = "https://www.opendesign.com/guestfiles/oda_file_converter";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ nagisa ];
     platforms = [ "x86_64-linux" ];

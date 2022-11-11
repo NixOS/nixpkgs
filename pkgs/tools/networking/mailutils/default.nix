@@ -22,6 +22,7 @@
 , python3
 , sasl
 , system-sendmail
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-wMWzj+qLRaSvzUNkh/Knb9VSUJLQN4gTputVQsIScTk=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     sed -i -e '/chown root:mail/d' \
@@ -61,6 +64,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     sasl
+    libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ];
 
   patches = [

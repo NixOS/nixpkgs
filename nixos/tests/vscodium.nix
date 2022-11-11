@@ -32,6 +32,14 @@ let
         maintainers = [ synthetica turion ];
       };
       enableOCR = true;
+
+      # testScriptWithTypes:55: error: Item "function" of
+      # "Union[Callable[[Callable[..., Any]], ContextManager[Any]], ContextManager[Any]]"
+      # has no attribute "__enter__"
+      #     with codium_running:
+      #          ^
+      skipTypeCheck = true;
+
       testScript = ''
         @polling_condition
         def codium_running():
@@ -62,15 +70,15 @@ let
 
             # Save the file
             machine.send_key('ctrl-s')
-            machine.wait_for_text('Save')
+            machine.wait_for_text('(Save|Desktop|alice|Size)')
             machine.screenshot('save_window')
             machine.send_key('ret')
 
             # (the default filename is the first line of the file)
             machine.wait_for_file(f'/home/alice/{test_string}')
 
-        machine.send_key('ctrl-q')
-        machine.wait_until_fails('pgrep -x codium')
+        # machine.send_key('ctrl-q')
+        # machine.wait_until_fails('pgrep -x codium')
       '';
     });
 

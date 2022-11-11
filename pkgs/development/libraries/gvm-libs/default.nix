@@ -12,6 +12,7 @@
 , libpcap
 , libssh
 , libuuid
+, libxcrypt
 , libxml2
 , pkg-config
 , zlib
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "21.4.3";
+  version = "21.4.4";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1NVLGyUDUnOy3GYDtVyhGTvWOYoWp95EbkgTlFWuxE8=";
+    sha256 = "sha256-Ps8J9JuLKcrowl9wgZ3Wm7JTXyiejQPDr4OV/IvDy+I=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     libpcap
     libssh
     libuuid
+    libxcrypt
     libxml2
     zlib
   ];

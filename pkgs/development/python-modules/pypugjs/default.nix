@@ -1,21 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, six, chardet, nose
-, django, jinja2, tornado, pyramid, pyramid_mako, Mako }:
+{ lib
+, buildPythonPackage
+, charset-normalizer
+, django
+, fetchFromGitHub
+, jinja2
+, Mako
+, nose
+, pyramid
+, pyramid_mako
+, pytestCheckHook
+, six
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.9.10";
+  version = "5.9.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "082dae87d44e184030b66da9ea9bd1a0209f86c089d8f2bd61064b97a7511a28";
+  src = fetchFromGitHub {
+    owner = "kakulukia";
+    repo = "pypugjs";
+    rev = "v${version}";
+    sha256 = "sha256-6tIhKCa8wg01gNFygCS6GdUHfbWBu7wOZeMkCExRR34=";
   };
 
-  propagatedBuildInputs = [ six chardet ];
-  checkInputs = [ nose django jinja2 tornado pyramid pyramid_mako Mako ];
+  propagatedBuildInputs = [ six charset-normalizer ];
 
-  checkPhase = ''
-    nosetests pypugjs
-  '';
+  checkInputs = [
+    django
+    jinja2
+    Mako
+    nose
+    tornado
+    pyramid
+    pyramid_mako
+    pytestCheckHook
+  ];
+
+  pytestCheckFlags = [
+    "pypugjs/testsuite"
+  ];
 
   meta = with lib; {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";

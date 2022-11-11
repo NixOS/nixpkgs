@@ -22,16 +22,20 @@
 
 buildPythonPackage rec {
   pname = "qiskit-finance";
-  version = "0.3.0";
+  version = "0.3.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "1wpx519apnpp25yiq20warg4q8yv09x8fk0m8b9kyp199x86iffp";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-1XM4gBuMsvjwU4GSdQJobMyyDFZOOTbwvnUPG0nXFoc=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt --replace "pandas<1.4.0" "pandas"
+  '';
 
   propagatedBuildInputs = [
     fastdtw

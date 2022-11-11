@@ -1,5 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub, six, python-axolotl, pytest
-, isPy3k, consonance, appdirs
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, appdirs
+, consonance
+, protobuf
+, python-axolotl
+, six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,19 +25,28 @@ buildPythonPackage rec {
     sha256 = "1pz0r1gif15lhzdsam8gg3jm6zsskiv2yiwlhaif5rl7lv3p0v7q";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    HOME=$(mktemp -d) py.test yowsup
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "argparse" "" \
+      --replace "==" ">=" \
   '';
 
-  patches = [ ./dependency-fixes.patch ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ six python-axolotl consonance appdirs ];
+  propagatedBuildInputs = [
+    appdirs
+    consonance
+    protobuf
+    python-axolotl
+    six
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

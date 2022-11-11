@@ -13,7 +13,9 @@ def quote(s: str) -> str:
 def main() -> None:
     data = toml.load(sys.stdin)
 
-    assert list(data.keys()) == ["source"]
+    # There is no dependency to vendor in this project.
+    if not list(data.keys()) == ["source"]:
+        return
 
     # this value is non deterministic
     data["source"]["vendored-sources"]["directory"] = "@vendor@"

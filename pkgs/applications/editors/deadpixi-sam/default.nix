@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace config.mk.def \
       --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2" \
-      --replace "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc"
+      --replace "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
+      --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';
 
   CFLAGS = "-D_DARWIN_C_SOURCE";
@@ -24,8 +25,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   postInstall = ''
+    substituteInPlace deadpixi-sam.desktop \
+      --replace "accessories-text-editor" "$out/share/icons/hicolor/scalable/apps/sam.svg"
     mkdir -p $out/share/applications
+    mkdir -p $out/share/icons/hicolor/scalable/apps
     mv deadpixi-sam.desktop $out/share/applications
+    mv sam.svg $out/share/icons/hicolor/scalable/apps
   '';
 
   meta = with lib; {

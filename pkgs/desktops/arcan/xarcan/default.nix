@@ -36,24 +36,16 @@
 , xtrans
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0.6.0+unstable=2021-06-14";
+  version = "unstable-2022-06-14";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "98d28a5f2c6860bb191fbc1c9e577c18e4c9a9b7";
-    hash = "sha256-UTIVDKnYD/q0K6G7NJUKh1tHcqnsuiJ/cQxWuPMJ2G4=";
+    repo = "xarcan";
+    rev = "02111f4925453c0c545e9193c6a5e22c0d4e98c3";
+    hash = "sha256-rp2sNRbv0OZdfyqZfsv/v3TGQY5uyXWqbvlmUDd7iBk=";
   };
-
-  patches = [
-    # fix build with meson 0.60
-    (fetchpatch {
-      url = "https://github.com/letoram/xarcan/commit/b67e514dbb59bffc23b75d47ca7f24e96c4aeb05.patch";
-      sha256 = "sha256-tSQmNy1Id6nDIN+03dc1+rEEF8fMq0yJBiscNM60xic=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -122,6 +114,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
-}
+})

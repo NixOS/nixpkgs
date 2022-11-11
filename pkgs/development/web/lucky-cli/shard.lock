@@ -2,13 +2,17 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 0.14.2
+    version: 1.0.0
 
-  future:
-    git: https://github.com/crystal-community/future.cr.git
-    version: 0.1.0
+  lucky_task:
+    git: https://github.com/luckyframework/lucky_task.git
+    version: 0.1.1
+
+  nox:
+    git: https://github.com/matthewmcgarvey/nox.git
+    version: 0.2.0
 
   teeplate:
     git: https://github.com/luckyframework/teeplate.git
-    version: 0.8.2
+    version: 0.8.5
 

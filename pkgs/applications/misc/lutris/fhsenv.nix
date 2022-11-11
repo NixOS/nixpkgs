@@ -7,7 +7,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome.gnome-desktop gnome.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome-desktop gnome.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -61,6 +61,9 @@ in buildFHSUserEnv {
 
     # Osmose
     qt4
+
+    # Overwatch 2
+    libunwind
 
     # PPSSPP
     glew snappy
@@ -122,6 +125,15 @@ in buildFHSUserEnv {
     ln -sf ${lutris-unwrapped}/share/applications $out/share
     ln -sf ${lutris-unwrapped}/share/icons $out/share
   '';
+
+  # allows for some gui applications to share IPC
+  # this fixes certain issues where they don't render correctly
+  unshareIpc = false;
+
+  # Some applications such as Natron need access to MIT-SHM or other
+  # shared memory mechanisms. Unsharing the pid namespace
+  # breaks the ability for application to reference shared memory.
+  unsharePid = false;
 
   meta = {
     inherit (lutris-unwrapped.meta)

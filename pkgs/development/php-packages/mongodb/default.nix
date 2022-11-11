@@ -14,8 +14,8 @@
 buildPecl {
   pname = "mongodb";
 
-  version = "1.12.0";
-  sha256 = "sha256-DZ9nCwISiLtsmwYJefGR8dp3PXKRAGcxZvOLYX4kMX4=";
+  version = "1.14.1";
+  sha256 = "sha256-uuKodv3ME9bNATn7Wyrv1RydXISmpPxTvr2+PxYtg14=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

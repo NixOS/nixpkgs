@@ -1,8 +1,9 @@
-{ self, callPackage }:
+{ self, callPackage, passthruFun }:
 callPackage ./default.nix {
-  inherit self;
-  version = "2.1.0-2021-10-27";
-  rev = "b4b2dce9fc3ffaaaede39b36d06415311e2aa516";
+  sourceVersion = { major = "2"; minor = "1"; patch = "0"; };
+  inherit self passthruFun;
+  version = "2.1.0-2022-10-04";
+  rev = "6c4826f12c4d33b8b978004bc681eb1eef2be977";
   isStable = false;
-  sha256 = "185s071aa0yffz8npgdxj7l98cs987vddb2l5pzfcdqfj41gn55q";
+  hash = "sha256-GMgoSVHrfIuLdk8mW9XgdemNFsAkkQR4wiGGjaAXAKg=";
 }

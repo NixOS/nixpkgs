@@ -9,7 +9,7 @@
 , six
 , nose
 , Mako
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? false, cudaPackages
 , openclSupport ? true, ocl-icd, clblas
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   configurePhase = "cmakeConfigurePhase";
 
   libraryPath = lib.makeLibraryPath (
-    lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out ]
+    lib.optionals cudaSupport (with cudaPackages; [ cudatoolkit.lib cudatoolkit.out ])
     ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 

@@ -7,8 +7,7 @@ if [[ $# -lt 1 ]]; then
     exit 1
 fi
 
-
-VERSION=$1
+VERSION="$1"
 
 declare -A SYSTEMS HASHES
 SYSTEMS=(
@@ -20,8 +19,8 @@ SYSTEMS=(
     [aarch64-darwin]=darwin-arm64
 )
 
-hashfile="$(nix-prefetch-url --print-path "https://github.com/electron/electron/releases/download/v${VERSION}/SHASUMS256.txt" 2>/dev/null | tail -n1)"
-headers="$(nix-prefetch-url "https://atom.io/download/electron/v${VERSION}/node-v${VERSION}-headers.tar.gz")"
+hashfile="$(nix-prefetch-url --print-path "https://github.com/electron/electron/releases/download/v${VERSION}/SHASUMS256.txt" | tail -n1)"
+headers="$(nix-prefetch-url "https://artifacts.electronjs.org/headers/dist/v${VERSION}/node-v${VERSION}-headers.tar.gz")"
 
 # Entry similar to the following goes in default.nix:
 

@@ -4,7 +4,7 @@
 , fetchurl
 , makeDesktopItem
 , copyDesktopItems
-, testVersion
+, testers
 , opensupaplex
 , SDL2
 , SDL2_mixer
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = opensupaplex;
     command = "opensupaplex --help";
     version = "v${version}";
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     icon = "open-supaplex";
     desktopName = "OpenSupaplex";
     comment = meta.description;
-    categories = "Application;Game;";
+    categories = [ "Application" "Game" ];
   })];
 
   meta = with lib; {

@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "tparsec";
+  pname = "tparsec";
   version = "2020-02-11";
 
   ipkgName = "TParsec";

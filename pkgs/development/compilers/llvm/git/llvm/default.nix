@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta
 , pkgsBuildBuild
-, src
+, monorepoSrc
+, runCommand
 , fetchpatch
 , cmake
 , python3
@@ -22,7 +23,7 @@
   || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? false
-}:
+} @args:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -35,8 +36,16 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    cp -r ${monorepoSrc}/third-party "$out"
+  '' + lib.optionalString enablePolly ''
+    cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+  '');
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -51,12 +60,6 @@ in stdenv.mkDerivation (rec {
   checkInputs = [ which ];
 
   patches = [
-    # When cross-compiling we configure llvm-config-native with an approximation
-    # of the flags used for the normal LLVM build. To avoid the need for building
-    # a native libLLVM.so (which would fail) we force llvm-config to be linked
-    # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
-
     ./gnu-install-dirs.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
@@ -86,11 +89,21 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
+    rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+  '';
+
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -111,7 +124,7 @@ in stdenv.mkDerivation (rec {
     # Some flags don't need to be repassed because LLVM already does so (like
     # CMAKE_BUILD_TYPE), others are irrelevant to the result.
     flagsForLlvmConfig = [
-      "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/"
+      "-DLLVM_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/llvm"
       "-DLLVM_ENABLE_RTTI=ON"
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -191,7 +204,7 @@ in stdenv.mkDerivation (rec {
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config"
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
+      --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
@@ -205,6 +218,9 @@ in stdenv.mkDerivation (rec {
     && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   checkTarget = "check-all";
+
+  # For the update script:
+  passthru.monorepoSrc = monorepoSrc;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {

@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
     wrapQtApp "$out/bin/zbarcam-qt"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Bar code reader";
     longDescription = ''
@@ -96,5 +98,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";
+    mainProgram = "zbarimg";
   };
 }

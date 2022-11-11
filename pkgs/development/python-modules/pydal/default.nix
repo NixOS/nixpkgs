@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20220114.1";
+  version = "20220916.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c872f1fd6759eef497d72cf33fe57537be86ccf23515bd47e1f8a04d862236e";
+    sha256 = "sha256-GKnJ1aRLuJp+wQVjzL51o/KteGD5k4X221bDzpIiEEQ=";
   };
 
   postPatch = ''

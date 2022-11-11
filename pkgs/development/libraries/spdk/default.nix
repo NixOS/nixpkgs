@@ -10,9 +10,19 @@
 , libuuid
 , numactl
 , openssl
+, fetchurl
 }:
 
-stdenv.mkDerivation rec {
+let
+  # The old version has some CVEs howver they should not affect SPDK's usage of the framework: https://github.com/NixOS/nixpkgs/pull/171648#issuecomment-1121964568
+  dpdk' = dpdk.overrideAttrs (old: rec {
+    name = "dpdk-21.11";
+    src = fetchurl {
+      url = "https://fast.dpdk.org/rel/${name}.tar.xz";
+      sha256 = "sha256-Mkbj7WjuKzaaXYviwGzxCKZp4Vf01Bxby7sha/Wr06E=";
+    };
+  });
+in stdenv.mkDerivation rec {
   pname = "spdk";
   version = "21.10";
 
@@ -40,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cunit dpdk libaio libbsd libuuid numactl openssl ncurses
+    cunit dpdk' libaio libbsd libuuid numactl openssl ncurses
   ];
 
   postPatch = ''
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-dpdk=${dpdk}" ];
+  configureFlags = [ "--with-dpdk=${dpdk'}" ];
 
   NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.
   # otherwise does not find strncpy when compiling

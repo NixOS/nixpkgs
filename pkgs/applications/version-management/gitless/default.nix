@@ -15,16 +15,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-xo5EWtP2aN8YzP8ro3bnxZwUGUp0PHD0g8hk+Y+gExE=";
   };
 
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+
   propagatedBuildInputs = with python3.pkgs; [
     sh
     pygit2
     clint
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pygit2==0.28.2" "pygit2>=0.28.2"
-  '';
+  pythonRelaxDeps = [ "pygit2" ];
 
   doCheck = false;
 

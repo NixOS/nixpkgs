@@ -1,20 +1,26 @@
 { lib
 , fetchFromSourcehut
 , buildGoModule
+, unzip
 }:
 
-buildGoModule rec {
+buildGoModule (rec {
   pname = "pagessrht";
-  version = "0.5.2";
+  version = "0.7.4";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-yEM122uhF0MNkMlNXyvBSfkLogRQETeuBl2K66kivac=";
+    sha256 = "sha256-WM9T2LS8yIqaR0PQQRgMk/tiMYcw8DZVPMqMWkj/5RY=";
   };
 
-  vendorSha256 = "sha256-udr+1y5ApQCSPhs3yQTTi9QfzRbz0A9COYuFMjQGa74=";
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: server" ""
+  '';
+
+  vendorSha256 = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
@@ -27,4 +33,6 @@ buildGoModule rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
-}
+  # There is no ./loaders but this does not cause troubles
+  # to go generate
+} // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.9"; })

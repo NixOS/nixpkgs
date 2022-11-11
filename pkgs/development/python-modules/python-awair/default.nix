@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-awair";
-  version = "0.2.2";
+  version = "0.2.4";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ahayworth";
     repo = "python_awair";
     rev = version;
-    sha256 = "sha256-5+s1aSvt+rXyumvf/qZ58Uvmq0p45mu23Djbwgih3qI=";
+    sha256 = "sha256-zdZyA6adM4bfEYupdZl7CzMjwyfRkQBrntNh0MusynE=";
   };
 
   nativeBuildInputs = [ poetry-core ];

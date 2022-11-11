@@ -23,16 +23,16 @@ in
   imports = [ (mkRemovedOptionModule [ "services" "thelounge" "private" ] "The option was renamed to `services.thelounge.public` to follow upstream changes.") ];
 
   options.services.thelounge = {
-    enable = mkEnableOption "The Lounge web IRC client";
+    enable = mkEnableOption (lib.mdDoc "The Lounge web IRC client");
 
     public = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Make your The Lounge instance public.
-        Setting this to <literal>false</literal> will require you to configure user
-        accounts by using the (<command>thelounge</command>) command or by adding
-        entries in <filename>${dataDir}/users</filename>. You might need to restart
+        Setting this to `false` will require you to configure user
+        accounts by using the ({command}`thelounge`) command or by adding
+        entries in {file}`${dataDir}/users`. You might need to restart
         The Lounge after making changes to the state directory.
       '';
     };
@@ -40,7 +40,7 @@ in
     port = mkOption {
       type = types.port;
       default = 9000;
-      description = "TCP port to listen on for http connections.";
+      description = lib.mdDoc "TCP port to listen on for http connections.";
     };
 
     extraConfig = mkOption {
@@ -54,14 +54,14 @@ in
           port = 6697;
         };
       }'';
-      description = ''
-        The Lounge's <filename>config.js</filename> contents as attribute set (will be
+      description = lib.mdDoc ''
+        The Lounge's {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 
         The options defined here will be merged to the default configuration file.
-        Note: In case of duplicate configuration, options from <option>extraConfig</option> have priority.
+        Note: In case of duplicate configuration, options from {option}`extraConfig` have priority.
 
-        Documentation: <link xlink:href="https://thelounge.chat/docs/server/configuration" />
+        Documentation: <https://thelounge.chat/docs/server/configuration>
       '';
     };
 
@@ -69,9 +69,9 @@ in
       default = [ ];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
-      description = ''
+      description = lib.mdDoc ''
         The Lounge plugins to install. Plugins can be found in
-        <literal>pkgs.theLoungePlugins.plugins</literal> and <literal>pkgs.theLoungePlugins.themes</literal>.
+        `pkgs.theLoungePlugins.plugins` and `pkgs.theLoungePlugins.themes`.
       '';
     };
   };

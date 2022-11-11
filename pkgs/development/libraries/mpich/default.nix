@@ -11,17 +11,20 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "4.0";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "0r7zzcj8b9dbf5lp2d81wcvffi38c1zchkgzyxckk51adv4ijx6z";
+    sha256 = "sha256-F0BuqQpu1OzVvjnJ3cv6yTQ+arT3esToxevko+O2xQE=";
   };
 
   configureFlags = [
     "--enable-shared"
     "--enable-sharedlib"
     "--with-pm=${withPm}"
+  ] ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
+    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
+    "FCFLAGS=-fallow-argument-mismatch"
   ];
 
   enableParallelBuilding = true;

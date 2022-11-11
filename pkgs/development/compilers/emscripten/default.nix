@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "2.0.27";
+  version = "3.1.17";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "1dpfib2nmbvskqlaqw3kvaay69qpa7d155hd4w05c2xgmahmrd4n";
+    sha256 = "sha256-xOt9Znn5kCcieRHnXk794rMpgTzoR8pIKBXv/GeKcuw=";
     rev = version;
   };
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
     # precompile libc (etc.) in all variants:
     pushd $TMPDIR
-    echo 'int main() { return 42; }' >test.c
+    echo 'int __main_argc_argv() { return 42; }' >test.c
     for LTO in -flto ""; do
       # wasm2c doesn't work with PIC
       $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c

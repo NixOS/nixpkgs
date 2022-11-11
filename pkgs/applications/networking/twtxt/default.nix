@@ -23,6 +23,11 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook tox ];
 
+  disabledTests = [
+     # Disable test using relative date and time
+     "test_tweet_relative_datetime"
+  ];
+
   meta = with lib; {
     description = "Decentralised, minimalist microblogging service for hackers";
     homepage = "https://github.com/buckket/twtxt";

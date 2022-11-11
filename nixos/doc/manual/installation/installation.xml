@@ -14,4 +14,5 @@
  <xi:include href="../from_md/installation/installing.chapter.xml" />
  <xi:include href="../from_md/installation/changing-config.chapter.xml" />
  <xi:include href="../from_md/installation/upgrading.chapter.xml" />
+ <xi:include href="../from_md/installation/building-nixos.chapter.xml" />
 </part>

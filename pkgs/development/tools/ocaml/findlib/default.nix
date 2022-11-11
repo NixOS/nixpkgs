@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, m4, ncurses, ocaml, writeText }:
+{ lib, stdenv, fetchurl, ncurses, ocaml, writeText }:
 
 stdenv.mkDerivation rec {
-  pname = "ocaml-findlib";
-  version = "1.9.1";
+  pname = "ocaml${ocaml.version}-findlib";
+  version = "1.9.6";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
+    sha256 = "sha256-LfmWJ5rha2Bttf9Yefk9v63giY258aPoL3+EX6opMKI=";
   };
 
-  nativeBuildInputs = [m4 ocaml];
-  buildInputs = [ ncurses ];
+  nativeBuildInputs = [ ocaml ];
+  buildInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
@@ -54,14 +54,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
+    homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maggesi vbmithr ];
+    mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [];
-    maintainers = [
-      lib.maintainers.maggesi
-      lib.maintainers.vbmithr
-    ];
   };
 }
 

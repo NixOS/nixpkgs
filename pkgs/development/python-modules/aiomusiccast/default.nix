@@ -4,11 +4,12 @@
 , fetchFromGitHub
 , poetry-core
 , aiohttp
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.14.3";
+  version = "0.14.5";
 
   format = "pyproject";
   disabled = pythonOlder "3.8";
@@ -16,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "aiomusiccast";
-    rev = version;
-    hash = "sha256-ELdNxeU9dajWr4VeOyuvNrSi7B+ImVJM/BlZsw3tcKE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YssBrG4sFtQtrzKU/O/tWEVL9eq8dpszejY/1So5Mec=";
   };
 
   postPatch = ''
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    setuptools
   ];
 
   # upstream has no tests

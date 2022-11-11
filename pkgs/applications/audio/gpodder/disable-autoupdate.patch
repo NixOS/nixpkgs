@@ -11,41 +11,20 @@
      </section>
      <section>
        <item>
-@@ -201,4 +197,4 @@
-     </submenu>
-   </menu>
- </interface>
--<!-- :noTabs=true:tabSize=2:indentSize=2: -->
-\ No newline at end of file
-+<!-- :noTabs=true:tabSize=2:indentSize=2: -->
 --- a/src/gpodder/config.py
 +++ b/src/gpodder/config.py
-@@ -91,13 +91,6 @@
-         'retries': 3,  # number of retries when downloads time out
-     },
+@@ -94,7 +94,7 @@
  
--    # Software updates from gpodder.org
--    'software_update': {
+     # Software updates from gpodder.org
+     'software_update': {
 -        'check_on_startup': True,  # check for updates on start
--        'last_check': 0,  # unix timestamp of last update check
--        'interval': 5,  # interval (in days) to check for updates
--    },
--
-     'ui': {
-         # Settings for the Command-Line Interface
-         'cli': {
++       'check_on_startup': False,  # check for updates on start
+         'last_check': 0,  # unix timestamp of last update check
+         'interval': 5,  # interval (in days) to check for updates
+     },
 --- a/src/gpodder/gtkui/main.py
 +++ b/src/gpodder/gtkui/main.py
-@@ -224,7 +224,7 @@
-             util.idle_add(self.subscribe_to_url, self.options.subscribe)
-         elif not self.channels:
-             self.on_itemUpdate_activate()
--        elif self.config.software_update.check_on_startup:
-+        elif False and self.config.software_update.check_on_startup:
-             # Check for software updates from gpodder.org
-             diff = time.time() - self.config.software_update.last_check
-             if diff > (60 * 60 * 24) * self.config.software_update.interval:
-@@ -3288,6 +3288,7 @@
+@@ -3445,6 +3445,7 @@
          If silent=False, a message will be shown even if no updates are
          available (set silent=False when the check is manually triggered).
          """

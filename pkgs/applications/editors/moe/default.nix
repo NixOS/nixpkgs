@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moe";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "mirror://gnu/moe/${pname}-${version}.tar.lz";
-    sha256 = "sha256-DvvLz1pKjZZlQcbLCZugq2QWeANm286C2f+ZWoWl4vk=";
+    sha256 = "sha256-iohfK+Qm+OBK05yWASvYYJVAhaI3RPJFFmMWiCbXoeg=";
   };
 
   prePatch = ''

@@ -43,6 +43,7 @@
 , pcre
 , threadweaver
 , x265
+, jasper
 
 # For panorama and focus stacking
 , enblend-enfuse
@@ -55,11 +56,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.4.0";
+  version = "7.8.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-0Iq2bacyu0SbwQEG7BHdne+ls1Yt7TdBsEHbuqcVUEo=";
+    sha256 = "sha256-sIV3sLFe+ZhDaVcIqiwOmNVHMD2Fvio7OZBUhPLKts4=";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -86,6 +87,7 @@ mkDerivation rec {
     opencv
     pcre
     x265
+    jasper
 
     qtbase
     qtxmlpatterns
@@ -115,6 +117,7 @@ mkDerivation rec {
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
     "-DENABLE_APPSTYLES=on"
+    "-DCMAKE_CXX_FLAGS=-I${libksane}/include/KF5" # fix `#include <ksane_version.h>`
   ];
 
   dontWrapGApps = true;

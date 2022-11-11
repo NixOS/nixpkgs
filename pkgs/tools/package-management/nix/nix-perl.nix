@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , perl
 , pkg-config
 , curl
@@ -8,16 +9,16 @@
 , autoreconfHook
 , autoconf-archive
 , nlohmann_json
-
-, version
-, src
+, Security
 }:
 
 stdenv.mkDerivation {
   pname = "nix-perl";
-  inherit version src;
+  inherit (nix) version src;
 
   postUnpack = "sourceRoot=$sourceRoot/perl";
+
+  buildInputs = lib.optional (stdenv.isDarwin) Security;
 
   # This is not cross-compile safe, don't have time to fix right now
   # but noting for future travellers.

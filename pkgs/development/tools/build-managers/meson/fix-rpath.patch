@@ -1,9 +1,9 @@
 --- a/mesonbuild/backend/backends.py
 +++ b/mesonbuild/backend/backends.py
-@@ -456,6 +456,21 @@ class Backend:
-                 args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
-             except Exception:
-                 pass
+@@ -723,6 +723,21 @@
+     @staticmethod
+     def get_rpath_dirs_from_link_args(args: T.List[str]) -> T.Set[str]:
+         dirs: T.Set[str] = set()
 +
 +        nix_ldflags = os.environ.get('NIX_LDFLAGS', '').split()
 +        next_is_path = False

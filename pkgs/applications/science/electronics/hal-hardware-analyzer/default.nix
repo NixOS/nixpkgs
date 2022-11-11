@@ -1,9 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
-, boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
-, graphviz, llvmPackages, z3
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, pkg-config
+, python3Packages
+, boost
+, rapidjson
+, qtbase
+, qtsvg
+, igraph
+, spdlog
+, wrapQtAppsHook
+, graphviz
+, llvmPackages
+, z3
+, fmt_8
 }:
 
-stdenv.mkDerivation rec {
+let
+  # no stable hal release yet with recent spdlog/fmt support, remove
+  # once 4.0.0 is released - see https://github.com/emsec/hal/issues/452
+  spdlog' = spdlog.override {
+    fmt_8 = fmt_8.overrideAttrs (_: rec {
+      version = "8.0.1";
+      src = fetchFromGitHub {
+        owner = "fmtlib";
+        repo = "fmt";
+        rev = version;
+        sha256 = "1mnvxqsan034d2jiqnw2yvkljl7lwvhakmj5bscwp1fpkn655bbw";
+      };
+    });
+  };
+in stdenv.mkDerivation rec {
   version = "3.3.0";
   pname = "hal-hardware-analyzer";
 
@@ -13,6 +43,18 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-uNpELHhSAVRJL/4iypvnl3nX45SqB419r37lthd2WmQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix build with python 3.10
+      # https://github.com/emsec/hal/pull/463
+      name = "hal-fix-python-3.10.patch";
+      url = "https://github.com/emsec/hal/commit/f695f55cb2209676ef76366185b7c419417fbbc9.patch";
+      sha256 = "sha256-HsCdG3tPllUsLw6kQtGaaEGkEHqZPSC2v9k6ycO2I/8=";
+      includes = [ "plugins/gui/src/python/python_context.cpp" ];
+    })
+  ];
+
   # make sure bundled dependencies don't get in the way - install also otherwise
   # copies them in full to the output, bloating the package
   postPatch = ''
@@ -22,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog graphviz wrapQtAppsHook z3 ]
+  buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog' graphviz wrapQtAppsHook z3 ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
@@ -15,15 +15,18 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
+  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
   postFixup = ''
     chmod +x $out/lib/*
   '';
 
   meta = with lib; {
-    homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";
+    homepage = "http://miniupnp.free.fr/libnatpmp.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej ];
+    mainProgram = "natpmpc";
     platforms = platforms.all;
   };
 }

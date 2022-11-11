@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0g5a7a680b05x27apz0y1ldl5csxpp152wqi42s107jymbp0s20j";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
-    glib libwnck libnotify dbus-glib makeWrapper
+    glib libwnck libnotify dbus-glib
     gsettings-desktop-schemas
   ];
 

@@ -7,7 +7,7 @@
 , click-threading
 , requests-toolbelt
 , requests
-, requests_oauthlib # required for google oauth sync
+, requests-oauthlib
 , atomicwrites
 , hypothesis
 , pytestCheckHook
@@ -17,14 +17,23 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.18.0";
   pname = "vdirsyncer";
+  version = "0.18.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
+    hash = "sha256-J7w+1R93STX7ujkpFcjI1M9jmuUaRLZ0aGtJoQJfwgE=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
+
+    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     atomicwrites
@@ -32,7 +41,7 @@ buildPythonPackage rec {
     click-log
     click-threading
     requests
-    requests_oauthlib # required for google oauth sync
+    requests-oauthlib
     requests-toolbelt
   ];
 
@@ -46,10 +55,6 @@ buildPythonPackage rec {
     pytest-localserver
     pytest-subtesthack
   ];
-
-  postPatch = ''
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
-  '';
 
   preCheck = ''
     export DETERMINISTIC_TESTS=true

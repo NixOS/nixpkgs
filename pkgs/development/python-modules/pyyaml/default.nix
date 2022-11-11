@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyYAML";
+  pname = "pyyaml";
   version = "6.0";
 
   disabled = pythonOlder "3.6";

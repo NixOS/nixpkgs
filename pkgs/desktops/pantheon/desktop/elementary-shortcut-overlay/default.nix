@@ -14,7 +14,6 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     glib
     granite
     gtk3

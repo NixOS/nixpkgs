@@ -3,19 +3,23 @@
 , fetchFromGitHub
 , impacket
 , netaddr
+, pythonOlder
 , pypykatz
 , rich
 }:
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.1";
+  version = "3.1.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jd0kmp0mc8jn5qmgrspdx05vy6nyq773cj4yid1qyr8dmyx6a7n";
+    hash = "sha256-/YDBzH8Mji6PWBEIbsgZcTvoAWAsBbJV3cHfySY/gGA=";
   };
 
   propagatedBuildInputs = [

@@ -21,14 +21,12 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [
-    autoconf
-    automake
     gnum4
     gperf
     libtool
     libxcb
-    pkg-config
     xorg.utilmacros
     xorg.xcbutilimage
     xorg.xcbutilrenderutil

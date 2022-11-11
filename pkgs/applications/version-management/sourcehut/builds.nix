@@ -1,7 +1,7 @@
 { lib
 , fetchFromSourcehut
-, buildPythonPackage
 , buildGoModule
+, buildPythonPackage
 , srht
 , redis
 , celery
@@ -9,34 +9,40 @@
 , markdown
 , ansi2html
 , python
+, unzip
 }:
 let
-  version = "0.74.17";
+  version = "0.83.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-6Yc33lkhozpnx8e6yukUfo+/Qw5mwpJQQKuYbC7uqcU=";
+    hash = "sha256-u/y+sYu/09LypWI/ngghbge5SvkuLQpray10j0SjlOo=";
   };
 
-  buildWorker = src: buildGoModule {
+  buildsrht-api = buildGoModule ({
     inherit src version;
-    pname = "builds-sr-ht-worker";
+    pname = "buildsrht-api";
+    modRoot = "api";
+    vendorHash = "sha256-DfVWr/4J4ZrhHpy9CXPaAQcbag/9FmDgiexcNo0lEsk=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.20"; });
 
-    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+  buildsrht-worker = buildGoModule {
+    inherit src version;
+    sourceRoot = "source/worker";
+    pname = "buildsrht-worker";
+    vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
   };
 in
 buildPythonPackage rec {
   inherit src version;
   pname = "buildsrht";
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/build/0001-Revert-Add-build-submission-and-queue-monitoring.patch
-  ];
-
-  nativeBuildInputs = srht.nativeBuildInputs;
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api worker" ""
+  '';
 
   propagatedBuildInputs = [
     srht
@@ -58,7 +64,8 @@ buildPythonPackage rec {
 
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
-    cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
+    ln -s ${buildsrht-api}/bin/api $out/bin/buildsrht-api
+    ln -s ${buildsrht-worker}/bin/worker $out/bin/buildsrht-worker
   '';
 
   pythonImportsCheck = [ "buildsrht" ];

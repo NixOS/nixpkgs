@@ -10,14 +10,14 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.9.2";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "0bkps488h9s15ylvkm4fmfywgrpbw570glawpnv6khpq9n223dzl";
+    sha256 = "sha256-RVr7NFVxY+6MBD8NV7eMW8TEWuCgcfqpula1o1VZe0o=";
   };
 
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     "-Denable_tools=${lib.boolToString withTools}"
     "-Denable_examples=${lib.boolToString withExamples}"
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";

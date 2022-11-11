@@ -19,6 +19,9 @@
 --disable-muxers
 --enable-muxer=rtp
 --enable-muxer=g722
+--enable-muxer=g723_1
+--enable-muxer=g726
+--enable-muxer=g726le
 --enable-muxer=h263
 --enable-muxer=h264
 --enable-muxer=hevc
@@ -43,6 +46,9 @@
 --enable-demuxer=wav
 --enable-demuxer=ac3
 --enable-demuxer=g722
+--enable-demuxer=g723_1
+--enable-demuxer=g726
+--enable-demuxer=g726le
 --enable-demuxer=pcm_mulaw
 --enable-demuxer=pcm_alaw
 --enable-demuxer=pcm_s16be
@@ -59,6 +65,13 @@
 --enable-parser=opus
 --enable-encoder=adpcm_g722
 --enable-decoder=adpcm_g722
+--enable-encoder=adpcm_g726
+--enable-decoder=adpcm_g726
+--enable-encoder=adpcm_g726le
+--enable-decoder=adpcm_g726le
+--enable-decoder=g729
+--enable-encoder=g723_1
+--enable-decoder=g723_1
 --enable-encoder=rawvideo
 --enable-decoder=rawvideo
 --enable-encoder=libx264

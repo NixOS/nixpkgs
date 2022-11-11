@@ -25,6 +25,6 @@ buildPythonPackage {
     description = "File type identification using libmagic";
     homepage = "https://github.com/aliles/filemagic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

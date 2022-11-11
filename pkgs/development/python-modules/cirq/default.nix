@@ -6,7 +6,6 @@
 , cirq-pasqal
 , cirq-rigetti
 , cirq-web
-  # test inputs
 , pytestCheckHook
 }:
 
@@ -25,7 +24,9 @@ buildPythonPackage rec {
   ];
 
   # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Don't run submodule or development tool tests
   disabledTestPaths = [

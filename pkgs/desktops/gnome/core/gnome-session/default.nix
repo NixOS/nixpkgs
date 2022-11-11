@@ -30,13 +30,13 @@
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "41.3";
+  version = "43.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "7koikFP1ImJAVIiWCTNbiFKHz2e73g3J/YgrAeybWzk=";
+    sha256 = "P7mUlQE4XIwUYY548XjZUt+YrYyRCA9MXhVoxzk64fI=";
   };
 
   patches = [
@@ -116,6 +116,8 @@ stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share"\
       --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -94,7 +94,7 @@ let
 in
 
 runCommand "cling-${unwrapped.version}" {
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   inherit unwrapped flags compilerIncludeFlags;
   inherit (unwrapped) meta;
 } ''

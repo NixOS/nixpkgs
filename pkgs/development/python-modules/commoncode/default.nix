@@ -19,15 +19,20 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "30.0.0";
-  format = "setuptools";
+  version = "31.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6SeU4u6pfDuGCgCYAO5fdbWBxW9XN3WvM8j6DwUlFwM=";
+    sha256 = "sha256-iX7HjsbW9rUgG35XalqfXh2+89vEiwish90FGOpkzRo=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
+  '';
 
   dontConfigure = true;
 
@@ -52,7 +57,15 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # chinese character translates different into latin
+    "test_safe_path_posix_style_chinese_char"
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
+    "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
+    "test_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+  ] ++ lib.optionals stdenv.isDarwin [
     # expected result is tailored towards the quirks of upstream's
     # CI environment on darwin
     "test_searchable_paths"

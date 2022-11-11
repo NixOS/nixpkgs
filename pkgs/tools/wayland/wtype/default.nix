@@ -12,15 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wtype";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "atx";
     repo = "wtype";
     rev = "v${version}";
-    hash = "sha256-8q2PxI3ItR4tsP/KOiSlqnuK4ZSe7OdekheolEFVmys=";
+    hash = "sha256-TfpzAi0mkXugQn70MISyNFOXIJpDwvgh3enGv0Xq8S4=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland ];
   buildInputs = [ libxkbcommon wayland ];
 

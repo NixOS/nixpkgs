@@ -1,6 +1,6 @@
 { lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
 , libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison, runtimeShell
-, pam ? null, glibcCross ? null
+, libxcrypt, pam ? null, glibcCross ? null
 }:
 
 let
@@ -19,16 +19,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.8.1";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = version;
-    sha256 = "13407r6qwss00504qy740jghb2dzd561la7dhp47rg8w3g8jarpn";
+    rev = "v${version}";
+    sha256 = "sha256-PxLX5V0t18JftT5wT41krNv18Ew7Kz3MfZkOi/80ODA=";
   };
 
-  buildInputs = lib.optional (pam != null && stdenv.isLinux) pam;
+  buildInputs = [ libxcrypt ]
+    ++ lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
@@ -62,6 +63,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-man"
     "--with-group-name-max-length=32"
+    "--with-bcrypt"
+    "--with-yescrypt"
   ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc")

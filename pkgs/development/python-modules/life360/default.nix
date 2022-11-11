@@ -1,14 +1,14 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "life360";
-  version = "4.1.1";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,12 +16,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "v+j0DBWQb1JdOu+uxJAdWhzef5zB62z+NSQ+WxpsinA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GacesPWPTuIIZel4OARWW13OYflYFNf4Jxh9I8ms7s0=";
   };
 
   propagatedBuildInputs = [
-    requests
+    aiohttp
   ];
 
   # Project has no tests

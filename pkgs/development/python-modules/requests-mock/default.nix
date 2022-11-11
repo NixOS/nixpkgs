@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d72abe54546c1fc9696fa1516672f1031d72a55a1d66c85184f972a24ba0eba";
+    sha256 = "sha256-WcnDJBmp+xroPsJC2Y6InEW9fXpl1IN1zCQ+wIRBZYs=";
   };
 
   patchPhase = ''

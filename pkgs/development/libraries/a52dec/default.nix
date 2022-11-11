@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "a52dec";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
+    # Define inline as __attribute__ ((__always_inline__))
+    "ac_cv_c_inline=yes"
   ];
 
   makeFlags = [

@@ -2,16 +2,18 @@
 
 let
   pname = "restinio";
-  version = "0.6.14";
+  version = "0.6.17";
 in
 fetchzip {
   name = "${pname}-${version}";
-  url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}-full.tar.bz2";
-  sha256 = "sha256-v/t3Lo1D6rHMx3GywPpEhOnHrT7JVC8n++YxpMTRfDM=";
+  url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}.tar.bz2";
+  hash = "sha256-8A13r3Qsn5S+kVWLPENoOjqz2tPMxSo6EWBvHG1cTAE=";
 
+  stripRoot = false;
   postFetch = ''
-    mkdir -p $out/include/restinio
-    tar -xjf $downloadedFile --strip-components=3 -C $out/include/restinio --wildcards "*/dev/restinio"
+    mkdir -p $out/include
+    mv $out/restinio-*/dev/restinio $out/include
+    rm -r $out/restinio-*
   '';
 
   meta = with lib; {

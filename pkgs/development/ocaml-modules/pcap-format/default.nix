@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchurl
 , ppx_cstruct, ppx_tools
-, cstruct, ounit, mmap
+, cstruct, ounit, mmap, stdlib-shims
 }:
 
 buildDunePackage rec {
@@ -24,6 +24,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     cstruct
+    stdlib-shims
   ];
 
   doCheck = true;

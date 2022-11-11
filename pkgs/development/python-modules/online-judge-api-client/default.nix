@@ -20,13 +20,13 @@ let
   pythonEnv = python.withPackages (ps: with ps; [ colorlog jinja2 markdown toml ]);
 in buildPythonPackage rec {
   pname = "online-judge-api-client";
-  version = "10.10.0";
+  version = "10.10.1";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "api-client";
-    rev = "v${version}";
-    sha256 = "0lmryqi0bv82v9k9kf1rzzq9zr83smpmy8ivzw4fk31hvpczp4fn";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
   };
 
   patches = [ ./fix-paths.patch ];

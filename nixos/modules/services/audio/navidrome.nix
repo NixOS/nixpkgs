@@ -9,7 +9,7 @@ in {
   options = {
     services.navidrome = {
 
-      enable = mkEnableOption "Navidrome music server";
+      enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
       settings = mkOption rec {
         type = settingsFormat.type;
@@ -21,8 +21,8 @@ in {
         example = {
           MusicFolder = "/mnt/music";
         };
-        description = ''
-          Configuration for Navidrome, see <link xlink:href="https://www.navidrome.org/docs/usage/configuration-options/"/> for supported values.
+        description = lib.mdDoc ''
+          Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.
         '';
       };
 
@@ -45,7 +45,10 @@ in {
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
         BindReadOnlyPaths = [
+          # navidrome uses online services to download additional album metadata / covers
+          "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
+          "/etc"
         ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
@@ -59,7 +62,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         RestrictRealtime = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

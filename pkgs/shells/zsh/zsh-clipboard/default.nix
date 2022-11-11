@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
 
   src = ./.;
 
+  strictDeps = true;
   dontBuild = true;
 
   installPhase = ''

@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, b43FirmwareCutter }:
+{ lib, stdenvNoCC, fetchurl, b43FirmwareCutter }:
 
 let version = "5.100.138"; in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "b43-firmware";
   inherit version;
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0vz4ka8gycf72gmnaq61k8rh8y17j1wm2k3fidxvcqjvmix0drzi";
   };
 
-  buildInputs = [ b43FirmwareCutter ];
+  nativeBuildInputs = [ b43FirmwareCutter ];
 
   installPhase = ''
     mkdir -p $out/lib/firmware
@@ -24,4 +24,3 @@ stdenv.mkDerivation {
     license = lib.licenses.unfree;
   };
 }
-

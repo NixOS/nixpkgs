@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, curl, hwloc, gmp }:
+{ stdenv, lib, fetchurl, unzip, boost, curl, hwloc, gmp }:
 
 let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -18,11 +18,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mprime";
-  version = "29.8b7";
+  version = "30.8b15";
 
   src = fetchurl {
     url = "https://www.mersenne.org/ftp_root/gimps/p95v${lib.replaceStrings ["."] [""] version}.source.zip";
-    sha256 = "0x5dk2dcppfnq17n79297lmn6p56rd66cbwrh1ds4l8r4hmwsjaj";
+    hash = "sha256-CNYorZStHV0aESGX9LfLZ4oD5PFR2UOFLN1MiLaKw58=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  buildInputs = [ curl hwloc gmp ];
+  buildInputs = [ boost curl hwloc gmp ];
 
   enableParallelBuilding = true;
 

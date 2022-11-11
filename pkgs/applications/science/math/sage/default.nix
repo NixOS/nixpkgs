@@ -1,5 +1,7 @@
 { pkgs
 , withDoc ? false
+, requireSageTests ? true
+, extraPythonPackages ? ps: []
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -46,6 +48,12 @@ let
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
   };
 
+  jupyter-kernel-specs = pkgs.jupyter-kernel.create {
+    definitions = pkgs.jupyter-kernel.default // {
+      sagemath = jupyter-kernel-definition;
+    };
+  };
+
   three = callPackage ./threejs-sage.nix { };
 
   # A bash script setting various environment variables to tell sage where
@@ -70,8 +78,7 @@ let
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
-    inherit sage-with-env;
-    inherit python3 maxima;
+    inherit sage-with-env jupyter-kernel-specs;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
@@ -106,10 +113,11 @@ let
     tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
     scipy
     ipywidgets
+    notebook # for "sage -n"
     rpy2
     sphinx
     pillow
-  ];
+  ] ++ extraPythonPackages python3.pkgs;
 
   pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
@@ -165,6 +173,6 @@ let
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
-  inherit withDoc;
+  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition jupyter-kernel-specs;
+  inherit withDoc requireSageTests;
 }

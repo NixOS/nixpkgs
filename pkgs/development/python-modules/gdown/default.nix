@@ -1,22 +1,25 @@
 { lib
 , beautifulsoup4
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , filelock
 , requests
 , tqdm
 , setuptools
 , six
+, pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "gdown";
-  version = "4.2.1";
+  version = "4.5.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X3onSr8PN3D24lMtKG2Y/RiKbD1qSq2n0YVO8Y5H5K4=";
+    hash = "sha256-bL991BCFiMc0qliBMdjh1S5k8Ic4cPcfdMusGV8MYO8=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +29,7 @@ buildPythonApplication rec {
     tqdm
     setuptools
     six
-  ];
+  ] ++ requests.optional-dependencies.socks;
 
   checkPhase = ''
     $out/bin/gdown --help > /dev/null

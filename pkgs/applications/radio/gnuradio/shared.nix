@@ -84,7 +84,11 @@ rec {
   postInstall = ""
     # Gcc references
     + lib.optionalString (hasFeature "gnuradio-runtime") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+    ''
+    # Clang references in InstalledDir
+    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.isDarwin) ''
+      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
   ;
   # NOTE: Outputs are disabled due to upstream not using GNU InstallDIrs cmake
@@ -125,6 +129,6 @@ rec {
     homepage = "https://www.gnuradio.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ doronbehar bjornfor fpletz ];
+    maintainers = with maintainers; [ doronbehar bjornfor fpletz jiegec ];
   };
 }

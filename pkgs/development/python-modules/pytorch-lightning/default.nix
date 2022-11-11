@@ -3,30 +3,36 @@
 , fetchFromGitHub
 , isPy27
 , future
+, fsspec
+, packaging
 , pytestCheckHook
-, pytorch
+, torch
 , pyyaml
-, tensorflow-tensorboard
+, tensorboard
+, torchmetrics
 , tqdm }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.5.8";
+  version = "1.6.5";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "PyTorchLightning";
     repo = pname;
-    rev = version;
-    sha256 = "161mz66l11z4350q93fmmq3x0jzbp5761lf4fx3yvz17qzp7ygkn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CgD5g5nhz2DI4gOQyPl8/Cq6wWHzL0ALgOB5SgUOgaI=";
   };
 
   propagatedBuildInputs = [
+    packaging
     future
-    pytorch
+    fsspec
+    torch
     pyyaml
-    tensorflow-tensorboard
+    tensorboard
+    torchmetrics
     tqdm
   ];
 

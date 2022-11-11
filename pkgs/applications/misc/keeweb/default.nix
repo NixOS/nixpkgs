@@ -1,21 +1,21 @@
 { lib, stdenv, fetchurl, appimageTools, undmg, libsecret, libxshmfence }:
 let
   pname = "keeweb";
-  version = "1.18.6";
+  version = "1.18.7";
   name = "${pname}-${version}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.linux.AppImage";
-      sha256 = "sha256-hxXs8Dfh5YQy1zaFb20KDWNl8eqFjuN5QY7tsO6+E/U=";
+      hash = "sha256-W3Dfo7YZfLObodAS7ZN3jqnYzLNAnjJIfJC6il5THwY=";
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.x64.dmg";
-      sha256 = "sha256-8+7NzaHVcLinKb57SAcJmF2Foy9RfxFhcTxzvL0JSJQ=";
+      hash = "sha256-+ZFGrrw0tZ7F6lb/3iBIyGD+tp1puVhkPv10hfp6ATU=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/keeweb/keeweb/releases/download/v${version}/KeeWeb-${version}.mac.arm64.dmg";
-      sha256 = "sha256-1BNY6kRS0F+AUI+80ZGFi/ek28NMP1uexo1UORz5D6g=";
+      hash = "sha256-bkhwsWYLkec16vMOfXUce7jfrmI9W2xHiZvU1asebK4=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system};
@@ -28,6 +28,7 @@ let
     description = "Free cross-platform password manager compatible with KeePass";
     homepage = "https://keeweb.info/";
     changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
@@ -44,7 +45,7 @@ let
       install -Dm644 ${appimageContents}/keeweb.png -t $out/share/icons/hicolor/256x256/apps
       install -Dm644 ${appimageContents}/usr/share/mime/keeweb.xml -t $out/share/mime
       substituteInPlace $out/share/applications/keeweb.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace "Exec=AppRun" "Exec=$out/bin/${pname}"
     '';
   };
 

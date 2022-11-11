@@ -11,9 +11,7 @@
 , qiskit-terra
 , scikit-learn
 , sparse
-  # Optional inputs
-, withTorch ? true
-, pytorch
+, torch
   # Check Inputs
 , pytestCheckHook
 , ddt
@@ -23,25 +21,26 @@
 
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
-  version = "0.3.0";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    sha256 = "0jycs18apnwrksarpwpmp7scndyx91vnv6fchil4jyx4kym8mnf9";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-WZSXt+sVeO64wCVbDgBhuGvo5jTn/JKh9oNSO7ZY9wo=";
   };
 
   propagatedBuildInputs = [
     fastdtw
     numpy
     psutil
+    torch
     qiskit-terra
     scikit-learn
     sparse
-  ] ++ lib.optional withTorch pytorch;
+  ];
 
   doCheck = false;  # TODO: enable. Tests fail on unstable due to some multithreading issue?
   checkInputs = [

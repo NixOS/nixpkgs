@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cfitsio";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
-    sha256 = "sha256-sqjvugufhtPhvWGfZipHbsGBErTyfMRBzGgKTjd3Ql4=";
+    sha256 = "sha256-s2fGldKDGVjnFmkhw7NW1d+lGx7O5QW5dBa6OdG2wXo=";
   };
 
   buildInputs = [ bzip2 zlib ];
 
   patches = [ ./darwin-rpath-universal.patch ];
 
-  configureFlags = [ "--with-bzip2=${bzip2.out}" ];
+  configureFlags = [ "--with-bzip2=${bzip2.out}" "--enable-reentrant" ];
 
   hardeningDisable = [ "format" ];
 

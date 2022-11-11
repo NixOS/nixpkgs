@@ -6,6 +6,7 @@ To update the list of packages from MELPA,
 
 1. Run `./update-melpa`
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
 3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
@@ -185,7 +186,7 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             install -m=755 -D source/sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
@@ -216,6 +217,12 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
+          # Temporary work around for:
+          #   - https://github.com/vedang/pdf-tools/issues/102
+          #   - https://github.com/vedang/pdf-tools/issues/103
+          #   - https://github.com/vedang/pdf-tools/issues/109
+          CXXFLAGS = "-std=c++17";
+
           nativeBuildInputs = [
             pkgs.autoconf
             pkgs.automake
@@ -270,9 +277,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -294,7 +302,7 @@ let
             make
             popd
           '';
-          postInstall = ''
+          postInstall = (attrs.postInstall or "") + "\n" + ''
             outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
             mkdir $outd/build
             install -m444 -t $outd/build ./source/src/libegit2.so
@@ -419,7 +427,7 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mkdir -p $out/bin
             install -m755 -Dt $out/bin ./source/server/telega-server
           '';
@@ -449,7 +457,7 @@ let
             pkgs.libtool
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mv $EZMQ_LIBDIR/emacs-zmq.* $out/share/emacs/site-lisp/elpa/zmq-*
             rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
             rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
@@ -526,7 +534,7 @@ let
           ];
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             pushd source/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
@@ -545,6 +553,20 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
+        });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
         });
       };
 

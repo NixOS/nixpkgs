@@ -1,30 +1,36 @@
-{ lib, stdenv, fetchurl, makeWrapper, curl }:
+{ lib, resholve, fetchurl, bash, curl }:
 
-stdenv.mkDerivation {
+resholve.mkDerivation {
   pname = "ix";
   version = "20190815";
 
   src = fetchurl {
     url = "http://ix.io/client";
-    sha256 =  "0xc2s4s1aq143zz8lgkq5k25dpf049dw253qxiav5k7d7qvzzy57";
+    hash = "sha256-p/j/Nz7tzLJV7HgUwVsiwN1WxCx4Por+HyRgFTTRgnU=";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   dontUnpack = true;
 
   installPhase = ''
-    install -Dm +x $src $out/bin/ix
+    runHook preInstall
+
+    install -Dm555 $src $out/bin/ix
+    substituteInPlace $out/bin/ix \
+      --replace '$echo ' ""
+
+    runHook postInstall
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/ix --prefix PATH : "${lib.makeBinPath [ curl ]}"
-  '';
+  solutions.default = {
+    scripts = [ "bin/ix" ];
+    interpreter = "${lib.getExe bash}";
+    inputs = [ curl ];
+  };
 
   meta = with lib; {
     homepage = "http://ix.io";
     description = "Command line pastebin";
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
   };
 }

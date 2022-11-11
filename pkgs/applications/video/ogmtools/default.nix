@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libogg libvorbis libdvdread ];
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   meta = {
     description = "Tools for modifying and inspecting OGG media streams";
     longDescription = ''

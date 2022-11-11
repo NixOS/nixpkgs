@@ -8,19 +8,25 @@
 
 buildPythonPackage rec {
   pname = "colormath";
-  version = "3.0.0";
+  # Switch to unstable which fixes an deprecation issue with newer numpy
+  # versions, should be included in versions > 3.0
+  # https://github.com/gtaylor/python-colormath/issues/104
+  version = "unstable-2021-04-17";
 
   src = fetchFromGitHub {
     owner = "gtaylor";
-    rev = "3.0.0";
     repo = "python-colormath";
-    sha256 = "1nqf5wy8ikx2g684khzvjc4iagkslmbsxxwilbv4jpaznr9lahdl";
+    rev = "4a076831fd5136f685aa7143db81eba27b2cd19a";
+    sha256 = "sha256-eACVPIQFgiGiVmQ/PjUxP/UH/hBOsCywz5PlgpA4dk4=";
   };
 
   propagatedBuildInputs = [ networkx numpy ];
 
   checkInputs = [ nose ];
+
   checkPhase = "nosetests";
+
+  pythonImportsCheck = [ "colormath" ];
 
   meta = with lib; {
     description = "Color math and conversion library";

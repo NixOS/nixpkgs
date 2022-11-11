@@ -9,7 +9,7 @@ in {
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, installs vim and configures vim to be the default editor
         using the EDITOR environment variable.
       '';
@@ -20,7 +20,7 @@ in {
       default = pkgs.vim;
       defaultText = literalExpression "pkgs.vim";
       example = literalExpression "pkgs.vimHugeX";
-      description = ''
+      description = lib.mdDoc ''
         vim package to use.
       '';
     };

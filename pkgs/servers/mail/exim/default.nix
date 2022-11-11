@@ -1,4 +1,4 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkg-config, lib, stdenv
+{ coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -10,15 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.95";
+  version = "4.96";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    sha256 = "0rzi0kc3qiiaw8vnv5qrpwdvvh4sr5chns026xy99spjzx9vd76c";
+    hash = "sha256-KZpWknsus0d9qv08W9oCvGflxOWJinrq8nQIdSeM8aM=";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ coreutils db openssl perl pcre ]
+  buildInputs = [ coreutils db openssl perl pcre2 ]
     ++ lib.optional enableLDAP openldap
     ++ lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ lib.optional enableAuthDovecot dovecot
@@ -27,7 +29,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableDMARC opendmarc
     ++ lib.optional enableRedis hiredis;
 
-  preBuild = ''
+  configurePhase = ''
+    runHook preConfigure
+
     sed '
       s:^\(BIN_DIRECTORY\)=.*:\1='"$out"'/bin:
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
@@ -90,9 +94,13 @@ stdenv.mkDerivation rec {
       #/^\s*#.*/d
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man8
     cp doc/exim.8 $out/share/man/man8
 
@@ -106,6 +114,8 @@ stdenv.mkDerivation rec {
       for i in mailq newaliases rmail rsmtp runq sendmail; do
         ln -s exim $i
       done )
+
+    runHook postInstall
   '';
 
   meta = with lib; {

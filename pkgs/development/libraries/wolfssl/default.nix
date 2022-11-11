@@ -1,25 +1,29 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, Security
 , autoreconfHook
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.1.1";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "sha256-/noS5cn8lllWoGyZ9QyjRmdiR6LXzfT4lYGEt+0+Bdw=";
+    sha256 = "sha256-d8DDyEsK35WK7c0udZI5HxQLO+mbod8hlbSoa3IWWS0=";
   };
 
   postPatch = ''
     patchShebangs ./scripts
     # ocsp tests require network access
     sed -i -e '/ocsp\.test/d' -e '/ocsp-stapling\.test/d' scripts/include.am
+    # ensure test detects musl-based systems too
+    substituteInPlace scripts/ocsp-stapling2.test \
+      --replace '"linux-gnu"' '"linux-"'
   '';
 
   # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+  propagatedBuildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [
     autoreconfHook
   ];

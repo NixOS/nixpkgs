@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-synapse-compress-state";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uL7uoJPvZoTbrmEFY7jiBphvjWSRpH9pyk3x7s3Yvrs=";
+    sha256 = "sha256-SSfVtG8kwHarVbB1O7xC2SSbUpPGYMHTMyoxu8mpEk0=";
   };
 
-  cargoSha256 = "sha256-3w5RyVrpCnetXnxnzgVl94kUZa+1i9bU2O8vp7sb3lY=";
+  cargoSha256 = "sha256-PG+UeovhJMsIlm5dOYdtMxbUxZjwG3V59kAcB9aFP5c=";
 
   cargoBuildFlags = [
     "--all"

@@ -12,7 +12,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install Light backlight control command
           and udev rules granting access to members of the "video" group.
         '';

@@ -1,16 +1,31 @@
+From 83f97773ea99fe2191a49e551ea43d51c9a765cd Mon Sep 17 00:00:00 2001
+Subject: [PATCH] strip some hard-coded default paths for libs and extensions
+
+---
+ src/hotspot/os/linux/os_linux.cpp | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
 diff --git a/src/hotspot/os/linux/os_linux.cpp b/src/hotspot/os/linux/os_linux.cpp
-index 0dbe03349e..847d56778d 100644
+index 476b1c2175..2695ed2301 100644
 --- a/src/hotspot/os/linux/os_linux.cpp
 +++ b/src/hotspot/os/linux/os_linux.cpp
-@@ -326,13 +326,13 @@ void os::init_system_properties_values() {
+@@ -417,20 +417,20 @@ void os::init_system_properties_values() {
    //        ...
    //        7: The default directories, normally /lib and /usr/lib.
  #if defined(AMD64) || (defined(_LP64) && defined(SPARC)) || defined(PPC64) || defined(S390)
 -  #define DEFAULT_LIBPATH "/usr/lib64:/lib64:/lib:/usr/lib"
 +  #define DEFAULT_LIBPATH ""
  #else
+ #if defined(AARCH64)
+   // Use 32-bit locations first for AARCH64 (a 64-bit architecture), since some systems
+   // might not adhere to the FHS and it would be a change in behaviour if we used
+   // DEFAULT_LIBPATH of other 64-bit architectures which prefer the 64-bit paths.
+-  #define DEFAULT_LIBPATH "/lib:/usr/lib:/usr/lib64:/lib64"
++  #define DEFAULT_LIBPATH ""
+ #else
 -  #define DEFAULT_LIBPATH "/lib:/usr/lib"
 +  #define DEFAULT_LIBPATH ""
+ #endif // AARCH64
  #endif
  
  // Base path of extensions installed on the system.
@@ -19,7 +34,7 @@ index 0dbe03349e..847d56778d 100644
  #define EXTENSIONS_DIR  "/lib/ext"
  
    // Buffer that fits several sprintfs.
-@@ -392,13 +392,13 @@ void os::init_system_properties_values() {
+@@ -490,13 +490,13 @@ void os::init_system_properties_values() {
                                                       strlen(v) + 1 +
                                                       sizeof(SYS_EXT_DIR) + sizeof("/lib/") + sizeof(DEFAULT_LIBPATH) + 1,
                                                       mtInternal);
@@ -35,3 +50,6 @@ index 0dbe03349e..847d56778d 100644
    Arguments::set_ext_dirs(buf);
  
    FREE_C_HEAP_ARRAY(char, buf);
+--
+2.35.1
+

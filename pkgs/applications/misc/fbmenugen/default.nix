@@ -7,17 +7,18 @@
 , substituteAll
 , xorg
 , wrapGAppsHook
+, gitUpdater
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "fbmenugen";
-  version = "0.86";
+  version = "0.87";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = pname;
     rev = version;
-    sha256 = "0ya7s8b5xbaplz365bnr580szxxsngrs2n7smj8vz8a7kwi0319q";
+    sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
 
   patches = [
@@ -64,6 +65,8 @@ perlPackages.buildPerlPackage rec {
   postFixup = ''
     wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/trizen/fbmenugen";

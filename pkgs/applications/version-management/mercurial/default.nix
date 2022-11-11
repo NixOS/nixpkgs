@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , fullBuild ? false
@@ -20,12 +20,12 @@ let
   inherit (python3Packages) docutils python fb-re2 pygit2 pygments;
 
   self = python3Packages.buildPythonApplication rec {
-    pname = "mercurial";
-    version = "6.0.2";
+    pname = "mercurial${lib.optionalString fullBuild "-full"}";
+    version = "6.2.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-X7TDbThWKS6/WEBR1ZMG2WrYqjK1U3RSsdnEdvlasRo=";
+      sha256 = "sha256-mNGuAC9orfU9ZcWUf+i3o3n5jPBdm46h9Ad9LKXc6ds=";
     };
 
     format = "other";
@@ -34,9 +34,9 @@ let
 
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
-      name = "${pname}-${version}";
-      sha256 = "sha256-rIG57oPCTUz4HNJyuMBPlKTSh02ecF5052Q1P9wGq1s=";
-      sourceRoot = "${pname}-${version}/rust";
+      name = "mercurial-${version}";
+      sha256 = "sha256-UWYXVPdEMITLNdBjnoo8IuLOGZiwUJL+dqSl26nf5qs=";
+      sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
 
@@ -91,7 +91,7 @@ let
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien ];
+      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
     };
   };
@@ -148,9 +148,22 @@ let
 
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
+
+    # Python 3.10 error message change https://bz.mercurial-scm.org/show_bug.cgi?id=6643
+    test-http-bad-server.t
+
+    # Python 3.10-3.12 deprecation warning: distutils
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6729
+    test-hghave.t
+
+    # Python 3.10-3.12 deprecation warning: asyncore
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
+    test-patchbomb-tls.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
+    # include tests for native components
+    export HGMODULEPOLICY="rust+c"
     # extended timeout necessary for tests to pass on the busy CI workers
     export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800 -j$NIX_BUILD_CORES ${flags}"
     make check
@@ -180,7 +193,11 @@ in
         buildInputs = self.buildInputs ++ self.propagatedBuildInputs;
         nativeBuildInputs = self.nativeBuildInputs;
 
-        phases = [ "installPhase" "installCheckPhase" ];
+        dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        doCheck = false;
 
         installPhase = ''
           runHook preInstall

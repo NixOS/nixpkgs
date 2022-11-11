@@ -1,17 +1,18 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
-, wrapGAppsHook, fetchpatch, bash, doxygen
+, wrapGAppsHook, fetchpatch, doxygen
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
-  version = "1.7.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
-    sha256 = "sha256-0E1TeAhkiK+hFJ4oMoeZLvfRehTzdGF3AtEVwf/MaF8=";
+    sha256 = "sha256-O+yz/uNxueR+naEJG8EZ+k/JutRjJ5wwbB9DYb8YNLw=";
   };
 
   patches = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ pkg-config autoconf automake gettext intltool
-      wrapGAppsHook bash doxygen
+      wrapGAppsHook doxygen
     ];
 
   buildInputs = [
@@ -46,6 +47,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Lightweight GTK based image viewer";

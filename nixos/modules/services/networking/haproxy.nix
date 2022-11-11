@@ -20,7 +20,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable HAProxy, the reliable, high performance TCP/HTTP
           load balancer.
         '';
@@ -29,21 +29,21 @@ with lib;
       user = mkOption {
         type = types.str;
         default = "haproxy";
-        description = "User account under which haproxy runs.";
+        description = lib.mdDoc "User account under which haproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "haproxy";
-        description = "Group account under which haproxy runs.";
+        description = lib.mdDoc "Group account under which haproxy runs.";
       };
 
       config = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Contents of the HAProxy configuration file,
-          <filename>haproxy.conf</filename>.
+          {file}`haproxy.conf`.
         '';
       };
     };

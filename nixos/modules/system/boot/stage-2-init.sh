@@ -5,32 +5,30 @@ systemConfig=@systemConfig@
 export HOME=/root PATH="@path@"
 
 
-# Process the kernel command line.
-for o in $(</proc/cmdline); do
-    case $o in
-        boot.debugtrace)
-            # Show each command.
-            set -x
-            ;;
-        resume=*)
-            set -- $(IFS==; echo $o)
-            resumeDevice=$2
-            ;;
-    esac
-done
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Process the kernel command line.
+    for o in $(</proc/cmdline); do
+        case $o in
+            boot.debugtrace)
+                # Show each command.
+                set -x
+                ;;
+        esac
+    done
 
 
-# Print a greeting.
-echo
-echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
-echo
+    # Print a greeting.
+    echo
+    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+    echo
 
 
-# Normally, stage 1 mounts the root filesystem read/writable.
-# However, in some environments, stage 2 is executed directly, and the
-# root is read-only.  So make it writable here.
-if [ -z "$container" ]; then
-    mount -n -o remount,rw none /
+    # Normally, stage 1 mounts the root filesystem read/writable.
+    # However, in some environments, stage 2 is executed directly, and the
+    # root is read-only.  So make it writable here.
+    if [ -z "$container" ]; then
+        mount -n -o remount,rw none /
+    fi
 fi
 
 
@@ -43,6 +41,12 @@ if [ ! -e /proc/1 ]; then
         local options="$3"
         local fsType="$4"
 
+        # We must not overwrite this mount because it's bind-mounted
+        # from stage 1's /run
+        if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] && [ "${mountPoint}" = /run ]; then
+            return
+        fi
+
         install -m 0755 -d "$mountPoint"
         mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
     }
@@ -50,7 +54,11 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
-echo "booting system configuration $systemConfig" > /dev/kmsg
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+    echo "booting system configuration ${systemConfig}"
+else
+    echo "booting system configuration $systemConfig" > /dev/kmsg
+fi
 
 
 # Make /nix/store a read-only bind mount to enforce immutability of
@@ -72,59 +80,32 @@ if [ -n "@readOnlyStore@" ]; then
 fi
 
 
-# Provide a /etc/mtab.
-install -m 0755 -d /etc
-test -e /etc/fstab || touch /etc/fstab # to shut up mount
-rm -f /etc/mtab* # not that we care about stale locks
-ln -s /proc/mounts /etc/mtab
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
+    if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
+        resolvconf -m 1000 -a host </etc/resolv.conf
+    fi
 
 
-# More special file systems, initialise required directories.
-[ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
+    # Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+    # Only at this point are all the necessary prerequisites ready for these commands.
+    exec {logOutFd}>&1 {logErrFd}>&2
+    if test -w /dev/kmsg; then
+        exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
+            if test -n "$line"; then
+                echo "<7>stage-2-init: $line" > /dev/kmsg
+            fi
+        done) 2>&1
+    else
+        mkdir -p /run/log
+        exec > >(tee -i /run/log/stage-2-init.log) 2>&1
+    fi
+fi
+
+
+# Required by the activation script
+install -m 0755 -d /etc /etc/nixos
 install -m 01777 -d /tmp
-install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
-    /run/lock /home /bin # for the /bin/sh symlink
-
-
-# Miscellaneous boot time cleanup.
-rm -rf /var/run /var/lock
-rm -f /etc/{group,passwd,shadow}.lock
-
-
-# Also get rid of temporary GC roots.
-rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
-
-
-# For backwards compatibility, symlink /var/run to /run, and /var/lock
-# to /run/lock.
-ln -s /run /var/run
-ln -s /run/lock /var/lock
-
-
-# Clear the resume device.
-if test -n "$resumeDevice"; then
-    mkswap "$resumeDevice" || echo 'Failed to clear saved image.'
-fi
-
-
-# Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
-if [ -n "@useHostResolvConf@" ] && [ -e /etc/resolv.conf ]; then
-    resolvconf -m 1000 -a host </etc/resolv.conf
-fi
-
-# Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
-# Only at this point are all the necessary prerequisites ready for these commands.
-exec {logOutFd}>&1 {logErrFd}>&2
-if test -w /dev/kmsg; then
-    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
-        if test -n "$line"; then
-            echo "<7>stage-2-init: $line" > /dev/kmsg
-        fi
-    done) 2>&1
-else
-    mkdir -p /run/log
-    exec > >(tee -i /run/log/stage-2-init.log) 2>&1
-fi
 
 
 # Run the script that performs all configuration activation that does
@@ -133,21 +114,8 @@ echo "running activation script..."
 $systemConfig/activate
 
 
-# Restore the system time from the hardware clock.  We do this after
-# running the activation script to be sure that /etc/localtime points
-# at the current time zone.
-if [ -e /dev/rtc ]; then
-    hwclock --hctosys
-fi
-
-
 # Record the boot configuration.
 ln -sfn "$systemConfig" /run/booted-system
-
-# Prevent the booted system from being garbage-collected. If it weren't
-# a gcroot, if we were running a different kernel, switched system,
-# and garbage collected all, we could not load kernel modules anymore.
-ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 
 
 # Run any user-specified commands.
@@ -162,15 +130,15 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 : >> /etc/machine-id
 
 
-# Reset the logging file descriptors.
-exec 1>&$logOutFd 2>&$logErrFd
-exec {logOutFd}>&- {logErrFd}>&-
+# No need to restore the stdout/stderr streams we never redirected and
+# especially no need to start systemd
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
+    # Reset the logging file descriptors.
+    exec 1>&$logOutFd 2>&$logErrFd
+    exec {logOutFd}>&- {logErrFd}>&-
 
 
-# Start systemd.
-echo "starting systemd..."
-
-PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
-    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive @systemdUnitPathEnvVar@ \
-    TZDIR=/etc/zoneinfo \
-    exec @systemdExecutable@
+    # Start systemd in a clean environment.
+    echo "starting systemd..."
+    exec @systemdExecutable@ "$@"
+fi

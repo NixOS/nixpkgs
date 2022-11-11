@@ -1,5 +1,5 @@
 diff --git a/shells/bash.go b/shells/bash.go
-index bd99eca1a..9873dff6b 100644
+index 18d608445..f158ffc0b 100644
 --- a/shells/bash.go
 +++ b/shells/bash.go
 @@ -3,6 +3,7 @@ package shells
@@ -10,16 +10,16 @@ index bd99eca1a..9873dff6b 100644
  	"path"
  	"runtime"
  	"strconv"
-@@ -300,7 +301,11 @@ func (b *BashShell) GetConfiguration(info common.ShellScriptInfo) (*common.Shell
- 	if info.User != "" {
- 		script.Command = "su"
- 		if runtime.GOOS == "linux" {
--			script.Arguments = append(script.Arguments, "-s", "/bin/"+b.Shell)
-+			shellPath, err := exec.LookPath(b.Shell)
-+			if err != nil {
-+				shellPath = "/bin/" + b.Shell
-+			}
-+			script.Arguments = append(script.Arguments, "-s", shellPath)
- 		}
- 		script.Arguments = append(
- 			script.Arguments,
+@@ -307,7 +308,11 @@ func (b *BashShell) GetConfiguration(info common.ShellScriptInfo) (*common.Shell
+
+ 	script.Command = "su"
+ 	if runtime.GOOS == OSLinux {
+-		script.Arguments = []string{"-s", "/bin/" + b.Shell, info.User, "-c", script.CmdLine}
++		shellPath, err := exec.LookPath(b.Shell)
++		if err != nil {
++			shellPath = "/bin/" + b.Shell
++		}
++		script.Arguments = []string{"-s", shellPath, info.User, "-c", script.CmdLine}
+ 	} else {
+ 		script.Arguments = []string{info.User, "-c", script.CmdLine}
+ 	}

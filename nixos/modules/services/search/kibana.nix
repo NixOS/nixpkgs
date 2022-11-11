@@ -32,53 +32,53 @@ let
 
 in {
   options.services.kibana = {
-    enable = mkEnableOption "kibana service";
+    enable = mkEnableOption (lib.mdDoc "kibana service");
 
     listenAddress = mkOption {
-      description = "Kibana listening host";
+      description = lib.mdDoc "Kibana listening host";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Kibana listening port";
+      description = lib.mdDoc "Kibana listening port";
       default = 5601;
       type = types.int;
     };
 
     cert = mkOption {
-      description = "Kibana ssl certificate.";
+      description = lib.mdDoc "Kibana ssl certificate.";
       default = null;
       type = types.nullOr types.path;
     };
 
     key = mkOption {
-      description = "Kibana ssl key.";
+      description = lib.mdDoc "Kibana ssl key.";
       default = null;
       type = types.nullOr types.path;
     };
 
     index = mkOption {
-      description = "Elasticsearch index to use for saving kibana config.";
+      description = lib.mdDoc "Elasticsearch index to use for saving kibana config.";
       default = ".kibana";
       type = types.str;
     };
 
     defaultAppId = mkOption {
-      description = "Elasticsearch default application id.";
+      description = lib.mdDoc "Elasticsearch default application id.";
       default = "discover";
       type = types.str;
     };
 
     elasticsearch = {
       url = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Elasticsearch url.
 
-          Defaults to <literal>"http://localhost:9200"</literal>.
+          Defaults to `"http://localhost:9200"`.
 
           Don't set this when using Kibana >= 7.0.0 because it will result in a
-          configuration error. Use <option>services.kibana.elasticsearch.hosts</option>
+          configuration error. Use {option}`services.kibana.elasticsearch.hosts`
           instead.
         '';
         default = null;
@@ -86,11 +86,11 @@ in {
       };
 
       hosts = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The URLs of the Elasticsearch instances to use for all your queries.
           All nodes listed here must be on the same cluster.
 
-          Defaults to <literal>[ "http://localhost:9200" ]</literal>.
+          Defaults to `[ "http://localhost:9200" ]`.
 
           This option is only valid when using kibana >= 6.6.
         '';
@@ -99,22 +99,22 @@ in {
       };
 
       username = mkOption {
-        description = "Username for elasticsearch basic auth.";
+        description = lib.mdDoc "Username for elasticsearch basic auth.";
         default = null;
         type = types.nullOr types.str;
       };
 
       password = mkOption {
-        description = "Password for elasticsearch basic auth.";
+        description = lib.mdDoc "Password for elasticsearch basic auth.";
         default = null;
         type = types.nullOr types.str;
       };
 
       ca = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           CA file to auth against elasticsearch.
 
-          It's recommended to use the <option>certificateAuthorities</option> option
+          It's recommended to use the {option}`certificateAuthorities` option
           when using kibana-5.4 or newer.
         '';
         default = null;
@@ -122,13 +122,13 @@ in {
       };
 
       certificateAuthorities = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           CA files to auth against elasticsearch.
 
-          Please use the <option>ca</option> option when using kibana &lt; 5.4
+          Please use the {option}`ca` option when using kibana \< 5.4
           because those old versions don't support setting multiple CA's.
 
-          This defaults to the singleton list [ca] when the <option>ca</option> option is defined.
+          This defaults to the singleton list [ca] when the {option}`ca` option is defined.
         '';
         default = if cfg.elasticsearch.ca == null then [] else [ca];
         defaultText = literalExpression ''
@@ -138,33 +138,33 @@ in {
       };
 
       cert = mkOption {
-        description = "Certificate file to auth against elasticsearch.";
+        description = lib.mdDoc "Certificate file to auth against elasticsearch.";
         default = null;
         type = types.nullOr types.path;
       };
 
       key = mkOption {
-        description = "Key file to auth against elasticsearch.";
+        description = lib.mdDoc "Key file to auth against elasticsearch.";
         default = null;
         type = types.nullOr types.path;
       };
     };
 
     package = mkOption {
-      description = "Kibana package to use";
+      description = lib.mdDoc "Kibana package to use";
       default = pkgs.kibana;
       defaultText = literalExpression "pkgs.kibana";
       type = types.package;
     };
 
     dataDir = mkOption {
-      description = "Kibana data directory";
+      description = lib.mdDoc "Kibana data directory";
       default = "/var/lib/kibana";
       type = types.path;
     };
 
     extraConf = mkOption {
-      description = "Kibana extra configuration";
+      description = lib.mdDoc "Kibana extra configuration";
       default = {};
       type = types.attrs;
     };

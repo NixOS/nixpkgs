@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , vala
 , gettext
 , pkg-config
@@ -11,7 +12,6 @@
 , libpeas
 , bash
 , gobject-introspection
-, libsoup
 , gtksourceview4
 , gsettings-desktop-schemas
 , adwaita-icon-theme
@@ -21,6 +21,7 @@
 , libgee
 , libgit2-glib
 , libsecret
+, libxml2
 , meson
 , ninja
 , python3
@@ -35,6 +36,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "f7Ybn7EPuqVI0j1wZbq9cq1j5iHeVYQMBlzm45hsRik=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:8:5: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gitg/-/commit/1978973b12848741b08695ec2020bac98584d636.patch";
+      sha256 = "sha256-RzaGPGGiKMgjy0waFqt48rV2yWBGZgC3kHehhVhxktk=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -60,7 +70,7 @@ stdenv.mkDerivation rec {
     libgit2-glib
     libpeas
     libsecret
-    libsoup
+    libxml2
   ];
 
   doCheck = false; # FAIL: tests-gitg gtk_style_context_add_provider_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed

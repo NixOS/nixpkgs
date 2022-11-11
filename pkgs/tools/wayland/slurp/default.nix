@@ -8,6 +8,7 @@
 , libxkbcommon
 , wayland
 , wayland-protocols
+, wayland-scanner
 , buildDocs ? true, scdoc
 }:
 
@@ -22,10 +23,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5ZB34rqLyZmfjT/clxNRDmF0qgITFZ5xt/gIEXQzvQE=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ] ++ lib.optional buildDocs scdoc;
 
   buildInputs = [

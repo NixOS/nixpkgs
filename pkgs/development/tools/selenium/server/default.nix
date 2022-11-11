@@ -33,8 +33,10 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.seleniumhq.org/";
     description = "Selenium Server for remote WebDriver";
-    maintainers = with maintainers; [ coconnor offline ];
-    platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ coconnor offline ];
+    mainProgram = "selenium-server";
+    platforms = platforms.all;
   };
 }

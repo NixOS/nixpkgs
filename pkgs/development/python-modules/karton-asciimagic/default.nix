@@ -2,29 +2,25 @@
 , buildPythonPackage
 , fetchFromGitHub
 , karton-core
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "karton-asciimagic";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vj4b8man81g99g4c53zyvp1gc47c2imj5ha9r4z4bf8gs3aqsv6";
+    sha256 = "sha256-sY5ik9efzLBa6Fbh17Vh4q7PlwOGYjuodU9yvp/8E3k=";
   };
 
   propagatedBuildInputs = [
     karton-core
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "karton.asciimagic" ];
 

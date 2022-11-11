@@ -14,6 +14,7 @@
 , glib
 , gtk3
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -26,11 +27,12 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.15.0";
+  version = "0.21.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-ZEfYjgSaj4vVdfgdIcg0PWwlFX90PIm5wvdn9P/8tvo=";
+    sha256 = "sha256-I0BWwEKvOYQ1s2IpvV70GWxhARdX6AZ+B4ypnTlLlDw=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +59,14 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
     gtk3
     pam
@@ -81,7 +84,12 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -108,13 +116,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    # The OSK0.desktop points to a dummy stub that's not needed
-    rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 
@@ -122,7 +128,7 @@ stdenv.mkDerivation rec {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

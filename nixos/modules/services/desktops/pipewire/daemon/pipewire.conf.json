@@ -3,12 +3,14 @@
     "link.max-buffers": 16,
     "core.daemon": true,
     "core.name": "pipewire-0",
+    "default.clock.min-quantum": 16,
     "vm.overrides": {
       "default.clock.min-quantum": 1024
     }
   },
   "context.spa-libs": {
     "audio.convert.*": "audioconvert/libspa-audioconvert",
+    "avb.*": "avb/libspa-avb",
     "api.alsa.*": "alsa/libspa-alsa",
     "api.v4l2.*": "v4l2/libspa-v4l2",
     "api.libcamera.*": "libcamera/libspa-libcamera",
@@ -19,8 +21,10 @@
   },
   "context.modules": [
     {
-      "name": "libpipewire-module-rtkit",
-      "args": {},
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
       "flags": [
         "ifexists",
         "nofail"

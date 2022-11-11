@@ -1,14 +1,32 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption mkIf mkOption types
+    recursiveUpdate;
+
   cfg = config.networking.wireless.iwd;
   ini = pkgs.formats.ini { };
-  configFile = ini.generate "main.conf" cfg.settings;
-in {
+  defaults = {
+    # without UseDefaultInterface, sometimes wlan0 simply goes AWOL with NetworkManager
+    # https://iwd.wiki.kernel.org/interface_lifecycle#interface_management_in_iwd
+    General.UseDefaultInterface = with config.networking.networkmanager; (enable && (wifi.backend == "iwd"));
+  };
+  configFile = ini.generate "main.conf" (recursiveUpdate defaults cfg.settings);
+
+in
+{
   options.networking.wireless.iwd = {
-    enable = mkEnableOption "iwd";
+    enable = mkEnableOption (lib.mdDoc "iwd");
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.iwd;
+      defaultText = lib.literalExpression "pkgs.iwd";
+      description = lib.mdDoc ''
+        The iwd package to use.
+      '';
+    };
 
     settings = mkOption {
       type = ini.type;
@@ -23,9 +41,9 @@ in {
         };
       };
 
-      description = ''
+      description = lib.mdDoc ''
         Options passed to iwd.
-        See <link xlink:href="https://iwd.wiki.kernel.org/networkconfigurationsettings">here</link> for supported options.
+        See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
       '';
     };
   };
@@ -38,14 +56,14 @@ in {
       '';
     }];
 
-    environment.etc."iwd/main.conf".source = configFile;
+    environment.etc."iwd/${configFile.name}".source = configFile;
 
     # for iwctl
-    environment.systemPackages =  [ pkgs.iwd ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.iwd ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.iwd ];
+    systemd.packages = [ cfg.package ];
 
     systemd.network.links."80-iwd" = {
       matchConfig.Type = "wlan";
@@ -58,5 +76,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }

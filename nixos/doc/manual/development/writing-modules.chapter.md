@@ -90,6 +90,17 @@ modules: `systemd.services` (the set of all systemd services) and
 `systemd.timers` (the list of commands to be executed periodically by
 `systemd`).
 
+Care must be taken when writing systemd services using `Exec*` directives. By
+default systemd performs substitution on `%<char>` specifiers in these
+directives, expands environment variables from `$FOO` and `${FOO}`, splits
+arguments on whitespace, and splits commands on `;`. All of these must be escaped
+to avoid unexpected substitution or splitting when interpolating into an `Exec*`
+directive, e.g. when using an `extraArgs` option to pass additional arguments to
+the service. The functions `utils.escapeSystemdExecArg` and
+`utils.escapeSystemdExecArgs` are provided for this, see [Example: Escaping in
+Exec directives](#exec-escaping-example) for an example. When using these
+functions system environment substitution should *not* be disabled explicitly.
+
 ::: {#locate-example .example}
 ::: {.title}
 **Example: NixOS Module for the "locate" Service**
@@ -149,6 +160,37 @@ in {
         timerConfig.OnCalendar = cfg.interval;
       };
   };
+}
+```
+:::
+
+::: {#exec-escaping-example .example}
+::: {.title}
+**Example: Escaping in Exec directives**
+:::
+```nix
+{ config, lib, pkgs, utils, ... }:
+
+with lib;
+
+let
+  cfg = config.services.echo;
+  echoAll = pkgs.writeScript "echo-all" ''
+    #! ${pkgs.runtimeShell}
+    for s in "$@"; do
+      printf '%s\n' "$s"
+    done
+  '';
+  args = [ "a%Nything" "lang=\${LANG}" ";" "/bin/sh -c date" ];
+in {
+  systemd.services.echo =
+    { description = "Echo to the journal";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "oneshot";
+      serviceConfig.ExecStart = ''
+        ${echoAll} ${utils.escapeSystemdExecArgs args}
+      '';
+    };
 }
 ```
 :::

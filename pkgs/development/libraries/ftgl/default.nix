@@ -23,6 +23,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 
+  # GL_DYLIB is hardcoded to an impure path
+  # /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+  # and breaks build on recent macOS versions
+  postPatch = ''
+    substituteInPlace m4/gl.m4 \
+      --replace ' -dylib_file $GL_DYLIB: $GL_DYLIB' ""
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     doxygen

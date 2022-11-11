@@ -1,0 +1,28 @@
+diff --git a/pylibfdt/libfdt.i b/pylibfdt/libfdt.i
+index 51ee801..075ef70 100644
+--- a/pylibfdt/libfdt.i
++++ b/pylibfdt/libfdt.i
+@@ -1044,9 +1044,9 @@ typedef uint32_t fdt32_t;
+ 		$result = Py_None;
+ 	else
+         %#if PY_VERSION_HEX >= 0x03000000
+-            $result = Py_BuildValue("y#", $1, *arg4);
++            $result = Py_BuildValue("y#", $1, (Py_ssize_t)*arg4);
+         %#else
+-            $result = Py_BuildValue("s#", $1, *arg4);
++            $result = Py_BuildValue("s#", $1, (Py_ssize_t)*arg4);
+         %#endif
+ }
+ 
+diff --git a/pylibfdt/setup.py b/pylibfdt/setup.py
+index ef40f15..81e161a 100755
+--- a/pylibfdt/setup.py
++++ b/pylibfdt/setup.py
+@@ -42,6 +42,7 @@ def get_version():
+ libfdt_module = Extension(
+     '_libfdt',
+     sources=[os.path.join(srcdir, 'libfdt.i')],
++    define_macros=[('PY_SSIZE_T_CLEAN', None)],
+     include_dirs=[os.path.join(srcdir, '../libfdt')],
+     libraries=['fdt'],
+     library_dirs=[os.path.join(top_builddir, 'libfdt')],

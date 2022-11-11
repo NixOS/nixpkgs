@@ -10,7 +10,7 @@
 , llvmSharedForBuild
 , llvmSharedForHost
 , llvmSharedForTarget
-, llvmPackagesForBuild # Exposed through rustc for LTO in Firefox
+, llvmPackages # Exposed through rustc for LTO in Firefox
 }:
 { stdenv, lib
 , buildPackages
@@ -28,7 +28,7 @@ in
   lib = lib';
 
   # Backwards compat before `lib` was factored out.
-  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec;
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions from
@@ -64,7 +64,7 @@ in
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
-        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackagesForBuild;
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
 
         patches = rustcPatches;
 
@@ -83,7 +83,6 @@ in
         inherit CoreFoundation Security;
       };
       clippy = self.callPackage ./clippy.nix { inherit Security; };
-      rls = self.callPackage ./rls { inherit CoreFoundation Security SystemConfiguration; };
     });
   };
 }

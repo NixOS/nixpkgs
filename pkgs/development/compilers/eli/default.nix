@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
   # skip interactive browser check
   buildFlags = [ "nobrowsers" ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure=''
     configureFlagsArray=(

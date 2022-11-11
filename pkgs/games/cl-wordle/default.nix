@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cl-wordle";
-  version = "0.2.0";
+  version = "0.5.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-M2ljFrfIOyM1Slwsk7ZJ+PhJIVSUvFcFck2Q2e9nOwc=";
+  src = fetchFromGitHub {
+    owner = "conradludgate";
+    repo = "wordle";
+    rev = "v${version}";
+    sha256 = "sha256-wFTvzAzboUFQg3fauIwIdRChK7rmLES92jK+8ff1D3s=";
   };
 
-  cargoSha256 = "sha256-bB6MzpJc8QS2+8GSS8RbSF5QcJyRT8FkmChpf1x2i/E=";
-
-  patches = [ ./rust-1-57.diff ];
+  cargoSha256 = "sha256-PtJbLpAUH44alupFY6wX++t/QsKknn5bXvnXzdYsd9o=";
 
   meta = with lib; {
     description = "Wordle TUI in Rust";

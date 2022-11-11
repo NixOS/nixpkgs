@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}c++"
   ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   installPhase = ''
     runHook preInstall
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://npush.sourceforge.net/";
     description = "A Sokoban-like game";
     license = licenses.gpl2Plus;

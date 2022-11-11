@@ -33,85 +33,85 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Hologram server for AWS instance credentials";
+        description = lib.mdDoc "Whether to enable the Hologram server for AWS instance credentials";
       };
 
       listenAddress = mkOption {
         type        = types.str;
         default     = "0.0.0.0:3100";
-        description = "Address and port to listen on";
+        description = lib.mdDoc "Address and port to listen on";
       };
 
       ldapHost = mkOption {
         type        = types.str;
-        description = "Address of the LDAP server to use";
+        description = lib.mdDoc "Address of the LDAP server to use";
       };
 
       ldapInsecure = mkOption {
         type        = types.bool;
         default     = false;
-        description = "Whether to connect to LDAP over SSL or not";
+        description = lib.mdDoc "Whether to connect to LDAP over SSL or not";
       };
 
       ldapUserAttr = mkOption {
         type        = types.str;
         default     = "cn";
-        description = "The LDAP attribute for usernames";
+        description = lib.mdDoc "The LDAP attribute for usernames";
       };
 
       ldapBaseDN = mkOption {
         type        = types.str;
-        description = "The base DN for your Hologram users";
+        description = lib.mdDoc "The base DN for your Hologram users";
       };
 
       ldapBindDN = mkOption {
         type        = types.str;
-        description = "DN of account to use to query the LDAP server";
+        description = lib.mdDoc "DN of account to use to query the LDAP server";
       };
 
       ldapBindPassword = mkOption {
         type        = types.str;
-        description = "Password of account to use to query the LDAP server";
+        description = lib.mdDoc "Password of account to use to query the LDAP server";
       };
 
       enableLdapRoles = mkOption {
         type        = types.bool;
         default     = false;
-        description = "Whether to assign user roles based on the user's LDAP group memberships";
+        description = lib.mdDoc "Whether to assign user roles based on the user's LDAP group memberships";
       };
 
       groupClassAttr = mkOption {
         type = types.str;
         default = "groupOfNames";
-        description = "The objectclass attribute to search for groups when enableLdapRoles is true";
+        description = lib.mdDoc "The objectclass attribute to search for groups when enableLdapRoles is true";
       };
 
       roleAttr = mkOption {
         type        = types.str;
         default     = "businessCategory";
-        description = "Which LDAP group attribute to search for authorized role ARNs";
+        description = lib.mdDoc "Which LDAP group attribute to search for authorized role ARNs";
       };
 
       awsAccount = mkOption {
         type        = types.str;
-        description = "AWS account number";
+        description = lib.mdDoc "AWS account number";
       };
 
       awsDefaultRole = mkOption {
         type        = types.str;
-        description = "AWS default role";
+        description = lib.mdDoc "AWS default role";
       };
 
       statsAddress = mkOption {
         type        = types.str;
         default     = "";
-        description = "Address of statsd server";
+        description = lib.mdDoc "Address of statsd server";
       };
 
       cacheTimeoutSeconds = mkOption {
         type        = types.int;
         default     = 3600;
-        description = "How often (in seconds) to refresh the LDAP cache";
+        description = lib.mdDoc "How often (in seconds) to refresh the LDAP cache";
       };
     };
   };

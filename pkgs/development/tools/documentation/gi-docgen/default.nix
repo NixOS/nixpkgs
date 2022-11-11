@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2021.8";
+  version = "2022.1";
 
   format = "other";
 
@@ -17,15 +17,15 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "Y1IdCH6bytxbKIj48IAw/3XUQhoqwPshvdj/d1hRS3o=";
+    sha256 = "35pL/2TQRVgPfAcfOGCLlSP1LIh4r95mFC+UoXQEEHo=";
   };
 
   patches = [
-    # Fix building docs of some packages (e.g. gnome-builder)
-    # https://gitlab.gnome.org/GNOME/gi-docgen/-/issues/111
+    # Fix gnome-builder build
+    # https://gitlab.gnome.org/GNOME/gi-docgen/-/merge_requests/161
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/72f3c5dbe27aabb5f7a376afda23f3dfc3c2e212.patch";
-      sha256 = "iVXc3idmcjmFVZQdE2QX2V53YZ79lqxZid9nWdxAZ/Q=";
+      url = "https://gitlab.gnome.org/GNOME/gi-docgen/-/commit/0524047ada3e6a5572c43dd36201ebe589d08095.patch";
+      sha256 = "1P+i7v1sMULOd0w8K363Mssj+tBJ2wiSmE7DlztvCbw=";
     })
   ];
 

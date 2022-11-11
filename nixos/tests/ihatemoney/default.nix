@@ -7,7 +7,7 @@ let
   inherit (import ../../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   f = backend: makeTest {
     name = "ihatemoney-${backend}";
-    machine = { nodes, lib, ... }: {
+    nodes.machine = { nodes, lib, ... }: {
       services.ihatemoney = {
         enable = true;
         enablePublicProjectCreation = true;
@@ -32,14 +32,7 @@ let
         };
       };
       # ihatemoney needs a local smtp server otherwise project creation just crashes
-      services.opensmtpd = {
-        enable = true;
-        serverConfiguration = ''
-          listen on lo
-          action foo relay
-          match from any for any action foo
-        '';
-      };
+      services.postfix.enable = true;
     };
     testScript = ''
       machine.wait_for_open_port(8000)

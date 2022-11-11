@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" "doc" ];
+  strictDeps = true;
 
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738, migrated to
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
-    ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
+    ++ optionals (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
        # Can't run these tests while cross-compiling
-    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
        [ "glib_cv_stack_grows=no"
          "glib_cv_uscore=no"
          "ac_cv_func_posix_getpwuid_r=yes"

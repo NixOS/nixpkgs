@@ -11,7 +11,7 @@ let
   });
 in {
   options.programs.singularity = {
-    enable = mkEnableOption "Singularity";
+    enable = mkEnableOption (lib.mdDoc "Singularity");
   };
 
   config = mkIf cfg.enable {

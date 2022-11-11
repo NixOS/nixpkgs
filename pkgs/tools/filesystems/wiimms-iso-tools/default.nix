@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     patchShebangs gen-text-file.sh
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security -fcommon";
   INSTALL_PATH = "$out";
 
   installPhase = ''

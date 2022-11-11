@@ -40,10 +40,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/FD-/RPiPlay";
     description = "An open-source implementation of an AirPlay mirroring server.";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mschneider ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

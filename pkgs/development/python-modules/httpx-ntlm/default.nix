@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "httpx_ntlm";
     inherit version;
-    sha256 = "sha256-pv/OxgcO0JWk2nCZp+bKlOdX7NqV6V5xZRDy5dd13qQ=";
+    hash = "sha256-pv/OxgcO0JWk2nCZp+bKlOdX7NqV6V5xZRDy5dd13qQ=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,12 @@ buildPythonPackage rec {
     httpx
     pyspnego
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyspnego==0.3.*" "pyspnego>=0.3.*" \
+      --replace "cryptography==36.0.*" "cryptography>=36.0.*"
+  '';
 
   # https://github.com/ulodciv/httpx-ntlm/issues/5
   doCheck = false;

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "subarulink";
-  version = "0.4.2";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "G-Two";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EI7m2SFa1eAtncMA0g1OmXumzub4UvE6ssGfUGtLO2Q=";
+    hash = "sha256-esZ+nIHIXKfilb8dBFbAbQQFI6fFRUcoFVCPdnqGXYw=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,10 @@ buildPythonPackage rec {
     cryptography
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   postPatch = ''

@@ -1,10 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
-let
-  pname = "xml-light";
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, gitUpdater }:
+
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-xml-light";
   version = "2.4";
-in
-stdenv.mkDerivation {
-  name = "ocaml-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ncannasse";
@@ -13,20 +11,21 @@ stdenv.mkDerivation {
     sha256 = "sha256-2txmkl/ZN5RGaLQJmr+orqwB4CbFk2RpLJd4gr7kPiE=";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
-
   installPhase = ''
+    runHook preInstall
     make install_ocamlfind
     mkdir -p $out/share
     cp -vai doc $out/share/
+    runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Minimal Xml parser and printer for OCaml";
@@ -40,6 +39,6 @@ stdenv.mkDerivation {
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [ ];
+    inherit (ocaml.meta) platforms;
   };
 }

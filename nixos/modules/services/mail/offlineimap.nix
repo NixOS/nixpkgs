@@ -7,18 +7,18 @@ let
 in {
 
   options.services.offlineimap = {
-    enable = mkEnableOption "OfflineIMAP, a software to dispose your mailbox(es) as a local Maildir(s)";
+    enable = mkEnableOption (lib.mdDoc "OfflineIMAP, a software to dispose your mailbox(es) as a local Maildir(s)");
 
     install = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install a user service for Offlineimap. Once
         the service is started, emails will be fetched automatically.
 
         The service must be manually started for each user with
         "systemctl --user start offlineimap" or globally through
-        <varname>services.offlineimap.enable</varname>.
+        {var}`services.offlineimap.enable`.
       '';
     };
 
@@ -26,26 +26,26 @@ in {
       type = types.package;
       default = pkgs.offlineimap;
       defaultText = literalExpression "pkgs.offlineimap";
-      description = "Offlineimap derivation to use.";
+      description = lib.mdDoc "Offlineimap derivation to use.";
     };
 
     path = mkOption {
       type = types.listOf types.path;
       default = [];
       example = literalExpression "[ pkgs.pass pkgs.bash pkgs.notmuch ]";
-      description = "List of derivations to put in Offlineimap's path.";
+      description = lib.mdDoc "List of derivations to put in Offlineimap's path.";
     };
 
     onCalendar = mkOption {
       type = types.str;
       default = "*:0/3"; # every 3 minutes
-      description = "How often is offlineimap started. Default is '*:0/3' meaning every 3 minutes. See systemd.time(7) for more information about the format.";
+      description = lib.mdDoc "How often is offlineimap started. Default is '*:0/3' meaning every 3 minutes. See systemd.time(7) for more information about the format.";
     };
 
     timeoutStartSec = mkOption {
       type = types.str;
       default = "120sec"; # Kill if still alive after 2 minutes
-      description = "How long waiting for offlineimap before killing it. Default is '120sec' meaning every 2 minutes. See systemd.time(7) for more information about the format.";
+      description = lib.mdDoc "How long waiting for offlineimap before killing it. Default is '120sec' meaning every 2 minutes. See systemd.time(7) for more information about the format.";
     };
   };
   config = mkIf (cfg.enable || cfg.install) {

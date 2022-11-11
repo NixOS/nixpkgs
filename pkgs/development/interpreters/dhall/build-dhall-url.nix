@@ -59,6 +59,7 @@ let
         outputHash = hash;
         name = baseNameOf url;
         nativeBuildInputs = [ cacert ];
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       }
       ''
         echo "${url} ${dhallHash}" > in-dhall-file
@@ -76,7 +77,8 @@ let
    sourceFile = "source.dhall";
 
 in
-  runCommand name { } (''
+  runCommand name { }
+ (''
     set -eu
 
     mkdir -p ${cacheDhall} $out/${cacheDhall}

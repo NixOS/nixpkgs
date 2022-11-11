@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchurl, pkg-config, deadbeef, glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, deadbeef
+, autoreconfHook
+, pkg-config
+, glib
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "deadbeef-mpris2-plugin";
-  version = "1.12";
+  version = "1.14";
+in stdenv.mkDerivation {
+  inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/Serranya/deadbeef-mpris2-plugin/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0s3y4ka4qf38cypc0xspy79q0g5y1kqx6ldad7yr6a45nw6j95jh";
+  src = fetchFromGitHub {
+    owner = "DeaDBeeF-Player";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-w7ccIhcPjbjs18kb3ZdM9JtSail9ik3uyAc40T8lHho=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ deadbeef glib ];
+  buildInputs = [
+    deadbeef
+    glib
+  ];
 
   meta = with lib; {
     description = "MPRISv2 plugin for the DeaDBeeF music player";
-    homepage = "https://github.com/Serranya/deadbeef-mpris2-plugin/";
+    homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.abbradar ];

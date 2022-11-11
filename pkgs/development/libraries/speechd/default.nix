@@ -27,11 +27,11 @@ let
   inherit (python3Packages) python pyxdg wrapPython;
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-0doS7T2shPE3mbai7Dm6LTyiGoST9E3BhVvQupbC3cY=";
+    sha256 = "sha256-i0ZJkl5oy+GntMCge7BBznc4s1yQamAr+CmG2xqg82Q=";
   };
 
   patches = [
@@ -69,9 +69,9 @@ in stdenv.mkDerivation rec {
     espeak
     sonic
     pcaudiolib
-  ] ++ lib.optional withFlite [
+  ] ++ lib.optionals withFlite [
     flite
-  ] ++ lib.optional withPico [
+  ] ++ lib.optionals withPico [
     svox
   ];
 
@@ -83,17 +83,17 @@ in stdenv.mkDerivation rec {
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ lib.optional withPulse [
+  ] ++ lib.optionals withPulse [
   "--with-pulse"
-  ] ++ lib.optional withAlsa [
+  ] ++ lib.optionals withAlsa [
     "--with-alsa"
-  ] ++ lib.optional withLibao [
+  ] ++ lib.optionals withLibao [
     "--with-libao"
-  ] ++ lib.optional withOss [
+  ] ++ lib.optionals withOss [
     "--with-oss"
-  ] ++ lib.optional withEspeak [
+  ] ++ lib.optionals withEspeak [
     "--with-espeak-ng"
-  ] ++ lib.optional withPico [
+  ] ++ lib.optionals withPico [
     "--with-pico"
   ];
 

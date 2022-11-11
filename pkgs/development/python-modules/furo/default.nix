@@ -4,25 +4,43 @@
 , fetchPypi
 , sphinx
 , beautifulsoup4
+, sphinx-basic-ng
 }:
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2022.1.2";
-  format = "flit";
-  disable = pythonOlder "3.6";
+  version = "2022.9.29";
+  format = "wheel";
+
+  disable = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "b217f218cbcd423ffbfe69baa79389d4ecebf2d86f0d593c44ef31da7b5aed30";
+    inherit pname version format;
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-VZ7heZnA9ScoSB3PaxsM+Ml0PmjF46GMtFp5knR4aak=";
   };
 
   propagatedBuildInputs = [
     sphinx
     beautifulsoup4
+    sphinx-basic-ng
   ];
 
-  pythonImportsCheck = [ "furo" ];
+  installCheckPhase = ''
+    # furo was built incorrectly if this directory is empty
+    # Ignore the hidden file .gitignore
+    cd "$out/lib/python"*
+    if [ "$(ls 'site-packages/furo/theme/furo/static/' | wc -l)" -le 0 ]; then
+      echo 'static directory must not be empty'
+      exit 1
+    fi
+    cd -
+  '';
+
+  pythonImportsCheck = [
+    "furo"
+  ];
 
   meta = with lib; {
     description = "A clean customizable documentation theme for Sphinx";

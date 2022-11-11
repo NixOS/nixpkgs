@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssh
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, openssh
 , mpi, blas, lapack
 } :
 
@@ -6,16 +6,23 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hiap5i9ik6xpvl721n2slanlqygagc1pg2bcjb27ans6balhsfh";
+    sha256 = "sha256-GNVGWrIWdfyTfbz7c31Vjt9eDlVzCd/aLHoWq2DMyX4=";
   };
 
   passthru = { inherit (blas) isILP64; };
+
+  # upstream patch, remove with next release
+  patches = [ (fetchpatch {
+    name = "gcc-10";
+    url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/a0f76fc0c1c16646875b454b7d6f8d9d17726b5a.patch";
+    sha256 = "0civn149ikghakic30bynqg1bal097hr7i12cm4kq3ssrhq073bp";
+  })];
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19
@@ -31,8 +38,11 @@ stdenv.mkDerivation rec {
   checkInputs = [ openssh ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
-  doCheck = true;
+  # xslu and xsllt tests seem to time out on x86_64-darwin.
+  # this line is left so those who force installation on x86_64-darwin can still build
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -60,15 +70,15 @@ stdenv.mkDerivation rec {
 
     # Run single threaded
     export OMP_NUM_THREADS=1
-
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ costrouc markuskowa ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ costrouc markuskowa gdinh ];
+    # xslu and xsllt tests fail on x86 darwin
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

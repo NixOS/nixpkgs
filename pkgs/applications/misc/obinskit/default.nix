@@ -15,7 +15,7 @@ let
     icon = "obinskit";
     desktopName = "Obinskit";
     genericName = "Obinskit keyboard configurator";
-    categories = "Utility";
+    categories = [ "Utility" ];
   };
   electron = electron_13;
 in

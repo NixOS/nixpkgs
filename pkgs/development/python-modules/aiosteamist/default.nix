@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiosteamist";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    hash = "sha256-VoIJh3EDBPKmvEmM3gP2pyt/0oz4i6Y0zIkkprTcFLg=";
+    hash = "sha256-IKrAJ4QDcYJRO4hcomL9FRs8hJ3k7SgRgK4H1b8SxIM=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=aiosteamist" ""
+      --replace "--cov=aiosteamist" "" \
+      --replace 'xmltodict = "^0.12.0"' 'xmltodict = "*"'
   '';
 
   pythonImportsCheck = [

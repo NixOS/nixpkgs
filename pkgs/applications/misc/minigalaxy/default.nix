@@ -8,7 +8,7 @@
 , gtk3
 , python3
 , python3Packages
-, steam-run-native
+, steam-run
 , unzip
 , webkitgtk
 , wrapGAppsHook
@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-BbtwLuG5TH/+06Ez8+mwSAjG1IWg9/3uxzjmgPHczAw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-bpNtdMYBl2dJ4PQsxkhm/Y+3A0dD/Y2XC0VaUYyRhvM=";
   };
 
   checkPhase = ''
@@ -30,6 +30,10 @@ python3Packages.buildPythonApplication rec {
     env HOME=$PWD LC_ALL=en_US.UTF-8 pytest
     runHook postCheck
   '';
+
+  # Cannot find GSettings schemas when opening settings,
+  # probably https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   nativeBuildInputs = [
     gettext
@@ -54,14 +58,14 @@ python3Packages.buildPythonApplication rec {
     python3.pkgs.requests
     python3.pkgs.setuptools
     python3.pkgs.simplejson
-    steam-run-native
+    steam-run
     unzip
     webkitgtk
   ];
 
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
   postFixup = ''
-    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run-native}/bin/steam-run#' -i $out/bin/minigalaxy
+    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run}/bin/steam-run#' -i $out/bin/minigalaxy
   '';
 
   meta = with lib; {

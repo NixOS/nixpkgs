@@ -2,24 +2,23 @@
 
 let
   pname = "buttercup-desktop";
-  version = "2.13.0";
-  name = "${pname}-${version}";
+  version = "2.16.0";
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
-    sha256 = "sha256-JXXJZyd/fp2463WyxIB+pKcNzGUFfCouPE6iTx2lhME=";
+    sha256 = "sha256-o6KdbwD0VdCTYLEfar7Jt7MRZUayGHyasnmtU8Cqg3E=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname src version;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/buttercup-desktop
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/buttercup.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/buttercup.desktop \
-      --replace 'Exec=AppRun' 'Exec=buttercup-desktop'
+      --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

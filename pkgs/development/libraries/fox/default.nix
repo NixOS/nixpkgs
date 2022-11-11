@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, libXft
-, CoreServices ? null }:
+{ lib
+, stdenv
+, fetchurl
+, libpng
+, libjpeg
+, libtiff
+, zlib
+, bzip2
+, libXcursor
+, libXext
+, libXrandr
+, libXft
+, CoreServices ? null
+}:
 
 stdenv.mkDerivation rec {
   pname = "fox";
@@ -12,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang.patch ];
 
-  buildInputs = [ libpng xlibsWrapper libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ]
+  buildInputs = [ libpng libjpeg libtiff zlib bzip2 libXcursor libXext libXrandr libXft ]
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
@@ -32,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "http://fox-toolkit.org";
     license = licenses.lgpl3;
     maintainers = [];
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     platforms = platforms.all;
   };
 }

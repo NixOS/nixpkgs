@@ -34,6 +34,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "PDF to XML converter";
+    homepage = "https://sourceforge.net/projects/pdf2xml/";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

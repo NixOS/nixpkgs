@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, libX11, libXext, xorgproto, libjpeg, giflib, libtiff, libpng
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, giflib
+, libX11
+, libXext
+, libjpeg
+, libpng
+, libtiff
+, xorgproto
 }:
 
 stdenv.mkDerivation rec {
   pname = "imlib";
   version = "1.9.15";
+
   src = fetchurl {
-    url = "https://tarballs.nixos.org/imlib-${version}.tar.gz";
-    sha256 = "0ggjxyvgp4pxc0b88v40xj9daz90518ydnycw7qax011gxpr12d3";
+    url = "https://ftp.acc.umu.se/pub/GNOME/sources/imlib/1.9/${pname}-${version}.tar.gz";
+    hash = "sha256-o4mQb38hgK7w4czb5lEoIH3VkuyAbIQWYP2S+7bv8j0=";
   };
 
   patches = [
@@ -34,7 +44,15 @@ stdenv.mkDerivation rec {
     "--x-libraries=${libX11.out}/lib"
   ];
 
-  buildInputs = [ libjpeg libXext libX11 xorgproto libtiff giflib libpng ];
+  buildInputs = [
+    libjpeg
+    libXext
+    libX11
+    xorgproto
+    libtiff
+    giflib
+    libpng
+  ];
 
   meta = with lib; {
     description = "An image loading and rendering library for X11";

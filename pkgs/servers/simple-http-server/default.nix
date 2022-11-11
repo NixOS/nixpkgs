@@ -1,21 +1,21 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01a129i1ph3m8k6zkdcqnnkqbhlqpk7qvvdsz2i2kas54csbgsww";
+    sha256 = "sha256-qhYsfbzEBbWii4r/G0trU7XiAMPrX/guRshyZE2xeJk=";
   };
 
-  cargoSha256 = "050avk6wff8v1dlsfvxwvldmmgfakdxmhglv2bhvc2f3q8cf1d5d";
+  cargoSha256 = "sha256-aldAez28SZM4A8niIHk85pKeRzpxaZiQhV9Ch5dyblI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
@@ -24,6 +24,6 @@ rustPlatform.buildRustPackage rec {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ mephistophiles ];
+    maintainers = with maintainers; [ figsoda mephistophiles ];
   };
 }

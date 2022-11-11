@@ -31,9 +31,11 @@
 , libkate
 , libmad
 , libmatroska
+, libmodplug
 , libmtp
 , liboggz
 , libopus
+, libplacebo
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -78,15 +80,14 @@
 
 let
   inherit (lib) optionalString optional optionals;
-  hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.16";
+  version = "3.0.17.3";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-/641/GT2JcF1Vx0jRrxfYge+mXYlF/FUI+dPGDmUEPY=";
+    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -121,8 +122,10 @@ stdenv.mkDerivation rec {
     libmad
     libmatroska
     libmtp
+    libmodplug
     liboggz
     libopus
+    libplacebo
     libpulseaudio
     libraw1394
     librsvg
@@ -149,13 +152,13 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ (with xorg; [
+    libSM
     libXpm
     libXv
     libXvMC
     xcbutilkeysyms
-    xlibsWrapper
   ])
-  ++ optional (!hostIsAarch && !onlyLibVLC) live555
+  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
   ++ optionals skins2Support (with xorg; [
@@ -180,18 +183,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if hostIsAarch then null else live555;
+  LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
-    # Required in order to run newer srt plugin. Remove it when next release arrives
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
-      sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
-    })
     # patches to build with recent live555
     # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
     (fetchpatch {

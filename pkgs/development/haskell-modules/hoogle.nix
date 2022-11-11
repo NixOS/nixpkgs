@@ -36,7 +36,6 @@ let
       This index includes documentation for many Haskell modules.
     '';
 
-  # TODO: closePropagation is deprecated; replace
   docPackages = lib.closePropagation
     # we grab the doc outputs
     (map (lib.getOutput "doc") packages);
@@ -45,6 +44,16 @@ in
 buildPackages.stdenv.mkDerivation {
   name = "hoogle-with-packages";
   buildInputs = [ghc hoogle];
+
+  # compiling databases takes less time than copying the results
+  # between machines.
+  preferLocalBuild = true;
+
+  # we still allow substitutes because a database is relatively small and if it
+  # is already built downloading is probably faster.  The substitution will only
+  # trigger for users who have already cached the database on a substituter and
+  # thus probably intend to substitute it.
+  allowSubstitutes = true;
 
   inherit docPackages;
 

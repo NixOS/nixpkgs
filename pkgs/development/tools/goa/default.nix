@@ -1,25 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "goa";
-  version = "1.4.1";
-
-  goPackagePath = "github.com/goadesign/goa";
-  subPackages = [ "goagen" ];
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    sha256 = "0qcd4ii6arlpsivfdhcwidvnd8zbxxvf574jyxyvm1aazl8sqxj7";
+    sha256 = "sha256-Z/J1L6fYuim6LkVh+LDrr3FLTZO7uQwHXRg0YTofkWA=";
   };
+  vendorSha256 = "sha256-r/1huS/6qqS6TuqPQkwqKuYwye5DYQWYfBS1IcXWRgk=";
 
-  goDeps = ./deps.nix;
+  subPackages = [ "cmd/goa" ];
 
   meta = with lib; {
+    description = "Design-based APIs and microservices in Go";
     homepage = "https://goa.design";
-    description = "A framework for building microservices in Go using a unique design-first approach";
     license = licenses.mit;
-    maintainers = [ maintainers.rushmorem ];
+    maintainers = with maintainers; [ rushmorem ];
   };
 }

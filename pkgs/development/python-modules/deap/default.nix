@@ -1,23 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, python, numpy, matplotlib, nose }:
+{ lib, buildPythonPackage, fetchPypi, numpy, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bvshly83c4h5jhxaa97z192viczymz5fxp6vl8awjmmrs9l9x8i";
+    sha256 = "sha256-h3LxsP/wQtXlFrCuusLHBiQwRap9DejguGWPOAGBzzE=";
   };
 
-  postPatch = ''
-    sed -i '/use_2to3=True/d' setup.py
-  '';
-
   propagatedBuildInputs = [ numpy matplotlib ];
-
-  preBuild = ''
-    2to3 -wn deap
-  '';
 
   checkInputs = [ nose ];
   checkPhase = ''

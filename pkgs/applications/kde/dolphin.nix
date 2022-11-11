@@ -13,7 +13,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/dolphin/";
     description = "KDE file manager";
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
     broken = lib.versionOlder qtbase.version "5.14";
   };
@@ -27,8 +27,4 @@ mkDerivation {
     wayland qtwayland
   ];
   outputs = [ "out" "dev" ];
-  # We need the RPATH for linking, because the `libkdeinit5_dolphin.so` links
-  # private against its dependencies and without the correct RPATH, these
-  # dependencies are not found.
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 }

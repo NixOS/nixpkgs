@@ -1,27 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , passlib
+, python-dateutil
 , pythonOlder
 , scramp
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.24.0";
-  format = "setuptools";
+  version = "1.29.3";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BsawsGjQfONm97ztrfdqC12mph+GMCyMr/aQt/xd/ts=";
+    hash = "sha256-yMlU08htf79ZG8g7ANbs4on64XbIM1oYKnVwaZ2iv9w=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     passlib
+    python-dateutil
     scramp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
+
+  postPatch = ''
+    sed '/^\[metadata\]/a version = ${version}' setup.cfg
+  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

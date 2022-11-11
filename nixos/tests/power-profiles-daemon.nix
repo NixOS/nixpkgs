@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta = with pkgs.lib.maintainers; {
     maintainers = [ mvnetbiz ];
   };
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.power-profiles-daemon.enable = true;
     environment.systemPackages = [ pkgs.glib ];
   };

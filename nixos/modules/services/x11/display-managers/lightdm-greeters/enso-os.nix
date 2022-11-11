@@ -26,7 +26,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable enso-os-greeter as the lightdm greeter
         '';
       };
@@ -36,7 +36,7 @@ in {
           type = types.package;
           default = pkgs.gnome.gnome-themes-extra;
           defaultText = literalExpression "pkgs.gnome.gnome-themes-extra";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the theme given in the name option.
           '';
         };
@@ -44,7 +44,7 @@ in {
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = ''
+          description = lib.mdDoc ''
             Name of the theme to use for the lightdm-enso-os-greeter
           '';
         };
@@ -55,7 +55,7 @@ in {
           type = types.package;
           default = pkgs.papirus-icon-theme;
           defaultText = literalExpression "pkgs.papirus-icon-theme";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the icon theme given in the name option.
           '';
         };
@@ -63,7 +63,7 @@ in {
         name = mkOption {
           type = types.str;
           default = "ePapirus";
-          description = ''
+          description = lib.mdDoc ''
             Name of the icon theme to use for the lightdm-enso-os-greeter
           '';
         };
@@ -74,7 +74,7 @@ in {
           type = types.package;
           default = pkgs.capitaine-cursors;
           defaultText = literalExpression "pkgs.capitaine-cursors";
-          description = ''
+          description = lib.mdDoc ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
@@ -82,7 +82,7 @@ in {
         name = mkOption {
           type = types.str;
           default = "capitane-cursors";
-          description = ''
+          description = lib.mdDoc ''
             Name of the cursor theme to use for the lightdm-enso-os-greeter
           '';
         };
@@ -91,7 +91,7 @@ in {
       blur = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether or not to enable blur
         '';
       };
@@ -99,7 +99,7 @@ in {
       brightness = mkOption {
         type = types.int;
         default = 7;
-        description = ''
+        description = lib.mdDoc ''
           Brightness
         '';
       };
@@ -107,7 +107,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration that should be put in the greeter.conf
           configuration file
         '';

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stump/libsmf";
     license = licenses.bsd2;
     maintainers = [ maintainers.goibhniu ];
+    mainProgram = "smfsh";
     platforms = platforms.unix;
   };
 }

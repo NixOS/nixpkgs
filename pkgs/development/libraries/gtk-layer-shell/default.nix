@@ -13,15 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-layer-shell";
-  version = "0.6.0";
+  version = "0.7.0";
 
   outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "devdoc"; # for demo
 
   src = fetchFromGitHub {
     owner = "wmww";
     repo = "gtk-layer-shell";
     rev = "v${version}";
-    sha256 = "sha256-jLWXBoYcVoUSzw4OIYVM5iPvsmpy+Wg5TbDpo8cll80=";
+    sha256 = "sha256-0S1WBpxXpWoMOecJQS6FKEXRZdw4E5hrjURPyhkxiMc=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dexamples=true"
   ];
 
   meta = with lib; {

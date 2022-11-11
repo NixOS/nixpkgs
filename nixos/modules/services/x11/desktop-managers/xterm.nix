@@ -16,7 +16,7 @@ in
       type = types.bool;
       default = versionOlder config.system.stateVersion "19.09" && xSessionEnabled;
       defaultText = literalExpression ''versionOlder config.system.stateVersion "19.09" && config.services.xserver.enable;'';
-      description = "Enable a xterm terminal as a desktop manager.";
+      description = lib.mdDoc "Enable a xterm terminal as a desktop manager.";
     };
 
   };

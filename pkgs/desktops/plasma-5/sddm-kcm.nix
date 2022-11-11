@@ -17,7 +17,7 @@
 }:
 
 mkDerivation {
-  name = "sddm-kcm";
+  pname = "sddm-kcm";
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
     libpthreadstubs

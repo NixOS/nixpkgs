@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.20.2";
+  version = "0.21.0";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "4d08c198ecaa50a6a6b109d0f14c070e813defc046a83ac5d7ab494f85599e35";
+    sha256 = "sha256-zh06KKEy6UyJrDN2mlD4H2VjSrK9QFVjF+Fb1srRzkI=";
   };
 
   postPatch = ''

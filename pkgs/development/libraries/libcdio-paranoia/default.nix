@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
       This is a port of xiph.org's cdda paranoia to use libcdio for CDROM
       access. By doing this, cdparanoia runs on platforms other than GNU/Linux.
     '';
-    license = licenses.gpl3;
     homepage = "https://github.com/rocky/libcdio-paranoia";
-    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl3;
     maintainers = [ ];
+    mainProgram = "cd-paranoia";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

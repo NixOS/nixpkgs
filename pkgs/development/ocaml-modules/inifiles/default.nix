@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ocaml_pcre ];
+
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 

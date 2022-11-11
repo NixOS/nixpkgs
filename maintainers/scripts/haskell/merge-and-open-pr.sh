@@ -99,7 +99,7 @@ This PR is the regular merge of the \`haskell-updates\` branch into \`master\`.
 
 This branch is being continually built and tested by hydra at https://hydra.nixos.org/jobset/nixpkgs/haskell-updates. You may be able to find an up-to-date Hydra build report at [cdepillabout/nix-haskell-updates-status](https://github.com/cdepillabout/nix-haskell-updates-status).
 
-We roughly aim to merge these \`haskell-updates\` PRs at least once every two weeks. See the @NixOS/haskell [team calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky) for who is currently in charge of this branch.
+We roughly aim to merge these \`haskell-updates\` PRs at least once every two weeks. See the @NixOS/haskell [team calendar](https://cloud.maralorn.de/apps/calendar/p/H6migHmKX7xHoTFa) for who is currently in charge of this branch.
 
 ### haskellPackages Workflow Summary
 

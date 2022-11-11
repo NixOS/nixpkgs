@@ -3,428 +3,468 @@
 { fetchurl, mirror }:
 
 {
-  bluedevil = {
-    version = "5.23.5";
+  aura-browser = {
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/bluedevil-5.23.5.tar.xz";
-      sha256 = "1nbnmfdaisqngygyz1478fswsm1xp28v9l78xlw70yvvyjk2kc6v";
-      name = "bluedevil-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/aura-browser-5.26.3.tar.xz";
+      sha256 = "0103avsjplj6zmjql4gcgh2lrmmx87k3dx0wl371vqdf1prgbv2z";
+      name = "aura-browser-5.26.3.tar.xz";
+    };
+  };
+  bluedevil = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/bluedevil-5.26.3.tar.xz";
+      sha256 = "1f2dh7d0ds5n8vcnrkx919yvf5g3yrl6zg2rfaiac9vff04afcpj";
+      name = "bluedevil-5.26.3.tar.xz";
     };
   };
   breeze = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/breeze-5.23.5.tar.xz";
-      sha256 = "1pyw7rhzkbd9kwsm8l7iz867jhwlbmkarc5iihg0bkbcg1ds18ic";
-      name = "breeze-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/breeze-5.26.3.tar.xz";
+      sha256 = "0wn5m8avs1ncvx70lrh5gafnq7sdfd18rvih95cpdbqqs4y222a5";
+      name = "breeze-5.26.3.tar.xz";
     };
   };
   breeze-grub = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/breeze-grub-5.23.5.tar.xz";
-      sha256 = "12rm9a3vrmb3sm04l2c4vcj8psfyjxplp9wgh87q3k1rcyqz7fqk";
-      name = "breeze-grub-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/breeze-grub-5.26.3.tar.xz";
+      sha256 = "0qnxcwina2m4imgm02yq2yn2ax2rwncp511gihx49h97cy9yx7i5";
+      name = "breeze-grub-5.26.3.tar.xz";
     };
   };
   breeze-gtk = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/breeze-gtk-5.23.5.tar.xz";
-      sha256 = "1ynbvfgy2nlxg5svjqazj70m7py58ixxa7xyj13dcj6i2ikbcjld";
-      name = "breeze-gtk-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/breeze-gtk-5.26.3.tar.xz";
+      sha256 = "0qrz7kkkv00rmaja6a1dmrldy6nfshdsx56k3vji00fwpi03nfja";
+      name = "breeze-gtk-5.26.3.tar.xz";
     };
   };
   breeze-plymouth = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/breeze-plymouth-5.23.5.tar.xz";
-      sha256 = "1sllcrhz8hniqkgybk5bbb36fzjcdp5drjbf7v7jn4ih4wvybwmk";
-      name = "breeze-plymouth-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/breeze-plymouth-5.26.3.tar.xz";
+      sha256 = "0n6skqay6c84411n2hi9sibyhiiqisl2kmd5lwbv748h4x311yz8";
+      name = "breeze-plymouth-5.26.3.tar.xz";
     };
   };
   discover = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/discover-5.23.5.tar.xz";
-      sha256 = "1kzp7jpw2kgml2yc3cx9n5syln3kyd9fxa5klh3sa1xn6bz9f8zr";
-      name = "discover-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/discover-5.26.3.tar.xz";
+      sha256 = "1p9l6q68kyzm40hg6nhp2jsqx6mjscixj1fkmibphj3ps10xsgqf";
+      name = "discover-5.26.3.tar.xz";
     };
   };
   drkonqi = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/drkonqi-5.23.5.tar.xz";
-      sha256 = "08jjh52r6dmgp7dyxjxvavb4cxhmvzirwdn7hnmfhdbwkm09fqm5";
-      name = "drkonqi-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/drkonqi-5.26.3.tar.xz";
+      sha256 = "0897fkxa3gd7hbvx4h5hhwnxwycgcciyp02aw5m2gmyylav97pb4";
+      name = "drkonqi-5.26.3.tar.xz";
     };
   };
   kactivitymanagerd = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kactivitymanagerd-5.23.5.tar.xz";
-      sha256 = "09v6pia34a694g0amj0miqi0j42yqvhfcv6yr9zfix4gf1qcdidn";
-      name = "kactivitymanagerd-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kactivitymanagerd-5.26.3.tar.xz";
+      sha256 = "1wv6b5shm8741phhhfldrwzb8pm4jskd3sq242pg8230qh054vrc";
+      name = "kactivitymanagerd-5.26.3.tar.xz";
     };
   };
   kde-cli-tools = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kde-cli-tools-5.23.5.tar.xz";
-      sha256 = "1203z87i4dmhq1vlrfj4kiw157i5zkccd2bwc7p7qwhgbddaw5jd";
-      name = "kde-cli-tools-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kde-cli-tools-5.26.3.tar.xz";
+      sha256 = "0h76w9nkcc4d15lh7yz260vfh3fv9apx5d7i5m75pb4z9mgcpgzv";
+      name = "kde-cli-tools-5.26.3.tar.xz";
     };
   };
   kde-gtk-config = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kde-gtk-config-5.23.5.tar.xz";
-      sha256 = "14qqxy2vz9004kfam9biv6q0601sn9yhrkx0i8y0958a58s5z3hp";
-      name = "kde-gtk-config-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kde-gtk-config-5.26.3.tar.xz";
+      sha256 = "1fkiqf92222vsbrq15skn6cynni312r7clbr2xrsxnygwbvsqni7";
+      name = "kde-gtk-config-5.26.3.tar.xz";
     };
   };
   kdecoration = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kdecoration-5.23.5.tar.xz";
-      sha256 = "1kqj8l95wy46kfsw3f1crxwba9zwdlbgi7345mamhyks74wj1628";
-      name = "kdecoration-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kdecoration-5.26.3.tar.xz";
+      sha256 = "0ngcqfp0qy8dmd7df35xw5m2pz5azzvpsj0raby370j76s8l92wi";
+      name = "kdecoration-5.26.3.tar.xz";
     };
   };
   kdeplasma-addons = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kdeplasma-addons-5.23.5.tar.xz";
-      sha256 = "0cq0g8nqrkwv12010rsrmzqvxsa5arjpa87gvws8pah3v9k1xnkq";
-      name = "kdeplasma-addons-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kdeplasma-addons-5.26.3.tar.xz";
+      sha256 = "13j79097j2x8cmssqikiwlxkkajaj8nnw4md6vl4f51qnrz7h7f4";
+      name = "kdeplasma-addons-5.26.3.tar.xz";
     };
   };
   kgamma5 = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kgamma5-5.23.5.tar.xz";
-      sha256 = "17j0kv00ibs2g9jxfvflk965221iznm0ydgj3i05i6j2bd8301zn";
-      name = "kgamma5-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kgamma5-5.26.3.tar.xz";
+      sha256 = "0pjyqrily8in109ys2bawm3cr0vn4ig788h100l3953wg15alv47";
+      name = "kgamma5-5.26.3.tar.xz";
     };
   };
   khotkeys = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/khotkeys-5.23.5.tar.xz";
-      sha256 = "13562p0bv0jkamx9q07wi5vs78bdrhd0h3qg5rxajc5s36gyh63a";
-      name = "khotkeys-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/khotkeys-5.26.3.tar.xz";
+      sha256 = "0pwmf35qfz2vrvc5gwwibxjwwpc5lvlihba77cj6lfw1hn9h203m";
+      name = "khotkeys-5.26.3.tar.xz";
     };
   };
   kinfocenter = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kinfocenter-5.23.5.tar.xz";
-      sha256 = "0f7ik3gg1pimjlc94dp6psk0sha8k7pinx50nvmgsglap4k1xbk7";
-      name = "kinfocenter-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kinfocenter-5.26.3.tar.xz";
+      sha256 = "0fmc34n9yvkrfhgp0akjd9y7mkhjl8jfl485kfij5rrc14zyln65";
+      name = "kinfocenter-5.26.3.tar.xz";
     };
   };
   kmenuedit = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kmenuedit-5.23.5.tar.xz";
-      sha256 = "0k3dbip98zwia6m8nlgiw4mz09pkw7bik4cn3j73v2x3n7y3c542";
-      name = "kmenuedit-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kmenuedit-5.26.3.tar.xz";
+      sha256 = "0bapsrfi9fhj8gw8qbs3f538l1kpawv3k2avkk87zy9cvi9kh1vw";
+      name = "kmenuedit-5.26.3.tar.xz";
+    };
+  };
+  kpipewire = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/kpipewire-5.26.3.tar.xz";
+      sha256 = "193wrnz4v8zqi95laa9jpbnd2kmf1y40a57yyhfjhawfijinba5l";
+      name = "kpipewire-5.26.3.tar.xz";
     };
   };
   kscreen = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kscreen-5.23.5.tar.xz";
-      sha256 = "0j5rgzj132j7qy1pgi12mhihf1a89a3xh8j5f7dp5s1f8kyjq0yi";
-      name = "kscreen-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kscreen-5.26.3.tar.xz";
+      sha256 = "05dcff125vklawf3b8hirbp7fwhjqnpqrlkkaqsxf7w99p3s6bss";
+      name = "kscreen-5.26.3.tar.xz";
     };
   };
   kscreenlocker = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kscreenlocker-5.23.5.tar.xz";
-      sha256 = "07vhwvcyz9ynjzh44zny1f6di2knzy3fkiji3bhrki8p3zc9vjpm";
-      name = "kscreenlocker-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kscreenlocker-5.26.3.tar.xz";
+      sha256 = "0sa56dyxa7mg76z41dn5w7z1snsyqwyxh0nq32izi9bm20zd2f6f";
+      name = "kscreenlocker-5.26.3.tar.xz";
     };
   };
   ksshaskpass = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/ksshaskpass-5.23.5.tar.xz";
-      sha256 = "0p8aka60mc8p96v3bx954jy99n9lf0a4b09sig307clwinfr23if";
-      name = "ksshaskpass-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/ksshaskpass-5.26.3.tar.xz";
+      sha256 = "05kwcwny6lx459p149nwgv09hzjb6w24jafqzxa6rk1k1fb0x5wi";
+      name = "ksshaskpass-5.26.3.tar.xz";
     };
   };
   ksystemstats = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/ksystemstats-5.23.5.tar.xz";
-      sha256 = "1xmr0yk5xynja6z7xc6l1zd529q5si5qs71f72dba2zna22hb7hb";
-      name = "ksystemstats-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/ksystemstats-5.26.3.tar.xz";
+      sha256 = "0il22sx3clkksri9z0k41ssqhb07qvfipnymckja90m70npqb2a2";
+      name = "ksystemstats-5.26.3.tar.xz";
     };
   };
   kwallet-pam = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kwallet-pam-5.23.5.tar.xz";
-      sha256 = "1cha41wiqsfgyrqb8di5qnnz0mnvmchprxay48czrn3r5mz49pw9";
-      name = "kwallet-pam-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kwallet-pam-5.26.3.tar.xz";
+      sha256 = "03haxcdsjwydb1l27lzizk8bqqhyf313044p4f94ii8gdgg1w8l5";
+      name = "kwallet-pam-5.26.3.tar.xz";
     };
   };
   kwayland-integration = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kwayland-integration-5.23.5.tar.xz";
-      sha256 = "0gs68v4rriknn59fv0yjcgrmcryv7wxgskswdgi1xx18v0rlc4ag";
-      name = "kwayland-integration-5.23.5.tar.xz";
-    };
-  };
-  kwayland-server = {
-    version = "5.23.5";
-    src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kwayland-server-5.23.5.tar.xz";
-      sha256 = "0b8c1mkh36cgxhx18v9j23n9gnvzy22x50gpiw3dbkjzsmr1n7by";
-      name = "kwayland-server-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kwayland-integration-5.26.3.tar.xz";
+      sha256 = "0hy6xv1009vcmypqaga8mzfsh4nybsrvm107g261hww43qyx2wg5";
+      name = "kwayland-integration-5.26.3.tar.xz";
     };
   };
   kwin = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kwin-5.23.5.tar.xz";
-      sha256 = "00azqmdgkh72bg4d8868cin984vxxk6s6pk5x4dfvlaknzlyfjgp";
-      name = "kwin-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kwin-5.26.3.tar.xz";
+      sha256 = "050a5j0dm131a45lggiw47mllzzm4fxf2m1mv5csazzwjrbmz661";
+      name = "kwin-5.26.3.tar.xz";
     };
   };
   kwrited = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/kwrited-5.23.5.tar.xz";
-      sha256 = "0aj911kfzd100jq1k1sg7i1nhiixnl7qiphc2bczn47f1jj64iqv";
-      name = "kwrited-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/kwrited-5.26.3.tar.xz";
+      sha256 = "0jznp1r92z22vk5zqwjh1fk6j5jzw4vygzjjlm4yv426izkw2xdj";
+      name = "kwrited-5.26.3.tar.xz";
     };
   };
   layer-shell-qt = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/layer-shell-qt-5.23.5.tar.xz";
-      sha256 = "1ah66z9hiricw6h3j7x2k7d49y7g4l2s9w2658wjrava2qng9bsr";
-      name = "layer-shell-qt-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/layer-shell-qt-5.26.3.tar.xz";
+      sha256 = "10d4vi70z27n434d71n38m1l8dgdk33155yk97d7rsaicg7s1hq2";
+      name = "layer-shell-qt-5.26.3.tar.xz";
     };
   };
   libkscreen = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/libkscreen-5.23.5.tar.xz";
-      sha256 = "08wgg96clp685fl5lflrfd4kmf5c2p5ms7n1q2izvg0n6qr37m1i";
-      name = "libkscreen-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/libkscreen-5.26.3.tar.xz";
+      sha256 = "1nfpa4h8yhrkfq39qzlbpfkxp1qvd5k11jv4sgdqv0fs99g8xhzf";
+      name = "libkscreen-5.26.3.tar.xz";
     };
   };
   libksysguard = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/libksysguard-5.23.5.tar.xz";
-      sha256 = "1gy1grkkz7vwglby52vv4gr8zbzsv8rbvwbp6rqvvhmqg7ascc1h";
-      name = "libksysguard-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/libksysguard-5.26.3.tar.xz";
+      sha256 = "1lbngciln6q66g2q48xcl7m1j7rb2yjrncpaidr6464a8vffwh69";
+      name = "libksysguard-5.26.3.tar.xz";
     };
   };
   milou = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/milou-5.23.5.tar.xz";
-      sha256 = "05bc6hc5pn5rz4zp6b2akjdbssv7xppvzsw3pidkqb8pincl01gh";
-      name = "milou-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/milou-5.26.3.tar.xz";
+      sha256 = "12wjbvw72033havjq91i2prcj4yjynh6h2lc2z6ba9zsp6rsgk41";
+      name = "milou-5.26.3.tar.xz";
     };
   };
   oxygen = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/oxygen-5.23.5.tar.xz";
-      sha256 = "1vvy9yqllqq9dx2riwv4bmxfq13wph5wagy84f1hhl7zxnbcyv0c";
-      name = "oxygen-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/oxygen-5.26.3.tar.xz";
+      sha256 = "1hczm502afy9ps5qq6pq0zdzvdyn2gsr17072q530fi9mzljbdch";
+      name = "oxygen-5.26.3.tar.xz";
+    };
+  };
+  oxygen-sounds = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/oxygen-sounds-5.26.3.tar.xz";
+      sha256 = "015mn6smrc5ii5jq8yajqi0ndlaci48cy289ks8q5qspvfd99hrs";
+      name = "oxygen-sounds-5.26.3.tar.xz";
+    };
+  };
+  plank-player = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/plank-player-5.26.3.tar.xz";
+      sha256 = "16lmsmg6d363giyfw0vwbyznx27fy8p4cvmpgqdzq23zhc20axnm";
+      name = "plank-player-5.26.3.tar.xz";
+    };
+  };
+  plasma-bigscreen = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/plasma-bigscreen-5.26.3.tar.xz";
+      sha256 = "13mr8xkmvq0lh6fc103nzirkgda3gpry1qwy3azvw65bxxakf7wq";
+      name = "plasma-bigscreen-5.26.3.tar.xz";
     };
   };
   plasma-browser-integration = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-browser-integration-5.23.5.tar.xz";
-      sha256 = "0jw9jircgbilig4pryyjxhby8qc7nag9a1s5nk1zdsnlaqr08jyp";
-      name = "plasma-browser-integration-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-browser-integration-5.26.3.tar.xz";
+      sha256 = "1bwdl6dzz6cj9753cgivrz1ajxy6qn59g5la4icfp7kn945zw7zm";
+      name = "plasma-browser-integration-5.26.3.tar.xz";
     };
   };
   plasma-desktop = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-desktop-5.23.5.tar.xz";
-      sha256 = "0ym8cssw351ygw2vy27cyxql05y0gaflnqnq4fwkdgidldvmi45k";
-      name = "plasma-desktop-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-desktop-5.26.3.tar.xz";
+      sha256 = "1lsw17rkwb91v1kaqg627rg6i3a56q2izj66fcgfy9fl34sc4x31";
+      name = "plasma-desktop-5.26.3.tar.xz";
     };
   };
   plasma-disks = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-disks-5.23.5.tar.xz";
-      sha256 = "0197zyj5p7j8y80g0vvf5d9bq86qxkhwpa9dzb5l3is50y8lkj6p";
-      name = "plasma-disks-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-disks-5.26.3.tar.xz";
+      sha256 = "0gjbhnf74vnd1d1zfbdha9qx0jddx8621z80czyrn0b6yz28pmgm";
+      name = "plasma-disks-5.26.3.tar.xz";
     };
   };
   plasma-firewall = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-firewall-5.23.5.tar.xz";
-      sha256 = "0fhycjrb89blh6wf24rvq7bafqqrxj37ir0daj5jlph9f1w4laq0";
-      name = "plasma-firewall-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-firewall-5.26.3.tar.xz";
+      sha256 = "0ra23mv2n2bsq5hsyl9biiak2s1ii3fpxhbbmyzakp3dnln0vkwx";
+      name = "plasma-firewall-5.26.3.tar.xz";
     };
   };
   plasma-integration = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-integration-5.23.5.tar.xz";
-      sha256 = "03c0cqvr5cdpvxgm145sqpbbr8wv0qv4pqjl69v3bs010pd755lg";
-      name = "plasma-integration-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-integration-5.26.3.tar.xz";
+      sha256 = "1vfs6hw9pswxgjln13kj5l7hqfh3m40vqrh0yz3zzs574bfj61y7";
+      name = "plasma-integration-5.26.3.tar.xz";
+    };
+  };
+  plasma-mobile = {
+    version = "5.26.3";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.26.3/plasma-mobile-5.26.3.tar.xz";
+      sha256 = "0l4m281bsilswvzhp849x6qnpvzc632p1mlarhwh40gak9ymjx0h";
+      name = "plasma-mobile-5.26.3.tar.xz";
     };
   };
   plasma-nano = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-nano-5.23.5.tar.xz";
-      sha256 = "1yh67bh1smk7zx35hd72pafjbjdv7wwwhm76ga5sj251m61ncxim";
-      name = "plasma-nano-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-nano-5.26.3.tar.xz";
+      sha256 = "1n2nfl8s9vrsr919cpz2pji4f8fa6cmlp5qybib490mnwlw6vy7k";
+      name = "plasma-nano-5.26.3.tar.xz";
     };
   };
   plasma-nm = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-nm-5.23.5.tar.xz";
-      sha256 = "14sknzy4v4xx1ihjn1s6x0lv5difnp4gi24zsdqvnkxkmxzhcij3";
-      name = "plasma-nm-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-nm-5.26.3.tar.xz";
+      sha256 = "1q21lnl5y3dm73pl7586bg7whc9fk540ajm3hy0x4p10q28y7yyc";
+      name = "plasma-nm-5.26.3.tar.xz";
     };
   };
   plasma-pa = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-pa-5.23.5.tar.xz";
-      sha256 = "1pcnf59qj7rgmcbc5xhad5zl487r48i2kyp6nc3yrlgj1xcfpfxg";
-      name = "plasma-pa-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-pa-5.26.3.tar.xz";
+      sha256 = "01q8jbbdi1hqa6wx8bhas7qzqg3v5mkqrj3lmaq56qvp9rjyg8ik";
+      name = "plasma-pa-5.26.3.tar.xz";
     };
   };
-  plasma-phone-components = {
-    version = "5.23.5";
+  plasma-remotecontrollers = {
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-phone-components-5.23.5.tar.xz";
-      sha256 = "08c03pycvv7ald21d8ckxpv6d25qlxs28gjm99hdn6x8m74j7frn";
-      name = "plasma-phone-components-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-remotecontrollers-5.26.3.tar.xz";
+      sha256 = "0hmacs0927pqhxmv89p96g5c71ic2wsn7byvbnp9w9gp4wbgkwc2";
+      name = "plasma-remotecontrollers-5.26.3.tar.xz";
     };
   };
   plasma-sdk = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-sdk-5.23.5.tar.xz";
-      sha256 = "1s0l09lgqipks0w0jplaaipcs4a1ny4iclkz9hkfx4xjgcvk5m2j";
-      name = "plasma-sdk-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-sdk-5.26.3.tar.xz";
+      sha256 = "0s71clqpc9ncqcz6pjkv4r0zk4v2bl72i1s6mxr7z9qxmhhmi41f";
+      name = "plasma-sdk-5.26.3.tar.xz";
     };
   };
   plasma-systemmonitor = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-systemmonitor-5.23.5.tar.xz";
-      sha256 = "1snzabxgja9rsk000h97qjadb9fs8zdbqpr4zqa9sk0jjgm011lf";
-      name = "plasma-systemmonitor-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-systemmonitor-5.26.3.tar.xz";
+      sha256 = "11dvzjr083c3ds4cq2ws7d3365c3hdqdpw0r9sca94grs64jigwz";
+      name = "plasma-systemmonitor-5.26.3.tar.xz";
     };
   };
   plasma-tests = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-tests-5.23.5.tar.xz";
-      sha256 = "125b0sf7h0ibjl7msw1sc3cccms8nrrkx6cgwd46a9xi5svrsfg2";
-      name = "plasma-tests-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-tests-5.26.3.tar.xz";
+      sha256 = "1m71rhvfl1yls8vlyxpfs7z3aavf42a0lyg94rmb7awzp4qkf7zv";
+      name = "plasma-tests-5.26.3.tar.xz";
     };
   };
   plasma-thunderbolt = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-thunderbolt-5.23.5.tar.xz";
-      sha256 = "1ich92w479llvq1vjlfyvxh3dvqc4pgycfi97hz4sfhn7dnaw3vr";
-      name = "plasma-thunderbolt-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-thunderbolt-5.26.3.tar.xz";
+      sha256 = "1w0b124xkh8g9kivlxwasb4iqpp5spm40y5hdz08r8faw065fn6g";
+      name = "plasma-thunderbolt-5.26.3.tar.xz";
     };
   };
   plasma-vault = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-vault-5.23.5.tar.xz";
-      sha256 = "1gf531q29qnvvsdxqgb1zyxwh5ck25kb0h1kk0d95pjkkylgyv0d";
-      name = "plasma-vault-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-vault-5.26.3.tar.xz";
+      sha256 = "09mljjn7z8vbwzfhdxbjnkr8r4anplbb3di2vvfwcgn0yn2m4hmf";
+      name = "plasma-vault-5.26.3.tar.xz";
     };
   };
   plasma-workspace = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-workspace-5.23.5.tar.xz";
-      sha256 = "0x950nb56xmmdf7hfpbrd9hvgq1a8vca0x8g1qsvrjhh5ymydgif";
-      name = "plasma-workspace-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-workspace-5.26.3.tar.xz";
+      sha256 = "0ly96nxdiw5sndb1ga2ngqr4s5sslg8gi9ikp0nq4h75wfc1wb0a";
+      name = "plasma-workspace-5.26.3.tar.xz";
     };
   };
   plasma-workspace-wallpapers = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plasma-workspace-wallpapers-5.23.5.tar.xz";
-      sha256 = "0nr631yz8v671a87vh9f2a5kfjhn4f9147b339p09fwgfpx06vfx";
-      name = "plasma-workspace-wallpapers-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plasma-workspace-wallpapers-5.26.3.tar.xz";
+      sha256 = "1qrwfn8r845giganv9gk7v75827q9js8sygc0dvijg2ilmr56d31";
+      name = "plasma-workspace-wallpapers-5.26.3.tar.xz";
     };
   };
   plymouth-kcm = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/plymouth-kcm-5.23.5.tar.xz";
-      sha256 = "0ynyqfm6az8yj3d30yxza5mjcsgfw6mmdkcgr3v95r6db112hqbx";
-      name = "plymouth-kcm-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/plymouth-kcm-5.26.3.tar.xz";
+      sha256 = "14np3wnca4nmcr74zbkrnysbfsrbrhxaf0hb96f4rn391kj5m635";
+      name = "plymouth-kcm-5.26.3.tar.xz";
     };
   };
   polkit-kde-agent = {
-    version = "1-5.23.5";
+    version = "1-5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/polkit-kde-agent-1-5.23.5.tar.xz";
-      sha256 = "1wgpgbq987qa6fdayw4155fwym6rcn2z7w66s8faqv94x78njzln";
-      name = "polkit-kde-agent-1-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/polkit-kde-agent-1-5.26.3.tar.xz";
+      sha256 = "0wd6yjd1qgiqjvvdn575zaa4c3szigk91d5l7a4c4kg4x5yb161g";
+      name = "polkit-kde-agent-1-5.26.3.tar.xz";
     };
   };
   powerdevil = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/powerdevil-5.23.5.tar.xz";
-      sha256 = "1lxjqd4w3jvnffcn9751j9k1fzsyasd1z8b1gm2iaf38iys21116";
-      name = "powerdevil-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/powerdevil-5.26.3.tar.xz";
+      sha256 = "0190rygc748av81iw2a3bl3zkawl0wjpx0761lagvrdj7hm3x35v";
+      name = "powerdevil-5.26.3.tar.xz";
     };
   };
   qqc2-breeze-style = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/qqc2-breeze-style-5.23.5.tar.xz";
-      sha256 = "15i9h2md54a1h7isvma4x9pni3iy0bk84z8ibn3a36ydimyq5hra";
-      name = "qqc2-breeze-style-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/qqc2-breeze-style-5.26.3.tar.xz";
+      sha256 = "04nx8519g6dwvacyp8x6n2av4wp65kshqbvbfy32f61lildhkg9c";
+      name = "qqc2-breeze-style-5.26.3.tar.xz";
     };
   };
   sddm-kcm = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/sddm-kcm-5.23.5.tar.xz";
-      sha256 = "0csj1gml8w29dzv62zpbia9g10qz5k1nzv1yywsvay1q8rbqccxv";
-      name = "sddm-kcm-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/sddm-kcm-5.26.3.tar.xz";
+      sha256 = "1xfkwqs0aljk1wdmgvw9vqm50d43svlzrkhh7cacy94z9jnaaxia";
+      name = "sddm-kcm-5.26.3.tar.xz";
     };
   };
   systemsettings = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/systemsettings-5.23.5.tar.xz";
-      sha256 = "0shsqancxbxy6f4fd9m2a30x7gnjmd6gb8kq4nhlj6rramcwn3jh";
-      name = "systemsettings-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/systemsettings-5.26.3.tar.xz";
+      sha256 = "1clqw087nk47gb7qbbmc0s9ks2k5ch5ssim2smz7j6gn3d9n3qy3";
+      name = "systemsettings-5.26.3.tar.xz";
     };
   };
   xdg-desktop-portal-kde = {
-    version = "5.23.5";
+    version = "5.26.3";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.23.5/xdg-desktop-portal-kde-5.23.5.tar.xz";
-      sha256 = "09s3fpjdrnxqvnyxmxva0rx612d6pxv28qqvm00hzrb23nxz6qgb";
-      name = "xdg-desktop-portal-kde-5.23.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.3/xdg-desktop-portal-kde-5.26.3.tar.xz";
+      sha256 = "1lx73k85ysyyscz1rpdrw3gq8vj16xsgbcz7gs36qcvzhwvg5pjp";
+      name = "xdg-desktop-portal-kde-5.26.3.tar.xz";
     };
   };
 }

@@ -7,16 +7,16 @@ with lib;
   options = {
     services.spark = {
       master = {
-        enable = mkEnableOption "Spark master service";
+        enable = mkEnableOption (lib.mdDoc "Spark master service");
         bind = mkOption {
           type = types.str;
-          description = "Address the spark master binds to.";
+          description = lib.mdDoc "Address the spark master binds to.";
           default = "127.0.0.1";
           example = "0.0.0.0";
         };
         restartIfChanged  = mkOption {
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Automatically restart master service on config change.
             This can be set to false to defer restarts on clusters running critical applications.
             Please consider the security implications of inadvertently running an older version,
@@ -26,7 +26,7 @@ with lib;
         };
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
-          description = "Extra environment variables to pass to spark master. See spark-standalone documentation.";
+          description = lib.mdDoc "Extra environment variables to pass to spark master. See spark-standalone documentation.";
           default = {};
           example = {
             SPARK_MASTER_WEBUI_PORT = 8181;
@@ -35,20 +35,20 @@ with lib;
         };
       };
       worker = {
-        enable = mkEnableOption "Spark worker service";
+        enable = mkEnableOption (lib.mdDoc "Spark worker service");
         workDir = mkOption {
           type = types.path;
-          description = "Spark worker work dir.";
+          description = lib.mdDoc "Spark worker work dir.";
           default = "/var/lib/spark";
         };
         master = mkOption {
           type = types.str;
-          description = "Address of the spark master.";
+          description = lib.mdDoc "Address of the spark master.";
           default = "127.0.0.1:7077";
         };
         restartIfChanged  = mkOption {
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Automatically restart worker service on config change.
             This can be set to false to defer restarts on clusters running critical applications.
             Please consider the security implications of inadvertently running an older version,
@@ -58,7 +58,7 @@ with lib;
         };
         extraEnvironment = mkOption {
           type = types.attrsOf types.str;
-          description = "Extra environment variables to pass to spark worker.";
+          description = lib.mdDoc "Extra environment variables to pass to spark worker.";
           default = {};
           example = {
             SPARK_WORKER_CORES = 5;
@@ -68,18 +68,18 @@ with lib;
       };
       confDir = mkOption {
         type = types.path;
-        description = "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
+        description = lib.mdDoc "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
         default = "${cfg.package}/lib/${cfg.package.untarDir}/conf";
         defaultText = literalExpression ''"''${package}/lib/''${package.untarDir}/conf"'';
       };
       logDir = mkOption {
         type = types.path;
-        description = "Spark log directory.";
+        description = lib.mdDoc "Spark log directory.";
         default = "/var/log/spark";
       };
       package = mkOption {
         type = types.package;
-        description = "Spark package.";
+        description = lib.mdDoc "Spark package.";
         default = pkgs.spark;
         defaultText = literalExpression "pkgs.spark";
         example = literalExpression ''pkgs.spark.overrideAttrs (super: rec {

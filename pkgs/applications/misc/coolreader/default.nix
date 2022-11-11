@@ -1,4 +1,4 @@
-{ mkDerivation, fetchFromGitHub, cmake, pkg-config, lib,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, lib,
   qttools, fribidi, libunibreak }:
 
 mkDerivation rec {
@@ -17,6 +17,7 @@ mkDerivation rec {
   buildInputs = [ qttools fribidi libunibreak ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
     license = licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  name = "z3-${version}";
+  pname = "z3";
   version = "4.4.0";
 
   src = fetchFromGitHub {
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
   enableParallelBuilding = true;
+
+  CXXFLAGS = if stdenv.isDarwin then "-std=gnu++98" else null;
 
   configurePhase = "python scripts/mk_make.py --prefix=$out && cd build";
 

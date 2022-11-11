@@ -30,7 +30,7 @@ in
   options = {
     hardware.sensor.hddtemp = {
       enable = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Enable this option to support HDD/SSD temperature sensors.
         '';
         type = types.bool;
@@ -38,24 +38,24 @@ in
       };
 
       drives = mkOption {
-        description = "List of drives to monitor. If you pass /dev/disk/by-path/* entries the symlinks will be resolved as hddtemp doesn't like names with colons.";
+        description = lib.mdDoc "List of drives to monitor. If you pass /dev/disk/by-path/* entries the symlinks will be resolved as hddtemp doesn't like names with colons.";
         type = types.listOf types.str;
       };
 
       unit = mkOption {
-        description = "Celcius or Fahrenheit";
+        description = lib.mdDoc "Celcius or Fahrenheit";
         type = types.enum [ "C" "F" ];
         default = "C";
       };
 
       dbEntries = mkOption {
-        description = "Additional DB entries";
+        description = lib.mdDoc "Additional DB entries";
         type = types.listOf types.str;
         default = [ ];
       };
 
       extraArgs = mkOption {
-        description = "Additional arguments passed to the daemon.";
+        description = lib.mdDoc "Additional arguments passed to the daemon.";
         type = types.listOf types.str;
         default = [ ];
       };

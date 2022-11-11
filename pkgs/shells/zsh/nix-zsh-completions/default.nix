@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n9whlys95k4wc57cnz3n07p7zpkv796qkmn68a50ygkx6h3afqf";
   };
 
+  strictDeps = true;
   installPhase = ''
     mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions

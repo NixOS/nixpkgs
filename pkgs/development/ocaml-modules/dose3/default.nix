@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "dose3";
-  version = "6.1";
+  version = "7.0.0";
 
   src = fetchFromGitLab {
     owner = "irill";
     repo = "dose3";
     rev = version;
-    sha256 = "sha256-RFChY7VH2pVD4u5U1qng46h9aAv8I/3yXVaNmFDmKFI=";
+    sha256 = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
   minimalOCamlVersion = "4.03";

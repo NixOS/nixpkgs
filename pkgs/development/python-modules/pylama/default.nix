@@ -10,12 +10,15 @@
 , pydocstyle
 , pyflakes
 , vulture
+, setuptools
+, isort
+, pylint
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+let pylama = buildPythonPackage rec {
   pname = "pylama";
-  version = "8.3.6";
+  version = "8.4.1";
 
   format = "setuptools";
 
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     owner = "klen";
     repo = "pylama";
     rev = version;
-    hash = "sha256-KU/G+2Fm4G/dUuNhhk8xM0Y8+7YOUUgREONM8CQGugw=";
+    hash = "sha256-WOGtZ412tX3YH42JCd5HIngunluwtMmQrOSUZp23LPU=";
   };
 
   patches = [
@@ -41,28 +44,40 @@ buildPythonPackage rec {
     pycodestyle
     pydocstyle
     pyflakes
+    setuptools
     vulture
   ];
 
+  # escape infinite recursion pylint -> isort -> pylama
+  doCheck = false;
+
   checkInputs = [
+    pylint
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$TEMP
+  '';
+
   disabledTests = [
-    "test_pylint" # infinite recursion
     "test_quotes" # FIXME package pylama-quotes
     "test_radon" # FIXME package radon
-    "test_sort"
   ];
 
   pythonImportsCheck = [
     "pylama.main"
   ];
 
+  passthru.tests = {
+    check = pylama.overridePythonAttrs (_: { doCheck = true; });
+  };
+
   meta = with lib; {
     description = "Code audit tool for python";
     homepage = "https://github.com/klen/pylama";
+    changelog = "https://github.com/klen/pylama/blob/${version}/Changelog";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+}; in pylama

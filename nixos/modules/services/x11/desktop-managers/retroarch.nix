@@ -6,21 +6,21 @@ let cfg = config.services.xserver.desktopManager.retroarch;
 
 in {
   options.services.xserver.desktopManager.retroarch = {
-    enable = mkEnableOption "RetroArch";
+    enable = mkEnableOption (lib.mdDoc "RetroArch");
 
     package = mkOption {
       type = types.package;
       default = pkgs.retroarch;
       defaultText = literalExpression "pkgs.retroarch";
       example = literalExpression "pkgs.retroarch-full";
-      description = "RetroArch package to use.";
+      description = lib.mdDoc "RetroArch package to use.";
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [ ];
       example = [ "--verbose" "--host" ];
-      description = "Extra arguments to pass to RetroArch.";
+      description = lib.mdDoc "Extra arguments to pass to RetroArch.";
     };
   };
 

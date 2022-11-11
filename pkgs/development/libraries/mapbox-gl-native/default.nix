@@ -30,6 +30,11 @@ mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/testing/mapbox-gl-native/0002-skip-license-check.patch?id=6751a93dca26b0b3ceec9eb151272253a2fe497e";
       sha256 = "1yybwzxbvn0lqb1br1fyg7763p2h117s6mkmywkl4l7qg9daa7ba";
     })
+    (fetchpatch {
+      name = "fix-compilation.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compilation.patch?h=mapbox-gl-native";
+      hash = "sha256-KgJHyoIdKdnQo+gedns3C+mEXlaTH/UtyQsaYR1T3iI=";
+    })
   ];
 
   postPatch = ''

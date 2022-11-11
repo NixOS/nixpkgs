@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
+{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchFromGitHub
 , cmake, pkg-config, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript

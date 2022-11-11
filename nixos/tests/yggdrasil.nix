@@ -42,7 +42,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
 
         services.yggdrasil = {
           enable = true;
-          config = {
+          settings = {
             Listen = ["tcp://0.0.0.0:12345"];
             MulticastInterfaces = [ ];
           };
@@ -112,7 +112,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         services.yggdrasil = {
           enable = true;
           denyDhcpcdInterfaces = [ "ygg0" ];
-          config = {
+          settings = {
             IfTAPMode = true;
             IfName = "ygg0";
             MulticastInterfaces = [ "eth1" ];

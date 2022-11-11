@@ -1,43 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, keras
+, numba
 , numpy
+, pynndescent
+, pytestCheckHook
+, pythonOlder
 , scikit-learn
 , scipy
-, numba
-, pynndescent
 , tensorflow
 , tqdm
-, pytestCheckHook
-, keras
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.2";
+  version = "0.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "sha256-JfYuuE1BP+HdiEl7l01sZ/XXlEwHyAsLjK9nqhRd/3o=";
+    hash = "sha256-S2+k7Ec4AxsN6d0GUGnU81oLnBgmlZp8OmUFCNaUJYw=";
   };
 
   propagatedBuildInputs = [
+    numba
     numpy
+    pynndescent
     scikit-learn
     scipy
-    numba
-    pynndescent
     tqdm
   ];
 
   checkInputs = [
-    nose
-    tensorflow
-    pytestCheckHook
     keras
+    pytestCheckHook
+    tensorflow
   ];
 
   preCheck = ''
@@ -52,6 +54,7 @@ buildPythonPackage rec {
 
     # Flaky test. Fails with AssertionError sometimes.
     "test_sparse_hellinger"
+    "test_densmap_trustworthiness_on_iris_supervised"
 
     # tensorflow maybe incompatible? https://github.com/lmcinnes/umap/issues/821
     "test_save_load"
@@ -61,6 +64,6 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

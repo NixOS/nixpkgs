@@ -1,32 +1,32 @@
 diff --git a/libfwupdplugin/meson.build b/libfwupdplugin/meson.build
-index d6a2ed68..12c82a95 100644
+index 1afa28e1..3da81d30 100644
 --- a/libfwupdplugin/meson.build
 +++ b/libfwupdplugin/meson.build
-@@ -216,7 +216,8 @@ fwupdplugin = library(
+@@ -220,7 +220,8 @@ fwupdplugin = library(
    ],
-   link_args : vflag,
-   link_depends : fwupdplugin_mapfile,
--  install : true
-+  install : true,
-+  install_dir : bindir / '..' / 'lib',
+   link_args: cc.get_supported_link_arguments([vflag]),
+   link_depends: fwupdplugin_mapfile,
+-  install: true
++  install: true,
++  install_dir: bindir / '..' / 'lib',
  )
  
  fwupdplugin_pkgg = import('pkgconfig')
-@@ -276,7 +277,8 @@ if get_option('introspection')
+@@ -280,7 +281,8 @@ if introspection.allowed()
        girtargets,
        fwupd_gir[0],
      ],
--    install : true
-+    install : true,
-+    install_dir_typelib : bindir / '..' / 'lib' / 'girepository-1.0',
+-    install: true
++    install: true,
++    install_dir_typelib: bindir / '..' / 'lib' / 'girepository-1.0',
    )
  
    # Verify the map file is correct -- note we can't actually use the generated
 diff --git a/meson.build b/meson.build
-index 38aa36b0..3fb7e579 100644
+index b91dd037..f97b4c26 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -521,7 +521,7 @@ if build_standalone
+@@ -504,7 +504,7 @@ if build_standalone
  if host_machine.system() == 'windows'
    plugin_dir = 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current)
  else

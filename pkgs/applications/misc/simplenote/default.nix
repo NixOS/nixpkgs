@@ -27,6 +27,7 @@ let
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
       kiwi
     ];
@@ -46,14 +47,13 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Development";
+      categories = [ "Development" ];
       comment = "Simplenote for Linux";
       desktopName = "Simplenote";
       exec = "simplenote %U";
       icon = "simplenote";
       name = "simplenote";
-      startupNotify = "true";
-      type = "Application";
+      startupNotify = true;
     };
 
     dontBuild = true;

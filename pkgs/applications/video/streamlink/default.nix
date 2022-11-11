@@ -6,11 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.1.1";
+  version = "5.0.1";
+  format = "pyproject";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hVzTHpAOOuHVMoo3Ejv//irsUBoddLzdEvDSonWAYOQ=";
+    hash = "sha256-PKRioPBhTV6i3ckQgcKuhQFmpBvUQE4o3FLej8qx4mM=";
   };
 
   checkInputs = with python3Packages; [
@@ -18,6 +19,10 @@ python3Packages.buildPythonApplication rec {
     mock
     requests-mock
     freezegun
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    versioningit
   ];
 
   propagatedBuildInputs = (with python3Packages; [
@@ -44,7 +49,6 @@ python3Packages.buildPythonApplication rec {
     '';
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

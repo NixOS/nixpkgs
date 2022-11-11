@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.5.3";
+  version = "3.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "nficano";
     repo = "humps";
     rev = "v${version}";
-    hash = "sha256-6F61y0niPPuZBci15j68MFXzzBBimvbZ24+i9AZ7XJs=";
+    hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
   };
 
   nativeBuildInputs = [
@@ -27,12 +27,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/nficano/humps/pull/240
-    substituteInPlace pyproject.toml \
-      --replace 'version = "3.0.2"' 'version = "${version}"'
-  '';
 
   pythonImportsCheck = [
     "humps"

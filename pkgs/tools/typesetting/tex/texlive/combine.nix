@@ -50,7 +50,7 @@ in (buildEnv {
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper libfaketime ];
   buildInputs = pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
@@ -180,7 +180,7 @@ in (buildEnv {
       echo -n "Wrapping '$link'"
       rm "$link"
       makeWrapper "$target" "$link" \
-        --prefix PATH : "$out/bin:${perl}/bin" \
+        --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --set-default TEXMFCNF "$TEXMFCNF"
 
@@ -225,13 +225,31 @@ in (buildEnv {
 
     perl `type -P mktexlsr.pl` --sort ./share/texmf
     ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
-    perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
+    FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
     #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
+    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
+    if [[ -d share/texmf-var/web2c/tex ]]
+    then
+      cd share/texmf-var/web2c/tex
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -ini -jobname=tex -progname=tex tex.ini
+      cd -
+    fi
+    if [[ -f share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
+    then
+      cd share/texmf-var/web2c/luahbtex
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
+      cd -
+    fi
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
     # Regenerate the map files (this is optional)
     perl `type -P updmap.pl` --sys --force
+
+    # sort entries to improve reproducibility
+    [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
     perl `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
   '' +
@@ -299,7 +317,12 @@ in (buildEnv {
       )
     fi
   ''
-    + bin.cleanBrokenLinks
+    + bin.cleanBrokenLinks +
+  # Get rid of all log files. They are not needed, but take up space
+  # and render the build unreproducible by their embedded timestamps.
+  ''
+    find $TEXMFSYSVAR/web2c -name '*.log' -delete
+  ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file

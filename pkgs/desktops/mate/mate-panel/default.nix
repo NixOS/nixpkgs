@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, glib
+, libwnck
+, librsvg
+, libxml2
+, dconf
+, gtk3
+, mate
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
@@ -37,9 +54,16 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+    )
+  '';
+
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "The MATE panel";

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rpcq";
-  version = "3.9.2";
+  version = "3.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vvf6y7459f8aamhkcxx36ajiai143s2vwg751x0dl0lx7hp3yn5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-J7jtGXJIF3jp0a0IQZmSR4TWf9D02Luau+Bupmi/d68=";
   };
 
   propagatedBuildInputs = [

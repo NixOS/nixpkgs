@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.8.21";
+  version = "1.8.22";
 
   src = fetchPypi {
     pname = "Fiona";
     inherit version;
-    sha256 = "sha256-Og7coqegcNtAXXEYchSkPSMzpXtAl1RKP8woIGali/w=";
+    sha256 = "sha256-qCqZzps+eCV0AVfEXJ+yJZ1OkvCohqqsJfDbQP/h7qM=";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -49,14 +49,6 @@ buildPythonPackage rec {
   disabledTests = [
     # Some tests access network, others test packaging
     "http" "https" "wheel"
-    # Assert not true
-    "test_no_append_driver_cannot_append"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # https://github.com/Toblerity/Fiona/issues/1012 the existence of this
-    # as a bug hasn't been challenged and other distributors seem to also
-    # be skipping these tests on aarch64, so this is not unique to nixpkgs.
-    "test_write_or_driver_error"
-    "test_append_or_driver_error"
   ];
 
   meta = with lib; {

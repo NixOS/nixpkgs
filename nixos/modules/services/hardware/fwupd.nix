@@ -15,9 +15,9 @@ let
         DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
       '';
     };
-    "fwupd/uefi.conf" = {
-      source = pkgs.writeText "uefi.conf" ''
-        [uefi]
+    "fwupd/uefi_capsule.conf" = {
+      source = pkgs.writeText "uefi_capsule.conf" ''
+        [uefi_capsule]
         OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
       '';
     };
@@ -33,18 +33,26 @@ let
       mkEtcFile = p: nameValuePair (mkName p) { source = p; };
     in listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
 
-  # We cannot include the file in $out and rely on filesInstalledToEtc
-  # to install it because it would create a cyclic dependency between
-  # the outputs. We also need to enable the remote,
-  # which should not be done by default.
-  testRemote = if cfg.enableTestRemote then {
-    "fwupd/remotes.d/fwupd-tests.conf" = {
-      source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
+  enableRemote = base: remote: {
+    "fwupd/remotes.d/${remote}.conf" = {
+      source = pkgs.runCommand "${remote}-enabled.conf" {} ''
         sed "s,^Enabled=false,Enabled=true," \
-        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        "${base}/etc/fwupd/remotes.d/${remote}.conf" > "$out"
       '';
     };
-  } else {};
+  };
+  remotes = (foldl'
+    (configFiles: remote: configFiles // (enableRemote cfg.package remote))
+    {}
+    cfg.extraRemotes
+  ) // (
+    # We cannot include the file in $out and rely on filesInstalledToEtc
+    # to install it because it would create a cyclic dependency between
+    # the outputs. We also need to enable the remote,
+    # which should not be done by default.
+    if cfg.enableTestRemote then (enableRemote cfg.package.installedTests "fwupd-tests") else {}
+  );
+
 in {
 
   ###### interface
@@ -53,7 +61,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable fwupd, a DBus service that allows
           applications to update firmware.
         '';
@@ -63,7 +71,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
-        description = ''
+        description = lib.mdDoc ''
           Allow disabling specific devices by their GUID
         '';
       };
@@ -72,7 +80,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "udev" ];
-        description = ''
+        description = lib.mdDoc ''
           Allow disabling specific plugins
         '';
       };
@@ -81,17 +89,26 @@ in {
         type = types.listOf types.path;
         default = [];
         example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
-        description = ''
+        description = lib.mdDoc ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
+        '';
+      };
+
+      extraRemotes = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "lvfs-testing" ];
+        description = lib.mdDoc ''
+          Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
         '';
       };
 
       enableTestRemote = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable test remote. This is used by
-          <link xlink:href="https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+          [installed tests](https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md).
         '';
       };
 
@@ -99,7 +116,7 @@ in {
         type = types.package;
         default = pkgs.fwupd;
         defaultText = literalExpression "pkgs.fwupd";
-        description = ''
+        description = lib.mdDoc ''
           Which fwupd package to use.
         '';
       };
@@ -119,13 +136,15 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     # customEtc overrides some files from the package
-    environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
+    environment.etc = originalEtc // customEtc // extraTrustedKeys // remotes;
 
     services.dbus.packages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
+
+    security.polkit.enable = true;
   };
 
   meta = {

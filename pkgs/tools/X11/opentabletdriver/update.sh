@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq common-updater-scripts nuget-to-nix dotnet-sdk_6 dotnet-sdk_5
+#!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -23,20 +23,4 @@ sed -i ./default.nix -re "s|\"$oldDebSha256\"|\"$newDebSha256\"|"
 
 pushd ../../../..
 update-source-version opentabletdriver "$new_version"
-store_src="$(nix-build -A opentabletdriver.src --no-out-link)"
-src="$(mktemp -d /tmp/opentabletdriver-src.XXX)"
-cp -rT "$store_src" "$src"
-chmod -R +w "$src"
-
-pushd "$src"
-trap "rm -rf $src" EXIT
-
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-mkdir ./nuget_pkgs
-for project in OpenTabletDriver.{Console,Daemon,UX.Gtk,Tests}; do
-  dotnet restore $project --packages ./nuget_pkgs
-done
-
-nuget-to-nix ./nuget_pkgs > "$deps_file"
+$(nix-build -A opentabletdriver.fetch-deps --no-out-link) "$deps_file"

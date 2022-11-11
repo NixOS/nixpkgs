@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , isPy27
+, pkg-config
+, pkgconfig
 , setuptools-scm
 , libdeltachat
 , cffi
-, imapclient
-, pluggy
+, imap-tools
 , requests
+, pluggy
 , setuptools
 , pytestCheckHook
 }:
@@ -19,6 +21,8 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   nativeBuildInputs = [
+    pkg-config
+    pkgconfig
     setuptools-scm
   ];
 
@@ -30,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    imapclient
+    imap-tools
     pluggy
     requests
     setuptools
@@ -53,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/master/python";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/python/CHANGELOG";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda srapenne ];
   };
 }

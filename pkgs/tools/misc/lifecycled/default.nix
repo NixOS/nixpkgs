@@ -4,13 +4,13 @@
 }:
 buildGoModule rec {
   pname = "lifecycled";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "lifecycled";
     rev = "v${version}";
-    sha256 = "sha256-+Ts2ERoEZcBdxMXQlxPVtQe3pst5NXWKU3rmS5CgR7A=";
+    sha256 = "sha256-zskN2T0+1xZPjppggeGpPFuQ8/AgPNyN77F33rDoghc=";
   };
 
   vendorSha256 = "sha256-q5wYKSLHRzL+UGn29kr8+mUupOPR1zohTscbzjMRCS0=";

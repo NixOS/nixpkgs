@@ -2,9 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, asciidoc
 , cmake
 , expat
+, flac
 , fontconfig
 , freetype
 , fribidi
@@ -27,36 +27,38 @@
 , libXpm
 , libXrandr
 , libjpeg
+, libogg
 , libpng
 , libpthreadstubs
 , libsndfile
 , libtiff
 , libxcb
 , mkfontdir
-, pcre
+, pcre2
 , perl
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "2.9.4";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
-    owner  = "ice-wm";
-    repo = pname;
-    rev = version;
-    hash = "sha256-ne2lqo9CAhGgC8dd9R03zhFXy9nPBQR0NcfAY0DeVj4=";
+    owner = "ice-wm";
+    repo = "icewm";
+    rev = finalAttrs.version;
+    hash = "sha256-CLRLDJtp/rrdckzBKgof+vYFi+sqszevtCNGwokNxI0=";
   };
 
   nativeBuildInputs = [
-    asciidoc
     cmake
     perl
     pkg-config
   ];
+
   buildInputs = [
     expat
+    flac
     fontconfig
     freetype
     fribidi
@@ -79,13 +81,14 @@ stdenv.mkDerivation rec {
     libXpm
     libXrandr
     libjpeg
+    libogg
     libpng
     libpthreadstubs
     libsndfile
     libtiff
     libxcb
     mkfontdir
-    pcre
+    pcre2
   ];
 
   cmakeFlags = [
@@ -95,7 +98,8 @@ stdenv.mkDerivation rec {
 
   # install legacy themes
   postInstall = ''
-    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
+    cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
+      $out/share/icewm/themes/
   '';
 
   meta = with lib; {
@@ -108,14 +112,14 @@ stdenv.mkDerivation rec {
       system. Application windows can be managed by keyboard and mouse. Windows
       can be iconified to the taskbar, to the tray, to the desktop or be made
       hidden. They are controllable by a quick switch window (Alt+Tab) and in a
-      window list. A handful of configurable focus models are
-      menu-selectable. Setups with multiple monitors are supported by RandR and
-      Xinerama. IceWM is very configurable, themeable and well documented. It
-      includes an optional external background wallpaper manager with
-      transparency support, a simple session manager and a system tray.
+      window list. A handful of configurable focus models are menu-selectable.
+      Setups with multiple monitors are supported by RandR and Xinerama. IceWM
+      is very configurable, themeable and well documented. It includes an
+      optional external background wallpaper manager with transparency support,
+      a simple session manager and a system tray.
     '';
     license = licenses.lgpl2Only;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})

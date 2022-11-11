@@ -12,7 +12,7 @@
 , dpkt
 , fetchFromGitHub
 , GitPython
-, itanium_demangler
+, itanium-demangler
 , mulpyplexer
 , nampa
 , networkx
@@ -46,16 +46,16 @@ in
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.1.11752";
-  format = "setuptools";
+  version = "9.2.25";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4DUM1c3M/naJFqN/gdrX/NnJrY3ElUEOQ34cwcpSC+s=";
+    hash = "sha256-BxhCQZl/hsqaKzjieAreiOePUcmWGNn63jD0mZ9vFNE=";
   };
 
   propagatedBuildInputs = [
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     cppheaderparser
     dpkt
     GitPython
-    itanium_demangler
+    itanium-demangler
     mulpyplexer
     nampa
     networkx

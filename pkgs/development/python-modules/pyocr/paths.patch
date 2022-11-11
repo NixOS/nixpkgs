@@ -1,3 +1,9 @@
+commit c4bac00441363fcaeb074682d8226ca523614ea2
+Author: Guillaume Girol <symphorien+git@xlumurb.eu>
+Date:   Sat Aug 20 17:48:01 2022 +0200
+
+    Fix finding tesseract and cuneiform
+
 diff --git a/src/pyocr/cuneiform.py b/src/pyocr/cuneiform.py
 index 2e5b717..35647e2 100644
 --- a/src/pyocr/cuneiform.py
@@ -19,7 +25,7 @@ index 2e5b717..35647e2 100644
  LANGUAGES_LINE_PREFIX = "Supported languages: "
  LANGUAGES_SPLIT_RE = re.compile("[^a-z]")
 diff --git a/src/pyocr/libtesseract/tesseract_raw.py b/src/pyocr/libtesseract/tesseract_raw.py
-index a068e73..9ebea5c 100644
+index 2002614..9ebea5c 100644
 --- a/src/pyocr/libtesseract/tesseract_raw.py
 +++ b/src/pyocr/libtesseract/tesseract_raw.py
 @@ -2,7 +2,6 @@ import ctypes
@@ -30,7 +36,7 @@ index a068e73..9ebea5c 100644
  
  from ..error import TesseractError
  
-@@ -10,48 +9,16 @@ from ..error import TesseractError
+@@ -10,51 +9,16 @@ from ..error import TesseractError
  logger = logging.getLogger(__name__)
  
  TESSDATA_PREFIX = os.getenv('TESSDATA_PREFIX', None)
@@ -57,7 +63,7 @@ index a068e73..9ebea5c 100644
 -            )
 -        )
 -    else:
--        TESSDATA_PREFIX = tessdata
+-        TESSDATA_PREFIX = os.path.join(tessdata, "tessdata")
 -
 -
 -if sys.platform[:3] == "win":  # pragma: no cover
@@ -77,15 +83,18 @@ index a068e73..9ebea5c 100644
 -    ]
 -else:
 -    libnames += [
+-        "libtesseract.so.5",
 -        "libtesseract.so.4",
 -        "libtesseract.so.3",
+-        "libtesseract.5.dylib",
+-        "libtesseract.4.dylib",
 -    ]
 -
 +libnames = [ "@tesseract@/lib/libtesseract.so" ]
  
  g_libtesseract = None
  
-@@ -364,12 +331,12 @@ def init(lang=None):
+@@ -367,12 +331,12 @@ def init(lang=None):
      try:
          if lang:
              lang = lang.encode("utf-8")
@@ -103,7 +112,7 @@ index a068e73..9ebea5c 100644
          )
          g_libtesseract.TessBaseAPISetVariable(
 diff --git a/src/pyocr/tesseract.py b/src/pyocr/tesseract.py
-index 7c30852..44e8446 100644
+index 0fe0d20..c1fdd27 100644
 --- a/src/pyocr/tesseract.py
 +++ b/src/pyocr/tesseract.py
 @@ -28,8 +28,7 @@ from .builders import DigitBuilder  # backward compatibility
@@ -193,7 +202,7 @@ index 45b7f6a..95f55c6 100644
              stderr=subprocess.STDOUT
          )
 diff --git a/tests/tests_libtesseract.py b/tests/tests_libtesseract.py
-index ad7fdc9..57e7a60 100644
+index a5d46d8..8b9e315 100644
 --- a/tests/tests_libtesseract.py
 +++ b/tests/tests_libtesseract.py
 @@ -165,7 +165,8 @@ class TestLibTesseractRaw(BaseTest):
@@ -217,7 +226,7 @@ index ad7fdc9..57e7a60 100644
  
              self.assertEqual(
 diff --git a/tests/tests_tesseract.py b/tests/tests_tesseract.py
-index 1a55567..a24d96f 100644
+index 18d01ef..593cf94 100644
 --- a/tests/tests_tesseract.py
 +++ b/tests/tests_tesseract.py
 @@ -36,7 +36,7 @@ class TestTesseract(BaseTest):
@@ -229,7 +238,7 @@ index 1a55567..a24d96f 100644
  
      @patch("subprocess.Popen")
      def test_version_error(self, popen):
-@@ -156,7 +156,7 @@ class TestTesseract(BaseTest):
+@@ -162,7 +162,7 @@ class TestTesseract(BaseTest):
          for lang in ("eng", "fra", "jpn", "osd"):
              self.assertIn(lang, langs)
          popen.assert_called_once_with(
@@ -238,7 +247,7 @@ index 1a55567..a24d96f 100644
              startupinfo=None, creationflags=0,
              stdout=subprocess.PIPE, stderr=subprocess.STDOUT
          )
-@@ -171,7 +171,7 @@ class TestTesseract(BaseTest):
+@@ -177,7 +177,7 @@ class TestTesseract(BaseTest):
          self.assertEqual(te.exception.status, 1)
          self.assertEqual("unable to get languages", te.exception.message)
          popen.assert_called_once_with(
@@ -247,7 +256,7 @@ index 1a55567..a24d96f 100644
              startupinfo=None, creationflags=0,
              stdout=subprocess.PIPE, stderr=subprocess.STDOUT
          )
-@@ -248,7 +248,7 @@ class TestTesseract(BaseTest):
+@@ -254,7 +254,7 @@ class TestTesseract(BaseTest):
          self.assertEqual(status, 0)
          self.assertEqual(error, message)
          popen.assert_called_once_with(
@@ -256,7 +265,7 @@ index 1a55567..a24d96f 100644
              cwd=tmpdir,
              startupinfo=None,
              creationflags=0,
-@@ -271,7 +271,7 @@ class TestTesseract(BaseTest):
+@@ -277,7 +277,7 @@ class TestTesseract(BaseTest):
          self.assertEqual(status, 0)
          self.assertEqual(error, message)
          popen.assert_called_with(
@@ -265,7 +274,7 @@ index 1a55567..a24d96f 100644
              cwd=tmpdir,
              startupinfo=None,
              creationflags=0,
-@@ -302,7 +302,7 @@ class TestTesseract(BaseTest):
+@@ -308,7 +308,7 @@ class TestTesseract(BaseTest):
              self.assertEqual(result["angle"], 90)
              self.assertEqual(result["confidence"], 9.30)
              popen.assert_called_once_with(
@@ -274,7 +283,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -338,7 +338,7 @@ class TestTesseract(BaseTest):
+@@ -344,7 +344,7 @@ class TestTesseract(BaseTest):
              self.assertEqual(result["angle"], 90)
              self.assertEqual(result["confidence"], 9.30)
              popen.assert_called_once_with(
@@ -283,7 +292,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -371,7 +371,7 @@ class TestTesseract(BaseTest):
+@@ -377,7 +377,7 @@ class TestTesseract(BaseTest):
              self.assertEqual(result["angle"], 90)
              self.assertEqual(result["confidence"], 9.30)
              popen.assert_called_once_with(
@@ -292,7 +301,7 @@ index 1a55567..a24d96f 100644
                   "--psm", "0", "-l", "osd"],
                  stdin=subprocess.PIPE,
                  shell=False,
-@@ -399,7 +399,7 @@ class TestTesseract(BaseTest):
+@@ -405,7 +405,7 @@ class TestTesseract(BaseTest):
              with self.assertRaises(tesseract.TesseractError) as te:
                  tesseract.detect_orientation(self.image)
              popen.assert_called_once_with(
@@ -301,7 +310,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -433,7 +433,7 @@ class TestTesseract(BaseTest):
+@@ -439,7 +439,7 @@ class TestTesseract(BaseTest):
              with self.assertRaises(tesseract.TesseractError) as te:
                  tesseract.detect_orientation(self.image)
              popen.assert_called_once_with(
@@ -310,7 +319,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -467,7 +467,7 @@ class TestTesseract(BaseTest):
+@@ -473,7 +473,7 @@ class TestTesseract(BaseTest):
              self.assertEqual(result["angle"], 90)
              self.assertEqual(result["confidence"], 9.30)
              popen.assert_called_once_with(
@@ -319,7 +328,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -500,7 +500,7 @@ class TestTesseract(BaseTest):
+@@ -506,7 +506,7 @@ class TestTesseract(BaseTest):
              self.assertEqual(result["angle"], 90)
              self.assertEqual(result["confidence"], 9.30)
              popen.assert_called_once_with(
@@ -328,7 +337,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -527,7 +527,7 @@ class TestTesseract(BaseTest):
+@@ -533,7 +533,7 @@ class TestTesseract(BaseTest):
              with self.assertRaises(tesseract.TesseractError) as te:
                  tesseract.detect_orientation(self.image)
              popen.assert_called_once_with(
@@ -337,7 +346,7 @@ index 1a55567..a24d96f 100644
                  stdin=subprocess.PIPE,
                  shell=False,
                  startupinfo=None,
-@@ -561,7 +561,7 @@ class TestTesseract(BaseTest):
+@@ -567,7 +567,7 @@ class TestTesseract(BaseTest):
              with self.assertRaises(tesseract.TesseractError) as te:
                  tesseract.detect_orientation(self.image)
              popen.assert_called_once_with(

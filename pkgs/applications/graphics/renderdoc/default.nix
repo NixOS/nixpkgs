@@ -32,13 +32,13 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
-  version = "1.17";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "sha256-Zr7Av49mK48B4N+Ca2vPIgKuVNP4YLVEs4EQepukSs8=";
+    sha256 = "sha256-T6OAr6Pl4VmXVSlNHF6kh8jIKs3FSTZsZ+Y4IH3SPTE=";
   };
 
   buildInputs = [
@@ -95,7 +95,7 @@ mkDerivation rec {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    maintainers = [ maintainers.jansol ];
+    maintainers = [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

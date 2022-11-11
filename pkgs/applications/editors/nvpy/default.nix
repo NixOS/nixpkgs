@@ -3,14 +3,14 @@
 let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "nvpy";
 
   src = fetchFromGitHub {
     owner = "cpbotha";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "02njvybd8yaqdnc5ghwrm8225z57gg4w7rhmx3w5jqzh16ld4mhh";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-eWvD1k0wbzo0G46/LEOlHl1wLvc4JHLL1fg6wuCHiQY=";
   };
 
 

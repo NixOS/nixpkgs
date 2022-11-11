@@ -1,39 +1,70 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, cython
-, matplotlib
-, scikit-learn
-, cupy
-, pymanopt
 , autograd
+, buildPythonPackage
+, cupy
+, cvxopt
+, cython
+, fetchPypi
+, matplotlib
+, numpy
+, tensorflow
+, pymanopt
 , pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
 , enableDimensionalityReduction ? false
 , enableGPU ? false
 }:
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.8.1.0";
+  version = "0.8.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "POT";
     inherit version;
-    sha256 = "ff2974418fbf35b18072555c2a9e7e4f6876eddfb6791179ddb8f0f6d6032505";
+    sha256 = "sha256-PKmuPI83DPy7RkOgHHPdPJJz5NT/fpr123AVTzTLwgQ=";
   };
+
+  nativeBuildInputs = [
+    numpy
+    cython
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ] ++ lib.optionals enableGPU [
+    cupy
+  ] ++ lib.optionals enableDimensionalityReduction [
+    autograd
+    pymanopt
+  ];
+
+  checkInputs = [
+    cvxopt
+    matplotlib
+    numpy
+    tensorflow
+    scikit-learn
+    pytestCheckHook
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov-report= --cov=ot" ""
-  '';
+      --replace " --cov-report= --cov=ot" "" \
+      --replace " --durations=20" "" \
+      --replace " --junit-xml=junit-results.xml" ""
+    substituteInPlace setup.py \
+      --replace '"oldest-supported-numpy", ' ""
 
-  nativeBuildInputs = [ numpy cython ];
-  propagatedBuildInputs = [ numpy scipy ]
-    ++ lib.optionals enableGPU [ cupy ]
-    ++ lib.optionals enableDimensionalityReduction [ pymanopt autograd ];
-  checkInputs = [ matplotlib scikit-learn pytestCheckHook ];
+    # we don't need setup.py to find the macos sdk for us
+    sed -i '/sdk_path/d' setup.py
+  '';
 
   # To prevent importing of an incomplete package from the build directory
   # instead of nix store (`ot` is the top-level package name).
@@ -41,15 +72,55 @@ buildPythonPackage rec {
     rm -r ot
   '';
 
-  # GPU tests are always skipped because of sandboxing
-  disabledTests = [ "warnings" ];
+  disabledTests = [
+    # GPU tests are always skipped because of sandboxing
+    "warnings"
+    # Fixture is not available
+    "test_conditional_gradient"
+    "test_convert_between_backends"
+    "test_emd_backends"
+    "test_emd_emd2_types_devices"
+    "test_emd1d_type_devices"
+    "test_emd2_backends"
+    "test_factored_ot_backends"
+    "test_free_support_barycenter_backends"
+    "test_func_backends"
+    "test_generalized_conditional_gradient"
+    "test_line_search_armijo"
+    "test_loss_dual"
+    "test_max_sliced_backend"
+    "test_plan_dual"
+    "test_random_backends"
+    "test_sliced_backend"
+    "test_to_numpy"
+    "test_wasserstein_1d_type_devices"
+    "test_wasserstein"
+    "test_weak_ot_bakends"
+    # TypeError: Only integers, slices...
+    "test_emd1d_device_tf"
+  ];
 
-  pythonImportsCheck = [ "ot" "ot.lp" ];
+  disabledTestPaths = [
+    # AttributeError: module pytest has no attribute skip_backend
+    "test/test_bregman.py"
+    "test/test_da.py"
+    "test/test_utils.py"
+    "test/test_gromov.py"
+    "test/test_helpers.py"
+    "test/test_unbalanced.py"
+  ] ++ lib.optionals (!enableDimensionalityReduction) [
+    "test/test_dr.py"
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "ot"
+    "ot.lp"
+  ];
+
+  meta = with lib; {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ yl3dy ];
   };
 }

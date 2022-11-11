@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk3, openbox,
-  imlib2, libxml2, libstartup_notification, makeWrapper, libSM }:
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, wrapGAppsHook
+, gtk3
+, imlib2
+, libSM
+, libstartup_notification
+, libxml2
+, openbox
+}:
 
 stdenv.mkDerivation rec {
   pname = "obconf";
@@ -14,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -22,16 +34,11 @@ stdenv.mkDerivation rec {
     libSM
     libstartup_notification
     libxml2
-    makeWrapper
     openbox
   ];
 
   postPatch = ''
     substituteInPlace configure.ac --replace 2.0.4 ${version}
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/obconf --prefix XDG_DATA_DIRS : ${openbox}/share/
   '';
 
   meta = {

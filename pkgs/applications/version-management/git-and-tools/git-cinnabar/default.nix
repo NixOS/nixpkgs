@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, makeWrapper
 , curl, libiconv, mercurial, zlib
+, CoreServices
 }:
 
 let
@@ -8,18 +9,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "git-cinnabar";
-  version = "0.5.7";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = version;
-    sha256 = "04dsjlsw98avrckldx7rc70b2zsbajzkyqqph4c7d9xd5djh3yaj";
+    sha256 = "sha256-vHHugCZ7ikB4lIv/TcNuOMSQsm0zCkGqu2hAFrqygu0=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoconf makeWrapper ];
-  buildInputs = [ curl zlib ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ curl zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
 
   # Ignore submodule status failing due to no git in environment.
   makeFlags = [ "SUBMODULE_STATUS=yes" ];

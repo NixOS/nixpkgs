@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/koekeishiya/kwm/releases";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
+    mainProgram = "kwmc";
     license = licenses.mit;
   };
 }

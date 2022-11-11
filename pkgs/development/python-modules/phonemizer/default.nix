@@ -1,34 +1,37 @@
 { lib
+, stdenv
 , substituteAll
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , joblib
 , segments
 , attrs
+, dlinfo
+, typing-extensions
 , espeak-ng
 , pytestCheckHook
 , pytest-cov
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.0.1";
+  version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b4ea53b8da9a156361dff1d0c04ac1a8e65e6966d1cb9a8147c200960b32296";
+    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
   };
 
   postPatch = ''
-    sed -i -e '/\'pytest-runner\'/d setup.py
+    sed -i '/pytest-runner/d setup.py
   '';
 
   patches = [
     (substituteAll {
       src = ./backend-paths.patch;
-      espeak = "${lib.getBin espeak-ng}/bin/espeak";
-      # override festival path should you try to integrate it
-      festival = "";
+      libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
+      # FIXME package festival
     })
     ./remove-intertwined-festival-test.patch
   ];
@@ -37,6 +40,8 @@ buildPythonApplication rec {
     joblib
     segments
     attrs
+    dlinfo
+    typing-extensions
   ];
 
   preCheck = ''
@@ -45,26 +50,26 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest-cov
   ];
 
   # We tried to package festvial, but were unable to get the backend running,
   # so let's disable related tests.
-  pytestFlagsArray = [
-    "--ignore=test/test_festival.py"
+  disabledTestPaths = [
+    "test/test_festival.py"
   ];
 
   disabledTests = [
     "test_festival"
-    "test_relative"
-    "test_absolute"
+    "test_festival_path"
     "test_readme_festival_syll"
+    "test_unicode"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/bootphon/phonemizer";
+    changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };
 }

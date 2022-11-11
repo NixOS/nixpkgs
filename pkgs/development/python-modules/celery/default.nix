@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , billiard
 , boto3
 , buildPythonPackage
@@ -9,6 +10,7 @@
 , click-repl
 , dnspython
 , fetchPypi
+, fetchpatch
 , kombu
 , moto
 , pymongo
@@ -19,19 +21,33 @@
 , pythonOlder
 , pytz
 , vine
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.2.3";
+  version = "5.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4s1BZnrZfU9qL0Zy0cam662hlMYZJTBYtfI3BKqtqoI=";
+    hash = "sha256-+vvYKTTTD4oAT4Ho96Bi4xQToj1ES+juMyZVORWVjG0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "billiard-4.0-comat.patch";
+      url = "https://github.com/celery/celery/commit/b260860988469ef8ad74f2d4225839c2fa91d590.patch";
+      hash = "sha256-NWB/UB0fE7A/vgMRYz6QGmqLmyN1ninAMyL4V2tpzto=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace requirements/default.txt \
+      --replace "billiard>=3.6.4.0,<4.0" "billiard>=3.6.4.0"
+  '';
 
   propagatedBuildInputs = [
     billiard
@@ -56,11 +72,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
-  '';
-
   disabledTestPaths = [
     # test_eventlet touches network
     "t/unit/concurrency/test_eventlet.py"
@@ -72,11 +83,20 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
   ];
 
   pythonImportsCheck = [
     "celery"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) sourcehut;
+  };
 
   meta = with lib; {
     description = "Distributed task queue";

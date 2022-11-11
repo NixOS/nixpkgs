@@ -2,6 +2,7 @@
   "dependencies": {
     "admin-lte": "2.4.9",
     "bootstrap": "^3.4.1",
+    "bootstrap-datepicker": "^1.8.0",
     "bootstrap-validator": "^0.11.9",
     "datatables.net-plugins": "^1.10.19",
     "icheck": "^1.0.2",
@@ -12,5 +13,5 @@
     "multiselect": "^0.9.12"
   },
   "name": "powerdns-admin-assets",
-  "version": "0.2.4"
+  "version": "0.3.0"
 }

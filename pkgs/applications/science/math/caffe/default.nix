@@ -13,12 +13,16 @@
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, cudnnSupport ? cudaSupport, cudnn ? null
-, ncclSupport ? false, nccl ? null
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudnnSupport ? cudaSupport
+, ncclSupport ? false
 , pythonSupport ? false, python ? null, numpy ? null
 , substituteAll
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+in
 
 assert leveldbSupport -> (leveldb != null && snappy != null);
 assert cudnnSupport -> cudaSupport;
@@ -137,7 +141,8 @@ stdenv.mkDerivation rec {
       Center (BVLC) and by community contributors.
     '';
     homepage = "http://caffe.berkeleyvision.org/";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ ];
+    broken = pythonSupport && (python.isPy310);
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

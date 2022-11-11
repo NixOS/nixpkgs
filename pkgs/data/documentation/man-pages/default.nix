@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
-    repositories.git = "https://git.kernel.org/pub/scm/docs/man-pages/man-pages";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     priority = 30; # if a package comes with its own man page, prefer it

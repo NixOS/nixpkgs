@@ -11,18 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ncnn";
-  version = "20211208";
+  version = "20220729";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
     rev = version;
-    sha256 = "1c9axrnafksnks7v5fmi6nzs0qim9n6j5kh5d0vfl3b4r22irhqr";
+    sha256 = "sha256-hZVeW3svuVpwQhQz67uqTPZ7B9pisLCwHhXB2zMLygo=";
   };
 
   patches = [
     ./cmakelists.patch
-    ./gpu-include.patch
   ];
 
   cmakeFlags = [

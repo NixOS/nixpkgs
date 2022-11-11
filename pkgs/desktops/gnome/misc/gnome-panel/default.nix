@@ -1,9 +1,11 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , autoreconfHook
 , dconf
 , evolution-data-server
 , gdm
+, geocode-glib_2
 , gettext
 , glib
 , gnome-desktop
@@ -23,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.42.0";
+  version = "3.46.0";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-rqjA78LtuiDpetRpUXnNCiU45kwpBHAsyMWU6OCJhwM=";
+    hash = "sha256-zsehG3DFJLXo121Nfk2DXuYHq9outC9N92GeYusGrrE=";
   };
 
   patches = [
@@ -69,6 +71,7 @@ stdenv.mkDerivation rec {
     dconf
     evolution-data-server
     gdm
+    geocode-glib_2
     glib
     gnome-desktop
     gnome-menus

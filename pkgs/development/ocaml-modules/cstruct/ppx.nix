@@ -2,13 +2,13 @@
 , ounit, cppo, ppx_sexp_conv, cstruct-unix, cstruct-sexp
 }:
 
-if !lib.versionAtLeast (cstruct.version or "1") "3"
+if lib.versionOlder (cstruct.version or "1") "3"
 then cstruct
 else
 
 buildDunePackage {
   pname = "ppx_cstruct";
-  inherit (cstruct) version src useDune2 meta;
+  inherit (cstruct) version src meta;
 
   minimalOCamlVersion = "4.08";
 

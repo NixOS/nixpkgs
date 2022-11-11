@@ -6,7 +6,6 @@ buildGoPackage rec {
   rev = "4acdcbdea79de6b3dee1c637eca5cbea0fdbe37c";
 
   goPackagePath = "github.com/mdempsky/gocode";
-  excludedPackages = "internal/suggest/testdata";
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the

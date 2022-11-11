@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "cameradar";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03nm03cqhq04ixw4rssfkgrin918pa0v7ai26v4h99gz7j8hs7ll";
+    sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
   };
 
-  vendorSha256 = "099np130dn51nb4lcyrrm46fihfipxrw0vpqs2jh5g4c6pnbk200";
+  vendorSha256 = "sha256-AIi57DWMvAKl0PhuwHO/0cHoDKk5e0bJsqHYBka4NiU=";
 
   nativeBuildInputs = [
     pkg-config

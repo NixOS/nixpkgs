@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libva" + lib.optionalString minimal "minimal";
-  version = "2.13.0";
+  pname = "libva" + lib.optionalString minimal "-minimal";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "0vsvli3xc0gqqp06p7wkm973lhr7c5qgnyz5jfjmf8kv75rajazp";
+    sha256 = "sha256-NJA2FTPrhLj9+vmkBy+GcTiH57gBEQnYhZzYk3sEOBo=";
   };
 
   outputs = [ "dev" "out" ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/linuxmedia/vaapi";
     changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

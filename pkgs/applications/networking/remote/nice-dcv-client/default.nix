@@ -4,7 +4,6 @@
 , glib
 , libX11
 , gst_all_1
-, sqlite
 , libepoxy
 , pango
 , cairo
@@ -79,6 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rmcgibbo ];

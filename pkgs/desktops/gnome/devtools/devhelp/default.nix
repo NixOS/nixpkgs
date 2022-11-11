@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -7,11 +8,9 @@
 , gtk3
 , wrapGAppsHook
 , glib
-, appstream-glib
 , gobject-introspection
-, python3
 , gi-docgen
-, webkitgtk
+, webkitgtk_4_1
 , gettext
 , itstool
 , gsettings-desktop-schemas
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
-  version = "41.2";
+  version = "43.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "7KqQsPTaqPsgMPbcaQv1M/+Zp3NDf+Dhis/oLZl/YNI=";
+    sha256 = "Y87u/QU5LgIESIHvHs1yQpNVPaVzW378CCstE/6F3QQ=";
   };
 
   nativeBuildInputs = [
@@ -36,16 +35,17 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    appstream-glib
     gobject-introspection
-    python3
     gi-docgen
+    # post install script
+    glib
+    gtk3
   ];
 
   buildInputs = [
     glib
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
   ];
@@ -55,12 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    # patchShebangs requires executable file
-    chmod +x build-aux/meson/meson_post_install.py
-    patchShebangs build-aux/meson/meson_post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "6.4.4";
+  version = "7.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    sha256 = "b1d782c1ce53ad4b2c5545f8b7aa799eb61a0b12a62b376a18e2313c6f2d77f1";
+    hash = "sha256-aSWDVdr4J2BXqS5CzsUllK2M/n3VBdbw5W/kQLxEGNA=";
   };
 
   propagatedBuildInputs = [
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests check for flake8
     "file_does_not_exist"
-    # AssertionError: assert '.c { color:...
-    "test_style_defs"
+    # Comparing console output doesn't work reliable
+    "console"
   ];
 
   pythonImportsCheck = [

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , aiodns
 , aiohttp
 , boto3
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.14.1";
+  version = "3.19.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "v${version}";
-    sha256 = "sha256-KhEfD8k7qQMfY2ErqApn1K1lhIJgBiVBjjWKL2DjNdg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-iWDKF4FZJPL6wHxVbvj2zlY0sqpBMXki9e7uuysX1o0=";
   };
 
   propagatedBuildInputs = [

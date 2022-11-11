@@ -9,7 +9,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "isl-${version}";
+  pname = "isl";
+  inherit version;
 
   src = fetchurl {
     inherit urls sha256;
@@ -17,6 +18,7 @@ stdenv.mkDerivation {
 
   inherit patches;
 
+  strictDeps = true;
   buildInputs = [ gmp ];
 
   inherit configureFlags;

@@ -1,16 +1,16 @@
-{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
+{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad, flac, libopus, opusfile, libogg, libxmp
 , Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
-, copyDesktopItems, makeDesktopItem
+, copyDesktopItems, makeDesktopItem, pkg-config
 , useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
 stdenv.mkDerivation rec {
   pname = "quakespasm";
-  version = "0.94.3";
+  version = "0.95.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
-    sha256 = "sha256-PpX20+XHIF4aRosErKGnylXIqdMtG3Ubsi70zNG9Dq0=";
+    sha256 = "sha256-pjXqOyL5ILu0Tx5sfehYXbVsL11Abt9cgZJ4xkkBrnA=";
   };
 
   sourceRoot = "${pname}-${version}/Quake";
@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
     ./quakespasm-darwin-makefile-improvements.patch
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
+
   buildInputs = [
-    gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
+    gzip libvorbis libmad flac libopus opusfile libogg libxmp
+    (if useSDL2 then SDL2 else SDL)
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa CoreAudio IOKit OpenGL
   ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
@@ -35,10 +40,11 @@ stdenv.mkDerivation rec {
     "USE_CODEC_WAVE=1"
     "USE_CODEC_MP3=1"
     "USE_CODEC_VORBIS=1"
-    "USE_CODEC_FLAC=0"
-    "USE_CODEC_OPUS=0"
+    "USE_CODEC_FLAC=1"
+    "USE_CODEC_OPUS=1"
     "USE_CODEC_MIKMOD=0"
     "USE_CODEC_UMX=0"
+    "USE_CODEC_XMP=1"
     "MP3LIB=mad"
     "VORBISLIB=vorbis"
   ] ++ lib.optionals useSDL2 [
@@ -76,7 +82,7 @@ stdenv.mkDerivation rec {
       name = "quakespasm";
       exec = "quake";
       desktopName = "Quakespasm";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
@@ -93,6 +99,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mikroskeem m3tti ];
+    maintainers = with maintainers; [ mikroskeem ];
+    mainProgram = "quake";
   };
 }

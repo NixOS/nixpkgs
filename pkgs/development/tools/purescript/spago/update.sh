@@ -33,4 +33,7 @@ cabal2nix --revision "$new_version" "https://github.com/purescript/spago.git" >>
 # TODO: This should ideally also automatically update the docsSearchVersion
 # from pkgs/development/haskell/configuration-nix.nix.
 
-echo "Finished."
+echo
+echo "Finished.  Make sure you run the following commands to confirm Spago builds correctly:"
+echo ' - `nix build -L -f ./. spago`'
+echo ' - `sudo nix build -L -f ./. spago.passthru.tests --option sandbox relaxed`'

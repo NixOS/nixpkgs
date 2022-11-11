@@ -5,7 +5,11 @@
 , pythonOlder
 , substituteAll
 
+# build
+, setuptools
+
 # patched in
+, fetchpatch
 , geos
 , gdal
 , withGdal ? false
@@ -17,12 +21,12 @@
 
 # tests
 , aiosmtpd
-, argon2_cffi
+, argon2-cffi
 , bcrypt
 , docutils
 , geoip2
 , jinja2
-, memcached
+, python-memcached
 , numpy
 , pillow
 , pylibmc
@@ -39,23 +43,33 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.0.2";
+  version = "4.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EQ+1j7Euylngcq1Z/ELXcc1kLdei8kFlgqqdp6jvlUo=";
+    hash = "sha256-Z4u/yGBOskbtVOIGPwdl8TsyGlBSa9yMsflD7af6MfE=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (substituteAll {
+      src = ./django_4_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;
       geos = geos;
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    });
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asgiref
@@ -70,13 +84,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiosmtpd
-    argon2_cffi
+    argon2-cffi
     asgiref
     bcrypt
     docutils
     geoip2
     jinja2
-    memcached
+    python-memcached
     numpy
     pillow
     pylibmc

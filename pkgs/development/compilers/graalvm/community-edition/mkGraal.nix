@@ -1,7 +1,36 @@
-{ version
+{
+  # An attrset describing each platform configuration. All values are extract
+  # from the GraalVM releases available on
+  # https://github.com/graalvm/graalvm-ce-builds/releases
+  # Example:
+  # config = {
+  #   x86_64-linux = {
+  #     # List of products that will be included in the GraalVM derivation
+  #     # See `with{NativeImage,Ruby,Python,WASM,*}Svm` variables for the
+  #     # available values
+  #     products = [ "graalvm-ce" "native-image-installable-svm" ];
+  #     # GraalVM arch, not to be confused with the nix platform
+  #     arch = "linux-amd64";
+  #     # GraalVM version
+  #     version = "22.0.0.2";
+  #   };
+  # }
+  config
+  # GraalVM version that will be used unless overriden by `config.<platform>.version`
+, defaultVersion
+  # Java version used by GraalVM
 , javaVersion
-, platforms
-, hashes ? import ./hashes.nix
+  # Platforms were GraalVM will be allowed to build (i.e. `meta.platforms`)
+, platforms ? builtins.attrNames config
+  # If set to true, update script will (re-)generate the sources file even if
+  # there are no updates available
+, forceUpdate ? false
+  # Path for the sources file that will be used
+  # See `update.nix` file for a description on how this file works
+, sourcesPath ? ./. + "/graalvm${javaVersion}-ce-sources.json"
+  # Use musl instead of glibc to allow true static builds in GraalVM's
+  # Native Image (i.e.: `--static --libc=musl`). This will cause glibc static
+  # builds to fail, so it should be used with care
 , useMusl ? false
 }:
 
@@ -32,17 +61,20 @@
 , gtkSupport ? stdenv.isLinux
 , cairo
 , glib
+  # updateScript deps
+, gnused
 , gtk3
+, jq
+, writeShellScript
 }:
 
 assert useMusl -> stdenv.isLinux;
 
 let
-  platform = {
-    aarch64-linux = "linux-aarch64";
-    x86_64-linux = "linux-amd64";
-    x86_64-darwin = "darwin-amd64";
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  platform = config.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  version = platform.version or defaultVersion;
+  name = "graalvm${javaVersion}-ce";
+  sources = builtins.fromJSON (builtins.readFile sourcesPath);
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -53,30 +85,24 @@ let
   ] ++ lib.optionals useMusl [
     (lib.getDev musl)
     # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
-    (writeShellScriptBin "${stdenv.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
+    (writeShellScriptBin "${stdenv.hostPlatform.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'')
   ]);
 
-  javaVersionPlatform = "${javaVersion}-${platform}";
+  withNativeImageSvm = builtins.elem "native-image-installable-svm" platform.products;
+  withRubySvm = builtins.elem "ruby-installable-svm" platform.products;
+  withPythonSvm = builtins.elem "python-installable-svm" platform.products;
+  withWasmSvm = builtins.elem "wasm-installable-svm" platform.products;
 
   graalvmXXX-ce = stdenv.mkDerivation rec {
     inherit version;
-    name = "graalvm${javaVersion}-ce";
-    srcs =
-      let
-        # Some platforms doesn't have all GraalVM features
-        # e.g.: GraalPython on aarch64-linux
-        # When the platform doesn't have a feature, sha256 is null on hashes.nix
-        # To update hashes.nix file, run `./update.sh <graalvm-ce-version>`
-        maybeFetchUrl = url: if url.sha256 != null then (fetchurl url) else null;
-      in
-      (lib.remove null
-        (map maybeFetchUrl (hashes { inherit javaVersionPlatform; })));
+    pname = name;
+
+    srcs = map fetchurl (builtins.attrValues sources.${platform.arch});
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
-      openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
       stdenv.cc.cc.lib # libstdc++.so.6
       xorg.libX11
       xorg.libXext
@@ -84,9 +110,12 @@ let
       xorg.libXrender
       xorg.libXtst
       zlib
+    ] ++ lib.optionals withRubySvm [
+      openssl # libssl.so wanted by languages/ruby/lib/mri/openssl.so
     ];
 
-    nativeBuildInputs = [ unzip perl autoPatchelfHook makeWrapper ];
+    nativeBuildInputs = [ unzip perl makeWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     unpackPhase = ''
       unpack_jar() {
@@ -139,93 +168,66 @@ let
 
     outputs = [ "out" "lib" ];
 
-    installPhase =
-      let
-        copyClibrariesToOut = basepath: ''
+    installPhase = ''
+      # ensure that $lib/lib exists to avoid breaking builds
+      mkdir -p "$lib/lib"
+      # jni.h expects jni_md.h to be in the header search path.
+      ln -s $out/include/linux/*_md.h $out/include/
+
+      # copy-paste openjdk's preFixup
+      # Set JAVA_HOME automatically.
+      mkdir -p $out/nix-support
+      cat > $out/nix-support/setup-hook << EOF
+        if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
+      EOF
+      ${
+        lib.optionalString (stdenv.isLinux) ''
           # provide libraries needed for static compilation
           ${
             if useMusl then
-              "for f in ${musl.stdenv.cc.cc}/lib/* ${musl}/lib/* ${zlib.static}/lib/*; do"
+              ''for f in "${musl.stdenv.cc.cc}/lib/"* "${musl}/lib/"* "${zlib.static}/lib/"*; do''
             else
-              "for f in ${glibc}/lib/* ${glibc.static}/lib/* ${zlib.static}/lib/*; do"
+              ''for f in "${glibc}/lib/"* "${glibc.static}/lib/"* "${zlib.static}/lib/"*; do''
           }
-            ln -s $f ${basepath}/${platform}/$(basename $f)
+            ln -s "$f" "$out/lib/svm/clibraries/${platform.arch}/$(basename $f)"
           done
-        '';
-        copyClibrariesToLib = ''
+
           # add those libraries to $lib output too, so we can use them with
-          # `native-image -H:CLibraryPath=''${lib.getLib graalvm11-ce}/lib ...` and reduce
+          # `native-image -H:CLibraryPath=''${lib.getLib graalvmXX-ce}/lib ...` and reduce
           # closure size by not depending on GraalVM $out (that is much bigger)
-          mkdir -p $lib/lib
-          for f in ${glibc}/lib/*; do
-            ln -s $f $lib/lib/$(basename $f)
+          # we always use glibc here, since musl is only supported for static compilation
+          for f in "${glibc}/lib/"*; do
+            ln -s "$f" "$lib/lib/$(basename $f)"
           done
-        '';
-      in
-      {
-        "11-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "17-linux-amd64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "11-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "17-linux-aarch64" = ''
-          ${copyClibrariesToOut "$out/lib/svm/clibraries"}
-
-          ${copyClibrariesToLib}
-        '';
-        "11-darwin-amd64" = "";
-        "17-darwin-amd64" = "";
-      }.${javaVersionPlatform} + ''
-        # ensure that $lib/lib exists to avoid breaking builds
-        mkdir -p $lib/lib
-        # jni.h expects jni_md.h to be in the header search path.
-        ln -s $out/include/linux/*_md.h $out/include/
-
-        # copy-paste openjdk's preFixup
-        # Set JAVA_HOME automatically.
-        mkdir -p $out/nix-support
-        cat <<EOF > $out/nix-support/setup-hook
-          if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
-        EOF
-      '';
+        ''
+      }
+    '';
 
     dontStrip = true;
 
     # Workaround for libssl.so.10 wanted by TruffleRuby
     # Resulting TruffleRuby cannot use `openssl` library.
-    autoPatchelfIgnoreMissingDeps = stdenv.isDarwin;
+    autoPatchelfIgnoreMissingDeps = withRubySvm && stdenv.isDarwin;
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
-      # We cannot use -exec since wrapProgram is a function but not a
-      # command.
-      #
-      # jspawnhelper is executed from JVM, so it doesn't need to wrap it,
-      # and it breaks building OpenJDK (#114495).
-      for bin in $( find "$out" -executable -type f -not -path '*/languages/ruby/lib/gems/*' -not -name jspawnhelper ); do
-        if patchelf --print-interpreter "$bin" &> /dev/null || head -n 1 "$bin" | grep '^#!' -q; then
-          wrapProgram "$bin" \
-            --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}" \
-            --prefix PATH : "${runtimeDependencies}"
-        fi
+      # Find all executables in any directory that contains '/bin/'
+      for bin in $(find "$out" -executable -type f -wholename '*/bin/*'); do
+        wrapProgram "$bin" \
+          --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}" \
+          --prefix PATH : "${runtimeDependencies}"
       done
 
       find "$out" -name libfontmanager.so -exec \
         patchelf --add-needed libfontconfig.so {} \;
 
-      # Workaround for libssl.so.10/libcrypto.so.10 wanted by TruffleRuby
-      patchelf $out/languages/ruby/lib/mri/openssl.so \
-        --replace-needed libssl.so.10 libssl.so \
-        --replace-needed libcrypto.so.10 libcrypto.so
+      ${
+        lib.optionalString withRubySvm ''
+          # Workaround for libssl.so.10/libcrypto.so.10 wanted by TruffleRuby
+          patchelf $out/languages/ruby/lib/mri/openssl.so \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
+        ''
+      }
     '';
 
     # $out/bin/native-image needs zlib to build native executables.
@@ -253,7 +255,7 @@ let
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
       ${# --static flag doesn't work for darwin
-        lib.optionalString (stdenv.isLinux && !useMusl) ''
+        lib.optionalString (withNativeImageSvm && stdenv.isLinux && !useMusl) ''
           echo "Ahead-Of-Time compilation"
           $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces --no-server HelloWorld
           ./helloworld | fgrep 'Hello World'
@@ -265,53 +267,51 @@ let
       }
 
       ${# --static flag doesn't work for darwin
-        lib.optionalString (stdenv.isLinux && useMusl) ''
+        lib.optionalString (withNativeImageSvm && stdenv.isLinux && useMusl) ''
           echo "Ahead-Of-Time compilation with --static and --libc=musl"
           $out/bin/native-image --no-server --libc=musl --static HelloWorld
           ./helloworld | fgrep 'Hello World'
         ''
       }
 
-      ${# TODO: Doesn't work on MacOS, we have this error:
-        # "Launching JShell execution engine threw: Operation not permitted (Bind failed)"
-        lib.optionalString (stdenv.isLinux) ''
+      ${
+        lib.optionalString withWasmSvm ''
           echo "Testing Jshell"
           echo '1 + 1' | $out/bin/jshell
         ''
       }
 
       ${
-        lib.optionalString (platform != "linux-aarch64") ''
+        lib.optionalString withPythonSvm ''
           echo "Testing GraalPython"
           $out/bin/graalpython -c 'print(1 + 1)'
           echo '1 + 1' | $out/bin/graalpython
         ''
       }
 
-      echo "Testing TruffleRuby"
-      # Hide warnings about wrong locale
-      export LANG=C
-      export LC_ALL=C
-      $out/bin/ruby -e 'puts(1 + 1)'
-      ${# FIXME: irb is broken in all platforms
-        # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
-        # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
-        # though `openssl` is in `propagatedBuildInputs`. For more details see:
-        # https://github.com/NixOS/nixpkgs/pull/105815
-        # TODO: "truffleruby: an internal exception escaped out of the interpreter"
-        # error on linux-aarch64
-        # TODO: "core/kernel.rb:234:in `gem_original_require':
-        # /nix/store/wlc5xalzj2ip1l83siqw8ac5fjd52ngm-graalvm11-ce/languages/llvm/native/lib:
-        # cannot read file data: Is a directory (RuntimeError)" error on linux-amd64
-        lib.optionalString false ''
+      ${
+        lib.optionalString withRubySvm ''
+          echo "Testing TruffleRuby"
+          # Hide warnings about wrong locale
+          export LANG=C
+          export LC_ALL=C
+          $out/bin/ruby -e 'puts(1 + 1)'
+        ''
+        # FIXME: irb is broken in all platforms
+        + lib.optionalString false ''
           echo '1 + 1' | $out/bin/irb
         ''
       }
     '';
 
     passthru = {
+      inherit (platform) products;
       home = graalvmXXX-ce;
-      updateScript = ./update.sh;
+      updateScript = import ./update.nix {
+        inherit config defaultVersion forceUpdate gnused jq lib name sourcesPath writeShellScript;
+        graalVersion = version;
+        javaVersion = "java${javaVersion}";
+      };
     };
 
     meta = with lib; {
@@ -321,7 +321,6 @@ let
       license = with licenses; [ upl gpl2Classpath bsd3 ];
       maintainers = with maintainers; [
         bandresen
-        volth
         hlolli
         glittershark
         babariviere

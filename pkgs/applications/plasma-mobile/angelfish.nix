@@ -1,9 +1,9 @@
 { lib
 , mkDerivation
-, fetchurl
 , cmake
 , corrosion
 , extra-cmake-modules
+, gcc11
 , kconfig
 , kcoreaddons
 , kdbusaddons
@@ -19,8 +19,8 @@
 , srcs
 
 # These must be updated in tandem with package updates.
-, cargoShaForVersion ? "21.08"
-, cargoSha256 ? "1pbvw9hdzn3i97mahdy9y6jnjsmwmjs3lxfz7q6r9r10i8swbkak"
+, cargoShaForVersion ? "22.09"
+, cargoSha256 ? "sha256-uxLvAhRV185srZZ0ZMsLRevAyMmajXERPRYotMcnLJA="
 }:
 
 # Guard against incomplete updates.
@@ -45,6 +45,7 @@ mkDerivation rec {
     cmake
     corrosion
     extra-cmake-modules
+    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

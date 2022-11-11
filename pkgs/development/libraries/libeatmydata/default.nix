@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./find-shell-lib.patch ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = ''
     substituteInPlace eatmydata.in \
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "Small LD_PRELOAD library to disable fsync and friends";
     homepage = "https://www.flamingspork.com/projects/libeatmydata/";
     license = licenses.gpl3Plus;
+    mainProgram = "eatmydata";
     platforms = platforms.unix;
   };
 }

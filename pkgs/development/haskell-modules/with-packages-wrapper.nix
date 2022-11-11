@@ -51,7 +51,7 @@ let
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghcCommand}-${ghc.version}";
+                  else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
@@ -121,7 +121,7 @@ symlinkJoin {
 
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
-    local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
+    local packageConfDir="${packageCfgDir}";
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
     # Clean up the old links that may have been (transitively) included by
@@ -148,8 +148,8 @@ symlinkJoin {
      # to another nix derivation, so they are not writable.  Removing
      # them allow the correct behavior of ghc-pkg recache
      # See: https://github.com/NixOS/nixpkgs/issues/79441
-     rm $out/lib/${ghc.name}/package.conf.d/package.cache.lock
-     rm $out/lib/${ghc.name}/package.conf.d/package.cache
+     rm ${packageCfgDir}/package.cache.lock
+     rm ${packageCfgDir}/package.cache
 
      $out/bin/${ghcCommand}-pkg recache
      ''}

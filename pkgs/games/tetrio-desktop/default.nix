@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , autoPatchelfHook
+, wrapGAppsHook
 , alsa-lib
 , cups
 , libX11
@@ -9,8 +10,12 @@
 , libXtst
 , mesa
 , nss
+, gtk3
+, libpulseaudio
 , systemd
-, wrapGAppsHook
+, callPackage
+, withTetrioPlus ? false
+, tetrio-plus ? callPackage ./tetrio-plus.nix { }
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "8.0.0";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20211130172544/https://tetr.io/about/desktop/builds/TETR.IO%20Setup.deb";
+    url = "https://web.archive.org/web/20211228025517if_/https://tetr.io/about/desktop/builds/TETR.IO%20Setup.deb";
     name = "tetrio-desktop.deb";
     sha256 = "1nlblfhrph4cw8rpic9icrs78mzrxyskl7ggyy2i8bk9i07i21xf";
   };
@@ -36,18 +41,13 @@ stdenv.mkDerivation rec {
     libXtst
     mesa
     nss
+    gtk3
   ];
 
   dontWrapGApps = true;
 
   libPath = lib.makeLibraryPath [
-    alsa-lib
-    cups
-    libX11
-    libXScrnSaver
-    libXtst
-    mesa
-    nss
+    libpulseaudio
     systemd
   ];
 
@@ -59,15 +59,25 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R $TMP/tetrio-desktop/{usr/share,opt} $out/
-
-    wrapProgram $out/opt/TETR.IO/tetrio-desktop \
-      --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/TETR.IO
-
     ln -s $out/opt/TETR.IO/tetrio-desktop $out/bin/
 
     substituteInPlace $out/share/applications/tetrio-desktop.desktop \
       --replace "Exec=\"/opt/TETR.IO/tetrio-desktop\"" "Exec=\"$out/opt/TETR.IO/tetrio-desktop\""
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.strings.optionalString withTetrioPlus ''
+      cp ${tetrio-plus} $out/opt/TETR.IO/resources/app.asar
+    '';
+
+  postFixup = ''
+    wrapProgram $out/opt/TETR.IO/tetrio-desktop \
+      --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/TETR.IO \
+      ''${gappsWrapperArgs[@]}
   '';
 
   meta = with lib; {

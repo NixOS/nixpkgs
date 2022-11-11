@@ -33,7 +33,7 @@ let
 
         buildInputs = [ libressl boost ];
         nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
-          ++ lib.optional useClang [ llvmPackages.lld ];
+          ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
         dontFixCmake = true;

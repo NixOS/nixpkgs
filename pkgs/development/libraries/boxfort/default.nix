@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2019-10-09";
   pname = "boxfort";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
-    rev = "356f047db08b7344ea7980576b705e65b9fc8772";
-    sha256 = "1p0llz7n0p5gzpvqszmra9p88vnr0j88sp5ixhgbfz89bswg62ss";
+    rev = "v${version}";
+    sha256 = "jmtWTOkOlqVZ7tFya3IrQjr714Y8TzAVY5Cq+RzDuRs=";
   };
 
   nativeBuildInputs = [ meson ninja ];
@@ -29,7 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ thesola10 Yumasi ];
     platforms = platforms.unix;
-    # Upstream currently broken for macOS https://cirrus-ci.com/build/5624937369042944
-    broken = stdenv.targetPlatform.isDarwin;
   };
 }

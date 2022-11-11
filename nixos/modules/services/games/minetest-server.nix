@@ -19,13 +19,13 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = "If enabled, starts a Minetest Server.";
+        description = lib.mdDoc "If enabled, starts a Minetest Server.";
       };
 
       gameId = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Id of the game to use. To list available games run
           `minetestserver --gameid list`.
 
@@ -36,7 +36,7 @@ in
       world = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Name of the world to use. To list available worlds run
           `minetestserver --world list`.
 
@@ -47,7 +47,7 @@ in
       configPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the config to use.
 
           If set to null, the config of the running user will be used:
@@ -58,7 +58,7 @@ in
       logPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
@@ -69,7 +69,7 @@ in
       port = mkOption {
         type        = types.nullOr types.int;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Port number to bind to.
 
           If set to null, the default 30000 will be used.

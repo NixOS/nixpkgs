@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchurl, bison, flex, libffi, coreutils }:
+{ lib, stdenv, fetchurl, libffi, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
-  version = "273";
+  version = "280";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-l0o60NktIsKn720kO8xzySQBMAVrfYhhWZ8L5K8QrUg=";
+    sha256 = "sha256-1iqWerUehLFPM63ZjJYY6xo9oHoNK7ne/a6M3+4L4so=";
   };
 
-  nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
 
   enableParallelBuilding = true;
@@ -45,6 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     homepage = "http://nongnu.org/txr";
     maintainers = with lib.maintainers; [ dtzWill ];
-    platforms = platforms.linux; # Darwin fails although it should work AFAIK
+    platforms = platforms.all;
   };
 }

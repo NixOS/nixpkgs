@@ -31,7 +31,7 @@ mkDerivation rec {
     desktopName = "Ricochet";
     genericName = "Ricochet";
     comment = meta.description;
-    categories = "Office;Email;";
+    categories = [ "Office" "Email" ];
   };
 
   buildInputs = [

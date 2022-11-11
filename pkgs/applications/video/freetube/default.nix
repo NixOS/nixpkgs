@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.15.1";
+  version = "0.17.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    sha256 = "sha256-7jmKD6HjsTqW/SRmD4xI3uQJnwmyDgjJZRJX9XygZyU=";
+    sha256 = "1n5r1h2khjwdsckiviv8f2pflxibk8rs68fs08jak0kbm0kkyj18";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/applications
+    mkdir -p $out/bin $out/share/${pname} $out/share/applications $out/share/icons/hicolor/scalable/apps
 
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/freetube.desktop $out/share/applications/${pname}.desktop
-    cp -a ${appimageContents}/usr/share/icons $out/share
+    cp -a ${appimageContents}/usr/share/icons/hicolor/scalable/freetube.svg $out/share/icons/hicolor/scalable/apps
 
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'

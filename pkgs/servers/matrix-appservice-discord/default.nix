@@ -1,10 +1,10 @@
-{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
+{ lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs, removeReferencesTo }:
 
 assert lib.versionAtLeast nodejs.version "12.0.0";
 
 let
   nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
+    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv node-* $out
   '';
 
@@ -30,6 +30,7 @@ in mkYarnPackage rec {
       postInstall = ''
         # build native sqlite bindings
         npm run build-release --offline --nodedir="${nodeSources}"
+        find build -type f -exec ${removeReferencesTo}/bin/remove-references-to -t "${nodeSources}" {} \;
      '';
     };
   };
@@ -62,10 +63,7 @@ in mkYarnPackage rec {
   '';
 
   # don't generate the dist tarball
-  # (`doDist = false` does not work in mkYarnPackage)
-  distPhase = ''
-    true
-  '';
+  doDist = false;
 
   passthru = {
     nodeAppDir = "libexec/${pname}/deps/${pname}";

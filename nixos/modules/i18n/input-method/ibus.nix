@@ -23,6 +23,8 @@ let
       Name=IBus
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
+      # GNOME will launch ibus using systemd
+      NotShowIn=GNOME;
     '';
   };
 in
@@ -41,15 +43,15 @@ in
           let
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
             engines = concatStringsSep ", "
-              (map (name: "<literal>${name}</literal>") (attrNames enginesDrv));
+              (map (name: "`${name}`") (attrNames enginesDrv));
           in
-            "Enabled IBus engines. Available engines are: ${engines}.";
+            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
         example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
-        description = "Replace the IBus panel with another panel.";
+        description = lib.mdDoc "Replace the IBus panel with another panel.";
       };
     };
   };
@@ -67,7 +69,7 @@ in
     programs.dconf.packages = [ ibusPackage ];
 
     services.dbus.packages = [
-      ibusAutostart
+      ibusPackage
     ];
 
     environment.variables = {

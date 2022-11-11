@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.5.0";
+  version = "5.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "20b8a1a0f0434f9b8d10eb7caa66e947a9a1d698e5a53d40d447bbc0d2ae41f0";
+    sha256 = "sha256-TTbZhZt6FTsnNWLe7tjCklh6Ry6x/VfNQVjsidne+ts=";
   };
 
   propagatedBuildInputs = [

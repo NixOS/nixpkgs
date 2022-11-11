@@ -6,29 +6,32 @@
 , attrs
 , cached-property
 , click
-, six
 , packaging
 , pytest-cov
 , pytest-timeout
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.2.9";
+  version = "1.3.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-tPMqVKbYwBRvb8/GyYNxO8lwJLcUUQyRoCoF5tg6rxs=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-N/q9zi2SX38ivSpnjrx+bEzdR9cS2ivSgy42SR8cl+Q=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
     cached-property
     click
-    six
     packaging
   ];
 

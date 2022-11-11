@@ -1,5 +1,4 @@
 { lib, stdenv
-, autoPatchelfHook
 , dpkg
 , fahviewer
 , fetchurl

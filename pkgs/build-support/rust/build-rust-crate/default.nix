@@ -46,16 +46,27 @@ let
               )
             else
               extern;
+          opts = lib.optionalString (dep.stdlib or false) "noprelude:";
+          filename =
+            if lib.any (x: x == "lib" || x == "rlib") dep.crateType
+            then "${dep.metadata}.rlib"
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
         in
-        (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
-          " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
-        else
-          " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+        " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )
       dependencies;
 
   # Create feature arguments for rustc.
   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
+
+  # Whether we need to use unstable command line flags
+  #
+  # Currently just needed for standard library dependencies, which have a
+  # special "noprelude:" modifier. If in later versions of Rust this is
+  # stabilized we can account for that here, too, so we don't opt into
+  # instability unnecessarily.
+  needUnstableCLI = dependencies:
+    lib.any (dep: dep.stdlib or false) dependencies;
 
   inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
@@ -64,7 +75,7 @@ let
   };
 
   buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs rust;
+    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI rust;
   };
 
   installCrate = import ./install-crate.nix { inherit stdenv; };
@@ -228,6 +239,7 @@ crate_: lib.makeOverridable
         "colors"
         "edition"
         "buildTests"
+        "codegenUnits"
       ];
       extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
@@ -277,9 +289,14 @@ crate_: lib.makeOverridable
 
       # Create a list of features that are enabled by the crate itself and
       # through the features argument of buildRustCrate. Exclude features
-      # with a forward slash, since they are passed through to dependencies.
+      # with a forward slash, since they are passed through to dependencies,
+      # and dep: features, since they're internal-only and do nothing except
+      # enable optional dependencies.
       crateFeatures = lib.optionals (crate ? features)
-        (builtins.filter (f: !lib.hasInfix "/" f) (crate.features ++ features));
+        (builtins.filter
+          (f: !(lib.hasInfix "/" f || lib.hasPrefix "dep:" f))
+          (crate.features ++ features)
+        );
 
       libName = if crate ? libName then crate.libName else crate.crateName;
       libPath = if crate ? libPath then crate.libPath else "";
@@ -310,6 +327,7 @@ crate_: lib.makeOverridable
       colors = lib.attrByPath [ "colors" ] "always" crate;
       extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or [ ]);
       edition = crate.edition or null;
+      codegenUnits = if crate ? codegenUnits then crate.codegenUnits else 1;
       extraRustcOpts =
         lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
@@ -324,13 +342,13 @@ crate_: lib.makeOverridable
         inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion
           extraLinkFlags extraRustcOptsForBuildRs
-          crateAuthors crateHomepage verbose colors;
+          crateAuthors crateHomepage verbose colors codegenUnits;
       };
       buildPhase = buildCrate {
         inherit crateName dependencies
           crateFeatures crateRenames libName release libPath crateType
           metadata hasCrateBin crateBin verbose colors
-          extraRustcOpts buildTests;
+          extraRustcOpts buildTests codegenUnits;
       };
       installPhase = installCrate crateName metadata buildTests;
 
@@ -339,6 +357,9 @@ crate_: lib.makeOverridable
       outputs = if buildTests then [ "out" ] else [ "out" "lib" ];
       outputDev = if buildTests then [ "out" ] else [ "lib" ];
 
+      meta = {
+        mainProgram = crateName;
+      };
     } // extraDerivationAttrs
     )
   )

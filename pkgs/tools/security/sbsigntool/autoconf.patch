@@ -1,9 +1,11 @@
---- sbsigntools/configure.ac	2018-09-25 10:30:00.878766256 -0500
-+++ configure.ac.new	2018-09-25 10:34:56.231277375 -0500
-@@ -71,15 +71,16 @@
+diff --git a/configure.ac b/configure.ac
+index 4ffb68f..d8a8265 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -71,15 +71,16 @@ AM_CONDITIONAL(TEST_BINARY_FORMAT, [ test "$EFI_ARCH" = "arm" -o "$EFI_ARCH" = "
  # no consistent view of where gnu-efi should dump the efi stuff, so find it
  ##
- for path in /lib /lib64 /usr/lib /usr/lib64 /usr/lib32 /lib/efi /lib64/efi /usr/lib/efi /usr/lib64/efi; do
+ for path in /lib /lib64 /usr/lib /usr/lib64 /usr/lib32 /lib/efi /lib64/efi /usr/lib/efi /usr/lib64/efi /usr/lib/gnuefi /usr/lib64/gnuefi ; do
 -    if test -e $path/crt0-efi-$EFI_ARCH.o; then
 -       CRTPATH=$path
 +    if test -e @@NIX_GNUEFI@@/$path/crt0-efi-$EFI_ARCH.o; then
@@ -20,7 +22,7 @@
   -DEFI_FUNCTION_WRAPPER"
  CPPFLAGS_save="$CPPFLAGS"
  CPPFLAGS="$CPPFLAGS $EFI_CPPFLAGS"
-@@ -90,5 +91,5 @@
+@@ -90,5 +91,5 @@ AC_SUBST(EFI_ARCH, $EFI_ARCH)
  AC_SUBST(CRTPATH, $CRTPATH)
  
  AC_CONFIG_FILES([Makefile src/Makefile lib/ccan/Makefile]

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , pkg-config
 , glib
 , freetype
@@ -21,25 +21,28 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+# for passthru.tests
+, gimp
+, gtk3
+, gtk4
+, mapnik
+, qt5
 }:
 
 let
-  version = "3.2.0";
+  version = "5.2.0";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
-  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "harfbuzz";
-    repo = "harfbuzz";
-    rev = version;
-    sha256 = "sha256-iNYp/hyJTaaF6e09YpUL7ktBhq2wRN9zKiEH59WLbYU=";
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    sha256 = "0b4lpkidwx0lf8slczjji652yll6g5zgmm5lmisnb4s7gf8r8nkk";
   };
 
   postPatch = ''
@@ -64,7 +67,10 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -79,9 +85,8 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype ]
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
-    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
+  buildInputs = [ glib freetype gobject-introspection ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
@@ -98,6 +103,11 @@ stdenv.mkDerivation {
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
     ''}
   '';
+
+  passthru.tests = {
+    inherit gimp gtk3 gtk4 mapnik;
+    inherit (qt5) qtbase;
+  };
 
   meta = with lib; {
     description = "An OpenType text shaping engine";

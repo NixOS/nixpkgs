@@ -5,11 +5,10 @@
 , ninja
 , pkg-config
 , makeFontsConf
-, boost
-, gnutls
 , openssl
 , libdrm
 , libevent
+, libyaml
 , lttng-ust
 , gst_all_1
 , gtest
@@ -20,14 +19,14 @@
 , systemd # for libudev
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "unstable-2022-01-03";
+  version = "0.0.1";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "1db1e31e664c1f613dc964d8519fe75d67b154b6";
-    hash = "sha256-pXYPIU9xDWA870Gp1Jgizi5xnUHRvTqEq/ofFXdVZdg=";
+    rev = "v${version}";
+    hash = "sha256-u5FnfXBCjwSp8QBrH8KIkVGV32/9pff41ZWjWXOwuMI=";
   };
 
   postPatch = ''
@@ -38,8 +37,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     # IPA and signing
-    gnutls
-    boost
+    openssl
 
     # gstreamer integration
     gst_all_1.gstreamer
@@ -54,6 +52,9 @@ stdenv.mkDerivation {
 
     # lttng tracing
     lttng-ust
+
+    # yamlparser
+    libyaml
 
     gtest
   ];
@@ -76,6 +77,9 @@ stdenv.mkDerivation {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    "-Dwerror=false"
     ];
 
   # Fixes error on a deprecated declaration
@@ -83,6 +87,17 @@ stdenv.mkDerivation {
 
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
 
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";

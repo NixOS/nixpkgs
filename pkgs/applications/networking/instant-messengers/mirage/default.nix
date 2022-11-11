@@ -65,6 +65,7 @@ mkDerivation rec {
     setuptools
     watchgod
     dbus-python
+    matrix-nio
   ];
 
   qmakeFlags = [

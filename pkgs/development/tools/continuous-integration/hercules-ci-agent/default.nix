@@ -1,6 +1,6 @@
 { gnutar, gzip, git, haskell, haskellPackages, lib, makeWrapper, nixos, runc, stdenv }:
 let
-  inherit (haskell.lib.compose) overrideCabal addBuildDepends justStaticExecutables;
+  inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
   inherit (lib) makeBinPath;
   bundledBins = [ gnutar gzip git ] ++ lib.optional stdenv.isLinux runc;
 
@@ -12,10 +12,10 @@ let
           ${o.postInstall or ""}
           mkdir -p $out/libexec
           mv $out/bin/hercules-ci-agent $out/libexec
-          makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${makeBinPath bundledBins}
+          makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
-      (addBuildDepends [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
+      (addBuildTools [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
 in pkg.overrideAttrs (o: {
     meta = o.meta // {
       position = toString ./default.nix + ":1";

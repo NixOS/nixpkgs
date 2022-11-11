@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3Packages
 , dnsmasq
+, gawk
 , getent
 , kmod
 , lxc
@@ -16,13 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.2.0";
+  version = "1.3.3";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "03d87sh443kn0j2mpih1g909khkx3wgb04h605f9jhd0znskkbmw";
+    sha256 = "sha256-av1kcOSViUV2jsFiTE21N6sAJIL6K+zKkpPHjx6iYVk=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -37,29 +39,17 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   installPhase = ''
-    mkdir -p $out/${python3Packages.python.sitePackages}
+    make install PREFIX=$out USE_SYSTEMD=0 USE_NFTABLES=1
 
-    cp -ra tools $out/${python3Packages.python.sitePackages}/tools
+    wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
+       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 nftables ]}
 
-    cp -ra data $out/${python3Packages.python.sitePackages}/data
-    wrapProgram $out/${python3Packages.python.sitePackages}/data/scripts/waydroid-net.sh \
-       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables nftables ]}
-
-    mkdir -p $out/share/waydroid/gbinder.d
-    cp gbinder/anbox.conf $out/share/waydroid/gbinder.d/anbox.conf
-
-    mkdir -p $out/share/applications
-    ln -s $out/${python3Packages.python.sitePackages}/data/Waydroid.desktop $out/share/applications/Waydroid.desktop
-
-    mkdir $out/bin
-    cp -a waydroid.py $out/${python3Packages.python.sitePackages}/waydroid.py
-    ln -s $out/${python3Packages.python.sitePackages}/waydroid.py $out/bin/waydroid
-
-    wrapPythonProgramsIn $out/${python3Packages.python.sitePackages} "${lib.concatStringsSep " " [
+    wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " [
       "$out"
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
+      gawk
       kmod
       lxc
       util-linux

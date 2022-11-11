@@ -9,6 +9,7 @@
 , pcre2
 , vte
 , makeWrapper
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
     makeWrapper "$out/bin/wrapped/tilda" "$out/bin/tilda" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.tilda;
 
   meta = with lib; {
     description = "A Gtk based drop down terminal for Linux and Unix";

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "Roswell is a Lisp implementation installer/manager, launcher, and much more";
     license = licenses.mit;
     maintainers = with maintainers; [ hiro98 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = "https://github.com/roswell/roswell";
     mainProgram = "ros";
   };

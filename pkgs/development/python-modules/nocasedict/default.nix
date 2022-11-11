@@ -1,18 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86e2dae49e34de7c31b65b486c8f9aa58b66dc2e8ee9b34c390c6c58885c85a0";
+    sha256 = "sha256-fBEdpM79JEQzy2M3ev8IGkD4S92unm83bGfwhsD4Bto=";
   };
 
+  propagatedBuildInputs = [
+    six
+  ];
+
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

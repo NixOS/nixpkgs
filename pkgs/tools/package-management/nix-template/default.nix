@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-template";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "jonringer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5CIGxm9LJ5GGUM2D2tZxzMsNlWIlfTWCVzyM/VNh15I=";
+    sha256 = "sha256-5Xxv9TH5rGA4VU/64YarrBIOrROWjFu3RYRcoNo70UA=";
   };
 
-  cargoSha256 = "sha256-enclL7lGwIiJFrMwH/d4vTK+lKbP5ytySKha5mkHsvc=";
+  cargoSha256 = "sha256-GvIE46NXNWg1kSEbffvOCwVDr0YmVMo8C8+52RDEwco=";
 
   nativeBuildInputs = [
     installShellFiles

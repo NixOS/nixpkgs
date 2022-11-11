@@ -319,6 +319,18 @@ The above are just guidelines, and exceptions may be granted on a case-by-case b
 However, please check if it's possible to disable a problematic subset of the
 test suite and leave a comment explaining your reasoning.
 
+This can be achived with `--skip` in `checkFlags`:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  checkFlags = [
+    # reason for disabling test
+    "--skip=example::tests:example_test"
+  ];
+}
+```
+
 #### Setting `test-threads` {#setting-test-threads}
 
 `buildRustPackage` will use parallel test threads by default,
@@ -458,12 +470,14 @@ you of the correct hash.
   `maturinBuildFlags`.
 * `cargoCheckHook`: run tests using Cargo. The build type for checks
   can be set using `cargoCheckType`. Features can be specified with
-  `cargoCheckNoDefaultFeaatures` and `cargoCheckFeatures`. Additional
+  `cargoCheckNoDefaultFeatures` and `cargoCheckFeatures`. Additional
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
+* `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
+  `bindgen` find `libclang` and `libclang` find the libraries in `buildInputs`.
 
 ### Examples {#examples}
 

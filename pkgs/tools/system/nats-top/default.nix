@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "nats-top";
-  version = "0.4.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b1hpnq8m1xfrn58ammmnx6lmhk319m8z4xjxgckz7wvy2fbzw0n";
+    sha256 = "sha256-G2rUN+eFYWz78xDJcwYVtooTtNSNWR2nUTzar5ztWwE=";
   };
 
-  vendorSha256 = "1a48p9gx5zdc340ma6cqakhi6f3lw9b0kz2597j1jcsk2qb7s581";
+  vendorSha256 = "sha256-UOy3kyKtOXADdyoZ2rVgIQEOPs2oPBkMTYXxfQzVFmc=";
 
   meta = with lib; {
     description = "top-like tool for monitoring NATS servers";

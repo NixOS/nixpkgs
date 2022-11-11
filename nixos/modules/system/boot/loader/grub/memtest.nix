@@ -18,12 +18,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Make Memtest86+ (or MemTest86 if EFI support is enabled),
           a memory testing program, available from the
           GRUB boot menu. MemTest86 is an unfree program, so
-          this requires <literal>allowUnfree</literal> to be set to
-          <literal>true</literal>.
+          this requires `allowUnfree` to be set to
+          `true`.
         '';
       };
 
@@ -31,45 +31,29 @@ in
         default = [];
         example = [ "console=ttyS0,115200" ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Parameters added to the Memtest86+ command line. As of memtest86+ 5.01
           the following list of (apparently undocumented) parameters are
           accepted:
 
-          <itemizedlist>
-
-          <listitem>
-            <para><literal>console=...</literal>, set up a serial console.
+          - `console=...`, set up a serial console.
             Examples:
-            <literal>console=ttyS0</literal>,
-            <literal>console=ttyS0,9600</literal> or
-            <literal>console=ttyS0,115200n8</literal>.</para>
-          </listitem>
+            `console=ttyS0`,
+            `console=ttyS0,9600` or
+            `console=ttyS0,115200n8`.
 
-          <listitem>
-            <para><literal>btrace</literal>, enable boot trace.</para>
-          </listitem>
+          - `btrace`, enable boot trace.
 
-          <listitem>
-            <para><literal>maxcpus=N</literal>, limit number of CPUs.</para>
-          </listitem>
+          - `maxcpus=N`, limit number of CPUs.
 
-          <listitem>
-            <para><literal>onepass</literal>, run one pass and exit if there
-            are no errors.</para>
-          </listitem>
+          - `onepass`, run one pass and exit if there
+            are no errors.
 
-          <listitem>
-            <para><literal>tstlist=...</literal>, list of tests to run.
-            Example: <literal>0,1,2</literal>.</para>
-          </listitem>
+          - `tstlist=...`, list of tests to run.
+            Example: `0,1,2`.
 
-          <listitem>
-            <para><literal>cpumask=...</literal>, set a CPU mask, to select CPUs
-            to use for testing.</para>
-          </listitem>
-
-          </itemizedlist>
+          - `cpumask=...`, set a CPU mask, to select CPUs
+            to use for testing.
 
           This list of command line options was obtained by reading the
           Memtest86+ source code.

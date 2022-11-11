@@ -1,7 +1,11 @@
-{lib, stdenv, fetchgit, autoreconfHook, halibut}:
+{ lib, stdenv
+, fetchgit
+, cmake
+, halibut
+}:
 let
-  date = "20200705";
-  rev = "2a7d4a2";
+  date = "20211129";
+  rev = "8cd63c5";
 in
 stdenv.mkDerivation {
   pname = "agedu";
@@ -11,10 +15,10 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.tartarus.org/simon/agedu.git";
     inherit rev;
-    sha256 = "gRNscl/vhBoZaHFCs9JjDBHDRoEpILJLtiI4YV+K/b4=";
+    hash = "sha256-5wqpL7wrFwIf6lxVte+GXLsXYY0/36EIAUepVNDCnSE=";
   };
 
-  nativeBuildInputs = [autoreconfHook halibut];
+  nativeBuildInputs = [ cmake halibut ];
 
   meta = with lib; {
     description = "A Unix utility for tracking down wasted disk space";

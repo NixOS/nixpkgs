@@ -8,13 +8,13 @@ let
   swanctlParams = import ./swanctl-params.nix lib;
 in  {
   options.services.strongswan-swanctl = {
-    enable = mkEnableOption "strongswan-swanctl service";
+    enable = mkEnableOption (lib.mdDoc "strongswan-swanctl service");
 
     package = mkOption {
       type = types.package;
       default = pkgs.strongswan;
       defaultText = literalExpression "pkgs.strongswan";
-      description = ''
+      description = lib.mdDoc ''
         The strongswan derivation to use.
       '';
     };
@@ -22,8 +22,8 @@ in  {
     strongswan.extraConfig = mkOption {
       type = types.str;
       default = "";
-      description = ''
-        Contents of the <literal>strongswan.conf</literal> file.
+      description = lib.mdDoc ''
+        Contents of the `strongswan.conf` file.
       '';
     };
 

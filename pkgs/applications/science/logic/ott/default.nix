@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ott";
-  version = "0.31";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "0l81126i2qkz11fs5yrjdgymnqgjcs5avb7f951h61yh1s68jpnn";
+    sha256 = "sha256-vdDsfsIi1gRW1Sowf29VyQ4C5UKyQZaVgS2uTb8VeW4=";
   };
 
   nativeBuildInputs = [ pkg-config opaline ];

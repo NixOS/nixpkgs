@@ -67,6 +67,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
 
+  elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
+
   elementary-mail = callPackage ./apps/elementary-mail { };
 
   elementary-music = callPackage ./apps/elementary-music { };
@@ -82,10 +84,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-videos = callPackage ./apps/elementary-videos { };
 
   epiphany = pkgs.epiphany.override { withPantheon = true; };
-
-  evince = pkgs.evince.override { withPantheon = true; };
-
-  file-roller = pkgs.gnome.file-roller.override { withPantheon = true; };
 
   sideload = callPackage ./apps/sideload { };
 
@@ -109,12 +107,10 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (gnome) file-roller;
   };
 
-  gala = callPackage ./desktop/gala {
-    inherit (gnome) gnome-desktop;
-  };
+  gala = callPackage ./desktop/gala { };
 
   gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
-    inherit (gnome) gnome-bluetooth;
+    inherit (gnome) gnome-bluetooth_1_0;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
@@ -126,6 +122,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #### LIBRARIES
 
   granite = callPackage ./granite { };
+
+  granite7 = callPackage ./granite/7 { };
 
   #### SERVICES
 
@@ -199,9 +197,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   switchboard-plug-onlineaccounts = callPackage ./apps/switchboard-plugs/onlineaccounts { };
 
-  switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell {
-    inherit (gnome) gnome-desktop;
-  };
+  switchboard-plug-pantheon-shell = callPackage ./apps/switchboard-plugs/pantheon-shell { };
 
   switchboard-plug-power = callPackage ./apps/switchboard-plugs/power { };
 
@@ -234,7 +230,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
   # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
 
-}) // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs config.allowAliases {
 
   ### ALIASES
 
@@ -246,7 +242,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
+  evince = pkgs.gnome.evince; # added 2022-03-18
+
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
+
+  file-roller = pkgs.gnome.file-roller; # added 2022-03-12
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 

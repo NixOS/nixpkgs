@@ -33,6 +33,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A language and an embedded JIT compiler";
     longDescription = ''
       Hobbes is a a language, embedded compiler, and runtime for efficient

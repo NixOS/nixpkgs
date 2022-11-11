@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -59,8 +58,9 @@ stdenv.mkDerivation rec {
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ earldouglas SuperSandro2000 ];
+    maintainers = with maintainers; [ earldouglas ];
   };
 }

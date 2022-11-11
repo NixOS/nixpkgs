@@ -1,33 +1,64 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, wheel
-, setuptools
-, setuptools-scm
-, pytestCheckHook
+, importlib-metadata
+, numpy
+, pydantic
 , pytest-mypy-plugins
-, pytest-cov
-, pytest
-, mypy
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 , typing-extensions
-}: buildPythonPackage rec
-{
+, wheel
+, wrapt
+}:
+
+buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.2.0";
+  version = "0.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "tlambert03";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-SiG2ywNEw3aNrRXyEMFTnvHKtKowO8yqoCaNI8PT4/Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KCdX+pMUAQxeQRZhkrdGCKGjBaB1Ode/r1W8LJQPxyM=";
   };
-  buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ typing-extensions ];
-  checkInputs = [ pytestCheckHook pytest-cov pytest-mypy-plugins ];
-  doCheck = false;  # mypy checks are failing
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  buildInputs = [
+    setuptools-scm
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    numpy
+    pydantic
+    pytest-mypy-plugins
+    pytestCheckHook
+    wrapt
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=psygnal --cov-report=term-missing" ""
+  '';
+
+  pythonImportsCheck = [
+    "psygnal"
+  ];
+
   meta = with lib; {
-    description = "Pure python implementation of Qt Signals";
+    description = "Implementation of Qt Signals";
     homepage = "https://github.com/tlambert03/psygnal";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];

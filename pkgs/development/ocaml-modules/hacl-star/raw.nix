@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   minimalOCamlVersion = "4.08";
 
+  # strictoverflow is disabled because it breaks aarch64-darwin
+  hardeningDisable = [ "strictoverflow" ];
+
   postPatch = ''
     patchShebangs ./
   '';
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [];
 
-  buildInputs = [
+  nativeBuildInputs = [
     which
     ocaml
     findlib
@@ -41,6 +44,8 @@ stdenv.mkDerivation rec {
   checkInputs = [
     cppo
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

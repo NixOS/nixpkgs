@@ -2,22 +2,30 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, importlib-resources
 , pydsdl
 , pyyaml
 }:
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "1.6.2";
+  version = "1.9.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6f99eaa65935b2c8a3f004025fb3c0309e11655c391d0fcd318d2a8665ca5c4";
+    sha256 = "sha256-KhgijXJ908uxM7VZdXo1WU/RGU0cfqctBCbpF2wOcy8=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydsdl ~= 1.16" "pydsdl"
+  '';
+
   propagatedBuildInputs = [
+    importlib-resources
     pydsdl
     pyyaml
   ];

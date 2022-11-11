@@ -13,6 +13,7 @@ let
       http_listen = "${cfg.listenAddress}:${toString cfg.port}";
       report_errors = cfg.log.prometheusErrors;
     };
+    inherit (cfg) loki;
   });
 
 in {
@@ -20,10 +21,11 @@ in {
 
   extraOpts = {
     inherit (options.services.unifi-poller.unifi) controllers;
+    inherit (options.services.unifi-poller) loki;
     log = {
-      debug = mkEnableOption "debug logging including line numbers, high resolution timestamps, per-device logs.";
-      quiet = mkEnableOption "startup and error logs only.";
-      prometheusErrors = mkEnableOption "emitting errors to prometheus.";
+      debug = mkEnableOption (lib.mdDoc "debug logging including line numbers, high resolution timestamps, per-device logs.");
+      quiet = mkEnableOption (lib.mdDoc "startup and error logs only.");
+      prometheusErrors = mkEnableOption (lib.mdDoc "emitting errors to prometheus.");
     };
   };
 

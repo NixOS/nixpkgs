@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 libsndfile portaudio ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: src/net/../gnauralnet.h:233: multiple definition of `GN_ScheduleFingerprint';
+  #     src/net/../../src/gnauralnet.h:233: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   postInstall = ''
     mkdir -p $out/share/applications
     substitute \

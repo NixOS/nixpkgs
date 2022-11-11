@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libinput-gestures";
-  version = "2.39";
+  version = "2.73";
 
   src = fetchFromGitHub {
     owner = "bulletmark";
     repo = "libinput-gestures";
     rev = version;
-    sha256 = "0bzyi55yhr9wyar9mnd09cr6pi88jkkp0f9lndm0a9jwi1xr4bdf";
+    sha256 = "sha256-dtCe3//BMC+FG50qyxVz0ni6nmAPYMPOv13VQTxhls4=";
   };
   patches = [
     ./0001-hardcode-name.patch
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   postFixup =
     ''
       rm "$out/bin/libinput-gestures-setup"
+      substituteInPlace "$out/share/systemd/user/libinput-gestures.service" --replace "/usr" "$out"
       substituteInPlace "$out/share/applications/libinput-gestures.desktop" --replace "/usr" "$out"
       chmod +x "$out/share/applications/libinput-gestures.desktop"
       wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"

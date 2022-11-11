@@ -1,20 +1,20 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
-, opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain, gtk3, qtbase
+, opusTools, vorbis-tools, mp3gain, lame, taglib, wavpack, vorbisgain, gtk3, qtbase
 , qttools, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "flacon";
-  version = "7.0.1";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "sha256-35tARJkyhC8EisIyDCwuT/UUruzLjJRUuZysuqeNssM=";
+    sha256 = "sha256-qnjWpsgCRAi09o9O7CBc0R9MN1EpXVmCoxB2npc9qpM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qttools libuchardet ];
+  buildInputs = [ qtbase qttools libuchardet taglib ];
 
   bin_path = lib.makeBinPath [
     shntool

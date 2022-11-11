@@ -1,36 +1,59 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
-, ipython
+, pythonOlder
+, fetchFromGitHub
+, hatchling
 , traitlets
-, glibcLocales
-, mock
-, pytest
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.9.1";
-  disabled = !isPy3k;
+  version = "4.11.2";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dce8a7499da5a53ae3afd5a9f4b02e5df1d57250cf48f3ad79da23b4778cd6fa";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = "jupyter_core";
+    rev = version;
+    hash = "sha256-lDhwvhsOxLHBC6CQjCW/rmtHSuMRPC2yaurBd5K3FLc=";
   };
 
-  checkInputs = [ pytest mock glibcLocales nose ];
-  propagatedBuildInputs = [ ipython traitlets ];
+  patches = [
+    ./tests_respect_pythonpath.patch
+  ];
 
-  patches = [ ./tests_respect_pythonpath.patch ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  checkPhase = ''
-    HOME=$TMPDIR LC_ALL=en_US.utf8 py.test
+  propagatedBuildInputs = [
+    traitlets
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
   '';
 
+  disabledTests = [
+    # creates a temporary script, which isn't aware of PYTHONPATH
+    "test_argv0"
+  ];
+
+  postCheck = ''
+    $out/bin/jupyter --help > /dev/null
+  '';
+
+  pythonImportsCheck = [ "jupyter_core" ];
+
   meta = with lib; {
-    description = "Jupyter core package. A base package on which Jupyter projects rely";
+    description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

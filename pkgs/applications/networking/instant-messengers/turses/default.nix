@@ -19,6 +19,10 @@ let
           rev = "v${version}";
           sha256 = "0k4bdlwjna6f1k19jki4xqgckrinkkw8b9wihzymr1l04rwd05nw";
         };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+          super.six
+          super.requests.optional-dependencies.socks
+        ];
         doCheck = false;
       });
     };

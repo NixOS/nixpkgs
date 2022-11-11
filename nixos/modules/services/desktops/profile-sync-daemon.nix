@@ -9,7 +9,7 @@ in {
     enable = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the Profile Sync daemon.
       '';
     };
@@ -17,7 +17,7 @@ in {
       type = str;
       default = "1h";
       example = "1h 30min";
-      description = ''
+      description = lib.mdDoc ''
         The amount of time to wait before syncing browser profiles back to the
         disk.
 

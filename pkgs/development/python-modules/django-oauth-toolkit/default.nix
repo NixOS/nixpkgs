@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
 
 # propagates
 , django
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "1.7.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
-    rev = version;
-    sha256 = "0rp7pjif54yvdxfxn0pnf8ha3fjxspnx1ijyr1f8npwk2x5vnvhb";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-mynchdvrfBGKMeFFb2oDaANhtSCxq85Nibx7GfSY2nQ=";
   };
 
   postPatch = ''
@@ -37,6 +38,11 @@ buildPythonPackage rec {
     jwcrypto
     oauthlib
     requests
+  ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "django"
   ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";

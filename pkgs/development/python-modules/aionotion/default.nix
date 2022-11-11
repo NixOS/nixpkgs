@@ -13,18 +13,21 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2021.10.0";
+  version = "2022.10.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5bu2XveDi2e6lGdI/T+0apqXzcnqdztVtaHEpp+Vkzs=";
+    hash = "sha256-DJkqFj87N8OlWHNto+tInj8QvVoNA9faLBb/pBbQl0U=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -38,9 +41,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "examples" ];
+  disabledTestPaths = [
+    "examples"
+  ];
 
-  pythonImportsCheck = [ "aionotion" ];
+  pythonImportsCheck = [
+    "aionotion"
+  ];
 
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";

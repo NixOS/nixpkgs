@@ -1,24 +1,40 @@
-{ buildPythonPackage, fetchPypi, pytest-runner, pytestCheckHook, glib, vips, cffi
-, pkg-config, pkgconfig, lib }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, glib
+, vips
+, cffi
+, pkgconfig  # from pythonPackages
+, pkg-config  # from pkgs
+, lib }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.1.16";
+  version = "2.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "654c03014a15f846786807a2ece6f525a8fec883d1c857742c8e37da149a81ed";
+  src = fetchFromGitHub {
+    owner = "libvips";
+    repo = "pyvips";
+    rev = "v${version}";
+    sha256 = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
   };
 
-  nativeBuildInputs = [ pytest-runner pkgconfig pkg-config ];
+  nativeBuildInputs = [ pkgconfig pkg-config ];
 
   buildInputs = [ glib vips ];
 
   propagatedBuildInputs = [ cffi ];
 
-  # tests are not included in pypi tarball
-  doCheck = false;
   checkInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    substituteInPlace pyvips/__init__.py \
+      --replace 'libvips.so.42' '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libvips.42.dylib' '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libgobject-2.0.so.0' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libgobject-2.0.dylib' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
+  '';
 
   pythonImportsCheck = [ "pyvips" ];
 
@@ -26,6 +42,6 @@ buildPythonPackage rec {
     description = "A python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
     license = licenses.mit;
-    maintainers = with maintainers; [ ccellado ];
+    maintainers = with maintainers; [ ccellado anthonyroussel ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, freetype, harfbuzz, openjpeg
+{ stdenv, lib, fetchurl, pkg-config, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
@@ -82,7 +82,6 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://mupdf.com";
-    repositories.git = "git://git.ghostscript.com/mupdf.git";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz ];

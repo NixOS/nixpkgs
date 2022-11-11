@@ -6,26 +6,26 @@
   # Dependencies (@see https://github.com/pavanjadhaw/betterlockscreen/blob/master/shell.nix)
 , bc
 , coreutils
+, dbus
+, dunst
 , i3lock-color
 , gawk
 , gnugrep
 , gnused
 , imagemagick
 , procps
-, xdpyinfo
-, xrandr
-, xset
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "betterlockscreen";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "pavanjadhaw";
     repo = "betterlockscreen";
     rev = "v${version}";
-    sha256 = "sha256-d4uI/S7Kr8yvzc4/L0BX8+TBXb4AVNMJp4gb8uXgBwA=";
+    sha256 = "sha256-ZZnwByxfESE8ZOOh1vnbphUHDolo9MIQh3erjtBLmWQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp betterlockscreen $out/bin/betterlockscreen
-    wrapProgram "$out/bin/betterlockscreen" --prefix PATH : "$out/bin:${lib.makeBinPath [ bc coreutils i3lock-color gawk gnugrep gnused imagemagick procps xdpyinfo xrandr xset ]}"
+    wrapProgram "$out/bin/betterlockscreen" \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ bc coreutils dbus dunst i3lock-color gawk gnugrep gnused imagemagick procps xorg.xdpyinfo xorg.xrandr xorg.xset ]}"
 
     runHook postInstall
   '';

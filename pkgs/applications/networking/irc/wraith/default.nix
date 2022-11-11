@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   patches = [ ./configure.patch ./dlopen.patch ];
   postPatch = ''
     substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
-                                       --subst-var-by openssl.out ${openssl.out}
-    substituteInPlace src/libssl.cc    --subst-var-by openssl ${openssl.out}
-    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${openssl.out}
+                                       --subst-var-by openssl-lib ${lib.getLib openssl}
+    substituteInPlace src/libssl.cc    --subst-var-by openssl ${lib.getLib openssl}
+    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl}
   '';
   installPhase = ''
     mkdir -p $out/bin
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "An IRC channel management bot written purely in C/C++";
     longDescription = ''
       Wraith is an IRC channel management bot written purely in C/C++. It has

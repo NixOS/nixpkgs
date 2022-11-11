@@ -1,38 +1,63 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pandas, shapely, fiona, pyproj
-, pytestCheckHook, Rtree }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fiona
+, packaging
+, pandas
+, pyproj
+, pytestCheckHook
+, pythonOlder
+, Rtree
+, shapely
+}:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.10.2";
-  disabled = pythonOlder "3.6";
+  version = "0.12.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "v${version}";
-    sha256 = "14azl3gppqn90k8h4hpjilsivj92k6p1jh7mdr6p4grbww1b7sdq";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aLERNVojPgZ3Y7+CnirGvC4RfuQf+K3Oj2/0BqdorwI=";
   };
 
   propagatedBuildInputs = [
-    pandas
-    shapely
     fiona
+    packaging
+    pandas
     pyproj
+    shapely
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    Rtree
   ];
 
   doCheck = !stdenv.isDarwin;
+
   preCheck = ''
-    # Wants to write test files into $HOME.
-    export HOME="$TMPDIR"
+    export HOME=$(mktemp -d);
   '';
-  checkInputs = [ pytestCheckHook Rtree ];
+
   disabledTests = [
-    # requires network access
+    # Requires network access
     "test_read_file_remote_geojson_url"
     "test_read_file_remote_zipfile_url"
   ];
-  pytestFlagsArray = [ "geopandas" ];
+
+  pytestFlagsArray = [
+    "geopandas"
+  ];
+
+  pythonImportsCheck = [
+    "geopandas"
+  ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";

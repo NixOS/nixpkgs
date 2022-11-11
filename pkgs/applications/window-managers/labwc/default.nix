@@ -21,19 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "0.4.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = pname;
     rev = version;
-    hash = "sha256-O9jVDR7UROt5u8inUsZjbzB3dQTosiLYqXkeOyGrbaM=";
+    hash = "sha256-YD2bGxa7uss6KRvOGM0kn8dM+277ubaYeOB7ugRZCcY=";
   };
-
-  patches = [
-    # Required to fix the build with wlroots 0.15.1:
-    ./relax-the-version-constraint-for-wlroots.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -64,6 +59,6 @@ stdenv.mkDerivation rec {
     description = "A Wayland stacking compositor, similar to Openbox";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    inherit (wayland.meta) platforms;
   };
 }

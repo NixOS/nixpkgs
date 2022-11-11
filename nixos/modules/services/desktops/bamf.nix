@@ -13,7 +13,7 @@ with lib;
 
   options = {
     services.bamf = {
-      enable = mkEnableOption "bamf";
+      enable = mkEnableOption (lib.mdDoc "bamf");
     };
   };
 

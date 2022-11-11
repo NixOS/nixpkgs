@@ -1,16 +1,27 @@
 { buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pytest
+, pytestCheckHook
+, albumentations
+, dill
 , h5py
 , hickle
 , numpy
+, opencv4
 , pandas
 , pillow
+, prodict
+, pycm
+, pyyaml
+, scipy
+, requests
+, scikitimage
 , six
-, pytorch
+, tabulate
+, torch
 , torchvision
 , tqdm
+, yacs
 , lib
 }:
 
@@ -27,17 +38,34 @@ buildPythonPackage rec {
     sha256 = "0wnijdvqgdpzfdsy1cga3bsr0n7zzsl8hp4dskqwxx087g5h1r84";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "opencv-python-headless" "opencv"
+  '';
+
   propagatedBuildInputs = [
-    h5py hickle numpy pandas pillow six pytorch torchvision tqdm
+    albumentations
+    dill
+    h5py
+    hickle
+    numpy
+    opencv4
+    pandas
+    pillow
+    prodict
+    pycm
+    pyyaml
+    scipy
+    requests
+    scikitimage
+    tabulate
+    torch
+    torchvision
+    tqdm
+    six
+    yacs
   ];
 
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    runHook preCheck
-    pytest tests/
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = {
     description = "High-level training framework for Pytorch";

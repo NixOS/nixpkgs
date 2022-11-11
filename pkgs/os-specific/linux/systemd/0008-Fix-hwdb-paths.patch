@@ -1,7 +1,7 @@
-From 3b9983969de2a86929768f6362ed41c20dd13bd3 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
-Subject: [PATCH 08/19] Fix hwdb paths
+Subject: [PATCH] Fix hwdb paths
 
 Patch by vcunat.
 ---
@@ -9,10 +9,10 @@ Patch by vcunat.
  1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/src/libsystemd/sd-hwdb/hwdb-internal.h b/src/libsystemd/sd-hwdb/hwdb-internal.h
-index 5ddc2211e6..ee621eec46 100644
+index 62d27f7b89..87318e041b 100644
 --- a/src/libsystemd/sd-hwdb/hwdb-internal.h
 +++ b/src/libsystemd/sd-hwdb/hwdb-internal.h
-@@ -82,8 +82,5 @@ struct trie_value_entry2_f {
+@@ -83,8 +83,5 @@ struct trie_value_entry2_f {
  } _packed_;
  
  #define hwdb_bin_paths                          \
@@ -23,6 +23,3 @@ index 5ddc2211e6..ee621eec46 100644
 -        UDEVLIBEXECDIR "/hwdb.bin\0"
 +        "/etc/udev/hwdb.bin\0"
 +
--- 
-2.33.1
-
