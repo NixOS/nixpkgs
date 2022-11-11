@@ -70,6 +70,13 @@ stdenv.mkDerivation rec {
     dbus
   ];
 
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
+
   # Broken by PCRE 2 bump in GLib.
   # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
   doCheck = false;
