@@ -4866,6 +4866,10 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  smokegen = callPackage ../development/libraries/smokegen {};
+
+  smokeqt = callPackage ../development/libraries/smokeqt {};
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
@@ -25012,7 +25016,9 @@ with pkgs;
 
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
-  humility = callPackage ../development/tools/rust/humility {};
+  humility = callPackage ../development/tools/rust/humility {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
@@ -30073,6 +30079,8 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
   };
 
+  lls = callPackage ../applications/networking/lls { };
+
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -31753,6 +31761,8 @@ with pkgs;
   secretscanner = callPackage ../tools/security/secretscanner { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
+
+  semver = callPackage ../applications/misc/semver { };
 
   sent = callPackage ../applications/misc/sent { };
 

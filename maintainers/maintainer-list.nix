@@ -2265,6 +2265,12 @@
     githubId = 5394722;
     name = "Spencer Baugh";
   };
+  catouc = {
+    email = "catouc@philipp.boeschen.me";
+    github = "catouc";
+    githubId = 25623213;
+    name = "Philipp Böschen";
+  };
   caugner = {
     email = "nixos@caugner.de";
     github = "caugner";
@@ -14215,6 +14221,12 @@
     github = "utdemir";
     githubId = 928084;
     name = "Utku Demir";
+  };
+  uthar = {
+    email = "galkowskikasper@gmail.com";
+    github = "uthar";
+    githubId = 15697697;
+    name = "Kasper Gałkowski";
   };
   uvnikita = {
     email = "uv.nikita@gmail.com";
