@@ -29441,6 +29441,16 @@ with pkgs;
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) ImageMagick;
   };
 
+  ikiwiki-full = ikiwiki.override {
+    bazaarSupport = false;      # tests broken
+    cvsSupport = true;
+    docutilsSupport = true;
+    gitSupport = true;
+    mercurialSupport = true;
+    monotoneSupport = true;
+    subversionSupport = true;
+  };
+
   iksemel = callPackage ../development/libraries/iksemel {
     texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
