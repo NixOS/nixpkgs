@@ -26,6 +26,7 @@ let
     DB_PORT = toString(cfg.database.port);
     DB_NAME = cfg.database.name;
     LOCAL_DOMAIN = cfg.localDomain;
+    WEB_DOMAIN = cfg.webDomain;
     SMTP_SERVER = cfg.smtp.host;
     SMTP_PORT = toString(cfg.smtp.port);
     SMTP_FROM_ADDRESS = cfg.smtp.fromAddress;
@@ -213,6 +214,12 @@ in {
 
       localDomain = lib.mkOption {
         description = lib.mdDoc "The domain serving your Mastodon instance.";
+        example = "example.org";
+        type = lib.types.str;
+      };
+
+      webDomain = lib.mkOption {
+        description = lib.mdDoc "The web domain serving your Mastodon instance.";
         example = "social.example.org";
         type = lib.types.str;
       };
@@ -637,7 +644,7 @@ in {
     services.nginx = lib.mkIf cfg.configureNginx {
       enable = true;
       recommendedProxySettings = true; # required for redirections to work
-      virtualHosts."${cfg.localDomain}" = {
+      virtualHosts."${cfg.webDomain}" = {
         root = "${cfg.package}/public/";
         forceSSL = true; # mastodon only supports https
         enableACME = true;
