@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , gtest
 , cudatoolkit
@@ -10,6 +9,7 @@
 , addOpenGLRunpath
 , amd ? true
 , nvidia ? true
+, udev
 }:
 
 let
@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop" + pname-suffix;
-  version = "2.0.4";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-WOXVmKnVNRjWqShbOUZ0Z4hd0m9njLmCGLnV9FBS3Us=";
+    hash = "sha256-vLvt2sankpQWAVZBPo3OePs4LDy7YfVnMkZLfN6ERAc=";
   };
 
   cmakeFlags = with lib; [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ++ optional amd "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
   ;
   nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
-  buildInputs = with lib; [ ncurses ]
+  buildInputs = with lib; [ ncurses udev ]
     ++ optional nvidia cudatoolkit
     ++ optional amd libdrm
   ;
@@ -55,14 +55,15 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A (h)top like task monitor for AMD and NVIDIA GPUs";
+    description = "A (h)top like task monitor for AMD, Intel and NVIDIA GPUs";
     longDescription = ''
-      Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
+      Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Intel and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
     '';
     homepage = "https://github.com/Syllo/nvtop";
-    license = licenses.gpl3;
+    changelog = "https://github.com/Syllo/nvtop/releases/tag/${version}";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb ];
+    maintainers = with maintainers; [ willibutz gbtb anthonyroussel ];
     mainProgram = "nvtop";
   };
 }
