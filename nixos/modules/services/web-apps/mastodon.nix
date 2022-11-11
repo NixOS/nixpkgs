@@ -219,7 +219,7 @@ in {
       };
 
       webDomain = lib.mkOption {
-        description = lib.mdDoc "The web domain serving your Mastodon instance. If different to localDomain then a web-finger 301 redirect must be configured. See https://docs.joinmastodon.org/admin/config/";
+        description = lib.mdDoc "The web domain serving your Mastodon instance. If different to localDomain then a manual web-finger 301 redirect must be configured. See https://docs.joinmastodon.org/admin/config/";
         example = "social.example.org";
         type = lib.types.str;
       };
