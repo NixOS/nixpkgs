@@ -1,4 +1,4 @@
-{ callPackage, libsForQt5, pkgsi686Linux }:
+{ callPackage, libsForQt5, qt6Packages, pkgsi686Linux }:
 
 # When adding new plugins:
 # - Respect alphabetical order. On diversion, file a PR.
@@ -16,7 +16,7 @@
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
-  obs-multi-rtmp = libsForQt5.callPackage ./obs-multi-rtmp.nix { };
+  obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
   obs-ndi = libsForQt5.callPackage ./obs-ndi.nix { };
 

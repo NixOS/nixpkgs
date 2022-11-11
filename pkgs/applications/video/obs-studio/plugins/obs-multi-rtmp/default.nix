@@ -2,20 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
-  version = "0.2.8.1";
+  version = "0.2.8.1-OBS28";
 
   src = fetchFromGitHub {
     owner = "sorayuki";
     repo = "obs-multi-rtmp";
     rev = version;
-    sha256 = "sha256-OhatuSlDJ2VDNorM4QfoKPYKyv5YpN8EnIelLdBTlZ0=";
+    sha256 = "sha256-1W+c8Y0AmtKQmCIg8IDAaYYStQzDpZRuqw3vZEY5ncU=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ];
 
-  cmakeFlags = [
-    "-DLIBOBS_INCLUDE_DIR=${obs-studio}/include/obs"
+  patches = [
+    # Patch cmake file to link against the obs build output, instead of its sources
+    ./fix-build.patch
   ];
 
   dontWrapQtApps = true;
