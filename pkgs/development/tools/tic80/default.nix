@@ -15,7 +15,6 @@
 
 stdenv.mkDerivation rec {
   pname = "tic-80";
-
   version = "1.0.2164";
 
   nativeBuildInputs = [
