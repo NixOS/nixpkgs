@@ -42,8 +42,7 @@ appimageTools.wrapType2 rec {
     cp -a ${appimageContents}/resources/images/ $out/share/${pname}/resources
 
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    install -m 444 -D ${appimageContents}/resources/images/icons/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
+    install -m 444 -D ${appimageContents}/resources/images/desktop/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
 
