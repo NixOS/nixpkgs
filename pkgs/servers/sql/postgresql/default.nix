@@ -204,45 +204,45 @@ let
 in self: {
 
   postgresql_11 = self.callPackage generic {
-    version = "11.17";
+    version = "11.18";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    hash = "sha256-bphJY64HZeYVd5lRA6fmWU2w8L0BUorBI+DeSmpMtMQ=";
+    hash = "sha256-0k8g78UukYrPvMoh6c6ijg4mO4RqDECPz6w7PEoPdQQ=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.12";
+    version = "12.13";
     psqlSchema = "12";
-    hash = "sha256-NLPxxpQI4iBowMcbGCdpHxyJFTsK1XbBpE+JIKhYA5w=";
+    hash = "sha256-tsYjBGr0VI8RqEtAeTTWddEe0HDHk9FbBGg79fMi4C0=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.8";
+    version = "13.9";
     psqlSchema = "13";
-    hash = "sha256-c4dv3TpRcIc0BFjcpM4VuNKk286zNMBEFCRVGubEze0=";
+    hash = "sha256-7xlmwKXkn77TNwrSgkkoy2sRZGF67q4WBtooP38zpBU=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.5";
+    version = "14.6";
     psqlSchema = "14";
-    hash = "sha256-1PcstfuFfJqfdeyM8JGhdxJygC8hePCy5lt7b/ZPSjA=";
+    hash = "sha256-UIhA/BgJ05q3InTV8Tfau5/X+0+TPaQWiu67IAae3yI=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;
   };
 
   postgresql_15 = self.callPackage generic {
-    version = "15.0";
+    version = "15.1";
     psqlSchema = "15";
-    hash = "sha256-cux09KfBbmhPQ+pC4hVJf81MVdAopo+3LpnmH/QNpNY=";
+    hash = "sha256-ZP3yPXNK+tDf5Ad9rKlqxR3NaX5ori09TKbEXLFOIa4=";
     this = self.postgresql_15;
     thisAttr = "postgresql_15";
     inherit self;
