@@ -22,6 +22,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [ obs-studio pipewire ];
 
+  cmakeFlags = [
+    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
+    "-Wno-dev"
+  ];
+
+  preConfigure = ''
+    cp ${obs-studio.src}/cmake/external/ObsPluginHelpers.cmake cmake/FindLibObs.cmake
+  '';
+
   meta = with lib; {
     description = " Audio device and application capture for OBS Studio using PipeWire ";
     homepage = "https://github.com/dimtpap/obs-pipewire-audio-capture";

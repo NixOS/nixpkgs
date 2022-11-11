@@ -49,7 +49,6 @@ gcc10Stdenv.mkDerivation rec {
   # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
   dontFixCmake = true;
   NIX_CFLAGS_COMPILE = "-Wno-error";
-  preConfigure = "patchShebangs utils";
 
   postPatch = ''
     sed -ie 's!/bin/echo!echo!' 3rdParty/V8/gypfiles/*.gypi
@@ -57,6 +56,10 @@ gcc10Stdenv.mkDerivation rec {
     # with nixpkgs, it has no sense to check for a version update
     substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
     substituteInPlace js/server/server.js --replace "require('@arangodb').checkAvailableVersions();" ""
+  '';
+
+  preConfigure = ''
+    patchShebangs utils
   '';
 
   cmakeFlags = [
@@ -76,6 +79,6 @@ gcc10Stdenv.mkDerivation rec {
     description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.flosse maintainers.jsoo1 ];
+    maintainers = with maintainers; [ flosse jsoo1 ];
   };
 }
