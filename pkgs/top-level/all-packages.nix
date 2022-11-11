@@ -36718,6 +36718,8 @@ with pkgs;
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
+  museeks = callPackage ../applications/audio/museeks { };
+
   musly = callPackage ../applications/audio/musly { };
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
