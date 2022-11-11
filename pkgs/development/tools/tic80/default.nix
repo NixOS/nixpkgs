@@ -34,10 +34,9 @@ stdenv.mkDerivation rec {
     OpenGL
   ];
 
-  postInstall =
-    if stdenv.isDarwin then ''
-      cp -r bin $out/
-    '' else "";
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    cp -r bin $out
+  '';
 
   src = fetchFromGitHub {
     owner = "nesbox";
