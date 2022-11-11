@@ -1,4 +1,4 @@
-{ callPackage, libsForQt5, qt6Packages, pkgsi686Linux }:
+{ callPackage, qt6Packages, pkgsi686Linux }:
 
 # When adding new plugins:
 # - Respect alphabetical order. On diversion, file a PR.
@@ -12,7 +12,7 @@
 
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
-  obs-hyperion = libsForQt5.callPackage ./obs-hyperion/default.nix { };
+  obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
