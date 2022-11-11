@@ -7367,6 +7367,8 @@ with pkgs;
 
   godot-server = callPackage ../development/tools/godot/3/server.nix { };
 
+  goeland = callPackage ../applications/networking/feedreaders/goeland { };
+
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
   goofys = callPackage ../tools/filesystems/goofys { };
