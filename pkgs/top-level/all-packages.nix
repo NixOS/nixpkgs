@@ -26655,6 +26655,8 @@ with pkgs;
 
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
+  mona-sans = callPackage ../data/fonts/mona-sans { };
+
   monoid = callPackage ../data/fonts/monoid { };
 
   mononoki = callPackage ../data/fonts/mononoki { };
