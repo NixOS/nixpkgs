@@ -18,7 +18,7 @@
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
-  obs-ndi = libsForQt5.callPackage ./obs-ndi.nix { };
+  obs-ndi = qt6Packages.callPackage ./obs-ndi.nix { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
