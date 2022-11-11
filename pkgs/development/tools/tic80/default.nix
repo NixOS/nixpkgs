@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tic80.com";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ davidcromp ];
   };
 }

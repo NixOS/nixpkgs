@@ -3134,6 +3134,12 @@
     githubId = 6754950;
     name = "David Armstrong Lewis";
   };
+  davidcromp = {
+    email = "davidcrompton1192@gmail.com";
+    github = "DavidCromp";
+    githubId = 10701143;
+    name = "David Crompton";
+  };
   davidrusu = {
     email = "davidrusu.me@gmail.com";
     github = "davidrusu";
