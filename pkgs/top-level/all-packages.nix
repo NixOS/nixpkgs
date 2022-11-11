@@ -1317,6 +1317,8 @@ with pkgs;
 
   cidrgrep = callPackage ../tools/text/cidrgrep { };
 
+  clematis = callPackage ../tools/misc/clematis { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
