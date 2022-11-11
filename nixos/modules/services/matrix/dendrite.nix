@@ -121,14 +121,20 @@ in
               numbers and email addresses
             '';
           };
-        };
-        options.app_service_api.database = {
-          connection_string = lib.mkOption {
-            type = lib.types.str;
-            default = "file:federationapi.db";
-            description = lib.mdDoc ''
-              Database for the Appservice API.
-            '';
+          database = {
+            connection_string = lib.mkOption {
+              type = lib.types.str;
+              example = "postgres:///dendrite?host=/run/postgresql";
+              default = "";
+              description =  lib.mdDoc ''
+                Connection string for global database connection
+                pool. Either specify only this option and none of the
+                other `connection_string` options, or omit this option
+                and specify all the other `connection_string`
+                options. Cannot be a SQLite database, i.e. cannot
+                start with `file:`.
+              '';
+            };
           };
         };
         options.client_api = {
@@ -144,18 +150,23 @@ in
         options.federation_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:federationapi.db";
+            example = "file:dendrite_federationapi.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Federation API.
+              Database for the Federation API. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
         options.key_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:keyserver.db";
+            example = "file:dendrite_keyserver.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Key Server (for end-to-end encryption).
+              Database for the Key Server (for end-to-end
+              encryption). Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
@@ -163,9 +174,11 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mediaapi.db";
+              example = "file:dendrite_mediaapi.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for the Media API.
+                Database for the Media API. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -180,18 +193,22 @@ in
         options.room_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:roomserver.db";
+            example = "file:dendrite_roomserver.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Room Server.
+              Database for the Room Server. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
         options.sync_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:syncserver.db";
+            example = "file:dendrite_syncapi.db";
+            default = "";
             description = lib.mdDoc ''
-              Database for the Sync API.
+              Database for the Sync API. Do not use with
+              {option}`services.dendrite.settings.global.database.connection_string`.
             '';
           };
         };
@@ -218,18 +235,11 @@ in
           account_database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:userapi_accounts.db";
+              example = "file:dendrite_userapi.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for the User API, accounts.
-              '';
-            };
-          };
-          device_database = {
-            connection_string = lib.mkOption {
-              type = lib.types.str;
-              default = "file:userapi_devices.db";
-              description = lib.mdDoc ''
-                Database for the User API, devices.
+                Database for the User API, accounts. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -238,9 +248,11 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mscs.db";
+              example = "file:dendrite_mscs.db";
+              default = "";
               description = lib.mdDoc ''
-                Database for exerimental MSC's.
+                Database for exerimental MSC's. Do not use with
+                {option}`services.dendrite.settings.global.database.connection_string`.
               '';
             };
           };
@@ -263,14 +275,44 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
-      message = ''
-        If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
+    assertions = [
+      {
+        assertion = cfg.httpsPort != null -> (cfg.tlsCert != null && cfg.tlsKey != null);
+        message = ''
+          If Dendrite is configured to use https, tlsCert and tlsKey must be provided.
 
-        nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
-      '';
-    }];
+          nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
+        '';
+      }
+      {
+        assertion = let
+          globalConn = cfg.settings.global.database.connection_string;
+          apiConns = (map (api: cfg.settings."${api}".database.connection_string)
+            [ "federation_api"
+              "key_server"
+              "media_api"
+              "room_server"
+              "sync_api"
+              "mscs"
+            ]) ++ [ cfg.settings.user_api.account_database.connection_string ];
+        in globalConn == "" && builtins.all (x: x != "") apiConns
+           ||
+           globalConn != "" && builtins.all (x: x == "") apiConns;
+        message = ''
+          Either specify
+          services.dendrite.settings.global.database.connection_string
+          and none of the other database connection_string options, or
+          do not specify
+          services.dendrite.settings.global.database.connection_string
+          and specify all of the other database connection_string
+          options.
+        '';
+      }
+      {
+        assertion = ! lib.strings.hasPrefix "file:" cfg.settings.global.database.connection_string;
+        message = "Global database cannot be a SQLite database";
+      }
+    ];
 
     systemd.services.dendrite = {
       description = "Dendrite Matrix homeserver";
