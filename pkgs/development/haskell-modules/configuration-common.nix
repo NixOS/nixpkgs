@@ -106,7 +106,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "09ksaaf5kxpskq2hmi1ad35k15cnhn86j795iw6nk86gbvx5hrap";
+      sha256 = "14391vj0awvkpsd32kanmc85yic5mg4pxmjhiv7wjxy7ga13wfqw";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -122,6 +122,10 @@ self: super: {
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
   }) super.git-annex;
+
+  # Too strict bounds on servant
+  # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
+  arch-web = doJailbreak super.arch-web;
 
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal (drv: {
@@ -1577,6 +1581,10 @@ self: super: {
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
+  hledger_1_27_1 = doDistribute (super.hledger_1_27_1.override {
+    hledger-lib = self.hledger-lib_1_27_1;
+  });
+
   hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
@@ -1715,7 +1723,17 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
+  hercules-ci-agent = lib.pipe super.hercules-ci-agent [
+    (appendPatches [
+      # https://github.com/hercules-ci/hercules-ci-agent/pull/446
+      (fetchpatch {
+        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/99afac77ddb84122a5321494a08e6fe2e95548a1.patch";
+        sha256 = "sha256-0dtmNL1rqzeXvXWinfANc57a5LIM3uNnhR3A+p8mH0A=";
+        stripLen = 1;
+      })
+    ])
+    (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
+  ];
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
@@ -2377,17 +2395,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # GHC 9 support https://github.com/lambdabot/dice/pull/2
-  dice = appendPatch (fetchpatch {
-    name = "dice-ghc9.patch";
-    url = "https://github.com/lambdabot/dice/commit/80d6fd443cb17b21d91b725f994ece6e8274e0a0.patch";
-    excludes = [ ".gitignore" ];
-    sha256 = "sha256-MtS1n7v5D6MRWWzzTyKl3Lqd/NhD1bV+g80wnhZ3P/Y=";
-  }) (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.dice);
-
   # GHC 9 support https://github.com/lambdabot/lambdabot/pull/204
   lambdabot-core = appendPatch ./patches/lambdabot-core-ghc9.patch (overrideCabal (drv: {
     revision = null;
@@ -2559,9 +2566,6 @@ self: super: {
     testTarget = "regex-tdfa-unittest";
   } super.regex-tdfa;
 
-  # Missing test files https://github.com/qrilka/xlsx/issues/165
-  xlsx = dontCheck super.xlsx;
-
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
@@ -2635,4 +2639,13 @@ in {
 
   # 2022-10-04: Needs newer tasty-dejafu than (currently) in stackage
   rec-def = super.rec-def.override { tasty-dejafu = self.tasty-dejafu_2_1_0_0; };
+
+  # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
+  tzdata = dontCheck super.tzdata;
+
+  # 2022-11-04: The situation around heist-emanote is quite terrible.
+  # It‘s simply a heist fork because heist is unmaintained.
+  # Upstream jailbreak is unreleased: https://github.com/srid/heist/commit/988692ea850b3cbe966c7dc4dd26ba1d49647706
+  heist-emanote = doJailbreak (dontCheck super.heist-emanote);
+
 })

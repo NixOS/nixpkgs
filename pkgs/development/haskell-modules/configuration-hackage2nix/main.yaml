@@ -290,6 +290,7 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - ema
+    - emanote
     - generic-optics
     - ghcid
     - ghcide
@@ -454,6 +455,7 @@ unsupported-platforms:
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ platforms.darwin ]
+  ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
@@ -520,6 +522,7 @@ unsupported-platforms:
   sensei:                                       [ platforms.darwin ]
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
   Unixutils-shadow:                             [ platforms.darwin ]

@@ -18692,6 +18692,8 @@ with pkgs;
 
   elfio = callPackage ../development/libraries/elfio { };
 
+  emanote = haskell.lib.compose.justStaticExecutables haskellPackages.emanote;
+
   enchant1 = callPackage ../development/libraries/enchant/1.x.nix { };
 
   enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
@@ -30947,6 +30949,8 @@ with pkgs;
 
   navipowm = callPackage ../applications/misc/navipowm { };
 
+  nc4nix = callPackage ../development/tools/nc4nix { };
+
   netbeans = callPackage ../applications/editors/netbeans {
     jdk = jdk17;
   };
@@ -31014,15 +31018,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  obs-studio27 = libsForQt5.callPackage ../applications/video/obs-studio/27.nix {
+  obs-studio = qt6Packages.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
   };
-
-  obs-studio28 = qt6Packages.callPackage ../applications/video/obs-studio/28.nix {
-    ffmpeg_4 = ffmpeg-full;
-  };
-
-  obs-studio = obs-studio28;
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};

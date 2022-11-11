@@ -1102,6 +1102,20 @@ self: super: builtins.intersectAttrs super {
     broken = false;
   }) super.cabal-install;
 
+  tailwind = addBuildDepend
+      # Overrides for tailwindcss copied from:
+      # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
+      (pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+        plugins = [
+          pkgs.nodePackages."@tailwindcss/aspect-ratio"
+          pkgs.nodePackages."@tailwindcss/forms"
+          pkgs.nodePackages."@tailwindcss/line-clamp"
+          pkgs.nodePackages."@tailwindcss/typography"
+        ];
+      })) super.tailwind;
+
+  emanote = addBuildDepend pkgs.stork super.emanote;
+
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
   # ghcide-bench tests need network
