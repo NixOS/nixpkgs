@@ -26900,6 +26900,8 @@ with pkgs;
 
   sil-padauk = callPackage ../data/fonts/sil-padauk { };
 
+  sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen { };
+
   snap7 = callPackage ../development/libraries/snap7 {};
 
   snowblind = callPackage ../data/themes/snowblind { };

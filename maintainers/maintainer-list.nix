@@ -6206,6 +6206,12 @@
     githubId = 2588851;
     name = "Jan Solanti";
   };
+  jan-senaa = {
+    email = "mi-jan-sena@proton.me";
+    github = "jan-senaa";
+    githubId = 45771313;
+    name = "jan Sena";
+  };
   jappie = {
     email = "jappieklooster@hotmail.com";
     github = "jappeace";
