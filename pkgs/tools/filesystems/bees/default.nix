@@ -5,6 +5,7 @@
 , bash
 , btrfs-progs
 , coreutils
+, linuxHeaders_5_19
 , python3Packages
 , util-linux
 , nixosTests
@@ -24,6 +25,10 @@ let
     };
 
     buildInputs = [
+      # Works around build failure for flexible array members.
+      # Can be removed after 0.7.3 release where it was fixed upstream.
+      linuxHeaders_5_19
+
       btrfs-progs # for btrfs/ioctl.h
       util-linux # for uuid.h
     ];
