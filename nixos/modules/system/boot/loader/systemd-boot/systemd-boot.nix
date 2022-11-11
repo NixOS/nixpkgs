@@ -57,6 +57,11 @@ let
       --disallow-untyped-defs \
       $out
   '';
+
+  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" (''
+    #!${pkgs.runtimeShell}
+    ${checkedSystemdBootBuilder} $@
+  '' + cfg.extraInstallCommands);
 in {
 
   imports =
@@ -96,6 +101,16 @@ in {
 
         `null` means no limit i.e. all generations
         that were not garbage collected yet.
+      '';
+    };
+
+    extraInstallCommands = mkOption {
+      default = "";
+      example = "";
+      type = types.lines;
+      description = ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries.
       '';
     };
 
@@ -277,7 +292,7 @@ in {
     ];
 
     system = {
-      build.installBootLoader = checkedSystemdBootBuilder;
+      build.installBootLoader = finalSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 
