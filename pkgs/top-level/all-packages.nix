@@ -31445,7 +31445,7 @@ with pkgs;
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = libsForQt5.callPackage ../applications/audio/qmmp { };
+  qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
