@@ -3817,7 +3817,7 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
-  djv = callPackage ../applications/graphics/djv { stdenv = gcc10StdenvCompat; };
+  djv = callPackage ../applications/graphics/djv { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
 
