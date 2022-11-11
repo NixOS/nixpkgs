@@ -222,9 +222,9 @@ in self: {
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.8";
+    version = "13.9";
     psqlSchema = "13";
-    hash = "sha256-c4dv3TpRcIc0BFjcpM4VuNKk286zNMBEFCRVGubEze0=";
+    hash = "sha256-7xlmwKXkn77TNwrSgkkoy2sRZGF67q4WBtooP38zpBU=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
