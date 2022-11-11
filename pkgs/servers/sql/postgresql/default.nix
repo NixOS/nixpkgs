@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin && !stdenv.hostPlatform.isStatic)
+      , enableSystemd ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -37,14 +37,22 @@ let
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
-    buildInputs =
-      [ zlib readline openssl libxml2 icu ]
+    buildInputs = [
+      zlib
+      readline
+      openssl
+      libxml2
+      icu
+    ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper pkg-config ];
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -71,25 +79,24 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
-    patches =
-      [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
-        (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
-        (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
-        ./patches/specify_pkglibdir_at_runtime.patch
-        ./patches/findstring.patch
-      ]
-      ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
+    patches = [
+      ./patches/disable-resolve_symlinks.patch
+      ./patches/less-is-more.patch
+      ./patches/hardcode-pgxs-path.patch
+      ./patches/specify_pkglibdir_at_runtime.patch
+      ./patches/findstring.patch
+    ] ++ lib.optionals stdenv.isLinux [
+      (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
+    ];
 
     installTargets = [ "install-world" ];
 
     LC_ALL = "C";
 
-    postConfigure =
-      let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
-        ''
-          # Hardcode the path to pgxs so pg_config returns the path in $out
-          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
-        '';
+    postPatch = ''
+      # Hardcode the path to pgxs so pg_config returns the path in $out
+      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+    '';
 
     postInstall =
       ''
@@ -162,8 +169,6 @@ let
       license     = licenses.postgresql;
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ];
       platforms   = platforms.unix;
-      knownVulnerabilities = optional (!atLeast "9.4")
-        "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
   };
 
