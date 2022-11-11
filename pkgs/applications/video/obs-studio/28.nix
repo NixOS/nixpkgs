@@ -7,8 +7,8 @@
 } @ args:
 
 callPackage ./generic.nix (args // {
-  version = "28.0.3";
-  sha256 = "sha256-+4H1BjEgxqkAEvRyr2Tg3wXutnMvlYQEdT5jz644fMA=";
+  version = "28.1.2";
+  sha256 = "sha256-M5UEOtdzXBVY0UGfwWx3MsM28bJ1EcVPl8acWXWV0lg=";
   extraPatches = [ ./Provide-runtime-plugin-destination-as-relative-path.patch ];
   extraBuildInputs = [
     libajantv2
