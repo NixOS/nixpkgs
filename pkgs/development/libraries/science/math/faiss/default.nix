@@ -26,7 +26,7 @@
 
 let
   pname = "faiss";
-  version = "1.7.2";
+  version = "1.7.3";
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv.mkDerivation {
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Tklf5AaqJbOs9qtBZVcxXPLAp+K54EViZLSOvEhmswg=";
+    hash = "sha256-QETVgRk4PXzaODeQF1+78To8IiI1Ft1lV8pcBTk1Jhg=";
   };
 
   buildInputs = [
