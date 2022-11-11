@@ -5370,19 +5370,17 @@ with pkgs;
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
-  inherit (callPackage ../tools/networking/connman {})
+  connmanPackages =
+    recurseIntoAttrs (callPackage ../tools/networking/connman { });
+  inherit (connmanPackages)
     connman
     connmanFull
     connmanMinimal
+    connman_dmenu
+    connman-gtk
+    connman-ncurses
+    connman-notify
   ;
-
-  connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
-
-  connman-ncurses = callPackage ../tools/networking/connman/connman-ncurses { };
-
-  connman-notify = callPackage ../tools/networking/connman/connman-notify { };
-
-  connman_dmenu = callPackage ../tools/networking/connman/connman_dmenu  { };
 
   convertlit = callPackage ../tools/text/convertlit { };
 
@@ -7366,6 +7364,8 @@ with pkgs;
   godot-headless = callPackage ../development/tools/godot/3/headless.nix { };
 
   godot-server = callPackage ../development/tools/godot/3/server.nix { };
+
+  goeland = callPackage ../applications/networking/feedreaders/goeland { };
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -24628,19 +24628,41 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
-  # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
-  # so as not to have the newly bound xorg items already in scope,  which would
-  # have created a cycle.
-  xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
-  }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
-    inherit (darwin.apple_sdk.libs) Xplugin;
-    inherit (buildPackages.darwin) bootstrap_cmds;
-    udev = if stdenv.isLinux then udev else null;
-    libdrm = if stdenv.isLinux then libdrm else null;
-    abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
-      or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  }));
+  xorg = let
+    otherSplices = {
+      selfBuildBuild = pkgsBuildBuild.xorg;
+      selfBuildHost = pkgsBuildHost.xorg;
+      selfBuildTarget = pkgsBuildTarget.xorg;
+      selfHostHost = pkgsHostHost.xorg;
+      selfTargetTarget = pkgsTargetTarget.xorg or { };
+    };
+    keep = _self: { };
+    extra = _spliced0: { };
+
+    # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
+    # so as not to have the newly bound xorg items already in scope,  which would
+    # have created a cycle.
+    overrides = lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
+      inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa;
+      inherit (darwin.apple_sdk.libs) Xplugin;
+      inherit (buildPackages.darwin) bootstrap_cmds;
+      udev = if stdenv.isLinux then udev else null;
+      libdrm = if stdenv.isLinux then libdrm else null;
+      abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
+        or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
+    };
+
+    generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix {};
+
+    xorgPackages = lib.makeScopeWithSplicing
+      splicePackages
+      newScope
+      otherSplices
+      keep
+      extra
+      (lib.extends overrides generatedPackages);
+
+  in recurseIntoAttrs xorgPackages;
 
   xorg-autoconf = callPackage ../development/tools/misc/xorg-autoconf { };
 
@@ -30962,9 +30984,16 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  obs-studio = libsForQt5.callPackage ../applications/video/obs-studio {
+  obs-studio27 = libsForQt5.callPackage ../applications/video/obs-studio/27.nix {
     ffmpeg_4 = ffmpeg-full;
   };
+
+  obs-studio28 = qt6Packages.callPackage ../applications/video/obs-studio/28.nix {
+    ffmpeg_4 = ffmpeg-full;
+  };
+
+  obs-studio = obs-studio28;
+
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
