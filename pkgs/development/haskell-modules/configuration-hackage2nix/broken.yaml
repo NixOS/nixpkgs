@@ -2355,7 +2355,6 @@ broken-packages:
   - hquantlib
   - hquery
   - hR
-  - h-raylib
   - hreq-core
   - h-reversi
   - hricket
