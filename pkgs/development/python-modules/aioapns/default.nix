@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, setuptools
 , h2
 , lib
 , pyjwt
@@ -9,11 +10,16 @@
 buildPythonPackage rec {
   pname = "aioapns";
   version = "2.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-3FMNIhIZrstPKTfHVmN+K28UR2G26HZ5S/JtXmaFk1c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     h2
