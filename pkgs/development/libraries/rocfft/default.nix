@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Madouura ];
     broken = rocmVersion != hip.version;
+    hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };
 }
