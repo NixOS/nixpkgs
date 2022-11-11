@@ -54,6 +54,9 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around https://github.com/psf/black/issues/2105
     export TMPDIR="/tmp"
+
+    # OsError 24: Too many open files
+    ulimit -n 4096
   '';
 
   disabledTests = [
