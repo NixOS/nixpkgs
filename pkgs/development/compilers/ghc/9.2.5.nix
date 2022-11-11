@@ -1,33 +1,9 @@
-{ version
-, rev ? null
-, sha256
-, url ?
-    if rev != null
-    then "https://gitlab.haskell.org/ghc/ghc.git"
-    else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
-}:
-
-{ lib
-, stdenv
-, pkgsBuildTarget
-, pkgsHostTarget
-, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
-, autoconf
-, automake
-, coreutils
-, fetchpatch
-, fetchurl
-, fetchgit
-, perl
-, python3
-, m4
-, sphinx
-, xattr
-, autoSignDarwinBinariesHook
+, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
+, xattr, autoSignDarwinBinariesHook
 , bash
 
 , libiconv ? null, ncurses
@@ -43,8 +19,7 @@
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildTargetLlvmPackages
-, llvmPackages
+  buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
@@ -64,80 +39,10 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
-  enableDwarf ? (stdenv.targetPlatform.isx86 ||
-                 (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
-                lib.meta.availableOn stdenv.hostPlatform elfutils &&
-                lib.meta.availableOn stdenv.targetPlatform elfutils &&
-                # HACK: elfutils is marked as broken on static platforms
-                # which availableOn can't tell.
-                !stdenv.targetPlatform.isStatic &&
-                !stdenv.hostPlatform.isStatic
-, elfutils
-
-, # What flavour to build. Flavour string may contain a flavour and flavour
-  # transformers as accepted by hadrian.
-  ghcFlavour ?
-    let
-      # TODO(@sternenseemann): does using the static flavour make sense?
-      baseFlavour = "release";
-      # Note: in case hadrian's flavour transformers cease being expressive
-      # enough for us, we'll need to resort to defining a "nixpkgs" flavour
-      # in hadrianUserSettings and using that instead.
-      transformers =
-        lib.optionals useLLVM [ "llvm" ]
-        ++ lib.optionals (!enableShared) [
-          "fully_static"
-          "no_dynamic_ghc"
-        ]
-        ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
-        # While split sections are now enabled by default in ghc 8.8 for windows,
-        # they seem to lead to `too many sections` errors when building base for
-        # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ]
-      ;
-    in
-      baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
-
-, # Contents of the UserSettings.hs file to use when compiling hadrian.
-  hadrianUserSettings ? ''
-    module UserSettings (
-        userFlavours, userPackages, userDefaultFlavour,
-        verboseCommand, buildProgressColour, successColour, finalStage
-        ) where
-
-    import Flavour.Type
-    import Expression
-    import {-# SOURCE #-} Settings.Default
-
-    -- no way to set this via the command line
-    finalStage :: Stage
-    finalStage = ${
-      if stdenv.hostPlatform == stdenv.targetPlatform
-      then "Stage2" # native compiler
-      else "Stage1" # cross compiler
-    }
-
-    userDefaultFlavour :: String
-    userDefaultFlavour = "release"
-
-    userFlavours :: [Flavour]
-    userFlavours = []
-
-    -- Disable Colours
-    buildProgressColour :: BuildProgressColour
-    buildProgressColour = mkBuildProgressColour (Dull Reset)
-    successColour :: SuccessColour
-    successColour = mkSuccessColour (Dull Reset)
-
-    -- taken from src/UserSettings.hs unchanged, need to be there
-    userPackages :: [Package]
-    userPackages = []
-    verboseCommand :: Predicate
-    verboseCommand = do
-        verbosity <- expr getVerbosity
-        return $ verbosity >= Verbose
-  ''
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
 , #  Whether to build sphinx documentation.
   enableDocs ? (
@@ -149,6 +54,10 @@
     && !stdenv.hostPlatform.isMusl
   )
 
+, enableHaddockProgram ?
+    # Disabled for cross; see note [HADDOCK_DOCS].
+    (stdenv.targetPlatform == stdenv.hostPlatform)
+
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
@@ -156,19 +65,11 @@
 
 assert !enableNativeBignum -> gmp != null;
 
-assert stdenv.hostPlatform == stdenv.targetPlatform || throw ''
-  hadrian doesn't support building an installable GHC cross-compiler at the moment.
-  Consider using GHC 9.4 or lower which support this via the make build system.
-  See also: https://gitlab.haskell.org/ghc/ghc/-/issues/22090
-'';
+# Cross cannot currently build the `haddock` program for silly reasons,
+# see note [HADDOCK_DOCS].
+assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
-  src = (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  });
-
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -178,33 +79,50 @@ let
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 
-  hadrianSettings =
-    # -fexternal-dynamic-refs apparently (because it's not clear from the
-    # documentation) makes the GHC RTS able to load static libraries, which may
-    # be needed for TemplateHaskell. This solution was described in
-    # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
-    lib.optionals enableRelocatedStaticLibs [
-      "*.*.rts.*.opts += -fPIC -fexternal-dynamic-refs"
-      "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
-    ]
-    ++ lib.optionals targetPlatform.useAndroidPrebuilt [
-      "*.*.ghc.c.opts += -optc-std=gnu99"
-    ];
+  buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
+    BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
+    BUILD_SPHINX_PDF = NO
+  '' +
+  # Note [HADDOCK_DOCS]:
+  # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
+  # program is built (which we generally always want to have a complete GHC install)
+  # and whether it is run on the GHC sources to generate hyperlinked source code
+  # (which is impossible for cross-compilation); see:
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
+  # This implies that currently a cross-compiled GHC will never have a `haddock`
+  # program, so it can never generate haddocks for any packages.
+  # If this is solved in the future, we'd like to unconditionally
+  # build the haddock program (removing the `enableHaddockProgram` option).
+  ''
+    HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
 
-  # GHC's build system hadrian built from the GHC-to-build's source tree
-  # using our bootstrap GHC.
-  hadrian = bootPkgs.callPackage ../../tools/haskell/hadrian {
-    ghcSrc = src;
-    ghcVersion = version;
-    userSettings = hadrianUserSettings;
-  };
+    DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
+    BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
+  '' + lib.optionalString (targetPlatform != hostPlatform) ''
+    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    CrossCompilePrefix = ${targetPrefix}
+  '' + lib.optionalString (!enableProfiledLibs) ''
+    GhcLibWays = "v dyn"
+  '' +
+  # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
+  # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
+  # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+  lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
+    GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
+  '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
+    EXTRA_CC_OPTS += -std=gnu99
+  '';
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
     ++ [libffi]
-    # Bindist configure script fails w/o elfutils in linker search path
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
-    ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -255,17 +173,30 @@ assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
 assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation (rec {
+  version = "9.2.5";
   pname = "${targetPrefix}ghc${variantSuffix}";
-  inherit version;
 
-  inherit src;
+  src = fetchurl {
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "0606797d1b38e2d88ee2243f38ec6b9a1aa93e9b578e95f0de9a9c0a4144021c";
+  };
 
   enableParallelBuilding = true;
 
-  postPatch = ''
-    patchShebangs --build .
-  '';
+  outputs = [ "out" "doc" ];
+
+  patches = [
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
+  ];
+
+  postPatch = "patchShebangs .";
 
   # GHC needs the locale configured during the Haddock phase.
   LANG = "en_US.UTF-8";
@@ -297,8 +228,9 @@ stdenv.mkDerivation ({
   '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
-  '' +
-  lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+  '' + ''
+    echo -n "${buildMK}" > mk/build.mk
+  '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -307,15 +239,7 @@ stdenv.mkDerivation ({
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
     export XATTR=${lib.getBin xattr}/bin/xattr
-  ''
-  # If we are not using release tarballs, some files need to be generated using
-  # the boot script.
-  + lib.optionalString (rev != null) ''
-    echo ${version} > VERSION
-    echo ${rev} > GIT_COMMIT_ID
-    ./boot
-  ''
-  + lib.optionalString targetPlatform.useAndroidPrebuilt ''
+  '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
       echo "patching llvm-targets for musl targets..."
@@ -333,16 +257,6 @@ stdenv.mkDerivation ({
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-  ''
-  # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
-  # preConfigure, so overrideAttrs can be used to modify it effectively.
-  # hadrianSettings are passed via the command line so they are more visible
-  # in the build log.
-  + ''
-    hadrianFlagsArray=(
-      "-j$NIX_BUILD_CORES"
-      ${lib.escapeShellArgs hadrianSettings}
-    )
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
@@ -371,10 +285,6 @@ stdenv.mkDerivation ({
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
-  ] ++ lib.optionals enableDwarf [
-    "--enable-dwarf-unwind"
-    "--with-libdw-includes=${lib.getDev elfutils}/include"
-    "--with-libdw-libraries=${lib.getLib elfutils}/lib"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -384,10 +294,8 @@ stdenv.mkDerivation ({
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (rev != null) [
-    # We need to execute the boot script
-    autoconf automake m4 python3
+    perl autoconf automake m4 python3
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -401,24 +309,6 @@ stdenv.mkDerivation ({
 
   depsTargetTarget = map lib.getDev (libDeps targetPlatform);
   depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
-
-  hadrianFlags = [
-    "--flavour=${ghcFlavour}"
-    "--bignum=${if enableNativeBignum then "native" else "gmp"}"
-    "--docs=${if enableDocs then "no-sphinx-pdfs" else "no-sphinx"}"
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    # hadrianFlagsArray is created in preConfigure
-    echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray}"
-
-    # We need to go via the bindist for installing
-    hadrian $hadrianFlags "''${hadrianFlagsArray}" binary-dist-dir
-
-    runHook postBuild
-  '';
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
@@ -441,24 +331,9 @@ stdenv.mkDerivation ({
   # Hydra which already warrants a significant speedup
   requiredSystemFeatures = [ "big-parallel" ];
 
-  outputs = [ "out" "doc" ];
-
-  # We need to configure the bindist *again* before installing
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/22058
-  # TODO(@sternenseemann): it would be nice if the bindist could be an intermediate
-  # derivation, but since it is > 2GB even on x86_64-linux, not a good idea?
-  preInstall = ''
-    pushd _build/bindist/*
-
-    ./configure $configureFlags "''${configureFlagsArray[@]}"
-  '';
-
   postInstall = ''
-    # leave bindist directory
-    popd
-
     # Install the bash completion file.
-    install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
 
   passthru = {
@@ -467,11 +342,12 @@ stdenv.mkDerivation ({
     inherit llvmPackages;
     inherit enableShared;
 
+    # This is used by the haskell builder to query
+    # the presence of the haddock program.
+    hasHaddock = enableHaddockProgram;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
-
-    # Expose hadrian used for bootstrapping, for debugging purposes
-    inherit hadrian;
   };
 
   meta = {
@@ -484,8 +360,8 @@ stdenv.mkDerivation ({
     inherit (ghc.meta) license platforms;
   };
 
-  dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;
 } // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+  dontStrip = true;
   dontPatchELF = true;
   noAuditTmpdir = true;
 })
