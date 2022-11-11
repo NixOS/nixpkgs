@@ -18052,6 +18052,8 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
+  grace = callPackage ../development/tools/misc/grace { };
+
   mypy = with python3Packages; toPythonApplication mypy;
 
   mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
