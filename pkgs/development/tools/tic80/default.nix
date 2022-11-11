@@ -19,14 +19,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ruby
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
   ];
 
-  buildInputs = [
-    # Ruby support!
-    ruby
-  ] ++ lib.optional stdenv.isDarwin ([
-    xcbuild
-  ] ++ [
+  buildInputs = lib.optionals stdenv.isDarwin [
     AVFoundation
     AudioUnit
     Cocoa
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
     CoreServices
     ForceFeedback
     OpenGL
-  ]);
+  ];
 
   postInstall =
     if stdenv.isDarwin then ''
