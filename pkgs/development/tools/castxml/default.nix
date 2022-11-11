@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "CastXML";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EXi5dPhzxqHLNH1Ty8iz81uJxRX1+pFtwWSwbXeolL0=";
+    hash = "sha256-h2sLwhlz8AHyBK6Bbci17dvLkQ/9WEClz4lwM3GVVK8=";
   };
 
   nativeBuildInputs = [
