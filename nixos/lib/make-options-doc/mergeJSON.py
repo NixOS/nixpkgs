@@ -201,17 +201,21 @@ def convertMD(options: Dict[str, Any]) -> str:
         return option[key]['_type'] == typ
 
     for (name, option) in options.items():
-        if optionIs(option, 'description', 'mdDoc'):
-            option['description'] = convertString(name, option['description']['text'])
-        elif markdownByDefault:
-            option['description'] = convertString(name, option['description'])
+        try:
+            if optionIs(option, 'description', 'mdDoc'):
+                option['description'] = convertString(name, option['description']['text'])
+            elif markdownByDefault:
+                option['description'] = convertString(name, option['description'])
 
-        if optionIs(option, 'example', 'literalMD'):
-            docbook = convertString(name, option['example']['text'])
-            option['example'] = { '_type': 'literalDocBook', 'text': docbook }
-        if optionIs(option, 'default', 'literalMD'):
-            docbook = convertString(name, option['default']['text'])
-            option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+            if optionIs(option, 'example', 'literalMD'):
+                docbook = convertString(name, option['example']['text'])
+                option['example'] = { '_type': 'literalDocBook', 'text': docbook }
+            if optionIs(option, 'default', 'literalMD'):
+                docbook = convertString(name, option['default']['text'])
+                option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+        except Exception as e:
+            raise Exception(f"Failed to render option {name}: {str(e)}")
+
 
     return options
 
