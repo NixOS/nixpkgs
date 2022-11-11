@@ -17214,6 +17214,8 @@ with pkgs;
 
   itstool = callPackage ../development/tools/misc/itstool { };
 
+  jacoco = callPackage ../development/tools/analysis/jacoco { };
+
   inherit (callPackage ../development/tools/build-managers/jam { })
     jam
     ftjam;
