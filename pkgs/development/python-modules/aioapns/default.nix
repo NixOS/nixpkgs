@@ -5,12 +5,15 @@
 , lib
 , pyjwt
 , pyopenssl
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioapns";
   version = "2.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
