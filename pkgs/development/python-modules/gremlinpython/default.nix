@@ -15,19 +15,23 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.6.0";
+  version = "3.6.1";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    sha256 = "0gyf3a0zbh1grc1vr9zzpqm5yfcjvn0f1akw9l1arq36isqwvydn";
+    sha256 = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
   };
+
   sourceRoot = "source/gremlin-python/src/main/python";
+
   postPatch = ''
+    sed -i '/pytest-runner/d' setup.py
+
     substituteInPlace setup.py \
-      --replace 'pytest-runner==5.2' ' '
+      --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp'
   '';
 
   # setup-requires requirements
