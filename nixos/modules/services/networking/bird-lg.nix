@@ -211,22 +211,22 @@ in
         };
         script = ''
           ${cfg.package}/bin/frontend \
-            --servers ${concatStringsSep "," cfg.frontend.servers } \
-            --domain ${cfg.frontend.domain} \
-            --listen ${cfg.frontend.listenAddress} \
-            --proxy-port ${toString cfg.frontend.proxyPort} \
-            --whois ${cfg.frontend.whois} \
-            --dns-interface ${cfg.frontend.dnsInterface} \
-            --bgpmap-info ${concatStringsSep "," cfg.frontend.bgpMapInfo } \
-            --title-brand ${cfg.frontend.titleBrand} \
-            --navbar-brand ${cfg.frontend.navbar.brand} \
-            --navbar-brand-url ${cfg.frontend.navbar.brandURL} \
-            --navbar-all-servers ${cfg.frontend.navbar.allServers} \
-            --navbar-all-url ${cfg.frontend.navbar.allServersURL} \
-            --net-specific-mode ${cfg.frontend.netSpecificMode} \
-            --protocol-filter ${concatStringsSep "," cfg.frontend.protocolFilter } \
-            --name-filter ${cfg.frontend.nameFilter} \
-            --time-out ${toString cfg.frontend.timeout} \
+            --servers="${concatStringsSep "," cfg.frontend.servers }" \
+            --domain="${cfg.frontend.domain}" \
+            --listen="${cfg.frontend.listenAddress}" \
+            --proxy-port="${toString cfg.frontend.proxyPort}" \
+            --whois="${cfg.frontend.whois}" \
+            --dns-interface="${cfg.frontend.dnsInterface}" \
+            --bgpmap-info="${concatStringsSep "," cfg.frontend.bgpMapInfo}" \
+            --title-brand="${cfg.frontend.titleBrand}" \
+            --navbar-brand="${cfg.frontend.navbar.brand}" \
+            --navbar-brand-url="${cfg.frontend.navbar.brandURL}" \
+            --navbar-all-servers="${cfg.frontend.navbar.allServers}" \
+            --navbar-all-url="${cfg.frontend.navbar.allServersURL}" \
+            --net-specific-mode="${cfg.frontend.netSpecificMode}" \
+            --protocol-filter="${concatStringsSep "," cfg.frontend.protocolFilter}" \
+            --name-filter="${cfg.frontend.nameFilter}" \
+            --time-out="${toString cfg.frontend.timeout}" \
             ${cfg.frontend.extraArgs}
         '';
       };
@@ -247,11 +247,11 @@ in
         };
         script = ''
           ${cfg.package}/bin/proxy \
-          --allowed ${concatStringsSep "," cfg.proxy.allowedIPs } \
-          --bird ${cfg.proxy.birdSocket} \
-          --listen ${cfg.proxy.listenAddress} \
-          --traceroute_bin ${cfg.proxy.traceroute.binary}
-          --traceroute_raw ${boolToString cfg.proxy.traceroute.rawOutput}
+          --allowed="${concatStringsSep "," cfg.proxy.allowedIPs}" \
+          --bird="${cfg.proxy.birdSocket}" \
+          --listen="${cfg.proxy.listenAddress}" \
+          --traceroute_bin="${cfg.proxy.traceroute.binary}" \
+          --traceroute_raw="${boolToString cfg.proxy.traceroute.rawOutput}" \
           ${cfg.proxy.extraArgs}
         '';
       };
