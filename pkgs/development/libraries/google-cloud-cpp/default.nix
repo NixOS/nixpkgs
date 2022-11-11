@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
     # this adds a good chunk of time to the build
     "-DBUILD_TESTING:BOOL=ON"
     "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+    "-DCMAKE_CXX_STANDARD=17"
   ] ++ lib.optionals (apis != [ "*" ]) [
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];
