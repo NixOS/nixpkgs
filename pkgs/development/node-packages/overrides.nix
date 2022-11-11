@@ -280,7 +280,7 @@ final: prev: {
     '';
   };
 
-  manta = prev.manta.override {
+  manta = prev.manta.override ( oldAttrs: {
     nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
     postInstall = ''
       # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
@@ -291,7 +291,8 @@ final: prev: {
         installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
       done
     '';
-  };
+    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
+  });
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
   if stdenv.isDarwin
@@ -533,12 +534,13 @@ final: prev: {
     '';
   };
 
-  triton = prev.triton.override {
+  triton = prev.triton.override (oldAttrs: {
     nativeBuildInputs = [ pkgs.installShellFiles ];
     postInstall = ''
       installShellCompletion --cmd triton --bash <($out/bin/triton completion)
     '';
-  };
+    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
+  });
 
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
