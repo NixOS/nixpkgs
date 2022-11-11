@@ -12,13 +12,13 @@ index ad8f3b84e..74676d039 100644
      if (!lib) {
          PR_fprintf(PR_STDERR, "loading softokn3 failed");
 diff --git nss/lib/pk11wrap/pk11load.c nss/lib/pk11wrap/pk11load.c
-index 9e7a0a546..a0a23a1a4 100644
+index 119c8c512..720d39ccc 100644
 --- nss/lib/pk11wrap/pk11load.c
 +++ nss/lib/pk11wrap/pk11load.c
-@@ -466,6 +466,15 @@ secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
-          * unload the library if anything goes wrong from here on out...
-          */
+@@ -486,6 +486,15 @@ secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule)
+ #else
          library = PR_LoadLibrary(mod->dllName);
+ #endif // defined(_WIN32)
 +#ifndef NSS_STATIC_SOFTOKEN
 +        if ((library == NULL) &&
 +            !rindex(mod->dllName, PR_GetDirectorySeparator())) {
@@ -32,7 +32,7 @@ index 9e7a0a546..a0a23a1a4 100644
  
          if (library == NULL) {
 diff --git nss/lib/util/secload.c nss/lib/util/secload.c
-index 12efd2f75..8b74478f6 100644
+index 1cebae4e2..9194bb761 100644
 --- nss/lib/util/secload.c
 +++ nss/lib/util/secload.c
 @@ -70,9 +70,14 @@ loader_LoadLibInReferenceDir(const char* referencePath, const char* name)
@@ -66,8 +66,8 @@ index 12efd2f75..8b74478f6 100644
 @@ -89,6 +99,10 @@ loader_LoadLibInReferenceDir(const char* referencePath, const char* name)
                                                         | PR_LD_ALT_SEARCH_PATH
  #endif
-                                           );
-+            if (! dlh) {
+             );
++            if (!dlh) {
 +                strcpy(fullName + referencePathSize, name);
 +                dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL);
 +            }
