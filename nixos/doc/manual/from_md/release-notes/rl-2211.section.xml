@@ -952,6 +952,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>obs-studio</literal> hase been updated to version 28.
+          If you have packaged custom plugins, check if they are
+          compatible. <literal>obs-websocket</literal> has been
+          integrated into <literal>obs-studio</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>signald</literal> has been bumped to
           <literal>0.23.0</literal>. For the upgrade, a migration
           process is necessary. It can be done by running a command like
