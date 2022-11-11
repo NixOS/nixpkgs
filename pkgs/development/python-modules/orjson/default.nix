@@ -52,6 +52,12 @@ buildPythonPackage rec {
     xxhash
   ];
 
+  disabledTests = lib.optionals (stdenv.is32bit) [
+    # integer overflow on 32bit
+    "test_numpy_array_d1_intp"
+    "test_numpy_array_d1_uintp"
+  ];
+
   pythonImportsCheck = [ pname ];
 
   meta = with lib; {
