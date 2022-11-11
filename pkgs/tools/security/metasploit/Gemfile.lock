@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 2ab12336a4a6197c88ca4777c016311fa4fb7a3d
-  ref: refs/tags/6.2.25
+  revision: ef8b26c32cbcf48e9ba6a4d6c01d587a1d45f6cc
+  ref: refs/tags/6.2.26
   specs:
-    metasploit-framework (6.2.25)
+    metasploit-framework (6.2.26)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -32,7 +32,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.97)
+      metasploit-payloads (= 2.0.99)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.20)
       mqtt
@@ -129,13 +129,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.656.0)
-    aws-sdk-core (3.166.0)
+    aws-partitions (1.659.0)
+    aws-sdk-core (3.167.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.345.0)
+    aws-sdk-ec2 (1.349.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.73.0)
@@ -236,7 +236,7 @@ GEM
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.97)
+    metasploit-payloads (2.0.99)
     metasploit_data_models (5.0.6)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -427,7 +427,7 @@ GEM
       activesupport (>= 4.2, < 8.0)
     xmlrpc (0.3.2)
       webrick
-    zeitwerk (2.6.5)
+    zeitwerk (2.6.6)
 
 PLATFORMS
   ruby
