@@ -34,7 +34,6 @@
 , json_c
 , libjxl
 , libhwy
-, kea
 , lerc
 , xz
 , libxml2
@@ -119,7 +118,6 @@ stdenv.mkDerivation rec {
     json_c
     libjxl
     libhwy  # required by libjxl
-    kea
     lerc
     xz
     libxml2
