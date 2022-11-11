@@ -67,6 +67,11 @@ in stdenv.mkDerivation rec {
     zlib
   ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Advanced shading language for production GI renderers";

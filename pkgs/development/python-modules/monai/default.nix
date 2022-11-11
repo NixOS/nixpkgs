@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "0.9.1";
+  version = "1.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = version;
-    hash = "sha256-GU439svMHY1qIUZ0gM5c5tt6G1hh9eAHYV+38Munw9I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BnsgZpkXsY2l6inuzOkuvK4zJqYs2dj7jF5gKKiLnZM=";
   };
 
   # Ninja is not detected by setuptools for some reason even though it's present:

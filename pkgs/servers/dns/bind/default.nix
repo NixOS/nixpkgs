@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.7";
+  version = "9.18.8";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-nirPFpj0nXCtEv+6057GcWp9pSTp69mEKcfHC6EmKYE=";
+    sha256 = "sha256-Djw6uTeNuEug83Bz1nuhJa5PL/ja82bJ2yh+PxssNfA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];

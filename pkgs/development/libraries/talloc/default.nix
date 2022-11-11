@@ -4,6 +4,7 @@
 , pkg-config
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     libxslt
+    libxcrypt
   ];
 
   wafPath = "buildtools/bin/waf";

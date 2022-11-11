@@ -28,8 +28,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit version;
-    pname = "unicode-paracode";
     rev-prefix = "v";
   };
 

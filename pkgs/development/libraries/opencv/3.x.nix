@@ -248,7 +248,7 @@ stdenv.mkDerivation {
     "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
-  ] ++ lib.optional enableEigen [
+  ] ++ lib.optionals enableEigen [
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];

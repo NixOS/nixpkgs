@@ -3,6 +3,7 @@
 , fetchurl
 , postgresql
 , openssl
+, libxcrypt
 , withPam ? stdenv.isLinux
 , pam
 }:
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     postgresql
     openssl
+    libxcrypt
   ] ++ lib.optional withPam pam;
 
   configureFlags = [

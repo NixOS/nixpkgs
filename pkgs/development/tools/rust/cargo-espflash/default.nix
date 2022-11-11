@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-espflash";
@@ -15,8 +15,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     udev
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   cargoSha256 = "sha256-82o3B6qmBVPpBVAogClmTbxrBRXY8Lmd2sHmonP5/s8=";

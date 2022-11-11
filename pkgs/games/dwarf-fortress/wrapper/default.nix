@@ -137,4 +137,6 @@ stdenv.mkDerivation {
   '';
 
   preferLocalBuild = true;
+
+  inherit (dwarf-fortress) meta;
 }

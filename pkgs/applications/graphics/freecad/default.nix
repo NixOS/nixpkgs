@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , GitPython

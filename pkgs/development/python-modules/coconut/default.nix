@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , cpyparsing
 , ipykernel
@@ -12,7 +12,7 @@
 , watchdog
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "coconut";
   version = "1.6.0";
 

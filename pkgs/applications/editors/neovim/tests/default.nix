@@ -7,7 +7,6 @@
 , pkgs
 }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix;
   inherit (neovimUtils) makeNeovimConfig;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
@@ -69,12 +68,12 @@ let
 
   # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
   # the answer is store in `plugin_was_loaded_too_late` in the cwd
-  texFtplugin = pkgs.runCommandLocal "tex-ftplugin" {} ''
+  texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
     mkdir -p $out/ftplugin
     echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
     echo ':q!' >> $out/ftplugin/tex.vim
     echo '\documentclass{article}' > $out/main.tex
-  '';
+  '') // { pname = "test-ftplugin"; };
 
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
@@ -140,7 +139,7 @@ rec {
 
   nvim_with_ftplugin = neovim.override {
     extraName = "-with-ftplugin";
-    configure.packages.plugins = with pkgs.vimPlugins; {
+    configure.packages.plugins = {
       start = [
         texFtplugin
       ];

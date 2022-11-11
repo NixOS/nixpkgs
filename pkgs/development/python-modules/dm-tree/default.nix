@@ -13,14 +13,13 @@
 
 buildPythonPackage rec {
   pname = "dm-tree";
-  # As of 2021-12-29, the latest stable version still builds with Bazel.
-  version = "unstable-2021-12-20";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "tree";
-    rev = "b452e5c2743e7489b4ba7f16ecd51c516d7cd8e3";
-    sha256 = "1r187xwpvnnj98lyasngcv3lbxz0ziihpl5dbnjbfbjr0kh6z0j9";
+    rev = version;
+    hash = "sha256-rg6dcGcbTGfK3h4WAyhwCjgM3o64Jj2SImxNsZXJHHM=";
   };
 
   patches = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc_2, openssl, unbound
+{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc, openssl, unbound
 , readline, libsodium, rapidjson
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
+    boost miniupnpc openssl unbound rapidjson readline libsodium
   ];
 
   postUnpack = ''

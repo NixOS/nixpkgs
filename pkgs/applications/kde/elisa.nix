@@ -1,5 +1,4 @@
 { mkDerivation
-, fetchFromGitHub
 , lib
 , extra-cmake-modules
 , kdoctools

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -12,9 +13,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "drj11";
     repo = "pypng";
-    rev = "${pname}-${version}";
+    rev = "refs/tags/${pname}-${version}";
     sha256 = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "png" ];
 

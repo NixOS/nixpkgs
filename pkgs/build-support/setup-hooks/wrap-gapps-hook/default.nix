@@ -13,6 +13,7 @@
 }:
 
 makeSetupHook {
+  name = "wrap-gapps-hook";
   deps = lib.optionals (!stdenv.isDarwin) [
     # It is highly probable that a program will use GSettings,
     # at minimum through GTK file chooser dialogue.
@@ -36,8 +37,8 @@ makeSetupHook {
     # We use the wrapProgram function.
     makeWrapper
   ];
-  substitutions = {
-    passthru.tests = let
+  passthru = {
+    tests = let
       sample-project = ./tests/sample-project;
 
       testLib = callPackage ./tests/lib.nix { };

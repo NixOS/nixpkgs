@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , filelock
-, flit-core
 , importlib-metadata
 , packaging
 , pep517
@@ -12,13 +11,14 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , toml
 , tomli
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,11 +27,11 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = pname;
     rev = version;
-    hash = "sha256-P0DFBYsL2Ce/JwfYss64+CY/IvzYZEiz9wuEslij+oU=";
+    hash = "sha256-iQvfZC/h9SbagExoG8dJ2A8G8gVRdMaRvEy9QcQIN5I=";
   };
 
   nativeBuildInputs = [
-    flit-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

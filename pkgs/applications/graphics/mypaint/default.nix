@@ -23,6 +23,7 @@ let
 in buildPythonApplication rec {
   pname = "mypaint";
   version = "2.0.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "mypaint";
@@ -48,6 +49,7 @@ in buildPythonApplication rec {
     wrapGAppsHook
     gobject-introspection # for setup hook
     hicolor-icon-theme # fór setup hook
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [

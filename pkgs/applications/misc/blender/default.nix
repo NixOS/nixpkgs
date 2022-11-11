@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-IsUaTmY4XLFIGKpNdtz3+m1uEDr7DTaRbhLqFZiNIfA=";
+    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport [
+    ++ optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioshutil";
-  version = "1.1";
+  version = "1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "kumaraditya303";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CQIzNu1NrGDOh2uVif/EzB5C5t/Y/h9oT56Gp6jrOPQ=";
+    hash = "sha256-HDN170lKxMj5vK94dn0sNXNDKoksg1tJ8G+vZEU7g/4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

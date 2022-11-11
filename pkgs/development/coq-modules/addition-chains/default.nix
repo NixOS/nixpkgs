@@ -19,7 +19,7 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ mathcomp-ssreflect mathcomp-algebra mathcomp-fingroup paramcoq ];
 
-  useDune2 = true;
+  useDune = true;
 
   meta = {
     description = "Exponentiation algorithms following addition chains";

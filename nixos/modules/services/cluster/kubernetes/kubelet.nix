@@ -62,6 +62,7 @@ in
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "applyManifests" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "networkPlugin" ] "")
   ];
 
   ###### interface
@@ -176,8 +177,7 @@ in
 
     hostname = mkOption {
       description = lib.mdDoc "Kubernetes kubelet hostname override.";
-      default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = literalExpression "config.networking.fqdnOrHostName";
       type = str;
     };
 
@@ -187,12 +187,6 @@ in
       description = lib.mdDoc "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
       type = attrsOf attrs;
       default = {};
-    };
-
-    networkPlugin = mkOption {
-      description = lib.mdDoc "Network plugin to use by Kubernetes.";
-      type = nullOr (enum ["cni" "kubenet"]);
-      default = "kubenet";
     };
 
     nodeIp = mkOption {
@@ -315,7 +309,6 @@ in
               "--cluster-dns=${cfg.clusterDns}"} \
             ${optionalString (cfg.clusterDomain != "")
               "--cluster-domain=${cfg.clusterDomain}"} \
-            --cni-conf-dir=${cniConfig} \
             ${optionalString (cfg.featureGates != [])
               "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
             --hairpin-mode=hairpin-veth \
@@ -323,8 +316,6 @@ in
             --healthz-port=${toString cfg.healthz.port} \
             --hostname-override=${cfg.hostname} \
             --kubeconfig=${kubeconfig} \
-            ${optionalString (cfg.networkPlugin != null)
-              "--network-plugin=${cfg.networkPlugin}"} \
             ${optionalString (cfg.nodeIp != null)
               "--node-ip=${cfg.nodeIp}"} \
             --pod-infra-container-image=pause \
@@ -357,8 +348,8 @@ in
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 
-      services.kubernetes.kubelet.hostname = with config.networking;
-        mkDefault (hostName + optionalString (domain != null) ".${domain}");
+      services.kubernetes.kubelet.hostname =
+        mkDefault config.networking.fqdnOrHostName;
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

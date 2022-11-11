@@ -13,17 +13,19 @@
 , pytestCheckHook
 , python
 , pythonOlder
+, setuptools
 , six
 , typed-ast
 , typing-extensions
 , tomli
+, types-setuptools
 , types-typed-ast
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.971";
+  version = "0.981";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -31,11 +33,13 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J1lUnJco9rLYgFpJkfujGfVq1CfC4pdvvDzoan3jGkU=";
+    hash = "sha256-CkRK/j5DRUZU2enpZtqX4l+89E7ODDG9MeRYFQp9kSs=";
   };
 
   nativeBuildInputs = [
+    setuptools
     types-typed-ast
+    types-setuptools
   ];
 
   propagatedBuildInputs = [
@@ -59,10 +63,12 @@ buildPythonPackage rec {
     "mypy"
     "mypy.api"
     "mypy.fastparse"
-    "mypy.report"
     "mypy.types"
     "mypyc"
     "mypyc.analysis"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
   ];
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled

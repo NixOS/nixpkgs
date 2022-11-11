@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libssh openssl ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/rtrlib.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   meta = with lib; {
     description = "An open-source C implementation of the RPKI/Router Protocol client";
     homepage = "https://github.com/rtrlib/rtrlib";

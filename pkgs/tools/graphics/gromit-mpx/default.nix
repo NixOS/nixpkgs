@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
+, gtk, glib, pcre, libappindicator, libpthreadstubs, xorg
 , libxkbcommon, libepoxy, at-spi2-core, dbus, libdbusmenu
 , wrapGAppsHook
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk glib pcre libappindicator libpthreadstubs
-    libXdmcp libxkbcommon libepoxy at-spi2-core
+    xorg.libXdmcp libxkbcommon libepoxy at-spi2-core
     dbus libdbusmenu
   ];
 

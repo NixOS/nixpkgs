@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "schiene";
-  version = "0.24";
+  version = "0.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-y1gbeavZNFniRiOBbJ4Mgmb0F01HedSmpAWaeZEv0Go=";
+    sha256 = "sha256-sCaVrHqQZwAZDXIjh4Rg9ZT/EQSbrOPdSyT8oofCsmA=";
   };
 
   propagatedBuildInputs = [

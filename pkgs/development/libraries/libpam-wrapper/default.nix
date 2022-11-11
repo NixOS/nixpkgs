@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "00mqhsashx7njrvxz085d0b88nizhdy7m3x17ip5yhvwsl63km6p";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional enablePython [ python ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals enablePython [ python ];
 
   # We must use linux-pam, using openpam will result in broken fprintd.
   buildInputs = [ linux-pam ];

@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
-    ++ lib.optional fabricSupport [ libpsm2 libfabric ];
+    ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
   nativeBuildInputs = [ perl ]
     ++ lib.optionals fortranSupport [ gfortran ];

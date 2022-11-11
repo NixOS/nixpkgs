@@ -1,38 +1,47 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook
-, libtool, pkg-config, gtk2, libGLU, file
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cglm
+, gtk3
+, libepoxy
+, libGLU
 }:
 
-let
-  gtkglarea = stdenv.mkDerivation rec {
-    pname    = "gtkglarea";
-    version = "2.1.0";
-    src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      sha256 = "1pl2vdj6l64j864ilhkq1bcggb3hrlxjwk5m029i7xfjfxc587lf";
-    };
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs       = [ gtk2 libGLU ];
-    hardeningDisable  = [ "format" ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname   = "fsv";
-  version = "0.9-1";
+  version = "3.0";
 
   src = fetchFromGitHub {
-    owner  = "mcuelenaere";
-    repo   = "fsv";
-    rev    = "${pname}-${version}";
-    sha256 = "0n09jd7yqj18mx6zqbg7kab4idg5llr15g6avafj74fpg1h7iimj";
+    owner = "jabl";
+    repo  = "fsv";
+    rev   = "${pname}-${version}";
+    hash  = "sha256-fxsA3qcBPvK4H5P4juGTe6eg1lkygvzFpNW36B9lsE4=";
   };
 
-  postPatch = ''
-   # fix build with gettext 0.20
-   sed -i 's/AM_GNU_GETTEXT/AM_GNU_GETTEXT([external])/' configure.in
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
-  buildInputs       = [ file gtk2 libGLU gtkglarea ];
+  buildInputs = [
+    cglm
+    gtk3
+    libepoxy
+    libGLU
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp src/fsv $out/bin/fsv
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description     = "File system visualizer in cyberspace";
@@ -44,7 +53,7 @@ in stdenv.mkDerivation rec {
       hard drive, or any arbitrarily large collection of files, limited only
       by the host computer's memory and graphics hardware.
     '';
-    homepage    = "https://github.com/mcuelenaere/fsv";
+    homepage    = "https://github.com/jabl/fsv";
     license     = licenses.lgpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];

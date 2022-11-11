@@ -1,10 +1,10 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
-, fetchurl, zip, unzip, jq, xdg-utils, writeText
+, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
 , ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
-, browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
+, browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
 , udev
@@ -65,7 +65,7 @@ let
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
-          ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
+          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome-browser-connector
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
           ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
@@ -166,38 +166,64 @@ let
     in stdenv.mkDerivation {
       inherit pname version;
 
-      desktopItem = makeDesktopItem {
+      desktopItem = makeDesktopItem ({
         name = applicationName;
         exec = "${launcherName} %U";
         inherit icon;
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
-        genericName = "Web Browser";
-        categories = [ "Network" "WebBrowser" ];
-        mimeTypes = [
-          "text/html"
-          "text/xml"
-          "application/xhtml+xml"
-          "application/vnd.mozilla.xul+xml"
-          "x-scheme-handler/http"
-          "x-scheme-handler/https"
-          "x-scheme-handler/ftp"
-        ];
+        startupNotify = true;
         startupWMClass = wmClass;
-        actions = {
-          new-window = {
-            name = "New Window";
-            exec = "${launcherName} --new-window %U";
-          };
-          new-private-window = {
-            name = "New Private Window";
-            exec = "${launcherName} --private-window %U";
-          };
-          profile-manager-window = {
-            name = "Profile Manager";
-            exec = "${launcherName} --ProfileManger";
-          };
-        };
-      };
+        terminal = false;
+      } // (if libName == "thunderbird"
+            then {
+              genericName = "Email Client";
+              comment = "Read and write e-mails or RSS feeds, or manage tasks on calendars.";
+              categories = [
+                "Network" "Chat" "Email" "Feed" "GTK" "News"
+              ];
+              keywords = [
+                "mail" "email" "e-mail" "messages" "rss" "calendar"
+                "address book" "addressbook" "chat"
+              ];
+              mimeTypes = [
+                "message/rfc822"
+                "x-scheme-handler/mailto"
+                "text/calendar"
+                "text/x-vcard"
+              ];
+              actions = {
+                profile-manager-window = {
+                  name = "Profile Manager";
+                  exec = "${launcherName} --ProfileManger";
+                };
+              };
+            }
+            else {
+              genericName = "Web Browser";
+              categories = [ "Network" "WebBrowser" ];
+              mimeTypes = [
+                "text/html"
+                "text/xml"
+                "application/xhtml+xml"
+                "application/vnd.mozilla.xul+xml"
+                "x-scheme-handler/http"
+                "x-scheme-handler/https"
+              ];
+              actions = {
+                new-window = {
+                  name = "New Window";
+                  exec = "${launcherName} --new-window %U";
+                };
+                new-private-window = {
+                  name = "New Private Window";
+                  exec = "${launcherName} --private-window %U";
+                };
+                profile-manager-window = {
+                  name = "Profile Manager";
+                  exec = "${launcherName} --ProfileManger";
+                };
+              };
+            }));
 
       nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];

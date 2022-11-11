@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];
+    maintainers = with maintainers; [ Br1ght0ne ymarkus ];
   };
 
 }

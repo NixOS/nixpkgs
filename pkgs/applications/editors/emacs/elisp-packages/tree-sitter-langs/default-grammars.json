@@ -1,5 +1,4 @@
 [
-  "tree-sitter-agda",
   "tree-sitter-bash",
   "tree-sitter-c",
   "tree-sitter-c-sharp",
@@ -7,11 +6,11 @@
   "tree-sitter-css",
   "tree-sitter-elixir",
   "tree-sitter-elm",
-  "tree-sitter-fluent",
   "tree-sitter-go",
   "tree-sitter-haskell",
   "tree-sitter-hcl",
   "tree-sitter-html",
+  "tree-sitter-janet-simple",
   "tree-sitter-java",
   "tree-sitter-javascript",
   "tree-sitter-jsdoc",
@@ -19,6 +18,8 @@
   "tree-sitter-julia",
   "tree-sitter-nix",
   "tree-sitter-ocaml",
+  "tree-sitter-perl",
+  "tree-sitter-pgn",
   "tree-sitter-php",
   "tree-sitter-prisma",
   "tree-sitter-python",
@@ -27,5 +28,6 @@
   "tree-sitter-scala",
   "tree-sitter-typescript",
   "tree-sitter-verilog",
+  "tree-sitter-yaml",
   "tree-sitter-zig"
 ]

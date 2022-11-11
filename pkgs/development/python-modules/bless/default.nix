@@ -2,6 +2,7 @@
 , aioconsole
 , bleak
 , buildPythonPackage
+, dbus-next
 , fetchFromGitHub
 , numpy
 , pytestCheckHook
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bleak
+    dbus-next
   ];
 
   checkInputs = [

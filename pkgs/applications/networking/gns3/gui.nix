@@ -10,6 +10,7 @@
 , python3
 , fetchFromGitHub
 , wrapQtAppsHook
+, packageOverrides ? self: super: {}
 }:
 
 let
@@ -17,22 +18,9 @@ let
   ];
 
   python = python3.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: {
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-        };
-
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-        doCheck = false;
-      });
-    }) defaultOverrides;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
+
 in python.pkgs.buildPythonPackage rec {
   pname = "gns3-gui";
   inherit version;
@@ -84,6 +72,6 @@ in python.pkgs.buildPythonPackage rec {
     changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

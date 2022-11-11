@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cli11";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${version}";
-    sha256 = "sha256-emTIaoUyTINbAAn9tw1r3zLTQt58N8A1zoP+0y41yKo=";
+    sha256 = "sha256-J/hOgCDQPI0n2BGJK0+HIwlfNDVaZcxCC45uFAR7JUc=";
   };
 
   nativeBuildInputs = [ cmake ];

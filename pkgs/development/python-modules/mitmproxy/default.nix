@@ -117,6 +117,8 @@ buildPythonPackage rec {
     "test_integration"
     "test_contentview_flowview"
     "test_flowview"
+    # ValueError: Exceeds the limit (4300) for integer string conversion
+    "test_roundtrip_big_integer"
   ];
   dontUsePytestXdist = true;
 

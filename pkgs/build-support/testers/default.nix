@@ -67,6 +67,6 @@
             else test;
           calledTest = lib.toFunction loadedTest pkgs;
         in
-          nixosTesting.makeTest calledTest;
+          nixosTesting.simpleTest calledTest;
 
 }

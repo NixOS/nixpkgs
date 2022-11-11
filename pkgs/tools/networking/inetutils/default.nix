@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inetutils";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-CwG7COKWI8TjuUDyM8lhRR2a+MUGYwGt12pSqV1Rdyw=";
+    sha256 = "sha256-F4nWsbGlff4qere1M+6fXf2cv1tZuxuzwmEu0I0PaLI=";
   };
 
   outputs = ["out" "apparmor"];

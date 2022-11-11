@@ -1,21 +1,26 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
+, fetchFromGitHub
+, stdenv
+, Security
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "onetun";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "aramperes";
     repo = pname;
     rev = "v${version}";
-
-    sha256 = "sha256-TYDSAJxWwNF/e42KR9656vrWfIanFMaJKvof0gcZ80U=";
+    sha256 = "sha256-gVw1aVbYjDPYTtMYIXq3k+LN0gUBAbQm275sxzwoYw8=";
   };
 
-  cargoSha256 = "sha256-aki3jL+0ETPa/0eMyxuBKdF3K1wM86BZx8FrOkaUAFQ=";
+  cargoSha256 = "sha256-/sOjd0JKk3MNNXYpTEXteFYtqDWYfyVItZrkX4uzjtc=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   meta = with lib; {
     description = "A cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";

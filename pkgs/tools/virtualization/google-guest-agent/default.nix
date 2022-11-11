@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "guest-agent";
-  version = "20220824.00";
+  version = "20221104.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dOLxluLLBpPeABlUdxCmSnSvB+N9CBixEubpVLqsicU=";
+    sha256 = "sha256-JvI0tj6/+iCu+Q5XB3QOrrfBl6n2/bB6pj9lUDZL8DE=";
   };
 
   vendorSha256 = "sha256-JZfplQGwe+UCzdMLMD+9JJ2ksK9dZ6scz2jl0XoZ9rI=";

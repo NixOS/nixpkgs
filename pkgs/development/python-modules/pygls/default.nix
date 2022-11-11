@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.12.1";
+  version = "0.12.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
-    repo = pname;
+    repo = "pygls";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-L2KTNiI+I+r2fF88B1NSunowokrDzGCw3PXbxekg/oE=";
+    sha256 = "sha256-RtoRIfPIbERQFx0GzQqsxnKAMsIK5Zbf2sNtHhC2fmo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, perl
-, bdftopcf, bdf2psf, mkfontdir
-, fonttosfnt
+, bdftopcf, bdf2psf, xorg
 , targetsDat  ? null
 , variantsDat ? null
 }:
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   # remove for version >1.3
   patches = [ ./determinism.patch ];
 
-  nativeBuildInputs = [ perl bdftopcf bdf2psf fonttosfnt mkfontdir ];
+  nativeBuildInputs = [ perl bdftopcf bdf2psf xorg.fonttosfnt xorg.mkfontdir ];
 
   # configure sizes, encodings and variants
   preConfigure =

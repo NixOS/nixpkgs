@@ -3,7 +3,6 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
-, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
@@ -39,7 +38,7 @@
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
-, enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
+, enableJemalloc ? !stdenv.isDarwin
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
@@ -147,10 +146,9 @@ stdenv.mkDerivation rec {
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
   ++ lib.optionals enableGcs [
-    abseil-cpp
     crc32c
     curl
-    google-cloud-cpp
+    google-cloud-cpp grpc
     nlohmann_json
   ];
 

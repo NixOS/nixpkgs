@@ -4,6 +4,7 @@
 , unittestCheckHook
 , pythonOlder
 , fetchFromGitLab
+, fetchpatch
 , substituteAll
 , bubblewrap
 , exiftool
@@ -52,6 +53,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./fix_poppler.patch;
       poppler_path = "${poppler_gi}/lib/girepository-1.0";
+    })
+    # https://0xacab.org/jvoisin/mat2/-/issues/178
+    (fetchpatch {
+      url = "https://0xacab.org/jvoisin/mat2/-/commit/618e0a8e3984fd534b95ef3dbdcb8a76502c90b5.patch";
+      hash = "sha256-l9UFim3hGj+d2uKITiDG1OnqGeo2McBIiRSmK0Vidg8=";
     })
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     (substituteAll {

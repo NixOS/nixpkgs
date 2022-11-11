@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -115,6 +114,46 @@ stdenv.mkDerivation rec {
 
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
+
+    # https://trac.sagemath.org/ticket/34118
+    (fetchSageDiff {
+      name = "sympy-1.11-upgrade.patch";
+      base = "9.7";
+      rev = "52815744bde2b682245b6f985a112f7cb8666056";
+      sha256 = "sha256-gv6z6JkQ6S6oCJQNkVgcPVvzlplyvR1nC7pWmcUiSc0=";
+    })
+
+    # https://trac.sagemath.org/ticket/34460
+    (fetchSageDiff {
+      name = "ipywidgets-8-upgrade.patch";
+      base = "9.7";
+      rev = "2816dbacb342398a23bb3099e20c92c8020ab0fa";
+      sha256 = "sha256-tCOsMxXwPkRg3FJGVvTqDzlWdra78UfDY6nci0Nr9GI=";
+    })
+
+    # https://trac.sagemath.org/ticket/34391
+    (fetchSageDiff {
+      name = "gap-4.12-upgrade.patch";
+      base = "9.8.beta2";
+      rev = "eb8cd42feb58963adba67599bf6e311e03424328";
+      sha256 = "sha256-0dKewOZe2n3PqSdxCJt18FkqwTdrD0VA5MXAMiTW8Tw=";
+    })
+
+    # https://trac.sagemath.org/ticket/34701
+    (fetchSageDiff {
+      name = "libgap-fix-gc-crashes-on-aarch64.patch";
+      base = "eb8cd42feb58963adba67599bf6e311e03424328"; # TODO: update when #34391 lands
+      rev = "90acc7f1c13a80b8aa673469a2668feb9cd4207f";
+      sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
+    })
+
+    # Sage uses mixed integer programs (MIPs) to find edge disjoint
+    # spanning trees. For some reason, aarch64 glpk takes much longer
+    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
+    # has "numerous problems" and will be replaced by a polynomial
+    # algorithm soon, disable this test for now.
+    # https://trac.sagemath.org/ticket/34575
+    ./patches/disable-slow-glpk-test.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

@@ -45,8 +45,6 @@ buildPythonPackage rec {
       --replace "all: api" ""
   '';
 
-  nativeBuildInputs = srht.nativeBuildInputs;
-
   propagatedBuildInputs = [
     pgpy
     srht

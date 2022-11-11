@@ -13,18 +13,18 @@
 , liblxqt
 , libqtxdg
 , lxqt-globalkeys
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "+FpJD5PEH2/HOSWDQEwMX2sV2JJH0kjcoohBolhSP1A=";
+    sha256 = "yUQYvAWAsbaa2acwzIqnlFt5bsFLT63/RQdvWUsopqc=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ mkDerivation rec {
     lxqt-globalkeys
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-powermanagement";

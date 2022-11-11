@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , django
 , suds-jurko
-, ldap
+, python-ldap
 , mechanize
 , beautifulsoup4
 , pyxdg
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django suds-jurko ldap mechanize beautifulsoup4 pyxdg python-dateutil requests
+    django suds-jurko python-ldap mechanize beautifulsoup4 pyxdg python-dateutil requests
   ];
 
   buildInputs = [ httpretty ];

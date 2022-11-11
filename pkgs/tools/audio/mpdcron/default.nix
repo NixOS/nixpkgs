@@ -31,10 +31,9 @@ in stdenv.mkDerivation {
     sha256 = "0vdksf6lcgmizqr5mqp0bbci259k0dj7gpmhx32md41jlmw5skaw";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [
     libtool
-    pkg-config
     glib
     libdaemon
     pandoc

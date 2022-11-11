@@ -425,6 +425,39 @@ in {
           Do automatic database migrations.
         '';
       };
+
+      mediaAutoRemove = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          example = false;
+          description = lib.mdDoc ''
+            Automatically remove remote media attachments and preview cards older than the configured amount of days.
+
+            Recommended in https://docs.joinmastodon.org/admin/setup/.
+          '';
+        };
+
+        startAt = lib.mkOption {
+          type = lib.types.str;
+          default = "daily";
+          example = "hourly";
+          description = lib.mdDoc ''
+            How often to remove remote media.
+
+            The format is described in {manpage}`systemd.time(7)`.
+          '';
+        };
+
+        olderThanDays = lib.mkOption {
+          type = lib.types.int;
+          default = 30;
+          example = 14;
+          description = lib.mdDoc ''
+            How old remote media needs to be in order to be removed.
+          '';
+        };
+      };
     };
   };
 
@@ -475,7 +508,6 @@ in {
       } // cfgService;
 
       after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
@@ -500,16 +532,21 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ])) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
-      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
     };
 
     systemd.services.mastodon-streaming = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon streaming";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon streaming";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
         else { PORT = toString(cfg.streamingPort); }
@@ -529,11 +566,14 @@ in {
     };
 
     systemd.services.mastodon-web = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon web";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon web";
       environment = env // (if cfg.enableUnixSocket
         then { SOCKET = "/run/mastodon-web/web.socket"; }
         else { PORT = toString(cfg.webPort); }
@@ -554,11 +594,14 @@ in {
     };
 
     systemd.services.mastodon-sidekiq = {
-      after = [ "network.target" ]
-        ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else [])
-        ++ (if cfg.automaticMigrations then [ "mastodon-init-db.service" ] else [ "mastodon-init-dirs.service" ]);
-      description = "Mastodon sidekiq";
+      after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+      requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "multi-user.target" ];
+      description = "Mastodon sidekiq";
       environment = env // {
         PORT = toString(cfg.sidekiqPort);
         DB_POOL = toString cfg.sidekiqThreads;
@@ -573,6 +616,22 @@ in {
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
+    };
+
+    systemd.services.mastodon-media-auto-remove = lib.mkIf cfg.mediaAutoRemove.enable {
+      description = "Mastodon media auto remove";
+      environment = env;
+      serviceConfig = {
+        Type = "oneshot";
+        script = let
+          olderThanDays = toString cfg.mediaAutoRemove.olderThanDays;
+        in ''
+          ${cfg.package}/bin/tootctl media remove --days=${olderThanDays}
+          ${cfg.package}/bin/tootctl preview_cards remove --days=${olderThanDays}
+        '';
+        EnvironmentFile = "/var/lib/mastodon/.secrets_env";
+        startAt = cfg.mediaAutoRemove.startAt;
+      } // cfgService;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {

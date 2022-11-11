@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , hypothesis
 , poetry
 , pydantic
 , pytest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -10,10 +13,19 @@ buildPythonPackage rec {
   version = "1.1.4";
   format = "pyproject";
 
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9jksza0gg2gva3liy0s8riv6imjavhnqw05m8l5660knq2yb2y";
+    hash = "sha256-XiwvsJ3AmEJRLYBjC7eSNZodM9LARzrUfuI9oL6eMrE=";
   };
+
+  postPatch = ''
+    # https://github.com/timothycrosley/hypothesis-auto/pull/20
+    substituteInPlace pyproject.toml \
+      --replace 'pydantic = ">=0.32.2<2.0.0"' 'pydantic = ">=0.32.2, <2.0.0"' \
+      --replace 'hypothesis = ">=4.36<6.0.0"' 'hypothesis = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry
@@ -25,7 +37,9 @@ buildPythonPackage rec {
     pytest
   ];
 
-  pythonImportsCheck = [ "hypothesis_auto" ];
+  pythonImportsCheck = [
+    "hypothesis_auto"
+  ];
 
   meta = with lib; {
     description = "Enables fully automatic tests for type annotated functions";

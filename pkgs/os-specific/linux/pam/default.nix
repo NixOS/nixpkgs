@@ -1,6 +1,6 @@
 { lib, stdenv, buildPackages, fetchurl, flex, cracklib, db4, gettext, audit
 , nixosTests
-, withLibxcrypt ? false, libxcrypt
+, withLibxcrypt ? true, libxcrypt
 }:
 
 stdenv.mkDerivation rec {

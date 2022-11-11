@@ -6,12 +6,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "miniplayer";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JUlUFj/5DOTLa1XCZX/9Nj3Z9W+k4gnpJONiS4qNBIU=";
+    hash = "sha256-NrIDv61mRDe9JWpSP8cvlU4CGoN6Ou6XuNOIn1p47Pw=";
   };
 
   propagatedBuildInputs = [

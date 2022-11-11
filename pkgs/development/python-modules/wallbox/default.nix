@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "wallbox";
-  version = "0.4.9";
+  version = "0.4.10";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "90e664cf7d99eb1baf20a9ff5fd415dfa14ddafabcefd606e15b5bcd25f969e9";
+    sha256 = "sha256-+LJ0ggRUXFfqmiDbIF2ZWL6qsE6gOzp5OKMFSY3dGG0=";
   };
 
   propagatedBuildInputs = [

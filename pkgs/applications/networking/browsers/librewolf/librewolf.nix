@@ -1,4 +1,4 @@
-{ callPackage }:
+{ callPackage, lib, stdenv, fetchpatch }:
 let
   src = callPackage ./src.nix { };
 in
@@ -6,7 +6,13 @@ rec {
 
   inherit (src) packageVersion firefox source;
 
-  extraPatches = [ ./verify-telemetry-macros.patch ];
+  extraPatches = lib.optionals stdenv.isAarch64 [
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1791275
+      name = "no-sysctl-aarch64.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/0efaf5a00aaceeed679885e4cd393bd9a5fcd0ff";
+      hash = "sha256-wS/KufeLFxCexQalGGNg8+vnQhzDiL79OLt8FtL/JJ8=";
+    })
+  ];
 
   extraConfigureFlags = [
     "--with-app-name=librewolf"

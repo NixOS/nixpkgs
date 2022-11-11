@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl,
   bison, re2c, sconsPackages,
-  libcxx
+  libcxx, libcxxabi
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./SConstruct \
       --replace \
         "env['LIBPATH']        = []" \
-        "env['LIBPATH']        = ['${lib.getLib libcxx}/lib']"
+        "env['LIBPATH']        = ['${lib.getLib libcxx}/lib', '${lib.getLib libcxxabi}/lib']"
   '' + ''
     sed '1i#include <limits>' -i libgringo/gringo/{control,term}.hh
   '';

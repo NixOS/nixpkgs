@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libpng zlib qt4 python3Packages.pyqt4 python3Packages.boost bison flex ];
 
+  # https://github.com/wdas/SeExpr/issues/106
+  postPatch = ''
+    substituteInPlace src/build/seexpr2.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   meta = with lib; {
     description = "Embeddable expression evaluation engine from Disney Animation";
     homepage = "https://wdas.github.io/SeExpr/";

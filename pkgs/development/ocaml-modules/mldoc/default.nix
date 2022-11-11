@@ -28,7 +28,7 @@ let
 in
 buildDunePackage rec {
   pname = "mldoc";
-  version = "1.4.8";
+  version = "1.4.9";
 
   minimalOCamlVersion = "4.10";
 
@@ -36,7 +36,7 @@ buildDunePackage rec {
     owner = "logseq";
     repo = "mldoc";
     rev = "v${version}";
-    sha256 = "sha256-263/TQ8+Ihv6bCWnq4hA5Yk6mtokb3312dJrJ8U1QQs=";
+    sha256 = "sha256-jKZ4ejskngXb03EnHBlqRKC5xeNHJ32n73y1zQP9CiM=";
   };
 
   buildInputs = [

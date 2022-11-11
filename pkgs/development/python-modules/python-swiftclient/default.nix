@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , installShellFiles
 , mock
@@ -10,7 +10,7 @@
 , stestr
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-swiftclient";
   version = "4.1.0";
   format = "setuptools";

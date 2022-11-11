@@ -49,10 +49,10 @@
       elpaBuild {
         pname = "annotate";
         ename = "annotate";
-        version = "1.7.1";
+        version = "1.8.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/annotate-1.7.1.tar";
-          sha256 = "0jyzx5z10mv9b134jz4hkp1mbc9f1ki794cr5na9zwvpd9q3j9iy";
+          url = "https://elpa.nongnu.org/nongnu/annotate-1.8.0.tar";
+          sha256 = "169cav480g2fm3z7d5dixrng2h8fv39sa9n066b79cb573p4bbcp";
         };
         packageRequires = [];
         meta = {
@@ -199,10 +199,10 @@
       elpaBuild {
         pname = "boxquote";
         ename = "boxquote";
-        version = "2.2";
+        version = "2.3";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/boxquote-2.2.tar";
-          sha256 = "0vcqm78b5fsizkn2xalnzmdci5m02yxxypcr9q2sai04j7lhmwd9";
+          url = "https://elpa.nongnu.org/nongnu/boxquote-2.3.tar";
+          sha256 = "1d072qls4ywl71wi29khlq4w6yw9idp55vf811nvbmiihn6lwmiv";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1208,10 +1208,10 @@
       elpaBuild {
         pname = "helm";
         ename = "helm";
-        version = "3.8.7";
+        version = "3.8.8";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-3.8.7.tar";
-          sha256 = "1n0m061amrzm0xpgqy2mp9vrk2960gqhl5hi6c1smcmm7nxqwz12";
+          url = "https://elpa.nongnu.org/nongnu/helm-3.8.8.tar";
+          sha256 = "1qsiw8gswjwfp79n7g103db7xsmk36lq6ln558ipn4cw0fpnq1sc";
         };
         packageRequires = [ helm-core popup ];
         meta = {
@@ -1223,10 +1223,10 @@
       elpaBuild {
         pname = "helm-core";
         ename = "helm-core";
-        version = "3.8.7";
+        version = "3.8.8";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.7.tar";
-          sha256 = "1sak74v3gg34zzlbbgvlzvg7gw32fhcbxp5kigigmwvvbj5imgs7";
+          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.8.tar";
+          sha256 = "0wg21425ki8n8d954lkmlyci6awwwv53jg4gn5z495vh27qiv3qn";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -1577,7 +1577,6 @@
         };
       }) {};
     mentor = callPackage ({ async
-                          , cl-lib ? null
                           , elpaBuild
                           , emacs
                           , fetchurl
@@ -1587,12 +1586,12 @@
       elpaBuild {
         pname = "mentor";
         ename = "mentor";
-        version = "0.3.5";
+        version = "0.4";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/mentor-0.3.5.tar";
-          sha256 = "01zrvfk2njzyzjzkvp5hv5cjl1k1qjrila1ab4bv26gf6bkq5xh3";
+          url = "https://elpa.nongnu.org/nongnu/mentor-0.4.tar";
+          sha256 = "1n51yabm4npx62fpfn8rhky09x4y779ismdxa026fycy7va7ynzz";
         };
-        packageRequires = [ async cl-lib emacs seq xml-rpc ];
+        packageRequires = [ async emacs seq xml-rpc ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/mentor.html";
           license = lib.licenses.free;
@@ -2348,14 +2347,29 @@
       elpaBuild {
         pname = "subed";
         ename = "subed";
-        version = "1.0.8";
+        version = "1.0.10";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/subed-1.0.8.tar";
-          sha256 = "05dx4ywma7n73d0cihf4v8ayihm7gmfqpzvdycq4yk0zkxb958z1";
+          url = "https://elpa.nongnu.org/nongnu/subed-1.0.10.tar";
+          sha256 = "08vw9sv2g76yj8sfnx53dd28zkj4s0842i7qi92jam993v9s8h0z";
         };
         packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/subed.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    sweeprolog = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "sweeprolog";
+        ename = "sweeprolog";
+        version = "0.4.5";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.4.5.tar";
+          sha256 = "17dbrn2yvc6ib4dig410kbmvpwp4iz6q9hx6g0mk3vxqjrmgwyls";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/sweeprolog.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -2500,14 +2514,29 @@
           license = lib.licenses.free;
         };
       }) {};
+    treeview = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "treeview";
+        ename = "treeview";
+        version = "1.1.1";
+        src = fetchurl {
+          url = "https://elpa.nongnu.org/nongnu/treeview-1.1.1.tar";
+          sha256 = "0ryycz2n1kam3ji0ibpy99ll5l6xnx1mx9i9bgfvma61f0ppcppd";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/treeview.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     tuareg = callPackage ({ caml, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "tuareg";
         ename = "tuareg";
-        version = "2.3.0";
+        version = "3.0.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/tuareg-2.3.0.tar";
-          sha256 = "0a24q64yk4bbgsvm56j1y68zs9yi25qyl83xydx3ff75sk27f1yb";
+          url = "https://elpa.nongnu.org/nongnu/tuareg-3.0.1.tar";
+          sha256 = "0y98gwnbrcj3csd9yilk1izgzmp1ds5dh3y1bxgb2fzrjir3i13f";
         };
         packageRequires = [ caml emacs ];
         meta = {
@@ -2722,10 +2751,10 @@
       elpaBuild {
         pname = "xah-fly-keys";
         ename = "xah-fly-keys";
-        version = "17.22.20220909110152";
+        version = "18.1.20220921110635";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-17.22.20220909110152.tar";
-          sha256 = "1d8xkwcyd6dcxp926mwb8kgcpdqrcpmdv62ybdhx7izx0abia95y";
+          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-18.1.20220921110635.tar";
+          sha256 = "0nnd7jq1k62cgjb5y45jg6b76gvzyqh11kha7has4zipd52psvnj";
         };
         packageRequires = [ emacs ];
         meta = {

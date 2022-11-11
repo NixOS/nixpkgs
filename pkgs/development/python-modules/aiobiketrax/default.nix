@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "0.2.1";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "basilfx";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jZBs1h+01Mbwpvy3hg5/DEIU5EPKW4P/iMqp4eb4EpM=";
+    hash = "sha256-P8BExzL22rRj1IFPpojKR8ITdVq0RF8e3qLgb+H1PzE=";
   };
 
   nativeBuildInputs = [

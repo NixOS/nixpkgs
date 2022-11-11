@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "1.3.4";
+  version = "1.3.5";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kktK+6rLwYhkG7LiTBlgBbiIN8apweg4l8pJSTjKQU4=";
+    sha256 = "sha256-kgoQUX2l5YENEozcnfluwvcAO1ZSxlfHPVIa9ABW6IU=";
   };
 
   propagatedBuildInputs = [ protobuf ];

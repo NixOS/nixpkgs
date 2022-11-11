@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, openal, fluidsynth
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, libvpx, mpg123
-, game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem }:
+, game-music-emu, pkg-config, copyDesktopItems, makeDesktopItem, gtk3 }:
 
 let
   zmusic = stdenv.mkDerivation rec {
@@ -15,6 +15,10 @@ let
     };
 
     nativeBuildInputs = [ cmake pkg-config ];
+
+    buildInputs = [ fluidsynth ];
+
+    cmakeFlags = [ "-DDYN_FLUIDSYNTH=OFF" ];
 
     preConfigure = ''
       sed -i \
@@ -39,16 +43,17 @@ let
     nativeBuildInputs = [ cmake makeWrapper pkg-config copyDesktopItems ];
     buildInputs = [
       SDL2
-      libGL
-      openal
-      fluidsynth
       bzip2
-      zlib
+      fluidsynth
+      game-music-emu
+      gtk3
+      libGL
       libjpeg
       libsndfile
       libvpx
       mpg123
-      game-music-emu
+      openal
+      zlib
       zmusic
     ];
 
@@ -60,6 +65,8 @@ let
     ];
 
     NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
+
+    cmakeFlags = [ "-DDYN_GTK=OFF" ];
 
     desktopItems = [
       (makeDesktopItem {

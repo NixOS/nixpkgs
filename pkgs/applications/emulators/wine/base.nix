@@ -108,6 +108,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
+     mesa # for libgbm
   ])));
 
   patches = [ ]
@@ -119,7 +120,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-    ++ lib.optionals supportFlags.vkd3dSupport [ "--with-vkd3d" ]
     ++ lib.optionals (stdenv.isDarwin && !supportFlags.xineramaSupport) [ "--without-x" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add

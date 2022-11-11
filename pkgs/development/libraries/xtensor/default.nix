@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest ];
   checkTarget = "xtest";
 
+  # https://github.com/xtensor-stack/xtensor/issues/2542
+  postPatch = ''
+    substituteInPlace xtensor.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   meta = with lib; {
     description = "Multi-dimensional arrays with broadcasting and lazy computing.";
     homepage = "https://github.com/xtensor-stack/xtensor";

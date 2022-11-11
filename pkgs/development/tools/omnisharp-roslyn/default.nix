@@ -9,7 +9,7 @@
 , expect
 }:
 let
-  inherit (dotnetCorePackages) sdk_6_0;
+  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
@@ -37,7 +37,7 @@ let finalPackage = buildDotnetModule rec {
     "-property:AssemblyVersion=${version}.0"
     "-property:FileVersion=${version}.0"
     "-property:InformationalVersion=${version}"
-    "-property:RuntimeFrameworkVersion=6.0.0-preview.7.21317.1"
+    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
     "-property:RollForward=LatestMajor"
   ];
 

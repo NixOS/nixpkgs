@@ -555,6 +555,9 @@ while read -u 3 mountPoint; do
 
       umount /tmp-iso
       rmdir /tmp-iso
+      if [ -n "$isoPath" ] && [ $fsType = "iso9660" ] && mountpoint -q /findiso; then
+       umount /findiso
+      fi
       continue
     fi
 

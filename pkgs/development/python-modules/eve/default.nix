@@ -11,12 +11,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Eve";
-  version = "2.0.1";
+  pname = "eve";
+  version = "2.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-34dfYd1DSMAHSB0w6T8YPSQA3GUCgcNEFOD5sM+SapQ=";
+    inherit version;
+    pname = "Eve";
+    sha256 = "sha256-UiOhnJyEy5bPIIRHAhuWo8AqHOCp0OE5d0btujfeq4o=";
   };
 
   disabled = pythonOlder "3.7";
@@ -32,7 +34,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "events>=0.3,<0.4" "events>=0.3,<0.5"
+      --replace "flask<2.2" "flask" \
+      --replace "events>=0.3,<0.4" "events>=0.3"
   '';
 
   pythonImportsCheck = [ "eve" ];

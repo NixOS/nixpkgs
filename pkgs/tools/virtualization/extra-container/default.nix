@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "extra-container";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "erikarvstedt";

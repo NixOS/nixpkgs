@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam, nixosTests }:
+{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam, libxcrypt, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "vsftpd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
-  buildInputs = [ libcap openssl libseccomp pam ];
+  buildInputs = [ libcap openssl libseccomp pam libxcrypt ];
 
   patches = [ ./CVE-2015-1419.patch ];
 

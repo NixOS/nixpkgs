@@ -168,7 +168,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -187,7 +187,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
@@ -455,8 +455,9 @@ in
       };
 
       adminAddr = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         example = "admin@example.org";
+        default = null;
         description = lib.mdDoc "E-mail address of the server administrator.";
       };
 

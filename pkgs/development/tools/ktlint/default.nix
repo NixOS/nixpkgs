@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${jre_headless}/bin"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
   '';
 
   meta = with lib; {

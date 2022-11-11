@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
-    ++ lib.optional staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
     ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildPhase = lib.optionalString libOnly ''
     runHook preBuild
 
-    MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
+    MAKE="make -j $NIX_BUILD_CORES"
     for folder in $libFolders; do
       $MAKE -C $folder
     done

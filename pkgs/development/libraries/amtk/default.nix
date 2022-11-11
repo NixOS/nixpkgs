@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amtk";
-  version = "5.5.1";
+  version = "5.6.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "7Ilt0BfiwUNoUuXmCXD80IML0SFI1XzBvcDZOCa925w=";
+    sha256 = "89uHl0Qqm4UGKs0LPheskSWgtIfhQhbQmwOwiEGCDrk=";
   };
 
   nativeBuildInputs = [

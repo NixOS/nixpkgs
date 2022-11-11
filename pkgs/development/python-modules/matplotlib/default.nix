@@ -17,7 +17,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.5.2";
+  version = "3.5.3";
   pname = "matplotlib";
   format = "setuptools";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18h78s5ld1i6mz00w258hy29909nfr3ddq6ry9kq18agw468bks8";
+    sha256 = "sha256-M5ysSLgN28i/0F2q4KOnNBRlGoWWkEwqiBz9Httl8mw=";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -39,9 +39,9 @@ buildPythonPackage rec {
   buildInputs = [
     which
     sphinx
-  ] ++ lib.optional enableGhostscript [
+  ] ++ lib.optionals enableGhostscript [
     ghostscript
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];
 
@@ -112,6 +112,9 @@ buildPythonPackage rec {
       echo "[libs]
       system_freetype=true
       system_qhull=true" > mplsetup.cfg
+
+      substituteInPlace setup.py \
+        --replace "setuptools_scm>=4,<7" "setuptools_scm>=4"
     '';
 
   # Matplotlib needs to be built against a specific version of freetype in

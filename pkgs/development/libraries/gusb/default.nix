@@ -4,7 +4,7 @@
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+  pythonEnv = python3.pythonForBuild.withPackages(ps: with ps; [
     setuptools
   ]);
 in

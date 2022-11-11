@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ZoYzWp7WI/euInb++lCkENTnHUIxiAgkcUBwyzFzI9I=";
+    sha256 = "XVVoKCqzi5V1nUJUAfdHblb4y/JimIVYdDn0O9C4S74=";
   };
 
   strictDeps = true;
@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     gobject-introspection
-  ];
-
-  mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   postPatch = ''

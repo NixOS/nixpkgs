@@ -74,8 +74,6 @@ python3.pkgs.buildPythonApplication rec  {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "cinnamon.warpinator";
     ignoredVersions = "^master.*";
   };
 

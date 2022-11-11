@@ -23,10 +23,10 @@
 }:
 
 let
-  defaultVersion = "2022.07";
+  defaultVersion = "2022.10";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-krCOtJwk2hTBrb9wpxro83zFPutCMOhZrYtnM9E9z14=";
+    hash = "sha256-ULRIKlBbwoG6hHDDmaPCbhReKbI1ALw1xQ3r1/pGvfg=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -60,6 +60,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc

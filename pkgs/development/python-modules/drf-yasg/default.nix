@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.3";
+  version = "1.21.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-su67Q4+mQVA6CNrHkb4kGD6ibbz+NxqYJOqR9uOpiKo=";
+    sha256 = "sha256-iHyfeeZPRqpIl0I05hApsb6msS6mKKj8ijaXWJrdHT4=";
   };
 
   postPatch = ''

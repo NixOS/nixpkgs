@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.16.0";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-qL5ZbLimpsi/7yuhubHF3/tAouE/5zCWRx4nZG841cU=";
+    sha256 = "sha256-7F6Pqq/iFmI3JzDKoMmSyVm6BUr+Ev9GPidOofcLNV4=";
   };
 
   # patch Cargo.toml to not vendor libgit2 and openssl
   cargoPatches = [ ./no-vendor.patch ];
 
-  cargoSha256 = "sha256-OB3rjJNxkUKRQPsWRvCniNPfYBgLFV4yXO7dnVvL7wo=";
+  cargoSha256 = "sha256-kC8BGobS1iMq+vIwE24Lip+HGdVnA/NjHFAb6cqOz44=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -38,11 +38,14 @@ rustPlatform.buildRustPackage rec {
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
-  checkFlags = [ "--skip favorites::favorites_default_to_git_if_not_defined" ]
-      ++ lib.optionals stdenv.isDarwin [ "--skip git::utils::should_canonicalize" ];
+  checkFlags = [
+    "--skip=favorites::favorites_default_to_git_if_not_defined"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=git::utils::should_canonicalize"
+  ];
 
   meta = with lib; {
-    description = "cargo, make me a project";
+    description = "A tool to generaet a new Rust project by leveraging a pre-existing git repository as a template";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

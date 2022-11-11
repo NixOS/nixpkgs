@@ -151,6 +151,9 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ optionals cfg.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+      "systemd-portabled.service"
     ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
@@ -325,8 +328,8 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = lib.mdDoc ''
-        Extra config options for systemd. See man systemd-system.conf for
-        available options.
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
       '';
     };
 

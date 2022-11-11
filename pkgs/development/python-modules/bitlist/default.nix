@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , nose
 , parts
 , pytestCheckHook
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-rpXQKkV2RUuYza+gfpGEH3kFJ+hjuNGKV2i46eXQUUI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     parts

@@ -33,10 +33,10 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
         )
 
     with subtest("Manage script works"):
-        # Should fail if not called by healthchecks user
-        machine.fail("echo 'print(\"foo\")' | healthchecks-manage help")
-
         # "shell" sucommand should succeed, needs python in PATH.
         assert "foo\n" == machine.succeed("echo 'print(\"foo\")' | sudo -u healthchecks healthchecks-manage shell")
+
+        # Shouldn't fail if not called by healthchecks user
+        assert "foo\n" == machine.succeed("echo 'print(\"foo\")' | healthchecks-manage shell")
   '';
 })

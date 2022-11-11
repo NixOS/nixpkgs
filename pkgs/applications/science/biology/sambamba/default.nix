@@ -23,10 +23,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which python3 ldc ];
   buildInputs = [ zlib lz4 ];
 
+  buildFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
   # Upstream's install target is broken; copy manually
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/sambamba-${version} $out/bin/sambamba
+    runHook preInstall
+
+    install -Dm755 bin/sambamba-${version} $out/bin/sambamba
+
+    runHook postInstall
   '';
 
   meta = with lib; {

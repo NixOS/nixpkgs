@@ -26,6 +26,7 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, libxcrypt
 }:
 
 # Make sure we get GNU sed.
@@ -180,7 +181,7 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc
+    gmp mpfr libmpc libxcrypt
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
@@ -190,10 +191,12 @@ stdenv.mkDerivation ({
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
-  preConfigure = import ../common/pre-configure.nix {
+  preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
     inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
-  };
+  }) + ''
+    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+  '';
 
   dontDisableStatic = true;
 

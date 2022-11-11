@@ -47,7 +47,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [ "semantic-version" ];
+  pythonRelaxDeps = [ "asttokens" "semantic-version" ];
 
   propagatedBuildInputs = [
     asttokens

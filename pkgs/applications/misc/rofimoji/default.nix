@@ -1,6 +1,7 @@
 { buildPythonApplication
 , fetchFromGitHub
 , lib
+, python3
 
 , waylandSupport ? true
 , x11Support ? true
@@ -24,6 +25,10 @@ buildPythonApplication rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-6W/59DjxrgejHSkNxpruDAws812Vjyf+GePDPbXzVbc=";
   };
+
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+  ];
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.

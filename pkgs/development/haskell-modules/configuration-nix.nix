@@ -27,6 +27,10 @@
 # If you have an override of this kind, see configuration-common.nix instead.
 { pkgs, haskellLib }:
 
+let
+  inherit (pkgs) lib;
+in
+
 with haskellLib;
 
 # All of the overrides in this set should look like:
@@ -95,12 +99,12 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
-  niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
-  ormolu = generateOptparseApplicativeCompletion "ormolu" (enableSeparateBinOutput super.ormolu);
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
 
   # Generate shell completion.
-  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
+  cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
 
   arbtt = overrideCabal (drv: {
     # The test suite needs the packages's executables in $PATH to succeed.
@@ -154,11 +158,18 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  hs-mesos = overrideCabal (drv: {
-    # Pass _only_ mesos; the correct protobuf is propagated.
-    extraLibraries = [ pkgs.mesos ];
-    preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
-  }) super.hs-mesos;
+  # Doesn't declare boost dependency
+  nix-serve-ng = overrideSrc {
+    src = assert super.nix-serve-ng.version == "1.0.0";
+      # Workaround missing files in sdist
+      # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      pkgs.fetchFromGitHub {
+        repo = "nix-serve-ng";
+        owner = "aristanetworks";
+        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
+        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+      };
+  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -731,12 +742,33 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie_1_2_0_0;
 
-  haskell-language-server = overrideCabal (drv: {
+  haskell-language-server = let
+    # This wrapper will be included in the sdist in the next release, then we can remove this custom fetch.
+    abi-compat-check-wrapper = assert super.haskell-language-server.version == "1.8.0.0"; pkgs.fetchurl {
+      url = "https://raw.githubusercontent.com/haskell/haskell-language-server/c12379c57ab8f0abd606e9f397de54e508d024a0/bindist/wrapper.in";
+      sha256 = "sha256-vHi6+s8/V4WJSCxIqjP+thumEpttokpCc+a823WEPPk=";
+    }; in
+      overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
     # produce some illegal references to /build/.
     enableSharedExecutables = true;
-    postInstall = "ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${self.ghc.version}";
+    # The shell script wrapper checks that the runtime ghc and its boot packages match the ghc hls was compiled with.
+    # This prevents linking issues when running TH splices.
+    postInstall = ''
+      mv "$out/bin/haskell-language-server" "$out/bin/.haskell-language-server-${self.ghc.version}-unwrapped"
+      BOOT_PKGS=`ghc-pkg-${self.ghc.version} --global list --simple-output`
+      ${pkgs.buildPackages.gnused}/bin/sed \
+        -e "s!@@EXE_DIR@@!$out/bin!" \
+        -e "s/@@EXE_NAME@@/.haskell-language-server-${self.ghc.version}-unwrapped/" \
+        -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
+        -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
+        -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        ${abi-compat-check-wrapper} > "$out/bin/haskell-language-server"
+      ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
+      chmod +x "$out/bin/haskell-language-server"
+      '';
     testToolDepends = [ self.cabal-install pkgs.git ];
     testTarget = "func-test"; # wrapper test accesses internet
     preCheck = ''
@@ -759,6 +791,16 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access internet
   prune-juice = dontCheck super.prune-juice;
+
+  citeproc = lib.pipe super.citeproc [
+    enableSeparateBinOutput
+    # Enable executable being built and add missing dependencies
+    (enableCabalFlag "executable")
+    (addBuildDepends [ self.aeson-pretty ])
+    # TODO(@sternenseemann): we may want to enable that for improved performance
+    # Is correctness good enough since 0.5?
+    (disableCabalFlag "icu")
+  ];
 
   # based on https://github.com/gibiansky/IHaskell/blob/aafeabef786154d81ab7d9d1882bbcd06fc8c6c4/release.nix
   ihaskell = overrideCabal (drv: {
@@ -786,7 +828,7 @@ self: super: builtins.intersectAttrs super {
         install -D man/pnbackup.1 $out/share/man/man1/pnbackup.1
       '' + (drv.postInstall or "");
     })
-    (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
+    (self.generateOptparseApplicativeCompletions [ "pnbackup" ] super.pinboard-notes-backup);
 
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
@@ -847,7 +889,7 @@ self: super: builtins.intersectAttrs super {
   }) super.tophat;
 
   # Runtime dependencies and CLI completion
-  nvfetcher = generateOptparseApplicativeCompletion "nvfetcher" (overrideCabal
+  nvfetcher = self.generateOptparseApplicativeCompletions [ "nvfetcher" ] (overrideCabal
     (drv: {
       # test needs network
       doCheck = false;
@@ -859,9 +901,13 @@ self: super: builtins.intersectAttrs super {
       '';
     }) super.nvfetcher);
 
-  rel8 = addTestToolDepend pkgs.postgresql super.rel8;
+  rel8 = pkgs.lib.pipe super.rel8 [
+    (addTestToolDepend pkgs.postgresql)
+    # https://github.com/NixOS/nixpkgs/issues/198495
+    (overrideCabal { doCheck = pkgs.postgresql.doCheck; })
+  ];
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =
@@ -889,7 +935,7 @@ self: super: builtins.intersectAttrs super {
   # to arbitrary files in $HOME. This doesn't either not achieve anything
   # or even fail, so we prevent it and install everything necessary ourselves.
   # See also: https://hackage.haskell.org/package/cli-setup-0.2.1.4/docs/src/Distribution.CommandLine.html#setManpathGeneric
-  ats-format = generateOptparseApplicativeCompletion "atsfmt" (
+  ats-format = self.generateOptparseApplicativeCompletions [ "atsfmt" ] (
     justStaticExecutables (
       overrideCabal (drv: {
         # use vanilla Setup.hs
@@ -948,6 +994,19 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
   }) super.fourmolu_0_8_2_0;
+
+  # Test suite needs to execute 'disco' binary
+  disco = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/disco:$PATH"
+    '';
+    testFlags = drv.testFlags or [] ++ [
+      # Needs network access
+      "-p" "!/oeis/"
+    ];
+    # disco-examples needs network access
+    testTarget = "disco-tests";
+  }) super.disco;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.
@@ -1013,7 +1072,7 @@ self: super: builtins.intersectAttrs super {
   # Make sure that Cabal 3.8.* can be built as-is
   Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # cabal-install switched to build type simple in 3.2.0.0
@@ -1042,6 +1101,20 @@ self: super: builtins.intersectAttrs super {
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
+
+  tailwind = addBuildDepend
+      # Overrides for tailwindcss copied from:
+      # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
+      (pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+        plugins = [
+          pkgs.nodePackages."@tailwindcss/aspect-ratio"
+          pkgs.nodePackages."@tailwindcss/forms"
+          pkgs.nodePackages."@tailwindcss/line-clamp"
+          pkgs.nodePackages."@tailwindcss/typography"
+        ];
+      })) super.tailwind;
+
+  emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 

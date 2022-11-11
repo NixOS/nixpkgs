@@ -73,6 +73,7 @@ stdenv.mkDerivation (args // {
   configurePlatforms = lib.optionals (lib.versionAtLeast version "4.08" && !(stdenv.isDarwin && stdenv.isAarch64)) [ "host" "target" ];
   # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
   hardeningDisable = lib.optional (lib.versionAtLeast version "4.09" && stdenv.hostPlatform.isMusl) "pie"
+    ++ lib.optional (lib.versionAtLeast version "5.0" && stdenv.cc.isClang) "strictoverflow"
     ++ lib.optionals (args ? hardeningDisable) args.hardeningDisable;
 
   # Older versions have some race:
@@ -137,7 +138,7 @@ stdenv.mkDerivation (args // {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    broken = stdenv.isAarch64 && lib.versionOlder version "4.06";
+    broken = stdenv.isAarch64 && lib.versionOlder version (if stdenv.isDarwin then "4.10" else "4.06");
   };
 
 })

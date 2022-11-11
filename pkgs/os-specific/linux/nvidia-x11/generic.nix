@@ -101,7 +101,7 @@ let
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optional (!libsOnly) [ kernel.dev ];
+    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 
     passthru = {
       open = mapNullable (hash: callPackage ./open.nix {
@@ -115,6 +115,7 @@ let
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
       inherit persistencedVersion settingsVersion;
+      compressFirmware = false;
     } // optionalAttrs (!i686bundled) {
       inherit lib32;
     };

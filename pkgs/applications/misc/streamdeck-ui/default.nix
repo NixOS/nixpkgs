@@ -11,13 +11,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "2.0.4";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "timothycrosley";
     rev = "v${version}";
-    hash = "sha256-NV4BkHEgfxIOuLfmn0vcPNqivmHLD6v7jLdLZgnrb0Q=";
+    sha256 = "sha256-5dk+5oefg5R68kv038gsZ2p5ixmpj/vBLBp/V7Sdos8=";
   };
 
   desktopItems = [ (makeDesktopItem {
@@ -33,11 +33,7 @@ python3Packages.buildPythonApplication rec {
   postInstall =
     let
       udevRules = ''
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0060", TAG+="uaccess"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0063", TAG+="uaccess"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="006c", TAG+="uaccess"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="006d", TAG+="uaccess"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0080", TAG+="uaccess"
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", TAG+="uaccess"
       '';
     in
       ''

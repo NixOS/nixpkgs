@@ -1,18 +1,18 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? false, sqlite, curl, libmicrohttpd_0_9_70, libarchive
+, enableDebuginfod ? false, sqlite, curl, libmicrohttpd, libarchive
 , gitUpdater
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.187";
+  version = "0.188";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-5wsN++YQ+QxNH+DXGvFCpOJcPE7566uNLXK2UVnUVMg=";
+    sha256 = "sha256-+4sOjQgCAFuaMJxgwdjeMt0pUbVvDDo8tW0hzgFZXf8=";
   };
 
   patches = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableDebuginfod [
     sqlite
     curl
-    libmicrohttpd_0_9_70
+    libmicrohttpd
     libarchive
   ];
 
@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
   doInstallCheck = !stdenv.hostPlatform.isMusl;
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://sourceware.org/git/elfutils.git";
     rev-prefix = "elfutils-";
   };

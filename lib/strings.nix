@@ -185,6 +185,16 @@ rec {
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
+  /* Normalize path, removing extranous /s
+
+     Type: normalizePath :: string -> string
+
+     Example:
+       normalizePath "/a//b///c/"
+       => "/a/b/c/"
+  */
+  normalizePath = s: (builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x+y) "" (stringToCharacters s));
+
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
@@ -294,6 +304,21 @@ rec {
       map f (stringToCharacters s)
     );
 
+  /* Convert char to ascii value, must be in printable range
+
+     Type: charToInt :: string -> int
+
+     Example:
+       charToInt "A"
+       => 65
+       charToInt "("
+       => 40
+
+  */
+  charToInt = let
+    table = import ./ascii-table.nix;
+  in c: builtins.getAttr c table;
+
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
 
@@ -304,6 +329,19 @@ rec {
        => "\\(foo\\)"
   */
   escape = list: replaceChars list (map (c: "\\${c}") list);
+
+  /* Escape occurence of the element of `list` in `string` by
+     converting to its ASCII value and prefixing it with \\x.
+     Only works for printable ascii characters.
+
+     Type: escapeC = [string] -> string -> string
+
+     Example:
+       escapeC [" "] "foo bar"
+       => "foo\\x20bar"
+
+  */
+  escapeC = list: replaceChars list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
 
   /* Quote string to be used safely within the Bourne shell.
 
@@ -745,24 +783,105 @@ rec {
     else
       false;
 
-  /* Parse a string as an int.
+  /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
+  ambiguity between zero-padded and octal numbers. See toIntBase10.
 
      Type: string -> int
 
      Example:
+
        toInt "1337"
        => 1337
+
        toInt "-4"
        => -4
+
+       toInt " 123 "
+       => 123
+
+       toInt "00024"
+       => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
-  # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
-    let may_be_int = fromJSON str; in
-    if isInt may_be_int
-    then may_be_int
-    else throw "Could not convert ${str} to int.";
+    let
+      # RegEx: Match any leading whitespace, then any digits, and finally match any trailing
+      # whitespace.
+      strippedInput = match "[[:space:]]*([[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match a leading '0' then one or more digits.
+      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toInt: Could not convert ${escapeNixString str} to int.";
+
+      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
+      + " between octal and zero padded integer.";
+
+    in
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # Error on presence of leading zero/octal ambiguity.
+      else if isLeadingZero
+      then throw octalAmbigError
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
+
+
+  /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+
+     Type: string -> int
+
+     Example:
+       toIntBase10 "1337"
+       => 1337
+
+       toIntBase10 "-4"
+       => -4
+
+       toIntBase10 " 123 "
+       => 123
+
+       toIntBase10 "00024"
+       => 24
+
+       toIntBase10 "3.14"
+       => error: floating point JSON numbers are not supported
+  */
+  toIntBase10 = str:
+    let
+      # RegEx: Match any leading whitespace, then match any zero padding, capture any remaining
+      # digits after that, and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*0*([[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match at least one '0'.
+      isZero = match "0+" (head strippedInput) == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toIntBase10: Could not convert ${escapeNixString str} to int.";
+
+    in
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # In the special case zero-padded zero (00000), return early.
+      else if isZero
+      then 0
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.

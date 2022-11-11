@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , flit-core
 , matplotlib
 , pytestCheckHook
@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    repo = "seaborn";
-    owner = "mwaskom";
-    rev = "v${version}";
-    sha256 = "sha256-rJQRsUYFF0LoksE+q+CbxAxdI/Pi9k1qWR2G3PD1MkI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ux6x1R0wlzaMGHw+8InAKI7B/oqhxp+zJMaKodAt9ME=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     matplotlib

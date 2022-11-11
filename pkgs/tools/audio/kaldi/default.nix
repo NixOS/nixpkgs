@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , openblas
 , blas
 , lapack
@@ -9,6 +10,7 @@
 , fetchFromGitHub
 , git
 , python3
+, Accelerate
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -35,6 +37,9 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DKALDI_BUILD_TEST=off"
     "-DBUILD_SHARED_LIBS=on"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DBLAS_LIBRARIES=-lblas"
+    "-DLAPACK_LIBRARIES=-llapack"
   ];
 
   enableParallelBuilding = true;
@@ -70,6 +75,8 @@ stdenv.mkDerivation {
     openblas
     openfst
     icu
+  ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
   ];
 
   nativeBuildInputs = [
@@ -88,6 +95,6 @@ stdenv.mkDerivation {
     homepage = "https://kaldi-asr.org";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

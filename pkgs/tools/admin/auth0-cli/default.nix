@@ -33,5 +33,6 @@ buildGoModule rec {
     homepage = "https://auth0.github.io/auth0-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
+    mainProgram = "auth0";
   };
 }

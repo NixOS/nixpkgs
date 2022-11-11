@@ -16,6 +16,9 @@ buildPythonPackage rec {
 
   dontBuild = true;
   dontInstall = true;
+  preConfigure = ''
+    pythonOutputDistPhase() { touch $dist; }
+  '';
 
   checkInputs = [
     stestr

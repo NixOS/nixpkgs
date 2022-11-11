@@ -1,12 +1,12 @@
 { stdenv, lib, callPackage, fetchFromGitHub, indilib }:
 
 let
-  indi-version = "1.9.3";
+  indi-version = "1.9.8";
   indi-3rdparty-src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indi-version}";
-    sha256 = "sha256-TBccdheBEO48uIXd6tya6dytkzxaHg2+YancBkcL3bw=";
+    sha256 = "sha256-ZFbMyjMvAWcdsl+1TyX5/v5nY1DqvhZ2ckFBDe8gdQg=";
   };
   indi-firmware = callPackage ./indi-firmware.nix {
     version = indi-version;

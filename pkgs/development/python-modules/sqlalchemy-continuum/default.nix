@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , flask
-, flask_login
+, flask-login
 , flask-sqlalchemy
 , flexmock
 , pytestCheckHook
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sqlalchemy-i18n
     flask
-    flask_login
+    flask-login
     flask-sqlalchemy
     flexmock
   ];

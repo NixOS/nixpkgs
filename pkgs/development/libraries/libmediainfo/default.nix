@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
   propagatedBuildInputs = [ libzen ];
 
-  postPatch = "cd Project/GNU/Library";
+  sourceRoot = "MediaInfoLib/Project/GNU/Library";
+
+  postPatch = lib.optionalString (stdenv.cc.targetPrefix != "") ''
+    substituteInPlace configure.ac \
+      --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
+  '';
 
   configureFlags = [ "--enable-shared" ];
 

@@ -16,8 +16,11 @@ let
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  allowNonSource = config.allowNonSource or true
-    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
+  allowNonSource = let
+    envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
+  in if envVar != ""
+     then envVar != "0"
+     else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -285,6 +288,10 @@ let
     });
     timeout = int;
 
+    # Needed for Hydra to expose channel tarballs:
+    # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
+    isHydraChannel = bool;
+
     # Weirder stuff that doesn't appear in the documentation?
     maxSilent = int;
     knownVulnerabilities = listOf str;
@@ -294,7 +301,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = bool;
+    available = unspecified;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;

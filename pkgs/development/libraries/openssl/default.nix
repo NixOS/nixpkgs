@@ -130,7 +130,9 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
-      ++ lib.optional (lib.versionAtLeast version "3.0.0") "enable-ktls"
+      # We select KTLS here instead of the configure-time detection (which we patch out).
+      # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
       ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -212,24 +214,22 @@ let
 in {
 
 
-  openssl_1_1 = common rec {
-    version = "1.1.1q";
-    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
+  openssl_1_1 = common {
+    version = "1.1.1s";
+    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
-    ] ++ lib.optionals (stdenv.isDarwin && (builtins.substring 5 5 version) < "m") [
-      ./1.1/macos-yosemite-compat.patch
     ];
     withDocs = true;
   };
 
   openssl_3 = common {
-    version = "3.0.5";
-    sha256 = "sha256-qn2Nm+9xrWUlxVuhHl9Dl4ic5Jwsk0nc6m0+TwsCSno=";
+    version = "3.0.7";
+    sha256 = "sha256-gwSdBComDmlvYkBqxcCL9wb9hDg/lFzyG9YentlcOW4=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

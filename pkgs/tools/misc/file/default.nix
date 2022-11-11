@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "file";
-  version = "5.42";
+  version = "5.43";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/${pname}-${version}.tar.gz"
       "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-wHb7TQKcdAc/FcQzYe9XLPuGhAfTRxkLqDSvOxY5sOQ=";
+    sha256 = "sha256-jIAV6Rrg6NAyHZTHgjmJLvnbxwxK3gAIwOlYlKv7GZE=";
   };
 
   strictDeps = true;
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
-  doCheck = true;
+  # https://bugs.astron.com/view.php?id=382
+  doCheck = !stdenv.buildPlatform.isMusl;
 
   makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 

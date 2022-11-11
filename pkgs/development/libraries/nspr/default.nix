@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.34.1";
+  version = "4.35";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    hash = "sha256-xbg1TEi2Mrj0wZcGKBRsDgwMqPMscxXX1XNsAC4Dd08=";
+    hash = "sha256-fqMpfqWWm10lpd2NR/JEPNqI6e50YwH24eFCb4pqvI8=";
   };
 
   patches = [

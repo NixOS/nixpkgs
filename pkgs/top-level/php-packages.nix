@@ -22,6 +22,7 @@
 , libffi
 , libiconv
 , libjpeg
+, libkrb5
 , libpng
 , libsodium
 , libwebp
@@ -57,6 +58,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
     pname = "php-${pname}";
+    meta.mainProgram = args.meta.mainProgram or pname;
   });
 
   # Function to build an extension which is shipped as part of the php
@@ -342,10 +344,8 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "imap";
-          buildInputs = [ uwimap openssl pam pcre2 ];
-          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
-          # uwimap doesn't build on darwin.
-          enable = (!stdenv.isDarwin);
+          buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
+          configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
         }
         {
           name = "intl";

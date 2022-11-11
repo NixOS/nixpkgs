@@ -4,7 +4,9 @@
 , setuptools-scm
 , ansible-compat
 , ansible-core
+, black
 , enrich
+, filelock
 , flaky
 , jsonschema
 , pythonOlder
@@ -20,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.4.0";
+  version = "6.8.5";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xadjBsrpBqJgz3KGyofE0DukSSsu17/qIa0R/fPH6NE=";
+    sha256 = "sha256-r+lWJWLp5tGxehhltUDU9xZb8Bz+8q0DA9HK1q05f4g=";
   };
 
   postPatch = ''
@@ -42,7 +44,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ansible-compat
     ansible-core
+    black
     enrich
+    filelock
     jsonschema
     pytest # yes, this is an actual runtime dependency
     pyyaml
@@ -97,6 +101,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
     license = licenses.mit;
-    maintainers = with maintainers; [ sengaya SuperSandro2000 ];
+    maintainers = with maintainers; [ sengaya ];
   };
 }

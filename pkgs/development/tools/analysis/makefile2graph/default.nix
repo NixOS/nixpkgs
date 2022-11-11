@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "makefile2graph";
-  version = "unstable-2018-01-03";
+  version = "2021.11.06";
 
   src = fetchFromGitHub {
     owner = "lindenb";
     repo = "makefile2graph";
-    rev = "61fb95a5ba91c20236f5e4deb11127c34b47091f";
-    sha256 = "07hq40bl48i8ka35fcciqcafpd8k9rby1wf4vl2p53v0665xaghr";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4jyftC0eCJ13X/L4uEWhT5FA5/UXUmSHSoba89GSySQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

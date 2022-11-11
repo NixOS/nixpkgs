@@ -9,6 +9,19 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
+  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
+  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
+  # forks of each other, azan@faissal.bensefia.id is more recent
+  "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
+  "azan@hatem.masmoudi.org" = null;
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 42 #######
+
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
 
@@ -20,13 +33,6 @@
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
-
-  "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
-  "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
 
   # ####### GNOME 41 #######
 

@@ -14,27 +14,12 @@
 
 let
   defaultOverrides = commonOverrides ++ [
-    (self: super: {
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.2.0";
-
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
-        };
-
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-        doCheck = false;
-      });
-
-    })
   ];
 
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
+
 in python.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
@@ -95,6 +80,6 @@ in python.pkgs.buildPythonApplication {
     changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }

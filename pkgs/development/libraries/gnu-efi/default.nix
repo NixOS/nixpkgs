@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     # No nicer place to find latest release.
     url = "https://git.code.sf.net/p/gnu-efi/code";
   };

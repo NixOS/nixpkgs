@@ -4,195 +4,195 @@
 
 {
   alligator = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/alligator-22.06.tar.xz";
-      sha256 = "1h4jawzmiikn81iajc62pkgdv0xlc2w9g80l04awfiz2546rcxmf";
-      name = "alligator-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/alligator-22.09.tar.xz";
+      sha256 = "0krys21df6mlyi2zxdxgqx02k1q7njliz0nsxcygxrd89ajxlslb";
+      name = "alligator-22.09.tar.xz";
     };
   };
   angelfish = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/angelfish-22.06.tar.xz";
-      sha256 = "0s9kzkw0ikb4r4x04nyd568kika7wvi5gj0k6735nwjn5qyp933f";
-      name = "angelfish-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/angelfish-22.09.tar.xz";
+      sha256 = "1blhn84xka11zjwqimr30qv94jp5slfcmc44xcjxginl3n6hicwx";
+      name = "angelfish-22.09.tar.xz";
     };
   };
   audiotube = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/audiotube-22.06.tar.xz";
-      sha256 = "0680cr90nsa5qc9qm9vpl7993zmz0r1ms0m4f63cds7k8zrwwal0";
-      name = "audiotube-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/audiotube-22.09.tar.xz";
+      sha256 = "1ay3qrg8lnw209kwmgm2ll5k1gbp2q694g6w837xl2wjy792vqw8";
+      name = "audiotube-22.09.tar.xz";
     };
   };
   calindori = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/calindori-22.06.tar.xz";
-      sha256 = "0fcbkk1yisdd6z1qvac9x6i55wfppqpdma87a0n5smm191lkjg07";
-      name = "calindori-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/calindori-22.09.tar.xz";
+      sha256 = "1pwgdqznp76mhk0ikzjhy3c67qgk91kgv69ygqwzlh5hwiw5sl4n";
+      name = "calindori-22.09.tar.xz";
     };
   };
   kalk = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/kalk-22.06.tar.xz";
-      sha256 = "09c3rfnljjacw55vdrgcpp18vkbbjzq6brcfs6gb0nhfgbjj6ava";
-      name = "kalk-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/kalk-22.09.tar.xz";
+      sha256 = "0sci3jv3asjxahcdz2vkmh90fbffx8lfj1cy5kqnpijdxcm10gfq";
+      name = "kalk-22.09.tar.xz";
     };
   };
   kasts = {
-    version = "22.06";
+    version = "22.09.2";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/kasts-22.06.tar.xz";
-      sha256 = "0hznam4gxrhz1sbykl7wr0mqa6r23mskx5qhp0lq3sxaxiy9jlrk";
-      name = "kasts-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/kasts-22.09.2.tar.xz";
+      sha256 = "10i0b8k1k0ki8pq8hsj979y7np75iaq49bxkyj95zzci9g73vd59";
+      name = "kasts-22.09.2.tar.xz";
     };
   };
   kclock = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/kclock-22.06.tar.xz";
-      sha256 = "1rd2gxbc3p5h1xjwn59vqr5v2xdk8b0m0dx6qsmihx1qnr2k5vrj";
-      name = "kclock-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/kclock-22.09.tar.xz";
+      sha256 = "18b5lncgh9vc94bgrdmzigi853j4l7hqrvggk4hfcklj4pnv1bav";
+      name = "kclock-22.09.tar.xz";
     };
   };
   keysmith = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/keysmith-22.06.tar.xz";
-      sha256 = "0qwfvznjp85y93y3dry5pkcqz6y63wpk2h2p5m3qiymk3qckm9yj";
-      name = "keysmith-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/keysmith-22.09.tar.xz";
+      sha256 = "0w3vvmp9rn6ahly2fm9n6f4glfr7d84bfvj33mrs5pn7n99h7jgy";
+      name = "keysmith-22.09.tar.xz";
     };
   };
   khealthcertificate = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/khealthcertificate-22.06.tar.xz";
-      sha256 = "079j9df21hcfs62ikh2q8sjxq59qiqvinicjvghk708xf0dkl8nh";
-      name = "khealthcertificate-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/khealthcertificate-22.09.tar.xz";
+      sha256 = "16vkjpyxwx34pvdpnci0l6mx2bdjialiscjvbdx53xbsq9ff701k";
+      name = "khealthcertificate-22.09.tar.xz";
     };
   };
   koko = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/koko-22.06.tar.xz";
-      sha256 = "0fcwls7xq0dmb2ghn8x6xq26a4qa9ashnlm8ypcyfmfr4pvxwlml";
-      name = "koko-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/koko-22.09.tar.xz";
+      sha256 = "1z3ysc2f1agbkmm2cxa87x5rk2nx9fjv3czlvcsn8s5ssfdws3gl";
+      name = "koko-22.09.tar.xz";
     };
   };
   kongress = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/kongress-22.06.tar.xz";
-      sha256 = "1mlyqdv0y112z4c56a9746hc8x0xrcvw0qqafm7vvd7hy5idqsrb";
-      name = "kongress-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/kongress-22.09.tar.xz";
+      sha256 = "0pjp2s774sgw2dklqib8alm1a9fkixy3s92i2v8v00znx08zf2jz";
+      name = "kongress-22.09.tar.xz";
     };
   };
   krecorder = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/krecorder-22.06.tar.xz";
-      sha256 = "148gqz5xya1pxw0mhs82dns0wmpvl8h48hrb5hly9jwdymb7143g";
-      name = "krecorder-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/krecorder-22.09.tar.xz";
+      sha256 = "0kcgw7bsyw3bhai2djcq3qjn5ims7i4qbvpm7nwpjkm1p3m7fjii";
+      name = "krecorder-22.09.tar.xz";
     };
   };
   ktrip = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/ktrip-22.06.tar.xz";
-      sha256 = "123770qa8d4xhpgga6gbs7dnnfmka9jshsbkpckvbzl3ndcnlpql";
-      name = "ktrip-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/ktrip-22.09.tar.xz";
+      sha256 = "0x9s4yh2nvy7zmg3ds9bn8ir6wx10i8d0mvfaylbzb39rcabpmrl";
+      name = "ktrip-22.09.tar.xz";
     };
   };
   kweather = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/kweather-22.06.tar.xz";
-      sha256 = "0a47swzvp6z1fdn3vhgfnqz06583x6xsgvf01wsspkz4g2lxj5zk";
-      name = "kweather-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/kweather-22.09.tar.xz";
+      sha256 = "0z3z659y1r1jry02w0hxwcpghkgxgqiwj1kqck07vlg8ks7lz1jz";
+      name = "kweather-22.09.tar.xz";
     };
   };
   neochat = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/neochat-22.06.tar.xz";
-      sha256 = "16wxkc3h0bqlnb7jhkk6qh1v5hj06rwaj7khzqxbm9cj8zh29wdn";
-      name = "neochat-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/neochat-22.09.tar.xz";
+      sha256 = "1j8p6mv89q1krjjbc9n26r83csqpxwd03zzhvzxxm53334qwqdci";
+      name = "neochat-22.09.tar.xz";
     };
   };
   plasma-dialer = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/plasma-dialer-22.06.tar.xz";
-      sha256 = "07sbjmk9hzf1nhk7jhvavikwkb4nmy0bwccs7qa4nf9g2yzbli87";
-      name = "plasma-dialer-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/plasma-dialer-22.09.tar.xz";
+      sha256 = "1wk8q5lc15d53viqyknsww1hgci1rxmnra4hj887fabnj0id29rs";
+      name = "plasma-dialer-22.09.tar.xz";
     };
   };
   plasma-phonebook = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/plasma-phonebook-22.06.tar.xz";
-      sha256 = "00h9plfjgr4bmcay56la074pza2hp4l28a566nbqqivagpn1qz8w";
-      name = "plasma-phonebook-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/plasma-phonebook-22.09.tar.xz";
+      sha256 = "1wsv330sfjh78fg98kd2g6a4bsmdyf7gn9r3aqazci7p7i5n2ln0";
+      name = "plasma-phonebook-22.09.tar.xz";
     };
   };
   plasma-settings = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/plasma-settings-22.06.tar.xz";
-      sha256 = "096zyzxff0b948wnnmdykp9fm87r8xyn8kkndnjkrmacz2p3822m";
-      name = "plasma-settings-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/plasma-settings-22.09.tar.xz";
+      sha256 = "0jq2r7ckz27a8r41n4jn61wlrpcx0qwlasipig4jz7rc9i0ayfka";
+      name = "plasma-settings-22.09.tar.xz";
     };
   };
   plasmatube = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/plasmatube-22.06.tar.xz";
-      sha256 = "009kcba9blhyx8xhbsxawjxayq1vrpi2byig1n1ra848kij0hi3q";
-      name = "plasmatube-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/plasmatube-22.09.tar.xz";
+      sha256 = "00w9p5fcpv4s406lmcdcbrxf19sgkvf9yy8pfjmf1asvvvi8bpnk";
+      name = "plasmatube-22.09.tar.xz";
     };
   };
   qmlkonsole = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/qmlkonsole-22.06.tar.xz";
-      sha256 = "1h244bb566sgfgswgdqkljfdd70z4v52gxm0h5bmvmdqjhb6zg7n";
-      name = "qmlkonsole-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/qmlkonsole-22.09.tar.xz";
+      sha256 = "19bf9f4vxa8arnl1zjappg6kh21br131cbsx902qnpv6y0r3swz1";
+      name = "qmlkonsole-22.09.tar.xz";
     };
   };
   spacebar = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/spacebar-22.06.tar.xz";
-      sha256 = "0jl9gvhf8dfg9y8wwxp0c86rlsmj8inrl7syb25pz57z1mvv4kkr";
-      name = "spacebar-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/spacebar-22.09.tar.xz";
+      sha256 = "0fmk7fa7i67l8ff0amn80yxhf05vf0j9c42zj6qg5p30d1j31pbl";
+      name = "spacebar-22.09.tar.xz";
     };
   };
   telly-skout = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/telly-skout-22.06.tar.xz";
-      sha256 = "09ibm424x5k1kjbay1cn48car6xacz82dk6qwi8ww3jph32jm4pf";
-      name = "telly-skout-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/telly-skout-22.09.tar.xz";
+      sha256 = "1byakylbjjxyz6bh59dydqnvh8c627jpx39ih1ylrdl8jlkd0scy";
+      name = "telly-skout-22.09.tar.xz";
     };
   };
   tokodon = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/tokodon-22.06.tar.xz";
-      sha256 = "0cgg42ys7liab754n9nwbanwl3i7iz587933vvhf5k9zmvx4jqhb";
-      name = "tokodon-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/tokodon-22.09.tar.xz";
+      sha256 = "123vyq9vfl48l7ssrymvkhxlkwihplnssal0wvz4n2dk59byl46p";
+      name = "tokodon-22.09.tar.xz";
     };
   };
   vakzination = {
-    version = "22.06";
+    version = "22.09";
     src = fetchurl {
-      url = "${mirror}/stable/plasma-mobile/22.06/vakzination-22.06.tar.xz";
-      sha256 = "0wa58a9fps9i0brbppcdkda1przxckg7sir8f2p8k842k2qnsvbp";
-      name = "vakzination-22.06.tar.xz";
+      url = "${mirror}/stable/plasma-mobile/22.09/vakzination-22.09.tar.xz";
+      sha256 = "01xzc1di57j0fgzkqwa39jng0fd90laya0rj85vjda7mbh2lxxk6";
+      name = "vakzination-22.09.tar.xz";
     };
   };
 }

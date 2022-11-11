@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, zlib
+{ lib, stdenv, fetchurl, glibc, zlib, libxcrypt
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableSCP ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib libxcrypt ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
   meta = with lib; {
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";

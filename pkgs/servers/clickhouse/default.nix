@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "22.3.2.2";
+  version = "22.8.5.29";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "0rhzgm0gvwpx4h5xyr7y393y7s9slcr4a7grw9316f5m70frxg2v";
+    sha256 = "sha256-JRdZb5YgaumTnjJEYIXh9o3NSv67DAdl9gizVKvGTJI=";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DENABLE_CCACHE=0"
     "-DENABLE_EMBEDDED_COMPILER=ON"
     "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   passthru.tests.clickhouse = nixosTests.clickhouse;
 
   meta = with lib; {
-    homepage = "https://clickhouse.tech/";
+    homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];

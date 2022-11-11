@@ -1,7 +1,7 @@
 { appimageTools
 , fetchurl
 , lib
-, libxkbfile
+, xorg
 , udev
 , wooting-udev-rules
 }:
@@ -26,7 +26,7 @@ appimageTools.wrapType2 rec {
     pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
       udev
       wooting-udev-rules
-      libxkbfile
+      xorg.libxkbfile
     ]);
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 

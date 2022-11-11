@@ -4,6 +4,7 @@
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, fetchpatch
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -31,6 +32,13 @@ let
       name = "${old.pname}-${version}";
       hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
     };
+    patches = [
+      (fetchpatch {
+        name = "turn-off-hard-errors-for-lints.patch";
+        url = "https://github.com/deltachat/deltachat-core-rust/commit/7598c50dbaa2abcbd417d96a02743269f666597b.patch";
+        hash = "sha256-Xss44v6Wf6mL3FK9hH+oFYZ0fBA9rSh4wDrr7nSUibQ=";
+      })
+    ];
   });
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
@@ -73,16 +81,13 @@ in nodePackages.deltachat-desktop.override rec {
   USE_SYSTEM_LIBDELTACHAT = "true";
   VERSION_INFO_GIT_REF = src.rev;
 
-  preRebuild = ''
-    substituteInPlace package.json \
-      --replace "node ./bin/check-nodejs-version.js" true
-  '';
-
-  postInstall = ''
+  postRebuild = ''
     rm -r node_modules/deltachat-node/node/prebuilds
 
     npm run build4production
+  '';
 
+  postInstall = ''
     npm prune --production
 
     install -D $out/lib/node_modules/deltachat-desktop/build/icon.png \

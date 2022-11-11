@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
@@ -77,7 +77,13 @@ core = stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # configure: error: tangle was not found but is required when cross-compiling.
+    texlive.bin.core
+  ];
+
   buildInputs = [
     /*teckit*/ zziplib mpfr gmp
     pixman gd freetype libpng libpaper zlib
@@ -94,7 +100,10 @@ core = stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   configureFlags = common.configureFlags
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc" ]
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
     ++ map (what: "--disable-${what}") [
       "chktex"
@@ -113,7 +122,7 @@ core = stdenv.mkDerivation rec {
 
   # TODO: perhaps improve texmf.cnf search locations
   postInstall = /* links format -> engine will be regenerated in texlive.combine */ ''
-    PATH="$out/bin:$PATH" ${texlinks}/bin/texlinks --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
+    PATH="$out/bin:$PATH" ${buildPackages.texlive.bin.texlinks}/bin/texlinks --cnffile "$out/share/texmf-dist/web2c/fmtutil.cnf" --unlink "$out/bin"
   '' + /* a few texmf-dist files are useful; take the rest from pkgs */ ''
     mv "$out/share/texmf-dist/web2c/texmf.cnf" .
     rm -r "$out/share/texmf-dist"
@@ -169,6 +178,18 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   inherit (common) src prePatch;
 
+  patches = [
+    # improves reproducibility of fmt files. This patch has been proposed upstream,
+    # but they are considering some other approaches as well. This is fairly
+    # conservative so we can safely apply it until they make a decision
+    # https://mailman.ntg.nl/pipermail/dev-luatex/2022-April/006650.html
+    (fetchpatch {
+      name = "reproducible_exception_strings.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
+      sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
+    })
+  ];
+
   hardeningDisable = [ "format" ];
 
   inherit (core) nativeBuildInputs;
@@ -202,7 +223,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
         if [[ "$path" =~ "libs/pplib" ]]; then
           # TODO: revert for texlive 2022
           # ../../../texk/web2c/luatexdir/luamd5/md5lib.c:197:10: fatal error: 'utilsha.h' file not found
-          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+          make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
         fi
       )
     done
@@ -336,6 +357,7 @@ latexindent = perlPackages.buildPerlPackage rec {
 pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
+  format = "other";
 
   src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
 

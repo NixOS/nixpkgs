@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -31,15 +31,16 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.15.0";
+  version = "1.0.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "sha256-E36zXpv+9WBNYvv/shItS7Q34gYqUyADlqWd+m4Jpps=";
+    hash = "sha256-KJ+z4zGrdGIXcGZzqHtWMf8aAzcn9CtltFawcHVldMQ=";
   };
 
   sourceRoot = "source/${pname}";
@@ -48,8 +49,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy" \
-      --replace "sympy<1.10" "sympy"
+      --replace "numpy~=1.16" "numpy"
   '';
 
   propagatedBuildInputs = [
@@ -80,20 +80,25 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = lib.optionals (!withContribRequires) [
-    # requires external (unpackaged) libraries, so untested.
+    # Requires external (unpackaged) libraries, so untested
     "cirq/contrib/"
+    # No need to test the version number
+    "cirq/_version_test.py"
   ];
+
   disabledTests = [
-    "test_metadata_search_path" # tries to import flynt, which isn't in Nixpkgs
-    "test_benchmark_2q_xeb_fidelities" # fails due pandas MultiIndex. Maybe issue with pandas version in nix?
+    # Tries to import flynt, which isn't in Nixpkgs
+    "test_metadata_search_path"
+    # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
+    "test_benchmark_2q_xeb_fidelities"
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger fab ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

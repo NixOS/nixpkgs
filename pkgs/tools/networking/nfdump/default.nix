@@ -2,7 +2,7 @@
 , autoconf, automake, libtool, pkg-config
 , bzip2, libpcap, flex, bison }:
 
-let version = "1.6.23"; in
+let version = "1.7.0.1"; in
 
 stdenv.mkDerivation {
   pname = "nfdump";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "phaag";
     repo = "nfdump";
     rev = "v${version}";
-    sha256 = "sha256-aM7U+JD8EtxEusvObsRgqS0aqfTfF3vYxCqvw0bgX20=";
+    sha256 = "sha256-yD/NFGw38ishqQmKhlnHYodXmJuezI09hxNsyObZ1QE=";
   };
 
   nativeBuildInputs = [ autoconf automake flex libtool pkg-config bison ];

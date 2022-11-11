@@ -128,7 +128,7 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "2.034";
+    version = "2.038";
     emojiPythonEnv =
       buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenvNoCC.mkDerivation {
@@ -139,7 +139,7 @@ in
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
+      sha256 = "1rgmcc6nqq805iqr8kvxxlk5cf50q714xaxk3ld6rjrd69kb8ix9";
     };
 
     depsBuildBuild = [
@@ -171,8 +171,10 @@ in
     enableParallelBuilding = true;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/share/fonts/noto
-      cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
+      cp NotoColorEmoji.ttf $out/share/fonts/noto
+      runHook postInstall
     '';
 
     meta = with lib; {

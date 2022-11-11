@@ -39,7 +39,7 @@ gem 'sprockets', '3.7.2'
 # allows us to precompile all our templates in the unicorn master
 gem 'actionview_precompiler', require: false
 
-gem 'seed-fu'
+gem 'discourse-seed-fu'
 
 gem 'mail', git: 'https://github.com/discourse/mail.git'
 gem 'mini_mime'
@@ -134,13 +134,10 @@ gem 'cose', require: false
 gem 'addressable'
 gem 'json_schemer'
 
-if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.1")
-  # net-smtp, net-imap and net-pop were removed from default gems in Ruby 3.1
-  gem "net-smtp", "~> 0.2.1", require: false
-  gem "net-imap", "~> 0.2.1", require: false
-  gem "net-pop", "~> 0.1.1", require: false
-  gem "digest", "3.0.0", require: false
-end
+gem "net-smtp", require: false
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "digest", require: false
 
 # Gems used only for assets and not required in production environments by default.
 # Allow everywhere for now cause we are allowing asset debugging in production
@@ -149,11 +146,14 @@ group :assets do
 end
 
 group :test do
+  gem 'capybara', require: false
   gem 'webmock', require: false
   gem 'fakeweb', require: false
   gem 'minitest', require: false
   gem 'simplecov', require: false
+  gem 'selenium-webdriver', require: false
   gem "test-prof"
+  gem 'webdrivers', require: false
 end
 
 group :test, :development do
@@ -170,7 +170,7 @@ group :test, :development do
   gem 'shoulda-matchers', require: false
   gem 'rspec-html-matchers'
   gem 'byebug', require: ENV['RM_INFO'].nil?, platform: :mri
-  gem 'rubocop-discourse', require: false, github: 'discourse/rubocop-discourse'
+  gem 'rubocop-discourse', require: false
   gem 'parallel_tests'
 
   gem 'rswag-specs'
@@ -268,6 +268,9 @@ gem 'colored2', require: false
 gem 'maxminddb'
 
 gem 'rails_failover', require: false
+
+gem 'faraday'
+gem 'faraday-retry'
 
 # workaround for faraday-net_http, see
 # https://github.com/ruby/net-imap/issues/16#issuecomment-803086765

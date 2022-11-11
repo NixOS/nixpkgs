@@ -1,15 +1,17 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.11.0";
+  version = "1.72.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,11 +20,16 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-j0bD8JtcMRX+G0QaxbSUqmGUw/ubrmz1ngGyzaR9UHA=";
+    hash = "sha256-7KsikrHfk0EGtLOzO8qGyU8ZzqNshijDJgnDLn16Eis=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
   ];
 
   checkInputs = [
@@ -32,12 +39,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" "" \
-      --replace "[tool.poetry.group.dev.dependencies]" ""
+      --replace " --cov=dbus_fast --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
     "dbus_fast"
+    "dbus_fast.aio"
+    "dbus_fast.service"
+    "dbus_fast.message"
   ];
 
   disabledTests = [
@@ -69,9 +78,18 @@ buildPythonPackage rec {
     "test_standard_interfaces"
     "test_tcp_connection_with_forwarding"
     "test_unexpected_disconnect"
+    # NameError: name '_cast_uint32_native' is not defined
+    "test_unmarshall_bluez_interfaces_added_message"
+    "test_unmarshall_bluez_interfaces_removed_message"
+    "test_unmarshall_bluez_message"
+    "test_unmarshall_bluez_properties_changed_with_service_data"
+    "test_unmarshall_can_resume"
+    "test_unmarshalling_with_table"
+    "test_ay_buffer"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/v${version}";
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
     license = licenses.mit;

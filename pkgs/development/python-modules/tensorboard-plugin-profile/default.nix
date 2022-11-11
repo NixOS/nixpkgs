@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
 , gviz-api
 , protobuf
 , werkzeug
@@ -16,6 +19,10 @@ buildPythonPackage rec {
     python = "py3";
     hash = "sha256-2LzXSdPrzS5G63ONvchdEL4aJD75eU9dF1pMqLcfbto=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     gviz-api

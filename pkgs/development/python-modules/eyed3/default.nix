@@ -11,13 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.9.6";
+  version = "0.9.7";
   pname    = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b5064ec0fb3999294cca0020d4a27ffe4f29149e8292fdf7b2de9b9cabb7518";
+    sha256 = "sha256-k7GOk5M3akURT5QJ18yhGftvT5o31LaXtQCvSLTFzw8=";
   };
 
   # requires special test data:

@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.3";
-  srcSha256 = "sha256-HOOH3H2SXLcT2oW/xL80TO+ZSI+Haulnznpb4hlCQow=";
-  yarnSha256 = "sha256-x9g0vSoexfknqLejgcNIigmkFnqYsmhcQNTOStcj68o=";
+  version = "0.15.5";
+  srcSha256 = "yaA2PKw4xuqd8vGXh/GhcJJHw4mJ1z97tWJTREE14ow=";
+  yarnSha256 = "1jpb4gblmknl81f6iclqg8ba82ca931q38xpm0kzki8y5ayk9n67";
 in
 {
   inherit version yarnSha256;
@@ -31,6 +31,6 @@ in
   meta = with lib; {
     homepage = "https://woodpecker-ci.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie ];
+    maintainers = with maintainers; [ ambroisie techknowlogick ];
   };
 }

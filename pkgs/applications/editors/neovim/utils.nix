@@ -1,11 +1,11 @@
 { lib
-, buildLuarocksPackage
 , callPackage
 , vimUtils
 , nodejs
 , neovim-unwrapped
 , bundlerEnv
 , ruby
+, lua
 , python3Packages
 , writeText
 , wrapNeovimUnstable
@@ -116,8 +116,8 @@ let
         ] ++ lib.optionals (binPath != "") [
           "--suffix" "PATH" ":" binPath
         ] ++ lib.optionals (luaEnv != null) [
-          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaPathAbsStr luaEnv)
-          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
         ];
 
       manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
@@ -193,7 +193,7 @@ in
   inherit legacyWrapper;
 
   buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
-    inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
-    inherit buildLuarocksPackage;
+    inherit (vimUtils) toVimPlugin;
+    inherit lua;
   };
 }

@@ -41,6 +41,7 @@ in
 buildPythonPackage rec {
   pname = "rdkit";
   version = "2022.03.5";
+  format = "other";
 
   src =
     let

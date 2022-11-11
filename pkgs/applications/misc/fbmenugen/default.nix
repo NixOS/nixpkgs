@@ -66,7 +66,7 @@ perlPackages.buildPerlPackage rec {
     wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
-  passthru.updateScript = gitUpdater { inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/trizen/fbmenugen";
