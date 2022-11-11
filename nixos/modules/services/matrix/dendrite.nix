@@ -91,6 +91,7 @@ in
           server_name = lib.mkOption {
             type = lib.types.str;
             example = "example.com";
+            default = "localhost";
             description = lib.mdDoc ''
               The domain name of the server, with optional explicit port.
               This is used by remote servers to connect to this server.
@@ -102,6 +103,7 @@ in
               lib.types.path
               (lib.types.strMatching "^\\$CREDENTIALS_DIRECTORY/.+");
             example = "$CREDENTIALS_DIRECTORY/private_key";
+            default = "${workingDir}/matrix_key.pem";
             description = lib.mdDoc ''
               The path to the signing private key file, used to sign
               requests and events.
@@ -320,6 +322,14 @@ in
         "network.target"
       ];
       wantedBy = [ "multi-user.target" ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -i ${configurationYaml} \
+          -o /run/dendrite/dendrite.yaml
+        if ! [ -s "${cfg.settings.global.private_key}" ]; then
+          ${pkgs.dendrite}/bin/generate-keys --private-key ${cfg.settings.global.private_key}
+        fi
+      '';
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
@@ -330,11 +340,6 @@ in
         LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         LoadCredential = cfg.loadCredential;
-        ExecStartPre = ''
-          ${pkgs.envsubst}/bin/envsubst \
-            -i ${configurationYaml} \
-            -o /run/dendrite/dendrite.yaml
-        '';
         ExecStart = lib.strings.concatStringsSep " " ([
           "${pkgs.dendrite}/bin/dendrite-monolith-server"
           "--config /run/dendrite/dendrite.yaml"
