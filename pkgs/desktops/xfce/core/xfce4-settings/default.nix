@@ -5,9 +5,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.16.3";
+  version = "4.16.4";
 
-  sha256 = "sha256-Jd1PJrIqzsutParZu8rNMuzHnycjr3eeZGXWIG3PqZY=";
+  sha256 = "sha256-w/wnLa3NuOV/2LlDPMCEG3z+k3pW+MPHtqx5L5NdOJs=";
 
   postPatch = ''
     for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
