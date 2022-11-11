@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
-, wafHook
 , pkg-config
 , bison
 , flex
@@ -46,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.9";
+  version = "4.17.2";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-loKixxwv8lOqJ8uwEmDqyJf/YlzznbIO4yBz5Thv4hk=";
+    hash = "sha256-5V3fTVF4+MhDFqv1PF7dezU5njt9hry4G3UmHIJ7s7g=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -60,17 +59,16 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
-    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
   ];
 
   nativeBuildInputs = [
     python3Packages.python
-    wafHook
     pkg-config
     bison
     flex
     perl
     perl.pkgs.ParseYapp
+    perl.pkgs.JSON
     libxslt
     buildPackages.stdenv.cc
     heimdal
@@ -108,8 +106,6 @@ stdenv.mkDerivation rec {
     ++ optional enableAcl acl
     ++ optional enablePam pam;
 
-  wafPath = "buildtools/bin/waf";
-
   postPatch = ''
     # Removes absolute paths in scripts
     sed -i 's,/sbin/,,g' ctdb/config/functions
@@ -124,7 +120,7 @@ stdenv.mkDerivation rec {
     export PKGCONFIG="$PKG_CONFIG"
   '';
 
-  wafConfigureFlags = [
+  configureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--enable-fhs"

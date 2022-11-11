@@ -1597,6 +1597,8 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
+  ludusavi = callPackage ../applications/backup/ludusavi { };
+
   maiko = callPackage ../applications/emulators/maiko { };
 
   mame = libsForQt5.callPackage ../applications/emulators/mame {
@@ -4864,6 +4866,10 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  smokegen = callPackage ../development/libraries/smokegen {};
+
+  smokeqt = callPackage ../development/libraries/smokeqt {};
+
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
@@ -7360,6 +7366,8 @@ with pkgs;
   godot-headless = callPackage ../development/tools/godot/3/headless.nix { };
 
   godot-server = callPackage ../development/tools/godot/3/server.nix { };
+
+  goeland = callPackage ../applications/networking/feedreaders/goeland { };
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -21341,6 +21349,8 @@ with pkgs;
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
 
+  nanomq = callPackage ../servers/mqtt/nanomq { };
+
   mps = callPackage ../development/libraries/mps { stdenv = gcc10StdenvCompat; };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
@@ -25010,7 +25020,9 @@ with pkgs;
 
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
-  humility = callPackage ../development/tools/rust/humility {};
+  humility = callPackage ../development/tools/rust/humility {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   btop = callPackage ../tools/system/btop {
     stdenv = gcc11Stdenv;
@@ -30071,6 +30083,8 @@ with pkgs;
     inherit (ocaml-ng.ocamlPackages_4_09) ocaml;
   };
 
+  lls = callPackage ../applications/networking/lls { };
+
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -31751,6 +31765,8 @@ with pkgs;
   secretscanner = callPackage ../tools/security/secretscanner { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
+
+  semver = callPackage ../applications/misc/semver { };
 
   sent = callPackage ../applications/misc/sent { };
 

@@ -863,6 +863,12 @@
       </listitem>
       <listitem>
         <para>
+          Linux 4.9 has been removed because it will reach its end of
+          life within the lifespan of 22.11.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           (Neo)Vim can not be configured with
           <literal>configure.pathogen</literal> anymore to reduce
           maintainance burden. Use <literal>configure.packages</literal>
@@ -1187,6 +1193,13 @@ signald -d /var/lib/signald/db \
           uses DocBook documentation; it defaults to
           <literal>true</literal> to preserve the previous behavior and
           will be removed once the transition to CommonMark is complete.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The redis module now persists each instance’s configuration
+          file in the state directory, in order to support some more
+          advanced use cases like sentinel.
         </para>
       </listitem>
       <listitem>

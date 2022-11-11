@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "insilica";
     repo = "rs-srvc";
     rev = "v${version}";
-    sha256 = "sha256-XGZ6Jr/RVDOLDa0sANZIsKtNjY3pEBlOtei+xNGPBBY=";
+    sha256 = "sha256-2eEuKAMxxTwjDInpYcOlFJha5DTe0IrxT5rI6ymN0hc=";
   };
 
-  cargoSha256 = "sha256-sjMg5XMnAQZjp6z9prtRq+0pyNQ1oTm0/KWOZPxDW4w=";
+  cargoSha256 = "sha256-nJM7/w4awbCZQysUOSTO6bfsBXO3agJRdp1RyRZhtUY=";
+
+  # remove timeouts in tests to make them less flaky
+  patches = [ ./tests-no-timeout.patch ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
@@ -22,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/insilica/rs-srvc";
     license = licenses.asl20;
     maintainers = with maintainers; [ john-shaffer ];
+    mainProgram = "sr";
   };
 }

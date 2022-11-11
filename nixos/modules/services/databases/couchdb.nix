@@ -34,13 +34,7 @@ in {
 
     services.couchdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to run CouchDB Server.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "CouchDB Server");
 
       package = mkOption {
         type = types.package;
