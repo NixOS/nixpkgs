@@ -113,16 +113,6 @@ in
               ```
             '';
           };
-          trusted_third_party_id_servers = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            example = [ "matrix.org" ];
-            default = [ "matrix.org" "vector.im" ];
-            description = lib.mdDoc ''
-              Lists of domains that the server will trust as identity
-              servers to verify third party identifiers such as phone
-              numbers and email addresses
-            '';
-          };
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
@@ -137,16 +127,6 @@ in
                 start with `file:`.
               '';
             };
-          };
-        };
-        options.client_api = {
-          registration_disabled = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = lib.mdDoc ''
-              Whether to disable user registration to the server
-              without the shared secret.
-            '';
           };
         };
         options.federation_api.database = {
@@ -214,25 +194,6 @@ in
             '';
           };
         };
-        options.sync_api.search = {
-          enable = lib.mkEnableOption (lib.mdDoc "Dendrite's full-text search engine");
-          index_path = lib.mkOption {
-            type = lib.types.str;
-            default = "${workingDir}/searchindex";
-            description = lib.mdDoc ''
-              The path the search index will be created in.
-            '';
-          };
-          language = lib.mkOption {
-            type = lib.types.str;
-            default = "en";
-            description = lib.mdDoc ''
-              The language most likely to be used on the server - used when indexing, to
-              ensure the returned results match expectations. A full list of possible languages
-              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
-            '';
-          };
-        };
         options.user_api = {
           account_database = {
             connection_string = lib.mkOption {
@@ -267,11 +228,12 @@ in
         for available options with which to populate settings.
       '';
     };
-    openRegistration = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    extraFlags = lib.mkOption {
+      default = [ ];
+      example = [ "-really-enable-open-registration" ];
+      type = lib.types.listOf lib.types.str;
       description = lib.mdDoc ''
-        Allow open registration without secondary verification (reCAPTCHA).
+        Extra arguments to use for executing dendrite.
       '';
     };
   };
@@ -349,9 +311,7 @@ in
           "--https-bind-address :${builtins.toString cfg.httpsPort}"
           "--tls-cert ${cfg.tlsCert}"
           "--tls-key ${cfg.tlsKey}"
-        ] ++ lib.optionals cfg.openRegistration [
-          "--really-enable-open-registration"
-        ]);
+        ] ++ cfg.extraFlags);
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
