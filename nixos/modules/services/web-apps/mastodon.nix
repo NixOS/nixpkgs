@@ -213,7 +213,7 @@ in {
       };
 
       localDomain = lib.mkOption {
-        description = lib.mdDoc "The domain serving your Mastodon instance. Configure with example.com here to enable pretty @username@example.com style usernames";
+        description = lib.mdDoc "The domain serving your Mastodon instance. If webDomain is configured to host the application on a subdomain then enable pretty @username@example.com style usernames on your domain root is possible";
         example = "example.org";
         type = lib.types.str;
       };
