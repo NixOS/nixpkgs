@@ -108,7 +108,7 @@ in {
       default = "";
       example = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Additional shell commands inserted in the bootloader installer
         script after generating menu entries.
       '';
