@@ -7,26 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
-  version = "2.6.4";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
     rev = version;
-    sha256 = "sha256-+kAdCM5PEFNxKNmJmf2ASTyUKA7xnbMAA7kP/emoaeI=";
+    sha256 = "sha256-zWHQ01iNTlqSAKcmsDCUZPXmmBIpqY/ZDftD5J6kp80=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
 
-  preConfigure = ''
-    cp ${obs-studio.src}/cmake/external/ObsPluginHelpers.cmake cmake/
+  postInstall = ''
+    rm -rf $out/obs-plugins $out/data
   '';
-
-  cmakeFlags = [
-    "-DBUILD_OUT_OF_TREE=On"
-    "-Wno-dev"
-  ];
 
   meta = with lib; {
     description = "Plugin for OBS Studio to move source to a new position during scene transition";

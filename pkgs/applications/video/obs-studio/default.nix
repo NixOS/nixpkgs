@@ -1,9 +1,4 @@
-{ version
-, sha256
-, extraPatches ? [ ]
-, extraBuildInputs ? [ ]
-, extraCMakeFlags ? [ ]
-, config
+{ config
 , lib
 , stdenv
 , fetchFromGitHub
@@ -41,6 +36,10 @@
 , pipewireSupport ? stdenv.isLinux
 , pipewire
 , libdrm
+, libajantv2
+, librist
+, srt
+, qtwayland
 , wrapQtAppsHook
 , ...
 }:
@@ -51,20 +50,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "obs-studio";
-  inherit version;
+  version = "28.1.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    inherit sha256;
+    sha256 = "sha256-M5UEOtdzXBVY0UGfwWx3MsM28bJ1EcVPl8acWXWV0lg=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
-  ] ++ extraPatches;
+    ./Provide-runtime-plugin-destination-as-relative-path.patch
+  ];
 
   nativeBuildInputs = [
     addOpenGLRunpath
@@ -94,8 +94,11 @@ stdenv.mkDerivation rec {
     libvlc
     mbedtls
     pciutils
+    libajantv2
+    librist
+    srt
+    qtwayland
   ]
-  ++ extraBuildInputs
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
@@ -123,7 +126,8 @@ stdenv.mkDerivation rec {
     # Add support for browser source
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
-  ] ++ extraCMakeFlags;
+    "-DENABLE_JACK=ON"
+  ];
 
   dontWrapGApps = true;
   preFixup = ''
