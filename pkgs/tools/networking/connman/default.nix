@@ -1,6 +1,7 @@
-{ callPackage }:
+{ lib, pkgs }:
 
-{
+lib.makeScope pkgs.newScope (self: with self; {
+
   # All the defaults
   connman = callPackage ./connman { };
 
@@ -37,4 +38,12 @@
     enableClient = false;
     # enableDatafiles = false; # If disabled, configuration and data files are not installed
   };
-}
+
+  connman_dmenu = callPackage ./connman_dmenu { };
+
+  connman-gtk = callPackage ./connman-gtk { };
+
+  connman-ncurses = callPackage ./connman-ncurses { };
+
+  connman-notify = callPackage ./connman-notify { };
+})
