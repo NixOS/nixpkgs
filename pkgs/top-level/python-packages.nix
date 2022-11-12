@@ -1564,6 +1564,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connio = callPackage ../development/python-modules/connio { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   coqui-trainer = callPackage ../development/python-modules/coqui-trainer {};
