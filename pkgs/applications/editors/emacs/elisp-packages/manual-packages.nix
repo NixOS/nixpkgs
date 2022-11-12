@@ -4,27 +4,7 @@ self: with self; {
 
   elisp-ffi = callPackage ./elisp-ffi { };
 
-  ghc-mod = melpaBuild {
-    pname = "ghc";
-    version = pkgs.haskellPackages.ghc-mod.version;
-
-    src = pkgs.haskellPackages.ghc-mod.src;
-
-    packageRequires = [ haskell-mode ];
-
-    propagatedUserEnvPkgs = [ pkgs.haskellPackages.ghc-mod ];
-
-    recipe = pkgs.writeText "recipe" ''
-      (ghc-mod :repo "DanielG/ghc-mod" :fetcher github :files ("elisp/*.el"))
-    '';
-
-    fileSpecs = [ "elisp/*.el" ];
-
-    meta = {
-      description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
-      license = lib.licenses.bsd3;
-    };
-  };
+  ghc-mod = callPackage ./elisp-ffi { };
 
   haskell-unicode-input-method = let
     rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
