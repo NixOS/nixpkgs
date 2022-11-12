@@ -11221,6 +11221,8 @@ self: super: with self; {
 
   tox = callPackage ../development/python-modules/tox { };
 
+  tplink-omada-client = callPackage ../development/python-modules/tplink-omada-client { };
+
   tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
 
   tqdm = callPackage ../development/python-modules/tqdm { };
