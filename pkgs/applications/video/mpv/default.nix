@@ -4,11 +4,10 @@
 , fetchFromGitHub
 , addOpenGLRunpath
 , docutils
-, perl
+, meson
+, ninja
 , pkg-config
 , python3
-, wafHook
-, which
 , ffmpeg
 , freefont_ttf
 , freetype
@@ -100,37 +99,31 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
-  # These flags are not supported and cause the build
-  # to fail, even when cross compilation itself works.
-  dontAddWafCrossFlags = true;
+  mesonFlags = let
+    mesonFeatureFlag = feature: flag: "-D${feature}=${if flag then "enabled" else "disabled"}";
+  in [
+    "-Ddefault_library=shared"
+    "-Dlibmpv=true"
+    (mesonFeatureFlag "libarchive" archiveSupport)
+    (mesonFeatureFlag "manpage-build" true)
+    (mesonFeatureFlag "cdda" cddaSupport)
+    (mesonFeatureFlag "dvbin" dvbinSupport)
+    (mesonFeatureFlag "dvdnav" dvdnavSupport)
+    (mesonFeatureFlag "openal" openalSupport)
+    (mesonFeatureFlag "sdl2" sdl2Support)
+    # Disable whilst Swift isn't supported
+    (mesonFeatureFlag "macos-cocoa-cb" swiftSupport)
+  ];
 
-  wafConfigureFlags = [
-    "--enable-libmpv-shared"
-    "--enable-manpage-build"
-    "--disable-libmpv-static"
-    "--disable-static-build"
-    "--disable-build-date" # Purity
-    (lib.enableFeature archiveSupport  "libarchive")
-    (lib.enableFeature cddaSupport     "cdda")
-    (lib.enableFeature dvdnavSupport   "dvdnav")
-    (lib.enableFeature javascriptSupport "javascript")
-    (lib.enableFeature openalSupport   "openal")
-    (lib.enableFeature sdl2Support     "sdl2")
-    (lib.enableFeature sixelSupport    "sixel")
-    (lib.enableFeature vaapiSupport    "vaapi")
-    (lib.enableFeature waylandSupport  "wayland")
-    (lib.enableFeature dvbinSupport  "dvbin")
-  ] # Disable whilst Swift isn't supported
-    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+  mesonAutoFeatures = "auto";
 
   nativeBuildInputs = [
     addOpenGLRunpath
     docutils # for rst2man
-    perl
+    meson
+    ninja
     pkg-config
     python3
-    wafHook
-    which
   ] ++ lib.optionals swiftSupport [ swift ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
@@ -175,8 +168,6 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
     ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString stdenv.isDarwin ''
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
@@ -186,13 +177,10 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-    cp TOOLS/mpv_identify.sh $out/bin
-    cp TOOLS/umpv $out/bin
+    cp ../TOOLS/mpv_identify.sh $out/bin
+    cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
-
-    substituteInPlace $out/lib/pkgconfig/mpv.pc \
-      --replace "$out/include" "$dev/include"
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
@@ -227,6 +215,6 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = platforms.unix;
   };
 }
