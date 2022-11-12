@@ -10362,6 +10362,8 @@ self: super: with self; {
 
   socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
 
+  sockio = callPackage ../development/python-modules/sockio { };
+
   sockjs = callPackage ../development/python-modules/sockjs { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
