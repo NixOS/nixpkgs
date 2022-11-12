@@ -3218,6 +3218,12 @@
     githubId = 798427;
     name = "Davor Babic";
   };
+  davsanchez = {
+    email = "davidslt+nixpkgs@pm.me";
+    github = "davsanchez";
+    githubId = 11422515;
+    name = "David Sánchez";
+  };
   dawidsowa = {
     email = "dawid_sowa@posteo.net";
     github = "dawidsowa";
