@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  cmakeFlags = lib.optional stdenv.isLinux [
+  cmakeFlags = lib.optionals stdenv.isLinux [
     "-DINSTALL_UDEV_RULES=ON"
     "-DWITH_RPC=ON"
   ];

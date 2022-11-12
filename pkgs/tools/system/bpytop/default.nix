@@ -45,8 +45,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ aw ];
     platforms = with platforms; linux ++ freebsd ++ darwin;
-
-    # https://github.com/NixOS/nixpkgs/pull/94625#issuecomment-668509399
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

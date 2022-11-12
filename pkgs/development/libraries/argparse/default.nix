@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vbf4kePi5gfg9ub4aP1cCK1jtiA65bUS9+5Ghgvxt/E=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '$'{CMAKE_INSTALL_LIBDIR_ARCHIND} '$'{CMAKE_INSTALL_LIBDIR}
+    substituteInPlace packaging/pkgconfig.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   nativeBuildInputs = [
     cmake
   ];

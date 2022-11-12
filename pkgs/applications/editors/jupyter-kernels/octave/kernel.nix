@@ -1,4 +1,4 @@
-{ lib, octave, python3Packages }:
+{ lib, python3Packages }:
 
 with python3Packages;
 

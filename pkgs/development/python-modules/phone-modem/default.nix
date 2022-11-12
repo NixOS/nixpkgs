@@ -17,6 +17,11 @@ buildPythonPackage rec {
     sha256 = "sha256-7NahK9l67MdT/dDVXsq+y0Z4cZxZ/WUW2kPpE4Wz6j0=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "aioserial==1.3.0" "aioserial"
+  '';
+
   propagatedBuildInputs = [
     aioserial
   ];

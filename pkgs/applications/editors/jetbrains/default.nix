@@ -86,6 +86,22 @@ let
       };
     });
 
+  buildGateway = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+      product = "Gateway";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/remote-development/gateway/";
+        inherit description license platforms;
+        longDescription = ''
+          JetBrains Gateway is a lightweight launcher that connects a remote
+          server with your local machine, downloads necessary components on the
+          backend, and opens your project in JetBrains Client.
+        '';
+        maintainers = with maintainers; [ kouyk ];
+      };
+    });
+
   buildGoland = { pname, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk;
@@ -167,7 +183,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ ];
+        maintainers = with maintainers; [ dritter ];
       };
     });
 
@@ -299,6 +315,19 @@ in
     };
     wmClass = "jetbrains-datagrip";
     update-channel = products.datagrip.update-channel;
+  };
+
+  gateway = buildGateway rec {
+    pname = "gateway";
+    version = products.gateway.version;
+    description = "Your single entry point to all remote development environments";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.gateway.url;
+      sha256 = products.gateway.sha256;
+    };
+    wmClass = "jetbrains-gateway";
+    update-channel = products.gateway.update-channel;
   };
 
   goland = buildGoland rec {

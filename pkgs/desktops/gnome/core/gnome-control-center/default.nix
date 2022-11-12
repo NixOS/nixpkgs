@@ -33,6 +33,7 @@
 , libpulseaudio
 , libpwquality
 , librsvg
+, webp-pixbuf-loader
 , libsecret
 , libwacom
 , libxml2
@@ -63,18 +64,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "42.3";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zgrjZQ3ir368sKfh/JkS7dtu/40lfz/lD/iynBk0HH4=";
+    sha256 = "sha256-6YvGt4Sv0E8pfbXo5sWZEOLNCQMycQd08m3I3omvT8c=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
     })
@@ -135,19 +135,20 @@ stdenv.mkDerivation rec {
     upower
   ];
 
-  # postPatch = ''
-  #   scriptsToPatch=(
-  #     build-aux/meson/meson_post_install.py
-  #     build-aux/meson/find_xdg_file.py
-  #   )
-  #   # # patchShebangs requires executable file
-  #   # chmod +x "''${scriptsToPatch[@]}"
-  #   # patchShebangs "''${scriptsToPatch[@]}"
-  # '';
-
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''

@@ -13,6 +13,7 @@
 , gobject-introspection
 , libadwaita
 , librsvg
+, gtk4
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,10 +41,11 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     wrapGAppsHook4
+    gobject-introspection
+    gtk4 # for gtk4-update-icon-cache
   ];
 
   buildInputs = [
-    gobject-introspection
     libadwaita
     librsvg
   ];

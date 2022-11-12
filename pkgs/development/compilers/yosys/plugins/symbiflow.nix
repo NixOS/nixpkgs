@@ -4,29 +4,28 @@
 , python3
 , readline
 , stdenv
-, which
 , yosys
 , zlib
 , yosys-symbiflow
+, uhdm
+, surelog
+, flatbuffers
 }: let
 
   src = fetchFromGitHub {
-    owner  = "SymbiFlow";
-    repo   = "yosys-symbiflow-plugins";
-    rev    = "35c6c33811a8de7c80dff6a7bcf7aa6ec9b21233";
-    hash   = "sha256-g5dX9+R+gWt8e7Bhbbg60O9qa+Vi6Ar0M1sHhYlAre8=";
+    owner  = "chipsalliance";
+    repo   = "yosys-f4pga-plugins";
+    rev    = "e23ff6db487da9ceea576c53ac33853566c3a84e";
+    hash   = "sha256-HJ4br6lQwRrcnkLgV3aecr3T3zcPzA11MfxhRjwIb0I=";
   };
 
-  version = "2022.01.06";
+  version = "2022.11.07";
 
   # Supported symbiflow plugins.
   #
   # The following are disabled:
   #
   # "ql-qlf" builds but fails to load the plugin, so is not currently supported.
-  #
-  # "UHDM" doesn't currently build, as the work to package UHDM and surelog has
-  # not (yet) been undertaken.
   plugins = [
     "design_introspection"
     "fasm"
@@ -36,7 +35,7 @@
     # "ql-qlf"
     "sdc"
     "xdc"
-    # "UHDM"
+    "systemverilog"
   ];
 
   static_gtest = gtest.dev.overrideAttrs (old: {
@@ -50,8 +49,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   inherit src version plugin;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which python3 ];
-  buildInputs = [ yosys readline zlib ] ;
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ yosys readline zlib uhdm surelog ];
 
   # xdc has an incorrect path to a test which has yet to be patched
   doCheck = plugin != "xdc";
@@ -62,6 +61,7 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   patches = lib.optional ( plugin == "ql-qlf" ) ./symbiflow-pmgen.patch;
 
   preBuild = ''
+    export LDFLAGS="-L${flatbuffers}/lib"
     mkdir -p ql-qlf-plugin/pmgen
   ''
   + lib.optionalString ( plugin == "ql-qlf" ) ''
@@ -70,8 +70,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   # Providing a symlink avoids the need for patching the test makefile
   postUnpack = ''
-    mkdir -p source/third_party/googletest/googletest/build/
-    ln -s ${static_gtest}/lib source/third_party/googletest/googletest/build/lib
+    mkdir -p source/third_party/googletest/build/
+    ln -s ${static_gtest}/lib source/third_party/googletest/build/lib
   '';
 
   makeFlags = [
@@ -102,5 +102,3 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ollieB thoughtpolice ];
   };
 }))
-
-

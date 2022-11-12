@@ -52,7 +52,17 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
     eprint(f" - {package['name']}: UPDATING ...")
 
     try:
-        update_process = await check_subprocess('env', f"UPDATE_NIX_ATTR_PATH={package['attrPath']}", *update_script_command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+        update_process = await check_subprocess(
+            'env',
+            f"UPDATE_NIX_NAME={package['name']}",
+            f"UPDATE_NIX_PNAME={package['pname']}",
+            f"UPDATE_NIX_OLD_VERSION={package['oldVersion']}",
+            f"UPDATE_NIX_ATTR_PATH={package['attrPath']}",
+            *update_script_command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            cwd=worktree,
+        )
         update_info = await update_process.stdout.read()
 
         await merge_changes(merge_lock, package, update_info, temp_dir)

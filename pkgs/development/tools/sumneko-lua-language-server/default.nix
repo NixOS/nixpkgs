@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "3.5.6";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-S07/N6Cq/YG0kS2riPI8wy/fOxPHkMrGqpmUd+ymwJ0=";
+    sha256 = "sha256-jlx2Tn5NuHq7OFHPHOknZfLAbQanWLMTsw7wO1SJOkk=";
     fetchSubmodules = true;
   };
 
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath='~/.cache/sumneko_lua/log' \
-      --metapath='~/.cache/sumneko_lua/meta'"
+      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/log \
+      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/meta"
 
     runHook postInstall
   '';

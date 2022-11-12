@@ -1,52 +1,67 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
 , gnome
 , glib
-, gtk3
-, wrapGAppsHook
+, gtk4
+, desktop-file-utils
+, wrapGAppsHook4
 , gettext
 , itstool
-, libhandy
+, libadwaita
 , libxml2
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , systemd
-, python3
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "TV5FFp1r9DkC16npoHk8kW65LaumuoWzXI629nLNq9c=";
+    sha256 = "M6k7l17CfISHglBIqnuK99XCNWWrz3t0yQKrez7CCGE=";
   };
 
+  patches = [
+    # Remove GTK 3 depndency
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/46
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/32193a1385b95012bc8e7007ada89566bd63697d.patch";
+      sha256 = "5WsTnfVpWZquU65pSLnk2M6VnY+qQPUi7A0cqMmzfrU=";
+      postFetch = ''
+        substituteInPlace "$out" --replace "43.1" "43.0"
+      '';
+    })
+  ];
+
   nativeBuildInputs = [
-    python3
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
     itstool
     libxml2
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
+    glib
+    gtk4
+    desktop-file-utils
   ];
 
   buildInputs = [
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     systemd
     gsettings-desktop-schemas
   ];
@@ -54,11 +69,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dman=true"
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   doCheck = true;
 

@@ -1,38 +1,40 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , SDL2
 , cmake
+, copyDesktopItems
+, makeDesktopItem
 , curl
 , extra-cmake-modules
-, gtk3
 , libevdev
 , libpulseaudio
-, mesa
+, libXrandr
+, mesa # for libgbm
 , ninja
 , pkg-config
 , qtbase
 , qttools
-, sndio
 , vulkan-loader
-, wayland
+#, wayland # Wayland doesn't work correctly this version
 , wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "duckstation";
-  version = "0.pre+date=2022-01-18";
+  version = "unstable-2022-07-08";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "51041e47f70123eda41d999701f5651830a0a95e";
-    sha256 = "sha256-nlF6ctDU8KCK7MN2pniPLLqUbPUygX9rl0hjzVQ+mPo=";
+    rev = "82965f741e81e4d2f7e1b2abdc011e1f266bfe7f";
+    sha256 = "sha256-D8Ps/EQRcHLsps/KEUs56koeioOdE/GPA0QJSrbSdYs=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    copyDesktopItems
     ninja
     pkg-config
     qttools
@@ -42,43 +44,43 @@ mkDerivation rec {
   buildInputs = [
     SDL2
     curl
-    gtk3
     libevdev
     libpulseaudio
+    libXrandr
     mesa
     qtbase
-    sndio
     vulkan-loader
-    wayland
+    #wayland
   ];
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
-    "-DUSE_WAYLAND=ON"
+    #"-DUSE_WAYLAND=ON"
   ];
 
-  postPatch = ''
-    substituteInPlace extras/linux-desktop-files/duckstation-qt.desktop \
-      --replace "duckstation-qt" "duckstation" \
-      --replace "TryExec=duckstation" "tryExec=duckstation-qt" \
-      --replace "Exec=duckstation" "Exec=duckstation-qt"
-    substituteInPlace extras/linux-desktop-files/duckstation-nogui.desktop \
-      --replace "duckstation-nogui" "duckstation" \
-      --replace "TryExec=duckstation" "tryExec=duckstation-nogui" \
-      --replace "Exec=duckstation" "Exec=duckstation-nogui"
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      name = "duckstation-qt";
+      desktopName = "DuckStation";
+      genericName = "PlayStation 1 Emulator";
+      icon = "duckstation";
+      tryExec = "duckstation-qt";
+      exec = "duckstation-qt %f";
+      comment = "Fast PlayStation 1 emulator";
+      categories = [ "Game" "Emulator" "Qt" ];
+      type = "Application";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share $out/share/pixmaps $out/share/applications
-    rm bin/common-tests
+    mkdir -p $out/bin $out/share
 
     cp -r bin $out/share/duckstation
-    ln -s $out/share/duckstation/duckstation-{qt,nogui} $out/bin/
+    ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    cp ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
-    cp ../extras/linux-desktop-files/* $out/share/applications/
+    install -Dm644 ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
@@ -86,12 +88,13 @@ mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    ./bin/common-tests
+    bin/common-tests
     runHook postCheck
   '';
 
   # Libpulseaudio fixes https://github.com/NixOS/nixpkgs/issues/171173
   qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM xcb"
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
   ];
 

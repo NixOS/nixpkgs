@@ -1,32 +1,34 @@
 { lib
-, attrs
 , buildPythonPackage
-, dictpath
 , django
 , djangorestframework
 , falcon
 , fetchFromGitHub
 , flask
+, httpx
 , isodate
-, lazy-object-proxy
+, jsonschema-spec
 , mock
 , more-itertools
 , openapi-schema-validator
 , openapi-spec-validator
 , parse
+, pathable
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , responses
-, six
+, requests
+, starlette
+, typing-extensions
 , webob
 , werkzeug
-, python
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.14.2";
-  format = "setuptools";
+  version = "0.16.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -34,51 +36,67 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = version;
-    hash = "sha256-+VyNPSq7S1Oz4eGf+jaeRTx0lZ8pUA+G+KZ/5PyK+to=";
+    hash = "sha256-J3n34HR5lfMM0ik5HAZ2JCr75fX5FTqBWrZ7E3/6XSE=";
   };
 
   postPatch = ''
-    sed -i "/^addopts/d" setup.cfg
+    sed -i "/--cov/d" pyproject.toml
   '';
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
-    attrs
-    dictpath
     isodate
-    lazy-object-proxy
+    more-itertools
+    pathable
     more-itertools
     openapi-schema-validator
+    jsonschema-spec
     openapi-spec-validator
+    typing-extensions
     parse
-    six
     werkzeug
   ];
 
+  passthru.optional-dependencies = {
+    django = [
+      django
+    ];
+    falcon = [
+      falcon
+    ];
+    flask = [
+      flask
+    ];
+    requests = [
+      requests
+    ];
+    starlette = [
+      httpx
+      starlette
+    ];
+  };
+
   checkInputs = [
-    django
-    djangorestframework
-    falcon
-    flask
     mock
     pytestCheckHook
     responses
     webob
-  ];
+  ] ++ passthru.optional-dependencies.flask
+  ++ passthru.optional-dependencies.falcon
+  ++ passthru.optional-dependencies.django
+  ++ passthru.optional-dependencies.starlette
+  ++ passthru.optional-dependencies.requests;
 
   disabledTestPaths = [
     # AttributeError: 'str' object has no attribute '__name__'
-    "tests/integration/validation"
-    # requires secrets and additional configuration
-    "tests/integration/contrib/test_django.py"
+    #"tests/integration/validation"
+    # Requires secrets and additional configuration
+    "tests/integration/contrib/django/"
     # Unable to detect SECRET_KEY and ROOT_URLCONF
-    "tests/integration/contrib/test_django.py"
-  ];
-
-  disabledTests = [
-    # TypeError: Unexpected keyword arguments passed to pytest.raises: message
-    "test_string_format_invalid_value"
-    # Needs a fix for new PyYAML
-    "test_django_rest_framework_apiview"
+    "tests/integration/contrib/django/"
   ];
 
   pythonImportsCheck = [

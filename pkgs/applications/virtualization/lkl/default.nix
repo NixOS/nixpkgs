@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, bc, python3, bison, flex, fuse, libarchive
-, buildPackages }:
+, buildPackages
+
+, firewallSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "lkl";
@@ -26,6 +29,8 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  '' + lib.optionalString firewallSupport ''
+    cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
   '';
 
   installPhase = ''

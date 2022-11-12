@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
 , cython
 , numpy
 , python-dateutil
@@ -27,12 +28,13 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.4.3";
+  version = "1.4.4";
   format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-L/d4hGjnWRdXTwgM1GgbJ+GnvzZGH+lotJqHtaVNAHw=";
+    hash = "sha256-q2wNc4YXtnUYPl8o2zK1FItpStm7oKQMPqJtlrQx22c=";
   };
 
   nativeBuildInputs = [ cython ];

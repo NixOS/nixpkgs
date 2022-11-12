@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib }:
+{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sortmerna";

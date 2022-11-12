@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/Taywee/args/issues/108
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '$'{CMAKE_INSTALL_LIBDIR_ARCHIND} '$'{CMAKE_INSTALL_LIBDIR}
+    substituteInPlace packaging/pkgconfig.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "A simple header-only C++ argument parser library";
     homepage = "https://github.com/Taywee/args";

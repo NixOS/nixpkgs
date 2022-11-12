@@ -48,7 +48,17 @@ let
         let
           result = builtins.tryEval pathContent;
 
-          dedupResults = lst: nubOn ({ package, attrPath }: package.updateScript) (lib.concatLists lst);
+          somewhatUniqueRepresentant =
+            { package, attrPath }: {
+              inherit (package) updateScript;
+              # Some updaters use the same `updateScript` value for all packages.
+              # Also compare `meta.description`.
+              position = package.meta.position or null;
+              # We cannot always use `meta.position` since it might not be available
+              # or it might be shared among multiple packages.
+            };
+
+          dedupResults = lst: nubOn somewhatUniqueRepresentant (lib.concatLists lst);
         in
           if result.success then
             let

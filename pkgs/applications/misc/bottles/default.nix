@@ -96,9 +96,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";

@@ -27,18 +27,20 @@
 , pymongo
 , pytestCheckHook
 , python
-, pythonAtLeast
 , python-dateutil
+, pythonAtLeast
+, pythonRelaxDepsHook
 , pytz
 , pyyaml
 , requests
 , requests-mock
+, scikit-learn
 , setuptools
 , sqlalchemy
 , tenacity
-, typing-extensions
 , testcontainers
-, scikit-learn }:
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "apache-beam";
@@ -51,14 +53,16 @@ buildPythonPackage rec {
     sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
   };
 
-  # See https://github.com/NixOS/nixpkgs/issues/156957.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "dill>=0.3.1.1,<0.3.2" "dill" \
-      --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow" \
-      --replace "numpy>=1.14.3,<1.23.0" "numpy" \
-      --replace "pymongo>=3.8.0,<4.0.0" "pymongo"
-  '';
+  pythonRelaxDeps = [
+    # See https://github.com/NixOS/nixpkgs/issues/156957
+    "dill"
+    "numpy"
+    "pyarrow"
+    "pymongo"
+
+    # See https://github.com/NixOS/nixpkgs/issues/193613
+    "protobuf"
+  ];
 
   sourceRoot = "source/sdks/python";
 
@@ -66,6 +70,7 @@ buildPythonPackage rec {
     cython
     grpcio-tools
     mypy-protobuf
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

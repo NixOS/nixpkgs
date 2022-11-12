@@ -1,7 +1,9 @@
 { lib
 , stdenv
+, expat
 , fetchFromGitHub
 , gst_all_1
+, withGtk2 ? true
 , gtk2
 , gtk3
 , libGL
@@ -9,21 +11,27 @@
 , libSM
 , libXinerama
 , libXxf86vm
+, libpng
+, libtiff
+, libjpeg_turbo
+, zlib
 , pkg-config
 , xorgproto
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , compat26 ? false
 , compat28 ? true
 , unicode ? true
-, withGtk2 ? true
-, withWebKit ? false, webkitgtk
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withWebKit ? false
+, webkitgtk
+, setfile
 , AGL
-, AVFoundation
 , Carbon
 , Cocoa
 , Kernel
 , QTKit
-, setfile
+, AVFoundation
+, AVKit
+, WebKit
 }:
 
 assert withGtk2 -> (!withWebKit);
@@ -42,13 +50,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-p69nNCg552j+nldGY0oL65uFRVu4xXCkoE10F5MwY9A=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libpng
+    libtiff
+    libjpeg_turbo
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
     gtk
     libSM
     libXinerama
@@ -56,14 +67,17 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional withWebKit webkitgtk
+  ++ lib.optional (withWebKit && stdenv.isLinux) webkitgtk
+  ++ lib.optional (withWebKit && stdenv.isDarwin) WebKit
   ++ lib.optionals stdenv.isDarwin [
-    AVFoundation
+    expat
+    setfile
     Carbon
     Cocoa
     Kernel
     QTKit
-    setfile
+    AVFoundation
+    AVKit
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
@@ -78,20 +92,20 @@ stdenv.mkDerivation rec {
     "--enable-mediactrl"
     (if compat26 then "--enable-compat26" else "--disable-compat26")
     (if compat28 then "--enable-compat28" else "--disable-compat28")
-  ]
-  ++ lib.optional unicode "--enable-unicode"
+  ] ++ lib.optional unicode "--enable-unicode"
   ++ lib.optional withMesa "--with-opengl"
-  ++ lib.optionals stdenv.isDarwin [ # allow building on 64-bit
+  ++ lib.optionals stdenv.isDarwin [
+    # allow building on 64-bit
     "--enable-universal-binaries"
-    "--with-cocoa"
     "--with-macosx-version-min=10.7"
-  ]
-  ++ lib.optionals withWebKit [
+    "--with-osx_cocoa"
+    "--with-libiconv"
+  ] ++ lib.optionals withWebKit [
     "--enable-webview"
-    "--enable-webview-webkit"
+    "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib ";
+  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib";
 
   preConfigure = ''
     substituteInPlace configure --replace \
@@ -101,11 +115,10 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace \
       /usr /no-such-path
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace \
-      'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' \
-      'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
-    substituteInPlace configure --replace \
-      "-framework System" "-lSystem"
+    substituteInPlace configure \
+      --replace 'ac_cv_prog_SETFILE="/Developer/Tools/SetFile"' 'ac_cv_prog_SETFILE="${setfile}/bin/SetFile"'
+    substituteInPlace configure \
+      --replace "-framework System" "-lSystem"
   '';
 
   postInstall = ''
@@ -130,8 +143,8 @@ stdenv.mkDerivation rec {
       database support, HTML viewing and printing, and much more.
     '';
     license = licenses.wxWindows;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 
   passthru = {

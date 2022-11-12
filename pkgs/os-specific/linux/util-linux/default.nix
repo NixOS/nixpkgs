@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , capabilitiesSupport ? true
 , libcap_ng
+, libxcrypt
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]

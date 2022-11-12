@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/skypjack/entt/issues/890
+  postPatch = ''
+    substituteInPlace cmake/in/entt.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/skypjack/entt";
     description = "A header-only, tiny and easy to use library for game programming and much more written in modern C++";

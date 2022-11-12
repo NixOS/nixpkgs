@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , callPackage
 , runCommand
 , makeWrapper

@@ -206,7 +206,7 @@ let
             [ pcre2 ]
 
             # Enable sapis
-            ++ lib.optional pearSupport [ libxml2.dev ]
+            ++ lib.optionals pearSupport [ libxml2.dev ]
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -230,7 +230,7 @@ let
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
+            ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optional pharSupport "--enable-phar"
             ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
 

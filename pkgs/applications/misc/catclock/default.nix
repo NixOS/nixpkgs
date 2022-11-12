@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, xlibsWrapper, motif
+{ stdenv, lib, fetchFromGitHub, motif, xorg
 , withAudioTracking ? false, libpulseaudio, aubio }:
 
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   makeFlags = [ "DESTINATION=$(out)/bin/" ]
     ++ lib.optional withAudioTracking "WITH_TEMPO_TRACKER=1";
 
-  buildInputs = [ xlibsWrapper motif ]
+  buildInputs = [ motif xorg.libX11 xorg.libXext xorg.libXt ]
     ++ lib.optionals withAudioTracking [ libpulseaudio aubio ];
 
   meta = with lib; {

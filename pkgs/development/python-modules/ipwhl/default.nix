@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, pythonOlder, fetchFromSourcehut
-, ipfs, packaging, tomli }:
+, kubo, packaging, tomli }:
 
 buildPythonPackage rec {
   pname = "ipwhl";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
 
-  buildInputs = [ ipfs ];
+  buildInputs = [ kubo ];
   propagatedBuildInputs = [ packaging tomli ];
   doCheck = false; # there's no test
   pythonImportsCheck = [ "ipwhl" ];

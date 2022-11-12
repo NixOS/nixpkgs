@@ -152,11 +152,11 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ (with xorg; [
+    libSM
     libXpm
     libXv
     libXvMC
     xcbutilkeysyms
-    xlibsWrapper
   ])
   ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2

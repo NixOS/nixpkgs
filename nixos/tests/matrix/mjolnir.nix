@@ -32,6 +32,7 @@ import ../make-test-python.nix (
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
+      broken = true; # times out after spending many hours
     };
 
     nodes = {

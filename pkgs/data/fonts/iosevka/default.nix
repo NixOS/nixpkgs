@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   inherit extraParameters;
   passAsFile = [
     "extraParameters"
-  ] ++ lib.optional (! (builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)) [
+  ] ++ lib.optionals (! (builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)) [
     "buildPlan"
   ];
 

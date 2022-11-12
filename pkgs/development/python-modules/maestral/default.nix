@@ -5,6 +5,7 @@
 , pythonOlder
 , python
 , click
+, dbus-python
 , desktop-notifier
 , dropbox
 , fasteners
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     desktop-notifier
+    dbus-python
     dropbox
     fasteners
     keyring

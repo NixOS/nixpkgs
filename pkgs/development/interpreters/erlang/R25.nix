@@ -1,8 +1,6 @@
 { mkDerivation }:
 
-# How to obtain `sha256`:
-# nix-prefetch-url --unpack https://github.com/erlang/otp/archive/OTP-${version}.tar.gz
 mkDerivation {
-  version = "25.0.3";
-  sha256 = "0zchcm7gv52j30fq5p658h9c593ziirq09kkah6mpsvjfdsmvmgl";
+  version = "25.1.2";
+  sha256 = "0fn6zyqrgyiznyghkhygak524f3clc3kz91rarq8cqn3r920dmg9";
 }

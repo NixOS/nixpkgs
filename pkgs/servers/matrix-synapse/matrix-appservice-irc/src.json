@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/matrix-org/matrix-appservice-irc",
-  "rev": "b52ac9ec9e45fe82fb3eb9c1a5e420c1eba73b9b",
-  "date": "2022-09-13T09:07:52+01:00",
-  "path": "/nix/store/nd7jrqynfikcirmzc22jp82bgmliglnp-matrix-appservice-irc",
-  "sha256": "0bw06rzlsi3rddjmw1v32vlpq3clda26dcyq3f8qaily9rdxr7vn",
+  "rev": "89e44e482a918476059f543d242118abf4d0fb3d",
+  "date": "2022-10-25T09:47:56+01:00",
+  "path": "/nix/store/y7x302d9lq4cbq7fczrqk6c9g54xywvr-matrix-appservice-irc",
+  "sha256": "0xsm54z9z6b7c5x8i5si8ndq6vllx8yjxlmg018l5ywzv8wcpy7k",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

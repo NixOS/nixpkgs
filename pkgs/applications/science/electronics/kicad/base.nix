@@ -5,6 +5,7 @@
 , libGL
 , zlib
 , wxGTK
+, gtk3
 , libX11
 , gettext
 , glew
@@ -143,7 +144,7 @@ stdenv.mkDerivation rec {
     zlib
     libX11
     wxGTK
-    wxGTK.gtk
+    gtk3
     pcre
     libXdmcp
     gettext
@@ -168,8 +169,7 @@ stdenv.mkDerivation rec {
   preInstallCheck = optionals (withNgspice) [ "export LD_LIBRARY_PATH=${libngspice}/lib" ];
 
   # debug builds fail all but the python test
-  # stable release doesn't have the fix for upstream issue 9888 yet
-  doInstallCheck = !debug && !stable;
+  doInstallCheck = !debug;
   installCheckTarget = "test";
 
   dontStrip = debug;

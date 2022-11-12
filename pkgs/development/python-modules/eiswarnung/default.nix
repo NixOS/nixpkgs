@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "eiswarnung";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-eiswarnung";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fyxqVSZcbo/rrItad5ZTwmp4N8s0HGBdxvx3LBax/hc=";
+    hash = "sha256-sMR16if2Q+lK+ilnVNYVootBN2LFwBQLlZFkoX+oS/g=";
   };
 
   nativeBuildInputs = [

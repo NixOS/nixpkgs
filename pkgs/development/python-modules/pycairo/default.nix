@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pkg-config
 , cairo
+, libxcrypt
 , python
 }:
 
@@ -33,6 +34,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     cairo
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
   ];
 
   checkInputs = [

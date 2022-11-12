@@ -1,5 +1,6 @@
 [
   "@angular/cli"
+, "@ansible/ansible-language-server"
 , "@antfu/ni"
 , "@antora/cli"
 , "@antora/site-generator-default"
@@ -32,6 +33,7 @@
 , "asar"
 , "audiosprite"
 , "autoprefixer"
+, "auto-changelog"
 , "aws-azure-login"
 , "aws-cdk"
 , "awesome-lint"
@@ -69,6 +71,7 @@
 , "coc-jest"
 , "coc-json"
 , "coc-lists"
+, "coc-ltex"
 , "coc-markdownlint"
 , "coc-metals"
 , "coc-pairs"
@@ -119,7 +122,9 @@
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "@electron-forge/cli"
+, "eas-cli"
 , "elm-oracle"
+, "elm-test"
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
@@ -149,6 +154,7 @@
 , "gitmoji-cli"
 , "glob"
 , "gramma"
+, "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
@@ -203,6 +209,7 @@
 , "less-plugin-clean-css"
 , "live-server"
 , "livedown"
+, "localtunnel"
 , "lodash"
 , "lua-fmt"
 , "lv_font_conv"
@@ -242,6 +249,7 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
+, {"photoprism-frontend": "../../servers/photoprism"}
 , "pkg"
 , "pm2"
 , "pnpm"
@@ -396,5 +404,6 @@
 , "yalc"
 , "yarn"
 , "yo"
+, "@zwave-js/server"
 , "zx"
 ]

@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl libunistring openssl pcre zlib ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/the_Foundation.pc \
+      --replace '="''${prefix}//' '="/'
+  '';
+
   meta = with lib; {
     description = "Opinionated C11 library for low-level functionality";
     homepage = "https://git.skyjake.fi/skyjake/the_Foundation";

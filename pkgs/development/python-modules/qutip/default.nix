@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.graphics;
 
   # Disabling OpenMP support on Darwin.
-  setupPyGlobalFlags = lib.optional (!stdenv.isDarwin) [
+  setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [
     "--with-openmp"
   ];
 

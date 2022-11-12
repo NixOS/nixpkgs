@@ -1,6 +1,8 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, adwaita-icon-theme
+, breeze-icons
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -13,17 +15,17 @@
 let
   pname = "tela-circle-icon-theme";
 in
-lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brown" "green" "grey" "orange" "pink" "purple" "red" "yellow" "manjaro" "ubuntu" ] colorVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brown" "green" "grey" "orange" "pink" "purple" "red" "yellow" "manjaro" "ubuntu" "dracula" "nord" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-03-07";
+  version = "2022-11-06";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "vQeWGZmurvT/UQJ1dx6t+ZeKdJ1Oq9TdHBADw64x18g=";
+    sha256 = "ybp+r0Ru2lJg1WipFHIowvRO5XjppI0cUxKc6kPn0lM=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +34,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    adwaita-icon-theme
+    breeze-icons
     hicolor-icon-theme
   ];
 
@@ -42,21 +46,23 @@ stdenvNoCC.mkDerivation rec {
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 
+  postPatch = ''
+    patchShebangs install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
-
-    patchShebangs install.sh
 
     ./install.sh -d $out/share/icons \
       ${lib.optionalString circularFolder "-c"} \
       ${if allColorVariants then "-a" else builtins.toString colorVariants}
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Flat and colorful personality icon theme";

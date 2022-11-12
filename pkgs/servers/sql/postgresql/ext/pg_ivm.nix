@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_ivm";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-q/iAMrT9npmtIKFKi/vSeYGvFSE+SgsKTP08YfBOpik=";
+    hash = "sha256-HdIqAB/A6+EvioKhS2OKmlABjpeTAgkbU5ihbt/OzdI=";
   };
 
   buildInputs = [ postgresql ];

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.2.1";
+  version = "2.2.2.1";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
-    hash = "sha256-Uo403vxzmDntmdoQZQqncuLpDXVJ2FdGi4pQ9jE9b/k=";
+    hash = "sha256-fkN5VNiXRVKCCAyrG6Z2s5qLEtHQNB2874VprhHBhAg=";
   };
 
   sourceRoot = "source/src";

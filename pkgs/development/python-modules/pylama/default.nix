@@ -10,6 +10,7 @@
 , pydocstyle
 , pyflakes
 , vulture
+, setuptools
 , isort
 , pylint
 , pytestCheckHook
@@ -43,6 +44,7 @@ let pylama = buildPythonPackage rec {
     pycodestyle
     pydocstyle
     pyflakes
+    setuptools
     vulture
   ];
 

@@ -22,7 +22,7 @@ mkDerivation {
   buildPhase = ''
     runHook preBuild
     composer dump-autoload
-    box build
+    box compile
     runHook postBuild
   '';
 

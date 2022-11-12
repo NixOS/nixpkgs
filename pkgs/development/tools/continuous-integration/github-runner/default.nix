@@ -27,9 +27,12 @@ let
     inherit sha256;
   };
 
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix { inherit fetchNuGet; } ++
+  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
     dotnetSdk.passthru.packages { inherit fetchNuGet; }
+  );
+
+  nugetSource = linkFarmFromDrvs "nuget-packages" (
+    import ./deps.nix { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -43,13 +46,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.296.2";
+  version = "2.299.1";
+
+  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-Cpg17N4LXjMpKx9SB6Bq/1eKJH5B8yVDUwjxak7xykY=";
+    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
   };
 
   nativeBuildInputs = [
@@ -110,6 +115,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${sdkSource}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -302,12 +308,12 @@ stdenv.mkDerivation rec {
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
     name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    runtimeInputs = [ dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
     text = ''
       # Disable telemetry data
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      rundir=$(pwd)
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
@@ -324,10 +330,8 @@ stdenv.mkDerivation rec {
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
@@ -336,7 +340,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }

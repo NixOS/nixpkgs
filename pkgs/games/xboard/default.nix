@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libX11
     xorgproto
@@ -51,7 +52,6 @@ stdenv.mkDerivation rec {
     gnuchess
     texinfo
     libXpm
-    pkg-config
     librsvg
     cairo
     pango

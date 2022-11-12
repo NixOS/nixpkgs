@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "4.8.3";
+  version = "4.8.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wwAZUGMgyiR02DTM7R4iF+pTPgDrKj9Ot4eQB5QOxoI=";
+    sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
   };
 
   patches = [
@@ -70,7 +70,9 @@ stdenv.mkDerivation rec {
     dbus
   ];
 
-  doCheck = stdenv.isLinux;
+  # Broken by PCRE 2 bump in GLib.
+  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck

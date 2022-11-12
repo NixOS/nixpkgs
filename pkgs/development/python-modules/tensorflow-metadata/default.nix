@@ -21,6 +21,11 @@ buildPythonPackage rec {
     ./build.patch
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'protobuf>=3.13,<4' 'protobuf>=3.13'
+  '';
+
   # Default build pulls in Bazel + extra deps, given the actual build
   # is literally three lines (see below) - replace it with custom build.
   preBuild = ''

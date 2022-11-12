@@ -2,6 +2,8 @@
 , trivialBuild
 , fetchFromGitHub
 , emacs
+, evil
+, markdown-mode
 }:
 
 trivialBuild rec {
@@ -15,11 +17,9 @@ trivialBuild rec {
     hash = "sha256-HBBuZ1VWIn6kwK5CtGIvHM1+9eiNiKPH0GUsyvpUVN8=";
   };
 
-  buildInputs = [
-    emacs
-  ] ++ propagatedUserEnvPkgs;
+  buildInputs = propagatedUserEnvPkgs;
 
-  propagatedUserEnvPkgs = with emacs.pkgs; [
+  propagatedUserEnvPkgs = [
     evil
     markdown-mode
   ];

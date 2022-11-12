@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.8.0"' 'aiofiles = ">=0.8.0"' \
       --replace 'zstandard = "^0.17.0"' 'zstandard = "*"'
   '';
 

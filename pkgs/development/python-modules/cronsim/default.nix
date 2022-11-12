@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "cronsim";
-  version = "2.2";
+  version = "2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LMMZni8Cipo10mxAQbRadWpPvum76JQuzlrLvFvTt5o=";
+    hash = "sha256-ebFYIOANXZLmM6cbovwBCJH8Wr/HlJbOR9YGp8Jw7pc=";
   };
 
   checkInputs = [

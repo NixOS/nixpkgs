@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # present in master, see https://github.com/libjxl/libjxl/pull/1403
+    (fetchpatch {
+      name = "prefixless-pkg-config.patch";
+      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
+      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
+    })
+
     # present in master, remove after 0.7?
     (fetchpatch {
       name = "fix-link-lld-macho.patch";

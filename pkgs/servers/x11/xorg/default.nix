@@ -1,7 +1,7 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -70,7 +70,7 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  encodings = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
+  encodings = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     pname = "encodings";
     version = "1.0.5";
     builder = ./builder.sh;
@@ -80,7 +80,7 @@ lib.makeScope newScope (self: with self; {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ ];
     meta.platforms = lib.platforms.unix;
   }) {};
@@ -99,6 +99,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -116,6 +117,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -133,6 +135,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -150,6 +153,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -167,6 +171,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -200,6 +205,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -217,6 +223,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -234,6 +241,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -251,6 +259,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -268,6 +277,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -285,6 +295,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -302,6 +313,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -319,6 +331,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -336,6 +349,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -353,6 +367,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -370,6 +385,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -387,6 +403,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -404,6 +421,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -421,6 +439,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -438,6 +457,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -455,6 +475,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -472,6 +493,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -489,6 +511,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -506,6 +529,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -523,6 +547,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -540,6 +565,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -557,6 +583,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -574,6 +601,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -591,6 +619,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf fontutil mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -608,6 +637,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -625,6 +655,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -642,6 +673,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -691,6 +723,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config bdftopcf mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -708,6 +741,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkg-config mkfontscale ];
     buildInputs = [ fontutil ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -858,11 +892,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
     pname = "libX11";
-    version = "1.7.2";
+    version = "1.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.7.2.tar.bz2";
-      sha256 = "0v7aj8q3rlchdyfwdna7n7vgpyzyir391dlv5rwy9fxagbikbyhw";
+      url = "mirror://xorg/individual/lib/libX11-1.8.1.tar.xz";
+      sha256 = "1xyry8i7zqmlkvpbyyqwi18rrdw6ycczlvfp63rh2570pfhimi0v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -932,22 +966,6 @@ lib.makeScope newScope (self: with self; {
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libX11 libXext xorgproto libXmu libXpm libXt ];
-    meta.platforms = lib.platforms.unix;
-  }) {};
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXaw3d = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
-    pname = "libXaw3d";
-    version = "1.6.3";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2";
-      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
-    };
-    hardeningDisable = [ "bindnow" "relro" ];
-    strictDeps = true;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -1082,11 +1100,11 @@ lib.makeScope newScope (self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXft = callPackage ({ stdenv, pkg-config, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     pname = "libXft";
-    version = "2.3.4";
+    version = "2.3.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXft-2.3.4.tar.bz2";
-      sha256 = "1pdbr6gzfvixc791pjf42i9gg8wvfq6cpq6sdca04h4i42mxmpjp";
+      url = "mirror://xorg/individual/lib/libXft-2.3.6.tar.xz";
+      sha256 = "08ihq0in7iy5bwrx71nhnlkj7k1ic34brjcqs2wbnf69kwqyg9k0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3575,4 +3593,4 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = lib.platforms.unix;
   }) {};
 
-})
+}

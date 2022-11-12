@@ -19,7 +19,7 @@ rec {
     ];
 
   qemuSerialDevice =
-    if pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isRiscV then "ttyS0"
+    if with pkgs.stdenv.hostPlatform; isx86 || isMips64 || isRiscV then "ttyS0"
     else if (with pkgs.stdenv.hostPlatform; isAarch || isPower) then "ttyAMA0"
     else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 

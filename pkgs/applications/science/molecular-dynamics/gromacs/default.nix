@@ -63,6 +63,12 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$out/$out/" "$out/"
+  '';
+
   meta = with lib; {
     homepage = "http://www.gromacs.org";
     license = licenses.gpl2;

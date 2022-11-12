@@ -26,6 +26,7 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, libxcrypt
 }:
 
 # Make sure we get GNU sed.
@@ -63,11 +64,9 @@ let majorVersion = "12";
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
       ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        # TODO: switch back to Homebrew patches:
-        #   was "https://github.com/Homebrew/formula-patches/raw/76677f2b/gcc/gcc-12.1.0-arm.diff"
         name = "gcc-12-darwin-aarch64-support.patch";
-        url = "https://github.com/tjni/gcc-12-branch/compare/releases/gcc-12.2...gcc-12-2-darwin.diff";
-        sha256 = "sha256-hjM9q6tsdzoGOQWJ7v3BaeVxdWQGTaEnep2ZSwX5+74=";
+        url = "https://github.com/Homebrew/formula-patches/raw/1d184289/gcc/gcc-12.2.0-arm.diff";
+        sha256 = "sha256-omclLslGi/2yCV4pNBMaIpPDMW3tcz/RXdupbNbeOHA=";
       })
       ++ optional langD ../libphobos.patch
 
@@ -175,7 +174,7 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc
+    gmp mpfr libmpc libxcrypt
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
@@ -185,10 +184,13 @@ stdenv.mkDerivation ({
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
-  preConfigure = import ../common/pre-configure.nix {
+
+  preConfigure = (import ../common/pre-configure.nix {
     inherit lib;
     inherit version targetPlatform hostPlatform gnatboot langAda langGo langJit crossStageStatic enableMultilib;
-  };
+  }) + ''
+    ln -sf ${libxcrypt}/include/crypt.h libsanitizer/sanitizer_common/crypt.h
+  '';
 
   dontDisableStatic = true;
 

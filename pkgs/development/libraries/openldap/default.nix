@@ -11,6 +11,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     libtool
     openssl
   ] ++ lib.optionals (stdenv.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
     systemdMinimal
   ];
 

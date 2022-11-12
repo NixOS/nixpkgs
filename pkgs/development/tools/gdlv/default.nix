@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, OpenGL }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, OpenGL
+, AppKit
+}:
 
 buildGoModule rec {
   pname = "gdlv";
@@ -14,7 +20,7 @@ buildGoModule rec {
   vendorSha256 = null;
   subPackages = ".";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ OpenGL ];
+  buildInputs = lib.optionals stdenv.isDarwin [ OpenGL AppKit ];
 
   meta = with lib; {
     description = "GUI frontend for Delve";

@@ -1,0 +1,17 @@
+diff --git a/pynvml.py b/pynvml.py
+index 9a424de..669afe0 100644
+--- a/pynvml.py
++++ b/pynvml.py
+@@ -1676,7 +1676,11 @@ def _LoadNvmlLibrary():
+                             nvmlLib = CDLL(os.path.join(os.getenv("ProgramFiles", "C:/Program Files"), "NVIDIA Corporation/NVSMI/nvml.dll"))
+                     else:
+                         # assume linux
+-                        nvmlLib = CDLL("libnvidia-ml.so.1")
++                        try:
++                            nvmlLib = CDLL("libnvidia-ml.so.1")
++                        except OSError:
++                            # Assume NixOS
++                            nvmlLib = CDLL("/run/opengl-driver/lib/libnvidia-ml.so.1")
+                 except OSError as ose:
+                     _nvmlCheckReturn(NVML_ERROR_LIBRARY_NOT_FOUND)
+                 if (nvmlLib == None):

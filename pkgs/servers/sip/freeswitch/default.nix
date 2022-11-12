@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff
+, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
 
 , callPackage
 
@@ -88,12 +88,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.7";
+  version = "1.10.8";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0npdvidvsi4dhwswdwilff4p3x04qmz7hgs9sdadiy2w83qb6alf";
+    sha256 = "sha256-66kwEN42LjTh/oEdFeOyXP2fU88tjR1K5ZWQJkKcDLQ=";
   };
 
   postPatch = ''
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     openssl ncurses gnutls readline libjpeg
     sqlite pcre speex ldns libedit
     libsndfile libtiff
-    libuuid
+    libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];

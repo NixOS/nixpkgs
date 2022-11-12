@@ -27,7 +27,7 @@ in
       { case = isEq "8.10"; out = "8.10.0+0.7.2";  }
     ] null;
 
-  useDune2 = true;
+  useDune = true;
 
   patches = [ ./janestreet-0.15.patch ];
 

@@ -59,12 +59,12 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
   cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   doctest = dontCheck (doJailbreak super.doctest);
@@ -87,7 +87,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
-  dbus = self.dbus_1_2_26;
+  dbus = self.dbus_1_2_27;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -132,6 +132,11 @@ self: super: {
   servant = doJailbreak super.servant;
   servant-swagger = doJailbreak super.servant-swagger;
 
+  # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
+  # https://github.com/haskell-infra/hackage-trustees/issues/347
+  # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
+  language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
+
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/haskell-servant/servant/pull/1607/files
   servant-docs = doJailbreak super.servant-docs;
@@ -168,9 +173,6 @@ self: super: {
 
   # lens >= 5.1 supports 9.2.1
   lens = doDistribute self.lens_5_2;
-
-  # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
-  alex = dontCheck super.alex;
 
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
@@ -229,4 +231,7 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  relude = dontCheck self.relude_1_1_0_0;
+  hermes-json = doJailbreak super.hermes-json;
 }

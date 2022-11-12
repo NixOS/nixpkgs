@@ -3,7 +3,7 @@ import sys
 
 options = json.load(sys.stdin)
 for (name, value) in options.items():
-    print('##', name.replace('<', '\\<').replace('>', '\\>'))
+    print('##', name.replace('<', '&lt;').replace('>', '&gt;'))
     print(value['description'])
     print()
     if 'type' in value:

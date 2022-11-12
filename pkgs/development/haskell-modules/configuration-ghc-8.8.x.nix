@@ -58,12 +58,12 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
   cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
     Cabal = self.Cabal_3_8_1_0;
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
+    process = self.process_1_6_16_0;
   });
 
   # Ignore overly restrictive upper version bounds.
@@ -109,9 +109,6 @@ self: super: {
   # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
-
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
 
   # liquidhaskell does not support ghc version 8.8.x.
   liquid = markBroken super.liquid;

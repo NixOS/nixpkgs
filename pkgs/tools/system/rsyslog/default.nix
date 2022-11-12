@@ -62,20 +62,24 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2208.0";
+  version = "8.2210.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FN5o57jlqwxdc0+C4tyf/yLNf0cQrWkHJ+sQp7mz314=";
+    hash = "sha256-ZD7ieROdaUoHyf8/8Q3FITvfh0mD0n03NSXpXgX6CU0=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    docutils
+  ];
+
   buildInputs = [
     fastJson
     libestr
     json_c
     zlib
-    docutils
   ] ++ lib.optional withKrb5 libkrb5
   ++ lib.optional withJemalloc jemalloc
   ++ lib.optional withPostgres postgresql

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libconfuse, gettext }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "genimage";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hp+WYtO3eMabHR/nDfZY4cnpCu2iart1P2/lXosMbnM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libconfuse gettext ];
 
   postInstall = ''

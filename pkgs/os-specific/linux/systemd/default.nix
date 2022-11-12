@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -27,6 +28,7 @@
 , util-linux
 , kbd
 , kmod
+, libxcrypt
 
   # Optional dependencies
 , pam
@@ -83,7 +85,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? true
+, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -92,14 +94,14 @@
 , withOomd ? true
 , withPCRE2 ? true
 , withPolkit ? true
-, withPortabled ? false
+, withPortabled ? !stdenv.hostPlatform.isMusl
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
 , withTimedated ? true
 , withTimesyncd ? true
-, withTpm2Tss ? !stdenv.hostPlatform.isMusl
-, withUserDb ? !stdenv.hostPlatform.isMusl
+, withTpm2Tss ? true
+, withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
@@ -120,7 +122,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.4";
+  version = "251.7";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -137,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-lfG6flT1k8LZBAdDK+cF9RjmJMkHMJquMjQK3MINFd8=";
+    sha256 = "sha256-Sa5diyNFyYtREo1xSCcufAW83ZZGZvueoDVuQ2r8wno=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -163,6 +165,7 @@ stdenv.mkDerivation {
     ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
+    ./0018-core-don-t-taint-on-unmerged-usr.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -240,12 +243,14 @@ stdenv.mkDerivation {
           opt = condition: pkg: if condition then pkg else null;
         in
         [
-          # bpf compilation support
-          { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+          # bpf compilation support. We use libbpf 1 now.
+          { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
+          { name = "libbpf.so.0"; pkg = null; }
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
           { name = "libqrencode.so.4"; pkg = null; }
+          { name = "libqrencode.so.3"; pkg = null; }
 
           # We did not provide libpwquality before so it is safe to disable it for
           # now.
@@ -331,6 +336,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -359,6 +365,7 @@ stdenv.mkDerivation {
       acl
       audit
       kmod
+      libxcrypt
       libcap
       libidn2
       libuuid
@@ -571,21 +578,22 @@ stdenv.mkDerivation {
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where, ignore ? [] }:
+      mkSubstitute = { replacement, search, where, ignore ? [ ] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
-      let
-        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
-      in ''
-        set +e
-        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
-        set -e
-        if [[ -n "$search" ]]; then
-          echo "Not all references to '${search}' have been replaced. Found the following matches:"
-          echo "$search"
-          exit 1
-        fi
-      '';
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [ ] }:
+        let
+          ignore' = lib.concatStringsSep "|" (ignore ++ [ "^test" "NEWS" ]);
+        in
+        ''
+          set +e
+          search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+          set -e
+          if [[ -n "$search" ]]; then
+            echo "Not all references to '${search}' have been replaced. Found the following matches:"
+            echo "$search"
+            exit 1
+          fi
+        '';
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -664,7 +672,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup = lib.optionalString withCryptsetup ''
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
@@ -677,7 +692,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;

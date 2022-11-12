@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     timidity
   ];
 
+  outputs = [ "out" "dev" ];
+
   # fix default path to timidity.cfg so MIDI files could be played
   postPatch = ''
     substituteInPlace timidity/options.h \

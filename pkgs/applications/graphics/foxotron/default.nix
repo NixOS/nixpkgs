@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
-  version = "2022-08-06";
+  version = "2022-11-02";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-IGLoiUeHcTlQ+WJTot3o5/Q+jRJcY52I3xHDAT0zuIU=";
+    sha256 = "sha256-WjsVvFhwVCzclHxA+Gu2YtR2yK0Opqhncwlg9FEhOLk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];

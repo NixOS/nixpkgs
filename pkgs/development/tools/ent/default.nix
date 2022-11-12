@@ -34,7 +34,7 @@ buildGoModule rec {
     homepage = "https://entgo.io/";
     downloadPage = "https://github.com/ent/ent";
     license = licenses.asl20;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
     mainProgram = "ent";
   };
 }

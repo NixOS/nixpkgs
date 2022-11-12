@@ -9,6 +9,7 @@
 , libxml2
 , libffi
 , libbfd
+, libxcrypt
 , ncurses
 , zlib
 , debugVersion ? false
@@ -32,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja python3 ];
 
-  buildInputs = [ libxml2 ];
+  buildInputs = [ libxml2 libxcrypt ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 

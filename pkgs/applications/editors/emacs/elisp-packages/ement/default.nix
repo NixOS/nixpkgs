@@ -1,7 +1,6 @@
 { trivialBuild
 , lib
 , fetchFromGitHub
-, curl
 , plz
 , cl-lib
 , ts

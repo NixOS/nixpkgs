@@ -1,23 +1,25 @@
 { lib
 , mkDerivation
 , fetchFromGitLab
+, fetchpatch
 , cmake
 , pkg-config
 , qtbase
 , qttools
 , qpdf
 , podofo
+, imagemagick
 }:
 
 mkDerivation rec {
   pname = "pdfmixtool";
-  version = "1.0.2";
+  version = "1.1";
 
   src = fetchFromGitLab {
     owner = "scarpetta";
     repo = pname;
     rev = "v${version}";
-    sha256 = "066ap1w05gj8n0kvilyhlr1fzwrmlczx3lax7mbw0rfid9qh3467";
+    hash = "sha256-S8hhWZ6nHyIWPwsfl+o9XnljLD3aE/vthCLuWEbm5nc=";
   };
 
   nativeBuildInputs = [
@@ -26,10 +28,20 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    imagemagick
     qtbase
     qttools
     qpdf
     podofo
+  ];
+
+  patches = [
+    # fix incompatibility with qpdf11
+    (fetchpatch {
+      url = "https://gitlab.com/scarpetta/pdfmixtool/-/commit/81f7e96f6e68dfeba3cd4e00d8553dfdd2d7f2fa.diff";
+      hash = "sha256-uBchYjUIqL7dJR7U/TSxhSGu1qY742cFUIv0XKU6L2g=";
+    })
+
   ];
 
   meta = with lib; {

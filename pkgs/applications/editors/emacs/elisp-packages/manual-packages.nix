@@ -160,6 +160,8 @@
 
   urweb-mode = callPackage ./urweb-mode { };
 
+  voicemacs = callPackage ./voicemacs { };
+
   # Packages made the classical callPackage way
 
   ebuild-mode = callPackage ./ebuild-mode { };
@@ -179,6 +181,8 @@
   header-file-mode = callPackage ./header-file-mode { };
 
   helm-words = callPackage ./helm-words { };
+
+  idris2-mode = callPackage ./idris2-mode { };
 
   isearch-plus = callPackage ./isearch-plus { };
 

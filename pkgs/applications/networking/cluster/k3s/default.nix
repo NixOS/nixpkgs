@@ -47,15 +47,15 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.25.0+k3s1";     # k3s git tag
-  k3sCommit = "26e9405767263a2915723cb72b1ffd7f50687a8f"; # k3s git commit at the above version
-  k3sRepoSha256 = "0rk0svqx26rn6qlvvyj5rsqb87195h1qcf84qmmvf874qwszwpgh";
-  k3sVendorSha256 = "sha256-YX/yLOLtDxGhRB4tic6oTli/qeeSnpP+f+S+sVXXDSs=";
+  k3sVersion = "1.25.3+k3s1";     # k3s git tag
+  k3sCommit = "f2585c1671b31b4b34bddbb3bf4e7d69662b0821"; # k3s git commit at the above version
+  k3sRepoSha256 = "0zwf3iwjcidx14zw36s1hr0q8wmmbfc0rfqwd7fmpjq597h8zkms";
+  k3sVendorSha256 = "sha256-U67tJRGqPFk5AfRe7I50zKGC9HJ2oh+iI/C7qF/76BQ=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
-  traefikChartVersion = "10.19.3";
-  traefikChartSha256 = "04zg5li957svgscdmkzmzjkwljaljyav68rzxmhakkwgav6q9058";
+  traefikChartVersion = "12.0.0";
+  traefikChartSha256 = "1sqmi71fi3ad5dh5fmsp9mv80x6pkgqwi4r9fr8l6i9sdnai6f1a";
 
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
   k3sRootVersion = "0.11.0";
@@ -77,7 +77,7 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank mic92 superherointj ];
+    maintainers = with maintainers; [ euank mic92 ];
     platforms = platforms.linux;
   };
 

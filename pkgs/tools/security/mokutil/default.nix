@@ -6,6 +6,7 @@
 , openssl
 , efivar
 , keyutils
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     openssl
     efivar
     keyutils
+    libxcrypt
   ];
 
   meta = with lib; {

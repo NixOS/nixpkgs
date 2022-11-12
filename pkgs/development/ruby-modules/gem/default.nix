@@ -250,6 +250,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   meta = {
     # default to Ruby's platforms
     platforms = ruby.meta.platforms;
+    mainProgram = gemName;
   } // meta;
 })
 

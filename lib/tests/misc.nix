@@ -312,6 +312,92 @@ runTests {
     expected = true;
   };
 
+  testNormalizePath = {
+    expr = strings.normalizePath "//a/b//c////d/";
+    expected = "/a/b/c/d/";
+  };
+
+  testCharToInt = {
+    expr = strings.charToInt "A";
+    expected = 65;
+  };
+
+  testEscapeC = {
+    expr = strings.escapeC [ " " ] "Hello World";
+    expected = "Hello\\x20World";
+  };
+
+  testToInt = testAllTrue [
+    # Naive
+    (123 == toInt "123")
+    (0 == toInt "0")
+    # Whitespace Padding
+    (123 == toInt " 123")
+    (123 == toInt "123 ")
+    (123 == toInt " 123 ")
+    (123 == toInt "   123   ")
+    (0 == toInt " 0")
+    (0 == toInt "0 ")
+    (0 == toInt " 0 ")
+  ];
+
+  testToIntFails = testAllTrue [
+    ( builtins.tryEval (toInt "") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "00") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "01") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "002") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 002 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo123 ") == { success = false; value = false; } )
+  ];
+
+  testToIntBase10 = testAllTrue [
+    # Naive
+    (123 == toIntBase10 "123")
+    (0 == toIntBase10 "0")
+    # Whitespace Padding
+    (123 == toIntBase10 " 123")
+    (123 == toIntBase10 "123 ")
+    (123 == toIntBase10 " 123 ")
+    (123 == toIntBase10 "   123   ")
+    (0 == toIntBase10 " 0")
+    (0 == toIntBase10 "0 ")
+    (0 == toIntBase10 " 0 ")
+    # Zero Padding
+    (123 == toIntBase10 "0123")
+    (123 == toIntBase10 "0000123")
+    (0 == toIntBase10 "000000")
+    # Whitespace and Zero Padding
+    (123 == toIntBase10 " 0123")
+    (123 == toIntBase10 "0123 ")
+    (123 == toIntBase10 " 0123 ")
+    (123 == toIntBase10 " 0000123")
+    (123 == toIntBase10 "0000123 ")
+    (123 == toIntBase10 " 0000123 ")
+    (0 == toIntBase10 " 000000")
+    (0 == toIntBase10 "000000 ")
+    (0 == toIntBase10 " 000000 ")
+  ];
+
+  testToIntBase10Fails = testAllTrue [
+    ( builtins.tryEval (toIntBase10 "") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
+  ];
+
 # LISTS
 
   testFilter = {
@@ -1205,6 +1291,59 @@ runTests {
   testLevenshteinAtMostThreeTrue = {
     expr = strings.levenshteinAtMost 3 "hello" "Holla";
     expected = true;
+  };
+
+  # lazyDerivation
+
+  testLazyDerivationIsLazyInDerivationForAttrNames = {
+    expr = attrNames (lazyDerivation {
+      derivation = throw "not lazy enough";
+    });
+    # It's ok to add attribute names here when lazyDerivation is improved
+    # in accordance with its inline comments.
+    expected = [ "drvPath" "meta" "name" "out" "outPath" "outputName" "outputs" "system" "type" ];
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.tests = "whatever is in tests";
+    }).tests;
+    expected = "whatever is in tests";
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr2 = {
+    # passthru.tests is not a special case. It works for any attr.
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.foo = "whatever is in foo";
+    }).foo;
+    expected = "whatever is in foo";
+  };
+
+  testLazyDerivationIsLazyInDerivationForMeta = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      meta = "whatever is in meta";
+    }).meta;
+    expected = "whatever is in meta";
+  };
+
+  testLazyDerivationReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out"];
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta = "test meta";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; };
+    expected = derivation;
   };
 
   testTypeDescriptionInt = {

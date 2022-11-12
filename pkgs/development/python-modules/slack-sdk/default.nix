@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.18.3";
+  version = "3.19.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Up3W0NkN9BY6C9KWD6EPZ2sy+55f4eNFl2cP4IdcIcs=";
+    sha256 = "sha256-iWDKF4FZJPL6wHxVbvj2zlY0sqpBMXki9e7uuysX1o0=";
   };
 
   propagatedBuildInputs = [
@@ -74,7 +74,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
     license = with licenses; [ mit ];

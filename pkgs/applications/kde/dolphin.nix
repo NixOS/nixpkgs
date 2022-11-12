@@ -13,7 +13,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/dolphin/";
     description = "KDE file manager";
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
     broken = lib.versionOlder qtbase.version "5.14";
   };

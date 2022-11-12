@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     "-DUSE_MBELIB=ON"
   ];
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/libdsdcc.pc \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
+
   meta = with lib; {
     description = "Digital Speech Decoder (DSD) rewritten as a C++ library";
     homepage = "https://github.com/f4exb/dsdcc";

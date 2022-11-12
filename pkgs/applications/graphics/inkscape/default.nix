@@ -5,6 +5,7 @@
 , cairo
 , cmake
 , fetchurl
+, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -77,6 +78,12 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
+    })
+
+    # Fix build with Poppler 22.09
+    (fetchpatch {
+      url = "https://github.com/archlinux/svntogit-packages/raw/b2f65dfb60ae0c8cd6cd9affd3d71064082a6201/trunk/inkscape-1.2.1-poppler-22.09.0.patch";
+      sha256 = "pArvsS/qoCTMAisF8yj3agZKrb90zRFZkck1TX0KeGc=";
     })
   ];
 

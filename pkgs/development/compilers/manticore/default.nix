@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ coreutils smlnj ];
 
-  autoreconfFlags = "-Iconfig -vfi";
+  autoreconfFlags = [ "-Iconfig" "-vfi" ];
 
   unpackPhase = ''
     mkdir -p $out

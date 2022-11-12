@@ -1,16 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, ghcWithPackages, ... }:
+{ stdenv, lib, fetchFromGitHub, ghcWithPackages, haskellPackages, ... }:
 
 let xmonadctlEnv = ghcWithPackages (self: [ self.xmonad-contrib self.X11 ]);
 in stdenv.mkDerivation rec {
   pname = "xmonadctl";
-  version = "0.17.0";
 
-  src = fetchFromGitHub {
-    owner = "xmonad";
-    repo = "xmonad-contrib";
-    rev = "v${version}";
-    sha256 = "142ycg7dammq98drimv6xbih8dla9qindxds9fgkspmrrils3sar";
-  };
+  inherit (haskellPackages.xmonad-contrib) src version;
 
   installPhase = ''
     runHook preInstall

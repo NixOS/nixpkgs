@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
-  buildInputs = [ intltool gtk2 ];
+  buildInputs = [ gtk2 ];
 
   meta = with lib; {
     description = "A simple and fast image viewer for X";

@@ -1,5 +1,5 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
-buildGoPackage rec {
+{ lib, buildGoModule, fetchFromGitHub }:
+buildGoModule rec {
   pname = "nix-store-gcs-proxy";
   version = "0.1.0";
 
@@ -10,9 +10,9 @@ buildGoPackage rec {
     sha256 = "0804p65px4wd7gzxggpdxsazkd1hbz1p15zzaxf9ygc6sh26ncln";
   };
 
-  goPackagePath = "github.com/tweag/nix-store-gcs-proxy";
+  vendorSha256 = "sha256-Bm3yFzm2LXOPYWQDk/UBusV0lPfc/BCKIb3pPlWgDFo=";
 
-  goDeps = ./deps.nix;
+  ldflags = [ "-s" "-w" ];
 
   meta = {
     description = "A HTTP nix store that proxies requests to Google Storage";

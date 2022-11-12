@@ -1,26 +1,39 @@
-{ lib, fetchFromGitHub, buildGoModule, go-bindata }:
+{ lib
+, fetchFromGitHub
+, nixosTests
+, buildGoModule
+}:
 
 buildGoModule rec {
   pname = "magnetico";
-  version = "0.12.0";
+  version = "unstable-2022-08-10";
 
   src = fetchFromGitHub {
-    owner  = "boramalper";
+    owner  = "ireun";
     repo   = "magnetico";
-    rev    = "v${version}";
-    sha256 = "1avqnfn4llmc9xmpsjfc9ivki0cfvd8sljfzd9yac94xcj581s83";
+    rev    = "828e230d3b3c0759d3274e27f5a7b70400f4d6ea";
+    sha256 = "sha256-V1pBzillWTk9iuHAhFztxYaq4uLL3U3HYvedGk6ffbk=";
   };
 
-  vendorSha256 = "087kikj6sjhjxqymnj7bpxawfmwckihi6mbmi39w0bn2040aflx5";
+  vendorSha256 = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
 
-  nativeBuildInputs = [ go-bindata ];
   buildPhase = ''
+    runHook preBuild
+
     make magneticow magneticod
+
+    runHook postBuild
   '';
 
   checkPhase = ''
+    runHook preBuild
+
     make test
+
+    runHook postBuild
   '';
+
+  passthru.tests = { inherit (nixosTests) magnetico; };
 
   meta = with lib; {
     description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";

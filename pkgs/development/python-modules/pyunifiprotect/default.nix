@@ -21,6 +21,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, setuptools
 , termcolor
 , typer
 , ffmpeg
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.3.3";
+  version = "4.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-77vBKca4S0XEa5O4ntuBW8uEwVig7IBH6BX3QEmvHWc=";
+    hash = "sha256-lwgYvmig3yIQPcmX2suStcnzEYOXphHTRn40iJZICPs=";
   };
 
   postPatch = ''
@@ -45,6 +46,10 @@ buildPythonPackage rec {
       --replace "--cov=pyunifiprotect --cov-append" "" \
       --replace "pydantic!=1.9.1" "pydantic"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles

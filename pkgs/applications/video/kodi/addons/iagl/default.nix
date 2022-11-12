@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, fetchzip, dateutil, requests, routing, vfs-libarchive, archive_tool, youtube }:
+{ lib, buildKodiAddon, fetchFromGitHub, dateutil, requests, routing, vfs-libarchive, archive_tool, youtube }:
 
 buildKodiAddon rec {
   pname = "iagl";

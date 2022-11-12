@@ -4,7 +4,7 @@ let
   pname = "losslesscut";
   nameRepo = "lossless-cut";
   nameCamel = "LosslessCut";
-  nameSource = "${nameCamel}-mac.dmg";
+  nameSource = "${nameCamel}-mac-x64.dmg";
   nameApp = nameCamel + ".app";
   owner = "mifi";
   src = fetchurl {

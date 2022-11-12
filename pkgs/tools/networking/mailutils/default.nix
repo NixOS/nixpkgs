@@ -22,6 +22,7 @@
 , python3
 , sasl
 , system-sendmail
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     sasl
+    libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ];
 
   patches = [

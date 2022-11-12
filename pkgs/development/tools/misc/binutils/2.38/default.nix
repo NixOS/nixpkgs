@@ -90,14 +90,6 @@ stdenv.mkDerivation {
     ./deterministic-temp-prefixes.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
-  # This patch was suggested by Nick Clifton to fix
-  # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-  # It can be removed when that 7-year-old bug is closed.
-  # This binutils bug causes GHC to emit broken binaries on armv7, and indeed
-  # GHC will refuse to compile with a binutils suffering from it. See this
-  # comment for more information:
-  # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-  ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++ lib.optional stdenv.targetPlatform.isMips64n64
      # this patch is from debian:

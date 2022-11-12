@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, opencv, pcl, libusb1, eigen
 , wrapQtAppsHook, qtbase, g2o, ceres-solver, libpointmatcher, octomap, freenect
-, libdc1394, librealsense, libGL, libGLU, vtkWithQt5, wrapGAppsHook }:
+, libdc1394, librealsense, libGL, libGLU, vtkWithQt5, wrapGAppsHook, liblapack
+, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "rtabmap";
-  version = "unstable-2022-02-07";
+  version = "unstable-2022-09-24";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
-    rev = "f584f42ea423c44138aa0668b5c8eb18f2978fe2";
-    sha256 = "sha256-xotOcaz5XrmzwEKuVEQZoeq6fEVbACK7PSUW9kULH40=";
+    rev = "fa31affea0f0bd54edf1097b8289209c7ac0548e";
+    sha256 = "sha256-kcY+o31fSmwxBcvF/e+Wu6OIqiQzLKgEJJxcj+g3qDM=";
   };
 
   patches = [
@@ -23,6 +24,10 @@ stdenv.mkDerivation rec {
     ## Required
     opencv
     pcl
+    liblapack
+    xorg.libSM
+    xorg.libICE
+    xorg.libXt
     ## Optional
     libusb1
     eigen

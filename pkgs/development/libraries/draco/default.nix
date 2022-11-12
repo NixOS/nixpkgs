@@ -16,14 +16,14 @@ let
   cmakeBool = b: if b then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
-  version = "1.5.3";
+  version = "1.5.5";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "sha256-LbWtZtgvZQdgwAGHVsouH6cAIVXP+9Q5n8KjzaBRrBQ=";
+    sha256 = "sha256-WYWEUfBPz/Pt7sE8snG3/LnOA3DEUm/SUVLtsH7zG5g=";
     fetchSubmodules = true;
   };
 
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
+    changelog = "https://github.com/google/draco/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.all;

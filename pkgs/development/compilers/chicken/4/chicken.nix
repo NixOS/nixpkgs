@@ -41,6 +41,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = lib.optionals (bootstrap-chicken != null) [

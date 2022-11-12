@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "sigtools";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fMhKC6VuNLfxXkM3RCaPEODEp21r/s6JzswaHKkROLY=";
+    sha256 = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
   };
 
   nativeBuildInputs = [

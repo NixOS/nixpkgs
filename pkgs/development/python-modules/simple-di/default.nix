@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     setuptools
     typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
   ];
 

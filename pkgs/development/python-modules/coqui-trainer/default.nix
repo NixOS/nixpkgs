@@ -17,7 +17,7 @@
 
 let
   pname = "coqui-trainer";
-  version = "0.0.15";
+  version = "0.0.16";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,8 +27,12 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WBFsQuGnpqOiQW7VFfsk0t7qEBs1ScOChfQFpLmqTz4=";
+    hash = "sha256-G2qFQEO5OOEI2jsb+zXsO8cbC13o7pqAC2xkFrhGkLc=";
   };
+
+  postPatch = ''
+    sed -i 's/^protobuf.*/protobuf/' requirements.txt
+  '';
 
   propagatedBuildInputs = [
     coqpit

@@ -1,24 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, testers }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, go-jsonnet }:
 
-let self = buildGoModule rec {
+buildGoModule rec {
   pname = "go-jsonnet";
-  version = "0.18.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = "go-jsonnet";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o/IjXskGaMhvQmTsAS745anGBMI2bwHf/EOEp57H8LU=";
+    hash = "sha256-FgQYnas0qkIedRAA8ApZXLzEylg6PS6+8zzl7j+yOeI=";
   };
 
-  vendorSha256 = "sha256-fZBhlZrLcC4xj5uvb862lBOczGnJa9CceS3D8lUhBQo=";
+  vendorSha256 = "sha256-j1fTOUpLx34TgzW94A/BctLrg9XoTtb3cBizhVJoEEI=";
 
-  doCheck = false;
+  patches = [
+    # See https://github.com/google/go-jsonnet/issues/653.
+    (fetchpatch {
+      url = "https://github.com/google/go-jsonnet/commit/5712f2ed2c8dfa685e4f1234eefc7690a580af6f.patch";
+      hash = "sha256-/+6BlAaul4FoD7pq7yAy1xG78apEBuH2LC4fsfbugFQ=";
+    })
+  ];
 
   subPackages = [ "cmd/jsonnet*" ];
 
   passthru.tests.version = testers.testVersion {
-    package = self;
+    package = go-jsonnet;
     version = "v${version}";
   };
 
@@ -29,5 +35,4 @@ let self = buildGoModule rec {
     maintainers = with maintainers; [ nshalman aaronjheng ];
     mainProgram = "jsonnet";
   };
-};
-in self
+}

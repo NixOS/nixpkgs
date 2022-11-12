@@ -7,16 +7,24 @@ let
   };
 in
 nodePackages.n8n.override {
-  nativeBuildInputs = with pkgs.nodePackages; [
-    node-pre-gyp
+  nativeBuildInputs = [
+    pkgs.nodePackages.node-pre-gyp
   ];
 
-  dontNpmInstall = true;
+  buildInputs = [
+    pkgs.postgresql
+  ];
 
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s $out/lib/node_modules/n8n/bin/n8n $out/bin/n8n
+  # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
+  # This can supposedly be fixed by building a custom copy of the module from source, but that's way
+  # too much complexity for a setup no one would ever actually run.
+  #
+  # NB: If you _are_ actually running n8n on Oracle on aarch64, feel free to submit a patch.
+  preRebuild = lib.optionalString stdenv.isAarch64 ''
+    rm -rf node_modules/oracledb
   '';
+
+  dontNpmInstall = true;
 
   passthru = {
     updateScript = ./generate-dependencies.sh;

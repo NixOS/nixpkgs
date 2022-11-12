@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
 
   dontUseImakeConfigure = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkg-config bison imake which blas lapack curl tcl tk jdk
+    bison imake which blas lapack curl tcl tk jdk
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [

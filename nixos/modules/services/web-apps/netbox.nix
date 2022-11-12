@@ -46,7 +46,7 @@ let
     '';
   })).override {
     plugins = ps: ((cfg.plugins ps)
-      ++ optional cfg.enableLdap [ ps.django-auth-ldap ]);
+      ++ optionals cfg.enableLdap [ ps.django-auth-ldap ]);
   };
   netboxManageScript = with pkgs; (writeScriptBin "netbox-manage" ''
     #!${stdenv.shell}

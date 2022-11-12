@@ -1,35 +1,135 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-booting-from-usb">
-  <title>Booting from a USB Drive</title>
+  <title>Booting from a USB flash drive</title>
   <para>
-    For systems without CD drive, the NixOS live CD can be booted from a
-    USB stick. You can use the <literal>dd</literal> utility to write
-    the image: <literal>dd if=path-to-image of=/dev/sdX</literal>. Be
-    careful about specifying the correct drive; you can use the
-    <literal>lsblk</literal> command to get a list of block devices.
+    The image has to be written verbatim to the USB flash drive for it
+    to be bootable on UEFI and BIOS systems. Here are the recommended
+    tools to do that.
   </para>
-  <note>
-    <title>On macOS</title>
+  <section xml:id="sec-booting-from-usb-graphical">
+    <title>Creating bootable USB flash drive with a graphical
+    tool</title>
+    <para>
+      Etcher is a popular and user-friendly tool. It works on Linux,
+      Windows and macOS.
+    </para>
+    <para>
+      Download it from
+      <link xlink:href="https://www.balena.io/etcher/">balena.io</link>,
+      start the program, select the downloaded NixOS ISO, then select
+      the USB flash drive and flash it.
+    </para>
+    <warning>
+      <para>
+        Etcher reports errors and usage statistics by default, which can
+        be disabled in the settings.
+      </para>
+    </warning>
+    <para>
+      An alternative is
+      <link xlink:href="https://bztsrc.gitlab.io/usbimager">USBImager</link>,
+      which is very simple and does not connect to the internet.
+      Download the version with write-only (wo) interface for your
+      system. Start the program, select the image, select the USB flash
+      drive and click <quote>Write</quote>.
+    </para>
+  </section>
+  <section xml:id="sec-booting-from-usb-linux">
+    <title>Creating bootable USB flash drive from a Terminal on
+    Linux</title>
+    <orderedlist numeration="arabic" spacing="compact">
+      <listitem>
+        <para>
+          Plug in the USB flash drive.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Find the corresponding device with <literal>lsblk</literal>.
+          You can distinguish them by their size.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Make sure all partitions on the device are properly unmounted.
+          Replace <literal>sdX</literal> with your device (e.g.
+          <literal>sdb</literal>).
+        </para>
+      </listitem>
+    </orderedlist>
     <programlisting>
-$ diskutil list
-[..]
-/dev/diskN (external, physical):
-   #:                       TYPE NAME                    SIZE       IDENTIFIER
-[..]
-$ diskutil unmountDisk diskN
-Unmount of all volumes on diskN was successful
-$ sudo dd if=nix.iso of=/dev/rdiskN bs=1M
+sudo umount /dev/sdX*
+</programlisting>
+    <orderedlist numeration="arabic" spacing="compact">
+      <listitem override="4">
+        <para>
+          Then use the <literal>dd</literal> utility to write the image
+          to the USB flash drive.
+        </para>
+      </listitem>
+    </orderedlist>
+    <programlisting>
+sudo dd if=&lt;path-to-image&gt; of=/dev/sdX bs=4M conv=fsync
+</programlisting>
+  </section>
+  <section xml:id="sec-booting-from-usb-macos">
+    <title>Creating bootable USB flash drive from a Terminal on
+    macOS</title>
+    <orderedlist numeration="arabic" spacing="compact">
+      <listitem>
+        <para>
+          Plug in the USB flash drive.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Find the corresponding device with
+          <literal>diskutil list</literal>. You can distinguish them by
+          their size.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Make sure all partitions on the device are properly unmounted.
+          Replace <literal>diskX</literal> with your device (e.g.
+          <literal>disk1</literal>).
+        </para>
+      </listitem>
+    </orderedlist>
+    <programlisting>
+diskutil unmountDisk diskX
+</programlisting>
+    <orderedlist numeration="arabic" spacing="compact">
+      <listitem override="4">
+        <para>
+          Then use the <literal>dd</literal> utility to write the image
+          to the USB flash drive.
+        </para>
+      </listitem>
+    </orderedlist>
+    <programlisting>
+sudo dd if=&lt;path-to-image&gt; of=/dev/rdiskX bs=4m
 </programlisting>
     <para>
-      Using the 'raw' <literal>rdiskN</literal> device instead of
-      <literal>diskN</literal> completes in minutes instead of hours.
       After <literal>dd</literal> completes, a GUI dialog &quot;The disk
       you inserted was not readable by this computer&quot; will pop up,
       which can be ignored.
     </para>
-  </note>
-  <para>
-    The <literal>dd</literal> utility will write the image verbatim to
-    the drive, making it the recommended option for both UEFI and
-    non-UEFI installations.
-  </para>
+    <note>
+      <para>
+        Using the 'raw' <literal>rdiskX</literal> device instead of
+        <literal>diskX</literal> with dd completes in minutes instead of
+        hours.
+      </para>
+    </note>
+    <orderedlist numeration="arabic" spacing="compact">
+      <listitem override="5">
+        <para>
+          Eject the disk when it is finished.
+        </para>
+      </listitem>
+    </orderedlist>
+    <programlisting>
+diskutil eject /dev/diskX
+</programlisting>
+  </section>
 </section>

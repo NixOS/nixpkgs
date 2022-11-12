@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "protobuf>=3.1.0,<3.20" "protobuf" \
+      --replace "protobuf>=3.1.0,<4" "protobuf" \
       --replace "MechanicalSoup>=0.6.0,<0.13" "MechanicalSoup"
   '';
 

@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "41.1";
+  version = "43.alpha";
 
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "UilgyihzD/ZkOQcLBEGMngpLtVVg11v+CLIY2ixn5Uc=";
+    sha256 = "utrp972m+lch2regi4I3p15TJcDJpmlJj/VPdyFG5M8=";
   };
 
   nativeBuildInputs = [

@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
+, fetchurl
 , pkg-config
 , glib
 , freetype
@@ -31,7 +30,7 @@
 }:
 
 let
-  version = "5.1.0";
+  version = "5.2.0";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
@@ -41,20 +40,10 @@ stdenv.mkDerivation {
   pname = "harfbuzz${optionalString withIcu "-icu"}";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "harfbuzz";
-    repo = "harfbuzz";
-    rev = version;
-    sha256 = "sha256-K6iScmg1vNfwb1UYqtXsnijLVpcC+am2ZL+W5bLFzsI=";
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    sha256 = "0b4lpkidwx0lf8slczjji652yll6g5zgmm5lmisnb4s7gf8r8nkk";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "aarch64-test-narrowing.diff";
-      url = "https://github.com/harfbuzz/harfbuzz/commit/04d28d94e576aab099891e6736fd0088dfac3366.diff";
-      sha256 = "sha256-099GP8t1G0kyYl79A6xJhfyrs3WXYitvn+He7sEz+Oo=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs src/*.py test

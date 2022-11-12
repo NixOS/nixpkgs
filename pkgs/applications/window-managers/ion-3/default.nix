@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xlibsWrapper, lua, gettext, groff }:
+{ lib, stdenv, fetchurl, lua, gettext, groff, libICE, libSM, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "ion";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nkks5a95986nyfkxvg2rik6zmwx0lh7szd5fji7yizccwzc9xns";
   };
 
-  buildInputs = [ xlibsWrapper lua gettext groff ];
+  buildInputs = [ libICE libSM libX11 libXext lua gettext groff ];
 
   buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" "PREFIX=\${out}" ];
 

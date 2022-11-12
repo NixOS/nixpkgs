@@ -21,7 +21,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
-, withWebengine ? false
+, withWebengine ? true
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     python gen-resources.py
-    echo 'const char VERSION_STRING[] = "${version}";' > src/version.h
+    echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
 
   nativeBuildInputs = [

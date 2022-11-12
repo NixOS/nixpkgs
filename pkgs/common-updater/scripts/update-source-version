@@ -237,9 +237,13 @@ fi
 if [[ -z "$newHash" ]]; then
     nix-build $systemArg --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
-    newHash=$(sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+')
+    newHash=$(
+        sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" \
+        | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+' \
+        || true # handled below
+    )
 
-    if [[ -n "$sri" ]]; then
+    if [[ -n "$newHash" && -n "$sri" ]]; then
         # nix-build preserves the hashing scheme so we can just convert the result to SRI using the old type
         newHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
             || nix to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null)" \

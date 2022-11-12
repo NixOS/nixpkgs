@@ -319,6 +319,18 @@ The above are just guidelines, and exceptions may be granted on a case-by-case b
 However, please check if it's possible to disable a problematic subset of the
 test suite and leave a comment explaining your reasoning.
 
+This can be achived with `--skip` in `checkFlags`:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  checkFlags = [
+    # reason for disabling test
+    "--skip=example::tests:example_test"
+  ];
+}
+```
+
 #### Setting `test-threads` {#setting-test-threads}
 
 `buildRustPackage` will use parallel test threads by default,

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , typing-extensions
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = "http_sfv-${version}";
     hash = "sha256-zl0Rk4QbzCVmYZ6TnVq+C+oe27Imz5fEQY9Fco5lo5s=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     typing-extensions

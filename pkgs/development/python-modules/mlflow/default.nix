@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.29.0";
+  version = "1.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+tUYYA9RW8gcv3cFPVBrdpRBIpEFtqS/hXX+qmOgDak=";
+    hash = "sha256-Ln1R9uLcbMIxbnLc9BNSF8WByPTx+d3hBmqrqeCyLHo=";
   };
 
   propagatedBuildInputs = [

@@ -41,6 +41,22 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
       sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
     })
+    (fetchpatch {
+      name = "CVE-2022-2953.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/48d6ece8389b01129e7d357f0985c8f938ce3da3.patch";
+      sha256 = "sha256-h9hulV+dnsUt/2Rsk4C1AKdULkvweM2ypIJXYQ3BqQU=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-3626.CVE-2022-3627.CVE-2022-3597.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/236b7191f04c60d09ee836ae13b50f812c841047.patch";
+      excludes = [ "doc/tools/tiffcrop.rst" ];
+      sha256 = "sha256-L2EMmmfMM4oEYeLapO93wvNS+HlO0yXsKxijXH+Wuas=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-3598.CVE-2022-3570.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/cfbb883bf6ea7bedcb04177cc4e52d304522fdff.patch";
+      sha256 = "sha256-SLq2+JaDEUOPZ5mY4GPB6uwhQOG5cD4qyL5o9i8CVVs=";
+    })
   ];
 
   postPatch = ''

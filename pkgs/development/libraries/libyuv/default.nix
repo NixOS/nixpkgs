@@ -24,10 +24,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
+  NIX_CFLAGS_LINK = lib.optional stdenv.isDarwin "-ljpeg";
+
   meta = with lib; {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";
     description = "Open source project that includes YUV scaling and conversion functionality";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ leixb ];
     license = licenses.bsd3;
   };

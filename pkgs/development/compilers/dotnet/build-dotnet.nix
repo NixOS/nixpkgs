@@ -23,6 +23,7 @@ assert if type == "sdk" then packages != null else true;
 , lttng-ust_2_12
 , testers
 , runCommand
+, writeShellScript
 }:
 
 let
@@ -71,9 +72,16 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ $out
+
+    mkdir -p $out/share/doc/$pname/$version
+    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
+    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
     ln -s $out/dotnet $out/bin/dotnet
+
     runHook postInstall
   '';
 
@@ -120,6 +128,18 @@ stdenv.mkDerivation (finalAttrs: rec {
       "x86_64-darwin" = "osx-x64";
       "aarch64-darwin" = "osx-arm64";
     };
+
+    updateScript =
+      if type == "sdk" then
+      let
+        majorVersion =
+          with lib;
+          concatStringsSep "." (take 2 (splitVersion version));
+      in
+      writeShellScript "update-dotnet-${majorVersion}" ''
+        pushd pkgs/development/compilers/dotnet
+        exec ${./update.sh} "${majorVersion}"
+      '' else null;
 
     # Convert a "stdenv.hostPlatform.system" to a dotnet RID
     systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
