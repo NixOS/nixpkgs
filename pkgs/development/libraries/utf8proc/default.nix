@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake
+  # passthru.tests
+, tmux
+, fcft
+, arrow-cpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "utf8proc";
@@ -19,6 +24,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit fcft tmux arrow-cpp;
+  };
 
   meta = with lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
