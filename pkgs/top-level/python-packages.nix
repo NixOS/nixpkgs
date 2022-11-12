@@ -6137,6 +6137,8 @@ self: super: with self; {
 
   nibabel = callPackage ../development/python-modules/nibabel { };
 
+  nibe = callPackage ../development/python-modules/nibe { };
+
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
   Nikola = callPackage ../development/python-modules/Nikola { };
