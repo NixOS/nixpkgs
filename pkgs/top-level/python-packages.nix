@@ -666,6 +666,8 @@ self: super: with self; {
 
   async-lru = callPackage ../development/python-modules/async-lru { };
 
+  async-modbus = callPackage ../development/python-modules/async-modbus { };
+
   asyncclick = callPackage ../development/python-modules/asyncclick { };
 
   asynccmd = callPackage ../development/python-modules/asynccmd { };
