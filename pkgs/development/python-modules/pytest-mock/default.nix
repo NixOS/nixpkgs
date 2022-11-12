@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.8.2";
+  version = "3.10.0";
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d/A/RVQ5JVhwApXgWu0LEJaiDUpgpPPdzeWLDDHI/KI=";
+    hash = "sha256-+72whe98JSoyb9jNysCqOxMz2IEfExvcxwEALhvn7U8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
