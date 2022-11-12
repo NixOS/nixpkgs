@@ -316,6 +316,7 @@ in {
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
+  keyoxide-web = handleTest ./web-apps/keyoxide-web.nix {};
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5 {});
