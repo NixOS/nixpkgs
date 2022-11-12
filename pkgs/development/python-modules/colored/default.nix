@@ -25,9 +25,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://gitlab.com/dslackw/colored";
     description = "Simple library for color and formatting to terminal";
+    homepage = "https://gitlab.com/dslackw/colored";
+    changelog = "https://gitlab.com/dslackw/colored/-/raw/${version}/CHANGES.md";
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
-
 }
