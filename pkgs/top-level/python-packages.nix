@@ -1074,9 +1074,15 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
-  pulumi = callPackage ../development/python-modules/pulumi { };
+  pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+
+  pulumi-aws-native = pkgs.pulumiPackages.pulumi-aws-native.sdks.python;
+
+  pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
+
+  pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
   backcall = callPackage ../development/python-modules/backcall { };
 
