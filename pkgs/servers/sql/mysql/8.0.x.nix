@@ -16,6 +16,10 @@ self = stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison cmake pkg-config ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
+  patches = [
+    ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+  ];
+
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
