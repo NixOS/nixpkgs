@@ -109,6 +109,12 @@ let
           url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
           sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
         })
+      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.0") [
+        # needed for #12601 to get applied successfully
+        (fetchpatch {
+          url = "https://github.com/crystal-lang/crystal/commit/bf4009dacbf67a63a1cbaffddbdc99549bb70a03.patch";
+          sha256 = "sha256-KpMA5Zdy0QI+HcfuZVRT2gLPS7oH2D4MsdYEnHGDt/0=";
+        })
       ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
         # fixes an issue that prevented tests from passing when ran with
         # the --release flag
