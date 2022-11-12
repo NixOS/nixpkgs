@@ -1,12 +1,12 @@
 { alsa-lib, autoPatchelfHook, fetchurl, gtk3, libnotify
 , makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
-, xorg
+, xorg, qtbase, wrapQtAppsHook, mesa
 }:
 
 let
   bits = "x86_64";
 
-  version = "4.11.3";
+  version = "10.107.10";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
@@ -17,25 +17,25 @@ let
     categories = [ "Network" ];
   };
 
-  tarball = "Wavebox_${lib.replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
+  tarball = "Wavebox_${version}-2.tar.gz";
 
 in stdenv.mkDerivation {
   pname = "wavebox";
   inherit version;
   src = fetchurl {
-    url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-    sha256 = "0z04071lq9bfyrlg034fmvd4346swgfhxbmsnl12m7c2m2b9z784";
+    url = "https://download.wavebox.app/stable/linux/tar/${tarball}";
+    sha256 = "17q72bmq461bh75dwawwfpc7pd73pahx6gm6rd89kb5xgad01dvi";
   };
 
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
 
   buildInputs = with xorg; [
-    libXdmcp libXScrnSaver libXtst
+    libXdmcp libXScrnSaver libXtst libXdamage libXrandr
   ] ++ [
-    alsa-lib gtk3 nss
+    alsa-lib qtbase nss stdenv.cc.cc.lib gtk3 mesa
   ];
 
   runtimeDependencies = [ (lib.getLib udev) libnotify ];
@@ -52,15 +52,16 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     # make xdg-open overrideable at runtime
-    makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
+    makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
       --suffix PATH : ${xdg-utils}/bin
   '';
 
   meta = with lib; {
-    description = "Wavebox messaging application";
-    homepage = "https://wavebox.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ rawkode ];
+    description = "Browser application for webapps";
+    homepage = https://wavebox.io;
+    changelog = https://wavebox.io/blog/tag/releases/;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ rawkode eddsteel ];
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
   };
