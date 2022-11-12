@@ -11470,6 +11470,8 @@ self: super: with self; {
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
 
+  umodbus = callPackage ../development/python-modules/umodbus { };
+
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
   unasync = callPackage ../development/python-modules/unasync { };
