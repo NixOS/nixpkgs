@@ -82,12 +82,12 @@ in {
     user = mkOption {
       type = types.str;
       default = "keyoxide-web";
-      description = "The user as which to run Keyoxide-web.";
+      description = mdDoc "The user as which to run Keyoxide-web.";
     };
     group = mkOption {
       type = types.str;
       default = "keyoxide-web";
-      description = "The group as which to run Keyoxide-web.";
+      description = mdDoc "The group as which to run Keyoxide-web.";
     };
 
   };
@@ -95,7 +95,7 @@ in {
   config = mkIf cfg.enable {
 
     systemd.services.keyoxide-web = {
-      description = "Keyoxide Web service";
+      description = mdDoc "Keyoxide Web service";
       documentation = [ "https://docs.keyoxide.org/" ];
 
       wantedBy = [ "multi-user.target" ];
