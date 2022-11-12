@@ -167,6 +167,8 @@
   ebuild-mode = callPackage ./ebuild-mode { };
 
   evil-markdown = callPackage ./evil-markdown { };
+  cask = callPackage ./cask { };
+
 
   emacspeak = callPackage ./emacspeak { };
 

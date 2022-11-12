@@ -16592,8 +16592,6 @@ with pkgs;
 
   cadre = callPackage ../development/tools/cadre { };
 
-  cask = callPackage ../development/tools/cask { };
-
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
