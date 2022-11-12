@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , intltool
 , autoreconfHook
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     sha256 = "J/1YeW+qHNTMASDDTqhTFaCJHscfVbxnk8FOzxaKP1c=";
   };
 
+  patches = [
+    # Support lasem 0.7.
+    # https://gitlab.gnome.org/GNOME/goffice/-/merge_requests/7
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/goffice/-/commit/5ebb6be7ded738c7f7a0ab32e8cf30c5115dcd51.patch";
+      sha256 = "iYQSqsuR+NpXj1T7u6lSlXhHBI3h5OOvVTLDAjNHwhU=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     intltool
@@ -56,6 +66,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-gtk-doc"
+    "--with-lasem"
   ];
 
   enableParallelBuilding = true;
