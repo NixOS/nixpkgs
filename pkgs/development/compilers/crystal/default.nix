@@ -67,7 +67,7 @@ let
         patchShebangs $out/bin/crystal
       '';
 
-      meta.broken = (lib.versionOlder version "1.2.0" && isAarch64Darwin) || (lib.versionAtLeast version "1.3.0" && stdenv.system == "i686-linux") || (lib.versionAtLeast version "1.5.0" && stdenv.system == "aarch64-linux");
+      meta.platforms = lib.attrNames sha256s;
     };
 
   commonBuildInputs = extraBuildInputs: [
@@ -243,13 +243,11 @@ let
       };
 
       meta = with lib; {
-        broken = stdenv.isDarwin;
+        inherit (binary.meta) platforms;
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
-        platforms = let archNames = builtins.attrNames archs; in
-          if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
       };
     })
   );
