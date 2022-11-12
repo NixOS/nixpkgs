@@ -62,6 +62,16 @@ let
         };
       });
 
+      nibe = super.nibe.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.0";
+        src = fetchFromGitHub {
+          owner = "yozik04";
+          repo = "nibe";
+          rev = "refs/tags/${version}";
+          hash = "sha256-DguGWNJfc5DfbcKMX2eMM2U1WyVPcdtv2BmpVloOFSU=";
+        };
+      });
+
       # pytest-aiohttp>0.3.0 breaks home-assistant tests
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
