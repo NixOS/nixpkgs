@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "eve";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "Eve";
-    sha256 = "sha256-UiOhnJyEy5bPIIRHAhuWo8AqHOCp0OE5d0btujfeq4o=";
+    sha256 = "sha256-RZ6dwekCKA+PomBp2Ht7/0elOLLUs/sO0KgdxxTOjtc=";
   };
 
   disabled = pythonOlder "3.7";
