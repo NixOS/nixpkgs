@@ -12,6 +12,7 @@ buildFHSUserEnv {
 
   targetPkgs = pkgs: with pkgs; [
     heroic-unwrapped
+    gamemode
     curl
     gawk
     gnome.zenity
