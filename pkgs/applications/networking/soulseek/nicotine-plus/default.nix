@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-swFNFw2a5PXwBkh0FBrCy5u3m5gErq29ZmWhMP7MpmQ=";
   };
 
-  nativeBuildInputs = [ gettext wrapGAppsHook ];
+  nativeBuildInputs = [ gettext wrapGAppsHook gobject-introspection ];
 
   propagatedBuildInputs = [
     gdk-pixbuf
