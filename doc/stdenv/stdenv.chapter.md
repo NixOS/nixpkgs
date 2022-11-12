@@ -309,13 +309,20 @@ The attribute can also contain a list, a script followed by arguments to be pass
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 ```
 
-The script will be run with the `UPDATE_NIX_NAME`, `UPDATE_NIX_PNAME`, `UPDATE_NIX_OLD_VERSION` and `UPDATE_NIX_ATTR_PATH` environment variables set respectively to the name, pname, old version and attribute path of the package it is supposed to update.
+##### How update scripts are executed? {#var-passthru-updateScript-execution}
+
+Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
+
+Each update script will be passed the following environment variables:
+
+- [`UPDATE_NIX_NAME`]{#var-passthru-updateScript-env-UPDATE_NIX_NAME} – content of the `name` attribute of the updated package.
+- [`UPDATE_NIX_PNAME`]{#var-passthru-updateScript-env-UPDATE_NIX_PNAME} – content of the `pname` attribute of the updated package.
+- [`UPDATE_NIX_OLD_VERSION`]{#var-passthru-updateScript-env-UPDATE_NIX_OLD_VERSION} – content of the `version` attribute of the updated package.
+- [`UPDATE_NIX_ATTR_PATH`]{#var-passthru-updateScript-env-UPDATE_NIX_ATTR_PATH} – attribute path the `update.nix` discovered the package on (or the [canonical `attrPath`](#var-passthru-updateScript-set-attrPath) when available). Example: `pantheon.elementary-terminal`
 
 ::: {.note}
-The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running `git commit` or any other commands that cannot handle that.
+An update script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that `update.nix` executes update scripts in parallel by default so you should avoid running `git commit` or any other commands that cannot handle that.
 :::
-
-For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
