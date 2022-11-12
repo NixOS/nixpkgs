@@ -631,6 +631,18 @@ with lib.maintainers; {
     shortName = "Release";
   };
 
+  rocm = {
+    members = [
+      Madouura
+      Flakebi
+    ];
+    githubTeams = [
+      "rocm-maintainers"
+    ];
+    scope = "Maintain ROCm and related packages.";
+    shortName = "ROCm";
+  };
+
   ruby = {
     members = [
       marsam
