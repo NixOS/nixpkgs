@@ -15782,7 +15782,7 @@ with pkgs;
   php81 = callPackage ../development/interpreters/php/8.1.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     pcre2 = pcre2.override {
-      withJitSealloc = false; # Needed to avoid crashes, see https://bugs.php.net/bug.php?id=78630
+      withJitSealloc = !stdenv.isDarwin;
     };
   };
   php81Extensions = recurseIntoAttrs php81.extensions;
