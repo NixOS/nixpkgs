@@ -1,16 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-localserver
+, pytest-asyncio
+, pytest-httpserver
 , pytestCheckHook
 , pythonOlder
 , requests
+, toml
+, types-toml
+, typing-extensions
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,16 +25,22 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     rev = version;
-    hash = "sha256-qYohrXrQkUBPo7yC+ZOwidDaCg/2nteXKAOCUvR4k2Q=";
+    hash = "sha256-VOIpowxPvYmufnj9MM/vMtZQDIOxorAhMCNK0fX/j1U=";
   };
 
   propagatedBuildInputs = [
     requests
+    toml
+    types-toml
     urllib3
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
+
   checkInputs = [
-    pytest-localserver
+    pytest-asyncio
+    pytest-httpserver
     pytestCheckHook
   ];
 
