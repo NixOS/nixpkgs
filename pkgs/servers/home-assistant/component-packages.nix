@@ -2128,8 +2128,9 @@
     "nfandroidtv" = ps: with ps; [
     ]; # missing inputs: notifications-android-tv
     "nibe_heatpump" = ps: with ps; [
+      nibe
       tenacity
-    ]; # missing inputs: nibe
+    ];
     "nightscout" = ps: with ps; [
       py-nightscout
     ];
@@ -4144,6 +4145,7 @@
     "nexia"
     "nextbus"
     "nextdns"
+    "nibe_heatpump"
     "nightscout"
     "nina"
     "nmap_tracker"
