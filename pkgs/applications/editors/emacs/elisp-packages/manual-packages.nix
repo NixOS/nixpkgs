@@ -1,4 +1,6 @@
-{ lib, pkgs }: self: with self; with lib.licenses; {
+{ lib, pkgs }:
+
+self: with self; {
 
   elisp-ffi = let
     rev = "da37c516a0e59bdce63fb2dc006a231dee62a1d9";
@@ -38,7 +40,7 @@
         driving a subprocess to do the heavy lifting, passing result
         values on to Emacs.
       '';
-      license = publicDomain;
+      license = lib.licenses.publicDomain;
     };
   };
 
@@ -60,7 +62,7 @@
 
     meta = {
       description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
-      license = bsd3;
+      license = lib.licenses.bsd3;
     };
   };
 
@@ -143,64 +145,10 @@
 
     meta = {
       description = "A chat client and API wrapper for Matrix.org";
-      license = gpl3Plus;
+      license = lib.licenses.gpl3Plus;
     };
 
   };
-
-  agda2-mode = callPackage ./agda2-mode { };
-
-  agda-input = callPackage ./agda-input{ };
-
-  bqn-mode = callPackage ./bqn-mode { };
-
-  llvm-mode = callPackage ./llvm-mode { };
-
-  ott-mode = callPackage ./ott-mode { };
-
-  urweb-mode = callPackage ./urweb-mode { };
-
-  voicemacs = callPackage ./voicemacs { };
-
-  # Packages made the classical callPackage way
-
-  ebuild-mode = callPackage ./ebuild-mode { };
-
-  evil-markdown = callPackage ./evil-markdown { };
-  cask = callPackage ./cask { };
-
-
-  emacspeak = callPackage ./emacspeak { };
-
-  ement = callPackage ./ement { };
-
-  ess-R-object-popup = callPackage ./ess-R-object-popup { };
-
-  font-lock-plus = callPackage ./font-lock-plus { };
-
-  git-undo = callPackage ./git-undo { };
-
-  header-file-mode = callPackage ./header-file-mode { };
-
-  helm-words = callPackage ./helm-words { };
-
-  idris2-mode = callPackage ./idris2-mode { };
-
-  isearch-plus = callPackage ./isearch-plus { };
-
-  isearch-prop = callPackage ./isearch-prop { };
-
-  jam-mode = callPackage ./jam-mode { };
-
-  nano-theme = callPackage ./nano-theme { };
-
-  perl-completion = callPackage ./perl-completion { };
-
-  control-lock = callPackage ./control-lock { };
-
-  pod-mode = callPackage ./pod-mode { };
-
-  power-mode = callPackage ./power-mode { };
 
   prisma-mode = let
     rev = "5283ca7403bcb21ca0cac8ecb063600752dfd9d4";
@@ -227,16 +175,69 @@
 
     meta = {
       description = "Major mode for Prisma Schema Language";
-      license = gpl2Only;
+      license = lib.licenses.gpl2Only;
     };
   };
+
+  agda-input = callPackage ./agda-input { };
+
+  agda2-mode = callPackage ./agda2-mode { };
+
+  bqn-mode = callPackage ./bqn-mode { };
+
+  cask = callPackage ./cask { };
+
+  control-lock = callPackage ./control-lock { };
+
+  ebuild-mode = callPackage ./ebuild-mode { };
+
+  emacspeak = callPackage ./emacspeak { };
+
+  ement = callPackage ./ement { };
+
+  ess-R-object-popup = callPackage ./ess-R-object-popup { };
+
+  evil-markdown = callPackage ./evil-markdown { };
+
+  font-lock-plus = callPackage ./font-lock-plus { };
+
+  git-undo = callPackage ./git-undo { };
+
+  header-file-mode = callPackage ./header-file-mode { };
+
+  helm-words = callPackage ./helm-words { };
+
+  idris2-mode = callPackage ./idris2-mode { };
+
+  isearch-plus = callPackage ./isearch-plus { };
+
+  isearch-prop = callPackage ./isearch-prop { };
+
+  jam-mode = callPackage ./jam-mode { };
+
+  llvm-mode = callPackage ./llvm-mode { };
+
+  nano-theme = callPackage ./nano-theme { };
+
+  ott-mode = callPackage ./ott-mode { };
+
+  perl-completion = callPackage ./perl-completion { };
+
+  pod-mode = callPackage ./pod-mode { };
+
+  power-mode = callPackage ./power-mode { };
 
   structured-haskell-mode = self.shm;
 
   sv-kalender = callPackage ./sv-kalender { };
 
   tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
+
   tsc = callPackage ./tsc { };
+
+  urweb-mode = callPackage ./urweb-mode { };
+
+  voicemacs = callPackage ./voicemacs { };
 
   yes-no = callPackage ./yes-no { };
 
