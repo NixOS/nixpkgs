@@ -108,6 +108,16 @@ stdenv.mkDerivation rec {
     "-Dfwupd=false"
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # By default Flatpaks installed through gnome-software have the full Nix
+      # store path hardcoded into the launcher/desktop file. After that version
+      # of Flatpak has been garbage-collected they stop working.
+      # The same fix is already applied to the flatpak binary itself.
+      --set FLATPAK_BINARY flatpak
+    )
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
