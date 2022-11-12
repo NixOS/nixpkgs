@@ -4939,6 +4939,13 @@
     githubId = 37017396;
     name = "gbtb";
   };
+  gdamjan = {
+    email = "gdamjan@gmail.com";
+    matrix = "@gdamjan:spodeli.org";
+    github = "gdamjan";
+    githubId = 81654;
+    name = "Damjan Georgievski";
+  };
   gdinh = {
     email = "nix@contact.dinh.ai";
     github = "gdinh";
