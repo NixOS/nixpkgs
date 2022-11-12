@@ -26436,6 +26436,8 @@ with pkgs;
 
   hermit = callPackage ../data/fonts/hermit { };
 
+  hubot-sans = callPackage ../data/fonts/hubot-sans { };
+
   humanity-icon-theme = callPackage ../data/icons/humanity-icon-theme { };
 
   hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
@@ -26652,6 +26654,8 @@ with pkgs;
   };
 
   moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
+
+  mona-sans = callPackage ../data/fonts/mona-sans { };
 
   monoid = callPackage ../data/fonts/monoid { };
 

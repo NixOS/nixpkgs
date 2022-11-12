@@ -12,6 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
 in
 
 {
@@ -65,10 +66,14 @@ in
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme.name = mkDefault "Mint-X";
-        theme.package = mkDefault pkgs.cinnamon.mint-themes;
-        iconTheme.name = mkDefault "Mint-X-Dark";
-        iconTheme.package = mkDefault pkgs.cinnamon.mint-x-icons;
+        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+          name = mkDefault "Mint-X";
+          package = mkDefault pkgs.cinnamon.mint-themes;
+        };
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
+          name = mkDefault "Mint-X-Dark";
+          package = mkDefault pkgs.cinnamon.mint-x-icons;
+        };
       };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
@@ -123,11 +128,8 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; [
+      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
         desktop-file-utils
-        nixos-artwork.wallpapers.simple-dark-gray
-        onboard
-        sound-theme-freedesktop
 
         # common-files
         cinnamon-common
@@ -152,24 +154,32 @@ in
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
-        orca
 
         # theme
         gnome.adwaita-icon-theme
-        hicolor-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
+
+        # other
+        glib # for gsettings
+        xdg-user-dirs
+      ] ++ utils.removePackagesByName [
+        # accessibility
+        onboard
+        orca
+
+        # theme
+        sound-theme-freedesktop
+        nixos-artwork.wallpapers.simple-dark-gray
         mint-artwork
         mint-themes
         mint-x-icons
         mint-y-icons
         vanilla-dmz
+      ] config.environment.cinnamon.excludePackages);
 
-        # other
-        glib # for gsettings
-        shared-mime-info # for update-mime-database
-        xdg-user-dirs
-      ];
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -183,7 +193,7 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
+      # Harmonize Qt5 applications under Cinnamon
       qt5.enable = true;
       qt5.platformTheme = "gnome";
       qt5.style = "adwaita";
