@@ -284,6 +284,8 @@ self: super: with self; {
 
   aioqsw = callPackage ../development/python-modules/aioqsw { };
 
+  aioquic = callPackage ../development/python-modules/aioquic { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -8035,6 +8037,8 @@ self: super: with self; {
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 
   pylru = callPackage ../development/python-modules/pylru { };
+
+  pylsqpack = callPackage ../development/python-modules/pylsqpack { };
 
   pyls-black = callPackage ../development/python-modules/pyls-black { };
 
