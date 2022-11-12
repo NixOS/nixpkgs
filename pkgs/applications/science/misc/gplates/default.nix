@@ -14,13 +14,15 @@
 , libGLU
 , mpfr
 , proj
-, python3
+# build with Python 3.10 fails, because boost <= 1.78 can't find
+# pythons with double digits in minor versions, like X.YZ
+, python39
 , qtxmlpatterns
 , qwt
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
+  python = python39.withPackages (ps: with ps; [
     numpy
   ]);
   boost' = boost.override {
