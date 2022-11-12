@@ -3,13 +3,15 @@
 , fetchFromGitHub
 , paho-mqtt
 , pythonOlder
+, setuptools
+, setuptools-scm
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-mqtt";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "0.14.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +19,15 @@ buildPythonPackage rec {
     owner = "sbtinstruments";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-On4N5KPnbwYrJguWwBdrnaNq58ZeGIPYSFzIRBfojpQ=";
+    hash = "sha256-ByVslOx/XsxVan2/xdRi+wOQR9oVpIGtHPcHlIcHMEk=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     paho-mqtt
@@ -26,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # Module will have tests starting with > 0.13.0
+  # Module will have tests starting with > 0.14.0
   doCheck = false;
 
   pythonImportsCheck = [
