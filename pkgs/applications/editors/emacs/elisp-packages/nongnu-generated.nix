@@ -1208,10 +1208,10 @@
       elpaBuild {
         pname = "helm";
         ename = "helm";
-        version = "3.8.8";
+        version = "3.8.9";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-3.8.8.tar";
-          sha256 = "1qsiw8gswjwfp79n7g103db7xsmk36lq6ln558ipn4cw0fpnq1sc";
+          url = "https://elpa.nongnu.org/nongnu/helm-3.8.9.tar";
+          sha256 = "0hikp6g5g7cy290qxd768vxy91gxj92cwrrzp8kicxy3qck1q39v";
         };
         packageRequires = [ helm-core popup ];
         meta = {
@@ -1223,10 +1223,10 @@
       elpaBuild {
         pname = "helm-core";
         ename = "helm-core";
-        version = "3.8.8";
+        version = "3.8.9";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.8.tar";
-          sha256 = "0wg21425ki8n8d954lkmlyci6awwwv53jg4gn5z495vh27qiv3qn";
+          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.9.tar";
+          sha256 = "03fzcc84gjslgsssbpjhdgnj7dn0pdfb5b2x79ss9vfvxamf2k94";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -2378,10 +2378,10 @@
       elpaBuild {
         pname = "subed";
         ename = "subed";
-        version = "1.0.18";
+        version = "1.0.19";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/subed-1.0.18.tar";
-          sha256 = "1iddwddsw2vwzqz6pck8p76ya7ai248mxhg2whin3d3fw4c8xcfz";
+          url = "https://elpa.nongnu.org/nongnu/subed-1.0.19.tar";
+          sha256 = "1wgicb0lvnghhr3a1xndkaxhs1c9gc1ac5xwvxcsc9zpgzrlmcda";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2393,10 +2393,10 @@
       elpaBuild {
         pname = "sweeprolog";
         ename = "sweeprolog";
-        version = "0.8.3";
+        version = "0.8.6";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.8.3.tar";
-          sha256 = "0gng74bxb0nw7lm147gq2qsgry7y1dwskhrqfzfvx6jjvw86lcg7";
+          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.8.6.tar";
+          sha256 = "108hjh276xgl0xhn2f7h43725xi49zh6j2xrcc17xw2i0phhhswf";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2654,10 +2654,10 @@
       elpaBuild {
         pname = "vcomplete";
         ename = "vcomplete";
-        version = "1.2.1";
+        version = "2.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/vcomplete-1.2.1.tar";
-          sha256 = "1fcchgv4kdmhzgincfy1jm625lwj3qrjskd0cswag5z15by6b5xf";
+          url = "https://elpa.nongnu.org/nongnu/vcomplete-2.0.tar";
+          sha256 = "0fh5rfvhjmpfdhp4k4b1y57zlsixiabhzca9329id48p8jm4rqyp";
         };
         packageRequires = [ emacs ];
         meta = {
