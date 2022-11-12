@@ -10,11 +10,10 @@
 , glibcLocales
 , gnupg
 , gpgme
-, mock
-, urllib3
 , paramiko
 , pytestCheckHook
 , pythonOlder
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -36,18 +35,28 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  passthru.optional-dependencies = {
+    fastimport = [
+      fastimport
+    ];
+    pgp = [
+      gpgme
+      gnupg
+    ];
+    paramiko = [
+      paramiko
+    ];
+  };
+
   checkInputs = [
-    fastimport
     gevent
     geventhttpclient
     git
     glibcLocales
-    gpgme
-    gnupg
-    mock
-    paramiko
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.fastimport
+  ++ passthru.optional-dependencies.pgp
+  ++ passthru.optional-dependencies.paramiko;
 
   doCheck = !stdenv.isDarwin;
 
@@ -70,7 +79,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple Python implementation of the Git file formats and protocols";
+    description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
       does not depend on Git itself. All functionality is available in pure Python.
