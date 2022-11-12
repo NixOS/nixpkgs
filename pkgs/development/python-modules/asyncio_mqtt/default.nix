@@ -1,7 +1,9 @@
 { lib
+, anyio
 , buildPythonPackage
 , fetchFromGitHub
 , paho-mqtt
+, pytestCheckHook
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -35,11 +37,29 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # Module will have tests starting with > 0.14.0
-  doCheck = false;
+  checkInputs = [
+    anyio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "asyncio_mqtt"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_client_filtered_messages"
+    "test_client_unfiltered_messages"
+    "test_client_unsubscribe"
+    "test_client_will"
+    "test_client_tls_context"
+    "test_client_tls_params"
+    "test_client_username_password "
+    "test_client_logger"
+    "test_client_max_concurrent_outgoing_calls"
+    "test_client_websockets"
+    "test_client_pending_calls_threshold"
+    "test_client_no_pending_calls_warnings_with_max_concurrent_outgoing_calls"
   ];
 
   meta = with lib; {
