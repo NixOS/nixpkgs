@@ -2179,7 +2179,6 @@ with pkgs;
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2; };
-    gsl = gsl_1;
   };
 
   async = callPackage ../development/tools/async {};
@@ -3819,7 +3818,7 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
-  djv = callPackage ../applications/graphics/djv { stdenv = gcc10StdenvCompat; };
+  djv = callPackage ../applications/graphics/djv { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
 
@@ -8313,6 +8312,8 @@ with pkgs;
   };
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { };
+
+  katana = callPackage ../tools/security/katana { };
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
