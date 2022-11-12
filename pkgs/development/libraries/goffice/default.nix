@@ -1,5 +1,23 @@
-{ fetchurl, lib, stdenv, pkg-config, intltool, glib, gtk3, lasem
-, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome }:
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, intltool
+, autoreconfHook
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, glib
+, gtk3
+, lasem
+, libgsf
+, libxml2
+, libxslt
+, cairo
+, pango
+, librsvg
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "goffice";
@@ -12,13 +30,33 @@ stdenv.mkDerivation rec {
     sha256 = "J/1YeW+qHNTMASDDTqhTFaCJHscfVbxnk8FOzxaKP1c=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
-
-  propagatedBuildInputs = [
-    glib gtk3 libxml2 cairo pango libgsf lasem
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    autoreconfHook
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_45
   ];
 
-  buildInputs = [ libxslt librsvg ];
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    libxml2
+    cairo
+    pango
+    libgsf
+    lasem
+  ];
+
+  buildInputs = [
+    libxslt
+    librsvg
+  ];
+
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
 
   enableParallelBuilding = true;
   doCheck = !stdenv.hostPlatform.isPower64;
