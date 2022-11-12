@@ -8314,6 +8314,8 @@ with pkgs;
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { };
 
+  katana = callPackage ../tools/security/katana { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
