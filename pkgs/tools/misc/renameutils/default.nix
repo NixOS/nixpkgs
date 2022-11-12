@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ readline ];
-  buildInputs = lib.optionals stdenv.isDarwin [ coreutils ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/apply.c \
