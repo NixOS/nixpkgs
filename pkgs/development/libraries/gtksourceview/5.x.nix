@@ -74,6 +74,13 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
+
   doCheck = stdenv.isLinux;
 
   checkPhase = ''

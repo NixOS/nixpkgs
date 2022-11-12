@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.22";
+  version = "2.0.23";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RFyQvg7CF5Fa+DnOo0PoDtGPJMOx0Md8I+gshMH2Fvs=";
+    hash = "sha256-FQnyWC7d9h8Ya2BlaTGTrNXkHtJJLdeNL7qXP7scLFA=";
   };
 
   postPatch = ''
