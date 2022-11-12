@@ -1284,12 +1284,12 @@
     "version": "3.4.0"
   },
   "yandex": {
-    "hash": "sha256-WdiJD1gt56VDFe2qVKwiYOvneixaGRie6mrxdOCklQY=",
+    "hash": "sha256-HBGQ+WrAy+f0nK0iyd/Z+Mj5AshvHyGyBEN0E61ftn0=",
     "owner": "yandex-cloud",
     "provider-source-address": "registry.terraform.io/yandex-cloud/yandex",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.81.0",
-    "vendorHash": "sha256-n+XARZuMzmxUGxFAseKyiBsKuGDUl8T6LWXzJ+6ZJ/E=",
-    "version": "0.81.0"
+    "rev": "v0.82.0",
+    "vendorHash": "sha256-Tgfgq3nrfZP2ie4KLmJq83TfzZ41lc4gwWIULLOQmBw=",
+    "version": "0.82.0"
   }
 }
