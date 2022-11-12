@@ -89,7 +89,10 @@ stdenv.mkDerivation rec {
     install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
   '';
 
-  cmakeFlags = lib.optionals enableTests [
+  cmakeFlags = [
+    # Helps xrootd to find its plugins
+    "-DCMAKE_INSTALL_RPATH=${placeholder "out"}/lib"
+  ] ++ lib.optionals enableTests [
     "-DENABLE_TESTS=TRUE"
   ];
 
