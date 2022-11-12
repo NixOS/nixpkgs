@@ -6,34 +6,7 @@ self: with self; {
 
   ghc-mod = callPackage ./elisp-ffi { };
 
-  haskell-unicode-input-method = let
-    rev = "d8d168148c187ed19350bb7a1a190217c2915a63";
-  in melpaBuild {
-    pname = "haskell-unicode-input-method";
-    version = "20110905.2307";
-
-    commit = rev;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "roelvandijk";
-      repo = "emacs-haskell-unicode-input-method";
-      inherit rev;
-      sha256 = "09b7bg2s9aa4s8f2kdqs4xps3jxkq5wsvbi87ih8b6id38blhf78";
-    };
-
-    recipe = pkgs.writeText "recipe" ''
-      (haskell-unicode-input-method
-       :repo "roelvandijk/emacs-haskell-unicode-input-method"
-       :fetcher github)
-    '';
-
-    packageRequires = [];
-
-    meta = {
-      homepage = "https://melpa.org/#haskell-unicode-input-method/";
-      license = lib.licenses.free;
-    };
-  };
+  haskell-unicode-input-method = callPackage ./haskell-unicode-input-method { };
 
   matrix-client = let
     rev = "d2ac55293c96d4c95971ed8e2a3f6f354565c5ed";
