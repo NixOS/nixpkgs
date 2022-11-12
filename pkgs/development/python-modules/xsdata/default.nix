@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "22.9";
+  version = "22.11";
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xi1QArTeWbrKTE6p7f3Aj7d1lxPsIROaruv/IMw+fPw=";
+    hash = "sha256-3A2vyK6UdelWSzcN7pzPz6xKnU3X+rum7dKzl6OfWoc=";
   };
 
   postPatch = ''
@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python XML Binding";
     homepage = "https://github.com/tefra/xsdata";
+    changelog = "https://github.com/tefra/xsdata/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
