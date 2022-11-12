@@ -25939,6 +25939,7 @@ with pkgs;
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
+    ubootLibreTechCC
     ubootNanoPCT4
     ubootNovena
     ubootOdroidC2
