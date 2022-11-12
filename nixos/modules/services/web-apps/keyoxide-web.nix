@@ -15,15 +15,18 @@ in {
       description = mdDoc "The domain on which the instance is hosted";
       example = "keyoxide.org";
       type = types.str;
+      default = "";
     };
     onionUrl = mkOption {
       description = mdDoc "The onion URL that points to the same instance";
       example = "keyoxide3hd2j9djj.onion";
       type = types.str;
+      default = "";
     };
     proxyHostname = mkOption {
       description = mdDoc "The hostname of the doip-proxy instance to use";
       type = types.str;
+      default = "";
     };
     profileOne = {
       name = mkOption {
@@ -93,14 +96,13 @@ in {
 
     systemd.services.keyoxide-web = {
       description = "Keyoxide Web service";
-      documentation = "https://docs.keyoxide.org/";
+      documentation = [ "https://docs.keyoxide.org/" ];
 
       wantedBy = [ "multi-user.target" ];
       requires = [ "networking.target" ];
-      after = requires;
 
       environment = {
-        PORT = cfg.port;
+        PORT = toString cfg.port;
         DOMAIN = cfg.domain;
         ONION_URL = cfg.onionUrl;
         PROXY_HOSTNAME = cfg.proxyHostname;
@@ -115,11 +117,13 @@ in {
         KX_HIGHLIGHTS_3_FINGERPRINT = cfg.profileThree.fingerprint;
       };
 
-      Restart = "on-failure";
-      User = cfg.user;
-      SyslogIdentifier = "keyoxide-web";
-      RestartSec = "10s";
-      ExecStart = "${pkgs.keyoxide-web}/bin/keyoxide-web";
+      serviceConfig = {
+        Restart = "on-failure";
+        User = cfg.user;
+        SyslogIdentifier = "keyoxide-web";
+        RestartSec = "10s";
+        ExecStart = "${pkgs.keyoxide-web}/bin/keyoxide-web";
+      };
     };
 
     users.users.${cfg.user} = {
@@ -130,7 +134,6 @@ in {
     users.groups.${cfg.group} = {};
 
   };
-
 
   meta.maintainers = with maintainers; [ BrinkOfBailout ];
 }

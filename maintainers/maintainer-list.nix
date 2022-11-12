@@ -15832,4 +15832,15 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  BrinkOfBailout = {
+    name = "brinkofbailout";
+    email = "brinkofbailout@i2pmail.org";
+    github = "brinkofbailout";
+    githubId = 114080831;
+    keys = [
+      {
+        fingerprint = "5EC2 19C1 9916 FC65 31A1 E660 17D4 01E2 D27C 4262";
+      }
+    ];
+  };
 }
