@@ -86,7 +86,7 @@ in {
     };
     group = mkOption {
       type = types.str;
-      default = cfg.user;
+      default = "keyoxide-web";
       description = "The group as which to run Keyoxide-web.";
     };
 
