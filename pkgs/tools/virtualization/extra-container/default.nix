@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "erikarvstedt";
     repo = pname;
     rev = version;
-    hash = "sha256-vtCZ0w1Kaiw9bIrzwEb4Jnv7QoQLp8JDjaGmAP91hpE=";
+    hash = "sha256-ORe1tSWhmgIaDj3CTEovsFCq+60LQmYy8RUx9v7De30=";
   };
 
   buildCommand = ''
