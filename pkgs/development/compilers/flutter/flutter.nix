@@ -175,7 +175,7 @@ runCommand drvName
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ babariviere ericdallo ];
+    maintainers = with maintainers; [ babariviere ericdallo h7x4 ];
   };
 } ''
   mkdir -p $out/bin
