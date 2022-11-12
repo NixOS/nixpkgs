@@ -67,7 +67,7 @@ in
       homepage = "https://keyoxide.org";
       description = "A modern, secure and decentralized platform to prove your online identity.";
       license = licenses.agpl3Only;
-      maintainers = with maintainers; [ brinkofbailout ];
+      maintainers = with maintainers; [ BrinkOfBailout ];
     };
   }
 
