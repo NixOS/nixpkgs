@@ -2,93 +2,94 @@
 
 self: with self; {
 
-  elisp-ffi = callPackage ./elisp-ffi { };
+  agda-input = callPackage ./manual-packages/agda-input { };
 
-  ghc-mod = callPackage ./elisp-ffi { };
+  agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  haskell-unicode-input-method = callPackage ./haskell-unicode-input-method { };
+  bqn-mode = callPackage ./manual-packages/bqn-mode { };
 
-  matrix-client = callPackage ./matrix-client { _map = self.map; };
+  cask = callPackage ./manual-packages/cask { };
 
-  prisma-mode = callPackage ./prisma-mode { };
+  control-lock = callPackage ./manual-packages/control-lock { };
 
-  agda-input = callPackage ./agda-input { };
+  ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
 
-  agda2-mode = callPackage ./agda2-mode { };
+  elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
-  bqn-mode = callPackage ./bqn-mode { };
+  emacspeak = callPackage ./manual-packages/emacspeak { };
 
-  cask = callPackage ./cask { };
+  ement = callPackage ./manual-packages/ement { };
 
-  control-lock = callPackage ./control-lock { };
+  ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
-  ebuild-mode = callPackage ./ebuild-mode { };
+  evil-markdown = callPackage ./manual-packages/evil-markdown { };
 
-  emacspeak = callPackage ./emacspeak { };
+  font-lock-plus = callPackage ./manual-packages/font-lock-plus { };
 
-  ement = callPackage ./ement { };
+  ghc-mod = callPackage ./manual-packages/elisp-ffi { };
 
-  ess-R-object-popup = callPackage ./ess-R-object-popup { };
+  git-undo = callPackage ./manual-packages/git-undo { };
 
-  evil-markdown = callPackage ./evil-markdown { };
+  haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
-  font-lock-plus = callPackage ./font-lock-plus { };
+  header-file-mode = callPackage ./manual-packages/header-file-mode { };
 
-  git-undo = callPackage ./git-undo { };
+  helm-words = callPackage ./manual-packages/helm-words { };
 
-  header-file-mode = callPackage ./header-file-mode { };
+  idris2-mode = callPackage ./manual-packages/idris2-mode { };
 
-  helm-words = callPackage ./helm-words { };
+  isearch-plus = callPackage ./manual-packages/isearch-plus { };
 
-  idris2-mode = callPackage ./idris2-mode { };
+  isearch-prop = callPackage ./manual-packages/isearch-prop { };
 
-  isearch-plus = callPackage ./isearch-plus { };
+  jam-mode = callPackage ./manual-packages/jam-mode { };
 
-  isearch-prop = callPackage ./isearch-prop { };
+  llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
-  jam-mode = callPackage ./jam-mode { };
+  matrix-client = callPackage ./manual-packages/matrix-client {
+    _map = self.map;
+  };
 
-  llvm-mode = callPackage ./llvm-mode { };
+  nano-theme = callPackage ./manual-packages/nano-theme { };
 
-  nano-theme = callPackage ./nano-theme { };
+  ott-mode = callPackage ./manual-packages/ott-mode { };
 
-  ott-mode = callPackage ./ott-mode { };
+  perl-completion = callPackage ./manual-packages/perl-completion { };
 
-  perl-completion = callPackage ./perl-completion { };
+  pod-mode = callPackage ./manual-packages/pod-mode { };
 
-  pod-mode = callPackage ./pod-mode { };
+  power-mode = callPackage ./manual-packages/power-mode { };
 
-  power-mode = callPackage ./power-mode { };
+  prisma-mode = callPackage ./manual-packages/prisma-mode { };
 
   structured-haskell-mode = self.shm;
 
-  sv-kalender = callPackage ./sv-kalender { };
+  sv-kalender = callPackage ./manual-packages/sv-kalender { };
 
-  tree-sitter-langs = callPackage ./tree-sitter-langs { final = self; };
+  tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
-  tsc = callPackage ./tsc { };
+  tsc = callPackage ./manual-packages/tsc { };
 
-  urweb-mode = callPackage ./urweb-mode { };
+  urweb-mode = callPackage ./manual-packages/urweb-mode { };
 
-  voicemacs = callPackage ./voicemacs { };
+  voicemacs = callPackage ./manual-packages/voicemacs { };
 
-  yes-no = callPackage ./yes-no { };
+  yes-no = callPackage ./manual-packages/yes-no { };
 
-  youtube-dl = callPackage ./youtube-dl { };
+  youtube-dl = callPackage ./manual-packages/youtube-dl { };
 
   # From old emacsPackages (pre emacsPackagesNg)
-  cedille = callPackage ./cedille { cedille = pkgs.cedille; };
-  color-theme-solarized = callPackage ./color-theme-solarized { };
-  session-management-for-emacs = callPackage ./session-management-for-emacs { };
-  hsc3-mode = callPackage ./hsc3 { };
-  prolog-mode = callPackage ./prolog { };
-  rect-mark = callPackage ./rect-mark { };
-  sunrise-commander = callPackage ./sunrise-commander { };
+  cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
+  color-theme-solarized = callPackage ./manual-packages/color-theme-solarized { };
+  hsc3-mode = callPackage ./manual-packages/hsc3 { };
+  prolog-mode = callPackage ./manual-packages/prolog { };
+  rect-mark = callPackage ./manual-packages/rect-mark { };
+  session-management-for-emacs = callPackage ./manual-packages/session-management-for-emacs { };
+  sunrise-commander = callPackage ./manual-packages/sunrise-commander { };
 
   # camelCase aliases for some of the kebab-case expressions above
   colorThemeSolarized = color-theme-solarized;
   emacsSessionManagement = session-management-for-emacs;
   rectMark = rect-mark;
   sunriseCommander = sunrise-commander;
-
 }
