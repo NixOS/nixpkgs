@@ -1,12 +1,12 @@
 { lib, stdenv, buildPecl, php, valgrind, pcre2 }:
 let
   pname = "openswoole";
-  version = "4.11.1";
+  version = "4.12.0";
 in
 buildPecl {
   inherit pname version;
 
-  sha256 = "sha256-Rhoa4ny86dwB3e86/1W30AlDGRUDYjK8RusquKF5Izg=";
+  sha256 = "16fxwkjqihinzsmjbpzslf13m8yp0wnsqa2y5g0b07cf15g6qbny";
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
 
