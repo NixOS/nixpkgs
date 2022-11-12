@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname   = "amazon-ecs-agent";
-  version = "1.66.1";
+  version = "1.66.2";
 
   goPackagePath = "github.com/aws/${pname}";
   subPackages   = [ "agent" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev    = "v${version}";
     owner  = "aws";
     repo   = pname;
-    sha256 = "sha256-XMgZLjNGLKmyQ7QlWcDqWW8chBUyVWKHqCFkS3Xkyyw=";
+    sha256 = "sha256-mZzDvD+40YiC8cBpLlYd7K1p5UBYpso9OMCDijopuik=";
   };
 
   meta = with lib; {
