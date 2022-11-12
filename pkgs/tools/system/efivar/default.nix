@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-A38BKGMK3Vo+85wzgxmzTjzZXtpcY9OpbZaONWnMYNk=";
   };
 
+  postPatch = ''
+    substituteInPlace src/include/defaults.mk \
+      --replace "-Werror" ""
+  '';
+
   nativeBuildInputs = [ pkg-config mandoc ];
   buildInputs = [ popt ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -27,8 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
+    homepage = "https://github.com/rhboot/efivar";
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
   };
