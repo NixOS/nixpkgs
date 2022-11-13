@@ -85,6 +85,7 @@ let
       ncloud = removed "ncloud" "2022/08";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
+      panos = removed "panos" "2022/05";
       template = archived "template" "2022/05";
     };
 
