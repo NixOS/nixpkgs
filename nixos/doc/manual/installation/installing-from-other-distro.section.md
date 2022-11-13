@@ -148,7 +148,7 @@ The first steps to all these are the same:
     Generate your NixOS configuration:
 
     ```ShellSession
-    $ sudo `which nixos-generate-config` --root /
+    $ sudo `which nixos-generate-config`
     ```
 
     Note that this will place the generated configuration files in
