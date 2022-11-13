@@ -52,6 +52,7 @@ buildFHSUserEnv {
     alsa-lib
     alsa-plugins
     bash
+    cabextract
     cairo
     coreutils
     cups
