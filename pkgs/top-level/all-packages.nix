@@ -560,6 +560,8 @@ with pkgs;
 
   riot-redis = callPackage ../development/tools/riot-redis { };
 
+  r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
+
   ptouch-print = callPackage ../misc/ptouch-print { };
 
   demoit = callPackage ../servers/demoit { };
