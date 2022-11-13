@@ -40,7 +40,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
 
-  vendorSha256 = "sha256-81BKMLuEXA/NeIjO7icBm48ROq6KxAxHtvP0nV5yM5A=";
+  vendorSha256 = null; #vendorSha256 = "";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
@@ -71,5 +71,6 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     maintainers = [ maintainers.raboof ];
     platforms = platforms.linux;
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }
