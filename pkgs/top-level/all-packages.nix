@@ -23545,7 +23545,7 @@ with pkgs;
   codeowners = callPackage ../development/tools/codeowners { };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    erlang = buildPackages.erlangR22;
+    erlang = buildPackages.erlangR24;
   };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
