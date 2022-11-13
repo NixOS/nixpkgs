@@ -912,15 +912,6 @@
     "vendorHash": null,
     "version": "2.6.4"
   },
-  "panos": {
-    "hash": "sha256-mscWNK113W7CVKI+qPGYX3irQI3YhkLdXox4pddOdF0=",
-    "owner": "PaloAltoNetworks",
-    "provider-source-address": "registry.terraform.io/PaloAltoNetworks/panos",
-    "repo": "terraform-provider-panos",
-    "rev": "v1.10.3",
-    "vendorHash": null,
-    "version": "1.10.3"
-  },
   "pass": {
     "hash": "sha256-hFgNWw6ZmATo0bFZvJL9z/lJF506KsBewigGoFj67sM=",
     "owner": "camptocamp",
