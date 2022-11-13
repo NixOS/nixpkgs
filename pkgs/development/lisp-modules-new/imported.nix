@@ -57419,9 +57419,6 @@ in {
     });
     systems = [ "pzmq" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) ];
-    meta = {
-      broken = true;
-    };
   };
   pzmq-compat = {
     pname = "pzmq-compat";
