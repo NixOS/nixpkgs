@@ -1,8 +1,9 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
 , pkg-config
+, alsa-lib
 , jack2
-, pulseaudio
+, libpulseaudio
 , sndio
 , speexdsp
 , lazyLoad ? true
@@ -25,8 +26,9 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    alsa-lib
     jack2
-    pulseaudio
+    libpulseaudio
     sndio
     speexdsp
   ];
@@ -43,7 +45,7 @@ stdenv.mkDerivation {
 
   passthru = {
     # For downstream users when lazyLoad is true
-    backendLibs = [ jack2 pulseaudio sndio speexdsp ];
+    backendLibs = [ alsa-lib jack2 libpulseaudio sndio ];
   };
 
   meta = with lib; {
