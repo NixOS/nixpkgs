@@ -29,7 +29,7 @@ buildGoModule rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "CloudFlare Tunnel daemon (and DNS-over-HTTPS client)";
+    description = "Cloudflare Tunnel daemon (and DNS-over-HTTPS client)";
     homepage    = "https://www.cloudflare.com/products/tunnel";
     license     = licenses.asl20;
     platforms   = platforms.unix;
