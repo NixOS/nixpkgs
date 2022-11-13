@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "pdftools.pdfposter";
   version = "0.8.1";
+  format = "setuptools";
 
   propagatedBuildInputs = [ pypdf2 ];
 
@@ -10,6 +11,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-yWFtHgVKAWs4dRlSk8t8cB2KBJeBOa0Frh3BLR9txS0=";
   };
+
+  pythonImportsCheck = [
+    "pdftools.pdfposter"
+    "pdftools.pdfposter.cmd"
+  ];
 
   meta = with lib; {
     description = "Split large pages of a PDF into smaller ones for poster printing";
