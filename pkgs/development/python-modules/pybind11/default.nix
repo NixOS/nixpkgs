@@ -33,10 +33,16 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
+  # Don't build tests if not needed, read the doInstallCheck value at runtime
+  preConfigure = ''
+    if [ -n "$doInstallCheck" ]; then
+      cmakeFlagsArray+=("-DBUILD_TESTING=ON")
+    fi
+  '';
+
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
     "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
