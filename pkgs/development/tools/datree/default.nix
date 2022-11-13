@@ -2,30 +2,28 @@
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.6.42";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = version;
-    hash = "sha256-4sj+zyFYtG/C6oDuQno/rkyxgdnnvAn9GZ5qvqA+UhA=";
+    rev = "v${version}";
+    hash = "sha256-FeGV/GXzt/AHprvKyt/gPAxxJ7d46GXrh0QRLb7qp0E=";
   };
 
-  vendorSha256 = "sha256-gjD24nyQ8U1WwhUbq8N4dvzFK74t3as7wWZK7rh9yiw=";
+  vendorHash = "sha256-m3O5AoAHSM6rSnmL5N7V37XU38FADb0Edt/EZvvb2u4=";
+
+  CGO_ENABLED = 0;
+
+  tags = [ "main" ];
 
   ldflags = [
-    "-extldflags '-static'"
     "-s"
     "-w"
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/datree version | grep ${version} > /dev/null
-  '';
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -34,7 +32,10 @@ buildGoModule rec {
     done
   '';
 
-  doCheck = true;
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/datree version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     description =
