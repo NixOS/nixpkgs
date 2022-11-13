@@ -194,7 +194,7 @@ let
               actions = {
                 profile-manager-window = {
                   name = "Profile Manager";
-                  exec = "${launcherName} --ProfileManger";
+                  exec = "${launcherName} --ProfileManager";
                 };
               };
             }
@@ -220,7 +220,7 @@ let
                 };
                 profile-manager-window = {
                   name = "Profile Manager";
-                  exec = "${launcherName} --ProfileManger";
+                  exec = "${launcherName} --ProfileManager";
                 };
               };
             }));

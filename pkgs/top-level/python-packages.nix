@@ -284,6 +284,8 @@ self: super: with self; {
 
   aioqsw = callPackage ../development/python-modules/aioqsw { };
 
+  aioquic = callPackage ../development/python-modules/aioquic { };
+
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -665,6 +667,8 @@ self: super: with self; {
   async-dns = callPackage ../development/python-modules/async-dns { };
 
   async-lru = callPackage ../development/python-modules/async-lru { };
+
+  async-modbus = callPackage ../development/python-modules/async-modbus { };
 
   asyncclick = callPackage ../development/python-modules/asyncclick { };
 
@@ -1070,9 +1074,15 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
-  pulumi = callPackage ../development/python-modules/pulumi { };
+  pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+
+  pulumi-aws-native = pkgs.pulumiPackages.pulumi-aws-native.sdks.python;
+
+  pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
+
+  pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
   backcall = callPackage ../development/python-modules/backcall { };
 
@@ -1563,6 +1573,8 @@ self: super: with self; {
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
+
+  connio = callPackage ../development/python-modules/connio { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
@@ -6133,6 +6145,8 @@ self: super: with self; {
 
   nibabel = callPackage ../development/python-modules/nibabel { };
 
+  nibe = callPackage ../development/python-modules/nibe { };
+
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
 
   Nikola = callPackage ../development/python-modules/Nikola { };
@@ -8029,6 +8043,8 @@ self: super: with self; {
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 
   pylru = callPackage ../development/python-modules/pylru { };
+
+  pylsqpack = callPackage ../development/python-modules/pylsqpack { };
 
   pyls-black = callPackage ../development/python-modules/pyls-black { };
 
@@ -10098,6 +10114,8 @@ self: super: with self; {
     pythonSupport = true;
   }));
 
+  serialio = callPackage ../development/python-modules/serialio { };
+
   serpent = callPackage ../development/python-modules/serpent { };
 
   serpy = callPackage ../development/python-modules/serpy { };
@@ -10361,6 +10379,8 @@ self: super: with self; {
   socialscan = callPackage ../development/python-modules/socialscan { };
 
   socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
+
+  sockio = callPackage ../development/python-modules/sockio { };
 
   sockjs = callPackage ../development/python-modules/sockjs { };
 
@@ -11469,6 +11489,8 @@ self: super: with self; {
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
+
+  umodbus = callPackage ../development/python-modules/umodbus { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 

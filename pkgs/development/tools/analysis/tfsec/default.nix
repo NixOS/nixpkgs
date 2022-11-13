@@ -17,7 +17,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aquasecurity/tfsec/version.Version=${version}"
+    "-X github.com/aquasecurity/tfsec/version.Version=v${version}"
     ## not sure if this is needed (https://github.com/aquasecurity/tfsec/blob/master/.goreleaser.yml#L6)
     # "-extldflags '-fno-PIC -static'"
   ];

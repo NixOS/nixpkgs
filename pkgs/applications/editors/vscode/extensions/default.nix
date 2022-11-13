@@ -2083,6 +2083,16 @@ let
         };
       };
 
+      redhat.vscode-xml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-xml";
+          publisher = "redhat";
+          version = "0.22.0";
+          sha256 = "sha256-7QOw0EVcfa7MFnZAHAsUtDZHXD5AFlW54f1qaN3h+2U=";
+        };
+        meta.license = lib.licenses.epl20;
+      };
+
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-yaml";

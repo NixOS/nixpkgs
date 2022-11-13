@@ -166,13 +166,13 @@
     "version": "1.16.0"
   },
   "bitbucket": {
-    "hash": "sha256-0Sts826Yt6xVVwGpqTC1ZAiNB2+7S6z9rPXDGPNpmOk=",
+    "hash": "sha256-7Xxu3Q+pAaZdvRvfIFQFx3pfH8N0gk2waoxW//zh2dA=",
     "owner": "DrFaust92",
     "provider-source-address": "registry.terraform.io/DrFaust92/bitbucket",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.21.3",
+    "rev": "v2.21.4",
     "vendorHash": "sha256-VFh86MFKzgN7LvSYG7TooYapOZOJbDC8sntPzGVaNs8=",
-    "version": "2.21.3"
+    "version": "2.21.4"
   },
   "brightbox": {
     "hash": "sha256-l4gN7gxLMTuUMjf50Hc2Els5pJ4BId1QlRAhykseK7c=",
@@ -886,13 +886,13 @@
     "version": "1.31.7"
   },
   "opsgenie": {
-    "hash": "sha256-DhECesGkBaQuk43pF4xk6zln+FzgL+1A1rSm0sqg7XQ=",
+    "hash": "sha256-OTwQ/sF4/xSyJjYy1TvLOr1guGcho+Es9/WkonfVvcg=",
     "owner": "opsgenie",
     "provider-source-address": "registry.terraform.io/opsgenie/opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.16",
+    "rev": "v0.6.17",
     "vendorHash": null,
-    "version": "0.6.16"
+    "version": "0.6.17"
   },
   "ovh": {
     "hash": "sha256-QaJZQU6bnjXoTCxfP1NcsPqegFyZ6JwP2QgN7zrE0z0=",
@@ -1120,13 +1120,13 @@
     "version": "0.13.5"
   },
   "tencentcloud": {
-    "hash": "sha256-vVwfKzA6qK6VzRRlYPEqL1QPlpiruD8JZRL6oF/u62w=",
+    "hash": "sha256-ZoNmoeeRnZ/CDAfXRyKxgXcXpjzquncbaS5dpjq16Lw=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.9",
+    "rev": "v1.78.10",
     "vendorHash": null,
-    "version": "1.78.9"
+    "version": "1.78.10"
   },
   "tfe": {
     "hash": "sha256-MDlRwB2iVi/Rv7/UtukI6mIDImz8Gnpm5Qv5R6EDpiU=",
@@ -1284,12 +1284,12 @@
     "version": "3.4.0"
   },
   "yandex": {
-    "hash": "sha256-WdiJD1gt56VDFe2qVKwiYOvneixaGRie6mrxdOCklQY=",
+    "hash": "sha256-HBGQ+WrAy+f0nK0iyd/Z+Mj5AshvHyGyBEN0E61ftn0=",
     "owner": "yandex-cloud",
     "provider-source-address": "registry.terraform.io/yandex-cloud/yandex",
     "repo": "terraform-provider-yandex",
-    "rev": "v0.81.0",
-    "vendorHash": "sha256-n+XARZuMzmxUGxFAseKyiBsKuGDUl8T6LWXzJ+6ZJ/E=",
-    "version": "0.81.0"
+    "rev": "v0.82.0",
+    "vendorHash": "sha256-Tgfgq3nrfZP2ie4KLmJq83TfzZ41lc4gwWIULLOQmBw=",
+    "version": "0.82.0"
   }
 }
