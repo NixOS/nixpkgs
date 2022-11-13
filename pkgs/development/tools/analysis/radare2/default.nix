@@ -25,7 +25,6 @@
 , capstone
 , useX11 ? false
 , rubyBindings ? false
-, pythonBindings ? true
 , luaBindings ? false
 }:
 
@@ -81,7 +80,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config meson ninja python3 ];
   buildInputs = [
     capstone
     file
@@ -92,7 +93,6 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     libuv
-    python3
     lz4
   ] ++ lib.optionals useX11 [ gtkdialog vte gtk2 ]
     ++ lib.optionals rubyBindings [ ruby ]
