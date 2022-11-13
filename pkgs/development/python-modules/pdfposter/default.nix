@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pdftools.pdfposter";
-  version = "0.8";
+  version = "0.8.1";
 
   propagatedBuildInputs = [ pypdf2 ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SYEn54kpO6KQ8ywpgu0+3uL+Ilr1hsfSornWrs2EBqQ=";
+    sha256 = "sha256-yWFtHgVKAWs4dRlSk8t8cB2KBJeBOa0Frh3BLR9txS0=";
   };
 
   meta = with lib; {
