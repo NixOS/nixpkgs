@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Split large pages of a PDF into smaller ones for poster printing";
     homepage = "https://pdfposter.readthedocs.io";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wamserma ];
   };
 }
