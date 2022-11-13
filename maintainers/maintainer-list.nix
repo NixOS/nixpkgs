@@ -16018,4 +16018,10 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  ziguana = {
+    name = "Zig Uana";
+    email = "git@ziguana.dev";
+    github = "ziguana";
+    githubId = 45833444;
+  };
 }
