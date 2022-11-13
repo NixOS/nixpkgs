@@ -19,6 +19,9 @@ let
     cl-cffi-gtk-cairo = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-cairo2 = pkg: {
+      nativeLibs = [ cairo ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
@@ -129,6 +132,24 @@ let
       nativeBuildInputs = [ libfixposix ];
       nativeLibs = [ libfixposix ];
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
+    };
+    "cl-ana.hdf-cffi" = pkg: {
+      nativeBuildInputs = [ hdf5 ];
+      nativeLibs = [ hdf5 ];
+      NIX_LDFLAGS = [ "-lhdf5" ];
+    };
+    gsll = pkg: {
+      nativeBuildInputs = [ gsl ];
+      nativeLibs = [ gsl ];
+    };
+    cl-libyaml = pkg: {
+      nativeLibs = [ libyaml ];
+    };
+    cl-libxml2 = pkg: {
+      nativeLibs = [ libxml2 ];
+    };
+    cl-readline = pkg: {
+      nativeLibs = [ readline ];
     };
   };
 

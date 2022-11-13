@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
-#! nix-shell ../../../../../../. -i python3 -p python3 -p nix
+#! nix-shell ../../../../../../../. -i python3 -p python3 -p nix
+
 from os.path import (
     dirname,
     abspath,

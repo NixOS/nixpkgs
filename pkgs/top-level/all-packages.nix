@@ -560,6 +560,8 @@ with pkgs;
 
   riot-redis = callPackage ../development/tools/riot-redis { };
 
+  r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
+
   ptouch-print = callPackage ../misc/ptouch-print { };
 
   demoit = callPackage ../servers/demoit { };
@@ -2128,7 +2130,7 @@ with pkgs;
 
   apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
-  apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
+  apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
   argagg = callPackage ../development/libraries/argagg { };
 
@@ -28167,7 +28169,7 @@ with pkgs;
 
   endeavour = callPackage ../applications/office/endeavour { };
 
-  enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
+  enhanced-ctorrent = callPackage ../applications/networking/p2p/enhanced-ctorrent { };
 
   entangle = callPackage ../applications/video/entangle {
     inherit (gst_all_1) gstreamer gst-plugins-base;
@@ -29280,6 +29282,8 @@ with pkgs;
   marker = callPackage ../applications/editors/marker { };
 
   meerk40t = callPackage ../applications/misc/meerk40t { };
+
+  meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
 
   musikcube = callPackage ../applications/audio/musikcube {
     inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
