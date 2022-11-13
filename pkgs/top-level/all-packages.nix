@@ -25255,6 +25255,8 @@ with pkgs;
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
+  level-zero = callPackage ../development/libraries/level-zero { };
+
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
   iotop = callPackage ../os-specific/linux/iotop { };
