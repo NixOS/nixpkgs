@@ -53,6 +53,10 @@ let
     "2.2.9" = {
       sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
     };
+
+    "2.2.10" = {
+      sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
+    };
   };
 
 in with versionMap.${version};
