@@ -29289,6 +29289,8 @@ with pkgs;
 
   meerk40t = callPackage ../applications/misc/meerk40t { };
 
+  meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
+
   musikcube = callPackage ../applications/audio/musikcube {
     inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
   };
