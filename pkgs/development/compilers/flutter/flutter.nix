@@ -3,18 +3,31 @@
 , patches
 , dart
 , src
+, supportsLinuxDesktop ? true
 }:
 
 { bash
 , buildFHSUserEnv
 , cacert
 , git
-, runCommand
+, runCommandLocal
+, writeShellScript
+, makeWrapper
 , stdenv
 , lib
 , alsa-lib
+, atk
+, cairo
+, clang
+, cmake
 , dbus
 , expat
+, gdk-pixbuf
+, glib
+, gtk3
+, harfbuzz
+, libepoxy
+, libGL
 , libpulseaudio
 , libuuid
 , libX11
@@ -22,16 +35,19 @@
 , libXcomposite
 , libXcursor
 , libXdamage
+, libXext
 , libXfixes
+, libXi
 , libXrender
 , libXtst
-, libXi
-, libXext
-, libGL
+, ninja
 , nspr
 , nss
+, pango
+, pkg-config
 , systemd
 , which
+, xorgproto
 , callPackage
 }:
 let
@@ -100,18 +116,34 @@ let
 
   # Wrap flutter inside an fhs user env to allow execution of binary,
   # like adb from $ANDROID_HOME or java from android-studio.
+  #
+  # Also provide libraries at hardcoded locations for Linux desktop target
+  # compilation and execution.
   fhsEnv = buildFHSUserEnv {
     name = "${drvName}-fhs-env";
-    multiPkgs = pkgs: [
-      # Flutter only use these certificates
-      (runCommand "fedoracert" { } ''
-        mkdir -p $out/etc/pki/tls/
-        ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-      '')
-      pkgs.zlib
-    ];
+    multiPkgs = pkgs:
+      with pkgs; ([
+        # Flutter only use these certificates
+        (runCommandLocal "fedoracert" { } ''
+          mkdir -p $out/etc/pki/tls/
+          ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
+        '')
+        zlib
+      ] ++ pkgs.lib.lists.optionals supportsLinuxDesktop [
+        atk
+        cairo
+        gdk-pixbuf
+        glib
+        gtk3
+        harfbuzz
+        libepoxy
+        pango
+        xorg.libX11
+        xorg.libX11.dev
+        xorg.xorgproto
+      ]);
     targetPkgs = pkgs:
-      with pkgs; [
+      with pkgs; ([
         bash
         curl
         dart
@@ -143,22 +175,39 @@ let
         nspr
         nss
         systemd
-      ];
+      ]);
+    profile = ''
+      export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/share/pkgconfig"
+    '';
   };
 
 in
 let
 self = (self:
-runCommand drvName
+runCommandLocal drvName
 {
-  startScript = ''
-    #!${bash}/bin/bash
+  flutterWithCorrectedCache = writeShellScript "flutter_corrected_cache" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
-    ${fhsEnv}/bin/${drvName}-fhs-env ${flutter}/bin/flutter --no-version-check "$@"
+    ${flutter}/bin/flutter "$@"
   '';
-  preferLocalBuild = true;
-  allowSubstitutes = false;
+  buildInputs = [
+      makeWrapper
+      pkg-config
+  ] ++ lib.lists.optionals supportsLinuxDesktop (let
+    # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
+    deps = pkg: (pkg.buildInputs or []) ++ (pkg.propagatedBuildInputs or []);
+    collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ lib.concatMap collect (deps pkg));
+  in
+    collect atk.dev ++
+    collect cairo.dev ++
+    collect gdk-pixbuf.dev ++
+    collect glib.dev ++
+    collect gtk3.dev ++
+    collect harfbuzz.dev ++
+    collect libepoxy.dev ++
+    collect pango.dev ++
+    collect libX11.dev ++
+    collect xorgproto);
   passthru = {
     unwrapped = flutter;
     inherit dart;
@@ -178,13 +227,25 @@ runCommand drvName
     maintainers = with maintainers; [ babariviere ericdallo ];
   };
 } ''
-  mkdir -p $out/bin
+    mkdir -p $out/bin
 
-  mkdir -p $out/bin/cache/
-  ln -sf ${dart} $out/bin/cache/dart-sdk
+    mkdir -p $out/bin/cache/
+    ln -sf ${dart} $out/bin/cache/dart-sdk
 
-  echo -n "$startScript" > $out/bin/${pname}
-  chmod +x $out/bin/${pname}
+    mkdir -p $out/libexec
+    makeWrapper "$flutterWithCorrectedCache" $out/libexec/flutter_launcher \
+        --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
+        --prefix PATH : ${lib.makeBinPath (lib.lists.optionals supportsLinuxDesktop [
+            pkg-config
+            cmake
+            ninja
+            clang
+          ])} \
+        --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH_FOR_TARGET" \
+        --add-flags --no-version-check
+
+    makeWrapper ${fhsEnv}/bin/${drvName}-fhs-env $out/bin/${pname} \
+        --add-flags $out/libexec/flutter_launcher
 '') self;
 in
 self
