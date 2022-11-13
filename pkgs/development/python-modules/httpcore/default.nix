@@ -3,6 +3,7 @@
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
+, fetchpatch
 , h11
 , h2
 , pproxy
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,13 +27,19 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = version;
-    hash = "sha256-FF3Yzac9nkVcA5bHVOz2ymvOelSfJ0K6oU8UWpBDcmo=";
+    hash = "sha256-mnd2VRtuDU0hCpzrMOWXHEj3NkF0GL8jRLhbrT+jXzg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11>=0.11,<0.13" "h11>=0.11,<0.14"
-  '';
+  patches = [
+    # upstream have moved to pytest-httpbin 2.x. we have not.
+    (fetchpatch {
+      name = "restore-httpbin-error-suppression.patch";
+      url = "https://github.com/encode/httpcore/commit/168c8a71b299ba1e4b5a4a556dbcf3c30d953f53.patch";
+      includes = [ "setup.cfg" ];
+      revert = true;
+      hash = "sha256-Re33tZAgKl+KSTFhbZoRz1jJVgb/6OxLjral8dBaOJE=";
+    })
+  ];
 
   propagatedBuildInputs = [
     anyio
