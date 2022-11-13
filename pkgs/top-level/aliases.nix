@@ -1564,6 +1564,7 @@ mapAliases ({
   wireguard = throw "'wireguard' has been renamed to/replaced by 'wireguard-tools'"; # Converted to throw 2022-02-22
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
   wmii_hg = wmii;
+  wmc-mpris = throw "wmc-mpris has been abandoned by upstream due to its redundancy"; # Added 2022-11-13
   ws = throw "ws has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   wxGTK = throw "wxGTK28 has been removed from nixpkgs as it has reached end of life"; # Added 2022-11-04
   wxGTK28 = throw "wxGTK28 has been removed from nixpkgs as it has reached end of life"; # Added 2022-11-04

@@ -12936,8 +12936,6 @@ with pkgs;
 
   wml = callPackage ../development/web/wml { };
 
-  wmc-mpris = callPackage ../applications/misc/web-media-controller { };
-
   wol = callPackage ../tools/networking/wol { };
 
   wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
