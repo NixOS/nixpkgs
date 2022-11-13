@@ -8,7 +8,7 @@
 , vala
 , gi-docgen
 , python3
-, libsoup
+, libsoup_3
 , glib
 , gnome
 , gssdp-tools
@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.4.1";
+  version = "1.6.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
+    sha256 = "0r4KbiWREJpuQlhRFhpKU7xUtPBqAhTHlwVmMpvVYzA=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_3
   ];
 
   propagatedBuildInputs = [
