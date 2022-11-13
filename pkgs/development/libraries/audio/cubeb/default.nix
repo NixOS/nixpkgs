@@ -6,10 +6,23 @@
 , libpulseaudio
 , sndio
 , speexdsp
-, lazyLoad ? true
+, AudioUnit
+, CoreAudio
+, CoreServices
+, lazyLoad ? !stdenv.isDarwin
 }:
 
-stdenv.mkDerivation {
+assert lib.assertMsg (stdenv.isDarwin -> !lazyLoad) "cubeb: lazyLoad is inert on Darwin";
+
+let
+  backendLibs = [
+    alsa-lib
+    jack2
+    libpulseaudio
+    sndio
+  ];
+
+in stdenv.mkDerivation {
   pname = "cubeb";
   version = "unstable-2022-10-18";
 
@@ -25,13 +38,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [
-    alsa-lib
-    jack2
-    libpulseaudio
-    sndio
-    speexdsp
-  ];
+  buildInputs = [ speexdsp ] ++ (
+    if stdenv.isDarwin then [ AudioUnit CoreAudio CoreServices ]
+    else backendLibs
+  );
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -45,14 +55,14 @@ stdenv.mkDerivation {
 
   passthru = {
     # For downstream users when lazyLoad is true
-    backendLibs = [ alsa-lib jack2 libpulseaudio sndio ];
+    backendLibs = lib.optionals lazyLoad backendLibs;
   };
 
   meta = with lib; {
     description = "Cross platform audio library";
     homepage = "https://github.com/mozilla/cubeb";
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ zhaofengli ];
   };
 }
