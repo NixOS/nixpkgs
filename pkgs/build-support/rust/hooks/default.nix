@@ -20,6 +20,7 @@ let
   shortTarget = if targetIsJSON then
       (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
+  shortTargetEnv = lib.replaceStrings ["-"] ["_"] (lib.toUpper shortTarget);
   ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
@@ -95,18 +96,14 @@ in {
         # when cross-compiling.
         #
         # [1]: https://github.com/rust-lang/compiler-team/issues/422
+
         cargoConfig = ''
-          [host]
-          "linker" = "${ccForBuild}"
-          "rustflags" = [ "-C", "target-feature=${if stdenv.buildPlatform.isStatic then "+" else "-"}crt-static" ]
-
-          [target."${shortTarget}"]
-          "linker" = "${ccForHost}"
-          "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
-
-          [unstable]
-          host-config = true
-          target-applies-to-host = true
+          export CARGO_UNSTABLE_HOST_CONFIG=true
+          export CARGO_UNSTABLE_TARGET_APPLIES_TO_HOST=true
+          export CARGO_HOST_LINKER="${ccForBuild}"
+          export CARGO_HOST_RUSTFLAGS="-C target-feature=${if stdenv.buildPlatform.isStatic then "+" else "-"}crt-static"
+          export CARGO_TARGET_${shortTargetEnv}_LINKER="${ccForHost}"
+          export CARGO_TARGET_${shortTargetEnv}_RUSTFLAGS="-C target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static"
         '';
 
         # https://github.com/NixOS/nixpkgs/issues/201254

@@ -28,9 +28,7 @@ cargoSetupPostUnpackHook() {
       --subst-var-by vendor "$cargoDepsCopy"
     cat ${tmp_config} >> .cargo/config
 
-    cat >> .cargo/config <<'EOF'
     @cargoConfig@
-EOF
 
     echo "Finished cargoSetupPostUnpackHook"
 }
