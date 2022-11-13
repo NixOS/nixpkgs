@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "nbsphinx";
   version = "0.8.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
