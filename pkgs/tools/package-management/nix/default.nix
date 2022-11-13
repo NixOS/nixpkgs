@@ -30,8 +30,8 @@ let
   });
 
   libstore-link-to-aws-crt-cpp-patch = fetchpatch {
-    url = "https://github.com/NixOS/nix/pull/7294/commits/07f2cb1e8f03784041475c27c2ba0aac7be6c0b7";
-    sha256 = "sha256-xz7QnWVCI12lX1000Zr9UpB93b10t1HS9y/5n5FYf8Q=";
+    url = "https://github.com/NixOS/nix/pull/7294/commits/07f2cb1e8f03784041475c27c2ba0aac7be6c0b7.patch";
+    sha256 = "sha256-ez6UENPO20snei691VmTSuWn/Tcr0sp5xxn9Gb2AVAM=";
   };
 
   common = args:
