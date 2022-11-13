@@ -197,7 +197,7 @@ let
         #
         # NOTE: It's important to read files from `src` instead of
         # from pwd to get go-to-definition working with SLIME
-        export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:${src}//
+        export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$src//
 
         # Similiarily for native deps
         export LD_LIBRARY_PATH=${makeLibraryPath nativeLibs}:$LD_LIBRARY_PATH
@@ -205,7 +205,7 @@ let
 
         # Make asdf compile from `src` to pwd and load `lispLibs`
         # from storeDir. Otherwise it could try to recompile lisp deps.
-        export ASDF_OUTPUT_TRANSLATIONS="${src}:$(pwd):${storeDir}:${storeDir}"
+        export ASDF_OUTPUT_TRANSLATIONS="$src:$(pwd):${storeDir}:${storeDir}"
 
         # track lisp dependencies for graph generation
         # TODO: Do the propagation like for lisp, native and java like this:
