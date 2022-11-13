@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # https://github.com/pubs/pubs/issues/276
     "test_readme"
+    "test_list_chronological_order"
   ];
 
   meta = with lib; {
