@@ -4186,7 +4186,9 @@ with pkgs;
 
   gist = callPackage ../tools/text/gist { };
 
-  gitjacker = callPackage ../tools/security/gitjacker { };
+  gitjacker = callPackage ../tools/security/gitjacker {
+    buildGoModule = buildGo118Module;
+  };
 
   gixy = callPackage ../tools/admin/gixy { };
 
