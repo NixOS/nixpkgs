@@ -6325,6 +6325,8 @@ with pkgs;
 
   conform = callPackage ../applications/version-management/git-and-tools/conform { };
 
+  easeprobe = callPackage ../tools/misc/easeprobe { };
+
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_14;
   };
@@ -16570,8 +16572,6 @@ with pkgs;
 
   cadre = callPackage ../development/tools/cadre { };
 
-  cask = callPackage ../development/tools/cask { };
-
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
@@ -24512,6 +24512,8 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   tailscale = callPackage ../servers/tailscale { };
+
+  tailspin = callPackage ../tools/misc/tailspin { };
 
   thanos = callPackage ../servers/monitoring/thanos { };
 
