@@ -18,17 +18,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "aruiz";
     repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-dcdydWYrXZJjo4FxJtvzGzrQLOs87/BmxshFZwsT2ws=";
+    sha256 = "sha256-Za5/9YlDRqF5oGI8ZfLhx2ZT0XvXK6Z0h6fu5CGvizc=";
   };
 
   nativeBuildInputs = [
-    gdk-pixbuf
+    gdk-pixbuf.dev
     meson
     ninja
     pkg-config
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgdk_pixbuf_query_loaders_path=${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders"
     "-Dgdk_pixbuf_moduledir=${placeholder "out"}/${moduleDir}"
   ];
 
@@ -51,13 +50,11 @@ stdenv.mkDerivation rec {
       --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer"
   '';
 
-  preInstall = ''
-    # environment variables controlling loaders.cache generation by gdk-pixbuf-query-loaders
-    export GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}"
-    export GDK_PIXBUF_MODULEDIR="$out/${moduleDir}"
-  '';
-
   postInstall = ''
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+    GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
+    gdk-pixbuf-query-loaders --update-cache
+
     # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
     # So we replace it with a wrapped executable.
     mkdir -p "$out/bin"
@@ -71,7 +68,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members ++ [ maintainers.cwyc ];
-    # meson.build:16:0: ERROR: Program or command 'gcc' not found or not executable
-    broken = stdenv.isDarwin;
   };
 }

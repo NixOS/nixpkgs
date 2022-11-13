@@ -344,6 +344,8 @@ self: super: with self; {
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
+  aioweenect = callPackage ../development/python-modules/aioweenect { };
+
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
@@ -11220,6 +11222,8 @@ self: super: with self; {
   };
 
   tox = callPackage ../development/python-modules/tox { };
+
+  tplink-omada-client = callPackage ../development/python-modules/tplink-omada-client { };
 
   tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
 
