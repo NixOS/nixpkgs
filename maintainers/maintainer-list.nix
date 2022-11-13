@@ -4622,12 +4622,6 @@
     githubId = 66178592;
     name = "Pavel Zolotarevskiy";
   };
-  flexw = {
-    email = "felix.weilbach@t-online.de";
-    github = "FlexW";
-    githubId = 19961516;
-    name = "Felix Weilbach";
-  };
   fliegendewurst = {
     email = "arne.keller@posteo.de";
     github = "FliegendeWurst";
