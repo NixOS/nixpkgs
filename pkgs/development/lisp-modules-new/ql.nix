@@ -148,6 +148,10 @@ let
     cl-readline = pkg: {
       nativeLibs = [ pkgs.readline ];
     };
+    pzmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
   };
 
   qlpkgs =

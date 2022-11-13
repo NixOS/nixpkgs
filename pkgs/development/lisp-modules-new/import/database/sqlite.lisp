@@ -90,8 +90,6 @@ in {")
    "hu.dwim.zlib"
    ;; Missing libgvc.so native library
    "hu.dwim.graphviz"
-   ;; Missing zmq.h C header
-   "pzmq"
    ))
 
 (defmethod database->nix-expression ((database sqlite-database) outfile)
