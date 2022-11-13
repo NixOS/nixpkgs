@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch }:
 
 buildPythonPackage {
     pname = "pyext";
@@ -6,11 +6,19 @@ buildPythonPackage {
 
     # Latest release not on Pypi or tagged since 2015
     src = fetchFromGitHub {
-      owner = "kirbyfan64";
+      owner = "refi64";
       repo = "PyExt";
       rev = "1e018b12752ceb279f11aee123ed773d63dcec7e";
       sha256 = "16km897ng6lgjs39hv83xragdxh0mhyw6ds0qkm21cyci1k5m1vm";
     };
+
+    patches = [
+      (fetchpatch {
+        name = "fix-for-python-3.11.patch";
+        url = "https://github.com/refi64/PyExt/commit/01dd1c68ec3a44379179b602633a0aecb52c5633.patch";
+        hash = "sha256-kaqWYOR/Ool9Htjr3n4mHq5fxICkXXFGa2tBa33OfIk=";
+      })
+    ];
 
     # Has no test suite
     doCheck = false;
