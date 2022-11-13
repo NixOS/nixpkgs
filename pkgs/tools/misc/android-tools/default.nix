@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, cmake, perl, go, python3
+, cmake, pkg-config, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
 }:
 
@@ -9,40 +9,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "33.0.3";
+  version = "33.0.3p1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-jOF02reB1d69Ke0PllciMfd3vuGbjvPBZ+M9PqdnC8U=";
+    hash = "sha256-viBHzyVgUWdK9a60u/7SdpiVEvgNEZHihkyRkGH5Ydg=";
   };
 
   patches = [
-    ./android-tools-kernel-headers-6.0.diff
+    (fetchpatch {
+      name = "add-macos-platform.patch";
+      url = "https://github.com/nmeum/android-tools/commit/a1ab35b31525966e0f0770047cd82accb36d025b.patch";
+      hash = "sha256-6O3ekDf0qPdzcfINFF8Ae4XOYgnQWTBhvu9SCFSHkXY=";
+    })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i 's/usb_linux/usb_osx/g' vendor/CMakeLists.{adb,fastboot}.txt
-    sed -i 's/libselinux libsepol/ /g;s#selinux/libselinux/include##g' vendor/CMakeLists.{fastboot,mke2fs}.txt
-    sed -z -i 's/add_library(libselinux.*selinux\/libsepol\/include)//g' vendor/CMakeLists.fastboot.txt
-    sed -i 's/e2fsdroid//g' vendor/CMakeLists.txt
-    sed -z -i 's/add_executable(e2fsdroid.*e2fsprogs\/misc)//g' vendor/CMakeLists.mke2fs.txt
-  '';
-
-  nativeBuildInputs = [ cmake perl go ];
+  nativeBuildInputs = [ cmake pkg-config perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
   propagatedBuildInputs = [ pythonEnv ];
 
   # Don't try to fetch any Go modules via the network:
   GOFLAGS = [ "-mod=vendor" ];
-
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
-    "-D_DARWIN_C_SOURCE"
-  ];
-
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
-    "-framework CoreFoundation"
-    "-framework IOKit"
-  ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
