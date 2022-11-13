@@ -56,14 +56,22 @@ in mkYarnPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
+    runHook preBuild
+
     # compile TypeScript sources
     yarn --offline build
+
+    runHook postBuild
   '';
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     # the default 2000ms timeout is sometimes too short on our busy builders
     yarn --offline test --timeout 10000
+
+    runHook postCheck
   '';
 
   postInstall = ''
