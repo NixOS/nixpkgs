@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./hardcode-gsettings.patch;
       caja_gsetttings_path = glib.getSchemaPath mate.caja;
-      term_gsetttings_path = glib.getSchemaPath mate.mate-terminal;
+      desktop_gsetttings_path = glib.getSchemaPath mate.mate-desktop;
     })
   ];
 
