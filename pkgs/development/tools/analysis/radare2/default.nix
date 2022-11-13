@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , buildPackages
 , pkg-config
+, meson
+, ninja
 , libusb-compat-0_1
 , readline
 , libewf
@@ -19,10 +21,11 @@
 , python3
 , ruby
 , lua
+, lz4
 , capstone
 , useX11 ? false
 , rubyBindings ? false
-, pythonBindings ? false
+, pythonBindings ? true
 , luaBindings ? false
 }:
 
@@ -55,39 +58,30 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
-    chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
+    cp -r ${arm64} ../libr/asm/arch/arm/v35arm64/arch-arm64
+    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-arm64
 
-    cp -r ${armv7} libr/asm/arch/arm/v35arm64/arch-armv7
-    chmod -R +w libr/asm/arch/arm/v35arm64/arch-armv7
+    cp -r ${armv7} ../libr/asm/arch/arm/v35arm64/arch-armv7
+    chmod -R +w ../libr/asm/arch/arm/v35arm64/arch-armv7
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib $out/lib/libr_anal.${version}.dylib; do
-      install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
-    done
+    install_name_tool -add_rpath $out/lib $out/lib/libr_io.${version}.dylib
   '';
 
-  makeFlags = [
-    "WITHOUT_PULL=1"
-    "R2_GITTAP=${version}"
-    "RANLIB=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ranlib"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "HOST_CC=${stdenv.cc.targetPrefix}cc"
-  ];
-
-  configureFlags = [
-    "--with-sysmagic"
-    "--with-syszip"
-    "--with-sysxxhash"
-    "--with-syscapstone"
-    "--with-openssl"
+  mesonFlags = [
+   "-Duse_sys_capstone=true"
+   "-Duse_sys_magic=true"
+   "-Duse_sys_zip=true"
+   "-Duse_sys_xxhash=true"
+   "-Duse_sys_lz4=true"
+   "-Dr2_gittap=${version}"
   ];
 
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [
     capstone
     file
@@ -98,9 +92,10 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     libuv
+    python3
+    lz4
   ] ++ lib.optionals useX11 [ gtkdialog vte gtk2 ]
     ++ lib.optionals rubyBindings [ ruby ]
-    ++ lib.optionals pythonBindings [ python3 ]
     ++ lib.optionals luaBindings [ lua ];
 
   propagatedBuildInputs = [
