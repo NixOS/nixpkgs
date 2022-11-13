@@ -1,4 +1,14 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, git, Virtualization, testers, linuxkit }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, git
+, Cocoa
+, Virtualization
+, testers
+, linuxkit
+,
+}:
 
 buildGoModule rec {
   pname = "linuxkit";
@@ -15,7 +25,7 @@ buildGoModule rec {
 
   modRoot = "./src/cmd/linuxkit";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Virtualization ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Virtualization ];
 
   ldflags = [
     "-s"
