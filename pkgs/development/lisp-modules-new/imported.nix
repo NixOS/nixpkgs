@@ -25092,6 +25092,9 @@ in {
     });
     systems = [ "clml.blas.hompack" ];
     lispLibs = [ (getAttr "f2cl-lib" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   clml_dot_blas_dot_real = {
     pname = "clml.blas.real";
@@ -36543,10 +36546,6 @@ in {
     });
     systems = [ "gsll" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "foreign-array" pkgs) (getAttr "cffi-grovel" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "lisp-unit" pkgs) (getAttr "metabang-bind" pkgs) (getAttr "trivial-features" pkgs) (getAttr "trivial-garbage" pkgs) ];
-    meta = {
-      # needs "nativeLibs=nixpkgs.gsl" for libgslcblas.so and a way to set CFLAGS="-I gsl/include" or something similar
-      broken = true;
-    };
   };
   gt = {
     pname = "gt";
@@ -37991,6 +37990,9 @@ in {
     });
     systems = [ "hu.dwim.graphviz" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "metabang-bind" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_graphviz_dot_documentation = {
     pname = "hu.dwim.graphviz.documentation";
@@ -38030,6 +38032,9 @@ in {
     });
     systems = [ "hu.dwim.logger" ];
     lispLibs = [ (getAttr "bordeaux-threads" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_def_plus_hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star_plus_hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) (getAttr "local-time" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_logger_plus_iolib = {
     pname = "hu.dwim.logger+iolib";
@@ -38381,6 +38386,9 @@ in {
     });
     systems = [ "hu.dwim.quasi-quote" ];
     lispLibs = [ (getAttr "babel" pkgs) (getAttr "babel-streams" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_defclass-star_plus_hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_syntax-sugar" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) (getAttr "hu_dot_dwim_dot_walker" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_quasi-quote_dot_css = {
     pname = "hu.dwim.quasi-quote.css";
@@ -38718,6 +38726,9 @@ in {
     });
     systems = [ "hu.dwim.serializer" ];
     lispLibs = [ (getAttr "babel" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) (getAttr "hu_dot_dwim_dot_common" pkgs) (getAttr "hu_dot_dwim_dot_def" pkgs) (getAttr "hu_dot_dwim_dot_syntax-sugar" pkgs) (getAttr "hu_dot_dwim_dot_util" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_serializer_dot_documentation = {
     pname = "hu.dwim.serializer.documentation";
@@ -39379,6 +39390,9 @@ in {
     });
     systems = [ "hu.dwim.zlib" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "hu_dot_dwim_dot_asdf" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   hu_dot_dwim_dot_zlib_slash_fancy = {
     pname = "hu.dwim.zlib_fancy";
@@ -47717,6 +47731,9 @@ in {
     });
     systems = [ "mcclim-bezier" ];
     lispLibs = [ (getAttr "flexichain" pkgs) (getAttr "clim" pkgs) (getAttr "clim-pdf" pkgs) (getAttr "clim-postscript" pkgs) (getAttr "mcclim-clx" pkgs) (getAttr "mcclim-null" pkgs) (getAttr "mcclim-render" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   mcclim-bezier_slash_clx = {
     pname = "mcclim-bezier_clx";
@@ -57402,6 +57419,9 @@ in {
     });
     systems = [ "pzmq" ];
     lispLibs = [ (getAttr "cffi" pkgs) (getAttr "cffi-grovel" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   pzmq-compat = {
     pname = "pzmq-compat";
@@ -68823,6 +68843,9 @@ in {
     });
     systems = [ "ubiquitous" ];
     lispLibs = [  ];
+    meta = {
+      broken = true;
+    };
   };
   ubiquitous-concurrent = {
     pname = "ubiquitous-concurrent";
