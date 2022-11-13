@@ -120,11 +120,20 @@ let
        else throw "`url` is not a string")
     else throw "fetchurl requires either `url` or `urls` to be set";
 
+  hash_split = lib.splitString "-" hash; # note: our base64 never allows "-" inside
+  hash_hash = if lib.length hash_split != 2 then "" else lib.elemAt hash_split 1;
+
   hash_ =
     # Many other combinations don't make sense, but this is the most common one:
     if hash != "" && sha256 != "" then throw "multiple hashes passed to fetchurl" else
 
-    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    if lib.head hash_split == "sha256"
+      && (lib.stringLength hash_hash == 64 || lib.stringLength hash_hash == 52)
+        then { outputHashAlgo = "sha256"; outputHash = hash_hash; }
+    else if lib.head hash_split == "sha512"
+      && (lib.stringLength hash_hash == 128 || lib.stringLength hash_hash == 103)
+        then { outputHashAlgo = "sha512"; outputHash = hash_hash; }
+    else if hash != "" then { outputHashAlgo = null; outputHash = hash; }
     else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
