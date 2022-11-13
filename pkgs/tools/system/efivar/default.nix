@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, pkg-config, popt, mandoc }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, fetchpatch, pkg-config, popt, mandoc }:
 
 stdenv.mkDerivation rec {
   pname = "efivar";
@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-A38BKGMK3Vo+85wzgxmzTjzZXtpcY9OpbZaONWnMYNk=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rhboot/efivar/commit/15622b7e5761f3dde3f0e42081380b2b41639a48.patch";
+      sha256 = "sha256-SjZXj0hA2eQu2MfBoNjFPtd2DMYadtL7ZqwjKSf2cmI=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config mandoc ];
   buildInputs = [ popt ];
