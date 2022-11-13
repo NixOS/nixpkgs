@@ -11,6 +11,7 @@ qtModule {
     # wrapped executables from `wrapQtAppsHook` (see comment in patch for further
     # context).  Beware: shared among different Qt5 versions.
     ./qtwayland-app_id.patch
+
     # Backport of https://codereview.qt-project.org/c/qt/qtwayland/+/388338
     # Pulled from Fedora as they modified it to not apply to KDE as Plasma 5.x
     # doesn't behave properly with the patch applied. See the discussion at
@@ -19,5 +20,9 @@ qtModule {
       url = "https://src.fedoraproject.org/rpms/qt5-qtwayland/raw/46376bb00d4c3dd3db2e82ad7ca5301ce16ea4ab/f/0080-Client-set-constraint-adjustments-for-popups-in-xdg.patch";
       sha256 = "sha256-XP+noYCk8fUdA0ItCqMjV7lSXDlNdB7Az9q7NRpupHc=";
     })
+
+    # https://codereview.qt-project.org/c/qt/qtwayland/+/418303
+    # Fixes QT menus being broken for QT5 apps on Wayland.
+    ./qtwayland-menus-broken-fix.patch
   ];
 }

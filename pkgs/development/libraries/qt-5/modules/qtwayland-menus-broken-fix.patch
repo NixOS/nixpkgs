@@ -1,0 +1,63 @@
+Backport of https://codereview.qt-project.org/c/qt/qtwayland/+/418303
+
+diff --git a/src/client/qwaylandintegration.cpp b/src/client/qwaylandintegration.cpp
+index fbf00c6..25b7c0b 100644
+--- a/src/client/qwaylandintegration.cpp
++++ b/src/client/qwaylandintegration.cpp
+@@ -117,6 +117,9 @@ QWaylandIntegration::QWaylandIntegration()
+         mFailed = true;
+         return;
+     }
++
++    QWaylandWindow::fixedToplevelPositions =
++            !qEnvironmentVariableIsSet("QT_WAYLAND_DISABLE_FIXED_POSITIONS");
+ #if QT_CONFIG(clipboard)
+     mClipboard.reset(new QWaylandClipboard(mDisplay.data()));
+ #endif
+diff --git a/src/client/qwaylandwindow.cpp b/src/client/qwaylandwindow.cpp
+index 71d0e94..66abff7 100644
+--- a/src/client/qwaylandwindow.cpp
++++ b/src/client/qwaylandwindow.cpp
+@@ -363,8 +363,13 @@ void QWaylandWindow::setGeometry_helper(const QRect &rect)
+     }
+ }
+ 
+-void QWaylandWindow::setGeometry(const QRect &rect)
++void QWaylandWindow::setGeometry(const QRect &r)
+ {
++    auto rect = r;
++    if (fixedToplevelPositions && !QPlatformWindow::parent() && window()->type() != Qt::Popup
++        && window()->type() != Qt::ToolTip) {
++        rect.moveTo(screen()->geometry().topLeft());
++    }
+     setGeometry_helper(rect);
+ 
+     if (window()->isVisible() && rect.isValid()) {
+@@ -1046,6 +1051,13 @@ void QWaylandWindow::handleScreensChanged()
+ 
+     QWindowSystemInterface::handleWindowScreenChanged(window(), newScreen->QPlatformScreen::screen());
+     mLastReportedScreen = newScreen;
++    if (fixedToplevelPositions && !QPlatformWindow::parent() && window()->type() != Qt::Popup
++        && window()->type() != Qt::ToolTip
++        && geometry().topLeft() != newScreen->geometry().topLeft()) {
++        auto geometry = this->geometry();
++        geometry.moveTo(newScreen->geometry().topLeft());
++        setGeometry(geometry);
++    }
+ 
+     int scale = newScreen->isPlaceholder() ? 1 : static_cast<QWaylandScreen *>(newScreen)->scale();
+     if (scale != mScale) {
+diff --git a/src/client/qwaylandwindow_p.h b/src/client/qwaylandwindow_p.h
+index ea3d199..487a91a 100644
+--- a/src/client/qwaylandwindow_p.h
++++ b/src/client/qwaylandwindow_p.h
+@@ -98,6 +98,9 @@ public:
+     QWaylandWindow(QWindow *window, QWaylandDisplay *display);
+     ~QWaylandWindow() override;
+ 
++    // Keep Toplevels position on the top left corner of their screen
++    static inline bool fixedToplevelPositions = true;
++
+     virtual WindowType windowType() const = 0;
+     virtual void ensureSize();
+     WId winId() const override;
