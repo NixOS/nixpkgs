@@ -2128,7 +2128,7 @@ with pkgs;
 
   apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
-  apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
+  apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
   argagg = callPackage ../development/libraries/argagg { };
 
