@@ -31747,6 +31747,8 @@ with pkgs;
 
   udiskie = callPackage ../applications/misc/udiskie { };
 
+  saber = callPackage ../applications/graphics/saber { };
+
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
   sayonara = libsForQt514.callPackage ../applications/audio/sayonara { };
