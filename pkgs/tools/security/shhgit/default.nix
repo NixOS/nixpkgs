@@ -15,12 +15,13 @@ buildGoModule rec {
     sha256 = "1b7r4ivfplm4crlvx571nyz2rc6djy0xvl14nz7m0ngh6206df9k";
   };
 
-  vendorSha256 = "0isa9faaknm8c9mbyj5dvf1dfnyv44d1pjd2nbkyfi6b22hcci3d";
+  vendorSha256 = null; #vendorSha256 = "";
 
   meta = with lib; {
     description = "Tool to detect secrets in repositories";
     homepage = "https://github.com/eth0izzle/shhgit";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

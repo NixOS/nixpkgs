@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "18d3h0i2sfqbc0bjx26jm2n9f37zwp8z9z4wd17sw7nvkfa72a26";
   };
 
-  vendorSha256 = "05q2g591xl08h387mm6njabvki19yih63dfsafgpc9hyk5ydf2n9";
+  vendorSha256 = null; #vendorSha256 = "";
 
   # The upstream test checks are obsolete/unmaintained.
   doCheck = false;
@@ -22,5 +22,6 @@ buildGoModule rec {
     license = licenses.agpl3;
     maintainers = [ maintainers.dasj19 ];
     platforms = platforms.linux;
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }
