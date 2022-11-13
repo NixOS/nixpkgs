@@ -24532,6 +24532,8 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
+  terminusdb = callPackage ../servers/nosql/terminusdb { };
+
   thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
