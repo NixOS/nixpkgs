@@ -5,7 +5,7 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
   pname = "oneDNN";
-  version = "2.5.2";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
