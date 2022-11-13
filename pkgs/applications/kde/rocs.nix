@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, boost,
-  qtbase, qtscript, qtquickcontrols, qtwebkit, qtxmlpatterns, grantlee,
+  qtbase, qtscript, qtquickcontrols, qtxmlpatterns, grantlee,
   kdoctools, karchive, kxmlgui, kcrash, kdeclarative, ktexteditor, kguiaddons
 }:
 
@@ -19,7 +19,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     boost
-    qtbase qtscript qtquickcontrols qtwebkit qtxmlpatterns grantlee
+    qtbase qtscript qtquickcontrols qtxmlpatterns grantlee
     kxmlgui kcrash kdeclarative karchive ktexteditor kguiaddons
   ];
 }
