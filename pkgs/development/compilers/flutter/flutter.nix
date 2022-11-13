@@ -130,15 +130,6 @@ let
         '')
         zlib
       ] ++ pkgs.lib.lists.optionals supportsLinuxDesktop [
-        atk
-        cairo
-        gdk-pixbuf
-        glib
-        gtk3
-        harfbuzz
-        libepoxy
-        pango
-        xorg.libX11
         xorg.libX11.dev
         xorg.xorgproto
       ]);
@@ -242,6 +233,17 @@ runCommandLocal drvName
             clang
           ])} \
         --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH_FOR_TARGET" \
+        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath (lib.lists.optionals supportsLinuxDesktop [
+            atk
+            cairo
+            gdk-pixbuf
+            glib
+            gtk3
+            harfbuzz
+            libepoxy
+            pango
+            libX11
+          ])} \
         --add-flags --no-version-check
 
     makeWrapper ${fhsEnv}/bin/${drvName}-fhs-env $out/bin/${pname} \
