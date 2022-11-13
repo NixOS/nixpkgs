@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxcrypt";
-  version = "4.4.30";
+  version = "4.4.31";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
-    sha256 = "sha256-s2Z/C6hdqtavJGukCQ++UxY62TyLaioSV9IqeLt87ro=";
+    hash = "sha256-wBgbao7qg4UM/neDEZv3H9295prd3aHRV0e6Qz1cV7o=";
   };
 
   outputs = [
