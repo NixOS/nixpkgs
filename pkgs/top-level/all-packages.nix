@@ -18271,7 +18271,11 @@ with pkgs;
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
 
-  bobcat = callPackage ../development/libraries/bobcat { };
+  bobcat = callPackage ../development/libraries/bobcat
+    (lib.optionalAttrs (with stdenv.hostPlatform; isAarch64 && isLinux) {
+      # C++20 is required, aarch64-linux has gcc 9 by default
+      stdenv = gcc10Stdenv;
+    });
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
