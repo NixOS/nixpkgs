@@ -14,6 +14,12 @@
 , pythonOlder
 , sniffio
 , socksio
+
+# for passthru.tests
+, falcon
+, httpx
+, pytest-httpx
+, respx
 }:
 
 buildPythonPackage rec {
@@ -48,13 +54,18 @@ buildPythonPackage rec {
     sniffio
   ];
 
-  passthru.optional-dependencies = {
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
+  passthru = {
+    optional-dependencies = {
+      http2 = [
+        h2
+      ];
+      socks = [
+        socksio
+      ];
+    };
+    tests = {
+      inherit falcon httpx pytest-httpx respx;
+    };
   };
 
   checkInputs = [
