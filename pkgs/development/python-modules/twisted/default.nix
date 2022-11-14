@@ -50,6 +50,11 @@ buildPythonPackage rec {
     contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
   };
 
+  patches = [
+    # https://github.com/twisted/twisted/commit/f2f5e81c03f14e253e85fe457e646130780db40b
+    ./CVE-2022-39348.patch
+  ];
+
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
   postPatch = lib.optionalString stdenv.isLinux ''
