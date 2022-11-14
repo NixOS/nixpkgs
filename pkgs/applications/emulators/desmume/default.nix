@@ -21,15 +21,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "desmume";
-  version = "0.9.11+unstable=2021-09-22";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "TASVideos";
-    repo = pname;
-    rev = "7fc2e4b6b6a58420de65a4089d4df3934d7a46b1";
-    hash = "sha256-sTCyjQ31w1Lp+aa3VQ7/rdLbhjnqthce54mjKJZQIDM=";
+    repo = "desmume";
+    rev = "release_${lib.replaceChars ["."] ["_"] finalAttrs.version}";
+    hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})
 # TODO: investigate the patches
 # TODO: investigate other platforms
