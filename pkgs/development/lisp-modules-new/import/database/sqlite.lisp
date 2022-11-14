@@ -90,6 +90,9 @@ in {")
    "hu.dwim.zlib"
    ;; Missing libgvc.so native library
    "hu.dwim.graphviz"
+   ;; These require libRmath.so, but I don't know where to get it from
+   "cl-random"
+   "cl-random-tests"
    ))
 
 (defmethod database->nix-expression ((database sqlite-database) outfile)
