@@ -34,6 +34,9 @@
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
+  "auto-activities@acedron.github.io" = "auto-activities-2";
+  "auto-activities@CleoMenezesJr.github.io" = "auto-activities";
+
   # ####### GNOME 41 #######
 
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
