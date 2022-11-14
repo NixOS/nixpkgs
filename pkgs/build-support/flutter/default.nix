@@ -45,7 +45,7 @@ let
   getAttrsOrNull = names: attrs: lib.genAttrs names (name: if attrs ? ${name} then attrs.${name} else null);
   flutterDeps = [
     # flutter deps
-    flutter.unwrapped
+    flutter.wrapped
     bash
     curl
     flutter.dart
