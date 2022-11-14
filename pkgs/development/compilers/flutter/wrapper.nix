@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , flutter
-, supportsLinuxDesktop ? true
+, supportsLinuxDesktop ? stdenv.isLinux
 , makeWrapper
 , runCommandLocal
 , writeShellScript
