@@ -17,14 +17,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qzDQFS2ogQ6hqTCddHnttWF365007Labnn4BmHB219k=";
+    sha256 = "sha256-XCEX2VCynbMUP5xsxWq8PlHnfrBfES5c2fuu2jhM+tI=";
   };
+
+  patches = [ ./version.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
+    "-DBUILD_INET_EXTENSION=ON"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ];
 
@@ -56,13 +59,20 @@ stdenv.mkDerivation rec {
   installCheckPhase =
     let
       excludes = map (pattern: "exclude:'${pattern}'") [
-        "*test_slow"
-        "Test file buffers for reading/writing to file"
-        "[test_slow]"
+        "[s3]"
+        "Test closing database during long running query"
         "test/common/test_cast_hugeint.test"
         "test/sql/copy/csv/test_csv_remote.test"
         "test/sql/copy/parquet/test_parquet_remote.test"
         "test/sql/copy/parquet/test_parquet_remote_foreign_files.test"
+        "test/sql/storage/compression/chimp/chimp_read.test"
+        "test/sql/storage/compression/chimp/chimp_read_float.test"
+        "test/sql/storage/compression/patas/patas_compression_ratio.test_coverage"
+        "test/sql/storage/compression/patas/patas_read.test"
+        # these are only hidden if no filters are passed in
+        "[!hide]"
+        # this test apparently never terminates
+        "test/sql/copy/csv/auto/test_csv_auto.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
