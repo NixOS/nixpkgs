@@ -2736,6 +2736,8 @@ self: super: with self; {
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
+  doq = callPackage ../development/python-modules/doq { };
+
   dparse = callPackage ../development/python-modules/dparse { };
 
   dparse2 = callPackage ../development/python-modules/dparse2 { };

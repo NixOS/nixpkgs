@@ -15843,4 +15843,11 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  v1kko = {
+    name = "Victor Azizi";
+    email = "nix@lipsum.eu";
+    github = "v1kko";
+    githubId = 1472570;
+    matrix = "@victor:matrix.lipsum.eu";
+  };
 }
