@@ -14,7 +14,7 @@
 , libXtst
 , zlib
 , maven
-, webkitgtk
+, webkitgtk_4_1
 , glib-networking
 , javaPackages
 }:
@@ -52,7 +52,7 @@
     libXtst
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    webkitgtk
+    webkitgtk_4_1
     glib-networking
   ];
 
@@ -108,7 +108,7 @@
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_1 glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
