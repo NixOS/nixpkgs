@@ -141,6 +141,10 @@ buildPythonApplication rec {
     "checkov"
   ];
 
+  postInstall = ''
+    chmod +x $out/bin/checkov
+  '';
+
   meta = with lib; {
     description = "Static code analysis tool for infrastructure-as-code";
     homepage = "https://github.com/bridgecrewio/checkov";
