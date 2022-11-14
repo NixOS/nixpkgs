@@ -22,6 +22,11 @@ let
     cl-cairo2 = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-freetype2 = pkg: {
+      nativeLibs = [ freetype ];
+      nativeBuildInputs = [ freetype ];
+      patches = [ ./patches/cl-freetype2-fix-grovel-includes.patch ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
