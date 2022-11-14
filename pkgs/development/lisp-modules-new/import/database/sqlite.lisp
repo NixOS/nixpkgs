@@ -80,6 +80,7 @@ in {")
    "hu.dwim.quasi-quote"
    ;; Tries to write in $HOME
    "ubiquitous"
+   "math"
    ;; Upstream bad packaging, multiple systems in clml.blas.asd
    "clml.blas.hompack"
    ;; Fails on SBCL due to heap exhaustion

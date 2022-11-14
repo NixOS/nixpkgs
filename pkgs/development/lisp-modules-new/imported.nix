@@ -47325,6 +47325,9 @@ in {
     });
     systems = [ "math" ];
     lispLibs = [ (getAttr "cl-utilities" pkgs) (getAttr "font-discovery" pkgs) (getAttr "gsll" pkgs) (getAttr "vgplot" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   math_slash_appr = {
     pname = "math_appr";
