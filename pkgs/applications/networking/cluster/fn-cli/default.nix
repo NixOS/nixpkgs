@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, docker }:
 
 buildGoModule rec {
   pname = "fn";
@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://fnproject.io";
     license = licenses.asl20;
     maintainers = [ maintainers.c4605 ];
+    broken = stdenv.isDarwin;
   };
 }
