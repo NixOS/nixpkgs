@@ -201,19 +201,27 @@ def convertMD(options: Dict[str, Any]) -> str:
         return option[key]['_type'] == typ
 
     for (name, option) in options.items():
-        if optionIs(option, 'description', 'mdDoc'):
-            option['description'] = convertString(name, option['description']['text'])
-        if optionIs(option, 'example', 'literalMD'):
-            docbook = convertString(name, option['example']['text'])
-            option['example'] = { '_type': 'literalDocBook', 'text': docbook }
-        if optionIs(option, 'default', 'literalMD'):
-            docbook = convertString(name, option['default']['text'])
-            option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+        try:
+            if optionIs(option, 'description', 'mdDoc'):
+                option['description'] = convertString(name, option['description']['text'])
+            elif markdownByDefault:
+                option['description'] = convertString(name, option['description'])
+
+            if optionIs(option, 'example', 'literalMD'):
+                docbook = convertString(name, option['example']['text'])
+                option['example'] = { '_type': 'literalDocBook', 'text': docbook }
+            if optionIs(option, 'default', 'literalMD'):
+                docbook = convertString(name, option['default']['text'])
+                option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+        except Exception as e:
+            raise Exception(f"Failed to render option {name}: {str(e)}")
+
 
     return options
 
 warningsAreErrors = False
 errorOnDocbook = False
+markdownByDefault = False
 optOffset = 0
 for arg in sys.argv[1:]:
     if arg == "--warnings-are-errors":
@@ -222,6 +230,9 @@ for arg in sys.argv[1:]:
     if arg == "--error-on-docbook":
         optOffset += 1
         errorOnDocbook = True
+    if arg == "--markdown-by-default":
+        optOffset += 1
+        markdownByDefault = True
 
 options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
 overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
