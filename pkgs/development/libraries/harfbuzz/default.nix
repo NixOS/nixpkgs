@@ -33,8 +33,8 @@
 let
   version = "5.3.1";
   inherit (lib) optional optionals optionalString;
-  mesonFeatureFlag = opt: b:
-    "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation {
