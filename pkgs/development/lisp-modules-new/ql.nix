@@ -22,6 +22,9 @@ let
     cl-cairo2 = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-cairo2-xlib = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
     cl-freetype2 = pkg: {
       nativeLibs = [ freetype ];
       nativeBuildInputs = [ freetype ];
