@@ -70,6 +70,17 @@ in
       test_as_regular('/run/wrappers/bin/sgid_root_busybox id -g', '0')
       test_as_regular('/run/wrappers/bin/sgid_root_busybox id -rg', '${toString usersGid}')
 
+      # Test that in nonewprivs environment the wrappers simply exec their target.
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -u', '${toString userUid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -ru', '${toString userUid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -g', '${toString usersGid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/suid_root_busybox id -rg', '${toString usersGid}')
+
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -u', '${toString userUid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -ru', '${toString userUid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -g', '${toString usersGid}')
+      test_as_regular('${pkgs.util-linux}/bin/setpriv --no-new-privs /run/wrappers/bin/sgid_root_busybox id -rg', '${toString usersGid}')
+
       # We are only testing the permitted set, because it's easiest to look at with capsh.
       machine.fail(cmd_as_regular('${pkgs.libcap}/bin/capsh --has-p=CAP_CHOWN'))
       machine.fail(cmd_as_regular('${pkgs.libcap}/bin/capsh --has-p=CAP_SYS_ADMIN'))
