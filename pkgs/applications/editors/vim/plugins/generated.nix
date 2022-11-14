@@ -7781,6 +7781,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-github.nvim/";
   };
 
+  telescope-live-grep-args-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-live-grep-args.nvim";
+    version = "2022-11-07";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-live-grep-args.nvim";
+      rev = "7de3baef1ec4fb77f7a8195fe87bebd513244b6a";
+      sha256 = "0yfn2mlgb3kz5bmkahri7gxv91fj3svy6ygb4lbn649519l840a6";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-live-grep-args.nvim/";
+  };
+
   telescope-lsp-handlers-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-lsp-handlers.nvim";
     version = "2021-09-07";
