@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
     rev = version;
-    hash = "sha256-bKZOAGInks26NmzlKo1T8NREO9xoF8ZsssNDzyTJwlU=";
+    hash = "sha256-76JMC9kjeQO4ZuRQ4Kv7J141xy0M7kDTWWjQtJ/d5r0=";
   };
 
   buildInputs = [ pcre
