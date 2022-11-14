@@ -25,42 +25,51 @@ let
             ${attr} = [];
           });
 
-  datasourceFile = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
-  dashboardFile = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
+  datasourceFileOrDir = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
+  dashboardFileOrDir = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
 
   notifierConfiguration = {
     apiVersion = 1;
     notifiers = cfg.provision.notifiers;
   };
 
-  notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
+  notifierFileOrDir = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
   generateAlertingProvisioningYaml = x: if (cfg.provision.alerting."${x}".path == null)
                                         then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
                                         else cfg.provision.alerting."${x}".path;
-  rulesFile = generateAlertingProvisioningYaml "rules";
-  contactPointsFile = generateAlertingProvisioningYaml "contactPoints";
-  policiesFile = generateAlertingProvisioningYaml "policies";
-  templatesFile = generateAlertingProvisioningYaml "templates";
-  muteTimingsFile = generateAlertingProvisioningYaml "muteTimings";
+  rulesFileOrDir = generateAlertingProvisioningYaml "rules";
+  contactPointsFileOrDir = generateAlertingProvisioningYaml "contactPoints";
+  policiesFileOrDir = generateAlertingProvisioningYaml "policies";
+  templatesFileOrDir = generateAlertingProvisioningYaml "templates";
+  muteTimingsFileOrDir = generateAlertingProvisioningYaml "muteTimings";
 
-  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+  ln = { src, dir, filename }: ''
+    if [[ -d "${src}" ]]; then
+      pushd $out/${dir} &>/dev/null
+        lndir "${src}"
+      popd &>/dev/null
+    else
+      ln -sf ${src} $out/${dir}/${filename}.yaml
+    fi
+  '';
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
     mkdir -p $out/{datasources,dashboards,notifiers,alerting}
-    ln -sf ${datasourceFile} $out/datasources/datasource.yaml
-    ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
-    ln -sf ${notifierFile} $out/notifiers/notifier.yaml
-    ln -sf ${rulesFile} $out/alerting/rules.yaml
-    ln -sf ${contactPointsFile} $out/alerting/contactPoints.yaml
-    ln -sf ${policiesFile} $out/alerting/policies.yaml
-    ln -sf ${templatesFile} $out/alerting/templates.yaml
-    ln -sf ${muteTimingsFile} $out/alerting/muteTimings.yaml
+    ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
+    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashbaord"; }}
+    ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
+    ${ln { src = rulesFileOrDir;         dir = "alerting";    filename = "rules"; }}
+    ${ln { src = contactPointsFileOrDir; dir = "alerting";    filename = "contactPoints"; }}
+    ${ln { src = policiesFileOrDir;      dir = "alerting";    filename = "policies"; }}
+    ${ln { src = templatesFileOrDir;     dir = "alerting";    filename = "templates"; }}
+    ${ln { src = muteTimingsFileOrDir;   dir = "alerting";    filename = "muteTimings"; }}
   '';
 
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
   # FIXME(@Ma27) remove before 23.05. This is just a helper-type
-  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
+  # because `mkRenamedOptionMthere's there's odule` doesn't work if `foo.bar` is renamed
   # to `foo.bar.baz`.
   submodule' = module: types.coercedTo
     (mkOptionType {
@@ -342,19 +351,7 @@ in {
                 Don't change the value of this option if you are planning to use `services.grafana.provision` options.
               '';
               default = provisionConfDir;
-              defaultText = literalExpression ''
-                pkgs.runCommand "grafana-provisioning" { } \'\'
-                  mkdir -p $out/{datasources,dashboards,notifiers,alerting}
-                  ln -sf ''${datasourceFile} $out/datasources/datasource.yaml
-                  ln -sf ''${dashboardFile} $out/dashboards/dashboard.yaml
-                  ln -sf ''${notifierFile} $out/notifiers/notifier.yaml
-                  ln -sf ''${rulesFile} $out/alerting/rules.yaml
-                  ln -sf ''${contactPointsFile} $out/alerting/contactPoints.yaml
-                  ln -sf ''${policiesFile} $out/alerting/policies.yaml
-                  ln -sf ''${templatesFile} $out/alerting/templates.yaml
-                  ln -sf ''${muteTimingsFile} $out/alerting/muteTimings.yaml
-                  \'\'
-              '';
+              defaultText = "directory with all provisioning files linked together";
               type = types.path;
             };
           };
@@ -641,6 +638,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML datasource configuration. Can't be used with
               [](#opt-services.grafana.provision.datasources.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -692,6 +690,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML dashboard configuration. Can't be used with
               [](#opt-services.grafana.provision.dashboards.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -714,6 +713,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML rules configuration. Can't be used with
               [](#opt-services.grafana.provision.alerting.rules.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -837,6 +837,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML contact points configuration. Can't be used with
               [](#opt-services.grafana.provision.alerting.contactPoints.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -917,6 +918,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML notification policies configuration. Can't be used with
               [](#opt-services.grafana.provision.alerting.policies.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -986,6 +988,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML templates configuration. Can't be used with
               [](#opt-services.grafana.provision.alerting.templates.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -1067,6 +1070,7 @@ in {
             description = lib.mdDoc ''
               Path to YAML mute timings configuration. Can't be used with
               [](#opt-services.grafana.provision.alerting.muteTimings.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;

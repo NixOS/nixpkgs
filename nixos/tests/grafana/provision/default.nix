@@ -163,6 +163,22 @@ let
         };
       };
     };
+
+    provisionYamlDirs = let
+      mkdir = p: pkgs.writeTextDir (baseNameOf p) (builtins.readFile p);
+    in {
+      services.grafana.provision = {
+        datasources.path = mkdir ./datasources.yaml;
+        dashboards.path = mkdir ./dashboards.yaml;
+        alerting = {
+          rules.path = mkdir ./rules.yaml;
+          contactPoints.path = mkdir ./contact-points.yaml;
+          policies.path = mkdir ./policies.yaml;
+          templates.path = mkdir ./templates.yaml;
+          muteTimings.path = mkdir ./mute-timings.yaml;
+        };
+      };
+    };
   };
 
   nodes = builtins.mapAttrs (_: val: mkMerge [ val baseGrafanaConf ]) extraNodeConfs;
@@ -180,8 +196,9 @@ in {
 
     nodeNix = ("Nix (new format)", provisionNix)
     nodeYaml = ("Nix (YAML)", provisionYaml)
+    nodeYamlDir = ("Nix (YAML in dirs)", provisionYamlDirs)
 
-    for description, machine in [nodeNix, nodeYaml]:
+    for description, machine in [nodeNix, nodeYaml, nodeYamlDir]:
         with subtest(f"Should start provision node: {description}"):
             machine.wait_for_unit("grafana.service")
             machine.wait_for_open_port(3000)

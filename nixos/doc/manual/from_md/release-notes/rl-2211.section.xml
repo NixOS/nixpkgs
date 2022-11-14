@@ -1300,7 +1300,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                 <para>
                   Instead of declaring datasources and dashboards in
                   pure Nix, it’s also possible to specify configuration
-                  files with YAML instead using
+                  files (or directories) with YAML instead using
                   <xref linkend="opt-services.grafana.provision.datasources.path" />
                   (or
                   <xref linkend="opt-services.grafana.provision.dashboards.path" />.
