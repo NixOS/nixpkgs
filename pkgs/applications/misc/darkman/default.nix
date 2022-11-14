@@ -45,5 +45,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/WhyNotHugo/darkman";
     license = licenses.isc;
     maintainers = [ maintainers.ajgrf ];
+    platforms = platforms.linux;
   };
 }
