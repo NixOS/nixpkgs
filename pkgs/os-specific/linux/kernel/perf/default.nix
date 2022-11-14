@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs scripts tools/perf/pmu-events/jevents.py
-
+  '' + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
     substituteInPlace tools/perf/scripts/python/flamegraph.py \
       --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
       "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
