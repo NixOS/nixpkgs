@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.43.1";
+  version = "3.46.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LbPXCwU6aJp+z5scfej5Reo2X8QUvZpASWkcDBBF1J0=";
+    hash = "sha256-bEAggHGMhSSwEiYj+DdJRajR4DLunpidbd4DflkBrQ8=";
   };
 
-  vendorSha256 = "sha256-APGiCqHdXDRCFx0W8RDeL89sskYZ2vzdpg4ePE7KixA=";
+  vendorSha256 = "sha256-+JKCCNkByqWuvAv8qUL3L9DlDhvIbMsDbsfn3KYolUo=";
 
   sourceRoot = "source/pkg";
 
@@ -62,6 +62,7 @@ buildGoModule rec {
 
     # Code generation tests also download dependencies from network
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+    rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
   '' + lib.optionalString stdenv.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
