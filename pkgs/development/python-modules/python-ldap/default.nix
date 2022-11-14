@@ -46,7 +46,8 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_tls_ext_noca" # fails with openssl 3
+    # https://github.com/python-ldap/python-ldap/issues/501
+    "test_tls_ext_noca"
   ];
 
   doCheck = !stdenv.isDarwin;
