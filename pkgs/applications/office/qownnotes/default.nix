@@ -11,7 +11,7 @@ mkDerivation rec {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
     # Fetch the checksum of current version with curl:
     # curl https://download.tuxfamily.org/qownnotes/src/qownnotes-<version>.tar.xz.sha256
-    hash = "sha256-oZLbplYn1AYCv/fPb2dotpQeb8MITx7F5Tc4Wxd65Ew=";
+    sha256 = "a192dba65627d40602bff7cf6f6768b6941e6fc3084f1ec5e537385b177ae44c";
   };
 
   nativeBuildInputs = [ qmake qttools ];
