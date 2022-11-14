@@ -56,6 +56,8 @@ npmConfigHook() {
       exit 1
     fi
 
+    @prefetchNpmDeps@ --fixup-lockfile "$srcLockfile"
+
     local cachePath
 
     if [ -z "${makeCacheWritable-}" ]; then

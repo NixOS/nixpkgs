@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, rustPlatform, Security, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -16,7 +16,12 @@
 
     cargoLock.lockFile = ./Cargo.lock;
 
+    nativeBuildInputs = [ makeWrapper ];
     buildInputs = lib.optional stdenvNoCC.isDarwin Security;
+
+    postInstall = ''
+      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
+    '';
 
     passthru.tests =
       let
@@ -79,7 +84,7 @@
             hash = "sha256-X9mCwPqV5yP0S2GonNvpYnLSLJMd/SUIked+hMRxDpA=";
           };
 
-          hash = "sha256-ri8qvYjn420ykmCC2Uy5P3jxVVrKWJG3ug/qLIGcR7o=";
+          hash = "sha256-5Mg7KDJLMM5e/7BCHGinGAnBRft2ySQzvKW06p3u/0o=";
         };
 
         linkDependencies = makeTest {
@@ -102,7 +107,7 @@
             hash = "sha256-1fGNxYJi1I4cXK/jinNG+Y6tPEOhP3QAqWOBEQttS9E=";
           };
 
-          hash = "sha256-73rLcSBgsZRJFELaKK++62hVbt1QT8JgLu2hyDSmIZE=";
+          hash = "sha256-8xF8F74nHwL9KPN2QLsxnfvsk0rNCKOZniYJQCD5u/I=";
         };
       };
 

@@ -4,11 +4,12 @@ use crate::cacache::Cache;
 use anyhow::{anyhow, Context};
 use rayon::prelude::*;
 use serde::Deserialize;
+use serde_json::{Map, Value};
 use std::{
     collections::{HashMap, HashSet},
-    env, fmt, fs,
+    env, fmt, fs, io,
     path::Path,
-    process::{self, Command},
+    process::{self, Command, Stdio},
 };
 use tempfile::tempdir;
 use url::Url;
@@ -245,6 +246,55 @@ fn get_initial_url() -> anyhow::Result<Url> {
     Url::parse("git+ssh://git@a.b").context("initial url should be valid")
 }
 
+/// `fixup_lockfile` removes the `integrity` field from Git dependencies.
+///
+/// Git dependencies from specific providers can be retrieved from those providers' automatic tarball features.
+/// When these dependencies are specified with a commit identifier, npm generates a tarball, and inserts the integrity hash of that
+/// tarball into the lockfile.
+///
+/// Thus, we remove this hash, to replace it with our own determinstic copies of dependencies from hosted Git providers.
+fn fixup_lockfile(mut lock: Map<String, Value>) -> anyhow::Result<Option<Map<String, Value>>> {
+    if lock
+        .get("lockfileVersion")
+        .ok_or_else(|| anyhow!("couldn't get lockfile version"))?
+        .as_i64()
+        .ok_or_else(|| anyhow!("lockfile version isn't an int"))?
+        < 2
+    {
+        return Ok(None);
+    }
+
+    let mut fixed = false;
+
+    for package in lock
+        .get_mut("packages")
+        .ok_or_else(|| anyhow!("couldn't get packages"))?
+        .as_object_mut()
+        .ok_or_else(|| anyhow!("packages isn't a map"))?
+        .values_mut()
+    {
+        if let Some(Value::String(resolved)) = package.get("resolved") {
+            if resolved.starts_with("git+ssh://") && package.get("integrity").is_some() {
+                fixed = true;
+
+                package
+                    .as_object_mut()
+                    .ok_or_else(|| anyhow!("package isn't a map"))?
+                    .remove("integrity");
+            }
+        }
+    }
+
+    if fixed {
+        lock.remove("dependencies");
+
+        Ok(Some(lock))
+    } else {
+        Ok(None)
+    }
+}
+
+#[allow(clippy::too_many_lines)]
 fn main() -> anyhow::Result<()> {
     let args = env::args().collect::<Vec<_>>();
 
@@ -254,6 +304,18 @@ fn main() -> anyhow::Result<()> {
         println!("Prefetches npm dependencies for usage by fetchNpmDeps.");
 
         process::exit(1);
+    }
+
+    if args[1] == "--fixup-lockfile" {
+        let lock = serde_json::from_str(&fs::read_to_string(&args[2])?)?;
+
+        if let Some(fixed) = fixup_lockfile(lock)? {
+            println!("Fixing lockfile");
+
+            fs::write(&args[2], serde_json::to_string(&fixed)?)?;
+        }
+
+        return Ok(());
     }
 
     let lock_content = fs::read_to_string(&args[1])?;
@@ -310,40 +372,87 @@ fn main() -> anyhow::Result<()> {
 
     let cache = Cache::new(out.join("_cacache"));
 
-    packages.into_par_iter().try_for_each(|(dep, package)| {
-        eprintln!("{dep}");
+    packages
+        .into_par_iter()
+        .try_for_each(|(dep, mut package)| {
+            eprintln!("{dep}");
 
-        let mut resolved = match package.resolved {
-            Some(UrlOrString::Url(url)) => url,
-            _ => unreachable!(),
-        };
+            let mut resolved = match package.resolved {
+                Some(UrlOrString::Url(url)) => url,
+                _ => unreachable!(),
+            };
 
-        if let Some(hosted_git_url) = get_hosted_git_url(&resolved) {
-            resolved = hosted_git_url;
-        }
+            let mut hosted = false;
 
-        let mut data = Vec::new();
+            if let Some(hosted_git_url) = get_hosted_git_url(&resolved) {
+                resolved = hosted_git_url;
+                package.integrity = None;
+                hosted = true;
+            }
 
-        agent
-            .get(resolved.as_str())
-            .call()?
-            .into_reader()
-            .read_to_end(&mut data)?;
+            let mut data = Vec::new();
 
-        cache
-            .put(
-                format!("make-fetch-happen:request-cache:{resolved}"),
-                resolved,
-                &data,
-                package
-                    .integrity
-                    .map(|i| Ok::<String, anyhow::Error>(get_ideal_hash(&i)?.to_string()))
-                    .transpose()?,
-            )
-            .map_err(|e| anyhow!("couldn't insert cache entry for {dep}: {e:?}"))?;
+            let mut body = agent.get(resolved.as_str()).call()?.into_reader();
 
-        Ok::<_, anyhow::Error>(())
-    })?;
+            if hosted {
+                let workdir = tempdir()?;
+
+                let tar_path = workdir.path().join("package");
+
+                fs::create_dir(&tar_path)?;
+
+                let mut cmd = Command::new("tar")
+                    .args(["--extract", "--gzip", "--strip-components=1", "-C"])
+                    .arg(&tar_path)
+                    .stdin(Stdio::piped())
+                    .spawn()?;
+
+                io::copy(&mut body, &mut cmd.stdin.take().unwrap())?;
+
+                let exit = cmd.wait()?;
+
+                if !exit.success() {
+                    return Err(anyhow!(
+                        "failed to extract tarball for {dep}: tar exited with status code {}",
+                        exit.code().unwrap()
+                    ));
+                }
+
+                data = Command::new("tar")
+                    .args([
+                        "--sort=name",
+                        "--mtime=0",
+                        "--owner=0",
+                        "--group=0",
+                        "--numeric-owner",
+                        "--format=gnu",
+                        "-I",
+                        "gzip -n -9",
+                        "--create",
+                        "-C",
+                    ])
+                    .arg(workdir.path())
+                    .arg("package")
+                    .output()?
+                    .stdout;
+            } else {
+                body.read_to_end(&mut data)?;
+            }
+
+            cache
+                .put(
+                    format!("make-fetch-happen:request-cache:{resolved}"),
+                    resolved,
+                    &data,
+                    package
+                        .integrity
+                        .map(|i| Ok::<String, anyhow::Error>(get_ideal_hash(&i)?.to_string()))
+                        .transpose()?,
+                )
+                .map_err(|e| anyhow!("couldn't insert cache entry for {dep}: {e:?}"))?;
+
+            Ok::<_, anyhow::Error>(())
+        })?;
 
     fs::write(out.join("package-lock.json"), lock_content)?;
 
