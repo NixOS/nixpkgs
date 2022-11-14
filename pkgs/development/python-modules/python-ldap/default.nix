@@ -45,6 +45,10 @@ buildPythonPackage rec {
     export SCHEMA="${openldap}/etc/schema"
   '';
 
+  disabledTests = [
+    "test_tls_ext_noca" # fails with openssl 3
+  ];
+
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
