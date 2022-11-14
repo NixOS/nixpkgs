@@ -20457,6 +20457,9 @@ in {
     });
     systems = [ "cl-random" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "anaphora" pkgs) (getAttr "array-operations" pkgs) (getAttr "cl-num-utils" pkgs) (getAttr "cl-rmath" pkgs) (getAttr "cl-slice" pkgs) (getAttr "gsll" pkgs) (getAttr "let-plus" pkgs) (getAttr "lla" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-random-forest = {
     pname = "cl-random-forest";
@@ -20496,6 +20499,9 @@ in {
     });
     systems = [ "cl-random-tests" ];
     lispLibs = [ (getAttr "cl-random" pkgs) (getAttr "clunit" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   cl-rdfxml = {
     pname = "cl-rdfxml";
