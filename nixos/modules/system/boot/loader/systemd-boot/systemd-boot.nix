@@ -107,11 +107,17 @@ in {
 
     extraInstallCommands = mkOption {
       default = "";
-      example = "";
+      example = ''
+        default_cfg=$(cat /boot/loader/loader.conf | grep default | awk '{print $2}')
+        init_value=$(cat /boot/loader/entries/$default_cfg | grep init= | awk '{print $2}')
+        sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
+      '';
       type = types.lines;
       description = lib.mdDoc ''
         Additional shell commands inserted in the bootloader installer
-        script after generating menu entries.
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
       '';
     };
 
