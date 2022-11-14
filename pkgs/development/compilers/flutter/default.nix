@@ -1,11 +1,13 @@
 { callPackage, fetchurl, dart }:
 let
   mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
+  wrapFlutter = flutter: callPackage (import ./wrapper.nix) { flutter = flutter; };
+  mkFlutterFHS = flutter: callPackage (import ./fhs.nix) { flutter = flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-  flutterDrv = { version, pname, dartVersion, hash, dartHash, patches }: mkFlutter {
-    inherit version pname patches;
+  flutterDrv = { version, dartVersion, hash, dartHash, patches }: mkFlutter {
+    inherit version patches;
     dart = dart.override {
       version = dartVersion;
       sources = {
@@ -26,9 +28,8 @@ let
   };
 in
 {
-  inherit mkFlutter;
+  inherit mkFlutter wrapFlutter mkFlutterFHS flutterDrv;
   stable = flutterDrv {
-    pname = "flutter";
     version = "3.3.3";
     dartVersion = "2.18.2";
     hash = "sha256-MTZeWQUp4/TcPzYIT6eqIKSPUPvn2Mp/thOQzNgpTXg=";
@@ -40,7 +41,6 @@ in
   };
 
   v2 = flutterDrv {
-    pname = "flutter";
     version = "2.10.5";
     dartVersion = "2.16.2";
     hash = "sha256-DTZwxlMUYk8NS1SaWUJolXjD+JnRW73Ps5CdRHDGnt0=";
