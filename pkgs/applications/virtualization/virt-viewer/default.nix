@@ -19,8 +19,8 @@
 , pkg-config
 , python3
 , shared-mime-info
-# https://gitlab.com/virt-viewer/virt-viewer/-/issues/88
-, spice-gtk_libsoup2 ? null
+  # https://gitlab.com/virt-viewer/virt-viewer/-/issues/88
+, spice-gtk ? null
 , spice-protocol ? null
 , spiceSupport ? true
 , vte
@@ -29,9 +29,9 @@
 
 assert spiceSupport -> (
   gdbm != null
-  && (stdenv.isLinux -> libcap != null)
-  && spice-gtk_libsoup2 != null
-  && spice-protocol != null
+    && (stdenv.isLinux -> libcap != null)
+    && spice-gtk != null
+    && spice-protocol != null
 );
 
 with lib;
@@ -46,11 +46,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with meson 0.61
-    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    # Fix build with libsoup 3 and meson 0.61
     (fetchpatch {
-      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
-      sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
+      url = "https://github.com/archlinux/svntogit-community/raw/895834eb7e811ca29b19b5812a2c412a5b705cf5/trunk/rest.diff";
+      sha256 = "sha256-aOV/WOHT1L0N+o+L+qH8CibJQrtUVqCvBZBF1nZYwG0=";
     })
   ];
 
@@ -78,20 +77,22 @@ stdenv.mkDerivation rec {
     vte
   ] ++ optionals spiceSupport ([
     gdbm
-    spice-gtk_libsoup2
+    spice-gtk
     spice-protocol
   ] ++ optionals stdenv.isLinux [
     libcap
   ]);
 
   # Required for USB redirection PolicyKit rules file
-  propagatedUserEnvPkgs = optional spiceSupport spice-gtk_libsoup2;
+  propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
 
   strictDeps = true;
 
   postPatch = ''
     patchShebangs build-aux/post_install.py
   '';
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = {
     description = "A viewer for remote virtual machines";
