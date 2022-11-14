@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DFETCH_PYTHON_DEPS=OFF"
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
   nativeBuildInputs = [
     cmake
     ensureNewerSourcesForZipFilesHook
@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
       Google's software suite for combinatorial optimization.
     '';
     maintainers = with maintainers; [ andersk ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }
