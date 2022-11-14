@@ -21,13 +21,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.10.1";
+  version = "2.11.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-am2acceDig7tjhkO5GiWfvkq0Mabyxedbc8mR49SXBU=";
+    hash = "sha256-QXxZ6RQwXrVsaZRkW13r7aoz8iHxuT0nW/2aFDpLLzU=";
   };
 
   netfilter-go-modules = (buildGoModule {
@@ -40,14 +40,14 @@ let
     inherit src;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-sw6iylh3SgCDA1z/xvwNGWrCU2xr7IVPUL4fdOi43lc=";
+    hash = "sha256-BRUUEDIVQoF+FuKnoBzFbMyeGOgGb6/boYSaftZPF2U=";
   };
 
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-gBJIzTTo6i415aHwUsBriokUt2K/r55QCpC6Tv8GXh4=";
+    hash = "sha256-oSO7KS4aBwSVYIyxmWTXKn0CL9t6CDR/hx+0+nbf/dM=";
   };
 
 in
@@ -108,7 +108,7 @@ stdenv.mkDerivation {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    substituteInPlace src/connectionbenchmark/benchmarktaskdownload.cpp \
+    substituteInPlace src/connectionbenchmark/benchmarktasktransfer.cpp \
       --replace 'QT_VERSION >= 0x060400' 'false'
 
     ln -s '${netfilter-go-modules}' linux/netfilter/vendor
