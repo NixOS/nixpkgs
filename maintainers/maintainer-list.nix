@@ -826,6 +826,7 @@
   };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
+    matrix = "@anderson_torres:matrix.org";
     github = "AndersonTorres";
     githubId = 5954806;
     name = "Anderson Torres";
@@ -4621,12 +4622,6 @@
     github = "flexagoon";
     githubId = 66178592;
     name = "Pavel Zolotarevskiy";
-  };
-  flexw = {
-    email = "felix.weilbach@t-online.de";
-    github = "FlexW";
-    githubId = 19961516;
-    name = "Felix Weilbach";
   };
   fliegendewurst = {
     email = "arne.keller@posteo.de";
