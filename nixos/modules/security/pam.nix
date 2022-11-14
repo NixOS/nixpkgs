@@ -544,6 +544,7 @@ let
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
             (config.security.pam.enableEcryptfs
+              || config.security.pam.enableFscrypt
               || cfg.pamMount
               || cfg.enableKwallet
               || cfg.enableGnomeKeyring
@@ -557,6 +558,9 @@ let
               '' +
               optionalString config.security.pam.enableEcryptfs ''
                 auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap
+              '' +
+              optionalString config.security.pam.enableFscrypt ''
+                auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
               '' +
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -606,6 +610,9 @@ let
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
+          optionalString config.security.pam.enableFscrypt ''
+            password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
           '' +
@@ -651,6 +658,14 @@ let
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
+          '' +
+          optionalString config.security.pam.enableFscrypt ''
+            # Work around https://github.com/systemd/systemd/issues/8598
+            # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
+            # anyways.
+            # See also https://github.com/google/fscrypt/issues/95
+            session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+            session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -1168,6 +1183,14 @@ in
     };
 
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
+    security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
+      Enables fscrypt to automatically unlock directories with the user's login password.
+
+      This also enables a service at security.pam.services.fscrypt which is used by
+      fscrypt to verify the user's password when setting up a new protector. If you
+      use something other than pam_unix to verify user passwords, please remember to
+      adjust this PAM service.
+    '');
 
     users.motd = mkOption {
       default = null;
@@ -1192,6 +1215,7 @@ in
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+      ++ optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
       ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
@@ -1233,6 +1257,9 @@ in
            it complains "Cannot create session: Already running in a
            session". */
         runuser-l = { rootOK = true; unixAuth = false; };
+      } // optionalAttrs (config.security.pam.enableFscrypt) {
+        # Allow fscrypt to verify login passphrase
+        fscrypt = {};
       };
 
     security.apparmor.includes."abstractions/pam" = let
@@ -1296,6 +1323,9 @@ in
       '' +
       optionalString config.security.pam.enableEcryptfs ''
         mr ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so,
+      '' +
+      optionalString config.security.pam.enableFscrypt ''
+        mr ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so,
       '' +
       optionalString (isEnabled (cfg: cfg.pamMount)) ''
         mr ${pkgs.pam_mount}/lib/security/pam_mount.so,

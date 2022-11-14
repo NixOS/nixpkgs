@@ -26,6 +26,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-source-record = callPackage ./obs-source-record.nix { };
+
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };

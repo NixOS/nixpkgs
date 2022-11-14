@@ -7,6 +7,8 @@
 , ffmpeg
 , glib
 , libGLU
+, libICE
+, libX11
 , mesa
 , perl
 , pkg-config
@@ -14,7 +16,6 @@
 , python3
 , wrapGAppsHook
 , wxGTK32
-, xlibsWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     Carbon
     Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xlibsWrapper
+    libICE
+    libX11
   ];
 
   postPatch = ''
