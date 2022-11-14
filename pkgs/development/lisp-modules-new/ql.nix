@@ -30,6 +30,9 @@ let
       nativeBuildInputs = [ freetype ];
       patches = [ ./patches/cl-freetype2-fix-grovel-includes.patch ];
     };
+    cl-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
