@@ -24,10 +24,6 @@
 
 extern char **environ;
 
-// The WRAPPER_DIR macro is supplied at compile time so that it cannot
-// be changed at runtime
-static char *wrapper_dir = WRAPPER_DIR;
-
 // Wrapper debug variable name
 static char *wrapper_debug = "WRAPPER_DEBUG";
 
@@ -145,74 +141,15 @@ static int make_caps_ambient(const char *self_path) {
     return 0;
 }
 
-int readlink_malloc(const char *p, char **ret) {
-    size_t l = FILENAME_MAX+1;
-    int r;
-
-    for (;;) {
-        char *c = calloc(l, sizeof(char));
-        if (!c) {
-            return -ENOMEM;
-        }
-
-        ssize_t n = readlink(p, c, l-1);
-        if (n < 0) {
-            r = -errno;
-            free(c);
-            return r;
-        }
-
-        if ((size_t) n < l-1) {
-            c[n] = 0;
-            *ret = c;
-            return 0;
-        }
-
-        free(c);
-        l *= 2;
-    }
-}
-
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
-    char *self_path = NULL;
-    int self_path_size = readlink_malloc("/proc/self/exe", &self_path);
-    if (self_path_size < 0) {
-        fprintf(stderr, "cannot readlink /proc/self/exe: %s", strerror(-self_path_size));
-    }
-
-    // TODO: Determine if this is still useful, in particular if
-    // make_caps_ambient somehow relies on these properties.
-    // Make sure that we are being executed from the right location,
-    // i.e., `safe_wrapper_dir'.
-    int len = strlen(wrapper_dir);
-    if (len > 0 && '/' == wrapper_dir[len - 1])
-      --len;
-    ASSERT(!strncmp(self_path, wrapper_dir, len));
-    ASSERT('/' == wrapper_dir[0]);
-    ASSERT('/' == self_path[len]);
-
-    // Make *really* *really* sure that we were executed as
-    // `self_path', and not, say, as some other setuid program. That
-    // is, our effective uid/gid should match the uid/gid of
-    // `self_path'.
-    struct stat st;
-    ASSERT(lstat(self_path, &st) != -1);
-
-    ASSERT(!(st.st_mode & S_ISUID) || (st.st_uid == geteuid()));
-    ASSERT(!(st.st_mode & S_ISGID) || (st.st_gid == getegid()));
-
-    // And, of course, we shouldn't be writable.
-    ASSERT(!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the
     // capabilities too!
     if (make_caps_ambient("/proc/self/exe") != 0) {
-        free(self_path);
         return 1;
     }
-    free(self_path);
 
     execve(SOURCE_PROG, argv, environ);
     
