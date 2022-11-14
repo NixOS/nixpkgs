@@ -4,10 +4,7 @@ with lib;
 
 let
   cfg = config.services.tailscale;
-  firewallOn = config.networking.firewall.enable;
-  rpfMode = config.networking.firewall.checkReversePath;
   isNetworkd = config.networking.useNetworkd;
-  rpfIsStrict = rpfMode == true || rpfMode == "strict";
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
@@ -38,14 +35,23 @@ in {
       defaultText = literalExpression "pkgs.tailscale";
       description = lib.mdDoc "The package to use for tailscale";
     };
+
+    useRoutingFeatures = mkOption {
+      type = types.enum [ "none" "client" "server" "both" ];
+      default = "none";
+      example = "server";
+      description = lib.mdDoc ''
+        Enables settings required for Tailscale's routing features like subnet routers and exit nodes.
+
+        To use these these features, you will still need to call `sudo tailscale up` with the relevant flags like `--advertise-exit-node` and `--exit-node`.
+
+        When set to `client` or `both`, reverse path filtering will be set to loose instead of strict.
+        When set to `server` or `both`, IP forwarding will be enabled.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
-    warnings = optional (firewallOn && rpfIsStrict) ''
-      Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups. Consider setting:
-
-        networking.firewall.checkReversePath = "loose";
-    '';
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
@@ -74,6 +80,13 @@ in {
       # linux distros.
       stopIfChanged = false;
     };
+
+    boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
+      "net.ipv4.conf.all.forwarding" = mkDefault true;
+      "net.ipv6.conf.all.forwarding" = mkDefault true;
+    };
+
+    networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 
