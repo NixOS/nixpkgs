@@ -24433,6 +24433,8 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
+  rustic-rs = callPackage ../tools/backup/rustic-rs { };
+
   supervise = callPackage ../tools/system/supervise { };
 
   spamassassin = callPackage ../servers/mail/spamassassin { };
