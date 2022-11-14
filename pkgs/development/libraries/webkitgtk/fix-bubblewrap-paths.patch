@@ -1,16 +1,17 @@
-diff -ru old/webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp
---- old/webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp	2019-09-09 04:47:07.000000000 -0400
-+++ webkitgtk-2.26.0/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp	2019-09-20 21:14:10.537921173 -0400
-@@ -724,6 +724,12 @@
-         "--ro-bind-try", "/usr/local/lib64", "/usr/local/lib64",
+diff --git a/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp b/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp
+index 0a201fe176..fa3690c12a 100644
+--- a/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp
++++ b/Source/WebKit/UIProcess/Launcher/glib/BubblewrapLauncher.cpp
+@@ -819,6 +819,12 @@ GRefPtr<GSubprocess> bubblewrapSpawn(GSubprocessLauncher* launcher, const Proces
+         sandboxArgs.append("--unshare-ipc");
+     }
  
-         "--ro-bind-try", PKGLIBEXECDIR, PKGLIBEXECDIR,
++    // Nix Directories
++    sandboxArgs.appendVector(Vector<CString>({ "--ro-bind", "@storeDir@", "@storeDir@" }));
++    sandboxArgs.appendVector(Vector<CString>({ "--ro-bind-try", "/run/current-system", "/run/current-system" }));
++    sandboxArgs.appendVector(Vector<CString>({ "--ro-bind-try", "@driverLink@/lib", "@driverLink@/lib" }));
++    sandboxArgs.appendVector(Vector<CString>({ "--ro-bind-try", "@driverLink@/share", "@driverLink@/share" }));
 +
-+        // Nix Directories
-+        "--ro-bind", "@storeDir@", "@storeDir@",
-+        "--ro-bind", "/run/current-system", "/run/current-system",
-+        "--ro-bind-try", "@driverLink@/lib", "@driverLink@/lib",
-+        "--ro-bind-try", "@driverLink@/share", "@driverLink@/share",
-     };
-     // We would have to parse ld config files for more info.
-     bindPathVar(sandboxArgs, "LD_LIBRARY_PATH");
+ #if ENABLE(DEVELOPER_MODE)
+     const char* execDirectory = g_getenv("WEBKIT_EXEC_PATH");
+     if (execDirectory) {
