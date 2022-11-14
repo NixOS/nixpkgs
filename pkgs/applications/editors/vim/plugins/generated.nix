@@ -4032,12 +4032,12 @@ final: prev:
 
   legendary-nvim = buildVimPluginFrom2Nix {
     pname = "legendary.nvim";
-    version = "2022-11-14";
+    version = "2022-10-30";
     src = fetchFromGitHub {
       owner = "mrjones2014";
       repo = "legendary.nvim";
-      rev = "67acc7d5ce7598ea159e1c689cc0f323bcbfb297";
-      sha256 = "0m0vzapvvj6122kw9jsllhpdq2ljkn7wanmglxsf7d640p8b5s58";
+      rev = "cf388c44976ca8a9f950d98879b3e98d0f0f4b83";
+      sha256 = "0y0zndgs43aa30pdqjpsf1kyc65vg3klwfqqkkz3dkk75417xi2x";
     };
     meta.homepage = "https://github.com/mrjones2014/legendary.nvim/";
   };
