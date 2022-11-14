@@ -33,6 +33,15 @@ let
     cl-pango = pkg: {
       nativeLibs = [ pango ];
     };
+    cl-gtk2-gdk = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-gtk2-glib = pkg: {
+      nativeLibs = [ glib ];
+    };
+    cl-gtk2-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
