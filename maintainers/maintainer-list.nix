@@ -161,6 +161,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  oposs = {
+    email = "nixos.yui3n@simplelogin.com";
+    github = "0poss";
+    githubId = 67114640;
+    name = "Alexandre Brenner";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
