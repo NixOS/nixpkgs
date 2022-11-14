@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "unfs3";
     repo = pname;
-    rev = "c8f2d2cd4529955419bad0e163f88d47ff176b8d";
-    sha256 = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
+    rev = "refs/tags/unfs-${version}";
+    hash = "";
   };
 
   nativeBuildInputs = [ flex bison autoreconfHook pkg-config ];
