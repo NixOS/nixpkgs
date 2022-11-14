@@ -32,14 +32,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.8.11"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.8.12"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-E4O4DEdPwfIt+XOiCF2gLZILYTfZ4BhXMUgKggtsoCc=";
+    sha256 = "sha256-OeOSSB0WgVJEszmkXmMkmJNq37sPID7HFaTbXkBUwlI=";
   };
 
   nativeBuildInputs = [

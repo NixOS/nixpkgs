@@ -688,6 +688,8 @@ self: super: with self; {
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
 
+  asyncserial = callPackage ../development/python-modules/asyncserial { };
+
   asyncsleepiq = callPackage ../development/python-modules/asyncsleepiq { };
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
@@ -5734,6 +5736,8 @@ self: super: with self; {
 
   misaka = callPackage ../development/python-modules/misaka { };
 
+  misoc = callPackage ../development/python-modules/misoc { };
+
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistune = callPackage ../development/python-modules/mistune { };
@@ -5962,6 +5966,10 @@ self: super: with self; {
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
+
+  myhdl = callPackage ../development/python-modules/myhdl {
+    inherit (pkgs) ghdl verilog;
+  };
 
   myhome = callPackage ../development/python-modules/myhome { };
 
@@ -8060,6 +8068,8 @@ self: super: with self; {
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
 
+  pylpsd = callPackage ../development/python-modules/pylpsd { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
@@ -8828,6 +8838,8 @@ self: super: with self; {
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
+
+  pytest-plt = callPackage ../development/python-modules/pytest-plt { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
