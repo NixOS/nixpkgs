@@ -116,9 +116,6 @@ let
 
   # Wrap flutter inside an fhs user env to allow execution of binary,
   # like adb from $ANDROID_HOME or java from android-studio.
-  #
-  # Also provide libraries at hardcoded locations for Linux desktop target
-  # compilation and execution.
   fhsEnv = buildFHSUserEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs:
@@ -129,9 +126,6 @@ let
           ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
         '')
         zlib
-      ] ++ pkgs.lib.lists.optionals supportsLinuxDesktop [
-        xorg.libX11.dev
-        xorg.xorgproto
       ]);
     targetPkgs = pkgs:
       with pkgs; ([
@@ -167,9 +161,6 @@ let
         nss
         systemd
       ]);
-    profile = ''
-      export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/share/pkgconfig"
-    '';
   };
 
 in
@@ -233,7 +224,8 @@ runCommandLocal drvName
             clang
           ])} \
         --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH_FOR_TARGET" \
-        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath (lib.lists.optionals supportsLinuxDesktop [
+        --prefix CXXFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-isystem ${libX11.dev}/include -isystem ${xorgproto}/include"}' \
+        --prefix LDFLAGS "''\t" '${lib.optionalString supportsLinuxDesktop "-rpath ${lib.makeLibraryPath [
             atk
             cairo
             gdk-pixbuf
@@ -243,7 +235,12 @@ runCommandLocal drvName
             libepoxy
             pango
             libX11
-          ])} \
+          ]}"}' \
+        --suffix LD_LIBRARY_PATH : '${lib.optionalString supportsLinuxDesktop (lib.makeLibraryPath [
+            # The prebuilt flutter_linux_gtk library shipped in the Flutter SDK does not have an appropriate RUNPATH.
+            # Its dependencies must be added here.
+            libepoxy
+          ])}' \
         --add-flags --no-version-check
 
     makeWrapper ${fhsEnv}/bin/${drvName}-fhs-env $out/bin/${pname} \
