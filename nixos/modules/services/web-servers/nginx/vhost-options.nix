@@ -99,6 +99,10 @@ with lib;
       description = lib.mdDoc ''
         Host which to proxy requests to if acme challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.
+
+        For example, you could request certificates for the present domain with
+        an acme client that is running on another host, which you would specify
+        here.
       '';
     };
 
