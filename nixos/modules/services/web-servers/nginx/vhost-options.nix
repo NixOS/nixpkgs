@@ -88,7 +88,7 @@ with lib;
       type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
       description = lib.mdDoc ''
-        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Directory for the ACME challenge, which is **public**. Don't put certs or keys in here.
         Set to null to inherit from config.security.acme.
       '';
     };
@@ -97,12 +97,12 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = lib.mdDoc ''
-        Host which to proxy requests to if acme challenge is not found. Useful
+        Host which to proxy requests to if ACME challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.
 
-        For example, you could request certificates for the present domain with
-        an acme client that is running on another host, which you would specify
-        here.
+        With this option, you could request certificates for the present domain
+        with an ACME client that is running on another host, which you would
+        specify here.
       '';
     };
 
