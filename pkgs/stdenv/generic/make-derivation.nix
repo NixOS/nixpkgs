@@ -259,7 +259,7 @@ else let
     lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
       (lib.concatLists propagatedDependencies));
 
-  derivationArg =
+  derivationArgBeforeNormalization =
     (removeAttrs attrs
       ["meta" "passthru" "pos"
        "checkInputs" "installCheckInputs"
@@ -472,6 +472,49 @@ else let
                    then lib.all (d: d.meta.available or true) references
                    else true);
     };
+
+  # Attribute key-value pairs which have the property that
+  # setup.sh's behavior is unchanged if the key-value pair is
+  # deleted.  This allows normalization of attributes, so that
+  # adding `makeFlags = lib.optionals unlikely [ ... ]` won't cause
+  # Hydra to rebuild if `!unlikely` for all of its build
+  # configurations.  Likewise for `lib.optionalString` and ordinary
+  # boolean conditions.
+  normalAttrs =
+    (lib.genAttrs [ "dontUnpack" "dontMakeSourcesWritable"
+      "setSourceRoot" "dontPatch" "dontConfigure" "dontAddPrefix"
+      "dontAddStaticConfigureFlags" "dontAddDisableDepTrack"
+      "dontFixLibtool" "dontDisableStatic" "dontBuild" "doCheck"
+      "dontInstall" "dontFixup" "dontStrip" "dontStripHost"
+      "dontStripTarget" "dontMoveSbin" "dontPatchELF"
+      "dontPatchShebangs" "dontPruneLibtoolFiles"
+      "separateDebugInfo" "doInstallCheck" "dontCopyDist"]
+      (_: false))
+    //
+    (lib.genAttrs [ "preUnpack" "postUnpack" "unpackCmd" "prePatch"
+      "postPatch" "configureScript" "prefix" "prefixKey"
+      "preConfigure" "postConfigure" "makefile" "preBuild"
+      "postBuild" "checkTarget" "preCheck" "postCheck" "preInstall"
+      "postInstall" "setupHook" "preFixup" "postFixup"
+      "preInstallCheck" "postInstallCheck" "preDist" "postDist" ]
+      (_: ""))
+    //
+    (lib.genAttrs [ "srcs" "patches" "patchFlags" "configureFlags"
+      "configureFlagsArray" "makeFlags" "makeFlagsArray"
+      "buildFlags" "buildFlagsArray" "checkFlags" "checkFlagsArray"
+      "checkInputs" "installTargets" "installFlags"
+      "installFlagsArray" "stripAllList" "stripAllFlags"
+      "stripDebugList" "stripDebugFlags" "forceShare"
+      "installCheckTarget" "installCheckFlags"
+      "installCheckFlagsArray" "installCheckInputs" "distTarget"
+      "distFlags" "distFlagsArray" "tarballs" ]
+      (_: []));
+  normalizeAttrs = arg:
+    lib.mapAttrs (name: value:
+      if normalAttrs.name or null == value
+      then null
+      else value) arg;
+  derivationArg = normalizeAttrs derivationArgBeforeNormalization;
 
 in
 
