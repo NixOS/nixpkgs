@@ -20,7 +20,6 @@
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 
-, systemd ? null
 , withX ? !stdenv.isDarwin && !withPgtk
 , withNS ? stdenv.isDarwin && !withMacport
 , withMacport ? macportVersion != null
@@ -45,6 +44,7 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
+, withSystemd ? stdenv.isLinux, systemd
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -141,7 +141,8 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls gettext jansson harfbuzz.dev ]
-    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd alsa-lib acl gpm ]
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux alsa-lib acl gpm ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
