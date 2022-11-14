@@ -178,6 +178,18 @@ let
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
     };
+    pzmq-compat = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-examples = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-test = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
   };
 
   qlpkgs =
