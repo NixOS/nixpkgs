@@ -1606,7 +1606,9 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi { };
+  ludusavi = callPackage ../applications/backup/ludusavi {
+    inherit (plasma5Packages) kdialog;
+  };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
