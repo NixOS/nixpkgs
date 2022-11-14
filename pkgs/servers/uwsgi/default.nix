@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre, libxcrypt
+{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre, libxcrypt, zlib, expat
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
               ++ lib.optional withSystemd systemd
               ++ lib.optional withCap libcap
               ++ lib.concatMap (x: x.inputs) needed
+              ++ lib.optionals stdenv.isDarwin [ zlib expat ]
               ;
 
   basePlugins =  lib.concatStringsSep ","
