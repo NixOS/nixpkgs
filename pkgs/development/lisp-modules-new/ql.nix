@@ -19,6 +19,9 @@ let
     cl-cffi-gtk-cairo = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-cairo2 = pkg: {
+      nativeLibs = [ cairo ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
