@@ -6,7 +6,7 @@ let
   parentWrapperDir = dirOf wrapperDir;
 
   securityWrapper = sourceProg : pkgs.callPackage ./wrapper.nix {
-    inherit parentWrapperDir sourceProg;
+    inherit sourceProg;
   };
 
   fileModeType =
