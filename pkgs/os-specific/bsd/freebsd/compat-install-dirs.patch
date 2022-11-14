@@ -1,0 +1,42 @@
+diff --git a/tools/build/Makefile b/tools/build/Makefile
+index 948a5f9dfdb..592af84eeae 100644
+--- a/tools/build/Makefile
++++ b/tools/build/Makefile
+@@ -327,15 +327,15 @@ host-symlinks:
+ # and cross-tools stages. We do this here using mkdir since mtree may not exist
+ # yet (this happens if we are crossbuilding from Linux/Mac).
+ INSTALLDIR_LIST= \
+-	bin \
+-	lib/casper \
+-	lib/geom \
+-	usr/include/casper \
+-	usr/include/private/ucl \
+-	usr/include/private/zstd \
+-	usr/lib \
+-	usr/libdata/pkgconfig \
+-	usr/libexec
++	${BINDIR} \
++	${LIBDIR}/casper \
++	${LIBDIR}/geom \
++	${INCLUDEDIR}/casper \
++	${INCLUDEDIR}/private/ucl \
++	${INCLUDEDIR}/private/zstd \
++	${LIBDIR} \
++	${LIBDIR}/libdata/pkgconfig \
++	${LIBEXECDIR}
+ 
+ installdirs:
+ 	mkdir -p ${INSTALLDIR_LIST:S,^,${DESTDIR}/,}
+@@ -352,9 +352,9 @@ installdirs:
+ 	    rm -rf "${DESTDIR}/${_dir}"; \
+ 	fi
+ .endfor
+-	ln -sfn bin ${DESTDIR}/sbin
+-	ln -sfn ../bin ${DESTDIR}/usr/bin
+-	ln -sfn ../bin ${DESTDIR}/usr/sbin
++	ln -sfn bin ${DESTDIR}/${SBINDIR}
++	ln -sfn ../bin ${DESTDIR}/${BINDIR}
++	ln -sfn ../bin ${DESTDIR}/${SBINDIR}
+ .for _group in ${INCSGROUPS:NINCS}
+ 	mkdir -p "${DESTDIR}/${${_group}DIR}"
+ .endfor

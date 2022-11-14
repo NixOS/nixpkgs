@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "2.2.1";
+  version = "2.3.1";
 
   disabled = pythonOlder "3.6";
 
@@ -21,11 +21,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2LSMRqxmKLuDRBt93cR1bP4lgqvhOhEu5uTvGjSq0DI=";
+    hash = "sha256-bm/LfU6DIQmM8on1m2UFHK/TRn8InG5XyfiUrjLCO3E=";
   };
 
   postPatch = ''
     substituteInPlace safety/safety.py \
+      --replace "telemetry=True" "telemetry=False"
+    substituteInPlace safety/util.py \
       --replace "telemetry=True" "telemetry=False"
     substituteInPlace safety/cli.py \
       --replace "telemetry', default=True" "telemetry', default=False"

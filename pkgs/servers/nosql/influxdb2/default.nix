@@ -13,22 +13,22 @@
 }:
 
 let
-  version = "2.4.0";
+  version = "2.5.1";
   # Despite the name, this is not a rolling release. This is the
-  # version of the UI assets for 2.4.0, as specified in
-  # scripts/fetch-ui-assets.sh in the 2.4.0 tag of influxdb.
-  ui_version = "Master";
-  libflux_version = "0.179.0";
+  # version of the UI assets for 2.5.1, as specified in
+  # scripts/fetch-ui-assets.sh in the 2.5.1 tag of influxdb.
+  ui_version = "OSS-2022-09-16";
+  libflux_version = "0.188.1";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "sha256-ufJnrVWVfia2/xLRmFkauCw8ktdSJUybJkv42Gd0npg=";
+    sha256 = "sha256-AKyuFBja06BuWYliqIGKOb4PIc5G8S9S+cf/dLrEATY=";
   };
 
   ui = fetchurl {
-    url = "https://github.com/influxdata/ui/releases/download/OSS-${ui_version}/build.tar.gz";
+    url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
     sha256 = "sha256-YKDp1jLyo4n+YTeMaWl8dhN4Lr3H8FXV7stJ3p3zFe8=";
   };
 
@@ -39,20 +39,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "sha256-xcsmvT8Ve1WbfwrdVPnJcj7RAvrk795N3C95ubbGig0=";
+      sha256 = "sha256-Xmh7V/o1Gje62kcnTeB9h/fySljhfu+tjbyvryvIGRc=";
     };
-    patches = [
-      # https://github.com/influxdata/flux/pull/5273
-      # fix compile error with Rust 1.64
-      (fetchpatch {
-        url = "https://github.com/influxdata/flux/commit/20ca62138a0669f2760dd469ca41fc333e04b8f2.patch";
-        stripLen = 2;
-        extraPrefix = "";
-        sha256 = "sha256-Fb4CuH9ZvrPha249dmLLI8MqSNQRKqKPxPbw2pjqwfY=";
-      })
-    ];
     sourceRoot = "source/libflux";
-    cargoSha256 = "sha256-+hJQFV0tWeTQDN560DzROUNpdkcZ5h2sc13akHCgqPc=";
+    cargoSha256 = "sha256-9rPW0lgi3lXJARa1KXgSY8LVJsoFjppok5ODGlqYeYw=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -77,11 +67,11 @@ let
 in buildGoModule {
   pname = "influxdb";
   version = version;
-  src = src;
+  inherit src;
 
   nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorSha256 = "sha256-DZsd6qPKfRbnvz0UAww+ubaeTEqQxLeil1S3SZAmmJk=";
+  vendorSha256 = "sha256-02x+HsWkng7OnKVSfkQR8LL1Qk42Bdrw0IMtBpS7xQc=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -102,7 +92,7 @@ in buildGoModule {
         exit 1
       fi
 
-      ui_ver=$(egrep 'influxdata/ui/releases/.*/sha256.txt' scripts/fetch-ui-assets.sh | perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      ui_ver=$(egrep 'UI_RELEASE=".*"' scripts/fetch-ui-assets.sh | cut -d'"' -f2)
       if [ "$ui_ver" != "${ui_version}" ]; then
         echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
         exit 1
