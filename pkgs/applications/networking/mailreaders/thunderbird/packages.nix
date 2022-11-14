@@ -19,6 +19,7 @@ rec {
     ];
 
     meta = with lib; {
+      changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
