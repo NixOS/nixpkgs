@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     sqlalchemy
     tornado
     unidecode
-    Wand
+    wand
     werkzeug
   ];
 
