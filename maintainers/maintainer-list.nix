@@ -3079,6 +3079,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  czapek = {
+    name = "Gabriel Waksmundzki";
+    email = "czapek1337@gmail.com";
+    github = "czapek1337";
+    githubId = 32851089;
+  };
   d-goldin = {
     email = "dgoldin+github@protonmail.ch";
     github = "d-goldin";
