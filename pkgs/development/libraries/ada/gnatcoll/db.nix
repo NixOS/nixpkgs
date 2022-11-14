@@ -50,7 +50,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "gnatcoll-${component}";
+  # executables don't adhere to the string gnatcoll-* scheme
+  pname =
+    if onlyExecutable
+    then builtins.replaceStrings [ "_" ] [ "-" ] component
+    else "gnatcoll-${component}";
   version = "23.0.0";
 
   src = fetchFromGitHub {
