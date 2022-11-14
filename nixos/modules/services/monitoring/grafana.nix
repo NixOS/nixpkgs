@@ -1183,7 +1183,7 @@ in {
         doesntUseFileProvider cfg.settings.security.admin_password "admin"
       ) ''
         Grafana passwords will be stored as plaintext in the Nix store!
-        Use file/env provider or an env-var instead.
+        Use file provider or an env-var instead.
       '')
       # Warn about deprecated notifiers.
       ++ (optional (cfg.provision.notifiers != []) ''
@@ -1203,7 +1203,7 @@ in {
         in any declarationUnsafe datasourcesToCheck
       ) ''
         Declarations in the `secureJsonData`-block of a datasource will be leaked to the
-        Nix store unless a file/env-provider or an env-var is used!
+        Nix store unless a file-provider or an env-var is used!
       '')
       ++ (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
