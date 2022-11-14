@@ -130,7 +130,7 @@ let
       nativeLibs = [ libfixposix ];
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
     };
-    cl-ana_dot_hdf-cffi = pkg: {
+    "cl-ana.hdf-cffi" = pkg: {
       nativeBuildInputs = [ pkgs.hdf5 ];
       nativeLibs = [ pkgs.hdf5 ];
       NIX_LDFLAGS = [ "-lhdf5" ];
