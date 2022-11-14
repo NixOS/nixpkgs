@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isAarch64 && stdenv.isLinux; # ofborg failed
   };
 })
 # TODO: investigate the patches
