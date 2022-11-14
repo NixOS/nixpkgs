@@ -46439,6 +46439,9 @@ in {
     });
     systems = [ "magicl" ];
     lispLibs = [ (getAttr "alexandria" pkgs) (getAttr "cffi" pkgs) (getAttr "cffi-libffi" pkgs) (getAttr "abstract-classes" pkgs) (getAttr "interface" pkgs) (getAttr "policy-cond" pkgs) ];
+    meta = {
+      broken = true;
+    };
   };
   magicl-examples = {
     pname = "magicl-examples";

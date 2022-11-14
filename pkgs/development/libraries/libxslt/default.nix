@@ -11,7 +11,7 @@
 , libxcrypt
 , libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? true
+, pythonSupport ? libxml2.pythonSupport
 , gnome
 }:
 

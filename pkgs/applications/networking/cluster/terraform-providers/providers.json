@@ -741,13 +741,13 @@
     "version": "3.3.0"
   },
   "minio": {
-    "hash": "sha256-fSZf5lLs3INa742AL3ayuvHr5vsr2/i4yjSvNrCzBT0=",
+    "hash": "sha256-9UZbFTMH6QOcNyBkqnGA3dSDl8Tmhe6oggwJC0yJTAw=",
     "owner": "aminueza",
     "provider-source-address": "registry.terraform.io/aminueza/minio",
     "repo": "terraform-provider-minio",
-    "rev": "v1.8.0",
-    "vendorHash": "sha256-LcU7Pord10j4Eyxx2xIVcQXiZQT9kSTz8iBJCe8/E7s=",
-    "version": "1.8.0"
+    "rev": "v1.9.0",
+    "vendorHash": "sha256-586ekznHNm442LjQ33azbswrOOZ1Z5KNuJEXMrwQ1SM=",
+    "version": "1.9.0"
   },
   "mongodbatlas": {
     "hash": "sha256-xyKBhIsTawksKruRPXBJ3pEo+ssK7Gol3xCCdNPOes8=",
@@ -911,15 +911,6 @@
     "rev": "v2.6.4",
     "vendorHash": null,
     "version": "2.6.4"
-  },
-  "panos": {
-    "hash": "sha256-mscWNK113W7CVKI+qPGYX3irQI3YhkLdXox4pddOdF0=",
-    "owner": "PaloAltoNetworks",
-    "provider-source-address": "registry.terraform.io/PaloAltoNetworks/panos",
-    "repo": "terraform-provider-panos",
-    "rev": "v1.10.3",
-    "vendorHash": null,
-    "version": "1.10.3"
   },
   "pass": {
     "hash": "sha256-hFgNWw6ZmATo0bFZvJL9z/lJF506KsBewigGoFj67sM=",

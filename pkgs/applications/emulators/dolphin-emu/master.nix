@@ -10,10 +10,12 @@
 , libGL
 , libXrandr
 , libusb1
+, libXdmcp
 , libXext
 , openal
 , udev
 , libevdev
+, cubeb
 , curl
 , alsa-lib
 , miniupnpc
@@ -73,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cubeb
     curl
     ffmpeg
     pugixml
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
     libusb1
     libiconv
     libpng
+    libXdmcp
     hidapi
     miniupnpc
     enet
@@ -127,7 +131,7 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
     "--set QT_QPA_PLATFORM xcb"
@@ -169,7 +173,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    mainProgram = "Dolphin";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu";
     branch = "master";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
