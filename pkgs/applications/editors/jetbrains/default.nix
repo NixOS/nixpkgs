@@ -5,6 +5,9 @@
 , maven
 , autoPatchelfHook
 , libdbusmenu
+, patchelf
+, openssl
+, expat
 , vmopts ? null
 }:
 
@@ -41,12 +44,14 @@ let
     }).overrideAttrs (attrs: {
       nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
         autoPatchelfHook
+        patchelf
       ];
       buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
-        lldb
+        openssl.out
+        expat
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
@@ -58,9 +63,11 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
-          # bundled lldb does not find libssl
-          rm -rf bin/lldb/linux
-          ln -s ${lldb} bin/lldb/linux
+
+          ls -d $PWD/bin/lldb/linux/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
 
