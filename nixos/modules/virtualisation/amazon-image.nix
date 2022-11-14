@@ -31,18 +31,12 @@ in
   config = {
 
     assertions = [
-      { assertion = cfg.hvm;
-        message = "Paravirtualized EC2 instances are no longer supported.";
-      }
-      { assertion = cfg.efi -> cfg.hvm;
-        message = "EC2 instances using EFI must be HVM instances.";
-      }
       { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
         message = "ENA driver fails to build with kernel >= 5.17";
       }
     ];
 
-    boot.growPartition = cfg.hvm;
+    boot.growPartition = true;
 
     fileSystems."/" = mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
@@ -66,7 +60,7 @@ in
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
+    boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -74,10 +68,7 @@ in
     # boot.
     boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
 
-    # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
-    boot.loader.grub.version = if cfg.hvm then 2 else 1;
-    boot.loader.grub.device = if (cfg.hvm && !cfg.efi) then "/dev/xvda" else "nodev";
-    boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
     boot.loader.grub.efiSupport = cfg.efi;
     boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 1;
