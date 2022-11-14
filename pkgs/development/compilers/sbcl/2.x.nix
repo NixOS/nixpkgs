@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     # hard-coded /bin/cat to just ‘cat’, trusting the PATH
     (fetchpatch {
       url = "https://github.com/sbcl/sbcl/commit/8ed662fbfeb5dde35eb265f390b55b01f79f70c1.patch";
-      sha256 = "1qwqxpk5jrp236gj12yqkqg9n51mn7yjjjm0nplk0dd5gbb99kvw";
+      sha256 = "sha256-2aqb13AFdw9KMf8KQ9yj1HVxgoFWZ9xWmnoDdbRSLy4=";
     })
   ];
 
