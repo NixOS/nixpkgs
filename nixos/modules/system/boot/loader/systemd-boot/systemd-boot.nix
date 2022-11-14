@@ -58,10 +58,11 @@ let
       $out
   '';
 
-  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" (''
+  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} $@
-  '' + cfg.extraInstallCommands);
+    ${checkedSystemdBootBuilder} "$@"
+    ${cfg.extraInstallCommands}
+  '';
 in {
 
   imports =
