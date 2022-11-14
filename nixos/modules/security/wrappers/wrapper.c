@@ -236,7 +236,7 @@ int main(int argc, char **argv) {
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the
     // capabilities too!
-    if (make_caps_ambient(self_path) != 0) {
+    if (make_caps_ambient("/proc/self/exe") != 0) {
         free(self_path);
         return 1;
     }
