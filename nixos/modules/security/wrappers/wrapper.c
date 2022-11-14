@@ -28,10 +28,6 @@
 
 extern char **environ;
 
-// The WRAPPER_DIR macro is supplied at compile time so that it cannot
-// be changed at runtime
-static char *wrapper_dir = WRAPPER_DIR;
-
 // Wrapper debug variable name
 static char *wrapper_debug = "WRAPPER_DEBUG";
 
@@ -155,92 +151,15 @@ static int make_caps_ambient(const char *self_path) {
     return 0;
 }
 
-int readlink_malloc(const char *p, char **ret) {
-    size_t l = FILENAME_MAX+1;
-    int r;
-
-    for (;;) {
-        char *c = calloc(l, sizeof(char));
-        if (!c) {
-            return -ENOMEM;
-        }
-
-        ssize_t n = readlink(p, c, l-1);
-        if (n < 0) {
-            r = -errno;
-            free(c);
-            return r;
-        }
-
-        if ((size_t) n < l-1) {
-            c[n] = 0;
-            *ret = c;
-            return 0;
-        }
-
-        free(c);
-        l *= 2;
-    }
-}
-
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
-    char *self_path = NULL;
-    int self_path_size = readlink_malloc("/proc/self/exe", &self_path);
-    if (self_path_size < 0) {
-        fprintf(stderr, "cannot readlink /proc/self/exe: %s", strerror(-self_path_size));
-    }
-
-    unsigned int ruid, euid, suid, rgid, egid, sgid;
-    MUSTSUCCEED(getresuid(&ruid, &euid, &suid));
-    MUSTSUCCEED(getresgid(&rgid, &egid, &sgid));
-
-    // If true, then we did not benefit from setuid privilege escalation,
-    // where the original uid is still in ruid and different from euid == suid.
-    int didnt_suid = (ruid == euid) && (euid == suid);
-    // If true, then we did not benefit from setgid privilege escalation
-    int didnt_sgid = (rgid == egid) && (egid == sgid);
-
-
-    // TODO: Determine if this is still useful, in particular if
-    // make_caps_ambient somehow relies on these properties.
-    // Make sure that we are being executed from the right location,
-    // i.e., `safe_wrapper_dir'.
-    int len = strlen(wrapper_dir);
-    if (len > 0 && '/' == wrapper_dir[len - 1])
-      --len;
-    ASSERT(!strncmp(self_path, wrapper_dir, len));
-    ASSERT('/' == wrapper_dir[0]);
-    ASSERT('/' == self_path[len]);
-
-    // If we got privileges with the fs set[ug]id bit, check that the privilege we
-    // got matches the one one we expected, ie that our effective uid/gid
-    // matches the uid/gid of `self_path`. This ensures that we were executed as
-    // `self_path', and not, say, as some other setuid program.
-    // We don't check that if we did not benefit from the set[ug]id bit, as
-    // can be the case in nosuid mounts or user namespaces.
-    struct stat st;
-    ASSERT(lstat(self_path, &st) != -1);
-
-    // if the wrapper gained privilege with suid, check that we got the uid of the file owner
-    ASSERT(!((st.st_mode & S_ISUID) && !didnt_suid) || (st.st_uid == euid));
-    // if the wrapper gained privilege with sgid, check that we got the gid of the file group
-    ASSERT(!((st.st_mode & S_ISGID) && !didnt_sgid) || (st.st_gid == egid));
-    // same, but with suid instead of euid
-    ASSERT(!((st.st_mode & S_ISUID) && !didnt_suid) || (st.st_uid == suid));
-    ASSERT(!((st.st_mode & S_ISGID) && !didnt_sgid) || (st.st_gid == sgid));
-
-    // And, of course, we shouldn't be writable.
-    ASSERT(!(st.st_mode & (S_IWGRP | S_IWOTH)));
 
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the
     // capabilities too!
     if (make_caps_ambient("/proc/self/exe") != 0) {
-        free(self_path);
         return 1;
     }
-    free(self_path);
 
     execve(SOURCE_PROG, argv, environ);
     
