@@ -3451,7 +3451,7 @@ with pkgs;
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
-  cloudflare-dyndns = python3Packages.cloudflare-dyndns;
+  cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 
