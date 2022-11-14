@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "unfs3";
     repo = pname;
     rev = "refs/tags/${pname}-${version}";
-    hash = "";
+    hash = "sha256-5iAriIutBhwyZVS7AG2fnkrHOI7pNAKfYv062Cy0WXw=";
   };
 
   nativeBuildInputs = [ flex bison autoreconfHook pkg-config ];
