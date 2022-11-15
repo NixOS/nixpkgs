@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, jq, nix-prefetch-git }:
+{ lib, stdenv, callPackage, makeWrapper, jq, nix-prefetch-git }:
 
 stdenv.mkDerivation {
   name = "swiftpm2nix";
@@ -14,6 +14,8 @@ stdenv.mkDerivation {
   '';
 
   preferLocalBuild = true;
+
+  passthru = callPackage ./support.nix { };
 
   meta = {
     description = "Generate a Nix expression to fetch swiftpm dependencies";
