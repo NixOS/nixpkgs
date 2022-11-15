@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.2.0";
+  version = "2.3.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
   };
 
   postPatch = ''
