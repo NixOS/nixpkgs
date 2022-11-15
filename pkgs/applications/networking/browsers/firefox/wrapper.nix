@@ -33,7 +33,6 @@ let
     , wmClass ? null
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
-    , forceWayland ? false
     , useGlvnd ? true
     , cfg ? config.${applicationName} or {}
 
@@ -170,7 +169,7 @@ let
         name = applicationName;
         exec = "${launcherName} %U";
         inherit icon;
-        desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
+        desktopName = "${desktopName}${nameSuffix}";
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -309,7 +308,7 @@ let
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
             --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
-            ${lib.optionalString forceWayland "--set MOZ_ENABLE_WAYLAND 1"} \
+            --set-default MOZ_ENABLE_WAYLAND 1 \
             "''${oldWrapperArgs[@]}"
         #############################
         #                           #
