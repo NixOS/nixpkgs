@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, tox
-, virtualenv
 , protobuf
 }:
 
@@ -14,11 +12,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "085238b4944cb9c658ee62d5794de936ac3d0c337c504b2cc86424a205ae978a";
   };
-
-  checkInputs = [
-    tox
-    virtualenv
-  ];
 
   propagatedBuildInputs = [
     protobuf
