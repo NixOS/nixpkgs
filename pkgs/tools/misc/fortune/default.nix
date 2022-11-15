@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, recode, perl, withOffensive ? false }:
+{ lib, stdenv, fetchurl, cmake, recode, perl }:
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-  ] ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
+    "-DNO_OFFENSIVE=true"
+  ]
 
   patches = [ (builtins.toFile "not-a-game.patch" ''
     diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     --
   '') ];
 
-  postFixup = lib.optionalString (!withOffensive) ''
+  postFixup = ''
     rm -f $out/share/fortunes/men-women*
   '';
 
