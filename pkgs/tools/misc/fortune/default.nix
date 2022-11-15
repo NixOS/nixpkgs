@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
     "-DNO_OFFENSIVE=true"
-  ]
+  ];
 
   patches = [ (builtins.toFile "not-a-game.patch" ''
     diff --git a/CMakeLists.txt b/CMakeLists.txt
