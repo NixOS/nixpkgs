@@ -4158,6 +4158,15 @@
     githubId = 147284;
     name = "Jason Felice";
   };
+  ercao = {
+    email = "vip@ercao.cn";
+    github = "ercao";
+    githubId = 51725284;
+    name = "ercao";
+    keys = [{
+      fingerprint = "F3B0 36F7 B0CB 0964 3C12  D3C7 FFAB D125 7ECF 0889";
+    }];
+  };
   erdnaxe = {
     email = "erdnaxe@crans.org";
     github = "erdnaxe";
@@ -11790,6 +11799,12 @@
     github = "robbinch";
     githubId = 12312980;
     name = "Robbin C.";
+  };
+  robbins = {
+    email = "nejrobbins@gmail.com";
+    github = "robbins";
+    githubId = 31457698;
+    name = "Nathanael Robbins";
   };
   roberth = {
     email = "nixpkgs@roberthensing.nl";

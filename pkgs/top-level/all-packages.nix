@@ -482,6 +482,8 @@ with pkgs;
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
+  figma-linux = callPackage ../applications/graphics/figma-linux {};
+
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
   frece = callPackage ../development/tools/frece { };
@@ -5036,8 +5038,6 @@ with pkgs;
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
-
-  appleseed = callPackage ../tools/graphics/appleseed { };
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
@@ -13856,7 +13856,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -13870,7 +13870,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -13887,7 +13887,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -13906,7 +13906,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -13921,7 +13921,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -13936,7 +13936,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -13948,7 +13948,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -13960,7 +13960,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -13972,7 +13972,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else {};
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -14638,7 +14638,7 @@ with pkgs;
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then 11
-      else if platform.isFreeBSD then 7
+      else if platform.isFreeBSD then 12
       else if platform.isAndroid then 12
       else if platform.system == "armv6l-linux" then 7  # This fixes armv6 cross-compilation
       else if platform.isLinux then 11
@@ -15413,7 +15413,7 @@ with pkgs;
       # want the C++ library to be explicitly chosen by the caller, and null by
       # default.
       libcxx ? null
-    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross
+    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross.package
     , nixSupport ? {}
     , ...
     } @ extraArgs:
@@ -19131,6 +19131,7 @@ with pkgs;
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
       else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
+    else if name == "fblibc" then targetPackages.freebsdCross.libc or freebsdCross.libc
     else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
@@ -19139,10 +19140,13 @@ with pkgs;
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
-  threadsCross =
-    if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
-    then targetPackages.windows.mcfgthreads or windows.mcfgthreads
-    else null;
+  threadsCross = if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
+    then {
+      # other possible values: win32 or posix
+      model = "mcf";
+      # For win32 or posix set this to null
+      package = targetPackages.windows.mcfgthreads or windows.mcfgthreads;
+    } else {};
 
   wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
@@ -24438,6 +24442,8 @@ with pkgs;
   rpiplay = callPackage ../servers/rpiplay { };
 
   roon-server = callPackage ../servers/roon-server { };
+
+  rustic-rs = callPackage ../tools/backup/rustic-rs { };
 
   supervise = callPackage ../tools/system/supervise { };
 
@@ -37855,6 +37861,11 @@ with pkgs;
   bsdSetupHook = makeSetupHook {
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
+
+  freebsd = callPackage ../os-specific/bsd/freebsd {};
+  freebsdCross = callPackage ../os-specific/bsd/freebsd {
+    stdenv = crossLibcStdenv;
+  };
 
   netbsd = callPackage ../os-specific/bsd/netbsd {};
   netbsdCross = callPackage ../os-specific/bsd/netbsd {
