@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python3, perl, snappy, lzo, which, gcc10Stdenv}:
+{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python3, perl, snappy, lzo, which }:
 
 let
-  common = { version, sha256 }: gcc10Stdenv.mkDerivation {
+  common = { version, sha256 }: stdenv.mkDerivation {
     pname = "arangodb";
     inherit version;
 
@@ -47,8 +47,9 @@ let
       maintainers = [ maintainers.flosse ];
     };
   };
-in
-  arangodb_9_3 {
+in {
+  arangodb_9_3 = common {
     version = "3.9.3";
     sha256 = "078bs8m045ym0ka0n3n1wvzr8gri09bcs574kdzy8z3rrngvp82m";
-  }
+  };
+}
