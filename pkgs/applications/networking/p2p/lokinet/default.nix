@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lokinet";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "oxen-io";
     repo = "lokinet";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-AaGsRg9S9Cng9emI/mN09QSOIRbE+x3916clWAwLnRs=";
+    sha256 = "sha256-dLkIFp1yz5MgUDxYQHN4zv2mexEb4GfkxlTOZyECsew=";
   };
 
   nativeBuildInputs = [
