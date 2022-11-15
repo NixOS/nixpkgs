@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
+, jdupes
 , librsvg
 , gitUpdater
 }:
@@ -17,6 +18,10 @@ stdenvNoCC.mkDerivation rec {
     rev = version;
     sha256 = "Rx22O8C7kbYADxqJF8u6kdcQnXNA5aS+NWOnx/X4urY=";
   };
+
+  nativeBuildInputs = [
+    jdupes
+  ];
 
   buildInputs = [
     gdk-pixbuf
@@ -38,6 +43,7 @@ stdenvNoCC.mkDerivation rec {
     install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
     mkdir -p $out/share/doc/${pname}
     cp -a src/extra/firefox $out/share/doc/${pname}
+    jdupes --quiet --link-soft --recurse $out/share
     runHook postInstall
   '';
 
