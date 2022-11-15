@@ -590,7 +590,7 @@ in stdenv.mkDerivation {
 
   preFixup = lib.optionalString stdenv.isLinux ''
     # This is cheesy, but helps the patchelf hook remove /build from RPATH.
-    cd $NIX_BUILD_TOP
+    cd $SWIFT_BUILD_ROOT/..
     mv build buildx
   '';
 
