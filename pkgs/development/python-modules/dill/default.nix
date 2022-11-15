@@ -3,6 +3,10 @@
 , fetchFromGitHub
 , python
 , setuptools
+
+# passthru tests
+, apache-beam
+, datasets
 }:
 
 buildPythonPackage rec {
@@ -26,6 +30,10 @@ buildPythonPackage rec {
     ${python.interpreter} dill/tests/__main__.py
     runHook postCheck
   '';
+
+  passthru.tests = {
+    inherit apache-beam datasets;
+  };
 
   pythonImportsCheck = [ "dill" ];
 
