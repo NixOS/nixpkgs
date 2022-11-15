@@ -300,7 +300,11 @@ in
     boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     # Add the mount helpers to the system path so that `mount' can find them.
-    system.fsPackages = [ pkgs.dosfstools ];
+    system.fsPackages = [
+      pkgs.dosfstools
+      # This is needed for the main fsck utility wrapping the fs-specific ones.
+      pkgs.util-linux
+    ];
 
     environment.systemPackages = with pkgs; [ fuse3 fuse ] ++ config.system.fsPackages;
 
