@@ -1565,10 +1565,10 @@ self: super: {
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
   ]).overrideScope (lself: lsuper: {
     ormolu = doJailbreak lself.ormolu_0_5_0_1;
-    fourmolu = doJailbreak lself.fourmolu_0_8_2_0;
+    fourmolu = doJailbreak lself.fourmolu_0_9_0_0;
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1589,12 +1589,12 @@ self: super: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
   });
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex_9_2_0_4 = disableCabalFlag "auto" (super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
   });
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
@@ -2179,7 +2179,7 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   });
 
