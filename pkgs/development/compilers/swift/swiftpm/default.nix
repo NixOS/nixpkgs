@@ -27,6 +27,7 @@ let
 
   sources = callPackage ../sources.nix { };
   generated = swiftpm2nix.helpers ./generated;
+  cmakeGlue = callPackage ./cmake-glue.nix { };
 
   # Common attributes for the bootstrap swiftpm and the final swiftpm.
   commonAttrs = {
@@ -146,13 +147,7 @@ let
     name = "swift-system";
     src = generated.sources.swift-system;
 
-    postInstall = ''
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/SwiftSystem
-      export staticLibExt="${stdenv.hostPlatform.extensions.staticLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/SwiftSystemConfig.cmake} $out/lib/cmake/SwiftSystem/SwiftSystemConfig.cmake
-    ''
+    postInstall = cmakeGlue.SwiftSystem
       + lib.optionalString (!stdenv.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
@@ -172,13 +167,7 @@ let
       sed -i -e '/BUILD_SHARED_LIBS/d' CMakeLists.txt
     '';
 
-    postInstall = ''
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/SwiftCollections
-      export staticLibExt="${stdenv.hostPlatform.extensions.staticLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/SwiftCollectionsConfig.cmake} $out/lib/cmake/SwiftCollections/SwiftCollectionsConfig.cmake
-    ''
+    postInstall = cmakeGlue.SwiftCollections
       + lib.optionalString (!stdenv.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
@@ -196,7 +185,7 @@ let
       sqlite
     ];
 
-    postInstall = ''
+    postInstall = cmakeGlue.TSC + ''
       # Swift modules are not installed.
       mkdir -p $out/${swiftModuleSubdir}
       cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
@@ -207,11 +196,6 @@ let
       # Headers are not installed.
       mkdir -p $out/include
       cp -r ../Sources/TSCclibc/include $out/include/TSC
-
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/TSC
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      substituteAll ${./cmake-glue/TSCConfig.cmake} $out/lib/cmake/TSC/TSCConfig.cmake
     '';
   };
 
@@ -226,13 +210,7 @@ let
       "-DBUILD_EXAMPLES=NO"
     ];
 
-    postInstall = ''
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/ArgumentParser
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/ArgumentParserConfig.cmake} $out/lib/cmake/ArgumentParser/ArgumentParserConfig.cmake
-    ''
+    postInstall = cmakeGlue.ArgumentParser
       + lib.optionalString stdenv.isLinux ''
         # Fix rpath so ArgumentParserToolInfo can be found.
         patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
@@ -247,13 +225,7 @@ let
     # Conflicts with BUILD file on case-insensitive filesystems.
     cmakeBuildDir = "_build";
 
-    postInstall = ''
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/Yams
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/YamsConfig.cmake} $out/lib/cmake/Yams/YamsConfig.cmake
-    '';
+    postInstall = cmakeGlue.Yams;
   };
 
   llbuild = mkBootstrapDerivation {
@@ -287,18 +259,13 @@ let
       "-DLLBUILD_SUPPORT_BINDINGS=Swift"
     ];
 
-    postInstall = ''
+    postInstall = cmakeGlue.LLBuild + ''
       # Install module map.
       cp ../products/libllbuild/include/module.modulemap $out/include
 
       # Swift modules are not installed.
       mkdir -p $out/${swiftModuleSubdir}
       cp products/llbuildSwift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/LLBuild
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      substituteAll ${./cmake-glue/LLBuildConfig.cmake} $out/lib/cmake/LLBuild/LLBuildConfig.cmake
     '';
   };
 
@@ -314,16 +281,10 @@ let
       swift-tools-support-core
     ];
 
-    postInstall = ''
+    postInstall = cmakeGlue.SwiftDriver + ''
       # Swift modules are not installed.
       mkdir -p $out/${swiftModuleSubdir}
       cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/SwiftDriver
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/SwiftDriverConfig.cmake} $out/lib/cmake/SwiftDriver/SwiftDriverConfig.cmake
     '';
   };
 
@@ -336,18 +297,12 @@ let
         --replace /usr/bin/ar $NIX_CC/bin/ar
     '';
 
-    postInstall = ''
+    postInstall = cmakeGlue.SwiftCrypto + ''
       # Static libs are not installed.
       cp lib/*.a $out/lib/
 
       # Headers are not installed.
       cp -r ../Sources/CCryptoBoringSSL/include $out/include
-
-      # Provide a CMake module.
-      mkdir -p $out/lib/cmake/SwiftCrypto
-      export dylibExt="${stdenv.hostPlatform.extensions.sharedLibrary}"
-      export swiftOs="${swiftOs}"
-      substituteAll ${./cmake-glue/SwiftCryptoConfig.cmake} $out/lib/cmake/SwiftCrypto/SwiftCryptoConfig.cmake
     '';
   };
 
