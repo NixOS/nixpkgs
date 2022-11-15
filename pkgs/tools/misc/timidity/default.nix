@@ -9,6 +9,9 @@
 , ncurses
 , alsa-lib
 , buildPackages
+
+## Additional optional output modes
+, enableVorbis ? false, libvorbis
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
+
   buildInputs = [
     libjack2
     ncurses
@@ -37,19 +41,31 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreAudio
     libobjc
+  ] ++ lib.optionals enableVorbis [
+    libvorbis
+  ];
+
+  enabledOutputModes = [
+    "jack"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "oss"
+    "alsa"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "darwin"
+  ] ++ lib.optionals enableVorbis [
+    "vorbis"
   ];
 
   configureFlags = [
     "--enable-ncurses"
+    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--enable-audio=oss,alsa,jack"
     "--enable-alsaseq"
     "--with-default-output=alsa"
     "lib_cv_va_val_copy=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--enable-audio=darwin,jack"
     "lib_cv_va_val_copy=no"
     "timidity_cv_ccoption_rdynamic=yes"
     # These configure tests fail because of incompatible function pointer conversions.
