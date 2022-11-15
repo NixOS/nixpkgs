@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.13.4";
+  version = "0.13.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+3fLExLQChXKx1LCnNvPLNTUzopP+D+6tOikFrjdysY=";
+    hash = "sha256-1GoFmncG5bUWJOIUDLatopQMxCFsmlcj8aofJMGUTzQ=";
   };
 
   patches = [
@@ -132,7 +132,6 @@ buildPythonPackage rec {
     "tests/unit_tests/test_internal_api.py"
     "tests/unit_tests/test_label_full.py"
     "tests/unit_tests/test_login.py"
-    "tests/unit_tests/test_meta.py"
     "tests/unit_tests/test_metric_full.py"
     "tests/unit_tests/test_metric_internal.py"
     "tests/unit_tests/test_mode_disabled.py"
@@ -145,7 +144,6 @@ buildPythonPackage rec {
     "tests/unit_tests/test_start_method.py"
     "tests/unit_tests/test_tb_watcher.py"
     "tests/unit_tests/test_telemetry_full.py"
-    "tests/unit_tests/test_tpu.py"
     "tests/unit_tests/test_util.py"
 
     # Tries to access /homeless-shelter
