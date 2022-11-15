@@ -6,10 +6,19 @@
 , jdupes
 , librsvg
 , gitUpdater
+, colorVariants ? [] # default: all
+, themeVariants ? [] # default: blue
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
   pname = "matcha-gtk-theme";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "aliz" "azul" "sea" "pueril" "all" ] themeVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
   version = "2022-11-15";
 
   src = fetchFromGitHub {
@@ -38,12 +47,19 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
-    name= ./install.sh --dest $out/share/themes
-    install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
+
+    name= ./install.sh \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --dest $out/share/themes
+
     mkdir -p $out/share/doc/${pname}
     cp -a src/extra/firefox $out/share/doc/${pname}
+
     jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
 
