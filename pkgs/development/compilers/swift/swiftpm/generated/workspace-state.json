@@ -64,7 +64,7 @@
         "state": {
           "checkoutState": {
             "branch": "release/5.7",
-            "revision": "719426df790661020de657bf38beb2a8b1de5ad3"
+            "revision": "82b274af66cfbb8f3131677676517b34d01e30fd"
           },
           "name": "sourceControlCheckout"
         },
@@ -115,7 +115,7 @@
         "state": {
           "checkoutState": {
             "branch": "release/5.7",
-            "revision": "184eba382f6abbb362ffc02942d790ff35019ad4"
+            "revision": "afc0938503bac012f76ceb619d031f63edc4c5f7"
           },
           "name": "sourceControlCheckout"
         },
