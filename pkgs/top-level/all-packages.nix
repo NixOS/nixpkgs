@@ -18330,6 +18330,8 @@ with pkgs;
 
   boxfort = callPackage ../development/libraries/boxfort { };
 
+  brunsli = callPackage ../development/libraries/brunsli { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
@@ -19010,10 +19012,7 @@ with pkgs;
     libXpm = null;
   };
 
-  gdal = callPackage ../development/libraries/gdal {
-    pythonPackages = python3Packages;
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  gdal = callPackage ../development/libraries/gdal { };
 
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
@@ -19840,6 +19839,8 @@ with pkgs;
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica { };
+
+  lerc = callPackage ../development/libraries/lerc { };
 
   lib2geom = callPackage ../development/libraries/lib2geom { };
 
@@ -21257,13 +21258,9 @@ with pkgs;
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
   mapnik = callPackage ../development/libraries/mapnik {
-    gdal = gdal.override {
-      libgeotiff = libgeotiff.override { proj = proj_7; };
-      libspatialite = libspatialite.override { proj = proj_7; };
-      proj = proj_7;
+    harfbuzz = harfbuzz.override {
+      withIcu = true;
     };
-    proj = proj_7;
-    boost = boost175;
   };
 
   manticoresearch = callPackage ../servers/search/manticoresearch { };
@@ -36235,6 +36232,7 @@ with pkgs;
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
     boost = boost175;
+    python3 = python39;
   };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
@@ -37017,10 +37015,8 @@ with pkgs;
 
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
     gdal = gdal.override {
-      libmysqlclient = mysql // {
-        lib = { dev = mysql; }
-      ;}
-    ;};
+      libmysqlclient = mysql;
+    };
     mysql = mysql;
     pcre = pcre-cpp;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
