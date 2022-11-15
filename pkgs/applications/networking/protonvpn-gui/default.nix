@@ -66,6 +66,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/ProtonVPN/linux-app";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Plus;
+    mainProgram = "protonvpn";
     platforms = platforms.linux;
   };
 }
