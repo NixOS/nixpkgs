@@ -53,7 +53,7 @@ index e14a9bf..691afab 100644
 +    GSettingsSchemaSource* schema_source;
 +    GSettingsSchema* schema;
 +
-+    schema_source = g_settings_schema_source_new_from_directory("@CAJA_GSETTINGS_PATH@",
++    schema_source = g_settings_schema_source_new_from_directory("@caja_gsetttings_path@",
 +                                                                g_settings_schema_source_get_default(),
 +                                                                TRUE, NULL);
 +    schema = g_settings_schema_source_lookup(schema_source,
@@ -74,7 +74,7 @@ index e14a9bf..691afab 100644
 +    GSettingsSchemaSource* schema_source;
 +    GSettingsSchema* schema;
 +
-+    schema_source = g_settings_schema_source_new_from_directory("@TERM_GSETTINGS_PATH@",
++    schema_source = g_settings_schema_source_new_from_directory("@desktop_gsetttings_path@",
 +                                                                g_settings_schema_source_get_default(),
 +                                                                TRUE, NULL);
 +    schema = g_settings_schema_source_lookup(schema_source,
@@ -95,7 +95,7 @@ index e14a9bf..691afab 100644
 +    GSettingsSchemaSource* schema_source;
 +    GSettingsSchema* schema;
 +
-+    schema_source = g_settings_schema_source_new_from_directory("@TERM_GSETTINGS_PATH@",
++    schema_source = g_settings_schema_source_new_from_directory("@desktop_gsetttings_path@",
 +                                                                g_settings_schema_source_get_default(),
 +                                                                TRUE, NULL);
 +    schema = g_settings_schema_source_lookup(schema_source,
@@ -155,7 +155,7 @@ index 3119e9f..4f80c88 100644
      filename = g_filename_from_uri(uri, NULL, NULL);
  
 -    settings = g_settings_new (WP_SCHEMA);
-+    schema_source = g_settings_schema_source_new_from_directory("@GSETTINGS_PATH@",
++    schema_source = g_settings_schema_source_new_from_directory("@desktop_gsetttings_path@",
 +                                                                g_settings_schema_source_get_default(),
 +                                                                TRUE, NULL);
 +    schema = g_settings_schema_source_lookup(schema_source,
