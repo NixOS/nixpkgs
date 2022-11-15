@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchFromGitLab
 , callPackage
 , config
 , writeShellScript
@@ -21,6 +22,7 @@ let
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
+     , mkProviderFetcher ? fetchFromGitHub
      , mkProviderGoModule ? buildGoModule
        # Looks like "registry.terraform.io/vancluever/acme"
      , provider-source-address
@@ -35,7 +37,7 @@ let
         # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
-        src = fetchFromGitHub {
+        src = mkProviderFetcher {
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
