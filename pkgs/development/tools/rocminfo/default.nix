@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault Flakebi ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
