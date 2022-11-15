@@ -117,6 +117,14 @@ stdenv.mkDerivation rec {
     # 5.0 hits nixpkgs.
     # https://github.com/sphinx-doc/sphinx/pull/10372
     ./patches/docutils-0.18.1-deprecation.patch
+
+    # https://trac.sagemath.org/ticket/34506
+    (fetchSageDiff {
+      name = "python-unlimited-str-to-int-conversion.patch";
+      base = "9.7.rc1";
+      rev = "20f06e6eb4bdd093fe952911bb568f7ebf9141f1";
+      sha256 = "sha256-FiUJdE8FGBDBO27OFp1KY3ToRHOz4nDUjlDZ0bx9jyM=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

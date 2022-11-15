@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 
 # Build dependencies
@@ -38,6 +39,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     glibcLocales
+  ];
+
+  patches = [
+    (fetchpatch {
+      # The original URL might not be very stable, so let's prefer a copy.
+      urls = [
+        "https://raw.githubusercontent.com/bmwiedemann/openSUSE/9b35e4405a44aa737dda623a7dabe5384172744c/packages/p/python-ipython/ipython-pr13714-xxlimited.patch"
+        "https://github.com/ipython/ipython/pull/13714.diff"
+      ];
+      sha256 = "XPOcBo3p8mzMnP0iydns9hX8qCQXTmRgRD0TM+FESCI=";
+    })
   ];
 
   propagatedBuildInputs = [

@@ -110,6 +110,8 @@ buildPythonPackage rec {
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
     "test_integration"
+    # ValueError: Exceeds the limit (4300) for integer string conversion
+    "test_roundtrip_big_integer"
   ];
   dontUsePytestXdist = true;
 
