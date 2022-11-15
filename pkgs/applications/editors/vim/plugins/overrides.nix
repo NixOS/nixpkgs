@@ -5,6 +5,7 @@
 , buildGoModule
 , buildVimPluginFrom2Nix
 , fetchFromGitHub
+, fetchFromSourcehut
 , fetchpatch
 , fetchurl
 , substituteAll
@@ -463,10 +464,17 @@ self: super: {
 
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
-    inherit (himalaya) src version;
+    # vim plugin doesn't seem to have own version
+    # https://git.sr.ht/~soywod/himalaya-vim
+    inherit (himalaya) version;
+    src = fetchFromSourcehut {
+      repo = "himalaya-vim";
+      owner = "~soywod";
+      rev = "747ff2a6055839cb5b403b540883515af37b7117";
+      hash = "sha256-0WP9JoKN/A5bmnRjQJnquk3mRC7NEflUAdqki7+zqBU=";
+    };
     dependencies = with self; [ himalaya ];
     configurePhase = ''
-      cd vim
       substituteInPlace plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
     '';
