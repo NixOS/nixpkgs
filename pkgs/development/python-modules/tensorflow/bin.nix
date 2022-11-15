@@ -51,7 +51,7 @@ in buildPythonPackage {
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
+    platform = if stdenv.isDarwin && stdenv.isAarch64 then "macarm" else if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyVerNoDot}_${unit}";
   in fetchurl packages.${key};
@@ -112,7 +112,9 @@ in buildPythonPackage {
         -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
     )
     wheel pack ./unpacked/tensorflow*
-    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
+    if [[ ! -e $orig_name ]]; then
+        mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
+    fi
 
     popd
   '';
@@ -197,6 +199,6 @@ in buildPythonPackage {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

@@ -48,4 +48,16 @@ mac_py_310_cpu = {
   url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.9.1-cp310-cp310-macosx_10_14_x86_64.whl";
   sha256 = "0baq0djx8vhn8d75wyf82m6iqgfxwcrgg4xcvlr20m4x9bmysxrc";
 };
+macarm_py_310_cpu = {
+  url = "https://files.pythonhosted.org/packages/e4/84/45714d6497ced8de8c3f6105d071147f8f20de18114685de40c5cb9d6069/tensorflow_macos-2.9.1-cp310-cp310-macosx_11_0_arm64.whl";
+  sha256 = "1xy87cw4dbb41q8246fllspjb1j071gn67xxl8912nm672zdgdyg";
+};
+macarm_py_39_cpu = {
+  url = "https://files.pythonhosted.org/packages/3a/ae/b8eda20c9dfe04b99997cd4595599449592b6c0a4c0dc55114800768f093/tensorflow_macos-2.9.1-cp39-cp39-macosx_11_0_arm64.whl";
+  sha256 = "1nb1aszbmbawp0rvvvar48ndyjw8lg68c3p24qgj741qpzj28fmj";
+};
+macarm_py_38_cpu = {
+  url = "https://files.pythonhosted.org/packages/5e/87/1c81905cbae192764595b7d1d09da15bee9aeb8c0bf37197724160ab98be/tensorflow_macos-2.9.1-cp38-cp38-macosx_11_0_arm64.whl";
+  sha256 = "16l4vgi4dl7bpp51x31ixkc1hvx48wbzvldr7xr1lcad6wsngbb9";
+};
 }
