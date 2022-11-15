@@ -204,6 +204,7 @@ stdenv.mkDerivation {
         else "https://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
+    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
     license = licenses.mpl20;
