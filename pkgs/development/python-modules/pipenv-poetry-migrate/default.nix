@@ -2,31 +2,36 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , poetry
-, rich
+, typer
 , setuptools
 }:
 
 buildPythonPackage rec {
-  version = "0.2.0";
+  version = "0.2.1";
   pname = "pipenv-poetry-migrate";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
-    rev = "v${version}";
-    hash = "sha256-2/e6uGwpUvzxXlz+51gUriE054bgNeJNyLDCIyiGflM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aP8bzWFUzAZrEsz8pYL2y5c7GaUjWG5GA+cc4/tGPZk=";
   };
 
-  propagatedBuildInputs = [
-    poetry
-    rich
+    nativeBuildInputs = [
     setuptools
   ];
 
+  propagatedBuildInputs = [
+    poetry
+    typer
+  ];
+
   postPatch = ''
-  substituteInPlace pyproject.toml --replace 'rich = "^9.6.1"' 'rich = ">9"'
+  substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
   '';
 
   checkInputs = [
