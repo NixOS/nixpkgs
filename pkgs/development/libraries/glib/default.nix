@@ -134,12 +134,12 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     python3
     gettext
-  ] ++ lib.optionals buildDocs [
-    gtk-doc
     docbook_xsl
     docbook_xml_dtd_45
-    libxml2
     libxslt
+  ] ++ lib.optionals buildDocs [
+    gtk-doc
+    libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
