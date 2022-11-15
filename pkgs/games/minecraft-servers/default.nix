@@ -2,7 +2,7 @@
 let
   servers = lib.importJSON ./servers.json;
   vanillaServers = lib.filterAttrs (n: v: lib.hasPrefix "vanilla-" n) servers;
-  vanillaServers = lib.filterAttrs (n: v: lib.hasPrefix "fabric-" n) servers;
+  fabricServers = lib.filterAttrs (n: v: lib.hasPrefix "fabric-" n) servers;
 
   latestVersion = lib.last (builtins.sort lib.versionOlder (builtins.catAttrs "version" (lib.collect (x: x ? version) vanillaServers)));
   latestFabric = lib.last (builtins.sort lib.versionOlder (builtins.catAttrs "version" (lib.collect (x: x ? version) fabricServers)));
