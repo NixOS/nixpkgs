@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ascii-image-converter";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "TheZoraiz";
     repo = "ascii-image-converter";
     rev = "v${version}";
-    sha256 = "5Sa9PqhoJ/LCAHrymqVCO4bI39mQeVa4xv1z235Cxvg=";
+    sha256 = "sha256-2kg5W5u6YjLce3wNS3A1e89ZYAVK2LyNmPGCm86HxPM=";
   };
 
-  vendorSha256 = "rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";
+  vendorSha256 = "sha256-rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";
 
   meta = with lib; {
     description = "Convert images into ASCII art on the console";
