@@ -2648,4 +2648,12 @@ in {
   # Upstream jailbreak is unreleased: https://github.com/srid/heist/commit/988692ea850b3cbe966c7dc4dd26ba1d49647706
   heist-emanote = doJailbreak (dontCheck super.heist-emanote);
 
+  # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
+  # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
+  swarm = doJailbreak (super.swarm.override {
+    witch = super.witch_1_1_2_0;
+    brick = doJailbreak (dontCheck (super.brick_1_3.override {
+      text-zipper = super.text-zipper_0_12;
+    }));
+  });
 })
