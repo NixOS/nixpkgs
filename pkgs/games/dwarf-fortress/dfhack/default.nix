@@ -13,8 +13,6 @@
 , allegro5
 , libGLU
 , libGL
-, enableTWBT ? true
-, twbt
 , SDL
 , dfVersion
 }:
@@ -115,9 +113,9 @@ let
       exit 1
     fi
   '';
-
-  dfhack = stdenv.mkDerivation {
-    pname = "dfhack-base";
+in
+  stdenv.mkDerivation {
+    pname = "dfhack";
     inherit version;
 
     # Beware of submodules
@@ -166,21 +164,13 @@ let
       ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
     '';
 
-  };
-in
+    passthru = { inherit dfVersion; };
 
-buildEnv {
-  name = "dfhack-${version}";
-
-  passthru = { inherit version dfVersion; };
-
-  paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
-
-  meta = with lib; {
-    description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = "https://github.com/DFHack/dfhack/";
-    license = licenses.zlib;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
-  };
-}
+    meta = with lib; {
+      description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
+      homepage = "https://github.com/DFHack/dfhack/";
+      license = licenses.zlib;
+      platforms = [ "x86_64-linux" "i686-linux" ];
+      maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
+    };
+  }

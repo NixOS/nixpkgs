@@ -16,6 +16,7 @@
 , twbt
 , themes ? { }
 , theme ? null
+, extraPackages ? [ ]
   # General config options:
 , enableIntro ? true
 , enableTruetype ? true
@@ -27,7 +28,6 @@
 let
   dfhack_ = dfhack.override {
     inherit enableStoneSense;
-    inherit enableTWBT;
   };
 
   ptheme =
@@ -38,16 +38,16 @@ let
   unBool = b: if b then "YES" else "NO";
 
   # These are in inverse order for first packages to override the next ones.
-  themePkg = lib.optional (theme != null) ptheme;
+  themePkgs = lib.optional (theme != null) ptheme;
   pkgs = lib.optional enableDFHack dfhack_
     ++ lib.optional enableSoundSense soundSense
-    ++ lib.optional enableTWBT twbt.art
+    ++ lib.optionals enableTWBT [ twbt.lib twbt.art ]
     ++ [ dwarf-fortress ];
 
-  fixup = lib.singleton (runCommand "fixup" { } (''
+  config = runCommand "dwarf-fortress-config" { } (''
     mkdir -p $out/data/init
   '' + (if (theme != null) then ''
-    cp ${lib.head themePkg}/data/init/init.txt $out/data/init/init.txt
+    cp ${ptheme}/data/init/init.txt $out/data/init/init.txt
   '' else ''
     cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
   '') + lib.optionalString enableDFHack ''
@@ -76,20 +76,23 @@ let
   '' + ''
     substituteInPlace $out/data/init/init.txt \
       --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
-      --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
+      --replace '[TRUETYPE:24]' '[TRUETYPE:${unBool enableTruetype}]' \
       --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]' \
       --replace '[SOUND:YES]' '[SOUND:${unBool enableSound}]'
-  ''));
+  '');
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";
 
-    paths = fixup ++ themePkg ++ pkgs;
-    pathsToLink = [ "/" "/hack" "/hack/scripts" ];
+    paths = extraPackages ++ [ config ] ++ themePkgs ++ pkgs;
 
     ignoreCollisions = true;
   };
 in
+
+lib.throwIf (enableTWBT && !enableDFHack) "dwarf-fortress: TWBT requires DFHack to be enabled"
+lib.throwIf (enableStoneSense && !enableDFHack) "dwarf-fortress: StoneSense requires DFHack to be enabled"
+lib.throwIf (enableTextMode && enableTWBT) "dwarf-fortress: text mode and TWBT are mutually exclusive"
 
 stdenv.mkDerivation {
   pname = "dwarf-fortress";
@@ -114,7 +117,10 @@ stdenv.mkDerivation {
   runDFHack = ./dfhack.in;
   runSoundSense = ./soundSense.in;
 
-  passthru = { inherit dwarf-fortress dwarf-therapist; };
+  passthru = {
+    inherit dwarf-fortress dwarf-therapist twbt;
+    dfhack = dfhack_;
+  };
 
   buildCommand = ''
     mkdir -p $out/bin
