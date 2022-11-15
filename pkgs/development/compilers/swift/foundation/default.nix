@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, callPackage
 , cmake
 , ninja
 , swift
@@ -10,17 +10,13 @@
 , curl
 }:
 
-stdenv.mkDerivation rec {
+let
+  sources = callPackage ../sources.nix { };
+in stdenv.mkDerivation {
   pname = "swift-corelibs-foundation";
 
-  # Releases are made as part of the Swift toolchain, so versions should match.
-  version = "5.7";
-  src = fetchFromGitHub {
-    owner = "apple";
-    repo = "swift-corelibs-foundation";
-    rev = "swift-${version}-RELEASE";
-    hash = "sha256-6XUSC6759dcG24YapWicjRzUnmVVe0QPSsLEw4sQNjI=";
-  };
+  inherit (sources) version;
+  src = sources.swift-corelibs-foundation;
 
   outputs = [ "out" "dev" ];
 

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , cmake
 , coreutils
 , gnugrep
@@ -10,7 +11,6 @@
 , bintools
 , python3
 , git
-, fetchFromGitHub
 , fetchpatch
 , makeWrapper
 , gnumake
@@ -43,43 +43,7 @@ let
 
   inherit (stdenv) hostPlatform targetPlatform;
 
-  # The Swift toolchain script builds projects with separate repos. By convention, some of them share
-  # the same version with the main Swift compiler project per release.
-  version = "5.7";
-
-  fetchSwiftRelease = { repo, hash }:
-    fetchFromGitHub {
-      owner = "apple";
-      inherit repo hash;
-      rev = "swift-${version}-RELEASE";
-      name = "${repo}-${version}-src";
-    };
-
-  # Names in this set match the directory the source is unpacked to.
-  sources = {
-    cmark = fetchSwiftRelease {
-      repo = "swift-cmark";
-      hash = "sha256-f0BoTs4HYdx/aJ9HIGCWMalhl8PvClWD6R4QK3qSgAw=";
-    };
-    llvm-project = fetchSwiftRelease {
-      repo = "llvm-project";
-      hash = "sha256-uW6dEAFaDOlHXnq8lFYxrKNLRPEukauZJxX4UCpWpIY=";
-    };
-    swift = fetchSwiftRelease {
-      repo = "swift";
-      hash = "sha256-n8WVQYinAyIj4wmQnDhvPsH+t8ydANkGbjFJ6blfHOY=";
-    };
-    swift-experimental-string-processing = fetchSwiftRelease {
-      repo = "swift-experimental-string-processing";
-      hash = "sha256-Ar9fQWi8bYSvGErrS0SWrxIxwEwCjsYIZcWweZ8bV28=";
-    };
-  }
-    // lib.optionalAttrs (!stdenv.isDarwin) {
-      swift-corelibs-libdispatch = fetchSwiftRelease {
-        repo = "swift-corelibs-libdispatch";
-        hash = "sha256-1qbXiC1k9+T+L6liqXKg6EZXqem6KEEx8OctuL4Kb2o=";
-      };
-    };
+  sources = callPackage ../sources.nix { };
 
   # Tools invoked by swift at run-time.
   runtimeDeps = lib.optionals stdenv.isDarwin [
@@ -207,7 +171,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "swift";
-  inherit version;
+  inherit (sources) version;
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -267,13 +231,19 @@ in stdenv.mkDerivation {
   # We setup custom build directories.
   dontUseCmakeBuildDir = true;
 
-  unpackPhase = ''
+  unpackPhase = let
+    copySource = repo: "cp -r ${sources.${repo}} ${repo}";
+  in ''
     mkdir src
     cd src
 
-    ${lib.concatStrings (lib.mapAttrsToList (dir: src: ''
-      cp -r ${src} ${dir}
-    '') sources)}
+    ${copySource "swift-cmark"}
+    ${copySource "llvm-project"}
+    ${copySource "swift"}
+    ${copySource "swift-experimental-string-processing"}
+    ${lib.optionalString
+      (!stdenv.isDarwin)
+      (copySource "swift-corelibs-libdispatch")}
 
     chmod -R u+w .
   '';
@@ -410,7 +380,7 @@ in stdenv.mkDerivation {
     }
 
     cmakeFlags="-GNinja"
-    buildProject cmark
+    buildProject swift-cmark
 
     # Some notes:
     # - The Swift build just needs Clang.
@@ -439,8 +409,8 @@ in stdenv.mkDerivation {
       -DSWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY=ON
       -DLLVM_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/llvm
       -DClang_DIR=$SWIFT_BUILD_ROOT/llvm/lib/cmake/clang
-      -DSWIFT_PATH_TO_CMARK_SOURCE=$SWIFT_SOURCE_ROOT/cmark
-      -DSWIFT_PATH_TO_CMARK_BUILD=$SWIFT_BUILD_ROOT/cmark
+      -DSWIFT_PATH_TO_CMARK_SOURCE=$SWIFT_SOURCE_ROOT/swift-cmark
+      -DSWIFT_PATH_TO_CMARK_BUILD=$SWIFT_BUILD_ROOT/swift-cmark
       -DSWIFT_PATH_TO_LIBDISPATCH_SOURCE=$SWIFT_SOURCE_ROOT/swift-corelibs-libdispatch
       -DEXPERIMENTAL_STRING_PROCESSING_SOURCE_DIR=$SWIFT_SOURCE_ROOT/swift-experimental-string-processing
       -DSWIFT_INSTALL_COMPONENTS=${lib.concatStringsSep ";" swiftInstallComponents}

@@ -1,7 +1,6 @@
 { lib
 , callPackage
 , stdenv
-, fetchFromGitHub
 , cmake
 , ninja
 , git
@@ -25,16 +24,12 @@ let
   inherit (swift) swiftOs swiftModuleSubdir swiftStaticModuleSubdir;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
+  sources = callPackage ../sources.nix { };
+
   # Common attributes for the bootstrap swiftpm and the final swiftpm.
-  commonAttrs = rec {
-    # Releases are made as part of the Swift toolchain, so versions should match.
-    version = "5.7";
-    src = fetchFromGitHub {
-      owner = "apple";
-      repo = "swift-package-manager";
-      rev = "swift-${version}-RELEASE";
-      hash = "sha256-MZah+/XfeK46YamxwuE3Kiv+u5bj7VmjEh6ztDF+0j4=";
-    };
+  commonAttrs = {
+    inherit (sources) version;
+    src = sources.swift-package-manager;
     nativeBuildInputs = [ makeWrapper ];
     # Required at run-time for the host platform to build package manifests.
     propagatedBuildInputs = [ Foundation ];

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, callPackage
 , cmake
 , ninja
 , swift
@@ -8,17 +8,13 @@
 , DarwinTools
 }:
 
-stdenv.mkDerivation rec {
+let
+  sources = callPackage ../sources.nix { };
+in stdenv.mkDerivation {
   pname = "swift-corelibs-xctest";
 
-  # Releases are made as part of the Swift toolchain, so versions should match.
-  version = "5.7";
-  src = fetchFromGitHub {
-    owner = "apple";
-    repo = "swift-corelibs-xctest";
-    rev = "swift-${version}-RELEASE";
-    hash = "sha256-qLUO9/3tkJWorDMEHgHd8VC3ovLLq/UWXJWMtb6CMN0=";
-  };
+  inherit (sources) version;
+  src = sources.swift-corelibs-xctest;
 
   outputs = [ "out" ];
 

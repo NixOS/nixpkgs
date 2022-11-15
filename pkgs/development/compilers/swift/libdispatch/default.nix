@@ -1,22 +1,16 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, callPackage
 , cmake
 , ninja
 , useSwift ? true, swift
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "swift-corelibs-libdispatch";
 
-  # Releases are made as part of the Swift toolchain, so versions should match.
-  version = "5.7";
-  src = fetchFromGitHub {
-    owner = "apple";
-    repo = "swift-corelibs-libdispatch";
-    rev = "swift-${version}-RELEASE";
-    hash = "sha256-1qbXiC1k9+T+L6liqXKg6EZXqem6KEEx8OctuL4Kb2o=";
-  };
+  inherit (sources) version;
+  src = sources.swift-corelibs-libdispatch;
 
   outputs = [ "out" "dev" "man" ];
 
