@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, python, six, tox, mock, pytest }:
+{ buildPythonPackage, fetchPypi, lib, python, six, mock, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "smpplib";
@@ -10,11 +10,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ tox mock pytest ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ mock pytestCheckHook ];
 
   postInstall = ''
     rm -rf $out/${python.sitePackages}/tests
