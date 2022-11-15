@@ -198,8 +198,8 @@ let
 
       ${optionalString cfg.statusPage ''
         server {
-          listen ${cfg.defaultHTTPListenPort};
-          ${optionalString enableIPv6 "listen [::]:${cfg.defaultHTTPListenPort};" }
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
 
           server_name localhost;
 
