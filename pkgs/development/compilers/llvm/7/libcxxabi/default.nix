@@ -46,6 +46,8 @@ stdenv.mkDerivation {
 
   preInstall = lib.optionalString stdenv.isDarwin ''
     for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
       # Fix up the install name. Preserve the basename, just replace the path.
       installName="$out/lib/$(basename $(otool -D $file | tail -n 1))"
 
