@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.1.1";
+  version = "1.1.2";
 
   suffix = {
     x86_64-linux = "x86_64";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-KRlOE4iDWMYzKZUZnuKIwIGooj5o8ARpROS7f2VIr1c=";
+    x86_64-linux = "sha256-RkFlc+atTB9zHRAjQSqe4nJ9N7I9FE/RBeEcXoCk0T8=";
     aarch64-linux = "sha256-AqVFqUbMtjPmOsSgAaJ2AFNc0McC708fAD36qLz0VAc=";
   };
 

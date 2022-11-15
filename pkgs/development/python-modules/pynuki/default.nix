@@ -2,13 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, requests
+, pynacl
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "pynuki";
-  version = "1.5.2";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,17 +18,15 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Uqw1Xa0pBQmQsFEBv/l1gtsPy+owYcTZITOYUmMvT5Y=";
+    hash = "sha256-9WiPApesocE9wXyI/qH+TTfbsTgJTyifSW3tfNro7XI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'requests = ">=2.27,<3"' 'requests = "*"'
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
+    pynacl
     requests
   ];
 

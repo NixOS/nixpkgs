@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_412
-, docbook_xml_dtd_44
+, docbook_xml_dtd_45
 , glib
 , gssdp
 , libsoup
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.4.3";
+  version = "1.4.4";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-FO2nd5NNot90PQckiZM72YETMre1v0Fia4Ay77KLM7o=";
+    sha256 = "sha256-N2GxXLBjYh+Efz7/t9djfwMXUA/Ka9oeGQT3OSF1Ch8=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
-    docbook_xml_dtd_44
+    docbook_xml_dtd_45
   ];
 
   buildInputs = [
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
     };
   };
 

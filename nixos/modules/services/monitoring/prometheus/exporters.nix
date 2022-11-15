@@ -77,6 +77,7 @@ let
     "varnish"
     "wireguard"
     "flow"
+    "zfs"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
@@ -196,7 +197,7 @@ let
         serviceConfig.LockPersonality = true;
         serviceConfig.MemoryDenyWriteExecute = true;
         serviceConfig.NoNewPrivileges = true;
-        serviceConfig.PrivateDevices = true;
+        serviceConfig.PrivateDevices = mkDefault true;
         serviceConfig.ProtectClock = mkDefault true;
         serviceConfig.ProtectControlGroups = true;
         serviceConfig.ProtectHome = true;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   dontAddDisableDepTrack = stdenv.isDarwin;
 
-  patches = lib.optional stdenv.hostPlatform.isMips64 [
+  patches = lib.optionals stdenv.hostPlatform.isMips64 [
     (fetchpatch {
       name = "0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
       url = "https://raw.githubusercontent.com/buildroot/buildroot/master/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";

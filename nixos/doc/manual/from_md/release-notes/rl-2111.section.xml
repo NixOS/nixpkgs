@@ -2106,7 +2106,7 @@ Superuser created successfully.
           <literal>ghc810</literal>. Those attributes point to the same
           compilers and packagesets but have the advantage that e.g.
           <literal>ghc92</literal> stays stable when we update from
-          <literal>ghc924</literal> to <literal>ghc925</literal>.
+          <literal>ghc925</literal> to <literal>ghc926</literal>.
         </para>
       </listitem>
     </itemizedlist>

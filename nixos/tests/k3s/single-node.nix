@@ -40,15 +40,14 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
       services.k3s.role = "server";
       services.k3s.package = pkgs.k3s;
       # Slightly reduce resource usage
-      services.k3s.extraFlags = ''
-        --disable coredns \
-        --disable local-storage \
-        --disable metrics-server \
-        --disable servicelb \
-        --disable traefik \
-        --pause-image \
-        test.local/pause:local
-      '';
+      services.k3s.extraFlags = builtins.toString [
+        "--disable" "coredns"
+        "--disable" "local-storage"
+        "--disable" "metrics-server"
+        "--disable" "servicelb"
+        "--disable" "traefik"
+        "--pause-image" "test.local/pause:local"
+      ];
 
       users.users = {
         noprivs = {

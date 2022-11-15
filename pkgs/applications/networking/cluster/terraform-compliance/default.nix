@@ -10,7 +10,6 @@
 , mock
 , netaddr
 , pytestCheckHook
-, python3Packages
 , radish-bdd
 , semver
 }:

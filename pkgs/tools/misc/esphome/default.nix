@@ -15,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.9.3";
+  version = "2022.10.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xrfNdJD8c0PbtipGTQNSCcXaWu4TEyER6lHtREdVcFI=";
+    hash = "sha256-f6t5Q9jK6ovcIFVw1hYyhtiy/iDaq7cmfn5ywAeEaT8=";
   };
 
   postPatch = ''
@@ -55,6 +55,7 @@ with python.pkgs; buildPythonApplication rec {
     protobuf
     pyserial
     pyyaml
+    requests
     tornado
     tzdata
     tzlocal

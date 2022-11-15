@@ -10,16 +10,16 @@
 
 buildGoModule rec{
   pname = "flintlock";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flintlock";
     rev = "v${version}";
-    sha256 = "sha256-zVsI8443/4joOhhuqhrUGsIW6iFvetW9BhHqASL+XUk=";
+    sha256 = "sha256-kHrVpQ4E8b1YV+ofZwd4iGJ9ucVUUam6rxdpOGmvRR4=";
   };
 
-  vendorSha256 = "sha256-PPda8/9WSiWQYyJJQhWo94g8LqGEEwx2u2j2wfqpOv0=";
+  vendorSha256 = "sha256-A3LrikB2KrnSI+OREiLmlkTFpRKQWRB8w4OJ6ApX7oY=";
 
   subPackages = [ "cmd/flintlock-metrics" "cmd/flintlockd" ];
 
@@ -41,7 +41,7 @@ buildGoModule rec{
 
   meta = with lib; {
     description = "Create and manage the lifecycle of MicroVMs backed by containerd";
-    homepage = "https://github.com/weaveworks/flintlock";
+    homepage = "https://github.com/weaveworks-liquidmetal/flintlock";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ techknowlogick ];

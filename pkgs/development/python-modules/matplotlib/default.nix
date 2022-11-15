@@ -39,9 +39,9 @@ buildPythonPackage rec {
   buildInputs = [
     which
     sphinx
-  ] ++ lib.optional enableGhostscript [
+  ] ++ lib.optionals enableGhostscript [
     ghostscript
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];
 

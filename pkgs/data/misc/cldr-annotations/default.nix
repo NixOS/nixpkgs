@@ -1,18 +1,22 @@
 { lib, fetchzip }:
 
-let
-  version = "41.0";
-in fetchzip rec {
-  name = "cldr-annotations-${version}";
+fetchzip rec {
+  pname = "cldr-annotations";
+  version = "42.0";
 
   url = "https://unicode.org/Public/cldr/${lib.versions.major version}/cldr-common-${version}.zip";
 
+  stripRoot = false;
   postFetch = ''
-    mkdir -p $out/share/unicode/cldr
-    unzip -d $out/share/unicode/cldr $downloadedFile 'common/annotations/*' 'common/annotationsDerived/*'
+    mkdir -p $out/share/unicode/cldr/common
+    mv $out/common/annotations{,Derived} -t $out/share/unicode/cldr/common
+
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
-  sha256 = "sha256-3dHVZGx3FmR97fzhlTSx/xp6YTAV+sMExl6gpLzl1MY=";
+  hash = "sha256-9OOd69nBaDSt+ilL3PTGpcQgC60PnHqd8/CYa2LgeI0=";
 
   meta = with lib; {
     description = "Names and keywords for Unicode characters from the Common Locale Data Repository";

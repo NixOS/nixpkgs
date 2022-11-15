@@ -11,6 +11,7 @@
 , SDL2
 , libtheora
 , libvorbis
+, libopus
 , openal
 , openalSoft
 , physfs
@@ -42,17 +43,18 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.2.7";
+  version  = "4.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-f1J84A7aRAmbGn48MD7eJ2+DX21q2UWwYAoXXdq7ALA=";
+    sha256 = "sha256-GdHe8DskEd0G1E388z8GGOtjTqHTMBpFSxf1MNATGN0=";
   };
 
   buildInputs = [
     SDL2
     libtheora
     libvorbis
+    libopus
     openal
     openalSoft
     physfs

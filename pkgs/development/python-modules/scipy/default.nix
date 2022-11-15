@@ -2,6 +2,7 @@
 , stdenv
 , fetchPypi
 , python
+, pythonOlder
 , buildPythonPackage
 , cython
 , gfortran
@@ -14,21 +15,27 @@
 , pytest-xdist
 , numpy
 , pybind11
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.9.1";
+  version = "1.9.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JtKMRokA5tX9s30oEqtG2wzNIsY7qglQV4cfqjpJi8k=";
+    sha256 = "sha256-+8XAXIXBoCvnex/1kQh8g7xEV5xtK9n7eYu2TqXhoCc=";
   };
 
   nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
 
-  buildInputs = [ numpy.blas pybind11 ];
+  buildInputs = [
+    numpy.blas
+    pybind11
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = [ numpy ];
 

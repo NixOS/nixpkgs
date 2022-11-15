@@ -1,18 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkg-config
-, ronn, substituteAll
-, mbrolaSupport ? true, mbrola
-, pcaudiolibSupport ? true, pcaudiolib
-, sonicSupport ? true, sonic }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, which
+, libtool
+, pkg-config
+, ronn
+, substituteAll
+, mbrolaSupport ? true
+, mbrola
+, pcaudiolibSupport ? true
+, pcaudiolib
+, sonicSupport ? true
+, sonic
+}:
 
 stdenv.mkDerivation rec {
   pname = "espeak-ng";
-  version = "1.50";
+  version = "1.51";
 
   src = fetchFromGitHub {
     owner = "espeak-ng";
     repo = "espeak-ng";
     rev = version;
-    sha256 = "0jkqhf2h94vbqq7mg7mmm23bq372fa7mdk941my18c3vkldcir1b";
+    hash = "sha256-KwzMlQ3/JgpNOpuV4zNc0zG9oWEGFbVSJ4bEd3dtD3Y=";
   };
 
   patches = lib.optionals mbrolaSupport [
@@ -26,20 +38,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
 
   buildInputs = lib.optional mbrolaSupport mbrola
-             ++ lib.optional pcaudiolibSupport pcaudiolib
-             ++ lib.optional sonicSupport sonic;
+    ++ lib.optional pcaudiolibSupport pcaudiolib
+    ++ lib.optional sonicSupport sonic;
 
   preConfigure = "./autogen.sh";
 
   configureFlags = [
     "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
   ];
-
-  # Current release lacks dependencies on local espeak-ng:
-  #  cd dictsource && ESPEAK_DATA_PATH=/build/espeak-ng LD_LIBRARY_PATH=../src: ../src/espeak-ng --compile=yue && cd ..
-  #  bash: line 1: ../src/espeak-ng: No such file or directory
-  # Should be fixed in next release: https://github.com/espeak-ng/espeak-ng/pull/1029
-  enableParallelBuilding = false;
 
   postInstall = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng

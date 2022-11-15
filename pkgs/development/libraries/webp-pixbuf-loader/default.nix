@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, makeWrapper
-, gdk-pixbuf, libwebp
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, makeWrapper
+, gdk-pixbuf
+, libwebp
 }:
+
 let
-  moduleDir = gdk-pixbuf.moduleDir;
+  inherit (gdk-pixbuf) moduleDir;
 
   # turning lib/gdk-pixbuf-#.#/#.#.#/loaders into lib/gdk-pixbuf-#.#/#.#.#/loaders.cache
   # removeSuffix is just in case moduleDir gets a trailing slash
@@ -11,40 +18,48 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "webp-pixbuf-loader";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
     owner = "aruiz";
-    repo = pname;
+    repo = "webp-pixbuf-loader";
     rev = version;
-    sha256 = "sha256-dcdydWYrXZJjo4FxJtvzGzrQLOs87/BmxshFZwsT2ws=";
+    sha256 = "sha256-Za5/9YlDRqF5oGI8ZfLhx2ZT0XvXK6Z0h6fu5CGvizc=";
   };
 
-  # It looks for gdk-pixbuf-thumbnailer in this package's bin rather than the gdk-pixbuf bin. We need to patch that.
-  postPatch = ''
-    substituteInPlace webp-pixbuf.thumbnailer.in --replace @bindir@/gdk-pixbuf-thumbnailer $out/bin/webp-thumbnailer
-  '';
+  nativeBuildInputs = [
+    gdk-pixbuf.dev
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+  ];
 
-  nativeBuildInputs = [ gdk-pixbuf meson ninja pkg-config makeWrapper ];
-  buildInputs = [ gdk-pixbuf libwebp ];
+  buildInputs = [
+    gdk-pixbuf
+    libwebp
+  ];
 
   mesonFlags = [
-    "-Dgdk_pixbuf_query_loaders_path=${gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders"
     "-Dgdk_pixbuf_moduledir=${placeholder "out"}/${moduleDir}"
   ];
 
-  # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
-  # So we replace it with a wrapped executable.
-  postInstall = ''
-    mkdir -p $out/bin
-    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer $out/bin/webp-thumbnailer \
-      --set GDK_PIXBUF_MODULE_FILE $out/${loadersPath}
+  postPatch = ''
+    # It looks for gdk-pixbuf-thumbnailer in this package's bin rather than the gdk-pixbuf bin. We need to patch that.
+    substituteInPlace webp-pixbuf.thumbnailer.in \
+      --replace "@bindir@/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer"
   '';
 
-  # environment variables controlling loaders.cache generation by gdk-pixbuf-query-loaders
-  preInstall = ''
-    export GDK_PIXBUF_MODULE_FILE=$out/${loadersPath}
-    export GDK_PIXBUF_MODULEDIR=$out/${moduleDir}
+  postInstall = ''
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+    GDK_PIXBUF_MODULEDIR="$out/${moduleDir}" \
+    gdk-pixbuf-query-loaders --update-cache
+
+    # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
+    # So we replace it with a wrapped executable.
+    mkdir -p "$out/bin"
+    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/bin/webp-thumbnailer" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
   '';
 
   meta = with lib; {
@@ -52,8 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aruiz/webp-pixbuf-loader";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.cwyc ];
-    # meson.build:16:0: ERROR: Program or command 'gcc' not found or not executable
-    broken = stdenv.isDarwin;
+    maintainers = teams.gnome.members ++ [ maintainers.cwyc ];
   };
 }

@@ -1,14 +1,14 @@
 diff --git a/cps/__init__.py b/cps/__init__.py
-index 627cca0b..233bb2dd 100644
+index 1ba1f778..fd5dc2f1 100644
 --- a/cps/__init__.py
 +++ b/cps/__init__.py
-@@ -87,6 +87,9 @@ db.CalibreDB.setup_db(config, cli.settingspath)
- 
- calibre_db = db.CalibreDB()
- 
-+if os.environ.get('__RUN_MIGRATIONS_AND_EXIT'):
-+    sys.exit(0)
+@@ -116,6 +116,9 @@ def create_app():
+     db.CalibreDB.setup_db(config.config_calibre_dir, cli_param.settings_path)
+     calibre_db.init_db()
+
++    if os.environ.get('__RUN_MIGRATIONS_AND_EXIT'):
++        sys.exit(0)
 +
- def create_app():
-     app.wsgi_app = ReverseProxied(app.wsgi_app)
-     # For python2 convert path to unicode
+     updater_thread.init_updater(config, web_server)
+     # Perform dry run of updater and exit afterwards
+     if cli_param.dry_run:

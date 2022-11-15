@@ -2,9 +2,6 @@
 , stdenv
 , fetchgit
 , bash
-, pkg-config
-, jre8
-, libuuid
 , openmodelica
 , mkOpenModelicaDerivation
 }:

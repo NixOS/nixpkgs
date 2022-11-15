@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
-  NIX_CFLAGS_COMPILE = lib.optional (lib.versionOlder version "2.1.10") [
+  NIX_CFLAGS_COMPILE = lib.optionals (lib.versionOlder version "2.1.10") [
     # Workaround build failure on -fno-common toolchains like upstream
     # clang-13. Without the change build fails as:
     #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o

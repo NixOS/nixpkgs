@@ -1,7 +1,5 @@
 { stdenv, symlinkJoin, lib, makeWrapper
 , writeText
-, bundlerEnv, ruby
-, nodejs
 , nodePackages
 , python3
 , python3Packages

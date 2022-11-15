@@ -1,4 +1,4 @@
-From 6a7723be33261cdc302e0f7bdb37fb50d30cc5fc Mon Sep 17 00:00:00 2001
+From 05c008dcabaf94f5623f2f7e267005eef0a8c5fc Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 20 Sep 2022 18:42:31 +0800
 Subject: [PATCH 2/4] skip building doc
@@ -8,7 +8,7 @@ Subject: [PATCH 2/4] skip building doc
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index d38311d..a775d36 100644
+index d38311dce..a775d36e1 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -227,7 +227,7 @@ define stringreplace
@@ -21,5 +21,5 @@ index d38311d..a775d36 100644
  	@$(MAKE) $(QUIET_MAKE) all
  else
 -- 
-2.37.2
+2.38.1
 

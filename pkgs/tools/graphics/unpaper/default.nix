@@ -12,7 +12,7 @@
 
 # runtime
 , buildPackages
-, ffmpeg_5
+, ffmpeg_5-headless
 
 # tests
 , nixosTests
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_5
+    ffmpeg_5-headless
   ];
 
   passthru.tests = {

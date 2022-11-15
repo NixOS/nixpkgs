@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, linkFarm, lightdm-enso-os-greeter
-, dbus, pcre, libepoxy, libXdmcp, at-spi2-core, libxklavier, libxkbcommon, libpthreadstubs
-, gtk3, vala, cmake, libgee, libX11, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
+, dbus, pcre, libepoxy, xorg, at-spi2-core, libxklavier, libxkbcommon
+, gtk3, vala, cmake, libgee, lightdm, gdk-pixbuf, clutter-gtk, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation {
   pname = "lightdm-enso-os-greeter";
@@ -30,15 +30,15 @@ stdenv.mkDerivation {
     pcre
     libepoxy
     libgee
-    libX11
+    xorg.libX11
     lightdm
-    libXdmcp
+    xorg.libXdmcp
     gdk-pixbuf
     clutter-gtk
     libxklavier
     at-spi2-core
     libxkbcommon
-    libpthreadstubs
+    xorg.libpthreadstubs
     librsvg
   ];
 

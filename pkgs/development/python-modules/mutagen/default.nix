@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mutagen";
-  version = "1.45.1";
+  version = "1.46.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6397602efb3c2d7baebd2166ed85731ae1c1d475abca22090b7141ff5034b3e1";
+    hash = "sha256-bl+LqEg2uZ/mC+X7J/hL5K2Rm7trScqmroHnBYS1Xlg=";
   };
 
   outputs = [ "out" "doc" ];
@@ -44,11 +44,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Hypothesis produces unreliable results: Falsified on the first call but did not on a subsequent one
     "test_test_fileobj_save"
+    "test_test_fileobj_load"
+    "test_test_fileobj_delete"
+    "test_mock_fileobj"
   ];
 
-  disabledTestPaths = [
-    # we are not interested in code quality measurements
-    "tests/quality/test_flake8.py"
+  pythonImportsCheck = [
+    "mutagen"
   ];
 
   meta = with lib; {
@@ -66,5 +68,6 @@ buildPythonPackage rec {
     homepage = "https://mutagen.readthedocs.io";
     changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

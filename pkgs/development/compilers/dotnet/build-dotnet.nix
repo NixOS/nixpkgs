@@ -130,13 +130,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     };
 
     updateScript =
-      if type != "sdk" then
-        lib.warn "${pname}-${version}: only the SDK package can be updated - this script will do nothing!"
-        writeShellScript "dummy-update" ''
-          echo "Doing nothing..."
-          echo "Run the updateScript from the SDK package"
-        ''
-      else
+      if type == "sdk" then
       let
         majorVersion =
           with lib;
@@ -145,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       writeShellScript "update-dotnet-${majorVersion}" ''
         pushd pkgs/development/compilers/dotnet
         exec ${./update.sh} "${majorVersion}"
-      '';
+      '' else null;
 
     # Convert a "stdenv.hostPlatform.system" to a dotnet RID
     systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");

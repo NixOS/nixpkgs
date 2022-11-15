@@ -59,6 +59,7 @@
   # Darwin
 , gmp
 , libiconv
+, qemu
 , Carbon
 , AppKit
 
@@ -154,6 +155,9 @@ stdenv.mkDerivation rec {
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
+    sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuvhostusertest/d' tests/meson.build
   '' + optionalString (isDarwin && isx86_64) ''
     sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
@@ -267,6 +271,7 @@ stdenv.mkDerivation rec {
       (cfg "runstatedir" "/run")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
+      (cfg "qemu_datadir" (if isDarwin then "${qemu}/share/qemu" else ""))
 
       (feat "apparmor" isLinux)
       (feat "attr" isLinux)

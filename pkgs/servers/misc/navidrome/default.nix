@@ -4,7 +4,7 @@
 , lib
 , pkg-config
 , stdenv
-, ffmpeg
+, ffmpeg-headless
 , taglib
 , zlib
 , makeWrapper
@@ -14,17 +14,15 @@
 
 let
 
-  version = "0.47.5";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-gTvJI+brdEpdpbEcdQycqw15seI+k5dMDVrjY3v6i14=";
+    hash = "sha256-FO2Vl3LeajvZ8CLtnsOSLXr//gaOWPbMthj70RHxp+Q=";
   };
 
-  # FIXME: we currently manually inject a patch for react-scripts in here
-  # See https://github.com/navidrome/navidrome/pull/1767
   ui = callPackage ./ui {
     inherit src version;
   };
@@ -37,7 +35,7 @@ buildGoModule {
 
   inherit src version;
 
-  vendorSha256 = "sha256-xMAxGbq2VSXkF9R9hxB9EEk2CnqsRxg2Nmt7zyXohJI=";
+  vendorSha256 = "sha256-LPoM5RFHfTTWZtlxc59hly12zzrY8wjXGZ6xW2teOFM=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
@@ -56,7 +54,7 @@ buildGoModule {
 
   postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
 
   passthru = {

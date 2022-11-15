@@ -8,6 +8,7 @@
 , pytest-timeout
 , pytestCheckHook
 , CoreServices
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,12 @@ buildPythonPackage rec {
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     ./force-kqueue.patch
+  ] ++ [
+    (fetchpatch {
+      url = "https://github.com/gorakhargosh/watchdog/commit/255d1e45c17929dd5ba8a6f91aa28771109931cd.patch";
+      sha256 = "sha256-gGgEGuB/0g+4Pv1dXMvIdObjqKruWKkxtufS/dzSlY8=";
+      excludes = [ "changelog.rst" ];
+    })
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
@@ -41,11 +48,6 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg \
       --replace "--cov=watchdog" "" \
       --replace "--cov-report=term-missing" ""
-  '' + lib.optionalString stdenv.hostPlatform.isMusl
-  # https://github.com/gorakhargosh/watchdog/issues/920
-  ''
-    substituteInPlace tests/test_inotify_c.py \
-      --replace "Unknown error -1" "No error information"
   '';
 
   disabledTests = [

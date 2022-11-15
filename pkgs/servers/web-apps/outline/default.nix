@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.66.1";
+  version = "0.66.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-pK/rrGAL9JKt52jQRVtbQgPPe644anOARUNOhPCUCqE=";
+    sha256 = "sha256-jRnw6UIUA3gAgyqQg6R1GOI4O8HXKnVfTH3d3SFBa9A=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
+    export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     fixup_yarn_lock yarn.lock

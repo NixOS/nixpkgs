@@ -53,7 +53,7 @@ for package in *; do
           # If multiple remote sources are enabled, nuget will try them all
           # concurrently and use the one that responds first. We always use the
           # first source that has the package.
-          echo "$package $version is available on $url, but was downloaded from ${base_addresses[$used_source]}$package/$version/$package.$version.nupkg" 1>&2
+          echo "$package $version is available at $url, but was restored from $used_source" 1>&2
           found=true
           break
         else

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.5.1";
+  version = "1.6.0";
   format = "pyproject";
   disabled = pythonOlder "3.9";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-//e+Kb85TBAC9/mHz/T/Dm/pNjbj0488/L/NeS1RMqY=";
+    hash = "sha256-6w940Yn0WgVC0Rn9OX40+6hO4maPSC7VrT3ARD8CIjQ=";
   };
 
   postPatch = ''

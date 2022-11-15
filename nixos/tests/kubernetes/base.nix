@@ -43,7 +43,7 @@ let
                   trustedInterfaces = ["mynet"];
 
                   extraCommands = concatMapStrings  (node: ''
-                    iptables -A INPUT -s ${node.config.networking.primaryIPAddress} -j ACCEPT
+                    iptables -A INPUT -s ${node.networking.primaryIPAddress} -j ACCEPT
                   '') (attrValues nodes);
                 };
               };

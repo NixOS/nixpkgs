@@ -1,6 +1,7 @@
 { callPackage }:
 {
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
+  "argos@pew.worldwidemann.com" = callPackage ./argos { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
   "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };

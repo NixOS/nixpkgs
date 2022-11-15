@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.7.3";
+  version = "3.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,16 +17,8 @@ buildPythonPackage rec {
     owner = "nficano";
     repo = "humps";
     rev = "v${version}";
-    hash = "sha256-7jkwf4qGQ+AD4/hOrEe/oAPY+gnSySUVBWFf70rU7xc=";
+    hash = "sha256-ElL/LY2V2Z3efdV5FnDy9dSoBltULrzxsjaOx+7W9Oo=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/nficano/humps/pull/281
-      url = "https://github.com/nficano/humps/commit/e248c26195804fa04c43e88c5682528f367e27b3.patch";
-      hash = "sha256-+TCVfuMgfkDaS1tPu4q6PIOC3Kn1MBWyuoyAO6W0/h4=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core

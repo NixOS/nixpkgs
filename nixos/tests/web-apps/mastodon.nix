@@ -129,6 +129,9 @@ in
     ca.wait_for_unit("step-ca.service")
     ca.wait_for_open_port(8443)
 
+    # Check that mastodon-media-auto-remove is scheduled
+    server.succeed("systemctl status mastodon-media-auto-remove.timer")
+
     server.wait_for_unit("nginx.service")
     server.wait_for_unit("redis-mastodon.service")
     server.wait_for_unit("postgresql.service")

@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.2.0";
+  version = "1.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -50,12 +50,13 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+Nsg7oPh9tAHEKt1R9C+nY9UPy+9vbf/+A6vQWgTi+4=";
+    hash = "sha256-huIjLv1T42HEmePCQNJpKnNxJKdyD9MlEtc2WRPOjRE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'crashtest = "^0.3.0"' 'crashtest = "*"'
+      --replace 'crashtest = "^0.3.0"' 'crashtest = "*"' \
+      --replace 'xattr = { version = "^0.9.7"' 'xattr = { version = "^0.10.0"'
   '';
 
   nativeBuildInputs = [
@@ -106,8 +107,15 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  preCheck = ''
+  preCheck = (''
     export HOME=$TMPDIR
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '');
+
+  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    unset no_proxy
   '';
 
   disabledTests = [

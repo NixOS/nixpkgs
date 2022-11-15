@@ -26,7 +26,7 @@
 }:
 let
   pname = "gamescope";
-  version = "3.11.47";
+  version = "3.11.48";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     owner = "Plagman";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-GkvujrYc7dBbsGqeG0THqtEAox+VZ3DoWQK4gkHo+ds=";
+    hash = "sha256-/a0fW0NVIrg9tuK+mg+D+IOcq3rJJxKdFwspM1ZRR9M=";
   };
 
   patches = [ ./use-pkgconfig.patch ];

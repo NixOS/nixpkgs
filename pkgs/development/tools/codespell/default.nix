@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "2.2.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-H/istsEt6kYzwvwy8GlOH0fkMTWbEdXVF1P1qO6sITs=";
+    sha256 = "sha256-zXHqaZzGIS7BOFc/kPzA4sgpoEmXuaKHdOcKpMWWeOI=";
   };
 
   postPatch = ''
@@ -22,12 +22,18 @@ python3.pkgs.buildPythonApplication rec {
       --replace "--cov-report=" ""
   '';
 
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+  ];
+
   checkInputs = with python3.pkgs; [
     aspell-python
     chardet
     pytestCheckHook
     pytest-dependency
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"

@@ -7,6 +7,7 @@
 , fetchpatch
 , fetchzip
 , buildPackages
+, makeBinaryWrapper
 , ninja
 , meson
 , m4
@@ -84,7 +85,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? true
+, withLibBPF ? lib.versionAtLeast llvmPackages.clang.version "10.0"
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -93,7 +94,7 @@
 , withOomd ? true
 , withPCRE2 ? true
 , withPolkit ? true
-, withPortabled ? true
+, withPortabled ? !stdenv.hostPlatform.isMusl
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
@@ -121,7 +122,7 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.5";
+  version = "251.8";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -138,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-2MEmvFT1D+9v8OazBwjnKc7i/x7i196Eoi8bODk1cM4=";
+    sha256 = "sha256-kao0xJwwJc4zUyaK5yxyGip4E6ADak98iVv5E8Hw0zk=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -242,12 +243,14 @@ stdenv.mkDerivation {
           opt = condition: pkg: if condition then pkg else null;
         in
         [
-          # bpf compilation support
-          { name = "libbpf.so.0"; pkg = opt withLibBPF libbpf; }
+          # bpf compilation support. We use libbpf 1 now.
+          { name = "libbpf.so.1"; pkg = opt withLibBPF libbpf; }
+          { name = "libbpf.so.0"; pkg = null; }
 
           # We did never provide support for libxkbcommon & qrencode
           { name = "libxkbcommon.so.0"; pkg = null; }
           { name = "libqrencode.so.4"; pkg = null; }
+          { name = "libqrencode.so.3"; pkg = null; }
 
           # We did not provide libpwquality before so it is safe to disable it for
           # now.
@@ -333,6 +336,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     [
       pkg-config
+      makeBinaryWrapper
       gperf
       ninja
       meson
@@ -402,6 +406,7 @@ stdenv.mkDerivation {
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     "-Dtime-epoch=${releaseTimestamp}"
 
+    "-Dmode=release"
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
@@ -668,7 +673,14 @@ stdenv.mkDerivation {
   preFixup = lib.optionalString withEfi ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
-  postFixup = lib.optionalString withEfi ''
+
+  # Wrap in the correct path for LUKS2 tokens.
+  postFixup = lib.optionalString withCryptsetup ''
+    for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
+    done
+  '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 

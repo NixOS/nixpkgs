@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  # have to link to static gcc lib on aarch64-linux explicitly
+  NIX_LDFLAGS = lib.optionalString (with stdenv.targetPlatform; isAarch64 && isLinux) "-lgcc";
+
   buildPhase = ''
     ./build libraries all
     ./build man

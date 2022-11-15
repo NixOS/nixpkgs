@@ -37,7 +37,7 @@ assert langGo -> langCC;
 assert langAda -> gnatboot != null;
 
 # threadsCross is just for MinGW
-assert threadsCross != null -> stdenv.targetPlatform.isWindows;
+assert threadsCross != {} -> stdenv.targetPlatform.isWindows;
 
 # profiledCompiler builds inject non-determinism in one of the compilation stages.
 # If turned on, we can't provide reproducible builds anymore
@@ -76,7 +76,7 @@ let majorVersion = "11";
       })
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -187,7 +187,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ;
 
-  depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
+  depsTargetTarget = optional (!crossStageStatic && threadsCross != {} && threadsCross.package != null) threadsCross.package;
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
@@ -207,7 +207,7 @@ stdenv.mkDerivation ({
       lib
       stdenv
       targetPackages
-      crossStageStatic libcCross
+      crossStageStatic libcCross threadsCross
       version
 
       gmp mpfr libmpc isl

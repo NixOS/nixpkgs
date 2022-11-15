@@ -42,8 +42,6 @@ in stdenv.mkDerivation rec {
     ./gcloud-path.patch
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
-    # Try to use cloud_sql_proxy from SDK only if it actually exists, otherwise, search for one in PATH
-    ./cloud_sql_proxy_path.patch
   ];
 
   installPhase = ''

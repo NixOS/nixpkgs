@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     ./add-Cargo.lock.patch
   ];
   cargoSha256 = "sha256-1tW5TOap5MstxTXAFij3IB8TIpI+FryEX9TXlVXjRl4=";
-  cargoBuildFlags = "-p rustc-demangle-capi";
+  cargoBuildFlags = [ "-p" "rustc-demangle-capi" ];
   postInstall = ''
     mkdir -p $out/lib
     cp target/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc_demangle.so $out/lib

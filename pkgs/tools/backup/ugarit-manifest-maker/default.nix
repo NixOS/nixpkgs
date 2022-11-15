@@ -27,5 +27,6 @@ in with pkgs; eggDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

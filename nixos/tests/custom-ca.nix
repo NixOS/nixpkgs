@@ -191,5 +191,5 @@ in
   firefox = { error = "Security Risk"; };
   chromium = { error = "not private"; };
   qutebrowser = { args = "-T"; error = "Certificate error"; };
-  midori = { error = "Security"; };
+  midori = { args = "-p"; error = "Security"; };
 }

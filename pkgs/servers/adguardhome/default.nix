@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
+    schema_version = 14;
     tests.adguardhome = nixosTests.adguardhome;
   };
 

@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optional (component == "sqlite") [
+  ] ++ lib.optionals (component == "sqlite") [
     # link against packaged, not vendored libsqlite3
     "GNATCOLL_SQLITE=external"
   ];

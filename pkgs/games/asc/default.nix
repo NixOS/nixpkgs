@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
-, boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkg-config, zlib, zip, bzip2
+, boost, expat, freetype, libjpeg, wxGTK32, lua, perl, pkg-config, zlib, zip, bzip2
 , libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
-    freetype libjpeg wxGTK lua perl zlib zip bzip2 libpng
+    freetype libjpeg wxGTK32 lua perl zlib zip bzip2 libpng
     libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 

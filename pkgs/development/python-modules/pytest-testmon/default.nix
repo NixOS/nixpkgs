@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "1.3.7";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tjdu4mEslRl7QGnNGg7ATaQCipwF5/XSpFPq3E3A/Vo=";
+    hash = "sha256-PVLXOBTo2xnMBM4wyvrmGgyztW0ajGxMU+oIhrjZiw8=";
   };
 
   buildInputs = [

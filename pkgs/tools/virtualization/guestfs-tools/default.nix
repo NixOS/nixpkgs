@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, bash-completion
 , bison
 , cdrkit
 , cpio
@@ -8,12 +9,13 @@
 , getopt
 , hivex
 , jansson
-, libguestfs
+, libguestfs-with-appliance
 , libvirt
 , libxml2
 , makeWrapper
 , ncurses
 , ocamlPackages
+, openssl
 , pcre2
 , perlPackages
 , pkg-config
@@ -56,25 +58,35 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
+    bash-completion
     hivex
     jansson
-    libguestfs
+    libguestfs-with-appliance
     libvirt
     libxml2
     ncurses
+    openssl
     pcre2
     xz
   ];
 
-  enableParallelBuilding = true;
-
-  preBuild = ''
-    patchShebangs .
+  preConfigure = ''
+    patchShebangs ocaml-dep.sh.in ocaml-link.sh.in run.in
   '';
+
+  makeFlags = [
+    "LIBGUESTFS_PATH=${libguestfs-with-appliance}/lib/guestfs"
+  ];
+
+  installFlags = [
+    "BASH_COMPLETIONS_DIR=${placeholder "out"}/share/bash-completion/completions"
+  ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/virt-win-reg \
-      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs ]}
+      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';
 
   meta = with lib; {

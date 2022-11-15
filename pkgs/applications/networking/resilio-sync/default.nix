@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ... }:
+{ lib, stdenv, fetchurl, libxcrypt, ... }:
 
 stdenv.mkDerivation rec {
   pname = "resilio-sync";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -D rslsync "$out/bin/rslsync"
     patchelf \
       --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} "$out/bin/rslsync"
+      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc libxcrypt ]} "$out/bin/rslsync"
   '';
 
   meta = with lib; {

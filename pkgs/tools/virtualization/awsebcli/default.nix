@@ -16,7 +16,6 @@ let
       self = localPython;
       packageOverrides = self: super: {
         cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
-        colorama = changeVersion super.colorama.overridePythonAttrs "0.4.3" "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         future = changeVersion super.future.overridePythonAttrs "0.16.0" "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
         semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
@@ -52,6 +51,7 @@ with localPython.pkgs; buildPythonApplication rec {
       --replace "requests>=2.20.1,<=2.26" "requests==2.28.1" \
       --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<1.27.76" \
       --replace "pathspec==0.9.0" "pathspec>=0.10.0,<0.11.0" \
+      --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
       --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<2.1.0"
   '';
 

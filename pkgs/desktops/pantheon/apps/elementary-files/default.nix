@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -29,24 +28,15 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.4";
+  version = "6.2.0";
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Fix terminal critical warnings and possible crash when removing bookmark
-    # https://github.com/elementary/files/pull/2062
-    (fetchpatch {
-      url = "https://github.com/elementary/files/commit/daa5ab244b45aafdd7be49eb0bd6f052ded5b5a7.patch";
-      sha256 = "sha256-crGvbo9Ye9656cOy6YqNreMLE2pEMO0Rg8oz81OfJkw=";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-3j0b+hExUe6OBmEHQVmd2uBkbOGxMdpgDmymuCiph80=";
+    sha256 = "sha256-V1otkc1Og7J/A68j+4MrJzOtAH6PHSfj5fSpjKhhwo4=";
   };
 
   nativeBuildInputs = [

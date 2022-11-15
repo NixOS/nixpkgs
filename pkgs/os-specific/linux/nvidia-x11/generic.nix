@@ -101,7 +101,7 @@ let
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
-    disallowedReferences = optional (!libsOnly) [ kernel.dev ];
+    disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 
     passthru = {
       open = mapNullable (hash: callPackage ./open.nix {
@@ -127,7 +127,8 @@ let
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
       maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-      inherit broken;
+      # proprietary driver currently does not support X86_KERNEL_IBT, which is scheduled to be added in linux 6.2
+      broken = broken || (kernel != null && kernel.kernelAtLeast "6.2");
     };
   };
 

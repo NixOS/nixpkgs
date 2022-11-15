@@ -1,5 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
-, cairo
+{ stdenv, lib, meson, ninja, fetchurl, cairo
 , girara
 , gtk-mac-integration
 , gumbo

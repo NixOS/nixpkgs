@@ -433,6 +433,8 @@ in {
         componentsUsingBluetooth = [
           # Components that require the AF_BLUETOOTH address family
           "august"
+          "august_ble"
+          "airthings_ble"
           "bluemaestro"
           "bluetooth"
           "bluetooth_le_tracker"
@@ -445,15 +447,19 @@ in {
           "govee_ble"
           "homekit_controller"
           "inkbird"
+          "keymitt_ble"
           "led_ble"
           "melnor"
           "moat"
+          "oralb"
           "qingping"
           "sensorpro"
           "sensorpush"
+          "snooz"
           "switchbot"
           "thermobeacon"
           "thermopro"
+          "tilt_ble"
           "xiaomi_ble"
           "yalexs_ble"
         ];

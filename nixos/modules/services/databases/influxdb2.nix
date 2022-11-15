@@ -40,6 +40,7 @@ in
       after = [ "network.target" ];
       environment = {
         INFLUXD_CONFIG_PATH = configFile;
+        ZONEINFO = "${pkgs.tzdata}/share/zoneinfo";
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/influxd --bolt-path \${STATE_DIRECTORY}/influxd.bolt --engine-path \${STATE_DIRECTORY}/engine";

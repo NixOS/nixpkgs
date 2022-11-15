@@ -9,25 +9,34 @@ in
 
 nodeComposition.package.override rec {
   pname = "open-stage-control";
-  inherit (nodeComposition.args) version;
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-q18pRtsHfme+OPmi3LhJDK1AdpfkwhoE9LA2rNenDtY=";
+    hash = "sha256-AXdPxTauy2rMRMdfUjkfTjbNDgOKmoiGUeeLak0wu84=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
+    nodejs
+    python3
   ];
 
   buildInputs = [
     python3.pkgs.python-rtmidi
   ];
 
-  dontNpmInstall = true;
+  doInstallCheck = true;
+
+  preRebuild = ''
+    # remove electron to prevent building since nixpkgs electron is used instead
+    rm -r node_modules/electron
+  '';
 
   postInstall = ''
     # build assets
@@ -48,7 +57,6 @@ nodeComposition.package.override rec {
   installCheckPhase = ''
     XDG_CONFIG_HOME="$(mktemp -d)" $out/bin/open-stage-control --help
   '';
-  doInstallCheck = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -61,6 +69,8 @@ nodeComposition.package.override rec {
       startupWMClass = "open-stage-control";
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";

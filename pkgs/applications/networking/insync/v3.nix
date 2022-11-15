@@ -3,8 +3,6 @@
 , fetchurl
 , makeWrapper
 , dpkg
-, glibc
-, glib
 , libxcb
 , libGL
 , nss

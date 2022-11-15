@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.9.2";
 
   src = fetchurl {
-    url = "http://s48.org/${version}/scheme48-${version}.tgz";
+    url = "https://s48.org/${version}/scheme48-${version}.tgz";
     sha256 = "1x4xfm3lyz2piqcw1h01vbs1iq89zq7wrsfjgh3fxnlm1slj2jcw";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://s48.org/";
+    homepage = "https://s48.org/";
     description = "Scheme 48 interpreter for R5RS";
     platforms = platforms.unix;
     license = licenses.bsd3;

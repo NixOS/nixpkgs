@@ -64,7 +64,6 @@
 , systemd
 , taglib
 , unzip
-, xlibsWrapper
 , xorg
 , zlib
 , chromecastSupport ? true, libmicrodns, protobuf
@@ -150,10 +149,10 @@ stdenv.mkDerivation rec {
     srt
     systemd
     taglib
-    xlibsWrapper
     zlib
   ]
   ++ (with xorg; [
+    libSM
     libXpm
     libXv
     libXvMC

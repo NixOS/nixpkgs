@@ -4,7 +4,6 @@
 , qmake
 , mkDerivation
 , qtsvg
-, libxml2
 , postgresql
 }:
 

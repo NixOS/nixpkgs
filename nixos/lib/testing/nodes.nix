@@ -101,7 +101,7 @@ in
     nodesCompat =
       mapAttrs
         (name: config: config // {
-          config = lib.warn
+          config = lib.warnIf (lib.isInOldestRelease 2211)
             "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
             config;
         })

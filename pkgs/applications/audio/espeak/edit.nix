@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, unzip, portaudio, wxGTK, sox }:
+{ lib, stdenv, fetchurl, pkg-config, unzip, portaudio, wxGTK32, sox }:
 
 stdenv.mkDerivation rec {
   pname = "espeakedit";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ portaudio wxGTK ];
+  buildInputs = [ portaudio wxGTK32 ];
 
   # TODO:
   # Uhm, seems like espeakedit still wants espeak-data/ in $HOME, even thought
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     ./espeakedit-configurable-sox-path.patch
     ./espeakedit-configurable-path-espeak-data.patch
     ./espeakedit-gcc6.patch
+    ./espeakedit-wxgtk30.patch
   ];
 
   postPatch = ''

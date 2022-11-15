@@ -7,7 +7,7 @@
 , gobject-introspection
 , intltool, wrapGAppsHook, glib
 , librsvg
-, libayatana-appindicator-gtk3
+, libayatana-appindicator
 , libpulseaudio
 , keybinder3
 , gdk-pixbuf
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     gobject-introspection
     librsvg
-    libayatana-appindicator-gtk3
+    libayatana-appindicator
     libpulseaudio
     keybinder3
   ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 , rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
 , fullBuild ? false

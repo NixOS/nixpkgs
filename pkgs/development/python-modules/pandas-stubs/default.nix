@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
@@ -101,6 +102,8 @@ buildPythonPackage rec {
     "test_dummies"
     "test_from_dummies_args"
     "test_rolling_step_method"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_plotting" # Fatal Python error: Illegal instruction
   ];
 
   pythonImportsCheck = [

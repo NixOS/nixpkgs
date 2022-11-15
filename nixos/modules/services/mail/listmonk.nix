@@ -202,7 +202,7 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
         SystemCallArchitecture = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         ProtectDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;

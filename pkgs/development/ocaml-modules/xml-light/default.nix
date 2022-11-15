@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-xml-light";
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     cp -vai doc $out/share/
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Minimal Xml parser and printer for OCaml";

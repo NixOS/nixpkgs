@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
-, coreutils, git, gnused, nix, nixfmt }:
+{ lib, stdenv, fetchFromGitHub, writeScript, common-updater-scripts
+, coreutils, git, gnused, nix }:
 
 let
   owner = "scopatz";

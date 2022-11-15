@@ -2,7 +2,7 @@
 
 buildDunePackage {
   pname = "ringo-lwt";
-  inherit (ringo) version src doCheck useDune2;
+  inherit (ringo) version src doCheck;
 
   minimalOCamlVersion = "4.08";
 

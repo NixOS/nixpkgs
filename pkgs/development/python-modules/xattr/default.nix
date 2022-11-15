@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "0.9.9";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09cb7e1efb3aa1b4991d6be4eb25b73dc518b4fe894f0915f5b0dcede972f346";
+    sha256 = "sha256-ciZS0qUyTheJHEFtTHbZHM+YgwqPUWoN6FM86GfzrK8=";
   };
 
   propagatedBuildInputs = [ cffi ];

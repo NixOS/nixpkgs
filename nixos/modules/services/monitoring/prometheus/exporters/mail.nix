@@ -33,7 +33,7 @@ let
       '';
     };
     port = mkOption {
-      type = types.int;
+      type = types.port;
       example = 587;
       description = lib.mdDoc ''
         Port to use for SMTP.

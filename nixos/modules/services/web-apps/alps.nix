@@ -54,7 +54,7 @@ in {
     smtps = {
       port = mkOption {
         type = types.port;
-        default = 445;
+        default = 465;
         description = lib.mdDoc ''
           The SMTPS server port.
         '';

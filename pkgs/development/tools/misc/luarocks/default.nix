@@ -1,23 +1,30 @@
-{lib, stdenv, fetchFromGitHub, buildPackages
+{ lib
+, stdenv
+, fetchFromGitHub
 , fetchpatch
-, curl, makeWrapper, which, unzip
+, curl
+, makeWrapper
+, which
+, unzip
 , lua
-# for 'luarocks pack'
+, file
+, nix-prefetch-git
+  # for 'luarocks pack'
 , zip
 , nix-update-script
-# some packages need to be compiled with cmake
+  # some packages need to be compiled with cmake
 , cmake
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "luarocks";
   version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v${version}";
+    rev = "v${self.version}";
     sha256 = "sha256-G6HDap3pspeQtGDBq+ukN7kftDaT/CozMVdYM60F6HI=";
   };
 
@@ -67,12 +74,16 @@ stdenv.mkDerivation rec {
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
-              --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
+              --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix PATH : ${lib.makeBinPath ([ unzip ] ++
+                lib.optionals (self.pname == "luarocks-nix") [ file nix-prefetch-git ])}
         }
     done
   '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd luarocks --bash <($out/bin/luarocks completion bash)
-    installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
+    installShellCompletion --cmd luarocks \
+      --bash <($out/bin/luarocks completion bash) \
+      --fish <($out/bin/luarocks completion fish) \
+      --zsh <($out/bin/luarocks completion zsh)
   '';
 
   propagatedBuildInputs = [ zip unzip cmake ];
@@ -94,15 +105,15 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = pname;
+      attrPath = self.pname;
     };
   };
 
   meta = with lib; {
     description = "A package manager for Lua";
-    license = licenses.mit ;
-    maintainers = with maintainers; [raskin teto];
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin teto ];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
   };
-}
+})

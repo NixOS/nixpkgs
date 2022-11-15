@@ -61,7 +61,10 @@ let self = stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gmplib.org/";
     description = "GNU multiple precision arithmetic library";
-    license = licenses.gpl3Plus;
+    license = with licenses; [
+      lgpl3Only
+      gpl2Only
+    ];
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating

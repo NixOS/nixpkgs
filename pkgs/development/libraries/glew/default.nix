@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, libXmu, libXi, libXext
 , OpenGL
 , enableEGL ? false
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libXmu libXi libXext ];
   propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";

@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.4.0.1";
+  version = "1.4.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hnaEnVf7giuHKIVtut6/OGf4nuR6DsR6IARdAR9DFYI=";
+    sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
+      freeze = true;
     };
 
     tests = {

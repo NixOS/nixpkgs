@@ -46,7 +46,6 @@
 }:
 let
   testBackends = [
-    "dask"
     "datafusion"
     "duckdb"
     "pandas"

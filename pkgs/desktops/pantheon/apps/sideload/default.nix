@@ -6,28 +6,26 @@
 , flatpak
 , gettext
 , glib
-, granite
-, gtk3
-, libgee
-, libhandy
+, granite7
+, gtk4
 , meson
 , ninja
 , pkg-config
 , python3
 , vala
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0abpcawmmv5mgzk2i5n9rlairmjr2v9rg9b8c9g7xa085s496bi9";
+    sha256 = "sha256-iyqKhyBU9OLlPLy5ZD/GxoOzprbm7uKBkFzjUUoQc5g=";
   };
 
   nativeBuildInputs = [
@@ -38,16 +36,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     flatpak
     glib
-    granite
-    gtk3
-    libgee
-    libhandy
+    granite7
+    gtk4
     libxml2
   ];
 

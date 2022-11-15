@@ -3,8 +3,7 @@
 , coreutils
 , fetchFromGitHub
 , resholve
-, xauth
-, xorgserver
+, xorg
 }:
 
 resholve.mkDerivation rec {
@@ -26,11 +25,11 @@ resholve.mkDerivation rec {
       interpreter = "${bash}/bin/sh";
       inputs = [
         coreutils
-        xauth
-        xorgserver
+        xorg.xauth
+        xorg.xorgserver
       ];
       execer = [
-        "cannot:${xorgserver}/bin/Xorg"
+        "cannot:${xorg.xorgserver}/bin/Xorg"
       ];
     };
   };

@@ -5,7 +5,7 @@
 }:
 let
   # Poetry2nix version
-  version = "1.34.1";
+  version = "1.36.0";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -159,11 +159,14 @@ lib.makeScope pkgs.newScope (self: {
       };
 
       poetryLock = readTOML poetrylock;
+
+      # Lock file version 1.1 files
       lockFiles =
         let
           lockfiles = lib.getAttrFromPath [ "metadata" "files" ] poetryLock;
         in
         lib.listToAttrs (lib.mapAttrsToList (n: v: { name = normalizePackageName n; value = v; }) lockfiles);
+
       evalPep508 = mkEvalPep508 python;
 
       # Filter packages by their PEP508 markers & pyproject interpreter version
@@ -192,13 +195,14 @@ lib.makeScope pkgs.newScope (self: {
                     pkgMeta // {
                       inherit pwd preferWheels;
                       source = pkgMeta.source or null;
-                      files = lockFiles.${normalizedName};
+                      # Default to files from lock file version 2.0 and fall back to 1.1
+                      files = pkgMeta.files or lockFiles.${normalizedName};
                       pythonPackages = self;
 
                       sourceSpec = (
                         (normalizePackageSet pyProject.tool.poetry.dependencies or { }).${normalizedName}
                           or (normalizePackageSet pyProject.tool.poetry.dev-dependencies or { }).${normalizedName}
-                          or (normalizePackageSet pyProject.tool.poetry.group.dev.dependencies { }).${normalizedName} # Poetry 1.2.0+
+                          or (normalizePackageSet pyProject.tool.poetry.group.dev.dependencies or { }).${normalizedName} # Poetry 1.2.0+
                           or { }
                       );
                     }
@@ -219,9 +223,6 @@ lib.makeScope pkgs.newScope (self: {
           [
             (
               self: super:
-                let
-                  hooks = self.callPackage ./hooks { };
-                in
                 {
                   mkPoetryDep = self.callPackage ./mk-poetry-dep.nix {
                     inherit lib python poetryLib evalPep508;
@@ -232,8 +233,6 @@ lib.makeScope pkgs.newScope (self: {
                   poetry = poetryPkg;
 
                   __toPluginAble = toPluginAble self;
-
-                  inherit (hooks) pipBuildHook removePathDependenciesHook removeGitDependenciesHook poetry2nixFixupHook wheelUnpackHook;
                 } // lib.optionalAttrs (! super ? setuptools-scm) {
                   # The canonical name is setuptools-scm
                   setuptools-scm = super.setuptools_scm;
@@ -371,6 +370,8 @@ lib.makeScope pkgs.newScope (self: {
       };
       py = poetryPython.python;
 
+      hooks = py.pkgs.callPackage ./hooks { };
+
       inherit (poetryPython) pyProject;
       specialAttrs = [
         "overrides"
@@ -387,8 +388,8 @@ lib.makeScope pkgs.newScope (self: {
       app = py.pkgs.buildPythonPackage (
         passedAttrs // inputAttrs // {
           nativeBuildInputs = inputAttrs.nativeBuildInputs ++ [
-            py.pkgs.removePathDependenciesHook
-            py.pkgs.removeGitDependenciesHook
+            hooks.removePathDependenciesHook
+            hooks.removeGitDependenciesHook
           ];
         } // {
           pname = normalizePackageName pyProject.tool.poetry.name;

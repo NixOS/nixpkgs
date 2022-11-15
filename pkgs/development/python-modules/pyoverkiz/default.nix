@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.5.5";
+  version = "1.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5HoCoVgq1pg+VxD324Fijosk2ln4sGE0oWpemFVAsfc=";
+    hash = "sha256-TWX/8O57gNqkm1ZqreZfy1AQ6UcgP4FODDpXteqO5q8=";
   };
 
   postPatch = ''

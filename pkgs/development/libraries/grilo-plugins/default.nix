@@ -7,9 +7,8 @@
 , gettext
 , gperf
 , sqlite
-, librest
 , libarchive
-, libsoup
+, libsoup_3
 , gnome
 , libxml2
 , lua5_3
@@ -31,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.14";
+  version = "0.3.15";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "aGhEs07HOySTH/bMT2Az8AcpR6bbYKzcf7Pq8Velgcg=";
+    sha256 = "hRjD2VT5MJXZVWJKBEzhanNFUy+BHSmdv6HhFM/rqzM=";
   };
 
   patches = [
@@ -65,15 +64,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    libgdata
+    # libgdata
     lua5_3
     liboauth
     sqlite
     gnome-online-accounts
     totem-pl-parser
-    librest
     libarchive
-    libsoup
+    libsoup_3
     gmime
     gom
     json-glib

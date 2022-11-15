@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , cython
 , fetchFromGitHub
+, libiconv
 , pandas
 , python
 , pythonOlder
@@ -29,6 +31,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   propagatedBuildInputs = [

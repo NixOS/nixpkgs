@@ -1,0 +1,148 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Thomas Lamprecht <thomas@lamprecht.org>
+Date: Wed, 18 May 2022 08:41:14 +0200
+Subject: [PATCH] re-route dependencies not available on crates.io to git repos
+
+Signed-off-by: Thomas Lamprecht <thomas@lamprecht.org>
+---
+ Cargo.toml    | 112 +++++++-------------------------------------------
+ 1 file changed, 15 insertions(+), 97 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 41980292..e7daaad5 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -25,94 +25,12 @@ members = [
+     "pbs-config",
+     "pbs-datastore",
+     "pbs-fuse-loop",
+-    "proxmox-rest-server",
+-    "proxmox-rrd",
+-    "pbs-tape",
+     "pbs-tools",
+ 
+-    "proxmox-backup-banner",
+     "proxmox-backup-client",
+-    "proxmox-file-restore",
+-    "proxmox-restore-daemon",
+     "pxar-bin",
+ ]
+ 
+-[lib]
+-name = "proxmox_backup"
+-path = "src/lib.rs"
+-
+-[dependencies]
+-apt-pkg-native = "0.3.2"
+-base64 = "0.13"
+-bitflags = "1.2.1"
+-bytes = "1.0"
+-cidr = "0.2.1"
+-crc32fast = "1"
+-endian_trait = { version = "0.6", features = ["arrays"] }
+-flate2 = "1.0"
+-anyhow = "1.0"
+-thiserror = "1.0"
+-futures = "0.3"
+-h2 = { version = "0.3", features = [ "stream" ] }
+-handlebars = "3.0"
+-hex = "0.4.3"
+-http = "0.2"
+-hyper = { version = "0.14", features = [ "full" ] }
+-lazy_static = "1.4"
+-libc = "0.2"
+-log = "0.4.17"
+-nix = "0.19.1"
+-num-traits = "0.2"
+-once_cell = "1.3.1"
+-openssl = "0.10.38" # currently patched!
+-pam = "0.7"
+-pam-sys = "0.5"
+-percent-encoding = "2.1"
+-regex = "1.5.5"
+-rustyline = "7"
+-serde = { version = "1.0", features = ["derive"] }
+-serde_json = "1.0"
+-siphasher = "0.3"
+-syslog = "4.0"
+-tokio = { version = "1.6", features = [ "fs", "io-util", "io-std", "macros", "net", "parking_lot", "process", "rt", "rt-multi-thread", "signal", "time" ] }
+-tokio-openssl = "0.6.1"
+-tokio-stream = "0.1.0"
+-tokio-util = { version = "0.6", features = [ "codec", "io" ] }
+-tower-service = "0.3.0"
+-udev = "0.4"
+-url = "2.1"
+-#valgrind_request = { git = "https://github.com/edef1c/libvalgrind_request", version = "1.1.0", optional = true }
+-walkdir = "2"
+-xdg = "2.2"
+-nom = "5.1"
+-crossbeam-channel = "0.5"
+-
+-# Used only by examples currently:
+-zstd = { version = "0.6", features = [ "bindgen" ] }
+-
+-pathpatterns = "0.1.2"
+-pxar = { version = "0.10.1", features = [ "tokio-io" ] }
+-
+-proxmox-http = { version = "0.6.1", features = [ "client", "http-helpers", "websocket" ] }
+-proxmox-io = "1"
+-proxmox-lang = "1.1"
+-proxmox-router = { version = "1.2.2", features = [ "cli" ] }
+-proxmox-schema = { version = "1.3.1", features = [ "api-macro" ] }
+-proxmox-section-config = "1"
+-proxmox-tfa = { version = "2", features = [ "api", "api-types" ] }
+-proxmox-time = "1.1.2"
+-proxmox-uuid = "1"
+-proxmox-serde = "0.1"
+-proxmox-shared-memory = "0.2"
+-proxmox-sys = { version = "0.2", features = [ "sortable-macro" ] }
+-proxmox-compression = "0.1"
+-
+-
+-proxmox-acme-rs = "0.4"
+-proxmox-apt = "0.8.0"
+-proxmox-async = "0.4"
+-proxmox-openid = "0.9.0"
+-
+ pbs-api-types = { path = "pbs-api-types" }
+ pbs-buildcfg = { path = "pbs-buildcfg" }
+ pbs-client = { path = "pbs-client" }
+@@ -126,22 +44,23 @@ pbs-tape = { path = "pbs-tape" }
+ # Local path overrides
+ # NOTE: You must run `cargo update` after changing this for it to take effect!
+ [patch.crates-io]
+-#proxmox = { path = "../proxmox/proxmox" }
+-#proxmox-async = { path = "../proxmox/proxmox-async" }
+-#proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
+-#proxmox-fuse = { path = "../proxmox-fuse" }
+-#proxmox-http = { path = "../proxmox/proxmox-http" }
+-#proxmox-io = { path = "../proxmox/proxmox-io" }
+-#proxmox-lang = { path = "../proxmox/proxmox-lang" }
+-#proxmox-router = { path = "../proxmox/proxmox-router" }
+-#proxmox-schema = { path = "../proxmox/proxmox-schema" }
+-#proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
+-#proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
+-#proxmox-sys = { path = "../proxmox/proxmox-sys" }
++proxmox-async = { path = "../proxmox/proxmox-async" }
++proxmox-compression = { path = "../proxmox/proxmox-compression" }
++proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
++proxmox-fuse = { path = "../proxmox-fuse" }
++proxmox-http = { path = "../proxmox/proxmox-http" }
++proxmox-io = { path = "../proxmox/proxmox-io" }
++proxmox-lang = { path = "../proxmox/proxmox-lang" }
++proxmox-router = { path = "../proxmox/proxmox-router" }
++proxmox-schema = { path = "../proxmox/proxmox-schema" }
++proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
++proxmox-serde = { path = "../proxmox/proxmox-serde" }
++proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
++proxmox-sys = { path = "../proxmox/proxmox-sys" }
+ #proxmox-tfa = { path = "../proxmox/proxmox-tfa" }
+-#proxmox-time = { path = "../proxmox/proxmox-time" }
+-#proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
+-#pxar = { path = "../pxar" }
++proxmox-time = { path = "../proxmox/proxmox-time" }
++proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
++pxar = { path = "../pxar" }
+ 
+ [features]
+ default = []

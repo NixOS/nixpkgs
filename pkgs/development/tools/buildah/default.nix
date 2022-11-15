@@ -46,7 +46,7 @@ buildGoModule rec {
     runHook preBuild
     patchShebangs .
     make bin/buildah
-    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    make -C docs GOMD2MAN="go-md2man"
     runHook postBuild
   '';
 

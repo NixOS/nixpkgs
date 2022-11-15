@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://electricsheep.org/";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = licenses.gpl1;
+    license = licenses.gpl2Only;
   };
 }

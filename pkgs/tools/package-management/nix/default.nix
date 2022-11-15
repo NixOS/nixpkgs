@@ -50,7 +50,13 @@ in lib.makeExtensible (self: {
 
   nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
-  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
+  # This is the last version of nix where https://github.com/NixOS/nix/issues/6572
+  # is not an unsolved breaking bug. Please keep it until the issue is fixed
+  # and in latest stable nix.
+  nix_2_6 = common {
+    version = "2.6.1";
+    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
+  };
 
   nix_2_7 = common {
     version = "2.7.0";

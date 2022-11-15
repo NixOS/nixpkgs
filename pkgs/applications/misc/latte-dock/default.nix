@@ -1,24 +1,27 @@
-{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchurl
-, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, kcrash, knewstuff }:
+{ mkDerivation, lib, cmake, xorg, plasma-framework, plasma-wayland-protocols, fetchFromGitLab
+, extra-cmake-modules, karchive, kwindowsystem, qtx11extras, qtwayland, kcrash, knewstuff, wayland }:
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.10.4";
+  version = "unstable-2022-09-06";
 
-  src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "XRop+MNcbeCcbnL2LM1i67QvMudW3CjWYEPLkT/qbGM=";
-    name = "${pname}-${version}.tar.xz";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "plasma";
+    repo = "latte-dock";
+    rev = "cd36798a61a37652eb549d7dfcdf06d2028eddc4";
+    sha256 = "sha256-X2PzI2XJje4DpPh7gTtYnMIwerR1IDY53HImvEtFmF4=";
   };
 
-  buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
+  buildInputs = [ plasma-framework plasma-wayland-protocols qtwayland xorg.libpthreadstubs xorg.libXdmcp xorg.libSM wayland ];
 
   nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
     qtx11extras kcrash knewstuff ];
 
   patches = [
-    ./0001-close-user-autostart.patch
+    ./0001-Disable-autostart.patch
   ];
+
   fixupPhase = ''
     mkdir -p $out/etc/xdg/autostart
     cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
@@ -26,7 +29,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";
-    homepage = "https://github.com/psifidotos/Latte-Dock";
+    homepage = "https://invent.kde.org/plasma/latte-dock";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.ysndr ];

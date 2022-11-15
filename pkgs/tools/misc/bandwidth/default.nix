@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sed -i 's,ar ,$(AR) ,g' OOC/Makefile
     # Remove unnecessary -m32 for 32-bit targets
     sed -i 's,-m32,,g' OOC/Makefile
+    # Replace arm64 with aarch64
+    sed -i 's#,arm64#,aarch64#g' Makefile
     # Fix wrong comment character
     sed -i 's,# 32,; 32,g' routines-x86-32bit.asm
     # Fix missing symbol exports for macOS clang

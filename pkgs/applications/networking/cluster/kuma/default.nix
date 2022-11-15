@@ -16,7 +16,7 @@
 
 buildGoModule rec {
   inherit pname ;
-  version = "1.8.0";
+  version = "1.8.1";
   tags = lib.optionals enableGateway ["gateway"];
   vendorSha256 = "sha256-69uXHvpQMeFwQbejMpfQPS8DDXJyVsnn59WUEJpSeng=";
 
@@ -24,7 +24,7 @@ buildGoModule rec {
     owner = "kumahq";
     repo = "kuma";
     rev = version;
-    sha256 = "sha256-5459Fl7AbzuNGIOfDpVYlhvzLzfLT2Ckhr5omxZr76w=";
+    sha256 = "sha256-hNfgiMX3aMb8yjXjFKz73MczOeJyOI3Tna/NRSJBSzs=";
   };
 
   doCheck = false;

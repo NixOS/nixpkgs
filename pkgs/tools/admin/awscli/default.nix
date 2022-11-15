@@ -7,14 +7,6 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      # TODO: https://github.com/aws/aws-cli/pull/5712
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
-        };
-      });
       pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
         version = "5.4.1";
         src = fetchFromGitHub {
@@ -30,6 +22,7 @@ let
         '';
       });
     };
+    self = py;
   };
 
 in
@@ -46,6 +39,7 @@ with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
+      --replace "colorama>=0.2.5,<0.4.5" "colorama>=0.2.5,<0.5" \
       --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
   '';
 

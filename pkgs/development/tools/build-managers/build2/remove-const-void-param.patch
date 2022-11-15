@@ -1,11 +1,11 @@
---- build2-0.14.0_/libbuild2/cc/pkgconfig.cxx	2022-10-04 14:18:24.864604892 -0400
-+++ build2-0.14.0/libbuild2/cc/pkgconfig.cxx	2022-10-04 14:20:58.153254961 -0400
-@@ -186,7 +186,7 @@
-     ;
-
-   static bool
--  pkgconf_error_handler (const char* msg, const pkgconf_client_t*, const void*)
-+  pkgconf_error_handler (const char* msg, const pkgconf_client_t*, void*)
-   {
-     error << runtime_error (msg); // Sanitize the message.
-     return true;
+--- a/libbuild2/cc/pkgconfig-libpkgconf.cxx
++++ b/libbuild2/cc/pkgconfig-libpkgconf.cxx
+@@ -84,7 +84,7 @@ namespace build2
+     static bool
+     pkgconf_error_handler (const char* msg,
+                            const pkgconf_client_t*,
+-                           const void*)
++                           void*)
+     {
+       error << runtime_error (msg); // Sanitize the message (trailing dot).
+       return true;

@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = lib.optional enablePython [
+  propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
+  checkInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src

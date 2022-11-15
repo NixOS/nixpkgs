@@ -1670,9 +1670,9 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 
 ```nix
   nixpkgs.config.packageOverrides = super: {
-    python = super.python.override {
+    python3 = super.python3.override {
       packageOverrides = python-self: python-super: {
-        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        twisted = python-super.twisted.overridePythonAttrs (oldAttrs: {
           src = super.fetchPypi {
             pname = "twisted";
             version = "19.10.0";

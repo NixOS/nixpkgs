@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libjpeg
     tremor
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     pango

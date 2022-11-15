@@ -6,12 +6,14 @@
 , withMediaPlayback  ? true
 , backend            ? "webengine"
 , pipewireSupport    ? stdenv.isLinux
-, pipewire_0_2
+, pipewire
 , qtwayland
 , mkDerivationWith ? null
 , qtbase ? null
 , qtwebengine ? null
 , wrapGAppsHook ? null
+, enableWideVine ? false
+, widevine-cdm
 }: let
   isQt6 = mkDerivationWith == null;
 
@@ -75,7 +77,8 @@ buildPythonApplication {
   nativeBuildInputs = [
     wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-  ];
+  ]
+    ++ lib.optional isQt6 python3Packages.pygments;
 
   propagatedBuildInputs = with python3Packages; ([
     pyyaml backendPackage jinja2 pygments
@@ -97,6 +100,10 @@ buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
+  preConfigure = lib.optionalString isQt6 ''
+    python scripts/asciidoc2html.py
+  '';
+
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
@@ -105,29 +112,20 @@ buildPythonApplication {
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
 
-  postBuild = ''
-    a2x -f manpage doc/qutebrowser.1.asciidoc
+  installPhase = ''
+    runHook preInstall
+
+    make -f misc/Makefile \
+      PYTHON=${python3}/bin/python3 \
+      PREFIX=. \
+      DESTDIR="$out" \
+      DATAROOTDIR=/share \
+      install
+
+    runHook postInstall
   '';
 
   postInstall = ''
-    install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
-    install -Dm644 misc/org.qutebrowser.qutebrowser.desktop \
-        "$out/share/applications/org.qutebrowser.qutebrowser.desktop"
-
-    # Install icons
-    for i in 16 24 32 48 64 128 256 512; do
-        install -Dm644 "qutebrowser/icons/qutebrowser-''${i}x''${i}.png" \
-            "$out/share/icons/hicolor/''${i}x''${i}/apps/qutebrowser.png"
-    done
-    install -Dm644 ${if isQt6 then "qutebrowser/" else ""}icons/qutebrowser.svg \
-        "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
-
-    # Install scripts
-    sed -i "s,/usr/bin/,$out/bin/,g" scripts/open_url_in_instance.sh
-    ${if isQt6 then "rm -rf scripts/{testbrowser,dev}" else ""}
-    install -Dm755 -t "$out/share/qutebrowser/scripts/" $(find scripts -type f)
-    install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
-
     # Patch python scripts
     buildPythonPath "$out $propagatedBuildInputs"
     scripts=$(grep -rl python "$out"/share/qutebrowser/{user,}scripts/)
@@ -137,7 +135,7 @@ buildPythonApplication {
   '';
 
   preFixup = let
-    libPath = lib.makeLibraryPath [ pipewire_0_2 ];
+    libPath = lib.makeLibraryPath [ pipewire ];
   in
     ''
     makeWrapperArgs+=(
@@ -146,14 +144,15 @@ buildPythonApplication {
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
       ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/libwidevinecdm.so"''}
     )
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/The-Compiler/qutebrowser";
+    homepage    = "https://github.com/qutebrowser/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
-    inherit (backendPackage.meta) platforms;
+    platforms   = if enableWideVine then [ "x86_64-linux" ] else backendPackage.meta.platforms;
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
   };
 }

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.11.3";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4tGwhgHLZmvsbaDjmmQ3tXBwUBIxb5EpQrT8VIu/XwY=";
+    hash = "sha256-B6dC9+t/pe7vsPb7rkGAbJWLfCAF7lIElFvt1pUu5yA=";
   };
 
   nativeBuildInputs = [

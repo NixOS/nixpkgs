@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular-sidecar";
-  version = "2022.6.1";
+  version = "2022.11.1";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
     rev = version;
-    sha256 = "sha256-SKMAA8tcvWUF7EARq9vN8C0DWcQFRX5j/tfgHF5TUWs=";
+    sha256 = "sha256-ztUdV+Bhi3zx5UiwnpiQM/RglUH1n9J48Beuq2GPWdg=";
   };
 
   propagatedBuildInputs = [

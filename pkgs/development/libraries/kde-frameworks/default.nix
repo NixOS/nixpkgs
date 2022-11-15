@@ -32,7 +32,7 @@ let
   broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
   maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
   license = with lib.licenses; [
-    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12Plus
   ];
 
   srcs = import ./srcs.nix {

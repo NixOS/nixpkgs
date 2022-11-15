@@ -155,7 +155,7 @@ let
 
   makeFstabEntries =
     let
-      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
+      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "nfs4" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces

@@ -12,8 +12,6 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
-
 in {
   imports = [
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
@@ -77,11 +75,9 @@ in {
 
       hostname = mkOption {
         type = types.str;
-        default = "${user}.${fqdn}";
+        default = "${user}.${config.networking.fqdnOrHostName}";
         defaultText = literalExpression ''
-          if config.${options.networking.domain} != null
-          then "${user}.''${config.${options.networking.fqdn}}"
-          else "${user}.''${config.${options.networking.hostName}}"
+          "${user}.''${config.${options.networking.fqdnOrHostName}}"
         '';
         example = "matomo.yourdomain.org";
         description = lib.mdDoc ''

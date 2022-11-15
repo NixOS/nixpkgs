@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-0UiPhkTWV61DnAF5kWd1FctX8i0sXaJ1p/xCMznY/A8=";
+    sha256 = "sha256-KvQdYQLzgt/MKPsA/mO5un6nE3/xcvVYwIveNn/uDnU=";
   };
 
   vendorSha256 = null;

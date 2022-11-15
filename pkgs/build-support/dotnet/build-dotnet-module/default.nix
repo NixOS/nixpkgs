@@ -204,7 +204,9 @@ stdenvNoCC.mkDerivation (args // {
             fi
 
             # Since mktemp is used this will be empty if the script didnt succesfully complete
-            ! test -s "$depsFile" && rm -rf "$depsFile"
+            if ! test -s "$depsFile"; then
+              rm -rf "$depsFile"
+            fi
         }
 
         trap exitTrap EXIT INT TERM

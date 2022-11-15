@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.4.4";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "sha256-uJFBboV0DhZHEir4+2VdTGMqxZsahnFRgr9btdMlW2M=";
+    sha256 = "sha256-JhVwzNwihYLNkpwOmanZP/fOiIpojAR3pCya5zuy3Lc=";
   };
 
-  vendorSha256 = "sha256-qeyXUTcII0hMrOWIvsjaOXv/tKWBoUrTkCimRC/RnUw=";
+  vendorSha256 = "sha256-nchscK8HPsZ/i4kjyB1uHNh4lNbs7UALzGLVgxdAcSk=";
 
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to

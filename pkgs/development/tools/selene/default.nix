@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selene";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "sha256-a3mslAqDzUlMLBMjxScMkR4GePmpBeH+Ottd1ENum/c=";
+    sha256 = "sha256-6DbWz4u4mbW/aSDpaLxP4bG14gHxMGc4A8zMTVH/vj0=";
   };
 
-  cargoSha256 = "sha256-nFtZDoNbUxO5YY+Mqu5W6AR+tH2zsBLMQ7EDK6A8qAg=";
+  cargoSha256 = "sha256-6dYXGxDNiLzpyZCmF2OJl2HAFyzJeAeQpEfaIZBBJD8=";
 
   nativeBuildInputs = lib.optional robloxSupport pkg-config;
 

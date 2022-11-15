@@ -2,16 +2,13 @@
   name = "adguardhome";
 
   nodes = {
-    minimalConf = { ... }: {
-      services.adguardhome = { enable = true; };
-    };
-
     declarativeConf = { ... }: {
       services.adguardhome = {
         enable = true;
 
         mutableSettings = false;
         settings = {
+          schema_version = 0;
           dns = {
             bind_host = "0.0.0.0";
             bootstrap_dns = "127.0.0.1";
@@ -26,6 +23,7 @@
 
         mutableSettings = true;
         settings = {
+          schema_version = 0;
           dns = {
             bind_host = "0.0.0.0";
             bootstrap_dns = "127.0.0.1";
@@ -36,10 +34,6 @@
   };
 
   testScript = ''
-    with subtest("Minimal config test"):
-        minimalConf.wait_for_unit("adguardhome.service")
-        minimalConf.wait_for_open_port(3000)
-
     with subtest("Declarative config test, DNS will be reachable"):
         declarativeConf.wait_for_unit("adguardhome.service")
         declarativeConf.wait_for_open_port(53)

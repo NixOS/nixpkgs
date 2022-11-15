@@ -1791,6 +1791,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.9.2":
+  version "7.19.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz#22b11c037b094d27a8a2504ea4dcff00f50e2259"
+  integrity sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.12.13":
   version "7.14.5"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.14.5.tgz#a9bc9d8b33354ff6e55a9c60d1109200a68974f4"
@@ -2350,6 +2357,21 @@
     "@projectstorm/react-diagrams-core" "^6.6.1"
     "@projectstorm/react-diagrams-defaults" "^6.6.1"
     "@projectstorm/react-diagrams-routing" "^6.6.1"
+
+"@react-dnd/asap@^5.0.1":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@react-dnd/asap/-/asap-5.0.2.tgz#1f81f124c1cd6f39511c11a881cfb0f715343488"
+  integrity sha512-WLyfoHvxhs0V9U+GTsGilGgf2QsPl6ZZ44fnv0/b8T3nQyvzxidxsg/ZltbWssbsRDlYW8UKSQMTGotuTotZ6A==
+
+"@react-dnd/invariant@^4.0.1":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@react-dnd/invariant/-/invariant-4.0.2.tgz#b92edffca10a26466643349fac7cdfb8799769df"
+  integrity sha512-xKCTqAK/FFauOM9Ta2pswIyT3D8AQlfrYdOi/toTPEhqCuAs1v5tcJ3Y08Izh1cJ5Jchwy9SeAXmMg6zrKs2iw==
+
+"@react-dnd/shallowequal@^4.0.1":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@react-dnd/shallowequal/-/shallowequal-4.0.2.tgz#d1b4befa423f692fa4abf1c79209702e7d8ae4b4"
+  integrity sha512-/RVXdLvJxLg4QKvMoM5WlwNR9ViO9z8B/qPcc+C0Sa/teJY7QG7kJ441DwzOjMYEY7GmU4dj5EcGHIkKZiQZCA==
 
 "@react-leaflet/core@^1.1.1":
   version "1.1.1"
@@ -4901,6 +4923,15 @@ discontinuous-range@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/discontinuous-range/-/discontinuous-range-1.0.0.tgz#e38331f0844bba49b9a9cb71c771585aab1bc65a"
   integrity sha512-c68LpLbO+7kP/b1Hr1qs8/BJ09F5khZGTxqxZuhzxpmwJKOgRFHJWIb9/KmqnqHhLdO55aOxFH/EGBvUQbL/RQ==
+
+dnd-core@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-16.0.1.tgz#a1c213ed08961f6bd1959a28bb76f1a868360d19"
+  integrity sha512-HK294sl7tbw6F6IeuK16YSBUoorvHpY8RHO+9yFfaJyCDVb6n7PRcezrOEOa2SBCqiYpemh5Jx20ZcjKdFAVng==
+  dependencies:
+    "@react-dnd/asap" "^5.0.1"
+    "@react-dnd/invariant" "^4.0.1"
+    redux "^4.2.0"
 
 doctrine@^2.1.0:
   version "2.1.0"
@@ -9521,6 +9552,24 @@ react-checkbox-tree@^1.7.2:
   dependencies:
     clsx "^1.1.1"
 
+react-dnd-html5-backend@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-16.0.1.tgz#87faef15845d512a23b3c08d29ecfd34871688b6"
+  integrity sha512-Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==
+  dependencies:
+    dnd-core "^16.0.1"
+
+react-dnd@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-16.0.1.tgz#2442a3ec67892c60d40a1559eef45498ba26fa37"
+  integrity sha512-QeoM/i73HHu2XF9aKksIUuamHPDvRglEwdHL4jsp784BgUuWcg6mzfxT0QDdQz8Wj0qyRKx2eMg8iZtWvU4E2Q==
+  dependencies:
+    "@react-dnd/invariant" "^4.0.1"
+    "@react-dnd/shallowequal" "^4.0.1"
+    dnd-core "^16.0.1"
+    fast-deep-equal "^3.1.3"
+    hoist-non-react-statics "^3.3.2"
+
 react-dom@^16.6.3:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
@@ -9783,6 +9832,13 @@ redent@^4.0.0:
   dependencies:
     indent-string "^5.0.0"
     strip-indent "^4.0.0"
+
+redux@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.0.tgz#46f10d6e29b6666df758780437651eeb2b969f13"
+  integrity sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
 
 reflect.ownkeys@^0.2.0:
   version "0.2.0"
@@ -11419,12 +11475,13 @@ watchpack@^2.2.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-"webcabin-docker@git+https://github.com/EnterpriseDB/wcDocker/#40d025e0d86ee3cf058a52e01d2042113f134cdd":
+"webcabin-docker@git+https://github.com/EnterpriseDB/wcDocker/#b4d58f29b3a308ab555085ee444fa7010aa4b991":
   version "2.2.5"
-  resolved "git+https://github.com/EnterpriseDB/wcDocker/#40d025e0d86ee3cf058a52e01d2042113f134cdd"
+  resolved "git+https://github.com/EnterpriseDB/wcDocker/#b4d58f29b3a308ab555085ee444fa7010aa4b991"
   dependencies:
     "@fortawesome/fontawesome-free" "^5.14.0"
     FileSaver "^0.10.0"
+    bootstrap "^4.3.1"
     jquery "^3.3.1"
     jquery-contextmenu "^2.6.4"
 

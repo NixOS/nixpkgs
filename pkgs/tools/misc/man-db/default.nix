@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"

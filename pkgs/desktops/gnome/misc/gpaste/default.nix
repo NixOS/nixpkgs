@@ -9,6 +9,7 @@
 , gobject-introspection
 , gtk3
 , gtk4
+, gcr_4
 , libadwaita
 , meson
 , mutter
@@ -16,22 +17,31 @@
 , pango
 , pkg-config
 , vala
+, desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "42.1";
+  version = "43.0";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-A5NZ4NiPVZUr7vPdDuNywLsLrejZ4SCg7+3//ZNRmLY=";
+    sha256 = "sha256-F+AWTYVK145RzJ1Zldh4Q4R/hN/D7aXO3SIJ1t6ClWs=";
   };
 
   patches = [
     ./fix-paths.patch
+
+    # Build against GCR 4.
+    # Patch was temporarily reverted.
+    # https://github.com/Keruspe/GPaste/pull/409
+    (fetchpatch {
+      url = "https://github.com/Keruspe/GPaste/commit/0378cb4a657042ce5321f1d9728cff31e55bede6.patch";
+      sha256 = "0Ngr+/fS5/wICR84GEiE0pXEXQ/f/3G59lDivH167m8=";
+    })
   ];
 
   # TODO: switch to substituteAll with placeholder
@@ -52,6 +62,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    desktop-file-utils
     wrapGAppsHook
   ];
 
@@ -61,6 +72,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     gtk4
+    gcr_4
     libadwaita
     mutter
     pango
@@ -71,10 +83,6 @@ stdenv.mkDerivation rec {
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";

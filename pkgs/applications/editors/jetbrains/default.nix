@@ -5,6 +5,9 @@
 , maven
 , autoPatchelfHook
 , libdbusmenu
+, patchelf
+, openssl
+, expat
 , vmopts ? null
 }:
 
@@ -41,12 +44,14 @@ let
     }).overrideAttrs (attrs: {
       nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
         autoPatchelfHook
+        patchelf
       ];
       buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
         libdbusmenu
-        lldb
+        openssl.out
+        expat
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
@@ -58,9 +63,11 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
-          # bundled lldb does not find libssl
-          rm -rf bin/lldb/linux
-          ln -s ${lldb} bin/lldb/linux
+
+          ls -d $PWD/bin/lldb/linux/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
 
@@ -83,6 +90,22 @@ let
           construct efficient, statically checked SQL queries and much more.
         '';
         maintainers = with maintainers; [ ];
+      };
+    });
+
+  buildGateway = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+      product = "Gateway";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/remote-development/gateway/";
+        inherit description license platforms;
+        longDescription = ''
+          JetBrains Gateway is a lightweight launcher that connects a remote
+          server with your local machine, downloads necessary components on the
+          backend, and opens your project in JetBrains Client.
+        '';
+        maintainers = with maintainers; [ kouyk ];
       };
     });
 
@@ -167,7 +190,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ ];
+        maintainers = with maintainers; [ dritter ];
       };
     });
 
@@ -299,6 +322,19 @@ in
     };
     wmClass = "jetbrains-datagrip";
     update-channel = products.datagrip.update-channel;
+  };
+
+  gateway = buildGateway rec {
+    pname = "gateway";
+    version = products.gateway.version;
+    description = "Your single entry point to all remote development environments";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.gateway.url;
+      sha256 = products.gateway.sha256;
+    };
+    wmClass = "jetbrains-gateway";
+    update-channel = products.gateway.update-channel;
   };
 
   goland = buildGoland rec {

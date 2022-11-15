@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    sha256 = "sha256-VameENcHZ6AttV0D8ekPGGFoMHTiTXAY2FxK/Nxwjmk=";
+    sha256 = "sha256-vODSjTpo2oTY42fONhUU8Xn119cTYUGQ6RJaLnS9q3k=";
   };
 
   vendorSha256 = null;

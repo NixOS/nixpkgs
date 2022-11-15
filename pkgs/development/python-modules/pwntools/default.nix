@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , debugger
 , fetchPypi
@@ -77,7 +78,7 @@ buildPythonPackage rec {
     installShellCompletion --bash extra/bash_completion.d/shellcraft
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p "$out/bin"
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';

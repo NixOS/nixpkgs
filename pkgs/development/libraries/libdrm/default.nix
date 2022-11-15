@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     "-Dinstall-test-programs=true"
     "-Domap=enabled"
     "-Dcairo-tests=disabled"
+    "-Dvalgrind=${if withValgrind then "enabled" else "disabled"}"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=enabled"
     "-Detnaviv=enabled"

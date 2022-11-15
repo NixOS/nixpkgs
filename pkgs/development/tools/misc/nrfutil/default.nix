@@ -37,9 +37,12 @@ buildPythonApplication rec {
     nose
   ];
 
+  # Workaround: pythonRelaxDepsHook doesn't work for this.
   postPatch = ''
     mkdir test-reports
-    substituteInPlace requirements.txt --replace "libusb1==1.9.3" "libusb1"
+    substituteInPlace requirements.txt \
+      --replace "libusb1==1.9.3" "libusb1" \
+      --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
   '';
 
   meta = with lib; {

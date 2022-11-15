@@ -138,7 +138,7 @@ in stdenv.mkDerivation {
       lirc
       mesa # for libEGL
     ]
-    ++ lib.optional x11Support [
+    ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
       libXinerama libXrandr.dev libXtst libXfixes
     ]
@@ -158,7 +158,7 @@ in stdenv.mkDerivation {
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional gbmSupport [
+    ++ lib.optionals gbmSupport [
       libxkbcommon.dev
       mesa.dev
       libinput.dev
@@ -200,7 +200,7 @@ in stdenv.mkDerivation {
       # whitelisted directories). This adds the entire nix store to the Kodi
       # webserver whitelist to avoid this problem.
       "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
-    ] ++ lib.optional waylandSupport [
+    ] ++ lib.optionals waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
 

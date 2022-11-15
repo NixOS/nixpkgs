@@ -40,6 +40,8 @@
 # `false`, and a different renderer may be used with different bugs and performance
 # characteristics but (hopefully) indistinguishable output.
 , allowDocBook ? true
+# whether lib.mdDoc is required for descriptions to be read as markdown.
+, markdownByDefault ? false
 }:
 
 let
@@ -125,7 +127,11 @@ in rec {
       nativeBuildInputs = [
         pkgs.brotli
         (let
-          self = (pkgs.python3Minimal.override {
+          # python3Minimal can't be overridden with packages on Darwin, due to a missing framework.
+          # Instead of modifying stdenv, we take the easy way out, since most people on Darwin will
+          # just be hacking on the Nixpkgs manual (which also uses make-options-doc).
+          python = if pkgs.stdenv.isDarwin then pkgs.python3 else pkgs.python3Minimal;
+          self = (python.override {
             inherit self;
             includeSiteCustomize = true;
            });
@@ -148,6 +154,7 @@ in rec {
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
         ${lib.optionalString (! allowDocBook) "--error-on-docbook"} \
+        ${lib.optionalString markdownByDefault "--markdown-by-default"} \
         $baseJSON $options \
         > $dst/options.json
 

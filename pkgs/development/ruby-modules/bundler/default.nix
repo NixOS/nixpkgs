@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.3.23";
-  source.sha256 = "sha256-xYrUhtzNfN3X9r8GqGj9d1aeZkcPozFrk/2c9oVkKx8=";
+  version = "2.3.25";
+  source.sha256 = "sha256-/YHsRjXEGJtm/QeJU31cs4s4ELcHZfbh6C3aFbl1ka0=";
   dontPatchShebangs = true;
 
   passthru.updateScript = writeScript "gem-update-script" ''

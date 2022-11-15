@@ -11,7 +11,7 @@ options = {
     type = type specification;
     default = default value;
     example = example value;
-    description = "Description for use in the NixOS manual.";
+    description = lib.mdDoc "Description for use in the NixOS manual.";
   };
 };
 ```
@@ -59,8 +59,9 @@ The function `mkOption` accepts the following arguments.
 :   A textual description of the option, in [Nixpkgs-flavored Markdown](
     https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format, that will be
     included in the NixOS manual. During the migration process from DocBook
-    to CommonMark the description may also be written in DocBook, but this is
-    discouraged.
+    it is necessary to mark descriptions written in CommonMark with `lib.mdDoc`.
+    The description may still be written in DocBook (without any marker), but this
+    is discouraged and will be deprecated in the future.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -83,7 +84,7 @@ lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = "Whether to enable magic.";
+  description = lib.mdDoc "Whether to enable magic.";
 }
 ```
 
@@ -116,7 +117,7 @@ lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression "pkgs.hello";
-  description = "The hello package to use.";
+  description = lib.mdDoc "The hello package to use.";
 }
 ```
 
@@ -132,7 +133,7 @@ lib.mkOption {
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
   example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-  description = "The GHC package to use.";
+  description = lib.mdDoc "The GHC package to use.";
 }
 ```
 

@@ -11,20 +11,20 @@
 , libxcrypt
 , libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? true
+, pythonSupport ? libxml2.pythonSupport
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.36";
+  version = "1.1.37";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EoSPCkQI9ltTDTlizZ/2cLaueWGRz+/zdSK1dy3o3I4=";
+    sha256 = "Oksn3IAnzNYUZyWVAzbx7FIJKPMg8UTrX6eZCuYSOrQ=";
   };
 
   strictDeps = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2.dev libxcrypt
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     gettext
   ] ++ lib.optionals pythonSupport [
     libxml2.py

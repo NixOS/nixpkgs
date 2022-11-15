@@ -25,7 +25,7 @@
 , blinker
 , email-validator
 , flask
-, flask_login
+, flask-login
 , flask_principal
 , flask-wtf
 , itsdangerous
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     blinker
     email-validator
     flask
-    flask_login
+    flask-login
     flask_principal
     flask-wtf
     itsdangerous

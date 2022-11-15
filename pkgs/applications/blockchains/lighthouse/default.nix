@@ -17,7 +17,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.1.2";
+  version = "3.2.1";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-EJFg6ZjxxijxJNMwKRh0cYeqwujUV3OJgXBvBRsnbVI=";
+    sha256 = "sha256-Aqc3kk1rquhLKNZDlEun4bQpKI4Nsk7+Wr7E2IkJQEs=";
   };
 
-  cargoHash = "sha256-iXqRtBqvM9URQsL8qGmpr3CNX2fpbtDOaluibAX/lWo=";
+  cargoSha256 = "sha256-wGEk7OfEmyeRW65kq5stvKCdnCjfssyXUmNWGkGq42M=";
 
   buildFeatures = [ "modern" "gnosis" ];
 

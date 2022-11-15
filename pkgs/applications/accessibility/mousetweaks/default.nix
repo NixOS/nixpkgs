@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config
 , glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook
-, libX11, libXtst, libXfixes, libXcursor
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gtk3 gsettings-desktop-schemas
-    libX11 libXtst libXfixes libXcursor
+    xorg.libX11 xorg.libXtst xorg.libXfixes xorg.libXcursor
   ];
 
   passthru = {

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ clang_12 python2 ];
 
   propagatedBuildInputs = [ graphviz matplotlib numpy pandas scipy plotly six ]
-    ++ lib.optional withCuda [ cudatoolkit ];
+    ++ lib.optionals withCuda [ cudatoolkit ];
 
   patches = [
     ./nix-support.patch

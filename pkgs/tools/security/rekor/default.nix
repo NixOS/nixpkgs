@@ -4,13 +4,13 @@ let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.12.2";
+      version = "1.0.0";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-Ew9RHjzmQGZ9Vou436NdBLAj97vfnrLy9EuRKg4sNHY=";
+        sha256 = "sha256-yFUpaKfZUgT/KZyZLEeNGnD0SS4iBAQfXRy/Yiuj9g8=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -23,7 +23,7 @@ let
         '';
       };
 
-      vendorSha256 = "sha256-SwezkvJx50NpwNrv//Ai8yj5ONfC/hmdKbVS754ofW8=";
+      vendorSha256 = "sha256-RtlSf34l68XzxJB7G/aSjpu3BBtV556sRauWj591fIk=";
 
       nativeBuildInputs = [ installShellFiles ];
 

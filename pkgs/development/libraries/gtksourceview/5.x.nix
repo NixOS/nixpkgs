@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "5.4.2";
+  version = "5.6.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rRQOB+uEGRDeSDwJK9SIWr0puq3W6V+iLZPtLfC3nec=";
+    sha256 = "ZZ2cydA0oRTwfn4TTugNd97ASXyxUWrlNpEZwvy52hY=";
   };
 
   patches = [
@@ -73,6 +73,13 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
+
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
 
   doCheck = stdenv.isLinux;
 

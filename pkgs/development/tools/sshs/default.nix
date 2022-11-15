@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "sshs";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = pname;
     rev = version;
-    sha256 = "OTyk3EGlpr5k6QSwGmHFoF3cAJKQEEkWJuV53Wi8ook=";
+    sha256 = "KD971dGm1oQt9GbiUGZm2k4SJrBAA9rnHj7Gu0t3SJw=";
   };
 
-  vendorSha256 = "wClgX08UbItCpWOkWLgmsy7Ad5LlpvXrStN3JHujVww=";
+  vendorSha256 = "OCh37wjSs40Q0VQmoc1nXQ4nWddnoUCrI5xgxpxR/Ec=";
 
   ldflags = [ "-s" "-w" "-X github.com/quantumsheep/sshs/cmd.Version=${version}" ];
 

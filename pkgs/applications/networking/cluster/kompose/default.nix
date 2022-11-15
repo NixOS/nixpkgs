@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kompose, git }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, testers, kompose, git }:
 
 buildGoModule rec {
   pname = "kompose";
@@ -11,7 +11,14 @@ buildGoModule rec {
     sha256 = "sha256-NfzqGG5ZwPpmjhvcvXN1AA+kfZG/oujbAEtXkm1mzeU=";
   };
 
-  vendorSha256 = "sha256-OR5U2PnebO0a+lwU09Dveh0Yxk91cmSRorTxQIO5lHc=";
+  vendorHash = "sha256-/i4R50heqf0v2F2GTZCKGq10+xKKr+zPkqWKa+afue8=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/kubernetes/kompose/commit/0964a7ccd16504b6e5ef49a07978c87cca803d46.patch";
+      hash = "sha256-NMHLxx7Ae6Z+pacj538ivxIby7rNz3IbfDPbeLA0sMc=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles git ];
 

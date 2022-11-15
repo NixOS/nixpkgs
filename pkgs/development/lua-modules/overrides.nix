@@ -520,6 +520,13 @@ with prev;
       make all
     '';
   });
+  vusted = prev.vusted.overrideAttrs (_: {
+    # make sure vusted_entry.vim doesn't get wrapped
+    postInstall = ''
+      chmod -x $out/bin/vusted_entry.vim
+    '';
+  });
+
 
   # aliases
   cjson = prev.lua-cjson;

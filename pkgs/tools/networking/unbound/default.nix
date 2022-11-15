@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.3";
+  version = "1.17.0";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-6gxmZeLDMlt2nqwd/M1g/hgo1fz2YmUAOezLP2ftso4=";
+    hash = "sha256-3LyV14kdn5EMZuTtyfHy/eTeou7Bjjr591rtRKAvE0E=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"

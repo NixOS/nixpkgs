@@ -748,6 +748,11 @@ in
 
       boot.loader.supportsInitrdSecrets = true;
 
+      system.systemBuilderArgs.configurationName = cfg.configurationName;
+      system.systemBuilderCommands = ''
+        echo -n "$configurationName" > $out/configuration-name
+      '';
+
       system.build.installBootLoader =
         let
           install-grub-pl = pkgs.substituteAll {
