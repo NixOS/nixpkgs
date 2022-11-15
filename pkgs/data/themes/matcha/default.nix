@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
@@ -7,15 +7,15 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "matcha-gtk-theme";
-  version = "2022-06-07";
+  version = "2022-11-15";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "26xa9EGo2hci08Zw+X/A0Pn0VHxU8yfvRMiRusml+tc=";
+    sha256 = "Rx22O8C7kbYADxqJF8u6kdcQnXNA5aS+NWOnx/X4urY=";
   };
 
   buildInputs = [
