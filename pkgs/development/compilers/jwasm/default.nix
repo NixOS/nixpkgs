@@ -3,14 +3,14 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jwasm";
   version = "2.15";
 
   src = fetchFromGitHub {
     owner = "Baron-von-Riedesel";
     repo  = "JWasm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ef4uEtEpnqYGhFmxuefJ40zyOuHsiPOLpH/52i7a7KI=";
   };
 
@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/Baron-von-Riedesel/JWasm/";
     description = "A MASM-compatible x86 assembler";
+    changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})
 # TODO: generalize for Windows builds
