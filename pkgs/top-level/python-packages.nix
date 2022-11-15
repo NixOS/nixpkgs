@@ -5055,6 +5055,8 @@ self: super: with self; {
 
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
+  latexify-py = callPackage ../development/python-modules/latexify-py { };
+
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
 
   laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
