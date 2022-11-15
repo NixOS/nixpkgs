@@ -16,6 +16,7 @@
 , responses
 , tqdm
 , xxhash
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,13 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
   };
+
+  patches = [
+    (fetchpatch { # add compatibility with dill 0.3.6
+      url = "https://github.com/huggingface/datasets/pull/5166.patch";
+      sha256 = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
