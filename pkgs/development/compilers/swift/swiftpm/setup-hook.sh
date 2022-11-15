@@ -19,7 +19,7 @@ swiftpmBuildPhase() {
     runHook postBuild
 }
 
-if [ -z "${dontUseSwiftpmBuild-}" -a -z "${buildPhase-}" ]; then
+if [ -z "${dontUseSwiftpmBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=swiftpmBuildPhase
 fi
 
@@ -44,7 +44,7 @@ swiftpmCheckPhase() {
     runHook postCheck
 }
 
-if [ -z "${dontUseSwiftpmCheck-}" -a -z "${checkPhase-}" ]; then
+if [ -z "${dontUseSwiftpmCheck-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=swiftpmCheckPhase
 fi
 
