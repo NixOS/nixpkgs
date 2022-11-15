@@ -102,7 +102,7 @@ let
     postInstall = (attrs.postInstall or "")
       + lib.optionalString stdenv.isDarwin ''
         # The install name of libraries is incorrectly set to lib/ (via our
-        # CMake setup hook) instead of lib/swift/. This'd by easily fixed by
+        # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
         # fixDarwinDylibNames, but some builds create libraries that reference
         # eachother, and we also have to fix those references.
         dylibs="$(find $out/lib/swift* -name '*.dylib')"
@@ -155,7 +155,7 @@ let
     ''
       + lib.optionalString (!stdenv.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
-        # Fix up the installation so to module can be found on non-Darwin.
+        # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
         mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
       '';
@@ -181,7 +181,7 @@ let
     ''
       + lib.optionalString (!stdenv.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
-        # Fix up the installation so to module can be found on non-Darwin.
+        # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
         mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
       '';
