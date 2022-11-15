@@ -1224,6 +1224,12 @@
           the npm install step prunes dev dependencies.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>arangodb</literal> package version is bumped from
+          3.5.3 to 3.9.3.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
