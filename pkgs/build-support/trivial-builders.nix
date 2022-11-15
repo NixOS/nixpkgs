@@ -489,7 +489,8 @@ rec {
   let
     entries' =
       if (lib.isAttrs entries) then entries
-      else if (lib.isList entries) then lib.listToAttrs (map (x: lib.nameValuePair x.name x.path) entries)
+      # We do this foldl to have last-wins semantics in case of repeated entries
+      else if (lib.isList entries) then lib.foldl (a: b: a // { "${b.name}" = b.path; }) { } entries
       else throw "linkFarm entries must be either attrs or a list!";
 
     linkCommands = lib.mapAttrsToList (name: path: ''
