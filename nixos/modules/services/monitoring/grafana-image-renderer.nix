@@ -111,6 +111,7 @@ in {
     services.grafana.extraOptions = mkIf cfg.provisionGrafana {
       RENDERING_SERVER_URL = "http://localhost:${toString cfg.settings.service.port}/render";
       RENDERING_CALLBACK_URL = "http://localhost:${toString config.services.grafana.port}";
+      before = [ "grafana-image-renderer.service" ];
     };
 
     services.grafana-image-renderer.chromium = mkDefault pkgs.chromium;
