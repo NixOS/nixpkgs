@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , zstd
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -52,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://pymemcache.readthedocs.io/";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.is32bit;
   };
 }
