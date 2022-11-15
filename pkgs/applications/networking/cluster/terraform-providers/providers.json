@@ -30,13 +30,13 @@
     "version": "0.1.1"
   },
   "aiven": {
-    "hash": "sha256-+Uzz2eu873lh707/zADfMK/4D5wDMxXZtAf0RU6V42M=",
+    "hash": "sha256-2QdpXNCnnYh75CyqeKJbYgFB63TCcMrWlUPLe/puvOw=",
     "owner": "aiven",
     "provider-source-address": "registry.terraform.io/aiven/aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v3.8.0",
-    "vendorHash": "sha256-F+zF9xqHNCXrGxOjEoe8gaGS0C7EO0s61CjN9+9PiYk=",
-    "version": "3.8.0"
+    "rev": "v3.8.1",
+    "vendorHash": "sha256-pFRCT0fgWOucw3jNqvSas7pl9KHayJorFmgOKGmL1jI=",
+    "version": "3.8.1"
   },
   "akamai": {
     "hash": "sha256-QbCDaDII+xEA3lXjODsz8jai2mg3N/3uC4fruiLqvWc=",
@@ -777,13 +777,13 @@
     "version": "0.6.12"
   },
   "newrelic": {
-    "hash": "sha256-C8lWtFECZrtj6ZyurbysZnCMfX1uJWhO4r188Wobg/M=",
+    "hash": "sha256-TZM7MRdc3Fok2e8FR04ccC19rd1OXvrRnm6yQRRhXJU=",
     "owner": "newrelic",
     "provider-source-address": "registry.terraform.io/newrelic/newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.6.1",
-    "vendorHash": "sha256-lEFcR908CK4RSSO/3kbqQ/wse5HKaqveWUZbzUhUTMI=",
-    "version": "3.6.1"
+    "rev": "v3.7.0",
+    "vendorHash": "sha256-gKPopfkEx1YRxcsO8W2+2EqKJfYbJ/pJgpydc1YScDA=",
+    "version": "3.7.0"
   },
   "nomad": {
     "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",

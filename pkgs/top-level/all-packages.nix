@@ -3451,7 +3451,7 @@ with pkgs;
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
-  cloudflare-dyndns = python3Packages.cloudflare-dyndns;
+  cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 
@@ -5038,8 +5038,6 @@ with pkgs;
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
-
-  appleseed = callPackage ../tools/graphics/appleseed { };
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
@@ -16803,9 +16801,7 @@ with pkgs;
     python = python3;
   };
 
-  libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
-    python3 = python38;
-  };
+  libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };

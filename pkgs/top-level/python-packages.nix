@@ -518,8 +518,6 @@ self: super: with self; {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
-  appleseed = toPythonModule (pkgs.appleseed.override { python3 = self.python; });
-
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
@@ -1799,8 +1797,6 @@ self: super: with self; {
   clldutils = callPackage ../development/python-modules/clldutils { };
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
-
-  cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 

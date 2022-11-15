@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, ncurses, perl, help2man
 , apparmorRulesFromClosure
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,9 @@ stdenv.mkDerivation rec {
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
-  buildInputs = [ ncurses /* for `talk' */ ];
+  buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
