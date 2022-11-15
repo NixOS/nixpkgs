@@ -144,7 +144,7 @@ exitHandler() {
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
-            return 0
+            exit 0
         fi
 
     else
