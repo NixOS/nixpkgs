@@ -83,6 +83,7 @@ mapAliases ({
   antimicro = throw "antimicro has been removed as it was broken, see antimicrox instead"; # Added 2020-08-06
   antimicroX = antimicrox; # Added 2021-10-31
   apple-music-electron = throw "'apple-music-electron' is end of life and has been removed, you can use 'cider' instead"; # Added 2022-10-02
+  appleseed = throw "appleseed has been removed, because it was unmaintained"; # Added 2022-05-26
   arangodb_3_3 = throw "arangodb_3_3 went end of life and has been removed"; # Added 2022-10-08
   arangodb_3_4 = throw "arangodb_3_4 went end of life and has been removed"; # Added 2022-10-08
   arangodb_3_5 = throw "arangodb_3_5 went end of life and has been removed"; # Added 2022-10-08

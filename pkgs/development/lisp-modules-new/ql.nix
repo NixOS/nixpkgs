@@ -22,6 +22,29 @@ let
     cl-cairo2 = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-cairo2-xlib = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-freetype2 = pkg: {
+      nativeLibs = [ freetype ];
+      nativeBuildInputs = [ freetype ];
+      patches = [ ./patches/cl-freetype2-fix-grovel-includes.patch ];
+    };
+    cl-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-gtk2-gdk = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-gtk2-glib = pkg: {
+      nativeLibs = [ glib ];
+    };
+    cl-gtk2-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-rsvg2 = pkg: {
+      nativeLibs = [ librsvg ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
@@ -134,22 +157,38 @@ let
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
     };
     "cl-ana.hdf-cffi" = pkg: {
-      nativeBuildInputs = [ hdf5 ];
-      nativeLibs = [ hdf5 ];
+      nativeBuildInputs = [ pkgs.hdf5 ];
+      nativeLibs = [ pkgs.hdf5 ];
       NIX_LDFLAGS = [ "-lhdf5" ];
     };
     gsll = pkg: {
-      nativeBuildInputs = [ gsl ];
-      nativeLibs = [ gsl ];
+      nativeBuildInputs = [ pkgs.gsl ];
+      nativeLibs = [ pkgs.gsl ];
     };
     cl-libyaml = pkg: {
-      nativeLibs = [ libyaml ];
+      nativeLibs = [ pkgs.libyaml ];
     };
     cl-libxml2 = pkg: {
-      nativeLibs = [ libxml2 ];
+      nativeLibs = [ pkgs.libxml2 ];
     };
     cl-readline = pkg: {
-      nativeLibs = [ readline ];
+      nativeLibs = [ pkgs.readline ];
+    };
+    pzmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-compat = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-examples = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-test = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
     };
   };
 

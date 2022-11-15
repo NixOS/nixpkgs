@@ -1557,7 +1557,10 @@ with pkgs;
 
   emulationstation = callPackage ../applications/emulators/emulationstation { };
 
-  fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
+  fceux = callPackage ../applications/emulators/fceux {
+    lua = lua5_1;
+    inherit (libsForQt5) wrapQtAppsHook;
+  };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
 
@@ -3451,7 +3454,7 @@ with pkgs;
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
-  cloudflare-dyndns = python3Packages.cloudflare-dyndns;
+  cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
 
@@ -5038,8 +5041,6 @@ with pkgs;
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
-
-  appleseed = callPackage ../tools/graphics/appleseed { };
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
@@ -9592,6 +9593,16 @@ with pkgs;
 
   inherit (callPackage ../servers/nextcloud {})
     nextcloud23 nextcloud24 nextcloud25;
+
+  nextcloud23Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/23.json;
+  });
+  nextcloud24Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/24.json;
+  });
+  nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/25.json;
+  });
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -16801,9 +16812,7 @@ with pkgs;
     python = python3;
   };
 
-  libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
-    python3 = python38;
-  };
+  libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };

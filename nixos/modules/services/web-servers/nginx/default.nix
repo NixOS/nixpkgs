@@ -198,8 +198,8 @@ let
 
       ${optionalString cfg.statusPage ''
         server {
-          listen 80;
-          ${optionalString enableIPv6 "listen [::]:80;" }
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
 
           server_name localhost;
 
@@ -246,8 +246,8 @@ let
           if vhost.listen != [] then vhost.listen
           else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -446,6 +446,24 @@ in
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = lib.mdDoc ''
           If vhosts do not specify listenAddresses, use these addresses by default.
+        '';
+      };
+
+      defaultHTTPListenPort = mkOption {
+        type = types.port;
+        default = 80;
+        example = 8080;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for HTTP by default.
+        '';
+      };
+
+      defaultSSLListenPort = mkOption {
+        type = types.port;
+        default = 443;
+        example = 8443;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for SSL by default.
         '';
       };
 
