@@ -293,6 +293,12 @@
     githubId = 749381;
     name = "Adam Tulinius";
   };
+  adarsh = {
+    email = "adarshb94@gmail.com";
+    github = "adarshb20";
+    githubId = 18482538;
+    name = "Adarsh B";
+  };
   adelbertc = {
     email = "adelbertc@gmail.com";
     github = "adelbertc";

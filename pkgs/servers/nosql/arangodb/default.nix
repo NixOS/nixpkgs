@@ -44,7 +44,7 @@ let
       description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
       license = licenses.asl20;
       platforms = platforms.linux;
-      maintainers = [ maintainers.flosse ];
+      maintainers = [ maintainers.flosse maintainers.adarsh ];
     };
   };
 in {
