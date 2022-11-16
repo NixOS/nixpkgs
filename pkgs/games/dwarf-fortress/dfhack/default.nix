@@ -2,6 +2,7 @@
 , buildEnv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , writeScriptBin
 , perl
@@ -64,22 +65,24 @@ let
       prerelease = true;
     };
     "0.47.04" = {
-      dfHackRelease = "0.47.04-r2";
-      sha256 = "18ppn1dqaxi6ahjzsvb9kw70rvca106a1hibhzc4rxmraypnqb89";
-      xmlRev = "036b662a1bbc96b4911f3cbe74dfa1243b6459bc";
+      dfHackRelease = "0.47.04-r5";
+      sha256 = "sha256-0s+/LKbqsS/mrxKPDeniqykE5+Gy3ZzCa8yEDzMyssY=";
+      xmlRev = "be0444cc165a1abff053d5893dc1f780f06526b7";
       prerelease = false;
     };
     "0.47.05" = {
-      dfHackRelease = "0.47.05-r1";
-      sha256 = "sha256-B0iv7fpIcnaO8sx9wPqI7/WuyLK15p8UYlYIcF5F5bw=";
-      xmlRev = "11c379ffd31255f2a1415d98106114a46245e1c3";
+      dfHackRelease = "0.47.05-r7";
+      sha256 = "sha256-vBKUTSjfCnalkBzfjaIKcxUuqsGGOTtoJC1RHJIDlNc=";
+      xmlRev = "f5019a5c6f19ef05a28bd974c3e8668b78e6e2a4";
       prerelease = false;
     };
 
   };
 
   release =
-    if hasAttr dfVersion dfhack-releases
+    if lib.isAttrs dfVersion
+    then dfVersion
+    else if hasAttr dfVersion dfhack-releases
     then getAttr dfVersion dfhack-releases
     else throw "[DFHack] Unsupported Dwarf Fortress version: ${dfVersion}";
 
@@ -127,10 +130,20 @@ in
       fetchSubmodules = true;
     };
 
-    patches = [ ./fix-stonesense.patch ];
+    patches = lib.optional (lib.versionOlder version "0.44.12-r3") (fetchpatch {
+      name = "fix-stonesense.patch";
+      url = "https://github.com/DFHack/stonesense/commit/f5be6fe5fb192f01ae4551ed9217e97fd7f6a0ae.patch";
+      extraPrefix = "plugins/stonesense/";
+      stripLen = 1;
+      hash = "sha256-wje6Mkct29eyMOcJnbdefwBOLJko/s4JcJe52ojuW+8=";
+    }) ++ lib.optional (lib.versionOlder version "0.47.04-r1") (fetchpatch {
+      name = "fix-protobuf.patch";
+      url = "https://github.com/DFHack/dfhack/commit/7bdf958518d2892ee89a7173224a069c4a2190d8.patch";
+      hash = "sha256-p+mKhmYbnhWKNiGPMjbYO505Gcg634n0nudqH0NX3KY=";
+    });
 
     # gcc 11 fix
-    NIX_CFLAGS_COMPILE = "-fpermissive";
+    NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionOlder version "0.47.05-r3") "-fpermissive";
 
     # As of
     # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
