@@ -2,15 +2,15 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2022-02-26";
+  version = "unstable-2022-11-14";
 
   outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "2fba0d68602b7eb3374d030c1c34939de56023f9";
-    sha256 = "sha256-IFkKwRRyZeOXD8/9n8UDrruUKK6oQK4BD9wYN2dmSAc=";
+    rev = "83e116a566eda04a2469a11ee562cef1d7b33e4f";
+    sha256 = "sha256-sSabk+VWkoXj1Nzv9ufgIU/nkfKf4XkZU1SO+j+eSPA=";
   };
 
   patchPhase = ''
@@ -20,8 +20,9 @@ stdenvNoCC.mkDerivation {
     # the installation order of font files with the same name is not
     # fixed.
     rm -rv ofl/cabincondensed \
-           ofl/signikanegative \
-           ofl/signikanegativesc
+      ofl/signikanegative \
+      ofl/signikanegativesc \
+      axisregistry/tests/data
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
