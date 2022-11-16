@@ -8168,6 +8168,8 @@ with pkgs;
 
   jfmt = callPackage ../development/tools/jfmt { };
 
+  jfrog-cli = callPackage ../development/tools/misc/jfrog-cli { };
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
