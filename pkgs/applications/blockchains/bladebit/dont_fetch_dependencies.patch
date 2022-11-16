@@ -1,0 +1,41 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 66cc8a4..99ac667 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -41,8 +41,7 @@ include(FetchContent)
+ 
+ FetchContent_Declare(
+   bls
+-  GIT_REPOSITORY https://github.com/Chia-Network/bls-signatures.git
+-  GIT_TAG        1.0.10
++  SOURCE_DIR @blspy_src@
+ )
+ 
+ set(BUILD_BLS_PYTHON_BINDINGS "0" CACHE STRING "0")
+@@ -59,12 +58,6 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+     set(platform_libs ${NUMA_LIBRARY})
+ endif()
+ 
+-# Catch
+-# TODO: Add configuration var to disable this
+-include(cmake_modules/FindCatch2.cmake)
+-set_target_properties(Catch2 PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-set_target_properties(Catch2WithMain PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-
+ 
+ # Config
+ set(c_opts)
+@@ -414,13 +407,6 @@ target_link_libraries(fsegen PRIVATE lib_bladebit)
+ # )
+ # target_link_libraries(plot_tool PRIVATE lib_bladebit)
+ 
+-# Tests
+-add_executable(tests ${src_tests} ${bb_headers})
+-target_compile_options(tests PUBLIC $<$<CONFIG:Release>:${c_opts} ${release_c_opts} ${tests_c_opts}>)
+-target_compile_options(tests PUBLIC $<$<CONFIG:Debug>:${c_opts} ${debug_c_opts} ${tests_c_opts}>)
+-set_target_properties(tests PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+-target_link_libraries(tests PRIVATE lib_bladebit Catch2::Catch2WithMain)
+-
+ # Pretty source view for IDE projects
+ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src 
+     FILES ${src_full} ${bb_headers}
