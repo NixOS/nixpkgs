@@ -1,13 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , sphinx
 , mock
-, coverage
-, unittest2
+, repeated-test
+, unittestCheckHook
 , attrs
-, funcsigs
-, six
 , setuptools-scm
 }:
 
@@ -15,6 +14,8 @@ buildPythonPackage rec {
   pname = "sigtools";
   version = "4.0.1";
   format = "pyproject";
+
+  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,12 +30,12 @@ buildPythonPackage rec {
     attrs
   ];
 
-  patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
-
-  # repeated_test no longer exists in nixpkgs
-  # Also see: https://github.com/epsy/sigtools/issues/26
-  doCheck = false;
-  checkInputs = [ sphinx mock coverage unittest2 ];
+  checkInputs = [
+    mock
+    repeated-test
+    sphinx
+    unittestCheckHook
+  ];
 
   meta = with lib; {
     description = "Utilities for working with 3.3's inspect.Signature objects.";
