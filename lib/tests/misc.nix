@@ -478,6 +478,23 @@ runTests {
 
 # ATTRSETS
 
+  testConcatMapAttrs = {
+    expr = concatMapAttrs
+      (name: value: {
+        ${name} = value;
+        ${name + value} = value;
+      })
+      {
+        foo = "bar";
+        foobar = "baz";
+      };
+    expected = {
+      foo = "bar";
+      foobar = "baz";
+      foobarbaz = "baz";
+    };
+  };
+
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
