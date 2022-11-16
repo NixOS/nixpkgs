@@ -67,7 +67,7 @@ let
 
       src = fetchFromGitHub src-args;
 
-      patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+      patches = map (x: patch-src + x) (readLinesToList ./config/pjsip_patches);
     });
 
   opendht-jami = opendht.override {
