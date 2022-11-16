@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     description = "Library tasked with managing, extracting and handling media art caches";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

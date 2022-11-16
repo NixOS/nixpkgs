@@ -5,6 +5,7 @@
 , dill
 , fastavro
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , grpcio
 , grpcio-tools
@@ -52,6 +53,16 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/apache/beam/pull/24143
+      name = "fix-for-dill-0.3.6.patch";
+      url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
+      hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
+      stripLen = 2;
+    })
+  ];
 
   pythonRelaxDeps = [
     # See https://github.com/NixOS/nixpkgs/issues/156957
@@ -138,6 +149,10 @@ buildPythonPackage rec {
     "apache_beam/runners/portability/flink_runner_test.py"
     "apache_beam/runners/portability/samza_runner_test.py"
     "apache_beam/runners/portability/spark_runner_test.py"
+
+    # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
+    # https://github.com/uqfoundation/dill/issues/482#issuecomment-1139017499.
+    "apache_beam/transforms/window_test.py"
   ];
 
   disabledTests = [
