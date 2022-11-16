@@ -47,6 +47,9 @@ in {
       since picom v6 and was subsequently removed by upstream.
       See https://github.com/yshui/picom/commit/bcbc410
     '')
+    (mkRemovedOptionModule [ "services" "picom" "experimentalBackends" ] ''
+      This option was removed by upstream since picom v10.
+    '')
   ];
 
   options.services.picom = {
@@ -55,14 +58,6 @@ in {
       default = false;
       description = lib.mdDoc ''
         Whether or not to enable Picom as the X.org composite manager.
-      '';
-    };
-
-    experimentalBackends = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Whether to use the unstable new reimplementation of the backends.
       '';
     };
 
@@ -306,8 +301,7 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}"
-          + (optionalString cfg.experimentalBackends " --experimental-backends");
+        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
         RestartSec = 3;
         Restart = "always";
       };
