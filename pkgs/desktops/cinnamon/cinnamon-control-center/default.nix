@@ -9,7 +9,6 @@
 , libnotify
 , libxml2
 , gnome-online-accounts
-, cinnamon-settings-daemon
 , colord
 , polkit
 , libxkbfile
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.4.7";
+  version = "5.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-38n1QCygkBq+wOLwui1oF6MtDWxAFWxp5U1omSVtbro=";
+    hash = "sha256-WK35uDckIYU4HwuYtLj+CFVJD8O78LTQcnOvjp/et2s=";
   };
 
   buildInputs = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     libgnomekbd
     libxklavier
     colord
-    cinnamon-settings-daemon
     libgudev
     libwacom
     gnome-online-accounts
@@ -75,10 +73,6 @@ stdenv.mkDerivation rec {
     ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
 
   postPatch = ''
-    find . -type f -exec sed -i \
-      -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
-      {} +
-
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c
     sed 's|TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"|TZ_DATA_FILE "${tzdata}/share/zoneinfo/zone.tab"|g' -i ./panels/datetime/tz.h
     sed 's|"/usr/share/i18n/locales/"|"${glibc}/share/i18n/locales/"|g' -i panels/datetime/test-endianess.c
