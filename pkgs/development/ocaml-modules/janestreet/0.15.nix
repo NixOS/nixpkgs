@@ -922,7 +922,8 @@ with self;
 
   sexplib = janePackage {
     pname = "sexplib";
-    hash = "05h34fm3p0179xivc14bixc50pzc8zws46l5gsq310kpm37srq3c";
+    version = "0.15.1";
+    hash = "sha256-LkGNnp717LMHeWe1Ka6qUZcpw8fKSsd5MusaLgFjm70=";
     minimumOCamlVersion = "4.04.2";
     meta.description = "Library for serializing OCaml values to and from S-expressions";
     propagatedBuildInputs = [ num parsexp ];
