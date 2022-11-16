@@ -166,6 +166,6 @@ in
       homepage = "https://github.com/DFHack/dfhack/";
       license = licenses.zlib;
       platforms = [ "x86_64-linux" "i686-linux" ];
-      maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
+      maintainers = with maintainers; [ robbinch a1russell abbradar numinit ncfavier ];
     };
   }
