@@ -4653,6 +4653,8 @@ self: super: with self; {
 
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
+  jamo = callPackage ../development/python-modules/jamo { };
+
   janus = callPackage ../development/python-modules/janus { };
 
   jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
