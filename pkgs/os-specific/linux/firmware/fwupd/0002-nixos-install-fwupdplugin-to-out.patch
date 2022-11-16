@@ -1,0 +1,73 @@
+From 5fabcf8be6cc75bf3aa909a33ba86cdfd85ce122 Mon Sep 17 00:00:00 2001
+From: Bernardo Meurer <bernardo@meurer.org>
+Date: Tue, 15 Nov 2022 22:00:32 -0500
+Subject: [PATCH 2/4] nixos: install fwupdplugin to out
+
+This avoids a cycle
+---
+ libfwupdplugin/meson.build        | 5 +++--
+ plugins/modem-manager/meson.build | 2 +-
+ src/meson.build                   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/libfwupdplugin/meson.build b/libfwupdplugin/meson.build
+index 71667b6bc..b944d97f2 100644
+--- a/libfwupdplugin/meson.build
++++ b/libfwupdplugin/meson.build
+@@ -250,7 +250,7 @@ fwupdplugin = library(
+   ],
+   link_args: cc.get_supported_link_arguments([vflag]),
+   link_depends: fwupdplugin_mapfile,
+-  install_dir: libdir_pkg,
++  install_dir: bindir / '..' / 'lib',
+   install: true
+ )
+ 
+@@ -300,7 +300,8 @@ if introspection.allowed()
+       girtargets,
+       fwupd_gir[0],
+     ],
+-    install: false
++    install: true,
++    install_dir_typelib: bindir / '..' / 'lib' / 'girepository-1.0',
+   )
+ 
+   # Verify the map file is correct -- note we can't actually use the generated
+diff --git a/plugins/modem-manager/meson.build b/plugins/modem-manager/meson.build
+index 325c55e05..290dbdb72 100644
+--- a/plugins/modem-manager/meson.build
++++ b/plugins/modem-manager/meson.build
+@@ -26,7 +26,7 @@ shared_module('fu_plugin_modem_manager',
+   include_directories: plugin_incdirs,
+   install: true,
+   install_rpath: libdir_pkg,
+-  install_dir: libdir_pkg,
++  install_dir: bindir / '..' / 'lib',
+   c_args: cargs,
+   link_with: plugin_libs,
+   dependencies: [
+diff --git a/src/meson.build b/src/meson.build
+index ebb262224..19e333972 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -87,7 +87,7 @@ fwupdutil = library(
+   ],
+   install: true,
+   install_rpath: libdir_pkg,
+-  install_dir: libdir_pkg,
++  install_dir: bindir / '..' / 'lib',
+   include_directories: [
+     root_incdir,
+     fwupd_incdir,
+@@ -199,7 +199,7 @@ fwupdengine = library(
+   sources: fwupd_engine_src,
+   install: true,
+   install_rpath: libdir_pkg,
+-  install_dir: libdir_pkg,
++  install_dir: bindir / '..' / 'lib',
+   include_directories: plugin_incdirs,
+   dependencies: [
+     daemon_dep,
+-- 
+2.38.1
+

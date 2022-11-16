@@ -2,7 +2,6 @@
 
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , gi-docgen
 , pkg-config
@@ -52,12 +51,16 @@
 , libmbim
 , libcbor
 , xz
+
+, breakpointHook
+, ripgrep
 }:
 
 let
   python = python3.withPackages (p: with p; [
     pygobject3
     setuptools
+    markdown
   ]);
 
   isx86 = stdenv.hostPlatform.isx86;
@@ -85,13 +88,13 @@ let
 
   test-firmware =
     let
-      version = "unstable-2021-11-02";
+      version = "unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
         repo = "fwupd-test-firmware";
-        rev = "aaa2f9fd68a40684c256dd85b86093cba38ffd9d";
-        sha256 = "Slk7CNfkmvmOh3WtIBkPs3NYT96co6i8PwqcbpeVFgA=";
+        rev = "39954e434d63e20e85870dd1074818f48a0c08b7";
+        hash = "sha256-d4qG3fKyxkfN91AplRYqARFz+aRr+R37BpE450bPxi0=";
         passthru = {
           inherit src version; # For update script
           updateScript = unstableGitUpdater {
@@ -114,16 +117,18 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.4";
+    version = "1.8.7";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
     # CLI programs go to out
     outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
-    src = fetchurl {
-      url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-rfoHQ0zcKexBxA/vRg6Nlwlj/gx+hJ3sfzkyrbFh+IY=";
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = version;
+      hash = "sha256-XywBv+d4rG25KxzkZ6xzxIYbNO2Fj5j7xLfSEGBl6Fc=";
     };
 
     patches = [
@@ -132,18 +137,18 @@ let
       # Let’s install the files to $prefix/etc
       # while still reading them from /etc.
       # NixOS module for fwupd will take take care of copying the files appropriately.
-      ./add-option-for-installation-sysconfdir.patch
+      ./0001-nixos-add-option-for-installation-sysconfdir.patch
 
       # Install plug-ins and libfwupdplugin to $out output,
       # they are not really part of the library.
-      ./install-fwupdplugin-to-out.patch
+      ./0002-nixos-install-fwupdplugin-to-out.patch
 
       # Installed tests are installed to different output
       # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-      ./installed-tests-path.patch
+      ./0003-nixos-introduce-installed_test_prefix.patch
 
       # EFI capsule is located in fwupd-efi now.
-      ./efi-app-path.patch
+      ./0004-nixos-get-efi-app-from-fwupd-efi.patch
     ];
 
     nativeBuildInputs = [
@@ -161,6 +166,9 @@ let
       python
       wrapGAppsNoGuiHook
       vala
+
+      breakpointHook
+      ripgrep
     ];
 
     buildInputs = [
@@ -210,8 +218,6 @@ let
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
       "-Dplugin_modem_manager=enabled"
-      # Requires Meson 0.63
-      "-Dgresource_quirks=disabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -232,8 +238,7 @@ let
     # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
     dontWrapGApps = true;
 
-    # /etc/os-release not available in sandbox
-    # doCheck = true;
+    doCheck = true;
 
     # Environment variables
 
@@ -254,16 +259,15 @@ let
     postPatch = ''
       patchShebangs \
         contrib/generate-version-script.py \
-        meson_post_install.sh \
         po/test-deps
-
-      # This checks a version of a dependency of gi-docgen but gi-docgen is self-contained in Nixpkgs.
-      echo "Clearing docs/test-deps.py"
-      test -f docs/test-deps.py
-      echo > docs/test-deps.py
 
       substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
         --replace "gdbus" ${glib.bin}/bin/gdbus
+
+      # patch-out broken tests that need /etc/machine-id
+      sed -i 's/test(.*)//' plugins/lenovo-thinklmi/meson.build
+      sed -i 's/test(.*)//' plugins/synaptics-mst/meson.build
+      sed -i 's/test(.*)//' src/meson.build
     '';
 
     preBuild = ''

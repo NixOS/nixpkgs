@@ -1,0 +1,25 @@
+From 195df43951e0667409d4226a4291fcb32882ee60 Mon Sep 17 00:00:00 2001
+From: Bernardo Meurer <bernardo@meurer.org>
+Date: Tue, 15 Nov 2022 22:07:22 -0500
+Subject: [PATCH 4/4] nixos: get efi app from fwupd-efi
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 7ac8c937a..5a23d0c80 100644
+--- a/meson.build
++++ b/meson.build
+@@ -419,7 +419,7 @@ if build_standalone and efiboot.found() and efivar.found()
+     conf.set('HAVE_EFI_TIME_T', '1')
+   endif
+ 
+-  efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
++  efi_app_location = join_paths(dependency('fwupd-efi').get_variable(pkgconfig: 'prefix'), 'libexec', 'fwupd', 'efi')
+   conf.set_quoted('EFI_APP_LOCATION', efi_app_location)
+ 
+   if host_cpu == 'x86'
+-- 
+2.38.1
+
