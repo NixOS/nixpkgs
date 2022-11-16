@@ -4,6 +4,7 @@
 , stdenv
 , nodejs
 , ffmpeg
+, nixosTests
 }:
 
 let
@@ -59,6 +60,10 @@ buildNpmPackage {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    audiobookshelf = nixosTests.audiobookshelf;
+  };
 
   meta = with lib; {
     description = "Self-hosted audiobook and podcast server";

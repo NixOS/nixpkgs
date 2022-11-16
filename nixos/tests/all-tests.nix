@@ -84,6 +84,7 @@ in {
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};
+  audiobookshelf = handleTest ./audiobookshelf.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };

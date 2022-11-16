@@ -32,6 +32,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/advplyr/audiobookshelf/">audiobookshelf</link>,
+          a self-hosted audiobook and podcast server. Available as
+          <link linkend="opt-services.audiobookshelf.enable">services.audiobookshelf</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/akinomyoga/ble.sh">blesh</link>,
           a line editor written in pure bash. Available as
           <link linkend="opt-programs.bash.blesh.enable">programs.bash.blesh</link>.
