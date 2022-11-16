@@ -9,7 +9,7 @@
 }:
 
 let
-  # remove when upgrading to pjsip >1.12.1
+  # remove when upgrading to pjsip >2.12.1
   pjsip_patches = [
     (fetchpatch {
       name = "0150-CVE-2022-31031.patch";
