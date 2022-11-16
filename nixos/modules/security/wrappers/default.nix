@@ -5,9 +5,7 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  securityWrapper = sourceProg : pkgs.callPackage ./wrapper.nix {
-    inherit sourceProg;
-  };
+  securityWrapper = pkgs.callPackage ./wrapper.nix {};
 
   fileModeType =
     let
@@ -41,7 +39,7 @@ let
       };
     options.permissions = lib.mkOption
       { type = fileModeType;
-        default  = "u+rx,g+x,o+x";
+        default  = "u+x,g+x,o+x";
         example = "a+rx";
         description = lib.mdDoc ''
           The permissions of the wrapper program. The format is that of a
@@ -91,7 +89,10 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      cp ${securityWrapper}/bin/nixos-security-wrapper "$wrapperDir/${program}"
+      # nixos-security-wrapper reads the path to the program at the end of its ELF
+      # structure, allowing to re-use the same binary without recompiling it.
+      echo -n "${source}" >> "$wrapperDir/${program}"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -102,8 +103,8 @@ let
       # its file into the Ambient set.
       ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
 
-      # Set the executable bit
-      chmod ${permissions} "$wrapperDir/${program}"
+      # Set the executable bit and make it readable
+      chmod ${permissions},u+r,g+r,o+r "$wrapperDir/${program}"
     '';
 
   ###### Activation script for the setuid wrappers
@@ -118,13 +119,16 @@ let
     , ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      cp ${securityWrapper}/bin/nixos-security-wrapper "$wrapperDir/${program}"
+      # nixos-security-wrapper reads the path to the program at the end of its ELF
+      # structure, allowing to re-use the same binary without recompiling it.
+      echo -n "${source}" >> "$wrapperDir/${program}"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
       chown ${owner}:${group} "$wrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
+      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions},u+r,g+r,o+r" "$wrapperDir/${program}"
     '';
 
   mkWrappedPrograms =
