@@ -1580,8 +1580,6 @@ self: super: with self; {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
-  coqui-trainer = callPackage ../development/python-modules/coqui-trainer {};
-
   cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
@@ -11249,6 +11247,8 @@ self: super: with self; {
   tracing = callPackage ../development/python-modules/tracing { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
+
+  trainer = callPackage ../development/python-modules/trainer {};
 
   traitlets = callPackage ../development/python-modules/traitlets { };
 

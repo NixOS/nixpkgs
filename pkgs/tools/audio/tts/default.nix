@@ -71,7 +71,6 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     anyascii
     coqpit
-    coqui-trainer
     flask
     fsspec
     gdown
@@ -92,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
     torch-bin
     torchaudio-bin
     tqdm
+    trainer
     umap-learn
     unidic-lite
     webrtcvad
