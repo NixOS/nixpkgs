@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, ocaml, ocamlbuild, findlib, ocaml_extlib, glib, perl, pkg-config, stdlib-shims, ounit }:
+{ lib, fetchurl, stdenv, ocaml, ocamlbuild, findlib, extlib, glib, perl, pkg-config, stdlib-shims, ounit }:
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-cudf";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     stdlib-shims
   ];
   propagatedBuildInputs = [
-    ocaml_extlib
+    extlib
   ];
 
   checkTarget = [

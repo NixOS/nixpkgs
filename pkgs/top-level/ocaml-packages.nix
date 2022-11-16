@@ -411,6 +411,12 @@ let
 
     ethernet = callPackage ../development/ocaml-modules/ethernet { };
 
+    extlib = extlib-1-7-9;
+
+    extlib-1-7-9 = callPackage ../development/ocaml-modules/extlib { };
+
+    extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
@@ -561,9 +567,7 @@ let
 
     iter = callPackage ../development/ocaml-modules/iter { };
 
-    javalib = callPackage ../development/ocaml-modules/javalib {
-      extlib = ocaml_extlib;
-    };
+    javalib = callPackage ../development/ocaml-modules/javalib { };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
 
@@ -1259,12 +1263,6 @@ let
     };
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
-
-    ocaml_extlib = ocaml_extlib-1-7-9;
-
-    ocaml_extlib-1-7-9 = callPackage ../development/ocaml-modules/extlib { };
-
-    ocaml_extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
