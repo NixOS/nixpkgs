@@ -1,16 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, substituteAll
-, qmake, qttools, qttranslations, qtlocation, qtpbfimageplugin, wrapQtAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, nix-update-script
+, substituteAll
+, qtbase
+, qttools
+, qttranslations
+, qtlocation ? null # qt5 only
+, qtpositioning ? null # qt6 only
+, qtpbfimageplugin
+, qtsvg
+, qt5compat ? null # qt6 only
+, wrapQtAppsHook
 }:
 
+let
+  isQt5 = lib.versions.major qtbase.version == "5";
+
+in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.6";
+  version = "11.8";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-kwEltkLcMCZlUJyE+nyy70WboVO1FgMw0cH1hxLVtKQ=";
+    hash = "sha256-n+KG2ykfZfpZOUGCP+YwLUJzYG7DDGKlYu/mZkMNb5k=";
   };
 
   patches = (substituteAll {
@@ -19,13 +36,17 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtlocation qtpbfimageplugin ];
+  buildInputs = [ qtpbfimageplugin ]
+    ++ (if isQt5 then [
+    qtlocation
+  ] else [
+    qtbase
+    qtpositioning
+    qtsvg
+    qt5compat
+  ]);
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
-
-  preConfigure = ''
-    lrelease gpxsee.pro
-  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
