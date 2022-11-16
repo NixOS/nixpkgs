@@ -29143,7 +29143,11 @@ with pkgs;
 
   gpxlab = libsForQt5.callPackage ../applications/misc/gpxlab { };
 
-  gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
+  gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
+
+  gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
+
+  gpxsee = gpxsee-qt5;
 
   gspell = callPackage ../development/libraries/gspell { };
 
