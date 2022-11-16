@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "A GObject to SQLite object mapper";
     homepage = "https://wiki.gnome.org/Projects/Gom";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
 }

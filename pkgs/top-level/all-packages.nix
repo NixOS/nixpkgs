@@ -1008,6 +1008,8 @@ with pkgs;
 
   sirula = callPackage ../tools/wayland/sirula { };
 
+  sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen {};
+
   srcOnly = callPackage ../build-support/src-only { };
 
   subnetcalc = callPackage ../tools/networking/subnetcalc { };
@@ -1604,7 +1606,9 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi { };
+  ludusavi = callPackage ../applications/backup/ludusavi {
+    inherit (plasma5Packages) kdialog;
+  };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -4581,6 +4585,8 @@ with pkgs;
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
   mmctl = callPackage ../tools/misc/mmctl { };
+
+  moar = callPackage ../tools/misc/moar { };
 
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
@@ -15142,7 +15148,6 @@ with pkgs;
   cargo-profiler = callPackage ../development/tools/rust/cargo-profiler {};
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
@@ -19733,11 +19738,7 @@ with pkgs;
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
-  jemalloc = callPackage ../development/libraries/jemalloc {
-    # tests fail with LLVM 11+
-    # https://github.com/jemalloc/jemalloc/issues/2091
-    stdenv = if stdenv.cc.isClang then llvmPackages_10.stdenv else stdenv;
-  };
+  jemalloc = callPackage ../development/libraries/jemalloc { };
 
   jose = callPackage ../development/libraries/jose { };
 
@@ -24531,6 +24532,10 @@ with pkgs;
 
   storm = callPackage ../servers/computing/storm { };
 
+  surrealdb = callPackage ../servers/nosql/surrealdb {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
   slurm = callPackage ../servers/computing/slurm { };
@@ -26543,6 +26548,8 @@ with pkgs;
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
+  linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin {};
+
   linux-manual = callPackage ../data/documentation/linux-manual { };
 
   lklug-sinhala = callPackage ../data/fonts/lklug-sinhala {};
@@ -27009,6 +27016,7 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -31761,6 +31769,10 @@ with pkgs;
     inherit (gnome) zenity;
   };
 
+  rymdport = callPackage ../applications/networking/rymdport {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+
   uade = callPackage ../applications/audio/uade {};
 
   udevil = callPackage ../applications/misc/udevil {};
@@ -36232,6 +36244,8 @@ with pkgs;
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
     boost = boost175;
+    # build with Python 3.10 fails, because boost <= 1.78 can't find
+    # pythons with double digits in minor versions, like X.YZ
     python3 = python39;
   };
 
