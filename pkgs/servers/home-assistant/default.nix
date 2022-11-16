@@ -149,6 +149,16 @@ let
         doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
 
+      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.20";
+        src = fetchFromGitHub {
+          owner = "andrey-git";
+          repo = "pysensibo";
+          rev = "refs/tags/${version}";
+          hash = "sha256-L2NP4XS+dPlBr2h8tsGoa4G7tI9yiI4fwrhvQaKkexk=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
@@ -238,7 +248,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.11.2";
+  hassVersion = "2022.11.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -256,7 +266,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-LYO0SM75+e/4FoOONW+qel1AX/7qM9e+K729jR6PyUQ=";
+    hash = "sha256-9L2GBgM3RTqeOCnW47Kr4OxqVjcbBEvzkiPYZ5qEQAE=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
