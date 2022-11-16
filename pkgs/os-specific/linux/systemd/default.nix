@@ -126,7 +126,7 @@ assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "250.7";
+  version = "250.8";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-dyKRo8ktaI/sGA98X6d6bqToN1ehDF3obA98N24uoqI=";
+    sha256 = "sha256-16PkAl0amLfdZ0L55opHdhXylKKof7RUlOJ/jDeRQko=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
