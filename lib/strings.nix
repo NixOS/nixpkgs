@@ -661,6 +661,61 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
+  /* Create a -D<feature>=<value> string that can be passed to typical Meson
+     invocations.
+
+    Type: mesonOption :: string -> string -> string
+
+     @param feature The feature to be set
+     @param value The desired value
+
+     Example:
+       mesonOption "engine" "opengl"
+       => "-Dengine=opengl"
+  */
+  mesonOption = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    "-D${feature}=${value}";
+
+  /* Create a -D<condition>={true,false} string that can be passed to typical
+     Meson invocations.
+
+    Type: mesonBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       mesonBool "hardened" true
+       => "-Dhardened=true"
+       mesonBool "static" false
+       => "-Dstatic=false"
+  */
+  mesonBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    mesonOption condition (lib.boolToString flag);
+
+  /* Create a -D<feature>={enabled,disabled} string that can be passed to
+     typical Meson invocations.
+
+    Type: mesonEnable :: string -> bool -> string
+
+     @param feature The feature to be enabled or disabled
+     @param flag The controlling flag
+
+     Example:
+       mesonEnable "docs" true
+       => "-Ddocs=enabled"
+       mesonEnable "savage" false
+       => "-Dsavage=disabled"
+  */
+  mesonEnable = feature: flag:
+    assert (lib.isString feature);
+    assert (lib.isBool flag);
+    mesonOption feature (if flag then "enabled" else "disabled");
+
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
 
