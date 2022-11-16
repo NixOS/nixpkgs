@@ -48,13 +48,13 @@
     "version": "3.0.0"
   },
   "alicloud": {
-    "hash": "sha256-2ClWPe4sTt6rW9AamDH8td/W5/yDdD1qR4V1pzJm/0I=",
+    "hash": "sha256-rscu2gCvf/8MJBx1coUmne+8DO8b6RFyfMAwhTUPU+w=",
     "owner": "aliyun",
     "provider-source-address": "registry.terraform.io/aliyun/alicloud",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.191.0",
+    "rev": "v1.192.0",
     "vendorHash": null,
-    "version": "1.191.0"
+    "version": "1.192.0"
   },
   "ansible": {
     "hash": "sha256-3nha5V4rNgVzgqliebmbC5e12Lj/zlCsyyiIVFlmUrY=",
@@ -148,13 +148,14 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "hash": "sha256-O2DU47kabPleWr+HodOx+Canp1bFypAZ3UMJnC2mzqQ=",
+    "deleteVendor": true,
+    "hash": "sha256-0L/T12jeSkdZDJknVu5JffyaniZ1RVWgMpPu3qKNmWU=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.18.0",
-    "vendorHash": null,
-    "version": "1.18.0"
+    "rev": "v1.18.2",
+    "vendorHash": "sha256-ya2FpsLQMIu8zWYObpyPgBHVkHoNKzHgdMxukbtsje4=",
+    "version": "1.18.2"
   },
   "bigip": {
     "hash": "sha256-erJeg7KF3QUi85ueOQTrab2woIC1nkMXRIj/pFm0DGY=",
@@ -221,13 +222,13 @@
     "version": "1.20.0"
   },
   "cloudflare": {
-    "hash": "sha256-DqGHPD1CnkIkABB0sB90zE/mVxo0aXQwu4Et7apuM1A=",
+    "hash": "sha256-a0zJ1n4nKHEyjqJeey5MxPhqJU8Bq9a+hqLOCEdTfEE=",
     "owner": "cloudflare",
     "provider-source-address": "registry.terraform.io/cloudflare/cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v3.27.0",
-    "vendorHash": "sha256-tpOyqFpO1jMEfXkXgodGEnFVGMqeAqsU5oou60lqcUE=",
-    "version": "3.27.0"
+    "rev": "v3.28.0",
+    "vendorHash": "sha256-Jvaud6rkaNMZZ/L/pb8JKGaAYw1MieGq7aU4Abe2VJA=",
+    "version": "3.28.0"
   },
   "cloudfoundry": {
     "hash": "sha256-VfGB0NkT36oYT5F1fh1N/2rlZdfhk+K76AXNh0NkO50=",
@@ -777,13 +778,13 @@
     "version": "0.6.12"
   },
   "newrelic": {
-    "hash": "sha256-TZM7MRdc3Fok2e8FR04ccC19rd1OXvrRnm6yQRRhXJU=",
+    "hash": "sha256-d5JRqxMmG7fku8+C8e700nfghz2wbL0n1TrOZb1hkpY=",
     "owner": "newrelic",
     "provider-source-address": "registry.terraform.io/newrelic/newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.7.0",
+    "rev": "v3.7.1",
     "vendorHash": "sha256-gKPopfkEx1YRxcsO8W2+2EqKJfYbJ/pJgpydc1YScDA=",
-    "version": "3.7.0"
+    "version": "3.7.1"
   },
   "nomad": {
     "hash": "sha256-oHY+jM4JQgLlE1wd+/H9H8H2g0e9ZuxI6OMlz3Izfjg=",
@@ -1111,13 +1112,13 @@
     "version": "0.13.5"
   },
   "tencentcloud": {
-    "hash": "sha256-ZoNmoeeRnZ/CDAfXRyKxgXcXpjzquncbaS5dpjq16Lw=",
+    "hash": "sha256-eTHI5T2RZawwb7PsrnTm5Bglhc28A7pKcX2Lq8flAcY=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.10",
+    "rev": "v1.78.11",
     "vendorHash": null,
-    "version": "1.78.10"
+    "version": "1.78.11"
   },
   "tfe": {
     "hash": "sha256-MDlRwB2iVi/Rv7/UtukI6mIDImz8Gnpm5Qv5R6EDpiU=",

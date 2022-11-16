@@ -114,6 +114,16 @@
 
 self: super: {
 
+  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
+    meta = {
+      description = "A VS Code like winbar for Neovim";
+      homepage = "https://github.com/utilyre/barbecue.nvim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ lightquantum ];
+    };
+  });
+
   clang_complete = super.clang_complete.overrideAttrs (old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).

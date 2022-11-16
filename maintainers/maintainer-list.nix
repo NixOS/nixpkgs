@@ -7939,6 +7939,13 @@
     githubId = 24509182;
     name = "Arnaud Pascal";
   };
+  lightquantum = {
+    email = "self@lightquantum.me";
+    github = "PhotonQuantum";
+    githubId = 18749973;
+    name = "Yanning Chen";
+    matrix = "@self:lightquantum.me";
+  };
   lihop = {
     email = "nixos@leroy.geek.nz";
     github = "lihop";

@@ -1008,6 +1008,8 @@ with pkgs;
 
   sirula = callPackage ../tools/wayland/sirula { };
 
+  sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen {};
+
   srcOnly = callPackage ../build-support/src-only { };
 
   subnetcalc = callPackage ../tools/networking/subnetcalc { };
@@ -26533,6 +26535,8 @@ with pkgs;
   lightly-qt = libsForQt5.callPackage ../data/themes/lightly-qt { };
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
+
+  linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin {};
 
   linux-manual = callPackage ../data/documentation/linux-manual { };
 
