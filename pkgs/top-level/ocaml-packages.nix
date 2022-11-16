@@ -1260,9 +1260,9 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
-    ocaml_extlib = ocaml_extlib-1-7-8;
+    ocaml_extlib = ocaml_extlib-1-7-9;
 
-    ocaml_extlib-1-7-8 = callPackage ../development/ocaml-modules/extlib { };
+    ocaml_extlib-1-7-9 = callPackage ../development/ocaml-modules/extlib { };
 
     ocaml_extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
 
@@ -1621,10 +1621,7 @@ let
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
-    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse {
-      # needs Base64 module
-      ocaml_extlib = ocaml_extlib.override { minimal = false; };
-    };
+    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
