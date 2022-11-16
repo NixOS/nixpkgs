@@ -10623,6 +10623,8 @@ with pkgs;
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  plotjuggler = libsForQt5.callPackage ../applications/science/robotics/plotjuggler { };
+
   pmacct = callPackage ../tools/networking/pmacct { };
 
   pmix = callPackage ../development/libraries/pmix { };
