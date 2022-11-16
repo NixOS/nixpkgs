@@ -13,10 +13,10 @@
 
 stdenv.mkDerivation rec {
   pname = "quarto";
-  version = "1.1.251";
+  version = "1.2.269";
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${version}/quarto-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-VEYUEI4xzQPXlyTbCThAW2npBCZNPDJ5x2cWnkNz7RE=";
+    sha256 = "sha256-liZc7Ewo7HaIXdcXpdfQ3SW5JlOmZiZDawusjgJt8pE=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-deno-path.patch
   ];
+
+  postPatch = ''
+    # Compat for Deno >=1.26
+    substituteInPlace bin/quarto.js \
+      --replace 'Deno.setRaw(stdin.rid, ' 'Deno.stdin.setRaw(' \
+      --replace 'Deno.setRaw(Deno.stdin.rid, ' 'Deno.stdin.setRaw('
+  '';
 
   dontStrip = true;
 
