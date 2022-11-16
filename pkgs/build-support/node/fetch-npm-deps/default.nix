@@ -46,7 +46,7 @@
             hash = "sha256-uQmc+S+V1co1Rfc4d82PpeXjmd1UqdsG492ADQFcZGA=";
           };
 
-          hash = "sha256-fk7L9vn8EHJsGJNMAjYZg9h0PT6dAwiahdiEeXVrMB8=";
+          hash = "sha256-wca1QvxUw3OrLStfYN9Co6oVBR1LbfcNUKlDqvObps4=";
         };
 
         lockfileV2 = makeTest {
@@ -57,7 +57,7 @@
             hash = "sha256-qS29tq5QPnGxV+PU40VgMAtdwVLtLyyhG2z9GMeYtC4=";
           };
 
-          hash = "sha256-s8SpZY/1tKZVd3vt7sA9vsqHvEaNORQBMrSyhWpj048=";
+          hash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
         };
 
         hashPrecedence = makeTest {
@@ -68,7 +68,7 @@
             hash = "sha256-1+0AQw9EmbHiMPA/H8OP8XenhrkhLRYBRhmd1cNPFjk=";
           };
 
-          hash = "sha256-KRxwrEij3bpZ5hbQhX67KYpnY2cRS7u2EVZIWO1FBPM=";
+          hash = "sha256-oItUls7AXcCECuyA+crQO6B0kv4toIr8pBubNwB7kAM=";
         };
 
         hostedGitDeps = makeTest {
@@ -79,7 +79,7 @@
             hash = "sha256-X9mCwPqV5yP0S2GonNvpYnLSLJMd/SUIked+hMRxDpA=";
           };
 
-          hash = "sha256-oIM05TGHstX1D4k2K4TJ+SHB7H/tNKzxzssqf0GJwvY=";
+          hash = "sha256-ri8qvYjn420ykmCC2Uy5P3jxVVrKWJG3ug/qLIGcR7o=";
         };
 
         linkDependencies = makeTest {
@@ -90,7 +90,7 @@
             hash = "sha256-6ZTBMyuyPP/63gpQugggHhKVup6OB4hZ2rmSvPJ0yEs=";
           };
 
-          hash = "sha256-uQx8F5OXKm+fqx6hP6obVYTlQIYcJwtO52j6VQNo7Sk=";
+          hash = "sha256-VzQhArHoznYSXUT7l9HkJV4yoSOmoP8eYTLel1QwmB4=";
         };
 
         # This package contains both hosted Git shorthand, and a bundled dependency that happens to override an existing one.
@@ -102,7 +102,7 @@
             hash = "sha256-1fGNxYJi1I4cXK/jinNG+Y6tPEOhP3QAqWOBEQttS9E=";
           };
 
-          hash = "sha256-TzUFykASDjXlfmgq2bUIJjUkfLlGLUkRTVFPIYPCmyc=";
+          hash = "sha256-73rLcSBgsZRJFELaKK++62hVbt1QT8JgLu2hyDSmIZE=";
         };
       };
 

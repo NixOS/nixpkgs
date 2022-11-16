@@ -5,7 +5,7 @@ use anyhow::{anyhow, Context};
 use rayon::prelude::*;
 use serde::Deserialize;
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     env, fmt, fs,
     path::Path,
     process::{self, Command},
@@ -292,47 +292,58 @@ fn main() -> anyhow::Result<()> {
         return Ok(());
     }
 
+    let packages = {
+        let mut seen = HashSet::new();
+        let mut new_packages = HashMap::new();
+
+        for (dep, package) in packages.unwrap().drain() {
+            if let (false, Some(UrlOrString::Url(resolved))) = (dep.is_empty(), &package.resolved) {
+                if !seen.contains(resolved) {
+                    seen.insert(resolved.clone());
+                    new_packages.insert(dep, package);
+                }
+            }
+        }
+
+        new_packages
+    };
+
     let cache = Cache::new(out.join("_cacache"));
 
-    packages
-        .unwrap()
-        .into_par_iter()
-        .filter(|(dep, _)| !dep.is_empty())
-        .filter(|(_, package)| matches!(package.resolved, Some(UrlOrString::Url(_))))
-        .try_for_each(|(dep, package)| {
-            eprintln!("{dep}");
+    packages.into_par_iter().try_for_each(|(dep, package)| {
+        eprintln!("{dep}");
 
-            let mut resolved = match package.resolved {
-                Some(UrlOrString::Url(url)) => url,
-                _ => unreachable!(),
-            };
+        let mut resolved = match package.resolved {
+            Some(UrlOrString::Url(url)) => url,
+            _ => unreachable!(),
+        };
 
-            if let Some(hosted_git_url) = get_hosted_git_url(&resolved) {
-                resolved = hosted_git_url;
-            }
+        if let Some(hosted_git_url) = get_hosted_git_url(&resolved) {
+            resolved = hosted_git_url;
+        }
 
-            let mut data = Vec::new();
+        let mut data = Vec::new();
 
-            agent
-                .get(resolved.as_str())
-                .call()?
-                .into_reader()
-                .read_to_end(&mut data)?;
+        agent
+            .get(resolved.as_str())
+            .call()?
+            .into_reader()
+            .read_to_end(&mut data)?;
 
-            cache
-                .put(
-                    format!("make-fetch-happen:request-cache:{resolved}"),
-                    resolved,
-                    &data,
-                    package
-                        .integrity
-                        .map(|i| Ok::<String, anyhow::Error>(get_ideal_hash(&i)?.to_string()))
-                        .transpose()?,
-                )
-                .map_err(|e| anyhow!("couldn't insert cache entry for {dep}: {e:?}"))?;
+        cache
+            .put(
+                format!("make-fetch-happen:request-cache:{resolved}"),
+                resolved,
+                &data,
+                package
+                    .integrity
+                    .map(|i| Ok::<String, anyhow::Error>(get_ideal_hash(&i)?.to_string()))
+                    .transpose()?,
+            )
+            .map_err(|e| anyhow!("couldn't insert cache entry for {dep}: {e:?}"))?;
 
-            Ok::<_, anyhow::Error>(())
-        })?;
+        Ok::<_, anyhow::Error>(())
+    })?;
 
     fs::write(out.join("package-lock.json"), lock_content)?;
 
