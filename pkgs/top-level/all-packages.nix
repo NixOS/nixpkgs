@@ -6468,7 +6468,6 @@ with pkgs;
 
   exempi = callPackage ../development/libraries/exempi {
     stdenv = if stdenv.isDarwin then stdenv
-             else if stdenv.isi686 then gcc6Stdenv
              else gcc9Stdenv;
     boost  = if stdenv.isDarwin then boost else boost15x;
   };
