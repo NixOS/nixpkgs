@@ -506,6 +506,8 @@ with pkgs;
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
+  lint-staged = callPackage ../development/tools/misc/lint-staged { };
+
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
   probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
