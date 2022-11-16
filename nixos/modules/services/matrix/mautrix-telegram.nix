@@ -109,6 +109,11 @@ in {
           and prepending `MAUTRIX_TELEGRAM_`.
           For example, the first value above maps to
           {option}`settings.appservice.as_token`.
+
+          The environment variable values can be prefixed with `json::` to have
+          them be parsed as JSON. For example, `login_shared_secret_map` can be
+          set as follows:
+          `MAUTRIX_TELEGRAM_BRIDGE_LOGIN_SHARED_SECRET_MAP=json::{"example.com":"secret"}`.
         '';
       };
 
