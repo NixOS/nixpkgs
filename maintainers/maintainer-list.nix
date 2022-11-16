@@ -1297,6 +1297,12 @@
     githubId = 55833;
     name = "Troels Henriksen";
   };
+  athre0z = {
+    email = "joel@zyantific.com";
+    github = "athre0z";
+    githubId = 6553158;
+    name = "Joel Höner";
+  };
   atila = {
     name = "Átila Saraiva";
     email = "atilasaraiva@gmail.com";
