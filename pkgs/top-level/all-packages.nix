@@ -2770,6 +2770,8 @@ with pkgs;
 
   hwi = with python3Packages; toPythonApplication hwi;
 
+  ida-free = callPackage ../applications/misc/ida-free { };
+
   ili2c = callPackage ../tools/misc/ili2c { };
 
   imagelol = callPackage ../tools/compression/imagelol { };
