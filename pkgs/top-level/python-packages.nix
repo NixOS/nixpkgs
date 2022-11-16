@@ -11786,7 +11786,7 @@ self: super: with self; {
 
   wallbox = callPackage ../development/python-modules/wallbox { };
 
-  Wand = callPackage ../development/python-modules/Wand { };
+  wand = callPackage ../development/python-modules/wand { };
 
   wandb = callPackage ../development/python-modules/wandb { };
 
