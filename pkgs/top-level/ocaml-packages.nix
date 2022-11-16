@@ -411,6 +411,12 @@ let
 
     ethernet = callPackage ../development/ocaml-modules/ethernet { };
 
+    extlib = extlib-1-7-9;
+
+    extlib-1-7-9 = callPackage ../development/ocaml-modules/extlib { };
+
+    extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
@@ -561,9 +567,7 @@ let
 
     iter = callPackage ../development/ocaml-modules/iter { };
 
-    javalib = callPackage ../development/ocaml-modules/javalib {
-      extlib = ocaml_extlib;
-    };
+    javalib = callPackage ../development/ocaml-modules/javalib { };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
 
@@ -1260,12 +1264,6 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
-    ocaml_extlib = ocaml_extlib-1-7-8;
-
-    ocaml_extlib-1-7-8 = callPackage ../development/ocaml-modules/extlib { };
-
-    ocaml_extlib-1-7-7 = callPackage ../development/ocaml-modules/extlib/1.7.7.nix { };
-
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
@@ -1621,10 +1619,7 @@ let
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
-    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse {
-      # needs Base64 module
-      ocaml_extlib = ocaml_extlib.override { minimal = false; };
-    };
+    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 

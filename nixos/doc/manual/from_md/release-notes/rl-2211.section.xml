@@ -994,6 +994,12 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          <literal>ocamlPackages.ocaml_extlib</literal> has been renamed
+          to <literal>ocamlPackages.extlib</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.fetchNextcloudApp</literal> has been rewritten
           to circumvent impurities in e.g. tarballs from GitHub and to
           make it easier to apply patches. This means that your hashes
