@@ -11,14 +11,14 @@ let
 in
 buildPythonApplication rec {
   pname = "MeerK40t";
-  version = "0.8.0031";
+  version = "0.8.1000";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "meerk40t";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7Vc7Z+mxy+xRbUBeivkqVwO86ovZDo42M4G0ZD23vMk=";
+    hash = "sha256-YCcnqaH4Npmct5IBHsnufswRz8bS7mUb1YFwTta/Dxc=";
   };
 
   nativeBuildInputs = [
