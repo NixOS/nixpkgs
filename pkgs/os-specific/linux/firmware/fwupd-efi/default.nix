@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , fetchFromGitHub
 , substituteAll
 , pkg-config
@@ -14,9 +13,11 @@ stdenv.mkDerivation rec {
   pname = "fwupd-efi";
   version = "1.3";
 
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1Ys04TwhWYZ8ORJgr04kGO6/lI1I36sC6kcrVoP/r1k=";
+  src = fetchFromGitHub {
+    owner = "fwupd";
+    repo = pname;
+    rev = version;
+    hash = "sha256-GF2a4RW5H4ybaBe1CS1dQK7eradJ0pzNe77T5fQzhLc=";
   };
 
   nativeBuildInputs = [
