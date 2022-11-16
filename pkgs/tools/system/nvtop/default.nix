@@ -6,6 +6,8 @@
 , cudatoolkit
 , libdrm
 , ncurses
+, nvtop
+, testers
 , addOpenGLRunpath
 , amd ? true
 , nvidia ? true
@@ -53,6 +55,14 @@ stdenv.mkDerivation rec {
   postFixup = (lib.optionalString amd amd-postFixup) + (lib.optionalString nvidia nvidia-postFixup);
 
   doCheck = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      package = nvtop;
+      command = "nvtop --version";
+    };
+  };
 
   meta = with lib; {
     description = "A (h)top like task monitor for AMD, Intel and NVIDIA GPUs";
