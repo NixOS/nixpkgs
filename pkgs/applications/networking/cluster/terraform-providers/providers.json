@@ -148,13 +148,14 @@
     "version": "1.0.0"
   },
   "baiducloud": {
-    "hash": "sha256-O2DU47kabPleWr+HodOx+Canp1bFypAZ3UMJnC2mzqQ=",
+    "deleteVendor": true,
+    "hash": "sha256-0L/T12jeSkdZDJknVu5JffyaniZ1RVWgMpPu3qKNmWU=",
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.18.0",
-    "vendorHash": null,
-    "version": "1.18.0"
+    "rev": "v1.18.2",
+    "vendorHash": "sha256-ya2FpsLQMIu8zWYObpyPgBHVkHoNKzHgdMxukbtsje4=",
+    "version": "1.18.2"
   },
   "bigip": {
     "hash": "sha256-erJeg7KF3QUi85ueOQTrab2woIC1nkMXRIj/pFm0DGY=",
