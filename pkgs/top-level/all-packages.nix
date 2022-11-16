@@ -23485,6 +23485,8 @@ with pkgs;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
+  atlas = callPackage ../development/tools/database/atlas { };
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   baserow = callPackage ../servers/baserow { };
