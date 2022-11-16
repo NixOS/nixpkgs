@@ -6851,8 +6851,6 @@ with pkgs;
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
-  fsfs = callPackage ../tools/filesystems/fsfs { };
-
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
