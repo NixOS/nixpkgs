@@ -7,8 +7,8 @@ let
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json {};
-  settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config-unsubstituted.json" cfg.settings;
-  settingsFile = "${dataDir}/config.json";
+  settingsFile =
+    settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
 
 in {
   options = {
@@ -147,16 +147,6 @@ in {
       environment.HOME = dataDir;
 
       preStart = ''
-        # Not all secrets can be passed as environment variable (yet)
-        # https://github.com/tulir/mautrix-telegram/issues/584
-        [ -f ${settingsFile} ] && rm -f ${settingsFile}
-        old_umask=$(umask)
-        umask 0177
-        ${pkgs.envsubst}/bin/envsubst \
-          -o ${settingsFile} \
-          -i ${settingsFileUnsubstituted}
-        umask $old_umask
-
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
@@ -192,8 +182,6 @@ in {
             --config='${settingsFile}'
         '';
       };
-
-      restartTriggers = [ settingsFileUnsubstituted ];
     };
   };
 
