@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv ];
-
-  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv pkg-config ];
 
   buildInputs = [ alsa-lib xlibsWrapper systemd libusb-compat-0_1 libftdi1 ];
 
