@@ -369,6 +369,11 @@ if [[ -n $flake ]]; then
     else
         flakeAttr="nixosConfigurations.\"$flakeAttr\""
     fi
+
+    # Follow symlink if local path
+    if [[ -e $flake ]] then
+        flake="$(readlink -f $flake)"
+    fi
 fi
 
 
