@@ -15142,7 +15142,6 @@ with pkgs;
   cargo-profiler = callPackage ../development/tools/rust/cargo-profiler {};
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
-    openssl = openssl_1_1;
   };
   cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks {
@@ -18328,6 +18327,8 @@ with pkgs;
 
   boxfort = callPackage ../development/libraries/boxfort { };
 
+  brunsli = callPackage ../development/libraries/brunsli { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   buildkit-nix = callPackage ../applications/virtualization/buildkit-nix { };
@@ -19007,10 +19008,7 @@ with pkgs;
     libXpm = null;
   };
 
-  gdal = callPackage ../development/libraries/gdal {
-    pythonPackages = python3Packages;
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
+  gdal = callPackage ../development/libraries/gdal { };
 
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
@@ -19730,11 +19728,7 @@ with pkgs;
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
-  jemalloc = callPackage ../development/libraries/jemalloc {
-    # tests fail with LLVM 11+
-    # https://github.com/jemalloc/jemalloc/issues/2091
-    stdenv = if stdenv.cc.isClang then llvmPackages_10.stdenv else stdenv;
-  };
+  jemalloc = callPackage ../development/libraries/jemalloc { };
 
   jose = callPackage ../development/libraries/jose { };
 
@@ -19836,6 +19830,8 @@ with pkgs;
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica { };
+
+  lerc = callPackage ../development/libraries/lerc { };
 
   lib2geom = callPackage ../development/libraries/lib2geom { };
 
@@ -21253,13 +21249,9 @@ with pkgs;
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
   mapnik = callPackage ../development/libraries/mapnik {
-    gdal = gdal.override {
-      libgeotiff = libgeotiff.override { proj = proj_7; };
-      libspatialite = libspatialite.override { proj = proj_7; };
-      proj = proj_7;
+    harfbuzz = harfbuzz.override {
+      withIcu = true;
     };
-    proj = proj_7;
-    boost = boost175;
   };
 
   manticoresearch = callPackage ../servers/search/manticoresearch { };
@@ -36227,6 +36219,9 @@ with pkgs;
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
     boost = boost175;
+    # build with Python 3.10 fails, because boost <= 1.78 can't find
+    # pythons with double digits in minor versions, like X.YZ
+    python3 = python39;
   };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
@@ -37009,10 +37004,8 @@ with pkgs;
 
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
     gdal = gdal.override {
-      libmysqlclient = mysql // {
-        lib = { dev = mysql; }
-      ;}
-    ;};
+      libmysqlclient = mysql;
+    };
     mysql = mysql;
     pcre = pcre-cpp;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -37020,7 +37013,7 @@ with pkgs;
 
   r128gain = callPackage ../applications/audio/r128gain { };
 
-  redis-desktop-manager = libsForQt5.callPackage ../applications/misc/redis-desktop-manager { };
+  resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
   robin-map = callPackage ../development/libraries/robin-map { };
 

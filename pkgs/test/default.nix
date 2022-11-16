@@ -67,6 +67,7 @@ with pkgs;
     references = callPackage ../build-support/trivial-builders/test/references.nix {};
     overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
     concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
+    linkFarm = callPackage ../build-support/trivial-builders/test/link-farm.nix {};
   };
 
   writers = callPackage ../build-support/writers/test.nix {};
