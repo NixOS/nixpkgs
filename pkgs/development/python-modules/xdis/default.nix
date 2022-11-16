@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+, python
 , pythonOlder
 , six
 }:
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Our Python release is not in the test matrix
     substituteInPlace xdis/magics.py \
-      --replace "3.10.4" "3.10.5 3.10.6"
+      --replace "3.10.4" "${python.version}"
   '';
 
   propagatedBuildInputs = [
