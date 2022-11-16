@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl, ocaml_extlib, lutils, rdbg }:
+{ lib, buildDunePackage, fetchurl, extlib, lutils, rdbg }:
 
 buildDunePackage rec {
   pname = "lustre-v6";
@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    ocaml_extlib
+    extlib
     lutils
     rdbg
   ];
