@@ -189,9 +189,21 @@ in ''
      EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
 
+     # We want to read part of every line that has cargo:rustc-env= prefix and
+     # export it as environment variables. This turns out tricky if the lines
+     # have spaces: we can't wrap the command in double quotes as that captures
+     # all the lines in single output. We can't use while read loop because
+     # exporting from inside of it doesn't make it to the outside scope. We
+     # can't use xargs as export is a built-in and does not work from it. As a
+     # last resort then, we change the IFS so that the for loop does not split
+     # on spaces and reset it after we are done. See ticket #199298.
+     #
+     _OLDIFS="$IFS"
+     IFS=$'\n'
      for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
-       export $env
+       export "$env"
      done
+     IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \

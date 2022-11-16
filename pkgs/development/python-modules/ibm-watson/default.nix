@@ -5,7 +5,6 @@
 , pytestCheckHook
 , python-dotenv
 , pytest-rerunfailures
-, tox
 , requests
 , python-dateutil
 , websocket-client
@@ -39,7 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dotenv
     pytest-rerunfailures
-    tox
   ];
 
   postPatch = ''
