@@ -3433,6 +3433,8 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
+  audiobookshelf = callPackage ../servers/web-apps/audiobookshelf { };
+
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
