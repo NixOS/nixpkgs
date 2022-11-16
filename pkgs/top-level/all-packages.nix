@@ -13297,6 +13297,8 @@ with pkgs;
 
   zkar = callPackage ../tools/security/zkar { };
 
+  zlint = callPackage ../tools/security/zlint { };
+
   zmap = callPackage ../tools/security/zmap { };
 
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
