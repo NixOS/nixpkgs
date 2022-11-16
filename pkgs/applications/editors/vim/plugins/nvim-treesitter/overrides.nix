@@ -1,4 +1,4 @@
-{ lib, callPackage, tree-sitter, nodejs }:
+{ lib, callPackage, tree-sitter, neovim, runCommand }:
 
 self: super:
 
@@ -21,7 +21,7 @@ let
           replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
         in
         map (lib.flip lib.nameValuePair v)
-          ([ ("tree-sitter-${k}") ] ++ lib.optionals (k != replaced) [
+          ([ "tree-sitter-${k}" ] ++ lib.optionals (k != replaced) [
             replaced
             "tree-sitter-${replaced}"
           ]))
@@ -44,15 +44,37 @@ let
           ln -s ${grammars} parser
         '';
     });
+
+  withAllGrammars = withPlugins (_: allGrammars);
 in
 
 {
   passthru = {
-    inherit builtGrammars allGrammars withPlugins;
+    inherit builtGrammars allGrammars withPlugins withAllGrammars;
 
-    tests.builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    tests.check-queries =
+      let
+        nvimWithAllGrammars = neovim.override {
+          configure.packages.all.start = [ withAllGrammars ];
+        };
+      in
+      runCommand "nvim-treesitter-check-queries"
+        {
+          nativeBuildInputs = [ nvimWithAllGrammars ];
+          CI = true;
+        }
+        ''
+          touch $out
+          export HOME=$(mktemp -d)
+          ln -s ${withAllGrammars}/CONTRIBUTING.md .
 
-    withAllGrammars = withPlugins (_: allGrammars);
+          nvim --headless "+luafile ${withAllGrammars}/scripts/check-queries.lua" | tee log
+
+          if grep -q Warning log; then
+            echo "Error: warnings were emitted by the check"
+            exit 1
+          fi
+        '';
   };
 
   meta.maintainers = with lib.maintainers; [ figsoda ];
