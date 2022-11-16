@@ -606,7 +606,7 @@ rec {
   getMan = getOutput "man";
 
   /* Pick the outputs of packages to place in buildInputs */
-  chooseDevOutputs = drvs: builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.
