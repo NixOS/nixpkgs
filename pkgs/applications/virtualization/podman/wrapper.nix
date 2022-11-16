@@ -5,7 +5,6 @@
 , lib
 , stdenv
 , extraPackages ? []
-, podman # Docker compat
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
@@ -23,8 +22,6 @@
 # adding aardvark-dns/netavark to `helpersBin` requires changes to the modules and tests
 
 let
-  podman = podman-unwrapped;
-
   binPath = lib.makeBinPath ([
   ] ++ lib.optionals stdenv.isLinux [
     runc
@@ -38,24 +35,24 @@ let
   ] ++ extraPackages);
 
   helpersBin = symlinkJoin {
-    name = "${podman.pname}-helper-binary-wrapper-${podman.version}";
+    name = "${podman-unwrapped.pname}-helper-binary-wrapper-${podman-unwrapped.version}";
 
     # this only works for some binaries, others may need to be be added to `binPath` or in the modules
     paths = [
       gvproxy
     ] ++ lib.optionals stdenv.isLinux [
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-      podman.rootlessport
+      podman-unwrapped.rootlessport
     ];
   };
 
-in runCommand podman.name {
-  name = "${podman.pname}-wrapper-${podman.version}";
-  inherit (podman) pname version passthru;
+in runCommand podman-unwrapped.name {
+  name = "${podman-unwrapped.pname}-wrapper-${podman-unwrapped.version}";
+  inherit (podman-unwrapped) pname version passthru;
 
   preferLocalBuild = true;
 
-  meta = builtins.removeAttrs podman.meta [ "outputsToInstall" ];
+  meta = builtins.removeAttrs podman-unwrapped.meta [ "outputsToInstall" ];
 
   outputs = [
     "out"
@@ -67,7 +64,7 @@ in runCommand podman.name {
   ];
 
 } ''
-  ln -s ${podman.man} $man
+  ln -s ${podman-unwrapped.man} $man
 
   mkdir -p $out/bin
   ln -s ${podman-unwrapped}/etc $out/etc
