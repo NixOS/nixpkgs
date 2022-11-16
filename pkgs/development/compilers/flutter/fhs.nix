@@ -65,6 +65,7 @@ let
       mkFlutterApp = callPackage ../../../build-support/flutter {
         flutter = callPackage ./fhs.nix { supportsAndroidEmulator = false; };
       };
+      fakeSdk = callPackage ./fake-sdk.nix { flutter = self; };
     };
 
     meta = flutter.meta // {

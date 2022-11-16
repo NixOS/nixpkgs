@@ -3,6 +3,7 @@ let
   mkFlutter = opts: callPackage (import ./flutter.nix opts) { };
   wrapFlutter = flutter: callPackage (import ./wrapper.nix) { flutter = flutter; };
   mkFlutterFHS = flutter: callPackage (import ./fhs.nix) { flutter = flutter; };
+  mkFakeSdk = flutter: callPackage (import ./fake-sdk.nix) { flutter = flutter; };
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
@@ -28,7 +29,7 @@ let
   };
 in
 {
-  inherit mkFlutter wrapFlutter mkFlutterFHS flutterDrv;
+  inherit mkFlutter wrapFlutter mkFlutterFHS mkFakeSdk flutterDrv;
   stable = flutterDrv {
     version = "3.3.3";
     dartVersion = "2.18.2";
