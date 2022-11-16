@@ -1606,7 +1606,9 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi { };
+  ludusavi = callPackage ../applications/backup/ludusavi {
+    inherit (plasma5Packages) kdialog;
+  };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -4583,6 +4585,8 @@ with pkgs;
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
   mmctl = callPackage ../tools/misc/mmctl { };
+
+  moar = callPackage ../tools/misc/moar { };
 
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
@@ -24522,6 +24526,10 @@ with pkgs;
 
   storm = callPackage ../servers/computing/storm { };
 
+  surrealdb = callPackage ../servers/nosql/surrealdb {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
   slurm = callPackage ../servers/computing/slurm { };
@@ -27002,6 +27010,7 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -31752,6 +31761,10 @@ with pkgs;
 
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
+  };
+
+  rymdport = callPackage ../applications/networking/rymdport {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
   uade = callPackage ../applications/audio/uade {};

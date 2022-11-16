@@ -173,10 +173,10 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZSHENV_SOURCED-}" ]; then return; fi
         __ETC_ZSHENV_SOURCED=1
 
-        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+        if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE-}" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
@@ -206,7 +206,7 @@ in
         ${zshStartupNotes}
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZPROFILE_SOURCED-}" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
 
         # Setup custom login shell init stuff.
