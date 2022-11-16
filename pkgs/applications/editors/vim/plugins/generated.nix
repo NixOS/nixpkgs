@@ -809,6 +809,18 @@ final: prev:
     meta.homepage = "https://github.com/romgrk/barbar.nvim/";
   };
 
+  barbecue-nvim = buildVimPluginFrom2Nix {
+    pname = "barbecue.nvim";
+    version = "2022-11-13";
+    src = fetchFromGitHub {
+      owner = "utilyre";
+      repo = "barbecue.nvim";
+      rev = "7f14b47d8ebb5135724ccb7041f5ce43ec6dc839";
+      sha256 = "0n61764k2lqr59gldqchzhrbh8rgyjbfijfdpxsfp4x1aps35zks";
+    };
+    meta.homepage = "https://github.com/utilyre/barbecue.nvim/";
+  };
+
   base16-vim = buildVimPluginFrom2Nix {
     pname = "base16-vim";
     version = "2022-09-20";
