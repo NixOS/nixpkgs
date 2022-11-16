@@ -106,7 +106,13 @@ stdenv.mkDerivation rec {
   preFixup = let
     libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
   in ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}")
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+
+      # Force X11 to be used until Wayland is natively supported
+      # <https://github.com/cemu-project/Cemu/pull/143>
+      --set GDK_BACKEND x11
+    )
   '';
 
   meta = with lib; {
