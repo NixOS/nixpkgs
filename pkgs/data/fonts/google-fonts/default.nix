@@ -1,9 +1,16 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fonts ? []
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
   version = "unstable-2022-11-14";
 
+  # Adobe Blank is split out in a seperate output,
+  # because it causes crashes with `libfontconfig`.
+  # It has an absurd number of symbols
   outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
@@ -13,7 +20,7 @@ stdenvNoCC.mkDerivation {
     sha256 = "sha256-sSabk+VWkoXj1Nzv9ufgIU/nkfKf4XkZU1SO+j+eSPA=";
   };
 
-  patchPhase = ''
+   postPatch = ''
     # These directories need to be removed because they contain
     # older or duplicate versions of fonts also present in other
     # directories. This causes non-determinism in the install since
@@ -32,13 +39,26 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
+  # The font files are in the fonts directory and use two naming schemes:
+  # FamilyName-StyleName.ttf and FamilyName[param1,param2,...].ttf
+  # This installs all fonts if fonts is empty and otherwise only
+  # the specified fonts by FamilyName. To do this, it invokes
+  # `find` 2 times for every font, anyone is free to do this
+  # in a more efficient way.
+  fonts = map (font: builtins.replaceStrings [" "] [""] font) fonts;
   installPhase = ''
     adobeBlankDest=$adobeBlank/share/fonts/truetype
     install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
     rm -r ofl/adobeblank
     dest=$out/share/fonts/truetype
+  '' + (if fonts == [] then ''
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
-  '';
+  '' else ''
+    for font in $fonts; do
+      find . -name "$font-*.ttf" -exec install -m 444 -Dt $dest '{}' +
+      find . -name "$font[*.ttf" -exec install -m 444 -Dt $dest '{}' +
+    done
+  '');
 
   meta = with lib; {
     homepage = "https://fonts.google.com";
