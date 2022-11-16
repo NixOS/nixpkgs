@@ -23520,12 +23520,12 @@ with pkgs;
 
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
-  clickhouse = callPackage ../servers/clickhouse {
-    # upstream requires llvm12 as of v22.3.2.2
+  inherit (callPackage ../servers/clickhouse {
+    # upstream requires llvm13 as of v22.8.5.29
     inherit (llvmPackages_13) clang-unwrapped lld llvm;
     llvm-bintools = llvmPackages_13.bintools;
     stdenv = llvmPackages_13.stdenv;
-  };
+  }) clickhouse clickhouse-lts;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
