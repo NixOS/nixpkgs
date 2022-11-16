@@ -33132,7 +33132,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  xxh = with python3Packages; toPythonApplication xxh;
+  xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
