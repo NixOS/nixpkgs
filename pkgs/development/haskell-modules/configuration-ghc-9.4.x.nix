@@ -220,4 +220,12 @@ in {
     hls-retrie-plugin = null;
     hls-splice-plugin = null;
   };
+
+  # https://github.com/tweag/ormolu/issues/941
+  ormolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
 }
