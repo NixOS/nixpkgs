@@ -75,12 +75,11 @@ in
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.wget ];
-      script = pkgs.callPackage ./ec2-metadata-fetcher.nix {
-        targetRoot = "/";
-        wgetExtraOptions = "";
-      };
+      after = ["network-online.target"];
+      path = [ pkgs.curl ];
+      script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
+      serviceConfig.StandardOutput = "journal+console";
     };
 
     # Allow root logins only using the SSH key that the user specified
