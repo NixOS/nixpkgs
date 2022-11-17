@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, albumentations
 , dill
 , h5py
 , hickle
@@ -10,7 +9,6 @@
 , opencv4
 , pandas
 , pillow
-, prodict
 , pycm
 , pyyaml
 , scipy
@@ -43,7 +41,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    albumentations
     dill
     h5py
     hickle
@@ -51,7 +48,6 @@ buildPythonPackage rec {
     opencv4
     pandas
     pillow
-    prodict
     pycm
     pyyaml
     scipy
@@ -72,5 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/achaiah/pywick";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true;  # Nixpkgs missing `albumentations` and `prodict`
   };
 }
