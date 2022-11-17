@@ -399,6 +399,15 @@ rec {
       };
     };
 
+    lengthCheckedString = min: max: mkOptionType {
+      name = "str-with-min-${toString min}-and-max-${toString max}-chars";
+      description = if min == max
+        then "string with exactly ${toString min} chars."
+        else "string which must have at least ${toString min} and at most ${toString max} chars.";
+      inherit (types.str) merge;
+      check = x: isString x && lib.stringLength x >= min && lib.stringLength x <= max;
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";
