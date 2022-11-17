@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "3.0.0";
   pname = "azure-mgmt-security";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2sr3clHf5EvbXAx5FH3d3ab1/Y48r6Ojww3p9WX35aM=";
+    sha256 = "sha256-vLp874V/awKi2Yr+sH+YcbFij6M9iGGrE4fnMufbP4Q=";
     extension = "zip";
   };
 
