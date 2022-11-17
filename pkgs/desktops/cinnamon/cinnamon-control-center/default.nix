@@ -80,26 +80,10 @@ stdenv.mkDerivation rec {
     patchShebangs meson_install_schemas.py
   '';
 
-  # it needs to have access to that file, otherwise we can't run tests after build
-
-  preBuild = ''
-    mkdir -p $out/share/cinnamon-control-center/
-    ln -s $PWD/panels/datetime $out/share/cinnamon-control-center/
-  '';
-
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
-
-  preInstall = ''
-    rm -r $out
-  '';
-
-  # the only test is wacom-calibrator and it seems to need an xserver and prob more services aswell
-  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
