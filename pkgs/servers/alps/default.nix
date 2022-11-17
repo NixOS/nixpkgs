@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromSourcehut }:
+{ lib, buildGoModule, fetchFromSourcehut, nixosTests }:
 
 buildGoModule rec {
   pname = "alps";
@@ -30,6 +30,8 @@ buildGoModule rec {
   '';
 
   proxyVendor = true;
+
+  passthru.tests = { inherit(nixosTests) alps; };
 
   meta = with lib; {
     description = "A simple and extensible webmail.";

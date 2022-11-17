@@ -2,7 +2,7 @@ let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
 in
-import ./make-test-python.nix {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "alps";
 
   nodes = {
@@ -32,7 +32,7 @@ import ./make-test-python.nix {
       };
     };
 
-    client = { nodes, ... }: {
+    client = { nodes, config, ... }: {
       security.pki.certificateFiles = [
         certs.ca.cert
       ];
@@ -51,6 +51,42 @@ import ./make-test-python.nix {
           port = 465;
         };
       };
+      environment.systemPackages = [
+        (pkgs.writers.writePython3Bin "test-alps-login" { } ''
+          from urllib.request import build_opener, HTTPCookieProcessor, Request
+          from urllib.parse import urlencode, urljoin
+          from http.cookiejar import CookieJar
+
+          baseurl = "http://localhost:${toString config.services.alps.port}"
+          username = "alice"
+          password = "${nodes.server.config.users.users.alice.password}"
+          cookiejar = CookieJar()
+          cookieprocessor = HTTPCookieProcessor(cookiejar)
+          opener = build_opener(cookieprocessor)
+
+          data = urlencode({"username": username, "password": password}).encode()
+          req = Request(urljoin(baseurl, "login"), data=data, method="POST")
+          with opener.open(req) as ret:
+              # Check that the alps_session cookie is set
+              print(cookiejar)
+              assert any(cookie.name == "alps_session" for cookie in cookiejar)
+
+          req = Request(baseurl)
+          with opener.open(req) as ret:
+              # Check that the alps_session cookie is still there...
+              print(cookiejar)
+              assert any(cookie.name == "alps_session" for cookie in cookiejar)
+              # ...and that we have not been redirected back to the login page
+              print(ret.url)
+              assert ret.url == urljoin(baseurl, "mailbox/INBOX")
+
+          req = Request(urljoin(baseurl, "logout"))
+          with opener.open(req) as ret:
+              # Check that the alps_session cookie is now gone
+              print(cookiejar)
+              assert all(cookie.name != "alps_session" for cookie in cookiejar)
+        '')
+      ];
     };
   };
 
@@ -63,6 +99,6 @@ import ./make-test-python.nix {
 
     client.start()
     client.wait_for_unit("alps.service")
-    client.wait_until_succeeds("curl -fvvv -s http://127.0.0.1:1323/", timeout=60)
+    client.succeed("test-alps-login")
   '';
-}
+})
