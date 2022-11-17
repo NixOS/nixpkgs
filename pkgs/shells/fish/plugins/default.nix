@@ -33,4 +33,5 @@ lib.makeScope newScope (self: with self; {
 
   sponge = callPackage ./sponge.nix { };
 
+  tide = callPackage ./tide.nix { };
 })
