@@ -5614,6 +5614,18 @@ final: prev:
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
   };
 
+  nvim-dap-go = buildVimPluginFrom2Nix {
+    pname = "nvim-dap-go";
+    version = "2022-11-04";
+    src = fetchFromGitHub {
+      owner = "leoluz";
+      repo = "nvim-dap-go";
+      rev = "c75921726ccfe97070285f206de49eddff276ea5";
+      sha256 = "1sgz5vkkw0zmpnmdfla2k3bvkax5pvn2y9g79xq3vhg9x6gyil5s";
+    };
+    meta.homepage = "https://github.com/leoluz/nvim-dap-go/";
+  };
+
   nvim-dap-python = buildVimPluginFrom2Nix {
     pname = "nvim-dap-python";
     version = "2022-11-01";
