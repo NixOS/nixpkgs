@@ -22,24 +22,6 @@ with lib;
 
 let
   dfhack-releases = {
-    "0.43.05" = {
-      dfHackRelease = "0.43.05-r3.1";
-      sha256 = "1ds366i0qcfbn62w9qv98lsqcrm38npzgvcr35hf6ihqa6nc6xrl";
-      xmlRev = "860a9041a75305609643d465123a4b598140dd7f";
-      prerelease = false;
-    };
-    "0.44.05" = {
-      dfHackRelease = "0.44.05-r2";
-      sha256 = "1cwifdhi48a976xc472nf6q2k0ibwqffil5a4llcymcxdbgxdcc9";
-      xmlRev = "2794f8a6d7405d4858bac486a0bb17b94740c142";
-      prerelease = false;
-    };
-    "0.44.09" = {
-      dfHackRelease = "0.44.09-r1";
-      sha256 = "1nkfaa43pisbyik5inj5q2hja2vza5lwidg5z02jyh136jm64hwk";
-      xmlRev = "3c0bf63674d5430deadaf7befaec42f0ec1e8bc5";
-      prerelease = false;
-    };
     "0.44.10" = {
       dfHackRelease = "0.44.10-r2";
       sha256 = "19bxsghxzw3bilhr8sm4axz7p7z8lrvbdsd1vdjf5zbg04rs866i";
