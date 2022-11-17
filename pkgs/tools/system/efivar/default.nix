@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
+    homepage = "https://github.com/rhboot/efivar";
     platforms = platforms.linux;
     license = licenses.lgpl21Only;
   };
