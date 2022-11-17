@@ -12081,8 +12081,6 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
-  tlspool = callPackage ../tools/networking/tlspool { };
-
   tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
