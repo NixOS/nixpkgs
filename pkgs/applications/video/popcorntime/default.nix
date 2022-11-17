@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
-  
+
   desktopItem = makeDesktopItem {
       name = pname;
       exec = pname;
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/popcorntime/Popcorn-Time $out/bin/popcorntime
 
     ln -s $out/opt/popcorntime/src/app/images/icon.png $out/share/icons/hicolor/scalable/apps/popcorntime.png
-    
+
     ln -s ${desktopItem}/share/applications/popcorntime.desktop $out/share/applications/popcorntime.desktop
   '';
 
