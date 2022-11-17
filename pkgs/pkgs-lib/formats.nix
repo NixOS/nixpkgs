@@ -92,6 +92,8 @@ rec {
     # Alternative to listsAsDuplicateKeys, converts list to non-list
     # listToValue :: [IniAtom] -> IniAtom
     listToValue ? null,
+    # Whether to use toINI or toINIWithGlobalSection
+    withGlobalSection ? false,
     ...
     }@args:
     assert !listsAsDuplicateKeys || listToValue == null;
@@ -120,18 +122,33 @@ rec {
         else
           singleIniAtom;
 
-    in attrsOf (attrsOf iniAtom);
+      iniAttrs = attrsOf iniAtom;
+
+      iniSubModuleWithGlobal = submodule {
+        options = {
+          sections = lib.mkOption { type = attrsOf iniAttrs; };
+          globalSection = lib.mkOption { type = iniAttrs; };
+        };
+      };
+
+    in if withGlobalSection then iniSubModuleWithGlobal else attrsOf iniAttrs;
 
     generate = name: value:
       let
+        transformLists = lib.mapAttrs (key: val: if lib.isList val then listToValue val else val);
         transformedValue =
           if listToValue != null
           then
-            lib.mapAttrs (section: lib.mapAttrs (key: val:
-              if lib.isList val then listToValue val else val
-            )) value
+            if withGlobalSection then
+              value // {
+                sections = lib.mapAttrs (section: transformLists) value.sections;
+                globalSection = transformLists value.globalSection;
+              }
+            else
+              lib.mapAttrs (section: transformLists) value
           else value;
-      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
+        generator = with lib.generators; if withGlobalSection then toINIWithGlobalSection else toINI;
+      in pkgs.writeText name (generator (removeAttrs args [ "withGlobalSection" "listToValue" ]) transformedValue);
 
   };
 
