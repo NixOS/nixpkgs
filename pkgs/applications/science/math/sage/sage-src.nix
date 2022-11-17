@@ -147,6 +147,22 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-9BhQLFB3wUhiXRQsK9L+I62lSjvTfrqMNi7QUIQvH4U=";
     })
 
+    # https://trac.sagemath.org/ticket/34537
+    (fetchSageDiff {
+      name = "pari-2.15.1-upgrade.patch";
+      squashed = true;
+      base = "54cd6fe6de52aee5a433e0569e8c370618cb2047"; # 9.8.beta1
+      rev = "1e86aa26790d84bf066eca67f98a60a8aa3d4d3a";
+      sha256 = "sha256-LUgcMqrKXWb72Kxl0n6MV5unLXlQSeG8ncN41F7TRSc=";
+      excludes = ["build/*"
+                  "src/sage/geometry/polyhedron/base_number_field.py"
+                  "src/sage/geometry/polyhedron/backend_normaliz.py"
+                  "src/sage/lfunctions/pari.py"];
+    })
+    # Some files were excluded from the above patch due to
+    # conflicts. The patch below contains rebased versions.
+    ./patches/pari-2.15.1-upgrade-rebased.patch
+
     # Sage uses mixed integer programs (MIPs) to find edge disjoint
     # spanning trees. For some reason, aarch64 glpk takes much longer
     # than x86_64 glpk to solve such MIPs. Since the MIP formulation
