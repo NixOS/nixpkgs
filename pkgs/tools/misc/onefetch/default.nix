@@ -9,6 +9,7 @@
 , libresolv
 , Security
 , git
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     ./zstd-pkg-config.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake installShellFiles pkg-config ];
 
   buildInputs = [ zstd ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
@@ -43,6 +44,13 @@ rustPlatform.buildRustPackage rec {
     git config user.email nixbld@example.com
     git add .
     git commit -m test
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd onefetch \
+      --bash <($out/bin/onefetch --generate bash) \
+      --fish <($out/bin/onefetch --generate fish) \
+      --zsh <($out/bin/onefetch --generate zsh)
   '';
 
   meta = with lib; {
