@@ -304,13 +304,13 @@
     "version": "0.0.3"
   },
   "digitalocean": {
-    "hash": "sha256-iLwAkmzKRY8NfUHVGcstIHlSnZY+oi7fhCNP2kCzIxM=",
+    "hash": "sha256-JCqYTBgwcyppZ/xKPRE/SrTI0nDWw5QYqrld8YL+Blw=",
     "owner": "digitalocean",
     "provider-source-address": "registry.terraform.io/digitalocean/digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.23.0",
+    "rev": "v2.24.0",
     "vendorHash": null,
-    "version": "2.23.0"
+    "version": "2.24.0"
   },
   "dme": {
     "hash": "sha256-QNkr+6lKlKY+os0Pf6dqlmIn9u2LtMOo6ONahDeA9mE=",
