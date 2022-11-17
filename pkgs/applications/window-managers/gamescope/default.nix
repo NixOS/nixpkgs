@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     description = "SteamOS session compositing window manager";
     homepage = "https://github.com/Plagman/gamescope";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nrdxp ];
+    maintainers = with maintainers; [ nrdxp zhaofengli ];
     platforms = platforms.linux;
   };
 }
