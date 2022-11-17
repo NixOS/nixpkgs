@@ -62,10 +62,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib/vst3
+    mkdir -p $out/bin $out/lib/vst3 $out/lib/lv2 $out/lib/clap
     cd Odin2_artefacts/Release
+    cp Standalone/Odin2 $out/bin
     cp -r VST3/Odin2.vst3 $out/lib/vst3
-    cp -r Standalone/Odin2 $out/bin
+    cp -r LV2/Odin2.lv2 $out/lib/lv2
+    cp -r CLAP/Odin2.clap $out/lib/clap
 '';
 
 
