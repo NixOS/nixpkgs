@@ -84,6 +84,7 @@
   tree-sitter-supercollider = lib.importJSON ./tree-sitter-supercollider.json;
   tree-sitter-surface = lib.importJSON ./tree-sitter-surface.json;
   tree-sitter-svelte = lib.importJSON ./tree-sitter-svelte.json;
+  tree-sitter-swift = lib.importJSON ./tree-sitter-swift.json;
   tree-sitter-tiger = lib.importJSON ./tree-sitter-tiger.json;
   tree-sitter-tlaplus = lib.importJSON ./tree-sitter-tlaplus.json;
   tree-sitter-toml = lib.importJSON ./tree-sitter-toml.json;
