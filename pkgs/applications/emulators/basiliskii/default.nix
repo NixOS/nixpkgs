@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ quag ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
