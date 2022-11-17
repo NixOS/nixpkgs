@@ -2,6 +2,7 @@
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
+, extraFonts ? pkgs: [ ] # Extra fonts to include in the fhs
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
 , runtimeOnly ? false
@@ -42,6 +43,13 @@ let
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
+  fontsPkg = (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+    mkdir -p "$out/share/fonts"
+    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+    find ${toString (extraFonts pkgs)} -regex "$font_regexp" \
+      -exec ln -sf -t "$out/share/fonts" '{}' \;
+  '');
+
   ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
   ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
@@ -81,6 +89,7 @@ in buildFHSUserEnv rec {
     libGL
     libva
     pipewire.lib
+    fontsPkg
 
     # steamwebhelper
     harfbuzz
