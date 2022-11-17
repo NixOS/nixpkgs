@@ -2,7 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , adwaita-icon-theme
-, breeze-icons
+, libsForQt5
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    breeze-icons
+    libsForQt5.breeze-icons
     hicolor-icon-theme
   ];
 

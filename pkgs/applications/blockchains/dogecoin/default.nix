@@ -2,7 +2,7 @@
 , pkg-config, autoreconfHook
 , db5, openssl, boost, zlib, miniupnpc, libevent
 , protobuf, qtbase ? null
-, wrapQtAppsHook ? null, qttools, qmake ? null, qrencode
+, wrapQtAppsHook ? null, qttools ? null, qmake ? null, qrencode
 , withGui, withUpnp ? true, withUtils ? true, withWallet ? true
 , withZmq ? true, zeromq, util-linux ? null, Cocoa ? null }:
 
