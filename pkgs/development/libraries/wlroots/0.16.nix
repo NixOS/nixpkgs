@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     a=$(ls /nix/store | grep hwdata | tail -n 1 )
-    
     substituteInPlace backend/drm/meson.build --replace  "/usr/share/hwdata/pnp.ids" "/nix/store/$a/share/hwdata/pnp.ids"
   '';
 
