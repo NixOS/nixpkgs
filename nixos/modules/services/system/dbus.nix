@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.dbus;
@@ -16,11 +14,11 @@ let
     serviceDirectories = cfg.packages;
   };
 
+  inherit (lib) mkOption types;
+
 in
 
 {
-  ###### interface
-
   options = {
 
     services.dbus = {
@@ -68,10 +66,11 @@ in
     };
   };
 
-  ###### implementation
-
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.dbus.daemon
+      pkgs.dbus
+    ];
 
     environment.etc."dbus-1".source = configDir;
 
@@ -84,7 +83,9 @@ in
 
     users.groups.messagebus.gid = config.ids.gids.messagebus;
 
-    systemd.packages = [ pkgs.dbus.daemon ];
+    systemd.packages = [
+      pkgs.dbus.daemon
+    ];
 
     security.wrappers.dbus-daemon-launch-helper = {
       source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
@@ -103,19 +104,29 @@ in
     systemd.services.dbus = {
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
-      restartTriggers = [ configDir ];
-      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
-    };
-
-    systemd.user = {
-      services.dbus = {
-        # Don't restart dbus-daemon. Bad things tend to happen if we do.
-        reloadIfChanged = true;
-        restartTriggers = [ configDir ];
+      restartTriggers = [
+        configDir
+      ];
+      environment = {
+        LD_LIBRARY_PATH = config.system.nssModules.path;
       };
-      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
-    environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
+    systemd.user.services.dbus = {
+      # Don't restart dbus-daemon. Bad things tend to happen if we do.
+      reloadIfChanged = true;
+      restartTriggers = [
+        configDir
+      ];
+    };
+
+    systemd.user.sockets.dbus.wantedBy = [
+      "sockets.target"
+    ];
+
+    environment.pathsToLink = [
+      "/etc/dbus-1"
+      "/share/dbus-1"
+    ];
   };
 }
