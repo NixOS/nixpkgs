@@ -19585,6 +19585,8 @@ with pkgs;
 
   mpfi = callPackage ../development/libraries/mpfi { };
 
+  mpdecimal = callPackage ../development/libraries/mpdecimal { };
+
   mpfshell = callPackage ../development/tools/mpfshell { };
 
   # A GMP fork
