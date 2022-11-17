@@ -17,6 +17,9 @@ let
     x86_64-apple-darwin = {
       double = "darwin-x86_64";
     };
+    aarch64-apple-darwin = {
+      double = "darwin-aarch64";
+    };
     x86_64-unknown-linux-gnu = {
       double = "linux-x86_64";
     };
