@@ -12,23 +12,15 @@
 
 buildPythonPackage rec {
   pname = "soundfile";
-  version = "0.10.3.post1";
+  version = "0.11.0";
   # https://github.com/bastibe/python-soundfile/issues/157
   disabled = isPyPy || stdenv.isi686;
 
   src = fetchPypi {
-    pname = "SoundFile";
+    pname = "soundfile";
     inherit version;
-    sha256 = "0yqhrfz7xkvqrwdxdx2ydy4h467sk7z3gf984y1x2cq7cm1gy329";
+    sha256 = "931738a1c93e8684c2d3e1d514ac63440ce827ec783ea0a2d3e4730e3dc58c18";
   };
-
-  patches = [
-    # Fix build on macOS arm64, https://github.com/bastibe/python-soundfile/pull/332
-    (fetchpatch {
-      url = "https://github.com/bastibe/python-soundfile/commit/e554e9ce8bed96207d587e6aa661e4b08f1c6a79.patch";
-      sha256 = "sha256-vu/7s5q4I3yBnoNHmmFmcXvOLFcPwY9ri9ri6cKLDwU=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
