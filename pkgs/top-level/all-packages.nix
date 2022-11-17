@@ -34485,6 +34485,8 @@ with pkgs;
 
   tetrio-desktop = callPackage ../games/tetrio-desktop { };
 
+  tetrio-plus-desktop = callPackage ../games/tetrio-desktop/plus.nix { };
+
   tr-patcher = callPackage ../games/tr-patcher { };
 
   tes3cmd = callPackage ../games/tes3cmd { };
