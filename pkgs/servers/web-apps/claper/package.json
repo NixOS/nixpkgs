@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "deploy": "NODE_ENV=production tailwindcss --postcss --minify --input=css/app.css --output=../priv/static/assets/app.css"
+  },
+  "devDependencies": {
+    "alpinejs": "^3.4.2",
+    "autoprefixer": "^10.3.7",
+    "cpx": "^1.5.0",
+    "esbuild": "^0.14.14",
+    "flatpickr": "^4.6.9",
+    "postcss": "^8.3.9",
+    "postcss-import": "^14.0.2",
+    "tailwindcss": "^2.2.16"
+  },
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
+    "phoenix": "file:../deps/phoenix",
+    "phoenix_html": "file:../deps/phoenix_html",
+    "phoenix_live_view": "file:../deps/phoenix_live_view",
+    "qr-code-styling": "^1.6.0-rc.1",
+    "tiny-slider": "^2.9.4"
+  }
+}
