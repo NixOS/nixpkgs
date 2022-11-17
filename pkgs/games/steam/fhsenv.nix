@@ -1,4 +1,4 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686, runCommand
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -43,7 +43,7 @@ let
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
-  fontsPkg = (pkgs.runCommand "share-fonts" { preferLocalBuild = true; } ''
+  fontsPkg = pkgs: (runCommand "share-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/fonts"
     font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
     find ${toString (extraFonts pkgs)} -regex "$font_regexp" \
@@ -89,7 +89,7 @@ in buildFHSUserEnv rec {
     libGL
     libva
     pipewire.lib
-    fontsPkg
+    (fontsPkg pkgs)
 
     # steamwebhelper
     harfbuzz
