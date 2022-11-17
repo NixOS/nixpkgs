@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tagger";
-  version = "2022.10.6";
+  version = "2022.11.1-f1";
 
   src = fetchFromGitHub {
     owner = "nlogozzo";
     repo = "NickvisionTagger";
     rev = version;
-    hash = "sha256-eo7H2pNtSChUAqjO0ocFjsGt4I0e8ZOHbZ/GoZgUva8=";
+    hash = "sha256-JeQTWs3TSs3Y+WGRR0bHINQr0OuS95dDxo+MkWte2Qw=";
   };
 
   nativeBuildInputs = [

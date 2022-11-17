@@ -262,6 +262,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
+
   cve = with python3Packages; toPythonApplication cvelib;
 
   fiche = callPackage ../servers/fiche { };
@@ -38016,9 +38018,7 @@ with pkgs;
   };
   inherit (jami) jami-daemon jami-client-qt;
 
-  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
-    electron = electron_17;
-  };
+  jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
   zenstates = callPackage ../os-specific/linux/zenstates {};
 
