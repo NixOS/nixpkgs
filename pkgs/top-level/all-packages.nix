@@ -4664,6 +4664,8 @@ with pkgs;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
+  nostril = callPackage ../tools/misc/nostril { };
+
   notemap = callPackage ../tools/networking/notemap { };
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
