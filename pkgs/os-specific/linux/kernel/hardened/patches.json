@@ -52,11 +52,11 @@
     "6.0": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.0.8-hardened1.patch",
-            "sha256": "08xvsqb3d0j98n2i4468ja9miydgy3kcrz66fbi1kymn79yam62n",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.0.8-hardened1/linux-hardened-6.0.8-hardened1.patch"
+            "name": "linux-hardened-6.0.9-hardened1.patch",
+            "sha256": "13bi9lbbcv3ydw837sbqs313dxlwpnrp9zy6mz18gqx30pbzzjfs",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.0.9-hardened1/linux-hardened-6.0.9-hardened1.patch"
         },
-        "sha256": "0mx2bxgnxm3vz688268939xw90jqci7xn992kfpny74mjqwzir0d",
-        "version": "6.0.8"
+        "sha256": "1irip1yk62carcisxlacwcxsiqib4qswx6h5mfhv8f97x04a4531",
+        "version": "6.0.9"
     }
 }
