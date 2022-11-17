@@ -1,12 +1,12 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+, wafHook
 , pkg-config
 , bison
 , flex
 , perl
 , libxslt
-, heimdal
 , docbook_xsl
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
@@ -20,9 +20,11 @@
 , gnutls
 , libunwind
 , systemd
+, samba
 , jansson
 , libtasn1
 , tdb
+, libxcrypt
 , cmocka
 , rpcsvc-proto
 , bash
@@ -45,11 +47,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.17.2";
+  version = "4.17.3";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-5V3fTVF4+MhDFqv1PF7dezU5njt9hry4G3UmHIJ7s7g=";
+    hash = "sha256-XRxCDLMexhPHhvmFN/lZZZCB7ca+g3PmjocUCGiTjiY=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -59,10 +61,12 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
+    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
   ];
 
   nativeBuildInputs = [
     python3Packages.python
+    wafHook
     pkg-config
     bison
     flex
@@ -71,14 +75,16 @@ stdenv.mkDerivation rec {
     perl.pkgs.JSON
     libxslt
     buildPackages.stdenv.cc
-    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
+
+  wafPath = "buildtools/bin/waf";
 
   buildInputs = [
     bash
@@ -95,6 +101,7 @@ stdenv.mkDerivation rec {
     gnutls
     libtasn1
     tdb
+    libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
@@ -118,9 +125,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
   '';
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--enable-fhs"
@@ -151,6 +159,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
+
+  # Save asn1_compile and compile_et so they are available to run on the build
+  # platform when cross-compiling
+  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$dev/bin"
+    cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
