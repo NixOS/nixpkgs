@@ -304,13 +304,13 @@
     "version": "0.0.3"
   },
   "digitalocean": {
-    "hash": "sha256-iLwAkmzKRY8NfUHVGcstIHlSnZY+oi7fhCNP2kCzIxM=",
+    "hash": "sha256-JCqYTBgwcyppZ/xKPRE/SrTI0nDWw5QYqrld8YL+Blw=",
     "owner": "digitalocean",
     "provider-source-address": "registry.terraform.io/digitalocean/digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.23.0",
+    "rev": "v2.24.0",
     "vendorHash": null,
-    "version": "2.23.0"
+    "version": "2.24.0"
   },
   "dme": {
     "hash": "sha256-QNkr+6lKlKY+os0Pf6dqlmIn9u2LtMOo6ONahDeA9mE=",
@@ -385,13 +385,13 @@
     "version": "2.2.3"
   },
   "fastly": {
-    "hash": "sha256-WxFkJBi87IvO4a/8bmftMKCc/JcfoQILCtklvr9bcuc=",
+    "hash": "sha256-Zcev9EegZ/LVRGcjn1rHbp+jdZ5x4OowCD23E/MEYQA=",
     "owner": "fastly",
     "provider-source-address": "registry.terraform.io/fastly/fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v2.4.0",
+    "rev": "v3.0.0",
     "vendorHash": null,
-    "version": "2.4.0"
+    "version": "3.0.0"
   },
   "flexibleengine": {
     "hash": "sha256-yg3o7jsWGJ7/fJmDDbFnCpDmKRu0oEbe9wYoILbVwq8=",
@@ -441,24 +441,24 @@
     "version": "3.19.0"
   },
   "google": {
-    "hash": "sha256-guE04J0RCFOHPXGtEpxGZu8s6fnfoh0WLRRZ5GW/gLk=",
+    "hash": "sha256-qOB4UV53j0Bm0332U1YETzLfyBtGwfXs2hGDAL2BCCk=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.43.0",
+    "rev": "v4.43.1",
     "vendorHash": "sha256-Hzl95NLEZlvTBpCGJYzF5rtHWfYe26TwW0pbtqWmxOo=",
-    "version": "4.43.0"
+    "version": "4.43.1"
   },
   "google-beta": {
-    "hash": "sha256-HB37OQKULhqiMHOE3gs24sjuPsjMessO98z3+5TNNnM=",
+    "hash": "sha256-nNz9BgTJ8Aj3QZNpT0XK14s44+thDu4EfLvbEB8OFRc=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/google-beta",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.43.0",
+    "rev": "v4.43.1",
     "vendorHash": "sha256-Hzl95NLEZlvTBpCGJYzF5rtHWfYe26TwW0pbtqWmxOo=",
-    "version": "4.43.0"
+    "version": "4.43.1"
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -833,13 +833,13 @@
     "version": "1.7.1"
   },
   "oci": {
-    "hash": "sha256-ONMY14nbU2j4MrxoJ7AwOlfrqB0Nv5FQyl4ChAe9+z0=",
+    "hash": "sha256-t8GrhKnKredpbRmx/MAA4tx0kV0yZoFNnacKsp0Htro=",
     "owner": "oracle",
     "provider-source-address": "registry.terraform.io/oracle/oci",
     "repo": "terraform-provider-oci",
-    "rev": "v4.99.0",
+    "rev": "v4.100.0",
     "vendorHash": null,
-    "version": "4.99.0"
+    "version": "4.100.0"
   },
   "okta": {
     "hash": "sha256-COGXHUjXYGB2QDY0iBG+MvNcxGy87vpGIerQU2XXEmw=",
@@ -878,13 +878,13 @@
     "version": "1.49.0"
   },
   "opentelekomcloud": {
-    "hash": "sha256-L28nrY2/UBi/W/mmK5ZPQub2Jf9vMethQo6JsSkepwU=",
+    "hash": "sha256-bDhtGpS8dqQdjcLqtJwae9dmUO41l4DeTRYMARBpnrM=",
     "owner": "opentelekomcloud",
     "provider-source-address": "registry.terraform.io/opentelekomcloud/opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.31.7",
-    "vendorHash": "sha256-wEtpZzrQoL0yJLsviwHI019KI04O+FAkXMsaJFztL/8=",
-    "version": "1.31.7"
+    "rev": "v1.31.8",
+    "vendorHash": "sha256-TnsdOX0Tt0oYavBI2fPcO+OV8VkWQEgGasqDTm5XkDU=",
+    "version": "1.31.8"
   },
   "opsgenie": {
     "hash": "sha256-OTwQ/sF4/xSyJjYy1TvLOr1guGcho+Es9/WkonfVvcg=",
@@ -1194,14 +1194,14 @@
     "version": "1.5.0"
   },
   "vault": {
-    "hash": "sha256-r4quQMAbAei8d+hzAOa7JqRIucrFSXqbVHT/VtpzwAU=",
+    "hash": "sha256-y5pK+sZ1xWnzlhT4sFUy5Mp6sggLLtaY4Cx2OPamDIc=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vault",
     "proxyVendor": true,
     "repo": "terraform-provider-vault",
-    "rev": "v3.10.0",
+    "rev": "v3.11.0",
     "vendorHash": "sha256-EOBNoEW9GI21IgXSiEN93B3skxfCrBkNwLxGXaso1oE=",
-    "version": "3.10.0"
+    "version": "3.11.0"
   },
   "vcd": {
     "hash": "sha256-qEElcMl6tCBfOTTTpTFjVYg6E6K9iTXfgmDDozrgNVg=",
