@@ -68,7 +68,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.dbus.daemon
       pkgs.dbus
     ];
 
@@ -84,11 +83,11 @@ in
     users.groups.messagebus.gid = config.ids.gids.messagebus;
 
     systemd.packages = [
-      pkgs.dbus.daemon
+      pkgs.dbus
     ];
 
     security.wrappers.dbus-daemon-launch-helper = {
-      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      source = "${pkgs.dbus}/libexec/dbus-daemon-launch-helper";
       owner = "root";
       group = "messagebus";
       setuid = true;
@@ -97,7 +96,7 @@ in
     };
 
     services.dbus.packages = [
-      pkgs.dbus.out
+      pkgs.dbus
       config.system.path
     ];
 
