@@ -106,11 +106,24 @@ let
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
 
-      # Recommended backport patch to fix tdesktop with pw-pulse
+      # Following are backported patches as recommended by upstream.
       # FIXME: remove in 0.3.61
+      # fix tdesktop with pw-pulse
       (fetchpatch {
         url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b720da771efa950cf380101bed42d5d5ee177908.diff";
         hash = "sha256-p/BvatnbEJAMLQUUOECKAK7FppaNp9ei3FHjAw2spM8=";
+      })
+
+      # fix a crash when quickly switching Bluetooth profiles
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/bf3516ba0496b644b3944b114253f23964178897.diff";
+        hash = "sha256-LqasplS/azCPekslJQPTd9MZkUcRqA0ks94FtwyY3GA=";
+      })
+
+      # fix no sound in VMs (Pipewire on the guest)
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
+        hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
       })
     ];
 

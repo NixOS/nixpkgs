@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prismlauncher";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-CZH2vINHoQy1hVfKloRrcoCDdXPQRnIylpClQJdOUrk=";
+    sha256 = "sha256-sKAhcbDoRbWf/DuwcBmDjb+VSMM0K2C33gu1K9AlPoQ=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ghc_filesystem cmake file jdk wrapQtAppsHook ];
