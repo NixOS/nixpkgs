@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, xz, dpkg
-, libxslt, docbook_xsl, makeWrapper, writeScript
+, libxslt, docbook_xsl, makeWrapper, writeShellScript
 , python3Packages
 , perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
 , sendmailPath ? "/run/wrappers/bin/sendmail"
