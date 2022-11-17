@@ -38,7 +38,7 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ georgesalkhouri ];
   };
 }

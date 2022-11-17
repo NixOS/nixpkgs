@@ -537,6 +537,16 @@ let
         };
       };
 
+      bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-fish";
+          publisher = "bmalehorn";
+          version = "1.0.31";
+          sha256 = "sha256-jDWW43ozUPIzhK/qQ+a+JSNdDHrjvgosyGe8kzBX6xM=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
@@ -1668,6 +1678,16 @@ let
         };
       };
 
+      matangover.mypy = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "mypy";
+          publisher = "matangover";
+          version = "0.2.2";
+          sha256 = "sha256-eaiR30HjPCpOLUKQqiQ2Oqj+XY+JNnV47bM5KD2Mouk=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
       mattn.lisp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "lisp";
@@ -2596,6 +2616,16 @@ let
           license = licenses.mit;
           maintainers = with maintainers; [  ];
         };
+      };
+
+      thenuprojectcontributors.vscode-nushell-lang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-nushell-lang";
+          publisher = "thenuprojectcontributors";
+          version = "0.7.0";
+          sha256 = "sha256-+AGJkFx/uzgQzuRnRBZ44xGNQ6a/QWt7SNiQgwPTZxo=";
+        };
+        meta.license = lib.licenses.mit;
       };
 
       tiehuis.zig = buildVscodeMarketplaceExtension {

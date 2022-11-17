@@ -994,6 +994,12 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          <literal>ocamlPackages.ocaml_extlib</literal> has been renamed
+          to <literal>ocamlPackages.extlib</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.fetchNextcloudApp</literal> has been rewritten
           to circumvent impurities in e.g. tarballs from GitHub and to
           make it easier to apply patches. This means that your hashes
@@ -1012,6 +1018,24 @@ signald -d /var/lib/signald/db \
           <literal>services.syncthing.dataDir</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.github-runner</literal> and
+          <literal>services.github-runners.&lt;name&gt;</literal> gained
+          the option <literal>serviceOverrides</literal> which allows
+          overriding the systemd <literal>serviceConfig</literal>. If
+          you have been overriding the systemd service configuration
+          (i.e., by defining
+          <literal>systemd.services.github-runner.serviceConfig</literal>),
+          you have to use the <literal>serviceOverrides</literal> option
+          now. Example:
+        </para>
+        <programlisting>
+services.github-runner.serviceOverrides.SupplementaryGroups = [
+  &quot;docker&quot;
+];
+</programlisting>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
@@ -1023,6 +1047,13 @@ signald -d /var/lib/signald/db \
           0.18.0 to 0.19.0, which brings some breaking changes. See the
           <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
           release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Configuring multiple GitHub runners is now possible through
+          <literal>services.github-runners.&lt;name&gt;</literal>. The
+          option <literal>services.github-runner</literal> remains.
         </para>
       </listitem>
       <listitem>
@@ -1431,6 +1462,14 @@ signald -d /var/lib/signald/db \
           to be set. This also allows extensions to be installed via the
           <literal>ExtensionSettings</literal> policy. The new options
           are under <literal>programs.firefox</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.picom.experimentalBackends</literal> was
+          removed since it is now the default and the option will cause
+          <literal>picom</literal> to quit instead.
         </para>
       </listitem>
     </itemizedlist>

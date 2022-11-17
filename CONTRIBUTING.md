@@ -51,7 +51,7 @@ See the nixpkgs manual for more details on [standard meta-attributes](https://ni
 
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
 
-For package version upgrades and such a one-line commit message is usually sufficient.
+Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
 
 ## Rebasing between branches (i.e. from master to staging)
 

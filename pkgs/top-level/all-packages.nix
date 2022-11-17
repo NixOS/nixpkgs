@@ -1008,6 +1008,8 @@ with pkgs;
 
   sirula = callPackage ../tools/wayland/sirula { };
 
+  sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen {};
+
   srcOnly = callPackage ../build-support/src-only { };
 
   subnetcalc = callPackage ../tools/networking/subnetcalc { };
@@ -1604,7 +1606,9 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi { };
+  ludusavi = callPackage ../applications/backup/ludusavi {
+    inherit (plasma5Packages) kdialog;
+  };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -4582,6 +4586,8 @@ with pkgs;
 
   mmctl = callPackage ../tools/misc/mmctl { };
 
+  moar = callPackage ../tools/misc/moar { };
+
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
@@ -7074,6 +7080,10 @@ with pkgs;
   git-cola = callPackage ../applications/version-management/git-and-tools/git-cola { };
 
   git-credential-1password = callPackage ../applications/version-management/git-and-tools/git-credential-1password { };
+
+  git-credential-keepassxc = callPackage ../applications/version-management/git-and-tools/git-credential-keepassxc {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
 
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
@@ -16815,10 +16825,6 @@ with pkgs;
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
-  # special forks used for dsview
-  libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
-  libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
-
   sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
@@ -24526,6 +24532,10 @@ with pkgs;
 
   storm = callPackage ../servers/computing/storm { };
 
+  surrealdb = callPackage ../servers/nosql/surrealdb {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
   slurm = callPackage ../servers/computing/slurm { };
@@ -26538,6 +26548,8 @@ with pkgs;
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
+  linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin {};
+
   linux-manual = callPackage ../data/documentation/linux-manual { };
 
   lklug-sinhala = callPackage ../data/fonts/lklug-sinhala {};
@@ -27004,6 +27016,7 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -31754,6 +31767,10 @@ with pkgs;
 
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
+  };
+
+  rymdport = callPackage ../applications/networking/rymdport {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
   uade = callPackage ../applications/audio/uade {};
