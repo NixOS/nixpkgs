@@ -9629,6 +9629,12 @@
     githubId = 43796009;
     name = "Max Wilson";
   };
+  myaats = {
+    email = "mats@mats.sh";
+    github = "Myaats";
+    githubId = 6295090;
+    name = "Mats";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "Myrl";
