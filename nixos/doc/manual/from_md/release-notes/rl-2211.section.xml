@@ -1464,6 +1464,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           are under <literal>programs.firefox</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option
+          <literal>services.picom.experimentalBackends</literal> was
+          removed since it is now the default and the option will cause
+          <literal>picom</literal> to quit instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
