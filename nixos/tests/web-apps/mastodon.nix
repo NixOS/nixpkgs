@@ -16,7 +16,7 @@ let
 in
 {
   name = "mastodon";
-  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
 
   nodes = {
     ca = { pkgs, ... }: {
