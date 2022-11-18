@@ -34,15 +34,28 @@ let
   # or for all grammars:
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
-    grammarFn: self.nvim-treesitter.overrideAttrs (_: {
-      postPatch =
-        let
-          grammars = tree-sitter.withPlugins (ps: grammarFn (ps // builtGrammars));
-        in
-        ''
-          rm -r parser
-          ln -s ${grammars} parser
-        '';
+    f: self.nvim-treesitter.overrideAttrs (_: {
+      passthru.dependencies = map
+        (grammar:
+          let
+            name = lib.pipe grammar [
+              lib.getName
+
+              # added in buildGrammar
+              (lib.removeSuffix "-grammar")
+
+              # grammars from tree-sitter.builtGrammars
+              (lib.removePrefix "tree-sitter-")
+              (lib.replaceStrings [ "-" ] [ "_" ])
+            ];
+          in
+
+          runCommand "nvim-treesitter-${name}-grammar" { } ''
+            mkdir -p $out/parser
+            ln -s ${grammar}/parser $out/parser/${name}.so
+          ''
+        )
+        (f (tree-sitter.builtGrammars // builtGrammars));
     });
 
   withAllGrammars = withPlugins (_: allGrammars);
@@ -79,4 +92,3 @@ in
 
   meta.maintainers = with lib.maintainers; [ figsoda ];
 }
-
