@@ -207,6 +207,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/maxbrunet/automatic-timezoned">automatic-timezoned</link>.
+          a Linux daemon to automatically update the system timezone
+          based on location. Available as
+          <link linkend="opt-services.automatic-timezoned.enable">services.automatic-timezoned</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           [xray] (https://github.com/XTLS/Xray-core), a fully compatible
           v2ray-core replacement. Features XTLS, which when enabled on
           server and client, brings UDP FullCone NAT to proxy setups.
@@ -1416,6 +1424,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           There is a new module for the <literal>xfconf</literal>
           program (the Xfce configuration storage system), which has a
           dbus service.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Mastodon package got upgraded from the major version 3 to
+          4. See the
+          <link xlink:href="https://github.com/mastodon/mastodon/releases/tag/v4.0.0">v4.0.0
+          release notes</link> for a list of changes. On standard
+          setups, no manual migration steps are required. Nevertheless,
+          a database backup is recommended.
         </para>
       </listitem>
       <listitem>
