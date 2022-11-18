@@ -30248,10 +30248,6 @@ with pkgs;
 
   markets = callPackage ../applications/misc/markets { };
 
-  markmind = callPackage ../applications/misc/markmind {
-    electron = electron_9;
-  };
-
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
   mastodon-bot = nodePackages.mastodon-bot;
