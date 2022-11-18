@@ -1316,6 +1316,7 @@ self: super: {
       "coc-smartf"
       "coc-snippets"
       "coc-solargraph"
+      "coc-spell-checker"
       "coc-sqlfluff"
       "coc-stylelint"
       "coc-sumneko-lua"

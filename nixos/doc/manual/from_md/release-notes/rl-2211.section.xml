@@ -1428,6 +1428,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          The Mastodon package got upgraded from the major version 3 to
+          4. See the
+          <link xlink:href="https://github.com/mastodon/mastodon/releases/tag/v4.0.0">v4.0.0
+          release notes</link> for a list of changes. On standard
+          setups, no manual migration steps are required. Nevertheless,
+          a database backup is recommended.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>nomad</literal> package now defaults to 1.3,
           which no longer has a downgrade path to releases 1.2 or older.
         </para>

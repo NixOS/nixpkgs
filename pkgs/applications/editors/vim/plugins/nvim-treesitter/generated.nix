@@ -23,6 +23,16 @@
       hash = "sha256-q1ni++SPbq5y+47fPb6TryMw86gpULwNcXwi5yjXCWI=";
     };
   };
+  awk = buildGrammar {
+    language = "awk";
+    version = "a799bc5";
+    source = fetchFromGitHub {
+      owner = "Beaglefoot";
+      repo = "tree-sitter-awk";
+      rev = "a799bc5da7c2a84bc9a06ba5f3540cf1191e4ee3";
+      hash = "sha256-A/mvLYD9+Ms/nBdAebBF2edVkFUkWyz3TiEIt4G5iWc=";
+    };
+  };
   bash = buildGrammar {
     language = "bash";
     version = "77cf8a7";
@@ -629,12 +639,12 @@
   };
   julia = buildGrammar {
     language = "julia";
-    version = "58d0701";
+    version = "6287135";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-julia";
-      rev = "58d0701550b4cce02acf433eedada03b634cc524";
-      hash = "sha256-ywliyXSL6A/NtqPnjRU++4C26H9MO6slz/3bIYFgGp4=";
+      rev = "628713553c42f30595a3b0085bb587e9359b986a";
+      hash = "sha256-vB9HnWQ+659Itu8cvd0meLbbLzn62/dDroA3vB7ZtIs=";
     };
   };
   kotlin = buildGrammar {
@@ -1004,12 +1014,12 @@
   };
   rego = buildGrammar {
     language = "rego";
-    version = "6d70da3";
+    version = "6174f05";
     source = fetchFromGitHub {
       owner = "FallenAngel97";
       repo = "tree-sitter-rego";
-      rev = "6d70da3a998fd0081efc5d1019c71e74cc1568e9";
-      hash = "sha256-i6XVQOQHItZsba3oNplkBbCfIYjX5bU5qyig/WyGEt4=";
+      rev = "6174f05f58e8c35d8c82323dd8c599b90b3171b3";
+      hash = "sha256-hO89IYKOHDLmuq+JrXJCi3tjxn3zMwjTnWxC6ld09YA=";
     };
   };
   rnoweb = buildGrammar {
