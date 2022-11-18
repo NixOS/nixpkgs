@@ -36,7 +36,7 @@ in
 fetchurl ((
   if (pname != "" && version != "") then
     {
-      name = "${name}-${version}";
+      name = "${pname}-${version}";
       inherit pname version;
     }
   else
