@@ -43,8 +43,8 @@ buildPythonPackage rec {
   # https://github.com/pganssle/pytz-deprecation-shim/issues/27
   doCheck = pythonAtLeast "3.9";
 
-  disabledTests = [
-    "test_localize_explicit_is_dst"
+  disabledTestPaths = [
+    "tests/test_pytz_equivalent.py"
   ];
 
   meta = with lib; {
