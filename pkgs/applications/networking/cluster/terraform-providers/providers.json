@@ -814,13 +814,13 @@
     "version": "3.2.9"
   },
   "null": {
-    "hash": "sha256-2YM3btZInUlIwp1VkasuugZZ8FervpRviUlx60vhVak=",
+    "hash": "sha256-ExXDbAXMVCTZBlYmi4kD/7JFB1fCFAoPL637+1N6rEI=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/null",
     "repo": "terraform-provider-null",
-    "rev": "v3.2.0",
-    "vendorHash": "sha256-rbZ7t5hcHkbbmqy+htYL7Ij8ZNILRsvUgLwwVObnZGg=",
-    "version": "3.2.0"
+    "rev": "v3.2.1",
+    "vendorHash": "sha256-vXyE0/tXzFHJPNq8MZ+NZItDWS3K7ZhtY23hGjtqRh8=",
+    "version": "3.2.1"
   },
   "nutanix": {
     "deleteVendor": true,
