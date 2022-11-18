@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "NomisIV";
     repo = pname;
-    rev = "v${version}";
+    rev = "${version}";
     sha256 = "sha256-ICDz3oDuXl/DAO4njoLJuv7hRXt76nGPPQlBVcc+hZo=";
   };
 
