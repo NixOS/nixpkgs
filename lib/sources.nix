@@ -166,7 +166,7 @@ let
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter src; };
 
-  pathIsGitRepo = path: (commitIdFromGitRepoOrError path)?value;
+  pathIsGitRepo = path: (_commitIdFromGitRepoOrError path)?value;
 
   /*
     Get the commit id of a git repo.
@@ -174,17 +174,16 @@ let
     Example: commitIdFromGitRepo <nixpkgs/.git>
   */
   commitIdFromGitRepo = path:
-    let commitIdOrError = commitIdFromGitRepoOrError path;
+    let commitIdOrError = _commitIdFromGitRepoOrError path;
     in commitIdOrError.value or (throw commitIdOrError.error);
 
-  /*
-    Get the commit id of a git repo.
+  # Get the commit id of a git repo.
 
-    Returns `{ value = commitHash }` or `{ error = "... message ..." }`.
+  # Returns `{ value = commitHash }` or `{ error = "... message ..." }`.
 
-    Example: commitIdFromGitRepo <nixpkgs/.git>
-  */
-  commitIdFromGitRepoOrError =
+  # Example: commitIdFromGitRepo <nixpkgs/.git>
+  # not exported, used for commitIdFromGitRepo
+  _commitIdFromGitRepoOrError =
     let readCommitFromFile = file: path:
         let fileName       = path + "/${file}";
             packedRefsName = path + "/packed-refs";
