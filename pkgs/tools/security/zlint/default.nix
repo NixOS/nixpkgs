@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, git
+, testers
+, zlint
+}:
 
 buildGoModule rec {
   pname = "zlint";
@@ -6,25 +12,54 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = pname;
+    repo = "zlint";
     rev = "v${version}";
-    sha256 = "sha256-l39GdfEKUAw5DQNjx6ZBgfGtengRlUUasm0G07kAA2A=";
+    leaveDotGit = true;
+    hash = "sha256-1T8WAWsivSEB2xVEM+GpWJuD3DGXPa9uNpuN6/ABsns=";
   };
 
   modRoot = "v3";
+
   vendorHash = "sha256-OiHEyMHuSiWDB/1YRvAhErb1h/rFfXXVcagcP386doc=";
-  preBuild = ''
-    # not in the go.mod
-    rm -rf cmd/genTestCerts
+
+  postPatch = ''
+    # Remove a package which is not declared in go.mod.
+    rm -rf v3/cmd/genTestCerts
   '';
 
-  # Tests rely on git and we don't have the .git dir because modRoot is in a subdir
-  doCheck = false;
+  subPackages = [
+    "cmd/zlint"
+    "cmd/zlint-gtld-update"
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  checkInputs = [ git ];
+
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = zlint;
+    command = "zlint -version";
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/zmap/zlint/";
+    description = "X.509 Certificate Linter focused on Web PKI standards and requirements";
+    longDescription = ''
+      ZLint is a X.509 certificate linter written in Go that checks for
+      consistency with standards (e.g. RFC 5280) and other relevant PKI
+      requirements (e.g. CA/Browser Forum Baseline Requirements).
+    '';
+    homepage = "https://github.com/zmap/zlint";
+    changelog = "https://github.com/zmap/zlint/releases/tag/${src.rev}";
     license = licenses.asl20;
-    description = "X.509 Certificate Linter focused on Web PKI standards and requirements.";
     maintainers = with maintainers; [ baloo ];
   };
 }
