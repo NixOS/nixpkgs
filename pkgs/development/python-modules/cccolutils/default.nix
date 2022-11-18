@@ -3,7 +3,7 @@
 , fetchPypi
 , git
 , gitpython
-, krb5Full
+, krb5
 , mock
 , pytestCheckHook
 , pythonOlder
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    krb5Full
+    krb5
   ];
 
   propagatedBuildInputs = [
