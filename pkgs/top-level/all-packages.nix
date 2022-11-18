@@ -1407,6 +1407,8 @@ with pkgs;
 
   quich = callPackage ../tools/misc/quich { } ;
 
+  r2modman = callPackage ../tools/games/r2modman { };
+
   redfang = callPackage ../tools/networking/redfang { };
 
   scarab = callPackage ../tools/games/scarab { };
