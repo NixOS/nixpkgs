@@ -1051,6 +1051,17 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
     <itemizedlist>
       <listitem>
         <para>
+          <literal>firefox</literal>, <literal>thunderbird</literal> and
+          <literal>librewolf</literal> come with enabled Wayland support
+          by default. The <literal>firefox-wayland</literal>,
+          <literal>firefox-esr-wayland</literal>,
+          <literal>thunderbird-wayland</literal> and
+          <literal>librewolf-wayland</literal> attributes are obsolete
+          and have been aliased to their generic attribute.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>xplr</literal> package has been updated from
           0.18.0 to 0.19.0, which brings some breaking changes. See the
           <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
