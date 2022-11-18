@@ -29397,9 +29397,10 @@ with pkgs;
     electron = electron_17;
   };
 
-  wlroots = wlroots_0_15;
-  wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix { };
-  wlroots_0_15 = callPackage ../development/libraries/wlroots/0.15.nix { };
+  inherit (callPackages ../development/libraries/wlroots {})
+    wlroots_0_14
+    wlroots_0_15
+    wlroots;
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
