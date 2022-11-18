@@ -137,9 +137,8 @@ rec {
           echo -n "$text" > "$target"
         fi
 
-        eval "$checkPhase"
-
         (test -n "$executable" && chmod +x "$target") || true
+        eval "$checkPhase"
       '';
 
   /*
