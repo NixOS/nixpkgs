@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.176.0";
+  version = "1.177.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    hash = "sha256-7J/FAcmZYmgbmYEFm2V3+RBUcLE+8A+yOiJd/xp2Aww=";
+    hash = "sha256-Nc8R+R+e/6o3tddGv8SudYK9+nTqfaX41gXKXTlOHcs=";
   };
 
   postPatch = ''

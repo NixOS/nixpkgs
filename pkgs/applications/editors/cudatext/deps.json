@@ -11,13 +11,13 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2022.11.09",
-    "hash": "sha256-2Q1azfhThrk1t65Q+2aRr00V0UFrvR+z5oVMeW9c2ug="
+    "rev": "2022.11.17",
+    "hash": "sha256-KSL0CbcW9oqSlAEg4AwhxPqyQtbO8Uzm7WZ04+9fIlc="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2022.11.09",
-    "hash": "sha256-rgXVOWmmc1ap/fCiXCvn34rhUbNRoMHbTXXYtnxk2pQ="
+    "rev": "2022.11.17",
+    "hash": "sha256-3lX23GY/RqPbeKebTi7MEnqBdMkxr6krtaz5ZxHwM/I="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.5.2",
-    "hash": "sha256-aGNKkLDbGTeFgFEhuX7R2BXhnllsanJmk4k+1muiSD8="
+    "rev": "v11.5.3",
+    "hash": "sha256-qjBD9TVZQy1tKWHFWkuu6vdLjASzQb3+HRy0FLdd9a8="
   }
 }
