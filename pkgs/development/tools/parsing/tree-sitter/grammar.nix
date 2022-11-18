@@ -14,12 +14,12 @@
   # source for the language grammar
 , source
 , location ? null
-, generate ? false,
-}:
+, generate ? false
+, ...
+}@args:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation ({
   pname = "${language}-grammar";
-  inherit version;
 
   src = source;
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     fi
     runHook postInstall
   '';
-}
+} // removeAttrs args [ "language" "source" "location" "generate" ])
