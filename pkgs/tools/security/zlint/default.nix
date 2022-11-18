@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, git
 , testers
 , zlint
 }:
@@ -14,8 +13,7 @@ buildGoModule rec {
     owner = "zmap";
     repo = "zlint";
     rev = "v${version}";
-    leaveDotGit = true;
-    hash = "sha256-1T8WAWsivSEB2xVEM+GpWJuD3DGXPa9uNpuN6/ABsns=";
+    hash = "sha256-l39GdfEKUAw5DQNjx6ZBgfGtengRlUUasm0G07kAA2A=";
   };
 
   modRoot = "v3";
@@ -38,12 +36,8 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  checkInputs = [ git ];
-
-  preCheck = ''
-    # Test all targets.
-    unset subPackages
-  '';
+  # Checks rely on .git directory, leaveDotGit makes the source derivation flaky.
+  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = zlint;
