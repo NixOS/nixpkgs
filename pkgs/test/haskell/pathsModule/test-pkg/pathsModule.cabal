@@ -1,0 +1,13 @@
+cabal-version:      1.22
+name:               pathsModule
+version:            0.0.0.0
+license:            MIT
+author:             sternenseemann
+build-type:         Simple
+
+executable pathsModule
+    main-is:          Main.hs
+    other-modules:    Paths_pathsModule
+    build-depends:    base
+    hs-source-dirs:   .
+    default-language: Haskell2010
