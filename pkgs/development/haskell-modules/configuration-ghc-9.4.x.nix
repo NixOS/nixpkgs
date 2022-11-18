@@ -95,8 +95,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib_9_4_2_20220822;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_2_20220822;
+  ghc-lib = doDistribute self.ghc-lib_9_4_3_20221104;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_3_20221104;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_1_0;
