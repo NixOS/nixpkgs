@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.19.0";
+  version = "3.20.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-3V40SG8aSD/3vnMAzBa01rJGkJh4d8MnjXl1NNZzjwI=";
+    sha256 = "sha256-hTbAMdvgeNNC8SH6iBqezSBctaeOY5AFrVcAEb2588Y=";
   };
 
   patches = [
