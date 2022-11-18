@@ -2791,8 +2791,6 @@ with pkgs;
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
-  itch = callPackage ../games/itch {};
-
   itd = callPackage ../applications/misc/itd { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };

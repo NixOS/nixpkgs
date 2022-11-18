@@ -658,7 +658,8 @@ mapAliases ({
   iproute = iproute2; # moved from top-level 2021-03-14
   iproute_mptcp = throw "'iproute_mptcp' has been moved to https://github.com/teto/mptcp-flake"; # Converted to throw 2022-10-04
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # Added 2021-12-15
-  itch-setup = throw "itch-setup has benn removed, use itch instead"; # Added 2022-06-02
+  itch = throw "itch has benn removed, because it depended on an insecure version of electron"; # Added 2022-11-18
+  itch-setup = throw "itch-setup has benn removed"; # Added 2022-06-02
 
   ### J ###
 
