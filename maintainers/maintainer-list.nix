@@ -10636,6 +10636,12 @@
     githubId = 84886;
     name = "Paul Baecher";
   };
+  pbar = {
+    email = "pbar1@users.noreply.github.com";
+    github = "pbar1";
+    githubId = 26949935;
+    name = "Pierce Bartine";
+  };
   pbogdan = {
     email = "ppbogdan@gmail.com";
     github = "pbogdan";
