@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "geopy";
   version = "2.3.0";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
