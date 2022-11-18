@@ -15,15 +15,15 @@ let
     given control of your browser, unless of course they also control your
     NixOS configuration.
   '';
-
-in {
+in
+{
   options.programs.firefox = {
     enable = mkEnableOption (mdDoc "the Firefox web browser");
 
     package = mkOption {
-      description = mdDoc "Firefox package to use.";
       type = types.package;
       default = pkgs.firefox;
+      description = mdDoc "Firefox package to use.";
       defaultText = literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
@@ -37,6 +37,8 @@ in {
     };
 
     policies = mkOption {
+      type = policyFormat.type;
+      default = { };
       description = mdDoc ''
         Group policies to install.
 
@@ -48,21 +50,19 @@ in {
 
         ${organisationInfo}
       '';
-      type = policyFormat.type;
-      default = {};
     };
 
     preferences = mkOption {
+      type = with types; attrsOf (oneOf [ bool int string ]);
+      default = { };
       description = mdDoc ''
-        Preferences to set from `about://config`.
+        Preferences to set from `about:config`.
 
         Some of these might be able to be configured more ergonomically
         using policies.
 
         ${organisationInfo}
       '';
-      type = with types; attrsOf (oneOf [ bool int string ]);
-      default = {};
     };
   };
 
@@ -78,14 +78,11 @@ in {
       };
 
     # Preferences are converted into a policy
-    programs.firefox.policies =
-      mkIf (cfg.preferences != {})
-      {
-        Preferences = (mapAttrs (name: value: {
-          Value = value;
-          Status = "locked";
-        }) cfg.preferences);
-      };
+    programs.firefox.policies = mkIf (cfg.preferences != { }) {
+      Preferences = (mapAttrs
+        (name: value: { Value = value; Status = cfg.preferencesStatus; })
+        cfg.preferences);
+    };
   };
 
   meta.maintainers = with maintainers; [ danth ];
