@@ -395,6 +395,7 @@ mapAliases ({
   electron_8 = throw "electron_8 has been removed in favor of newer versions"; # added 2022-02-08
   electron_9 = throw "electron_9 has been removed in favor of newer versions"; # added 2022-11-18
   electron_10 = throw "electron_10 has been removed in favor of newer versions"; # added 2022-11-18
+  electron_11 = throw "electron_11 has been removed in favor of newer versions"; # added 2022-11-18
 
   electrum-dash = throw "electrum-dash has been removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
 
