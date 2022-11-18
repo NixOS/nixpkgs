@@ -31362,10 +31362,6 @@ with pkgs;
 
   polymake = callPackage ../applications/science/math/polymake { };
 
-  pomotroid = callPackage ../applications/misc/pomotroid {
-    electron = electron_9;
-  };
-
   ponymix = callPackage ../applications/audio/ponymix { };
 
   popcorntime = callPackage ../applications/video/popcorntime {};
