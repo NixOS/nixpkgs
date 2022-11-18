@@ -4708,8 +4708,6 @@ with pkgs;
 
   oni2 = callPackage ../applications/editors/oni2 { };
 
-  obinskit = callPackage ../applications/misc/obinskit {};
-
   odoo = callPackage ../applications/finance/odoo {};
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};

@@ -1030,6 +1030,7 @@ mapAliases ({
   ### O ###
 
   oathToolkit = oath-toolkit; # Added 2022-04-04
+  obinskit = throw "obinskithas been removed, because it depended on an insecure version of electron"; # added 2022-11-18
   oci-image-tool = throw "oci-image-tool is no longer actively maintained, and has had major deficiencies for several years."; # Added 2022-05-14;
   oracleXE = throw "oracleXE has been removed, as it's heavily outdated and unmaintained"; # Added 2020-10-09
   OVMF-CSM = throw "OVMF-CSM has been removed in favor of OVMFFull"; # Added 2021-10-16
