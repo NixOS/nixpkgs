@@ -8236,7 +8236,7 @@
     email = "valentinobocchetti59@gmail.com";
     github = "luftmensch-luftmensch";
     githubId = 65391343;
-  }
+  };
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";
