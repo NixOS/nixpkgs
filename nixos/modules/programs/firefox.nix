@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.programs.firefox;
 
+  nmh = cfg.nativeMessagingHosts;
+
   policyFormat = pkgs.formats.json { };
 
   organisationInfo = ''
@@ -64,10 +66,68 @@ in
         ${organisationInfo}
       '';
     };
+
+    preferencesStatus = mkOption {
+      type = types.enum [ "default" "locked" "user" "clear" ];
+      default = "locked";
+      description = mdDoc ''
+        The status of `firefox.preferences`.
+
+        `status` can assume the following values:
+        - `"default"`: Preferences appear as default.
+        - `"locked"`: Preferences appear as default and can't be changed.
+        - `"user"`: Preferences appear as changed.
+        - `"clear"`: Value has no effect. Resets to factory defaults on each startup.
+      '';
+    };
+
+    autoConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = mdDoc ''
+        AutoConfig files can be used to set and lock preferences that are not covered
+        by the policies.json for Mac and Linux. This method can be used to automatically
+        change user preferences or prevent the end user from modifiying specific
+        preferences by locking them. More info can be found in https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig.
+      '';
+    };
+
+    nativeMessagingHosts = mapAttrs (_: v: mkEnableOption (mdDoc v)) {
+      browserpass = "Browserpass support";
+      bukubrow = "Bukubrow support";
+      ff2mpv = "ff2mpv support";
+      fxCast = "fx_cast support";
+      gsconnect = "GSConnect support";
+      jabref = "JabRef support";
+      passff = "PassFF support";
+      tridactyl = "Tridactyl support";
+      ugetIntegrator = "Uget Integrator support";
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      (cfg.package.override {
+        extraPrefs = cfg.autoConfig;
+        extraNativeMessagingHosts = with pkgs; optionals nmh.ff2mpv [
+          ff2mpv
+        ] ++ optionals nmh.gsconnect [
+          gnomeExtensions.gsconnect
+        ] ++ optionals nmh.jabref [
+          jabref
+        ] ++ optionals nmh.passff [
+          passff-host
+        ];
+      })
+    ];
+
+    nixpkgs.config.firefox = {
+      enableBrowserpass = nmh.browserpass;
+      enableBukubrow = nmh.bukubrow;
+      enableTridactylNative = nmh.tridactyl;
+      enableUgetIntegrator = nmh.ugetIntegrator;
+      enableFXCastBridge = nmh.fxCast;
+    };
 
     environment.etc =
       let
@@ -80,7 +140,7 @@ in
     # Preferences are converted into a policy
     programs.firefox.policies = mkIf (cfg.preferences != { }) {
       Preferences = (mapAttrs
-        (name: value: { Value = value; Status = cfg.preferencesStatus; })
+        (_: value: { Value = value; Status = cfg.preferencesStatus; })
         cfg.preferences);
     };
   };
