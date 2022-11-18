@@ -546,7 +546,7 @@ in {
             auto_assign_org_role = mkOption {
               description = lib.mdDoc "Default role new users will be auto assigned.";
               default = "Viewer";
-              type = types.enum ["Viewer" "Editor"];
+              type = types.enum ["Admin" "Viewer" "Editor"];
             };
           };
 
