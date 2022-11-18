@@ -208,7 +208,7 @@ self: super: {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  fourmolu = super.fourmolu_0_8_2_0;
+  fourmolu = super.fourmolu_0_9_0_0;
 
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
