@@ -154,6 +154,11 @@ in mkLicense lset) ({
     fullName = "BSD-2-Clause Plus Patent License";
   };
 
+  bsd2WithViews = {
+    spdxId = "BSD-2-Clause-Views";
+    fullName = "BSD 2-Clause with views sentence";
+  };
+
   bsd3 = {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
@@ -988,21 +993,6 @@ in mkLicense lset) ({
   agpl3 = {
     spdxId = "AGPL-3.0";
     fullName = "GNU Affero General Public License v3.0";
-    deprecated = true;
-  };
-  fdl11 = {
-    spdxId = "GFDL-1.1";
-    fullName = "GNU Free Documentation License v1.1";
-    deprecated = true;
-  };
-  fdl12 = {
-    spdxId = "GFDL-1.2";
-    fullName = "GNU Free Documentation License v1.2";
-    deprecated = true;
-  };
-  fdl13 = {
-    spdxId = "GFDL-1.3";
-    fullName = "GNU Free Documentation License v1.3";
     deprecated = true;
   };
   gpl2 = {

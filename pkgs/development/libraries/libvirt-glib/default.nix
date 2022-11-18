@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  # https://gitlab.com/libvirt/libvirt-glib/-/issues/4
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-sign" ];
+
   meta = with lib; {
     description = "Library for working with virtual machines";
     longDescription = ''

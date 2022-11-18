@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
 
 buildGoModule rec {
   pname = "go-mtpfs";
@@ -29,5 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/hanwen/go-mtpfs";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aaronjheng ];
+    broken = stdenv.isDarwin;
   };
 }

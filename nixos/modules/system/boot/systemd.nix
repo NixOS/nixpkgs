@@ -558,7 +558,8 @@ in
       # Environment of PID 1
       systemd.managerEnvironment = {
         # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
-        PATH = lib.makeBinPath config.system.fsPackages;
+        # util-linux is needed for the main fsck utility wrapping the fs-specific ones
+        PATH = lib.makeBinPath (config.system.fsPackages ++ [cfg.package.util-linux]);
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
         TZDIR = "/etc/zoneinfo";
         # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable

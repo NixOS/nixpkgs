@@ -44,7 +44,7 @@ in {
 
     mkBootstrap = adoptopenjdk: path: args:
       /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
-      if   adoptopenjdk.jdk-hotspot.meta.available
+      if   !stdenv.hostPlatform.isi686
       then
         # only linux has the gtkSupport option
         if stdenv.isLinux

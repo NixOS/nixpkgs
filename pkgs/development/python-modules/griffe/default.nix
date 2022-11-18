@@ -2,6 +2,7 @@
 , aiofiles
 , buildPythonPackage
 , cached-property
+, colorama
 , fetchFromGitHub
 , git
 , pdm-pep517
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.23.0";
+  version = "0.24.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = version;
-    hash = "sha256-eoWOkAwAd3ab9+uUfAdrYhkheibfGYkuoNQX/3nS57w=";
+    hash = "sha256-Gcht9pmh15dvSHRsG9y82l4HoJ7l/gxbmrRh7Jow2Bs=";
   };
 
   postPatch = ''
@@ -34,7 +35,9 @@ buildPythonPackage rec {
     pdm-pep517
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+  propagatedBuildInputs = [
+    colorama
+  ] ++ lib.optionals (pythonOlder "3.8") [
     cached-property
   ];
 

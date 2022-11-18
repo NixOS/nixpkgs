@@ -537,6 +537,16 @@ let
         };
       };
 
+      bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-fish";
+          publisher = "bmalehorn";
+          version = "1.0.31";
+          sha256 = "sha256-jDWW43ozUPIzhK/qQ+a+JSNdDHrjvgosyGe8kzBX6xM=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
@@ -1668,6 +1678,16 @@ let
         };
       };
 
+      matangover.mypy = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "mypy";
+          publisher = "matangover";
+          version = "0.2.2";
+          sha256 = "sha256-eaiR30HjPCpOLUKQqiQ2Oqj+XY+JNnV47bM5KD2Mouk=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
       mattn.lisp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "lisp";
@@ -2081,6 +2101,16 @@ let
           license = lib.licenses.epl20;
           broken = lib.versionOlder jdk.version "11";
         };
+      };
+
+      redhat.vscode-xml = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-xml";
+          publisher = "redhat";
+          version = "0.22.0";
+          sha256 = "sha256-7QOw0EVcfa7MFnZAHAsUtDZHXD5AFlW54f1qaN3h+2U=";
+        };
+        meta.license = lib.licenses.epl20;
       };
 
       redhat.vscode-yaml = buildVscodeMarketplaceExtension {
@@ -2588,6 +2618,16 @@ let
         };
       };
 
+      thenuprojectcontributors.vscode-nushell-lang = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-nushell-lang";
+          publisher = "thenuprojectcontributors";
+          version = "0.7.0";
+          sha256 = "sha256-+AGJkFx/uzgQzuRnRBZ44xGNQ6a/QWt7SNiQgwPTZxo=";
+        };
+        meta.license = lib.licenses.mit;
+      };
+
       tiehuis.zig = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "zig";
@@ -2605,8 +2645,8 @@ let
         mktplcRef = {
           name = "shellcheck";
           publisher = "timonwong";
-          version = "0.19.3";
-          sha256 = "0l8fbim19jgcdgxxgidnhdczxvhls920vrffwrac8k1y34lgfl3v";
+          version = "0.26.3";
+          sha256 = "GlyOLc2VrRnA50MkaG83qa0yLUyJYwueqEO+ZeAStYs=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''

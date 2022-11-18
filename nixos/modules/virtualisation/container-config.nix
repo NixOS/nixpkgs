@@ -7,6 +7,11 @@ with lib;
   config = mkIf config.boot.isContainer {
 
     # Disable some features that are not useful in a container.
+
+    boot.kernel.enable = false;
+
+    console.enable = mkDefault false;
+
     nix.optimise.automatic = mkDefault false; # the store is host managed
     powerManagement.enable = mkDefault false;
     documentation.nixos.enable = mkDefault false;

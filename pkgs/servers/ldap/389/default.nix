@@ -10,6 +10,7 @@
 , json_c
 , linux-pam
 , libevent
+, libxcrypt
 , nspr
 , nss
 , openldap
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     json_c
     linux-pam
     libevent
+    libxcrypt
     nspr
     nss
     cyrus_sasl

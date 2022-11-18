@@ -1,47 +1,57 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, datree
+}:
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.6.42";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
     rev = version;
-    hash = "sha256-4sj+zyFYtG/C6oDuQno/rkyxgdnnvAn9GZ5qvqA+UhA=";
+    hash = "sha256-dMKRfNGv5BImSjm7zf2bLJw+wWEdVl52IMzCrzJhSHA=";
   };
 
-  vendorSha256 = "sha256-gjD24nyQ8U1WwhUbq8N4dvzFK74t3as7wWZK7rh9yiw=";
+  vendorHash = "sha256-m3O5AoAHSM6rSnmL5N7V37XU38FADb0Edt/EZvvb2u4=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-extldflags '-static'"
     "-s"
     "-w"
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/datree version | grep ${version} > /dev/null
-  '';
+  tags = [ "main" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/datree completion $shell > datree.$shell
-      installShellCompletion datree.$shell
-    done
+    installShellCompletion \
+      --cmd datree \
+      --bash <($out/bin/datree completion bash) \
+      --fish <($out/bin/datree completion fish) \
+      --zsh <($out/bin/datree completion zsh)
   '';
 
-  doCheck = true;
+  passthru.tests.version = testers.testVersion {
+    package = datree;
+    command = "datree version";
+  };
 
   meta = with lib; {
-    description =
-      "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
+    description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
+    longDescription = ''
+      Datree provides an E2E policy enforcement solution to run automatic checks
+      for rule violations. Datree can be used on the command line, admission
+      webhook, or even as a kubectl plugin to run policies against Kubernetes
+      objects.
+    '';
     homepage = "https://datree.io/";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.jceb ];
-    mainProgram = "datree";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ azahi jceb ];
   };
 }

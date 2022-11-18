@@ -17,7 +17,6 @@
 , curl
 , fmt_8
 , nlohmann_json
-, xlibsWrapper
 , yara
 }:
 
@@ -45,7 +44,7 @@ gcc12Stdenv.mkDerivation rec {
     hash = "sha256-SFv5ulyjm5Yf+3Gpx+A74so2YClCJx1sx0LE5fh5eG4=";
   };
 
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config xlibsWrapper ];
+  nativeBuildInputs = [ cmake llvm python3 perl pkg-config ];
 
   buildInputs = [
     capstone

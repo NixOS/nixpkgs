@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , ngtcp2-gnutls
 , autoreconfHook
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
+    # knsupdate: fix segfault due to NULL pointer access when sending an update
+    (fetchpatch {
+      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/8a6645dab63d8fa7932c7d8f747fe33e8cc97e84.patch";
+      hash = "sha256-qzhSdRH5GqHqN9eLMWbDXmjO4JagsMRSZh3NWRFprao=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

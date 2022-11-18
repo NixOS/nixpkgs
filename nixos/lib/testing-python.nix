@@ -9,9 +9,6 @@
   # Modules to add to each VM
 , extraConfigurations ? [ ]
 }:
-
-with pkgs;
-
 let
   nixos-lib = import ./default.nix { inherit (pkgs) lib; };
 in

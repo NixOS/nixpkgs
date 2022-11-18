@@ -28,8 +28,8 @@ let
   };
 
   env = {
-    SANE_CONFIG_DIR = config.hardware.sane.configDir;
-    LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
+    SANE_CONFIG_DIR = "/etc/sane.d";
+    LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
@@ -158,6 +158,8 @@ in
 
       environment.systemPackages = backends;
       environment.sessionVariables = env;
+      environment.etc."sane.d".source = config.hardware.sane.configDir;
+      environment.etc."sane-libs".source = "${saneConfig}/lib/sane";
       services.udev.packages = backends;
 
       users.groups.scanner.gid = config.ids.gids.scanner;

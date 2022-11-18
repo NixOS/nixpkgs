@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , GitPython
 , isort
 , jupyter-client
@@ -30,6 +31,13 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mwouts/jupytext/commit/be9b65b03600227b737b5f10ea259a7cdb762b76.patch";
+      hash = "sha256-3klx8I+T560EVfsKe/FlrSjF6JzdKSCt6uhAW2cSwtc=";
+    })
+  ];
 
   buildInputs = [
     jupyter-packaging

@@ -43,7 +43,7 @@ let
     , phpdbgSupport ? true
 
       # Misc flags
-    , apxs2Support ? !stdenv.isDarwin
+    , apxs2Support ? false
     , argon2Support ? true
     , cgotoSupport ? false
     , embedSupport ? false

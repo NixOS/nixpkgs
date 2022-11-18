@@ -13,7 +13,7 @@ let
       sha
       dune_2
       luv
-      ocaml_extlib
+      extlib
     ] else if lib.versionAtLeast version "4.0"
     then with ocaml-ng.ocamlPackages_4_10; [
       ocaml
@@ -25,7 +25,7 @@ let
       sha
       dune_2
       luv
-      ocaml_extlib-1-7-7
+      extlib-1-7-7
     ] else with ocaml-ng.ocamlPackages_4_05; [
       ocaml
       camlp4

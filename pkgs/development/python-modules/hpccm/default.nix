@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "hpccm";
-  version = "22.8.0";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
     rev = "v${version}";
-    sha256 = "sha256-nq1zixIu/Kv2CtkQX1Sw7Q3BsOZKcCJjV0+uroXPEBs=";
+    sha256 = "sha256-dLMbwtvn7HTVVlWHAzXU19ERdJxytf9NlnqMXW6ShKI=";
   };
 
   propagatedBuildInputs = [ six archspec ];
