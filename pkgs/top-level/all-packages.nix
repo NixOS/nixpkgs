@@ -21115,6 +21115,7 @@ with pkgs;
     perl = buildPackages.perl.override {
       enableCrypt = false;
       fetchurl = stdenv.fetchurlBoot;
+      zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
     };
   };
 
