@@ -7,12 +7,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swayhide";
-  version = "v0.2.1";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "NomisIV";
     repo = pname;
-    rev = "${version}";
+    rev = "v${version}";
     sha256 = "sha256-ICDz3oDuXl/DAO4njoLJuv7hRXt76nGPPQlBVcc+hZo=";
   };
 
