@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ekbebwsdGkINdOFI+LLdwTRBN6d8mlNmftkj5SNRKNI=";
+    sha256 = "sha256-6k50L4EDqwDlKjxNu44Ju6EL4kvAl012kBvx5Qo6pJI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -39,6 +39,13 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  # These tests take about 1.5hr on a quad core laptop
+  # The remaining tests take about 15 minutes
+  disabledTestPaths = [
+    "tests/codes/test_bch.py"
+    "tests/codes/test_reed_solomon.py"
   ];
 
   postPatch = ''
