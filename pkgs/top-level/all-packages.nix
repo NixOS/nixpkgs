@@ -4558,9 +4558,7 @@ with pkgs;
     jdk11 = jdk11_headless;
   };
 
-  micropad = callPackage ../applications/office/micropad {
-    electron = electron_17;
-  };
+  micropad = callPackage ../applications/office/micropad { };
 
   midicsv = callPackage ../tools/audio/midicsv { };
 
