@@ -10128,6 +10128,8 @@ with pkgs;
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
+  nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
+
   ndstool = callPackage ../tools/archivers/ndstool { };
 
   nfs-ganesha = callPackage ../servers/nfs-ganesha { };
