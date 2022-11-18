@@ -13,7 +13,7 @@ buildPythonPackage rec {
   pname = "geopy";
   version = "2.3.0";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -21,11 +21,6 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "geographiclib<2,>=1.49" "geographiclib"
-  '';
 
   propagatedBuildInputs = [
     geographiclib
