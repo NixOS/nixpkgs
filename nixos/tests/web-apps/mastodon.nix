@@ -16,7 +16,7 @@ let
 in
 {
   name = "mastodon";
-  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
 
   nodes = {
     ca = { pkgs, ... }: {
@@ -56,6 +56,9 @@ in
     };
 
     server = { pkgs, ... }: {
+
+      virtualisation.memorySize = 2048;
+
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [

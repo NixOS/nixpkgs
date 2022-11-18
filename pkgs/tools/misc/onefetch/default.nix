@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , cmake
+, installShellFiles
 , pkg-config
 , zstd
 , stdenv
@@ -9,7 +10,6 @@
 , libresolv
 , Security
 , git
-, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     git init
+    git config user.name nixbld
     git config user.email nixbld@example.com
     git add .
     git commit -m test
