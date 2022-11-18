@@ -472,7 +472,12 @@ self: super: {
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
-    dependencies = with self; [ himalaya ];
+    postPatch = ''
+      substituteInPlace plugin/himalaya.vim \
+        --replace "if !executable('himalaya')" "if v:false"
+      substituteInPlace autoload/himalaya/request.vim \
+        --replace "'himalaya" "'${himalaya}/bin/himalaya"
+    '';
   });
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
