@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
+  # this should work on qt6, but doesn't so only do it on qt5 for now
+  preConfigure = lib.optionalString isQt5 ''
+    lrelease gpxsee.pro
+  '';
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
