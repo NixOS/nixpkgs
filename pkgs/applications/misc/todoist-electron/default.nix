@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_15, libsecret }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_15}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}"
   '';
