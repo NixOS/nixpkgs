@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.3.25";
-  source.sha256 = "sha256-/YHsRjXEGJtm/QeJU31cs4s4ELcHZfbh6C3aFbl1ka0=";
+  version = "2.3.26";
+  source.sha256 = "sha256-HuU832HnKK2Cxtv/Bs/NhVHVQi6I6GID8OLb6a6Zngk=";
   dontPatchShebangs = true;
 
   passthru.updateScript = writeScript "gem-update-script" ''
@@ -25,6 +25,7 @@ buildRubyGem rec {
   meta = with lib; {
     description = "Manage your Ruby application's gem dependencies";
     homepage = "https://bundler.io";
+    changelog = "https://github.com/rubygems/rubygems/blob/bundler-v${version}/bundler/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [anthonyroussel];
   };
