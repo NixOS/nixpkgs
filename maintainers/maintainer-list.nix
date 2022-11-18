@@ -13538,6 +13538,12 @@
     githubId = 3105057;
     name = "Jan Beinke";
   };
+  thenonameguy = {
+    email = "thenonameguy24@gmail.com";
+    name = "Krisztian Szabo";
+    github = "thenonameguy";
+    githubId = 2217181;
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
