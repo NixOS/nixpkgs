@@ -6486,6 +6486,12 @@
     githubId = 6445082;
     name = "Joseph Lukasik";
   };
+  jhh = {
+    email = "jeff@j3ff.io";
+    github = "jhh";
+    githubId = 14412;
+    name = "Jeff Hutchison";
+  };
   jhhuh = {
     email = "jhhuh.note@gmail.com";
     github = "jhhuh";
