@@ -120,5 +120,16 @@ rec {
     extraNativeBuildInputs = [ glslang ];
   };
 
+  wlroots_0_16 = generic {
+    version = "0.16.0";
+    hash = "sha256-k7BFx1xvvsdCXNWX0XeZYwv8H/myk4p42i2Y6vjILqM=";
+    extraBuildInputs = [ vulkan-loader ];
+    extraNativeBuildInputs = [ glslang ];
+    extraPatch = ''
+      substituteInPlace backend/drm/meson.build \
+        --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
+    '';
+  };
+
   wlroots = wlroots_0_15;
 }
