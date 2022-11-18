@@ -140,14 +140,14 @@
       buildPhase = ''
         runHook preBuild
 
-        if [[ ! -f package-lock.json ]]; then
+        if [[ ! -e package-lock.json ]]; then
           echo
           echo "ERROR: The package-lock.json file does not exist!"
           echo
           echo "package-lock.json is required to make sure that npmDepsHash doesn't change"
           echo "when packages are updated on npm."
           echo
-          echo "Hint: You can use the patches attribute to add a package-lock.json manually to the build."
+          echo "Hint: You can copy a vendored package-lock.json file via postPatch."
           echo
 
           exit 1
