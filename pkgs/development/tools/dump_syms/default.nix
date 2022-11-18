@@ -7,6 +7,11 @@
 
 # darwin
 , Security
+
+# tests
+, firefox-esr-unwrapped
+, firefox-unwrapped
+, thunderbird-unwrapped
 }:
 
 let
@@ -41,6 +46,10 @@ rustPlatform.buildRustPackage {
     "--skip windows::pdb::tests::test_ntdll"
     "--skip windows::pdb::tests::test_oleaut32"
   ];
+
+  passthru.tests = {
+    inherit firefox-esr-unwrapped firefox-unwrapped thunderbird-unwrapped;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/mozilla/dump_syms/releases/tag/v${version}";
