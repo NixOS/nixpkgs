@@ -12722,6 +12722,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  tremor-language-server = callPackage ../tools/misc/tremor-rs/ls.nix { };
+
   truecrack = callPackage ../tools/security/truecrack { };
   truecrack-cuda = truecrack.override { cudaSupport = true; };
 
