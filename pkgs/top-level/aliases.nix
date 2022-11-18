@@ -617,6 +617,8 @@ mapAliases ({
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra_unstable` now"; # Added 2020-04-06
   hydra-unstable = hydra_unstable; # added 2022-05-10
   hyperspace-cli = throw "hyperspace-cli is out of date, and has been deprecated upstream in favour of using the individual repos instead"; # Added 2022-08-29
+  hyper-haskell = throw "hyper-haskell has been removed, because it was unmaintained"; # Added 2022-11-18
+  hyper-haskell-server-with-packages = throw "hyper-haskell has been removed, because it was unmaintained"; # Added 2022-11-18
 
   ### I ###
 
