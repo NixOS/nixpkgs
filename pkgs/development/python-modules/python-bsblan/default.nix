@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.5.7";
+  version = "0.5.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eavARej+R8SPNuwX6LOGr43SJi1AuZszThJVG00vKhQ=";
+    hash = "sha256-pLqX+gbY71OsLflTyDuL4revj5dXol//eTFVy8iT9O4=";
   };
 
   nativeBuildInputs = [
