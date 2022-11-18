@@ -367,13 +367,13 @@
     "version": "1.10.0"
   },
   "exoscale": {
-    "hash": "sha256-d+CMg3wYHsOYow8LG7P+qcszUBiCbNwEp1zCJN7yZKo=",
+    "hash": "sha256-pJ9bbI7y6iOzJ8qPIw8SUOj8yLotRig6cmDsvLfc+6U=",
     "owner": "exoscale",
     "provider-source-address": "registry.terraform.io/exoscale/exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.41.0",
+    "rev": "v0.41.1",
     "vendorHash": null,
-    "version": "0.41.0"
+    "version": "0.41.1"
   },
   "external": {
     "hash": "sha256-o9vCr3ayqg9Ehi39FgR6vJFZYF1iTcVD4QfYHcs+YbQ=",
