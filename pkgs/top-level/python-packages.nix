@@ -10983,6 +10983,8 @@ self: super: with self; {
 
   termcolor = callPackage ../development/python-modules/termcolor { };
 
+  termgraph = callPackage ../development/python-modules/termgraph { };
+
   terminado = callPackage ../development/python-modules/terminado { };
 
   terminaltables = callPackage ../development/python-modules/terminaltables { };
