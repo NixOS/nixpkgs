@@ -3420,6 +3420,8 @@ with pkgs;
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
+  clash-premium = callPackage ../tools/networking/clash-premium { };
+
   clasp = callPackage ../tools/misc/clasp { };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
