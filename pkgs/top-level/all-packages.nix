@@ -36097,9 +36097,6 @@ with pkgs;
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
-  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_14;
-   };
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
