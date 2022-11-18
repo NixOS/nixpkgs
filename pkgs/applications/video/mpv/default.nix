@@ -61,7 +61,7 @@
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, pipewireSupport    ? stdenv.isLinux, pipewire
+, pipewireSupport    ? false,          pipewire # experimental
 , rubberbandSupport  ? true,           rubberband
 , screenSaverSupport ? true,           libXScrnSaver
 , sdl2Support        ? true,           SDL2
