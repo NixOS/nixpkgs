@@ -12,11 +12,11 @@
 }:
 
 let
-  version = "20220825.0828.c10f01f";
+  version = "20221031.1308.130cc26";
 
   src = fetchzip {
     url = "https://dl.jami.net/release/tarballs/jami_${version}.tar.gz";
-    hash = "sha256-axQYU7+kOFE9SnI8fR4F6NFvD9ITZ85UJhg5OVniSlg=";
+    hash = "sha256-+xpSoSsG+G+w8+g0FhXx+6Phroj83ijW8xWvYO+kdqY=";
 
     stripRoot = false;
     postFetch = ''
@@ -87,7 +87,7 @@ rec {
     inherit version src udev jack jami-meta ffmpeg-jami pjsip-jami opendht-jami;
   };
 
-  jami-client-qt = qt6Packages.callPackage ./client-qt.nix {
+  jami-client = qt6Packages.callPackage ./client.nix {
     inherit version src jami-meta ffmpeg-jami;
   };
 }
