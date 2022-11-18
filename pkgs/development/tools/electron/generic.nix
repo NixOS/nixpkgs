@@ -27,8 +27,7 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
-      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
+    platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     knownVulnerabilities = optional (versionOlder version "18.0.0") "Electron version ${version} is EOL";
@@ -49,7 +48,6 @@ let
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin-x64";
-  } // lib.optionalAttrs (lib.versionAtLeast version "11.0.0") {
      aarch64-darwin = "darwin-arm64";
   } // lib.optionalAttrs (lib.versionOlder version "19.0.0") {
     i686-linux = "linux-ia32";
@@ -63,14 +61,17 @@ let
     passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = with lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
-    ++ optionals (versionAtLeast version "9.0.0") [ libdrm mesa ]
-    ++ optionals (versionOlder version "10.0.0") [ libXScrnSaver ]
-    ++ optionals (versionAtLeast version "11.0.0") [ libxkbcommon ]
-    ++ optionals (versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ optionals (versionAtLeast version "17.0.0") [ libglvnd ]
-  );
+  electronLibPath = with lib; makeLibraryPath ([
+    libuuid
+    at-spi2-atk
+    at-spi2-core
+    libappindicator-gtk3
+    libdrm
+    mesa
+    libxkbcommon
+    libxshmfence
+    libglvnd
+  ]);
 
   linux = {
     buildInputs = [ glib gtk3 ];
@@ -97,7 +98,7 @@ let
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
         $out/lib/electron/electron \
-        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
+        "$out/lib/electron/chrome_crashpad_handler"
 
       wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
     '';
