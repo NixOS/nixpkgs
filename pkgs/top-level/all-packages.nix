@@ -4770,9 +4770,7 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_14;
-  };
+  pocket-casts = callPackage ../applications/audio/pocket-casts { };
 
   pouf = callPackage ../tools/misc/pouf { };
 
