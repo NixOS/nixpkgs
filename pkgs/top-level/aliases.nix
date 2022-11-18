@@ -216,6 +216,7 @@ mapAliases ({
   clearsilver = throw "clearsilver has been removed: abandoned by upstream"; # Added 2022-03-15
   clementineUnfree = throw "clementineUnfree has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   clutter_gtk = throw "'clutter_gtk' has been renamed to/replaced by 'clutter-gtk'"; # Converted to throw 2022-02-22
+  clockify = throw "clockify has been removed, because it depended on an insecure version of electron"; # added 2022-11-18
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # Added 2021-05
   codimd = hedgedoc; # Added 2020-11-29
   inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
