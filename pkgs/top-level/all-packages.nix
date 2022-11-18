@@ -16307,7 +16307,6 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron { })
     electron
-    electron_17
     electron_18
     electron_19
     electron_20
