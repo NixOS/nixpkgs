@@ -3,15 +3,13 @@
 with lib;
 
 let
-  json = pkgs.formats.json { };
+  yaml = pkgs.formats.yaml { };
   cfg = config.services.prometheus;
   checkConfigEnabled =
     (lib.isBool cfg.checkConfig && cfg.checkConfig)
       || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
-
-  prometheusYmlOut = "${workingDir}/prometheus-substituted.yaml";
 
   triggerReload = pkgs.writeShellScriptBin "trigger-reload-prometheus" ''
     PATH="${makeBinPath (with pkgs; [ systemd ])}"
@@ -38,7 +36,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
+  generatedPrometheusYml = yaml.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
