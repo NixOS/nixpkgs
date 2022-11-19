@@ -76,7 +76,8 @@ let
     in nameValuePair "borgbackup-job-${name}" {
       description = "BorgBackup job ${name}";
       path = with pkgs; [
-        borgbackup openssh
+        (borgbackup.override { exitcodeZeroOnWarning = true; })
+        openssh
       ];
       script = mkBackupScript cfg;
       serviceConfig = {

@@ -1028,6 +1028,13 @@ signald -d /var/lib/signald/db \
       </listitem>
       <listitem>
         <para>
+          The BorgBackup service no longer exits with code 1 on
+          warnings, e.g. caused by a file being changed while a backup
+          is running.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>services.github-runner</literal> and
           <literal>services.github-runners.&lt;name&gt;</literal> gained
           the option <literal>serviceOverrides</literal> which allows
