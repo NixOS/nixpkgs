@@ -3501,17 +3501,6 @@ final: prev:
     meta.homepage = "https://github.com/travitch/hasksyn/";
   };
 
-  himalaya-vim = buildVimPluginFrom2Nix {
-    pname = "himalaya-vim";
-    version = "2022-10-09";
-    src = fetchgit {
-      url = "https://git.sr.ht/~soywod/himalaya-vim";
-      rev = "747ff2a6055839cb5b403b540883515af37b7117";
-      sha256 = "05d8nfzqp96s05agj4fd5r2fckdsxacl0qvlk9dhxz4dh8kgsqyi";
-    };
-    meta.homepage = "https://git.sr.ht/~soywod/himalaya-vim";
-  };
-
   hiPairs = buildVimPluginFrom2Nix {
     pname = "hiPairs";
     version = "2020-12-10";
@@ -3522,6 +3511,17 @@ final: prev:
       sha256 = "1hcskq9zdkf8vlxwd2n403m4rq7495v2fj35hjf6461hqx9v9dnw";
     };
     meta.homepage = "https://github.com/Yggdroot/hiPairs/";
+  };
+
+  himalaya-vim = buildVimPluginFrom2Nix {
+    pname = "himalaya-vim";
+    version = "2022-10-09";
+    src = fetchgit {
+      url = "https://git.sr.ht/~soywod/himalaya-vim";
+      rev = "747ff2a6055839cb5b403b540883515af37b7117";
+      sha256 = "05d8nfzqp96s05agj4fd5r2fckdsxacl0qvlk9dhxz4dh8kgsqyi";
+    };
+    meta.homepage = "https://git.sr.ht/~soywod/himalaya-vim";
   };
 
   hlint-refactor-vim = buildVimPluginFrom2Nix {
