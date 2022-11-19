@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
-  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, help2man
+, python3
+
+, alsa-lib
+, libxslt
+, systemd
+, libusb-compat-0_1
+, libftdi1
+, libICE
+, libSM
+, libX11
+}:
 
 let
   pythonEnv = python3.pythonForBuild.withPackages (p: with p; [ pyyaml setuptools ]);
@@ -54,7 +70,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  buildInputs = [ alsa-lib xlibsWrapper systemd libusb-compat-0_1 libftdi1 ];
+  buildInputs = [ alsa-lib systemd libusb-compat-0_1 libftdi1 libICE libSM libX11 ];
 
   DEVINPUT_HEADER = "include/linux/input-event-codes.h";
 
