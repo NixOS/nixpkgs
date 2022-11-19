@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
+    "--with-libunwind"
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
