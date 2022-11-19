@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (buildDocs && !stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ];
 
