@@ -1,26 +1,26 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
-, help2man
 , glib-networking
 , gst_all_1
 , gtk3
+, help2man
 , luafilesystem
 , luajit
+, pkg-config
 , sqlite
 , webkitgtk
+, wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luakit";
   version = "2.3";
 
   src = fetchFromGitHub {
     owner = "luakit";
-    repo = pname;
-    rev = version;
+    repo = "luakit";
+    rev = finalAttrs.version;
     hash = "sha256-5YeJkbWk1wHxWXqWOvhEDeScWPU/aRVhuOWRHLSHVZM=";
   };
 
@@ -56,20 +56,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "DEVELOPMENT_PATHS=0"
-    "USE_LUAJIT=1"
     "INSTALLDIR=${placeholder "out"}"
     "PREFIX=${placeholder "out"}"
     "USE_GTK3=1"
+    "USE_LUAJIT=1"
     "XDGPREFIX=${placeholder "out"}/etc/xdg"
   ];
 
   preFixup = let
-    luaKitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
+    luakitPath = "$out/share/luakit/lib/?/init.lua;$out/share/luakit/lib/?.lua";
   in ''
     gappsWrapperArgs+=(
-      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-      --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
       --prefix LUA_CPATH ';' "$LUA_CPATH"
+      --prefix LUA_PATH ';' "${luakitPath};$LUA_PATH"
+      --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
     )
   '';
 
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
       power users, developers and anyone who wants to have fine-grained control
       over their web browser’s behaviour and interface.
     '';
-    license     = licenses.gpl3Only;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
-}
+})
