@@ -22,13 +22,17 @@ buildPythonPackage rec {
       --replace "'argparse'" ""
   '';
 
-  # tests require hadoop hdfs
+  # Tests require hadoop hdfs
   doCheck = false;
+
+  pythonImportsCheck = [
+    "snakebite"
+  ];
 
   meta = with lib; {
     description = "Pure Python HDFS client";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }
