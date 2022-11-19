@@ -135,9 +135,6 @@ in {
           port = cfg.port;
           klippy_uds_address = cfg.klipperSocket;
         };
-        database = {
-          database_path = "${cfg.stateDir}/database";
-        };
       } // (lib.optionalAttrs (cfg.configDir != null) {
         file_manager = {
           config_path = cfg.configDir;
