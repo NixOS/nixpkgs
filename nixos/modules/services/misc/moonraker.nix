@@ -149,7 +149,7 @@ in {
       script = ''
         cp /etc/moonraker.cfg ${cfg.configDir}/moonraker-temp.cfg
         chmod u+w ${cfg.configDir}/moonraker-temp.cfg
-        exec ${pkg}/bin/moonraker -c ${cfg.configDir}/moonraker-temp.cfg
+        exec ${pkg}/bin/moonraker -d ${cfg.stateDir} -c ${cfg.configDir}/moonraker-temp.cfg
       '';
 
       # Needs `ip` command
