@@ -33,8 +33,6 @@ in
         "firefox-bin"
         "firefox-devedition-bin"
         "firefox-esr"
-        "firefox-esr-wayland"
-        "firefox-wayland"
       ];
     };
 
