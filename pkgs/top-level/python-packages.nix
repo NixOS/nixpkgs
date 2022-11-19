@@ -3228,8 +3228,6 @@ self: super: with self; {
 
   filelock = callPackage ../development/python-modules/filelock { };
 
-  filemagic = callPackage ../development/python-modules/filemagic { };
-
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -6970,6 +6968,8 @@ self: super: with self; {
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
+
+  prodict = callPackage ../development/python-modules/prodict { };
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
