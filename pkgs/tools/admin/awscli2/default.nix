@@ -4,6 +4,8 @@
 , less
 , fetchFromGitHub
 , nix-update-script
+, testers
+, awscli2
 }:
 
 let
@@ -120,6 +122,11 @@ with py.pkgs; buildPythonApplication rec {
     python = py; # for aws_shell
     updateScript = nix-update-script {
       attrPath = pname;
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      version = version;
     };
   };
 
