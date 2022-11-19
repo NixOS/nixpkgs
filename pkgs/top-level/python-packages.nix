@@ -3228,8 +3228,6 @@ self: super: with self; {
 
   filelock = callPackage ../development/python-modules/filelock { };
 
-  filemagic = callPackage ../development/python-modules/filemagic { };
-
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
