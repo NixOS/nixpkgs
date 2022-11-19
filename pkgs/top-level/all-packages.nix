@@ -12871,6 +12871,8 @@ with pkgs;
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
+  vals = callPackage ../tools/security/vals { };
+
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
