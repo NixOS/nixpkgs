@@ -1,0 +1,16 @@
+# Should be unneeded in next release of terminus
+
+--- a/src/load_paths.pl
++++ b/src/load_paths.pl
+@@ -123,9 +123,8 @@ add_enterprise_test_path :-
+     asserta(user:file_search_path(enterprise_test, Enterprise)).
+ 
+ add_dashboard_path :-
+-    top_level_directory(Dir),
+-    directory_file_path(Dir, 'dashboard', Dashboard),
+-    directory_file_path(Dir, 'dashboard/assets', Assets),
++    getenv("TERMINUSDB_DASHBOARD_DIR", Dashboard),
++    directory_file_path(Dashboard, "assets", Assets),
+     asserta(user:file_search_path(dashboard, Dashboard)),
+     asserta(user:file_search_path(assets, Assets)).
+ 

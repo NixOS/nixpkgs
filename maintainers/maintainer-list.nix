@@ -1850,6 +1850,13 @@
     githubId = 37907;
     name = "Julian Stecklina";
   };
+  blueforesticarus = {
+    matrix = "@segfau1t:matrix.org";
+    github = "blueforesticarus";
+    githubId = 6549542;
+    email = "erichspaker@protonmail.com";
+    name = "Erich Spaker";
+  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
