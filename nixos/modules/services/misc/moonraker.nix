@@ -135,6 +135,9 @@ in {
           port = cfg.port;
           klippy_uds_address = cfg.klipperSocket;
         };
+        machine = {
+          validate_service = false;
+        };
       } // (lib.optionalAttrs (cfg.configDir != null) {
         file_manager = {
           config_path = cfg.configDir;
