@@ -16,7 +16,7 @@
 }:
 
 let
-  pname = "coqui-trainer";
+  pname = "trainer";
   version = "0.0.16";
 in
 buildPythonPackage {

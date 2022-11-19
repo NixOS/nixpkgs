@@ -423,13 +423,13 @@
     "version": "2.2.0"
   },
   "github": {
-    "hash": "sha256-cLBBz5qPRY+TpcO0yfyTXOQLQYz58hB1l6ufThbBSuM=",
+    "hash": "sha256-3ivfHKoj7jXQ3WsoTNSCL1zD93Pr0pjtZ9LneW9My4o=",
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v5.8.0",
+    "rev": "v5.9.0",
     "vendorHash": null,
-    "version": "5.8.0"
+    "version": "5.9.0"
   },
   "gitlab": {
     "hash": "sha256-1Ljf9kwpj96mzu/uHqitYCKIixNn/sZL21zOM8xQsU4=",
@@ -642,13 +642,13 @@
     "version": "1.14.0"
   },
   "kubernetes": {
-    "hash": "sha256-93cGlfYUH4VTdDYbtGySOUw5Kak7hKs0gxLCT0Bxca4=",
+    "hash": "sha256-hWFC8VBbM3BRGrX1Y45Znd/W3klYy/7aS7JbbKN7EUg=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/kubernetes",
     "repo": "terraform-provider-kubernetes",
-    "rev": "v2.15.0",
+    "rev": "v2.16.0",
     "vendorHash": null,
-    "version": "2.15.0"
+    "version": "2.16.0"
   },
   "launchdarkly": {
     "hash": "sha256-AsFtlCIGvlG8c+PilhMhaMowaea/g1+IXYzEiIIbZ44=",
@@ -1121,13 +1121,13 @@
     "version": "1.78.12"
   },
   "tfe": {
-    "hash": "sha256-MDlRwB2iVi/Rv7/UtukI6mIDImz8Gnpm5Qv5R6EDpiU=",
+    "hash": "sha256-ikuLRGm9Z+tt0Zsx7DYKNBrS08rW4DOvVWYpl3wvaeU=",
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/tfe",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.38.0",
-    "vendorHash": "sha256-reXq1MyAhHRet1WwDJZafdOg1r7J4sktQ/QhQUPhDak=",
-    "version": "0.38.0"
+    "rev": "v0.39.0",
+    "vendorHash": "sha256-Ws9IzlZQDDAdQ4JJ326jHXUe9oQphBXb/ZNO7Kl/A1w=",
+    "version": "0.39.0"
   },
   "thunder": {
     "hash": "sha256-fXvwBOIW3/76V3O9t25wff0oGViqSaSB2VgMdItXyn4=",
