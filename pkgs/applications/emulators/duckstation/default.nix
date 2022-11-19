@@ -7,28 +7,27 @@
 , makeDesktopItem
 , curl
 , extra-cmake-modules
-, libevdev
 , libpulseaudio
 , libXrandr
 , mesa # for libgbm
 , ninja
 , pkg-config
 , qtbase
+, qtsvg
 , qttools
 , vulkan-loader
-#, wayland # Wayland doesn't work correctly this version
+, wayland
 , wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "duckstation";
-  version = "unstable-2022-07-08";
-
+  version = "unstable-2022-11-18";
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = pname;
-    rev = "82965f741e81e4d2f7e1b2abdc011e1f266bfe7f";
-    sha256 = "sha256-D8Ps/EQRcHLsps/KEUs56koeioOdE/GPA0QJSrbSdYs=";
+    rev = "8d7aea5e19859ed483699cc4a5dbd47165c7be8b";
+    sha256 = "sha256-92Wn1ZEEZszmVK/KrJqjDuQf/lyD8/VScfTI/St5dY4=";
   };
 
   nativeBuildInputs = [
@@ -44,18 +43,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     curl
-    libevdev
     libpulseaudio
     libXrandr
     mesa
     qtbase
+    qtsvg
     vulkan-loader
-    #wayland
+    wayland
   ];
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
-    #"-DUSE_WAYLAND=ON"
+    "-DUSE_WAYLAND=ON"
   ];
 
   desktopItems = [
@@ -80,7 +79,7 @@ stdenv.mkDerivation rec {
     cp -r bin $out/share/duckstation
     ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    install -Dm644 ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
+    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
