@@ -1,13 +1,13 @@
 { lib
+, attrs
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, sphinx
 , mock
+, pythonOlder
 , repeated-test
-, unittestCheckHook
-, attrs
 , setuptools-scm
+, sphinx
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
+    hash = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +37,14 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  meta = with lib; {
-    description = "Utilities for working with 3.3's inspect.Signature objects.";
-    homepage = "https://pypi.python.org/pypi/sigtools";
-    license = licenses.mit;
-  };
+  pythonImportsCheck = [
+    "sigtools"
+  ];
 
+  meta = with lib; {
+    description = "Utilities for working with inspect.Signature objects";
+    homepage = "https://sigtools.readthedocs.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }
