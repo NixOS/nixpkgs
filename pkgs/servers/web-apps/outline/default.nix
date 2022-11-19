@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/outline
-    mv node_modules build $out/share/outline/
+    mv public node_modules build $out/share/outline/
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build
