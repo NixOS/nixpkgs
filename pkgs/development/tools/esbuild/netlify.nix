@@ -17,7 +17,7 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
-  
+
   passthru = {
     tests = {
       inherit netlify-cli;
