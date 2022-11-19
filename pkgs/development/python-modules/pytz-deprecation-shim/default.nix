@@ -41,11 +41,9 @@ buildPythonPackage rec {
   ];
 
   # https://github.com/pganssle/pytz-deprecation-shim/issues/27
-  doCheck = pythonAtLeast "3.9";
-
-  disabledTestPaths = [
-    "tests/test_pytz_equivalent.py"
-  ];
+  # https://github.com/pganssle/pytz-deprecation-shim/issues/30
+  # The test suite is just very flaky and breaks all the time
+  doCheck = false;
 
   meta = with lib; {
     description = "Shims to make deprecation of pytz easier";
