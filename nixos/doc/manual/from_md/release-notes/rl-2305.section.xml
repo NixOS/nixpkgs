@@ -83,7 +83,10 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Create the first release note entry in this section!
+          The module for the application firewall
+          <literal>opensnitch</literal> got the ability to configure
+          rules. Available as
+          <link linkend="opt-services.opensnitch.rules">services.opensnitch.rules</link>
         </para>
       </listitem>
     </itemizedlist>
