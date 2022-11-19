@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , openssl
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
+    hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
   };
 
   nativeBuildInputs = [
@@ -56,10 +56,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Python proxy framework";
     homepage = "https://github.com/abhinavsingh/proxy.py";
+    changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }
