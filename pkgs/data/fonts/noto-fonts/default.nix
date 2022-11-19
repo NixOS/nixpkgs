@@ -15,15 +15,15 @@
 
 let
   mkNoto = { pname, weights }:
-    stdenvNoCC.mkDerivation {
+    stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "2020-01-23";
+      version = "v20201206-phase3";
 
       src = fetchFromGitHub {
         owner = "googlefonts";
         repo = "noto-fonts";
-        rev = "f4726a2ec36169abd02a6d8abe67c8ff0236f6d8";
-        sha256 = "0zc1r7zph62qmvzxqfflsprazjf6x1qnwc2ma27kyzh6v36gaykw";
+        rev = version;
+        hash = "sha256-x60RvCRFLoGe0CNvswROnDkIsUFbWH+/laN8q2qkUPk=";
       };
 
       installPhase = ''
@@ -33,10 +33,10 @@ let
         #
         # TODO: install OpenType, variable versions?
         local out_ttf=$out/share/fonts/truetype/noto
-        install -m444 -Dt $out_ttf phaseIII_only/unhinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf phaseIII_only/hinted/ttf/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf archive/unhinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf archive/hinted/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf unhinted/*/*/*-${weights}.ttf
+        install -m444 -Dt $out_ttf hinted/*/*/*-${weights}.ttf
       '';
 
       meta = with lib; {
