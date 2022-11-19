@@ -22,6 +22,7 @@ in buildFHSUserEnv rec {
     xorg.libICE
     xorg.libSM
     zlib
+    libxcrypt
     # qsys requirements
     xorg.libXtst
     xorg.libXi
