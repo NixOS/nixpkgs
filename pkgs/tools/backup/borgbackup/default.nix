@@ -22,6 +22,12 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
   };
 
+  patches = [
+    # Don't exit with an error on changed files warning
+    # https://github.com/NixOS/nixpkgs/issues/177733
+    ./dont-error-on-changed-files.patch
+  ];
+
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \

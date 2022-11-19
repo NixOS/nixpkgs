@@ -1062,6 +1062,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          The <literal>borgbackup</literal> package was patched not to
+          exit with an error, when files changed during the backup.
+          Instead it will just emit a warning, when such an issue is
+          encountered.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>xplr</literal> package has been updated from
           0.18.0 to 0.19.0, which brings some breaking changes. See the
           <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream

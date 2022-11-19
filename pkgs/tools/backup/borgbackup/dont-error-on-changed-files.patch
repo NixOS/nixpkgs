@@ -1,0 +1,21 @@
+diff --git a/src/borg/archiver.py b/src/borg/archiver.py
+index 8afc4079..766ec12a 100644
+--- a/src/borg/archiver.py
++++ b/src/borg/archiver.py
+@@ -565,7 +565,7 @@ def create_inner(archive, cache, fso):
+                         self.print_warning('%s: %s', path, e)
+                         status = 'E'
+                     if status == 'C':
+-                        self.print_warning('%s: file changed while we backed it up', path)
++                        print(f'{path}: file changed while we backed it up', file=sys.stderr)
+                     self.print_file_status(status, path)
+                 if args.paths_from_command:
+                     rc = proc.wait()
+@@ -827,7 +827,7 @@ def _rec_walk(self, *, path, parent_fd, name, fso, cache, matcher,
+             self.print_warning('%s: %s', path, e)
+             status = 'E'
+         if status == 'C':
+-            self.print_warning('%s: file changed while we backed it up', path)
++            print(f'{path}: file changed while we backed it up', file=sys.stderr)
+         if not recurse_excluded_dir:
+             self.print_file_status(status, path)
