@@ -5853,6 +5853,12 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  ifd3f = {
+    name = "Astrid Yu";
+    email = "astrid@astrid.tech";
+    github = "ifd3f";
+    githubId = 7308591;
+  };
   ifurther = {
     email = "55025025+ifurther@users.noreply.github.com";
     github = "ifurther";
