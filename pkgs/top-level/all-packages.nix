@@ -17336,6 +17336,8 @@ with pkgs;
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
+  lemminx = callPackage ../development/tools/lemminx { };
+
   lenmus = callPackage ../applications/misc/lenmus { };
 
   lightningcss = callPackage ../development/tools/lightningcss { };
