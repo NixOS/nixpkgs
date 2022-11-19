@@ -184,5 +184,6 @@ in {
   meta.maintainers = with maintainers; [
     cab404
     vtuan10
+    zhaofengli
   ];
 }
