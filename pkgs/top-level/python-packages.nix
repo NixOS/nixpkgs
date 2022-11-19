@@ -7145,6 +7145,8 @@ self: super: with self; {
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
+  plotext = callPackage ../development/python-modules/plotext { };
+
   plotly = callPackage ../development/python-modules/plotly { };
 
   plotnine = callPackage ../development/python-modules/plotnine { };
@@ -9651,6 +9653,8 @@ self: super: with self; {
   reolink = callPackage ../development/python-modules/reolink { };
 
   reparser = callPackage ../development/python-modules/reparser { };
+
+  repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 

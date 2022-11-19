@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
     rev = "v${version}";
-    sha256 = "sha256-RXBMb43BBiJ23X0eKC1kqgLw8iFKJnP5iejY0AWcUrU=";
+    sha256 = "sha256-MmXzrooN+C9MUaAz4+IEGkGJWHbgvPMSLHgssM0wyN8=";
   };
 
   # Upstream splitted the project into gitlint and gitlint-core to
