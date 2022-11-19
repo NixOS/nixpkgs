@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-awlS1VHXj6n9Ee4qUI1x5tEdkMF/ZEr9NPKh4ICkv3g=";
+    hash = "sha256-awlS1VHXj6n9Ee4qUI1x5tEdkMF/ZEr9NPKh4ICkv3g=";
   };
 
   propagatedBuildInputs = [
@@ -44,11 +44,14 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  pythonImportsCheck = [ "spnego" ];
+  pythonImportsCheck = [
+    "spnego"
+  ];
 
   meta = with lib; {
     description = "Python SPNEGO authentication library";
     homepage = "https://github.com/jborean93/pyspnego";
+    changelog = "https://github.com/jborean93/pyspnego/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
