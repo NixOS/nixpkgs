@@ -78,7 +78,12 @@ rec {
     }: buildCommand:
     stdenv.mkDerivation ({
       enableParallelBuilding = true;
-      inherit buildCommand name;
+      inherit name;
+      buildCommand = ''
+        runHook preBuild
+        ${buildCommand}
+        runHook postBuild
+      '';
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
