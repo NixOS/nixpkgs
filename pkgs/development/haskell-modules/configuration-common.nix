@@ -2572,11 +2572,6 @@ self: super: {
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
-  # 2022-09-01:
-  # Restrictive upper bound on base.
-  # Remove once version 1.* is released
-  monad-bayes = doJailbreak super.monad-bayes;
-
   # Test failure after libxcrypt migration, reported upstrem at
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
