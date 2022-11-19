@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
-    rev = "v${version}";
-    hash = "sha256-0DQanrglJiGsN8qQ5KxkL8I+Fpt1abeeuKiM8v9GclM=";
+    # rev = "v${version}";
+    rev = "c8f60c030bfe1987415d05241a6839648d40b358"; # include aarch64 patch
+    hash = "sha256-xRbPFaPlO5hyDQJyM4Pf56icRcJAL9H46Ep+hcl3DUg=";
     fetchSubmodules = true;
   };
 
@@ -18,11 +19,6 @@ stdenv.mkDerivation rec {
   sourceRoot = "./source/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
-
-  postPatch = ''
-    substituteInPlace Constants.h \
-      --replace "UNKNOWN = -1" "// UNKNOWN removed since it doesn't fit in char"
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +33,7 @@ stdenv.mkDerivation rec {
       icon = "SonyHeadphonesClient";
       desktopName = "Sony Headphones Client";
       comment = "A client recreating the functionality of the Sony Headphones app";
-      categories = [ "Audio" "Mixer" ];
+      categories = [ "Audio" "AudioVideo" "Mixer" ];
     })
   ];
 
