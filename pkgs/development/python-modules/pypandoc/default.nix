@@ -1,10 +1,18 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
-, pandoc, pandocfilters, texlive
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandoc
+, pandocfilters
+, pythonOlder
+, substituteAll
+, texlive
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.10";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JessicaTegner";
@@ -25,6 +33,10 @@ buildPythonPackage rec {
   checkInputs = [
     texlive.combined.scheme-small
     pandocfilters
+  ];
+
+  pythonImportsCheck = [
+    "pypandoc"
   ];
 
   meta = with lib; {
