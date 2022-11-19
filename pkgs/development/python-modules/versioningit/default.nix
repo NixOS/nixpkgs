@@ -17,8 +17,9 @@
 buildPythonPackage rec {
   pname = "versioningit";
   version = "2.1.0";
-  disabled = pythonOlder "3.8";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,9 +36,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     setuptools
-    tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   checkInputs = [
