@@ -4,17 +4,20 @@
 , sqlalchemy
 , setuptools-scm
 , setuptools
-, tox
 , sphinx
 , pytestCheckHook
 , pytest-sugar
 , pymysql
 , psycopg2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-jsonfield";
   version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "penguinolog";
@@ -25,11 +28,25 @@ buildPythonPackage rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ sqlalchemy setuptools ];
+  propagatedBuildInputs = [
+    sqlalchemy
+    setuptools
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-sugar pymysql psycopg2 ];
+  checkInputs = [
+    pytestCheckHook
+    pytest-sugar
+    pymysql
+    psycopg2
+  ];
+
+  pythonImportsCheck = [
+    "sqlalchemy_jsonfield"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
