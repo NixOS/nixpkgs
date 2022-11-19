@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "4.11.0";
+  version = "4.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BTrees";
     inherit version;
-    hash = "sha256-AFwDtIAp1noojnYIeYw3rCSfLAabb1GDZAqUmdzY+qM=";
+    hash = "sha256-kIUAsCD/mJsAlG+Kb2Vz84qbGAjQd+UuPc8Ej7FwwTo=";
   };
 
   propagatedBuildInputs = [
