@@ -79,6 +79,7 @@ in
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, enableRelocatable ? false
 , # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -96,6 +97,8 @@ assert editedCabalFile != null -> revision != null;
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
 assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
+
+assert enableRelocatable -> !enableSeparateBinOutput && !enableSeparateDataOutput && !enableSeparateDocOutput;
 
 let
 
@@ -194,8 +197,14 @@ let
   defaultConfigureFlags = [
     "--verbose"
     "--prefix=$out"
+  ] ++ (if enableRelocatable then [
+    "--enable-relocatable"
+    "--libdir=\\$prefix/lib/\\$compiler"
+    "--libsubdir=\\$libdir/\\$abi/\\$libname"
+  ] else [
     "--libdir=\\$prefix/lib/\\$compiler"
     "--libsubdir=\\$abi/\\$libname"
+  ]) ++ [
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
   ] ++ optionals stdenv.hasCC [
