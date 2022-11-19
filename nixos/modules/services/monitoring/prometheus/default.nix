@@ -71,7 +71,8 @@ let
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
-    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
+    ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}"
+    ++ optional (cfg.webConfigFile != null) "--web.config.file=${cfg.webConfigFile}";
 
   filterValidPrometheus = filterAttrsListRecursive (n: v: !(n == "_module" || v == null));
   filterAttrsListRecursive = pred: x:
@@ -1714,6 +1715,15 @@ in
       description = lib.mdDoc ''
         The URL under which Prometheus is externally reachable (for example,
         if Prometheus is served via a reverse proxy).
+      '';
+    };
+
+    webConfigFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = lib.mdDoc ''
+        Specifies which file should be used as web.config.file and be passed on startup.
+        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
       '';
     };
 
