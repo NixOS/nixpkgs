@@ -21,16 +21,16 @@
 
 javaPackages.mavenfod rec {
   pname = "dbeaver";
-  version = "22.2.3"; # When updating also update mvnSha256
+  version = "22.2.4"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-CY3Er+EmHA7fpOzwbo9vbcqkGW2AwLSB31RiEpRciaw=";
+    sha256 = "sha256-ebEEz7KWKFOP377vOZJ8gopcjbipnDmOkjQ6l6jhMVw=";
   };
 
-  mvnSha256 = "4O8Tc3OhrHOtMpAOkvj75OwsVvw+OrOtnQOqks7nO3o=";
+  mvnSha256 = "iLNdHcXC1EqWtWd446F1nqfW1FfVpl8c81+fFj0RCgY=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
