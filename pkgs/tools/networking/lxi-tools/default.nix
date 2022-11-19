@@ -5,6 +5,7 @@
 , glib, gtk4, gtksourceview5, libadwaita, json-glib
 , desktop-file-utils, appstream-glib
 , gsettings-desktop-schemas
+, withGui ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja cmake pkg-config
-    wrapGAppsHook
-  ];
+  ] ++ lib.optional withGui wrapGAppsHook;
 
   buildInputs = [
     liblxi readline lua bash-completion
+  ] ++ lib.optionals withGui [
     glib gtk4 gtksourceview5 libadwaita json-glib
     desktop-file-utils appstream-glib
     gsettings-desktop-schemas
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sed -i '/meson.add_install.*$/d' source/meson.build";
 
-  postInstall = "glib-compile-schemas $out/share/glib-2.0/schemas";
+  mesonFlags = lib.optional (!withGui) "-Dgui=false";
+
+  postInstall = lib.optionalString withGui
+    "glib-compile-schemas $out/share/glib-2.0/schemas";
 
   meta = with lib; {
     description = "Tool for communicating with LXI compatible instruments";
