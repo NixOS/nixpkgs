@@ -14,16 +14,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uGkj2Z8mLg51IV+FOqwZl1hT7zVyjmD1CcY/VbH4tKk=";
+    hash = "sha256-uGkj2Z8mLg51IV+FOqwZl1hT7zVyjmD1CcY/VbH4tKk=";
   };
 
   checkInputs = [
     repeated-test
   ];
 
+  pythonImportsCheck = [
+    "od"
+  ];
+
   meta = with lib; {
     description = "Shorthand syntax for building OrderedDicts";
     homepage = "https://github.com/epsy/od";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
