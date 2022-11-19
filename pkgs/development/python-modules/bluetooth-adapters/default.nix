@@ -58,9 +58,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/main/CHANGELOG.md";
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://bluetooth-adapters.readthedocs.io/";
+    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };
