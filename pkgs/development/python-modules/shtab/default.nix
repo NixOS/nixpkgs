@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";
     homepage = "https://docs.iterative.ai/shtab/";
+    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
