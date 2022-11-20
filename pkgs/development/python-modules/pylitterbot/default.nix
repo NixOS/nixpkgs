@@ -49,10 +49,6 @@ buildPythonPackage rec {
       --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
   '';
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
   pythonImportsCheck = [
     "pylitterbot"
   ];
