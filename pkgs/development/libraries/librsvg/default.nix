@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.enableFeature withIntrospection "introspection")
-
     (lib.enableFeature withIntrospection "vala")
 
     "--enable-always-build-tests"
