@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "executing";
   version = "1.2.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
