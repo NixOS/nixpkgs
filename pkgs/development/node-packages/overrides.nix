@@ -441,6 +441,18 @@ final: prev: {
   };
 
   readability-cli = prev.readability-cli.override (oldAttrs: {
+    # Wrap src to fix this build error:
+    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
+    #
+    # Need to wrap the source, instead of patching in patchPhase, because
+    # buildNodePackage only unpacks sources in the installPhase.
+    src = stdenv.mkDerivation {
+      src = oldAttrs.src;
+      name = oldAttrs.name + "-src";
+      patchPhase = "chmod a-x readable.ts";
+      installPhase = ''cp -r . "$out"'';
+    };
+
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
       pixman
