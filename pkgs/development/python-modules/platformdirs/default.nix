@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-OAvhbgmwGhElszUPksXkOgB5Dp/Wcf4s8807CcT7eyM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OAvhbgmwGhElszUPksXkOgB5Dp/Wcf4s8807CcT7eyM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -41,8 +41,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python module for determining appropriate platform-specific directories";
+    description = "Module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
+    changelog = "https://github.com/platformdirs/platformdirs/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
