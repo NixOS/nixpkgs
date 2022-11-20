@@ -64,6 +64,7 @@ let
           sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
         };
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
+        pytestFlagsArray = [ "--asyncio-mode=auto" ];
       });
 
       daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
