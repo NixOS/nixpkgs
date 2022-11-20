@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An extremely fast Python linter";
     homepage = "https://github.com/charliermarsh/ruff";
+    changelog = "https://github.com/charliermarsh/ruff/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };
