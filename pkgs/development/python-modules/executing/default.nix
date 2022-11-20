@@ -5,6 +5,8 @@
 , setuptools-scm
 , pytestCheckHook
 , littleutils
+, pythonAtLeast
+, rich
 }:
 
 buildPythonPackage rec {
@@ -31,6 +33,8 @@ buildPythonPackage rec {
     pytestCheckHook
     asttokens
     littleutils
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    rich
   ];
 
   pythonImportsCheck = [
