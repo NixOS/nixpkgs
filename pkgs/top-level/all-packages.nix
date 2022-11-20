@@ -5232,6 +5232,8 @@ with pkgs;
 
   long-shebang = callPackage ../misc/long-shebang { };
 
+  lssecret = callPackage ../misc/lssecret {};
+
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
   numatop = callPackage ../os-specific/linux/numatop { };
