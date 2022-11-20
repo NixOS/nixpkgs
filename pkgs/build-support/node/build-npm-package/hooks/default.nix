@@ -1,4 +1,4 @@
-{ lib, makeSetupHook, nodejs, srcOnly, diffutils, jq, makeWrapper }:
+{ lib, makeSetupHook, nodejs, srcOnly, buildPackages, makeWrapper }:
 
 {
   npmConfigHook = makeSetupHook
@@ -9,9 +9,8 @@
 
         # Specify the stdenv's `diff` and `jq` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong binaries.
-        # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
-        diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
-        jq = "${jq.nativeDrv or jq}/bin/jq";
+        diff = "${buildPackages.diffutils}/bin/diff";
+        jq = "${buildPackages.jq}/bin/jq";
 
         nodeVersion = nodejs.version;
         nodeVersionMajor = lib.versions.major nodejs.version;
@@ -29,7 +28,7 @@
       deps = [ makeWrapper ];
       substitutions = {
         hostNode = "${nodejs}/bin/node";
-        jq = "${jq.nativeDrv or jq}/bin/jq";
+        jq = "${buildPackages.jq}/bin/jq";
       };
     } ./npm-install-hook.sh;
 }
