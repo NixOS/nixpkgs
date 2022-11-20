@@ -2,13 +2,13 @@
 
 let
   name = "lunar-client";
-  version = "2.10.1";
+  version = "2.14.0";
 
   desktopItem = makeDesktopItem {
     name = "lunar-client";
     exec = "lunar-client";
     icon = "lunarclient";
-    comment = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
+    comment = "Minecraft 1.7, 1.8, 1.12, 1.16, 1.17, 1.18, and 1.19 Client";
     desktopName = "Lunar Client";
     genericName = "Minecraft Client";
     categories = [ "Game" ];
@@ -21,7 +21,7 @@ let
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
     name = "lunar-client.AppImage";
-    hash = "sha256-3h2FFpIIRta6hEsa/H0xo8+DUvhdQyBv9dqdd/vlwZ4=";
+    hash = "sha256-bKpNiqQQXk+dGCo2TRVkQ4gaimoFrylyIVRPODhC3Io=";
   };
 in
 appimageTools.wrapType1 rec {
@@ -36,7 +36,7 @@ appimageTools.wrapType1 rec {
   extraPkgs = pkgs: [ pkgs.libpulseaudio ];
 
   meta = with lib; {
-    description = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
+    description = "Minecraft 1.7, 1.8, 1.12, 1.16, 1.17, 1.18, and 1.19 Client";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     maintainers = with maintainers; [ zyansheep Technical27 ];
