@@ -13,8 +13,7 @@
 
 mkDerivation rec {
   pname = "notepadqq";
-  # shipping a beta build as there's no proper release which supports
-  # qtwebengine
+  # shipping a beta build as there's no proper release which supports qtwebengine
   version = "2.0.0-beta";
 
   src = fetchFromGitHub {
