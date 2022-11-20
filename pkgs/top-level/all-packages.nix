@@ -790,6 +790,7 @@ with pkgs;
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
     icu =  icu69;
@@ -18579,7 +18580,7 @@ with pkgs;
   cypress = callPackage ../development/web/cypress { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    libkrb5 = if stdenv.isFreeBSD then libheimdal else libkrb5;
+    libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
   };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -19317,8 +19318,6 @@ with pkgs;
 
   gsl = callPackage ../development/libraries/gsl { };
 
-  gsl_1 = callPackage ../development/libraries/gsl/gsl-1_16.nix { };
-
   gsl-lite = callPackage ../development/libraries/gsl-lite { };
 
   gsm = callPackage ../development/libraries/gsm {};
@@ -19496,7 +19495,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
-  libheimdal = heimdal;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;

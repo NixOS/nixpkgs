@@ -36,7 +36,7 @@
 , pango
 , pipewire
 , pciutils
-, libheimdal
+, heimdal
 , libpulseaudio
 , systemd
 , channel
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       pango
       pipewire
       pciutils
-      libheimdal
+      heimdal
       libpulseaudio
       systemd
       ffmpeg

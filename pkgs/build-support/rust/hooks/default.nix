@@ -2,7 +2,6 @@
 , callPackage
 , cargo
 , clang
-, diffutils
 , lib
 , makeSetupHook
 , maturin
@@ -65,8 +64,7 @@ in {
 
         # Specify the stdenv's `diff` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong `diff`.
-        # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
-        diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
+        diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
 
         # We want to specify the correct crt-static flag for both
         # the build and host platforms. This is important when the wanted
