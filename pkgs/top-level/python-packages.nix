@@ -9816,6 +9816,8 @@ self: super: with self; {
 
   robotframework-databaselibrary = callPackage ../development/python-modules/robotframework-databaselibrary { };
 
+  robotframework-pythonlibcore = callPackage ../development/python-modules/robotframework-pythonlibcore { };
+
   robotframework-requests = callPackage ../development/python-modules/robotframework-requests { };
 
   robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
