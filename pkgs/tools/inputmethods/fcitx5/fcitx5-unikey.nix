@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-unikey";
-  version = "5.0.11";
+  version = "5.0.12";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-unikey";
     rev = version;
-    sha256 = "sha256-pFFxTk97m/ThSrJglY+tSjjKCzXbj2EukdPg8fckoDU=";
+    sha256 = "sha256-LaCDDwM5idq4JEs5F0ysMZfWIEaRqMBNgIyNf9DhmhY=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
