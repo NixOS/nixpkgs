@@ -68,20 +68,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mqv17hfmph4ylmb2bqyccy64gsgpmzapq5yrmf5yjsqkvw9rxbv";
+      sha256 = "1wyz9ab0mzi84gpf81fs19vrixglmmxi25k6n1mn9h141qmsp590";
       type = "gem";
     };
-    version = "2.6.0";
+    version = "2.7.1";
   };
   faraday-net_http = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13b717ddw90iaf4vijy06srmkvrfbzsnyjap93yll0nibad4dbxq";
+      sha256 = "13byv3mp1gsjyv8k0ih4612y6vw5kqva6i03wcg4w2fqpsd950k8";
       type = "gem";
     };
-    version = "3.0.1";
+    version = "3.0.2";
   };
   ffi = {
     groups = ["default"];
@@ -206,10 +206,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yg8ws7qygziqjc65ay5ahppf0j9jdli8nb2rnyh2iypfrjl4qiz";
+      sha256 = "1j3hy00vqk58vf7djip7vhqqczb84pjqlp34h1w4jgbw05vfcbqx";
       type = "gem";
     };
-    version = "3.0.0";
+    version = "3.0.1";
   };
   kubeclient = {
     dependencies = ["http" "jsonpath" "recursive-open-struct" "rest-client"];
@@ -288,10 +288,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0fbya3d5dv14ny8d55c8vqh52lj82pkzqnx9my05mjawg8q5r8gn";
+      sha256 = "0lggrhlihxyfgiqqr9b2fqdxc4d2zff2czq30m3rgn8a0b2gsv90";
       type = "gem";
     };
-    version = "3.13.22";
+    version = "3.13.23";
   };
   os = {
     groups = ["default"];
