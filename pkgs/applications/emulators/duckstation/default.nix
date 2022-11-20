@@ -4,11 +4,11 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, makeDesktopItem
 , curl
 , extra-cmake-modules
-, libpulseaudio
 , libXrandr
+, libpulseaudio
+, makeDesktopItem
 , mesa # for libgbm
 , ninja
 , pkg-config
@@ -18,14 +18,16 @@
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
+, enableWayland ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "duckstation";
   version = "unstable-2022-11-18";
+
   src = fetchFromGitHub {
     owner = "stenzek";
-    repo = pname;
+    repo = "duckstation";
     rev = "8d7aea5e19859ed483699cc4a5dbd47165c7be8b";
     sha256 = "sha256-92Wn1ZEEZszmVK/KrJqjDuQf/lyD8/VScfTI/St5dY4=";
   };
@@ -49,13 +51,13 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     vulkan-loader
-    wayland
-  ];
+  ]
+  ++ lib.optionals enableWayland [ wayland ];
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
-    "-DUSE_WAYLAND=ON"
-  ];
+  ]
+  ++ lib.optionals enableWayland [ "-DUSE_WAYLAND=ON" ];
 
   desktopItems = [
     (makeDesktopItem {
