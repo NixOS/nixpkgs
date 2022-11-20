@@ -11,11 +11,12 @@ buildPythonPackage rec {
   pname = "django-taggit";
   version = "3.1.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yPLk6uOHk5CJs9ddHYZJ4AiICXDAaM6dDoL4f9XilQg=";
+    hash = "sha256-yPLk6uOHk5CJs9ddHYZJ4AiICXDAaM6dDoL4f9XilQg=";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +43,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
+    changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst"
     license = licenses.bsd3;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }
