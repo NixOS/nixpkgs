@@ -445,6 +445,7 @@ broken-packages:
   - boombox
   - boots-app
   - boring-window-switcher
+  - borsh
   - bot
   - botpp
   - bottom
@@ -1354,6 +1355,7 @@ broken-packages:
   - etcd
   - ethereum-rlp
   - eurofxref
+  - evdev-streamly
   - eve
   - eved
   - event
@@ -1953,6 +1955,7 @@ broken-packages:
   - HaPy
   - haquery
   - harchive
+  - harfbuzz-pure
   - HARM
   - HarmTrace-Base
   - haroonga
@@ -3296,6 +3299,7 @@ broken-packages:
   - monadacme
   - monad-atom
   - monad-atom-simple
+  - monad-bayes
   - monad-branch
   - MonadCatchIO-transformers
   - monad-choice
@@ -4954,6 +4958,7 @@ broken-packages:
   - supervisor
   - supervisors
   - supplemented
+  - supply-chain-core
   - surjective
   - sv-core
   - SVD2HS
@@ -5109,6 +5114,7 @@ broken-packages:
   - text-and-plots
   - text-ascii
   - text-builder-linear
+  - text-compression
   - text-containers
   - text-display
   - text-format-heavy
