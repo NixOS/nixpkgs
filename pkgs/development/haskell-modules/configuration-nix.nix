@@ -989,11 +989,11 @@ self: super: builtins.intersectAttrs super {
   }) super.procex;
 
   # Test suite wants to run main executable
-  fourmolu_0_9_0_0 = overrideCabal (drv: {
+  fourmolu = overrideCabal (drv: {
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/fourmolu:$PATH"
     '';
-  }) super.fourmolu_0_9_0_0;
+  }) super.fourmolu;
 
   # Test suite needs to execute 'disco' binary
   disco = overrideCabal (drv: {

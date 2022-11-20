@@ -58,9 +58,6 @@ in {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  # 0.30 introduced support for GHC 9.2.
-  cryptonite = doDistribute self.cryptonite_0_30;
-
   doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
 
@@ -85,8 +82,6 @@ in {
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
-  base-compat = self.base-compat_0_12_2;
-  base-compat-batteries = self.base-compat-batteries_0_12_2;
   binary-instances = doJailbreak super.binary-instances;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
@@ -99,7 +94,6 @@ in {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_3_20221104;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_1_0;
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);

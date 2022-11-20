@@ -1031,15 +1031,6 @@ self: super: {
           (super.stack.overrideScope (self: super: {
             # Needs Cabal-3.6
             Cabal = self.Cabal_3_6_3_0;
-            # Official stack ships with hpack-0.35.0.  Nixpkgs uses the same
-            # version of hpack so that users who get stack from Nixpkgs
-            # generate the same .cabal files as users who download official binaries
-            # of stack.
-            #
-            # dontCheck is used because one of the hpack tests appears to be
-            # incorrectly(?) failing:
-            # https://github.com/sol/hpack/issues/528
-            hpack = dontCheck self.hpack_0_35_0;
           })));
 
   # Too strict version bound on hashable-time.
@@ -1435,12 +1426,6 @@ self: super: {
   # https://github.com/nikita-volkov/stm-containers/issues/29
   stm-containers = doJailbreak super.stm-containers;
 
-  # https://github.com/agrafix/Spock/issues/180
-  # Ignore Stackage LTS bound so we can compile Spock-core again. All other
-  # reverse dependencies of reroute are marked as broken in nixpkgs, so
-  # upgrading reroute is probably unproblematic.
-  reroute = doDistribute self.reroute_0_7_0_0;
-
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
 
@@ -1572,11 +1557,7 @@ self: super: {
     dontCheck
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
   ]).overrideScope (lself: lsuper: {
-    ormolu = doJailbreak lself.ormolu_0_5_0_1;
-    fourmolu = doJailbreak lself.fourmolu_0_9_0_0;
-    hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
+    hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1589,21 +1570,13 @@ self: super: {
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
   });
 
-  hledger_1_27_1 = doDistribute (super.hledger_1_27_1.override {
-    hledger-lib = self.hledger-lib_1_27_1;
-  });
-
   hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
+    hlint = enableCabalFlag "ghc-lib" lsuper.hlint;
   });
 
   # For -f-auto see cabal.project in haskell-language-server.
-  ghc-lib-parser-ex_9_2_0_4 = disableCabalFlag "auto" (super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
-  });
+  ghc-lib-parser-ex = disableCabalFlag "auto" super.ghc-lib-parser-ex;
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
@@ -1840,9 +1813,9 @@ self: super: {
   # https://github.com/jaspervdj/profiteur/issues/33
   profiteur = doJailbreak super.profiteur;
 
-  # Test suite has overly strict bounds on tasty.
+  # Test suite has overly strict bounds on tasty, jailbreaking fails.
   # https://github.com/input-output-hk/nothunks/issues/9
-  nothunks = doJailbreak super.nothunks;
+  nothunks = dontCheck super.nothunks;
 
   # Allow building with recent versions of tasty.
   lukko = doJailbreak super.lukko;
@@ -2178,12 +2151,6 @@ self: super: {
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
   hspec-golden-aeson = dontCheck super.hspec-golden-aeson;
 
-  # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
-  stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-  });
-
   # To strict bound on hspec
   # https://github.com/dagit/zenc/issues/5
   zenc = doJailbreak super.zenc;
@@ -2195,7 +2162,7 @@ self: super: {
     assert super.graphql.version == "1.0.3.0";
     appendConfigureFlags [
       "-f-json"
-    ] (lib.warnIf (lib.versionAtLeast self.hspec.version "2.9.0") "@NixOS/haskell: Remove jailbreak for graphql" doJailbreak super.graphql);
+    ] super.graphql;
 
   # https://github.com/ajscholl/basic-cpuid/pull/1
   basic-cpuid = appendPatch (fetchpatch {
@@ -2633,9 +2600,6 @@ in {
     sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
   }) super.text-format;
 
-  # 2022-10-04: Needs newer tasty-dejafu than (currently) in stackage
-  rec-def = super.rec-def.override { tasty-dejafu = self.tasty-dejafu_2_1_0_0; };
-
   # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
   tzdata = dontCheck super.tzdata;
 
@@ -2647,9 +2611,6 @@ in {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    witch = super.witch_1_1_2_0;
-    brick = doJailbreak (dontCheck (super.brick_1_3.override {
-      text-zipper = super.text-zipper_0_12;
-    }));
+    brick = doJailbreak (dontCheck super.brick_1_3);
   });
 })
