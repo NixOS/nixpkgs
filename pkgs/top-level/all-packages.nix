@@ -18116,6 +18116,8 @@ with pkgs;
 
   summon = callPackage ../development/tools/summon { };
 
+  supabase-cli = callPackage ../development/tools/supabase-cli { };
+
   svlint = callPackage ../development/tools/analysis/svlint { };
 
   svls = callPackage ../development/tools/misc/svls { };
