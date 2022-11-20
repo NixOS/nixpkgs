@@ -38,10 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
