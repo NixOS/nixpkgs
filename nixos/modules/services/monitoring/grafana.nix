@@ -69,7 +69,7 @@ let
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
   # FIXME(@Ma27) remove before 23.05. This is just a helper-type
-  # because `mkRenamedOptionMthere's there's odule` doesn't work if `foo.bar` is renamed
+  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
   # to `foo.bar.baz`.
   submodule' = module: types.coercedTo
     (mkOptionType {
@@ -351,7 +351,7 @@ in {
                 Don't change the value of this option if you are planning to use `services.grafana.provision` options.
               '';
               default = provisionConfDir;
-              defaultText = "directory with all provisioning files linked together";
+              defaultText = "directory with links to files generated from services.grafana.provision";
               type = types.path;
             };
           };
