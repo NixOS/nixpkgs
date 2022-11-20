@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dex2jar";
-  version  = "2.0";
+  version  = "2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.zip";
-    sha256 = "1g3mrbyl8sdw1nhp17z23qbfzqpa0w2yxrywgphvd04jdr6yn1vr";
+    url = "https://github.com/pxb1988/${pname}/releases/download/v${version}/${name}.zip";
+    sha256 = "sha256-epvfhD1D3k0elOwue29VglAXsMSn7jn/gmYOJJOkbwg=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
