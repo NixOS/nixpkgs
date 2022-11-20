@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "unifi-poller";
-  version = "2.1.3";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = "unifi-poller";
     repo = "unifi-poller";
     rev = "v${version}";
-    sha256 = "sha256-xh9s1xAhIeEmeDprl7iPdE6pxmxZjzgMvilobiIoJp0=";
+    sha256 = "sha256-eC+jEtSLWhiL3V+GKfRN5MVF18/2tnA1kI096j3XQB0=";
   };
 
-  vendorSha256 = "sha256-HoYgBKTl9HIMVzzzNYtRrfmqb7HCpPHVPeR4gUXneWk=";
+  vendorSha256 = "sha256-WVYQ3cZOO+EyJRTFcMjziDHwqqinm1IvxvSLuHTaqT8=";
 
   ldflags = [
     "-w" "-s"
