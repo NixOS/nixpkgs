@@ -1308,6 +1308,13 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
                   non-NixOS Grafana instances that you also want to
                   deploy to NixOS.
                 </para>
+                <para>
+                  <emphasis role="strong">Note:</emphasis> secrets from
+                  these files will be leaked into the store unless you
+                  use a
+                  <link xlink:href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider"><emphasis role="strong">file</emphasis>-provider
+                  or env-var</link> for secrets!
+                </para>
               </listitem>
               <listitem>
                 <para>
