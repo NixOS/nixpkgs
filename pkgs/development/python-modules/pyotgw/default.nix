@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mvn23";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gMrLoITDBO7T9JtY4O43aMKF88zhwnJ/rlw8U3yvG8k=";
+    hash = "sha256-qUwpW9C9VqsbDNa9zqa/BZtMuzmPU21Au/q0iGRkBNY=";
   };
 
   propagatedBuildInputs = [
