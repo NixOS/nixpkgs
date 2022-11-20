@@ -658,9 +658,12 @@ dont-distribute-packages:
   - gi-webkit
   - hsqml
   - hsqml-datamodel
+  - hsqml-datamodel-vinyl
   - hsqml-demo-manic
+  - hsqml-demo-morris
   - hsqml-demo-notes
   - hsqml-demo-samples
+  - hsqml-morris
   - hstorchat
   - jsaddle-webkitgtk
   - jsc
