@@ -1,33 +1,72 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
-, procps, libcap_ng, openssl, python3 , perl
-, kernel ? null }:
-
-with lib;
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, iproute2
+, kernel ? null
+, libcap_ng
+, openssl
+, perl
+, pkg-config
+, procps
+, python3
+, sphinxHook
+, util-linux
+, which
+}:
 
 let
   _kernel = kernel;
-  pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.17.2";
+  version = "3.0.1";
   pname = "openvswitch";
 
+  kernel = lib.optional (_kernel != null) _kernel.dev;
+
   src = fetchurl {
-    url = "https://www.openvswitch.org/releases/openvswitch-${version}.tar.gz";
-    sha256 = "sha256-ai4NtCutuMvK9/O+vVtemicBMZ3x0EKU6aennpRQTWk=";
+    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-5KEXFtCRn1syOSKLMrrcEJtWGl/maLlUfhQ7CxlbvWg=";
   };
 
-  kernel = optional (_kernel != null) _kernel.dev;
-
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [
-    util-linux openssl libcap_ng pythonEnv perl procps which
+  outputs = [
+    "out"
+    "man"
   ];
+
+  patches = [
+    # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
+    ./patches/disable-bash-arg-completion-test.patch
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    sphinxHook
+  ];
+
+  sphinxBuilders = [
+    "man"
+  ];
+
+  sphinxRoot = "./Documentation";
+
+  buildInputs = [
+    libcap_ng
+    openssl
+    perl
+    procps
+    python3
+    util-linux
+    which
+  ];
+
+  preConfigure = "./boot.sh";
 
   configureFlags = [
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ] ++ (optionals (_kernel != null) ["--with-linux"]);
+  ] ++ (lib.optionals (_kernel != null) ["--with-linux"]);
 
   # Leave /var out of this!
   installFlags = [
@@ -36,20 +75,27 @@ in stdenv.mkDerivation rec {
     "PKIDIR=$(TMPDIR)/dummy"
   ];
 
-  postBuild = ''
-    # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
+    installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
   '';
 
-  enableParallelBuilding = true;
-  doCheck = false; # bash-completion test fails with "compgen: command not found"
+  doCheck = true;
+
+  checkInputs = [
+    iproute2
+  ] ++ (with python3.pkgs; [
+    netaddr
+    pyparsing
+    pytest
+  ]);
 
   meta = with lib; {
-    platforms = platforms.linux;
+    changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
     description = "A multilayer virtual switch";
-    longDescription =
-      ''
+    longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
       licensed under the open source Apache 2.0 license. It is
       designed to enable massive network automation through
@@ -58,9 +104,10 @@ in stdenv.mkDerivation rec {
       RSPAN, CLI, LACP, 802.1ag). In addition, it is designed to
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
-      '';
+    '';
     homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ netixx kmcopper ];
+    platforms = platforms.linux;
   };
 }
