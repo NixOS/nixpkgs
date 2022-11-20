@@ -132,11 +132,11 @@
     };
   };
   kconfig = {
-    version = "5.100.0";
+    version = "5.100.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.100/kconfig-5.100.0.tar.xz";
-      sha256 = "08f93na14s9zcwl6vfk9ix4jm1lwcmalh4yyf6m3p5ga5fd39vbs";
-      name = "kconfig-5.100.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.100/kconfig-5.100.1.tar.xz";
+      sha256 = "1nl2ibqxgjd2zppiibnsvdpp5ci8ydz8i685gfgji3jfsx8pkfwb";
+      name = "kconfig-5.100.1.tar.xz";
     };
   };
   kconfigwidgets = {
@@ -596,11 +596,11 @@
     };
   };
   plasma-framework = {
-    version = "5.100.0";
+    version = "5.100.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.100/plasma-framework-5.100.0.tar.xz";
-      sha256 = "101jqybbzl6cnfh3w6gghd0916kbdwxqn1086q9i2fnvg503cxk4";
-      name = "plasma-framework-5.100.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.100/plasma-framework-5.100.1.tar.xz";
+      sha256 = "18ddniihbj26gz3lqh36xghwdszwgazkvpgr1bghb8bk0y90m52k";
+      name = "plasma-framework-5.100.1.tar.xz";
     };
   };
   prison = {
