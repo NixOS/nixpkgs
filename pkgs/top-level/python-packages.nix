@@ -7059,6 +7059,8 @@ self: super: with self; {
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
+  pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-crfsuite = callPackage ../development/python-modules/python-crfsuite { };
