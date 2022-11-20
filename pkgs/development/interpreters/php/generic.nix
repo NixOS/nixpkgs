@@ -91,7 +91,7 @@ let
               [ ]
               allExtensionFunctions;
 
-          getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+          getExtName = ext: ext.extensionName;
 
           # Recursively get a list of all internal dependencies
           # for a list of extensions.
