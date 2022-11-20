@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.4";
+  version = "3.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/YDBzH8Mji6PWBEIbsgZcTvoAWAsBbJV3cHfySY/gGA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Rdgz9hU2un1CKX2dRI8tVzL2lG7Ufd5HwninOxOsxjM=";
   };
 
   propagatedBuildInputs = [
