@@ -105,8 +105,8 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = doDistribute self.ghc-lib_9_2_4_20220729;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
+  ghc-lib = doDistribute self.ghc-lib_9_2_5_20221107;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_5_20221107;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_1_0;
@@ -208,7 +208,7 @@ self: super: {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  fourmolu = super.fourmolu_0_8_2_0;
+  fourmolu = super.fourmolu_0_9_0_0;
 
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
