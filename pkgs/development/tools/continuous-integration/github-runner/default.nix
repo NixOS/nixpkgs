@@ -1,4 +1,5 @@
 { autoPatchelfHook
+, autoSignDarwinBinariesHook
 , coreutils
 , curl
 , dotnetCorePackages
@@ -40,6 +41,7 @@ let
     "x86_64-linux" = "linux-x64";
     "aarch64-linux" = "linux-arm64";
     "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
   };
   runtimeId = runtimeIds.${stdenv.system};
   fakeSha1 = "0000000000000000000000000000000000000000";
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
