@@ -54,6 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ pname ];
 
+  # Enable when the upstream is fixed:
+  # https://github.com/ijl/orjson/issues/320
+  doCheck = !stdenv.hostPlatform.isi686;
+
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
