@@ -30980,7 +30980,7 @@ with pkgs;
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
-  notepadqq = libsForQt514.callPackage ../applications/editors/notepadqq { };
+  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
