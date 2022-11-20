@@ -18581,7 +18581,7 @@ with pkgs;
   cypress = callPackage ../development/web/cypress { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    libkrb5 = if stdenv.isFreeBSD then libheimdal else libkrb5;
+    libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
     openssl = openssl_1_1;
   };
 
@@ -19498,7 +19498,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
-  libheimdal = heimdal;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;

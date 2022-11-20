@@ -757,6 +757,7 @@ mapAliases ({
   libgpgerror = libgpg-error; # Added 2021-09-04
   libgroove = throw "libgroove has been removed, because it depends on an outdated and insecure version of ffmpeg"; # Added 2022-01-21
   libgumbo = throw "'libgumbo' has been renamed to/replaced by 'gumbo'"; # Converted to throw 2022-02-22
+  libheimdal = heimdal; # Added 2022-11-18
   libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # Added 2018-03-14
   libixp_hg = libixp;
   libjpeg_drop = libjpeg_original; # Added 2020-06-05
