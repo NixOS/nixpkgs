@@ -16,7 +16,7 @@ buildNpmPackage rec {
     ./package-lock.json.patch
   ];
 
-  npmDepsHash = "sha256-UF3pZ+SlrgDLqntciXRNbWfpPMtQw1DXl41x9r37QN4=";
+  npmDepsHash = "sha256-SGLcFjPnmhFoeXtP4gfGr4Qa1dTaXwSnzkweEvYW/1k=";
 
   nativeBuildInputs = [
     copyDesktopItems
