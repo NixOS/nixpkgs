@@ -46,7 +46,9 @@
 
     preConfigure = ''
       # we don't want to build a .pkg
-      sed -i 's/ADD_SUBDIRECTORY(osxinstall)//g' CMakeLists.txt
+      substituteInPlace CMakeLists.txt \
+        --replace "IF(APPLE)" "IF(0)" \
+        --replace "CMAKE_SYSTEM_NAME MATCHES AIX" "APPLE"
     '';
 
     cmakeFlags = [
@@ -61,7 +63,6 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
