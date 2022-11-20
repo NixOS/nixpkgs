@@ -1,3 +1,8 @@
+# This tests LXD with useQemu enabled.
+# For now, it tests the same functionality, just with the modified package
+# to ensure nothing broke.
+# Eventually, we will test for VM capabilities.
+
 import ./make-test-python.nix ({ pkgs, lib, ... } :
 
 let
@@ -21,7 +26,7 @@ in {
     maintainers = [ patryk27 ifd3f ];
   };
 
-  nodes.machine = { lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     virtualisation = {
       diskSize = 4096;
 
@@ -34,7 +39,6 @@ in {
 
       lxc.lxcfs.enable = true;
       lxd.enable = true;
-      lxd.package = pkgs.lxd.override { useQemu = false; };
     };
   };
 
