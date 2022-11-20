@@ -11456,9 +11456,6 @@ with pkgs;
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
-  # Not updated upstream since 2018, doesn't support qt newer than 5.12
-  sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
-
   slides = callPackage ../applications/misc/slides { };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
