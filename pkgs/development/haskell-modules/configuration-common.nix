@@ -1726,17 +1726,7 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (appendPatches [
-      # https://github.com/hercules-ci/hercules-ci-agent/pull/446
-      (fetchpatch {
-        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/99afac77ddb84122a5321494a08e6fe2e95548a1.patch";
-        sha256 = "sha256-0dtmNL1rqzeXvXWinfANc57a5LIM3uNnhR3A+p8mH0A=";
-        stripLen = 1;
-      })
-    ])
-    (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
-  ];
+  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
