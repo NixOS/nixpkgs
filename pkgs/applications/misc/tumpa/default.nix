@@ -37,5 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kushaldas/tumpa";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];
+    broken = true;
   };
 }
