@@ -125,11 +125,10 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ vlstill ];
     };
   };
