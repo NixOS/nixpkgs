@@ -26605,6 +26605,8 @@ with pkgs;
 
   manrope = callPackage ../data/fonts/manrope { };
 
+  martian-mono = callPackage ../data/fonts/martian-mono { };
+
   marwaita = callPackage ../data/themes/marwaita { };
 
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
