@@ -111,6 +111,11 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-FNiKqeN3vl0HA6feqLcQAUch9NMrR5UDFLBiNDPkmv4=";
     })
     ./4.3.0-CVE-2022-3598.CVE-2022-3570.patch
+    (fetchpatch {
+      name = "CVE-2022-3970.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/227500897dfb07fb7d27f7aa570050e62617e3be.patch";
+      sha256 = "sha256-pgItgS+UhMjoSjkDJH5y7iGFZ+yxWKqlL7BdT2mFcH0=";
+    })
   ];
 
   postPatch = ''
