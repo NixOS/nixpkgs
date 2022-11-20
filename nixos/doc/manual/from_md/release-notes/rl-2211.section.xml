@@ -141,6 +141,11 @@
       </listitem>
       <listitem>
         <para>
+          PHP 8.2.0 RC 6 is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>protonup</literal> has been aliased to and replaced
           by <literal>protonup-ng</literal> due to upstream not
           maintaining it.
