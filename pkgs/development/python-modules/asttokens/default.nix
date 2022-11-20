@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.0.8";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xh4WJG7Pss3ilYQGtMjrwEPJ5tc6qoPJQWc7NeXTp2s=";
+    sha256 = "sha256-SqdkAaFRyMxXLZBqrXrqKoQXgINKGdeA9DIcD+G1RjU=";
   };
 
   nativeBuildInputs = [
