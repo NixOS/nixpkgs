@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, graphicsmagick, libjpeg
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, graphicsmagick, libjpeg
 , ffmpeg, zlib, libexif, openslide }:
 
 stdenv.mkDerivation rec {
