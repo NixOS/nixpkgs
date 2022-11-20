@@ -20,11 +20,10 @@
     };
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
       description = "Official PostgreSQL ODBC Driver";
       homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
