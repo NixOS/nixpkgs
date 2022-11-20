@@ -5,10 +5,13 @@
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   frontendUrl = "https://${certs.domain}";
-  initialAdminPassword = "h4IhoJFnt2iQIR9";
 
   keycloakTest = import ./make-test-python.nix (
     { pkgs, databaseType, ... }:
+    let
+      initialAdminPassword = "h4Iho\"JFn't2>iQIR9";
+      adminPasswordFile = pkgs.writeText "admin-password" "${initialAdminPassword}";
+    in
     {
       name = "keycloak";
       meta = with pkgs.lib.maintainers; {
@@ -37,7 +40,7 @@ let
               type = databaseType;
               username = "bogus";
               name = "also bogus";
-              passwordFile = "${pkgs.writeText "dbPassword" "wzf6vOCbPp6cqTH"}";
+              passwordFile = "${pkgs.writeText "dbPassword" ''wzf6\"vO"Cb\nP>p#6;c&o?eu=q'THE'''H''''E''}";
             };
             plugins = with config.services.keycloak.package.plugins; [
               keycloak-discord
@@ -111,7 +114,7 @@ let
           keycloak.succeed("""
               curl -sSf -d 'client_id=admin-cli' \
                    -d 'username=admin' \
-                   -d 'password=${initialAdminPassword}' \
+                   -d "password=$(<${adminPasswordFile})" \
                    -d 'grant_type=password' \
                    '${frontendUrl}/realms/master/protocol/openid-connect/token' \
                    | jq -r '"Authorization: bearer " + .access_token' >admin_auth_header
@@ -119,10 +122,10 @@ let
 
           # Register the metrics SPI
           keycloak.succeed(
-              "${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt",
-              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password '${initialAdminPassword}'",
-              "KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'",
-              "curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"
+              """${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt""",
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password "$(<${adminPasswordFile})" """,
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'""",
+              """curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"""
           )
 
           # Publish the realm, including a test OIDC client and user

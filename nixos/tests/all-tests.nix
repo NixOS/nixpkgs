@@ -252,8 +252,8 @@ in {
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
   healthchecks = handleTest ./web-apps/healthchecks.nix {};
-  hbase1 = handleTest ./hbase.nix { package=pkgs.hbase1; };
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
+  hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
@@ -491,6 +491,7 @@ in {
   pgadmin4-standalone = handleTest ./pgadmin4-standalone.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
+  phosh = handleTest ./phosh.nix {};
   php = handleTest ./php {};
   php80 = handleTest ./php { php = pkgs.php80; };
   php81 = handleTest ./php { php = pkgs.php81; };

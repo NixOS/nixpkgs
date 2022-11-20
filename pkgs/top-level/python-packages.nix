@@ -1580,8 +1580,6 @@ self: super: with self; {
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
-  coqui-trainer = callPackage ../development/python-modules/coqui-trainer {};
-
   cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
@@ -3230,8 +3228,6 @@ self: super: with self; {
 
   filelock = callPackage ../development/python-modules/filelock { };
 
-  filemagic = callPackage ../development/python-modules/filemagic { };
-
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -3563,6 +3559,8 @@ self: super: with self; {
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
+
+  g2pkk = callPackage ../development/python-modules/g2pkk { };
 
   galario = toPythonModule (pkgs.galario.override {
     enablePython = true;
@@ -4654,6 +4652,8 @@ self: super: with self; {
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
+
+  jamo = callPackage ../development/python-modules/jamo { };
 
   janus = callPackage ../development/python-modules/janus { };
 
@@ -6969,6 +6969,8 @@ self: super: with self; {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
+  prodict = callPackage ../development/python-modules/prodict { };
+
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
@@ -7142,6 +7144,8 @@ self: super: with self; {
   });
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
+
+  plotext = callPackage ../development/python-modules/plotext { };
 
   plotly = callPackage ../development/python-modules/plotly { };
 
@@ -9650,6 +9654,8 @@ self: super: with self; {
 
   reparser = callPackage ../development/python-modules/reparser { };
 
+  repeated-test = callPackage ../development/python-modules/repeated-test { };
+
   repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportengine = callPackage ../development/python-modules/reportengine { };
@@ -11249,6 +11255,8 @@ self: super: with self; {
   tracing = callPackage ../development/python-modules/tracing { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
+
+  trainer = callPackage ../development/python-modules/trainer {};
 
   traitlets = callPackage ../development/python-modules/traitlets { };
 
