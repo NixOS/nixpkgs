@@ -87,10 +87,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.enableFeature withIntrospection "introspection")
-
-    # Vapi does not build on MacOS.
-    # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
-    (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
+    (lib.enableFeature withIntrospection "vala")
 
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
