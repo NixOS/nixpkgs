@@ -22551,6 +22551,8 @@ with pkgs;
 
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
 
+  inherit (python3Packages) sphinxHook;
+
   sphinxsearch = callPackage ../servers/search/sphinxsearch { };
 
   spice = callPackage ../development/libraries/spice { };
