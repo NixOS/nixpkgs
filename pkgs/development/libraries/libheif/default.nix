@@ -1,5 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, dav1d, rav1e, libde265, x265, libpng,
-  libjpeg, libaom }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, dav1d
+, rav1e
+, libde265
+, x265
+, libpng
+, libjpeg
+, libaom
+
+# for passthru.tests
+, gimp
+, imagemagick
+, imlib2Full
+, imv
+, vips
+}:
 
 stdenv.mkDerivation rec {
   pname = "libheif";
@@ -18,6 +36,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ dav1d rav1e libde265 x265 libpng libjpeg libaom ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit gimp imagemagick imlib2Full imv vips;
+  };
 
   meta = {
     homepage = "http://www.libheif.org/";
