@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.10.0";
+  version = "2.10.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -190,7 +190,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-Y6cujiMoQXKQlsLBr7d0T278ltdd00IfsTRycJbRVN4=";
+      hash = "sha256-AYHUtJEXYZdVDigKZo7mQnV+PDeQg8mi45YH18qXHZA=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -369,13 +369,14 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-KtVReqHL3zxE8TPrqIerSOt59Mgke/ftoFZKMzgX/u8="
+        "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
+      else if stdenv.isDarwin then
+        # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
+        "sha256-j2k9Q+k41444nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
+      else if stdenv.isAarch64 then
+        "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg="
       else
-        if stdenv.isDarwin then
-          # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
-        else
-          "sha256-zH3xNFEU2JR0Ww8bpD4mCiorGtao0WVPP4vklVMgS4A=";
+        "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
     };
 
     buildAttrs = {
