@@ -29432,6 +29432,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  waylock = callPackage ../applications/misc/waylock {};
+
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
