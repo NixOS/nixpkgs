@@ -79,7 +79,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
     "--benchmark-disable"
   ];
 

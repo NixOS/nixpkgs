@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.daphne;
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
   pythonImportsCheck = [
     "channels"
   ];
