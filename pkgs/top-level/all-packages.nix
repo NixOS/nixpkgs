@@ -29972,7 +29972,7 @@ with pkgs;
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
-  kvirc = libsForQt514.callPackage ../applications/networking/irc/kvirc { };
+  kvirc = libsForQt515.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
 
