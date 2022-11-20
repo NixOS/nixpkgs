@@ -1,49 +1,141 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, dpkg, gcc-unwrapped, zlib, pkg-config, openssl, python310 }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, fetchurl, sd, curl, pkg-config, openssl, rustPlatform, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock }:
 
-# TODO: Build Sapling from source
-# This is currently hard. The canonical way to build, `make install-oss`, pulls
-# dependencies from the network which isn't hermetic. It also copies a bunch of
-# artifacts (conch_paser.so, edenscm-isl, ghstack, and a few others) into the
-# target, which would need to be replicated.
 let
-  version = "20221116-203146-2c1a971a";
-  binaryVersion = "0.0-${builtins.replaceStrings ["-"] ["."] version}";
-in
-stdenv.mkDerivation rec {
-  name = "sapling";
-  inherit version;
+  deps = import ./deps.nix { inherit lib fetchurl; };
+  version = deps.version;
+  versionHash = deps.versionHash;
 
-  src = fetchurl {
-    url = "https://github.com/facebook/sapling/releases/download/${version}/sapling_${binaryVersion}_amd64.Ubuntu22.04.deb";
-    sha256 = "sha256-Lj8psxadt3AKF+0bjysxp0wLWbpeMoTXjAe9VB8rI28=";
+  src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "sapling";
+    rev = version;
+    hash = "sha256-IzbUaFrsSMojhsbpnRj1XLkhO9V2zYdmmZls4mtZquw=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-  ];
+  addonsSrc = "${src}/addons";
 
-  buildInputs = [
-    gcc-unwrapped
-    zlib
-    openssl
-    python310
-  ];
+  # Fetches the Yarn modules in Nix to to be used as an offline cache
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${addonsSrc}/yarn.lock";
+    sha256 = "sha256-B61T0ReZPRfrRjBC3iHLVkVYiifhzOXlaG1YL6rgmj4=";
+  };
 
-  unpackPhase = "true";
+  # Builds the NodeJS server that runs with `sl web`
+  isl = stdenv.mkDerivation {
+    pname = "sapling-isl";
+    src = addonsSrc;
+    inherit version;
+
+    nativeBuildInputs = [
+      fixup_yarn_lock
+      nodejs
+      yarn
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME=$(mktemp -d)
+      fixup_yarn_lock yarn.lock
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+      patchShebangs node_modules
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cd isl
+      node release.js $out
+
+      runHook postInstall
+    '';
+  };
+
+  # Builds the main `sl` binary and its Python extensions
+  sapling = python3Packages.buildPythonPackage {
+    pname = "sapling-main";
+    inherit src version;
+
+    sourceRoot = "source/eden/scm";
+
+    # Upstream does not commit Cargo.lock
+    cargoDeps = rustPlatform.importCargoLock {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "cloned-0.1.0" = "sha256-c3CPWVjOk+VKBLD6WuaYZvBoKi5PwgXmiwxKoCk0bsI=";
+        "deltae-0.3.0" = "sha256-a9Skaqs+tVTw8x83jga+INBr+TdaMmo35Bf2wbfR6zs=";
+        "fb303_core-0.0.0" = "sha256-yoKKSBwqufFayLef2rRpX5oV1j8fL/kRkXBXIC++d7Q=";
+        "fbthrift-0.0.1+unstable" = "sha256-jtsDE5U/OavDUXRAE1N8/nujSPrWltImsFLzHaxfeM0=";
+        "reqwest-0.11.11" = "sha256-uhc8XhkGW22XDNo0qreWdXeFF2cslOOZHfTRQ30IBcE=";
+        "serde_bser-0.3.1" = "sha256-KCAC+rbczroZn/oKYTVpAPJl40yMrszt/PGol+JStDU=";
+      };
+    };
+    postPatch = ''
+      cp ${./Cargo.lock} Cargo.lock
+    '';
+
+    # Since the derivation builder doesn't have network access to remain pure,
+    # fetch the artifacts manually and link them. Then replace the hardcoded URLs
+    # with filesystem paths for the curl calls.
+    postUnpack = ''
+      mkdir $sourceRoot/hack_pydeps
+      ( cd $sourceRoot/hack_pydeps
+        ${deps.links}
+      )
+      sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
+    '';
+
+    nativeBuildInputs = [
+      curl
+      pkg-config
+    ] ++ (with rustPlatform; [
+      cargoSetupHook
+      rust.cargo
+      rust.rustc
+    ]);
+
+    buildInputs = [
+      openssl
+    ];
+
+    doCheck = false;
+
+    HGNAME = "sl";
+    SAPLING_OSS_BUILD = "true";
+    SAPLING_VERSION = version;
+    SAPLING_VERSION_HASH = versionHash;
+  };
+in
+stdenv.mkDerivation {
+  pname = "sapling";
+  inherit version;
+
+  dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
-    dpkg -x $src $out
-    mv $out/usr/* $out
-    rm -rf $out/usr
+
+    cp -r ${sapling}/* $out
+
+    sitepackages=$out/lib/${python3Packages.python.libPrefix}/site-packages
+    chmod +w $sitepackages
+    cp -r ${isl} $sitepackages/edenscm-isl
+
+    runHook postInstall
   '';
 
-  meta = {
-    description = "A scalable, user-friendly source control system";
-    homepage = "https://sapling-scm.com/";
-    license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ pbar ];
-    platforms = [ "x86_64-linux" ];
+  meta = with lib; {
+    description = "A Scalable, User-Friendly Source Control System";
+    homepage = "https://sapling-scm.com";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ pbar ];
+    platforms = platforms.linux;
+    mainProgram = "sl";
   };
 }
