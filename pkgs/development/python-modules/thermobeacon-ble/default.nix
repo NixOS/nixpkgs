@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
-  version = "0.3.2";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wzDujKJkUzbzZZ9FYTz78cYF06n8REF1TQiAbePDFJc=";
+    hash = "sha256-t4l5K52Shaw/J4thcP0ken/u77ZX7BsMEEA6ZUpcRKY=";
   };
 
   nativeBuildInputs = [
