@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-gMrLoITDBO7T9JtY4O43aMKF88zhwnJ/rlw8U3yvG8k=";
   };
 
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact the OpenTherm Gateway";
     homepage = "https://github.com/mvn23/pyotgw";
+    changelog = "https://github.com/mvn23/pyotgw/blob/${version}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };
