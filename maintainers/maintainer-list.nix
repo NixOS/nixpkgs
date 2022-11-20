@@ -15893,4 +15893,10 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  jordanisaacs = {
+    name = "Jordan Isaacs";
+    email = "nix@jdisaacs.com";
+    github = "jordanisaacs";
+    githubId = 19742638;
+  };
 }
