@@ -1,17 +1,12 @@
 { lib
-, buildPythonPackage
+, python3
 , fetchFromGitHub
-, setuptools
-, pyside2
-, johnnycanencrypt
-, pythonOlder
 , wrapQtAppsHook
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tumpa";
   version = "0.1.2";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
@@ -20,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "17nhdildapgic5l05f3q1wf5jvz3qqdjv543c8gij1x9rdm8hgxi";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     setuptools
     johnnycanencrypt
     pyside2

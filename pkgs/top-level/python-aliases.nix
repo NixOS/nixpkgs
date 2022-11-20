@@ -206,6 +206,7 @@ mapAliases ({
   tensorflow-estimator_2 = tensorflow-estimator; # added 2021-11-25
   tensorflow-tensorboard = tensorboard; # added 2022-03-06
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
+  tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30

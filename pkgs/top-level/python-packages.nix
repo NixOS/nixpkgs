@@ -11332,10 +11332,6 @@ self: super: with self; {
 
   tubeup = callPackage ../development/python-modules/tubeup { };
 
-  tumpa = callPackage ../development/python-modules/tumpa {
-    inherit (pkgs.libsForQt5) wrapQtAppsHook;
-  };
-
   turnt = callPackage ../development/python-modules/turnt { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
