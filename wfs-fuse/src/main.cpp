@@ -70,7 +70,7 @@ static int wfs_open(const char* path, struct fuse_file_info* fi) {
     return -EACCES;
 
   fi->fh = reinterpret_cast<uint64_t>(
-      new locked_stream{std::unique_ptr<File::stream>(new File::stream(std::dynamic_pointer_cast<File>(item)))});
+      new locked_stream{std::unique_ptr<File::stream>(new File::stream(std::dynamic_pointer_cast<File>(item))), {}});
 
   return 0;
 }
@@ -94,7 +94,7 @@ static int wfs_read(const char* path, char* buf, size_t size, off_t offset, stru
   return static_cast<int>(stream->stream->gcount());
 }
 
-int wfs_readlink(const char* path, char* buf, size_t size) {
+int wfs_readlink(const char* path, [[maybe_unused]] char* buf, [[maybe_unused]] size_t size) {
   // TODO
   auto item = wfs->GetObject(path);
   if (!item || !item->IsLink())
@@ -226,7 +226,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  struct fuse_operations wfs_oper = {0};
+  struct fuse_operations wfs_oper = {};
   wfs_oper.getattr = wfs_getattr;
   wfs_oper.readdir = wfs_readdir;
   wfs_oper.open = wfs_open;

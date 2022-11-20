@@ -97,6 +97,9 @@ Requirements:
 * CMake 3.20+
 * Ninja
 
+Additional requirements for wfs-fuse: (Linux/MacOS only)
+* libfuse
+
 To build:
 ```
 git clone https://github.com/koolkdev/wfs-tools.git

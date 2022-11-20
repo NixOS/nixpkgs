@@ -6,4 +6,6 @@ add_subdirectory(wfslib)
 
 add_subdirectory(wfs-extract)
 add_subdirectory(wfs-file-injector)
-#add_subdirectory(wfs-fuse)
+if(NOT WIN32)
+    add_subdirectory(wfs-fuse)
+endif()
