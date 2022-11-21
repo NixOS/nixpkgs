@@ -12653,6 +12653,8 @@ with pkgs;
     vkbasalt32 = pkgsi686Linux.vkbasalt;
   };
 
+  vkbasalt-cli = callPackage ../tools/graphics/vkbasalt-cli { };
+
   vkmark = callPackage ../tools/graphics/vkmark { };
 
   vncrec = callPackage ../tools/video/vncrec { };
