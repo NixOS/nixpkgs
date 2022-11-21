@@ -339,6 +339,29 @@ in {
             {option}`database.user`.
           '';
         };
+
+        automaticBackup = {
+          enable = lib.mkEnableOption (lib.mdDoc "Regularly backup the database.");
+
+          location = lib.mkOption {
+            type = lib.types.path;
+            default = "/var/lib/mastodon/backups";
+            description = lib.mdDoc ''
+              The directory in which to save the backups.
+            '';
+          };
+
+          startAt = lib.mkOption {
+            type = lib.types.str;
+            default = "daily";
+            example = "hourly";
+            description = lib.mdDoc ''
+              How often to create a backup.
+
+              The format is described in {manpage}`systemd.time(7)`.
+            '';
+          };
+        };
       };
 
       smtp = {
@@ -632,6 +655,10 @@ in {
         ${cfg.package}/bin/tootctl preview_cards remove --days=${olderThanDays}
       '';
       startAt = cfg.mediaAutoRemove.startAt;
+    };
+
+    services.postgresqlBackup = lib.mkIf cfg.database.automaticBackup.enable {
+      inherit (cfg.database.automaticBackup) startAt location;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {

@@ -124,6 +124,9 @@ in
     server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl ip_blocks remove 192.168.0.0/16'")
     client.succeed("curl --fail https://mastodon.local/about")
 
+    # Ensure backups work
+    server.wait_until_succeeds("[ '$(ls -A /var/lib/mastodon/backups)' ]")
+
     server.shutdown()
     client.shutdown()
   '';
