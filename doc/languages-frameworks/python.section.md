@@ -789,7 +789,7 @@ documentation source root.
 ```
 
 The hook is also available to packages outside the python ecosystem by
-referencing it using `python3.pkgs.sphinxHook`.
+referencing it using `sphinxHook` from top-level.
 
 ### Develop local package {#develop-local-package}
 
