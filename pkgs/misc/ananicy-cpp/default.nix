@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin vnepogodin ];
+    maintainers = with maintainers; [ artturin ];
   };
 }
