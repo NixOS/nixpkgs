@@ -2704,6 +2704,11 @@ with pkgs;
 
   gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
 
+  go2tv = darwin.apple_sdk_11_0.callPackage ../applications/video/go2tv {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa Kernel UserNotifications;
+  };
+  go2tv-lite = go2tv.override { withGui = false; };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
@@ -16254,14 +16259,20 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_12;
-  ansible_2_13 = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.6";
+  ansible = ansible_2_14;
+  ansible_2_14 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.13.6";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-XzZuhRFZ2Pcs5o0yuMDt2lbuU3wB6faOyjgr0VEK9l0=";
-      sha256 = "";
+      hash = "sha256-Mf4yK2MpBnSo9zhhEN9QHwBEqkSJC+OrMTpuIluaKc8=";
+    };
+  }));
+  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.12.10";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-/rHfYXOM/B9eiTtCouwafeMpd9Z+hnB7Retj0MXDwjY=";
     };
     meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
@@ -30200,6 +30211,7 @@ with pkgs;
   lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
 
   lxi-tools = callPackage ../tools/networking/lxi-tools { };
+  lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
@@ -30972,7 +30984,7 @@ with pkgs;
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
-  notepadqq = libsForQt514.callPackage ../applications/editors/notepadqq { };
+  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
@@ -32522,6 +32534,10 @@ with pkgs;
   ttyper = callPackage ../applications/misc/ttyper { };
 
   tudu = callPackage ../applications/office/tudu { };
+
+  tumpa = callPackage ../applications/misc/tumpa {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
 
   tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
 

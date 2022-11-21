@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Unittest-compatible framework for repeating a test function over many fixtures";
     homepage = "https://github.com/epsy/repeated_test";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ tjni ];
   };
 }

@@ -7595,8 +7595,6 @@ self: super: with self; {
 
   pychart = callPackage ../development/python-modules/pychart { };
 
-  pychef = callPackage ../development/python-modules/pychef { };
-
   pychm = callPackage ../development/python-modules/pychm { };
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
@@ -11331,10 +11329,6 @@ self: super: with self; {
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
-
-  tumpa = callPackage ../development/python-modules/tumpa {
-    inherit (pkgs.libsForQt5) wrapQtAppsHook;
-  };
 
   turnt = callPackage ../development/python-modules/turnt { };
 

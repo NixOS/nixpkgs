@@ -81,18 +81,42 @@ in lib.makeExtensible (self: {
   nix_2_9 = common {
     version = "2.9.2";
     sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
+    patches = [
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
   };
 
   nix_2_10 = common {
     version = "2.10.3";
     sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
-    patches = [ ./patches/flaky-tests.patch ];
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
   };
 
   nix_2_11 = common {
     version = "2.11.0";
     sha256 = "sha256-9+rpYzI+SmxJn+EbYxjGv68Ucp22bdFUSy/4LkHkkDQ=";
-    patches = [ ./patches/flaky-tests.patch ];
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
   };
 
   stable = self.nix_2_11;
