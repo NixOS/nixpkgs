@@ -1050,6 +1050,14 @@ self: super: {
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
 
+  # Workaround for https://github.com/sol/hpack/issues/528
+  # The hpack test suite can't deal with the CRLF line endings hackage revisions insert
+  hpack = overrideCabal (drv: {
+    postPatch = drv.postPatch or "" + ''
+      "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+    '';
+  }) super.hpack;
+
   # hslua has tests that appear to break when using musl.
   # https://github.com/hslua/hslua/issues/106
   # Note that hslua is currently version 1.3.  However, in the latest version
