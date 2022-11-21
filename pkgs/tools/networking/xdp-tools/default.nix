@@ -15,24 +15,16 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.2.6";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    sha256 = "xKxR20Jz+pGKzazFoZe0i0pv7AuaxdL8Yt3IE4JAje8=";
+    sha256 = "7QYlC0YBQsXH2VxjgBbmTgEvp83lXloTLCHY2fTrZuQ=";
   };
 
   outputs = [ "out" "lib" ];
-
-  patches = [
-    (fetchpatch {
-      # Compat with libbpf 1.0: https://github.com/xdp-project/xdp-tools/pull/221
-      url = "https://github.com/xdp-project/xdp-tools/commit/f8592d0609807f5b2b73d27eb3bd623da4bd1997.diff";
-      sha256 = "+NpR0d5YE1TMFeyidBuXCDkcBTa2W0094nqYiEWKpY4=";
-    })
-  ];
 
   buildInputs = [
     libbpf
@@ -74,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/xdp-project/xdp-tools";
     description = "Library and utilities for use with XDP";
     license = with licenses; [ gpl2 lgpl21 bsd2 ];
-    maintainers = with maintainers; [ tirex vcunat ];
+    maintainers = with maintainers; [ tirex vcunat vifino ];
     platforms = platforms.linux;
   };
 }

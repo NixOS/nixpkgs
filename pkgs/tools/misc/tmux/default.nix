@@ -8,6 +8,7 @@
 , pkg-config
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 , utf8proc
+, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 }:
 
 let
@@ -44,12 +45,14 @@ stdenv.mkDerivation rec {
     ncurses
     libevent
   ] ++ lib.optionals withSystemd [ systemd ]
-  ++ lib.optionals stdenv.isDarwin [ utf8proc ];
+  ++ lib.optionals stdenv.isDarwin [ utf8proc ]
+  ++ lib.optionals withUtempter [ libutempter ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals withUtempter [ "--enable-utempter" ]
   ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;

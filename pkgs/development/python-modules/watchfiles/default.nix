@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.18.0";
+  version = "0.18.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,13 +24,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-biGGn0YAUbSO1hCJ4kU0ZWlqlXl/HRrBS3iIA3myRI8=";
+    hash = "sha256-XEhu6M1hFi3/gAKZcei7KJSrIhhlZhlvZvbfyA6VLR4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-nmkIKA4EDMOeppOxKwLSh3oREInlDIcFzE7/EYZRGKY=";
+    hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
   };
 
   nativeBuildInputs = [

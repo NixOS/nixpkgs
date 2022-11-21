@@ -28,6 +28,7 @@
 , rapidjson
 , SDL2
 , SDL2_ttf
+, sqlite
 , utf8proc
 , which
 , writeScript
@@ -53,6 +54,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-im6y/E0pQxruX2kNXZLE3fHq+zXfsstnOoC1QvH4fd4=";
   };
 
+  outputs = [ "out" "tools" ];
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
@@ -69,6 +72,7 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_PUGIXML=1"
     "USE_SYSTEM_LIB_RAPIDJSON=1"
     "USE_SYSTEM_LIB_UTF8PROC=1"
+    "USE_SYSTEM_LIB_SQLITE3=1"
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
@@ -89,6 +93,7 @@ stdenv.mkDerivation rec {
     glm
     SDL2
     SDL2_ttf
+    sqlite
     qtbase
   ]
   ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
@@ -104,11 +109,6 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # MAME is now generating the PDF documentation on its release script since commit:
-    # https://github.com/mamedev/mame/commit/c0e93076232e794c919231e4386445d78b2d80b1
-    # however this needs sphinx+latex to build, and it is available in the website
-    # anyway for those who need it
-    ./0001-Revert-Added-PDF-documentation-to-dist.mak.patch
     # by default MAME assumes that paths with stock resources
     # are relative and that you run MAME changing to
     # install directory, so we add absolute paths here
@@ -137,20 +137,30 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
+    # mame
     mkdir -p ${dest}
-    mv build/release/*/Release/mame/* ${dest}
 
-    mkdir -p $out/bin
-    find ${dest} -maxdepth 1 -executable -type f -exec mv -t $out/bin {} \;
-    install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
-
-    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
+    install -Dm755 mame -t $out/bin
     install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+    installManPage docs/man/*.1 docs/man/*.6
+    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} ${dest}
+    # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
+    # to the final package after we figure out how they work
 
-    mv artwork plugins samples ${dest}
+    # mame-tools
+    for _i in castool chdman floptool imgtool jedutil ldresample ldverify nltool nlwav pngcmp regrep romcmp \
+              split srcclean testkeys unidasm; do
+      install -Dm755 $_i -t $tools/bin
+    done
+    mv $tools/bin/{,mame-}split
 
     runHook postInstall
+  '';
+
+  # man1 is the tools documentation, man6 is the emulator documentation
+  # Need to be done in postFixup otherwise multi-output hook will move it back to $out
+  postFixup = ''
+    moveToOutput share/man/man1 $tools
   '';
 
   enableParallelBuilding = true;

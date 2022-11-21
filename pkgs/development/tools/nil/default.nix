@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2022-11-07";
+  version = "2022-11-15";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
     rev = version;
-    hash = "sha256-ioY9RvKx9DKnNTeMW8mAIEq23w7Y+lAOFWMkgUQ5fu4=";
+    hash = "sha256-KzQmGCEaOACOqaE1LsVZsqn18XpjlUbGWztDEI+o++w=";
   };
 
-  cargoHash = "sha256-sL/bnLK3TifmVHy3LOsduETHh9SGz639vgEKkbHE0HQ=";
+  cargoHash = "sha256-t5HfL7DKMcWJGod6x30NoHYYlAza++fEdEVvfvFWems=";
 
   CFG_DATE = version;
   CFG_REV = "release";

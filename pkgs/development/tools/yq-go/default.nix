@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.29.2";
+  version = "4.30.4";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    sha256 = "sha256-ZHl0FTxWdoxHrbWx6mp5qR/l/FtC3bBkzGuR0T2NouA=";
+    sha256 = "sha256-8tCxmcg2FW8OyYQmsoEkhtLJn0V/1u5uw+Er7kWlqcM=";
   };
 
   vendorSha256 = "sha256-L3l6wH4bR1/R6MtQTHYsyRE5E/EPnpNwa310zUONo+s=";

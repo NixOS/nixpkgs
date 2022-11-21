@@ -59,8 +59,9 @@ python3.pkgs.buildPythonApplication rec {
     rapidfuzz
   ];
 
+  # the file should be executable but it isn't so our wrapper doesn't run
   preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    chmod 555 $out/bin/puddletag
   '';
 
   doCheck = false; # there are no tests

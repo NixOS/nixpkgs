@@ -28,6 +28,8 @@
   safe,
   stm,
   streamly,
+  strict,
+  strict-types,
   terminal-size,
   text,
   time,
@@ -37,10 +39,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.3";
+  version = "2.0.0.4";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.3.tar.gz";
-    sha256 = "0mgg309vncjvx80mhqcyb7kk1918nfl02d38jczm9lsrlrmdafd9";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.4.tar.gz";
+    sha256 = "1pgrynsjjry253fqpmm3yr4k9xcvqffnbs4p8i1nlfi9l821wj8c";
   };
   isLibrary = true;
   isExecutable = true;
@@ -66,6 +68,8 @@ mkDerivation {
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -94,6 +98,8 @@ mkDerivation {
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time
@@ -126,6 +132,8 @@ mkDerivation {
     safe
     stm
     streamly
+    strict
+    strict-types
     terminal-size
     text
     time

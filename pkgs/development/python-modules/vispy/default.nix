@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zi0lalMdQF8pWTPHSZaRL79D9lUhbbX8ao/zp4dHhBo=";
+    sha256 = "sha256-CtSg/pAtOhhiuS6yE3ogzF0llceMQTF12ShXIi9GMD0=";
   };
 
   patches = [

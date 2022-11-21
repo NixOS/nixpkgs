@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "107.0.5304.87",
-    "sha256": "0n9wr5v7zcdmbqs7mmnyydjvzw0glh5l3skpj7i1nap2hv0h03kc",
-    "sha256bin64": "16a6qisxkfmx60qh67rvfy3knp66hdgxan48cga6j3zd683inas2",
+    "version": "107.0.5304.110",
+    "sha256": "1k7yjsb4i7m8i5mk018v7z25r4x1ypyprz4hnyrn7vk2983lhdfk",
+    "sha256bin64": "06rlxwbvp7rpw2rdpnjzl1cn7cr1rwlb20wz8r0cndjcjyzd3rjj",
     "deps": {
       "gn": {
         "version": "2022-09-14",
@@ -19,9 +19,9 @@
     }
   },
   "beta": {
-    "version": "108.0.5359.30",
-    "sha256": "1sxvlmz9k6r3qmlpljlis3p7vac26k62w21n8x29733hsq3hdra7",
-    "sha256bin64": "03x79s394xzwncfcgc4lw825q15i1ww2kmy2y7lcld9h52qyns8q",
+    "version": "108.0.5359.48",
+    "sha256": "0nk33rv4q22kgr9197y6a4w8yazgifsm5qvmmia41nnl24sqik57",
+    "sha256bin64": "062anw2i8rfi4v8zl0jdqxzn24xzl3ny24cbiyk8dyyf55r914v0",
     "deps": {
       "gn": {
         "version": "2022-10-05",
@@ -32,9 +32,9 @@
     }
   },
   "dev": {
-    "version": "109.0.5396.2",
-    "sha256": "0a4pd365i8wj608n9d6624mf11491px1x0wv4673m3nkj1k8sqld",
-    "sha256bin64": "1gk7wi20h11bwsfch67xazjk9grxj6ax6vjyz7ihrlajdahdaf0w",
+    "version": "109.0.5410.0",
+    "sha256": "00g8q0qzl8kyc9j60nsvvjkr2x9js2xvbkmwp77p8b6gg0pyymjn",
+    "sha256bin64": "0ljhc5lqdy01apzyj96xzl931d904i37x62257s1h35w0j78mps0",
     "deps": {
       "gn": {
         "version": "2022-10-28",
@@ -45,9 +45,9 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "107.0.5304.88",
-    "sha256": "1k4j4j9b1m7kjybfgns9akb7adfby3gnjpibk0kjd22n3sprar8y",
-    "sha256bin64": null,
+    "version": "107.0.5304.110",
+    "sha256": "1k7yjsb4i7m8i5mk018v7z25r4x1ypyprz4hnyrn7vk2983lhdfk",
+    "sha256bin64": "06rlxwbvp7rpw2rdpnjzl1cn7cr1rwlb20wz8r0cndjcjyzd3rjj",
     "deps": {
       "gn": {
         "version": "2022-09-14",
@@ -56,8 +56,8 @@
         "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
       },
       "ungoogled-patches": {
-        "rev": "107.0.5304.88-1",
-        "sha256": "1m9hjbs79ga5jw7x332jl882lh7yrr4n4r4qrzy37ai75x371pz2"
+        "rev": "107.0.5304.110-1",
+        "sha256": "14z9qi9i9l7kjx7gf74lzs63bpxqyd3wbqqpsvzvqgr2v0cgqahx"
       }
     }
   }

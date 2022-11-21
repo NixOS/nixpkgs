@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.7";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-qhUw1wjXn1tyiH175+BadcoKoZ0wHxpMTKDIKOcJjQ0=";
+    sha256 = "sha256-z02bMJ+KQaLHqIzsdB3BCVzTQ0NRG0ylAfTHYgOxZYk=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "sha256-Wh2kA12CggbgdofWJwPAy+587qfMUPSy9nQmO11+keY=";
+  cargoSha256 = "sha256-lP0fU2Cirta4WWha7Pgje537u6TbD5oiHLfamfzJtpU=";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1

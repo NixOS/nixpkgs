@@ -33,6 +33,11 @@ in python.pkgs.buildPythonPackage rec {
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "asyncpg>=0.20,<0.27" "asyncpg>=0.20"
+  '';
+
   propagatedBuildInputs = with python.pkgs; ([
     ruamel-yaml
     python-magic

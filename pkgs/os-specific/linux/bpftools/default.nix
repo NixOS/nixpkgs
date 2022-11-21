@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xDalSMcxLOb8WjRyy+rYle749ShB++fHH9jki9/isLo=";
   };
 
-  patches = [ ./strip-binary-name.patch ];
+  patches = [
+    ./strip-binary-name.patch
+    # fix unknown type name '__vector128' on ppc64le
+    ./include-asm-types-for-ppc64le.patch
+  ];
 
   nativeBuildInputs = [ python3 bison flex ];
   buildInputs = (if (lib.versionAtLeast version "5.20")

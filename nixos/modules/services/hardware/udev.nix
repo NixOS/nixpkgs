@@ -46,6 +46,11 @@ let
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
+  nixosInitrdRules = ''
+    # Mark dm devices as db_persist so that they are kept active after switching root
+    SUBSYSTEM=="block", KERNEL=="dm-[0-9]*", ACTION=="add|change", OPTIONS+="db_persist"
+  '';
+
   # Perform substitutions in all udev rules files.
   udevRulesFor = { name, udevPackages, udevPath, udev, systemd, binPackages, initrdBin ? null }: pkgs.runCommand name
     { preferLocalBuild = true;
@@ -364,8 +369,10 @@ in
         EOF
       '';
 
+    boot.initrd.services.udev.rules = nixosInitrdRules;
+
     boot.initrd.systemd.additionalUpstreamUnits = [
-      # TODO: "initrd-udevadm-cleanup-db.service" is commented out because of https://github.com/systemd/systemd/issues/12953
+      "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"

@@ -157,6 +157,7 @@
   ./programs/extra-container.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
+  ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/flashrom.nix
@@ -381,6 +382,7 @@
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
+  ./services/databases/surrealdb.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
@@ -717,6 +719,7 @@
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
+  ./services/monitoring/tremor-rs.nix
   ./services/monitoring/tuptime.nix
   ./services/monitoring/unifi-poller.nix
   ./services/monitoring/ups.nix
@@ -773,6 +776,7 @@
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
   ./services/networking/charybdis.nix
+  ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cntlm.nix
@@ -1047,6 +1051,7 @@
   ./services/security/vault.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
+  ./services/system/automatic-timezoned.nix
   ./services/system/cachix-agent/default.nix
   ./services/system/cachix-watch-store.nix
   ./services/system/cloud-init.nix

@@ -108,6 +108,7 @@ extra-packages:
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by matterhorn-50200.17.0
+  - brick == 1.3                        # 2022-11-03: needed by swarm 0.2.0.0
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - cabal-install-parsers < 0.5         # 2022-08-31: required by haskell-ci 0.14.3
   - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
@@ -143,6 +144,7 @@ extra-packages:
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
+  - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
   - lsp == 1.4.0.0                      # 2022-09-18: need for dhall-lsp-server 1.1.2
   - lsp-types == 1.4.0.1                # 2022-09-18: need for dhall-lsp-server 1.1.2
@@ -290,6 +292,7 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - ema
+    - emanote
     - generic-optics
     - ghcid
     - ghcide
@@ -454,6 +457,7 @@ unsupported-platforms:
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
   ghcjs-dom-hello:                              [ platforms.darwin ]
+  ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
@@ -520,6 +524,7 @@ unsupported-platforms:
   sensei:                                       [ platforms.darwin ]
   synthesizer-alsa:                             [ platforms.darwin ]
   taffybar:                                     [ platforms.darwin ]
+  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   termonad:                                     [ platforms.darwin ]
   tokyotyrant-haskell:                          [ platforms.darwin ]
   Unixutils-shadow:                             [ platforms.darwin ]
@@ -653,9 +658,12 @@ dont-distribute-packages:
   - gi-webkit
   - hsqml
   - hsqml-datamodel
+  - hsqml-datamodel-vinyl
   - hsqml-demo-manic
+  - hsqml-demo-morris
   - hsqml-demo-notes
   - hsqml-demo-samples
+  - hsqml-morris
   - hstorchat
   - jsaddle-webkitgtk
   - jsc

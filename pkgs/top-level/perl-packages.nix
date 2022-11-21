@@ -11998,10 +11998,10 @@ let
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.801";
+    version = "0.802";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.801.tar.gz";
-      hash = "sha256-ieRZuhe3alcrsbS7EgMBVB6MyTJCQXFmI2tsbbDhybk=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.802.tar.gz";
+      hash = "sha256-5YJzFXd2fEfqxDXvKQRmPUp1Cw5oAqSmGJo38Mswhzg";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
@@ -12503,11 +12503,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.49";
+    version = "12.50";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-l21p2ak+pe9GSWOatsGQ9YvyZfAFfKV3xB38rzexcVs=";
+      hash = "sha256-vOhB/FwQMC8PPvdnjDvxRpU6jAZcC6GMQfc0AH4uwKg=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -12529,7 +12529,7 @@ let
         Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
       '';
       homepage = "https://exiftool.org/";
-
+      changelog = "https://exiftool.org/history.html";
       license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
       maintainers = with maintainers; [ kiloreux anthonyroussel ];
       mainProgram = "exiftool";
@@ -26137,13 +26137,13 @@ let
 
   Tirex = buildPerlPackage rec {
     pname = "Tirex";
-    version = "0.6.1";
+    version = "0.7.0";
 
     src = fetchFromGitHub {
       owner = "openstreetmap";
       repo = "tirex";
       rev = "v${version}";
-      hash = "sha256-8GXhF2v04ZSF0h0WNKPp4bgYcvPYCml6HtCbikFxUzc=";
+      hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
     };
 
     buildInputs = [
@@ -26158,6 +26158,7 @@ let
     ];
 
     installPhase = ''
+      install -m 755 -d $out/usr/libexec
       make install DESTDIR=$out INSTALLOPTS=""
       mv $out/$out/lib $out/$out/share $out
       rmdir $out/$out $out/nix/store $out/nix

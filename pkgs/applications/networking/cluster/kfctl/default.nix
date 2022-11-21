@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-FY7o4QULobLY1djfcc2l6awE/v2stN7cc2lffMkjoPc=";
   };
 
-  vendorSha256 = "sha256-+6sxXp0LKegZjEFv1CIQ6xYh+hXLn+o9LggRYamCzpI=";
+  vendorSha256 = null; #vendorSha256 = "";
 
   subPackages = [ "cmd/kfctl" ];
 
@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubeflow/kfctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ mvnetbiz ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

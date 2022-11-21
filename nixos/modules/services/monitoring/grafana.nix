@@ -13,56 +13,95 @@ let
   settingsFormatIni = pkgs.formats.ini {};
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
-  datasourceConfiguration = {
-    apiVersion = 1;
-    datasources = cfg.provision.datasources;
-  };
+  mkProvisionCfg = name: attr: provisionCfg:
+    if provisionCfg.path != null
+      then provisionCfg.path
+    else
+      provisioningSettingsFormat.generate "${name}.yaml"
+        (if provisionCfg.settings != null
+          then provisionCfg.settings
+          else {
+            apiVersion = 1;
+            ${attr} = [];
+          });
 
-  datasourceFileNew = if (cfg.provision.datasources.path == null) then provisioningSettingsFormat.generate "datasource.yaml" cfg.provision.datasources.settings else cfg.provision.datasources.path;
-  datasourceFile = if (builtins.isList cfg.provision.datasources) then provisioningSettingsFormat.generate "datasource.yaml" datasourceConfiguration else datasourceFileNew;
-
-  dashboardConfiguration = {
-    apiVersion = 1;
-    providers = cfg.provision.dashboards;
-  };
-
-  dashboardFileNew = if (cfg.provision.dashboards.path == null) then provisioningSettingsFormat.generate "dashboard.yaml" cfg.provision.dashboards.settings else cfg.provision.dashboards.path;
-  dashboardFile = if (builtins.isList cfg.provision.dashboards) then provisioningSettingsFormat.generate "dashboard.yaml" dashboardConfiguration else dashboardFileNew;
+  datasourceFileOrDir = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
+  dashboardFileOrDir = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
 
   notifierConfiguration = {
     apiVersion = 1;
     notifiers = cfg.provision.notifiers;
   };
 
-  notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
+  notifierFileOrDir = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
   generateAlertingProvisioningYaml = x: if (cfg.provision.alerting."${x}".path == null)
                                         then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
                                         else cfg.provision.alerting."${x}".path;
-  rulesFile = generateAlertingProvisioningYaml "rules";
-  contactPointsFile = generateAlertingProvisioningYaml "contactPoints";
-  policiesFile = generateAlertingProvisioningYaml "policies";
-  templatesFile = generateAlertingProvisioningYaml "templates";
-  muteTimingsFile = generateAlertingProvisioningYaml "muteTimings";
+  rulesFileOrDir = generateAlertingProvisioningYaml "rules";
+  contactPointsFileOrDir = generateAlertingProvisioningYaml "contactPoints";
+  policiesFileOrDir = generateAlertingProvisioningYaml "policies";
+  templatesFileOrDir = generateAlertingProvisioningYaml "templates";
+  muteTimingsFileOrDir = generateAlertingProvisioningYaml "muteTimings";
 
-  provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
+  ln = { src, dir, filename }: ''
+    if [[ -d "${src}" ]]; then
+      pushd $out/${dir} &>/dev/null
+        lndir "${src}"
+      popd &>/dev/null
+    else
+      ln -sf ${src} $out/${dir}/${filename}.yaml
+    fi
+  '';
+  provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
     mkdir -p $out/{datasources,dashboards,notifiers,alerting}
-    ln -sf ${datasourceFile} $out/datasources/datasource.yaml
-    ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
-    ln -sf ${notifierFile} $out/notifiers/notifier.yaml
-    ln -sf ${rulesFile} $out/alerting/rules.yaml
-    ln -sf ${contactPointsFile} $out/alerting/contactPoints.yaml
-    ln -sf ${policiesFile} $out/alerting/policies.yaml
-    ln -sf ${templatesFile} $out/alerting/templates.yaml
-    ln -sf ${muteTimingsFile} $out/alerting/muteTimings.yaml
+    ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
+    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashbaord"; }}
+    ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
+    ${ln { src = rulesFileOrDir;         dir = "alerting";    filename = "rules"; }}
+    ${ln { src = contactPointsFileOrDir; dir = "alerting";    filename = "contactPoints"; }}
+    ${ln { src = policiesFileOrDir;      dir = "alerting";    filename = "policies"; }}
+    ${ln { src = templatesFileOrDir;     dir = "alerting";    filename = "templates"; }}
+    ${ln { src = muteTimingsFileOrDir;   dir = "alerting";    filename = "muteTimings"; }}
   '';
 
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
+  # FIXME(@Ma27) remove before 23.05. This is just a helper-type
+  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
+  # to `foo.bar.baz`.
+  submodule' = module: types.coercedTo
+    (mkOptionType {
+      name = "grafana-provision-submodule";
+      description = "Wrapper-type for backwards compat of Grafana's declarative provisioning";
+      check = x:
+        if builtins.isList x then
+          throw ''
+            Provisioning dashboards and datasources declaratively by
+            setting `dashboards` or `datasources` to a list is not supported
+            anymore. Use `services.grafana.provision.datasources.settings.datasources`
+            (or `services.grafana.provision.dashboards.settings.providers`) instead.
+          ''
+        else isAttrs x || isFunction x;
+    })
+    id
+    (types.submodule module);
+
   # http://docs.grafana.org/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
+
+    imports = [
+      (mkRemovedOptionModule [ "password" ] ''
+        `services.grafana.provision.datasources.settings.datasources.<name>.password` has been removed
+        in Grafana 9. Use `secureJsonData` instead.
+      '')
+      (mkRemovedOptionModule [ "basicAuthPassword" ] ''
+        `services.grafana.provision.datasources.settings.datasources.<name>.basicAuthPassword` has been removed
+        in Grafana 9. Use `secureJsonData` instead.
+      '')
+    ];
 
     options = {
       name = mkOption {
@@ -92,28 +131,6 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
-      };
-      password = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc ''
-          Database password, if used. Please note that the contents of this option
-          will end up in a world-readable Nix store. Use the file provider
-          pointing at a reasonably secured file in the local filesystem
-          to work around that. Look at the documentation for details:
-          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
-        '';
-      };
-      basicAuthPassword = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = lib.mdDoc ''
-          Basic auth password. Please note that the contents of this option
-          will end up in a world-readable Nix store. Use the file provider
-          pointing at a reasonably secured file in the local filesystem
-          to work around that. Look at the documentation for details:
-          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
-        '';
       };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
@@ -276,6 +293,10 @@ in {
     (mkRemovedOptionModule [ "services" "grafana" "auth" "google" "clientSecretFile" ] ''
       This option has been removed. Use 'services.grafana.settings.google.client_secret' with file provider instead.
     '')
+    (mkRemovedOptionModule [ "services" "grafana" "extraOptions" ] ''
+      This option has been removed. Use 'services.grafana.settings' instead. For a detailed migration guide, please
+      review the release notes of NixOS 22.11.
+    '')
 
     (mkRemovedOptionModule [ "services" "grafana" "auth" "azuread" "tenantId" ] "This option has been deprecated upstream.")
   ];
@@ -330,19 +351,7 @@ in {
                 Don't change the value of this option if you are planning to use `services.grafana.provision` options.
               '';
               default = provisionConfDir;
-              defaultText = literalExpression ''
-                pkgs.runCommand "grafana-provisioning" { } \'\'
-                  mkdir -p $out/{datasources,dashboards,notifiers,alerting}
-                  ln -sf ''${datasourceFile} $out/datasources/datasource.yaml
-                  ln -sf ''${dashboardFile} $out/dashboards/dashboard.yaml
-                  ln -sf ''${notifierFile} $out/notifiers/notifier.yaml
-                  ln -sf ''${rulesFile} $out/alerting/rules.yaml
-                  ln -sf ''${contactPointsFile} $out/alerting/contactPoints.yaml
-                  ln -sf ''${policiesFile} $out/alerting/policies.yaml
-                  ln -sf ''${templatesFile} $out/alerting/templates.yaml
-                  ln -sf ''${muteTimingsFile} $out/alerting/muteTimings.yaml
-                  \'\'
-              '';
+              defaultText = "directory with links to files generated from services.grafana.provision";
               type = types.path;
             };
           };
@@ -564,17 +573,14 @@ in {
 
       datasources = mkOption {
         description = lib.mdDoc ''
-          Deprecated option for Grafana datasource configuration. Use either
-          `services.grafana.provision.datasources.settings` or
-          `services.grafana.provision.datasources.path` instead.
+          Declaratively provision Grafana's datasources.
         '';
-        default = [];
-        apply = x: if (builtins.isList x) then map _filter x else x;
-        type = with types; either (listOf grafanaTypes.datasourceConfig) (submodule {
+        default = {};
+        type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana datasource configuration in Nix. Can't be used with
-              `services.grafana.provision.datasources.path` simultaneously. See
+              [](#opt-services.grafana.provision.datasources.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources>
               for supported options.
             '';
@@ -591,6 +597,7 @@ in {
                   description = lib.mdDoc "List of datasources to insert/update.";
                   default = [];
                   type = types.listOf grafanaTypes.datasourceConfig;
+                  apply = map (flip builtins.removeAttrs [ "password" "basicAuthPassword" ]);
                 };
 
                 deleteDatasources = mkOption {
@@ -630,28 +637,26 @@ in {
           options.path = mkOption {
             description = lib.mdDoc ''
               Path to YAML datasource configuration. Can't be used with
-              `services.grafana.provision.datasources.settings` simultaneously.
+              [](#opt-services.grafana.provision.datasources.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
           };
-        });
+        };
       };
 
 
       dashboards = mkOption {
         description = lib.mdDoc ''
-          Deprecated option for Grafana dashboard configuration. Use either
-          `services.grafana.provision.dashboards.settings` or
-          `services.grafana.provision.dashboards.path` instead.
+          Declaratively provision Grafana's dashboards.
         '';
-        default = [];
-        apply = x: if (builtins.isList x) then map _filter x else x;
-        type = with types; either (listOf grafanaTypes.dashboardConfig) (submodule {
+        default = {};
+        type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana dashboard configuration in Nix. Can't be used with
-              `services.grafana.provision.dashboards.path` simultaneously. See
+              [](#opt-services.grafana.provision.dashboards.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards>
               for supported options.
             '';
@@ -684,12 +689,13 @@ in {
           options.path = mkOption {
             description = lib.mdDoc ''
               Path to YAML dashboard configuration. Can't be used with
-              `services.grafana.provision.dashboards.settings` simultaneously.
+              [](#opt-services.grafana.provision.dashboards.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
           };
-        });
+        };
       };
 
 
@@ -706,7 +712,8 @@ in {
           path = mkOption {
             description = lib.mdDoc ''
               Path to YAML rules configuration. Can't be used with
-              `services.grafana.provision.alerting.rules.settings` simultaneously.
+              [](#opt-services.grafana.provision.alerting.rules.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -715,7 +722,7 @@ in {
           settings = mkOption {
             description = lib.mdDoc ''
               Grafana rules configuration in Nix. Can't be used with
-              `services.grafana.provision.alerting.rules.path` simultaneously. See
+              [](#opt-services.grafana.provision.alerting.rules.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#rules>
               for supported options.
             '';
@@ -829,7 +836,8 @@ in {
           path = mkOption {
             description = lib.mdDoc ''
               Path to YAML contact points configuration. Can't be used with
-              `services.grafana.provision.alerting.contactPoints.settings` simultaneously.
+              [](#opt-services.grafana.provision.alerting.contactPoints.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -838,7 +846,7 @@ in {
           settings = mkOption {
             description = lib.mdDoc ''
               Grafana contact points configuration in Nix. Can't be used with
-              `services.grafana.provision.alerting.contactPoints.path` simultaneously. See
+              [](#opt-services.grafana.provision.alerting.contactPoints.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#contact-points>
               for supported options.
             '';
@@ -852,7 +860,7 @@ in {
                 };
 
                 contactPoints = mkOption {
-                  description = lib.mdDoc "List of contact points to import or update. Please note that sensitive data will end up in world-readable Nix store.";
+                  description = lib.mdDoc "List of contact points to import or update.";
                   default = [];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
@@ -909,7 +917,8 @@ in {
           path = mkOption {
             description = lib.mdDoc ''
               Path to YAML notification policies configuration. Can't be used with
-              `services.grafana.provision.alerting.policies.settings` simultaneously.
+              [](#opt-services.grafana.provision.alerting.policies.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -918,7 +927,7 @@ in {
           settings = mkOption {
             description = lib.mdDoc ''
               Grafana notification policies configuration in Nix. Can't be used with
-              `services.grafana.provision.alerting.policies.path` simultaneously. See
+              [](#opt-services.grafana.provision.alerting.policies.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#notification-policies>
               for supported options.
             '';
@@ -978,7 +987,8 @@ in {
           path = mkOption {
             description = lib.mdDoc ''
               Path to YAML templates configuration. Can't be used with
-              `services.grafana.provision.alerting.templates.settings` simultaneously.
+              [](#opt-services.grafana.provision.alerting.templates.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -987,7 +997,7 @@ in {
           settings = mkOption {
             description = lib.mdDoc ''
               Grafana templates configuration in Nix. Can't be used with
-              `services.grafana.provision.alerting.templates.path` simultaneously. See
+              [](#opt-services.grafana.provision.alerting.templates.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#templates>
               for supported options.
             '';
@@ -1059,7 +1069,8 @@ in {
           path = mkOption {
             description = lib.mdDoc ''
               Path to YAML mute timings configuration. Can't be used with
-              `services.grafana.provision.alerting.muteTimings.settings` simultaneously.
+              [](#opt-services.grafana.provision.alerting.muteTimings.settings) simultaneously.
+              Can be either a directory or a single YAML file. Will end up in the store.
             '';
             default = null;
             type = types.nullOr types.path;
@@ -1068,7 +1079,7 @@ in {
           settings = mkOption {
             description = lib.mdDoc ''
               Grafana mute timings configuration in Nix. Can't be used with
-              `services.grafana.provision.alerting.muteTimings.path` simultaneously. See
+              [](#opt-services.grafana.provision.alerting.muteTimings.path) simultaneously. See
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#mute-timings>
               for supported options.
             '';
@@ -1159,52 +1170,50 @@ in {
 
   config = mkIf cfg.enable {
     warnings = let
-      usesFileProvider = opt: defaultValue: builtins.match "^${defaultValue}$|^\\$__file\\{.*}$" opt != null;
-    in flatten [
-      (optional (
-        ! usesFileProvider cfg.settings.database.password "" ||
-        ! usesFileProvider cfg.settings.security.admin_password "admin"
-      ) "Grafana passwords will be stored as plaintext in the Nix store! Use file provider instead.")
-      (optional (
+      doesntUseFileProvider = opt: defaultValue:
         let
-          checkOpts = opt: any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) opt;
-          datasourcesUsed = if (cfg.provision.datasources.settings == null) then [] else cfg.provision.datasources.settings.datasources;
-        in if (builtins.isList cfg.provision.datasources) then checkOpts cfg.provision.datasources else checkOpts datasourcesUsed
-        ) ''
-          Datasource passwords will be stored as plaintext in the Nix store!
-          It is not possible to use file provider in provisioning; please provision
-          datasources via `services.grafana.provision.datasources.path` instead.
-        '')
+          regex = "${optionalString (defaultValue != null) "^${defaultValue}$|"}^\\$__(file|env)\\{.*}$|^\\$[^_\\$][^ ]+$";
+        in builtins.match regex opt == null;
+    in
+      # Ensure that no custom credentials are leaked into the Nix store. Unless the default value
+      # is specified, this can be achieved by using the file/env provider:
+      # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
       (optional (
+        doesntUseFileProvider cfg.settings.database.password "" ||
+        doesntUseFileProvider cfg.settings.security.admin_password "admin"
+      ) ''
+        Grafana passwords will be stored as plaintext in the Nix store!
+        Use file provider or an env-var instead.
+      '')
+      # Warn about deprecated notifiers.
+      ++ (optional (cfg.provision.notifiers != []) ''
+        Notifiers are deprecated upstream and will be removed in Grafana 10.
+        Use `services.grafana.provision.alerting.contactPoints` instead.
+      '')
+      # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
+      # only uses file/env providers.
+      ++ (optional (
+        let
+          datasourcesToCheck = optionals
+            (cfg.provision.datasources.settings != null)
+            cfg.provision.datasources.settings.datasources;
+          declarationUnsafe = { secureJsonData, ... }:
+            secureJsonData != null
+            && any (flip doesntUseFileProvider null) (attrValues secureJsonData);
+        in any declarationUnsafe datasourcesToCheck
+      ) ''
+        Declarations in the `secureJsonData`-block of a datasource will be leaked to the
+        Nix store unless a file-provider or an env-var is used!
+      '')
+      ++ (optional (
         any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.")
-      (optional (
-        builtins.isList cfg.provision.datasources && cfg.provision.datasources != []
-      ) ''
-          Provisioning Grafana datasources with options has been deprecated.
-          Use `services.grafana.provision.datasources.settings` or
-          `services.grafana.provision.datasources.path` instead.
-        '')
-      (optional (
-        builtins.isList cfg.provision.datasources && cfg.provision.dashboards != []
-      ) ''
-          Provisioning Grafana dashboards with options has been deprecated.
-          Use `services.grafana.provision.dashboards.settings` or
-          `services.grafana.provision.dashboards.path` instead.
-        '')
-      (optional (
-        cfg.provision.notifiers != []
-        ) ''
-            Notifiers are deprecated upstream and will be removed in Grafana 10.
-            Use `services.grafana.provision.alerting.contactPoints` instead.
-        '')
-    ];
+      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.");
 
     environment.systemPackages = [ cfg.package ];
 
     assertions = [
       {
-        assertion = if (builtins.isList cfg.provision.datasources) then true else cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
+        assertion = cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
         message = "Cannot set both datasources settings and datasources path";
       }
       {
@@ -1213,12 +1222,11 @@ in {
           ({ type, access, ... }: type == "prometheus" -> access != "direct")
           opt;
         in
-          if (builtins.isList cfg.provision.datasources) then prometheusIsNotDirect cfg.provision.datasources
-          else cfg.provision.datasources.settings == null || prometheusIsNotDirect cfg.provision.datasources.settings.datasources;
+          cfg.provision.datasources.settings == null || prometheusIsNotDirect cfg.provision.datasources.settings.datasources;
         message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
       }
       {
-        assertion = if (builtins.isList cfg.provision.dashboards) then true else cfg.provision.dashboards.settings == null || cfg.provision.dashboards.path == null;
+        assertion = cfg.provision.dashboards.settings == null || cfg.provision.dashboards.path == null;
         message = "Cannot set both dashboards settings and dashboards path";
       }
       {

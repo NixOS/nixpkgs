@@ -9,8 +9,7 @@
 , themeVariants ? []
 }:
 
-let
-  pname = "Whitesur-icon-theme";
+let pname = "Whitesur-icon-theme";
 in
 lib.checkListOfEnum "${pname}: theme variants" [
   "default"
@@ -27,13 +26,13 @@ lib.checkListOfEnum "${pname}: theme variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-08-30";
+  version = "2022-11-17";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "pcvRD4CUwUT46/kmMbnerj5mqPCcHIRreVIh9wz6Kfg=";
+    hash = "sha256-crZ6JQeXeSjTHGIBptioNiFZas7MksJcjaKGlMP4fo0=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

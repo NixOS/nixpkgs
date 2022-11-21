@@ -1,7 +1,7 @@
 { lib, nimPackages, fetchFromGitHub }:
 
 nimPackages.buildNimPackage rec {
-  pname = "tridactly-native";
+  pname = "tridactyl-native";
   version = "0.3.7";
 
   src = fetchFromGitHub {

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=libcxxabi"

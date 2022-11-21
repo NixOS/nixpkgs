@@ -22,6 +22,7 @@
 , gst-vaapi
 , gtk3
 , dconf
+, libglvnd
 , buildPackages
 
   # options
@@ -57,6 +58,34 @@ let
           ./patches/qtbase-tzdir.patch
         ];
       };
+      env = callPackage ./qt-env.nix {};
+      full = env "qt-full-${qtbase.version}" ([
+        qt3d
+        qt5compat
+        qtcharts
+        qtconnectivity
+        qtdeclarative
+        qtdoc
+        qtimageformats
+        qtlottie
+        qtmultimedia
+        qtnetworkauth
+        qtpositioning
+        qtsensors
+        qtserialbus
+        qtserialport
+        qtshadertools
+        qtquick3d
+        qtsvg
+        qtscxml
+        qttools
+        qttranslations
+        qtvirtualkeyboard
+        qtwebchannel
+        qtwebengine
+        qtwebsockets
+        qtwebview
+      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]);
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -107,6 +136,8 @@ let
       } ./hooks/qmake-hook.sh;
     };
 
+  # TODO(@Artturin): convert to makeScopeWithSplicing
+  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   self = lib.makeScope newScope addPackages;
 in
 self

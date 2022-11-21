@@ -25,6 +25,7 @@
 , fftwSinglePrec
 , zlib
 , curl
+, rapidjson
 , blas, lapack
 # These two should use the same lapack and blas as the above
 , qrupdate, arpack, suitesparse ? null
@@ -130,6 +131,7 @@ let
       fltk
       zlib
       curl
+      rapidjson
       blas'
       lapack'
       libsndfile
