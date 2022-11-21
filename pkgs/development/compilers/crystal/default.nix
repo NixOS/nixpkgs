@@ -109,20 +109,6 @@ let
           url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
           sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
         })
-      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.0") [
-        # needed for #12601 to get applied successfully
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/commit/bf4009dacbf67a63a1cbaffddbdc99549bb70a03.patch";
-          sha256 = "sha256-KpMA5Zdy0QI+HcfuZVRT2gLPS7oH2D4MsdYEnHGDt/0=";
-        })
-      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
-        # fixes an issue that prevented tests from passing when ran with
-        # the --release flag
-        # the PR has been merged since version 1.6.1
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/pull/12601.patch";
-          sha256 = "sha256-3NiUC4EyP/jSn62sv38eieKcVw9zUfRB78aAvnxV57E=";
-        })
       ];
 
       outputs = [ "out" "lib" "bin" ];
@@ -187,6 +173,9 @@ let
 
       FLAGS = [
         "--single-module" # needed for deterministic builds
+      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
+        # ffi is only used by the interpreter and its spec are broken on < 1.6.1
+        "-Dwithout_ffi"
       ];
 
       # This makes sure we don't keep depending on the previous version of
