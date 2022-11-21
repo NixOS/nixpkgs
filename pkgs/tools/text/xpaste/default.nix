@@ -21,13 +21,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   patches = [
-  (fetchpatch {
-    # https://github.com/ossobv/xpaste/pull/6
-    name = "fix-function-call-after-wayland-update.patch";
-    url = "https://github.com/ossobv/xpaste/commit/47412738dad4b5fc8bc287ead23c8440bfdc547d.patch";
-    hash = "sha256-t4LZG600AsFTtKjXCxioGcAP4YcHIdQ/fVMIYjsunuA=";
-  })
-];
+    (fetchpatch {
+      # https://github.com/ossobv/xpaste/pull/6
+      name = "fix-function-call-after-wayland-update.patch";
+      url = "https://github.com/ossobv/xpaste/commit/47412738dad4b5fc8bc287ead23c8440bfdc547d.patch";
+      hash = "sha256-t4LZG600AsFTtKjXCxioGcAP4YcHIdQ/fVMIYjsunuA=";
+    })
+  ];
 
   # no tests, no python module to import, no version output to check
   doCheck = false;
