@@ -141,6 +141,11 @@
       </listitem>
       <listitem>
         <para>
+          PHP 8.2.0 RC 6 is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>protonup</literal> has been aliased to and replaced
           by <literal>protonup-ng</literal> due to upstream not
           maintaining it.
@@ -622,6 +627,23 @@
           <literal>p4d</literal>, <literal>p4broker</literal>, and
           <literal>p4p</literal>. To install the Helix Core Server
           binaries, use the <literal>p4d</literal> package instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>openssl</literal>-extension for the PHP
+          interpreter used by Nextcloud is built against OpenSSL 1.1 if
+          <xref linkend="opt-system.stateVersion" /> is below
+          <literal>22.11</literal>. This is to make sure that people
+          using
+          <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side
+          encryption</link> don’t loose access to their files.
+        </para>
+        <para>
+          In any other case it’s safe to use OpenSSL 3 for PHP’s openssl
+          extension. This can be done by setting
+          <xref linkend="opt-services.nextcloud.enableBrokenCiphersForSSE" />
+          to <literal>false</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1184,22 +1206,146 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          The <literal>services.grafana</literal> options were converted
-          to a
+          The module <literal>services.grafana</literal> was refactored
+          to be compliant with
           <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
-          0042</link> configuration.
+          0042</link>. To be precise, this means that the following
+          things have changed:
         </para>
-      </listitem>
-      <listitem>
-        <para>
-          The <literal>services.grafana.provision.datasources</literal>
-          and <literal>services.grafana.provision.dashboards</literal>
-          options were converted to a
-          <link xlink:href="https://github.com/NixOS/rfcs/blob/master/rfcs/0042-config-option.md">RFC
-          0042</link> configuration. They also now support specifying
-          the provisioning YAML file with <literal>path</literal>
-          option.
-        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The newly introduced option
+              <xref linkend="opt-services.grafana.settings" /> is an
+              attribute-set that will be converted into Grafana’s INI
+              format. This means that the configuration from
+              <link xlink:href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/">Grafana’s
+              configuration reference</link> can be directly written as
+              attribute-set in Nix within this option.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The option
+              <literal>services.grafana.extraOptions</literal> has been
+              removed. This option was an association of environment
+              variables for Grafana. If you had an expression like
+            </para>
+            <programlisting language="bash">
+{
+  services.grafana.extraOptions.SECURITY_ADMIN_USER = &quot;foobar&quot;;
+}
+</programlisting>
+            <para>
+              your Grafana instance was running with
+              <literal>GF_SECURITY_ADMIN_USER=foobar</literal> in its
+              environment.
+            </para>
+            <para>
+              For the migration, it is recommended to turn it into the
+              INI format, i.e. to declare
+            </para>
+            <programlisting language="bash">
+{
+  services.grafana.settings.security.admin_user = &quot;foobar&quot;;
+}
+</programlisting>
+            <para>
+              instead.
+            </para>
+            <para>
+              The keys in
+              <literal>services.grafana.extraOptions</literal> have the
+              format
+              <literal>&lt;INI section name&gt;_&lt;Key Name&gt;</literal>.
+              Further details are outlined in the
+              <link xlink:href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables">configuration
+              reference</link>.
+            </para>
+            <para>
+              Alternatively you can also set all your values from
+              <literal>extraOptions</literal> to
+              <literal>systemd.services.grafana.environment</literal>,
+              make sure you don’t forget to add the
+              <literal>GF_</literal> prefix though!
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Previously, the options
+              <xref linkend="opt-services.grafana.provision.datasources" />
+              and
+              <xref linkend="opt-services.grafana.provision.dashboards" />
+              expected lists of datasources or dashboards for the
+              <link xlink:href="https://grafana.com/docs/grafana/latest/administration/provisioning/">declarative
+              provisioning</link>.
+            </para>
+            <para>
+              To declare lists of
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  <emphasis role="strong">datasources</emphasis>, please
+                  rename your declarations to
+                  <xref linkend="opt-services.grafana.provision.datasources.settings.datasources" />.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis role="strong">dashboards</emphasis>, please
+                  rename your declarations to
+                  <xref linkend="opt-services.grafana.provision.dashboards.settings.providers" />.
+                </para>
+              </listitem>
+            </itemizedlist>
+            <para>
+              This change was made to support more features for that:
+            </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  It’s possible to declare the
+                  <literal>apiVersion</literal> of your dashboards and
+                  datasources by
+                  <xref linkend="opt-services.grafana.provision.datasources.settings.apiVersion" />
+                  (or
+                  <xref linkend="opt-services.grafana.provision.dashboards.settings.apiVersion" />).
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Instead of declaring datasources and dashboards in
+                  pure Nix, it’s also possible to specify configuration
+                  files (or directories) with YAML instead using
+                  <xref linkend="opt-services.grafana.provision.datasources.path" />
+                  (or
+                  <xref linkend="opt-services.grafana.provision.dashboards.path" />.
+                  This is useful when having provisioning files from
+                  non-NixOS Grafana instances that you also want to
+                  deploy to NixOS.
+                </para>
+                <para>
+                  <emphasis role="strong">Note:</emphasis> secrets from
+                  these files will be leaked into the store unless you
+                  use a
+                  <link xlink:href="https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider"><emphasis role="strong">file</emphasis>-provider
+                  or env-var</link> for secrets!
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <xref linkend="opt-services.grafana.provision.notifiers" />
+                  is not affected by this change because this feature is
+                  deprecated by Grafana and will probably removed in
+                  Grafana 10. It’s recommended to use
+                  <literal>services.grafana.provision.alerting.contactPoints</literal>
+                  instead.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>

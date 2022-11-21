@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, django
 , fetchPypi
 , pythonOlder
 }:
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-agZTglc3cbr0AHVMTTnAkTsKKaRTqUHfuRIu6+0hVy8=";
   };
 
+  propagatedBuildInputs = [
+    django
+  ];
+
   # django.core.exceptions.ImproperlyConfigured (path issue with DJANGO_SETTINGS_MODULE?)
   doCheck = false;
 
@@ -26,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Use webpack to generate your static bundles";
     homepage = "https://github.com/owais/django-webpack-loader";
-    maintainers = with maintainers; [ peterromfeldhk ];
     license = with licenses; [ mit ];
+    maintainers = with maintainers; [ peterromfeldhk ];
   };
 }
