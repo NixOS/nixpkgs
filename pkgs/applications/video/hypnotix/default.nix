@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       src = ./libmpv-path.patch;
       libmpv = "${lib.getLib mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+
+    # Fix launching with mpv 0.35.0 (ubuntu 22.04 doesn't have libmpv.so.2)
+    # https://github.com/linuxmint/hypnotix/issues/254
+    ./fix-deprecated-mpv-detach-destroy.patch
   ];
 
   postPatch = ''
