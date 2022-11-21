@@ -39,6 +39,10 @@ stdenv.mkDerivation {
     ln -s $renderArtifact/dist $out/share/docc/render
   '';
 
+  # Canary to verify output of our Swift toolchain does not depend on the Swift
+  # compiler itself. (Only its 'lib' output.)
+  disallowedRequisites = [ swift.swift ];
+
   meta = {
     description = "Documentation compiler for Swift";
     homepage = "https://github.com/apple/swift-docc";
