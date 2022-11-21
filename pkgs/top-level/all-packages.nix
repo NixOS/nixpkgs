@@ -31782,7 +31782,7 @@ with pkgs;
 
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
-  sayonara = libsForQt514.callPackage ../applications/audio/sayonara { };
+  sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
