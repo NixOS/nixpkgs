@@ -78,6 +78,7 @@ in {
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   apfs = handleTest ./apfs.nix {};
   apparmor = handleTest ./apparmor.nix {};
+  asterisk = handleTest ./asterisk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
