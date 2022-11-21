@@ -260,13 +260,13 @@ rec {
   };
 
   binaryCrystal_1_5 = genericBinary {
-    version = "1.5.0";
+    version = "1.5.1";
     sha256s = {
-      x86_64-linux = "sha256-YnNg8PyAUgLYAxAAfVA8ei/AdFsdsiEVN9f1TpqZQ0c=";
+      x86_64-linux = "sha256-pHXD2Z2+Dy1actRx+iXgPBJLWZ5HM27tdGlztLTXh7w=";
       #i686-linux = ""; no prebuilt binaries since 1.2.0
-      x86_64-darwin = "sha256-KU6+HLFlpYJSJS4F1zlHBeBt/rzxb7U57GmqRQnLm0Y==";
-      #aarch64-linux = ""; not available yet
-      aarch64-darwin = "sha256-KU6+HLFlpYJSJS4F1zlHBeBt/rzxb7U57GmqRQnLm0Y==";
+      x86_64-darwin = "sha256-QywvyZIkf2Ztt+VfsVUJRBUQgxpyvro0r/otdrby4JI=";
+      aarch64-linux = "sha256-SdgHd3e5R+/gF7OYz3MEaC7ezI/jcyfpCWmZ3qPeRBI=";
+      aarch64-darwin = "sha256-QywvyZIkf2Ztt+VfsVUJRBUQgxpyvro0r/otdrby4JI=";
     };
   };
 
@@ -292,7 +292,7 @@ rec {
   };
 
   crystal_1_5 = generic {
-    version = "1.5.0";
+    version = "1.5.1";
     sha256 = "sha256-twDWnJBLc5tvkg3HvbxXJsCPTMJr9vGvvHvfukMXGyA=";
     binary = binaryCrystal_1_5;
   };
