@@ -8341,6 +8341,8 @@ with pkgs;
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
+  keepmenu = callPackage ../applications/misc/keepmenu { };
+
   kent = callPackage ../applications/science/biology/kent { };
 
   keybase = callPackage ../tools/security/keybase {
