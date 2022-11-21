@@ -6,6 +6,7 @@
 
 mkDerivation {
   pname = "solid";
+  patches = [ ./fix-search-path.patch ];
   nativeBuildInputs = [ bison extra-cmake-modules flex media-player-info ];
   buildInputs = [ qtdeclarative qttools ];
   propagatedBuildInputs = [ qtbase ];
