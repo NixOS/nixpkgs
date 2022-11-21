@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
     inherit (iosevka.meta) homepage downloadPage description license platforms;
     maintainers = with lib.maintainers; [
       cstrahan
+      montchr
     ];
   };
 
