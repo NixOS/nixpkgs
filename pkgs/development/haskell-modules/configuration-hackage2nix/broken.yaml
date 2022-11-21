@@ -3356,7 +3356,7 @@ broken-packages:
   - morfette
   - morfeusz
   - morloc
-  - morpheus-graphql-core
+  - morpheus-graphql-cli
   - morphisms-functors
   - morphisms-objects
   - morte
