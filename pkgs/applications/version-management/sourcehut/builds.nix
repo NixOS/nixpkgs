@@ -10,15 +10,16 @@
 , ansi2html
 , python
 , unzip
+, tinycss2
 }:
 let
-  version = "0.83.0";
+  version = "0.83.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-u/y+sYu/09LypWI/ngghbge5SvkuLQpray10j0SjlOo=";
+    hash = "sha256-uEuhKLnCQx5LBwO+lchtWVwBUMFOqWfC6ptLMP+Guws=";
   };
 
   buildsrht-api = buildGoModule ({
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     pyyaml
     markdown
     ansi2html
+    tinycss2
   ];
 
   preBuild = ''
@@ -61,7 +63,9 @@ buildPythonPackage rec {
   postInstall = ''
     mkdir -p $out/lib
     mkdir -p $out/bin/builds.sr.ht
+    mkdir -p $out/share/sql
 
+    cp schema.sql $out/share/sql/builds-schema.sql
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
     ln -s ${buildsrht-api}/bin/api $out/bin/buildsrht-api
