@@ -721,6 +721,6 @@ in {
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
   };
 
-  meta.maintainers = with lib.maintainers; [ happy-river erictapen ];
+  meta.maintainers = with lib.maintainers; [ happy-river erictapen turion ];
 
 }
