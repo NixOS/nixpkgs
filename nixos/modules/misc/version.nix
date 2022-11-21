@@ -27,6 +27,7 @@ let
     HOME_URL = "https://nixos.org/";
     DOCUMENTATION_URL = "https://nixos.org/learn.html";
     SUPPORT_URL = "https://nixos.org/community.html";
+    SUPPORT_END = "2023-06-30";
     BUG_REPORT_URL = "https://github.com/NixOS/nixpkgs/issues";
   };
 
