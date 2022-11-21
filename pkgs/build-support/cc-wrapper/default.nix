@@ -366,10 +366,10 @@ stdenv.mkDerivation {
       touch "$out/nix-support/libcxx-ldflags"
     ''
     + optionalString (libcxx == null && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}${lib.optionalString (hostPlatform != targetPlatform) "/${targetPlatform.config}"}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
