@@ -3905,6 +3905,8 @@ with pkgs;
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
+  dynamic-wallpaper = callPackage ../tools/graphics/dynamic-wallpaper { };
+
   dyncall = callPackage ../development/libraries/dyncall { };
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
