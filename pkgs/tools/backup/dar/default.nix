@@ -2,7 +2,7 @@ args @ {
   lib,
   stdenv,
   llvmPackages_12, # Anything newer than 11
-  fetchurl,
+  fetchzip,
   which,
   attr,
   e2fsprogs,
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
   version = "2.7.7";
   pname = "dar";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wD4vUu/WWi8Ee2C77aJGDLUlFl4b4y8RC2Dgzs4/LMk=";
+    sha256 = "sha256-643hU28Vl0QaqdKoKdQ1Z/j5drE59/jw5xkVO/g+MSw=";
   };
 
   outputs = [ "out" "dev" ];
