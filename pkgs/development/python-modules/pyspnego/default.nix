@@ -9,11 +9,13 @@
 , pytestCheckHook
 , pythonOlder
 , glibcLocales
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.5.3";
+  version = "0.6.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -21,8 +23,12 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-awlS1VHXj6n9Ee4qUI1x5tEdkMF/ZEr9NPKh4ICkv3g=";
+    hash = "sha256-Nc15ULqvD7BSd78iDay1gMkKepJn/cBLBVYR8Lw15Z8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
