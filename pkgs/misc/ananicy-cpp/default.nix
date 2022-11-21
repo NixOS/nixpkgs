@@ -1,27 +1,27 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitLab
-, makeWrapper
 , cmake
+, pkg-config
 , spdlog
 , nlohmann_json
 , systemd
 }:
 
-gcc11Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ananicy-cpp";
-  version = "unstable-2021-10-13";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "6a14fe7353221c89347eddbbcafb35cf5fee4758";
+    rev = "4d263de226de106bf32bdbf9c181a7185ffe5a52";
     sha256 = "sha256-V0QPXC17ZD2c4MK3DAkzoPgKOU5V5BjfQKUk7I6f8WM=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     cmake
+    pkg-config
   ];
 
   buildInputs = [
@@ -31,7 +31,7 @@ gcc11Stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DUSE_EXTERNAL_JSON=yON"
+    "-DUSE_EXTERNAL_JSON=ON"
     "-DUSE_EXTERNAL_SPDLOG=ON"
     "-DUSE_EXTERNAL_FMTLIB=ON"
   ];
@@ -41,6 +41,6 @@ gcc11Stdenv.mkDerivation rec {
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin vnepogodin ];
   };
 }
