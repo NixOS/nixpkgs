@@ -8144,6 +8144,8 @@ self: super: with self; {
 
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
 
+  pymilter = callPackage ../development/python-modules/pymilter { };
+
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymfy = callPackage ../development/python-modules/pymfy { };
