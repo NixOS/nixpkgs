@@ -2,12 +2,25 @@
 fixupOutputHooks+=('convertDesktopFiles $prefix')
 
 # Get a param out of a desktop file. First parameter is the file and the second
-# is a pattern of the key who's value we should fetch.
+# is the key who's value we should fetch.
 getDesktopParam() {
-    local file="$1";
-    local pattern="$2";
+    local file="$1"
+    local key="$2"
+    local line k v
 
-    awk -F "=" "/${pattern}/ {print \$2}" "${file}"
+    while read -r line; do
+        if [[ "$line" = *=* ]]; then
+            k="${line%%=*}"
+            v="${line#*=}"
+
+            if [[ "$k" = "$key" ]]; then
+                echo "$v"
+                return
+            fi
+        fi
+    done < "$file"
+
+    return 1
 }
 
 # Convert a freedesktop.org icon theme for a given app to a .icns file. When possible, missing
@@ -190,14 +203,14 @@ processExecFieldCodes() {
 convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
-    local -r name=$(getDesktopParam "${file}" "^Name")
+    local -r name=$(getDesktopParam "${file}" "Name")
     local -r macOSExec=$(getDesktopParam "${file}" "X-macOS-Exec")
     if [[ "$macOSExec" ]]; then
       local -r exec="$macOSExec"
     else
       local -r exec=$(processExecFieldCodes "${file}")
     fi
-    local -r iconName=$(getDesktopParam "${file}" "^Icon")
+    local -r iconName=$(getDesktopParam "${file}" "Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
     mkdir -p "${!outputBin}/Applications/${name}.app/Contents/MacOS"
