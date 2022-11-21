@@ -8,17 +8,19 @@
 , unidiff
 , python
 , unzip
+, mercurial
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.31.3";
+  version = "0.32.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hg.sr.ht";
     rev = version;
-    sha256 = "4Qe08gqsSTMQVQBchFPEUXuxM8ZAAQGJT1EOcDjkZa0=";
+    sha256 = "BJi5mXOWhr7ZhQ6fQql96XFo07cDvadzP+YkcGHJbik=";
     vc = "hg";
   };
 
@@ -31,14 +33,21 @@ buildPythonPackage rec {
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
+    vendorSha256 = "sha256-vuOYpnF3WjA6kOe9MVSuVMhJBQqCmIex+QUBJrP+VDs=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
+    # the patch updates goredis-6 to goredis-8 and then all dependencies
+    # (go get -u) This is neccessary to allow use of redis connections over unix
+    # sockets.
+    #
+    # This patch can probably be dropped at the next update, the almost
+    # identical gitsrht-keys software already uses goredis-8.
+    patches = [ ./patches/hgsrht-keys/0001-update.patch ];
     pname = "hgsrht-keys";
     modRoot = "hgsrht-keys";
-    vendorSha256 = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+    vendorSha256 = "sha256-Py+BMA/BW1W043DZHE+IMImy+AKIN6hAbL8KGAeVc0M=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +55,8 @@ buildPythonPackage rec {
     hglib
     scmsrht
     unidiff
+    mercurial
+    tinycss2
   ];
 
   preBuild = ''
@@ -54,6 +65,8 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
+    mkdir -p $out/bin $out/share/sql
+    cp schema.sql $out/share/sql/hg-schema.sql
     ln -s ${hgsrht-api}/bin/api $out/bin/hgsrht-api
     ln -s ${hgsrht-keys}/bin/hgsrht-keys $out/bin/hgsrht-keys
   '';
