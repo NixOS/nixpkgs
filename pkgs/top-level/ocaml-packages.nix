@@ -1058,8 +1058,6 @@ let
 
     ocplib-json-typed = callPackage ../development/ocaml-modules/ocplib-json-typed { };
 
-    ocplib-json-typed-bson = callPackage ../development/ocaml-modules/ocplib-json-typed/bson.nix { };
-
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
     ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
