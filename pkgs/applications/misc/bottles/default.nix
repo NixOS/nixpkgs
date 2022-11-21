@@ -19,9 +19,12 @@
 , p7zip
 , xdpyinfo
 , imagemagick
+, lsb-release
+, pciutils
 , procps
 , gamescope
 , mangohud
+, vkbasalt-cli
 , vmtouch
 , wine
 , bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
@@ -39,13 +42,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.10.14.1";
+  version = "2022.11.14";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FO91GSGlc2f3TSLrlmRDPi5p933/Y16tdEpX4RcKhL0=";
+    sha256 = "sha256-bigrJtqx9iZURYojwxlGe7xSGWS13wSaGcrTTROP9J8=";
   };
 
   patches = [ ./vulkan_icd.patch ];
@@ -101,12 +104,17 @@ python3Packages.buildPythonApplication rec {
     p7zip
     xdpyinfo
     imagemagick
-    procps
+    vkbasalt-cli
 
     gamescope
     mangohud
     vmtouch
     wine
+
+    # Undocumented (subprocess.Popen())
+    lsb-release
+    pciutils
+    procps
   ];
 
   format = "other";
