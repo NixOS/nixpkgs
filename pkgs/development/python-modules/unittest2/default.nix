@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Python 3.10. `unittest2` is a compatability package between Python 2 and 3,
   # but it's relevance is dwinding as `python2Packages` is getting phased out
   # anyhow.
-  disabled = !(pythonOlder "3.10");
+  disabled = pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
