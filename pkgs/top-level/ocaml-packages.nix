@@ -1056,8 +1056,6 @@ let
 
     ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
 
-    ocplib-json-typed = callPackage ../development/ocaml-modules/ocplib-json-typed { };
-
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
     ocsigen-ppx-rpc = callPackage ../development/ocaml-modules/ocsigen-ppx-rpc { };
