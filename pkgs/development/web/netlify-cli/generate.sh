@@ -2,7 +2,7 @@
 set -eu -o pipefail
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 rm -f ./node-env.nix
-src="$(nix-build --expr 'let pkgs = import ../../../.. {}; lib = import ../../../../lib; meta = (lib.importJSON ./netlify-cli.json); in pkgs.fetchFromGitHub {owner = meta.owner; repo = meta.repo; rev = meta.rev; sha256 = meta.sha256;}')"
+src="$(nix-build --expr 'let pkgs = import ../../../.. {}; meta = (pkgs.lib.importJSON ./netlify-cli.json); in pkgs.fetchFromGitHub { inherit (meta) owner repo rev sha256; }')"
 echo $src
 node2nix \
   --input $src/package.json \
