@@ -162,6 +162,8 @@ stdenv.mkDerivation rec {
     python3
     at-spi2-core
     libinput
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    AppKit
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional developerBuild gdb
