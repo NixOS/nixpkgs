@@ -1,22 +1,22 @@
 { lib, fetchzip }:
 
-let
-  version = "1.3";
-in fetchzip {
-  name = "mononoki-${version}";
-
-  url = "https://github.com/madmalik/mononoki/releases/download/${version}/mononoki.zip";
+fetchzip {
+  pname = "mononoki";
+  version = "1.5";
+  url = "https://github.com/madmalik/mononoki/releases/download/1.5/mononoki.zip";
+  sha256 = "IM+D1AONLuOFy1wq114IsXKehJIliOgALKbRbIj/cX8=";
+  stripRoot = false;
 
   postFetch = ''
-    mkdir -p $out/share/fonts/mononoki
-    unzip -j $downloadedFile -d $out/share/fonts/mononoki
+    mkdir -pv $out/share/fonts/{opentype,truetype}
+    cp -v $out/*.otf $out/share/fonts/opentype
+    cp -v $out/*.ttf $out/share/fonts/truetype
   '';
 
-  sha256 = "sha256-K2uOpJRmQ1NcDZfh6rorCF0MvGHFCsSW8J7Ue9OC/OY=";
-
   meta = with lib; {
-    homepage = "https://github.com/madmalik/mononoki";
     description = "A font for programming and code review";
+    homepage = "https://madmalik.github.io/mononoki/";
+    maintainers = with maintainers; [ totoroot ];
     license = licenses.ofl;
     platforms = platforms.all;
   };
