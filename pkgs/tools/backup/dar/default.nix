@@ -1,10 +1,24 @@
-args @ { lib, stdenv, llvmPackages_12, fetchurl
-, which
-, attr, e2fsprogs
-, curl, libargon2, librsync, libthreadar
-, gpgme, libgcrypt, openssl
-, bzip2, lz4, lzo, xz, zlib
-, CoreFoundation
+args @ {
+  lib,
+  stdenv,
+  llvmPackages_12, # Anything newer than 11
+  fetchurl,
+  which,
+  attr,
+  e2fsprogs,
+  curl,
+  libargon2,
+  librsync,
+  libthreadar,
+  gpgme,
+  libgcrypt,
+  openssl,
+  bzip2,
+  lz4,
+  lzo,
+  xz,
+  zlib,
+  CoreFoundation,
 }:
 
 let
@@ -27,9 +41,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   buildInputs = [
-    curl librsync libthreadar
-    gpgme libargon2 libgcrypt openssl
-    bzip2 lz4 lzo xz zlib
+    curl
+    librsync
+    libthreadar
+    gpgme
+    libargon2
+    libgcrypt
+    openssl
+    bzip2
+    lz4
+    lzo
+    xz
+    zlib
   ] ++ lib.optionals stdenv.isLinux [
     attr
     e2fsprogs
