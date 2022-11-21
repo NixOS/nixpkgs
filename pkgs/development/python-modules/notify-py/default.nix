@@ -61,7 +61,7 @@ buildPythonPackage rec {
     PATH="$TMP/bin:$PATH" pytest
   '' else if stdenv.isLinux then ''
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       pytest
   '' else ''
     pytest

@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       make check
   '';
 

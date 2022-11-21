@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     libdatrie
     libxkbcommon
     libepoxy
-    dbus.daemon
+    dbus
     at-spi2-core
     libXtst
   ];

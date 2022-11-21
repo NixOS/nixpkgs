@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libxslt ];
   buildInputs = [ libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls python2 ];
 
-  checkInputs = [ dbus.daemon ];
+  checkInputs = [ dbus ];
 
   configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
 
