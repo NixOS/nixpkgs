@@ -4,18 +4,27 @@
 , srht
 , pyyaml
 , python
+, buildGoModule
+, unzip
 }:
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.13.8";
+  version = "0.15.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-Zji9FyYUtsklYz4qyLbtduusteC7WujLCMmvZKcqYis=";
+    sha256 = "sha256-FyajvzPPHPdXwJNwHip1nBe7ryNP3dXwV59bUcrglWU=";
   };
+
+  pastesrht-api = buildGoModule ({
+    inherit src version;
+    pname = "pastesrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -30,6 +39,12 @@ buildPythonPackage rec {
   preBuild = ''
     export PKGVER=${version}
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  '';
+
+  postInstall = ''
+    mkdir -p $out/bin $out/share/sql
+    cp schema.sql $out/share/sql/paste-schema.sql
+    ln -s ${pastesrht-api}/bin/api $out/bin/pastesrht-api
   '';
 
   pythonImportsCheck = [ "pastesrht" ];
