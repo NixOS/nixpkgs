@@ -1,13 +1,15 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , python3
 , libffi
 , git
 , cmake
 , zlib
 , fetchgit
+, fetchFromGitHub
 , makeWrapper
 , runCommand
-, llvmPackages_5
+, llvmPackages_9
 , glibc
 , ncurses
 }:
@@ -15,21 +17,19 @@
 let
   unwrapped = stdenv.mkDerivation rec {
     pname = "cling-unwrapped";
-    version = "0.7";
+    version = "0.9";
 
     src = fetchgit {
       url = "http://root.cern/git/clang.git";
-      # This commit has the tag cling-0.7 so we use it, even though cpt.py
-      # tries to use refs/tags/cling-patches-rrelease_50
-      rev = "354b25b5d915ff3b1946479ad07f3f2768ea1621";
-      branchName = "cling-patches";
-      sha256 = "0q8q2nnvjx3v59ng0q3qqqhzmzf4pmfqqiy3rz1f3drx5w3lgyjg";
+      rev = "cling-v0.9";
+      sha256 = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
     };
 
-    clingSrc = fetchgit {
-      url = "http://root.cern/git/cling.git";
-      rev = "70163975eee5a76b45a1ca4016bfafebc9b57e07";
-      sha256 = "1mv2fhk857kp5rq714bq49iv7gy9fgdwibydj5wy1kq2m3sf3ysi";
+    clingSrc = fetchFromGitHub {
+      owner = "root-project";
+      repo = "cling";
+      rev = "v0.9";
+      sha256 = "0wx3fi19wfjcph5kclf8108i436y79ddwakrcf0lgxnnxhdjyd29";
     };
 
     preConfigure = ''
@@ -38,8 +38,8 @@ let
       chmod -R a+w ./tools/cling
     '';
 
-    nativeBuildInputs = [ python3 git cmake llvmPackages_5.llvm.dev ];
-    buildInputs = [ libffi llvmPackages_5.llvm zlib ncurses ];
+    nativeBuildInputs = [ python3 git cmake llvmPackages_9.llvm.dev ];
+    buildInputs = [ libffi llvmPackages_9.llvm zlib ncurses ];
 
     strictDeps = true;
 
