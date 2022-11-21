@@ -33,6 +33,8 @@ then
   stdenv.mkDerivation
     (builtins.removeAttrs overridenUnwrappedGir.drvAttrs [ "name" ] # so we can get a fresh name generated from the pname
       // {
+
+      inherit (overridenUnwrappedGir) meta;
       pname = "gobject-introspection-wrapped";
       passthru = overridenUnwrappedGir.passthru // {
         unwrapped = overridenUnwrappedGir;
@@ -88,6 +90,7 @@ then
 else
   stdenv.mkDerivation (builtins.removeAttrs overridenUnwrappedGir.drvAttrs [ "name" ] # so we can get a fresh name generated from the pname
     // {
+    inherit (overridenUnwrappedGir) meta;
     pname = "gobject-introspection-wrapped";
     passthru = overridenUnwrappedGir.passthru // {
       unwrapped = overridenUnwrappedGir;
