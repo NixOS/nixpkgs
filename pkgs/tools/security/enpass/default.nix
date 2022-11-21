@@ -14,7 +14,7 @@ let
 
   data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
 
-  baseUrl = "http://repo.sinew.in";
+  baseUrl = "https://apt.enpass.io";
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
