@@ -87,7 +87,7 @@ let
     , binary
     , doCheck ? true
     , extraBuildInputs ? [ ]
-    , buildFlags ? [ "all" "docs" ]
+    , buildFlags ? [ "all" "docs" "release=1"]
     }:
     lib.fix (compiler: stdenv.mkDerivation {
       pname = "crystal";
@@ -165,7 +165,6 @@ let
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
-        "release=1"
         "progress=1"
       ];
 
