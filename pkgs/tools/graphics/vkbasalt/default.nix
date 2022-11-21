@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 spirv-headers vulkan-headers ];
   mesonFlags = [ "-Dappend_libdir_vkbasalt=true" ];
 
-  # Include 32bit layer in 64bit build
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+    install -Dm 644 $src/config/vkBasalt.conf $out/share/vkBasalt/vkBasalt.conf
+    # Include 32bit layer in 64bit build
     ln -s ${vkbasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
       "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
   '';
