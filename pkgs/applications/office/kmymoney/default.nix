@@ -3,7 +3,7 @@
 , autoPatchelfHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
+, kcmutils, kcontacts, qtwebengine, kdiagram, kholidays, kidentitymanagement
 , kitemmodels, libical, libofx, qgpgme
 
 , sqlcipher
@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OTi4B4tzkboy4Su0I5di+uE0aDoMLsGnUQXDAso+Xj8=";
   };
 
+  cmakeFlags = [
+    # Remove this when upgrading to a KMyMoney release that includes
+    # https://invent.kde.org/office/kmymoney/-/merge_requests/118
+    "-DENABLE_WEBENGINE=ON"
+  ];
+
   # Hidden dependency that wasn't included in CMakeLists.txt:
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
+    kcontacts qtwebengine kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
     sqlcipher
 
