@@ -2493,8 +2493,6 @@ self: super: with self; {
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
-  django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
-
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
 
   django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
