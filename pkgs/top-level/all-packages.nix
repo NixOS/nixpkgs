@@ -12649,8 +12649,8 @@ with pkgs;
 
   vix = callPackage ../tools/misc/vix { };
 
-  vkBasalt = callPackage ../tools/graphics/vkBasalt {
-    vkBasalt32 = pkgsi686Linux.vkBasalt;
+  vkbasalt = callPackage ../tools/graphics/vkbasalt {
+    vkbasalt32 = pkgsi686Linux.vkbasalt;
   };
 
   vkmark = callPackage ../tools/graphics/vkmark { };

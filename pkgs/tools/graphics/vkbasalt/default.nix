@@ -8,11 +8,11 @@
 , libX11
 , spirv-headers
 , vulkan-headers
-, vkBasalt32
+, vkbasalt32
 }:
 
 stdenv.mkDerivation rec {
-  pname = "vkBasalt";
+  pname = "vkbasalt";
   version = "0.3.2.6";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   # Include 32bit layer in 64bit build
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    ln -s ${vkBasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
+    ln -s ${vkbasalt32}/share/vulkan/implicit_layer.d/vkBasalt.json \
       "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
   '';
 
