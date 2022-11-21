@@ -1,11 +1,10 @@
 { lib
 , stdenv
 , swift
-, wrapperParams ? swift._wrapperParams
 , useSwiftDriver ? true, swift-driver
 }:
 
-stdenv.mkDerivation (wrapperParams // {
+stdenv.mkDerivation (swift._wrapperParams // {
   pname = "swift-wrapper";
   inherit (swift) version meta;
 
