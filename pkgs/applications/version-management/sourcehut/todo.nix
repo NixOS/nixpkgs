@@ -14,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.72.2";
+  version = "0.74.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-FLjVO8Y/9s2gFfMXwcY7Rj3WNzPEBYs1AEjiVZFWsT8=";
+    sha256 = "sha256-/5ztB7FWWN9r0JkaNnSseJ8v/keLdRYIts8HpvX8i58=";
   };
+
+  patches = [ ./patches/todosrht/0001-schema-fix-typo.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+    vendorSha256 = "sha256-rvfG5F6ez8UM0dYVhKfzwtb7ZEJlaKMBAfKDbo3Aofc=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
@@ -48,6 +50,8 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
+    mkdir -p $out/bin $out/share/sql
+    cp schema.sql $out/share/sql/todo-schema.sql
     ln -s ${todosrht-api}/bin/api $out/bin/todosrht-api
   '';
 

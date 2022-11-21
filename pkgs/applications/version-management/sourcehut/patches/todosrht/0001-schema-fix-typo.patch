@@ -1,0 +1,13 @@
+diff --git a/schema.sql b/schema.sql
+index 33623d2..89617a4 100644
+--- a/schema.sql
++++ b/schema.sql
+@@ -355,7 +355,7 @@ CREATE TABLE user_webhook_subscription (
+ 	created timestamp without time zone NOT NULL,
+ 	url character varying(2048) NOT NULL,
+ 	events character varying NOT NULL,
+-	user_id integer REFERENCES "user"(id), ON DELETE CASCADE
++	user_id integer REFERENCES "user"(id) ON DELETE CASCADE,
+ 	token_id integer REFERENCES oauthtoken(id) ON DELETE CASCADE
+ );
+ 
