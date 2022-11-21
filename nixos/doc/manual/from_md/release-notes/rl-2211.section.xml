@@ -582,6 +582,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>fetchgit</literal> fetcher supports sparse
+          checkouts via the <literal>sparseCheckout</literal> option.
+          This used to accept a multi-line string with
+          directories/patterns to check out, but now requires a list of
+          strings.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>openssh</literal> was updated to version 9.1,
           disabling the generation of DSA keys when using
           <literal>ssh-keygen -A</literal> as they are insecure. Also,
