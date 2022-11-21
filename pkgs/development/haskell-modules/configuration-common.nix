@@ -2541,6 +2541,9 @@ self: super: {
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
 
+  # Too strict upper bound on HTTP
+  oeis = doJailbreak super.oeis;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
