@@ -2363,13 +2363,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # GHC 9 support https://github.com/lambdabot/lambdabot/pull/204
-  lambdabot-core = appendPatch ./patches/lambdabot-core-ghc9.patch (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.lambdabot-core);
-  lambdabot-novelty-plugins = appendPatch ./patches/lambdabot-novelty-plugins-ghc9.patch super.lambdabot-novelty-plugins;
-
   # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
   # test suite is commented out, so the required dependency is missing naturally.
   # We need to use a default Setup.hs instead. Current master doesn't exhibit
@@ -2540,6 +2533,9 @@ self: super: {
   # Test failure after libxcrypt migration, reported upstrem at
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
+
+  # Too strict upper bound on HTTP
+  oeis = doJailbreak super.oeis;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
