@@ -5408,7 +5408,7 @@ self: super: with self; {
 
   logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
-  logilab_common = callPackage ../development/python-modules/logilab/common.nix { };
+  logilab-common = callPackage ../development/python-modules/logilab/common.nix { };
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
 
