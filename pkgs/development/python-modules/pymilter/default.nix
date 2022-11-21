@@ -29,6 +29,8 @@ buildPythonPackage rec {
     rm testpolicy.py
   '';
 
+  pythonImportsCheck = [ "Milter" ];
+
   meta = with lib; {
     homepage = "http://bmsi.com/python/milter.html";
     description = "Python bindings for libmilter api";

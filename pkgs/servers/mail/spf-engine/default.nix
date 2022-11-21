@@ -2,25 +2,29 @@
 
 buildPythonApplication rec {
   pname = "spf-engine";
-  majorVersion = lib.versions.majorMinor version;
   version = "2.9.3";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
+    url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "sha256-w0Nb+L/Os3KPApENoylxCVaCD4FvgmvpfVvwCkt2IDE=";
   };
 
   propagatedBuildInputs = [ pyspf dnspython authres pymilter ];
 
-  preBuild = ''
+  pythonImportsCheck = [
+    "spf_engine"
+    "spf_engine.milter_spf"
+    "spf_engine.policyd_spf"
+  ];
+
+  postPatch = ''
     substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
   '';
 
   meta = with lib; {
-    homepage = "https://launchpad.net/${pname}/";
+    homepage = "https://launchpad.net/spf-engine/";
     description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.asl20;
-    platforms = platforms.all;
   };
 }
