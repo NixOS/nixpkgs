@@ -7,7 +7,7 @@
 , mailcap, mimetypesSupport ? true
 , ncurses
 , openssl
-, openssl_1_1
+, openssl_legacy
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
@@ -77,9 +77,9 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 with lib;
 
 let
-  # cpython does support/build with openssl 3.0, but some libraries using the ssl module seem to have issues with it
+  # some python packages need legacy ciphers, so we're using openssl 3, but with that config
   # null check for Minimal
-  openssl' = if openssl != null then openssl_1_1 else null;
+  openssl' = if openssl != null then openssl_legacy else null;
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonForBuild;
