@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    sha256 = "sha256-5Xz8Lm2JF1Ckf3zwNVmk6PchK/VJAPJqnxL9bQCdTKk=";
+    hash = "sha256-UraJWp1K0v422yYe6MTIzJISuDehL5MAL6r1N6IVH1A=";
   };
 
   patches =
