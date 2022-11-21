@@ -4687,7 +4687,6 @@ broken-packages:
   - skemmtun
   - skulk
   - skylighting-extensions
-  - skylighting-format-ansi
   - skype4hs
   - slack
   - slack-api
