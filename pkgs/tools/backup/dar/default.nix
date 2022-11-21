@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl
+{ lib, gccStdenv, fetchurl
 , which
 , attr, e2fsprogs
 , curl, libargon2, librsync, libthreadar
 , gpgme, libgcrypt, openssl
 , bzip2, lz4, lzo, xz, zlib
+, CoreFoundation
 }:
 
 with lib;
+
+let
+  # Fails to build with clang on Darwin:
+  # error: exception specification of overriding function is more lax than base version
+  stdenv = gccStdenv;
+in
 
 stdenv.mkDerivation rec {
   version = "2.7.7";
@@ -25,7 +32,12 @@ stdenv.mkDerivation rec {
     curl librsync libthreadar
     gpgme libargon2 libgcrypt openssl
     bzip2 lz4 lzo xz zlib
-  ] ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  ] ++ optionals stdenv.isLinux [
+    attr
+    e2fsprogs
+  ] ++ optionals stdenv.isDarwin [
+    CoreFoundation
+  ];
 
   configureFlags = [
     "--disable-birthtime"
@@ -45,7 +57,6 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    broken = stdenv.isDarwin;
     homepage = "http://dar.linux.free.fr";
     description = "Disk ARchiver, allows backing up files into indexed archives";
     maintainers = with maintainers; [ izorkin ];
