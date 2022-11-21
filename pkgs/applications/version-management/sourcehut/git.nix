@@ -9,20 +9,20 @@
 , unzip
 }:
 let
-  version = "0.78.20";
+  version = "0.81.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
+    sha256 = "sha256-jHr3tEDG9YQKkitTTNmzuOktFjucWCbBYjoNa56voIw=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+    vendorSha256 = "sha256-b/t+lY3I40ZEPGJ04auZj1zmYBhO/MlO14rskRpop9c=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
@@ -75,7 +75,8 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/sql
+    cp schema.sql $out/share/sql/git-schema.sql
     ln -s ${gitApi}/bin/api $out/bin/gitsrht-api
     ln -s ${gitDispatch}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     ln -s ${gitKeys}/bin/gitsrht-keys $out/bin/gitsrht-keys
