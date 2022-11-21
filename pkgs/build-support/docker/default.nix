@@ -101,8 +101,8 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? defaultArch
-
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      arch ? defaultArch
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
@@ -514,6 +514,8 @@ rec {
       keepContentsDirlinks ? false
     , # Docker config; e.g. what command to run on the container.
       config ? null
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArch
     , # Optional bash script to run on the files prior to fixturizing the layer.
       extraCommands ? ""
     , uid ? 0
@@ -546,8 +548,7 @@ rec {
       baseJson =
         let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
-            inherit created config;
-            architecture = defaultArch;
+            inherit created config architecture;
             preferLocalBuild = true;
             os = "linux";
           });
@@ -838,6 +839,8 @@ rec {
       contents ? [ ]
     , # Docker config; e.g. what command to run on the container.
       config ? { }
+    , # Image architecture, defaults to the architecture of the `hostPlatform` when unset
+      architecture ? defaultArch
     , # Time of creation of the image. Passing "now" will make the
       # created date be the time of building.
       created ? "1970-01-01T00:00:01Z"
@@ -869,8 +872,7 @@ rec {
 
         streamScript = writePython3 "stream" { } ./stream_layered_image.py;
         baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
-          inherit config;
-          architecture = defaultArch;
+          inherit config architecture;
           os = "linux";
         });
 

@@ -700,6 +700,21 @@ rec {
     contents = [ pkgs.bashInteractive ./test-dummy ];
   };
 
+  build-image-with-architecture = buildImage {
+    name = "build-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
+  layered-image-with-architecture = pkgs.dockerTools.streamLayeredImage {
+    name = "layered-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
+    contents = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
   # ensure that caCertificates builds
   image-with-certs = buildImage {
     name = "image-with-certs";
