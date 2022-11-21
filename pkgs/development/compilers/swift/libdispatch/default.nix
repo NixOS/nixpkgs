@@ -6,7 +6,9 @@
 , useSwift ? true, swift
 }:
 
-stdenv.mkDerivation {
+let
+  sources = callPackage ../sources.nix { };
+in stdenv.mkDerivation {
   pname = "swift-corelibs-libdispatch";
 
   inherit (sources) version;
