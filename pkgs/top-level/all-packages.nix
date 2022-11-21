@@ -1479,6 +1479,8 @@ with pkgs;
 
   xcd = callPackage ../tools/misc/xcd { };
 
+  xpaste = callPackage ../tools/text/xpaste { };
+
   xrootd = callPackage ../tools/networking/xrootd { };
 
   xtrt = callPackage ../tools/archivers/xtrt { };
