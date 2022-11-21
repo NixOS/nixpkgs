@@ -62,6 +62,10 @@ let
 in
 
 {
+  postPatch = ''
+    rm -r parser
+  '';
+
   passthru = {
     inherit builtGrammars allGrammars withPlugins withAllGrammars;
 
