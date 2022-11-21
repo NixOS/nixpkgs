@@ -19,13 +19,13 @@
 , unzip
 }:
 let
-  version = "0.61.3";
+  version = "0.63.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    hash = "sha256-wMcpdRSRvxYEV163mdTGOemk62gljua89SOtwe6qGXU=";
+    hash = "sha256-pcgUsxPvM+MFNEeCGmmmkvsyCNqsLH7jaVtPzMSiSNg=";
   };
 
   metasrht-api = buildGoModule ({
@@ -67,7 +67,8 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/sql
+    cp schema.sql $out/share/sql/meta-schema.sql
     ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
   '';
 
