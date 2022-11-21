@@ -27,6 +27,10 @@ with self; with super; {
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
+  deprecation = callPackage ../development/python2-modules/deprecation {
+    inherit deprecation;
+  };
+
   enum = callPackage ../development/python2-modules/enum { };
 
   filelock =  callPackage ../development/python2-modules/filelock { };
