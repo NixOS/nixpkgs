@@ -631,6 +631,8 @@ with pkgs;
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  undocker = callPackage ../tools/misc/undocker { };
+
   dockle = callPackage ../development/tools/dockle { };
 
   docui = callPackage ../tools/misc/docui { };
