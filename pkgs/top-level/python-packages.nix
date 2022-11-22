@@ -5561,6 +5561,8 @@ self: super: with self; {
 
   mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
 
+  masky = callPackage ../development/python-modules/masky { };
+
   mastodon-py = callPackage ../development/python-modules/mastodon-py { };
 
   mat2 = callPackage ../development/python-modules/mat2 { };
