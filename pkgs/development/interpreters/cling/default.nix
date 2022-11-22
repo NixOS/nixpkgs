@@ -24,6 +24,7 @@ let
       rev = "cling-v0.9";
       sha256 = "sha256-ft1NUIclSiZ9lN3Z3DJCWA0U9q/K1M0TKkZr+PjsFYk=";
     };
+    # src = /home/tom/tools/clang;
 
     clingSrc = fetchFromGitHub {
       owner = "root-project";
@@ -31,6 +32,7 @@ let
       rev = "v0.9";
       sha256 = "0wx3fi19wfjcph5kclf8108i436y79ddwakrcf0lgxnnxhdjyd29";
     };
+    # clingSrc = /home/tom/tools/cling;
 
     preConfigure = ''
       echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
@@ -41,6 +43,10 @@ let
     nativeBuildInputs = [ python3 git cmake llvmPackages_9.llvm.dev ];
     buildInputs = [ libffi llvmPackages_9.llvm zlib ncurses ];
 
+    patches = [
+      ./no-clang-cpp.patch
+    ];
+
     strictDeps = true;
 
     cmakeFlags = [
@@ -50,6 +56,8 @@ let
       # Setting -DCLING_INCLUDE_TESTS=ON causes the cling/tools targets to be built;
       # see cling/tools/CMakeLists.txt
       "-DCLING_INCLUDE_TESTS=ON"
+      "-DCLANG-TOOLS=OFF"
+      # "--trace-expand"
     ];
 
     meta = with lib; {
