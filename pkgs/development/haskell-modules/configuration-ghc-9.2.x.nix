@@ -114,8 +114,6 @@ self: super: {
   resolv = doJailbreak super.resolv;
   retrie = dontCheck super.retrie;
   singleton-bool = doJailbreak super.singleton-bool;
-  servant = doJailbreak super.servant;
-  servant-swagger = doJailbreak super.servant-swagger;
 
   # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
   # https://github.com/haskell-infra/hackage-trustees/issues/347
