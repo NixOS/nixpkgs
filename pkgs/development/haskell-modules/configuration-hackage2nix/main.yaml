@@ -332,7 +332,6 @@ package-maintainers:
     - cabal2spec
     - funcmp
     - git-annex
-    - hledger
     - hledger-interest
     - hledger-ui
     - hledger-web
@@ -342,7 +341,6 @@ package-maintainers:
     - hsyslog
     - logging-facade-syslog
     - nix-paths
-    - pandoc
     - structured-haskell-mode
     - titlecase
     - xmonad
@@ -401,6 +399,8 @@ package-maintainers:
     - gopher-proxy
     # other packages I can help out for
     - cabal-install
+    - hledger
+    - pandoc
     - systemd
     - fast-logger
     - flat
