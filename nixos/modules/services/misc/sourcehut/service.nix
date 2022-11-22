@@ -313,7 +313,8 @@ in
             if test ! -e ${stateDir}/db; then
               # Setup the initial database.
               # Note that it stamps the alembic head afterward
-              ${cfg.python}/bin/${srvsrht}-initdb
+              ${postgresql.package}/bin/psql '${cfg.settings."${srv}.sr.ht".connection-string}' \
+                -f ${pkgs.sourcehut."${srvsrht}"}/share/sql/${srv}-schema.sql
               echo ${version} >${stateDir}/db
             fi
 
