@@ -1,4 +1,4 @@
-{ lib
+ lib
 , fetchFromGitHub
 , bash
 , glib
@@ -10,8 +10,12 @@
 , sassc
 , python3Packages
 , gobject-introspection
-, gtk3
 , wrapGAppsHook
+, libappindicator-gtk3
+, libxcb
+, qt5
+, ibus
+, usbutils
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,11 +32,9 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs scripts
-
     substituteInPlace scripts/build-styles.sh \
       --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
-
     substituteInPlace pylib/common.py \
       --replace "/usr/share/polychromatic" "$out/share/polychromatic"
   '';
@@ -41,6 +43,21 @@ python3Packages.buildPythonApplication rec {
     scripts/build-styles.sh
   '';
 
+  propagatedBuildInputs = with python3Packages; [
+    colorama
+    colour
+    openrazer
+    pyqt5
+    pyqtwebengine
+    requests
+    setproctitle
+    libxcb
+    openrazer-daemon
+    libappindicator-gtk3
+    ibus
+    usbutils
+  ];
+
   nativeBuildInputs = with python3Packages; [
     gettext
     gobject-introspection
@@ -48,25 +65,17 @@ python3Packages.buildPythonApplication rec {
     ninja
     sassc
     wrapGAppsHook
+    qt5.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    gtk3
-    openrazer
-    pygobject3
-    pyqt5
-    pyqtwebengine
-    requests
-    setproctitle
-  ];
+
 
   dontWrapGapps = true;
   dontWrapQtApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with lib; {
