@@ -39,7 +39,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus getconf qtbase qtwebengine qtx11extras libX11 icu63 ];
+  buildInputs = [ qtbase qtwebengine qtx11extras icu63 ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
