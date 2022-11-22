@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "erosmb";
-  version = "0.1.2";
+  version = "0.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "viktor02";
     repo = "EroSmb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H3ozc1DXBdXlqEg53eVGGTqK6m2eiY+Qtl0Ul3lUByk=";
+    hash = "sha256-ThJwBKpxoTwHP84OlVKH62gQ3kfv83J8HNs5Mizi8Ck=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -41,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "SMB network scanner";
     homepage = "https://github.com/viktor02/EroSmb";
+    changelog = "https://github.com/viktor02/EroSmb/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
