@@ -10,7 +10,6 @@ on your NixOS machine.
 <xi:include href="ipv6-config.section.xml" />
 <xi:include href="firewall.section.xml" />
 <xi:include href="wireless.section.xml" />
-<xi:include href="ad-hoc-network-config.section.xml" />
 <xi:include href="renaming-interfaces.section.xml" />
 ```
 <!-- TODO: OpenVPN, NAT -->
