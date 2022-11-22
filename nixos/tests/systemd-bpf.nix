@@ -7,7 +7,6 @@ import ./make-test-python.nix ({ lib, ... }: {
     node1 = {
       virtualisation.vlans = [ 1 ];
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1.ipv4.addresses = [
@@ -19,7 +18,6 @@ import ./make-test-python.nix ({ lib, ... }: {
     node2 = {
       virtualisation.vlans = [ 1 ];
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1.ipv4.addresses = [

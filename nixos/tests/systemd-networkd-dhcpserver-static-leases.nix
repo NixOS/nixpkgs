@@ -10,7 +10,6 @@ import ./make-test-python.nix ({ lib, ... }: {
       virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
       };

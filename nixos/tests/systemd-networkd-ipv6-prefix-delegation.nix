@@ -168,7 +168,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
 
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         # Consider enabling this in production and generating firewall rules
         # for fowarding/input from the configured interfaces so you do not have
@@ -272,10 +271,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     client = {
       virtualisation.vlans = [ 2 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
+      networking.useDHCP = false;
     };
   };
 

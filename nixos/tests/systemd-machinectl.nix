@@ -51,8 +51,6 @@ in
   name = "systemd-machinectl";
 
   nodes.machine = { lib, ... }: {
-    # use networkd to obtain systemd network setup
-    networking.useNetworkd = true;
     networking.useDHCP = false;
 
     # do not try to access cache.nixos.org

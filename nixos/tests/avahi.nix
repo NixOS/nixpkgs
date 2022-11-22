@@ -24,11 +24,7 @@ import ./make-test-python.nix {
         publish.workstation = true;
         extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
       };
-    } // pkgs.lib.optionalAttrs (networkd) {
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
+      networking.useNetworkd = networkd;
     };
   in {
     one = cfg;
