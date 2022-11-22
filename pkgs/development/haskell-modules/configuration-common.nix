@@ -170,15 +170,6 @@ self: super: {
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
 
-  # Pick patch from master for GHC 9.0 support
-  flat = assert versionOlder super.flat.version "0.5"; appendPatches [
-    (fetchpatch {
-      name = "flat-ghc-9.0.patch";
-      url = "https://github.com/Quid2/flat/commit/d32c2c0c0c3c38c41177684ade9febe92d279b06.patch";
-      sha256 = "0ay0c53jpjmnnh7ylfpzpxqkhs1vq9jdwm9f84d40r88ki8hls8g";
-    })
-  ] super.flat;
-
   # Too strict bounds on base, optparse-applicative: https://github.com/edsko/friendly/issues/5
   friendly = doJailbreak super.friendly;
 
