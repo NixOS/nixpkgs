@@ -34,18 +34,34 @@ let
     };
     # clingSrc = /home/tom/tools/cling;
 
-    preConfigure = ''
+    llvmSrc = fetchgit {
+      url = "http://root.cern/git/llvm.git";
+      rev = "cling-v0.9";
+      sha256 = "sha256-jts7DMnXwZF/pzUfWEQeJmj5XlOb51aXn6KExMbmcXg=";
+    };
+    # llvmSrc = /home/tom/tools/llvm;
+
+    prePatch = ''
       echo "add_llvm_external_project(cling)" >> tools/CMakeLists.txt
+
       cp -r $clingSrc ./tools/cling
       chmod -R a+w ./tools/cling
+
+      mkdir ./interpreter
+      cp -r $llvmSrc ./interpreter/llvm
+      chmod -R a+w ./interpreter/llvm
     '';
+
+    patches = [
+      # Applied to clang src
+      ./no-clang-cpp.patch
+
+      # Applied to cling src
+      ./use-patched-llvm.patch
+    ];
 
     nativeBuildInputs = [ python3 git cmake llvmPackages_9.llvm.dev ];
     buildInputs = [ libffi llvmPackages_9.llvm zlib ncurses ];
-
-    patches = [
-      ./no-clang-cpp.patch
-    ];
 
     strictDeps = true;
 
