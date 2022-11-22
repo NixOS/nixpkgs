@@ -133,9 +133,6 @@ self: super: {
   # 2022-09-02: Too strict bounds on lens
   # https://github.com/haskell-servant/servant-multipart/pull/64
   servant-multipart = doJailbreak super.servant-multipart;
-  # 2022-09-02: Too strict bounds on lens
-  # https://github.com/GetShopTV/swagger2/pull/242
-  swagger2 = doJailbreak super.swagger2;
 
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
