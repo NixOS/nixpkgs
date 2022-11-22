@@ -24,6 +24,19 @@
 , h2
 , priority
 , contextvars
+
+# for passthru.tests
+, cassandra-driver
+, klein
+, magic-wormhole
+, scrapy
+, treq
+, txaio
+, txamqp
+, txrequests
+, txtorcon
+, thrift
+, nixosTests
 }:
 buildPythonPackage rec {
   pname = "Twisted";
@@ -50,6 +63,11 @@ buildPythonPackage rec {
     contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
   };
 
+  patches = [
+    # https://github.com/twisted/twisted/commit/f2f5e81c03f14e253e85fe457e646130780db40b
+    ./CVE-2022-39348.patch
+  ];
+
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -70,6 +88,21 @@ buildPythonPackage rec {
   '';
   # Tests require network
   doCheck = false;
+
+  passthru.tests = {
+    inherit
+      cassandra-driver
+      klein
+      magic-wormhole
+      scrapy
+      treq
+      txaio
+      txamqp
+      txrequests
+      txtorcon
+      thrift;
+    inherit (nixosTests) buildbot matrix-synapse;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/twisted/twisted";
