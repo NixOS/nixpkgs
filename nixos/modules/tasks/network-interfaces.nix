@@ -1305,12 +1305,14 @@ in
     };
 
     networking.useNetworkd = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
-        Whether we should use networkd as the network configuration backend or
-        the legacy script based system. Note that this option is experimental,
-        enable at your own risk.
+        Whether to use systemd-networkd to manage network interface
+        configuration. networkd provides more declarative, versatile
+        and reliable network configuration than the legacy scripted
+        networking setup, but may require config changes when
+        upgrading.
       '';
     };
 
