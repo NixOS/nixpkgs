@@ -9,6 +9,11 @@
 , libXtst
 }:
 
+# Known issues:
+# - The daemon can't be started from the GUI, because pkexec requires a shell
+#   registered in /etc/shells. The nix's bash is not in there when running
+#   cpu-x from nixpkgs.
+
 stdenv.mkDerivation rec {
   pname = "cpu-x";
   version = "4.5.2";
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free software that gathers information on CPU, motherboard and more";
-    homepage = src.meta.homepage;
+    homepage = "https://thetumultuousunicornofdarkness.github.io/CPU-X";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ viraptor ];
