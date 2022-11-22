@@ -388,7 +388,9 @@ let
     # Filesystem options - in particular, enable extended attributes and
     # ACLs for all filesystems that support them.
     filesystem = {
-      FANOTIFY        = yes;
+      FANOTIFY                    = yes;
+      FANOTIFY_ACCESS_PERMISSIONS = yes;
+
       TMPFS           = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION   = if (versionAtLeast version "5.1") then yes else whenAtLeast "4.9" (option module);

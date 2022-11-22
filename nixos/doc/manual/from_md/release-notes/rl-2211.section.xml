@@ -280,6 +280,16 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://evcc.io">EVCC</link> is an EV charge
+          controller with PV integration. It supports a multitude of
+          chargers, meters, vehicle APIs and more and ties that together
+          with a well-tested backend and a lightweight web frontend.
+          Available as
+          <link linkend="opt-services.evcc.enable">services.evcc</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
@@ -578,6 +588,15 @@
           <literal>nonConeMode = true</literal>, but note that non-cone
           mode is deprecated and this option may be removed alongside a
           future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>fetchgit</literal> fetcher supports sparse
+          checkouts via the <literal>sparseCheckout</literal> option.
+          This used to accept a multi-line string with
+          directories/patterns to check out, but now requires a list of
+          strings.
         </para>
       </listitem>
       <listitem>
@@ -1390,6 +1409,26 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           of <literal>copyToRoot</literal>. Use
           <literal>copyToRoot = buildEnv { ... };</literal> or similar
           if you intend to add packages to <literal>/bin</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>proxmox.qemuConf.bios</literal> option was added,
+          it corresponds to <literal>Hardware-&gt;BIOS</literal> field
+          in Proxmox web interface. Use
+          <literal>&quot;ovmf&quot;</literal> value to build UEFI image,
+          default value remains <literal>&quot;bios&quot;</literal>. New
+          option <literal>proxmox.partitionTableType</literal> defaults
+          to either <literal>&quot;legacy&quot;</literal> or
+          <literal>&quot;efi&quot;</literal>, depending on the
+          <literal>bios</literal> value. Setting
+          <literal>partitionTableType</literal> to
+          <literal>&quot;hybrid&quot;</literal> results in an image,
+          which supports both methods
+          (<literal>&quot;bios&quot;</literal> and
+          <literal>&quot;ovmf&quot;</literal>), thereby remaining
+          bootable after change to Proxmox
+          <literal>Hardware-&gt;BIOS</literal> field.
         </para>
       </listitem>
       <listitem>

@@ -480,6 +480,8 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  enumer = callPackage ../tools/misc/enumer { };
+
   evans = callPackage ../development/tools/evans { };
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
@@ -1478,6 +1480,8 @@ with pkgs;
   writedisk = callPackage ../tools/misc/writedisk { };
 
   xcd = callPackage ../tools/misc/xcd { };
+
+  xpaste = callPackage ../tools/text/xpaste { };
 
   xrootd = callPackage ../tools/networking/xrootd { };
 
@@ -2703,6 +2707,11 @@ with pkgs;
   };
 
   gmnitohtml = callPackage ../applications/misc/gmnitohtml { };
+
+  go2tv = darwin.apple_sdk_11_0.callPackage ../applications/video/go2tv {
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa Kernel UserNotifications;
+  };
+  go2tv-lite = go2tv.override { withGui = false; };
 
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
@@ -5278,8 +5287,6 @@ with pkgs;
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
     lua = lua5_4;
-    # needs to be the same openssl version as python/pyopenssl
-    curl = (curl.override { openssl = openssl_1_1; });
   })
     ceph
     ceph-client;
@@ -5775,7 +5782,9 @@ with pkgs;
 
   daq = callPackage ../applications/networking/ids/daq { };
 
-  dar = callPackage ../tools/backup/dar { };
+  dar = callPackage ../tools/backup/dar {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
 
   darkhttpd = callPackage ../servers/http/darkhttpd { };
 
@@ -6444,6 +6453,8 @@ with pkgs;
   ets = callPackage ../tools/misc/ets { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
+
+  evcc = callPackage ../servers/home-automation/evcc { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
@@ -7804,6 +7815,8 @@ with pkgs;
   hexd = callPackage ../tools/misc/hexd { };
   pixd = callPackage ../tools/misc/pixd { };
 
+  hexgui = callPackage ../games/hexgui { };
+
   hey = callPackage ../tools/networking/hey { };
 
   hhpc = callPackage ../tools/misc/hhpc { };
@@ -8335,6 +8348,8 @@ with pkgs;
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
+
+  keepmenu = callPackage ../applications/misc/keepmenu { };
 
   kent = callPackage ../applications/science/biology/kent { };
 
@@ -14514,31 +14529,8 @@ with pkgs;
 
   juniper = callPackage ../development/compilers/juniper { };
 
-  julia_10 = callPackage ../development/compilers/julia/1.0.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-    libgit2 = libgit2.overrideAttrs (_: rec {
-      version = "0.27.10";
-      src = fetchFromGitHub {
-        owner = "libgit2";
-        repo = "libgit2";
-        rev = "v${version}";
-        sha256 = "09jz2fzv0zl5058s0g1cpnw87a2rgg8wnjwlygi18i2n9nn6m0ad";
-      };
-      patches = [];
-      meta.knownVulnerabilities = [
-        "CVE-2020-12278"
-        "CVE-2020-12279"
-      ];
-    });
-  };
-
-  julia_15 = callPackage ../development/compilers/julia/1.5.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  };
-
-  julia-lts = julia_10;
-  julia-stable = julia_15;
+  julia-lts = julia_16-bin;
+  julia-stable = julia_18;
   julia = julia-stable;
 
   julia_16-bin = callPackage ../development/compilers/julia/1.6-bin.nix { };
@@ -16256,14 +16248,20 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_12;
-  ansible_2_13 = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.6";
+  ansible = ansible_2_14;
+  ansible_2_14 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.13.6";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-XzZuhRFZ2Pcs5o0yuMDt2lbuU3wB6faOyjgr0VEK9l0=";
-      sha256 = "";
+      hash = "sha256-Mf4yK2MpBnSo9zhhEN9QHwBEqkSJC+OrMTpuIluaKc8=";
+    };
+  }));
+  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.12.10";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-/rHfYXOM/B9eiTtCouwafeMpd9Z+hnB7Retj0MXDwjY=";
     };
     meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
@@ -18588,7 +18586,6 @@ with pkgs;
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
-    openssl = openssl_1_1;
   };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -19251,8 +19248,7 @@ with pkgs;
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobject-introspection = if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) && stdenv.targetPlatform.emulatorAvailable buildPackages
-    then callPackage ../development/libraries/gobject-introspection/wrapper.nix { } else gobject-introspection-unwrapped;
+  gobject-introspection = callPackage ../development/libraries/gobject-introspection/wrapper.nix { };
 
   gobject-introspection-unwrapped = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
@@ -21682,9 +21678,7 @@ with pkgs;
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
-  openldap = callPackage ../development/libraries/openldap {
-    openssl = openssl_1_1;
-  };
+  openldap = callPackage ../development/libraries/openldap { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -24399,7 +24393,7 @@ with pkgs;
 
   pure-ftpd = callPackage ../servers/ftp/pure-ftpd { };
 
-  pypolicyd-spf = python3.pkgs.callPackage ../servers/mail/pypolicyd-spf { };
+  spf-engine = python3.pkgs.callPackage ../servers/mail/spf-engine { };
 
   pypiserver = with python3Packages; toPythonApplication pypiserver;
 
@@ -27614,7 +27608,7 @@ with pkgs;
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
   bottles = callPackage ../applications/misc/bottles {
-    wine = wineWowPackages.minimal;
+    wine = null;
   };
 
   brave = callPackage ../applications/networking/browsers/brave { };
@@ -29432,6 +29426,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  waylock = callPackage ../applications/misc/waylock {};
+
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
@@ -30206,6 +30202,7 @@ with pkgs;
   lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
 
   lxi-tools = callPackage ../tools/networking/lxi-tools { };
+  lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
@@ -30978,7 +30975,7 @@ with pkgs;
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
-  notepadqq = libsForQt514.callPackage ../applications/editors/notepadqq { };
+  notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     gmime = gmime3;
@@ -32528,6 +32525,10 @@ with pkgs;
   ttyper = callPackage ../applications/misc/ttyper { };
 
   tudu = callPackage ../applications/office/tudu { };
+
+  tumpa = callPackage ../applications/misc/tumpa {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
 
   tuna = python3Packages.callPackage ../os-specific/linux/tuna { };
 

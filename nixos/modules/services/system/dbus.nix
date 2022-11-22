@@ -1,8 +1,6 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, options, pkgs, ... }:
-
-with lib;
+{ config, lib, pkgs, ... }:
 
 let
 
@@ -16,11 +14,11 @@ let
     serviceDirectories = cfg.packages;
   };
 
+  inherit (lib) mkOption types;
+
 in
 
 {
-  ###### interface
-
   options = {
 
     services.dbus = {
@@ -65,31 +63,13 @@ in
         '';
         default = "disabled";
       };
-
-      socketActivated = mkOption {
-        type = types.nullOr types.bool;
-        default = null;
-        visible = false;
-        description = lib.mdDoc ''
-          Removed option, do not use.
-        '';
-      };
     };
   };
 
-  ###### implementation
-
-  config = mkIf cfg.enable {
-    warnings = optional (cfg.socketActivated != null) (
-      let
-        files = showFiles options.services.dbus.socketActivated.files;
-      in
-        "The option 'services.dbus.socketActivated' in ${files} no longer has"
-        + " any effect and can be safely removed: the user D-Bus session is"
-        + " now always socket activated."
-    );
-
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.dbus
+    ];
 
     environment.etc."dbus-1".source = configDir;
 
@@ -102,10 +82,12 @@ in
 
     users.groups.messagebus.gid = config.ids.gids.messagebus;
 
-    systemd.packages = [ pkgs.dbus.daemon ];
+    systemd.packages = [
+      pkgs.dbus
+    ];
 
     security.wrappers.dbus-daemon-launch-helper = {
-      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      source = "${pkgs.dbus}/libexec/dbus-daemon-launch-helper";
       owner = "root";
       group = "messagebus";
       setuid = true;
@@ -114,26 +96,36 @@ in
     };
 
     services.dbus.packages = [
-      pkgs.dbus.out
+      pkgs.dbus
       config.system.path
     ];
 
     systemd.services.dbus = {
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
-      restartTriggers = [ configDir ];
-      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
-    };
-
-    systemd.user = {
-      services.dbus = {
-        # Don't restart dbus-daemon. Bad things tend to happen if we do.
-        reloadIfChanged = true;
-        restartTriggers = [ configDir ];
+      restartTriggers = [
+        configDir
+      ];
+      environment = {
+        LD_LIBRARY_PATH = config.system.nssModules.path;
       };
-      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
-    environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
+    systemd.user.services.dbus = {
+      # Don't restart dbus-daemon. Bad things tend to happen if we do.
+      reloadIfChanged = true;
+      restartTriggers = [
+        configDir
+      ];
+    };
+
+    systemd.user.sockets.dbus.wantedBy = [
+      "sockets.target"
+    ];
+
+    environment.pathsToLink = [
+      "/etc/dbus-1"
+      "/share/dbus-1"
+    ];
   };
 }

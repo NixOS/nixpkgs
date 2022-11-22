@@ -361,8 +361,10 @@ in {
           fi
           echo 'include "${redisConfStore}"' > "${redisConfRun}"
           ${optionalString (conf.requirePassFile != null) ''
-            {echo -n "requirepass "
-            cat ${escapeShellArg conf.requirePassFile}} >> "${redisConfRun}"
+            {
+              echo -n "requirepass "
+              cat ${escapeShellArg conf.requirePassFile}
+            } >> "${redisConfRun}"
           ''}
         '');
         Type = "notify";

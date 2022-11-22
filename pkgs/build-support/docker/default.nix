@@ -547,10 +547,14 @@ rec {
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
             architecture = defaultArch;
+            preferLocalBuild = true;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
-            { nativeBuildInputs = [ jq ]; }
+            {
+              nativeBuildInputs = [ jq ];
+              preferLocalBuild = true;
+            }
             ''
               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
             '';
@@ -925,6 +929,7 @@ rec {
           {
             inherit fromImage maxLayers created;
             imageName = lib.toLower name;
+            preferLocalBuild = true;
             passthru.imageTag =
               if tag != null
               then tag
@@ -1015,6 +1020,7 @@ rec {
         result = runCommand "stream-${baseName}"
           {
             inherit (conf) imageName;
+            preferLocalBuild = true;
             passthru = passthru // {
               inherit (conf) imageTag;
 

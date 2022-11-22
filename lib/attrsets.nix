@@ -3,7 +3,7 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) id;
+  inherit (lib.trivial) flip id mergeAttrs pipe;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
@@ -76,6 +76,25 @@ rec {
   getAttrFromPath = attrPath:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg);
+
+  /* Map each attribute in the given set and merge them into a new attribute set.
+
+     Type:
+       concatMapAttrs ::
+         (String -> a -> AttrSet)
+         -> AttrSet
+         -> AttrSet
+
+     Example:
+       concatMapAttrs
+         (name: value: {
+           ${name} = value;
+           ${name + value} = value;
+         })
+         { x = "a"; y = "b"; }
+       => { x = "a"; xa = "a"; y = "b"; yb = "b"; }
+  */
+  concatMapAttrs = f: flip pipe [ (mapAttrs f) attrValues (foldl' mergeAttrs { }) ];
 
 
   /* Update or set specific paths of an attribute set.
@@ -606,7 +625,7 @@ rec {
   getMan = getOutput "man";
 
   /* Pick the outputs of packages to place in buildInputs */
-  chooseDevOutputs = drvs: builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.

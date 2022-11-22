@@ -16,8 +16,8 @@
   },
   "qtbase": {
     "url": "https://invent.kde.org/qt/qt/qtbase.git",
-    "rev": "98c727f273fc83c24550274bd2728e1aafbd213a",
-    "sha256": "1hwswan0yw6l4rka60ch173sd71ijx0y15gb2hnd3mhzws8gjsb5"
+    "rev": "51258629f2cf37fff8406bf705d79c07fc7135ca",
+    "sha256": "0wsjw7wc493kx6w954plmd5y8qsshbd5wqxdwj350gnv48n63g2k"
   },
   "qtcharts": {
     "url": "https://invent.kde.org/qt/qt/qtcharts.git",
@@ -36,8 +36,8 @@
   },
   "qtdeclarative": {
     "url": "https://invent.kde.org/qt/qt/qtdeclarative.git",
-    "rev": "45d43c04088efb8346979f633f72bb1f23183461",
-    "sha256": "1ad6r1zwzzvl1i2rxkjgp8x5k4ahcf6grfq6xarbbj9qvvb08ny4"
+    "rev": "959b1ac3b7c699ef67ec81155e6e1e579d4e1df7",
+    "sha256": "0f8l214x38hdn768jjfy31pqdjgya6221k38vidnfap522qs1fcm"
   },
   "qtdoc": {
     "url": "https://invent.kde.org/qt/qt/qtdoc.git",
@@ -56,8 +56,8 @@
   },
   "qtimageformats": {
     "url": "https://invent.kde.org/qt/qt/qtimageformats.git",
-    "rev": "1b83a9c73d6e5459ec4c2221b2bd7e5396b5e874",
-    "sha256": "07ry1bfim24aa530xslp8njn1bzalrmrwcx0xz2p2jilhfvvp5fc"
+    "rev": "adbc372b890ed90f006a6c4f3ca56bf0cba477ef",
+    "sha256": "05v47ba06lmhrmm9ivnfnxzv9qdhyx2bbx2lkqjfwax2czmnf81j"
   },
   "qtlocation": {
     "url": "https://invent.kde.org/qt/qt/qtlocation.git",
@@ -101,8 +101,8 @@
   },
   "qtquickcontrols2": {
     "url": "https://invent.kde.org/qt/qt/qtquickcontrols2.git",
-    "rev": "9ff77702cc3649cbaf94046742d682d77cdea698",
-    "sha256": "0sq2j94csmd7ifd1hw4lwv7b82l59iz2258jg50d0j5hcf3acydz"
+    "rev": "5465566a4ad9f6f9758bed304153f0c7fec3437b",
+    "sha256": "03qayykxd07fwp5m1s7dwjvdcv45m3v6zia9k6ipif2bbjbi4dyd"
   },
   "qtquicktimeline": {
     "url": "https://invent.kde.org/qt/qt/qtquicktimeline.git",
@@ -166,8 +166,8 @@
   },
   "qtwayland": {
     "url": "https://invent.kde.org/qt/qt/qtwayland.git",
-    "rev": "9c607c771acdb3d820be7f112db99213a6c6d7eb",
-    "sha256": "1dbilhkldvhwwd2j0g7mwz1jyw9zgzwyyx43rsmnmv9lh36pb3dc"
+    "rev": "4b43f2dc58e71732ebdbe1eaf4392272bc692e6d",
+    "sha256": "157wqyh9wv9kn8671l7dhnv3a4glmqpisqk0vdgnx19b6jdxymvj"
   },
   "qtwebchannel": {
     "url": "https://invent.kde.org/qt/qt/qtwebchannel.git",
