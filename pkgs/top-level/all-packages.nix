@@ -12765,6 +12765,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  veryfasttree = callPackage ../applications/science/biology/veryfasttree { };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
