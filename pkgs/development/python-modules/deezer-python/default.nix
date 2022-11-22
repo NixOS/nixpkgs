@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper around the Deezer API";
     homepage = "https://github.com/browniebroke/deezer-python";
+    changelog = "https://github.com/browniebroke/deezer-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ synthetica ];
   };
