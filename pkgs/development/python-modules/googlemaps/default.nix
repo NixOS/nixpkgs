@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "googlemaps";
-  version = "4.7.0";
+  version = "4.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "googlemaps";
     repo = "google-maps-services-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qn98b7oTU9/u0+EJ4OTOksLquJiWl/od9m498UuFiwo=";
+    hash = "sha256-SwNUoC4x1Z+cqBvuBtDZNZMDcs4XwLj7LWntZ4gZ+vo=";
   };
 
   propagatedBuildInputs = [
