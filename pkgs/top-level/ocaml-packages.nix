@@ -1561,10 +1561,6 @@ let
 
     zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
 
-    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
-      oasis = ocaml_oasis;
-    };
-
     # Jane Street
 
     janePackage =
