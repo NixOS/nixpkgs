@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of v1/v2c/v3 SNMP engine";
     homepage = "https://github.com/pysnmp/pysnmp";
+    changelog = "https://github.com/pysnmp/pysnmp/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
