@@ -95,8 +95,6 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib-parser = doDistribute super.ghc-lib-parser;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
@@ -152,7 +150,7 @@ self: super: {
   stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
 
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-  hlint = doDistribute (enableCabalFlag "ghc-lib" super.hlint);
+  hlint = enableCabalFlag "ghc-lib" super.hlint;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
