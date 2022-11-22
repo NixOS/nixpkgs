@@ -468,6 +468,7 @@ with lib.maintainers; {
   mobile = {
     members = [
       samueldr
+      tomfitzhenry
     ];
     scope = "Maintain Mobile NixOS.";
     shortName = "Mobile";
