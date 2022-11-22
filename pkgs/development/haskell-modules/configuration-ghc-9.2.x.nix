@@ -156,9 +156,6 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_2;
-
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
