@@ -1,7 +1,5 @@
 { lib, callPackage, fetchFromGitHub }:
 
-with lib;
-
 rec {
   dockerGen = {
       version, rev, sha256
@@ -72,7 +70,7 @@ rec {
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
 
-    moby = buildGoPackage (optionalAttrs stdenv.isLinux rec {
+    moby = buildGoPackage (lib.optionalAttrs stdenv.isLinux rec {
       pname = "moby";
       inherit version;
 
@@ -87,9 +85,9 @@ rec {
         ++ lib.optional withSystemd systemd
         ++ lib.optional withSeccomp libseccomp;
 
-      extraPath = optionals stdenv.isLinux (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = lib.optionals stdenv.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
-      extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+      extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
       patches = [
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
@@ -150,7 +148,7 @@ rec {
       ++ lib.optional composeSupport docker-compose;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
-    buildGoPackage (optionalAttrs (!clientOnly) {
+  buildGoPackage (lib.optionalAttrs (!clientOnly) {
     # allow overrides of docker components
     # TODO: move packages out of the let...in into top-level to allow proper overrides
     inherit docker-runc docker-containerd docker-proxy docker-tini moby;
@@ -180,7 +178,7 @@ rec {
     postPatch = ''
       patchShebangs man scripts/build/
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
-    '' + optionalString (plugins != []) ''
+    '' + lib.optionalString (plugins != []) ''
       substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
           "${pluginsRef}/libexec/docker/cli-plugins"
     '';
@@ -211,7 +209,7 @@ rec {
 
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
-    '' + optionalString (!clientOnly) ''
+    '' + lib.optionalString (!clientOnly) ''
       # symlink docker daemon to docker cli derivation
       ln -s ${moby}/bin/dockerd $out/bin/dockerd
       ln -s ${moby}/bin/dockerd-rootless $out/bin/dockerd-rootless
@@ -241,7 +239,7 @@ rec {
 
     passthru.tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
 
-    meta = {
+    meta = with lib; {
       homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
