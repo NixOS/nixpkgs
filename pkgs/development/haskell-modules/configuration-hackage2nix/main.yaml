@@ -589,6 +589,7 @@ supported-platforms:
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
   midi-alsa:                                    [ platforms.linux ]
+  OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
   password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
   password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
   reactivity:                                   [ platforms.windows ]
