@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
       --set-rpath ${rpath}:$out/lib \
       $out/share/react-native-debugger
 
-    wrapProgram $out/share/react-native-debugger --add-flags --no-sandbox
+    wrapProgram $out/share/react-native-debugger \
+      --add-flags --no-sandbox
 
     ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
 
