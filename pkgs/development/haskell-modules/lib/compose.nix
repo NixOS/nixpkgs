@@ -504,4 +504,144 @@ rec {
       libraryPkgconfigDepends = propagatedPlainBuildInputs old.libraryPkgconfigDepends or [ ];
       testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
     });
+
+  # The motivation for this utility is for use with CI builds in order to avoid
+  # a full rebuild on every commit to the trunk development branch or every pull
+  # request.  For more details, see:
+  #
+  # https://harry.garrood.me/blog/easy-incremental-haskell-ci-builds-with-ghc-9.4/
+  #
+  # This accelerates a Haskell package build by building the package
+  # "incrementally", meaning that a "full" rebuild is only done once every
+  # interval and all rebuilds in between are "incremental", meaning that each
+  # incremental build reuses the `dist` directory from the last full rebuild.
+  #
+  # This only works for packages that use `git` for their source.
+  #
+  # The `interval` argument is in seconds.  For example, if you wanted to do a
+  # full rebuild every day, you would specify `interval = 24 * 60 * 60;`.
+  #
+  # This function may require a sufficiently new version of macOS because it
+  # disables the work-around from https://github.com/NixOS/nixpkgs/pull/25537
+  # in order for incremental builds to work on Mac.  However, the work-around
+  # appears to no longer be necessary anyway on newer versions of macOS.  For
+  # example, this was stress-tested successfully without the work-around on
+  # macOS Ventura 13.0.1.
+  #
+  # The type of this function is conceptually:
+  #
+  # ```
+  # incremental
+  #   : { interval : Duration
+  #     , makePreviousBuild : (Derivation → Derivation) → Derivation
+  #     }
+  #   → Derivation
+  #   → Derivation
+  # ```
+  #
+  # Example usage:
+  #
+  # ```
+  # let
+  #   interval = 24 * 60 * 60;  # 1 day
+  #
+  #   makePreviousBuild =
+  #     floorToTimeBoundary:
+  #       import "${floorToTimeBoundary ./path/to/repository}/example.nix";
+  #
+  # in
+  #   incremental { inherit interval makePreviousBuild; } example
+  # ```
+  #
+  # To understand how the above example works, suppose that:
+  #
+  # - you are building a Haskell package named `example`
+  # - `./path/to/repository/example.nix` is a Nix file that builds that package
+  #
+  # Then what `floorToTimeBoundary` does in the above example is it takes the
+  # path to any repository (e.g. `./path/to/repository`) and rolls back that
+  # repository to the last time boundary (e.g. the latest UTC midnight in the
+  # above example, because the `interval` is 1 day).  Then all we need to do
+  # is locate and build the older version of our package stored within that
+  # earlier snapshot of the repository (in the above example by importing
+  # `./example.nix`, although the exact details of how to locate and build the
+  # the Haskell package will vary from repository to repository).
+  #
+  # In other words, if you explain to the `incremental` function how to build
+  # the older version of your package then it will take care of automatically
+  # selecting the correct revision to use for the full build.
+  incremental = { interval, makePreviousBuild, extraFetchGitArgs ? { } }: pkg:
+    let
+      requiredNixVersion = "2.12.0pre20221128_32c182b";
+      requiredGHCVersion = "9.4";
+
+      truncate = src:
+        let
+          srcAttributes =
+            if lib.isAttrs src
+            then src
+            else { url = src; };
+
+          url = srcAttributes.url or null;
+          name = srcAttributes.name or null;
+          submodules = srcAttributes.fetchSubmodules or null;
+
+          arguments = {
+            ${ if name == null then null else "name" } = name;
+            ${ if url == null then null else "url" } = url;
+            ${ if submodules == null then null else "submodules" } = submodules;
+          };
+
+          # You might wonder why we don't just do something like:
+          #
+          # builtins.fetchGit {
+          #   inherit (srcAttributes) rev;
+          #   date = "1 day ago";
+          # }
+          #
+          # This does not produce the desired behavior because it will not
+          # ensure that each incremental build for a given day shares the same
+          # full build (especially if the prior day had multiple commits, each
+          # of which could potentially be selected as the commit from "1 day
+          # ago".
+          #
+          # Instead, what we want is for each build for a given day (or whatever
+          # time interval) to select the same commit from the prior day to
+          # promote reuse of the same full build.  That's why we need to do this
+          # complicated calculation at evaluation time in Nix instead of reusing
+          # Git's built-in support for relative date specifications.
+          startingTime =
+              if      srcAttributes ? rev
+                  &&  srcAttributes.rev != "0000000000000000000000000000000000000000"
+              then
+                let
+                  startingRepository = builtins.fetchGit (arguments // {
+                    inherit (srcAttributes) rev;
+                  });
+                in
+                  startingRepository.lastModified
+              else
+                builtins.currentTime;
+
+        in
+          builtins.fetchGit (arguments // {
+            date = "${toString ((startingTime / interval) * interval)}";
+          } // extraFetchGitArgs);
+
+      previousBuild =
+          (overrideCabal
+            (old: {
+              doInstallIntermediates = true;
+              enableSeparateIntermediatesOutput = true;
+            })
+            (makePreviousBuild truncate)
+          ).dist;
+
+    in
+      if builtins.compareVersions requiredNixVersion builtins.nixVersion == 1 then
+        abort "pkgs.haskell.lib.incremental requires Nix version ${requiredNixVersion} or newer"
+      else if builtins.compareVersions requiredGHCVersion pkg.passthru.compiler.version == 1 then
+        abort "pkgs.haskell.lib.incremental requires GHC version ${requiredGHCVersion} or newer"
+      else
+        overrideCabal (old: { inherit previousBuild; }) pkg;
 }
