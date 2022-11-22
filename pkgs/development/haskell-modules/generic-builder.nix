@@ -79,6 +79,7 @@ in
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, enableSeparateDistOutput ? false
 , # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -88,6 +89,10 @@ in
   # This can make it slightly faster to load this library into GHCi, but takes
   # extra disk space and compile time.
   enableLibraryForGhci ? false
+  # Set this to a previous build of this same package to reuse the build
+  # products from that prior build as a starting point for accelerating this
+  # build
+, previousBuild ? null
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -304,7 +309,8 @@ stdenv.mkDerivation ({
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
          ++ (optional enableSeparateDocOutput "doc")
-         ++ (optional enableSeparateBinOutput "bin");
+         ++ (optional enableSeparateBinOutput "bin")
+         ++ (optional enableSeparateDistOutput "dist");
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -457,11 +463,16 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
-    runHook postBuild
-  '';
+  buildPhase =
+    optionalString (previousBuild != null) ''
+      mkdir -p dist/build
+      tar --extract --gzip --directory dist/build --file ${previousBuild.dist}
+    ''
+    + ''
+      runHook preBuild
+      ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
+      runHook postBuild
+    '';
 
   inherit doCheck;
 
@@ -540,7 +551,9 @@ stdenv.mkDerivation ({
     mkdir -p $doc
     ''}
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
-
+    ${optionalString enableSeparateDistOutput ''
+    tar --create --gzip --mtime='1970-01-01T00:00:00Z' --file "$dist" --directory dist/build .
+    ''}
     runHook postInstall
   '';
 
@@ -705,6 +718,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
+// optionalAttrs enableSeparateDistOutput {
+     # Don't strip the dist output
+     preFixupHooks = [ "outputs=(\${outputs[@]/dist})" ];
+   }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

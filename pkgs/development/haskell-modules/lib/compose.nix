@@ -463,4 +463,59 @@ rec {
   allowInconsistentDependencies = overrideCabal (drv: {
     allowInconsistentDependencies = true;
   });
+
+  # The motivation for this utility is for use for CI builds in order to avoid a
+  # full rebuild on every commit to the trunk development branch or every pull
+  # request.  For more details, see:
+  #
+  # https://harry.garrood.me/blog/easy-incremental-haskell-ci-builds-with-ghc-9.4/
+  #
+  # This accelerates a Haskell package build by building the package
+  # "incrementally", meaning that a "full" rebuild is only done once every
+  # interval and all rebuilds in between are "incremental", meaning that each
+  # incremental build reuses the `dist` directory from the last full rebuild.
+  #
+  # This only works for packages that use `git` for their source.
+  incremental = { interval }: pkg:
+    let
+      requiredNixVersion = "2.12.0";
+      requiredGHCVersion = "9.4";
+    in
+      if builtins.compareVersions requiredNixVersion builtins.nixVersion == 1 then
+        abort "pkgs.haskell.lib.incremental requires Nix version ${requiredNixVersion} or newer"
+      else if builtins.compareVersions requiredGHCVersion pkg.passthru.compiler.version == 1 then
+        abort "pkgs.haskell.lib.incremental requires GHC version ${requiredGHCVersion} or newer"
+      else
+        overrideCabal
+          (old: {
+            previousBuild =
+              overrideCabal
+              (old: {
+                enableSeparateDistOutput = true;
+                src =
+                  let
+                    srcAttributes =
+                      if lib.isAttrs old.src
+                      then old.src
+                      else { url = old.src; };
+
+                    url = srcAttributes.url or null;
+                    name = srcAttributes.name or null;
+                    submodules = srcAttributes.fetchSubmodules or null;
+
+                  in
+                    builtins.fetchGit
+                      { ${ if name == null then null else "name" } = name;
+                        ${ if url == null then null else "url" } = url;
+                        ${ if submodules == null then null else "submodules" } = submodules;
+                        date =
+                          let
+                            now = builtins.currentTime;
+                          in
+                            "${toString ((now / interval) * interval)}";
+                      };
+              })
+              pkg;
+          })
+          pkg;
 }
