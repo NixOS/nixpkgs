@@ -3560,6 +3560,8 @@ self: super: with self; {
 
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
+  fvs = callPackage ../development/python-modules/fvs { };
+
   fx2 = callPackage ../development/python-modules/fx2 { };
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
@@ -4153,6 +4155,8 @@ self: super: with self; {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heatshrink2 = callPackage ../development/python-modules/heatshrink2 { };
+
   heatzypy = callPackage ../development/python-modules/heatzypy { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
@@ -4402,6 +4406,8 @@ self: super: with self; {
   ics = callPackage ../development/python-modules/ics { };
 
   idasen = callPackage ../development/python-modules/idasen { };
+
+  icoextract = callPackage ../development/python-modules/icoextract { };
 
   icontract = callPackage ../development/python-modules/icontract { };
 
@@ -8141,6 +8147,8 @@ self: super: with self; {
   pymetno = callPackage ../development/python-modules/pymetno { };
 
   pymicrobot = callPackage ../development/python-modules/pymicrobot { };
+
+  pymilter = callPackage ../development/python-modules/pymilter { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
