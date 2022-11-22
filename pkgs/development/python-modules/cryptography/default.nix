@@ -27,19 +27,19 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "38.0.1"; # Also update the hash in vectors.nix
+  version = "38.0.3"; # Also update the hash in vectors.nix
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HbPYB6FJMfoxf5ZDVpXZ7Dhr57hLYYzGHPpdCLCuM9c=";
+    hash = "sha256-v75u4ZYVsHqYsdIofWpgc/c0c1tJ7kWxEyTYXvxNXL0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-o8l13fnfEUvUdDasq3LxSPArozRHKVsZfQg9DNR6M6Q=";
+    hash = "sha256-lzHLW1N4hZj+nn08NZiPVM/X+SEcIsuZDjEOy0OOkSc=";
   };
 
   cargoRoot = "src/rust";
