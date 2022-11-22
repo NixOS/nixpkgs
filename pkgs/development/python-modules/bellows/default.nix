@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.34.3";
+  version = "0.34.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7jaXNz7i+kF64T+5/QWKGpxHCkg/M9U2hbWrVB2tjH8=";
+    sha256 = "sha256-JUI2jUUc2i+/6mRYNhmuAOmAS4nCzMZwyM8ug0pOFfc=";
   };
 
   propagatedBuildInputs = [
