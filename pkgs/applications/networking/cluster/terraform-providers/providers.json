@@ -950,13 +950,13 @@
     "version": "1.7.0"
   },
   "rancher2": {
-    "hash": "sha256-TqztIk0sHevfv+BpNZJUs1XbwrbzJtcqdafGN5fTVaE=",
+    "hash": "sha256-DInP+DpCBOsBdlg1tiujlmN20WB5VQbeHgOiabEv9Zc=",
     "owner": "rancher",
     "provider-source-address": "registry.terraform.io/rancher/rancher2",
     "repo": "terraform-provider-rancher2",
-    "rev": "v1.24.2",
+    "rev": "v1.25.0",
     "vendorHash": "sha256-Ntq4wxXPUGbu4+6X1pBsmQsqfJ/jccTiHDJeHVpWe8Y=",
-    "version": "1.24.2"
+    "version": "1.25.0"
   },
   "random": {
     "hash": "sha256-oYtvVK0OOHyLUG6amhkvmr6zlbzy0CKoS3DxztoLbdE=",
