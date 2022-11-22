@@ -29,6 +29,6 @@ buildGoModule rec {
     description = "Build a digital writing community";
     homepage = "https://github.com/writeas/writefreely";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }
