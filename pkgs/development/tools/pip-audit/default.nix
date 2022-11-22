@@ -31,7 +31,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-S3v2utDLZOY7RXOnMQV8Zo7h6vMPyiwlws/EftXFpTM=";
   };
 
@@ -84,6 +84,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for scanning Python environments for known vulnerabilities";
     homepage = "https://github.com/trailofbits/pip-audit";
+    changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
