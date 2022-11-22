@@ -74,7 +74,6 @@ in {
   # Jailbreaks & Version Updates
 
   aeson = self.aeson_2_1_1_0;
-  lens-aeson = self.lens-aeson_1_2_2;
 
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
