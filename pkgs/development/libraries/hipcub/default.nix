@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -20,8 +21,9 @@ assert buildBenchmarks -> gbenchmark != null;
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation rec {
   pname = "hipcub";
+  repoVersion = "2.12.0";
   rocmVersion = "5.3.1";
-  version = "2.12.0-${rocmVersion}";
+  version = "${repoVersion}-${rocmVersion}";
 
   outputs = [
     "out"
@@ -77,6 +79,16 @@ stdenv.mkDerivation rec {
     mv $out/bin/benchmark_* $benchmark/bin
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/hipCUB/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version hipcub "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version hipcub "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
   '';
 
   meta = with lib; {

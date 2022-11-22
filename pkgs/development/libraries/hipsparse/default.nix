@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -27,8 +28,9 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "hipsparse";
+  repoVersion = "2.3.1";
   rocmVersion = "5.3.1";
-  version = "2.3.1-${rocmVersion}";
+  version = "${repoVersion}-${rocmVersion}";
 
   outputs = [
     "out"
@@ -120,6 +122,16 @@ in stdenv.mkDerivation rec {
     mv $out/bin/hipsparse-test $test/bin
     mv /build/source/matrices $test
     rmdir $out/bin
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/hipSPARSE/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version hipsparse "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version hipsparse "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
   '';
 
   meta = with lib; {

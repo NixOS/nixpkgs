@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -17,8 +18,9 @@ assert buildTests -> chrpath != null;
 
 stdenv.mkDerivation rec {
   pname = "rccl";
+  repoVersion = "2.12.10";
   rocmVersion = "5.3.1";
-  version = "2.12.10-${rocmVersion}";
+  version = "${repoVersion}-${rocmVersion}";
 
   outputs = [
     "out"
@@ -72,6 +74,16 @@ stdenv.mkDerivation rec {
     mkdir -p $test/bin
     mv $out/bin/* $test/bin
     rmdir $out/bin
+  '';
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rccl/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rccl "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rccl "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
   '';
 
   meta = with lib; {
