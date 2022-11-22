@@ -13,11 +13,14 @@ rec {
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose
-      , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
-      , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
-      , nixosTests
+      , sqlite, iproute2, docker-buildx, docker-compose
+      , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
+      , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
+      , withSystemd ? true, systemd
+      , withBtrfs ? true, btrfs-progs
+      , withLvm ? true, lvm2
+      , withSeccomp ? true, libseccomp
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -46,7 +49,8 @@ rec {
         sha256 = containerdSha256;
       };
 
-      buildInputs = oldAttrs.buildInputs ++ [ libseccomp ];
+      buildInputs = oldAttrs.buildInputs
+        ++ lib.optional withSeccomp [ libseccomp ];
     });
 
     docker-tini = tini.overrideAttrs (oldAttrs: {
@@ -77,7 +81,11 @@ rec {
       goPackagePath = "github.com/docker/docker";
 
       nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
-      buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
+      buildInputs = [ sqlite ]
+        ++ lib.optional withLvm lvm2
+        ++ lib.optional withBtrfs btrfs-progs
+        ++ lib.optional withSystemd systemd
+        ++ lib.optional withSeccomp libseccomp;
 
       extraPath = optionals stdenv.isLinux (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
@@ -132,15 +140,21 @@ rec {
           --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
       '';
 
-      DOCKER_BUILDTAGS = [ "journald" "seccomp" ];
+      DOCKER_BUILDTAGS = lib.optional withSystemd "journald"
+        ++ lib.optional withBtrfs "exclude_graphdriver_btrfs"
+        ++ lib.optional withLvm "exclude_graphdriver_devicemapper"
+        ++ lib.optional withSeccomp "seccomp";
     });
 
-    plugins = optionals buildxSupport [ docker-buildx ]
-      ++ optionals composeSupport [ docker-compose ];
+    plugins = lib.optional buildxSupport docker-buildx
+      ++ lib.optional composeSupport docker-compose;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage (optionalAttrs (!clientOnly) {
-   } // rec {
+    # allow overrides of docker components
+    # TODO: move packages out of the let...in into top-level to allow proper overrides
+    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+  } // rec {
     pname = "docker";
     inherit version;
 
@@ -156,9 +170,12 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = optionals (!clientOnly) [
-      sqlite lvm2 btrfs-progs systemd libseccomp
-    ] ++ plugins;
+    buildInputs = lib.optional (!clientOnly) sqlite
+      ++ lib.optional withLvm lvm2
+      ++ lib.optional withBtrfs btrfs-progs
+      ++ lib.optional withSystemd systemd
+      ++ lib.optional withSeccomp libseccomp
+      ++ plugins;
 
     postPatch = ''
       patchShebangs man scripts/build/
