@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
     version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/rocm_smi_lib/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-smi "$version"
+    update-source-version rocm-smi "$version" --ignore-same-hash
   '';
 
   meta = with lib; {

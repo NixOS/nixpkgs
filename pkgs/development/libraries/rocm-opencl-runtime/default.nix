@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
     version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-OpenCL-Runtime/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocm-opencl-runtime "$version"
+    update-source-version rocm-opencl-runtime "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
