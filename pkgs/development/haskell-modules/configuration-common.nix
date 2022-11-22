@@ -2333,16 +2333,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # Ships a custom cabal-doctest Setup.hs in the release tarball, but the actual
-  # test suite is commented out, so the required dependency is missing naturally.
-  # We need to use a default Setup.hs instead. Current master doesn't exhibit
-  # this anymore, so this override should be fine to remove once the assert fires.
-  linear-base = assert super.linear-base.version == "0.1.0"; overrideCabal (drv: {
-    preCompileBuildDriver = drv.preCompileBuildDriver or "" + ''
-      rm Setup.hs
-    '';
-  }) super.linear-base;
-
   # https://github.com/peti/hopenssl/issues/5
   hopenssl = super.hopenssl.override { openssl = pkgs.openssl_1_1; };
 
