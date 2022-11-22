@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "k5test";
   version = "0.10.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -33,13 +34,16 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [ "k5test" ];
+  pythonImportsCheck = [
+    "k5test"
+  ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
+    changelog = "https://github.com/pythongssapi/k5test/releases/tag/v{version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }
