@@ -1,4 +1,4 @@
-{ lib, gccStdenv, fetchurl
+args @ { lib, stdenv, llvmPackages_12, fetchurl
 , which
 , attr, e2fsprogs
 , curl, libargon2, librsync, libthreadar
@@ -10,9 +10,9 @@
 with lib;
 
 let
-  # Fails to build with clang on Darwin:
+  # Fails to build with clang-11 on Darwin:
   # error: exception specification of overriding function is more lax than base version
-  stdenv = gccStdenv;
+  stdenv = if args.stdenv.isDarwin then llvmPackages_12.stdenv else args.stdenv;
 in
 
 stdenv.mkDerivation rec {
