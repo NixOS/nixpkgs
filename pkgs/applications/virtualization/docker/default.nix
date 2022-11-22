@@ -237,7 +237,11 @@ rec {
       installManPage man/*/*.[1-9]
     '';
 
-    passthru.tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+    passthru = {
+      # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
+      inherit moby-src;
+      tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+    };
 
     meta = with lib; {
       homepage = "https://www.docker.com/";
@@ -245,9 +249,6 @@ rec {
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
     };
-
-    # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
-    inherit moby-src;
   });
 
   # Get revisions from
