@@ -480,6 +480,8 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  enumer = callPackage ../tools/misc/enumer { };
+
   evans = callPackage ../development/tools/evans { };
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
@@ -1393,6 +1395,8 @@ with pkgs;
   midimonster = callPackage ../tools/audio/midimonster { };
 
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
+
+  mnc = callPackage ../tools/misc/mnc { };
 
   mprocs = callPackage ../tools/misc/mprocs { };
 
@@ -6451,6 +6455,8 @@ with pkgs;
   ets = callPackage ../tools/misc/ets { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
+
+  evcc = callPackage ../servers/home-automation/evcc { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
@@ -27157,7 +27163,9 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  zeal = libsForQt5.callPackage ../data/documentation/zeal { };
+  zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
+  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal { };
+  zeal = zeal-qt5;
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
 
@@ -29391,9 +29399,11 @@ with pkgs;
     electron = electron_17;
   };
 
-  wlroots = wlroots_0_15;
-  wlroots_0_14 = callPackage ../development/libraries/wlroots/0.14.nix { };
-  wlroots_0_15 = callPackage ../development/libraries/wlroots/0.15.nix { };
+  inherit (callPackages ../development/libraries/wlroots {})
+    wlroots_0_14
+    wlroots_0_15
+    wlroots_0_16
+    wlroots;
 
   sway-unwrapped = callPackage ../applications/window-managers/sway { };
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
