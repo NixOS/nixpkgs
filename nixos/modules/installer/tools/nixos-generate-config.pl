@@ -596,22 +596,10 @@ ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 sub generateNetworkingDhcpConfig {
-    # FIXME disable networking.useDHCP by default when switching to networkd.
     my $config = <<EOF;
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  # Enables DHCP on all ethernet and wireless LAN interfaces.
   networking.useDHCP = lib.mkDefault true;
 EOF
-
-    foreach my $path (glob "/sys/class/net/*") {
-        my $dev = basename($path);
-        if ($dev ne "lo") {
-            $config .= "  # networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
-        }
-    }
-
     return $config;
 }
 

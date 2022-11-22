@@ -74,6 +74,7 @@ in
         enable = true;
       }
       (mkIf cfg.useDHCP {
+        wait-online.anyInterface = lib.mkDefault true;
         networks."99-ethernet-default-dhcp" = lib.mkIf cfg.useDHCP {
           # We want to match physical ethernet interfaces as commonly
           # found on laptops, desktops and servers, to provide an
