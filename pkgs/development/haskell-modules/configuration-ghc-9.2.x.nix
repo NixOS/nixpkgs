@@ -122,18 +122,6 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  # 2022-09-02: Too strict bounds on lens
-  # https://github.com/haskell-servant/servant/pull/1607/files
-  servant-docs = doJailbreak super.servant-docs;
-  servant-foreign = doJailbreak super.servant-foreign;
-  servant-auth = doJailbreak super.servant-auth;
-  servant-auth-docs = doJailbreak super.servant-auth-docs;
-  servant-auth-server = doJailbreak super.servant-auth-server;
-  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
-  # 2022-09-02: Too strict bounds on lens
-  # https://github.com/haskell-servant/servant-multipart/pull/64
-  servant-multipart = doJailbreak super.servant-multipart;
-
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
