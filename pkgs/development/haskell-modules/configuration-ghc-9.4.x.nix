@@ -130,8 +130,6 @@ in {
   # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
   # https://github.com/qfpl/tasty-hedgehog/pull/63
   tasty-hedgehog = self.tasty-hedgehog_1_4_0_0;
-  # due to tasty-hedgehog
-  retry = checkAgainAfter super.tasty-hedgehog "1.3.0.0" "tasty-hedgehog broken" (dontCheck super.retry);
 
   # https://github.com/dreixel/syb/issues/38
   syb = dontCheck super.syb;
