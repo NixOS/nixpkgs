@@ -27752,9 +27752,9 @@ with pkgs;
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
-  bottles = callPackage ../applications/misc/bottles {
-    wine = null;
-  };
+  bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
+
+  bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
