@@ -127,9 +127,9 @@ in {
   # We need >= 1.1.2 for ghc-9.4 support, but we don't have 1.1.x in
   # hackage-packages.nix
   hedgehog = doDistribute (dontHaddock super.hedgehog_1_2);
-  # does not work with hedgehog 1.2 yet:
+  # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
   # https://github.com/qfpl/tasty-hedgehog/pull/63
-  tasty-hedgehog = markBroken super.tasty-hedgehog;
+  tasty-hedgehog = self.tasty-hedgehog_1_4_0_0;
   # due to tasty-hedgehog
   retry = checkAgainAfter super.tasty-hedgehog "1.3.0.0" "tasty-hedgehog broken" (dontCheck super.retry);
 
