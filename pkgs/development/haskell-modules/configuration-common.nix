@@ -170,6 +170,10 @@ self: super: {
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
 
+  # Fix build with time >= 1.10 while retaining compat with time < 1.9
+  mbox = appendPatch ./patches/mbox-time-1.10.patch
+    (overrideCabal { editedCabalFile = null; revision = null; } super.mbox);
+
   # Too strict bounds on base, optparse-applicative: https://github.com/edsko/friendly/issues/5
   friendly = doJailbreak super.friendly;
 
