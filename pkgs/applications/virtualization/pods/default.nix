@@ -11,23 +11,24 @@
 , wrapGAppsHook4
 , gtksourceview5
 , libadwaita
+, libpanel
 }:
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.0-beta.7";
+  version = "1.0.0-beta.8";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b44x+VyoiDafsPqfCTPm70zZJfNYQ31/UXsrXP6K29E=";
+    sha256 = "sha256-WLjXeTtg5DlZbENWYC6lHj6ccU1HGLN+v7xl5sXXvE0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-kgXt5enZ0VJr6hmEVcCREna4Y53q1jEFzUMsGtV2zvY=";
+    sha256 = "sha256-/Z0vp9Fn49+PhXwtt4Z0on4CghU1Hnu4gWcjzAWeCFk=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
+    libpanel
   ];
 
   meta = with lib; {
