@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iWDKF4FZJPL6wHxVbvj2zlY0sqpBMXki9e7uuysX1o0=";
+    hash = "sha256-iWDKF4FZJPL6wHxVbvj2zlY0sqpBMXki9e7uuysX1o0=";
   };
 
   propagatedBuildInputs = [
@@ -76,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
