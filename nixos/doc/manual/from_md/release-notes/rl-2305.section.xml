@@ -13,7 +13,9 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Create the first release note entry in this section!
+          Cinnamon has been updated to 5.6, see
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/201328#issue-1449910204">the
+          pull request</link> for what is changed.
         </para>
       </listitem>
     </itemizedlist>
