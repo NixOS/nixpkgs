@@ -242,65 +242,27 @@ let
 
 in
 rec {
-  binaryCrystal_1_0 = genericBinary {
-    version = "1.0.0";
-    sha256s = {
-      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
-      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
-      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
-      aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
-    };
-  };
-
   binaryCrystal_1_2 = genericBinary {
-    version = "1.2.0";
+    version = "1.2.2";
     sha256s = {
-      aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
+      x86_64-linux = "sha256-sW5nhihW/6Dkq95i3vJNWs2D1CtQhujhxVbgQCAas6E=";
+      aarch64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
+      x86_64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
+      aarch64-linux = "sha256-QgPKUDFyodqY1+b85AybSpbbr0RmfISdNpB08Wf34jo=";
     };
-  };
-
-  binaryCrystal_1_5 = genericBinary {
-    version = "1.5.1";
-    sha256s = {
-      x86_64-linux = "sha256-pHXD2Z2+Dy1actRx+iXgPBJLWZ5HM27tdGlztLTXh7w=";
-      #i686-linux = ""; no prebuilt binaries since 1.2.0
-      x86_64-darwin = "sha256-QywvyZIkf2Ztt+VfsVUJRBUQgxpyvro0r/otdrby4JI=";
-      aarch64-linux = "sha256-SdgHd3e5R+/gF7OYz3MEaC7ezI/jcyfpCWmZ3qPeRBI=";
-      aarch64-darwin = "sha256-QywvyZIkf2Ztt+VfsVUJRBUQgxpyvro0r/otdrby4JI=";
-    };
-  };
-
-  crystal_1_0 = generic {
-    version = "1.0.0";
-    sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
-    binary = binaryCrystal_1_0;
-    extraBuildInputs = [ libatomic_ops ];
-  };
-
-  crystal_1_1 = generic {
-    version = "1.1.1";
-    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
-    binary = crystal_1_0;
-    extraBuildInputs = [ libatomic_ops ];
   };
 
   crystal_1_2 = generic {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = if isAarch64Darwin then binaryCrystal_1_2 else crystal_1_1;
+    binary = binaryCrystal_1_2;
     extraBuildInputs = [ libatomic_ops ];
-  };
-
-  crystal_1_5 = generic {
-    version = "1.5.1";
-    sha256 = "sha256-twDWnJBLc5tvkg3HvbxXJsCPTMJr9vGvvHvfukMXGyA=";
-    binary = binaryCrystal_1_5;
   };
 
   crystal_1_6 = generic {
     version = "1.6.2";
     sha256 = "sha256-WgU6Y8ww1IYyB0vd5tXwmWBEL5RiPjHA7YzPd21jlsY=";
-    binary = binaryCrystal_1_5;
+    binary = binaryCrystal_1_2;
   };
 
   crystal = crystal_1_6;
