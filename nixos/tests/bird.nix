@@ -15,7 +15,6 @@ let
     environment.systemPackages = with pkgs; [ jq ];
 
     networking = {
-      useNetworkd = true;
       useDHCP = false;
       firewall.enable = false;
     };

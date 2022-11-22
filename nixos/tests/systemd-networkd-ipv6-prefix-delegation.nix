@@ -167,7 +167,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
 
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         # Consider enabling this in production and generating firewall rules
         # for fowarding/input from the configured interfaces so you do not have
@@ -274,10 +273,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     client = {
       virtualisation.vlans = [ 2 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
 
       # make the network-online target a requirement, we wait for it in our test script
       systemd.targets.network-online.wantedBy = [ "multi-user.target" ];

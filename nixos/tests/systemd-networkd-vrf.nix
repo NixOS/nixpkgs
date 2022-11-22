@@ -10,7 +10,6 @@ in {
 
       networking = {
         useDHCP = false;
-        useNetworkd = true;
         firewall.checkReversePath = "loose";
       };
 
@@ -74,7 +73,6 @@ in {
       virtualisation.vlans = [ 1 ];
       networking = {
         useDHCP = false;
-        useNetworkd = true;
       };
 
       services.openssh.enable = true;
@@ -98,7 +96,6 @@ in {
       virtualisation.vlans = [ 2 ];
       networking = {
         useDHCP = false;
-        useNetworkd = true;
       };
 
       systemd.network = {
@@ -119,7 +116,6 @@ in {
       virtualisation.vlans = [ 2 ];
       networking = {
         useDHCP = false;
-        useNetworkd = true;
       };
 
       systemd.network = {

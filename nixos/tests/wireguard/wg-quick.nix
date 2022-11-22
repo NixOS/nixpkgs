@@ -18,6 +18,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
         extraConfig = {
           boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
           networking.firewall.allowedUDPPorts = [ 23542 ];
+          networking.useNetworkd = false;
           networking.wg-quick.interfaces.wg0 = {
             address = [ "10.23.42.1/32" "fc00::1/128" ];
             listenPort = 23542;
@@ -40,7 +41,6 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
         ip6 = "fd00::2";
         extraConfig = {
           boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
-          networking.useNetworkd = true;
           networking.wg-quick.interfaces.wg0 = {
             address = [ "10.23.42.2/32" "fc00::2/128" ];
             inherit (wg-snakeoil-keys.peer1) privateKey;

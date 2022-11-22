@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
       virtualisation.vlans = [ 1 ];
 
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.allowedUDPPorts = [ 67 ];
       };
@@ -58,10 +57,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
       virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
-        useNetworkd = true;
-        useDHCP = false;
         firewall.enable = false;
-        interfaces.eth1.useDHCP = true;
       };
     };
   };
