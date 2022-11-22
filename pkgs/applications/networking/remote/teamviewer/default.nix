@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
+, qtbase, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
 , libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
 , wrapQtAppsHook
 }:
@@ -21,7 +21,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
+  buildInputs = [ dbus getconf qtbase qtwebengine qtx11extras libX11 ];
   propagatedBuildInputs = [ qtquickcontrols ];
 
   installPhase = ''
