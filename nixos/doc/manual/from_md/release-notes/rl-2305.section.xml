@@ -1,0 +1,51 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-23.05">
+  <title>Release 23.05 (“Stoat”, 2023.05/??)</title>
+  <para>
+    Support is planned until the end of December 2023, handing over to
+    23.11.
+  </para>
+  <section xml:id="sec-release-23.05-highlights">
+    <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-new-services">
+    <title>New Services</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-notable-changes">
+    <title>Other Notable Changes</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>
