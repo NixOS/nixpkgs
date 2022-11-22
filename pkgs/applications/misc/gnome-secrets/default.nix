@@ -16,7 +16,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "6.5";
+  version = "7.0";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-Hy2W7cvvzVcKtd/KzTn81awoolnfM3ST0Nm70YBLTYY=";
+    sha256 = "sha256-P/1lKmWpwidW3fz2zxgVnFoHmROTVB//byDedoOC4u0=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,8 @@ python3Packages.buildPythonApplication rec {
     pykeepass
     pyotp
     libpwquality
+    validators
+    zxcvbn
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
