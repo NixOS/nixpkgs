@@ -52,6 +52,12 @@ let
       default = "https://${srv}.${domain}";
       defaultText = "https://${srv}.example.com";
     };
+    api-origin = mkOption {
+      description = lib.mdDoc "Origin URL for API, 100 more than web.";
+      type = types.str;
+      default = "http://${cfg.listenAddress}:${toString (cfg."${srv}".port + 100)}";
+      defaultText = ''http://<xref linkend="opt-services.sourcehut.listenAddress"/>:''${toString (<xref linkend="opt-services.sourcehut.${srv}.port"/> + 100)}'';
+    };
     debug-host = mkOption {
       description = lib.mdDoc "Address to bind the debug server to.";
       type = with types; nullOr str;
@@ -528,12 +534,6 @@ in
         options."meta.sr.ht" =
           removeAttrs (commonServiceSettings "meta")
             ["oauth-client-id" "oauth-client-secret"] // {
-          api-origin = mkOption {
-            description = lib.mdDoc "Origin URL for API, 100 more than web.";
-            type = types.str;
-            default = "http://${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
-            defaultText = ''http://<xref linkend="opt-services.sourcehut.listenAddress"/>:''${toString (<xref linkend="opt-services.sourcehut.meta.port"/> + 100)}'';
-          };
           webhooks = mkOption {
             description = lib.mdDoc "The Redis connection used for the webhooks worker.";
             type = types.str;
@@ -1289,29 +1289,6 @@ in
               fi
             '');
         }
-        (mkIf cfg.nginx.enable {
-          services.nginx.virtualHosts."meta.${domain}" = {
-            locations."/query" = {
-              proxyPass = cfg.settings."meta.sr.ht".api-origin;
-              extraConfig = ''
-                if ($request_method = 'OPTIONS') {
-                  add_header 'Access-Control-Allow-Origin' '*';
-                  add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-                  add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-                  add_header 'Access-Control-Max-Age' 1728000;
-                  add_header 'Content-Type' 'text/plain; charset=utf-8';
-                  add_header 'Content-Length' 0;
-                  return 204;
-                }
-
-                add_header 'Access-Control-Allow-Origin' '*';
-                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
-                add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-                add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
-              '';
-            };
-          };
-        })
       ];
     })
 
