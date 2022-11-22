@@ -20,7 +20,7 @@ assert buildTests == false;
 
 stdenv.mkDerivation rec {
   pname = "composable_kernel";
-  version = "unstable-2022-11-02";
+  version = "unstable-2022-11-19";
 
   outputs = [
     "out"
@@ -30,11 +30,13 @@ stdenv.mkDerivation rec {
     "example"
   ];
 
+  # There is now a release, but it's cpu-only it seems to be for a very specific purpose
+  # Thus, we're sticking with the develop branch for now...
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "composable_kernel";
-    rev = "79aa3fb1793c265c59d392e916baa851a55521c8";
-    hash = "sha256-vIfMdvRYCTqrjMGSb7gQfodzLw2wf3tGoCAa5jtfbvw=";
+    rev = "43a889b72e3faabf04c16ff410d387ce28486c3e";
+    hash = "sha256-DDRrWKec/RcOhW3CrN0gl9NZsp0Bjnja7HAiTcEh7qg=";
   };
 
   nativeBuildInputs = [
