@@ -794,7 +794,11 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
-  mongosh = callPackage ../development/tools/mongosh { };
+  mongosh = callPackage ../development/tools/mongosh {
+    buildNpmPackage = buildNpmPackage.override {
+      nodejs = nodejs-16_x;
+    };
+  };
 
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
