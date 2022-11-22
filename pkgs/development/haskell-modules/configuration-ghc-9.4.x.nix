@@ -58,7 +58,6 @@ in {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  doctest = self.doctest_0_20_1;
   # consequences of doctest breakage follow:
 
   double-conversion = markBroken super.double-conversion;
