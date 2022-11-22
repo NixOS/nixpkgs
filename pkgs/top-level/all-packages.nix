@@ -7150,6 +7150,8 @@ with pkgs;
 
   git-remote-gcrypt = callPackage ../applications/version-management/git-and-tools/git-remote-gcrypt { };
 
+  git-remote-ipld = callPackage ../applications/version-management/git-and-tools/git-remote-ipld { };
+
   git-remote-hg = callPackage ../applications/version-management/git-and-tools/git-remote-hg { };
 
   git-reparent = callPackage ../applications/version-management/git-and-tools/git-reparent { };
