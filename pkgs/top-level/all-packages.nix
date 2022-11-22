@@ -4294,6 +4294,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  has = callPackage ../applications/misc/has { };
+
   hdate = callPackage ../applications/misc/hdate { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
