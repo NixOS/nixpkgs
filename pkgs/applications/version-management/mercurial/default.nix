@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.3.0";
+    version = "6.3.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-iAOZtVSh3mQQFs5fNbiEDXXxjWh7mrHDWNrAWK1m5pg=";
+      sha256 = "sha256-bDmrhzKUjYnPEgh1HdfYXUBCqoIVOXdFG56xM2dYUHI=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-VfIZ1bV8bhjjBL4KNjToPuu8gg9TkChziH2rRKhdRXE=";
+      sha256 = "sha256-UZ/ZSZkAedrm3iUkaQu6zvfX4bhrYDlwR9L9ytf38ZY=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -157,9 +157,9 @@ let
     # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
     test-patchbomb-tls.t
 
-    # Test broken with recent versions of git due to default policy change
-    # https://foss.heptapod.net/mercurial/mercurial-devel/-/merge_requests/302
-    test-convert-git.t
+    # Test wanting TLS 1.0 and 1.1, not available with OpenSSL v3.
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6760
+    test-https.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
