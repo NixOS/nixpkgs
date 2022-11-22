@@ -47,7 +47,6 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? f
         extraConfig = lib.mkMerge [
           commonConfig
           {
-            networking.useNetworkd = true;
             networking.wg-quick.interfaces.wg0 = {
               address = [ "10.23.42.2/32" "fc00::2/128" ];
               inherit (wg-snakeoil-keys.peer1) privateKey;

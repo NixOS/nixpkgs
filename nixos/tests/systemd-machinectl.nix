@@ -7,10 +7,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       # ... and revert unwanted defaults
       networking.useHostResolvConf = false;
 
-      # use networkd to obtain systemd network setup
-      networking.useNetworkd = true;
-      networking.useDHCP = false;
-
       # systemd-nspawn expects /sbin/init
       boot.loader.initScript.enable = true;
 
@@ -30,10 +26,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
     name = "systemd-machinectl";
 
     nodes.machine = { lib, ... }: {
-      # use networkd to obtain systemd network setup
-      networking.useNetworkd = true;
-      networking.useDHCP = false;
-
       # do not try to access cache.nixos.org
       nix.settings.substituters = lib.mkForce [ ];
 
