@@ -590,6 +590,8 @@ with pkgs;
 
   credslayer = callPackage ../tools/security/credslayer { };
 
+  d2 = callPackage ../tools/misc/d2 { };
+
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
   devour = callPackage ../tools/X11/devour {};
