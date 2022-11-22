@@ -358,6 +358,10 @@ let
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
     };
+    "tree-sitter-phpdoc" = {
+      orga = "claytonrcarter";
+      repo = "tree-sitter-phpdoc";
+    };
   };
 
   allGrammars =
