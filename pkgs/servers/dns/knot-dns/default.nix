@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , ngtcp2-gnutls
 , autoreconfHook
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "cea9c1988cdce7752f88fbe37378f65e83c4e54048978b94fb21a9c92f88788f";
+    sha256 = "f736ef284358923e312f8e1e3c6ce7c97b20965b09eb65705e9f7e3d5e9a9d79";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
-    # knsupdate: fix segfault due to NULL pointer access when sending an update
-    (fetchpatch {
-      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/8a6645dab63d8fa7932c7d8f747fe33e8cc97e84.patch";
-      hash = "sha256-qzhSdRH5GqHqN9eLMWbDXmjO4JagsMRSZh3NWRFprao=";
-    })
   ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

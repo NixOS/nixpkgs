@@ -14287,6 +14287,12 @@
     githubId = 32751441;
     name = "urlordjames";
   };
+  ursi = {
+    email = "masondeanm@aol.com";
+    github = "ursi";
+    githubId = 17836748;
+    name = "Mason Mackaman";
+  };
   uskudnik = {
     email = "urban.skudnik@gmail.com";
     github = "uskudnik";

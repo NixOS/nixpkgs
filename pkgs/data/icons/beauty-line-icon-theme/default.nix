@@ -18,9 +18,9 @@ stdenvNoCC.mkDerivation rec {
     owner = "gvolpe";
     repo = pname;
     rev = version;
-    sparseCheckout = ''
-      BeautyLine-V3
-    '';
+    sparseCheckout = [
+      "BeautyLine-V3"
+    ];
     sha256 = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
   };
 
