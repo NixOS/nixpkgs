@@ -65,7 +65,6 @@ in {
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
   lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-  invariant = jailbreakForCurrentVersion super.invariant "0.5.6";
   implicit-hie-cradle = jailbreakForCurrentVersion super.implicit-hie-cradle "0.5.0.0";
 
   haskell-src-meta = doJailbreak super.haskell-src-meta;
