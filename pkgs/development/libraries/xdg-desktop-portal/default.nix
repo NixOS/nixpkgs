@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 })

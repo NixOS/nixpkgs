@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Generic spell checking library";
     homepage = "https://abiword.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
