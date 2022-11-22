@@ -1,4 +1,4 @@
- lib
+{ lib
 , fetchFromGitHub
 , bash
 , glib
