@@ -70,10 +70,6 @@ self: super: {
   extra = dontCheck super.extra;
 
   # Jailbreaks & Version Updates
-
-  # This `doJailbreak` can be removed once we have doctest v0.20
-  aeson-diff = assert super.doctest.version == "0.18.2"; doJailbreak super.aeson-diff;
-
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
