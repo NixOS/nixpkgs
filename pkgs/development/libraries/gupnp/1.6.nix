@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.1";
+  version = "1.6.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hTgUUtKvlbjhSyTUqYljPQ2DzYjRJy8nzLJBbMyDbUc=";
+    sha256 = "sha256-6QBZzIOAXa2T6DvkflOVjwdHHMRk+UQ5HntcgqpRoY8=";
   };
 
   depsBuildBuild = [
