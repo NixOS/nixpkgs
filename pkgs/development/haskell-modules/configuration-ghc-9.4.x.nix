@@ -143,10 +143,6 @@ in {
   vector = dontCheck super.vector;
   vector-binary-instances = doJailbreak super.vector-binary-instances;
 
-  # fixed in 1.16.x but it's not in hackage-packages yet.
-  rebase = jailbreakForCurrentVersion super.rebase "1.15.0.3";
-  rerebase = jailbreakForCurrentVersion super.rerebase "1.15.0.3";
-
   hpack = overrideCabal (drv: {
     # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
