@@ -30,7 +30,7 @@
 let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
-    version = "5.3.1";
+    version = "5.3.3";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
@@ -110,7 +110,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hip";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";

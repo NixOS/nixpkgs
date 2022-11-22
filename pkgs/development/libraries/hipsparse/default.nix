@@ -29,7 +29,7 @@ let
 in stdenv.mkDerivation rec {
   pname = "hipsparse";
   repoVersion = "2.3.1";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [

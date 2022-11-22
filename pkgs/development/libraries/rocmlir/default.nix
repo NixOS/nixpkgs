@@ -9,14 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocmlir";
-  rocmVersion = "5.3.1";
-  # For some reason they didn't add a tag for 5.3.1, should be compatible, change to rocmVersion later
-  version = "5.3.0";
+  rocmVersion = "5.3.3";
+  version = rocmVersion;
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
-    rev = "rocm-${version}"; # change to rocmVersion later
+    rev = "rocm-${rocmVersion}";
     hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
   };
 

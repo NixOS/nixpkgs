@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "tensile";
   repoVersion = "4.34.0";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "Tensile";
     rev = "rocm-${rocmVersion}";
-    hash = "sha256-QWt/zzBrZKM8h3MTnbLX4vN3p6cCQvo67U1C2yqAQxw=";
+    hash = "sha256-6A7REYdIw/ZmjrJh7B+wCXZMleh4bf04TFpRItPtctA=";
   };
 
   buildInputs = [

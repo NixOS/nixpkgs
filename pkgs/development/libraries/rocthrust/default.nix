@@ -24,7 +24,7 @@ assert buildBenchmarks == false;
 stdenv.mkDerivation rec {
   pname = "rocthrust";
   repoVersion = "2.16.0";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
     rev = "rocm-${rocmVersion}";
-    hash = "sha256-cT0VyEVz86xR6qubAY2ncTxtCRTwXrNTWcFyf3mV+y0=";
+    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
   };
 
   nativeBuildInputs = [

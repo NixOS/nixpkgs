@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";

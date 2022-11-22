@@ -22,7 +22,7 @@ assert buildBenchmarks -> gbenchmark != null;
 stdenv.mkDerivation rec {
   pname = "hipcub";
   repoVersion = "2.12.0";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [

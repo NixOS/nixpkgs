@@ -44,14 +44,14 @@ assert buildBenchmarks == false;
 stdenv.mkDerivation rec {
   pname = "rocblas";
   repoVersion = "2.45.0";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocBLAS";
     rev = "rocm-${rocmVersion}";
-    hash = "sha256-GeeICEI1dNE6D+nUUlBtUncLkPowAa5n+bsy160EtaU=";
+    hash = "sha256-z40WxF+suMeIZihBWJPRWyL20S2FUbeZb5JewmQWOJo=";
   };
 
   # We currently need this patch due to faulty toolchain includes

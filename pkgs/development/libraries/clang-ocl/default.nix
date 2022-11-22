@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clang-ocl";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = rocmVersion;
 
   src = fetchFromGitHub {

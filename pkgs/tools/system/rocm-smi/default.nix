@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-smi";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

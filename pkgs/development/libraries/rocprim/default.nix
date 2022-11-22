@@ -19,8 +19,8 @@ assert buildBenchmarks -> gbenchmark != null;
 
 stdenv.mkDerivation rec {
   pname = "rocprim";
-  repoVersion = "2.11.0";
-  rocmVersion = "5.3.1";
+  repoVersion = "2.11.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
     rev = "rocm-${rocmVersion}";
-    hash = "sha256-aapvj9bwwlg7VJfnH1PVR8DulMcJh1xR6B4rPPGU6Q4=";
+    hash = "sha256-jfTuGEPyssARpdo0ZnfVJt0MBkoHnmBtf6Zg4xXNJ1U=";
   };
 
   nativeBuildInputs = [

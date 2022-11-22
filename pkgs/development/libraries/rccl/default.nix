@@ -19,7 +19,7 @@ assert buildTests -> chrpath != null;
 stdenv.mkDerivation rec {
   pname = "rccl";
   repoVersion = "2.12.10";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [

@@ -28,7 +28,7 @@ assert (buildTests || buildBenchmarks) -> llvmPackages != null;
 stdenv.mkDerivation rec {
   pname = "rocfft";
   repoVersion = "1.0.18";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [

@@ -38,7 +38,7 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "miopengemm";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = rocmVersion;
 
   outputs = [

@@ -33,7 +33,7 @@ let
 in stdenv.mkDerivation rec {
   pname = "rocsparse";
   repoVersion = "2.3.2";
-  rocmVersion = "5.3.1";
+  rocmVersion = "5.3.3";
   version = "${repoVersion}-${rocmVersion}";
 
   outputs = [
