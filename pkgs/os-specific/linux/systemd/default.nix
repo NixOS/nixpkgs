@@ -122,13 +122,13 @@ assert withHomed -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "251.8";
+  version = "252.1";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1653143108";
+  releaseTimestamp = "1667246393";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -139,7 +139,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-kao0xJwwJc4zUyaK5yxyGip4E6ADak98iVv5E8Hw0zk=";
+    hash = "sha256-G43qbNF7znTITSM78sOL0qi8nqaA7qIhmiqP/rZKjXY=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
