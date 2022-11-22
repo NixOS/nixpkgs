@@ -13,6 +13,7 @@
 buildPythonPackage rec {
   pname = "arcam-fmj";
   version = "1.0.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "arcam_fmj";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Lmz701qdqFlXro279AdNx+P1o3Q/Om63jKvy854ogto=";
+    hash = "sha256-Lmz701qdqFlXro279AdNx+P1o3Q/Om63jKvy854ogto=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for speaking to Arcam receivers";
     homepage = "https://github.com/elupus/arcam_fmj";
+    changelog = "https://github.com/elupus/arcam_fmj/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
