@@ -334,13 +334,9 @@ package-maintainers:
   pacien:
     - ldgallery-compiler
   peti:
-    - cabal-install
-    - cabal2nix
     - cabal2spec
-    - distribution-nixpkgs
     - funcmp
     - git-annex
-    - hackage-db
     - hledger
     - hledger-interest
     - hledger-ui
@@ -349,8 +345,6 @@ package-maintainers:
     - hsdns
     - hsemail
     - hsyslog
-    - jailbreak-cabal
-    - language-nix
     - logging-facade-syslog
     - nix-paths
     - pandoc
@@ -403,9 +397,15 @@ package-maintainers:
     - zre
   sternenseemann:
     # also maintain upstream package
+    - cabal2nix
+    - distribution-nixpkgs
+    - hackage-db
+    - language-nix
+    - jailbreak-cabal
     - spacecookie
     - gopher-proxy
     # other packages I can help out for
+    - cabal-install
     - systemd
     - fast-logger
     - flat
