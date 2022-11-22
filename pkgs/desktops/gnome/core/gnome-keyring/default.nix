@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
   # - https://github.com/NixOS/nixpkgs/issues/51121
   doCheck = false;
 
+  patches = [
+    ./gnome-keyring-100percent-cpu.patch
+  ];
+
   postPatch = ''
     patchShebangs build
   '';

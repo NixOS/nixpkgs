@@ -1,0 +1,21 @@
+--- gnome-keyring-42.1/pam/gkr-pam-module.c.orig	2022-11-22 12:43:07.114557165 +0530
++++ gnome-keyring-42.1/pam/gkr-pam-module.c	2022-11-22 12:43:46.080649882 +0530
+@@ -378,7 +378,7 @@
+ 	}
+ 
+ 	/* Try valiantly to close unnecessary file descriptors */
+-	for (i = STDERR; i < 64; ++i)
++	for (i = STDERR + 1; i < 64; ++i)
+ 		close (i);
+ 	    
+ 	/* Close unnecessary file descriptors */
+--- gnome-keyring-42.1/daemon/gkd-main.c.orig	2022-11-22 12:42:18.482433965 +0530
++++ gnome-keyring-42.1/daemon/gkd-main.c	2022-11-22 12:42:40.758490397 +0530
+@@ -701,6 +701,7 @@
+ 	}
+ 
+ 	/* Here we are in the resulting daemon or background process. */
++	close( wakeup_fds[0] );
+ 	return wakeup_fds[1];
+ }
+ 
