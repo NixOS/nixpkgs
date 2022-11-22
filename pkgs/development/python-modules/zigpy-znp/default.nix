@@ -49,10 +49,6 @@ buildPythonPackage rec {
     asynctest
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
-
   pythonImportsCheck = [
     "zigpy_znp"
   ];

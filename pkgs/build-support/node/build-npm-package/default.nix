@@ -17,7 +17,7 @@
 , npmBuildScript ? "build"
   # Flags to pass to all npm commands.
 , npmFlags ? [ ]
-  # Flags to pass to `npm ci`.
+  # Flags to pass to `npm ci` and `npm prune`.
 , npmInstallFlags ? [ ]
   # Flags to pass to `npm rebuild`.
 , npmRebuildFlags ? [ ]

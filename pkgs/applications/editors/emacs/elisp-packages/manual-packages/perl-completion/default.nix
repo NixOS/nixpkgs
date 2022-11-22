@@ -1,6 +1,9 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, trivial-build
+, fetchurl
+}:
 
-stdenv.mkDerivation {
+trivial-build {
   name = "perl-completion";
 
   src = fetchurl {
@@ -10,14 +13,8 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  installPhase = ''
-    install -d $out/share/emacs/site-lisp
-    install $src $out/share/emacs/site-lisp/perl-completion.el
-  '';
-
   meta = {
     description = "Minor mode provides useful features for editing perl codes";
     homepage = "http://emacswiki.org/emacs/PerlCompletion";
-    platforms = lib.platforms.all;
   };
 }

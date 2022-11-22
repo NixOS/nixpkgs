@@ -205,7 +205,7 @@ let
         hlint
         hpack
         # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
-        hyper-haskell-server-with-packages
+        # hyper-haskell-server-with-packages # hyper-haskell-server is broken
         icepeak
         idris
         ihaskell

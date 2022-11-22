@@ -73,16 +73,17 @@ lib.makeScope pkgs.newScope (self: with self; {
   # will mark the extension as a zend extension or not.
   mkExtension = lib.makeOverridable
     ({ name
-    , configureFlags ? [ "--enable-${name}" ]
+    , configureFlags ? [ "--enable-${extName}" ]
     , internalDeps ? [ ]
     , postPhpize ? ""
     , buildInputs ? [ ]
     , zendExtension ? false
     , doCheck ? true
+    , extName ? name
     , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
-      extensionName = name;
+      extensionName = extName;
 
       outputs = [ "out" "dev" ];
 
@@ -105,7 +106,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
       cdToExtensionRootPhase = ''
         # Go to extension source root.
-        cd "ext/${name}"
+        cd "ext/${extName}"
       '';
 
       preConfigure = ''
@@ -141,7 +142,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         runHook preInstall
 
         mkdir -p $out/lib/php/extensions
-        cp modules/${name}.so $out/lib/php/extensions/${name}.so
+        cp modules/${extName}.so $out/lib/php/extensions/${extName}.so
         mkdir -p $dev/include
         ${rsync}/bin/rsync -r --filter="+ */" \
                               --filter="+ *.h" \
@@ -413,6 +414,16 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "openssl";
           buildInputs = if (lib.versionAtLeast php.version "8.1") then [ openssl ] else [ openssl_1_1 ];
+          configureFlags = [ "--with-openssl" ];
+          doCheck = false;
+        }
+        # This provides a legacy OpenSSL PHP extension
+        # For situations where OpenSSL 3 do not support a set of features
+        # without a specific openssl.cnf file
+        {
+          name = "openssl-legacy";
+          extName = "openssl";
+          buildInputs = [ openssl_1_1 ];
           configureFlags = [ "--with-openssl" ];
           doCheck = false;
         }

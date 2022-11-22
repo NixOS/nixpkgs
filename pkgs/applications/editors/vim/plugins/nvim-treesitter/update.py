@@ -91,8 +91,9 @@ def generate_grammar(item):
         generated += """
     generate = true;"""
 
-    generated += """
-  };
+    generated += f"""
+    meta.homepage = "{url}";
+  }};
 """
 
     return generated

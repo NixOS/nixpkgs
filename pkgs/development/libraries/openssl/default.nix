@@ -85,6 +85,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         riscv64-linux = "./Configure linux64-riscv64";
+        mipsel-linux = "./Configure linux-mips32";
         mips64el-linux =
           if stdenv.hostPlatform.isMips64n64
           then "./Configure linux64-mips64"

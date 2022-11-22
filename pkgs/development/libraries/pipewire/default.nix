@@ -68,11 +68,10 @@
 
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
-  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.59";
+    version = "0.3.60";
 
     outputs = [
       "out"
@@ -90,7 +89,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-4wDtdgkjBRlthhwbI3cSQFnbr+gxPQP5j5YnrWiQVp4=";
+      sha256 = "sha256-HDE2QAV2jnEJCqgiGx4TVP4ceeKAqwd4P3OYw6auNAM=";
     };
 
     patches = [
@@ -107,10 +106,24 @@ let
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
 
-      # remove when updating to 0.3.60
-      (fetchpatch { # filter-chain: iterate the port correctly
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/94a64268613adac8ef6f3e6c1f04468220540d00.patch";
-        sha256 = "sha256-IDTB7NgadgR3vKv97Nvd9pBfnOnMi21YsvLdD1Ew7HE=";
+      # Following are backported patches as recommended by upstream.
+      # FIXME: remove in 0.3.61
+      # fix tdesktop with pw-pulse
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b720da771efa950cf380101bed42d5d5ee177908.diff";
+        hash = "sha256-p/BvatnbEJAMLQUUOECKAK7FppaNp9ei3FHjAw2spM8=";
+      })
+
+      # fix a crash when quickly switching Bluetooth profiles
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/bf3516ba0496b644b3944b114253f23964178897.diff";
+        hash = "sha256-LqasplS/azCPekslJQPTd9MZkUcRqA0ks94FtwyY3GA=";
+      })
+
+      # fix no sound in VMs (Pipewire on the guest)
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
+        hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
       })
     ];
 

@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pillow, xlib, six, xvfb-run, sphinx }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pillow
+, xlib
+, six
+, xvfb-run
+, sphinx
+, gobject-introspection
+, pygobject3
+, gtk3
+, libayatana-appindicator }:
 
 buildPythonPackage rec {
   pname = "pystray";
@@ -12,8 +22,8 @@ buildPythonPackage rec {
     sha256 = "sha256-8B178MSe4ujlnGBmQhIu+BoAh1doP9V5cL0ermLQTvs=";
   };
 
-  nativeBuildInputs = [ sphinx ];
-  propagatedBuildInputs = [ pillow xlib six ];
+  nativeBuildInputs = [ gobject-introspection sphinx ];
+  propagatedBuildInputs = [ pillow xlib six pygobject3 gtk3 libayatana-appindicator ];
   checkInputs = [ xvfb-run ];
 
   checkPhase = ''

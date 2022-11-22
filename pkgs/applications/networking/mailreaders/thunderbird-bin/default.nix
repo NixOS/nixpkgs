@@ -42,7 +42,7 @@
 , pango
 , pipewire
 , pciutils
-, libheimdal
+, heimdal
 , libpulseaudio
 , systemd
 , writeScript
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
       pango
       pipewire
       pciutils
-      libheimdal
+      heimdal
       libpulseaudio
       systemd
       ffmpeg

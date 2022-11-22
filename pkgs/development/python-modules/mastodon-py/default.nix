@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.5.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-C1xkdM47WS31Eh8VXHd49x2QeizZAuvAcSnHGiZPLCE=";
+    sha256 = "sha256-bzacM5bJa936sBW+hgm9GOezW8cVY2oPaWApqjDYLSo=";
   };
 
   postPatch = ''

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hSDGVS3Q0LJ7HZPz6/kSRK+9XejETra5FloeEMrkdLg=";
+    hash = "sha256-sC8rJOyQB8mDCCmfpk2lVDPTWxBj7tZxVXQw8agl7t0=";
   };
 
   nativeBuildInputs = [ cmake ninja ];

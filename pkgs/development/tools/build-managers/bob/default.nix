@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "bob";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "benchkram";
     repo = pname;
     rev = version;
-    hash = "sha256-jZDyZVjo4Purt2tabJew5N4MZmLXli6gqBTejv5FGJM=";
+    hash = "sha256-37VhzYxVrt+w1XTDXzKAkJT43TQSyCmX9SAoNnk+o3w=";
   };
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];

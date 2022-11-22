@@ -1565,10 +1565,10 @@ self: super: {
     (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
   ]).overrideScope (lself: lsuper: {
     ormolu = doJailbreak lself.ormolu_0_5_0_1;
-    fourmolu = doJailbreak lself.fourmolu_0_8_2_0;
+    fourmolu = doJailbreak lself.fourmolu_0_9_0_0;
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -1589,12 +1589,12 @@ self: super: {
     # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
     hlint = enableCabalFlag "ghc-lib" lself.hlint_3_4_1;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
-    ghc-lib-parser = lself.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = lself.ghc-lib-parser_9_2_5_20221107;
   });
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex_9_2_0_4 = disableCabalFlag "auto" (super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
   });
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
@@ -1618,6 +1618,9 @@ self: super: {
 
   # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
   hls-refactor-plugin = dontCheck super.hls-refactor-plugin;
+
+  # 2022-11-18: https://github.com/haskell/haskell-language-server/commit/c1a7527c4fb348bee6093d9794b7d3e0c8d563f2
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.1.0.0"; doJailbreak super.hls-fourmolu-plugin;
 
   # 2022-10-27: implicit-hie 0.1.3.0 needs a newer version of Cabal-syntax.
   implicit-hie = super.implicit-hie.override {
@@ -2179,7 +2182,7 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = self.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser = self.ghc-lib-parser_9_2_5_20221107;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   });
 
@@ -2569,11 +2572,6 @@ self: super: {
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
-  # 2022-09-01:
-  # Restrictive upper bound on base.
-  # Remove once version 1.* is released
-  monad-bayes = doJailbreak super.monad-bayes;
-
   # Test failure after libxcrypt migration, reported upstrem at
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
@@ -2648,4 +2646,12 @@ in {
   # Upstream jailbreak is unreleased: https://github.com/srid/heist/commit/988692ea850b3cbe966c7dc4dd26ba1d49647706
   heist-emanote = doJailbreak (dontCheck super.heist-emanote);
 
+  # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
+  # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
+  swarm = doJailbreak (super.swarm.override {
+    witch = super.witch_1_1_2_0;
+    brick = doJailbreak (dontCheck (super.brick_1_3.override {
+      text-zipper = super.text-zipper_0_12;
+    }));
+  });
 })

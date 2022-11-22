@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin && !stdenv.hostPlatform.isStatic)
+      , enableSystemd ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
       # for postgresql.pkgs
@@ -37,14 +37,22 @@ let
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
-    buildInputs =
-      [ zlib readline openssl libxml2 icu ]
+    buildInputs = [
+      zlib
+      readline
+      openssl
+      libxml2
+      icu
+    ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = [ makeWrapper pkg-config ];
+    nativeBuildInputs = [
+      makeWrapper
+      pkg-config
+    ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
@@ -71,25 +79,24 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals stdenv.hostPlatform.isRiscV [ "--disable-spinlocks" ];
 
-    patches =
-      [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
-        (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
-        (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
-        ./patches/specify_pkglibdir_at_runtime.patch
-        ./patches/findstring.patch
-      ]
-      ++ lib.optional stdenv.isLinux (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch);
+    patches = [
+      ./patches/disable-resolve_symlinks.patch
+      ./patches/less-is-more.patch
+      ./patches/hardcode-pgxs-path.patch
+      ./patches/specify_pkglibdir_at_runtime.patch
+      ./patches/findstring.patch
+    ] ++ lib.optionals stdenv.isLinux [
+      (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
+    ];
 
     installTargets = [ "install-world" ];
 
     LC_ALL = "C";
 
-    postConfigure =
-      let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
-        ''
-          # Hardcode the path to pgxs so pg_config returns the path in $out
-          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
-        '';
+    postPatch = ''
+      # Hardcode the path to pgxs so pg_config returns the path in $out
+      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+    '';
 
     postInstall =
       ''
@@ -162,8 +169,6 @@ let
       license     = licenses.postgresql;
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ];
       platforms   = platforms.unix;
-      knownVulnerabilities = optional (!atLeast "9.4")
-        "PostgreSQL versions older than 9.4 are not maintained anymore!";
     };
   };
 
@@ -199,45 +204,45 @@ let
 in self: {
 
   postgresql_11 = self.callPackage generic {
-    version = "11.17";
+    version = "11.18";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    hash = "sha256-bphJY64HZeYVd5lRA6fmWU2w8L0BUorBI+DeSmpMtMQ=";
+    hash = "sha256-0k8g78UukYrPvMoh6c6ijg4mO4RqDECPz6w7PEoPdQQ=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.12";
+    version = "12.13";
     psqlSchema = "12";
-    hash = "sha256-NLPxxpQI4iBowMcbGCdpHxyJFTsK1XbBpE+JIKhYA5w=";
+    hash = "sha256-tsYjBGr0VI8RqEtAeTTWddEe0HDHk9FbBGg79fMi4C0=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.8";
+    version = "13.9";
     psqlSchema = "13";
-    hash = "sha256-c4dv3TpRcIc0BFjcpM4VuNKk286zNMBEFCRVGubEze0=";
+    hash = "sha256-7xlmwKXkn77TNwrSgkkoy2sRZGF67q4WBtooP38zpBU=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.5";
+    version = "14.6";
     psqlSchema = "14";
-    hash = "sha256-1PcstfuFfJqfdeyM8JGhdxJygC8hePCy5lt7b/ZPSjA=";
+    hash = "sha256-UIhA/BgJ05q3InTV8Tfau5/X+0+TPaQWiu67IAae3yI=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;
   };
 
   postgresql_15 = self.callPackage generic {
-    version = "15.0";
+    version = "15.1";
     psqlSchema = "15";
-    hash = "sha256-cux09KfBbmhPQ+pC4hVJf81MVdAopo+3LpnmH/QNpNY=";
+    hash = "sha256-ZP3yPXNK+tDf5Ad9rKlqxR3NaX5ori09TKbEXLFOIa4=";
     this = self.postgresql_15;
     thisAttr = "postgresql_15";
     inherit self;

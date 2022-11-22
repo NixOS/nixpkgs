@@ -4816,9 +4816,6 @@
     "setuptools",
     "setuptools-scm"
   ],
-  "filemagic": [
-    "setuptools"
-  ],
   "filetype": [
     "setuptools"
   ],

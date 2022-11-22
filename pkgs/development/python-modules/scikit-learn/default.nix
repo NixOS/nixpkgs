@@ -65,6 +65,8 @@ buildPythonPackage rec {
     "check_regressors_train"
     "check_classifiers_train"
     "xfail_ignored_in_check_estimator"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    "test_graphical_lasso"
   ];
 
   pytestFlagsArray = [
