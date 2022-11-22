@@ -480,6 +480,8 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  enumer = callPackage ../tools/misc/enumer { };
+
   evans = callPackage ../development/tools/evans { };
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
@@ -6451,6 +6453,8 @@ with pkgs;
   ets = callPackage ../tools/misc/ets { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
+
+  evcc = callPackage ../servers/home-automation/evcc { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 

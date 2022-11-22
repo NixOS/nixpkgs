@@ -198,6 +198,7 @@ in {
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
   extra-python-packages = handleTest ./extra-python-packages.nix {};
+  evcc = handleTest ./evcc.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   fenics = handleTest ./fenics.nix {};
