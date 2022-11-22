@@ -60,6 +60,9 @@ self: super: {
     process = self.process_1_6_16_0;
   });
 
+  # Additionally depends on OneTuple for GHC < 9.0
+  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
+
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
 
