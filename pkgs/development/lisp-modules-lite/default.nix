@@ -12,7 +12,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-{ pkgs ? import ../../.. {} }:
+{
+  pkgs ? import ../../.. {},
+  lisp ? pkgs.sbcl
+}:
 
 with pkgs.lib;
 
@@ -44,9 +47,6 @@ let root = rec {
   # the stdlib because this is a perversion of a low-level feature, not intended
   # for casual access in regular derivations.
   drvStrWithoutContext = rpipe [ toString b.getContext attrNames l.head ];
-
-  # Am I overlooking something in the stdlib?
-  hasAttr = key: a.hasAttrByPath [ key ];
 
   # optionalKeys [ "a" "b" ] { a = 1; b = 2; c = 3; }
   # => { a = 1; b = 2; }
@@ -118,8 +118,19 @@ let root = rec {
     ${b.concatStringsSep "\n" (map (lisp-asdf-op op) systems)}
   '';
 
-  # TODO: Customizable lisp.
-  sbcl = file: ''"${pkgs.sbcl}/bin/sbcl" --script "${file}"'';
+  # Internal convention for lisp: a function which takes a file and returns a
+  # shell invocation calling that file, then exiting. External API: same, but
+  # you can also just pass a derivation instead and it is converted, if
+  # recognized. E.g. lisp = pkgs.sbcl.
+  callLisp = lisp:
+    if b.isFunction lisp
+    then lisp
+    else
+      assert isDerivation lisp;
+      {
+        sbcl = file: ''"${lisp}/bin/sbcl" --script "${file}"'';
+        ecl = file: ''"${lisp}/bin/ecl" --shell "${file}"'';
+      }.${lisp.pname};
 
   # Get a context-less string representing this source derivation, come what
   # come may.
@@ -130,7 +141,7 @@ let root = rec {
     then b.path { path = src; }
     else src);
 
-  isLispDeriv = hasAttr "lispSystems";
+  isLispDeriv = x: x ? lispSystems;
 
   # Get the derivation path of the original source code of this derivation,
   # recursively passing through derivations until we hit an actual source
@@ -139,7 +150,7 @@ let root = rec {
   # {} .. ? Doesn’t sound like it. We’re phasing out the entire
   # behind-the-scenes .src rewriting so I think we can leave off the recursion
   # here.
-  srcPath = drv: if hasAttr "src" drv && isLispDeriv drv
+  srcPath = drv: if drv ? src && isLispDeriv drv
                  then srcPath drv.src
                  else derivPath drv;
 
@@ -149,8 +160,6 @@ let root = rec {
   # managed) systems map they end up passing the same list of systems to this
   # function, and it ends up resolving to the same derivation.
   lispDerivation = {
-    # The lisp to use to build this
-    lisp ? sbcl,
     # The system(s) defined by this derivation
     lispSystem ? null,
     lispSystems ? null,
@@ -213,7 +222,7 @@ let root = rec {
       # pre-parsing-dependency-tracking quagmire. It’s not unusual with -test
       # derivations. This graph is solved by incrementally including the
       # dependent systems in the parent derivations, and rebuilding them
-      # all. So, with an arrow indicating the ‘src’:
+      # all. So, with an arrow indicating the lispDependencies:
       #
       # [foo-a & foo-b & foo-c] -> bar -> [foo-b & foo-c] -> zim -> foo-c
       #
@@ -237,7 +246,6 @@ let root = rec {
       # Note that bar only depends on a single "foo" derivation, which is built
       # with foo-b and foo-c; not on two copies of foo, one with b & c, one with
       # just c.
-
 
       mySrc = srcPath src;
       lispDependencies' = lispDependencies ++ (optionals doCheck lispCheckDependencies);
@@ -276,7 +284,7 @@ let root = rec {
      lispSystems' = normaliseStrings lispSystemsArg;
       # Clean out the arguments to this function which aren’t deriv props. Leave
       # in the systems because it’s a useful and harmless prop.
-      derivArgs = removeAttrs args ["lispDependencies" "lispCheckDependencies" "lisp" "lispSystem" "_lispDeduplicateMyself"];
+      derivArgs = removeAttrs args ["lispDependencies" "lispCheckDependencies" "lispSystem" "_lispDeduplicateMyself"];
       pname = "${b.concatStringsSep "_" lispSystems'}";
 
       # Add here all "standard" derivation args which we want to make system
@@ -294,6 +302,17 @@ let root = rec {
         "patches"
       ];
       localizedArgs = a.mapAttrs (_: callIfFunc lispSystems') (optionalKeys stdArgs args);
+
+      # Secret arg to track how we were originally invoked by the end user. This
+      # only matters for tests: for regular builds, you want to ‘make’
+      # everything, but for tests you specifically really only want to test the
+      # specific system that was originally requested. This matters because
+      # tracking test dependencies can become tricky. Don’t forget that merging
+      # transitively dependent lisp systems for the same source repository into
+      # a single derivation is only really a convenience feature to help marry
+      # Nix and ASDF; it is not in fact something that the user necessarily
+      # cares about.
+      _lispOrigSystems = args._lispOrigSystems or lispSystems';
       me = pkgs.stdenv.mkDerivation (derivArgs // {
         inherit pname;
         lispSystems = lispSystems';
@@ -308,11 +327,6 @@ let root = rec {
             # function must not evaluate any properties that cause any recursive
             # properties to be evaluated. This only works because Nix is lazily
             # evaluated.
-            assert
-              # This isn’t actually ever used yet.
-              if (hasAttr "lisp" args) && (hasAttr "lisp" other)
-              then args.lisp == other.lisp
-              else true;
             # Not technically necessary but it makes for slightly cleaner API.
             assert isLispDeriv other;
             assert mySrc == srcPath other;
@@ -329,10 +343,18 @@ let root = rec {
             in
               # Only build a new one if it improves on both existing
               # derivations.
-              if newDoCheck == doCheck && newLispSystems == lispSystems'
+              if newDoCheck == other.doCheck && newLispSystems == other.lispSystems
+              then other.overrideAttrs (_: { inherit _lispOrigSystems; })
+              # N.B.: Only propagate ME if I have equal doCheck to other. This
+              # is subtly different from newDoCheck == doCheck. It solves the
+              # problem where a doCheck = true depends (transitively) on itself
+              # with doCheck false: that should /not/ be deduplicated, because
+              # some dependency in the middle clearly depends on me (with
+              # doCheck = false), so if I deduplicate I will end up re-building
+              # my non-test files here, which will cause a rebuild in that
+              # already-built-dependency.
+              else if doCheck == other.doCheck && newLispSystems == lispSystems'
               then me
-              else if newDoCheck == other.doCheck && newLispSystems == other.lispSystems
-              then other
               else
                 # Patches are removed because I assume the source to already have
                 # been patched by now. For it is myself.
@@ -341,6 +363,7 @@ let root = rec {
                   # contains all its own recursive self-dependencies and doesn’t
                   # need any more deduplication.
                   _lispDeduplicateMyself = false;
+                  inherit _lispOrigSystems;
                   lispDependencies = l.unique (lispDependencies ++ other.args.lispDependencies or []);
                   lispCheckDependencies = l.unique (lispCheckDependencies ++ other.args.lispCheckDependencies or []);
                   doCheck = newDoCheck;
@@ -376,7 +399,7 @@ let root = rec {
           # Import current package from PWD
           export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
           env | grep CL_SOURCE_REGISTRY
-          ${lisp (asdfOpScript lispBuildOp pname lispSystems')}
+          ${callLisp lisp (asdfOpScript lispBuildOp pname lispSystems')}
         '';
         installPhase = ''
           cp -R "." "$out"
@@ -384,7 +407,8 @@ let root = rec {
         checkPhase = ''
           # Import current package from PWD
           export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
-          ${lisp (asdfOpScript "test-system" pname lispSystems')}
+          ${callLisp lisp (asdfOpScript lispBuildOp pname lispSystems')}
+          ${callLisp lisp (asdfOpScript "test-system" pname _lispOrigSystems)}
         '';
       } // localizedArgs // (a.optionalAttrs (length allDepsDerivs > 0) {
         # It looks like this is instantiated for every single derivation
@@ -398,7 +422,7 @@ let root = rec {
     in
       # If I depend on myself in any way, first flatten me and all my transitive
       # dependent copies of me into one big union derivation.
-      if _lispDeduplicateMyself && hasAttr mySrc allDepsIncMyself
+      if _lispDeduplicateMyself && allDepsIncMyself ? ${mySrc}
       then me.merge allDepsIncMyself.${mySrc}
       else me;
 
@@ -406,7 +430,7 @@ let root = rec {
   # helper to define them.
   lispMultiDerivation = args: a.mapAttrs (name: system:
     let
-      namearg = a.optionalAttrs (! hasAttr "lispSystems" system) { lispSystem = name; };
+      namearg = a.optionalAttrs (! system ? lispSystems) { lispSystem = name; };
     in
       # Default system name is the derivation name in the containing ‘systems’
       # attrset, but can be overridden if the Lisp name is incompatible with Nix
@@ -421,7 +445,6 @@ in
   inherit (root)
     lispDerivation
     lispMultiDerivation
-    lispPackages
-    sbcl;
-    # Also include the packages top level for convenience
+    lispPackages;
+  # Also include the packages top level for convenience
 } // root.lispPackages

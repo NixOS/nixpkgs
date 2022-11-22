@@ -42,6 +42,26 @@ let
 
 in
   rec {
+    inherit (lispMultiDerivation {
+      src = pkgs.fetchFromGitHub {
+        name = "3bmd-src";
+        owner = "3b";
+        repo = "3bmd";
+        rev = "125c92389ded253a506ff394eb2c0dab3fc78acc";
+        sha256 = "sha256-mbb9dWDDp+wJYDj59QsyZv7ZTsc83cxqba34Xp9mApM=";
+      };
+      systems = {
+        _3bmd = {
+          lispSystem = "3bmd";
+          lispDependencies = [ alexandria esrap split-sequence ];
+        };
+        _3bmd-ext-code-blocks = {
+          lispSystem = "3bmd-ext-code-blocks";
+          lispDependencies = [ _3bmd alexandria colorize split-sequence ];
+        };
+      };
+    }) _3bmd _3bmd-ext-code-blocks;
+
     alexandria = lispify [ ] (pkgs.fetchFromGitLab {
       name = "alexandria-src";
       domain = "gitlab.common-lisp.net";
@@ -133,28 +153,18 @@ in
       };
     }) babel babel-streams;
 
-    bordeaux-threads = let
-      version = "v0.8.8";
-    in
-      lispDerivation {
-        lispDependencies = [
-          alexandria
-          global-vars
-          trivial-features
-          trivial-garbage
-        ];
-        lispCheckDependencies = [ fiveam ];
-        buildInputs = [ pkgs.libuv ];
-        lispSystem = "bordeaux-threads";
-        inherit version;
-        src = pkgs.fetchFromGitHub {
-          name = "bordeaux-threads-src";
-          owner = "sionescu";
-          repo = "bordeaux-threads";
-          rev = version;
-          sha256 = "sha256-5mauBDg13zJlYkbu5C30dCOIPBE95bVu2AiR8d0gJKY=";
-        };
+    blackbird = lispDerivation {
+      lispSystem = "blackbird";
+      src = pkgs.fetchFromGitHub {
+        name = "blackbird-src";
+        repo = "blackbird";
+        owner = "orthecreedence";
+        rev = "abe3696e1a128bd082fb5d3e211f33d8feb25bc8";
+        sha256 = "sha256-VBmXHK6TKNcYbCdIhVSP08E0blGVJCL9N/VPNQ5JDuQ=";
       };
+      lispDependencies = [ vom ];
+      lispCheckDependencies = [ cl-async fiveam ];
+    };
 
     inherit (
       let version = "v0.24.1"; in lispMultiDerivation {
@@ -320,6 +330,45 @@ in
         lispCheckDependencies = [ ptester kmrcl ];
       };
 
+    cl-change-case = lispDerivation {
+      lispSystem = "cl-change-case";
+      src = pkgs.fetchFromGitHub {
+        name = "cl-change-case-src";
+        repo = "cl-change-case";
+        owner = "rudolfochrist";
+        rev = "0.2.0";
+        sha256 = "sha256-mPRkekxFg3t6hcWkPE0TDGgj9mh/ymISDr2h+mJQAmI=";
+      };
+      lispDependencies = [
+        cl-ppcre
+        cl-ppcre-unicode
+      ];
+      lispCheckDependencies = [ fiveam ];
+    };
+
+    bordeaux-threads = let
+      version = "v0.8.8";
+    in
+      lispDerivation {
+        lispDependencies = [
+          alexandria
+          global-vars
+          trivial-features
+          trivial-garbage
+        ];
+        lispCheckDependencies = [ fiveam ];
+        buildInputs = [ pkgs.libuv ];
+        lispSystem = "bordeaux-threads";
+        inherit version;
+        src = pkgs.fetchFromGitHub {
+          name = "bordeaux-threads-src";
+          owner = "sionescu";
+          repo = "bordeaux-threads";
+          rev = version;
+          sha256 = "sha256-5mauBDg13zJlYkbu5C30dCOIPBE95bVu2AiR8d0gJKY=";
+        };
+      };
+
     cl-colors = lispDerivation {
       lispSystem = "cl-colors";
       lispCheckDependencies = [ lift ];
@@ -466,11 +515,10 @@ in
       ];
     };
 
-    cl-ppcre = let
+    inherit (let
       version = "v2.1.1";
     in
-      lispDerivation {
-        lispSystem = "cl-ppcre";
+      lispMultiDerivation {
         inherit version;
         src = pkgs.fetchFromGitHub {
           name = "cl-ppcre-src";
@@ -479,8 +527,16 @@ in
           rev = version;
           sha256 = "sha256-UffzJ2i4wpkShxAJZA8tIILUbBZzbWlseezj2JLImzc=";
         };
-        lispCheckDependencies = [ flexi-streams ];
-      };
+        systems = {
+          cl-ppcre = {
+            lispCheckDependencies = [ flexi-streams ];
+          };
+          cl-ppcre-unicode = {
+            lispDependencies = [ cl-ppcre cl-unicode ];
+            lispCheckDependencies = [ flexi-streams ];
+          };
+        };
+      }) cl-ppcre cl-ppcre-unicode;
 
     cl-speedy-queue = lispify [ ] (pkgs.fetchFromGitHub {
       name = "cl-speedy-queue-src";
@@ -632,6 +688,14 @@ in
         sha256 = "sha256-5Pud/s5LywqrY+EjDG2iCtuuildTzfDmVYzqhnJ5iyQ=";
       });
 
+    colorize = lispify [ alexandria html-encode split-sequence ] (pkgs.fetchFromGitHub {
+      name = "colorize-src";
+      repo = "colorize";
+      owner = "kingcons";
+      rev = "ea676b584e0899cec82f21a9e6871172fe3c0eb5";
+      sha256 = "sha256-ibMfRqzw8Q28UrAdm4/AIS866rk5Qud2HLl+puIkr90=";
+    });
+
     dexador = lispDerivation {
       lispSystem = "dexador";
       src = pkgs.fetchFromGitHub {
@@ -719,6 +783,19 @@ in
       sha256 = "sha256-E9p5yKay3nyGWxmOeQTpfA51B2X+EUD+9yd1S+um1Kk=";
     });
 
+    esrap = lispDerivation {
+      lispSystem = "esrap";
+      src = pkgs.fetchFromGitHub {
+        name = "esrap-src";
+        owner = "scymtym";
+        repo = "esrap";
+        rev = "7588b430ad7c52f91a119b4b1c9a549d584b7064";
+        sha256 = "sha256-C0GiTyRna9BMIMy1/XdMZAkhjpLaoAEF1+ps97xQyMY=";
+      };
+      lispDependencies = [ alexandria trivial-with-current-source-form ];
+      lispCheckDependencies = [ fiveam ];
+    };
+
     fast-http = lispDerivation {
       src = pkgs.fetchFromGitHub {
         name = "fast-http-src";
@@ -779,29 +856,41 @@ in
       systems = {
         fare-quasiquote = {
           lispDependencies = [ fare-utils ];
-          lispCheckDependencies = [ fare-quasiquote-extras hu_dwim_stefil optima ];
+          lispCheckDependencies = [
+            fare-quasiquote-extras
+            hu_dwim_stefil
+            optima
+          ];
         };
         fare-quasiquote-extras = {
-          lispDependencies = [ fare-quasiquote-readtable trivia-quasiquote ];
-          # This needs a better solution. How do we deal with multi-system but
-          # single-test-system derivs?
-          lispCheckDependencies = [ hu_dwim_stefil ];
+          lispDependencies = [
+            fare-quasiquote-optima
+            fare-quasiquote-readtable
+          ];
+        };
+        fare-quasiquote-optima = {
+          lispDependencies = [
+            trivia-quasiquote
+          ];
         };
         fare-quasiquote-readtable = {
           lispDependencies = [ fare-quasiquote named-readtables ];
-          lispCheckDependencies = [ hu_dwim_stefil ];
         };
       };
-    }) fare-quasiquote fare-quasiquote-extras fare-quasiquote-readtable;
+    }) fare-quasiquote
+       fare-quasiquote-extras
+       fare-quasiquote-optima
+       fare-quasiquote-readtable;
 
     fare-utils = lispDerivation {
       lispSystem = "fare-utils";
+      # While the PR to fix the test .asd is pending, point at my fork
       src = pkgs.fetchFromGitHub {
         name = "fare-utils-src";
-        owner = "fare";
+        owner = "hraban";
         repo = "fare-utils";
-        rev = "1a4f345d7911b403d07a5f300e6006ce3efa4047";
-        sha256 = "sha256-CTCYiXb5uy+QQBhkkDJEowax41rly677BSfLfpHX9vk=";
+        rev = "8bf19331fc541e4fb40b55ae9747d774eb427828";
+        sha256 = "sha256-Eye1XJUNWhptVlkukrwVmYL9dKpyrn8PJEdMDPntYzw=";
       };
       lispCheckDependencies = [ hu_dwim_stefil ];
     };
@@ -834,6 +923,14 @@ in
       lispDependencies = [ documentation-utils ];
     };
 
+    fset = lispify [ misc-extensions mt19937 named-readtables ] (pkgs.fetchFromGitHub {
+      name = "fset-src";
+      owner = "slburson";
+      repo = "fset";
+      rev = "69c209e6eb15187da04f70ece3f800a6e3cc8639";
+      sha256 = "sha256-XqPr1MK8rZvz+f+cumVoX/RynfMhsJnXhrSBxZQqSJQ=";
+    });
+
     global-vars = lispify [ ] (pkgs.fetchFromGitHub {
       name = "global-vars-src";
       owner = "lmj";
@@ -841,6 +938,16 @@ in
       rev = "c749f32c9b606a1457daa47d59630708ac0c266e";
       sha256 = "sha256-bXxeNNnFsGbgP/any8rR3xBvHE9Rb4foVfrdQRHroxo=";
     });
+
+    html-encode = let
+      version = "1.2";
+    in
+      lispify [ ] (pkgs.fetchzip {
+        pname = "html-encode-src";
+        inherit version;
+        url = "http://beta.quicklisp.org/orphans/html-encode-1.2.tgz";
+        sha256 = "sha256-qw2CstJIDteQC4N1eQEsD9+HRm1i9GP/XjjIZXtZr/k=";
+      });
 
     http-body = lispDerivation {
       lispSystem = "http-body";
@@ -929,20 +1036,25 @@ in
       lispCheckDependencies = [ fiveam ];
     };
 
-    inferior-shell = lispify [
-      alexandria
-      fare-utils
-      fare-quasiquote-extras
-      fare-mop
-      trivia
-      trivia-quasiquote
-    ] (pkgs.fetchFromGitHub {
-      name = "inferior-shell-src";
-      owner = "fare";
-      repo = "inferior-shell";
-      rev = "15c2d04a7398db965ea1c3ba2d49efa7c851f2c2";
-      sha256 = "sha256-lUj2tqRhmXWwgK3Qio1U+9vNhcJingN57USW+f8ZHQs=";
-    });
+    inferior-shell = lispDerivation {
+      lispSystem = "inferior-shell";
+      lispDependencies = [
+        alexandria
+        fare-utils
+        fare-quasiquote-extras
+        fare-mop
+        trivia
+        trivia-quasiquote
+      ];
+      lispCheckDependencies = [ hu_dwim_stefil ];
+      src = pkgs.fetchFromGitHub {
+        name = "inferior-shell-src";
+        owner = "fare";
+        repo = "inferior-shell";
+        rev = "15c2d04a7398db965ea1c3ba2d49efa7c851f2c2";
+        sha256 = "sha256-lUj2tqRhmXWwgK3Qio1U+9vNhcJingN57USW+f8ZHQs=";
+      };
+    };
 
     introspect-environment = lispDerivation {
       lispSystem = "introspect-environment";
@@ -1046,6 +1158,7 @@ in
         systems = {
           lack = {
             lispDependencies = [ lack-util ];
+            lispCheckDependencies = [ clack prove ];
           };
 
           lack-middleware-backtrace = {
@@ -1069,14 +1182,35 @@ in
             ];
           };
 
+          # stand-alone project used as a dependency of help systems
+          lack-test = {
+            lispDependencies = [
+              bordeaux-threads
+              clack
+              clack-handler-hunchentoot
+              dexador
+              flexi-streams
+              http-body
+              ironclad
+              rove
+              usocket
+            ];
+          };
+
           lack-util = {
             lispDependencies =
-              pkgs.lib.optional pkgs.hostPlatform.isWindows ironclad
-              ++ pkgs.lib.optional (! pkgs.hostPlatform.isWindows) cl-isaac;
+              if pkgs.hostPlatform.isWindows
+              then [ ironclad ]
+              else [ cl-isaac ];
+            lispCheckDependencies = [ lack-test prove ];
           };
         };
       }
-    ) lack lack-middleware-backtrace lack-request lack-util;
+    ) lack
+      lack-middleware-backtrace
+      lack-request
+      lack-test
+      lack-util;
 
     legion = lispDerivation {
       lispSystem = "legion";
@@ -1152,7 +1286,7 @@ in
         sha256 = "sha256-JUL1C029kOrlOO6RW3n82kDhMY3KNiwPsrvrOTjhU1Y=";
       };
       lispDependencies = [ bordeaux-threads ];
-      lispCheckDependencies = [ hu_dwim_stefil ];
+      lispCheckDependencies = [ stefil ];
     };
 
     lquery = lispDerivation {
@@ -1176,6 +1310,18 @@ in
       sha256 = "sha256-BY+ui/h01KrJ5VdsUfQBQvAaxJm00oo+An5YmM21QLw=";
     });
 
+    metabang-bind = lispDerivation {
+      lispSystem = "metabang-bind";
+      src = pkgs.fetchFromGitHub {
+        name = "metabang-bind-src";
+        owner = "gwkkwg";
+        repo = "metabang-bind";
+        rev = "9ab6e64a30261df109549d21ee7940df87db66bb";
+        sha256 = "sha256-ed01iQytK5lp41aBBGa5bKB5S90BKgF6G5wgIMWlARk=";
+      };
+      lispCheckDependencies = [ lift ];
+    };
+
     mgl-pax = lispDerivation {
       lispSystem = "mgl-pax";
       src = pkgs.fetchFromGitHub {
@@ -1187,8 +1333,37 @@ in
       };
       lispDependencies = [ named-readtables pythonic-string-reader ];
       # This package is more complicated than this suggests
-      lispCheckDependencies = [ try ];
+      lispCheckDependencies = [
+        # mgl-pax/document
+        _3bmd
+        _3bmd-ext-code-blocks
+        colorize
+        md5
+        try
+        # mgl-pax/navigate
+        swank
+        # mgl-pax/transcribe
+        alexandria
+      ];
     };
+
+    misc-extensions = lispify [ ] (pkgs.fetchFromGitLab {
+      name = "misc-extensions-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "misc-extensions";
+      repo = "devel";
+      rev = "101c05112bf2f1e1bbf527396822d2f50ca6327a";
+      sha256 = "sha256-YHt/r4deJnsr4oRTiDiTnNRkBYy0OKu7pfFjcC5x5T8=";
+    });
+
+    mt19937 = lispify [ ] (pkgs.fetchFromGitLab {
+      name = "mt19937-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "nyxt";
+      repo = "mt19937";
+      rev = "831284f0c7fbda54ddfd135eee1e80afad7cc16e";
+      sha256 = "sha256-j3YzNAJODcJR4nsp7Myl1K7889Kg3ojMAuYwZq3WAkA=";
+    });
 
     named-readtables = lispDerivation {
       lispSystem = "named-readtables";
@@ -1379,6 +1554,37 @@ in
       lispCheckDependencies = [ fiveam ];
     };
 
+    stefil = lispify [
+      alexandria
+      iterate
+      metabang-bind
+      swank
+    ] (pkgs.fetchFromGitLab {
+      domain = "gitlab.common-lisp.net";
+      name = "stefil-src";
+      owner = "stefil";
+      repo = "stefil";
+      rev = "0398548ec95dceb50fc2c2c03e5fb0ce49b86c7a";
+      sha256 = "sha256-kLKFBG6ZD3cRQAHoLAgxqp2fd9XaY/9DcvB/LTAxHy8=";
+    });
+
+    str = lispDerivation {
+      lispSystem = "str";
+      src = pkgs.fetchFromGitHub {
+        name = "str-src";
+        repo = "cl-str";
+        owner = "vindarel";
+        rev = "0.19";
+        sha256 = "sha256-aSAsXx30wFbBFIHjZioiKpZ/UAX7HsQJdYYfC6VQ38s=";
+      };
+      lispDependencies = [
+        cl-change-case
+        cl-ppcre
+        cl-ppcre-unicode
+      ];
+      lispCheckDependencies = [ prove ];
+    };
+
     swank = lispDerivation {
       lispSystem = "swank";
       # The Swank Lisp system is bundled with SLIME
@@ -1411,8 +1617,27 @@ in
           ];
           lispCheckDependencies = [
             fiveam
+            optima
+            trivia-cffi
+            trivia-fset
             trivia-ppcre
             trivia-quasiquote
+          ];
+        };
+
+        trivia-cffi = {
+          lispSystem = "trivia.cffi";
+          lispDependencies = [
+            cffi
+            trivia-trivial
+          ];
+        };
+
+        trivia-fset = {
+          lispSystem = "trivia.fset";
+          lispDependencies = [
+            fset
+            trivia-trivial
           ];
         };
 
@@ -1442,7 +1667,12 @@ in
           ];
         };
       };
-    }) trivia trivia-ppcre trivia-quasiquote trivia-trivial;
+    }) trivia
+       trivia-cffi
+       trivia-fset
+       trivia-ppcre
+       trivia-quasiquote
+       trivia-trivial;
 
     trivial-backtrace = lispify [ lift ] (pkgs.fetchFromGitLab {
       name = "trivial-backtrace-src";
@@ -1547,6 +1777,14 @@ in
       repo = "trivial-utf-8";
       rev = "6ca9943588cbc61ad22a3c1ff81beb371e122394";
       sha256 = "sha256-Wg8g/aQHNyiQpMnrgK0Olyzi3RaoC0yDL97Ctb5f7z8=";
+    });
+
+    trivial-with-current-source-form = lispify [ alexandria ] (pkgs.fetchFromGitHub {
+      name = "trivial-with-current-source-form-src";
+      owner = "scymtym";
+      repo = "trivial-with-current-source-form";
+      rev = "3898e09f8047ef89113df265574ae8de8afa31ac";
+      sha256 = "sha256-IKJOyJYqGBx0b6Oomddvb+2K6q4W508s3xnplleMJIQ=";
     });
 
     try = lispify [ alexandria closer-mop ieee-floats mgl-pax trivial-gray-streams ] (pkgs.fetchFromGitHub {
