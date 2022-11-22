@@ -4,6 +4,8 @@
 , cmake
 , cfitsio
 , libusb1
+, systemd
+, pkg-config
 , zlib
 , boost
 , libev
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     cfitsio
     libev
     libusb1
+    systemd
+    pkg-config
     zlib
     boost
     libnova
