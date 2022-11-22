@@ -173,9 +173,6 @@ in {
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
 
-  # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
-  hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
-
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
