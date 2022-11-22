@@ -23,7 +23,7 @@ buildPythonPackage rec {
   version = "0.7.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
@@ -39,8 +39,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    asyncio = [ async-timeout ];
-    trio = [ trio ];
+    asyncio = [
+      async-timeout
+    ];
+    trio = [
+      trio
+    ];
   };
 
   checkInputs = [
@@ -66,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
