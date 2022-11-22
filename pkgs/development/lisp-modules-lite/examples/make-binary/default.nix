@@ -8,7 +8,7 @@ lispDerivation {
   lispDependencies = [ alexandria arrow-macros cl-async cl-async-ssl ];
   lispSystem = "demo";
   version = "0.0.1";
-  src = ./.;
+  src = pkgs.lib.cleanSource ./.;
   # Binary is automatically built using ASDF’s :build-operation "program-op"
   installPhase = ''
     mkdir -p "$out/bin"

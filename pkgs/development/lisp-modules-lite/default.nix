@@ -63,6 +63,12 @@ let root = rec {
   # (a -> Bool) -> [a] -> [a]
   keepBy = f: foldr (a: b: l.optional (f a) a ++ b) [];
 
+  # If argument is a function, call it with a constant value. Otherwise pass it
+  # through.
+  callIfFunc = val: f: if isFunction f then f val else f;
+
+  normaliseStrings = rpipe [ l.unique l.naturalSort ];
+
   # This is a /nested/ union operation on attrsets: if you have e.g. a 2-layer
   # deep set (so a set of sets, so [ { String => { String => T } } ]), you can
   # pass 2 here to union them all.
@@ -114,10 +120,6 @@ let root = rec {
 
   # TODO: Customizable lisp.
   sbcl = file: ''"${pkgs.sbcl}/bin/sbcl" --script "${file}"'';
-
-  # If argument is a function, call it with a constant value. Otherwise pass it
-  # through.
-  callIfFunc = val: f: if isFunction f then f val else f;
 
   # Get a context-less string representing this source derivation, come what
   # come may.
@@ -271,7 +273,7 @@ let root = rec {
       # I use naturalSort because it’s an easy way to sort a list strings in Nix
       # but any sort will do. What’s important is that this is deterministically
       # sorted.
-     lispSystems' = pipe lispSystemsArg [l.naturalSort l.unique];
+     lispSystems' = normaliseStrings lispSystemsArg;
       # Clean out the arguments to this function which aren’t deriv props. Leave
       # in the systems because it’s a useful and harmless prop.
       derivArgs = removeAttrs args ["lispDependencies" "lispCheckDependencies" "lisp" "lispSystem" "_lispDeduplicateMyself"];
@@ -299,7 +301,6 @@ let root = rec {
         passthru = (derivArgs.passthru or {}) // {
           # Give others access to the args with which I was built
           inherit args;
-          lispSystemsArg = lispSystems';
           # (There is probably a neater, more idiomatic way to do this
           # overriding business.)
           merge = other:
@@ -315,33 +316,47 @@ let root = rec {
             # Not technically necessary but it makes for slightly cleaner API.
             assert isLispDeriv other;
             assert mySrc == srcPath other;
-            # Patches are removed because I assume the source to already have
-            # been patched by now. For it is myself.
-            lispDerivation ((removeAttrs args ["patches" "lispSystem"]) // {
-              # By this point, we assume that this top level derivation contains
-              # all its own recursive self-dependencies and doesn’t need any
-              # more deduplication.
-              _lispDeduplicateMyself = false;
-              lispDependencies = l.unique (lispDependencies ++ other.args.lispDependencies or []);
-              lispCheckDependencies = l.unique (lispCheckDependencies ++ other.args.lispCheckDependencies or []);
+            let
+              # The new arguments that define this merged derivation: which
+              # systems do you build, and are you in check mode y/n? The
+              # dependencies are automatically inferred when necessary.
+
               # Don’t get the lispSystems from the original args: we want to
               # know what the final, real collection of lisp system names was
               # that was used for this derivation.
-              lispSystems = l.unique (lispSystems' ++ other.lispSystemsArg); #?
-              doCheck = doCheck || other.args.doCheck or false;
-              # Important: we assume all the other args are automatically
-              # compatible for the new derivation, notably buildPhase, patches,
-              # etc. This means you can’t define two separate systems from the
-              # same source (foo-b and foo-c) and give each a distinct
-              # buildPhase--rather, you must define a single buildPhase as a
-              # function which takes an array of system names as an arg, and
-              # decides based on that arg what to do. There is special support
-              # for this in the lispDerivation.
+              newLispSystems = normaliseStrings (lispSystems' ++ other.lispSystems);
+              newDoCheck = doCheck || other.args.doCheck or false;
+            in
+              # Only build a new one if it improves on both existing
+              # derivations.
+              if newDoCheck == doCheck && newLispSystems == lispSystems'
+              then me
+              else if newDoCheck == other.doCheck && newLispSystems == other.lispSystems
+              then other
+              else
+                # Patches are removed because I assume the source to already have
+                # been patched by now. For it is myself.
+                lispDerivation ((removeAttrs args ["patches" "lispSystem"]) // {
+                  # By this point, we assume that this top level derivation
+                  # contains all its own recursive self-dependencies and doesn’t
+                  # need any more deduplication.
+                  _lispDeduplicateMyself = false;
+                  lispDependencies = l.unique (lispDependencies ++ other.args.lispDependencies or []);
+                  lispCheckDependencies = l.unique (lispCheckDependencies ++ other.args.lispCheckDependencies or []);
+                  doCheck = newDoCheck;
+                  lispSystems = newLispSystems;
+                  # Important: we assume all the other args are automatically
+                  # compatible for the new derivation, notably buildPhase,
+                  # patches, etc. This means you can’t define two separate
+                  # systems from the same source (foo-b and foo-c) and give each
+                  # a distinct buildPhase--rather, you must define a single
+                  # buildPhase as a function which takes an array of system
+                  # names as an arg, and decides based on that arg what to
+                  # do. There is special support for this in the lispDerivation.
 
-              # And now for the pièce de résistence:
-              src = other;
-              # 🎤 💥
-            });
+                  # And now for the pièce de résistence:
+                  src = other;
+                });
           # Invariant: this never includes myself.
           inherit allDeps;
           enableCheck = if doCheck
