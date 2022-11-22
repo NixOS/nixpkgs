@@ -10,8 +10,8 @@
 buildPythonPackage rec {
   pname = "aiomusiccast";
   version = "0.14.6";
-
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Companion library for musiccast devices intended for the Home Assistant integration";
     homepage = "https://github.com/vigonotion/aiomusiccast";
+    changelog = "https://github.com/vigonotion/aiomusiccast/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
