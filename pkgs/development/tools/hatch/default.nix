@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.6.3";
+  version = "1.11.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
-    rev = "hatch-v${version}";
-    hash = "sha256-3nPh6F+TmLoogz9FgaZMub7hPJIzANCY4oWk9Mq22Pc=";
+    rev = "refs/tags/hatchling-v${version}";
+    hash = "sha256-xTJFRbzHdwtzqfMCV0NDf+8Gr3ScHcajvxFvRmFl734=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
