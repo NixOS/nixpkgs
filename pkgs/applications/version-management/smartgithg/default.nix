@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "21.2.2";
+  version = "22.1.0";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
