@@ -72,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for sending emails and attachments";
     homepage = "https://github.com/sabuhish/fastapi-mail";
+    changelog = "https://github.com/sabuhish/fastapi-mail/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
