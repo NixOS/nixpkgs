@@ -53,8 +53,6 @@ let
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
-      TIMER_STATS               = whenOlder "4.11" yes;
-      DEBUG_NX_TEST             = whenOlder "4.11" no;
       DEBUG_STACK_USAGE         = no;
       DEBUG_STACKOVERFLOW       = option no;
       RCU_TORTURE_TEST          = no;
@@ -109,10 +107,10 @@ let
       BLK_CGROUP_IOLATENCY = whenAtLeast "4.19" yes;
       BLK_CGROUP_IOCOST = whenAtLeast "5.4" yes;
       IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
-      MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
-      BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
-      MQ_IOSCHED_KYBER = whenAtLeast "4.12" yes;
-      IOSCHED_BFQ = whenAtLeast "4.12" module;
+      MQ_IOSCHED_DEADLINE = yes;
+      BFQ_GROUP_IOSCHED = yes;
+      MQ_IOSCHED_KYBER = yes;
+      IOSCHED_BFQ = module;
     };
 
 
@@ -164,8 +162,8 @@ let
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
       IPV6_FOU_TUNNEL             = module;
-      IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
-      IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
+      IPV6_SEG6_LWTUNNEL          = yes;
+      IPV6_SEG6_HMAC              = yes;
       IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
       NET_CLS_BPF                 = module;
       NET_ACT_BPF                 = module;
@@ -222,7 +220,7 @@ let
       INET_DIAG         = mkDefault module;
       INET_TCP_DIAG     = mkDefault module;
       INET_UDP_DIAG     = mkDefault module;
-      INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
+      INET_RAW_DIAG     = mkDefault module;
       INET_DIAG_DESTROY = mkDefault yes;
 
       # enable multipath-tcp
@@ -231,7 +229,7 @@ let
       INET_MPTCP_DIAG = whenAtLeast "5.9" (mkDefault module);
 
       # Kernel TLS
-      TLS         = whenAtLeast "4.13" module;
+      TLS         = module;
       TLS_DEVICE  = whenAtLeast "4.18" yes;
 
       # infiniband
@@ -308,7 +306,7 @@ let
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
     } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
-      DRM_VC4_HDMI_CEC = whenAtLeast "4.14" yes;
+      DRM_VC4_HDMI_CEC = yes;
     };
 
     sound = {
@@ -321,8 +319,6 @@ let
       SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
-      # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
-      PSS_MIXER           = whenOlder "4.12" yes;
     # Enable Sound Open Firmware support
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" &&
                         versionAtLeast version "5.5") {
@@ -455,7 +451,6 @@ let
       CIFS_UPCALL       = yes;
       CIFS_ACL          = whenOlder "5.3" yes;
       CIFS_DFS_UPCALL   = yes;
-      CIFS_SMB2         = whenOlder "4.13" yes;
 
       CEPH_FSCACHE      = yes;
       CEPH_FS_POSIX_ACL = yes;
@@ -467,7 +462,7 @@ let
       SQUASHFS_LZO                 = yes;
       SQUASHFS_XZ                  = yes;
       SQUASHFS_LZ4                 = yes;
-      SQUASHFS_ZSTD                = whenAtLeast "4.14" yes;
+      SQUASHFS_ZSTD                = yes;
 
       # Native Language Support modules, needed by some filesystems
       NLS              = yes;
@@ -485,12 +480,10 @@ let
     };
 
     security = {
-      FORTIFY_SOURCE                   = whenAtLeast "4.13" (option yes);
+      FORTIFY_SOURCE                   = option yes;
 
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
-      # Detect writes to read-only module pages
-      DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
       HARDENED_USERCOPY                = yes;
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
@@ -535,7 +528,6 @@ let
       MICROCODE       = yes;
       MICROCODE_INTEL = yes;
       MICROCODE_AMD   = yes;
-    } // optionalAttrs (versionAtLeast version "4.10") {
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
@@ -550,7 +542,7 @@ let
       CGROUP_DEVICE  = yes;
       CGROUP_HUGETLB = yes;
       CGROUP_PERF    = yes;
-      CGROUP_RDMA    = whenAtLeast "4.11" yes;
+      CGROUP_RDMA    = yes;
 
       MEMCG                    = yes;
       MEMCG_SWAP               = whenOlder "6.1" yes;
@@ -580,8 +572,7 @@ let
       FTRACE_SYSCALLS       = yes;
       SCHED_TRACER          = yes;
       STACK_TRACER          = yes;
-      UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
-      UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
+      UPROBE_EVENTS         = option yes;
       BPF_SYSCALL           = yes;
       BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.16" yes;
       BPF_EVENTS            = yes;
@@ -596,8 +587,6 @@ let
       PARAVIRT_SPINLOCKS  = option yes;
 
       KVM_ASYNC_PF                      = yes;
-      KVM_COMPAT                        = whenOlder "4.12" (option yes);
-      KVM_DEVICE_ASSIGNMENT             = whenOlder "4.12" (option yes);
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
       KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
@@ -646,7 +635,6 @@ let
       MEDIA_USB_SUPPORT        = yes;
       MEDIA_ANALOG_TV_SUPPORT  = yes;
       VIDEO_STK1160_COMMON     = module;
-      VIDEO_STK1160_AC97       = whenOlder "4.11" yes;
     };
 
     "9p" = {
@@ -762,7 +750,7 @@ let
       DRAGONRISE_FF      = yes;
       GREENASIA_FF       = yes;
       HOLTEK_FF          = yes;
-      JOYSTICK_PSXPAD_SPI_FF = whenAtLeast "4.14" yes;
+      JOYSTICK_PSXPAD_SPI_FF = yes;
       LOGIG940_FF        = yes;
       NINTENDO_FF        = whenAtLeast "5.16" yes;
       PLAYSTATION_FF     = whenAtLeast "5.12" yes;
@@ -808,16 +796,16 @@ let
 
       BLK_DEV_INTEGRITY       = yes;
 
-      BLK_SED_OPAL = whenAtLeast "4.14" yes;
+      BLK_SED_OPAL = yes;
 
       BSD_PROCESS_ACCT_V3 = yes;
 
-      SERIAL_DEV_BUS = whenAtLeast "4.11" yes; # enables support for serial devices
-      SERIAL_DEV_CTRL_TTYPORT = whenAtLeast "4.11" yes; # enables support for TTY serial devices
+      SERIAL_DEV_BUS = yes; # enables support for serial devices
+      SERIAL_DEV_CTRL_TTYPORT = yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
       BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
-      BT_HCIUART_SERDEV = whenAtLeast "4.12" yes; # required by BT_HCIUART_QCA
+      BT_HCIUART_SERDEV = yes; # required by BT_HCIUART_QCA
       BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
@@ -897,8 +885,8 @@ let
       SCSI_LOGGING = yes; # SCSI logging facility
       SERIAL_8250  = yes; # 8250/16550 and compatible serial support
 
-      SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
-      SLAB_FREELIST_RANDOM   = whenAtLeast "4.10" yes;
+      SLAB_FREELIST_HARDENED = yes;
+      SLAB_FREELIST_RANDOM   = yes;
 
       SLIP_COMPRESSED = yes; # CSLIP compressed headers
       SLIP_SMART      = yes;
@@ -974,7 +962,7 @@ let
       NR_CPUS = freeform "384";
     } // optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enables support for the Allwinner Display Engine 2.0
-      SUN8I_DE2_CCU = whenAtLeast "4.13" yes;
+      SUN8I_DE2_CCU = yes;
 
       # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
       CRYPTO_AEGIS128_SIMD = whenAtLeast "5.4" no;
