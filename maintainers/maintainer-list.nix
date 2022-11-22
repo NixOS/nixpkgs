@@ -8580,6 +8580,12 @@
     githubId = 854770;
     name = "Matej Cotman";
   };
+  mateodd25 = {
+    email = "mateodd@icloud.com";
+    github = "mateodd25";
+    githubId = 854770;
+    name = "Mateo Diaz";
+  };
   mathnerd314 = {
     email = "mathnerd314.gph+hs@gmail.com";
     github = "Mathnerd314";
