@@ -107,10 +107,6 @@ in {
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
 
-  # 2022-09-02: Too strict bounds on lens
-  # https://github.com/GetShopTV/swagger2/pull/242
-  swagger2 = doJailbreak super.swagger2;
-
   base-orphans = dontCheck super.base-orphans;
 
   # Note: Any compilation fixes need to be done on the versioned attributes,
