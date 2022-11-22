@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
 
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };

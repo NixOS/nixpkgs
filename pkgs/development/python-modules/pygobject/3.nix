@@ -73,7 +73,7 @@ buildPythonPackage rec {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

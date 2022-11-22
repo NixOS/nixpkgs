@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.adminer.org";
     license = with licenses; [ asl20 gpl2Only ];
     maintainers = with maintainers; [
-      jtojnar
       sstef
     ];
     platforms = platforms.all;
