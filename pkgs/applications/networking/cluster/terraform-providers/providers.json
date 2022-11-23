@@ -423,13 +423,13 @@
     "version": "2.2.0"
   },
   "github": {
-    "hash": "sha256-3ivfHKoj7jXQ3WsoTNSCL1zD93Pr0pjtZ9LneW9My4o=",
+    "hash": "sha256-+I2h3wQnLd9EX99begsj4CI5R5i93JowBbGydYQNJHg=",
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v5.9.0",
+    "rev": "v5.9.1",
     "vendorHash": null,
-    "version": "5.9.0"
+    "version": "5.9.1"
   },
   "gitlab": {
     "hash": "sha256-1Ljf9kwpj96mzu/uHqitYCKIixNn/sZL21zOM8xQsU4=",
