@@ -343,7 +343,7 @@ in
           redis = mkOption {
             description = lib.mdDoc "The Redis connection used for the Celery worker.";
             type = types.str;
-            default = "redis+socket:///run/redis-sourcehut-buildsrht/redis.sock?virtual_host=2";
+            default = "redis://localhost:6379/0";
           };
           shell = mkOption {
             description = lib.mdDoc ''
@@ -376,7 +376,8 @@ in
               of the build runner (with HTTP port if not 80).
             '';
             type = types.str;
-            default = "localhost:5020";
+            default = "logs.${domain}";
+            defaultText = "logs.example.com";
           };
           timeout = mkOption {
             description = lib.mdDoc ''
@@ -842,13 +843,20 @@ in
             # Using this has the side effect of creating empty files in /usr/bin/
             optionals cfg.builds.enable [
               "${pkgs.writeShellScript "buildsrht-keys-wrapper" ''
-                set -e
-                cd /run/sourcehut/buildsrht/subdir
-                set -x
+                set -ex
+                cd /run/sourcehut/buildsrht/
                 exec -a "$0" ${pkgs.sourcehut.buildsrht}/bin/buildsrht-keys "$@"
               ''}:/usr/bin/buildsrht-keys"
-              "${pkgs.sourcehut.buildsrht}/bin/master-shell:/usr/bin/master-shell"
-              "${pkgs.sourcehut.buildsrht}/bin/runner-shell:/usr/bin/runner-shell"
+              "${pkgs.writeShellScript "master-shell-wrapper" ''
+                set -ex
+                cd /run/sourcehut/buildsrht/
+                exec -a "$0" ${pkgs.sourcehut.buildsrht}/bin/master-shell "$@"
+              ''}:/usr/bin/master-shell"
+              "${pkgs.writeShellScript "runner-shell-wrapper" ''
+                set -ex
+                cd /run/sourcehut/buildsrht/
+                exec -a "$0" ${pkgs.sourcehut.buildsrht}/bin/runner-shell "$@"
+              ''}:/usr/bin/runner-shell"
             ] ++
             optionals cfg.git.enable [
               # /path/to/gitsrht-keys calls /path/to/gitsrht-shell,
@@ -950,6 +958,38 @@ in
           TimeoutStartSec = "1800s";
           # buildsrht-worker looks up ../config.ini
           WorkingDirectory = "-"+"/run/sourcehut/${serviceName}/subdir";
+          # can possibly be strengthened.
+          InaccessiblePaths = lib.mkForce [];
+          RootDirectory = lib.mkForce null;
+          RootDirectoryStartOnly = lib.mkForce false;
+          PrivateTmp = lib.mkForce false;
+          MountAPIVFS = lib.mkForce false;
+          AmbientCapabilities = lib.mkForce null;
+          CapabilityBoundingSet = lib.mkForce null;
+          LockPersonality = lib.mkForce false;
+          MemoryDenyWriteExecute = lib.mkForce false;
+          NoNewPrivileges = lib.mkForce false;
+          PrivateDevices = lib.mkForce false;
+          PrivateMounts = lib.mkForce false;
+          PrivateNetwork = lib.mkForce false;
+          PrivateUsers = lib.mkForce false;
+          ProcSubset = lib.mkForce "all";
+          ProtectClock = lib.mkForce false;
+          ProtectControlGroups = lib.mkForce false;
+          ProtectHome = lib.mkForce false;
+          ProtectHostname = lib.mkForce false;
+          ProtectKernelLogs = lib.mkForce false;
+          ProtectKernelModules = lib.mkForce false;
+          ProtectKernelTunables = lib.mkForce false;
+          ProtectProc = lib.mkForce false;
+          ProtectSystem = lib.mkForce false;
+          RemoveIPC = lib.mkForce false;
+          RestrictAddressFamilies = lib.mkForce [ "~none" ];
+          RestrictNamespaces = lib.mkForce false;
+          RestrictRealtime = lib.mkForce false;
+          RestrictSUIDSGID = lib.mkForce false;
+          SystemCallFilter =  lib.mkForce [];
+          SystemCallArchitectures = lib.mkForce null;
         };
       };
       extraConfig = let
@@ -967,9 +1007,8 @@ in
         );
         image_dir_pre = pkgs.symlinkJoin {
           name = "buildsrht-worker-images-pre";
-          paths = image_dirs;
-            # FIXME: not working, apparently because ubuntu/latest is a broken link
-            # ++ [ "${pkgs.sourcehut.buildsrht}/lib/images" ];
+          paths = image_dirs
+            ++ [ "${pkgs.sourcehut.buildsrht}/lib/images" ];
         };
         image_dir = pkgs.runCommand "buildsrht-worker-images" { } ''
           mkdir -p $out/images
@@ -980,6 +1019,8 @@ in
           users.users.${cfg.builds.user}.shell = pkgs.bash;
 
           virtualisation.docker.enable = true;
+
+          services.redis.servers."".enable = true;
 
           services.sourcehut.settings = mkMerge [
             { # Note that git.sr.ht::dispatch is not a typo,
