@@ -82,7 +82,7 @@ if __name__ == '__main__':
     ct.register_plugin('xep_0363')
     # MUC
     ct.register_plugin('xep_0045')
-    ct.connect(("server", 5222))
+    ct.connect(("${connectTo}", 5222))
     ct.process(forever=False)
 
     if not ct.test_succeeded:
