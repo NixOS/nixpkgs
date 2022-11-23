@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Models for storing and converting Sensor Data state";
     homepage = "https://github.com/bluetooth-devices/sensor-state-data";
+    changelog = "https://github.com/Bluetooth-Devices/sensor-state-data/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
