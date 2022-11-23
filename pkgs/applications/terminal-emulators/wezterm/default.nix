@@ -30,15 +30,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20220905-102802-7d4b8249";
+  version = "20221119-145034-49b9839f";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Xvi0bluLM4F3BFefIPhkhTF3dmRvP8u+qV70Rz4CGKI=";
+    sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
   };
+
+  # Rust 1.65 does better at enum packing (according to
+  # 40e08fafe2f6e5b0c70d55996a0814d6813442ef), but Nixpkgs doesn't have 1.65
+  # yet (still in staging), so skip these tests for now.
+  checkFlags = [
+    "--skip=escape::action_size"
+    "--skip=surface::line::storage::test::memory_usage"
+  ];
 
   postPatch = ''
     echo ${version} > .tag
@@ -47,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-XJAeMDwtLtBzHMU/cb3lZgmcw5F3ifjKzKVmuP85/RY=";
+  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
 
   nativeBuildInputs = [
     installShellFiles
