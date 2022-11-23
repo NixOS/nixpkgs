@@ -429,6 +429,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://asphyxia-core.github.io/">Asphyxia
+          CORE</link>, an e-amuse emulator for Konami rhythm games.
+          Available as
+          <link linkend="opt-services.asphyxia-core.enable">services.asphyxia-core</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
           the authentication software for the German ID card. Available
           as
