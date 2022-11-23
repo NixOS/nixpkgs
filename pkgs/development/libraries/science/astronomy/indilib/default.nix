@@ -4,6 +4,8 @@
 , cmake
 , cfitsio
 , libusb1
+, systemd
+, pkg-config
 , zlib
 , boost
 , libev
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     cfitsio
     libev
     libusb1
+    systemd
+    pkg-config
     zlib
     boost
     libnova
@@ -53,6 +57,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 snick ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

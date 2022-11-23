@@ -3,8 +3,11 @@
 , cmake
 , cfitsio
 , libusb1
+, systemd
 , zlib
 , boost
+, pkg-config
+, limesuite
 , libnova
 , curl
 , libjpeg
@@ -31,8 +34,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+    indilib
+    libnova
+    curl
+    cfitsio
+    libusb1
+    systemd
+    zlib
+    boost
+    pkg-config
+    limesuite
+    gsl
+    gpsd
+    libjpeg
+    libgphoto2
+    libraw
+    libftdi1
+    libdc1394
+    ffmpeg
+    fftw
   ] ++ lib.optionals withFirmware [
     firmware
   ];
@@ -74,6 +94,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 snick ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

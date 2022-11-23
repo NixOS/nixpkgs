@@ -3,6 +3,8 @@
 , cmake
 , cfitsio
 , libusb1
+, pkg-config
+, systemd
 , zlib
 , boost
 , libnova
@@ -29,8 +31,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+    indilib
+    libnova
+    curl
+    cfitsio
+    libusb1
+    pkg-config
+    systemd
+    zlib
+    boost
+    gsl
+    gpsd
+    libjpeg
+    libgphoto2
+    libraw
+    libftdi1
+    libdc1394
+    ffmpeg
+    fftw
   ];
 
   cmakeFlags = [
@@ -51,6 +69,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  preFixup = ''
+    # fix missing libudev
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.1
+  '';
+
   postFixup = ''
     rm $out/lib/udev/rules.d/99-fli.rules
   '';
@@ -61,6 +84,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ hjones2199 snick ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

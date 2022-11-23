@@ -15,7 +15,7 @@ let
   indi-3rdparty = callPackage ./indi-3rdparty.nix {
     version = indi-version;
     src = indi-3rdparty-src;
-    withFirmware = stdenv.isx86_64;
+    withFirmware = stdenv.isx86_64 || stdenv.isAarch64;
     firmware = indi-firmware;
   };
 in
@@ -24,7 +24,6 @@ callPackage ./indi-with-drivers.nix {
   version = indi-version;
   extraDrivers = [
     indi-3rdparty
-  ] ++ lib.optionals stdenv.isx86_64 [
     indi-firmware
   ];
 }
