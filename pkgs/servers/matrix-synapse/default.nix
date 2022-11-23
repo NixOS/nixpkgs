@@ -11,20 +11,20 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.71.0";
+  version = "1.72.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-fmEQ1YsIB9xZOQZBojmYkFWPDdOLbNXqfn0szgZmtKg=";
+    hash = "sha256-LkzUrEXC+jonkEpAGIEDQhAKisrKNQB8/elchN/4YMU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-700LPWyhY95sVjB3chbdmr7AmE1Y55vN6Llszv/APL4=";
+    hash = "sha256-AuQURcVaIoOYG9jh6QhPpXB0akASVWMYe4fA/376cwo=";
   };
 
   postPatch = ''

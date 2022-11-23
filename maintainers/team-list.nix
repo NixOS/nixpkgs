@@ -250,7 +250,7 @@ with lib.maintainers; {
   };
 
   freedesktop = {
-    members = [ jtojnar ];
+    members = [ ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
     shortName = "freedesktop.org packaging";
   };
@@ -281,7 +281,6 @@ with lib.maintainers; {
     members = [
       bobby285271
       hedning
-      jtojnar
       dasj19
       maxeaubrey
     ];

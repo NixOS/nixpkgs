@@ -280,6 +280,16 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://evcc.io">EVCC</link> is an EV charge
+          controller with PV integration. It supports a multitude of
+          chargers, meters, vehicle APIs and more and ties that together
+          with a well-tested backend and a lightweight web frontend.
+          Available as
+          <link linkend="opt-services.evcc.enable">services.evcc</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
