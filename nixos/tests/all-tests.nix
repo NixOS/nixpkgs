@@ -480,7 +480,7 @@ in {
   pam-u2f = handleTest ./pam/pam-u2f.nix {};
   pam-ussh = handleTest ./pam/pam-ussh.nix {};
   pass-secret-service = handleTest ./pass-secret-service.nix {};
-  patroni = handleTest ./patroni.nix {};
+  patroni = handleTestOn ["x86_64-linux"] ./patroni.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
