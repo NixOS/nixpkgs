@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     distro
     numpy
     pandas
+    setuptools
   ];
 
   checkInputs = [
