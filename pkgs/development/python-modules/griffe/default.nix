@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.24.0";
+  version = "0.24.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Gcht9pmh15dvSHRsG9y82l4HoJ7l/gxbmrRh7Jow2Bs=";
+    hash = "sha256-HOjwm/IktllmD7Gg9bu8NZqe2RazFC5MNMgH3cld6/8=";
   };
 
   postPatch = ''
