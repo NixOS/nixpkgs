@@ -21,6 +21,11 @@ let
     (filterAttrs (k: v: v != null)
     (mapAttrs (section: v:
       let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht(::.*)?$" section; in
+      # the hg service uses the dispatcher of the git services,
+      # so it needs access to the corresponding config section
+      if srvMatch == [ "git" "::dispatch" ] && srv == "hg"
+      then v
+      else
       if srvMatch == null # Include sections shared by all services
       || head srvMatch == srv # Include sections for the service being configured
       then v
@@ -889,7 +894,7 @@ in
               ''}:/usr/bin/hgsrht-keys"
               "${pkgs.writeShellScript "hgsrht-shell-wrapper" ''
                 set -e
-                cd /run/sourcehut/hgsrht/subdir
+                cd /run/sourcehut/hgsrht
                 set -x
                 exec -a "$0" ${pkgs.sourcehut.hgsrht}/bin/hgsrht-shell "$@"
               ''}:/usr/bin/hgsrht-shell"
@@ -898,7 +903,7 @@ in
               "${pkgs.writeShellScript "hgsrht-hook-changegroup" ''
                 set -e
                 test -e "''$PWD"/config.ini ||
-                ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
+                ${pkgs.coreutils}/bin/ln -s /run/sourcehut/hgsrht/config.ini "''$PWD"/config.ini
                 set -x
                 exec -a "$0" ${cfg.python}/bin/hgsrht-hook-changegroup "$@"
               ''}:/usr/bin/hgsrht-hook-changegroup"
@@ -1119,7 +1124,14 @@ in
     (import ./service.nix "hg" (let
       baseService = {
         path = [ cfg.hg.package ];
-        serviceConfig.BindPaths = [ "${cfg.settings."hg.sr.ht".repos}:/var/lib/sourcehut/hgsrht/repos" ];
+        serviceConfig.BindPaths = [
+          "${cfg.settings."hg.sr.ht".repos}:/var/lib/sourcehut/hgsrht/repos"
+          "${pkgs.writeText "hgsrht-hgrc"
+            ''
+            [extensions]
+            hgext = ${pkgs.sourcehut.hgsrht}/lib/python3.10/site-packages/hgsrht/hgext
+            ''}:/etc/mercurial/hgrc"
+          ];
       };
       in {
       inherit configIniOfService;
@@ -1131,15 +1143,18 @@ in
       apiConfig = {
         path = [ cfg.hg.package ];
       };
-      extraTimers.hgsrht-periodic = {
-        service = baseService;
-        timerConfig.OnCalendar = ["*:0/20"];
-      };
-      extraTimers.hgsrht-clonebundles = mkIf cfg.hg.cloneBundles {
-        service = baseService;
-        timerConfig.OnCalendar = ["daily"];
-        timerConfig.AccuracySec = "1h";
-      };
+      extraTimers = {
+        hgsrht-periodic = {
+          service = baseService;
+          timerConfig.OnCalendar = ["*:0/20"];
+        };
+      } // (if cfg.hg.cloneBundles then {
+          hgsrht-clonebundles = {
+            service = baseService;
+            timerConfig.OnCalendar = ["daily"];
+            timerConfig.AccuracySec = "1h";
+          };
+        } else {});
       extraConfig = mkMerge [
         {
           users.users.${cfg.hg.user}.shell = pkgs.bash;
@@ -1150,6 +1165,10 @@ in
               mkDefault "${cfg.hg.user}:${cfg.hg.group}";
           };
           systemd.services.sshd = baseService;
+          systemd.tmpfiles.rules =
+            [ "D ${cfg.settings."hg.sr.ht".repos} 700 ${cfg.hg.user} ${cfg.hg.group} - - "
+              "L+ /var/log/hgsrht-shell - - - - /dev/null"
+            ];
         }
         (mkIf cfg.nginx.enable {
           # Allow nginx access to repositories
