@@ -8,7 +8,7 @@ let
         src = oldAttrs.src.override {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+          hash = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
         };
       });
     };

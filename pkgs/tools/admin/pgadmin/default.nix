@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.15";
+  version = "6.16";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-S//Rfi8IiBo+lL0BCFVBw+hy2Tw37B349Gcpq2knqSM=";
+    sha256 = "sha256-v2CfoV7QAzLcPXKY5nkUi9+HbHujiulUJS4GVBKxTY4=";
   };
 
   yarnDeps = mkYarnModules {
