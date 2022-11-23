@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "radian" ];
 
   meta = with lib; {
-    description = "A 21 century R console.";
+    description = "A 21 century R console";
     homepage = "https://github.com/randy3k/radian";
     license = licenses.mit;
     maintainers = with maintainers; [ jdreaver ];
