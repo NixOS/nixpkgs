@@ -470,13 +470,13 @@
     "version": "0.7.0"
   },
   "grafana": {
-    "hash": "sha256-HeUPa0xMQx5n1Wnv58v8Wi6VWbIWmfVwyO5badxi7Qo=",
+    "hash": "sha256-DAuG1VYLYr3cz+PR5wNlPBKuUcnbYAO0d9tNxnBiGuU=",
     "owner": "grafana",
     "provider-source-address": "registry.terraform.io/grafana/grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.30.0",
-    "vendorHash": "sha256-Mc8BkC7ZhTmmWYKAMR+aQ9lBr7IFll7vAIWFbZc/Rqw=",
-    "version": "1.30.0"
+    "rev": "v1.31.1",
+    "vendorHash": "sha256-4PrQW8h8EtX7hvSh2nzvA4EHwb2AhZqSLhrXlRrq8Lo=",
+    "version": "1.31.1"
   },
   "gridscale": {
     "hash": "sha256-k87g+MwzKl++VfKerzRllHsKN8Y8AyEFm1yWV5xrgwI=",
