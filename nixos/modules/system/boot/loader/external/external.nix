@@ -4,6 +4,19 @@ with lib;
 
 let
   cfg = config.boot.loader.external;
+  nib = pkgs.writeShellScriptBin "nixos-install-bootloader" "nixos-install-bootloader" ''
+    ${if cfg.passBootspec then
+    ''
+      echo "Passing bootspec to bootloader installer"
+      ${cfg.installHook} $out/bootspec/boot.v1.json
+    ''
+    else
+    ''
+      echo "Passing top-level to bootloader install"
+      ${cfg.installHook} $out
+    ''
+    }
+  '';
 in
 {
   meta = {
@@ -16,6 +29,8 @@ in
   options.boot.loader.external = {
     enable = mkEnableOption "use an external tool to install your bootloader";
 
+    passBootspec = mkEnableOption "pass bootspec to your bootloader installHook, otherwise the top-level";
+
     installHook = mkOption {
       type = with types; path;
       description = ''
@@ -27,12 +42,14 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ nib ];
+
     boot.loader = {
       grub.enable = mkDefault false;
       systemd-boot.enable = mkDefault false;
       supportsInitrdSecrets = false;
     };
 
-    system.build.installBootLoader = cfg.installHook;
+    system.build.installBootLoader = "${nib}/bin/nixos-install-bootloader";
   };
 }
