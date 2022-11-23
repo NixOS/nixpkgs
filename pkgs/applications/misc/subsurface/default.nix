@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, writeShellScriptBin
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -93,12 +94,20 @@ let
     };
   };
 
+  get-version = writeShellScriptBin "get-version" ''
+    echo -n ${version}
+  '';
+
 in
 stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
   src = subsurfaceSrc;
+
+  postPatch = ''
+    install -m555 -t scripts ${lib.getExe get-version}
+  '';
 
   buildInputs = [
     bluez
