@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, coverage
 , lineedit
 , pexpect
 , ptyprocess
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    coverage
     pyte
     pexpect
     ptyprocess
