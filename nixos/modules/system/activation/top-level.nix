@@ -3,6 +3,10 @@
 with lib;
 
 let
+  children =
+    mapAttrs
+      (childName: childConfig: childConfig.configuration.system.build.toplevel)
+      config.specialisation;
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
