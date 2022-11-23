@@ -247,6 +247,7 @@ in {
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "lighthouse-beacon";
+        ReadWritePaths = [ cfg.beacon.dataDir ];
         NoNewPrivileges = true;
         PrivateTmp = true;
         ProtectHome = true;
@@ -287,6 +288,7 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         StateDirectory = "lighthouse-validator";
+        ReadWritePaths = [ cfg.validator.dataDir ];
         CapabilityBoundingSet = "";
         DynamicUser = true;
         NoNewPrivileges = true;

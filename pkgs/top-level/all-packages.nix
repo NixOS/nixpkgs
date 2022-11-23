@@ -9646,7 +9646,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_3;
+  nomad = nomad_1_4;
 
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
@@ -15254,6 +15254,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
+  typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
@@ -29152,7 +29153,11 @@ with pkgs;
 
   gpxlab = libsForQt5.callPackage ../applications/misc/gpxlab { };
 
-  gpxsee = libsForQt5.callPackage ../applications/misc/gpxsee { };
+  gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
+
+  gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
+
+  gpxsee = gpxsee-qt5;
 
   gspell = callPackage ../development/libraries/gspell { };
 
