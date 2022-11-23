@@ -23,6 +23,12 @@ let
     inherit expected;
   };
 
+  pkg = name: derivation {
+    system = "fake-system";
+    builder = "/fake";
+    inherit name;
+  };
+
 in
 
 runTests {
@@ -535,6 +541,30 @@ runTests {
       foo = "bar";
       foobar = "baz";
       foobarbaz = "baz";
+    };
+  };
+
+  test_joinAttrsRecursive = {
+    expr = joinAttrsRecursive (concatStringsSep ".") (_path: isDerivation) {
+      a.b.c = pkg "abc";
+      a.b.d = pkg "abd";
+      a.e = pkg "e" // { f = pkg "f"; };
+    };
+    expected = {
+      "a.b.c" = pkg "abc";
+      "a.b.d" = pkg "abd";
+      "a.e" = pkg "e" // { f = pkg "f"; };
+    };
+  };
+
+  test_joinAttrsRecursive_empty = {
+    expr =
+      joinAttrsRecursive
+        (concatStringsSep ".")
+        (path: assert path == []; isDerivation)
+        (pkg "abc");
+    expected = {
+      "" = pkg "abc";
     };
   };
 
