@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_compile_options(${PROJECT_NAME} PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror  -D_FILE_OFFSET_BITS=64>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror -D_FILE_OFFSET_BITS=64>
 )
 
 if(BUILD_STATIC AND MSVC)
@@ -21,7 +21,11 @@ endif()
 
 get_property(wfs_include_dirs TARGET wfslib PROPERTY INCLUDE_DIRECTORIES)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${wfs_include_dirs})
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${wfs_include_dirs}
+        ${FUSE_INCLUDE_DIR}
+)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

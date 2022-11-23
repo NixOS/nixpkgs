@@ -30,7 +30,7 @@ void dumpdir(const std::filesystem::path& target,
     target_dir /= path;
   if (!std::filesystem::exists(target_dir)) {
     if (!std::filesystem::create_directories(target_dir)) {
-      std::cerr << "Error: Failed to create directory " << (target_dir) << std::endl;
+      std::cerr << "Error: Failed to create directory " << target_dir.string() << std::endl;
       return;
     }
   }
@@ -51,7 +51,7 @@ void dumpdir(const std::filesystem::path& target,
           stream.read(data.data(), std::min(data.size(), to_read));
           auto read = stream.gcount();
           if (read <= 0) {
-            std::cerr << "Error: Failed to read /" << npath << std::endl;
+            std::cerr << "Error: Failed to read /" << npath.generic_string() << std::endl;
             break;
           }
           output_file.write(data.data(), read);
@@ -61,7 +61,7 @@ void dumpdir(const std::filesystem::path& target,
       }
     }
   } catch (std::exception&) {
-    std::cerr << "Error: Failed to dump folder /" << path << std::endl;
+    std::cerr << "Error: Failed to dump folder /" << path.generic_string() << std::endl;
   }
 }
 
