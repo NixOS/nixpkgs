@@ -15796,6 +15796,8 @@ with pkgs;
 
   mujs = callPackage ../development/interpreters/mujs { };
 
+  nelua = callPackage ../development/interpreters/nelua { };
+
   nextflow = callPackage ../development/interpreters/nextflow { };
 
   ngn-k = callPackage ../development/interpreters/ngn-k { };
