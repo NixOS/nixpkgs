@@ -4,7 +4,6 @@
 , lib
 , nixosTests
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , buildPackages
 , ninja
@@ -127,7 +126,7 @@ assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "250.4";
+  version = "250.8";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -144,7 +143,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-AdzPh7dGVrGbbjL9+PqytQOpRzNDUUEftmKZAbFH3L4=";
+    sha256 = "sha256-16PkAl0amLfdZ0L55opHdhXylKKof7RUlOJ/jDeRQko=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -178,13 +177,6 @@ stdenv.mkDerivation {
     # need (AFAICT).
     # See https://github.com/systemd/systemd/pull/20479 for upstream discussion.
     ./0019-core-handle-lookup-paths-being-symlinks.patch
-
-    # fixes reproducability of dbus xml files
-    # Should no longer be necessary with v251.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/pull/22174.patch";
-      sha256 = "sha256-RVhxUEUiISgRlIP/AhU+w1VHfDQw2W16cFl2TXXyxno=";
-    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -546,6 +538,7 @@ stdenv.mkDerivation {
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
+            "src/test/test-load-fragment.c"
           ];
         }
         {

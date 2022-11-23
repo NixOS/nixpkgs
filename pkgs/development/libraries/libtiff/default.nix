@@ -104,6 +104,13 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-LUzcYU6Tfn+5cJBh0IMaVVCzcuEIF+HJ3ic9Ng7FrK4=";
     })
     ./4.3.0-CVE-2022-2953.patch
+    ./4.3.0-CVE-2022-3626.CVE-2022-3627.CVE-2022-3597.patch
+    (fetchpatch {
+      name = "4.3.0-heap-overflow-issues-273-275.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/aac006e5796437f1729b1284fbfa506b2b730aff.patch";
+      sha256 = "sha256-FNiKqeN3vl0HA6feqLcQAUch9NMrR5UDFLBiNDPkmv4=";
+    })
+    ./4.3.0-CVE-2022-3598.CVE-2022-3570.patch
   ];
 
   postPatch = ''
