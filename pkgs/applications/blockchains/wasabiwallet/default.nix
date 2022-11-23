@@ -1,8 +1,11 @@
 { lib, stdenv
+, autoPatchelfHook
+, makeWrapper
 , fetchurl
 , makeDesktopItem
 , curl
 , dotnetCorePackages
+, lttng-ust_2_12
 , fontconfig
 , krb5
 , openssl
@@ -11,15 +14,18 @@
 }:
 
 let
-  dotnet-runtime = dotnetCorePackages.runtime_5_0;
-  libPath = lib.makeLibraryPath [
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  # These libraries are dynamically loaded by the application,
+  # and need to be present in LD_LIBRARY_PATH
+  runtimeLibs = [
     curl
-    dotnet-runtime
     fontconfig.lib
     krb5
     openssl
     stdenv.cc.cc.lib
     xorg.libX11
+    xorg.libICE
+    xorg.libSM
     zlib
   ];
 in
@@ -33,7 +39,6 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-  dontPatchELF = true;
 
   desktopItem = makeDesktopItem {
     name = "wasabi";
@@ -44,16 +49,19 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "Utility" ];
   };
 
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  buildInputs = runtimeLibs ++ [
+    lttng-ust_2_12
+  ];
+
   installPhase = ''
     mkdir -p $out/opt/${pname} $out/bin $out/share/applications
     cp -Rv . $out/opt/${pname}
-    cd $out/opt/${pname}
-    for i in $(find . -type f -name '*.so') wassabee
-      do
-        patchelf --set-rpath ${libPath} $i
-      done
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" wassabee
-    ln -s $out/opt/${pname}/wassabee $out/bin/${pname}
+
+    makeWrapper "${dotnet-runtime}/bin/dotnet" "$out/bin/${pname}" \
+      --add-flags "$out/opt/${pname}/WalletWasabi.Fluent.Desktop.dll" \
+      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
