@@ -10,11 +10,12 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2022.11.0";
+  version = "2022.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-aCgMAaur2ljjiQ7tt/gXm/Vt+o6j/MsCOLN661CkFw4=";
+    hash = "sha256-Sm9gd5ezqrgcpDYJlFyEtzFmY29MbdY+pjWu6c86Rfg=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    typing-extensions
   ];
 
   checkInputs = [
