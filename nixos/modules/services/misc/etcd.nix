@@ -97,6 +97,16 @@ in {
       type = types.nullOr types.path;
     };
 
+    package = mkOption {
+      default = pkgs.etcd;
+      defaultText = literalExpression "pkgs.etcd";
+      type = types.package;
+      example = literalExpression "pkgs.etcd";
+      description = lib.mdDoc ''
+        Which etcd package to be installed: `pkgs.etcd`
+      '';
+    };
+
     peerCertFile = mkOption {
       description = lib.mdDoc "Cert file to use for peer to peer communication";
       default = cfg.certFile;
@@ -186,13 +196,13 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd}/bin/etcd";
+        ExecStart = "${cfg.package}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
       };
     };
 
-    environment.systemPackages = [ pkgs.etcd ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.etcd = {
       isSystemUser = true;
