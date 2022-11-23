@@ -2,7 +2,7 @@
 , buildPythonPackage
 , distro
 , fetchFromGitHub
-, jdk
+, jre
 , numpy
 , pandas
 , pytestCheckHook
@@ -25,6 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-Dfi6LzrLDz9VVDmbeK1dEaWuQosD4tvAH13Q4Mp3smA=";
   };
 
+  patches = [
+    ./java-interpreter-path.patch
+  ];
+
+  postPatch = ''
+    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
@@ -39,7 +47,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    jdk
     pytestCheckHook
   ];
 
