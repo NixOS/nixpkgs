@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.43.0";
+  version = "2.44.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JIO1Zm7me/SX0W7sVHOesERnqvC7jy0Fu1vfKFePFd0=";
+    sha256 = "sha256-9LnT0613z2I9bA0FhcTgINBnXG17ulz6flA13B1Vijs=";
   };
 
   buildInputs = [ boost zlib openssl ]
