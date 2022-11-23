@@ -12,6 +12,7 @@ in writeScriptBin "send-message" ''
 #!${(python3.withPackages (ps: [ ps.slixmpp ])).interpreter}
 import logging
 import sys
+import signal
 from types import MethodType
 
 from slixmpp import ClientXMPP
@@ -64,8 +65,13 @@ class CthonTest(ClientXMPP):
         log.info('MUC join success!')
         log.info('XMPP SCRIPT TEST SUCCESS')
 
+def timeout_handler(signalnum, stackframe):
+    print('ERROR: xmpp-sendmessage timed out')
+    sys.exit(1)
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(120)
     logging.basicConfig(level=logging.DEBUG,
                         format='%(levelname)-8s %(message)s')
 
