@@ -22,7 +22,8 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
+    platforms = platforms.all;
     maintainers = [ maintainers.montag451 ];
   };
 }
