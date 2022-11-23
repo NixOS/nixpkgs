@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.5.11";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "c1579e6b3fa1c302961d08debe17232127616b9b";
-    sha256 = "SAVZgdLv7DZNwfvbu98m3cSZuv/XrRRZXHTT+58z8Ao=";
+    rev = "v${version}";
+    sha256 = "QEHVdyVgsZxvs+d+xeeJqwx531+6e0uPi1J3t+hJ0d0=";
   };
 
   postPatch = ''
