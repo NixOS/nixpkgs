@@ -300,6 +300,9 @@ package-maintainers:
     - ghcide
     - haskell-language-server
     - hedgehog
+    - hledger
+    - hledger-ui
+    - hledger-web
     - hlint
     - hmatrix
     - hspec-discover
@@ -307,6 +310,7 @@ package-maintainers:
     - matrix-client
     - neuron
     - optics
+    - pandoc
     - paths
     - postgresql-simple
     - reflex-dom
@@ -338,8 +342,6 @@ package-maintainers:
     - funcmp
     - git-annex
     - hledger-interest
-    - hledger-ui
-    - hledger-web
     - hopenssl
     - hsdns
     - hsemail
