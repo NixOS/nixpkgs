@@ -4,6 +4,11 @@ with lib;
 
 {
   options.boot.loader.efi = {
+    enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc "Enable UEFI booting";
+    };
 
     canTouchEfiVariables = mkOption {
       default = false;

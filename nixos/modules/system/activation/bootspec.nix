@@ -19,6 +19,12 @@ let
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
               label = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+
+              extension = if config.boot.loader.efi.enable then {
+                esp = config.boot.loader.efi.efiSysMountPoint;
+                bootctl = "${config.systemd.package}/bin/bootctl";
+                osRelease = config.environment.etc."os-release".path;
+              } else {};
             });
 
       generator =
