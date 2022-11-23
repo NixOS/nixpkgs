@@ -9,6 +9,7 @@ let
     poller = { inherit (cfg.log) debug quiet; };
     unifi = { inherit (cfg) controllers; };
     influxdb.disable = true;
+    datadog.disable = true; # workaround for https://github.com/unpoller/unpoller/issues/442
     prometheus = {
       http_listen = "${cfg.listenAddress}:${toString cfg.port}";
       report_errors = cfg.log.prometheusErrors;
