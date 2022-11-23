@@ -84,7 +84,7 @@
             hash = "sha256-X9mCwPqV5yP0S2GonNvpYnLSLJMd/SUIked+hMRxDpA=";
           };
 
-          hash = "sha256-5Mg7KDJLMM5e/7BCHGinGAnBRft2ySQzvKW06p3u/0o=";
+          hash = "sha256-tEdElWJ+KBTxBobzXBpPopQSwK2usGW/it1+yfbVzBw=";
         };
 
         linkDependencies = makeTest {
@@ -107,7 +107,7 @@
             hash = "sha256-1fGNxYJi1I4cXK/jinNG+Y6tPEOhP3QAqWOBEQttS9E=";
           };
 
-          hash = "sha256-8xF8F74nHwL9KPN2QLsxnfvsk0rNCKOZniYJQCD5u/I=";
+          hash = "sha256-+KA8/orSBJ4EhuSyQO8IKSxsN/FAsYU3lOzq+awuxNQ=";
         };
       };
 
