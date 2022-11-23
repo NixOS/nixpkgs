@@ -33,5 +33,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    broken = true; # 2022-11-23
   };
 }
