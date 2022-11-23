@@ -33,7 +33,13 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Create the first release note entry in this section!
+          <literal>carnix</literal> and <literal>cratesIO</literal> has
+          been removed due to being unmaintained, use alternatives such
+          as
+          <link xlink:href="https://github.com/nix-community/naersk">naersk</link>
+          and
+          <link xlink:href="https://github.com/kolloch/crate2nix">crate2nix</link>
+          instead.
         </para>
       </listitem>
     </itemizedlist>
