@@ -1708,6 +1708,7 @@ runTests {
     };
   };
 
+  # type .description
 
   testTypeDescriptionInt = {
     expr = (with types; int).description;
