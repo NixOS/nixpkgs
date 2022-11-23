@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
   };

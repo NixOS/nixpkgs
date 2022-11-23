@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     description = "Plugin for DeaDBeeF audio player that fetches and shows the song’s lyrics";
     homepage = "https://github.com/C0rn3j/deadbeef-lyricbar";
     license = licenses.mit;
-    maintainers = [ maintainers.jtojnar ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

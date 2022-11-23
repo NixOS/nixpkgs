@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Applies STAT information from a Stylespace to a variable font";
     homepage = "https://github.com/daltonmaag/statmake";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }
