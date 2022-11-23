@@ -2,9 +2,8 @@
 , fetchFromGitHub
 , fzy
 , lib
-, makeWrapper
-, nix
-, nix-index
+, makeBinaryWrapper
+, nix-index-unwrapped
 , rustPlatform
 , testers
 }:
@@ -22,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/1b3GF0flhvejZ3C/yOzRGl50sWR4IxprwRoMUYEvm8=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/comma \
-      --prefix PATH : ${lib.makeBinPath [ nix fzy nix-index ]}
+      --prefix PATH : ${lib.makeBinPath [ fzy nix-index-unwrapped ]}
     ln -s $out/bin/comma $out/bin/,
   '';
 
@@ -39,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     description = "Runs programs without installing them";
     license = licenses.mit;
     maintainers = with maintainers; [ Enzime artturin ];
-    platforms = platforms.all;
   };
 }
