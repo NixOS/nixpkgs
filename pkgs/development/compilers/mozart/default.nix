@@ -81,10 +81,10 @@ in stdenv.mkDerivation rec {
     tk
   ];
 
-  meta = {
+  meta = with lib; {
     description = "An open source implementation of Oz 3";
-    maintainers = [ lib.maintainers.layus ];
-    license = lib.licenses.bsd2;
+    maintainers = with maintainers; [ layus h7x4 ];
+    license = licenses.bsd2;
     homepage = "https://mozart.github.io";
   };
 
