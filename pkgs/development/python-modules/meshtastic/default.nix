@@ -103,6 +103,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/Meshtastic-python";
+    changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
