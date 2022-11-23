@@ -1,21 +1,21 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, darwin, installShellFiles }:
+{ lib, fetchFromGitHub, rustPlatform, stdenv, Security, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "v${version}";
-    hash = "sha256-MGFtJUfPK6IH3w8xe/RZaXS+QDIVS3jFSnf4VYiSLM4=";
+    hash = "sha256-IyGSyyWhwxrevxWbnlfLVK0+Y1ZoKx2Dg1SRydG3nuo=";
   };
 
-  cargoHash = "sha256-siJrqL7HjUQvcyXpUN5rQWNeQNBc+693N1xTSvlOixI=";
+  cargoHash = "sha256-AE6z8/RO18FppLwsuz38JF/asI9dOLYmAErj1jzM3JA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     for shell in {ba,fi,z}sh; do
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rustic-rs/rustic";
     changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/changelog/${version}.txt";
     description = "fast, encrypted, deduplicated backups powered by pure Rust";
+    mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = [ lib.licenses.mit lib.licenses.asl20 ];
     maintainers = [ lib.maintainers.nobbz ];
