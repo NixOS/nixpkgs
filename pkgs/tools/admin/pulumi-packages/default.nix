@@ -7,5 +7,6 @@ in
   pulumi-aws-native = callPackage' ./pulumi-aws-native.nix { };
   pulumi-azure-native = callPackage' ./pulumi-azure-native.nix { };
   pulumi-language-python = callPackage ./pulumi-language-python.nix { };
+  pulumi-language-nodejs = callPackage ./pulumi-language-nodejs.nix { };
   pulumi-random = callPackage' ./pulumi-random.nix { };
 }
