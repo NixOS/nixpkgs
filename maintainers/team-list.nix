@@ -468,6 +468,7 @@ with lib.maintainers; {
   mobile = {
     members = [
       mindavi
+      pacman99
       samueldr
       tomfitzhenry
     ];
