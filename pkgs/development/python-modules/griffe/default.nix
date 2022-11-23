@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-Gcht9pmh15dvSHRsG9y82l4HoJ7l/gxbmrRh7Jow2Bs=";
   };
 
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";
+    changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };
