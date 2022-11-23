@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-m/tU1qf+CB9/2eoXktpBSgwjj8lMuMQ/WGYL6HhMNxA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-m/tU1qf+CB9/2eoXktpBSgwjj8lMuMQ/WGYL6HhMNxA=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python CoAP library";
     homepage = "https://aiocoap.readthedocs.io/";
+    changelog = "https://github.com/chrysn/aiocoap/blob/${version}/NEWS";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
