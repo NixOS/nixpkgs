@@ -471,6 +471,7 @@ with lib.maintainers; {
       pacman99
       samueldr
       tomfitzhenry
+      zhaofengli
     ];
     scope = "Maintain Mobile NixOS.";
     shortName = "Mobile";
