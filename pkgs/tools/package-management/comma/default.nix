@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/comma";
     description = "Runs programs without installing them";
     license = licenses.mit;
-    maintainers = with maintainers; [ Enzime artturin ];
+    maintainers = with maintainers; [ Enzime artturin marsam ];
   };
 }
