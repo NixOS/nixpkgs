@@ -1638,6 +1638,76 @@ runTests {
     };
   };
 
+  # joinDerivationsLeafStrictSep
+
+  test_joinDerivationsLeafStrictSep = let f = x: x; in {
+    expr = joinDerivationsLeafStrictSep "/" {
+      a = pkg "a";
+      b = {
+        c = pkg "bc";
+      };
+      d = recurseIntoAttrs {
+        e = pkg "de";
+        inherit f;
+        g = recurseIntoAttrs {
+          h = pkg "dgh";
+          inherit f;
+        };
+      };
+      inherit f;
+    };
+    expected = {
+      a = pkg "a";
+      "d/e" = pkg "de";
+      "d/g/h" = pkg "dgh";
+    };
+  };
+
+  test_joinDerivationsLeafStrictSep_singleton = let f = x: x; in {
+    expr = joinDerivationsLeafStrictSep (throw "sep: should be unused") (pkg "a");
+    expected = {
+      default = pkg "a";
+    };
+  };
+
+  test_joinDerivationsLeafStrictSep_shadow = let f = x: x; in {
+    expr = joinDerivationsLeafStrictSep "/" {
+
+      "b/c" = pkg "prior";
+      b = {
+        c = pkg "generated";
+      };
+
+      "B/C" = pkg "PRIOR";
+      B = {
+        C = pkg "GENERATED";
+      };
+
+      "a/b/c" = pkg "prior-a-b-c";
+      a = recurseIntoAttrs {
+        b = recurseIntoAttrs {
+          c = pkg "generated";
+        };
+      };
+
+      "a2/b" = recurseIntoAttrs {
+        "c" = pkg "prior-a2-b-c";
+      };
+      a2 = recurseIntoAttrs {
+        b = recurseIntoAttrs {
+          c = pkg "generated";
+        };
+      };
+
+    };
+    expected = {
+      "b/c" = pkg "prior";
+      "B/C" = pkg "PRIOR";
+      "a/b/c" = pkg "prior-a-b-c";
+      "a2/b/c" = pkg "prior-a2-b-c";
+    };
+  };
+
 
   testTypeDescriptionInt = {
     expr = (with types; int).description;

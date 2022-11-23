@@ -116,6 +116,7 @@ let
     inherit (self.derivations)
       getDerivationsChildStrict
       lazyDerivation
+      joinDerivationsLeafStrictSep
       ;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
