@@ -331,13 +331,13 @@
     "version": "3.2.3"
   },
   "dnsimple": {
-    "hash": "sha256-dge7slNS1EkWwjt3+WS8tlKjFHw6LV/q1Bxrl1RflBw=",
+    "hash": "sha256-P1mvxRbOSmQknQxFPEyAkpK5eZQq286oceRFbrgYYqg=",
     "owner": "dnsimple",
     "provider-source-address": "registry.terraform.io/dnsimple/dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v0.14.1",
+    "rev": "v0.15.0",
     "vendorHash": "sha256-z0vos/tZDUClK/s2yrXZG2RU8QgA8IM6bJj6jSdCnBk=",
-    "version": "0.14.1"
+    "version": "0.15.0"
   },
   "docker": {
     "hash": "sha256-/vz4rjENlVl9gqtxfqCV+k2SgsHZBcmA9Mz10Y2ay/E=",
