@@ -30,6 +30,7 @@
 , bash
 , python3Packages
 , nixosTests
+, libiconv
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
     tdb
     libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
+    ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
@@ -208,6 +210,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     # N.B. enableGlusterFS does not build
+    # TODO: darwin support needs newer SDK for "_futimens" and "_utimensat"
+    # see https://github.com/NixOS/nixpkgs/issues/101229
     broken = stdenv.isDarwin || enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };
