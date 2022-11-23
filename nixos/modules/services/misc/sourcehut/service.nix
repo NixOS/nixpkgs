@@ -3,6 +3,7 @@ srv:
 , srvsrht ? "${srv}srht" # Because "buildsrht" does not follow that pattern (missing an "s").
 , iniKey ? "${srv}.sr.ht"
 , webhooks ? false
+, apiConfig ? {}
 , extraTimers ? {}
 , mainService ? {}
 , extraServices ? {}
@@ -314,6 +315,29 @@ in
             fi
           '';
         } mainService ]);
+      }
+
+      {
+        "${srvsrht}-api" = baseService "${srvsrht}-api" { } (lib.mkMerge [
+          {
+            description = "sourcehut ${srv}.sr.ht api service";
+            after = [ "${srvsrht}.service" ];
+            wantedBy = [ "${srvsrht}.service" ];
+            partOf = [ "${srvsrht}.service" ];
+            serviceConfig = {
+              Type = "simple";
+              Restart = "always";
+              RestartSec = "5s";
+              ExecStart = "${
+                  pkgs.sourcehut."${srvsrht}"
+                }/bin/${srvsrht}-api -b ${cfg.listenAddress}:${
+                  toString (srvCfg.port + 100)
+                }";
+              StateDirectory = "sourcehut/${srvsrht}";
+            };
+          }
+          apiConfig
+        ]);
       }
 
       (mkIf webhooks {
