@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-aCgMAaur2ljjiQ7tt/gXm/Vt+o6j/MsCOLN661CkFw4=";
+    hash = "sha256-aCgMAaur2ljjiQ7tt/gXm/Vt+o6j/MsCOLN661CkFw4=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with RainMachine smart sprinkler controllers";
     homepage = "https://github.com/bachya/regenmaschine";
+    changelog = "https://github.com/bachya/regenmaschine/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
