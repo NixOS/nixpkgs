@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.3.32";
+  version = "0.3.39";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "0f3d5a191cca895a1cb9c41f8391520a08e8b9fc";
-    sha256 = "B+laYoW1XEq+XOoD/gjDngy8o9OSFJPpqdXVpvDIjLA=";
+    rev = "v${version}";
+    sha256 = "Hl2sYV8YVTzVHJr9LJDzuswoLgjVLT0kFIpIdt+uRzE=";
   };
 
   postPatch = ''
