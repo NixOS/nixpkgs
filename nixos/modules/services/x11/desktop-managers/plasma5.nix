@@ -384,6 +384,11 @@ in
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
+      # Extra services for D-Bus activation
+      services.dbus.packages = [
+        plasma5.kactivitymanagerd
+      ];
+
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
         "/share"
