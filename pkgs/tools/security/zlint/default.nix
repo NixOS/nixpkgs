@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "zlint";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
     rev = "v${version}";
-    hash = "sha256-l39GdfEKUAw5DQNjx6ZBgfGtengRlUUasm0G07kAA2A=";
+    hash = "sha256-edCZQeBZelDfZGBZgevvJ8fgm1G2QFILJKB3778D7ac=";
   };
 
   modRoot = "v3";
@@ -25,9 +25,8 @@ buildGoModule rec {
     rm -rf v3/cmd/genTestCerts
   '';
 
-  subPackages = [
-    "cmd/zlint"
-    "cmd/zlint-gtld-update"
+  excludedPackages = [
+    "lints"
   ];
 
   ldflags = [
@@ -35,9 +34,6 @@ buildGoModule rec {
     "-w"
     "-X main.version=${version}"
   ];
-
-  # Checks rely on .git directory, leaveDotGit makes the source derivation flaky.
-  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = zlint;
