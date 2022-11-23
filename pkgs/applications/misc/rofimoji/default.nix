@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , python3
+, installShellFiles
 
 , waylandSupport ? true
 , x11Support ? true
@@ -28,6 +29,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3.pkgs.poetry-core
+    installShellFiles
   ];
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
@@ -40,6 +42,10 @@ buildPythonApplication rec {
   # and has additional dependencies.
   postPatch = ''
     rm -rf extractors
+  '';
+
+  postInstall = ''
+    installManPage src/picker/docs/rofimoji.1
   '';
 
   meta = with lib; {
