@@ -1,7 +1,13 @@
 { lib }:
 
 let
-  inherit (lib) throwIfNot;
+  inherit (lib)
+    filterAttrs
+    isAttrs
+    isDerivation
+    mapAttrs
+    throwIfNot
+    ;
 in
 {
   /*
@@ -98,4 +104,38 @@ in
       # `lazyDerivation` caller knew a shortcut, be taken from there.
       meta = args.meta or checked.meta;
     } // passthru;
+
+  /*
+    getDerivationsChildStrict :: attrs -> (let tree = either package (attrsOf tree); in tree)
+
+    NOTE: This function evaluates too much and should usually be avoided.
+
+    Traverses a potentially nested attribute set of derivations and
+    non-derivations in approximately the way `nix-build` would.
+    Notably, this does not take into account restrictions on the attribute name.
+
+    "Child strict" refers to an unfortunate but required property of this function.
+    In order to determine whether any attribute should be returned at all, it must
+    evaluate the value of the attribute.
+    This lack of laziness is a performance risk, so it is best to specify your
+    packages and package sets in a way that does not require this function.
+
+    The `recurseForDerivations` attribute gets removed from the returned tree,
+    as it does not contain a derivation, or any information that can't be
+    recovered from `(attrs.type or null) == "derivation"`.
+  */
+  getDerivationsChildStrict = v0:
+    if isDerivation v0
+    then v0
+    else
+      lib.concatMapAttrs
+        (k: v:
+          if isDerivation v
+          then { ${k} = v; }
+          else if v.recurseForDerivations or false
+          then { ${k} = mapAttrs (k: lib.getDerivationsChildStrict) (filterAttrs (k: isAttrs) v); }
+          else { }
+        )
+        v0;
+
 }
