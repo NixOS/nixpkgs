@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.4";
+  version = "0.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "chrysn";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-m/tU1qf+CB9/2eoXktpBSgwjj8lMuMQ/WGYL6HhMNxA=";
+    hash = "sha256-t2yfWWfkJmOr14XdLsIV48HMgVRaEnUO4IG2jQHbKWA=";
   };
 
   propagatedBuildInputs = [
