@@ -6818,6 +6818,12 @@
     githubId = 7673602;
     name = "Jonathan Ringer";
   };
+  jordanisaacs = {
+    name = "Jordan Isaacs";
+    email = "nix@jdisaacs.com";
+    github = "jordanisaacs";
+    githubId = 19742638;
+  };
   jorise = {
     email = "info@jorisengbers.nl";
     github = "JorisE";
@@ -15920,11 +15926,5 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
-  };
-  jordanisaacs = {
-    name = "Jordan Isaacs";
-    email = "nix@jdisaacs.com";
-    github = "jordanisaacs";
-    githubId = 19742638;
   };
 }
