@@ -108,7 +108,7 @@ let
       #SocketBindDeny = "any";
       SystemCallFilter = [
         "@system-service"
-        "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@timer"
+        "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@timer"
         "@chown" "@setuid"
       ];
       SystemCallArchitectures = "native";
