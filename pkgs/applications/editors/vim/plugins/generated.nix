@@ -4953,6 +4953,18 @@ final: prev:
     meta.homepage = "https://github.com/Shougo/neocomplete.vim/";
   };
 
+  neoconf-nvim = buildVimPluginFrom2Nix {
+    pname = "neoconf.nvim";
+    version = "2022-11-22";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "neoconf.nvim";
+      rev = "d0dd1fb7aa74cbd88720abbacf3625bad1a1cb6c";
+      sha256 = "08vq10275jp7g985fmfyprvbrmlim9m4zb9z8jgv64lkx8v095q2";
+    };
+    meta.homepage = "https://github.com/folke/neoconf.nvim/";
+  };
+
   neodark-vim = buildVimPluginFrom2Nix {
     pname = "neodark.vim";
     version = "2022-11-13";
