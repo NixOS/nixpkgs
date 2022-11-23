@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.boot.loader.external;
-  nib = pkgs.writeShellScriptBin "nixos-install-bootloader" "nixos-install-bootloader" ''
+  nib = pkgs.writeShellScriptBin "nixos-install-bootloader" ''
     ${if cfg.passBootspec then
     ''
       echo "Passing bootspec to bootloader installer"
