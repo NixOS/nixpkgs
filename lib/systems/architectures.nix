@@ -2,8 +2,8 @@
 
 rec {
   # gcc.arch to its features (as in /proc/cpuinfo)
-  features = {
-    default        = [ ];
+  features = rec {
+    default        = x86-64-v2;
     # x86_64 Intel
     westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
