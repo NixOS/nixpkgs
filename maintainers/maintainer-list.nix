@@ -15933,10 +15933,4 @@
     github = "realsnick";
     githubId = 1440852;
   };
-  jordanisaacs = {
-    name = "Jordan Isaacs";
-    email = "nix@jdisaacs.com";
-    github = "jordanisaacs";
-    githubId = 19742638;
-  };
 }
