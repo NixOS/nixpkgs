@@ -33559,30 +33559,12 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin-unlimited  = libsForQt514.callPackage ../applications/blockchains/bitcoin-unlimited {
+  bitcoin-unlimited  = libsForQt5.callPackage ../applications/blockchains/bitcoin-unlimited {
     inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
     withGui = true;
   };
   bitcoind-unlimited = callPackage ../applications/blockchains/bitcoin-unlimited {
     inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
-    withGui = false;
-  };
-
-  bitcoin-classic  = libsForQt514.callPackage ../applications/blockchains/bitcoin-classic {
-    boost = boost165;
-    withGui = true;
-  };
-  bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic {
-    boost = boost165;
-    withGui = false;
-  };
-
-  bitcoin-gold = libsForQt514.callPackage ../applications/blockchains/bitcoin-gold {
-    boost = boost165;
-    withGui = true;
-  };
-  bitcoind-gold = callPackage ../applications/blockchains/bitcoin-gold {
-    boost = boost165;
     withGui = false;
   };
 
@@ -33594,15 +33576,6 @@ with pkgs;
 
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
-
-  digibyte = libsForQt514.callPackage ../applications/blockchains/digibyte {
-    withGui = true;
-    boost = boost170;
-  };
-  digibyted = callPackage ../applications/blockchains/digibyte {
-    withGui = false;
-    boost = boost170;
-  };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
     boost = boost165;
@@ -33748,7 +33721,7 @@ with pkgs;
 
   tessera = callPackage ../applications/blockchains/tessera { };
 
-  vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin {
+  vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     boost = boost165;
     withGui = true;
   };
