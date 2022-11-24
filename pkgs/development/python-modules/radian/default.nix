@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , lineedit
 , pexpect
+, prompt-toolkit
 , ptyprocess
 , pygments
 , pyte
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lineedit
+    prompt-toolkit
     pygments
     rchitect
     six
