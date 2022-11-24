@@ -193,6 +193,11 @@ let
     trivial-package-manager = pkg: {
       propagatedBuildInputs = [ pkgs.which ];
     };
+    "cl-sat.glucose" = pkg: {
+      propagatedBuildInputs = [ pkgs.glucose ];
+      patches = [ ./patches/cl-sat.glucose-binary-from-PATH-if-present.patch ];
+
+    };
   };
 
   qlpkgs =
