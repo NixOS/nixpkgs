@@ -367,7 +367,7 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      { valid = "no"; reason = "unsupported"; errormsg = "is only supported on `${toString attrs.meta.platforms}` but not on requested ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 
