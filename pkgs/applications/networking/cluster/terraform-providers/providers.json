@@ -340,13 +340,13 @@
     "version": "0.15.0"
   },
   "docker": {
-    "hash": "sha256-/vz4rjENlVl9gqtxfqCV+k2SgsHZBcmA9Mz10Y2ay/E=",
+    "hash": "sha256-SWfA3WaShBa+5FTyqLv+idVdvavet7V6qRKRGwYePUM=",
     "owner": "kreuzwerker",
     "provider-source-address": "registry.terraform.io/kreuzwerker/docker",
     "repo": "terraform-provider-docker",
-    "rev": "v2.23.0",
-    "vendorHash": "sha256-0JRJAwc4LbPXi6GJdrIGwuIaCzaP5MtIMuijYoOEjYA=",
-    "version": "2.23.0"
+    "rev": "v2.23.1",
+    "vendorHash": "sha256-EaWVf8GmNsabpfeOEzRjKPubCyEReGjdzRy7Ohb4mno=",
+    "version": "2.23.1"
   },
   "elasticsearch": {
     "hash": "sha256-+cktPArBOysc4V+uR3KWsVlxtxSIbuVMCmPSU21xF/U=",
@@ -385,13 +385,13 @@
     "version": "2.2.3"
   },
   "fastly": {
-    "hash": "sha256-cLiR9QAhIJCGHDGNZo2P3seqsAd9VibSb+7HKZwMS9Q=",
+    "hash": "sha256-X2T/t3uDY1jDPhx7IZOwVLx1o4pse5/0T+nrJtRB1Lk=",
     "owner": "fastly",
     "provider-source-address": "registry.terraform.io/fastly/fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v3.0.1",
+    "rev": "v3.0.2",
     "vendorHash": null,
-    "version": "3.0.1"
+    "version": "3.0.2"
   },
   "flexibleengine": {
     "hash": "sha256-yg3o7jsWGJ7/fJmDDbFnCpDmKRu0oEbe9wYoILbVwq8=",
@@ -887,13 +887,13 @@
     "version": "1.31.8"
   },
   "opsgenie": {
-    "hash": "sha256-OTwQ/sF4/xSyJjYy1TvLOr1guGcho+Es9/WkonfVvcg=",
+    "hash": "sha256-6lbJyBppfRqqmYpPgyzUTvnvHPSWjE3SJULqliZ2iUI=",
     "owner": "opsgenie",
     "provider-source-address": "registry.terraform.io/opsgenie/opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.17",
+    "rev": "v0.6.18",
     "vendorHash": null,
-    "version": "0.6.17"
+    "version": "0.6.18"
   },
   "ovh": {
     "hash": "sha256-6lBhEmeAvTv8xRMi5ZabcJg/59xJ9o4/MaAJP+H7pqk=",
@@ -1112,13 +1112,13 @@
     "version": "0.13.5"
   },
   "tencentcloud": {
-    "hash": "sha256-62G9q/MZtVnKO0ALXX9/pgkHDV6Bfdol4tSVdl0kx3I=",
+    "hash": "sha256-XycVc3PO7heRYZwl9tsOgErzDfyifMnO4X33oihFPRU=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.13",
+    "rev": "v1.78.14",
     "vendorHash": null,
-    "version": "1.78.13"
+    "version": "1.78.14"
   },
   "tfe": {
     "hash": "sha256-ikuLRGm9Z+tt0Zsx7DYKNBrS08rW4DOvVWYpl3wvaeU=",
