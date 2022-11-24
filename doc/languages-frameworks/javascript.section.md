@@ -177,7 +177,7 @@ buildNpmPackage rec {
 
   patches = [ ./remove-prepack-script.patch ];
 
-  npmDepsHash = "sha256-s8SpZY/1tKZVd3vt7sA9vsqHvEaNORQBMrSyhWpj048=";
+  npmDepsHash = "sha256-tuEfyePwlOy2/mOPdXbqJskO6IowvAP4DWg8xSZwbJw=";
 
   NODE_OPTIONS = "--openssl-legacy-provider";
 
