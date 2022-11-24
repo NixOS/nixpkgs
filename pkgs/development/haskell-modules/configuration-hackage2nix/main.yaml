@@ -431,17 +431,22 @@ package-maintainers:
   terlar:
     - nix-diff
   turion:
-    - rhine
-    - rhine-gloss
+    - Agda
+    - dunai
     - essence-of-live-coding
     - essence-of-live-coding-gloss
     - essence-of-live-coding-pulse
     - essence-of-live-coding-quickcheck
-    - Agda
-    - dunai
+    - essence-of-live-coding-warp
     - finite-typelits
+    - has-transformers
+    - monad-bayes
+    - monad-schedule
     - pulse-simple
+    - rhine
+    - rhine-gloss
     - simple-affine-space
+    - time-domain
   utdemir:
     - nix-tree
 
