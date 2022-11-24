@@ -190,6 +190,9 @@ let
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
     };
+    trivial-package-manager = pkg: {
+      propagatedBuildInputs = [ pkgs.which ];
+    };
   };
 
   qlpkgs =
