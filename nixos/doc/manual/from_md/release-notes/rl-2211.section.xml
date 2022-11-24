@@ -1404,6 +1404,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          The <literal>netlify-cli</literal> package has been updated
+          from 6.13.2 to 12.2.4, see the
+          <link xlink:href="https://github.com/netlify/cli/releases">changelog</link>
+          for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>dockerTools.buildImage</literal> deprecates the
           misunderstood <literal>contents</literal> parameter, in favor
           of <literal>copyToRoot</literal>. Use

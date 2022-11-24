@@ -1478,7 +1478,6 @@ with pkgs;
 
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
-    use64 = true;
   };
 
   wwcd = callPackage ../tools/misc/wwcd { };
@@ -4342,9 +4341,13 @@ with pkgs;
 
   hypr = callPackage ../applications/window-managers/hyprwm/hypr { };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
+  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
+    stdenv = gcc11Stdenv;
+  };
 
-  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper {
+    stdenv = gcc11Stdenv;
+  };
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -12478,6 +12481,8 @@ with pkgs;
 
   versus = callPackage ../applications/networking/versus { };
 
+  vexctl = callPackage ../tools/security/vexctl { };
+
   vgrep = callPackage ../tools/text/vgrep { };
 
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
@@ -12897,6 +12902,8 @@ with pkgs;
   veracrypt = callPackage ../applications/misc/veracrypt {
     wxGTK = wxGTK32;
   };
+
+  veryfasttree = callPackage ../applications/science/biology/veryfasttree { };
 
   vlan = callPackage ../tools/networking/vlan { };
 
@@ -18207,6 +18214,8 @@ with pkgs;
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
   asio = callPackage ../development/libraries/asio { };
 
+  asmjit = callPackage ../development/libraries/asmjit { };
+
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
@@ -23116,8 +23125,6 @@ with pkgs;
   yder = callPackage ../development/libraries/yder { };
 
   yojimbo = callPackage ../development/libraries/yojimbo { };
-
-  yubioath-desktop = libsForQt5.callPackage ../applications/misc/yubioath-desktop { };
 
   yubico-pam = callPackage ../development/libraries/yubico-pam { };
 
