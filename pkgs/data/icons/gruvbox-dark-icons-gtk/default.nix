@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ breeze-icons gnome-icon-theme hicolor-icon-theme ];
 
   installPhase = ''
-    mkdir -p $out/share/icons/oomox-gruvbox-dark
+    mkdir -p $out/share/icons/Gruvbox-Dark
     rm README.md
-    cp -r * $out/share/icons/oomox-gruvbox-dark
-    gtk-update-icon-cache $out/share/icons/oomox-gruvbox-dark
+    cp -r * $out/share/icons/Gruvbox-Dark
+    gtk-update-icon-cache $out/share/icons/Gruvbox-Dark
   '';
 
   dontDropIconThemeCache = true;
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.nomisiv ];
+    maintainers = with maintainers; [ nomisiv bigshaq9999 ];
   };
 }
