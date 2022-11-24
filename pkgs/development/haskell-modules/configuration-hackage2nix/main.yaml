@@ -1,40 +1,40 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-9.0.2
+compiler: ghc-9.2.4
 
 core-packages:
+  - Cabal-3.6.3.0
   - array-0.5.4.0
-  - base-4.15.1.0
-  - binary-0.8.8.0
-  - bytestring-0.10.12.1
-  - Cabal-3.4.1.0
-  - containers-0.6.4.1
-  - deepseq-1.4.5.0
+  - base-4.16.3.0
+  - binary-0.8.9.0
+  - bytestring-0.11.3.1
+  - containers-0.6.5.1
+  - deepseq-1.4.6.1
   - directory-1.3.6.2
   - exceptions-0.10.4
-  - filepath-1.4.2.1
-  - ghc-9.0.2
-  - ghc-bignum-1.1
-  - ghc-boot-9.0.2
-  - ghc-boot-th-9.0.2
+  - filepath-1.4.2.2
+  - ghc-9.2.4
+  - ghc-bignum-1.2
+  - ghc-boot-9.2.4
+  - ghc-boot-th-9.2.4
   - ghc-compact-0.1.0.0
-  - ghc-heap-9.0.2
-  - ghc-prim-0.7.0
-  - ghci-9.0.2
+  - ghc-heap-9.2.4
+  - ghc-prim-0.8.0
+  - ghci-9.2.4
   - haskeline-0.8.2
   - hpc-0.6.1.0
   - integer-gmp-1.1
-  - libiserv-9.0.2
+  - libiserv-9.2.4
   - mtl-2.2.2
-  - parsec-3.1.14.0
+  - parsec-3.1.15.0
   - pretty-1.1.3.6
   - process-1.6.13.2
   - rts-1.0.2
-  - stm-2.5.0.0
-  - template-haskell-2.17.0.0
+  - stm-2.5.0.2
+  - template-haskell-2.18.0.0
   - terminfo-0.4.1.5
   - text-1.2.5.0
-  - time-1.9.3
+  - time-1.11.1.1
   - transformers-0.5.6.2
   - unix-2.7.2.2
   - xhtml-3000.2.2.1
@@ -163,7 +163,6 @@ extra-packages:
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
-  - ghc-exactprint == 1.5.0             # 2022-10-06: newer versions of ghc-exactprint require ghc 9.4.2
 
 package-maintainers:
   abbradar:
