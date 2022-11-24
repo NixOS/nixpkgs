@@ -29,6 +29,7 @@
 
 , testers
 , warzone2100
+, nixosTests
 
 , withVideos ? false
 }:
@@ -111,6 +112,7 @@ stdenv.mkDerivation rec {
       # The command always exits with code 1
       command = "(warzone2100 --version || [ $? -eq 1 ])";
     };
+    nixosTest = nixosTests.warzone2100;
   };
 
   meta = with lib; {
