@@ -249,16 +249,11 @@ self: super: {
   }));
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (dontCheck (
-    super.hnix.overrideScope (hself: hsuper: {
-      hnix-store-core = hself.hnix-store-core_0_5_0_0;
-      hnix-store-remote = hself.hnix-store-remote_0_5_0_0;
-    })
-  ));
-  # Too strict bounds on algebraic-graphs
+  # 2022-11-24: jailbreak as it has too strict bounds on a bunch of things
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] (dontCheck (doJailbreak super.hnix));
+  # Too strict bounds on algebraic-graphs and bytestring
   # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core_0_5_0_0 = doJailbreak super.hnix-store-core_0_5_0_0;
+  hnix-store-core = doJailbreak super.hnix-store-core;
 
   # Too strict upper bound on bytestring
   # https://github.com/wangbj/hashing/issues/3
