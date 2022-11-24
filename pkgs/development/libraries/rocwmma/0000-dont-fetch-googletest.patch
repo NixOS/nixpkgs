@@ -1,0 +1,19 @@
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 7e0f2c8..db54eab 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -31,14 +31,6 @@ cmake_dependent_option( ROCWMMA_BUILD_BENCHMARK_TESTS "Build benchmarking tests"
+ cmake_dependent_option( ROCWMMA_BUILD_EXTENDED_TESTS "Build extended test parameter coverage" OFF "ROCWMMA_BUILD_TESTS" OFF )
+ 
+ # Test/benchmark requires additional dependencies
+-include( FetchContent )
+-
+-FetchContent_Declare(
+-  googletest
+-  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+-)
+-FetchContent_MakeAvailable(googletest)
+-
+ include(GoogleTest)
+ 
+ set(ROCWMMA_TEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
