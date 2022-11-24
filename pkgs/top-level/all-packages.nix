@@ -448,6 +448,8 @@ with pkgs;
 
   cryptowatch-desktop = callPackage ../applications/finance/cryptowatch { };
 
+  d2 = callPackage ../development/tools/d2 { };
+
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
   datalad = callPackage ../applications/version-management/datalad { };
