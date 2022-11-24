@@ -2,9 +2,17 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, externalPlugins ? []
+, vendorSha256 ? "sha256-3wa2x/dOmbosnKq9kcxAIny+3VG8t65FCEEu7VhImjU="
 }:
 
-buildGoModule rec {
+let
+  availableExternalPlugins = import ./external-plugins.nix;
+  generatePluginEntry = name: src: "${name}:${src}";
+  getPlugin = name: generatePluginEntry name availableExternalPlugins."${name}";
+  attrsToPlugins = attrs: builtins.map (x: getPlugin x) attrs;
+  attrsToSources = attrs: builtins.map (x: availableExternalPlugins."${x}") attrs;
+in buildGoModule rec {
   pname = "coredns";
   version = "1.10.0";
 
@@ -15,7 +23,34 @@ buildGoModule rec {
     sha256 = "sha256-Kb4nkxuyZHJT5dqFSkqReFkN8q1uYm7wbhSIiLd8Hck=";
   };
 
-  vendorSha256 = "sha256-nyMeKmGoypDrpZHYHGjhRnjgC3tbOX/dlj96pnXrdLE=";
+  inherit vendorSha256;
+
+  # Override the go-modules fetcher derivation to fetch plugins
+  modBuildPhase = ''
+    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
+    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
+    go generate
+  '';
+
+  # Copy over the lockfiles as well, because the source
+  # doesn't contain it. The fixed-output derivation is
+  # probably not reproducible anyway.
+  modInstallPhase = ''
+    mv -t vendor go.mod go.sum plugin.cfg
+    cp -r --reflink=auto vendor "$out"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    chmod -R u+w vendor
+    mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
+
+    go generate
+    go install
+
+    runHook postBuild
+  '';
 
   postPatch = ''
     substituteInPlace test/file_cname_proxy_test.go \
