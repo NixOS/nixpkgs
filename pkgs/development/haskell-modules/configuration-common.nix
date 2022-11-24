@@ -1611,7 +1611,7 @@ self: super: {
   });
 
   # For -f-auto see cabal.project in haskell-language-server.
-  ghc-lib-parser-ex = disableCabalFlag "auto" super.ghc-lib-parser-ex;
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
