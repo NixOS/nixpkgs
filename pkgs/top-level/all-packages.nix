@@ -24472,7 +24472,7 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  rustic-rs = callPackage ../tools/backup/rustic-rs { };
+  rustic-rs = callPackage ../tools/backup/rustic-rs { inherit (darwin) Security; };
 
   supervise = callPackage ../tools/system/supervise { };
 
@@ -30354,6 +30354,8 @@ with pkgs;
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  sapling = callPackage ../applications/version-management/sapling { };
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
