@@ -7,9 +7,9 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-U1c44JWhYZbnmQStp6DUDoiOiJ9t9Yd5wgH70p/3Grw="
-                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-N9dCP+D3/3lhD23zwXi97JBfSZ9GR8mtXgCR31otS8U="
-                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-VEPnU/8TW7LysXIRDYO36F6kSPJ8haBZ0EO9SssNwkU="
+    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-GCU1z5zM6hmq8fPqLszzQJ1x0vsA8kJUaLTSGb6YJTw="
+                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-Fvqf6ePX1uE7cHWRekBo/1IFUFSXI/mUWptUZnzKEoM="
+                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-Gu8sYzFv/IYZCQk0zlzD+URyWmaz4qjpbPbtvOycsuA="
                      else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-yuUO7ZiurZJ/xksF/hThRL/SnbRubI5KEVPZDH5BRBU="
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
