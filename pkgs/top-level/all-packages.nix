@@ -30355,6 +30355,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  sapling = callPackage ../applications/version-management/sapling { };
+
   mercurialFull = mercurial.override { fullBuild = true; };
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
