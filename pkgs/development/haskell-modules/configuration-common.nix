@@ -132,6 +132,10 @@ self: super: {
   # is released.
   map-syntax = doJailbreak super.map-syntax;
 
+  # Too strict upper bound on bytestring
+  # https://github.com/silkapp/multipart/issues/9
+  multipart = doJailbreak super.multipart;
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
