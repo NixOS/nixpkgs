@@ -24,6 +24,9 @@ with lib;
     # containers do not need to setup devices
     services.udev.enable = false;
 
+    # containers normally do not need to manage logical volumes
+    services.lvm.enable = lib.mkDefault false;
+
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = lib.mkDefault "${pkgs.coreutils}/bin/true";
 
