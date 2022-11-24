@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-h8OuDmm9I8lElhAGSpPx8sPUTY+EnFp2VXOYrYjiYNk=";
+    hash = "sha256-WPmoK/5pTVv9ueRnR6Gxtj86LM8ChB0dMfEvo+lLmy0=";
   };
 
   propagatedBuildInputs = [
@@ -98,11 +98,14 @@ buildPythonPackage rec {
     "test_watchGPIOs"
     "test_writeConfig_with_no_radioConfig"
     "test_writeGPIOs"
+    "test_reboot"
+    "test_shutdown"
   ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/Meshtastic-python";
+    changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
