@@ -192,10 +192,7 @@ in {
     hls-ormolu-plugin = null;
     hls-rename-plugin = null;
     hls-stylish-haskell-plugin = null;
-    hls-tactics-plugin = null;
-    hls-haddock-comments-plugin = null;
     hls-retrie-plugin = null;
-    hls-splice-plugin = null;
   };
 
   # https://github.com/tweag/ormolu/issues/941

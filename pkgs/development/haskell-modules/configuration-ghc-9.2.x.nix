@@ -98,14 +98,6 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
-  # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
-  # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
-  haskell-language-server = super.haskell-language-server.override {
-    hls-haddock-comments-plugin = null;
-    hls-splice-plugin = null;
-    hls-tactics-plugin = null;
-  };
-
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
