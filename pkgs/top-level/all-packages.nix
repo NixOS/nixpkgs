@@ -15000,6 +15000,8 @@ with pkgs;
     inherit (llvmPackages_rocm) clang;
   };
 
+  roctracer = callPackage ../development/libraries/roctracer { };
+
   rocthrust = callPackage ../development/libraries/rocthrust { };
 
   rtags = callPackage ../development/tools/rtags {
