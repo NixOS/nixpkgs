@@ -4281,8 +4281,6 @@ with pkgs;
 
   grim = callPackage ../tools/graphics/grim { };
 
-  gringo = callPackage ../tools/misc/gringo { };
-
   grit = callPackage ../tools/misc/grit { };
 
   grobi = callPackage ../tools/X11/grobi { };
