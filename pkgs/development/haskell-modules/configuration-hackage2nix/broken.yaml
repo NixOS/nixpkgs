@@ -3299,7 +3299,6 @@ broken-packages:
   - monadacme
   - monad-atom
   - monad-atom-simple
-  - monad-bayes
   - monad-branch
   - MonadCatchIO-transformers
   - monad-choice
