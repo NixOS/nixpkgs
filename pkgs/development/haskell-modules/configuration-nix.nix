@@ -359,6 +359,13 @@ self: super: builtins.intersectAttrs super {
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
   }) super.ghcide;
 
+  tasty-discover = overrideCabal (drv: {
+    # Depends on itself for testing
+    preBuild = ''
+      export PATH="$PWD/dist/build/tasty-discover:$PATH"
+    '' + (drv.preBuild or "");
+  }) super.tasty-discover;
+
   # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
   # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
   # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
