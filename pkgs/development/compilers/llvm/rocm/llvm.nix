@@ -24,7 +24,7 @@ let
     if stdenv.isx86_64 then "X86"
     else if stdenv.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   inherit src version;
 
   pname = "rocm-llvm";
@@ -88,4 +88,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

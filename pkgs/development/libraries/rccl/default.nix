@@ -16,11 +16,11 @@
 
 assert buildTests -> chrpath != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
   repoVersion = "2.12.10";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-whRXGD8oINDYhFs8+hEWKWoGNqacGlyy7xi8peA8Qsk=";
   };
 
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
     license = with licenses; [ bsd2 bsd3 ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

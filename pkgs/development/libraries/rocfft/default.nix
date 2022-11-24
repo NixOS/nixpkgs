@@ -25,11 +25,11 @@ assert buildBenchmarks -> fftwFloat != null;
 assert (buildTests || buildBenchmarks) -> boost != null;
 assert (buildTests || buildBenchmarks) -> llvmPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
   repoVersion = "1.0.18";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocFFT";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-jb2F1fRe+YLloYJ/KtzrptUDhmdBDBtddeW/g55owKM=";
   };
 
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
     hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };
-}
+})

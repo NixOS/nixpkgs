@@ -18,7 +18,7 @@ assert buildTests -> gtest != null;
 # Try removing this next update
 assert buildTests == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
   version = "unstable-2022-11-19";
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
   };
-}
+})

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, writeScript, cmake, clang, rocm-device-libs, llvm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-CompilerSupport";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-LQyMhqcWm8zqt6138fnT7EOq/F8bG3Iuf04PTemVQmg=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

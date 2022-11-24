@@ -5,14 +5,14 @@
 , rocm-comgr
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocclr";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-dmL9krI/gHGQdOZ53+bQ7WjKcmJ+fZZP0lzF8ITLT4E=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     # the future.
     platforms = [ "x86_64-linux" ];
   };
-}
+})

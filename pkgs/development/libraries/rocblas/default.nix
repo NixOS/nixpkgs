@@ -41,16 +41,16 @@ assert buildTests -> gfortran != null;
 assert buildTests == false;
 assert buildBenchmarks == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
   repoVersion = "2.45.0";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocBLAS";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-z40WxF+suMeIZihBWJPRWyL20S2FUbeZb5JewmQWOJo=";
   };
 
@@ -143,6 +143,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

@@ -7,15 +7,15 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
   rocmVersion = "5.3.3";
-  version = rocmVersion;
+  version = finalAttrs.rocmVersion;
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
   };
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

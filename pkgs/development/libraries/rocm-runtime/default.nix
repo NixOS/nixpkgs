@@ -13,14 +13,14 @@
 , rocm-device-libs
 , rocm-thunk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-26E7vA2JlC50zmpaQfDrFMlgjAqmfTdp9/A8g5caDqI=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
   };
-}
+})

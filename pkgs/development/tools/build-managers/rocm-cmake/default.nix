@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, writeScript, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-cmake";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-AOn3SLprHdeo2FwojQdhRAttUHuaWkO6WlymK8Q8lbc=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.rocm.members;
     platforms = platforms.unix;
   };
-}
+})

@@ -6,13 +6,13 @@
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
 , defaultTargets ? []}:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "5.3.3";
   pname = "rocminfo";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     sha256 = "sha256-4wZTm5AZgG8xEd6uYqxWq4bWZgcSYZ2WYA1z4RAPF8U=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
   };
-}
+})

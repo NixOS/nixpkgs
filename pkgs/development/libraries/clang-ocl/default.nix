@@ -8,15 +8,15 @@
 , clang
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clang-ocl";
   rocmVersion = "5.3.3";
-  version = rocmVersion;
+  version = finalAttrs.rocmVersion;
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "clang-ocl";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-uMSvcVJj+me2E+7FsXZ4l4hTcK6uKEegXpkHGcuist0=";
   };
 
@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != clang.version;
+    broken = finalAttrs.rocmVersion != clang.version;
   };
-}
+})

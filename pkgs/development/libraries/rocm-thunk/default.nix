@@ -7,14 +7,14 @@
 , numactl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCT-Thunk-Interface";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-cM78Bx6uYsxhvdqSVNgmqOUYQnUJVCA7mNpRNNSFv6k=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
   };
-}
+})

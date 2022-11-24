@@ -30,11 +30,11 @@ let
     mirror1 = "https://sparse.tamu.edu/MM";
     mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
   repoVersion = "2.3.2";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocSPARSE";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-1069oBrIpZ4M9CAkzoQ9a5j3WlCXErirTbgTUZuT6b0=";
   };
 
@@ -155,6 +155,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

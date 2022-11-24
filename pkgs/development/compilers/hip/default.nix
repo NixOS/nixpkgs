@@ -28,14 +28,14 @@
 }:
 
 let
-  hip = stdenv.mkDerivation rec {
+  hip = stdenv.mkDerivation (finalAttrs: {
     pname = "hip";
     version = "5.3.3";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
-      rev = "rocm-${version}";
+      rev = "rocm-${finalAttrs.version}";
       hash = "sha256-kmRvrwnT0h2dBMI+H9d1vmeW3TmDBD+qW4YYhaMV2dE=";
     };
 
@@ -106,16 +106,16 @@ let
       maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
       platforms = platforms.linux;
     };
-  };
+  });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hip";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-i7hT/j+V0LT6Va2XcQyyKXF1guoIyhcOHvn842wCRx4=";
   };
 
@@ -203,4 +203,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

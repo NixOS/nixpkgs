@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, writeScript, cmake, wrapPython }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm_smi_lib";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-UbGbkH2vhQ9gv3sSoG+mXap+MdcrP61TN5DcP5F/5nQ=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

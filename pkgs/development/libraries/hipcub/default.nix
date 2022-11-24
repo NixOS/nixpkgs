@@ -19,11 +19,11 @@ assert buildTests -> gtest != null;
 assert buildBenchmarks -> gbenchmark != null;
 
 # CUB can also be used as a backend instead of rocPRIM.
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
   repoVersion = "2.12.0";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "hipCUB";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-/GMZKbMD1sZQCM2FulM9jiJQ8ByYZinn0C8d/deFh0g=";
   };
 
@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/hipCUB";
     license = with licenses; [ bsd3 ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

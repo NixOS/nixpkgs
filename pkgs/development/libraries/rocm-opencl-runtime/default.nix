@@ -20,14 +20,14 @@
 , rocm-thunk
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-opencl-runtime";
   version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-QvAF25Zfq9d1M/KIsr2S+Ggxzqw/MQ2OVcm9ZNfjTa8=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DAMD_OPENCL_PATH=${src}"
+    "-DAMD_OPENCL_PATH=${finalAttrs.src}"
     "-DROCCLR_PATH=${rocclr}"
     "-DCPACK_PACKAGING_INSTALL_PREFIX=/opt/rocm/opencl"
   ];
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

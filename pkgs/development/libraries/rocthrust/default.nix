@@ -21,11 +21,11 @@ assert buildTests -> gtest != null;
 assert buildTests == false;
 assert buildBenchmarks == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
   repoVersion = "2.16.0";
   rocmVersion = "5.3.3";
-  version = "${repoVersion}-${rocmVersion}";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
   };
 
@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = rocmVersion != hip.version;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})
