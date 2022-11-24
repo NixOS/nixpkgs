@@ -1,22 +1,27 @@
 { lib, fetchFromGitHub }:
 
-let
-  version = "1.008";
+fetchFromGitHub rec {
   pname = "b612";
-in fetchFromGitHub {
-  name = "${pname}-font-${version}";
+  version = "1.008";
+
   owner = "polarsys";
   repo = "b612";
   rev = version;
+
   postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/truetype/${pname}
-    cp fonts/ttf/*.ttf $out/share/fonts/truetype/${pname}
+    mkdir -p $out/share/fonts/truetype
+
+    mv $out/fonts/ttf/*.ttf $out/share/fonts/truetype
+
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
-  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
+
+  hash = "sha256-aJ3XzWQauPsWwEDAHT2rD9a8RvLv1kqU3krFXprmypk=";
 
   meta = with lib; {
-    homepage = "http://b612-font.com/";
+    homepage = "https://b612-font.com/";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
       B612 is the result of a research project initiated by Airbus. The font

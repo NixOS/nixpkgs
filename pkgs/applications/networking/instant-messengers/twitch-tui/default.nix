@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "twitch-tui";
@@ -12,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoHash = "sha256-zUeI01EyXsuoKzHbpVu3jyA3H2aBk6wMY+GW3h3v8vc=";
 

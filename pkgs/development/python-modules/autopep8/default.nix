@@ -3,20 +3,20 @@
 , buildPythonPackage
 , pycodestyle
 , glibcLocales
-, toml
+, tomli
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ypsag+U6f61l1zHceiotUKpI9DhQQHxZ9qGjBsQgEUI=";
+    sha256 = "sha256-ixZZx/AD5pMZn1LK/9wGWFuwcWkAu8anRC/ZMdZYwHc=";
   };
 
-  propagatedBuildInputs = [ pycodestyle toml ];
+  propagatedBuildInputs = [ pycodestyle tomli ];
 
   checkInputs = [
     glibcLocales

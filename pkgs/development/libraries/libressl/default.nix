@@ -102,4 +102,9 @@ in {
       })
     ];
   };
+
+  libressl_3_6 = generic {
+    version = "3.6.1";
+    hash = "sha256-rPrGExbpO5GcKNYtUwN8pzTehcRrTXA/Gf2Dlc8AZ3Q=";
+  };
 }

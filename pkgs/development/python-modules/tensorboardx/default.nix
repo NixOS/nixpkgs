@@ -8,7 +8,7 @@
 , moto
 , numpy
 , pillow
-, protobuf3_8
+, protobuf
 , pytestCheckHook
 , torch
 , six
@@ -19,13 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.5";
+  version = "2.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-g6x0yUpofeSNA4rKPidqOKC7/TrOICstcc98VnQcfDY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Np0Ibn51qL0ORwq1IY8lUle05MQDdb5XkI1uzGOKJno=";
   };
 
   # apparently torch API changed a bit at 1.6
@@ -39,9 +40,10 @@ buildPythonPackage rec {
     sed -i -e "s/'protobuf[^']*'/'protobuf'/" setup.py
   '';
 
-  # Wanted protobuf version is mentioned here:
-  # https://github.com/lanpa/tensorboardX/blob/0d08112618a2bbda4c028a15a137fed3afe77401/compile.sh#L6
-  nativeBuildInputs = [ which protobuf3_8 ];
+  nativeBuildInputs = [
+    which
+    protobuf
+  ];
 
   # required to make tests deterministic
   PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";

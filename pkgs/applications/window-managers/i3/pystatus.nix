@@ -4,7 +4,6 @@
 , libnotify
 , gobject-introspection
 , python3Packages
-, wrapGAppsHook
 , extraLibs ? [] }:
 
 python3Packages.buildPythonApplication rec {

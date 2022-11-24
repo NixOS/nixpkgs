@@ -1,7 +1,7 @@
 diff --git a/Makefile b/Makefile
 index 3f1e18dc659d..163362b82f94 100644
---- a/Makefile
-+++ b/Makefile
+--- a/sys/Makefile
++++ b/sys/Makefile
 @@ -2,6 +2,8 @@
  
  .include <bsd.own.mk>

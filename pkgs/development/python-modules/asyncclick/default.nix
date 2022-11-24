@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.0.1.3";
+  version = "8.1.3.2";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = pname;
     rev = version;
-    sha256 = "03b8zz8i3aqzxr3ffzb4sxnrcm3gsk9r4hmr0fkml1ahi754bx2r";
+    sha256 = "sha256-by1clF+WAfN/gjOg/F60O1tCZ3qAhWqiiJJY04iMzQ8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

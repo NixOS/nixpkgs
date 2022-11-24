@@ -5,7 +5,8 @@
 , enableDdc ? true, ddcutil
 , enableDpms ? true, libXext
 , enableGamma ? true, libdrm, libXrandr, wayland
-, enableScreen ? true }:
+, enableScreen ? true
+, enableYoctolight ? true }:
 
 stdenv.mkDerivation rec {
   pname = "clightd";
@@ -33,10 +34,11 @@ stdenv.mkDerivation rec {
       "-DDBUS_CONFIG_DIR=${placeholder "out"}/etc/dbus-1/system.d"
       # systemd.pc has prefix=${systemd.out}
       "-DMODULE_LOAD_DIR=${placeholder "out"}/lib/modules-load.d"
-    ] ++ optional enableDdc    "-DENABLE_DDC=1"
-      ++ optional enableDpms   "-DENABLE_DPMS=1"
-      ++ optional enableGamma  "-DENABLE_GAMMA=1"
-      ++ optional enableScreen "-DENABLE_SCREEN=1";
+    ] ++ optional enableDdc        "-DENABLE_DDC=1"
+      ++ optional enableDpms       "-DENABLE_DPMS=1"
+      ++ optional enableGamma      "-DENABLE_GAMMA=1"
+      ++ optional enableScreen     "-DENABLE_SCREEN=1"
+      ++ optional enableYoctolight "-DENABLE_YOCTOLIGHT=1";
 
   nativeBuildInputs = [
     dbus

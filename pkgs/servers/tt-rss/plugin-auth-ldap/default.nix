@@ -2,19 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-auth-ldap";
-  version = "2.0.0";
+  version = "unstable-2022-10-31";
 
   src = fetchFromGitHub {
     owner = "hydrian";
     repo = "TTRSS-Auth-LDAP";
-    rev = version;
-    sha256 = "1mg9jff2m0ajxql1vd1g7hsxfbv9smhrmjg4j2gvvjbii45ry0jh";
+    rev = "0cc2a21441f99eef8368cfe0fbdbb78126e28d61";
+    sha256 = "sha256-pJWyvRnC38Ov1awVLgFZfp8+haADPniP+/P/C74qpcA=";
   };
 
   patches = [
+    # https://github.com/hydrian/TTRSS-Auth-LDAP/pull/47
     (fetchpatch {
-      url = "https://github.com/Mic92/TTRSS-Auth-LDAP/commit/7534fa54babc377a070e05e326a46a252b5e3884.patch";
-      sha256 = "1p7zas0n627z0g226dp5m5dg1ai2z3vi69n3xivp517iv3lch70l";
+      url = "https://github.com/hydrian/TTRSS-Auth-LDAP/commit/003ca55bbd6e0a87fb729383e51eb269d918313d.patch";
+      sha256 = "sha256-0YD33JPNOOPH2dpGwA/RbV3Kg4i2oKazBjP3hBcUIes=";
     })
     # https://github.com/hydrian/TTRSS-Auth-LDAP/pull/40
     (fetchpatch {

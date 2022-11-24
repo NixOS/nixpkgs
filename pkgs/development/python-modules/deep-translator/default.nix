@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deep-translator";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wPpVVopbvuw7wreZ4f0HLz9/NJgyYYIFttw4rhJC1xo=";
+    sha256 = "sha256-goLc/4BbVKUkH+csggKm6EKHmRVbv4i0Aq7N+/5WnmU=";
   };
 
   propagatedBuildInputs = [

@@ -1,5 +1,15 @@
-{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+{ config
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gettext
+, meson
+, ninja
+, pkg-config
+, perl
+, python3
+, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -7,10 +17,10 @@
 # this is just for tests (not in the closure of any regular package)
 , coreutils, dbus, libxml2, tzdata
 , desktop-file-utils, shared-mime-info
-, darwin, fetchpatch
+, darwin
+# update script
+, runCommand, git, coccinelle
 }:
-
-with lib;
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
@@ -40,20 +50,22 @@ let
     done
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
+
+  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.72.3";
+  version = "2.74.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
+    sha256 = "CrmBYY0dtHhF5WQXsNfBI/gaNCeyuck/Wkb/W7uWSWQ=";
   };
 
-  patches = optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-  ] ++ optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
@@ -90,14 +102,17 @@ stdenv.mkDerivation (finalAttrs: {
     #    * gio-launch-desktop
     ./split-dev-programs.patch
 
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
-    (fetchpatch {
-      name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
-      url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
-      sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
-    })
-
+    # Disable flaky test.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
+
+    # Fix infinite loop (e.g. in gnome-keyring)
+    # https://github.com/NixOS/nixpkgs/pull/197754#issuecomment-1312805358
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3039
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/2a36bb4b7e46f9ac043561c61f9a790786a5440c.patch";
+      sha256 = "b77Hxt6WiLxIGqgAj9ZubzPWrWmorcUOEe/dp01BcXA=";
+    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -105,15 +120,17 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf finalAttrs.setupHook pcre
-  ] ++ optionals (!stdenv.hostPlatform.isWindows) [
+    libelf
+    finalAttrs.setupHook
+    pcre2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ]) ++ lib.optionals buildDocs [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
     # glib's own Meson configuration uses the host pkg-config to find its
@@ -129,10 +146,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    (buildPackages.meson.override {
-      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
-    })
-    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2 libxslt
+    meson
+    ninja
+    pkg-config
+    perl
+    python3
+    gettext
+  ] ++ lib.optionals buildDocs [
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_45
+    libxml2
+    libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -140,10 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
     # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+    "-Dgtk_doc=${lib.boolToString buildDocs}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "-Dman=true"                # broken on Darwin
   ];
 
@@ -197,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (!buildDocs) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
 
@@ -212,7 +237,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
@@ -241,6 +266,55 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };
+    /*
+      can be used as part of an update script to automatically create a patch
+      hardcoding the path of all gsettings schemas in C code.
+      For example:
+      passthru = {
+        hardcodeGsettingsPatch = glib.mkHardcodeGsettingsPatch {
+          inherit src;
+          glib-schema-to-var = {
+             ...
+          };
+        };
+
+        updateScript =
+          let
+            updateSource = ...;
+            patch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+          in
+          _experimental-update-script-combinators.sequence [
+            updateSource
+            patch
+          ];
+        };
+      }
+      takes as input a mapping from schema path to variable name.
+      For example `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
+      hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
+      All schemas must be listed.
+    */
+    mkHardcodeGsettingsPatch = { src, glib-schema-to-var }:
+      runCommand
+        "hardcode-gsettings.patch"
+        {
+          inherit src;
+          nativeBuildInputs = [
+            git
+            coccinelle
+            python3 # For patch script
+          ];
+        }
+        ''
+          unpackPhase
+          cd "''${sourceRoot:-.}"
+          set -x
+          cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON glib-schema-to-var)} ./glib-schema-to-var.json
+          git init
+          git add -A
+          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
+          git diff > "$out"
+        '';
   };
 
   meta = with lib; {

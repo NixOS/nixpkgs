@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , argon2-cffi
@@ -25,12 +26,16 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.argon2
-    ++ passthru.optional-dependencies.bcrypt
-    ++ passthru.optional-dependencies.totp;
+  ++ passthru.optional-dependencies.bcrypt
+  ++ passthru.optional-dependencies.totp;
 
   disabledTests = [
     # timming sensitive
     "test_dummy_verify"
+  ]
+  # These tests fail because they don't expect support for algorithms provided through libxcrypt
+  ++ lib.optionals stdenv.isDarwin [
+    "test_82_crypt_support"
   ];
 
   meta = with lib; {

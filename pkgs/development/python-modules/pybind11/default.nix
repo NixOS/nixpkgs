@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , cmake
 , boost
@@ -9,6 +10,7 @@
 , catch
 , numpy
 , pytestCheckHook
+, libxcrypt
 }:
 
 buildPythonPackage rec {
@@ -27,6 +29,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   dontUseCmakeBuildDir = true;
 
@@ -41,7 +44,7 @@ buildPythonPackage rec {
 
   postBuild = ''
     # build tests
-    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
+    make -j $NIX_BUILD_CORES
   '';
 
   postInstall = ''

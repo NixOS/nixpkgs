@@ -224,14 +224,25 @@ in
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) firmware_part.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
+
+        mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
         # Populate the files intended for /boot/firmware
         mkdir firmware
         ${config.sdImage.populateFirmwareCommands}
 
+        find firmware -exec touch --date=2000-01-01 {} +
         # Copy the populated /boot/firmware into the SD image
-        (cd firmware; mcopy -psvm -i ../firmware_part.img ./* ::)
+        cd firmware
+        # Force a fixed order in mcopy for better determinism, and avoid file globbing
+        for d in $(find . -type d -mindepth 1 | sort); do
+          faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
+        done
+        for f in $(find . -type f | sort); do
+          mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
+        done
+        cd ..
+
         # Verify the FAT partition before copying it.
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS

@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , marisa-trie
 , poetry-core
@@ -7,7 +7,7 @@
 , setuptools
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "language-data";
   version = "1.0.1";
   format = "pyproject";

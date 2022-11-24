@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "1.3.224.1";
+  version = "1.3.231.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-ExtensionLayer";
       rev = "sdk-${version}";
-      hash = "sha256-KOlwtfuAYWzUFtf0NOJCNzWW+/ogRUgkaWw8NdW2vb8=";
+      hash = "sha256-8Z9w+3WFPYp8QKEUVkEQCGy9LXMWYlZDgGt8i34T5DU=";
     });
 
   nativeBuildInputs = [ cmake jq ];
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
   setupHook = writeText "setup-hook" ''
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
   '';
+
+  # Tests are not for gpu-less and headless environments
+  cmakeFlags = [
+    "-DBUILD_TESTS=false"
+  ];
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.

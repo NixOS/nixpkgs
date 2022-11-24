@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
+{ lib, stdenv, fetchurl, makeWrapper, wrapGAppsHook
 
 # Buildtime dependencies.
 , check, pkg-config, xxd

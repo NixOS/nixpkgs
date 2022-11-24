@@ -28,7 +28,7 @@ in {
     };
 
     mkAdoptopenjdk = path-linux: path-darwin: let
-      package-linux  = import path-linux { inherit lib; };
+      package-linux  = import path-linux { inherit stdenv lib; };
       package-darwin = import path-darwin { inherit lib; };
       package = if stdenv.isLinux
         then package-linux
@@ -44,8 +44,12 @@ in {
 
     mkBootstrap = adoptopenjdk: path: args:
       /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
-      if   adoptopenjdk.jdk-hotspot.meta.available
-      then adoptopenjdk.jdk-hotspot
+      if   !stdenv.hostPlatform.isi686
+      then
+        # only linux has the gtkSupport option
+        if stdenv.isLinux
+        then adoptopenjdk.jdk-hotspot.override { gtkSupport = false; }
+        else adoptopenjdk.jdk-hotspot
       else callPackage path args;
 
     mkOpenjdk = path-linux: path-darwin: args:

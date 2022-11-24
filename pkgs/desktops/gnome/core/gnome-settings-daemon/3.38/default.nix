@@ -31,7 +31,7 @@
 , modemmanager
 , networkmanager
 , gnome-desktop
-, geocode-glib
+, geocode-glib_2
 , docbook_xsl
 , wrapGAppsHook
 , python3
@@ -93,6 +93,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/f390e6e9d56ce7d3e3a725b8204d81c0b6240515.patch";
       sha256 = "8mfnlhkSF9ogjVWE+IESzRQzrxHQSwUWsq5OLBM08iM=";
     })
+
+    # Use geocode-glib_2 dependency
+    # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/300
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/03739474621e579e10b72577960ff94b4001e7ff.patch";
+      sha256 = "W4uD4ChNPZSsmQfmfmmXFA2Sm1RDkV7MqG8DmT4qeCY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -126,7 +133,7 @@ stdenv.mkDerivation rec {
     libgweather
     nss
     polkit
-    geocode-glib
+    geocode-glib_2
     geoclue2
     systemd
     libgudev

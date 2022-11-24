@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.tasks";
+    broken = true; # https://github.com/elementary/tasks/issues/340
   };
 }

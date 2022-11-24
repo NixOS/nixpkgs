@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
+{ lib, stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "policycoreutils";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ libsepol libselinux libsemanage ];
+  buildInputs = [ libsepol libselinux libsemanage libxcrypt ];
 
   makeFlags = [
     "PREFIX=$(out)"

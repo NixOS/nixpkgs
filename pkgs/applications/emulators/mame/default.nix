@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , alsa-lib
+, copyDesktopItems
 , CoreAudioKit
 , expat
 , fetchFromGitHub
+, fetchurl
 , flac
 , fontconfig
 , ForceFeedback
@@ -26,6 +28,7 @@
 , rapidjson
 , SDL2
 , SDL2_ttf
+, sqlite
 , utf8proc
 , which
 , writeScript
@@ -33,28 +36,25 @@
 }:
 
 let
-  desktopItem = makeDesktopItem {
-    name = "MAME";
-    exec = "mame${lib.optionalString stdenv.is64bit "64"}";
-    desktopName = "MAME";
-    genericName = "MAME is a multi-purpose emulation framework";
-    categories = [ "System" "Emulator" ];
+  # Get icon from Arch Linux package
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/614b24ef3856cb52b5cafc386b0f77923cbc9156/trunk/mame.svg";
+    sha256 = "sha256-F8RCyTPXZBdeTOHeUKgMDC3dXXM8rwnDzV5rppesQ/Q=";
   };
-
   dest = "$out/opt/mame";
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.243";
+  version = "0.249";
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${builtins.replaceStrings [ "." ] [ "" ] version}";
-    sha256 = "sha256-dUgYLNvgvolz9M0ySkGJIZjVMBQwejkxsZ6npg8rIqk=";
+    sha256 = "sha256-im6y/E0pQxruX2kNXZLE3fHq+zXfsstnOoC1QvH4fd4=";
   };
 
-  hardeningDisable = [ "fortify" ];
+  outputs = [ "out" "tools" ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_PUGIXML=1"
     "USE_SYSTEM_LIB_RAPIDJSON=1"
     "USE_SYSTEM_LIB_UTF8PROC=1"
+    "USE_SYSTEM_LIB_SQLITE3=1"
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
@@ -92,19 +93,22 @@ stdenv.mkDerivation rec {
     glm
     SDL2
     SDL2_ttf
+    sqlite
     qtbase
   ]
   ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
   ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
 
-  nativeBuildInputs = [ python3 pkg-config which makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    installShellFiles
+    makeWrapper
+    pkg-config
+    python3
+    which
+  ];
 
   patches = [
-    # MAME is now generating the PDF documentation on its release script since commit:
-    # https://github.com/mamedev/mame/commit/c0e93076232e794c919231e4386445d78b2d80b1
-    # however this needs sphinx+latex to build, and it is available in the website
-    # anyway for those who need it
-    ./0001-Revert-Added-PDF-documentation-to-dist.mak.patch
     # by default MAME assumes that paths with stock resources
     # are relative and that you run MAME changing to
     # install directory, so we add absolute paths here
@@ -116,21 +120,47 @@ stdenv.mkDerivation rec {
       --subst-var-by mame ${dest}
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "MAME";
+      desktopName = "MAME";
+      exec = "mame";
+      icon = "mame";
+      type = "Application";
+      genericName = "MAME is a multi-purpose emulation framework";
+      comment = "Play vintage games using the MAME emulator";
+      categories = [ "Game" "Emulator" ];
+      keywords = [ "Game" "Emulator" "Arcade" ];
+    })
+  ];
+
   installPhase = ''
-    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
+    runHook preInstall
+
+    # mame
     mkdir -p ${dest}
-    mv build/release/*/Release/mame/* ${dest}
 
-    mkdir -p $out/bin
-    find ${dest} -maxdepth 1 -executable -type f -exec mv -t $out/bin {} \;
-    install -Dm755 src/osd/sdl/taputil.sh $out/bin/taputil.sh
+    install -Dm755 mame -t $out/bin
+    install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+    installManPage docs/man/*.1 docs/man/*.6
+    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} ${dest}
+    # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
+    # to the final package after we figure out how they work
 
-    installManPage ${dest}/docs/man/*.1 ${dest}/docs/man/*.6
+    # mame-tools
+    for _i in castool chdman floptool imgtool jedutil ldresample ldverify nltool nlwav pngcmp regrep romcmp \
+              split srcclean testkeys unidasm; do
+      install -Dm755 $_i -t $tools/bin
+    done
+    mv $tools/bin/{,mame-}split
 
-    mv artwork plugins samples ${dest}
-  '' + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share
-    ln -s ${desktopItem}/share/applications $out/share
+    runHook postInstall
+  '';
+
+  # man1 is the tools documentation, man6 is the emulator documentation
+  # Need to be done in postFixup otherwise multi-output hook will move it back to $out
+  postFixup = ''
+    moveToOutput share/man/man1 $tools
   '';
 
   enableParallelBuilding = true;
@@ -146,7 +176,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];

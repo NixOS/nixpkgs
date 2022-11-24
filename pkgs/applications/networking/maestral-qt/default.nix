@@ -1,63 +1,50 @@
 { lib
 , fetchFromGitHub
 , python3
-, wrapQtAppsHook
+, qt6
 , nixosTests
 }:
 
-let
-  inherit (pypkgs) makePythonPath;
-
-  pypkgs = (python3.override {
-    packageOverrides = self: super: {
-      # Use last available version of maestral that still supports PyQt5
-      # Remove this override when PyQt6 is available
-      maestral = super.maestral.overridePythonAttrs (old: rec {
-        version = "1.5.3";
-        src = fetchFromGitHub {
-          owner = "SamSchott";
-          repo = "maestral";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Uo3vcYez2qSq162SSKjoCkwygwR5awzDceIq8/h3dao=";
-        };
-      });
-    };
-  }).pkgs;
-
-in
-pypkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.5.3";
-  disabled = pypkgs.pythonOlder "3.6";
+  version = "1.6.3";
+  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-zaG9Zwz9S/SVb7xDa7eXkjLNt1BhA1cQ3I18rVt+8uQ=";
+    sha256 = "sha256-Fvr5WhrhxPBeAMsrVj/frg01qgt2SeWgrRJYgBxRFHc=";
   };
 
   format = "pyproject";
 
-  propagatedBuildInputs = with pypkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     markdown2
     maestral
     packaging
-    pyqt5
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    pyqt6
   ];
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg  # Needed for the systray icon
+  ];
 
-  makeWrapperArgs = [
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+  ];
+
+  dontWrapQtApps = true;
+
+  makeWrapperArgs = with python3.pkgs; [
     # Firstly, add all necessary QT variables
     "\${qtWrapperArgs[@]}"
 
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath (pypkgs.requiredPythonModules pypkgs.maestral.propagatedBuildInputs)}"
-    "--prefix PYTHONPATH : ${makePythonPath [ pypkgs.maestral ]}"
+    "--prefix PYTHONPATH : ${makePythonPath (requiredPythonModules maestral.propagatedBuildInputs)}"
+    "--prefix PYTHONPATH : ${makePythonPath [ maestral ]}"
   ];
 
   # no tests

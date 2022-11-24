@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zfjhMko/u9Hv1WGNzTfPxJexmXkjvXELWYRywdhGZ0o=";
+    sha256 = "sha256-9KIGBEszKtALEAcrDcenCzWfo2XseG+Sq3V+9K5YhHQ=";
   };
 
   propagatedBuildInputs = [

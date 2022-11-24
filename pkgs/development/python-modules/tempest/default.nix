@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pbr
 , cliff
@@ -26,7 +26,7 @@
 , python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
   version = "32.0.0";
 

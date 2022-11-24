@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, sq }:
 buildGoModule rec {
   pname = "sq";
-  version = "0.15.6";
+  version = "0.15.11";
 
   src = fetchFromGitHub {
     owner = "neilotoole";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QEg80di2DmMfIrvsRFp7nELs7LiJRVa/wENDnf1zQ2Y=";
+    sha256 = "sha256-sYaQb7MFeTgJ/WPuCuMYjLcgmO/FhMGgOvY1HfGh2ag=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

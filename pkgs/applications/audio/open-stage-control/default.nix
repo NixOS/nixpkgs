@@ -1,37 +1,48 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, nodejs, electron, python3, ... }:
+{ lib, buildNpmPackage, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, electron, python3 }:
 
-let
-  nodeComposition = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-in
-
-nodeComposition.package.override rec {
+buildNpmPackage rec {
   pname = "open-stage-control";
-  inherit (nodeComposition.args) version;
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-q18pRtsHfme+OPmi3LhJDK1AdpfkwhoE9LA2rNenDtY=";
+    hash = "sha256-XgwlRdwUSl4gIRKqk6BnMAKarVvp291zk8vmNkuRWKo=";
   };
+
+  patches = [
+    # Use generated package-lock.json since upstream does not provide one in releases
+    ./package-lock.json.patch
+  ];
+
+  npmDepsHash = "sha256-SGLcFjPnmhFoeXtP4gfGr4Qa1dTaXwSnzkweEvYW/1k=";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
+    python3
   ];
 
   buildInputs = [
     python3.pkgs.python-rtmidi
   ];
 
-  dontNpmInstall = true;
+  doInstallCheck = true;
 
-  postInstall = ''
-    # build assets
-    npm run build
+  makeCacheWritable = true;
+  npmFlags = [ "--legacy-peer-deps" ];
+
+  # Override installPhase so we can copy the only folders that matter (app and node_modules)
+  installPhase = ''
+    runHook preInstall
+
+    # prune unused deps
+    npm prune --omit dev $npmFlags
+
+    # copy built app and node_modules directories
+    mkdir -p $out/lib/node_modules/open-stage-control
+    cp -r app node_modules $out/lib/node_modules/open-stage-control/
 
     # copy icon
     install -Dm644 resources/images/logo.png $out/share/icons/hicolor/256x256/apps/open-stage-control.png
@@ -43,12 +54,13 @@ nodeComposition.package.override rec {
       --add-flags $out/lib/node_modules/open-stage-control/app \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : '${lib.makeBinPath [ python3 ]}'
+
+    runHook postInstall
   '';
 
   installCheckPhase = ''
     XDG_CONFIG_HOME="$(mktemp -d)" $out/bin/open-stage-control --help
   '';
-  doInstallCheck = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -61,6 +73,8 @@ nodeComposition.package.override rec {
       startupWMClass = "open-stage-control";
     })
   ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";

@@ -22,6 +22,7 @@ with python3.pkgs; buildPythonApplication rec {
 
     substituteInPlace setup.py \
       --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"' \
+      --replace 'aiofiles==0.8.*' 'aiofiles==22.1.*' \
       --replace 'wsproto==' 'wsproto>='
   '';
 
@@ -147,6 +148,5 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
-    broken = stdenv.isAarch64;
   };
 }

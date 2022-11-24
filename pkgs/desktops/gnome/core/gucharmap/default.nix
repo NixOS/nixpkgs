@@ -25,7 +25,7 @@
 , runCommand
 , symlinkJoin
 , gobject-introspection
-, nix-update-script
+, gitUpdater
 }:
 
 let
@@ -45,16 +45,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "15.0.0";
+  version = "15.0.1";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "gucharmap";
     rev = version;
-    sha256 = "sha256-ymEtiOKdmQ1XWrGk40csX5O5BiwxH3aCPboVekcUukQ=";
+    sha256 = "sha256-uVXWgnNpPcky9N3FXkDu5oaqaEALECooFnf43Ed+zTY=";
   };
 
   nativeBuildInputs = [
@@ -94,8 +94,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.gucharmap";
+    updateScript = gitUpdater {
     };
   };
 

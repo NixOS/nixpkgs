@@ -20,6 +20,7 @@
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
@@ -45,7 +46,6 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkg-config
     qtbase
     qtsvg
     sox
@@ -54,9 +54,10 @@ mkDerivation rec {
     opencv3
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake which pkg-config ];
 
   outputs = [ "out" "dev" ];
 

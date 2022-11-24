@@ -5,27 +5,28 @@
 , ninja
 , pkg-config
 , libxml2
+, json-glib
 , glib
 , gettext
-, libsoup
+, libsoup_3
 , gi-docgen
 , gobject-introspection
 , python3
 , tzdata
-, geocode-glib
+, geocode-glib_2
 , vala
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.0.0";
+  version = "4.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RA1EgBtvcrSMZ25eN/kQnP7hOU/XTMknJeGxuk+ug0w=";
+    sha256 = "r4qBLaDYl2oADh1iVywlYIaoFzI/vzWwZtv92NLKYgM=";
   };
 
   patches = [
@@ -52,9 +53,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
-    geocode-glib
+    json-glib
+    geocode-glib_2
   ];
 
   mesonFlags = [
@@ -64,7 +66,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson/meson_post_install.py
     patchShebangs build-aux/meson/gen_locations_variant.py
 
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)

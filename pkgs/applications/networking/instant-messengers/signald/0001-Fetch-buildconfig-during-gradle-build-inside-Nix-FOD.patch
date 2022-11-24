@@ -1,4 +1,4 @@
-From 8ed5f3c9117e08f7c2e4e1e01c2eee501675049b Mon Sep 17 00:00:00 2001
+From 2c126682aaabd7f486dfb2ff75fe29b5d8697060 Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Sat, 26 Feb 2022 12:33:13 +0100
 Subject: [PATCH] Fetch buildconfig during gradle build inside Nix FOD
@@ -8,7 +8,7 @@ Subject: [PATCH] Fetch buildconfig during gradle build inside Nix FOD
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/build.gradle b/build.gradle
-index eaa6e0e..63c2947 100644
+index 799e782..caceaac 100644
 --- a/build.gradle
 +++ b/build.gradle
 @@ -83,6 +83,9 @@ static String getVersion() {
@@ -22,11 +22,11 @@ index eaa6e0e..63c2947 100644
  }
  
 @@ -104,6 +107,8 @@ dependencies {
-     implementation 'io.prometheus:simpleclient_httpserver:0.15.0'
+     implementation 'io.prometheus:simpleclient_httpserver:0.16.0'
      implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-     implementation 'io.sentry:sentry:5.7.3'
-+    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.0.3'
-+    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.4.31'
+     implementation 'io.sentry:sentry:6.4.0'
++    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.1.0'
++    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.10'
      testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
  }
  
@@ -38,5 +38,5 @@ index eaa6e0e..63c2947 100644
 \ No newline at end of file
 +}
 -- 
-2.36.0
+2.36.2
 

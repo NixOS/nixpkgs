@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
+{ lib, stdenv, ladspa-sdk, pkgs, ... }:
 
 stdenv.mkDerivation rec {
   pname = "tap-plugins";

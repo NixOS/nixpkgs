@@ -1,0 +1,102 @@
+diff --git a/dev/bots/prepare_package.dart b/dev/bots/prepare_package.dart
+index 8e4cb81340..2c20940423 100644
+--- a/dev/bots/prepare_package.dart
++++ b/dev/bots/prepare_package.dart
+@@ -526,7 +526,7 @@ class ArchiveCreator {
+ 
+   Future<String> _runGit(List<String> args, {Directory? workingDirectory}) {
+     return _processRunner.runProcess(
+-      <String>['git', ...args],
++      <String>['git', '--git-dir', '.git', ...args],
+       workingDirectory: workingDirectory ?? flutterRoot,
+     );
+   }
+diff --git a/packages/flutter_tools/lib/src/commands/downgrade.dart b/packages/flutter_tools/lib/src/commands/downgrade.dart
+index 666c190067..b6c3761f6f 100644
+--- a/packages/flutter_tools/lib/src/commands/downgrade.dart
++++ b/packages/flutter_tools/lib/src/commands/downgrade.dart
+@@ -118,7 +118,7 @@ class DowngradeCommand extends FlutterCommand {
+     // Detect unknown versions.
+     final ProcessUtils processUtils = _processUtils!;
+     final RunResult parseResult = await processUtils.run(<String>[
+-      'git', 'describe', '--tags', lastFlutterVersion,
++      'git', '--git-dir', '.git', 'describe', '--tags', lastFlutterVersion,
+     ], workingDirectory: workingDirectory);
+     if (parseResult.exitCode != 0) {
+       throwToolExit('Failed to parse version for downgrade:\n${parseResult.stderr}');
+@@ -191,7 +191,7 @@ class DowngradeCommand extends FlutterCommand {
+         continue;
+       }
+       final RunResult parseResult = await _processUtils!.run(<String>[
+-        'git', 'describe', '--tags', sha,
++        'git', '--git-dir', '.git', 'describe', '--tags', sha,
+       ], workingDirectory: workingDirectory);
+       if (parseResult.exitCode == 0) {
+         buffer.writeln('Channel "${getNameForChannel(channel)}" was previously on: ${parseResult.stdout}.');
+diff --git a/packages/flutter_tools/lib/src/version.dart b/packages/flutter_tools/lib/src/version.dart
+index dc47f17057..8068e2d1f5 100644
+--- a/packages/flutter_tools/lib/src/version.dart
++++ b/packages/flutter_tools/lib/src/version.dart
+@@ -111,7 +111,7 @@ class FlutterVersion {
+     String? channel = _channel;
+     if (channel == null) {
+       final String gitChannel = _runGit(
+-        'git rev-parse --abbrev-ref --symbolic $kGitTrackingUpstream',
++        'git --git-dir .git rev-parse --abbrev-ref --symbolic $kGitTrackingUpstream',
+         globals.processUtils,
+         _workingDirectory,
+       );
+@@ -119,7 +119,7 @@ class FlutterVersion {
+       if (slash != -1) {
+         final String remote = gitChannel.substring(0, slash);
+         _repositoryUrl = _runGit(
+-          'git ls-remote --get-url $remote',
++          'git --git-dir .git ls-remote --get-url $remote',
+           globals.processUtils,
+           _workingDirectory,
+         );
+@@ -298,7 +298,7 @@ class FlutterVersion {
+   /// the branch name will be returned as `'[user-branch]'`.
+   String getBranchName({ bool redactUnknownBranches = false }) {
+     _branch ??= () {
+-      final String branch = _runGit('git rev-parse --abbrev-ref HEAD', globals.processUtils);
++      final String branch = _runGit('git --git-dir .git rev-parse --abbrev-ref HEAD', globals.processUtils);
+       return branch == 'HEAD' ? channel : branch;
+     }();
+     if (redactUnknownBranches || _branch!.isEmpty) {
+@@ -331,7 +331,7 @@ class FlutterVersion {
+   /// wrapper that does that.
+   @visibleForTesting
+   static List<String> gitLog(List<String> args) {
+-    return <String>['git', '-c', 'log.showSignature=false', 'log'] + args;
++    return <String>['git', '-c', 'log.showSignature=false', '--git-dir', '.git', 'log'] + args;
+   }
+ 
+   /// Gets the release date of the latest available Flutter version.
+@@ -708,7 +708,7 @@ class GitTagVersion {
+     String gitRef = 'HEAD'
+   }) {
+     if (fetchTags) {
+-      final String channel = _runGit('git rev-parse --abbrev-ref HEAD', processUtils, workingDirectory);
++      final String channel = _runGit('git --git-dir .git rev-parse --abbrev-ref HEAD', processUtils, workingDirectory);
+       if (channel == 'dev' || channel == 'beta' || channel == 'stable') {
+         globals.printTrace('Skipping request to fetchTags - on well known channel $channel.');
+       } else {
+@@ -718,7 +718,7 @@ class GitTagVersion {
+     }
+     // find all tags attached to the given [gitRef]
+     final List<String> tags = _runGit(
+-      'git tag --points-at $gitRef', processUtils, workingDirectory).trim().split('\n');
++      'git --git-dir .git tag --points-at $gitRef', processUtils, workingDirectory).trim().split('\n');
+ 
+     // Check first for a stable tag
+     final RegExp stableTagPattern = RegExp(r'^\d+\.\d+\.\d+$');
+@@ -739,7 +739,7 @@ class GitTagVersion {
+     // recent tag and number of commits past.
+     return parse(
+       _runGit(
+-        'git describe --match *.*.* --long --tags $gitRef',
++        'git --git-dir .git describe --match *.*.* --long --tags $gitRef',
+         processUtils,
+         workingDirectory,
+       )

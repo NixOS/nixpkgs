@@ -28,6 +28,7 @@
 , polkit
 , libsecret
 , evolution-data-server
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -122,13 +123,15 @@ stdenv.mkDerivation rec {
     providedSessions = [
       "sm.puri.Phosh"
     ];
+
+    tests.phosh = nixosTests.phosh;
   };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

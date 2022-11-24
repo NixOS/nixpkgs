@@ -10,12 +10,12 @@ index 82fadfe1..25c1454c 100644
 +    s, o = subprocess.getstatusoutput("@git@ rev-parse HEAD")
      if s:
          return
-     wandb_local = f"git+https://github.com/wandb/client.git@{o}#egg=wandb"
+     wandb_local = f"git+https://github.com/wandb/wandb.git@{o}#egg=wandb"
 diff --git a/wandb/cli/cli.py b/wandb/cli/cli.py
 index 5767e61c..56009fec 100644
 --- a/wandb/cli/cli.py
 +++ b/wandb/cli/cli.py
-@@ -1745,7 +1745,7 @@ def restore(ctx, run, no_git, branch, project, entity):
+@@ -1919,7 +1919,7 @@ def restore(ctx, run, no_git, branch, project, entity):
      commit, json_config, patch_content, metadata = api.run_config(
          project, run=run, entity=entity
      )
@@ -24,8 +24,8 @@ index 5767e61c..56009fec 100644
      image = metadata.get("docker")
      restore_message = (
          """`wandb restore` needs to be run from the same git repository as the original run.
-@@ -1764,7 +1764,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
- 
+@@ -1938,7 +1938,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
+
      if commit and api.git.enabled:
          wandb.termlog(f"Fetching origin and finding commit: {commit}")
 -        subprocess.check_call(["git", "fetch", "--all"])
@@ -33,7 +33,7 @@ index 5767e61c..56009fec 100644
          try:
              api.git.repo.commit(commit)
          except ValueError:
-@@ -1818,7 +1818,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
+@@ -1992,7 +1992,7 @@ Run `git clone %s` and restore from there or pass the --no-git flag."""
              # --reject is necessary or else this fails any time a binary file
              # occurs in the diff
              exit_code = subprocess.call(
@@ -42,32 +42,6 @@ index 5767e61c..56009fec 100644
              )
              if exit_code == 0:
                  wandb.termlog("Applied patch")
-diff --git a/wandb/sdk/internal/internal_api.py b/wandb/sdk/internal/internal_api.py
-index 612220b9..b761bfbd 100644
---- a/wandb/sdk/internal/internal_api.py
-+++ b/wandb/sdk/internal/internal_api.py
-@@ -660,7 +660,7 @@ class Api:
-         )
-         patch = BytesIO()
-         if self.git.dirty:
--            self.git.repo.git.execute(["git", "diff"], output_stream=patch)
-+            self.git.repo.git.execute(["@git@", "diff"], output_stream=patch)
-             patch.seek(0)
-         cwd = "."
-         if self.git.enabled:
-diff --git a/wandb/sdk/internal/meta.py b/wandb/sdk/internal/meta.py
-index 6c53f750..c385951a 100644
---- a/wandb/sdk/internal/meta.py
-+++ b/wandb/sdk/internal/meta.py
-@@ -125,7 +125,7 @@ class Meta:
-         logger.debug("save patches")
-         try:
-             root = self._git.root
--            diff_args = ["git", "diff"]
-+            diff_args = ["@git@", "diff"]
-             if self._git.has_submodule_diff:
-                 diff_args.append("--submodule=diff")
- 
 diff --git a/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py b/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py
 index 614df9f5..38db460b 100644
 --- a/wandb/vendor/graphql-core-1.1/wandb_graphql/pyutils/version.py

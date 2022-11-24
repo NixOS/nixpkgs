@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck = !stdenv.buildPlatform.isMusl;
 
   makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 

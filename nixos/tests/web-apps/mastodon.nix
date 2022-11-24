@@ -16,7 +16,7 @@ let
 in
 {
   name = "mastodon";
-  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
 
   nodes = {
     ca = { pkgs, ... }: {
@@ -56,6 +56,9 @@ in
     };
 
     server = { pkgs, ... }: {
+
+      virtualisation.memorySize = 2048;
+
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -128,6 +131,9 @@ in
 
     ca.wait_for_unit("step-ca.service")
     ca.wait_for_open_port(8443)
+
+    # Check that mastodon-media-auto-remove is scheduled
+    server.succeed("systemctl status mastodon-media-auto-remove.timer")
 
     server.wait_for_unit("nginx.service")
     server.wait_for_unit("redis-mastodon.service")

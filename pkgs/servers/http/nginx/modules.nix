@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchFromGitLab, lib, pkgs }:
+{ fetchFromGitHub, fetchFromGitLab, fetchhg, lib, pkgs }:
 
 let
 
@@ -288,6 +288,28 @@ in
         rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
         sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
       } + "/naxsi_src";
+  };
+
+  njs = rec {
+    src = fetchhg {
+      url = "https://hg.nginx.org/njs";
+      rev = "0.7.8";
+      sha256 = "sha256-jsR8EOeW8tAo2utKznuUaCG4hK0oU0ZJSnnGmI5HUDk=";
+      name = "nginx-njs";
+    };
+
+    # njs module sources have to be writable during nginx build, so we copy them
+    # to a temporary directory and change the module path in the configureFlags
+    preConfigure = ''
+      NJS_SOURCE_DIR=$(readlink -m "$TMPDIR/${src}")
+      mkdir -p "$(dirname "$NJS_SOURCE_DIR")"
+      cp --recursive "${src}" "$NJS_SOURCE_DIR"
+      chmod -R u+rwX,go+rX "$NJS_SOURCE_DIR"
+      export configureFlags="''${configureFlags/"${src}"/"$NJS_SOURCE_DIR/nginx"}"
+      unset NJS_SOURCE_DIR
+    '';
+
+    inputs = [ pkgs.which ];
   };
 
   opentracing = {

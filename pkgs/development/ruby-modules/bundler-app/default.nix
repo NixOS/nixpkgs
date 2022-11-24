@@ -35,7 +35,9 @@
 }@args:
 
 let
-  basicEnv = (callPackage ../bundled-common {}) args;
+  basicEnv = (callPackage ../bundled-common {
+    inherit ruby;
+  }) args;
 
   cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults

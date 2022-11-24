@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
-  buildInputs = [ curl jansson autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ curl jansson ];
 
   configureFlags = [ "CFLAGS=-O3" ];
 

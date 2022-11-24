@@ -12,7 +12,6 @@
 , libpeas
 , bash
 , gobject-introspection
-, libsoup
 , gtksourceview4
 , gsettings-desktop-schemas
 , adwaita-icon-theme
@@ -22,6 +21,7 @@
 , libgee
 , libgit2-glib
 , libsecret
+, libxml2
 , meson
 , ninja
 , python3
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libgit2-glib
     libpeas
     libsecret
-    libsoup
+    libxml2
   ];
 
   doCheck = false; # FAIL: tests-gitg gtk_style_context_add_provider_for_screen: assertion 'GDK_IS_SCREEN (screen)' failed

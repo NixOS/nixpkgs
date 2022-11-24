@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FiZElESyOVu1VJxUDNiN6HVADiaubDrGdQHYp2CN8f4=";
+    hash = "sha256-FYB0IhokM74HBY2wOJYE6xJrHxHHWhDSAZpWFs6HFu0=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,11 @@ buildPythonPackage rec {
   checkInputs = [
     jaxlib
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # See https://github.com/deepmind/chex/issues/204.
+    "test_uninspected_checks"
   ];
 
   meta = with lib; {

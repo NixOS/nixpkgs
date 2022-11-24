@@ -3,7 +3,6 @@
 , alsa-lib
 , autoPatchelfHook
 , buildFHSUserEnvBubblewrap
-, callPackage
 , copyDesktopItems
 , dbus
 , dpkg

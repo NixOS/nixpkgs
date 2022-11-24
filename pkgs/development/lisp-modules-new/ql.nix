@@ -19,6 +19,32 @@ let
     cl-cffi-gtk-cairo = pkg: {
       nativeLibs = [ cairo ];
     };
+    cl-cairo2 = pkg: {
+      nativeLibs = [ cairo ];
+    };
+    cl-cairo2-xlib = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-freetype2 = pkg: {
+      nativeLibs = [ freetype ];
+      nativeBuildInputs = [ freetype ];
+      patches = [ ./patches/cl-freetype2-fix-grovel-includes.patch ];
+    };
+    cl-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-gtk2-gdk = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-gtk2-glib = pkg: {
+      nativeLibs = [ glib ];
+    };
+    cl-gtk2-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-rsvg2 = pkg: {
+      nativeLibs = [ librsvg ];
+    };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
     };
@@ -59,6 +85,9 @@ let
     };
     trivial-ssh-libssh2 = pkg: {
       nativeLibs = [ libssh2 ];
+    };
+    mssql = pkg: {
+      nativeLibs = [ freetds ];
     };
     sqlite = pkg: {
       nativeLibs = [ sqlite ];
@@ -126,6 +155,40 @@ let
       nativeBuildInputs = [ libfixposix ];
       nativeLibs = [ libfixposix ];
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
+    };
+    "cl-ana.hdf-cffi" = pkg: {
+      nativeBuildInputs = [ pkgs.hdf5 ];
+      nativeLibs = [ pkgs.hdf5 ];
+      NIX_LDFLAGS = [ "-lhdf5" ];
+    };
+    gsll = pkg: {
+      nativeBuildInputs = [ pkgs.gsl ];
+      nativeLibs = [ pkgs.gsl ];
+    };
+    cl-libyaml = pkg: {
+      nativeLibs = [ pkgs.libyaml ];
+    };
+    cl-libxml2 = pkg: {
+      nativeLibs = [ pkgs.libxml2 ];
+    };
+    cl-readline = pkg: {
+      nativeLibs = [ pkgs.readline ];
+    };
+    pzmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-compat = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-examples = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-test = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
     };
   };
 

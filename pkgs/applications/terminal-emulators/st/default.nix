@@ -14,13 +14,13 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "st";
-  version = "0.8.5";
+  version = "0.9";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
-    hash = "sha256-6mgyID7QL/dBgry4raqexFTI+YnnkjLLhZZl4vVEqzc=";
+    url = "https://dl.suckless.org/st/st-${finalAttrs.version}.tar.gz";
+    hash = "sha256-82NZeZc06ueFvss3QGPwvoM88i+ItPFpzSUbmTJOCOc=";
   };
 
   inherit patches;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   configFile = lib.optionalString (conf != null)
     (writeText "config.def.h" conf);
 
-  postPatch = lib.optionalString (conf != null) "cp ${configFile} config.def.h"
+  postPatch = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
     + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ andsild ];
     platforms = platforms.unix;
   };
-}
+})

@@ -158,7 +158,7 @@ assert !enableNativeBignum -> gmp != null;
 
 assert stdenv.hostPlatform == stdenv.targetPlatform || throw ''
   hadrian doesn't support building an installable GHC cross-compiler at the moment.
-  Consider using GHC 9.4.2 or lower which support this via the make build system.
+  Consider using GHC 9.4 or lower which support this via the make build system.
   See also: https://gitlab.haskell.org/ghc/ghc/-/issues/22090
 '';
 

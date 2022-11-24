@@ -26,4 +26,9 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_pasqal" ];
+
+  disabledTestPaths = [
+    # No need to test the version number
+    "cirq_pasqal/_version_test.py"
+  ];
 }

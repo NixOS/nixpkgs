@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "2.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "jart";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qi82iGw0Sj2pgV9O4rr/q7jyd1XG3MpTr69dXdAUH0Q=";
+    sha256 = "sha256-2Q4lutSIQ6tBwTy01lPSMepNAww9Kb7BwNyEcsSdWZ0=";
   };
 
   patches = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dist" ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
-  buildFlags = "o/cosmopolitan.h o//cosmopolitan.a o//libc/crt/crt.o o//ape/ape.o o//ape/ape.lds";
+  buildFlags = [ "o/cosmopolitan.h" "o//cosmopolitan.a" "o//libc/crt/crt.o" "o//ape/ape.o" "o//ape/ape.lds" ];
   checkTarget = "o//test";
   enableParallelBuilding = true;
 

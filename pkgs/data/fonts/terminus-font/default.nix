@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, python3
-, bdftopcf, mkfontscale
+, bdftopcf
+, xorg
 , variants ? []
 }:
 stdenv.mkDerivation rec {
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
 
   nativeBuildInputs =
-    [ python3 bdftopcf mkfontscale ];
+    [ python3 bdftopcf xorg.mkfontscale ];
 
   enableParallelBuilding = true;
 

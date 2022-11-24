@@ -40,7 +40,7 @@ in {
     port = mkOption {
       description = lib.mdDoc "Port number the broker should listen on.";
       default = 9092;
-      type = types.int;
+      type = types.port;
     };
 
     hostname = mkOption {

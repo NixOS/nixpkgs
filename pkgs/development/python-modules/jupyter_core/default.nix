@@ -1,42 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
-, fetchpatch
-, python
-, ipython
+, pythonOlder
+, fetchFromGitHub
+, hatchling
 , traitlets
-, glibcLocales
-, mock
 , pytestCheckHook
-, nose
 }:
 
 buildPythonPackage rec {
   pname = "jupyter_core";
-  version = "4.9.2";
-  disabled = !isPy3k;
+  version = "4.11.2";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1puuuf+xKLjNJlf88nA/icdp0Wc8hRgSEZ46Kg6TrZo=";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    owner = "jupyter";
+    repo = "jupyter_core";
+    rev = version;
+    hash = "sha256-lDhwvhsOxLHBC6CQjCW/rmtHSuMRPC2yaurBd5K3FLc=";
   };
 
-  checkInputs = [ pytestCheckHook mock glibcLocales nose ];
-  propagatedBuildInputs = [ ipython traitlets ];
-
   patches = [
-    # install jupyter_core/*.py files
-    (fetchpatch {
-      url = "https://github.com/jupyter/jupyter_core/pull/253/commits/3bbeaebec0a53520523162d5e8d5c6ca02b1b782.patch";
-      sha256 = "sha256-QeAfj7wLz4egVUPMAgrZ9Wn/Tv60LrIXLgHGVoH41wQ=";
-    })
     ./tests_respect_pythonpath.patch
+  ];
+
+  nativeBuildInputs = [
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    traitlets
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   preCheck = ''
     export HOME=$TMPDIR
-    export LC_ALL=en_US.utf8
   '';
 
   disabledTests = [
@@ -51,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyter_core" ];
 
   meta = with lib; {
-    description = "Jupyter core package. A base package on which Jupyter projects rely";
+    description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

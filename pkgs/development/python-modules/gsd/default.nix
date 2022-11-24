@@ -1,27 +1,47 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, cython, numpy
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, numpy
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "2.6.0";
   pname = "gsd";
-  disabled = isPy27;
+  version = "2.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GVb05uy5HKIn+fARFBN+mK54y2CtFBM8At21VUFr7tc=";
+    hash = "sha256-vQutfkSilfgRHuu/THWMG6bmkT1eKlAAniQM4DP8mqI=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "gsd"
+  ];
+
+
   preCheck = ''
     pushd gsd/test
   '';
+
   postCheck = ''
     popd
   '';
@@ -30,6 +50,6 @@ buildPythonPackage rec {
     description = "General simulation data file format";
     homepage = "https://github.com/glotzerlab/gsd";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -321,5 +321,6 @@ in {
       "proc-sys-fs-binfmt_misc.mount"
       "systemd-binfmt.service"
     ];
+    systemd.services.systemd-binfmt.restartTriggers = [ (builtins.toJSON config.boot.binfmt.registrations) ];
   };
 }

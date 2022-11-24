@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, aiohttp
 , buildPythonPackage
 , ed25519
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.1.7";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +21,11 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K2ugTwfeYrdBnXFV9SHNQP+fNvUmc1yuy53gpGmmvS0=";
+    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     ed25519
   ];
 

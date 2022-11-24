@@ -1,9 +1,28 @@
-{ lib, stdenv, makeWrapper, coreutils, gnused, gnugrep, diffutils, nix, git, jq }:
+{ lib
+, stdenv
+, makeWrapper
+, coreutils
+, diffutils
+, git
+, gnugrep
+, gnused
+, jq
+, nix
+, python3Packages
+}:
 
 stdenv.mkDerivation {
   name = "common-updater-scripts";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    python3Packages.wrapPython
+  ];
+
+  pythonPath = [
+    python3Packages.beautifulsoup4
+    python3Packages.requests
+  ];
 
   dontUnpack = true;
 
@@ -11,8 +30,15 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp ${./scripts}/* $out/bin
 
+    # wrap non python scripts
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ coreutils gnused gnugrep nix diffutils git jq ]}
+      if ! (head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'); then
+        wrapProgram $f --prefix PATH : ${lib.makeBinPath [ coreutils diffutils git gnugrep gnused jq nix ]}
+      fi
     done
+
+    # wrap python scripts
+    makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [ nix ]}" )
+    wrapPythonPrograms
   '';
 }

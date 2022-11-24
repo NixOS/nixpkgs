@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.21";
+  version = "4.21.1";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-jcUgXg80Q9WGYeMHg1If2cbUJtHn82Z6sS8qwbLTIHg=";
+    sha256 = "sha256-7f14EoXGVKBdxtsnLOAwDEQo5vvYddmZZOV94ltBvB4=";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
+{ lib, mkDerivation, fetchurl, cmake, pkg-config
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
@@ -40,7 +40,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
     [ # basic requirements
-      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
+      qtbase qttools qtmultimedia qtx11extras
       # transports
       curl libmms
       # input plugins

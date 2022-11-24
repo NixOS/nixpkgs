@@ -3,7 +3,6 @@
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
-, abseil-cpp
 , autoconf
 , aws-sdk-cpp
 , boost
@@ -147,10 +146,9 @@ stdenv.mkDerivation rec {
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
   ++ lib.optionals enableGcs [
-    abseil-cpp
     crc32c
     curl
-    google-cloud-cpp
+    google-cloud-cpp grpc
     nlohmann_json
   ];
 

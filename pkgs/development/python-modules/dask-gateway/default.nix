@@ -4,6 +4,7 @@
 , aiohttp
 , dask
 , distributed
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,8 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "source/dask-gateway";
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp

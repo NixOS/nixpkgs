@@ -10,7 +10,7 @@ let
 in
 {
   options.services.blocky = {
-    enable = mkEnableOption (lib.mdDoc "Fast and lightweight DNS proxy as ad-blocker for local network with many features");
+    enable = mkEnableOption (lib.mdDoc "blocky, a fast and lightweight DNS proxy as ad-blocker for local network with many features");
 
     settings = mkOption {
       type = format.type;

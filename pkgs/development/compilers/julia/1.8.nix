@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    sha256 = "sha256-MeRlX0s3fnPW9YPFOdAiHte0gKPqCRgz0ABTFhhcW2E=";
+    hash = "sha256-UraJWp1K0v422yYe6MTIzJISuDehL5MAL6r1N6IVH1A=";
   };
 
   patches =
@@ -43,10 +43,6 @@ stdenv.mkDerivation rec {
       (fetchurl {
         url = path "julia-hardcoded-libs.patch";
         sha256 = "sha256-kppSpVA7bRohd0wXDs4Jgct9ocHnpbeiiSz7ElFom1U=";
-      })
-      (fetchurl {
-        url = path "julia-libgit-1.4.patch";
-        sha256 = "sha256-rcVXYoGpAxwAbAl33n0/Rkwsi8ZJz8cnHQ5CalUx+1o=";
       })
       (fetchurl {
         url = path "julia-libunwind-1.6.patch";

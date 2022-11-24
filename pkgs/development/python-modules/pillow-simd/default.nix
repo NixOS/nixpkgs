@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, isPyPy, isPy3k
-, olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2
+, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2
 , libxcb, tk, libX11, openjpeg, libimagequant, pyroma, numpy, defusedxml
 , pytestCheckHook
 }@args:

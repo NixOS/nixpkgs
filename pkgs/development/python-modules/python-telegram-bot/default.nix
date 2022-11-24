@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace "tornado==6.1" "tornado"
   '';
 
-  setupPyGlobalFlags = "--with-upstream-urllib3";
+  setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
 
   # tests not included with release
   doCheck = false;

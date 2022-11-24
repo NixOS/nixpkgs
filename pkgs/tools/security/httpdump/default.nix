@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "0yh8kxy1k23lln09b614limwk9y59r7cn5qhbnzc06ga4mxfczv2";
   };
 
-  vendorSha256 = "0lb1p63lzn1ngj54bar9add7w0azvgcq3azhv9c5glk3ykv9c3iy";
+  vendorSha256 = null; #vendorSha256 = "";
 
   propagatedBuildInputs = [ libpcap ];
 
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/hsiafan/httpdump";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

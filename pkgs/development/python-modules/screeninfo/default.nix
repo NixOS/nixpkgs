@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, buildPythonApplication
+, buildPythonPackage
 , dataclasses
 , fetchFromGitHub
 , libX11
@@ -11,7 +11,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "screeninfo";
   version = "0.8.1";
   format = "pyproject";

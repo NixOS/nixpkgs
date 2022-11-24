@@ -5,6 +5,7 @@
 , poetry-core
 , pdfrw
 , reportlab
+, setuptools
 , svglib
 , xdg
 }:
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pdfrw
     reportlab
+    setuptools
     svglib
     xdg
   ];

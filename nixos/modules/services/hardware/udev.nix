@@ -46,6 +46,11 @@ let
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
   '';
 
+  nixosInitrdRules = ''
+    # Mark dm devices as db_persist so that they are kept active after switching root
+    SUBSYSTEM=="block", KERNEL=="dm-[0-9]*", ACTION=="add|change", OPTIONS+="db_persist"
+  '';
+
   # Perform substitutions in all udev rules files.
   udevRulesFor = { name, udevPackages, udevPath, udev, systemd, binPackages, initrdBin ? null }: pkgs.runCommand name
     { preferLocalBuild = true;
@@ -171,10 +176,10 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = if config.boot.kernelPackages.kernelAtLeast "5.3" then
-    pkgs.compressFirmwareXz
+  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
+    pkgs.compressFirmwareXz firmware
   else
-    id;
+    id firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -192,7 +197,6 @@ in
   ###### interface
 
   options = {
-
     boot.hardwareScan = mkOption {
       type = types.bool;
       default = true;
@@ -205,6 +209,9 @@ in
     };
 
     services.udev = {
+      enable = mkEnableOption (lib.mdDoc "udev") // {
+        default = true;
+      };
 
       packages = mkOption {
         type = types.listOf types.path;
@@ -345,7 +352,7 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf cfg.enable {
 
     services.udev.extraRules = nixosRules;
 
@@ -362,8 +369,10 @@ in
         EOF
       '';
 
+    boot.initrd.services.udev.rules = nixosInitrdRules;
+
     boot.initrd.systemd.additionalUpstreamUnits = [
-      # TODO: "initrd-udevadm-cleanup-db.service" is commented out because of https://github.com/systemd/systemd/issues/12953
+      "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"

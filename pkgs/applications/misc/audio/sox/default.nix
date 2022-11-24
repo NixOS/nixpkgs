@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-  ] ++ lib.optional enableOpusfile [
+  ] ++ lib.optionals enableOpusfile [
     # configure.ac uses pkg-config only to locate libopusfile
     pkg-config
   ];

@@ -2,25 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mmtc";
-  version = "0.2.15";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GQ1SoZE74o8fsXHVdjdEMbdUeefyPb4FXxidcHCy180=";
+    sha256 = "sha256-fWd349IDlN6XNv7MrqJeLwkmevZoKXLSz8a09YWsNcI=";
   };
 
-  cargoSha256 = "sha256-2IcOwjYTRl2tCB/YAuDACpgaRKZ/21IKWpVs+koYH3k=";
+  cargoSha256 = "sha256-WrEC3zWwY1plOn8DrspbJFI3R/fE6yDQT2u2lVubbQU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  preFixup = ''
-    completions=($releaseDir/build/mmtc-*/out/completions)
-    installShellCompletion $completions/mmtc.{bash,fish} --zsh $completions/_mmtc
+  postInstall = ''
+    installManPage artifacts/mmtc.1
+    installShellCompletion artifacts/mmtc.{bash,fish} --zsh artifacts/_mmtc
   '';
 
-  GEN_COMPLETIONS = 1;
+  GEN_ARTIFACTS = "artifacts";
 
   meta = with lib; {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";

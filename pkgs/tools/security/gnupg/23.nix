@@ -2,8 +2,9 @@
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
 , adns, bzip2, gnutls, libusb1, openldap
-, tpm2-tss, pinentry, readline, sqlite, zlib
+, pinentry, readline, sqlite, zlib
 , withPcsc ? !enableMinimal, pcsclite
+, withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
 }:
 
 assert guiSupport -> enableMinimal == false;
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     libgcrypt libassuan libksba libiconv npth gettext
   ] ++ lib.optionals (!enableMinimal) ([
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ lib.optional (!stdenv.isDarwin) tpm2-tss);
+  ] ++ lib.optional withTpm2Tss tpm2-tss);
 
   patches = [
     ./fix-libusb-include-path.patch
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
   ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ lib.optional ((!stdenv.isDarwin) && (!enableMinimal)) "--with-tss=intel";
+  ++ lib.optional withTpm2Tss "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}

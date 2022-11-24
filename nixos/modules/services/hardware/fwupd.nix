@@ -33,18 +33,26 @@ let
       mkEtcFile = p: nameValuePair (mkName p) { source = p; };
     in listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
 
-  # We cannot include the file in $out and rely on filesInstalledToEtc
-  # to install it because it would create a cyclic dependency between
-  # the outputs. We also need to enable the remote,
-  # which should not be done by default.
-  testRemote = if cfg.enableTestRemote then {
-    "fwupd/remotes.d/fwupd-tests.conf" = {
-      source = pkgs.runCommand "fwupd-tests-enabled.conf" {} ''
+  enableRemote = base: remote: {
+    "fwupd/remotes.d/${remote}.conf" = {
+      source = pkgs.runCommand "${remote}-enabled.conf" {} ''
         sed "s,^Enabled=false,Enabled=true," \
-        "${cfg.package.installedTests}/etc/fwupd/remotes.d/fwupd-tests.conf" > "$out"
+        "${base}/etc/fwupd/remotes.d/${remote}.conf" > "$out"
       '';
     };
-  } else {};
+  };
+  remotes = (foldl'
+    (configFiles: remote: configFiles // (enableRemote cfg.package remote))
+    {}
+    cfg.extraRemotes
+  ) // (
+    # We cannot include the file in $out and rely on filesInstalledToEtc
+    # to install it because it would create a cyclic dependency between
+    # the outputs. We also need to enable the remote,
+    # which should not be done by default.
+    if cfg.enableTestRemote then (enableRemote cfg.package.installedTests "fwupd-tests") else {}
+  );
+
 in {
 
   ###### interface
@@ -86,6 +94,15 @@ in {
         '';
       };
 
+      extraRemotes = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "lvfs-testing" ];
+        description = lib.mdDoc ''
+          Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
+        '';
+      };
+
       enableTestRemote = mkOption {
         type = types.bool;
         default = false;
@@ -119,7 +136,7 @@ in {
     environment.systemPackages = [ cfg.package ];
 
     # customEtc overrides some files from the package
-    environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
+    environment.etc = originalEtc // customEtc // extraTrustedKeys // remotes;
 
     services.dbus.packages = [ cfg.package ];
 

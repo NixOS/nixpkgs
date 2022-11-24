@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
 , cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
-, libjpeg, libseat, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
+, libjpeg, seatd, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
 , wayland-protocols, xlibsWrapper
 , pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
 , libva ? null, libwebp ? null, xwayland ? null
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
     cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
-    libjpeg libseat libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
+    libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
     pango pipewire udev vaapi wayland wayland-protocols xlibsWrapper
   ];
 

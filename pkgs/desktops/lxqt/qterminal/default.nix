@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "qterminal";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "x+rgDrijDsMMdpU7afkn0dsSQbuBbEI9agoaLVsR/q8=";
+    sha256 = "7fsMJdObNjXSXfmS2TxXtbErnRCZCJZb7WitE6y1xjg=";
   };
 
   nativeBuildInputs = [

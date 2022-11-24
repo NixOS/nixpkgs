@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , debugger
 , fetchPypi
@@ -77,13 +78,13 @@ buildPythonPackage rec {
     installShellCompletion --bash extra/bash_completion.d/shellcraft
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p "$out/bin"
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';
 
   meta = with lib; {
-    homepage = "http://pwntools.com";
+    homepage = "https://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;
     maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];

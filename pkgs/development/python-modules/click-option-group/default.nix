@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.3";
+  version = "0.5.5";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1w0692s8fabncpggpwl2d4dfqjjlmcia271rrb8hcz0r6nvw98ak";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
   };
 
   propagatedBuildInputs = [

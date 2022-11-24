@@ -79,7 +79,7 @@ in {
         LockPersonality = true;
         RemoveIPC = true;
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
       };
     };
   };

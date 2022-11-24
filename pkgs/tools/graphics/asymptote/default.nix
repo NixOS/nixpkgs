@@ -9,23 +9,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.67";
+  version = "2.83";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    hash = "sha256-dMgsKBg6YQ3mdx3jFqjX4vZeizaier8+ZQUl4J6QXNE=";
+    hash = "sha256-Kz1uh3fMbADd39seunfL5O2Q31VLGKhu/ZuKi9/kuEc=";
   };
-
-  patches =
-    (lib.optional (lib.versionOlder version "2.68")
-      (fetchpatch {
-        url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
-        hash = "sha256-1RYMZcwbjBAM7aAXFBbwst0eozWYFtJ8HcicjXogS/w=";
-      }))
-  ;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -80,7 +72,6 @@ stdenv.mkDerivation rec {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
-    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

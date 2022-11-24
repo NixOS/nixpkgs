@@ -103,6 +103,7 @@ stdenv.mkDerivation {
     pkg-config
     autoreconfHook
     gettext
+    intltool
     wrapGAppsHook
   ];
   buildInputs = [
@@ -114,7 +115,6 @@ stdenv.mkDerivation {
     gtk3
     gtkmm3
     imagemagick
-    intltool
     libjack2
     libsigcxx
     libxmlxx

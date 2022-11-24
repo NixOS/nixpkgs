@@ -1,0 +1,91 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-23.05">
+  <title>Release 23.05 (“Stoat”, 2023.05/??)</title>
+  <para>
+    Support is planned until the end of December 2023, handing over to
+    23.11.
+  </para>
+  <section xml:id="sec-release-23.05-highlights">
+    <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-new-services">
+    <title>New Services</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>carnix</literal> and <literal>cratesIO</literal> has
+          been removed due to being unmaintained, use alternatives such
+          as
+          <link xlink:href="https://github.com/nix-community/naersk">naersk</link>
+          and
+          <link xlink:href="https://github.com/kolloch/crate2nix">crate2nix</link>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The EC2 image module no longer fetches instance metadata in
+          stage-1. This results in a significantly smaller initramfs,
+          since network drivers no longer need to be included, and
+          faster boots, since metadata fetching can happen in parallel
+          with startup of other services. This breaks services which
+          rely on metadata being present by the time stage-2 is entered.
+          Anything which reads EC2 metadata from
+          <literal>/etc/ec2-metadata</literal> should now have an
+          <literal>after</literal> dependency on
+          <literal>fetch-ec2-metadata.service</literal>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The EC2 image module previously detected and automatically
+          mounted ext3-formatted instance store devices and partitions
+          in stage-1 (initramfs), storing <literal>/tmp</literal> on the
+          first discovered device. This behaviour, which only catered to
+          very specific use cases and could not be disabled, has been
+          removed. Users relying on this should provide their own
+          implementation, and probably use ext4 and perform the mount in
+          stage-2.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The EC2 image module previously detected and activated
+          swap-formatted instance store devices and partitions in
+          stage-1 (initramfs). This behaviour has been removed. Users
+          relying on this should provide their own implementation.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-23.05-notable-changes">
+    <title>Other Notable Changes</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Create the first release note entry in this section!
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>

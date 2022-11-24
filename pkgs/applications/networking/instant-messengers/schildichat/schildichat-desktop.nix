@@ -14,6 +14,7 @@
 , Security
 , AppKit
 , CoreServices
+, sqlcipher
 }:
 
 let
@@ -87,7 +88,9 @@ stdenv.mkDerivation rec {
     done
 
     # executable wrapper
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

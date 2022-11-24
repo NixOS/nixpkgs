@@ -11,7 +11,19 @@ let
 
 in {
   options.programs.neovim = {
-    enable = mkEnableOption (lib.mdDoc "Neovim");
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to enable Neovim.
+
+        When enabled through this option, Neovim is wrapped to use a
+        configuration managed by this module. The configuration file in the
+        user's home directory at {file}`~/.config/nvim/init.vim` is no longer
+        loaded by default.
+      '';
+    };
 
     defaultEditor = mkOption {
       type = types.bool;

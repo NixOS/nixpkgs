@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "51efa36f92679b25d43dbf8ba543e9f26138559f0fa1ba5fae172f5400659c8f";
+    sha256 = "f736ef284358923e312f8e1e3c6ce7c97b20965b09eb65705e9f7e3d5e9a9d79";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
-  checkFlags = "V=1"; # verbose output in case some test fails
+  checkFlags = [ "V=1" ]; # verbose output in case some test fails
   doInstallCheck = true;
 
   postInstall = ''

@@ -22,7 +22,7 @@ mkDerivation {
   buildPhase = ''
     runHook preBuild
     composer dump-autoload
-    box build
+    box compile
     runHook postBuild
   '';
 
@@ -36,6 +36,7 @@ mkDerivation {
   '';
 
   meta = with lib; {
+    broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
     license = licenses.bsd2;
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";

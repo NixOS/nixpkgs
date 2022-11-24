@@ -50,7 +50,7 @@ in (buildEnv {
     "/tex/generic/config" # make it a real directory for scheme-infraonly
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper libfaketime ];
   buildInputs = pkgList.extraInputs;
 
   # This is set primarily to help find-tarballs.nix to do its job
@@ -227,6 +227,21 @@ in (buildEnv {
     ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
     FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
     #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # tex intentionally ignores SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
+    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/0139-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
+    if [[ -d share/texmf-var/web2c/tex ]]
+    then
+      cd share/texmf-var/web2c/tex
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) tex -ini -jobname=tex -progname=tex tex.ini
+      cd -
+    fi
+    if [[ -f share/texmf-var/web2c/luahbtex/lualatex.fmt ]]
+    then
+      cd share/texmf-var/web2c/luahbtex
+      faketime $(date --utc -d@$SOURCE_DATE_EPOCH --iso-8601=seconds) luahbtex -ini -jobname=lualatex -progname=lualatex lualatex.ini
+      cd -
+    fi
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force

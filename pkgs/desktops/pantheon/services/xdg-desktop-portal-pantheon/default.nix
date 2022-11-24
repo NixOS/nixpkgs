@@ -13,17 +13,18 @@
 , libhandy
 , systemd
 , vte
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-YICNOeNrpO2tJFyULjQEhZQCrrMyQau59EC7c5K9q40=";
+    sha256 = "sha256-DPCBC3/MJxy9d77ZYzK68FwN8kbyo7guYrkZC+onRBw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     libhandy
     systemd
     vte
+    xorg.libX11
   ];
 
   mesonFlags = [

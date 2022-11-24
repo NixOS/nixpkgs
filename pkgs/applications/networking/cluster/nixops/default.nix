@@ -10,7 +10,7 @@ let
   interpreter = (
     poetry2nix.mkPoetryPackages {
       projectDir = ./.;
-      python = pkgs.python39;
+      python = pkgs.python310;
       overrides = [
         poetry2nix.defaultPoetryOverrides
         (import ./poetry-git-overlay.nix { inherit pkgs; })
@@ -42,12 +42,22 @@ let
         overrides
 
         # Make nixops pluginable
-        (self: super: {
+        (self: super: let
+          # Create a fake sphinx directory that doesn't pull the entire setup hook and incorrect python machinery
+          sphinx = pkgs.runCommand "sphinx" {} ''
+            mkdir -p $out/bin
+            for f in ${pkgs.python3.pkgs.sphinx}/bin/*; do
+              ln -s $f $out/bin/$(basename $f)
+            done
+          '';
+
+        in {
           nixops = super.__toPluginAble {
             drv = super.nixops;
             finalDrv = self.nixops;
 
-            nativeBuildInputs = [ self.sphinx ];
+            nativeBuildInputs = [ sphinx ];
+
             postInstall = ''
               doc_cache=$(mktemp -d)
               sphinx-build -b man -d $doc_cache doc/ $out/share/man/man1

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "arguments";
-  name  = "${pname}-2015-11-30";
+  version = "unstable-2015-11-30";
 
   owner = "BIC-MNI";
 

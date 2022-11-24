@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ntirpc";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "ntirpc";
     rev = "v${version}";
-    sha256 = "0hffma57b4c7g7862yvfr8bvbsbxh5w383mvjkjv3jpzi01l79yv";
+    sha256 = "sha256-RTuWj795YrXVo3TIiEr3Dy/QmSL5Ch0VVc4gRlDhNTM=";
   };
 
   postPatch = ''

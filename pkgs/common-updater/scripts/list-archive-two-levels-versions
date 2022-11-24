@@ -4,7 +4,7 @@
 
 pname=""  # package name
 attr_path=""  # package attribute path
-url=""  # directory list url
+url=""  # directory listing url
 file=""  # file for writing debugging information
 
 while (( $# > 0 )); do
@@ -31,7 +31,7 @@ while (( $# > 0 )); do
 done
 
 if [[ -z "$pname" ]]; then
-    pname="$UPDATE_NIX_NAME"
+    pname="$UPDATE_NIX_PNAME"
 fi
 
 if [[ -z "$attr_path" ]]; then

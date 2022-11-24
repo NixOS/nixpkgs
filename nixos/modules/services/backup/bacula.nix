@@ -314,7 +314,7 @@ in {
 
       port = mkOption {
         default = 9102;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           This specifies the port number on which the Client listens for
           Director connections. It must agree with the FDPort specified in
@@ -374,7 +374,7 @@ in {
 
       port = mkOption {
         default = 9103;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           Specifies port number on which the Storage daemon listens for
           Director connections.
@@ -451,7 +451,7 @@ in {
 
       port = mkOption {
         default = 9101;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           Specify the port (a positive integer) on which the Director daemon
           will listen for Bacula Console connections. This same port number

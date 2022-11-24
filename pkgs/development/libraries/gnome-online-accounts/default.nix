@@ -1,23 +1,25 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
 , pkg-config
 , vala
 , glib
 , meson
 , ninja
-, python3
 , libxslt
 , gtk3
-, webkitgtk
+, enableBackend ? stdenv.isLinux
+, webkitgtk_4_1
 , json-glib
-, librest
+, librest_1_0
+, libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
 , icu
 , glib-networking
-, libsoup
+, libsoup_3
 , docbook-xsl-nons
 , docbook_xml_dtd_412
 , gnome
@@ -30,7 +32,9 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.44.0";
+  version = "3.46.0";
+
+  outputs = [ "out" "dev" ] ++ lib.optionals enableBackend [ "man" "devdoc" ];
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,15 +42,14 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-8dp3cizyQVHegDxX9G6iGLW5g44audn431hCPMS/KlA=";
+    sha256 = "sha256-qVd55fmhY05zJ871OWc3hd1eWjYbYJuxlE/T2i3VCUA=";
   };
-
-  outputs = [ "out" "man" "dev" "devdoc" ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
-    "-Dgtk_doc=true"
-    "-Dman=true"
+    "-Dgoabackend=${lib.boolToString enableBackend}"
+    "-Dgtk_doc=${lib.boolToString enableBackend}"
+    "-Dman=${lib.boolToString enableBackend}"
     "-Dmedia_server=true"
   ];
 
@@ -61,7 +64,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -75,18 +77,15 @@ stdenv.mkDerivation rec {
     icu
     json-glib
     libkrb5
-    librest
+    librest_1_0
+    libxml2
     libsecret
-    libsoup
-    webkitgtk
+    libsoup_3
+  ] ++ lib.optionals enableBackend [
+    webkitgtk_4_1
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -98,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineAccounts";
     description = "Single sign-on framework for GNOME";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
   };

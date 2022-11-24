@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "1.5.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s57mXWZsj7S5O91I3tc/ecHJDbQR7amiyTxhYt7jzUM=";
+    hash = "sha256-sC8rJOyQB8mDCCmfpk2lVDPTWxBj7tZxVXQw8agl7t0=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -48,7 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ azahi nitsky ];
     platforms = platforms.unix;
-    # https://github.com/NixOS/nixpkgs/pull/189712#issuecomment-1237791234
-    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

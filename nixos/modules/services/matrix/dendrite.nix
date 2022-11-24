@@ -195,6 +195,25 @@ in
             '';
           };
         };
+        options.sync_api.search = {
+          enable = lib.mkEnableOption (lib.mdDoc "Dendrite's full-text search engine");
+          index_path = lib.mkOption {
+            type = lib.types.str;
+            default = "${workingDir}/searchindex";
+            description = lib.mdDoc ''
+              The path the search index will be created in.
+            '';
+          };
+          language = lib.mkOption {
+            type = lib.types.str;
+            default = "en";
+            description = lib.mdDoc ''
+              The language most likely to be used on the server - used when indexing, to
+              ensure the returned results match expectations. A full list of possible languages
+              can be found at https://github.com/blevesearch/bleve/tree/master/analysis/lang
+            '';
+          };
+        };
         options.user_api = {
           account_database = {
             connection_string = lib.mkOption {

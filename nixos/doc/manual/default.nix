@@ -63,6 +63,7 @@ let
       };
       documentType = "none";
       variablelistId = "test-options-list";
+      optionIdPrefix = "test-opt-";
     };
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];

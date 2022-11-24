@@ -11,6 +11,7 @@
 , cattrs
 , clickclick
 , colorlog
+, configupdater
 , connexion
 , cron-descriptor
 , croniter
@@ -19,7 +20,7 @@
 , deprecated
 , dill
 , flask
-, flask_login
+, flask-login
 , flask-appbuilder
 , flask-caching
 , flask-session
@@ -77,7 +78,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.3.4";
+  version = "2.4.1";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -85,7 +86,7 @@ let
     rev = "refs/tags/${version}";
     # Required because the GitHub archive tarballs don't appear to include tests
     leaveDotGit = true;
-    sha256 = "sha256-rxvLyz/hvZ6U8QKy9MiVofU0qeeo7OHctAj2PkxLh2c=";
+    sha256 = "sha256-HpPL/ocV7hRhYXsjfXMYvlP83Vh15kXyjBgubsaqaE8=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -146,6 +147,7 @@ buildPythonPackage rec {
     cattrs
     clickclick
     colorlog
+    configupdater
     connexion
     cron-descriptor
     croniter
@@ -157,7 +159,7 @@ buildPythonPackage rec {
     flask-caching
     flask-session
     flask-wtf
-    flask_login
+    flask-login
     GitPython
     graphviz
     gunicorn
@@ -223,7 +225,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-login>=0.6.2" "flask-login"
+      --replace "flask-login>=0.6.2" "flask-login" \
+      --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
     substituteInPlace airflow/utils/db.py \
@@ -235,12 +238,17 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $PYTHONPATH"
   ];
 
+  postInstall = ''
+    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
+    # Needed for pythonImportsCheck below
+    export HOME=$(mktemp -d)
+  '';
+
   pythonImportsCheck = [
     "airflow"
   ] ++ providerImports;
 
-  checkPhase = ''
-    export HOME=$(mktemp -d)
+  preCheck = ''
     export AIRFLOW_HOME=$HOME
     export AIRFLOW__CORE__UNIT_TEST_MODE=True
     export AIRFLOW_DB="$HOME/airflow.db"
@@ -258,10 +266,6 @@ buildPythonPackage rec {
   disabledTests = lib.optionals stdenv.isDarwin [
     "bash_operator_kill" # psutil.AccessDenied
   ];
-
-  postInstall = ''
-    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
-  '';
 
   # Updates yarn.lock and package.json
   passthru.updateScript = writeScript "update.sh" ''
@@ -289,6 +293,18 @@ buildPythonPackage rec {
     # update provider dependencies
     ./update-providers.py
   '';
+
+  # Note on testing the web UI:
+  # You can (manually) test the web UI as follows:
+  #
+  #   nix shell .#python3Packages.apache-airflow
+  #   airflow db init
+  #   airflow reset -y # WARNING: this will wipe any existing db state you might have!
+  #   airflow standalone
+  #
+  # Then navigate to the localhost URL using the credentials printed, try
+  # triggering the 'example_bash_operator' and 'example_bash_operator' DAGs and
+  # see if they report success.
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";

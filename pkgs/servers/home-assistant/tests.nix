@@ -13,12 +13,14 @@ let
     config = [ pydispatcher ];
     generic = [ av ];
     google_translate = [ mutagen ];
+    google_sheets = [ oauth2client ];
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
     raspberry_pi = [ rpi-bad-power ];
+    tilt_ble = [ govee-ble ibeacon-ble ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
     xiaomi_miio = [ arrow ];
@@ -45,6 +47,10 @@ let
       # bytearrray mismatch
       "test_rfy_cover"
     ];
+    zha = [
+      # 'manual_pick_radio_type' == 'choose_serial_port'
+      "test_options_flow_migration_reset_old_adapter"
+    ];
   };
 
   extraPytestFlagsArray = {
@@ -59,6 +65,10 @@ let
     history_stats = [
       # Flaky: AssertionError: assert '0.0' == '12.0'
       "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
+    ];
+    modem_callerid = [
+      # aioserial mock produces wrong state
+      "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
     skybell = [
       # Sandbox network limitations: Cannot connect to host cloud.myskybell.com:443
@@ -104,8 +114,6 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
-        "modem_callerid"
-        "subaru"
       ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;

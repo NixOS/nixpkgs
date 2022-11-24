@@ -93,14 +93,10 @@ stdenv.mkDerivation {
     ./gas-dwarf-zero-PR29451.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
-  # This patch was suggested by Nick Clifton to fix
-  # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-  # It can be removed when that 7-year-old bug is closed.
-  # This binutils bug causes GHC to emit broken binaries on armv7, and indeed
-  # GHC will refuse to compile with a binutils suffering from it. See this
-  # comment for more information:
-  # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-  ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
+  # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
+  # Patch from arch-community
+  # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
+  ++ lib.optional targetPlatform.isAvr ./avr-size.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++ lib.optional stdenv.targetPlatform.isMips64n64
      # this patch is from debian:

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, headsetcontrol, wrapGAppsHook, python3, gtk3
-, gobject-introspection, libayatana-appindicator-gtk3 }:
+, gobject-introspection, libayatana-appindicator }:
 
 stdenv.mkDerivation rec {
   # The last versioned release is 1.0.0.0 from 2020, since then there were updates but no versioned release.
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     headsetcontrol
     gtk3
     gobject-introspection
-    libayatana-appindicator-gtk3
+    libayatana-appindicator
   ];
 
   installPhase = ''

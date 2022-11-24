@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     libsamplerate
   ];
 
+  hardeningDisable = lib.optional stdenv.isAarch64 "format";
+
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/csdr.pc \
       --replace '=''${prefix}//' '=/' \
@@ -30,11 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/jketterl/csdr";
     description = "A simple DSP library and command-line tool for Software Defined Radio";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = teams.c3d2.members;
   };
 }

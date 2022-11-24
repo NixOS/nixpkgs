@@ -4,19 +4,18 @@
 , qmake
 , mkDerivation
 , qtsvg
-, libxml2
 , postgresql
 }:
 
 mkDerivation rec {
   pname = "pgmodeler";
-  version = "0.9.4";
+  version = "1.0.0-beta";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-FwLPhIc2ofaB8Z2ZUYMFFt5XdoosEfEOwoIaI7pSxa0=";
+    sha256 = "sha256-1+1hKOY8unu6Z7LLv/WQ86JlwWUubQuhPP9OUjyXOrM=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

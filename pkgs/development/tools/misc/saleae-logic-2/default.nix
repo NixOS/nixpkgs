@@ -1,10 +1,10 @@
 { lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.4.0";
+  version = "2.4.2";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "sha256-jvD/DLpcJKAqy9LSSEVZFtD+BMxfbUmdJwfnQMtA7rg=";
+    sha256 = "sha256-A0Gd/CDd1COWbBXa87eW+A8AKyQzubJ3qSpj/JnWeZk=";
   };
   desktopItem = makeDesktopItem {
     inherit name;
@@ -59,6 +59,7 @@ appimageTools.wrapType2 {
     alsa-lib
     at-spi2-core
     cups
+    libxcrypt
   ];
 
   meta = with lib; {

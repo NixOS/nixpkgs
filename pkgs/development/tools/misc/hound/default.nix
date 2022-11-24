@@ -4,6 +4,8 @@
 , makeWrapper
 , mercurial
 , git
+, openssh
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -25,8 +27,10 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    wrapProgram $out/bin/houndd --prefix PATH : ${lib.makeBinPath [ mercurial git ]}
+    wrapProgram $out/bin/houndd --prefix PATH : ${lib.makeBinPath [ mercurial git openssh ]}
   '';
+
+  passthru.tests = { inherit (nixosTests) hound; };
 
   meta = with lib; {
     inherit (src.meta) homepage;

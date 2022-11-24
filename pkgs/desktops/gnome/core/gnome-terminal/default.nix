@@ -1,15 +1,17 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkg-config
 , python3
 , libxml2
 , gnome
-, dconf
+, nix-update-script
 , nautilus
 , glib
+, gtk4
 , gtk3
 , gsettings-desktop-schemas
 , vte
@@ -28,12 +30,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.44.1";
+  version = "3.47.0";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-terminal";
+    rev = version;
+    sha256 = "sha256-CriI1DtDBeujaz0HtXCyzoGxnas7NmD6EMQ+gLph3E4=";
   };
+
+  patches = [
+    # Fix Nautilus extension build.
+    # https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/7916
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/614ea99b16fb09e10341fc6ccf5e115ac3f93caf.patch";
+      sha256 = "K7JHPfXywF3QSjSjyUnNZ11/ed+QXHQ47i135QBMIR8=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -55,11 +69,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    gtk4
     gtk3
     gsettings-desktop-schemas
     vte
     libuuid
-    dconf
     nautilus # For extension
   ];
 
@@ -77,13 +91,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-terminal";
+    updateScript = nix-update-script {
       attrPath = "gnome.gnome-terminal";
     };
-  };
 
-  passthru.tests.test = nixosTests.terminal-emulators.gnome-terminal;
+    tests = {
+      test = nixosTests.terminal-emulators.gnome-terminal;
+    };
+  };
 
   meta = with lib; {
     description = "The GNOME Terminal Emulator";

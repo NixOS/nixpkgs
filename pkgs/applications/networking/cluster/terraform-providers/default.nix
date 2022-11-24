@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchFromGitLab
 , callPackage
 , config
 , writeShellScript
@@ -21,6 +22,7 @@ let
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
      , deleteVendor ? false
      , proxyVendor ? false
+     , mkProviderFetcher ? fetchFromGitHub
      , mkProviderGoModule ? buildGoModule
        # Looks like "registry.terraform.io/vancluever/acme"
      , provider-source-address
@@ -35,7 +37,7 @@ let
         # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
-        src = fetchFromGitHub {
+        src = mkProviderFetcher {
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
@@ -52,7 +54,7 @@ let
         passthru = attrs // {
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
-            ./pkgs/applications/networking/cluster/terraform-providers/update-provider --no-build "$provider"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
           '';
         };
       });
@@ -65,6 +67,10 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
+      netlify = automated-providers.netlify.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      pass = automated-providers.pass.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      tencentcloud = automated-providers.tencentcloud.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
@@ -77,10 +83,12 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       b2 = removed "b2" "2022/06";
+      checkpoint = removed "checkpoint" "2022/11";
       dome9 = removed "dome9" "2022/08";
       ncloud = removed "ncloud" "2022/08";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
+      panos = removed "panos" "2022/05";
       template = archived "template" "2022/05";
     };
 

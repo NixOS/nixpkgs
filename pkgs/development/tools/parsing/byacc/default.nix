@@ -1,15 +1,20 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
-  version = "20220128";
+  version = "20221106";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
+    urls = let
+      inherit (finalAttrs) pname version;
+    in [
       "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
+      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
     ];
-    sha256 = "sha256-QsGAXMUpMU5qdjJv4bM+gMcIYqRLAUdNo2Li99stdJw=";
+    hash = "sha256-qJm+Inu8rJz3cA99u1qElGiPH58GF7UQdi2urOR7nRI=";
   };
 
   configureFlags = [
@@ -23,9 +28,22 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Berkeley YACC";
     homepage = "https://invisible-island.net/byacc/byacc.html";
+    description = "Berkeley YACC";
+    longDescription = ''
+      Berkeley Yacc (byacc) is generally conceded to be the best yacc variant
+      available. In contrast to bison, it is written to avoid dependencies upon
+      a particular compiler.
+
+      Byacc was written around 1990 by Robert Corbett who is the original author
+      of bison. Byacc is noted in Lex & Yacc by John Levine et al (O'Reilly,
+      1992) for its compatibility with the original yacc program.
+
+      Nowadays byacc is maintained by Thomas E. Dickey.
+    '';
+    changelog = "https://invisible-island.net/byacc/CHANGES.html";
     license = licenses.publicDomain;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})
