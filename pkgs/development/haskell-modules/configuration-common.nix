@@ -2519,6 +2519,9 @@ self: super: {
   doctest-parallel = dontCheck super.doctest-parallel;
   clash-prelude = dontCheck super.clash-prelude;
 
+  # Too strict upper bound on th-desugar, fixed in 3.1.1
+  singletons-th = assert super.singletons-th.version == "3.1"; doJailbreak super.singletons-th;
+
   # Ships a broken Setup.hs
   # https://github.com/lehins/conduit-aeson/issues/1
   conduit-aeson = overrideCabal (drv: {
