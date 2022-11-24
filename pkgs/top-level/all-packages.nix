@@ -14955,6 +14955,8 @@ with pkgs;
 
   rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
 
+  rocsolver = callPackage ../development/libraries/rocsolver { };
+
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
     inherit (llvmPackages_rocm) clang llvm;
   };
