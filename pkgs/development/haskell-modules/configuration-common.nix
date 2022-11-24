@@ -135,6 +135,10 @@ self: super: {
   # https://github.com/cachix/cachix/pull/451
   cachix = appendPatch ./patches/cachix.patch super.cachix;
 
+  # Too strict upper bound on hedgehog
+  # https://github.com/erikd/wide-word/issues/71
+  wide-word = doJailbreak super.wide-word;
+
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
