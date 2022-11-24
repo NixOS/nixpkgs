@@ -597,6 +597,12 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
+  # Too strict upper bounds on bytestring & time
+  # https://github.com/barrucadu/irc-conduit/issues/35
+  irc-conduit = doJailbreak super.irc-conduit;
+  # https://github.com/barrucadu/irc-client/issues/77
+  irc-client = doJailbreak super.irc-client;
+
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
