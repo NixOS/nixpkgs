@@ -10,7 +10,7 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-U1c44JWhYZbnmQStp6DUDoiOiJ9t9Yd5wgH70p/3Grw="
                      else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-N9dCP+D3/3lhD23zwXi97JBfSZ9GR8mtXgCR31otS8U="
                      else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-VEPnU/8TW7LysXIRDYO36F6kSPJ8haBZ0EO9SssNwkU="
-                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-enjY7yuzuRuZZ5qDBq1uSIf1QJ2xdVoQ8vrbWuPiDs0="
+                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-yuUO7ZiurZJ/xksF/hThRL/SnbRubI5KEVPZDH5BRBU="
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
