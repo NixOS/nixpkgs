@@ -8,12 +8,12 @@ let
     ${if cfg.passBootspec then
     ''
       echo "Passing bootspec to bootloader installer"
-      ${cfg.installHook} $out/bootspec/boot.v1.json
+      ${cfg.installHook} "$1/bootspec/boot.v1.json"
     ''
     else
     ''
       echo "Passing top-level to bootloader install"
-      ${cfg.installHook} $out
+      ${cfg.installHook} "$1"
     ''
     }
   '';
