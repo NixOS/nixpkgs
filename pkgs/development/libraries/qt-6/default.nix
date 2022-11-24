@@ -126,7 +126,9 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix { };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
-      qtwebview = callPackage ./modules/qtwebview.nix { };
+      qtwebview = callPackage ./modules/qtwebview.nix {
+        inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
+      };
 
       wrapQtAppsHook = makeSetupHook {
           deps = [ buildPackages.makeWrapper ];
