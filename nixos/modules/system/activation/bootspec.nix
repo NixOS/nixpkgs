@@ -22,6 +22,7 @@ let
 
               extension = if config.boot.loader.efi.enable then {
                 esp = config.boot.loader.efi.efiSysMountPoint;
+                systemd = config.systemd.package;
                 bootctl = "${config.systemd.package}/bin/bootctl";
                 osRelease = config.environment.etc."os-release".path;
               } else {};
