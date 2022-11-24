@@ -37412,6 +37412,8 @@ with pkgs;
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+  twitch-cli = callPackage ../development/tools/twitch-cli { };
+
   twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
