@@ -28302,6 +28302,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  furtherance = callPackage ../applications/misc/furtherance { };
+
   gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
 
   gigalixir = callPackage ../tools/misc/gigalixir { };
