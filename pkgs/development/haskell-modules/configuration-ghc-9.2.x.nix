@@ -63,7 +63,7 @@ self: super: {
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
-  retrie = doJailbreak (dontCheck super.retrie_1_2_1_1);
+  retrie = doJailbreak super.retrie_1_2_1_1;
 
   # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
   # https://github.com/haskell-infra/hackage-trustees/issues/347
