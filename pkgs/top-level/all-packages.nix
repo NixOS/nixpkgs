@@ -38095,7 +38095,7 @@ with pkgs;
     texlive = texlive.combined.scheme-medium;
   };
 
-  unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
+  unpoller = callPackage ../servers/monitoring/unpoller {};
 
   fac-build = callPackage ../development/tools/build-managers/fac {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
