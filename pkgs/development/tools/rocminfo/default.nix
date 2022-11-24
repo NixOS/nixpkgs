@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/RadeonOpenCompute/rocminfo";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
   };
