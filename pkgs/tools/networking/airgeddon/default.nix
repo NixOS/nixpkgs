@@ -24,7 +24,8 @@
 , util-linux
 , ccze
   # Optionals
-  # Missing in nixpkgs: beef, hostapd-wpe, asleap
+  # Missing in nixpkgs: beef, hostapd-wpe
+, asleap
 , bettercap
 , bully
 , crunch
@@ -84,6 +85,7 @@ let
     pixiewps
     reaverwps-t6x
   ] ++ lib.optionals supportHashCracking [
+    asleap
     crunch
     hashcat
     hcxdumptool
@@ -109,13 +111,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";
-  version = "11.02";
+  version = "11.10";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
     rev = "v${version}";
-    hash = "sha256-k3xQndF1m3fnn7nCb2T/wGxbUPJ83wOV33Ky0FbToVg=";
+    hash = "sha256-0x13QmT61lcPc7b3OYs13g6AISWRipvxbSFb7XyQA5U=";
   };
 
   strictDeps = true;
