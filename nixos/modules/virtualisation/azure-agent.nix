@@ -24,6 +24,7 @@ let
                     shadow # for useradd, usermod
                     util-linux # for (u)mount, fdisk, sfdisk, mkswap
                     parted
+                    python
                   ];
     pythonPath = [ pythonPackages.pyasn1 ];
 
