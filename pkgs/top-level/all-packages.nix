@@ -33527,15 +33527,6 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin-classic  = libsForQt514.callPackage ../applications/blockchains/bitcoin-classic {
-    boost = boost165;
-    withGui = true;
-  };
-  bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic {
-    boost = boost165;
-    withGui = false;
-  };
-
   bitcoin-gold = libsForQt514.callPackage ../applications/blockchains/bitcoin-gold {
     boost = boost165;
     withGui = true;
