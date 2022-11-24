@@ -7,7 +7,7 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-GCU1z5zM6hmq8fPqLszzQJ1x0vsA8kJUaLTSGb6YJTw="
+    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-Nt8dDGFMryt578FyWgGlqk8vv1rJfBH7c5Bx2Rk3Xp4="
                      else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-Fvqf6ePX1uE7cHWRekBo/1IFUFSXI/mUWptUZnzKEoM="
                      else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-Gu8sYzFv/IYZCQk0zlzD+URyWmaz4qjpbPbtvOycsuA="
                      else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-yuUO7ZiurZJ/xksF/hThRL/SnbRubI5KEVPZDH5BRBU="
