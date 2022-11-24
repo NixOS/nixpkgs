@@ -24,7 +24,7 @@ let
                 esp = config.boot.loader.efi.efiSysMountPoint;
                 systemd = config.systemd.package;
                 bootctl = "${config.systemd.package}/bin/bootctl";
-                osRelease = config.environment.etc."os-release".path;
+                osRelease = config.environment.etc."os-release".source;
               } else {};
             });
 
