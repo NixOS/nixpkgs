@@ -5413,6 +5413,12 @@
       fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
     }];
   };
+  harrisonthorne = {
+    email = "harrisonthorne@proton.me";
+    github = "harrisonthorne";
+    githubId = 33523827;
+    name = "Harrison Thorne";
+  };
   harvidsen = {
     email = "harvidsen@gmail.com";
     github = "harvidsen";
@@ -6811,6 +6817,12 @@
     github = "jonringer";
     githubId = 7673602;
     name = "Jonathan Ringer";
+  };
+  jordanisaacs = {
+    name = "Jordan Isaacs";
+    email = "nix@jdisaacs.com";
+    github = "jordanisaacs";
+    githubId = 19742638;
   };
   jorise = {
     email = "info@jorisengbers.nl";
@@ -15914,11 +15926,5 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
-  };
-  jordanisaacs = {
-    name = "Jordan Isaacs";
-    email = "nix@jdisaacs.com";
-    github = "jordanisaacs";
-    githubId = 19742638;
   };
 }
