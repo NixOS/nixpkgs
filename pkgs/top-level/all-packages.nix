@@ -13238,6 +13238,8 @@ with pkgs;
 
   zint = qt6Packages.callPackage ../development/libraries/zint { };
 
+  zinc = callPackage ../servers/search/zinc { };
+
   zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
 
   zs-wait4host = callPackage ../tools/networking/zs-wait4host { };

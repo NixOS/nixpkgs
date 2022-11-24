@@ -1017,6 +1017,7 @@
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
   ./services/search/solr.nix
+  ./services/search/zinc.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix

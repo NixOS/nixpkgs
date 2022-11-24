@@ -8958,6 +8958,12 @@
     github = "Mephistophiles";
     githubId = 4850908;
   };
+  mfenniak = {
+    email = "mathieu@fenniak.net";
+    name = "Mathieu Fenniak";
+    github = "mfenniak";
+    githubId = 91093;
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
