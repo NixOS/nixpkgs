@@ -13243,6 +13243,8 @@ with pkgs;
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
+  zsh-forgit = callPackage ../shells/zsh/zsh-forgit { };
+
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
 
   zsh-autocomplete = callPackage ../shells/zsh/zsh-autocomplete { };
