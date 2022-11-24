@@ -7369,6 +7369,18 @@ final: prev:
     meta.homepage = "https://github.com/chr4/sslsecure.vim/";
   };
 
+  ssr-nvim = buildVimPluginFrom2Nix {
+    pname = "ssr.nvim";
+    version = "2022-11-24";
+    src = fetchFromGitHub {
+      owner = "cshuaimin";
+      repo = "ssr.nvim";
+      rev = "7ce979b46bd9a0b828ca60b1d8b6ba2d172b07ef";
+      sha256 = "1n1pgd9qky89xnjs33p0avl5w34kck191nwi5mpf2431fn85qz4k";
+    };
+    meta.homepage = "https://github.com/cshuaimin/ssr.nvim/";
+  };
+
   stabilize-nvim = buildVimPluginFrom2Nix {
     pname = "stabilize.nvim";
     version = "2022-10-06";
