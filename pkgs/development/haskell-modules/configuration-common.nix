@@ -576,12 +576,10 @@ self: super: {
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
 
-  tasty-discover = overrideCabal (drv: {
-    # Depends on itself for testing
-    preBuild = ''
-      export PATH="$PWD/dist/build/tasty-discover:$PATH"
-    '' + (drv.preBuild or "");
-  }) super.tasty-discover;
+  # Test suite is missing an import from hspec
+  # https://github.com/haskell-works/tasty-discover/issues/9
+  # https://github.com/commercialhaskell/stackage/issues/6584#issuecomment-1326522815
+  tasty-discover = assert super.tasty-discover.version == "4.2.2"; dontCheck super.tasty-discover;
 
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
