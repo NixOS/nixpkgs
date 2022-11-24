@@ -4052,6 +4052,8 @@ self: super: with self; {
     inherit (pkgs.buildPackages) meson;
   };
 
+##  gsutil = callPackage ../development/python-modules/gsutil { };
+
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
