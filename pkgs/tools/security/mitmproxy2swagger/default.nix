@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to automagically reverse-engineer REST APIs";
     homepage = "https://github.com/alufers/mitmproxy2swagger";
+    changelog = "https://github.com/alufers/mitmproxy2swagger/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
