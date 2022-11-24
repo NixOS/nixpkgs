@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }

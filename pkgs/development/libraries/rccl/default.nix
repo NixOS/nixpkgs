@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     description = "ROCm communication collectives library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
     license = with licenses; [ bsd2 bsd3 ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }

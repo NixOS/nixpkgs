@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "MLIR-based convolution and GEMM kernel generator";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }

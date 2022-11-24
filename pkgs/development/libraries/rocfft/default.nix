@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     description = "FFT implementation for ROCm ";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
     hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };

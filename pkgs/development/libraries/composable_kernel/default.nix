@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
   };
 }

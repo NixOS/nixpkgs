@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
     description = "OpenCL general matrix multiplication API for ROCm";
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != clang.version;
   };
 }

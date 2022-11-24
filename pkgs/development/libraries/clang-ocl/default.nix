@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "OpenCL compilation with clang compiler";
     homepage = "https://github.com/RadeonOpenCompute/clang-ocl";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != clang.version;
   };
 }

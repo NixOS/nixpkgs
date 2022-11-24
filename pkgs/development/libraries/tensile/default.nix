@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCmSoftwarePlatform/Tensile";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
   };
 }

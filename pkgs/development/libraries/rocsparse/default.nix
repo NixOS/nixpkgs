@@ -154,7 +154,7 @@ in stdenv.mkDerivation rec {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }

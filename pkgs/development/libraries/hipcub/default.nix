@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Thin wrapper library on top of rocPRIM or CUB";
     homepage = "https://github.com/ROCmSoftwarePlatform/hipCUB";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }

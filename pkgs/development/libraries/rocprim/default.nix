@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "ROCm parallel primitives";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = teams.rocm.members;
     broken = rocmVersion != hip.version;
   };
 }
