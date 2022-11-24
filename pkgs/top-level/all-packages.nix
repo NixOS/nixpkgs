@@ -14977,6 +14977,8 @@ with pkgs;
 
   rocfft = callPackage ../development/libraries/rocfft { };
 
+  rocrand = callPackage ../development/libraries/rocrand { };
+
   tensile = python3Packages.callPackage ../development/libraries/tensile { };
 
   rocblas = callPackage ../development/libraries/rocblas {
