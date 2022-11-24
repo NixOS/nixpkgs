@@ -3,15 +3,15 @@
 with lib;
 
 let
-  cfg = config.services.unifi-poller;
+  cfg = config.services.unpoller;
 
-  configFile = pkgs.writeText "unifi-poller.json" (generators.toJSON {} {
+  configFile = pkgs.writeText "unpoller.json" (generators.toJSON {} {
     inherit (cfg) poller influxdb loki prometheus unifi;
   });
 
 in {
-  options.services.unifi-poller = {
-    enable = mkEnableOption (lib.mdDoc "unifi-poller");
+  options.services.unpoller = {
+    enable = mkEnableOption (lib.mdDoc "unpoller");
 
     poller = {
       debug = mkOption {
@@ -86,11 +86,11 @@ in {
       };
       pass = mkOption {
         type = types.path;
-        default = pkgs.writeText "unifi-poller-influxdb-default.password" "unifipoller";
-        defaultText = literalExpression "unifi-poller-influxdb-default.password";
+        default = pkgs.writeText "unpoller-influxdb-default.password" "unifipoller";
+        defaultText = literalExpression "unpoller-influxdb-default.password";
         description = lib.mdDoc ''
           Path of a file containing the password for influxdb.
-          This file needs to be readable by the unifi-poller user.
+          This file needs to be readable by the unpoller user.
         '';
         apply = v: "file://${v}";
       };
@@ -135,11 +135,11 @@ in {
       };
       pass = mkOption {
         type = types.path;
-        default = pkgs.writeText "unifi-poller-loki-default.password" "";
-        defaultText = "unifi-poller-influxdb-default.password";
+        default = pkgs.writeText "unpoller-loki-default.password" "";
+        defaultText = "unpoller-influxdb-default.password";
         description = lib.mdDoc ''
           Path of a file containing the password for Loki.
-          This file needs to be readable by the unifi-poller user.
+          This file needs to be readable by the unpoller user.
         '';
         apply = v: "file://${v}";
       };
@@ -184,11 +184,11 @@ in {
         };
         pass = mkOption {
           type = types.path;
-          default = pkgs.writeText "unifi-poller-unifi-default.password" "unifi";
-          defaultText = literalExpression "unifi-poller-unifi-default.password";
+          default = pkgs.writeText "unpoller-unifi-default.password" "unifi";
+          defaultText = literalExpression "unpoller-unifi-default.password";
           description = lib.mdDoc ''
             Path of a file containing the password for the unifi service user.
-            This file needs to be readable by the unifi-poller user.
+            This file needs to be readable by the unpoller user.
           '';
           apply = v: "file://${v}";
         };
@@ -274,7 +274,7 @@ in {
         default = false;
         description = lib.mdDoc ''
           Let prometheus select which controller to poll when scraping.
-          Use with default credentials. See unifi-poller wiki for more.
+          Use with default credentials. See unpoller wiki for more.
         '';
       };
 
@@ -292,25 +292,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups.unifi-poller = { };
-    users.users.unifi-poller = {
-      description = "unifi-poller Service User";
-      group = "unifi-poller";
+    users.groups.unpoller = { };
+    users.users.unpoller = {
+      description = "unpoller Service User";
+      group = "unpoller";
       isSystemUser = true;
     };
 
-    systemd.services.unifi-poller = {
+    systemd.services.unpoller = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
+        ExecStart = "${pkgs.unpoller}/bin/unpoller --config ${configFile}";
         Restart = "always";
         PrivateTmp = true;
         ProtectHome = true;
         ProtectSystem = "full";
         DevicePolicy = "closed";
         NoNewPrivileges = true;
-        User = "unifi-poller";
+        User = "unpoller";
         WorkingDirectory = "/tmp";
       };
     };

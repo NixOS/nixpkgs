@@ -72,7 +72,7 @@ let
     "tor"
     "unbound"
     "unifi"
-    "unifi-poller"
+    "unpoller"
     "v2ray"
     "varnish"
     "wireguard"

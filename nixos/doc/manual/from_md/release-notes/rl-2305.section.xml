@@ -76,6 +76,13 @@
           relying on this should provide their own implementation.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.prometheus.exporters.unifi-poller</literal>
+          has been renamed to
+          <literal>services.prometheus.exporters.unpoller</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-notable-changes">
