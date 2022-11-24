@@ -23,6 +23,7 @@
 , rope
 , setuptools
 , setuptools-scm
+, toml
 , ujson
 , websockets
 , whatthepatch
@@ -79,6 +80,7 @@ buildPythonPackage rec {
       pyflakes
       pylint
       rope
+      toml
       whatthepatch
       yapf
     ];
