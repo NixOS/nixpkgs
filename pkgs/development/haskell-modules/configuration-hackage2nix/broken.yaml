@@ -4489,7 +4489,6 @@ broken-packages:
   - sdl2-cairo-image
   - sdl2-compositor
   - sdl2-fps
-  - SDL-mpeg
   - sdr
   - seacat
   - seakale
