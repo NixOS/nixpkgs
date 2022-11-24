@@ -75,6 +75,13 @@ let self = stdenv.mkDerivation rec {
       sha256 = "NYoKCRh5o1Q15c11a79Hk5tGKq/jOa+e6GpgBjPEepo=";
       revert = true;
     })
+
+    # Backport edge resistance fix (should be part of 43.2)
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2687
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/accf532a29ea9a1d70880dfaa1834050aa3ae7be.patch";
+      sha256 = "XAHcPGQFWfZujlqO/cvUryojPCMBBSxeIG06BesDQQw=";
+    })
   ];
 
   mesonFlags = [
