@@ -24518,6 +24518,7 @@ with pkgs;
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
+  prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
   prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix {
     buildGoModule = buildGo118Module; # nixosTests.prometheus-exporter.ldap fails with 1.19
   };
