@@ -139,6 +139,13 @@
           the Nix store.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>unifi-poller</literal> package and corresponding
+          NixOS module have been renamed to <literal>unpoller</literal>
+          to match upstream.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
