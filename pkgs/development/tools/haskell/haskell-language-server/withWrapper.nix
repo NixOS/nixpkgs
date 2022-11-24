@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, supportedGhcVersions ? [ "90" ]
+, supportedGhcVersions ? [ "92" ]
 , dynamic ? true
 , haskellPackages
 , haskell
@@ -40,23 +40,21 @@ let
       "ln -s ${
         tunedHls (getPackages version)
       }/bin/haskell-language-server $out/bin/${x}") (targets version);
-  pkg = tunedHls haskellPackages;
-in stdenv.mkDerivation {
+in assert supportedGhcVersions != []; stdenv.mkDerivation {
   pname = "haskell-language-server";
   version = haskellPackages.haskell-language-server.version;
   buildCommand = ''
     mkdir -p $out/bin
-    ln -s ${pkg}/bin/haskell-language-server $out/bin/haskell-language-server
-    ln -s ${pkg}/bin/haskell-language-server-wrapper $out/bin/haskell-language-server-wrapper
+    ln -s ${tunedHls (getPackages (builtins.head supportedGhcVersions))}/bin/haskell-language-server-wrapper $out/bin/haskell-language-server-wrapper
     ${concatMapStringsSep "\n" makeSymlinks supportedGhcVersions}
   '';
   meta = haskellPackages.haskell-language-server.meta // {
     maintainers = [ lib.maintainers.maralorn ];
     longDescription = ''
-      This package provides haskell-language-server, haskell-language-server-wrapper, ${
+      This package provides the executables ${
         concatMapStringsSep ", " (x: concatStringsSep ", " (targets x))
         supportedGhcVersions
-      }.
+      } and haskell-language-server-wrapper.
       You can choose for which ghc versions to install hls with pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "92" ]; }.
     '';
   };
