@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "git-bug";
-  version = "0.7.2"; # the `rev` below pins the version of the source to get
-  rev = "cc4a93c8ce931b1390c61035b888ad17110b7bd6";
+  version = "0.8.0"; # the `rev` below pins the version of the source to get
+  rev = "a3fa445a9c76631c4cd16f93e1c1c68a954adef7";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "MichaelMure";
     repo = "git-bug";
-    sha256 = "0r6wh0y1fj3d3fbbrzq5n9k6z94xvwqww3xfbslkgyrin5bmziiq";
+    sha256 = "sha256-yCb9SXsKJLriMkg+uBD0LACdkvjBqhe1Bp9Xpa1xfok=";
   };
 
-  vendorSha256 = "15hhsrwwjc4krfc2d0r15lys3vr9rb9xk62pan4jr9ycbv0dny90";
+  vendorSha256 = "sha256-32kNDoBE50Jx1Ef9YwhDk7nd3CaTSnHPlu7PgWPUGfE=";
 
   doCheck = false;
 
@@ -23,8 +23,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -D -m 0644 misc/bash_completion/git-bug "$out/share/bash-completion/completions/git-bug"
-    install -D -m 0644 misc/zsh_completion/git-bug "$out/share/zsh/site-functions/git-bug"
+    install -D -m 0644 misc/completion/bash/git-bug "$out/share/bash-completion/completions/git-bug"
+    install -D -m 0644 misc/completion/zsh/git-bug "$out/share/zsh/site-functions/git-bug"
     install -D -m 0644 -t "$out/share/man/man1" doc/man/*
   '';
 
