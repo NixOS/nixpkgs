@@ -14960,6 +14960,10 @@ with pkgs;
     inherit (llvmPackages_rocm) clang llvm;
   };
 
+  rocalution = callPackage ../development/libraries/rocalution {
+    inherit (llvmPackages) openmp;
+  };
+
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
     inherit (llvmPackages_rocm) clang llvm;
   };
