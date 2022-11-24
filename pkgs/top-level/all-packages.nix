@@ -5181,6 +5181,8 @@ with pkgs;
 
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
+  loupe = callPackage ../applications/graphics/loupe { };
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
