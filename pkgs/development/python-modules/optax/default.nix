@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XAYztMBQpLBHNuNED/iodbwIMJSN/0GxdmTGQ5jD9Ws=";
+    hash = "sha256-BvmRFA1KNS7F6kozH9LMG8v4XJY/T2DwKgf9IIY2shE=";
   };
 
   outputs = [
