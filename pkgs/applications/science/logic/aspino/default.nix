@@ -27,7 +27,6 @@ stdenv.mkDerivation {
       --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
     substituteInPlace src/MaxSatSolver.cc \
       --replace "occ[i][sign(softLiterals[j])] > 0" "occ[i][sign(softLiterals[j])] != 0"
-    patchShebangs .
   '';
 
   preBuild = ''
