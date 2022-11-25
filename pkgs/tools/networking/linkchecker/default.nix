@@ -1,54 +1,56 @@
 { stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
 
-with python3Packages;
+let
+  pypkgs = python3Packages;
 
-buildPythonApplication rec {
+in
+pypkgs.buildPythonApplication rec {
   pname = "linkchecker";
-  version = "10.0.1";
+  version = "10.2.0";
+  format = "pyproject";
+
+  disabled = pypkgs.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v" + version;
-    sha256 = "sha256-OOssHbX9nTCURpMKIy+95ZTvahuUAabLUhPnRp3xpN4=";
+    hash = "sha256-wMiKS14fX5mkY1OwxQPFKm7i4WMFQKg3tdZZqD0g0Rw=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = [
-    configargparse
+  propagatedBuildInputs = with pypkgs; [
     argcomplete
     beautifulsoup4
-    pyopenssl
+    configargparse
     dnspython
-    pyxdg
+    hatch-vcs
+    hatchling
+    pyopenssl
     requests
   ];
 
-  checkInputs = [
+  checkInputs = with pypkgs; [
     parameterized
     pytest
   ];
 
-  postPatch = ''
-    sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
-    sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
-  '';
-
   # test_timeit2 is flakey, and depends sleep being precise to the milisecond
-  checkPhase = ''
-    ${lib.optionalString stdenv.isDarwin ''
-      # network tests fails on darwin
-      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
-    ''}
-      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
-        -k 'not TestLoginUrl and not test_timeit2'
+  checkPhase = lib.optionalString stdenv.isDarwin ''
+    # network tests fails on darwin
+    rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
+  '' + ''
+    pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
+      -k 'not TestLoginUrl and not test_timeit2'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Check websites for broken links";
     homepage = "https://linkcheck.github.io/linkchecker/";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ peterhoeg tweber ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ peterhoeg tweber ];
   };
 }
