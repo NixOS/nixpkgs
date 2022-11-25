@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 if ! kexec -v &>/dev/null; then
     echo 'kexec not found: please install kexec-tools' 2>&1
