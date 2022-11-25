@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${version}";
-    sha256 = "sha256-YSJztik0QTZFNR8k8Xu1hakyE16NziDavYVkEUCbtGM=";
+    sha256 = "sha256-J1kgNUElRO63mtU62qU7asf7hht9oyplMIO9I/E6BPU=";
   };
 
   outputs = [ "bin" "dev" "out" "man" ];
