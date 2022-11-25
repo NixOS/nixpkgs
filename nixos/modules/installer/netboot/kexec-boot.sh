@@ -18,4 +18,8 @@ kexec --load \
     --command-line="$(<"$kexecTree/kernel-params")" \
     -- "$kexecTree/kernel"
 
-kexec -e
+if [[ -d /run/systemd/system ]] && command -v systemctl >/dev/null; then
+    systemctl kexec
+else
+    kexec -e
+fi
