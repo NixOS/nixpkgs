@@ -6643,6 +6643,8 @@ with pkgs;
 
   fluent-bit = callPackage ../tools/misc/fluent-bit { };
 
+  fluent-reader = callPackage ../applications/networking/feedreaders/fluent-reader { };
+
   flux = callPackage ../development/compilers/flux { };
 
   fido2luks = callPackage ../tools/security/fido2luks {};
@@ -15058,6 +15060,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
+  cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
+  };
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -20801,7 +20806,9 @@ with pkgs;
 
   libow = callPackage ../development/libraries/libow { };
 
-  libp11 = callPackage ../development/libraries/libp11 { };
+  libp11 = callPackage ../development/libraries/libp11 {
+    openssl = openssl_1_1;
+  };
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
@@ -25649,9 +25656,7 @@ with pkgs;
 
   pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
-  pam_p11 = callPackage ../os-specific/linux/pam_p11 {
-    openssl = openssl_1_1;
-  };
+  pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
@@ -36788,6 +36793,8 @@ with pkgs;
   morph = callPackage ../tools/package-management/morph { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
+
+  museeks = callPackage ../applications/audio/museeks { };
 
   musly = callPackage ../applications/audio/musly { };
 

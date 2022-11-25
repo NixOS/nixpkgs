@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -20,10 +21,11 @@ assert buildTests -> gtest != null;
 assert buildTests == false;
 assert buildBenchmarks == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  rocmVersion = "5.3.1";
-  version = "2.16.0-${rocmVersion}";
+  repoVersion = "2.16.0";
+  rocmVersion = "5.3.3";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -37,8 +39,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-cT0VyEVz86xR6qubAY2ncTxtCRTwXrNTWcFyf3mV+y0=";
+    rev = "rocm-${finalAttrs.rocmVersion}";
+    hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
   };
 
   nativeBuildInputs = [
@@ -81,11 +83,21 @@ stdenv.mkDerivation rec {
   #   rmdir $out/bin
   # '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocthrust "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rocthrust "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "ROCm parallel algorithm library";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

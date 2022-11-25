@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -29,10 +30,11 @@ let
     mirror1 = "https://sparse.tamu.edu/MM";
     mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  rocmVersion = "5.3.1";
-  version = "2.3.2-${rocmVersion}";
+  repoVersion = "2.3.2";
+  rocmVersion = "5.3.3";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -45,7 +47,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocSPARSE";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-1069oBrIpZ4M9CAkzoQ9a5j3WlCXErirTbgTUZuT6b0=";
   };
 
@@ -138,11 +140,21 @@ in stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocSPARSE/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocsparse "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rocsparse "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

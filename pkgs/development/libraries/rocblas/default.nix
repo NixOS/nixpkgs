@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , fetchpatch
 , cmake
 , rocm-cmake
@@ -40,16 +41,17 @@ assert buildTests -> gfortran != null;
 assert buildTests == false;
 assert buildBenchmarks == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  rocmVersion = "5.3.1";
-  version = "2.45.0-${rocmVersion}";
+  repoVersion = "2.45.0";
+  rocmVersion = "5.3.3";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocBLAS";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-GeeICEI1dNE6D+nUUlBtUncLkPowAa5n+bsy160EtaU=";
+    rev = "rocm-${finalAttrs.rocmVersion}";
+    hash = "sha256-z40WxF+suMeIZihBWJPRWyL20S2FUbeZb5JewmQWOJo=";
   };
 
   # We currently need this patch due to faulty toolchain includes
@@ -126,11 +128,21 @@ stdenv.mkDerivation rec {
       --replace "virtualenv_install(\''${Tensile_TEST_LOCAL_PATH})" ""
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocBLAS/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocblas "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rocblas "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})
