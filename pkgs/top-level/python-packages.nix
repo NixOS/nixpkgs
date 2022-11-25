@@ -7221,6 +7221,8 @@ self: super: with self; {
 
   persim = callPackage ../development/python-modules/persim { };
 
+  persist-queue = callPackage ../development/python-modules/persist-queue { };
+
   persistent = callPackage ../development/python-modules/persistent { };
 
   persisting-theory = callPackage ../development/python-modules/persisting-theory { };
