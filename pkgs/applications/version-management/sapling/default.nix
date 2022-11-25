@@ -131,6 +131,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  # just a simple check phase, until we have a running test suite. this should
+  # help catch issues like lack of a LOCALE_ARCHIVE setting (see GH PR #202760)
+  doCheck = true;
+  checkPhase = ''
+    echo -n "testing sapling version; should be \"${version}\"... "
+    ${sapling}/bin/sl version | grep -qw "${version}"
+    echo "OK!"
+  '';
+
   meta = with lib; {
     description = "A Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
