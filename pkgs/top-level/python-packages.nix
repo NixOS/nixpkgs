@@ -11816,6 +11816,8 @@ self: super: with self; {
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
+  timeslot = callPackage ../development/python-modules/timeslot { };
+
   timetagger = callPackage ../development/python-modules/timetagger { };
 
   timezonefinder = callPackage ../development/python-modules/timezonefinder { };
