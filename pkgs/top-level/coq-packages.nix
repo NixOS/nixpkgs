@@ -82,6 +82,7 @@ let
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
+      mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
       metacoq-template-coq = self.metacoq.template-coq;
