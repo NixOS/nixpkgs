@@ -13,13 +13,13 @@
 
 gcc12Stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "11.27";
+  version = "11.28";
 
   src = fetchFromGitHub {
     owner = "hkneptune";
     repo = "FreeFileSync";
     rev = "v${version}";
-    sha256 = "sha256-ZIWqCR5/8qaK9Qcb0Uzi/wu3Do8nZ5DGAw8sfwUhCZg=";
+    sha256 = "sha256-3eYvXClMdOCdl35S1d7nP2kiYZZOjyydi2gKY62K/qM=";
   };
 
   # Patches from ROSA Linux
