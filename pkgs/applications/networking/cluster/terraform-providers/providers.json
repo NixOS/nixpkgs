@@ -1112,13 +1112,13 @@
     "version": "0.13.5"
   },
   "tencentcloud": {
-    "hash": "sha256-XycVc3PO7heRYZwl9tsOgErzDfyifMnO4X33oihFPRU=",
+    "hash": "sha256-zJ5nDsd5xK/iDk6LqNKJpqCtwVDarUKsv1Arnf0CNGw=",
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.78.14",
+    "rev": "v1.78.15",
     "vendorHash": null,
-    "version": "1.78.14"
+    "version": "1.78.15"
   },
   "tfe": {
     "hash": "sha256-ikuLRGm9Z+tt0Zsx7DYKNBrS08rW4DOvVWYpl3wvaeU=",
