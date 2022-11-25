@@ -35,10 +35,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    homepage = "https://github.com/altdesktop/python-dbus-next";
     description = "A zero-dependency DBus library for Python with asyncio support";
+    homepage = "https://github.com/altdesktop/python-dbus-next";
+    changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
+    broken = stdenv.isDarwin;
   };
 }

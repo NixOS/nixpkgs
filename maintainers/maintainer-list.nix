@@ -2233,6 +2233,12 @@
     github = "scaredmushroom";
     githubId = 45340040;
   };
+  CaptainJawZ = {
+    email = "CaptainJawZ@outlook.com";
+    name = "Danilo Reyes";
+    github = "CaptainJawZ";
+    githubId = 43111068;
+  };
   carlosdagos = {
     email = "m@cdagostino.io";
     github = "carlosdagos";
@@ -10663,6 +10669,12 @@
     github = "pb-";
     githubId = 84886;
     name = "Paul Baecher";
+  };
+  pbar = {
+    email = "piercebartine@gmail.com";
+    github = "pbar1";
+    githubId = 26949935;
+    name = "Pierce Bartine";
   };
   pbogdan = {
     email = "ppbogdan@gmail.com";

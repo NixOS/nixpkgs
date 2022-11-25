@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.47.0";
+  version = "3.47.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-r0VPWVyyWGZ2v2yKKiJGJV+ah77zxFm7Zwm9yag3fxc=";
+    hash = "sha256-Px1PPCnVNHTMdKyj1kwdfdsc+Hpuqwcnsin0+tPNtfU=";
   };
 
-  vendorSha256 = "sha256-eipxqX2m425FnPkf+ao/k1dYwDHDmJf+eS3S0sEiXkk=";
+  vendorSha256 = "sha256-cijM5R2Z/g3MJPOYDIeLSqTuVJvIKQbun+26FWHn2AI=";
 
   sourceRoot = "source/pkg";
 
