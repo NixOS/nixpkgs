@@ -247,6 +247,17 @@
       </listitem>
       <listitem>
         <para>
+          Kime has been updated from 2.5.6 to 3.0.2 and the
+          <literal>i18n.inputMethod.kime.config</literal> option has
+          been removed. Users should use
+          <literal>daemonModules</literal>,
+          <literal>iconColor</literal>, and
+          <literal>extraConfig</literal> options under
+          <literal>i18n.inputMethod.kime</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain
