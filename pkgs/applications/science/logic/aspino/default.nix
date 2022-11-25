@@ -23,8 +23,10 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "GCC = g++" "GCC = c++"
-
-    patchShebangs .
+    substituteInPlace src/main.cc \
+      --replace "defined(__linux__)" "defined(__linux__) && defined(__x86_64__)"
+    substituteInPlace src/MaxSatSolver.cc \
+      --replace "occ[i][sign(softLiterals[j])] > 0" "occ[i][sign(softLiterals[j])] != 0"
   '';
 
   preBuild = ''
@@ -45,9 +47,5 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     license = licenses.asl20;
     homepage = "https://alviano.net/software/maxino/";
-    # See pkgs/applications/science/logic/glucose/default.nix
-    badPlatforms = [ "aarch64-linux" ];
-    # src/MaxSatSolver.cc:280:62: error: ordered comparison between pointer and zero ('unsigned int *' and 'int')
-    broken = (stdenv.isDarwin && stdenv.isx86_64); # broken since 2019-05-07 on hydra
   };
 }
