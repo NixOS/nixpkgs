@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ _4825764518 ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
