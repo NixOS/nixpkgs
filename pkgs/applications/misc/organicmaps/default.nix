@@ -15,6 +15,8 @@
 , zlib
 , icu
 , freetype
+
+, nix-update-script
 }:
 
 mkDerivation rec {
@@ -61,6 +63,13 @@ mkDerivation rec {
   preConfigure = ''
     bash ./configure.sh
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+      versionRegex = "(.*)-android";
+    };
+  };
 
   meta = with lib; {
     # darwin: "invalid application of 'sizeof' to a function type"
