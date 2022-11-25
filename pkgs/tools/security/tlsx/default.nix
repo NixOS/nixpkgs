@@ -14,7 +14,10 @@ buildGoModule rec {
     hash = "sha256-DcC08KmSXYOk4jlU0KIdu5zziWZLYlWetN+/ZGaY4RQ=";
   };
 
-  vendorHash = "sha256-BppRtzTjiMcuc7xIz37bDcjnQHhOlstncES1vILTKYM=";
+  vendorHash = "sha256-MC7mS+GMfQUZPW6i/lDPW8qAHzT1Cr7gYYG9V4CTCM0=";
+
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
     description = "TLS grabber focused on TLS based data collection";
