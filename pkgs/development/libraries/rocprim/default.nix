@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -16,10 +17,11 @@
 assert buildTests -> gtest != null;
 assert buildBenchmarks -> gbenchmark != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  rocmVersion = "5.3.1";
-  version = "2.11.0-${rocmVersion}";
+  repoVersion = "2.11.1";
+  rocmVersion = "5.3.3";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -32,8 +34,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
-    rev = "rocm-${rocmVersion}";
-    hash = "sha256-aapvj9bwwlg7VJfnH1PVR8DulMcJh1xR6B4rPPGU6Q4=";
+    rev = "rocm-${finalAttrs.rocmVersion}";
+    hash = "sha256-jfTuGEPyssARpdo0ZnfVJt0MBkoHnmBtf6Zg4xXNJ1U=";
   };
 
   nativeBuildInputs = [
@@ -75,11 +77,21 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocPRIM/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocprim "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rocprim "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "ROCm parallel primitives";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != hip.version;
   };
-}
+})

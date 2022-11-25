@@ -13,14 +13,14 @@
 , rocm-device-libs
 , rocm-thunk }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-26E7vA2JlC50zmpaQfDrFMlgjAqmfTdp9/A8g5caDqI=";
   };
 
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
     version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCR-Runtime/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-runtime "$version"
+    update-source-version rocm-runtime "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
   };
-}
+})

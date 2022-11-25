@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-opencl-runtime
@@ -35,10 +36,10 @@ let
     varwidth
     titlesec;
   });
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  rocmVersion = "5.3.1";
-  version = rocmVersion;
+  rocmVersion = "5.3.3";
+  version = finalAttrs.rocmVersion;
 
   outputs = [
     "out"
@@ -53,7 +54,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpenGEMM";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-AiRzOMYRA/0nbQomyq4oOEwNZdkPYWRA2W6QFlctvFc=";
   };
 
@@ -106,11 +107,11 @@ in stdenv.mkDerivation rec {
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
     find tests -executable -type f -exec mv {} $test/bin \;
-    patchelf --set-rpath ${lib.makeLibraryPath buildInputs}:$out/lib $test/bin/*
+    patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib $test/bin/*
   '' + lib.optionalString buildBenchmarks ''
     mkdir -p $benchmark/bin
     find examples -executable -type f -exec mv {} $benchmark/bin \;
-    patchelf --set-rpath ${lib.makeLibraryPath buildInputs}:$out/lib $benchmark/bin/*
+    patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib $benchmark/bin/*
   '';
 
   postFixup = lib.optionalString buildDocs ''
@@ -119,11 +120,18 @@ in stdenv.mkDerivation rec {
     mv ../doc/pdf/miopengemm.pdf $docs/share/doc/miopengemm
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    rocmVersion="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpenGEMM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version miopengemm "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "OpenCL general matrix multiplication API for ROCm";
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != clang.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != clang.version;
   };
-}
+})
