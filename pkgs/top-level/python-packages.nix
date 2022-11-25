@@ -10245,6 +10245,8 @@ in {
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
 
+  types-psutil = callPackage ../development/python-modules/types-psutil { };
+
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
