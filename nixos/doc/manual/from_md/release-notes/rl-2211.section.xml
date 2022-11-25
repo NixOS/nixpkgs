@@ -816,6 +816,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nix.buildMachines</literal> got a new submodule
+          option <literal>protocol</literal>. An undocumented hack to
+          set the protocol via <literal>hostName</literal> is no longer
+          working and the <literal>protocol</literal> option should be
+          used instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>generateOptparseApplicativeCompletions</literal> and
           <literal>generateOptparseApplicativeCompletion</literal> from
           <literal>haskell.lib.compose</literal> (and
