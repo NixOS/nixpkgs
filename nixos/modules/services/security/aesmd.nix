@@ -25,6 +25,12 @@ in
       default = false;
       description = lib.mdDoc "Whether to build the PSW package in debug mode.";
     };
+    quoteProviderLibrary = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = literalExpression "pkgs.sgx-azure-dcap-client";
+      description = lib.mdDoc "Custom quote provider library to use.";
+    };
     settings = mkOption {
       description = lib.mdDoc "AESM configuration";
       default = { };
@@ -83,7 +89,6 @@ in
         storeAesmFolder = "${sgx-psw}/aesm";
         # Hardcoded path AESM_DATA_FOLDER in psw/ae/aesm_service/source/oal/linux/aesm_util.cpp
         aesmDataFolder = "/var/opt/aesmd/data";
-        aesmStateDirSystemd = "%S/aesmd";
       in
       {
         description = "Intel Architectural Enclave Service Manager";
@@ -98,7 +103,7 @@ in
         environment = {
           NAME = "aesm_service";
           AESM_PATH = storeAesmFolder;
-          LD_LIBRARY_PATH = storeAesmFolder;
+          LD_LIBRARY_PATH = makeLibraryPath [ cfg.quoteProviderLibrary ];
         };
 
         # Make sure any of the SGX application enclave devices is available
