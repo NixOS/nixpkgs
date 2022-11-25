@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     scripts/build-styles.sh
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     gettext
     gobject-introspection
     meson
@@ -67,6 +67,7 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with lib; {
