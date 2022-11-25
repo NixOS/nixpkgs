@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , rustPlatform
 , cmake
 , pkg-config
@@ -74,6 +75,10 @@ rustPlatform.buildRustPackage rec {
     genericName = "Code Editor";
     categories = [ "Development" "Utility" "TextEditor" ];
   }) ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
