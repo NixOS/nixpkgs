@@ -1,3 +1,169 @@
+<details>
+<summary>
+
+## Total beginner’s guide
+
+</summary>
+
+Completely baffled by Nix? By Lisp? Do you see a bunch of letter spaghetti and wonder, why would anybody care about this? Me too, friend. Me too.
+
+The worlds of Lisp and Nix are both independently confusing and idiosynratic. It’s a match made in hell.
+
+### Practical example
+
+For a practical example:
+
+1. Copy [examples/make-binary](examples/make-binary) to a fresh directory.
+
+2. Change the top lines in default.nix from:
+
+```nix
+{ pkgs ? import .... }:
+
+with pkgs.lispPackagesLite;
+```
+
+into:
+
+```nix
+{ pkgs ? import <nixpkgs> {} }:
+
+with rec {
+  hPkgsSrc = pkgs.fetchFromGitHub {
+    owner = "hraban";
+    repo = "nixpkgs";
+    # Put the latest revision of the github.com/hraban/nixpkgs
+    # feat/lisp-packages-lite branch here
+    rev = "0000000000000000000000000000000000000000";
+    # Enter the hash suggested by nix-build on error
+    sha256 = "";
+  };
+  lispPackagesLite = (import hPkgsSrc {}).lispPackagesLite.override {
+    inherit pkgs;
+  };
+};
+
+with lispPackagesLite;
+```
+
+3. Substitute the `00000...` with the output of:
+
+
+```sh
+git ls-remote https://github.com/hraban/nixpkgs feat/lisp-packages-lite | awk '{print $1}'
+```
+
+(E.g. "5cb59648f2a02fac400f0c3612cf9b2e40ed63de")
+
+4. Run `nix-build`. This will take a long time (minutes), and it will fail. That’s normal. It should give you this error message:
+
+```
+unpacking source archive /private/tmp/nix-build-source.drv-0/5cb59648f2a02fac400f0c3612cf9b2e40ed63de.tar.gz
+error: hash mismatch in fixed-output derivation '/nix/store/n0m267sy3vr24d6cw6wyn42449f2y23h-source.drv':
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-F0NMtivSGMGF5sb7MlXg1nGf3y2I4ZypmLrhfmlRi1E=
+(use '--show-trace' to show detailed location information)
+```
+
+5. Copy that random-looking `sha256-F0N..` (not the AAAA one), including the `sha256-` part, and paste it in the `sha256` field of your default.nix.
+
+6. Run `nix-build` again.
+
+7. Done. You should have your binary in `result/bin/demo`. Feel free to mess around in the source files and rebuild.
+
+### Nix
+
+Nix, at its core, is a *programming language* that lets you implement every step of a build system: from fetching the source, to building it, to installing it on your system. There is a huge central repository of many such packages across many programming languages, and their compilers, and tools, etc, all implemented in Nix: that’s “nixpkgs”. It contains e.g. GCC, which lets you build other apps, but it also contains useful functions like `lib.fetchFromGitHub`.
+
+People have taken this (too) far. They’ve built an entire Operating System in Nix. It’s NixOS. It started out as an experiment but it’s here to stay. However it is completely unrelated from this entire project: whether you use Nix on your Mac, Windows, existing Linux computer, or NixOS: this project just helps you build Common Lisp projects. And their dependencies.
+
+There you have it:
+
+- Nix: the language. Compare to Python without stdlib, or raw C without even `#include <stdlib.h>`
+- nixpkgs: A giant repository of useful helper functions and all conceivable software in the world for every language, in one. The cornerstone of any useful Nix project.
+- NixOS: Cool but unrelated.
+
+### Lisp
+
+Common Lisp is a very old family of Lisp, predating C, that managed to stay relevant and modern. Other, completely unrelated lisps, are Clojure (modern) and Emacs Lisp (also old but still relevant).
+
+This entire project is purely about Common Lisp and has nothing to do with the others.
+
+Common Lisp has many different implementations, and its spec is notoriously reticent to define any implementation details. In fact, the spec says nothing about the concept of packages, bundling, compilation (some but very little), “binaries”, etc.
+
+### ASDF
+
+ASDF is a build system for Common Lisp, but not a package repository. It specifies all the “sane” things a normal, ⅯⅯth century programming language should have: from “which file has which piece of code”, to “which files belong together”, and the ability to bundle them into a single “unit”. The only other language I know of which doesn’t have this built-in is C, or JavaScript (but even that is changing). With ASDF, your code organisation feels more like Python than C. More like Node.JS, less like bare JavaScript.
+
+ASDF is close to a `package.json` file actually: it even has `description`, `version`, `author` fields, etc.
+
+Example ASDF definition:
+
+```common-lisp
+(defsystem "hello-lisp"
+  :description "hello-lisp: a sample Lisp system."
+  :version "0.0.1"
+  :author "Joe User <joe@example.com>"
+  :licence "Public Domain"
+  :depends-on ("optima.ppcre" "command-line-arguments")
+  :components ((:file "packages")
+               (:file "macros" :depends-on ("packages"))
+               (:file "hello" :depends-on ("macros"))))
+```
+
+ASDF introduces the concept of “systems”, which you might as well call a “module”. Unfortunately the word “package” already means something very specific (and semi advanced) in Lisp, so just avoid it.
+
+*ASDF does **not** offer a package repository!* That means: it’s not Pip, it’s not NPM, it’s not Maven, etc. ASDF needs you to supply all the code somehow. If you don’t already have all necessary dependencies available on your local hard disk, ASDF can’t help you.
+
+<blockquote>
+
+<details>
+
+<summary>
+
+*Note:* This is not about asdf-vm.com.
+
+</summary>
+
+That’s a recent and completely unrelated project
+that helps you manage separate versions of Python, Ruby, etc, all in one
+tool. If anything, that’d be more a Nix thing, than a Lisp thing. And to make
+matters worse: you can manage Lisp versions using asdf-vm. There was
+understandable consternation in the Common Lisp community when they announced
+the name and it remains extremely confusing. This is the only thing I’ll say
+about that project because it’s 100% unrelated.
+
+</details>
+
+</blockquote>
+
+### A word on Package Repositories
+
+Such an obvious part of any ecosystem, why even question their existence? Package repositories: NPM, Pip, Cargo, Maven, ... what’s the problem? The problem: they are all basically the same thing, reimplemented and reinvented in 99%-similar-1%-different ways. Nix *could* completely obviate the need for package repositories.
+
+Notable language that *doesn’t* have a package repository: Go. In Go, you specify imports directly via the source location in code. It comes with its own baggage, but it’s interesting context. It is no coincidence that vendoring code is very common in Go, compared to other languages.
+
+(“Vendoring”: including your dependencies in your own project’s repository. Think `git add node_modules`.)
+
+Theoretically, Nix makes package repositories obsolete. Specifically: nixpkgs makes package repositories obsolete. More specifically: nixpkgs *is* a package repository.
+
+Practically, most x-language-in-Nix ecosystems are bootstrapped by leveraging their respective existing package repositories. It’s easier for both maintainers and users to just copy all of NPM / Pip / ... into nixpkgs. Maintainers don’t need to worry about where to find each project, or when to update it. Users get a familiar environment. “Oh, this is like NPM / Pip / ..., but with different syntax.”
+
+This lisp-packages-lite project *does* drop the existing Lisp package repository, but that’s only possible because of two peculiarities in the Common Lisp world:
+
+1. Common Lisp code moves slowly, and remains stable for ages. In JavaScript, a package that hasn’t had commits for 2 years is dead. In Common Lisp, it’s completely normal to find and use a package with no commits for >10 years. That means it’s stable. Benefit for lisp-packages-lite: less overhead when maintaining a central repository of "what is every package’s last version?"
+2. The Common Lisp ecosystem is relatively small. There are only, what, a few hundred packages? A single human being can maintain it (and he has: Zach Beane maintains the de facto Common Lisp package repository on his own, for >10y now: QuickLisp).
+
+### QuickLisp
+
+Think NPM / Pip for Common Lisp. It is built on top of ASDF. It is a de facto standard. Maintained by Zach Beane. Notable difference: in NPM, all packages are maintained by their respective owners, and updates are published individually. In QuickLisp, Zach sits down every couple of months and fetches the last version of every package, tests them all, and publishes a new version of the entire QuickLisp repository with every package simultaneously updated.
+
+---
+
+Now, back to this project, lisp-packages-lite...
+
+</details>
+
 # Nix Packages Lite
 
 Nix-only implementation of a lispDerivation builder, and registry of popular Common Lisp packages.
@@ -30,7 +196,7 @@ The implementation details:
 
 The trade-off is in favour of robustness, at the cost of more human work in managing the Nix derivation definitions.
 
-## Usage
+## Glossary
 
 This package (lisp-modules-lite) makes a distinction between Nix *derivations* and Lisp *systems*:
 
@@ -42,7 +208,9 @@ See the [`examples`](examples) directory for demonstrations on how to use this b
 
 ### 1 Nix derivation, many Lisp systems
 
-A crucial, defining feature of this implementation is that there is only ever *one single Nix derivation per Lisp source code project*. This means *there is **no** 1↔1 relationship between Lisp systems and Nix derivations*: if a single piece of code defines multiple systems (as many do; `trivia`, `cl-async`, `babel`, ...) they all still result in a single Nix derivation that exports all of them.
+A crucial, defining feature of this implementation is that there is only ever *one single Nix derivation per Lisp source code project*. This means *there is **no** 1 ⭤ 1 relationship between Lisp systems and Nix derivations*: if a single piece of code defines multiple systems (as many do; `trivia`, `cl-async`, `babel`, ...) they all still result in a single Nix derivation that exports all of them.
+
+## Usage
 
 ### Single derivation
 
@@ -337,6 +505,12 @@ The other lisp modules leverage QuickLisp which helps bootstrap the list of pack
 But perhaps the most important reason to omit QL is “because there are already two other modules that rely on QL and I wanted to try it without.”
 
 ## Links
+
+- [ASDF best practices][ASDF best practices]
+- [ASDF 3, or Why Lisp is Now an Acceptable Scripting Language (extended version)](http://fare.tunes.org/files/asdf3/asdf3-2014.html): Extremely detailed design document by the author of ASDFv3 with tons of lisp wisdom, and general programming wisdom. Recommended reading.
+- [lisp-modules](../lisp-modules): The original Common Lisp module in nixpkgs. Relies on QuickLisp.
+- [lisp-modules-new](../lisp-modules-new): A fresh reimplementation of Common-Lisp-in-Nix. Also relies on QuickLisp.
+- [what is `makeScope`](https://old.reddit.com/r/NixOS/comments/z47sky/introducing_lisppackageslite_common_lisp_in_pure/ixr0snv/): Reddit user jonringer117 explains `makeScope`.
 
 [ASDF best practices]: https://github.com/fare/asdf/blob/master/doc/best_practices.md
 
