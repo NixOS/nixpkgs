@@ -50,16 +50,14 @@ buildPythonPackage rec {
     ufoLib2
   ];
 
-  postPatch = ''
-    # https://github.com/daltonmaag/statmake/pull/41
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["poetry>=1.0.0"]' 'requires = ["poetry-core"]' \
-      --replace 'build-backend = "poetry.masonry.api"' 'build-backend = "poetry.core.masonry.api"' \
-      --replace 'cattrs = "^1.1"' 'cattrs = ">= 1.1"'
-  '';
-
   pythonImportsCheck = [
     "statmake"
+  ];
+
+  disabledTests = [
+    # Test requires an update as later cattrs is present in Nixpkgs
+    # https://github.com/daltonmaag/statmake/issues/42
+    "test_load_stylespace_broken_range"
   ];
 
   meta = with lib; {
