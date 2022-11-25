@@ -64,6 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to send result from tools to the Faraday Platform";
     homepage = "https://github.com/infobyte/faraday_agent_dispatcher";
+    changelog = "https://github.com/infobyte/faraday_agent_dispatcher/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };
