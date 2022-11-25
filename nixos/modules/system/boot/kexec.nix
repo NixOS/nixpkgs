@@ -25,7 +25,11 @@
               exit 1
             fi
             echo "Loading NixOS system via kexec."
-            exec kexec --load $p/kernel --initrd=$p/initrd --append="$(cat $p/kernel-params) init=$p/init"
+            exec kexec --load \
+              --kexec-syscall-auto \
+              --initrd="$p/initrd" \
+              --append="$(<"$p/kernel-params") init=$p/init" \
+              -- "$p/kernel"
           '';
       };
   };

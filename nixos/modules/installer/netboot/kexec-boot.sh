@@ -14,6 +14,7 @@ fi
 kexecTree=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 kexec --load \
+    --kexec-syscall-auto \
     --initrd="$kexecTree/initrd" \
     --command-line="$(<"$kexecTree/kernel-params")" \
     -- "$kexecTree/kernel"
