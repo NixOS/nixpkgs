@@ -33349,6 +33349,8 @@ with pkgs;
 
   faraday = callPackage ../applications/blockchains/faraday { };
 
+  feather = libsForQt5.callPackage ../applications/blockchains/feather { };
+
   fulcrum = libsForQt5.callPackage ../applications/blockchains/fulcrum { };
 
   go-ethereum = callPackage ../applications/blockchains/go-ethereum {
