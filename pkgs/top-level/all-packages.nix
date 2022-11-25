@@ -30351,7 +30351,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  sapling = callPackage ../applications/version-management/sapling { };
+  sapling = callPackage ../applications/version-management/sapling {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
+  };
 
   mercurialFull = mercurial.override { fullBuild = true; };
 
