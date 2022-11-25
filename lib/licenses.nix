@@ -250,6 +250,13 @@ in mkLicense lset) ({
     spdxId = "CC-BY-ND-3.0";
     fullName = "Creative Commons Attribution-No Derivative Works v3.00";
     free = false;
+
+    # This license permits redistribution of the unmodified work.
+    # As CC licenses, except CC0, is not suitable for software licensing
+    # and is mainly used to license data such as fonts and themes,
+    # they usually won't be patched or linked,
+    # and the outputs thus contain unmodified and redistributable copies of the source materials.
+    redistributable = true;
   };
 
   cc-by-sa-25 = {
