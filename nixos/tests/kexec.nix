@@ -37,10 +37,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     node2.shutdown()
 
     # Kexec node1 to the toplevel of node2 via the kexec-boot script
-    node1.succeed('touch /run/foo')
+    node1.succeed('printf test-key >/run/foo')
     node1.fail('hello')
     node1.execute(
         '${nodes.node2.config.system.build.kexecTree}/kexec-boot'
+        ' --ssh-authorized-keys /run/foo'
         ' --append nixos.foo=bar',
         check_return=False,
     )
@@ -51,6 +52,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     node1.succeed('! test -e /run/foo')
     node1.succeed('hello')
     node1.succeed('[ "$(hostname)" = "node2" ]')
+    node1.succeed('grep test-key /etc/ssh/authorized_keys.d/nixos')
     node1.succeed('grep nixos.foo=bar /proc/cmdline')
 
     node1.shutdown()

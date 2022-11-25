@@ -146,6 +146,13 @@ with lib;
 
     boot.loader.timeout = 10;
 
+    boot.initrd.postMountCommands = ''
+      # Copy any overlays from the kexec script.
+      if [[ -d /overlay ]]; then
+        cp -a --target-directory=/mnt-root /overlay/.
+      fi
+    '';
+
     boot.postBootCommands =
       ''
         # After booting, register the contents of the Nix store
