@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl,
+{ lib, stdenv, fetchurl, fetchpatch,
   bison, re2c, sconsPackages,
   libcxx, libcxxabi
 }:
@@ -12,9 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "16k4pkwyr2mh5w8j91vhxh9aff7f4y31npwf09w6f8q63fxvpy41";
   };
 
-  buildInputs = [ bison re2c sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ sconsPackages.scons_latest ];
+
+  buildInputs = [ bison re2c ];
 
   patches = [
+    (fetchpatch {
+      name = "sconscript-to-python3.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/gringo/sconscript-to-python3.patch?id=91d09eea75c1443c1d776f4d22193cbde18da491";
+      hash = "sha256-SvrewHv5ThCMGbdbj48xOqHBnXYpwTyPNG3Ia8I7puU=";
+    })
     ./gringo-4.5.4-cmath.patch
     ./gringo-4.5.4-to_string.patch
   ];
