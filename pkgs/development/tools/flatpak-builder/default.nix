@@ -80,7 +80,9 @@ in stdenv.mkDerivation rec {
     # this on our patch for Flatpak 0.99.
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit glibcLocales python2;
+      inherit glibcLocales;
+      # FIXME use python3 for tests that rely on python2
+      # inherit python2;
     })
   ];
 
@@ -137,7 +139,7 @@ in stdenv.mkDerivation rec {
     installedTestsDependencies = [
       gnupg
       ostree
-      python2
+      # FIXME python2
       gnumake
     ];
 
