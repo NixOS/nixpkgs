@@ -10774,6 +10774,13 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  niknetniko = {
+    name = "Niko Strijbol";
+    email = "niko@strijbol.be";
+    matrix = "@niknetniko:matrix.org";
+    github = "niknetniko";
+    githubId = 1756811;
+  };
   NikolaMandic = {
     email = "nikola@mandic.email";
     github = "NikolaMandic";
