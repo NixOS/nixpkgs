@@ -9053,6 +9053,11 @@ with pkgs;
 
   haproxy = callPackage ../tools/networking/haproxy { };
 
+  haproxyHTTP3 = haproxy.override {
+    openssl = quictls;
+    http3Support = true;
+  };
+
   hackertyper = callPackage ../tools/misc/hackertyper { };
 
   hackneyed = callPackage ../data/icons/hackneyed { };

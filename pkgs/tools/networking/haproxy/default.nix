@@ -1,6 +1,7 @@
 { useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
+, http3Support ? false
 , stdenv
 , lib
 , fetchurl
@@ -42,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     "USE_OPENSSL=yes"
     "USE_ZLIB=yes"
+  ] ++ lib.optionals http3Support [
+    "USE_QUIC=yes"
   ] ++ lib.optionals usePcre [
     "USE_PCRE=yes"
     "USE_PCRE_JIT=yes"
