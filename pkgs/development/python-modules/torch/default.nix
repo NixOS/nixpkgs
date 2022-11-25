@@ -124,7 +124,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "1.12.1";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.0";
@@ -140,7 +140,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-8378BVOBFCRYRG1+yIYFSPKmb1rFOLgR+8pNZKt9NfI=";
+    hash = "sha256-jlXd+9fYWePDevXRxsjtL4oEdTWirv1ObH0B4A6o6Q4=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
