@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, glib, dconf, pkg-config, dbus-glib, telepathy-glib, python2, libxslt, makeWrapper }:
+{ lib, stdenv, fetchurl, glib, dconf, pkg-config, dbus-glib, telepathy-glib, python3, libxslt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-idle";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1argdzbif1vdmwp5vqbgkadq9ancjmgdm2ncp0qfckni715ss4rh";
+    hash = "sha256-g4fiXl+wtMvnAeXcCS1mbWUQuDP9Pn5GLpFw027DwV8=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ glib telepathy-glib dbus-glib libxslt python2 (lib.getLib dconf) ];
+  nativeBuildInputs = [ pkg-config python3 makeWrapper ];
+  buildInputs = [ glib telepathy-glib dbus-glib libxslt (lib.getLib dconf) ];
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-idle" \
