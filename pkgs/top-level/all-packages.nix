@@ -3597,6 +3597,8 @@ with pkgs;
 
   wlopm = callPackage ../tools/wayland/wlopm { };
 
+  wlprop = callPackage ../tools/wayland/wlprop {};
+
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
   wlrctl = callPackage ../tools/wayland/wlrctl { };
