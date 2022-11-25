@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fsmon";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "nowsecure";
     repo = "fsmon";
     rev = version;
-    sha256 = "sha256-4KF8h+YdCMrF9Yk/9y71WqNjzyoEZnddriDZAdpIaa4=";
+    sha256 = "sha256-vAlAnGeFMgLIKaqUusBV7QalYh0+dZdifUvZwebk65U=";
   };
 
   installPhase = ''
