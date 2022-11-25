@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-if ! kexec -v &>/dev/null; then
-    echo 'kexec not found: please install kexec-tools' 2>&1
+if ! kexec --version &>/dev/null; then
+    printf >&2 'kexec not found: please install kexec-tools\n'
+    exit 1
+fi
+
+if (( EUID != 0 )); then
+    printf >&2 'kexec-boot must be run as root\n'
     exit 1
 fi
 
