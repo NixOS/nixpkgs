@@ -1,9 +1,7 @@
 { lib, stdenv, python3Packages, fetchFromGitHub, fetchurl, sd, curl, pkg-config, openssl, rustPlatform, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock }:
 
 let
-  deps = import ./deps.nix { inherit lib fetchurl; };
-  version = deps.version;
-  versionHash = deps.versionHash;
+  inherit (lib.importJSON ./deps.json) links version versionHash;
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -83,9 +81,7 @@ let
     # with filesystem paths for the curl calls.
     postUnpack = ''
       mkdir $sourceRoot/hack_pydeps
-      ( cd $sourceRoot/hack_pydeps
-        ${deps.links}
-      )
+      ${lib.concatStrings (map (li: "ln -s ${fetchurl li} $sourceRoot/hack_pydeps/${baseNameOf li.url}\n") links)}
       sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
     '';
 

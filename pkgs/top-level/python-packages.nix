@@ -578,6 +578,8 @@ self: super: with self; {
 
   aria2p = callPackage ../development/python-modules/aria2p { };
 
+  ariadne = callPackage ../development/python-modules/ariadne { };
+
   arnparse = callPackage ../development/python-modules/arnparse { };
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
