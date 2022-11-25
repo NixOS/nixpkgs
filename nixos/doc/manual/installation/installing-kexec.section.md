@@ -23,7 +23,7 @@ nix-build -A kexecTarball.x86_64-linux '<nixpkgs/nixos/release.nix>'
 ```
 
 This will create a `result` tarball containing the following:
- - `bzImage` (the Linux kernel)
+ - `kernel` (the Linux kernel)
  - `initrd` (the initrd file)
  - `kernel-params` (the kernel command-line parameters)
  - `kexec-boot` (a shell script invoking `kexec`)

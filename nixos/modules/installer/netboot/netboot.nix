@@ -101,18 +101,18 @@ with lib;
       boot
     '';
 
-    # A script invoking kexec on ./bzImage and ./initrd.gz.
+    # A script invoking kexec to boot into the kernel and initrd.
     # Usually used through system.build.kexecTree, but exposed here for composability.
     system.build.kexecScript = ./kexec-boot.sh;
 
     # A tree containing the kexec-boot script and its dependencies.
     system.build.kexecTree = pkgs.linkFarm "kexec-tree" [
       {
-        name = "initrd.gz";
+        name = "initrd";
         path = "${config.system.build.netbootRamdisk}/initrd";
       }
       {
-        name = "bzImage";
+        name = "kernel";
         path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
       }
       {

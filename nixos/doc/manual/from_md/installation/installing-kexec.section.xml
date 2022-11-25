@@ -34,7 +34,7 @@ nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
   <itemizedlist spacing="compact">
     <listitem>
       <para>
-        <literal>bzImage</literal> (the Linux kernel)
+        <literal>kernel</literal> (the Linux kernel)
       </para>
     </listitem>
     <listitem>

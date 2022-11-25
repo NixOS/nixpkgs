@@ -8,8 +8,8 @@ fi
 kexecTree=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 kexec --load \
-    --initrd="$kexecTree/initrd.gz" \
+    --initrd="$kexecTree/initrd" \
     --command-line="$(<"$kexecTree/kernel-params")" \
-    -- "$kexecTree/bzImage"
+    -- "$kexecTree/kernel"
 
 kexec -e
