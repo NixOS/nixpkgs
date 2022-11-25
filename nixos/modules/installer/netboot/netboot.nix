@@ -146,6 +146,7 @@ with lib;
         ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
+    system.stateVersion = lib.mkDefault lib.trivial.release;
   };
 
 }
