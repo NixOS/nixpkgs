@@ -14168,7 +14168,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnatboot
+      then buildPackages.gnatboot11
       else buildPackages.gnat11;
   });
 
@@ -14184,11 +14184,13 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnatboot
+      then buildPackages.gnatboot12
       else buildPackages.gnat12;
   });
 
-  gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+  gnatboot = gnatboot12;
+  gnatboot11 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "11"; });
+  gnatboot12 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "12"; });
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
