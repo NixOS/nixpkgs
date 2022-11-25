@@ -102,6 +102,7 @@ let
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
+        inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
