@@ -41,6 +41,16 @@ let
         };
       });
 
+      arcam-fmj = super.arcam-fmj.overridePythonAttrs (old: rec {
+        disabledTestPaths = [
+          # incompatible with pytest-aiohttp 0.3.0
+          # see https://github.com/elupus/arcam_fmj/pull/12
+          "tests/test_fake.py"
+          "tests/test_standard.py"
+          "tests/test_utils.py"
+        ];
+      });
+
       backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
         version = "1.11.1";
         src = fetchFromGitHub {
