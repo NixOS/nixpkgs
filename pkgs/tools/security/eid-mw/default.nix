@@ -21,13 +21,13 @@
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.1.4";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
     rev = "v${version}";
-    sha256 = "pHzjLyQFn7UvFrPUcI/ZQHMOwVp6ndnX9YegJzlhERM=";
+    sha256 = "sha256-AiEe28J47MhACHl2N+iFrJaH7GCySsemj8Wjp5BAToY=";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
