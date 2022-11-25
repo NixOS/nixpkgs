@@ -385,7 +385,11 @@ let
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Alien-wxWidgets-0.69.tar.gz";
       hash = "sha256-UyJOS7vv/0z3tj7ZpiljiTuf/Ull1w2WcQNI+Gdt4kk=";
     };
-    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk2 pkgs.wxGTK30 ModulePluggable ];
+    postPatch = ''
+      substituteInPlace Build.PL \
+        --replace "gtk+-2.0" "gtk+-3.0"
+    '';
+    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk3 pkgs.wxGTK30-gtk3 ModulePluggable ];
     buildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Building, finding and using wxWidgets binaries";
@@ -26946,6 +26950,12 @@ let
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Wx-0.9932.tar.gz";
       hash = "sha256-HP22U1oPRnbm8aqyydjhbVd74+s7fMBMgHTWheZlG3A=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/gtk3.patch?h=perl-wx&id=a3776d3747e3767d1e0f6d37bdaabf087f779fea";
+        hash = "sha256-CokmRzDTFmEMN/jTKw9ECCPvi0mHt5+h8Ojg4Jgd7D4=";
+      })
+    ];
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
