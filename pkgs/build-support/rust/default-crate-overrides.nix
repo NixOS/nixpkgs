@@ -82,6 +82,7 @@ in
   };
 
   evdev-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libevdev ];
   };
 
