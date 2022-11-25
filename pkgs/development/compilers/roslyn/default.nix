@@ -6,20 +6,18 @@
 , unzip
 }:
 
-let
-  packageVersion = "3.10.0";
-in buildDotnetModule rec {
+buildDotnetModule rec {
   pname = "roslyn";
-  version = "${packageVersion}-1.21102.26";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "v${version}";
-    sha256 = "0yf4f4vpqn9lixr37lkp29m2mk51xcm3ysv2ag332xn6zm5zpm2b";
+    hash = "sha256-4iXabFp0LqJ8TXOrqeD+oTAocg6ZTIfijfX3s3fMJuI=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 
@@ -28,6 +26,10 @@ in buildDotnetModule rec {
   dontDotnetFixup = true;
 
   nativeBuildInputs = [ unzip ];
+
+  postPatch = ''
+    sed -i 's/latestPatch/latestFeature/' global.json
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -42,10 +44,10 @@ in buildDotnetModule rec {
   '';
 
   installPhase = ''
-    pkg="$out/lib/dotnet/microsoft.net.compilers.toolset/${packageVersion}"
+    pkg="$out/lib/dotnet/microsoft.net.compilers.toolset/${version}"
     mkdir -p "$out/bin" "$pkg"
 
-    unzip -q artifacts/packages/Release/Shipping/Microsoft.Net.Compilers.Toolset.${packageVersion}-dev.nupkg \
+    unzip -q artifacts/packages/Release/Shipping/Microsoft.Net.Compilers.Toolset.${version}-dev.nupkg \
       -d "$pkg"
     # nupkg has 0 permissions for a bunch of things
     chmod -R +rw "$pkg"
@@ -57,9 +59,9 @@ in buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    mainProgram = "csc";
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
+    mainProgram = "csc";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ corngood ];
