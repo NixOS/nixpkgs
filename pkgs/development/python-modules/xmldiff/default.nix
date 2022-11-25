@@ -21,8 +21,9 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage = "https://github.com/Shoobx/xmldiff";
     description = "Creates diffs of XML files";
+    homepage = "https://github.com/Shoobx/xmldiff";
+    changelog = "https://github.com/Shoobx/xmldiff/blob/master/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
   };
