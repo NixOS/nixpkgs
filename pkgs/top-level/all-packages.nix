@@ -35983,7 +35983,7 @@ with pkgs;
   };
 
 
-  inherit (callPackages ../applications/science/logic/z3 { python = python2; })
+  inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
     z3_4_8
     z3_4_7;
