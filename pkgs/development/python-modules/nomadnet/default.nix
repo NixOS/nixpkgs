@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "NomadNet";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-ycQWvJnYvuNtXxNWjuLXD+TghscCIuOZMmch02M9C00=";
   };
 
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Off-grid, resilient mesh communication";
     homepage = "https://github.com/markqvist/NomadNet";
+    changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
