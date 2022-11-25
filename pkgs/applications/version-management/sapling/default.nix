@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, fetchurl, sd, curl, pkg-config, openssl, rustPlatform, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, fetchurl, sd, curl, pkg-config, openssl, rustPlatform, fetchYarnDeps, yarn, nodejs, fixup_yarn_lock, glibcLocales }:
 
 let
   inherit (lib.importJSON ./deps.json) links version versionHash;
@@ -85,6 +85,11 @@ let
       sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
     '';
 
+    postFixup = ''
+      wrapProgram $out/bin/sl \
+        --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    '';
+
     nativeBuildInputs = [
       curl
       pkg-config
@@ -130,7 +135,7 @@ stdenv.mkDerivation {
     description = "A Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pbar ];
+    maintainers = with maintainers; [ pbar thoughtpolice ];
     platforms = platforms.linux;
     mainProgram = "sl";
   };
