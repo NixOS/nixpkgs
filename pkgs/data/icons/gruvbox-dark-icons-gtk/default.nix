@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jmattheis/gruvbox-dark-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nomisiv bigshaq9999 ];
+    maintainers = [ maintainers.nomisiv ];
   };
 }
