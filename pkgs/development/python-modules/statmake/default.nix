@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "daltonmaag";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BpxjAr65ZQEJ0PSUIPtS78UvJbMG91qkV8py2K/+W2E=";
+    hash = "sha256-BpxjAr65ZQEJ0PSUIPtS78UvJbMG91qkV8py2K/+W2E=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Applies STAT information from a Stylespace to a variable font";
     homepage = "https://github.com/daltonmaag/statmake";
+    changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
   };
