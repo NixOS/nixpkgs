@@ -38068,6 +38068,10 @@ with pkgs;
 
   lc3tools = callPackage ../development/tools/lc3tools {};
 
+  ldid = callPackage ../development/tools/ldid {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   xcolor = callPackage ../tools/graphics/xcolor { };
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
