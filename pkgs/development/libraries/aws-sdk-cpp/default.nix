@@ -92,6 +92,8 @@ stdenv.mkDerivation rec {
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];
+  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
