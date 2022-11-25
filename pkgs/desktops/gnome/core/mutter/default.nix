@@ -65,6 +65,23 @@ let self = stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
       sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
     })
+
+    # Revert clutter optimization causing issues on X11
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2667
+    # Will be replaced with a proper fix in 43.2
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6054
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/7e7a639cc5132cf3355e861235f325540fe56548.patch";
+      sha256 = "NYoKCRh5o1Q15c11a79Hk5tGKq/jOa+e6GpgBjPEepo=";
+      revert = true;
+    })
+
+    # Backport edge resistance fix (should be part of 43.2)
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2687
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/accf532a29ea9a1d70880dfaa1834050aa3ae7be.patch";
+      sha256 = "XAHcPGQFWfZujlqO/cvUryojPCMBBSxeIG06BesDQQw=";
+    })
   ];
 
   mesonFlags = [
