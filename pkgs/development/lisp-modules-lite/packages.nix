@@ -167,9 +167,9 @@ in
     };
 
     inherit (
-      let version = "v0.24.1"; in lispMultiDerivation {
+      lispMultiDerivation rec {
         name = "cffi";
-        inherit version;
+        version = "v0.24.1";
         src = pkgs.fetchFromGitHub {
           name = "cffi-src";
           owner = "cffi";
@@ -265,70 +265,62 @@ in
       lispCheckDependencies = [ fiveam ];
     };
 
-    inherit (
-      let
-        version = "909c691ec7a3bfe98bbec536ab55d7eac8990a81";
-      in
-        lispMultiDerivation {
-          name = "cl-async";
-          inherit version;
+    inherit (lispMultiDerivation rec {
+      name = "cl-async";
+      version = "909c691ec7a3bfe98bbec536ab55d7eac8990a81";
 
-          src = pkgs.fetchFromGitHub {
-            name = "cl-async-src";
-            owner = "orthecreedence";
-            repo = "cl-async";
-            rev = version;
-            sha256 = "sha256-lonRpqW51lrf0zpOstYq261m2UR1YMrgKR23kLBrhfY=";
-          };
-
-          systems = {
-            cl-async = {
-              name = "cl-async";
-              lispDependencies = [
-                babel
-                bordeaux-threads
-                cffi
-                cffi-grovel
-                cl-libuv
-                cl-ppcre
-                fast-io
-                static-vectors
-                trivial-features
-                trivial-gray-streams
-                vom
-              ];
-            };
-
-            cl-async-repl = {
-              name = "cl-async-repl";
-              lispDependencies = [ bordeaux-threads cl-async ];
-            };
-
-            cl-async-ssl = {
-              name = "cl-async-ssl";
-              lispDependencies = [ cffi cl-async vom ];
-            };
-          };
-        }
-    ) cl-async cl-async-repl cl-async-ssl;
-
-    cl-base64 = let
-      version = "577683b18fd880b82274d99fc96a18a710e3987a";
-    in
-      lispDerivation {
-        lispSystem = "cl-base64";
-        inherit version;
-        src = pkgs.fetchzip {
-          pname = "cl-base64-src";
-          inherit version;
-          url = "http://git.kpe.io/?p=cl-base64.git;a=snapshot;h=${version}";
-          sha256 = "sha256-cuVDuPj8gXiN9kLgWpWerkZgodno2s3OENZoByApUoo=";
-          # This is necessary because the auto generated filename for a gitweb
-          # URL contains invalid characters.
-          extension = "tar.gz";
-        };
-        lispCheckDependencies = [ ptester kmrcl ];
+      src = pkgs.fetchFromGitHub {
+        name = "cl-async-src";
+        owner = "orthecreedence";
+        repo = "cl-async";
+        rev = version;
+        sha256 = "sha256-lonRpqW51lrf0zpOstYq261m2UR1YMrgKR23kLBrhfY=";
       };
+
+      systems = {
+        cl-async = {
+          name = "cl-async";
+          lispDependencies = [
+            babel
+            bordeaux-threads
+            cffi
+            cffi-grovel
+            cl-libuv
+            cl-ppcre
+            fast-io
+            static-vectors
+            trivial-features
+            trivial-gray-streams
+            vom
+          ];
+        };
+
+        cl-async-repl = {
+          name = "cl-async-repl";
+          lispDependencies = [ bordeaux-threads cl-async ];
+        };
+
+        cl-async-ssl = {
+          name = "cl-async-ssl";
+          lispDependencies = [ cffi cl-async vom ];
+        };
+      };
+    }) cl-async cl-async-repl cl-async-ssl;
+
+    cl-base64 = lispDerivation rec {
+      lispSystem = "cl-base64";
+      version = "577683b18fd880b82274d99fc96a18a710e3987a";
+      src = pkgs.fetchzip {
+        pname = "cl-base64-src";
+        inherit version;
+        url = "http://git.kpe.io/?p=cl-base64.git;a=snapshot;h=${version}";
+        sha256 = "sha256-cuVDuPj8gXiN9kLgWpWerkZgodno2s3OENZoByApUoo=";
+        # This is necessary because the auto generated filename for a gitweb
+        # URL contains invalid characters.
+        extension = "tar.gz";
+      };
+      lispCheckDependencies = [ ptester kmrcl ];
+    };
 
     cl-change-case = lispDerivation {
       lispSystem = "cl-change-case";
@@ -346,28 +338,25 @@ in
       lispCheckDependencies = [ fiveam ];
     };
 
-    bordeaux-threads = let
+    bordeaux-threads = lispDerivation rec {
+      lispDependencies = [
+        alexandria
+        global-vars
+        trivial-features
+        trivial-garbage
+      ];
+      lispCheckDependencies = [ fiveam ];
+      buildInputs = [ pkgs.libuv ];
+      lispSystem = "bordeaux-threads";
       version = "v0.8.8";
-    in
-      lispDerivation {
-        lispDependencies = [
-          alexandria
-          global-vars
-          trivial-features
-          trivial-garbage
-        ];
-        lispCheckDependencies = [ fiveam ];
-        buildInputs = [ pkgs.libuv ];
-        lispSystem = "bordeaux-threads";
-        inherit version;
-        src = pkgs.fetchFromGitHub {
-          name = "bordeaux-threads-src";
-          owner = "sionescu";
-          repo = "bordeaux-threads";
-          rev = version;
-          sha256 = "sha256-5mauBDg13zJlYkbu5C30dCOIPBE95bVu2AiR8d0gJKY=";
-        };
+      src = pkgs.fetchFromGitHub {
+        name = "bordeaux-threads-src";
+        owner = "sionescu";
+        repo = "bordeaux-threads";
+        rev = version;
+        sha256 = "sha256-5mauBDg13zJlYkbu5C30dCOIPBE95bVu2AiR8d0gJKY=";
       };
+    };
 
     cl-colors = lispDerivation {
       lispSystem = "cl-colors";
@@ -382,20 +371,17 @@ in
       };
     };
 
-    cl-colors2 = let
-      version = "cc37737fc70892ed97152842fafa086ad1b7beab";
-    in
-      lispDerivation {
-        lispSystem = "cl-colors2";
-        src = pkgs.fetchzip {
-          pname = "cl-colors2-src";
-          inherit version;
-          url = "https://notabug.org/cage/cl-colors2/archive/${version}.tar.gz";
-          sha256 = "sha256-GXq3Q6MjdS79EKks2ayojI+ZYh8hRVkd0TNkpjWF9zI=";
-        };
-        lispDependencies = [ alexandria cl-ppcre ];
-        lispCheckDependencies = [ clunit2 ];
+    cl-colors2 = lispDerivation {
+      lispSystem = "cl-colors2";
+      src = pkgs.fetchzip rec {
+        pname = "cl-colors2-src";
+        version = "cc37737fc70892ed97152842fafa086ad1b7beab";
+        url = "https://notabug.org/cage/cl-colors2/archive/${version}.tar.gz";
+        sha256 = "sha256-GXq3Q6MjdS79EKks2ayojI+ZYh8hRVkd0TNkpjWF9zI=";
       };
+      lispDependencies = [ alexandria cl-ppcre ];
+      lispCheckDependencies = [ clunit2 ];
+    };
 
     cl-cookie = lispDerivation {
       lispSystem = "cl-cookie";
@@ -470,22 +456,19 @@ in
       lispCheckDependencies = [ prove ];
     };
 
-    cl-libuv = let
+    cl-libuv = lispDerivation rec {
+      lispDependencies = [ alexandria cffi cffi-grovel ];
+      buildInputs = [ pkgs.libuv ];
+      lispSystem = "cl-libuv";
       version = "ebe3e166d1b6608efdc575be55579a086356b3fc";
-    in
-      lispDerivation {
-        lispDependencies = [ alexandria cffi cffi-grovel ];
-        buildInputs = [ pkgs.libuv ];
-        lispSystem = "cl-libuv";
-        inherit version;
-        src = pkgs.fetchFromGitHub {
-          name = "cl-libuv-src";
-          owner = "orthecreedence";
-          repo = "cl-libuv";
-          rev = version;
-          sha256 = "sha256-sGN4sIM+yy7VXudzrU6jV/+DLEY12EOK69TXnh94rGU=";
-        };
+      src = pkgs.fetchFromGitHub {
+        name = "cl-libuv-src";
+        owner = "orthecreedence";
+        repo = "cl-libuv";
+        rev = version;
+        sha256 = "sha256-sGN4sIM+yy7VXudzrU6jV/+DLEY12EOK69TXnh94rGU=";
       };
+    };
 
     cl-plus-ssl = lispDerivation {
       lispSystem = "cl+ssl";
@@ -515,28 +498,25 @@ in
       ];
     };
 
-    inherit (let
+    inherit (lispMultiDerivation rec {
       version = "v2.1.1";
-    in
-      lispMultiDerivation {
-        inherit version;
-        src = pkgs.fetchFromGitHub {
-          name = "cl-ppcre-src";
-          owner = "edicl";
-          repo = "cl-ppcre";
-          rev = version;
-          sha256 = "sha256-UffzJ2i4wpkShxAJZA8tIILUbBZzbWlseezj2JLImzc=";
+      src = pkgs.fetchFromGitHub {
+        name = "cl-ppcre-src";
+        owner = "edicl";
+        repo = "cl-ppcre";
+        rev = version;
+        sha256 = "sha256-UffzJ2i4wpkShxAJZA8tIILUbBZzbWlseezj2JLImzc=";
+      };
+      systems = {
+        cl-ppcre = {
+          lispCheckDependencies = [ flexi-streams ];
         };
-        systems = {
-          cl-ppcre = {
-            lispCheckDependencies = [ flexi-streams ];
-          };
-          cl-ppcre-unicode = {
-            lispDependencies = [ cl-ppcre cl-unicode ];
-            lispCheckDependencies = [ flexi-streams ];
-          };
+        cl-ppcre-unicode = {
+          lispDependencies = [ cl-ppcre cl-unicode ];
+          lispCheckDependencies = [ flexi-streams ];
         };
-      }) cl-ppcre cl-ppcre-unicode;
+      };
+    }) cl-ppcre cl-ppcre-unicode;
 
     cl-speedy-queue = lispify [ ] (pkgs.fetchFromGitHub {
       name = "cl-speedy-queue-src";
@@ -678,15 +658,12 @@ in
       sha256 = "sha256-24XWonW5plv83h9Sule6q6nEFUAZOlxofwxadSFrY4A=";
     });
 
-    clunit2 = let
+    clunit2 = lispify [ ] (pkgs.fetchzip rec {
+      pname = "clunit2-src";
       version = "200839e8e47e9212ded2d36520d84b9be681037c";
-    in
-      lispify [ ] (pkgs.fetchzip {
-        pname = "clunit2-src";
-        inherit version;
-        url = "https://notabug.org/cage/clunit2/archive/${version}.tar.gz";
-        sha256 = "sha256-5Pud/s5LywqrY+EjDG2iCtuuildTzfDmVYzqhnJ5iyQ=";
-      });
+      url = "https://notabug.org/cage/clunit2/archive/${version}.tar.gz";
+      sha256 = "sha256-5Pud/s5LywqrY+EjDG2iCtuuildTzfDmVYzqhnJ5iyQ=";
+    });
 
     colorize = lispify [ alexandria html-encode split-sequence ] (pkgs.fetchFromGitHub {
       name = "colorize-src";
@@ -939,15 +916,12 @@ in
       sha256 = "sha256-bXxeNNnFsGbgP/any8rR3xBvHE9Rb4foVfrdQRHroxo=";
     });
 
-    html-encode = let
+    html-encode = lispify [ ] (pkgs.fetchzip rec {
+      pname = "html-encode-src";
       version = "1.2";
-    in
-      lispify [ ] (pkgs.fetchzip {
-        pname = "html-encode-src";
-        inherit version;
-        url = "http://beta.quicklisp.org/orphans/html-encode-1.2.tgz";
-        sha256 = "sha256-qw2CstJIDteQC4N1eQEsD9+HRm1i9GP/XjjIZXtZr/k=";
-      });
+      url = "http://beta.quicklisp.org/orphans/html-encode-${version}.tgz";
+      sha256 = "sha256-qw2CstJIDteQC4N1eQEsD9+HRm1i9GP/XjjIZXtZr/k=";
+    });
 
     http-body = lispDerivation {
       lispSystem = "http-body";
@@ -1128,23 +1102,20 @@ in
       ];
     };
 
-    kmrcl = let
+    kmrcl = lispDerivation rec {
+      lispSystem = "kmrcl";
       version = "4a27407aad9deb607ffb8847630cde3d041ea25a";
-    in
-      lispDerivation {
-        lispSystem = "kmrcl";
+      src = pkgs.fetchzip {
+        pname = "kmrcl-src";
         inherit version;
-        src = pkgs.fetchzip {
-          pname = "kmrcl-src";
-          inherit version;
-          url = "http://git.kpe.io/?p=kmrcl.git;a=snapshot;h=${version}";
-          sha256 = "sha256-oq28Xy1NrL/v4cipw4sObu3YkDBIAo0OR8wWqCoB/Rk=";
-          # This is necessary because the auto generated filename for a gitweb
-          # URL contains invalid characters.
-          extension = "tar.gz";
-        };
-        lispCheckDependencies = [ rt ];
+        url = "http://git.kpe.io/?p=kmrcl.git;a=snapshot;h=${version}";
+        sha256 = "sha256-oq28Xy1NrL/v4cipw4sObu3YkDBIAo0OR8wWqCoB/Rk=";
+        # This is necessary because the auto generated filename for a gitweb
+        # URL contains invalid characters.
+        extension = "tar.gz";
       };
+      lispCheckDependencies = [ rt ];
+    };
 
     inherit (
       lispMultiDerivation {
@@ -1498,22 +1469,19 @@ in
       sha256 = "sha256-frJlBDdnoJjhKwqas/3zq414xQULCeN4XtzpgJL44ek=";
     });
 
-    rt = let
+    rt = lispDerivation rec {
+      lispSystem = "rt";
       version = "a6a7503a0b47953bc7579c90f02a6dba1f6e4c5a";
-    in
-      lispDerivation {
-        lispSystem = "rt";
+      src = pkgs.fetchzip {
+        pname = "rt-src";
         inherit version;
-        src = pkgs.fetchzip {
-          pname = "rt-src";
-          inherit version;
-          url = "http://git.kpe.io/?p=rt.git;a=snapshot;h=${version}";
-          sha256 = "sha256-KxlltS8zCpuYX6Yp05eC2t/eWcTavD0XyOsp1XMWUY8=";
-          # This is necessary because the auto generated filename for a gitweb
-          # URL contains invalid characters.
-          extension = "tar.gz";
-        };
+        url = "http://git.kpe.io/?p=rt.git;a=snapshot;h=${version}";
+        sha256 = "sha256-KxlltS8zCpuYX6Yp05eC2t/eWcTavD0XyOsp1XMWUY8=";
+        # This is necessary because the auto generated filename for a gitweb
+        # URL contains invalid characters.
+        extension = "tar.gz";
       };
+    };
 
     smart-buffer = lispDerivation {
       lispSystem = "smart-buffer";
