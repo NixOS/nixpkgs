@@ -57,7 +57,7 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
-      maintainers = with maintainers; [ ewok ];
+      maintainers = with maintainers; [ ewok dritter ];
     };
 
     nativeBuildInputs = [ makeWrapper ];

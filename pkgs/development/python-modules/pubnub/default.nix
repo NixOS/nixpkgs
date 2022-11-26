@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.0.1";
+  version = "7.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python";
     rev = "refs/tags/${version}";
-    hash = "sha256-rOpTPj9g9WKc8MLX4HqsZit7yvTtDqha7ImewW/tH7g=";
+    hash = "sha256-LVkP9og9Xru1Xuw4boI2pLwZ0RE2RvtUx0AHoJa6o9c=";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
+    changelog = "https://github.com/pubnub/python/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

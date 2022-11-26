@@ -749,6 +749,10 @@ self: super: {
     '';
   });
 
+  ssr = super.ssr-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-treesitter ];
+  });
+
   statix = buildVimPluginFrom2Nix rec {
     inherit (statix) pname src meta;
     version = "0.1.0";

@@ -6,14 +6,14 @@
 , llvm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
-    rev = "rocm-${version}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-rKMe0B/pkDek/ZU37trnJNa8aqvlwxobPb1+VTx/bJU=";
   };
 
@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
     version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-Device-Libs/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocm-device-libs "$version"
+    update-source-version rocm-device-libs "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-Device-Libs";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault Flakebi ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

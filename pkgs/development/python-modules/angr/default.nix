@@ -22,31 +22,16 @@
 , pycparser
 , pythonOlder
 , pyvex
-, sympy
-, sqlalchemy
 , rpyc
 , sortedcontainers
+, sqlalchemy
+, sympy
 , unicorn
 }:
 
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-    pname = "unicorn";
-    version = "1.0.2-rc4";
-    src =  fetchFromGitHub {
-      owner = "unicorn-engine";
-      repo = pname;
-      rev = version;
-      sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-    doCheck = false;
-  });
-in
-
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.25";
+  version = "9.2.26";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -55,7 +40,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BxhCQZl/hsqaKzjieAreiOePUcmWGNn63jD0mZ9vFNE=";
+    hash = "sha256-6NqxJETKBDUmOOM+RjD3gdvqfsXFqoHhhaL55D+Ajz8=";
   };
 
   propagatedBuildInputs = [
@@ -82,7 +67,7 @@ buildPythonPackage rec {
     sortedcontainers
     sqlalchemy
     sympy
-    unicorn'
+    unicorn
   ];
 
   setupPyBuildFlags = lib.optionals stdenv.isLinux [

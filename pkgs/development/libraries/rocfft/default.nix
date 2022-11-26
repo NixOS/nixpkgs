@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, writeScript
 , cmake
 , rocm-cmake
 , rocm-runtime
@@ -24,10 +25,11 @@ assert buildBenchmarks -> fftwFloat != null;
 assert (buildTests || buildBenchmarks) -> boost != null;
 assert (buildTests || buildBenchmarks) -> llvmPackages != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
-  rocmVersion = "5.3.1";
-  version = "1.0.18-${rocmVersion}";
+  repoVersion = "1.0.18";
+  rocmVersion = "5.3.3";
+  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
 
   outputs = [
     "out"
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocFFT";
-    rev = "rocm-${rocmVersion}";
+    rev = "rocm-${finalAttrs.rocmVersion}";
     hash = "sha256-jb2F1fRe+YLloYJ/KtzrptUDhmdBDBtddeW/g55owKM=";
   };
 
@@ -104,12 +106,22 @@ stdenv.mkDerivation rec {
     mv $out/rocfft_rtc_helper $out/bin
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocFFT/releases?per_page=1")"
+    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocfft "$repoVersion" --ignore-same-hash --version-key=repoVersion
+    update-source-version rocfft "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+  '';
+
   meta = with lib; {
     description = "FFT implementation for ROCm ";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ Madouura ];
-    broken = rocmVersion != hip.version;
+    maintainers = teams.rocm.members;
+    broken = finalAttrs.rocmVersion != hip.version;
     hydraPlatforms = [ ]; # rocFFT produces an extremely large output
   };
-}
+})
