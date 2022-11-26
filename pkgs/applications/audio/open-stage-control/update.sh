@@ -47,10 +47,7 @@ curl -sSL https://raw.githubusercontent.com/jean-emmanuel/open-stage-control/v"$
 # Lock dependencies with npm
 (cd "$pkgdir" && npm install --package-lock-only --ignore-scripts --legacy-peer-deps)
 
-# Turn lock file into patch file
-(cd "$pkgdir" && (diff -u /dev/null ./package-lock.json || [ $? -eq 1 ])) >"$pkgdir"/package-lock.json.patch
-
-rm -f "$pkgdir"/{package.json,package-lock.json}
+rm -f "$pkgdir"/package.json
 
 # Update FOD hash
 curhash="$(nixeval "$attr.npmDeps.outputHash")"
