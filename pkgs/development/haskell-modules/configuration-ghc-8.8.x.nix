@@ -76,7 +76,7 @@ self: super: {
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
-  hashable = doJailbreak super.hashable;
+  hashable = addBuildDepend self.base-orphans super.hashable;
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
