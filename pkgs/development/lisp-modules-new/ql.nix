@@ -190,6 +190,10 @@ let
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
     };
+    zmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
   };
 
   qlpkgs =
