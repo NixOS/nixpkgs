@@ -35807,9 +35807,7 @@ with pkgs;
     gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
     stdenv = gccStdenv;
   };
-  cvc4 = callPackage ../applications/science/logic/cvc4 {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  cvc4 = callPackage ../applications/science/logic/cvc4 { };
 
   cvc5 = callPackage ../applications/science/logic/cvc5 { };
 
