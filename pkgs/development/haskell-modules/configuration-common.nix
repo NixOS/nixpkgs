@@ -2586,9 +2586,6 @@ in {
         doJailbreak
         # Generate shell completions
         (self.generateOptparseApplicativeCompletions [ "purs" ])
-      ] ++ lib.optionals (lib.versions.majorMinor self.ghc.version == "9.2") [
-        markUnbroken
-        doDistribute
       ]);
 
   purenix = super.purenix.overrideScope purescriptOverlay;

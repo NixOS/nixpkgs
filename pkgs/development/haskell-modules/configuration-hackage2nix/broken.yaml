@@ -4117,7 +4117,6 @@ broken-packages:
   - Pup-Events-Server
   - pure-io
   - pure-priority-queue
-  - purescript
   - purescript-ast
   - purescript-cst
   - purescript-tsd-gen
