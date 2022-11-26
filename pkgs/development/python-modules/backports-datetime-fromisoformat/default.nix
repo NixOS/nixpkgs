@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p0gyhfqq6gssf3prsy0pcfq5w0wx2w3pcjqbwx3imvc92ls4xwm";
+    sha256 = "sha256-Gvqk1ZNHGjuamHXMm37fLfik8xdnnqZYqPj6JVU5zpA=";
   };
 
   # no tests in pypi package
