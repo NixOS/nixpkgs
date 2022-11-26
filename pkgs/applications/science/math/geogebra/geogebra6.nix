@@ -6,10 +6,22 @@ let
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
 
-  meta = with lib; geogebra.meta // {
-    license = licenses.geogebra;
+  meta = with lib; {
+    description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
+    longDescription = ''
+      Dynamic mathematics software for all levels of education that brings
+      together geometry, algebra, spreadsheets, graphing, statistics and
+      calculus in one easy-to-use package.
+    '';
+    homepage = "https://www.geogebra.org/";
     maintainers = with maintainers; [ voidless sikmir ];
+    license = licenses.geogebra;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode  # some jars include native binaries
+    ];
     platforms = with platforms; linux ++ darwin;
+    hydraPlatforms = [];
   };
 
   linuxPkg = stdenv.mkDerivation {
