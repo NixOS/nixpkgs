@@ -210,6 +210,10 @@ let
     trivial-ssh-libssh2 = pkg: {
       nativeLibs = [ libssh2 ];
     };
+    zmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
   };
 
   qlpkgs =
