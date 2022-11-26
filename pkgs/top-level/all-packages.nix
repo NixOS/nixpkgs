@@ -13413,10 +13413,7 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
-  abcl = callPackage ../development/compilers/abcl {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  abcl = callPackage ../development/compilers/abcl { };
 
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
