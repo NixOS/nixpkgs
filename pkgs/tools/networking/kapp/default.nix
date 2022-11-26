@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.53.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-kapp";
     rev = "v${version}";
-    sha256 = "sha256-y4afSca87vPWPPWbSMS/Q3Y6TZg8fl0eu0Vw3udp3zA=";
+    sha256 = "sha256-68JIsL+qrXB3yLU+euznAVPv57cQd5qzvHn547nwHVI=";
   };
 
   vendorSha256 = null;
