@@ -69,6 +69,10 @@ in
     # Wait until the export dialogue appears.
     machine.wait_for_window("Export")
     machine.screenshot("MuseScore1")
+    machine.send_key("shift-tab")
+    machine.sleep(1)
+    machine.send_key("shift-tab")
+    machine.sleep(1)
     machine.send_key("ret")
     machine.sleep(1)
     machine.send_key("ret")
