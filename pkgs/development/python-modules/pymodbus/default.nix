@@ -11,6 +11,7 @@
 , pyserial-asyncio
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , redis
 , sqlalchemy
 , tornado
@@ -20,12 +21,15 @@
 buildPythonPackage rec {
   pname = "pymodbus";
   version = "3.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "riptideio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-7zuFKJuKc+J4g7qoK22xed8dmXJatQbQXz4aKAOcvN8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7zuFKJuKc+J4g7qoK22xed8dmXJatQbQXz4aKAOcvN8=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
@@ -49,7 +53,9 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [ "pymodbus" ];
+  pythonImportsCheck = [
+    "pymodbus"
+  ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
@@ -60,6 +66,7 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/riptideio/pymodbus";
+    changelog = "https://github.com/riptideio/pymodbus/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
