@@ -31671,6 +31671,8 @@ with pkgs;
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
+  ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
+
   icewm = callPackage ../applications/window-managers/icewm { };
 
   icon-library = callPackage ../applications/graphics/icon-library { };
