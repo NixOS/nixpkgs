@@ -1,10 +1,11 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, setuptools
 , diskcache
+, fetchFromGitHub
 , more-itertools
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -12,10 +13,12 @@ buildPythonPackage rec {
   version = "0.17.3";
   format = "pyproject";
 
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
     owner = "harlowja";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-FVhHp8BZ/wQQyr5AcuDo94LlflixhjZ0SnheSdHuDVQ=";
   };
 
@@ -30,10 +33,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A python package that provides useful locks";
+    description = "Module that provides useful locks";
     homepage = "https://github.com/harlowja/fasteners";
+    changelog = "https://github.com/harlowja/fasteners/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
-
 }
