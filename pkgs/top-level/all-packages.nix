@@ -16296,23 +16296,13 @@ with pkgs;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
-  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
-    jdk = jdk8; # todo: remove override https://github.com/nixos/nixpkgs/pull/89731
-  };
-
-  antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
+  antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
+  antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
   antlr3 = antlr3_5;
 
-  inherit (callPackages ../development/tools/parsing/antlr/4.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  }) antlr4_8;
-
   inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
+    antlr4_8
     antlr4_9
     antlr4_10
     antlr4_11;
