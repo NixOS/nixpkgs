@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ pombeirp ];
     mainProgram = "makensis";
+    broken = stdenv.isDarwin;
   };
 }
