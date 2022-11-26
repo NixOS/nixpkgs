@@ -190,6 +190,17 @@ let
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
     };
+    trivial-package-manager = pkg: {
+      propagatedBuildInputs = [ pkgs.which ];
+    };
+    "cl-sat.glucose" = pkg: {
+      propagatedBuildInputs = [ pkgs.glucose ];
+      patches = [ ./patches/cl-sat.glucose-binary-from-PATH-if-present.patch ];
+
+    };
+    "cl-sat.minisat" = pkg: {
+      propagatedBuildInputs = [ pkgs.minisat ];
+    };
   };
 
   qlpkgs =

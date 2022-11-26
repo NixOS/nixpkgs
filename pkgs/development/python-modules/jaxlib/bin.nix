@@ -56,6 +56,10 @@ let
       url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_11_0_arm64.whl";
       hash = "sha256-7Ir55ZhBkccqfoa56WVBF8QwFAC2ws4KFHDkfVw6zm0=";
     };
+    "x86_64-darwin" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_10_14_x86_64.whl";
+      hash = "sha256-bOoQI+T+YsTUNA+cDu6wwYTcq9fyyzCpK9qrdCrNVoA=";
+    };
   };
 
   gpuSrc = fetchurl {
@@ -121,6 +125,6 @@ buildPythonPackage rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
-    platforms = [ "aarch64-darwin" "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }
