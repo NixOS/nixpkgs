@@ -407,7 +407,6 @@ let root = rec {
         checkPhase = ''
           # Import current package from PWD
           export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
-          ${callLisp lisp (asdfOpScript lispBuildOp pname lispSystems')}
           ${callLisp lisp (asdfOpScript "test-system" pname _lispOrigSystems)}
         '';
       } // localizedArgs // (a.optionalAttrs (length allDepsDerivs > 0) {
