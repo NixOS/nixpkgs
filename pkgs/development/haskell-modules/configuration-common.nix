@@ -2112,10 +2112,12 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  # 2022-01-16 haskell-ci needs Cabal 3.6, ShellCheck 0.7.2
-  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+  # 2022-01-16 haskell-ci needs Cabal 3.6
+  haskell-ci = (appendPatches [
+    # Allow building with optparse-applicative 0.17* and ShellCheck 0.8.0
+    ./patches/haskell-ci-optparse-applicative-0.17-ShellCheck-0.8.patch
+  ] super.haskell-ci).overrideScope (self: super: {
     Cabal = self.Cabal_3_6_3_0;
-    ShellCheck = self.ShellCheck_0_7_2;
     cabal-install-parsers = self.cabal-install-parsers_0_4_5;
   });
 
