@@ -236,6 +236,9 @@ let
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
 
+    # aarch64-darwin needs this env set
+    LIBTOOL = "${cctools}/bin/libtool";
+
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
     # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
@@ -370,11 +373,11 @@ let
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
         "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
-      else if stdenv.isDarwin then
+      else if stdenv.isDarwin && stdenv.isAarch64 then
         # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-        "sha256-j2k9Q+k41444nP1VjjkkNjXRov1uAda4RCMDMAthjr0="
-      else if stdenv.isAarch64 then
-        "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg="
+        "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E="
+      else if stdenv.isDarwin && stdenv.isx86_64 then
+        "sha256-/qPUDgfKsWCZh/pgZM4wm9+4U9U5kxxv7q3Uh7zKSO4="
       else
         "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
     };
