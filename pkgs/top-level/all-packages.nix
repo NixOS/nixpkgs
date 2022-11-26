@@ -6349,6 +6349,8 @@ with pkgs;
 
   conform = callPackage ../applications/version-management/git-and-tools/conform { };
 
+  d2-lang = callPackage ../tools/graphics/d2-lang {};
+
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {

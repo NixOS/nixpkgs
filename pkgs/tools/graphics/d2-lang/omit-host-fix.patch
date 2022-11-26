@@ -1,0 +1,164 @@
+diff --git a/e2etests/testdata/stable/images/dagre/board.exp.json b/e2etests/testdata/stable/images/dagre/board.exp.json
+index e56ad31..7ab6a06 100644
+--- a/e2etests/testdata/stable/images/dagre/board.exp.json
++++ b/e2etests/testdata/stable/images/dagre/board.exp.json
+@@ -29,6 +29,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/004-picture.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+@@ -78,6 +79,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/004-picture.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+diff --git a/e2etests/testdata/stable/images/elk/board.exp.json b/e2etests/testdata/stable/images/elk/board.exp.json
+index 17b1d23..4b04423 100644
+--- a/e2etests/testdata/stable/images/elk/board.exp.json
++++ b/e2etests/testdata/stable/images/elk/board.exp.json
+@@ -29,6 +29,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/004-picture.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+@@ -78,6 +79,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/004-picture.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+diff --git a/e2etests/testdata/stable/investigate/dagre/board.exp.json b/e2etests/testdata/stable/investigate/dagre/board.exp.json
+index 4c21655..6b23797 100644
+--- a/e2etests/testdata/stable/investigate/dagre/board.exp.json
++++ b/e2etests/testdata/stable/investigate/dagre/board.exp.json
+@@ -447,6 +447,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/time.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+@@ -534,6 +535,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/time.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+diff --git a/e2etests/testdata/stable/investigate/elk/board.exp.json b/e2etests/testdata/stable/investigate/elk/board.exp.json
+index 143daff..f7acfe6 100644
+--- a/e2etests/testdata/stable/investigate/elk/board.exp.json
++++ b/e2etests/testdata/stable/investigate/elk/board.exp.json
+@@ -447,6 +447,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/time.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+@@ -534,6 +535,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/time.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+diff --git a/testdata/d2compiler/TestCompile/basic_icon.exp.json b/testdata/d2compiler/TestCompile/basic_icon.exp.json
+index 400adef..5e91150 100644
+--- a/testdata/d2compiler/TestCompile/basic_icon.exp.json
++++ b/testdata/d2compiler/TestCompile/basic_icon.exp.json
+@@ -133,6 +133,7 @@
+             "Host": "icons.terrastruct.com",
+             "Path": "/essentials/004-picture.svg",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
+diff --git a/testdata/d2compiler/TestCompile/image_dimensions.exp.json b/testdata/d2compiler/TestCompile/image_dimensions.exp.json
+index 941ac98..7b54080 100644
+--- a/testdata/d2compiler/TestCompile/image_dimensions.exp.json
++++ b/testdata/d2compiler/TestCompile/image_dimensions.exp.json
+@@ -230,6 +230,7 @@
+             "Host": "icons.terrastruct.com",
+             "Path": "/essentials/004-picture.svg",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
+diff --git a/testdata/d2compiler/TestCompile/image_style.exp.json b/testdata/d2compiler/TestCompile/image_style.exp.json
+index 560a8af..61149d1 100644
+--- a/testdata/d2compiler/TestCompile/image_style.exp.json
++++ b/testdata/d2compiler/TestCompile/image_style.exp.json
+@@ -214,6 +214,7 @@
+             "Host": "icons.terrastruct.com",
+             "Path": "/essentials/004-picture.svg",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
+diff --git a/testdata/d2compiler/TestCompile/reserved_icon_near_style.exp.json b/testdata/d2compiler/TestCompile/reserved_icon_near_style.exp.json
+index f680476..766377c 100644
+--- a/testdata/d2compiler/TestCompile/reserved_icon_near_style.exp.json
++++ b/testdata/d2compiler/TestCompile/reserved_icon_near_style.exp.json
+@@ -364,6 +364,7 @@
+             "Host": "",
+             "Path": "orange",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
+diff --git a/testdata/d2exporter/TestExport/shape/image_dimensions.exp.json b/testdata/d2exporter/TestExport/shape/image_dimensions.exp.json
+index cc127dd..7b70bf1 100644
+--- a/testdata/d2exporter/TestExport/shape/image_dimensions.exp.json
++++ b/testdata/d2exporter/TestExport/shape/image_dimensions.exp.json
+@@ -29,6 +29,7 @@
+         "Host": "icons.terrastruct.com",
+         "Path": "/essentials/004-picture.svg",
+         "RawPath": "",
++        "OmitHost": false,
+         "ForceQuery": false,
+         "RawQuery": "",
+         "Fragment": "",
+diff --git a/testdata/d2oracle/TestMove/slice_style.exp.json b/testdata/d2oracle/TestMove/slice_style.exp.json
+index ffeedab..0bc79cd 100644
+--- a/testdata/d2oracle/TestMove/slice_style.exp.json
++++ b/testdata/d2oracle/TestMove/slice_style.exp.json
+@@ -227,6 +227,7 @@
+             "Host": "icons.terrastruct.com",
+             "Path": "/essentials/142-target.svg",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
+diff --git a/testdata/d2oracle/TestSet/icon.exp.json b/testdata/d2oracle/TestSet/icon.exp.json
+index 675c038..c1aa30e 100644
+--- a/testdata/d2oracle/TestSet/icon.exp.json
++++ b/testdata/d2oracle/TestSet/icon.exp.json
+@@ -128,6 +128,7 @@
+             "Host": "icons.terrastruct.com",
+             "Path": "/essentials/087-menu.svg",
+             "RawPath": "",
++            "OmitHost": false,
+             "ForceQuery": false,
+             "RawQuery": "",
+             "Fragment": "",
