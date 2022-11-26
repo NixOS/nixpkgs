@@ -15939,4 +15939,10 @@
     github = "wuyoli";
     githubId = 104238274;
   };
+  afwlehmann = {
+    name = "afwlehmann";
+    email = "afwlehmann@googlemail.com";
+    github = "afwlehmann";
+    githubId = 100929;
+  };
 }
