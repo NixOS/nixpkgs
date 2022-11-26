@@ -28,14 +28,12 @@ Options:
 
   * --force: Force the update even if the version matches.
   * --no-build: Don't build provider
-  * --vendor-hash <SRI-hash>: Override the SHA256 or "null".
 DOC
 }
 
+build=1
 force=
 provider=
-build=1
-vendorHash=
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -50,11 +48,6 @@ while [[ $# -gt 0 ]]; do
   --no-build)
     build=0
     shift
-    ;;
-  --vendor-hash)
-    force=1
-    vendorHash=$2
-    shift 2
     ;;
   *)
     if [[ -n ${provider} ]]; then
@@ -114,19 +107,19 @@ fi
 
 homepage="$(read_attr homepage)"
 
-old_vendor_hash=$(read_attr vendorHash)
-old_rev=$(read_attr rev)
-
 registry_response=$(curl -s "${homepage//providers/v1/providers}")
 
+old_rev="$(read_attr rev)"
 rev="$(jq -r '.tag' <<<"${registry_response}")"
-if [[ ${old_rev} == "${rev}" && ${force} != 1 && -z ${vendorHash} && ${old_vendor_hash} != "${vendorHash}" ]]; then
-  echo_provider "already at version ${rev}"
-  exit
-fi
-if [[ ${rev//v/} =~ [[:alpha:]] && ${force} != 1 ]]; then
-  echo_provider "not updating to unstable version ${rev}"
-  exit
+if [[ ${force} != 1 ]]; then
+  if [[ ${old_rev} == "${rev}" ]]; then
+    echo_provider "already at version ${rev}"
+    exit
+  fi
+  if [[ ${rev//v/} =~ [[:alpha:]] ]]; then
+    echo_provider "not updating to unstable version ${rev}"
+    exit
+  fi
 fi
 echo_provider "updating from ${old_rev} to ${rev}"
 update_attr rev "${rev}"
@@ -141,16 +134,12 @@ echo_provider "calculating hash"
 hash=$(generate_hash src)
 update_attr hash "${hash}"
 
-if [[ -z ${vendorHash} ]]; then
-  if [[ ${old_vendor_hash} == null ]]; then
-    vendorHash=null
-  else
-    echo_provider "calculating vendorHash"
-    vendorHash=$(generate_hash go-modules)
-  fi
+old_vendor_hash="$(read_attr vendorHash)"
+if [[ ${old_vendor_hash} != null ]]; then
+  echo_provider "calculating vendorHash"
+  vendorHash=$(generate_hash go-modules)
+  update_attr vendorHash "${vendorHash}"
 fi
-
-update_attr vendorHash "${vendorHash}"
 
 # Check that the provider builds
 if [[ ${build} == 1 ]]; then
