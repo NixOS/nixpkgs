@@ -695,15 +695,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-5rqn9/NE7Q0VI6SRd2VFKJl4npz9Y0Qp1pEpfj9KxrQ="
   },
-  "logicmonitor": {
-    "hash": "sha256-GQPTFf+JxJB3iO1Us0zOAAG2NonuJ/b5la6f1j2Nd4k=",
-    "homepage": "https://registry.terraform.io/providers/logicmonitor/logicmonitor",
-    "owner": "logicmonitor",
-    "repo": "terraform-provider-logicmonitor",
-    "rev": "v2.0.3",
-    "spdx": null,
-    "vendorHash": null
-  },
   "lxd": {
     "hash": "sha256-DfRhPRclg/hCmmp0V087hl66WSFbEyXHFUGeehlU290=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
@@ -803,15 +794,6 @@
     "rev": "v1.13.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-6ePPxdULuTzLdVzzr12BjLu/lBN+5yIUq8U8FVUw/PM="
-  },
-  "nsxt": {
-    "hash": "sha256-TOoRtCKdR1fBjk39dbMgBd7pDJGfjvkQAqfpJzWRwRg=",
-    "homepage": "https://registry.terraform.io/providers/vmware/nsxt",
-    "owner": "vmware",
-    "repo": "terraform-provider-nsxt",
-    "rev": "v3.2.9",
-    "spdx": "NOASSERTION",
-    "vendorHash": null
   },
   "null": {
     "hash": "sha256-ExXDbAXMVCTZBlYmi4kD/7JFB1fCFAoPL637+1N6rEI=",
@@ -1220,15 +1202,6 @@
     "rev": "v0.16.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-smeySV1kReZyF9bRCunEr89IV219f9845wcHHI1zFz8="
-  },
-  "vercel": {
-    "hash": "sha256-/LHyNxal5Il/UzXdCKfVRzK/VVfSYMgoeKerWsedmho=",
-    "homepage": "https://registry.terraform.io/providers/ondrejsika/vercel",
-    "owner": "ondrejsika",
-    "repo": "terraform-provider-vercel",
-    "rev": "v2.1.0",
-    "spdx": null,
-    "vendorHash": "sha256-EyzYlJV+DoOjFHq7ZkyZY0zHlvciH1YdTPgEIXZwE2g="
   },
   "vpsadmin": {
     "hash": "sha256-MFEerVGKros+9zubcjK8qUpYQveKuBgbfyai32Y0KLI=",
