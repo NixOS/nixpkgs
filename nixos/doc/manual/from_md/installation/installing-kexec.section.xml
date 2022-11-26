@@ -25,11 +25,11 @@
     you can run:
   </para>
   <programlisting>
-nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
+nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
 </programlisting>
   <para>
-    This will create a <literal>result</literal> directory containing
-    the following:
+    This will create a <literal>result</literal> tarball containing the
+    following:
   </para>
   <itemizedlist spacing="compact">
     <listitem>
@@ -44,25 +44,20 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     </listitem>
     <listitem>
       <para>
-        <literal>kexec-boot</literal> (a shellscript invoking
+        <literal>kexec-boot</literal> (a shell script invoking
         <literal>kexec</literal>)
       </para>
     </listitem>
   </itemizedlist>
   <para>
-    These three files are meant to be copied over to the other already
-    running Linux Distribution.
+    This file is meant to be copied over to the other already running
+    Linux distribution.
   </para>
   <para>
-    Note it’s symlinks pointing elsewhere, so <literal>cd</literal> in,
-    and use <literal>scp * root@$destination</literal> to copy it over,
-    rather than rsync.
-  </para>
-  <para>
-    Once you finished copying, execute <literal>kexec-boot</literal>
-    <emphasis>on the destination</emphasis>, and after some seconds, the
-    machine should be booting into an (ephemeral) NixOS installation
-    medium.
+    Once you finish copying and extracting, execute
+    <literal>kexec-boot</literal> <emphasis>on the
+    destination</emphasis>, and after some seconds, the machine should
+    be booting into an (ephemeral) NixOS installation medium.
   </para>
   <para>
     In case you want to describe your own system closure to kexec into,
@@ -83,8 +78,8 @@ nix-build -A kexec.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
 </programlisting>
   <programlisting>
 nix-build '&lt;nixpkgs/nixos&gt;' \
-  --arg configuration ./configuration.nix
-  --attr config.system.build.kexecTree
+  --arg configuration ./configuration.nix \
+  --attr config.system.build.kexecTarball
 </programlisting>
   <para>
     Make sure your <literal>configuration.nix</literal> does still

@@ -19,23 +19,20 @@ To build the necessary files from your current version of nixpkgs,
 you can run:
 
 ```ShellSession
-nix-build -A kexec.x86_64-linux '<nixpkgs/nixos/release.nix>'
+nix-build -A kexecTarball.x86_64-linux '<nixpkgs/nixos/release.nix>'
 ```
 
-This will create a `result` directory containing the following:
+This will create a `result` tarball containing the following:
  - `bzImage` (the Linux kernel)
  - `initrd` (the initrd file)
- - `kexec-boot` (a shellscript invoking `kexec`)
+ - `kexec-boot` (a shell script invoking `kexec`)
 
-These three files are meant to be copied over to the other already running
-Linux Distribution.
+This file is meant to be copied over to the other already running
+Linux distribution.
 
-Note it's symlinks pointing elsewhere, so `cd` in, and use
-`scp * root@$destination` to copy it over, rather than rsync.
-
-Once you finished copying, execute `kexec-boot` *on the destination*, and after
-some seconds, the machine should be booting into an (ephemeral) NixOS
-installation medium.
+Once you finish copying and extracting, execute `kexec-boot` *on the
+destination*, and after some seconds, the machine should be booting into an
+(ephemeral) NixOS installation medium.
 
 In case you want to describe your own system closure to kexec into, instead of
 the default installer image, you can build your own `configuration.nix`:
@@ -53,11 +50,10 @@ the default installer image, you can build your own `configuration.nix`:
 }
 ```
 
-
 ```ShellSession
 nix-build '<nixpkgs/nixos>' \
-  --arg configuration ./configuration.nix
-  --attr config.system.build.kexecTree
+  --arg configuration ./configuration.nix \
+  --attr config.system.build.kexecTarball
 ```
 
 Make sure your `configuration.nix` does still import `netboot-minimal.nix` (or
