@@ -13260,6 +13260,10 @@ with pkgs;
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
+  zsh-histdb = callPackage ../shells/zsh/zsh-histdb { };
+  zsh-histdb-fzf = callPackage ../shells/zsh/zsh-histdb-fzf { };
+  zsh-histdb-skim = callPackage ../shells/zsh/zsh-histdb-skim { };
+
   zsh-history = callPackage ../shells/zsh/zsh-history { };
 
   zsh-history-search-multi-word = callPackage ../shells/zsh/zsh-history-search-multi-word { };
