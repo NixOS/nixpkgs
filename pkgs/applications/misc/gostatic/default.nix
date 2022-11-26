@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gostatic";
-  version = "2.34";
+  version = "2.35";
 
   src = fetchFromGitHub {
     owner = "piranha";
     repo = pname;
     rev = version;
-    hash = "sha256-rdbiIFRZcn9dVaF2anl2iy6FM6boz38vjn+hCpMwcis=";
+    hash = "sha256-pxk9tauB7u0oe6g4maHh+dREZXKwMz44v3KB43yYW6c=";
   };
 
   vendorHash = "sha256-9YCt9crLuYjd+TUXJyx/EAYIMWM5TD+ZyzLeu0RMxVc=";
