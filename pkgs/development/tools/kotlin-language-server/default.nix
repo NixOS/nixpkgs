@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, openjdk11, gradle, makeWrapper, maven }:
+{ lib, stdenv, fetchzip, openjdk, gradle, makeWrapper, maven }:
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ gradle makeWrapper ];
-  buildInputs = [ openjdk11 gradle ];
+  buildInputs = [ openjdk gradle ];
 
   postFixup = ''
-    wrapProgram "$out/bin/kotlin-language-server" --set JAVA_HOME ${openjdk11} --prefix PATH : ${lib.strings.makeBinPath [ openjdk11 maven ] }
+    wrapProgram "$out/bin/kotlin-language-server" --set JAVA_HOME ${openjdk} --prefix PATH : ${lib.strings.makeBinPath [ openjdk maven ] }
   '';
 
   meta = {
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       using the Language Server Protocol Topics'';
     maintainers = with lib.maintainers; [ vtuan10 ];
     homepage = "https://github.com/fwcd/kotlin-language-server";
+    changelog = "https://github.com/fwcd/kotlin-language-server/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
