@@ -33,9 +33,8 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
     })
-  ] ++ lib.optional stdenv.is32bit [
-    # fix compilation on i686-linux but also breaks x86_64
-    # a similar issue got fixed in https://github.com/intel/media-driver/pull/1493 but thats to much C magic for me
+    # fix compilation on 32bit
+    # https://github.com/intel/media-driver/pull/1557
     ./32bit.patch
   ];
 
@@ -73,6 +72,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
