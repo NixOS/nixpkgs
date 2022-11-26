@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate with Skoda Connect";
     homepage = "https://github.com/lendy007/skodaconnect";
+    changelog = "https://github.com/lendy007/skodaconnect/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
