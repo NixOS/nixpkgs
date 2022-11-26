@@ -1,15 +1,14 @@
 { lib
+, aiomysql
+, aiopg
+, aiosqlite
+, asyncmy
+, asyncpg
 , buildPythonPackage
 , fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
 , pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
+, pythonOlder
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
@@ -17,25 +16,45 @@ buildPythonPackage rec {
   version = "0.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-kHsA9XpolGmtuAGzRTj61igooLG9/LBQyv7TtuqiJ/A=";
   };
 
   propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
     sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
   ];
+
+  passthru.optional-dependencies = {
+    postgresql = [
+      asyncpg
+    ];
+    asyncpg = [
+      asyncpg
+    ];
+    aiopg = [
+      aiopg
+    ];
+    mysql = [
+      aiomysql
+    ];
+    aiomysql = [
+      aiomysql
+    ];
+    asyncmy = [
+      asyncmy
+    ];
+    sqlite = [
+      aiosqlite
+    ];
+    aiosqlite = [
+      aiosqlite
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
@@ -56,6 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
+    changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };
