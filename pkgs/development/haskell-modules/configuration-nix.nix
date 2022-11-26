@@ -637,7 +637,9 @@ self: super: builtins.intersectAttrs super {
       # Tests require network access.
       spagoWithoutChecks = dontCheck spagoOldAeson;
     in
-    spagoWithoutChecks;
+    # spago doesn't currently build with ghc92.  Top-level spago is pulled from
+    # ghc90 and explicitly marked unbroken.
+    markBroken spagoWithoutChecks;
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
