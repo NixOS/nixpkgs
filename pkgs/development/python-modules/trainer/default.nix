@@ -6,13 +6,13 @@
 
 , coqpit
 , fsspec
-, torch-bin
+, soundfile
+, torch
 , tensorboardx
 , protobuf
 
 , pytestCheckHook
-, soundfile
-, torchvision-bin
+, torchvision
 }:
 
 let
@@ -37,18 +37,21 @@ buildPythonPackage {
   propagatedBuildInputs = [
     coqpit
     fsspec
-    torch-bin
+    torch
     soundfile
     tensorboardx
     protobuf
   ];
 
-  # only one test and that requires training data from the internet
-  doCheck = false;
-
   checkInputs = [
     pytestCheckHook
-    torchvision-bin
+    torchvision
+  ];
+
+  disabledTests = [
+    # tries to download training data
+    "test_train_mnist"
+    "test_continue_train"
   ];
 
   pythonImportsCheck = [
