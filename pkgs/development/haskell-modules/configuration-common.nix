@@ -2610,7 +2610,7 @@ in {
 
   purescript-ast = purescriptStOverride super.purescript-ast;
 
-  purenix = purescriptStOverride super.purenix;
+  purenix = super.purenix.overrideScope purescriptOverlay;
 
   # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
   tzdata = dontCheck super.tzdata;
