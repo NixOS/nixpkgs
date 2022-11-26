@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "libreddit";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-LS9yUjKv0GxK6wGo0f5jHAn7vyo+tvgHd3NWLYpAQOs=";
   };
 
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Private front-end for Reddit";
     homepage = "https://github.com/libreddit/libreddit";
+    changelog = "https://github.com/libreddit/libreddit/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ fab jojosch ];
   };
