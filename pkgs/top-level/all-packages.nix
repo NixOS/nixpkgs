@@ -29647,6 +29647,8 @@ with pkgs;
 
   popura = callPackage ../tools/networking/popura {};
 
+  portmaster = callPackage ../applications/networking/portmaster {};
+
   shepherd = nodePackages."@nerdwallet/shepherd";
 
   skate = callPackage ../applications/misc/skate { };
