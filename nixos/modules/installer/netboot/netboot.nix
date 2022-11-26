@@ -132,6 +132,24 @@ with lib;
       }
     ];
 
+    # A tarball of the kexecTree files for convenient download and transfer.
+    system.build.kexecTarball = let
+      baseName = "nixos-kexec-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+    in pkgs.runCommandNoCC "${baseName}.tar.zst" {} ''
+      ln -s -- ${config.system.build.kexecTree} ${lib.escapeShellArg baseName}
+      # Set mode `u+w` to make it easier to `rm -r` or tweak
+      # the extracted tree.
+      tar \
+        --sort=name \
+        --owner=0 \
+        --group=0 \
+        --numeric-owner \
+        --mode=u+w \
+        --dereference \
+        -c -- ${lib.escapeShellArg baseName} \
+        | ${pkgs.zstd}/bin/zstd -10 -T$NIX_BUILD_CORES > $out
+    '';
+
     boot.loader.timeout = 10;
 
     boot.postBootCommands =
