@@ -16,7 +16,7 @@ kexecTree=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 kexec --load \
     --kexec-syscall-auto \
     --initrd="$kexecTree/initrd" \
-    --command-line="$(<"$kexecTree/kernel-params")" \
+    --append="$(<"$kexecTree/kernel-params")" \
     -- "$kexecTree/kernel"
 
 if [[ -d /run/systemd/system ]] && command -v systemctl >/dev/null; then
