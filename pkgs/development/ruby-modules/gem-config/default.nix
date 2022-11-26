@@ -370,7 +370,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python2 ];
+    buildInputs = [ which v8 python3 ];
     buildFlags = [ "--with-system-v8=true" ];
     dontBuild = false;
     # The gem includes broken symlinks which are ignored during unpacking, but
