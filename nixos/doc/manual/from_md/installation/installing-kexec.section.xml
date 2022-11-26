@@ -44,6 +44,12 @@ nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     </listitem>
     <listitem>
       <para>
+        <literal>kernel-params</literal> (the kernel command-line
+        parameters)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
         <literal>kexec-boot</literal> (a shell script invoking
         <literal>kexec</literal>)
       </para>

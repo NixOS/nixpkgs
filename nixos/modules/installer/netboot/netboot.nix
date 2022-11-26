@@ -112,11 +112,11 @@ with lib;
       SCRIPT_DIR=$( cd -- "$( dirname -- "''${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
       kexec --load ''${SCRIPT_DIR}/bzImage \
         --initrd=''${SCRIPT_DIR}/initrd.gz \
-        --command-line "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
+        --command-line="$(< "''${SCRIPT_DIR}/kernel-params")"
       kexec -e
     '';
 
-    # A tree containing initrd.gz, bzImage and a kexec-boot script.
+    # A tree containing the kexec-boot script and its dependencies.
     system.build.kexecTree = pkgs.linkFarm "kexec-tree" [
       {
         name = "initrd.gz";
@@ -125,6 +125,11 @@ with lib;
       {
         name = "bzImage";
         path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
+      }
+      {
+        name = "kernel-params";
+        path = pkgs.writeText "kernel-params"
+          "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
       }
       {
         name = "kexec-boot";
