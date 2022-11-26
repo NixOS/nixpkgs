@@ -1,7 +1,7 @@
 { lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
 let
   pname = "geogebra";
-  version = "6-0-723-0";
+  version = "6-0-745-0";
 
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
@@ -30,9 +30,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
-        "https://web.archive.org/web/20220807022226/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
+        "https://web.archive.org/web/20221126110648/https://download.geogebra.org/installers/6.0/GeoGebra-Linux64-Portable-${version}.zip"
       ];
-      sha256 = "f0b8a5bdadd3599489872ffe8e0bfd9e42ce3d28b1f6072001cc74f7d3e9e647";
+      hash = "sha256-UksHZt7bEs/aRzFiJrT1Quz/SFSvA88sdhoi1IEVdBc=";
     };
 
     dontConfigure = true;
@@ -65,9 +65,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
-        "https://web.archive.org/web/20220807022337/https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
+        "https://web.archive.org/web/20221126111123/https://download.geogebra.org/installers/6.0/GeoGebra-Classic-6-MacOS-Portable-${version}.zip"
       ];
-      sha256 = "463ca067c5187e0b639b72bef577b2f1bf73c394c9a1a88071c547e3e1c1888c";
+      hash = "sha256-Qn2MD3W5icX45Tfs19oRV8J3lYmL8T+hp7A+crRb9tQ=";
     };
 
     dontUnpack = true;
