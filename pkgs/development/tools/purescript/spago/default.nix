@@ -1,5 +1,4 @@
 { haskell
-, haskellPackages
 , lib
 
 # The following are only needed for the passthru.tests:
@@ -19,7 +18,7 @@ let
         ];
         changelog =
           "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
-      }) haskellPackages.spago);
+      }) haskell.packages.ghc90.spago);
 in
 
 spago.overrideAttrs (oldAttrs: {
