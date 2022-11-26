@@ -260,6 +260,10 @@ with pkgs;
 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
 
+  alicevision = callPackage ../tools/graphics/alicevision {
+    pcl = pcl.override { vtk = vtkWithQt5; };
+  };
+  
   asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
@@ -1567,6 +1571,10 @@ with pkgs;
 
   mbidled = callPackage ../tools/networking/mbidled { };
 
+  meshroom = callPackage ../applications/misc/meshroom {
+    python = python3;
+  };
+  
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   midimonster = callPackage ../tools/audio/midimonster { };
@@ -19236,6 +19244,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  apriltag = callPackage ../development/libraries/apriltag { };
+  
   aprutil = callPackage ../development/libraries/apr-util { };
 
   aravis = callPackage ../development/libraries/aravis { };
@@ -19581,6 +19591,12 @@ with pkgs;
   coin3d = callPackage ../development/libraries/coin3d { };
 
   soxt = callPackage ../development/libraries/soxt { };
+
+  coin-utils = callPackage ../development/libraries/coin-utils { };
+
+  coin-osi = callPackage ../development/libraries/coin-osi { };
+
+  coin-clp = callPackage ../development/libraries/coin-clp { };
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
@@ -20112,6 +20128,8 @@ with pkgs;
 
   geographiclib = callPackage ../development/libraries/geographiclib { };
 
+  geogram = callPackage ../development/libraries/geogram { };
+  
   geoip = callPackage ../development/libraries/geoip { };
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
@@ -22911,6 +22929,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
   };
 
+  opengv = callPackage ../development/libraries/opengv { };
+  
   openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg = callPackage ../development/libraries/openjpeg { };
@@ -23077,6 +23097,8 @@ with pkgs;
     utils = true;
   };
 
+  popsift = callPackage ../tools/graphics/popsift { };
+  
   popt = callPackage ../development/libraries/popt { };
 
   portaudio = callPackage ../development/libraries/portaudio {
@@ -23949,6 +23971,8 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
+  uncertaintyte = callPackage ../development/libraries/uncertaintyte { };
+  
   unconvert = callPackage ../development/tools/unconvert { };
 
   uncover = callPackage ../tools/security/uncover { };
