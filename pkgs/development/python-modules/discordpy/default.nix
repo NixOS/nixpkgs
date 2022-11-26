@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-243w3J3nb/6GV5ogS/Ev9X3r0GrgUokMq14r5rjOdrA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-243w3J3nb/6GV5ogS/Ev9X3r0GrgUokMq14r5rjOdrA=";
   };
 
   propagatedBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the Discord API";
     homepage = "https://discordpy.rtfd.org/";
+    changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ivar ];
   };
