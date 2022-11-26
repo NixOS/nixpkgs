@@ -1071,14 +1071,7 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
-  stack =
-    self.generateOptparseApplicativeCompletions [ "stack" ]
-      # stack has a bunch of constraints in its .cabal file that don't seem to be necessary
-      (doJailbreak
-          (super.stack.overrideScope (self: super: {
-            # Needs Cabal-3.6
-            Cabal = self.Cabal_3_6_3_0;
-          })));
+  stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
 
   # Too strict version bound on hashable-time.
   # Tests require newer package version.
