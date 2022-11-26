@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nanomq";
-  version = "0.13.1";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     rev = version;
-    hash = "sha256-FJhM1IdS6Ee54JJqJXpvp0OcTJJo2NaB/uP8w3mf/Yw=";
+    hash = "sha256-Q5v4D5k3wPA5tS4aLpDQ+ifr0sBCM7D9NmeHFkQJ8OQ=";
     fetchSubmodules = true;
   };
 
