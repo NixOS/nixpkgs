@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-hZVeW3svuVpwQhQz67uqTPZ7B9pisLCwHhXB2zMLygo=";
+    rev = "b4ba207c18d3103d6df890c0e3a97b469b196b26";
+    sha256 = "0wTwBD1wfHb9ggCTYXV+Z4rGZKSB582GYCp9vNvOeQI=";
+    fetchSubmodules = true;
   };
 
   patches = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DNCNN_VULKAN=1"
     "-DNCNN_BUILD_EXAMPLES=0"
     "-DNCNN_BUILD_TOOLS=0"
-    "-DNCNN_SYSTEM_GLSLANG=1"
+    "-DNCNN_SYSTEM_GLSLANG=0"
     "-DNCNN_PYTHON=0" # Should be an attribute
 
     "-DGLSLANG_TARGET_DIR=${glslang}/lib/cmake"
