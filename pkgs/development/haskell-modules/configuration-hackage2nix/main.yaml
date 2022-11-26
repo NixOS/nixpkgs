@@ -91,6 +91,7 @@ default-package-overrides:
   - hasql-dynamic-statements < 0.3.1.2
   # Its dependency brick >= 1.0 is not yet in stackage
   - brick-skylighting < 1.0
+  - rope-utf16-splay < 0.4.0.0
 
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
