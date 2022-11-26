@@ -424,9 +424,6 @@ To test all packages, see [examples/test-all](examples/test-all).
 - More lisps
 - Test on Linux
 - integrate with borg? First: decide if this belongs in nixpkgs at all.
-- Learn about scopes and see how they apply
-
-I’m sure scopes are relevant. They must be the solution to overriding a single package.
 
 ### TODO: Fetching updates from source packages
 

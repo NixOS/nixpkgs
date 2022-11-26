@@ -8,4 +8,4 @@
 #
 #     nix-build -A alexandria
 
-pkgs.lispPackagesLite.lispPackages
+pkgs.lispPackagesLite

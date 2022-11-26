@@ -1,7 +1,6 @@
 { pkgs ? import ../../../../.. {} }:
 
 with pkgs.lispPackagesLite;
-
 lispDerivation {
   # Added a bunch of unnecessary deps to see how this system handles
   # deduplication

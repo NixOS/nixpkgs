@@ -16,7 +16,7 @@
 #
 #     nix-build -E 'import ./. { skip = (import ./. {}).failingTests; }'
 
-pkgs.lib.pipe pkgs.lispPackagesLite.lispPackages [
+pkgs.lib.pipe pkgs.lispPackagesLite [
   (pkgs.lib.attrsets.filterAttrs (n: v:
     (pkgs.lib.attrsets.isDerivation v) && !(builtins.elem n skip)
   ))
