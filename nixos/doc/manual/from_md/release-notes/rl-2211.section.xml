@@ -656,7 +656,7 @@
           <literal>22.11</literal>. This is to make sure that people
           using
           <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side
-          encryption</link> don’t loose access to their files.
+          encryption</link> don’t lose access to their files.
         </para>
         <para>
           In any other case it’s safe to use OpenSSL 3 for PHP’s openssl
