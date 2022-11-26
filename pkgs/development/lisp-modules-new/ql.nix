@@ -190,6 +190,10 @@ let
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
     };
+    cl-devil = pkg: {
+      nativeBuildInputs = [ pkgs.libdevil ];
+      nativeLibs = [ pkgs.libdevil ];
+    };
   };
 
   qlpkgs =
