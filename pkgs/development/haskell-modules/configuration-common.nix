@@ -1552,6 +1552,9 @@ self: super: {
   # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
+  # tests seem to require a different version of hspec-core
+  hspec-contrib = dontCheck super.hspec-contrib;
+
   # github.com/ucsd-progsys/liquidhaskell/issues/1729
   liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
