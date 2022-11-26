@@ -27776,6 +27776,8 @@ with pkgs;
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
+  booster = callPackage ../applications/system/booster {};
+
   bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
