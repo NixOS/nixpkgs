@@ -21,15 +21,11 @@
     however is rarely the case.
   </para>
   <para>
-    To build the necessary files from your current version of nixpkgs,
-    you can run:
-  </para>
-  <programlisting>
-nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
-</programlisting>
-  <para>
-    This will create a <literal>result</literal> tarball containing the
-    following:
+    You can download a <literal>nixos.kexecTarball</literal> build
+    corresponding to your system from the <literal>nixos-YY.MM</literal>
+    jobsets (or <literal>trunk-combined</literal> for unstable) on
+    <link xlink:href="https://hydra.nixos.org/project/nixos">the NixOS
+    Hydra project</link>. This contains the following:
   </para>
   <itemizedlist spacing="compact">
     <listitem>
@@ -56,6 +52,13 @@ nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     </listitem>
   </itemizedlist>
   <para>
+    Alternatively, you can get a tarball corresponding to an existing
+    Nix installation’s current version of nixpkgs:
+  </para>
+  <programlisting>
+nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
+</programlisting>
+  <para>
     This file is meant to be copied over to the other already running
     Linux distribution.
   </para>
@@ -66,20 +69,34 @@ nix-build -A kexecTarball.x86_64-linux '&lt;nixpkgs/nixos/release.nix&gt;'
     be booting into an (ephemeral) NixOS installation medium.
   </para>
   <para>
-    In case you want to describe your own system closure to kexec into,
-    instead of the default installer image, you can build your own
-    <literal>configuration.nix</literal>:
+    You can also enable SSH login as the <literal>nixos</literal> user
+    by specifying an authorized keys file, or append additional
+    parameters to the kernel command line:
+  </para>
+  <programlisting>
+./kexec-boot \
+  --ssh-authorized-keys ~/.ssh/authorized_keys \
+  --append 'panic=30 boot.panic_on_fail'
+</programlisting>
+  <para>
+    In case you want to customize things further, you can build your own
+    <literal>configuration.nix</literal> to describe a system closure to
+    kexec into instead of the default installer image:
   </para>
   <programlisting language="bash">
-{ modulesPath, ... }: {
+{ pkgs, modulesPath, ... }: {
   imports = [
     (modulesPath + &quot;/installer/netboot/netboot-minimal.nix&quot;)
   ];
 
-  services.openssh.enable = true;
-  users.users.root.openssh.authorizedKeys.keys = [
-    &quot;my-ssh-pubkey&quot;
-  ];
+  environment.systemPackages = [ pkgs.kakoune ];
+
+  users.users.nixos = {
+    shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      &quot;my-ssh-pubkey&quot;
+    ];
+  };
 }
 </programlisting>
   <programlisting>
