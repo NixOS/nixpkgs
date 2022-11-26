@@ -777,6 +777,8 @@ with pkgs;
 
   pet = callPackage ../development/tools/pet { };
 
+  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear {};
+
   pkger = callPackage ../development/libraries/pkger { };
 
   tapview = callPackage ../development/tools/tapview { };
