@@ -12,8 +12,8 @@
 , gtk3
 , libX11
 , libfm
+, libwnck
 , libwnck2
-, libwnck3
 , libXmu
 , libXpm
 , cairo
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     (if withGtk3 then gtk3 else gtk2)
     libX11
     (libfm.override { inherit withGtk3; })
-    (if withGtk3 then libwnck3 else libwnck2)
+    (if withGtk3 then libwnck else libwnck2)
     libXmu
     libXpm
     cairo
