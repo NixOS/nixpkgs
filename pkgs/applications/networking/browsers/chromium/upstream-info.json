@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "107.0.5304.110",
-    "sha256": "1k7yjsb4i7m8i5mk018v7z25r4x1ypyprz4hnyrn7vk2983lhdfk",
-    "sha256bin64": "06rlxwbvp7rpw2rdpnjzl1cn7cr1rwlb20wz8r0cndjcjyzd3rjj",
+    "version": "107.0.5304.121",
+    "sha256": "12z0fhgxcsdkf6shnsg9maj3v901226cjcy8y2x8m88maw2apc0j",
+    "sha256bin64": "0dxcf0h5ngrfrdnygwvbxfjbwgaxp9dk3r4x0iin34m3b85mzzim",
     "deps": {
       "gn": {
         "version": "2022-09-14",
