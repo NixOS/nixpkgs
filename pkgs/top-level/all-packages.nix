@@ -14762,9 +14762,7 @@ with pkgs;
 
   marst = callPackage ../development/compilers/marst { };
 
-  mercury = callPackage ../development/compilers/mercury {
-    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  mercury = callPackage ../development/compilers/mercury { };
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
