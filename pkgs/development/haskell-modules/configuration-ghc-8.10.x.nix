@@ -121,6 +121,8 @@ self: super: {
     ghc-prim = self.hashable;
   };
 
+  hashable = addBuildDepend self.base-orphans super.hashable;
+
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
 
