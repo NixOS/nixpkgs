@@ -2560,35 +2560,40 @@ self: super: {
   # Too strict upper bound on HTTP
   oeis = doJailbreak super.oeis;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
-  # We need to build purescript with these dependencies and thus also its reverse
-  # dependencies to avoid version mismatches in their dependency closure.
-  # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
-  purescriptOverlay = self: super: {
-    # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
-    # but it has a problem with parsing the `async` keyword.  It doesn't allow
-    # `async` to be used as an object key:
-    # https://github.com/erikd/language-javascript/issues/131
-    language-javascript = self.language-javascript_0_7_0_0;
-  };
-in {
-  purescript =
-    lib.pipe
-      (super.purescript.overrideScope purescriptOverlay)
-      ([
-        # PureScript uses nodejs to run tests, so the tests have been disabled
-        # for now.  If someone is interested in figuring out how to get this
-        # working, it seems like it might be possible.
-        dontCheck
-        # The current version of purescript (0.14.5) has version bounds for LTS-17,
-        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
-        # likely be removed when purescript-0.14.6 is released.
-        doJailbreak
-        # Generate shell completions
-        (self.generateOptparseApplicativeCompletions [ "purs" ])
-      ]);
+  inherit
+    (let
+      # We need to build purescript with these dependencies and thus also its reverse
+      # dependencies to avoid version mismatches in their dependency closure.
+      # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
+      purescriptOverlay = self: super: {
+        # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
+        # but it has a problem with parsing the `async` keyword.  It doesn't allow
+        # `async` to be used as an object key:
+        # https://github.com/erikd/language-javascript/issues/131
+        language-javascript = self.language-javascript_0_7_0_0;
+      };
+    in {
+      purescript =
+        lib.pipe
+          (super.purescript.overrideScope purescriptOverlay)
+          ([
+            # PureScript uses nodejs to run tests, so the tests have been disabled
+            # for now.  If someone is interested in figuring out how to get this
+            # working, it seems like it might be possible.
+            dontCheck
+            # The current version of purescript (0.14.5) has version bounds for LTS-17,
+            # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
+            # likely be removed when purescript-0.14.6 is released.
+            doJailbreak
+            # Generate shell completions
+            (self.generateOptparseApplicativeCompletions [ "purs" ])
+          ]);
 
-  purenix = super.purenix.overrideScope purescriptOverlay;
+      purenix = super.purenix.overrideScope purescriptOverlay;
+    })
+    purescript
+    purenix
+    ;
 
   # 2022-11-05: https://github.com/ysangkok/haskell-tzdata/issues/3
   tzdata = dontCheck super.tzdata;
@@ -2603,4 +2608,4 @@ in {
   swarm = doJailbreak (super.swarm.override {
     brick = doJailbreak (dontCheck super.brick_1_3);
   });
-})
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
