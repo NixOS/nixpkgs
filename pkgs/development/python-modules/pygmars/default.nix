@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pygmars";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "0wghk4nzplpl26iwrgvm0n9x88nyxlcxz4ywss4nwdr4hfccl28l";
+    sha256 = "sha256-PiH1lV1Vt9VTSOB+jep8FHIdk8qnauxj4nP3CIi/m7o=";
   };
 
   dontConfigure = true;
