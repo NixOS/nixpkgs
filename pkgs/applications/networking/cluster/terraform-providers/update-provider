@@ -103,27 +103,21 @@ echo_provider() {
 pushd "$(dirname "$0")" >/dev/null
 
 if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
-  echo_provider "init"
-  source_address=registry.terraform.io/${provider}
+  homepage="https://registry.terraform.io/providers/${provider}"
   provider=$(basename "${provider}")
-  update_attr "provider-source-address" "${source_address}"
+  echo_provider "init"
+  update_attr homepage "${homepage}"
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
-else
-  source_address="$(read_attr provider-source-address)"
 fi
+
+homepage="$(read_attr homepage)"
 
 old_vendor_hash=$(read_attr vendorHash)
 old_rev=$(read_attr rev)
 
-# The provider source address (used inside Terraform `required_providers` block) is
-# used to compute the registry API endpoint
-#
-# registry.terraform.io/hashicorp/aws (provider source address)
-# registry.terraform.io/providers/hashicorp/aws (provider URL for the website)
-# registry.terraform.io/v1/providers/hashicorp/aws (provider URL for the JSON API)
-registry_response=$(curl -s https://"${source_address/\///v1/providers/}")
+registry_response=$(curl -s "${homepage//providers/v1/providers}")
 
 rev="$(jq -r '.tag' <<<"${registry_response}")"
 if [[ ${old_rev} == "${rev}" && ${force} != 1 && -z ${vendorHash} && ${old_vendor_hash} != "${vendorHash}" ]]; then

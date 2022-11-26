@@ -24,10 +24,13 @@ let
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
      , mkProviderGoModule ? buildGoModule
-       # Looks like "registry.terraform.io/vancluever/acme"
-     , provider-source-address
+       # "https://registry.terraform.io/providers/vancluever/acme"
+     , homepage ? ""
+       # "registry.terraform.io/vancluever/acme"
+     , provider-source-address ? lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ] homepage
      , ...
      }@attrs:
+      assert lib.stringLength provider-source-address > 0;
       mkProviderGoModule {
         pname = repo;
         inherit vendorHash version deleteVendor proxyVendor;
@@ -40,6 +43,10 @@ let
         src = mkProviderFetcher {
           name = "source-${rev}";
           inherit owner repo rev hash;
+        };
+
+        meta = {
+          inherit homepage;
         };
 
         # Move the provider to libexec
