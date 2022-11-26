@@ -23844,6 +23844,8 @@ with pkgs;
 
   listmonk = callPackage ../servers/mail/listmonk { };
 
+  linx-server = callPackage ../servers/web-apps/linx-server {};
+
   livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
