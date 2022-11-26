@@ -17,6 +17,7 @@ let
     ({ owner
      , repo
      , rev
+     , spdx ? "UNSET"
      , version ? lib.removePrefix "v" rev
      , hash ? throw "use hash instead of sha256" # added 2202/09
      , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
@@ -47,6 +48,7 @@ let
 
         meta = {
           inherit homepage;
+          license = lib.getLicenseFromSpdxId spdx;
         };
 
         # Move the provider to libexec
@@ -77,6 +79,8 @@ let
       netlify = automated-providers.netlify.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
       pass = automated-providers.pass.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
       tencentcloud = automated-providers.tencentcloud.overrideAttrs (_: { meta.broken = stdenv.isDarwin; });
+      # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
+      checkly = automated-providers.checkly.override { spdx = "MIT"; };
       gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });

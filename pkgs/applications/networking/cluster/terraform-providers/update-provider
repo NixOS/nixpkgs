@@ -34,6 +34,7 @@ DOC
 build=1
 force=
 provider=
+spdx=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -47,6 +48,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --no-build)
     build=0
+    shift
+    ;;
+  --no-spdx)
+    spdx=0
     shift
     ;;
   *)
@@ -130,6 +135,12 @@ org="$(echo "${provider_source_url}" | cut -d '/' -f 4)"
 update_attr owner "${org}"
 repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
+
+if [[ ${spdx} == 1 ]]; then
+  spdx="$(curl -L -s "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+  update_attr spdx "${spdx}"
+fi
+
 echo_provider "calculating hash"
 hash=$(generate_hash src)
 update_attr hash "${hash}"
