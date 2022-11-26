@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , diskcache
+, eventlet
 , fetchFromGitHub
 , more-itertools
 , pytestCheckHook
@@ -10,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "fasteners";
-  version = "0.17.3";
+  version = "0.18";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "harlowja";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FVhHp8BZ/wQQyr5AcuDo94LlflixhjZ0SnheSdHuDVQ=";
+    hash = "sha256-FGcGGRfObOqXuURyEuNt/KDn51POpdNPUJJKtMcLJNI=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +29,17 @@ buildPythonPackage rec {
 
   checkInputs = [
     diskcache
+    eventlet
     more-itertools
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "fasteners"
+  ];
+
+  pytestFlagsArray = [
+    "tests/"
   ];
 
   meta = with lib; {
