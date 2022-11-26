@@ -61,6 +61,14 @@ rec {
     (args // {
       inherit name extraPkgs;
       src = extract { inherit name src; };
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru = lib.pipe args [
+        lib.attrNames
+        (lib.remove "src")
+        (removeAttrs args)
+      ] // args.passthru or { };
     });
 
   defaultFhsEnvArgs = {
