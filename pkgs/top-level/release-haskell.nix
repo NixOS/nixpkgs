@@ -403,12 +403,6 @@ let
         compilerNames.ghc924
         compilerNames.ghc925
       ];
-      purescript-cst = [
-        compilerNames.ghc8107
-      ];
-      purescript-ast = [
-        compilerNames.ghc8107
-      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
