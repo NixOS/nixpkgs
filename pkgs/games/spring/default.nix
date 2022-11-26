@@ -21,7 +21,7 @@
 , curl
 , makeWrapper
 , jdk
-, python
+, python3
 , systemd
 , libunwind
 , which
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     minizip
   ]
   ++ lib.optional withAI jdk
-  ++ lib.optional withAI python;
+  ++ lib.optional withAI python3;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
