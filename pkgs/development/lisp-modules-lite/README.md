@@ -32,10 +32,9 @@ with rec {
   hPkgsSrc = pkgs.fetchFromGitHub {
     owner = "hraban";
     repo = "nixpkgs";
-    # Put the latest revision of the github.com/hraban/nixpkgs
-    # feat/lisp-packages-lite branch here
+    # replace these two lines with the output of
+    # nix run nixpkgs#nix-prefetch-github -- --rev feat/lisp-packages-lite hraban nixpkgs --nix | grep 'rev\|sha'
     rev = "0000000000000000000000000000000000000000";
-    # Enter the hash suggested by nix-build on error
     sha256 = "";
   };
   lispPackagesLite = (import hPkgsSrc {}).lispPackagesLite.override {
@@ -46,30 +45,17 @@ with rec {
 with lispPackagesLite;
 ```
 
-3. Substitute the `00000...` with the output of:
-
+3. Run the following command:
 
 ```sh
-git ls-remote https://github.com/hraban/nixpkgs feat/lisp-packages-lite | awk '{print $1}'
+nix run nixpkgs#nix-prefetch-github -- --nix --rev feat/lisp-packages-lite hraban nixpkgs | grep 'rev\|sha'
 ```
 
-(E.g. "5cb59648f2a02fac400f0c3612cf9b2e40ed63de")
+Grab the two lines of output, and replace their corresponding lines in the snippet you just pasted, in step 2.
 
-4. Run `nix-build`. This will take a long time (minutes), and it will fail. That’s normal. It should give you this error message:
+4. Run `nix-build`
 
-```
-unpacking source archive /private/tmp/nix-build-source.drv-0/5cb59648f2a02fac400f0c3612cf9b2e40ed63de.tar.gz
-error: hash mismatch in fixed-output derivation '/nix/store/n0m267sy3vr24d6cw6wyn42449f2y23h-source.drv':
-         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-F0NMtivSGMGF5sb7MlXg1nGf3y2I4ZypmLrhfmlRi1E=
-(use '--show-trace' to show detailed location information)
-```
-
-5. Copy that random-looking `sha256-F0N..` (not the AAAA one), including the `sha256-` part, and paste it in the `sha256` field of your default.nix.
-
-6. Run `nix-build` again.
-
-7. Done. You should have your binary in `result/bin/demo`. Feel free to mess around in the source files and rebuild.
+5. Done. You should have your binary in `result/bin/demo`. Feel free to mess around in the source files and rebuild.
 
 ### Nix
 
@@ -338,10 +324,9 @@ with rec {
   hPkgsSrc = pkgs.fetchFromGitHub {
     owner = "hraban";
     repo = "nixpkgs";
-    # Put the latest revision of the github.com/hraban/nixpkgs
-    # feat/lisp-packages-lite branch here
+    # replace these two lines with the output of
+    # nix run nixpkgs#nix-prefetch-github -- --rev feat/lisp-packages-lite hraban nixpkgs --nix | grep 'rev\|sha'
     rev = "0000000000000000000000000000000000000000";
-    # Enter the hash suggested by nix-build on error
     sha256 = "";
   };
   lispPackagesLite = (import hPkgsSrc {}).lispPackagesLite.override {
