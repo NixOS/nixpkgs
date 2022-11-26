@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UVox7kuta7SK4FF4xYiuSaAqNd76Ad2aMpMwaQM2gWU=";
+    hash = "sha256-UVox7kuta7SK4FF4xYiuSaAqNd76Ad2aMpMwaQM2gWU=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +40,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
+    description = "Implementation of chunked, compressed, N-dimensional arrays";
     homepage = "https://github.com/zarr-developers/zarr";
+    changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers: [ costrouc ];
   };
 }
