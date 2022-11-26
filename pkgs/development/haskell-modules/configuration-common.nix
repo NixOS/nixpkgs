@@ -2275,13 +2275,15 @@ self: super: {
   # Upgrade of unordered-containers in Stackage causes ordering-sensitive test to fail
   # https://github.com/commercialhaskell/stackage/issues/6366
   # https://github.com/kapralVV/Unique/issues/9
+  # Too strict bounds on hashable
+   # https://github.com/kapralVV/Unique/pull/10
   Unique = assert super.Unique.version == "0.4.7.9"; overrideCabal (drv: {
     testFlags = [
       "--skip" "/Data.List.UniqueUnsorted.removeDuplicates/removeDuplicates: simple test/"
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/unique: simple test/"
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
     ] ++ drv.testFlags or [];
-  }) super.Unique;
+  }) (doJailbreak super.Unique);
 
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = assert super.aeson-casing.version == "0.2.0.0"; overrideCabal (drv: {
