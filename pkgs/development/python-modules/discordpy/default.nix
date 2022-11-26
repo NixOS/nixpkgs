@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "discord.py";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Rapptz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DX9AmVhwP7XgzUApY8d+UB6LGqymErsaSzaisuKAOB0=";
+    sha256 = "sha256-243w3J3nb/6GV5ogS/Ev9X3r0GrgUokMq14r5rjOdrA=";
   };
 
   propagatedBuildInputs = [
