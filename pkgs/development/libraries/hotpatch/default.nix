@@ -11,21 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "169vdh55wsbn6fl58lpzqx64v6ifzh7krykav33x1d9hsk98qjqh";
   };
 
-  doCheck = true;
-
   nativeBuildInputs = [ cmake ];
-
-  preConfigure = ''
-    substituteInPlace test/loader.c \
-      --replace \"/lib64/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib/ld-linux-x86-64.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace \"/lib32/ld-linux.so.2 \""$(cat $NIX_CC/nix-support/dynamic-linker)"
-  '';
-
-  checkPhase = ''
-    LD_LIBRARY_PATH=$(pwd)/src make test
-  '';
 
   meta = with lib; {
     description = "Hot patching executables on Linux using .so file injection";
