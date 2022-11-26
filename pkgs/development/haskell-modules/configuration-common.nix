@@ -2571,21 +2571,6 @@ self: super: {
     # https://github.com/erikd/language-javascript/issues/131
     language-javascript = self.language-javascript_0_7_0_0;
   };
-
-  # Don't support GHC >= 9.0 yet and need aeson 1.5.*
-  purescriptStOverride = drv:
-    let
-      overlayed = drv.overrideScope (
-        lib.composeExtensions
-          purescriptOverlay
-          (self: super: {
-            aeson = self.aeson_1_5_6_0;
-          })
-      );
-    in
-    if lib.versionAtLeast self.ghc.version "9.0"
-    then dontDistribute (markBroken overlayed)
-    else overlayed;
 in {
   purescript =
     lib.pipe
@@ -2605,10 +2590,6 @@ in {
         markUnbroken
         doDistribute
       ]);
-
-  purescript-cst = purescriptStOverride super.purescript-cst;
-
-  purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = super.purenix.overrideScope purescriptOverlay;
 
