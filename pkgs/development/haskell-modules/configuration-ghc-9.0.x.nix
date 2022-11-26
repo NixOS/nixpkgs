@@ -78,7 +78,7 @@ self: super: {
       [ (overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; }))
         doJailbreak
         dontCheck
-        (addExtraLibrary self.base-orphans)
+        (addBuildDepend self.base-orphans)
       ];
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
