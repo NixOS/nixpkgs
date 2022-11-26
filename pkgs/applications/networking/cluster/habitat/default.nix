@@ -1,38 +1,57 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config
-, libsodium, libarchive, openssl, zeromq }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, perl
+, libsodium
+, libarchive
+, openssl
+, zeromq
+, protobuf
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
-  # Newer versions required protobuf, which requires some finesse to get to
-  # compile with the vendored protobuf crate.
-  version = "0.90.6";
+  version = "1.6.614";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    sha256 = "0rwi0lkmhlq4i8fba3s9nd9ajhz2dqxzkgfp5i8y0rvbfmhmfd6b";
+    sha256 = "17yVH750pNfpBM+3t1IGuZcslyfFeKDZ+9dLbOt8Rs0=";
   };
 
-  cargoSha256 = "1c058sjgd79ps8ahvxp25qyc3a6b2csb41vamrphv9ygai60mng6";
+  cargoSha256 = "14b6sV2QjlEqbDsJwnfbyRVUbeskacq39cSR1blYBrg=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsodium libarchive openssl zeromq ];
+  nativeBuildInputs = [
+    pkg-config
+    perl # used by openssl-sys to configure
+  ];
 
-  cargoBuildFlags = ["--package hab"];
+  buildInputs = [
+    libarchive
+    openssl
+    zeromq
+    protobuf
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test"
-    cargo test --package hab
-    runHook postCheck
+  preBuild = ''
+    export PROTOC=${protobuf}/bin/protoc
+    export PROTOC_INCLUDE="${protobuf}/include";
   '';
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
+
+  cargoBuildFlags = [ "--package hab" ];
+
+  # the test suite calls out to the public internet and tries to install busybox-static in multiple places
+  doCheck = false;
 
   meta = with lib; {
     description = "An application automation framework";
     homepage = "https://www.habitat.sh";
     license = licenses.asl20;
     maintainers = with maintainers; [ rushmorem ];
-    platforms = [ "x86_64-linux" ];
   };
 }

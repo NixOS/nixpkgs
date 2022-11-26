@@ -1,0 +1,13 @@
+diff --git a/components/builder-api-client/src/builder.rs b/components/builder-api-client/src/builder.rs
+index a920bc950..31509f35f 100644
+--- a/components/builder-api-client/src/builder.rs
++++ b/components/builder-api-client/src/builder.rs
+@@ -1621,7 +1621,7 @@ mod tests {
+ 
+     #[tokio::test]
+     async fn package_search() {
+-        let client = BuilderAPIClient::new("http://test.com", "", "", None).expect("valid client");
++        let client = BuilderAPIClient::new("http://localhost", "", "", None).expect("valid client");
+ 
+         let sample_data = vec!["one_a", "one_b", "one_c", "one_d", "one_e", "two_a", "two_b",
+                                "two_c", "two_d", "two_e",];
