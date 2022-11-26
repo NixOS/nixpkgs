@@ -53,6 +53,10 @@ let
     "2.2.9" = {
       sha256 = "sha256-fr69bSAj//cHewNy+hFx+IBSm97GEE8gmDKXwv63wXI=";
     };
+
+    "2.2.10" = {
+      sha256 = "sha256-jMPDqHYSI63vFEqIcwsmdQg6Oyb6FV1wz5GruTXpCDM=";
+    };
   };
 
 in with versionMap.${version};
@@ -98,6 +102,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/sbcl/sbcl/commit/f88989694200a5192fb68047d43d0500b2165f7b.patch";
       sha256 = "sha256-MXEsK46RARPmB2WBPcrmZk6ArliU8DgHw73x9+/QAmk=";
+    })
+  ] ++ lib.optionals (version == "2.2.10") [
+    # hard-coded /bin/cat to just ‘cat’, trusting the PATH
+    (fetchpatch {
+      url = "https://github.com/sbcl/sbcl/commit/8ed662fbfeb5dde35eb265f390b55b01f79f70c1.patch";
+      sha256 = "sha256-2aqb13AFdw9KMf8KQ9yj1HVxgoFWZ9xWmnoDdbRSLy4=";
     })
   ];
 
