@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "protoc-gen-connect-go";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "connect-go";
     rev = "v${version}";
-    sha256 = "sha256-v+WBO7gcoInI9MgEDxuz1kBSz0w5+RGpaXrqACE9WRA=";
+    sha256 = "sha256-h1zZ4xYGS/zemb/vPvDGHRiIm4bCLeghhqHft2ll+oY=";
   };
 
   vendorSha256 = "sha256-Bh2JCWTaML/QU/sLBsxLKMzzH++K22BTGusfcVW2GBw=";
