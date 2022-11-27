@@ -93,14 +93,11 @@ let
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
-          "''${curl[@]}" --silent --request POST \
+          "''${curl[@]}" --silent --request GET \
             --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download -o /dev/null
+            --header "accept: */*" \
+            https://www.modartt.com/ -o /dev/null
+
           json=$(
             "''${curl[@]}" --silent --request POST \
             --cookie cookies \
@@ -109,8 +106,9 @@ let
             --header "content-type: application/json; charset=UTF-8" \
             --header "accept: application/json, text/javascript, */*" \
             --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download
+            https://www.modartt.com/api/0/download
           )
+
           url=$(echo $json | ${jq}/bin/jq -r .url)
           "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
@@ -140,7 +138,7 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data @login.json \
-          https://www.modartt.com/json/session
+          https://www.modartt.com/api/0/session
 
         json=$(
           "''${curl[@]}" --silent --request POST \
@@ -150,10 +148,10 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data-raw '{"file": "${name}", "get": "url"}' \
-          https://www.modartt.com/json/download
+          https://www.modartt.com/api/0/download
         )
-        url=$(echo $json | ${jq}/bin/jq -r .url)
 
+        url=$(echo $json | ${jq}/bin/jq -r .url)
         "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
