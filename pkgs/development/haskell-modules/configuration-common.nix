@@ -2315,7 +2315,4 @@ self: super: {
 
   # unix-compat <0.5
   hxt-cache = doJailbreak super.hxt-cache;
-
-  # unix-compat <0.5
-  vinyl-utils = doJailbreak super.vinyl-utils;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
