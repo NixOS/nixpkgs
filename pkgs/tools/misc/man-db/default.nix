@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    sha256 = "sha256-QTDhpiQSgDWe9eJdrsaFUzwKGTBnSRYgKrBXnlojLFE=";
+    sha256 = "sha256-LquqUlE0mEfenJ5DxjTZhsvMb4dkLR2cuGCOwYSHtsw=";
   };
 
   outputs = [ "out" "doc" ];
