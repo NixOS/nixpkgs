@@ -104,10 +104,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1h69kvk5nrjfznms3dy9xk552xzv4kbq7ks9wgj1fdbxzc3rszng";
+      sha256 = "1m7625widk7a5r57q2q7k4j8g5bwcd8giiw2gl2bw2ajav4psz6s";
       type = "gem";
     };
-    version = "1.664.0";
+    version = "1.665.0";
   };
   aws-sdk-core = {
     groups = ["default"];
@@ -504,20 +504,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0s28igrsspxmhwmwalv9c7g6ld2glzns2vhlfqmc3jnvnr68yhf1";
+      sha256 = "1xmscaydfswvy52p5narqy2kvi431qzk89pwqphpsjh3jymib3pd";
       type = "gem";
     };
-    version = "1.4.3";
+    version = "1.5.0";
   };
   jmespath = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mnvb80cdg7fzdcs3xscv21p28w4igk5sj5m7m81xp8v2ks87jj0";
+      sha256 = "1cdw9vw2qly7q7r41s7phnac264rbsdqgj4l0h4nqgbjb157g393";
       type = "gem";
     };
-    version = "1.6.1";
+    version = "1.6.2";
   };
   jsobfu = {
     groups = ["default"];
@@ -604,12 +604,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "1847611817b4dbea38ac13c83ac2c4abd92d7bc2";
-      sha256 = "12zhrs6v2q0zkqk9wnmgf5ryr1vzqzbmrgrdwk09pszdl0xjy2nk";
+      rev = "04fa45669108bfbd5029f69544ba4bd1f9cf765f";
+      sha256 = "09fny0svhb6vf3vx443abqnx44prg8fwq7a7sf28xmm7q6skjpf5";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.2.27";
+    version = "6.2.28";
   };
   metasploit-model = {
     groups = ["default"];
@@ -957,10 +957,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1sfk4i52yijcggkzkwj3z6k2iv9fdacmcgcid1c8xjcldh93fhpg";
+      sha256 = "1kljmw1lhzqjcwnwadr5m2khii0h2lsah447zb9vgirrv5jszg9h";
       type = "gem";
     };
-    version = "3.0.3";
+    version = "3.0.4";
   };
   rack-test = {
     groups = ["default"];
@@ -1337,10 +1337,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0znx4qhvgah5k696crv954xkrh8z4gick2fx04xl67wng7nnwrrc";
+      sha256 = "1lgvrna3wvm21y350hrasdb4w8119cn1fd0prrrj76ws5w0pdzvc";
       type = "gem";
     };
-    version = "3.0.3";
+    version = "3.0.4";
   };
   sqlite3 = {
     dependencies = ["mini_portile2"];

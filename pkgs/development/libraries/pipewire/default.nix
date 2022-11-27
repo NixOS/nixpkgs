@@ -3,7 +3,6 @@
 , buildPackages
 , fetchFromGitLab
 , fetchpatch
-, removeReferencesTo
 , python3
 , meson
 , ninja
@@ -20,7 +19,6 @@
 , libjack2
 , libusb1
 , udev
-, libva
 , libsndfile
 , vulkan-headers
 , vulkan-loader
@@ -33,7 +31,6 @@
 , nixosTests
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm

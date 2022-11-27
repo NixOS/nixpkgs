@@ -11,10 +11,10 @@ buildNpmPackage rec {
     hash = "sha256-XgwlRdwUSl4gIRKqk6BnMAKarVvp291zk8vmNkuRWKo=";
   };
 
-  patches = [
-    # Use generated package-lock.json since upstream does not provide one in releases
-    ./package-lock.json.patch
-  ];
+  # Use generated package-lock.json since upstream does not provide one in releases
+  postPatch = ''
+    ln -sT ${./package-lock.json} ./package-lock.json
+  '';
 
   npmDepsHash = "sha256-5KZXZ4agHcAh3gai5w9YodETIEGJtDq/kyEZOHb9dOc=";
 
@@ -38,7 +38,7 @@ buildNpmPackage rec {
     runHook preInstall
 
     # prune unused deps
-    npm prune --omit dev $npmFlags
+    npm prune --omit dev --no-save $npmFlags
 
     # copy built app and node_modules directories
     mkdir -p $out/lib/node_modules/open-stage-control

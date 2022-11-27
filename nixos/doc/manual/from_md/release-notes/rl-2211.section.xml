@@ -656,7 +656,7 @@
           <literal>22.11</literal>. This is to make sure that people
           using
           <link xlink:href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html">server-side
-          encryption</link> don’t loose access to their files.
+          encryption</link> don’t lose access to their files.
         </para>
         <para>
           In any other case it’s safe to use OpenSSL 3 for PHP’s openssl
@@ -707,6 +707,14 @@
           because of stability and compatibility issues. Users who still
           wish to remain using GTK can do so by using
           <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kanidm</literal> has been updated to 1.1.0-alpha.10
+          and now requires a tls certificate and key. It will always
+          start an https and – if enabled – an ldaps server and no http
+          and ldap server anymore.
         </para>
       </listitem>
       <listitem>
@@ -1692,6 +1700,22 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <literal>services.picom.experimentalBackends</literal> was
           removed since it is now the default and the option will cause
           <literal>picom</literal> to quit instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackage.callHackage</literal> is not always
+          invalidated if <literal>all-cabal-hashes</literal> changes,
+          leading to less rebuilds of haskell dependencies.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>haskellPackages.callHackage</literal> and
+          <literal>haskellPackages.callCabal2nix</literal> (and related
+          functions) no longer keep a reference to the
+          <literal>cabal2nix</literal> call used to generate them. As a
+          result, they will be garbage collected more often.
         </para>
       </listitem>
     </itemizedlist>
