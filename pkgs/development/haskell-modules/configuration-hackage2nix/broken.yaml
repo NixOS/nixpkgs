@@ -2498,6 +2498,7 @@ broken-packages:
   - html-rules
   - html-tokenizer
   - htoml-megaparsec
+  - htoml
   - htsn
   - htssets
   - http2-client
