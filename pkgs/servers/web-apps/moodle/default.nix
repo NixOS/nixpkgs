@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeText, plugins ? [ ] }:
+{ lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
 
 let
   version = "4.0.5";
@@ -55,6 +55,10 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) moodle;
+  };
 
   meta = with lib; {
     description =
