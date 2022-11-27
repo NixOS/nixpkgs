@@ -9,11 +9,11 @@ let
   python = python3.override {
     packageOverrides = self: super: {
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.26.0a5";
+        version = "1.27.0a1";
         pname = "tulir-telethon";
         src = super.fetchPypi {
           inherit pname version;
-          sha256 = "sha256-s6pj9kHqcl6XU1KQ/aOw1XWQ3CyDotaDl0m7aj9SbW4=";
+          sha256 = "sha256-tABAY4UlTyMK1ZafIFawegjBAtcnq3HMNbE1L6WaT3E=";
         };
         doCheck = false;
       });
@@ -21,22 +21,17 @@ let
   };
 in python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.12.1";
+  version = "0.12.2";
   disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
     rev = "v${version}";
-    sha256 = "sha256-ecNcoNz++HtuDZnDLsXfPL0MRF+XMQ1BU/NFkKPbD5U=";
+    sha256 = "sha256-htCk0VLr6GfXbpYWF/2bmpko7gSVlkH6HwDjOMhW8is=";
   };
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "asyncpg>=0.20,<0.27" "asyncpg>=0.20"
-  '';
 
   propagatedBuildInputs = with python.pkgs; ([
     ruamel-yaml
