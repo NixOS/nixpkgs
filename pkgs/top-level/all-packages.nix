@@ -14950,6 +14950,8 @@ with pkgs;
     inherit (llvmPackages_rocm) clang llvm;
   };
 
+  rocprofiler = callPackage ../development/libraries/rocprofiler { };
+
   hipcub = callPackage ../development/libraries/hipcub { };
 
   hipsparse = callPackage ../development/libraries/hipsparse { };
