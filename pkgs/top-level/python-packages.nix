@@ -9648,6 +9648,8 @@ self: super: with self; {
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
+  recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
