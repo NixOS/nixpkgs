@@ -15,16 +15,16 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-can";
+  pname = "can";
   version = "4.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
-    repo = pname;
-    rev = version;
+    repo = "python-can";
+    rev = "refs/tags/${version}";
     hash = "sha256-/z7zBfVbO7x4UtzWOXolH2YrtYWgsvRLObWwz8sqOEc=";
   };
 
@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
+    changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab sorki ];
   };
