@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
 , xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 stdenv.mkDerivation rec {
