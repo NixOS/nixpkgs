@@ -28840,9 +28840,7 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freenet = callPackage ../applications/networking/p2p/freenet {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  freenet = callPackage ../applications/networking/p2p/freenet { };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
 
