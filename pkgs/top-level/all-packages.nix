@@ -22548,6 +22548,8 @@ with pkgs;
 
   speech-tools = callPackage ../development/libraries/speech-tools {};
 
+  speedtest-exporter = callPackage ../development/libraries/speedtest-exporter {};
+
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
   };
