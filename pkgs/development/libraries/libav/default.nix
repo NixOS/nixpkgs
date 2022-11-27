@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, yasm, bzip2, zlib, perl, bash
-, mp3Support    ? true,   lame      ? null
-, speexSupport  ? true,   speex     ? null
-, theoraSupport ? true,   libtheora ? null
-, vorbisSupport ? true,   libvorbis ? null
-, vpxSupport    ? true,   libvpx    ? null
-, x264Support   ? false,  x264      ? null
-, xvidSupport   ? true,   xvidcore  ? null
-, faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? true,   libva     ? null
-, vdpauSupport  ? true,   libvdpau  ? null
-, freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
+, mp3Support    ? true,   lame
+, speexSupport  ? true,   speex
+, theoraSupport ? true,   libtheora
+, vorbisSupport ? true,   libvorbis
+, vpxSupport    ? true,   libvpx
+, x264Support   ? false,  x264
+, xvidSupport   ? true,   xvidcore
+, faacSupport   ? false,  faac
+, vaapiSupport  ? true,   libva
+, vdpauSupport  ? true,   libvdpau
+, freetypeSupport ? true, freetype # it's small and almost everywhere
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
@@ -53,7 +53,7 @@ let
     '';
 
     configurePlatforms = [];
-    configureFlags = assert lib.all (x: x!=null) buildInputs; [
+    configureFlags = [
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
       #"--enable-postproc" # it's now a separate package in upstream
