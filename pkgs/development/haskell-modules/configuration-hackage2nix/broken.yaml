@@ -597,7 +597,6 @@ broken-packages:
   - Cascade
   - cascading
   - caseof
-  - cases
   - cas-hashable
   - casr-logbook
   - casr-logbook-types
@@ -781,7 +780,6 @@ broken-packages:
   - compact-string-fix
   - comparse
   - compdata
-  - compdoc
   - compendium-client
   - competition
   - compilation
@@ -993,7 +991,6 @@ broken-packages:
   - DataIndex
   - data-ivar
   - data-kiln
-  - data-lens
   - datalog
   - data-map-multikey
   - data-named
@@ -1324,7 +1321,6 @@ broken-packages:
   - epic
   - epi-sim
   - epoll
-  - eprocess
   - epubname
   - Eq
   - EqualitySolver
@@ -1990,7 +1986,6 @@ broken-packages:
   - haskell-bitmex-rest
   - haskell-brainfuck
   - haskell-cnc
-  - haskell-coffee
   - haskell-compression
   - haskell-conll
   - haskell-course-preludes
@@ -2046,7 +2041,6 @@ broken-packages:
   - haskhol-core
   - haskmon
   - haskoin
-  - haskoin-core
   - haskoin-util
   - haskore
   - haskore-vintage
@@ -2503,7 +2497,6 @@ broken-packages:
   - html-parse
   - html-rules
   - html-tokenizer
-  - htoml
   - htoml-megaparsec
   - htsn
   - htssets
@@ -2567,7 +2560,6 @@ broken-packages:
   - hx
   - hxmppc
   - HXQ
-  - hxt-cache
   - hxt-pickle-utils
   - hyakko
   - hydra-hs
@@ -2718,7 +2710,6 @@ broken-packages:
   - IsNull
   - iso8601-duration
   - isobmff
-  - isomorphism-class
   - isotope
   - itcli
   - itemfield
@@ -2901,7 +2892,6 @@ broken-packages:
   - language-csharp
   - language-dart
   - language-dockerfile
-  - language-ecmascript
   - language-elm
   - language-gcl
   - language-gemini
@@ -3298,7 +3288,6 @@ broken-packages:
   - monad-atom
   - monad-atom-simple
   - monad-branch
-  - MonadCatchIO-transformers
   - monad-choice
   - MonadCompose
   - monad-fork
@@ -3323,7 +3312,6 @@ broken-packages:
   - monadplus
   - monad-ran
   - monad-recorder
-  - monads-fd
   - MonadStack
   - monad-statevar
   - monad-ste
@@ -3560,7 +3548,6 @@ broken-packages:
   - nullary
   - null-canvas
   - nullpipe
-  - numbered-semigroups
   - NumberSieves
   - NumberTheory
   - numerals-base
@@ -5167,7 +5154,6 @@ broken-packages:
   - th-to-exp
   - th-traced
   - thumbnail-plus
-  - thyme
   - tianbar
   - TicTacToe
   - tictactoe3d
@@ -5314,7 +5300,6 @@ broken-packages:
   - twitchapi
   - twitter
   - twitter-feed
-  - twitter-types
   - tx
   - txtblk
   - TYB
@@ -5374,14 +5359,12 @@ broken-packages:
   - uncertain
   - unescaping-print
   - unfix-binders
-  - unfoldable
   - unicode-data-names
   - unicode-data-scripts
   - unicode-data-security
   - unicode-prelude
   - unicode-symbols
   - unicode-tricks
-  - union
   - union-map
   - uniprot-kb
   - uniqueid
