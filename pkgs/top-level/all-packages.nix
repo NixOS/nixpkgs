@@ -1611,9 +1611,7 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi {
-    inherit (plasma5Packages) kdialog;
-  };
+  ludusavi = callPackage ../applications/backup/ludusavi { };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -6836,8 +6834,6 @@ with pkgs;
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
-  fsfs = callPackage ../tools/filesystems/fsfs { };
-
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
@@ -11243,8 +11239,6 @@ with pkgs;
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
-  screencloud = libsForQt5.callPackage ../applications/graphics/screencloud { };
-
   screenkey = callPackage ../applications/video/screenkey { };
 
   scrub = callPackage ../tools/misc/scrub { };
@@ -12068,8 +12062,6 @@ with pkgs;
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
-
-  tlspool = callPackage ../tools/networking/tlspool { };
 
   tlsx = callPackage ../tools/security/tlsx { };
 
@@ -27016,7 +27008,6 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -28327,8 +28318,6 @@ with pkgs;
   kerbrute = callPackage ../tools/security/kerbrute { };
 
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
-
-  exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
@@ -33102,7 +33091,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  xxh = with python3Packages; toPythonApplication xxh;
+  xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
