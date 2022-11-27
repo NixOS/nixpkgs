@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-krEQd0ak9Uua+r+pYmLStlizgE4HmZBO8Q0I2/gWAwU=";
   };
 
@@ -129,6 +129,7 @@ buildPythonPackage rec {
     broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc AluisioASG ];
   };
