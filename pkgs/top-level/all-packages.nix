@@ -29382,6 +29382,8 @@ with pkgs;
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
+  popura = callPackage ../tools/networking/popura {};
+
   shepherd = nodePackages."@nerdwallet/shepherd";
 
   skate = callPackage ../applications/misc/skate { };
