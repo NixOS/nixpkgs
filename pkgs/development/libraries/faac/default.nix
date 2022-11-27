@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook
-, mp4v2Support ? true, mp4v2 ? null
+, mp4v2Support ? true, mp4v2
 , drmSupport ? false # Digital Radio Mondiale
 }:
-
-assert mp4v2Support -> (mp4v2 != null);
 
 with lib;
 stdenv.mkDerivation rec {
@@ -15,16 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "1lmj0dib3mjp84jhxc5ddvydkzzhb0gfrdh3ikcidjlcb378ghxd";
   };
 
-  configureFlags = [ ]
-    ++ optional mp4v2Support "--with-external-mp4v2"
+  configureFlags = optional mp4v2Support "--with-external-mp4v2"
     ++ optional drmSupport "--enable-drm";
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ ]
-    ++ optional mp4v2Support mp4v2;
+  buildInputs = optional mp4v2Support mp4v2;
 
   enableParallelBuilding = true;
 
