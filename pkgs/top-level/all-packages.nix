@@ -34719,7 +34719,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  sienna = callPackage ../games/sienna { love = love_0_10; };
+  sienna = callPackage ../games/sienna { };
 
   sil = callPackage ../games/sil { };
 
