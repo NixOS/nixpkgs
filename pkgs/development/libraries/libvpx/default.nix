@@ -23,7 +23,7 @@
 , errorConcealmentSupport ? false # decoder conceals losses
 , smallSupport ? false # favor smaller binary over speed
 , postprocVisualizerSupport ? false # macro block/block level visualizers
-, unitTestsSupport ? false, curl ? null, coreutils ? null # unit tests
+, unitTestsSupport ? false, curl, coreutils # unit tests
 , webmIOSupport ? true # input from and output to webm container
 , libyuvSupport ? true # libyuv
 , decodePerfTestsSupport ? false # build decoder perf tests with unit tests
@@ -50,7 +50,6 @@ assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postp
    but is only executed if spatialResamplingSupport is enabled */
 assert spatialResamplingSupport;
 assert postprocVisualizerSupport -> postprocSupport;
-assert unitTestsSupport -> curl != null && coreutils != null;
 assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
