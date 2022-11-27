@@ -6,6 +6,7 @@
 , yapf
 , rubocop
 , rustfmt
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/uniffi-bindgen" \
       --suffix PATH : ${lib.strings.makeBinPath [ ktlint yapf rubocop rustfmt ] }
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";
