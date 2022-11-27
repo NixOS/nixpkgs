@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ j03 SuperSandro2000 ];
+    maintainers = with maintainers; [ j03 ];
   };
 }
