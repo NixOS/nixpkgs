@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchzip
 , writeScript
 , cmake
 , rocm-cmake
@@ -11,7 +12,6 @@
 , hip
 , gfortran
 , git
-, fetchzip ? null
 , gtest ? null
 , boost ? null
 , python3Packages ? null
@@ -19,18 +19,11 @@
 , buildBenchmarks ? false # Seems to depend on tests
 }:
 
-assert (buildTests || buildBenchmarks) -> fetchzip != null;
 assert (buildTests || buildBenchmarks) -> gtest != null;
 assert (buildTests || buildBenchmarks) -> boost != null;
 assert (buildTests || buildBenchmarks) -> python3Packages != null;
 
-let
-  matrices = lib.optionalAttrs (buildTests || buildBenchmarks) import ./deps.nix {
-    inherit fetchzip;
-    mirror1 = "https://sparse.tamu.edu/MM";
-    mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
-  };
-in stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
   repoVersion = "2.3.2";
   rocmVersion = "5.3.3";
@@ -90,30 +83,30 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = lib.optionalString (buildTests || buildBenchmarks) ''
     mkdir -p matrices
 
-    ln -s ${matrices.matrix-01}/*.mtx matrices
-    ln -s ${matrices.matrix-02}/*.mtx matrices
-    ln -s ${matrices.matrix-03}/*.mtx matrices
-    ln -s ${matrices.matrix-04}/*.mtx matrices
-    ln -s ${matrices.matrix-05}/*.mtx matrices
-    ln -s ${matrices.matrix-06}/*.mtx matrices
-    ln -s ${matrices.matrix-07}/*.mtx matrices
-    ln -s ${matrices.matrix-08}/*.mtx matrices
-    ln -s ${matrices.matrix-09}/*.mtx matrices
-    ln -s ${matrices.matrix-10}/*.mtx matrices
-    ln -s ${matrices.matrix-11}/*.mtx matrices
-    ln -s ${matrices.matrix-12}/*.mtx matrices
-    ln -s ${matrices.matrix-13}/*.mtx matrices
-    ln -s ${matrices.matrix-14}/*.mtx matrices
-    ln -s ${matrices.matrix-15}/*.mtx matrices
-    ln -s ${matrices.matrix-16}/*.mtx matrices
-    ln -s ${matrices.matrix-17}/*.mtx matrices
-    ln -s ${matrices.matrix-18}/*.mtx matrices
-    ln -s ${matrices.matrix-19}/*.mtx matrices
-    ln -s ${matrices.matrix-20}/*.mtx matrices
-    ln -s ${matrices.matrix-21}/*.mtx matrices
-    ln -s ${matrices.matrix-22}/*.mtx matrices
-    ln -s ${matrices.matrix-23}/*.mtx matrices
-    ln -s ${matrices.matrix-24}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-01}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-02}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-03}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-04}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-05}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-06}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-07}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-08}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-09}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-10}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-11}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-12}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-13}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-14}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-15}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-16}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-17}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-18}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-19}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-20}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-21}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-22}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-23}/*.mtx matrices
+    ln -s ${finalAttrs.passthru.matrices.matrix-24}/*.mtx matrices
 
     # Not used by the original cmake, causes an error
     rm matrices/*_b.mtx
@@ -140,15 +133,23 @@ in stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocSPARSE/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocsparse "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rocsparse "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
-  '';
+  passthru = {
+    matrices = import ./deps.nix {
+      inherit fetchzip;
+      mirror1 = "https://sparse.tamu.edu/MM";
+      mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
+    };
+
+    updateScript = writeScript "update.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocSPARSE/releases?per_page=1")"
+      repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
+      rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+      update-source-version rocsparse "$repoVersion" --ignore-same-hash --version-key=repoVersion
+      update-source-version rocsparse "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    '';
+  };
 
   meta = with lib; {
     description = "ROCm SPARSE implementation";
