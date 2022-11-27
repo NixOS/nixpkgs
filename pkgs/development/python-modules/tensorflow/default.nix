@@ -9,7 +9,7 @@
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
 # Common deps
-, git, pybind11, which, binutils, glibcLocales, cython, perl
+, git, pybind11, which, binutils, glibcLocales, cython, perl, coreutils
 # Common libraries
 , jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp, nsync
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib, protobuf-core
@@ -311,6 +311,7 @@ let
     postPatch = ''
       # bazel 3.3 should work just as well as bazel 3.1
       rm -f .bazelversion
+      patchShebangs .
     '' + lib.optionalString (!withTensorboard) ''
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
