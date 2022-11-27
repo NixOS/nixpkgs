@@ -61,6 +61,22 @@ let
         };
       });
 
+      caldav = super.caldav.overridePythonAttrs (old: rec {
+        version = "0.9.1";
+        src = fetchFromGitHub {
+          owner = "python-caldav";
+          repo = "caldav";
+          rev = "v${version}";
+          hash = "sha256-Gil0v4pGyp5+TnYPjb8Vk0xTqnQKaeD8Ko/ZWhvkbUk=";
+        };
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace ", 'xandikos<0.2.4'" "" \
+            --replace ", 'radicale'" ""
+        '';
+        checkInputs = old.checkInputs ++ [ self.nose ];
+      });
+
       gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
         version = "4.0.0";
         src = fetchFromGitHub {
