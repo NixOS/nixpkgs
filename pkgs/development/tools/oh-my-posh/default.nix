@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "12.17.2";
+  version = "12.20.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3/spbZhFa9IwScjJqdiwASiojXxuFLW+WXCteOAePOM=";
+    hash = "sha256-nGhPfwZw73w0iJLdBiXjRQnKPnKIuk6K/5GFKeHlcVw=";
   };
 
-  vendorSha256 = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
+  vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
 
   sourceRoot = "source/src";
 
@@ -34,6 +34,6 @@ buildGoModule rec {
     description = "A prompt theme engine for any shell";
     homepage = "https://ohmyposh.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with maintainers; [ lucperkins urandom ];
   };
 }
