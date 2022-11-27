@@ -6,24 +6,19 @@
 , rocm-cmake
 , rocm-opencl-runtime
 , clang
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
+, texlive
+, doxygen
+, sphinx
+, python3Packages
 , openblas ? null
-, buildDocs ? false
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
 assert buildTests -> openblas != null;
 
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = (texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -43,8 +38,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ] ++ lib.optionals buildDocs [
-    "docs"
+    "doc"
   ] ++ lib.optionals buildTests [
     "test"
   ] ++ lib.optionals buildBenchmarks [
@@ -62,16 +56,15 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     clang
-  ];
-
-  buildInputs = [
-    rocm-opencl-runtime
-  ] ++ lib.optionals buildDocs [
     latex
     doxygen
     sphinx
     python3Packages.sphinx_rtd_theme
     python3Packages.breathe
+  ];
+
+  buildInputs = [
+    rocm-opencl-runtime
   ] ++ lib.optionals buildTests [
     openblas
   ];
@@ -95,7 +88,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Unfortunately, it seems like we have to call make on these manually
-  postBuild = lib.optionalString buildDocs ''
+  postBuild = ''
     export HOME=$(mktemp -d)
     make doc
   '' + lib.optionalString buildTests ''
@@ -104,7 +97,10 @@ in stdenv.mkDerivation (finalAttrs: {
     make examples
   '';
 
-  postInstall = lib.optionalString buildTests ''
+  postInstall = ''
+    mv ../doc/html $out/share/doc/miopengemm
+    mv ../doc/pdf/miopengemm.pdf $out/share/doc/miopengemm
+  '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     find tests -executable -type f -exec mv {} $test/bin \;
     patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib $test/bin/*
@@ -112,12 +108,6 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir -p $benchmark/bin
     find examples -executable -type f -exec mv {} $benchmark/bin \;
     patchelf --set-rpath ${lib.makeLibraryPath finalAttrs.buildInputs}:$out/lib $benchmark/bin/*
-  '';
-
-  postFixup = lib.optionalString buildDocs ''
-    mkdir -p $docs/share/doc/miopengemm
-    mv ../doc/html $docs/share/doc/miopengemm
-    mv ../doc/pdf/miopengemm.pdf $docs/share/doc/miopengemm
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
