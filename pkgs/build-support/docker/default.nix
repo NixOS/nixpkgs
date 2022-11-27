@@ -19,7 +19,6 @@
 , pigz
 , rsync
 , runCommand
-, runCommandNoCC
 , runtimeShell
 , shadow
 , skopeo
