@@ -1,6 +1,7 @@
 { qtModule
 , qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
 
+, gcc-unwrapped
 , bison, flex, git, gperf, ninja, pkg-config, python, which
 , nodejs, qtbase, perl
 
@@ -203,25 +204,30 @@ qtModule {
     libunwind
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    cups
-    sandbox
+  buildInputs =
+    # FIXME: requires gcc-unwrapped in buildInputs, otherwise fails to link QtWebEngineProcess:
+    # /nix/store/039g378vc3pc3dvi9dzdlrd0i4q93qwf-binutils-2.39/bin/ld: /nix/store/6l2f5avj9fcgmfx45q4zg5dnbxd44nbr-x265-3.5/lib/libx265.so.199: undefined reference to `std::__throw_bad_array_new_length()@GLIBCXX_3.4.29'
+    # FIXME: needs proper fixing, but not in time for 22.11
+    lib.optional stdenv.cc.isGNU gcc-unwrapped
+    ++ lib.optionals stdenv.isDarwin [
+      cups
+      sandbox
 
-    # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
-    # to get some information about the host platform.
-    (writeScriptBin "sw_vers" ''
-      #!${stdenv.shell}
+      # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
+      # to get some information about the host platform.
+      (writeScriptBin "sw_vers" ''
+        #!${stdenv.shell}
 
-      while [ $# -gt 0 ]; do
-        case "$1" in
-          -buildVersion) echo "17E199";;
-        *) break ;;
+        while [ $# -gt 0 ]; do
+          case "$1" in
+            -buildVersion) echo "17E199";;
+          *) break ;;
 
-        esac
-        shift
-      done
-    '')
-  ];
+          esac
+          shift
+        done
+      '')
+    ];
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
