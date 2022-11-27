@@ -16,13 +16,13 @@
 , withExamples ? false
 
 # very long
-, withManual ? false, doxygen ? null, graphviz ? null, imagemagick ? null
+, withManual ? false, doxygen, graphviz, imagemagick
 # for manual, tetex is used to get the eps2pdf binary
 # texlive to get latexmk. building manual still fails though
-, dia, tetex ? null, ghostscript ? null, texlive ? null
+, dia, tetex, ghostscript, texlive
 
 # generates python bindings
-, pythonSupport ? false, ncurses ? null
+, pythonSupport ? false, ncurses
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
