@@ -15911,7 +15911,7 @@ with pkgs;
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
   pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
 
-  svg2tikz = python27Packages.svg2tikz;
+  svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   svg2pdf = callPackage ../tools/graphics/svg2pdf { };
 
@@ -20768,7 +20768,9 @@ with pkgs;
 
   libow = callPackage ../development/libraries/libow { };
 
-  libp11 = callPackage ../development/libraries/libp11 { };
+  libp11 = callPackage ../development/libraries/libp11 {
+    openssl = openssl_1_1;
+  };
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
@@ -21138,7 +21140,7 @@ with pkgs;
   };
 
   libxml2Python = let
-    libxml2 = python2Packages.libxml2;
+    inherit (python3.pkgs) libxml2;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
@@ -21964,7 +21966,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.12) {
       inherit newScope;
       inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -21977,7 +21979,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.14) {
       inherit newScope;
       inherit lib fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python2;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -21990,7 +21992,7 @@ with pkgs;
     (import ../development/libraries/qt-5/5.15) {
       inherit newScope;
       inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 python3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
       inherit buildPackages;
@@ -25618,9 +25620,7 @@ with pkgs;
 
   pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
-  pam_p11 = callPackage ../os-specific/linux/pam_p11 {
-    openssl = openssl_1_1;
-  };
+  pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
@@ -33938,7 +33938,6 @@ with pkgs;
 
   asc = callPackage ../games/asc {
     lua = lua5_1;
-    libsigcxx = libsigcxx12;
     physfs = physfs_2;
   };
 
