@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
-  version = "2022.5.17";
+  version = "2022.10.3";
 
   outputs = [ "out" "dev" "man" "doc" ];
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "tuxera";
     repo = "ntfs-3g";
     rev = version;
-    sha256 = "sha256-xh8cMNIHeJ1rtk5zwOsmcxeedgZ3+MSiWn2UC7y+gtQ=";
+    sha256 = "sha256-nuFTsGkm3zmSzpwmhyY7Ke0VZfZU0jHOzEWaLBbglQk=";
   };
 
   buildInputs = [ gettext libuuid ]
