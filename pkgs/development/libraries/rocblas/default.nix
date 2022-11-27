@@ -10,13 +10,13 @@
 , rocm-comgr
 , hip
 , python3
-, tensile ? null
-, msgpack ? null
-, libxml2 ? null
-, llvm ? null
-, python3Packages ? null
-, gtest ? null
-, gfortran ? null
+, tensile
+, msgpack
+, libxml2
+, llvm
+, python3Packages
+, gtest
+, gfortran
 , buildTensile ? true
 , buildTests ? false
 , buildBenchmarks ? false
@@ -27,14 +27,6 @@
 , tensileLibFormat ? "msgpack"
 , gpuTargets ? [ "all" ]
 }:
-
-assert buildTensile -> tensile != null;
-assert buildTensile -> msgpack != null;
-assert buildTensile -> libxml2 != null;
-assert buildTensile -> llvm != null;
-assert buildTensile -> python3Packages != null;
-assert buildTests -> gtest != null;
-assert buildTests -> gfortran != null;
 
 # Tests and benchmarks are a can of worms that I will tackle in a different PR
 # It involves completely rewriting the amd-blis derivation
