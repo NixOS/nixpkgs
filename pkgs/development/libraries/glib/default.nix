@@ -11,7 +11,7 @@
 , python3
 , libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-, util-linuxMinimal ? null
+, util-linuxMinimal
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
@@ -21,8 +21,6 @@
 # update script
 , runCommand, git, coccinelle
 }:
-
-assert stdenv.isLinux -> util-linuxMinimal != null;
 
 # TODO:
 # * Make it build without python
