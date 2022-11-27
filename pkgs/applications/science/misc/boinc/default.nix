@@ -23,6 +23,7 @@
 , libX11
 , libxcb
 , headless ? false
+, xssIdleDetection ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -52,12 +53,11 @@ stdenv.mkDerivation rec {
     libjpeg
     wxGTK32
     gtk3
-    libXScrnSaver
     libnotify
     libX11
     libxcb
     xcbutil
-  ];
+  ] ++ lib.optional xssIdleDetection libXScrnSaver;
 
   NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
 
