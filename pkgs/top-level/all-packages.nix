@@ -15002,6 +15002,19 @@ with pkgs;
 
   rocthrust = callPackage ../development/libraries/rocthrust { };
 
+  miopen = callPackage ../development/libraries/miopen {
+    inherit (llvmPackages_rocm) clang llvm;
+    boost = boost.override { enableStatic = true; };
+  };
+
+  miopen-hip = miopen.override {
+    useOpenCL = false;
+  };
+
+  miopen-opencl = miopen.override {
+    useOpenCL = true;
+  };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
