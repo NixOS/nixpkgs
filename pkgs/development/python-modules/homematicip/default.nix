@@ -86,6 +86,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for the homematicIP REST API";
     homepage = "https://github.com/hahn-th/homematicip-rest-api";
+    changelog = "https://github.com/hahn-th/homematicip-rest-api/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };
