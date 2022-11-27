@@ -19091,11 +19091,7 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  graphia = libsForQt514.callPackage ../applications/science/misc/graphia {
-    # Using gcc 10 because this fails to build with gcc 11
-    # Error similar to this https://github.com/RPCS3/rpcs3/issues/10291
-    stdenv = gcc10Stdenv;
-  };
+  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
   graphinder = callPackage ../tools/security/graphinder { };
 
