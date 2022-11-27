@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, perl
 , libiconv
 , openssl
 , rustPlatform
@@ -20,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-dv04AXOnzizjq/qx3qy524ylQHgE4gIBgeYI+2IRTug=";
+
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ libiconv openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
