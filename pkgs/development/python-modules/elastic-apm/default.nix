@@ -84,6 +84,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
