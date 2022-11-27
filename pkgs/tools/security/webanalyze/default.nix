@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "webanalyze";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "rverton";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W7NgV50r/MNSF6+e0IR9C1dcg/k0w67GcTs0NTbhKBc=";
+    hash = "sha256-1z4hi9a/OzBXIMBk1f0JpPMV/kRgBnTQAEygIZqV+1w=";
   };
 
   vendorSha256 = "sha256-kXtWYGsZUUhBNvkTOah3Z+ta118k6PXfpBx6MLr/pq0=";
