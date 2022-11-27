@@ -14994,6 +14994,10 @@ with pkgs;
 
   tensile = python3Packages.callPackage ../development/libraries/tensile { };
 
+  rocwmma = callPackage ../development/libraries/rocwmma {
+    inherit (llvmPackages) openmp;
+  };
+
   rocblas = callPackage ../development/libraries/rocblas {
     inherit (llvmPackages_rocm) llvm;
   };
