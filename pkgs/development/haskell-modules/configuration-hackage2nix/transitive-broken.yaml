@@ -2406,7 +2406,6 @@ dont-distribute-packages:
  - language-Modula2
  - language-avro
  - language-boogie
- - language-ecmascript-analysis
  - language-eiffel
  - language-kort
  - language-ninja
@@ -3701,7 +3700,6 @@ dont-distribute-packages:
  - twill
  - twitter-conduit
  - twitter-enumerator
- - twitter-types-lens
  - txt
  - type-assertions
  - type-cache

@@ -1624,7 +1624,8 @@ self: super: {
 
   # Test suite has a too strict bound on base
   # https://github.com/jswebtools/language-ecmascript/pull/88
-  language-ecmascript = doJailbreak super.language-ecmascript;
+  # Test suite doesn't compile anymore
+  language-ecmascript = dontCheck (doJailbreak super.language-ecmascript);
 
   # Too strict bounds on containers
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
@@ -2126,7 +2127,8 @@ self: super: {
   system-fileio = doJailbreak super.system-fileio;
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
-  ekg-core  = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
+  ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
+  hasura-ekg-core = doJailbreak super.hasura-ekg-core;
 
   # https://github.com/Synthetica9/nix-linter/issues/65
   nix-linter = super.nix-linter.overrideScope (self: super: {
@@ -2274,4 +2276,46 @@ self: super: {
   swarm = doJailbreak (super.swarm.override {
     brick = doJailbreak (dontCheck super.brick_1_3);
   });
+
+  # random <1.2
+  unfoldable = doJailbreak super.unfoldable;
+
+  # containers <0.6, semigroupoids <5.3
+  data-lens = doJailbreak super.data-lens;
+
+  # transformers <0.3
+  monads-fd = doJailbreak super.monads-fd;
+
+  # HTF <0.15
+  cases = doJailbreak super.cases;
+
+  # exceptions <0.9
+  eprocess = doJailbreak super.eprocess;
+
+  # hashable <1.4, mmorph <1.2
+  composite-aeson = doJailbreak super.composite-aeson;
+
+  # composite-aeson <0.8, composite-base <0.8
+  compdoc = doJailbreak super.compdoc;
+
+  # composite-aeson <0.8, composite-base <0.8
+  haskell-coffee = doJailbreak super.haskell-coffee;
+
+  # Test suite doesn't compile anymore
+  twitter-types = dontCheck super.twitter-types;
+
+  # base <4.14
+  numbered-semigroups = doJailbreak super.numbered-semigroups;
+
+  # Tests open file "data/test_vectors_aserti3-2d_run01.txt" but it doesn't exist
+  haskoin-core = dontCheck super.haskoin-core;
+
+  # base <4.9, transformers <0.5
+  MonadCatchIO-transformers = doJailbreak super.MonadCatchIO-transformers;
+
+  # unix-compat <0.5
+  hxt-cache = doJailbreak super.hxt-cache;
+
+  # unix-compat <0.5
+  vinyl-utils = doJailbreak super.vinyl-utils;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
