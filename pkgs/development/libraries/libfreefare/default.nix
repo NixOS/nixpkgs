@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libnfc, openssl
-, libobjc ? null
+, libobjc
 , IOKit, Security
 }:
 
