@@ -19,6 +19,11 @@ buildGoModule rec {
     installManPage ./moar.1
   '';
 
+  ldflags = [
+    "-s" "-w"
+    "-X" "main.versionString=v${version}"
+  ];
+
   meta = with lib; {
     description = "Nice-to-use pager for humans";
     homepage = "https://github.com/walles/moar";
