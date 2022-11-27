@@ -30,78 +30,76 @@ in
 # wrap both pkgsCrossX.buildPackages.gobject-introspection and {pkgs,pkgsSomethingExecutableOnBuildSystem).buildPackages.gobject-introspection
 if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) && stdenv.targetPlatform.emulatorAvailable buildPackages
 then
-  stdenv.mkDerivation
-    (builtins.removeAttrs overridenUnwrappedGir.drvAttrs [ "name" ] # so we can get a fresh name generated from the pname
-      // {
+  overridenUnwrappedGir.overrideAttrs
+    (previousAttrs:
+      {
 
-      inherit (overridenUnwrappedGir) meta;
+        pname = "gobject-introspection-wrapped";
+        passthru = previousAttrs.passthru // {
+          unwrapped = overridenUnwrappedGir;
+        };
+        dontStrip = true;
+        depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
+        buildCommand = ''
+          eval fixupPhase
+          ${lib.concatMapStrings (output: ''
+            mkdir -p ${"$" + "${output}"}
+            ${lib.getExe buildPackages.xorg.lndir} ${overridenUnwrappedGir.${output}} ${"$" + "${output}"}
+          '') overridenUnwrappedGir.outputs}
+
+          cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
+          cp $dev/bin/g-ir-scanner $dev/bin/.g-ir-scanner-wrapped
+
+          (
+            rm "$dev/bin/g-ir-compiler"
+            rm "$dev/bin/g-ir-scanner"
+            export bash="${buildPackages.bash}"
+            export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+            export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
+            export buildlddtree="${buildPackages.pax-utils}/bin/lddtree"
+
+            export targetgir="${lib.getDev overridenTargetUnwrappedGir}"
+
+            substituteAll "${./wrappers/g-ir-compiler.sh}" "$dev/bin/g-ir-compiler"
+            substituteAll "${./wrappers/g-ir-scanner.sh}" "$dev/bin/g-ir-scanner"
+            substituteAll "${./wrappers/g-ir-scanner-lddwrapper.sh}" "$dev/bin/g-ir-scanner-lddwrapper"
+            substituteAll "${./wrappers/g-ir-scanner-qemuwrapper.sh}" "$dev/bin/g-ir-scanner-qemuwrapper"
+            chmod +x $dev/bin/g-ir-compiler
+            chmod +x $dev/bin/g-ir-scanner*
+          )
+        ''
+        # when cross-compiling and using the wrapper then when a package looks up the g_ir_X
+        # variable with pkg-config they'll get the host version which can't be run
+        # override the variable to use the absolute path to g_ir_X in PATH which can be run
+        + ''
+          cat >> $dev/nix-support/setup-hook <<-'EOF'
+            override-pkg-config-gir-variables() {
+              PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner)"
+              PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler)"
+              PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE="$(type -p g-ir-generate)"
+              export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER
+              export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER
+              export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE
+            }
+
+            preConfigureHooks+=(override-pkg-config-gir-variables)
+          EOF
+        '';
+      })
+else
+  overridenUnwrappedGir.overrideAttrs (previousAttrs:
+    {
       pname = "gobject-introspection-wrapped";
-      passthru = overridenUnwrappedGir.passthru // {
+      passthru = previousAttrs.passthru // {
         unwrapped = overridenUnwrappedGir;
       };
-      phases = [ "fixupPhase" ]; # don't remove, it is valid to set phases here.
       dontStrip = true;
       depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
-      postFixup = ''
+      buildCommand = ''
+        eval fixupPhase
         ${lib.concatMapStrings (output: ''
           mkdir -p ${"$" + "${output}"}
-          ${lib.getExe buildPackages.xorg.lndir} ${gobject-introspection-unwrapped.${output}} ${"$" + "${output}"}
-        '') gobject-introspection-unwrapped.outputs}
-
-        cp $dev/bin/g-ir-compiler $dev/bin/.g-ir-compiler-wrapped
-        cp $dev/bin/g-ir-scanner $dev/bin/.g-ir-scanner-wrapped
-
-        (
-          rm "$dev/bin/g-ir-compiler"
-          rm "$dev/bin/g-ir-scanner"
-          export bash="${buildPackages.bash}"
-          export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
-          export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
-          export buildlddtree="${buildPackages.pax-utils}/bin/lddtree"
-
-          export targetgir="${lib.getDev overridenTargetUnwrappedGir}"
-
-          substituteAll "${./wrappers/g-ir-compiler.sh}" "$dev/bin/g-ir-compiler"
-          substituteAll "${./wrappers/g-ir-scanner.sh}" "$dev/bin/g-ir-scanner"
-          substituteAll "${./wrappers/g-ir-scanner-lddwrapper.sh}" "$dev/bin/g-ir-scanner-lddwrapper"
-          substituteAll "${./wrappers/g-ir-scanner-qemuwrapper.sh}" "$dev/bin/g-ir-scanner-qemuwrapper"
-          chmod +x $dev/bin/g-ir-compiler
-          chmod +x $dev/bin/g-ir-scanner*
-        )
-      ''
-      # when cross-compiling and using the wrapper then when a package looks up the g_ir_X
-      # variable with pkg-config they'll get the host version which can't be run
-      # override the variable to use the absolute path to g_ir_X in PATH which can be run
-      + ''
-        cat >> $dev/nix-support/setup-hook <<-'EOF'
-          override-pkg-config-gir-variables() {
-            PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner)"
-            PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler)"
-            PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE="$(type -p g-ir-generate)"
-            export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER
-            export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER
-            export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE
-          }
-
-          preConfigureHooks+=(override-pkg-config-gir-variables)
-        EOF
+          ${lib.getExe buildPackages.xorg.lndir} ${overridenUnwrappedGir.${output}} ${"$" + "${output}"}
+        '') overridenUnwrappedGir.outputs}
       '';
     })
-else
-  stdenv.mkDerivation (builtins.removeAttrs overridenUnwrappedGir.drvAttrs [ "name" ] # so we can get a fresh name generated from the pname
-    // {
-    inherit (overridenUnwrappedGir) meta;
-    pname = "gobject-introspection-wrapped";
-    passthru = overridenUnwrappedGir.passthru // {
-      unwrapped = overridenUnwrappedGir;
-    };
-    phases = [ "fixupPhase" ]; # don't remove, it is valid to set phases here.
-    dontStrip = true;
-    depsTargetTargetPropagated = [ overridenTargetUnwrappedGir ];
-    postFixup = ''
-      ${lib.concatMapStrings (output: ''
-        mkdir -p ${"$" + "${output}"}
-        ${lib.getExe buildPackages.xorg.lndir} ${gobject-introspection-unwrapped.${output}} ${"$" + "${output}"}
-      '') gobject-introspection-unwrapped.outputs}
-    '';
-  })

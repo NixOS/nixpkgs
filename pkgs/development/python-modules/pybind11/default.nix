@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/X8DZPFsNrKGbhjZ1GFOj17/NU6p4R+saCW3pLKVNeA=";
+    hash = "sha256-9NS0/fLW2zEmEXhI9GfNN3C/CeI5xibFHwMoUebI90U=";
   };
 
   postPatch = ''
@@ -33,10 +33,16 @@ buildPythonPackage rec {
 
   dontUseCmakeBuildDir = true;
 
+  # Don't build tests if not needed, read the doInstallCheck value at runtime
+  preConfigure = ''
+    if [ -n "$doInstallCheck" ]; then
+      cmakeFlagsArray+=("-DBUILD_TESTING=ON")
+    fi
+  '';
+
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DBUILD_TESTING=on"
     "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
