@@ -85,7 +85,6 @@ dont-distribute-packages:
  - Dust-tools-pcap
  - DysFRP-Cairo
  - DysFRP-Craftwerk
- - EdisonCore
  - EditTimeReport
  - EntrezHTTP
  - EsounD
