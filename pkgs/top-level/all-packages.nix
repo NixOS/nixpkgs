@@ -14936,6 +14936,8 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+  hsa-amd-aqlprofile = callPackage ../development/libraries/hsa-amd-aqlprofile { };
+
   clang-ocl = callPackage ../development/libraries/clang-ocl {
     inherit (llvmPackages_rocm) clang;
   };
