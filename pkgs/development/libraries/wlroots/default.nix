@@ -23,7 +23,7 @@
 , nixosTests
 
 , enableXWayland ? true
-, xwayland ? null
+, xwayland
 }:
 
 let
