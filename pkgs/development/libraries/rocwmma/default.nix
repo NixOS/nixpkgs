@@ -6,24 +6,17 @@
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
-, rocblas ? null
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
+, gtest
+, rocblas
+, texlive
+, doxygen
+, sphinx
+, python3Packages
 , buildTests ? false
 , buildSamples ? false
 , buildDocs ? false
 , gpuTargets ? null # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
-
-assert buildTests -> gtest != null;
-assert buildTests -> rocblas != null;
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
 
 # Building tests isn't working for now
 # undefined reference to symbol '_ZTIN7testing4TestE'
