@@ -8,6 +8,7 @@ use std::fs::{OpenOptions};
 use std::process::{Command,exit};
 use std::io::Write;
 use std::io::ErrorKind;
+use std::io;
 
 use std::collections::HashSet;
 use std::collections::VecDeque;
@@ -134,13 +135,10 @@ fn mod_paths(kernel : &KernelData,
     }
 }
 
-fn copy_mod(source : &Path, target : &Path){
+fn copy_mod(source : &Path, target : &Path) {
     let target_dir = target.parent().unwrap();
     fs::create_dir_all(&target_dir).unwrap();
-    println!("  copying module: {}\n  to {}",
-             &source.display(),
-             &target_dir.display());
-    fs::copy(&source,&target).unwrap();
+    copy_with_trace("module",&source,&target).unwrap();
 }
 
 fn copy_firmware(kernel : &KernelData,
@@ -153,29 +151,47 @@ fn copy_firmware(kernel : &KernelData,
             .into_iter()
             .map(OsString::from_vec)
             .collect();
-        let source_dir = firmware_dir.join("lib/firmware");
-        let target_dir = out_dir.join("lib/firmware");
         for fw in firmware {
-            let target = target_dir.join(&fw);
+            let [source,source_xz] = firmware_files(&fw,&firmware_dir);
+            let [target,target_xz] = firmware_files(&fw,&out_dir);
+
             if let Some(root) = target.parent() {
                 fs::create_dir_all(&root).unwrap();
             }
-            let source = source_dir.join(&fw);
-            println!("  copying firmware {}\nto {}",
-                     &source.display(),
-                     &target_dir.display());
-            let res = fs::copy(&source,&target);
+
+            let res = if source_xz.try_exists().unwrap() {
+                copy_with_trace("firmware",&source_xz,&target_xz)
+            } else if source.try_exists().unwrap() {
+                copy_with_trace("firmware",&source,&target)
+            } else {
+              eprintln!("WARNING: missing firmware {} for module {}",
+                &fw.to_string_lossy(),
+                &module.to_string_lossy()
+                );
+              if !allow_missing {
+                  panic!("{}","missing firmware");
+              }
+              Ok(())
+            };
             if let Err(err) = res {
-                match err.kind() {
-                    ErrorKind::NotFound => {
-                        eprintln!("WARNING: missing firmware {}",&fw.to_string_lossy());
-                        eprintln!("for module {}",&module.to_string_lossy());
-                    }
-                    _ => panic!("{}",err)
-                }
+                panic!("{}",err)
             }
         }
     }
+}
+
+fn copy_with_trace(name : &str, source : &Path, target : &Path) -> io::Result<()> {
+    println!("  copying {} {}\nto {}",
+      &name,
+      &source.display(),
+      &target.display());
+    fs::copy(&source,&target).map(|_| ())
+}
+
+fn firmware_files(fw : &OsString, dir : &Path) -> [PathBuf;2] {
+  let mut fw_xz = fw.clone();
+  fw_xz.push(".xz");
+  [ fw.clone(), fw_xz ].map(|s| dir.join("lib/firmware").join(s))
 }
 
 fn mod_resolve(kernel : &KernelData,
