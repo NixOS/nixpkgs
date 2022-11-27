@@ -61,6 +61,12 @@ stdenv.mkDerivation rec {
     "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
   ];
 
+  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep from pam_gnome_keyring.so
+  # The pam module runs the daemon from $PREFIX (nix store) otherwise, which is
+  # unwrapped.
+  NIX_CFLAGS_COMPILE =
+    ''-DGNOME_KEYRING_DAEMON="/run/wrappers/bin/gnome-keyring-daemon"'';
+
   # Tends to fail non-deterministically.
   # - https://github.com/NixOS/nixpkgs/issues/55293
   # - https://github.com/NixOS/nixpkgs/issues/51121
