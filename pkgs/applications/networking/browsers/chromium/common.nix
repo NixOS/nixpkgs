@@ -295,7 +295,14 @@ let
       chrome_pgo_phase = 0;
       clang_base_path = "${llvmPackages.clang}";
       use_qt = false;
+    } // optionalAttrs (!chromiumVersionAtLeast "108") {
       use_system_libwayland_server = true;
+    } // optionalAttrs (chromiumVersionAtLeast "108") {
+      # The default has changed to false. We'll build with libwayland from
+      # Nixpkgs for now but might want to eventually use the bundled libwayland
+      # as well to avoid incompatibilities (if this continues to be a problem
+      # from time to time):
+      use_system_libwayland = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
