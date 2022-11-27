@@ -44,6 +44,12 @@
     <itemizedlist>
       <listitem>
         <para>
+          The minimum version of Nix required to evaluate Nixpkgs is now
+          2.8.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>carnix</literal> and <literal>cratesIO</literal> has
           been removed due to being unmaintained, use alternatives such
           as
