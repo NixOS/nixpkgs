@@ -18,5 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
     maintainers = [ maintainers.j0hax ];
+    # needs golang.org/x/sys bump
+    broken = stdenv.isDarwin;
   };
 }
