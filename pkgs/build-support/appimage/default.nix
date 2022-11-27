@@ -7,11 +7,17 @@
 , pv
 , squashfsTools
 , buildFHSUserEnv
-, pkgs
+, runCommand
+, substituteAll
 }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  # for compatibility, deprecated. TODO: guard these behind config.allowAliases
+  extractType1 = extract;
+  extractType2 = extract;
+  wrapType1 = wrapType2;
+
+  appimage-exec = substituteAll {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
@@ -26,26 +32,28 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
-    } ''
+  extract =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , ...
+    } @ args:
+    runCommand "${name}-extracted"
+      {
+        nativeBuildInputs = [ appimage-exec ];
+      } ''
       appimage-exec.sh -x $out ${src}
     '';
 
-  # for compatibility, deprecated
-  extractType1 = extract;
-  extractType2 = extract;
-  wrapType1 = wrapType2;
-
-  wrapAppImage = args@{
-    name ? "${args.pname}-${args.version}",
-    src,
-    extraPkgs,
-    meta ? {},
-    ...
-  }: buildFHSUserEnv
-    (defaultFhsEnvArgs // {
-      inherit name;
+  wrapAppImage =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , extraPkgs ? pkgs: [ ]
+    , extraInstallCommands ? ""
+    , meta ? { }
+    , ...
+    } @ args:
+    buildFHSUserEnv (defaultFhsEnvArgs // {
+      inherit name extraInstallCommands;
 
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -55,12 +63,33 @@ rec {
       meta = {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       } // meta;
-    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
+    } // (removeAttrs args ([ "pname" "version" ] ++ (lib.attrNames (builtins.functionArgs wrapAppImage)))));
 
-  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
-    (args // {
+  wrapType2 =
+    { name ? "${args.pname}-${args.version}"
+    , src
+    , extraPkgs ? pkgs: [ ]
+    , extraInstall ? extracted: ""
+    , ...
+    } @ args:
+    let
+      extracted = extract { inherit name src; };
+    in
+    wrapAppImage (removeAttrs args [ "extraInstall" ] // {
       inherit name extraPkgs;
-      src = extract { inherit name src; };
+      src = extracted;
+
+      extraInstallCommands = args.extraInstallCommands or ''
+        # Dont include the version number in the binary name. It would be better
+        # if we could do this in wrapAppImage, but that would break existing uses
+        if [ -f "$out/bin/${name}" ]; then
+          mv "$out/bin/${name}" "$out/bin/${lib.getName name}"
+        fi
+
+        # Appimages always have a desktop file, copy it to our output
+        mkdir -p $out/share/applications
+        cp ${extracted}/*.desktop $out/share/applications
+      '' + extraInstall extracted;
     });
 
   defaultFhsEnvArgs = {

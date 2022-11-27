@@ -28,21 +28,45 @@ Note how the type 1 AppImage is described as an `ISO 9660 CD-ROM filesystem`, an
 
 ## Wrapping {#ssec-pkgs-appimageTools-wrapping}
 
-Depending on the type of AppImage you're wrapping, you'll have to use `wrapType1` or `wrapType2`.
+To create a derivation for a appimage you can use the `wrapType2` builder. It is a wrapper around `buildFHSUserEnv` that extracts the appimage for you and generates a FHS environment to run it in. Any attribute `buildFHSUserEnv` accepts will also be valid in `wrapType2` derivations.
+
+Example:
 
 ```nix
-appimageTools.wrapType2 { # or wrapType1
-  name = "patchwork";
+appimageTools.wrapType2 rec {
+  pname = "patchwork";
+  version = "4.11.4";
+
   src = fetchurl {
-    url = "https://github.com/ssbc/patchwork/releases/download/v3.11.4/Patchwork-3.11.4-linux-x86_64.AppImage";
+    url = "https://github.com/ssbc/patchwork/releases/download/v${version}/Patchwork-${version}-linux-x86_64.AppImage";
     sha256 = "1blsprpkvm0ws9b96gb36f0rbf8f5jgmw4x6dsb1kswr4ysf591s";
   };
+
   extraPkgs = pkgs: with pkgs; [ ];
+
+  extraInstall = appimageContents: ''
+    cp -r ${appimageContents}/usr/share/icons $out/share
+  '';
 }
 ```
 
 - `name` specifies the name of the resulting image.
+
+  Note that `pname` and `version` can be specified instead as well.
+
 - `src` specifies the AppImage file to extract.
-- `extraPkgs` allows you to pass a function to include additional packages inside the FHS environment your AppImage is going to run in. There are a few ways to learn which dependencies an application needs:
-  - Looking through the extracted AppImage files, reading its scripts and running `patchelf` and `ldd` on its executables. This can also be done in `appimage-run`, by setting `APPIMAGE_DEBUG_EXEC=bash`.
+
+- `extraInstall` specifies extra commands used for the install phase.
+
+  It allows you to reference the contents of the extracted appimage using a function argument, as shown in the example.
+
+- `extraPkgs` allows you to include additional packages inside the FHS environment your AppImage is going to run in.
+   The attribute is specified as a function that takes as argument the Nixpkgs package set.
+
+  There are a few ways to learn which dependencies an application needs:
+
+  - Looking through the extracted AppImage files, reading its scripts and running `patchelf` and `ldd` on its executables.
+
+  This can also be done in `appimage-run`, by setting `APPIMAGE_DEBUG_EXEC=bash`.
+
   - Running `strace -vfefile` on the wrapped executable, looking for libraries that can't be found.
