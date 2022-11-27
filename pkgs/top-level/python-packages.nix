@@ -12149,8 +12149,6 @@ self: super: with self; {
     inherit (pkgs.xorg) xorgserver;
   };
 
-  xxh = callPackage ../tools/networking/xxh { };
-
   xxhash = callPackage ../development/python-modules/xxhash { };
 
   yabadaba = callPackage ../development/python-modules/yabadaba { };
