@@ -497,7 +497,7 @@ with prev;
 
     # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
     checkPhase = ''
-      export LIBSQLITE="${sqlite.out}/lib/libsqlite3.so"
+      export LIBSQLITE="${sqlite.out}/lib/libsqlite3${stdenv.hostPlatform.extensions.sharedLibrary}"
       export HOME="$TMPDIR";
 
       nvim --headless -i NONE \
