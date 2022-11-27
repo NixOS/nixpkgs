@@ -38,23 +38,23 @@
 , nixosTests
 
   # Linux
-, acl ? null
-, attr ? null
-, audit ? null
-, dmidecode ? null
-, fuse ? null
-, kmod ? null
-, libapparmor ? null
-, libcap_ng ? null
-, libnl ? null
-, libpciaccess ? null
-, libtirpc ? null
-, lvm2 ? null
-, numactl ? null
-, numad ? null
-, parted ? null
-, systemd ? null
-, util-linux ? null
+, acl
+, attr
+, audit
+, dmidecode
+, fuse
+, kmod
+, libapparmor
+, libcap_ng
+, libnl
+, libpciaccess
+, libtirpc
+, lvm2
+, numactl
+, numad
+, parted
+, systemd
+, util-linux
 
   # Darwin
 , gmp
