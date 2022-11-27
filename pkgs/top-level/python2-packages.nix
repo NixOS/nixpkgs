@@ -19,6 +19,10 @@ with self; with super; {
 
   cheetah = callPackage ../development/python2-modules/cheetah { };
 
+  ciso8601 = callPackage ../development/python2-modules/ciso8601 {
+    inherit ciso8601;
+  };
+
   configparser = callPackage ../development/python2-modules/configparser { };
 
   construct = callPackage ../development/python2-modules/construct { };
