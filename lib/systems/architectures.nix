@@ -28,6 +28,12 @@ rec {
     znver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver3         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
+    # Microarchitecture levels
+    # https://en.wikipedia.org/wiki/X86-64#Microarchitecture_levels
+    x86-64         = [ ];
+    x86-64-v2      = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
+    x86-64-v3      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2"          "fma"        ];
+    x86-64-v4      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2" "avx512" "fma"        ];
     # other
     armv5te        = [ ];
     armv6          = [ ];
