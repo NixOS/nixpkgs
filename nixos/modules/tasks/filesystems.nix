@@ -33,7 +33,7 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc "Location of the mounted the file system.";
+        description = lib.mdDoc "Location of the mounted file system.";
       };
 
       device = mkOption {
