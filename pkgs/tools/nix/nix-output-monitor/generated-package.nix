@@ -22,7 +22,6 @@
   mtl,
   nix-derivation,
   optics,
-  process,
   random,
   relude,
   safe,
@@ -39,10 +38,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.0.0.4";
+  version = "2.0.0.5";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.4.tar.gz";
-    sha256 = "1pgrynsjjry253fqpmm3yr4k9xcvqffnbs4p8i1nlfi9l821wj8c";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.5.tar.gz";
+    sha256 = "02xrbf2nr64yfny3idkjb1xbd97wl8m5viifrwjf4hi6ivs5bl18";
   };
   isLibrary = true;
   isExecutable = true;
@@ -126,7 +125,6 @@ mkDerivation {
     mtl
     nix-derivation
     optics
-    process
     random
     relude
     safe
@@ -137,6 +135,7 @@ mkDerivation {
     terminal-size
     text
     time
+    typed-process
     wcwidth
     word8
   ];
