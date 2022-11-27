@@ -160,20 +160,20 @@ in {
   # TODO currently can't install more than one because `lame` clashes
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
-    version = "7.5.4";
+    version = "8.0.5";
     archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-ybtq+hjnaQxpLxv2KE0ZcbQXtn5DJJsnMwCmh3rlrIc=";
+      sha256 = "sha256-9Lo4e1SM1gw2/+TmpDUdZCOQcHEpT/aaG6P80/GRPQY=";
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
-    version = "7.5.4";
+    version = "8.0.5";
     archdir = "x86-64bit";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-3a3+SKTEhvDtqK5Kg4E6KiLvn5+j6JN6ntIb72u2bdQ=";
+      sha256 = "sha256-qxViVIbld8zTMj1+TIfOsIOhmujOGJux2/u2J4hvsqw=";
     };
   };
   stage-6 = mkPianoteq rec {
