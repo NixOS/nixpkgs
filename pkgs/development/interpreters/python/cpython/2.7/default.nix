@@ -120,11 +120,12 @@ let
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
 
-      # Patch is likely to go away in the next release (if there is any)
+      # https://www.activestate.com/products/python/python-2-end-of-life-security-updates/
       ./CVE-2019-20907.patch
-
+      ./CVE-2020-8492.patch
+      ./CVE-2020-26116.patch
+      ./CVE-2020-27619.patch
       ./CVE-2021-3177.patch
-
       ./CVE-2021-23336.patch
 
       # The workaround is for unittests on Win64, which we don't support.

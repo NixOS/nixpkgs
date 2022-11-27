@@ -1,0 +1,93 @@
+From 138e2caeb4827ccfd1eaff2cf63afb79dfeeb3c4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Thu, 10 Sep 2020 13:39:48 +0200
+Subject: [PATCH 03/36] bpo-39603: Prevent header injection in http methods
+ (GH-18485) (GH-21539)
+
+reject control chars in http method in http.client.putrequest to prevent http header injection
+(cherry picked from commit 8ca8a2e8fb068863c1138f07e3098478ef8be12e)
+
+Co-authored-by: AMIR <31338382+amiremohamadi@users.noreply.github.com>
+
+[rebased for py2.7]
+---
+ Lib/httplib.py           | 17 +++++++++++++++++
+ Lib/test/test_httplib.py | 20 ++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+
+diff --git a/Lib/httplib.py b/Lib/httplib.py
+index fcc4152aaf..81a08d5d71 100644
+--- a/Lib/httplib.py
++++ b/Lib/httplib.py
+@@ -257,6 +257,10 @@ _contains_disallowed_url_pchar_re = re.compile('[\x00-\x20\x7f-\xff]')
+ #  _is_allowed_url_pchars_re = re.compile(r"^[/!$&'()*+,;=:@%a-zA-Z0-9._~-]+$")
+ # We are more lenient for assumed real world compatibility purposes.
+ 
++# These characters are not allowed within HTTP method names
++# to prevent http header injection.
++_contains_disallowed_method_pchar_re = re.compile('[\x00-\x1f]')
++
+ # We always set the Content-Length header for these methods because some
+ # servers will otherwise respond with a 411
+ _METHODS_EXPECTING_BODY = {'PATCH', 'POST', 'PUT'}
+@@ -935,6 +939,8 @@ class HTTPConnection:
+         else:
+             raise CannotSendRequest()
+ 
++        self._validate_method(method)
++
+         # Save the method for use later in the response phase
+         self._method = method
+ 
+@@ -1020,6 +1026,17 @@ class HTTPConnection:
+         # On Python 2, request is already encoded (default)
+         return request
+ 
++    def _validate_method(self, method):
++        """Validate a method name for putrequest."""
++        # prevent http header injection
++        match = _contains_disallowed_method_pchar_re.search(method)
++        if match:
++            msg = (
++                "method can't contain control characters. {method!r} "
++                "(found at least {matched!r})"
++            ).format(matched=match.group(), method=method)
++            raise ValueError(msg)
++
+     def _validate_path(self, url):
+         """Validate a url for putrequest."""
+         # Prevent CVE-2019-9740.
+diff --git a/Lib/test/test_httplib.py b/Lib/test/test_httplib.py
+index d8a57f7353..e20a0986dc 100644
+--- a/Lib/test/test_httplib.py
++++ b/Lib/test/test_httplib.py
+@@ -384,6 +384,26 @@ class HeaderTests(TestCase):
+             with self.assertRaisesRegexp(ValueError, 'Invalid header'):
+                 conn.putheader(name, value)
+ 
++    def test_invalid_method_names(self):
++        methods = (
++            'GET\r',
++            'POST\n',
++            'PUT\n\r',
++            'POST\nValue',
++            'POST\nHOST:abc',
++            'GET\nrHost:abc\n',
++            'POST\rRemainder:\r',
++            'GET\rHOST:\n',
++            '\nPUT'
++        )
++
++        for method in methods:
++            with self.assertRaisesRegexp(
++                    ValueError, "method can't contain control characters"):
++                conn = httplib.HTTPConnection('example.com')
++                conn.sock = FakeSocket(None)
++                conn.request(method=method, url="/")
++
+ 
+ class BasicTest(TestCase):
+     def test_status_lines(self):
+-- 
+2.38.1
+
