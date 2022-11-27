@@ -21,13 +21,12 @@
 , boost
 , sqlite
 , bzip2
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
+, texlive
+, doxygen
+, sphinx
+, python3Packages
 , zlib ? null
 , fetchurl ? null
-, buildDocs ? false
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
 # This isn't strictly required, but is recommended
@@ -36,15 +35,11 @@
 , useOpenCL ? false
 }:
 
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
 assert buildTests -> zlib != null;
 assert fetchKDBs -> fetchurl != null;
 
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = (texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -72,7 +67,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-  ] ++ lib.optionals buildDocs [
     "doc"
   ] ++ lib.optionals buildTests [
     "test"
@@ -92,6 +86,12 @@ in stdenv.mkDerivation (finalAttrs: {
     hip
     clang
     llvm
+    latex
+    doxygen
+    sphinx
+    python3Packages.sphinx_rtd_theme
+    python3Packages.breathe
+    python3Packages.myst-parser
   ];
 
   buildInputs = [
@@ -108,13 +108,6 @@ in stdenv.mkDerivation (finalAttrs: {
     boost
     sqlite
     bzip2
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    sphinx
-    python3Packages.sphinx_rtd_theme
-    python3Packages.breathe
-    python3Packages.myst-parser
   ] ++ lib.optionals buildTests [
     zlib
   ];
@@ -170,7 +163,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Unfortunately, it seems like we have to call make on these manually
-  postBuild = lib.optionalString buildDocs ''
+  postBuild = ''
     export HOME=$(mktemp -d)
     make doc
   '' + lib.optionalString buildTests ''
@@ -179,20 +172,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     rm $out/bin/install_precompiled_kernels.sh
+    mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
+    mv ../doc/pdf/miopen.pdf $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
     patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.nativeBuildInputs ++ finalAttrs.buildInputs)}:$out/lib $test/bin/*
-  '';
-
-  postFixup = lib.optionalString (buildDocs && !useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-hip
-  '' + lib.optionalString (buildDocs && useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-opencl
-  '' + lib.optionalString buildDocs ''
-    mkdir -p $docDir
-    mv ../doc/html $docDir
-    mv ../doc/pdf/miopen.pdf $docDir
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
