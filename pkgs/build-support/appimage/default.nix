@@ -79,7 +79,6 @@ rec {
       gtk3
       bashInteractive
       gnome.zenity
-      python2
       xorg.xrandr
       which
       perl
