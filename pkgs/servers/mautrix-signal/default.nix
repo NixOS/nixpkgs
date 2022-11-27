@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, fetchpatch }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
@@ -36,6 +36,14 @@ python3.pkgs.buildPythonPackage rec {
       --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
       --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "fix-v11-upgrade.patch";
+      url = "https://github.com/mautrix/signal/commit/4839e2afbef6179f4e0b494298086ac802ff912c.patch";
+      sha256 = "sha256-rnIFRCegNGbE383hodOdXc92PXhzbcaSN4PN5zK46Ds=";
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
