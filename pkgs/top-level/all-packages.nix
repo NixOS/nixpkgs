@@ -26710,9 +26710,7 @@ with pkgs;
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
-  netease-music-tui = callPackage ../applications/audio/netease-music-tui {
-    openssl = openssl_1_1;
-  };
+  netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
   netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
