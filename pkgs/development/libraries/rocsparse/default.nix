@@ -12,16 +12,12 @@
 , hip
 , gfortran
 , git
-, gtest ? null
-, boost ? null
-, python3Packages ? null
+, gtest
+, boost
+, python3Packages
 , buildTests ? false
 , buildBenchmarks ? false # Seems to depend on tests
 }:
-
-assert (buildTests || buildBenchmarks) -> gtest != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> python3Packages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
