@@ -41,7 +41,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-    "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt"
+    "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt;clang-tools-extra"
   ]
   ++ lib.optionals enableManpages [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
