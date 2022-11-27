@@ -3,32 +3,30 @@
 , fetchFromGitHub
 , qmake
 , qtbase
+, qttools
 , qtimageformats
 , qtsvg
 }:
 
 mkDerivation rec {
   pname = "qview";
-  version = "4.0";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
     rev = version;
-    sha256 = "15n9cq7w3ckinnx38hvncxrbkv4qm4k51sal41q4y0pkvhmafhnr";
+    hash = "sha256-VQ0H9iPrrxO9e/kMo7yZ/zN5I2qDWBCAFacS9uGuZLI=";
   };
 
   nativeBuildInputs = [ qmake ];
 
   buildInputs = [
     qtbase
+    qttools
     qtimageformats
     qtsvg
   ];
-
-  patchPhase = ''
-    sed "s|/usr/|$out/|g" -i qView.pro
-  '';
 
   meta = with lib; {
     description = "Practical and minimal image viewer";
