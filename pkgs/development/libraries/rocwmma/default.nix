@@ -6,31 +6,26 @@
 , rocm-cmake
 , hip
 , openmp
+, texlive
+, doxygen
+, sphinx
+, python3Packages
 , gtest ? null
 , rocblas ? null
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
 , buildTests ? false
 , buildSamples ? false
-, buildDocs ? false
 , gpuTargets ? null # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
 assert buildTests -> gtest != null;
 assert buildTests -> rocblas != null;
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
 
 # Building tests isn't working for now
 # undefined reference to symbol '_ZTIN7testing4TestE'
 assert buildTests == false;
 
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = (texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -51,12 +46,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "doc"
   ] ++ lib.optionals buildTests [
     "test"
   ] ++ lib.optionals buildSamples [
     "sample"
-  ] ++ lib.optionals buildDocs [
-    "docs"
   ];
 
   src = fetchFromGitHub {
@@ -74,6 +68,11 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     hip
+    latex
+    doxygen
+    sphinx
+    python3Packages.sphinx_rtd_theme
+    python3Packages.breathe
   ];
 
   buildInputs = [
@@ -81,12 +80,6 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals buildTests [
     gtest
     rocblas
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    sphinx
-    python3Packages.sphinx_rtd_theme
-    python3Packages.breathe
   ];
 
   cmakeFlags = [
@@ -108,18 +101,21 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
   ];
 
-  postPatch = lib.optionalString buildDocs ''
+  postPatch = ''
     patchShebangs docs/*.sh
   '';
 
   # Unfortunately, it seems like we have to call make on this manually
   # -DROCWMMA_BUILD_DOCS=ON is invalid, despite being on the README
-  postBuild = lib.optionalString buildDocs ''
+  postBuild = ''
     export HOME=$(mktemp -d)
     ../docs/run_doc.sh
   '';
 
-  postInstall = lib.optionalString buildTests ''
+  postInstall = ''
+    mv ../docs/source/_build/html $out/share/doc/rocwmma
+    mv ../docs/source/_build/latex/rocWMMA.pdf $out/share/doc/rocwmma
+  '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/*_test* $test/bin
   '' + lib.optionalString buildSamples ''
@@ -129,12 +125,6 @@ in stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/simple_dlrm $sample/bin
   '' + lib.optionalString (buildTests || buildSamples) ''
     rmdir $out/bin
-  '';
-
-  postFixup = lib.optionalString buildDocs ''
-    mkdir -p $docs/share/doc/rocwmma
-    mv ../docs/source/_build/html $docs/share/doc/rocwmma
-    mv ../docs/source/_build/latex/rocWMMA.pdf $docs/share/doc/rocwmma
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
