@@ -71,6 +71,17 @@ let
 
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
+
+  bootstrapCompiler = stdenv.mkDerivation {
+    pname = "nim-bootstrap";
+    inherit (nim-unwrapped) version src;
+    enableParallelBuilding = true;
+    installPhase = ''
+      runHook preInstall
+      install -Dt $out/bin bin/nim
+      runHook postInstall
+    '';
+  };
 in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
@@ -95,6 +106,7 @@ in {
 
     configurePhase = ''
       runHook preConfigure
+      cp ${bootstrapCompiler}/bin/nim bin/
       echo 'define:nixbuild' >> config/nim.cfg
       runHook postConfigure
     '';
@@ -112,7 +124,6 @@ in {
     '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
       sed -i "s/aarch64/arm64/g" makefile
     '' + ''
-      make -j$NIX_BUILD_CORES
       ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
