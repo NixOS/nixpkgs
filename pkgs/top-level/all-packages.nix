@@ -33356,7 +33356,7 @@ with pkgs;
 
   xnotify = callPackage ../tools/X11/xnotify { };
 
-  xygrib = libsForQt514.callPackage ../applications/misc/xygrib {};
+  xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
