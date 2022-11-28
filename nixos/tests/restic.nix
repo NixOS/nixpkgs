@@ -102,15 +102,15 @@ import ./make-test-python.nix (
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that remote-from-file-backup produces a snapshot
           "systemctl start restic-backups-remote-from-file-backup.service",
-          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that rclonebackup produces a snapshot
           "systemctl start restic-backups-rclonebackup.service",
-          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
@@ -143,12 +143,13 @@ import ./make-test-python.nix (
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
-          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
 
           # test that remoteprune brings us back to 1 snapshot in remotebackup
           "systemctl start restic-backups-remoteprune.service",
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+
       )
     '';
   }
