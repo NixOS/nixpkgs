@@ -265,6 +265,15 @@ with lib.maintainers; {
     shortName = "GCC";
   };
 
+  geospatial = {
+    members = [
+      imincik
+      sikmir
+    ];
+    scope = "Maintain geospatial packages.";
+    shortName = "Geospatial";
+  };
+
   golang = {
     members = [
       c00w
