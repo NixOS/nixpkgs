@@ -58,6 +58,9 @@ in
       identity.address    = "1.0.0.1";
     };
 
+    # Occupies port 53 otherwise
+    services.resolved.enable = false;
+
     services.pdns-recursor.enable = true;
     services.pdns-recursor.resolveNamecoin = true;
 
