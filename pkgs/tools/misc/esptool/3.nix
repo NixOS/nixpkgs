@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, openssl }:
+{ lib, fetchFromGitHub, fetchpatch, python3, openssl }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
@@ -10,6 +10,16 @@ python3.pkgs.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-hpPL9KNPA+S57SJoKnQewBCOybDbKep0t5RKw9a9GjM=";
   };
+
+  patches = [
+    # https://github.com/espressif/esptool/pull/802
+    (fetchpatch {
+      name = "bitstring-4-compatibility.patch";
+      url = "https://github.com/espressif/esptool/commit/99cd24592c87875e0ba61af1967956bc92e6788e.patch";
+      hash = "sha256-zPHz0xPfy4jp91vDkXl0kX63bkev3ZydWrzBOeAipk0=";
+      excludes = [ "setup.py" ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace test/test_imagegen.py \
