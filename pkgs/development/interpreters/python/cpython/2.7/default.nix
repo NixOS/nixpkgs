@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -79,8 +79,10 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  src = fetchurl {
-    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+  src = fetchFromGitHub {
+    owner = "ActiveState";
+    repo = "cpython";
+    rev = "v${version}";
     inherit sha256;
   };
 
@@ -118,14 +120,6 @@ let
 
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
-
-      # https://www.activestate.com/products/python/python-2-end-of-life-security-updates/
-      ./CVE-2019-20907.patch
-      ./CVE-2020-8492.patch
-      ./CVE-2020-26116.patch
-      ./CVE-2020-27619.patch
-      ./CVE-2021-3177.patch
-      ./CVE-2021-23336.patch
 
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
