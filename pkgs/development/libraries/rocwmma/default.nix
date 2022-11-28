@@ -15,7 +15,7 @@
 , buildDocs ? true
 , buildTests ? false
 , buildSamples ? false
-, gpuTargets ? null # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
 assert buildTests -> gtest != null;
@@ -98,7 +98,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != null) [
+  ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DROCWMMA_BUILD_VALIDATION_TESTS=ON"

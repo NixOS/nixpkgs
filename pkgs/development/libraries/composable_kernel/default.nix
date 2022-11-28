@@ -8,7 +8,7 @@
 , gtest ? null
 , buildTests ? false
 , buildExamples ? false
-, gpuTargets ? null # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
 
 assert buildTests -> gtest != null;
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-  ] ++ lib.optionals (gpuTargets != null) [
+  ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
   ];
 
