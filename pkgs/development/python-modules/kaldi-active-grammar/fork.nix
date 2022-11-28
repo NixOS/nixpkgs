@@ -13,15 +13,19 @@
 }:
 
 let
-  old-openfst = openfst.overrideAttrs (self: {
+  old-openfst = openfst.overrideAttrs (prev: {
+    version = "kag-unstable-2022-05-06";
+
     src = fetchFromGitHub {
       owner = "kkm000";
       repo = "openfst";
+      # required by https://github.com/daanzu/kaldi-fork-active-grammar/blob/e9c7d0ffca401cf312779d25f2c05a34b41ff696/cmake/third_party/openfst.cmake#L7
       rev = "0bca6e76d24647427356dc242b0adbf3b5f1a8d9";
       sha256 = "1802rr14a03zl1wa5a0x1fa412kcvbgprgkadfj5s6s3agnn11rx";
     };
     buildInputs = [ zlib ];
-  }); in
+  });
+in
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
