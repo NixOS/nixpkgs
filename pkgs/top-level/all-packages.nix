@@ -14763,6 +14763,8 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_14.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
     targetLlvm = targetPackages.llvmPackages_14.llvm or llvmPackages_14.llvm;
+  } // lib.optionalAttrs (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux && buildPackages.stdenv.cc.isGNU) {
+    stdenv = gcc11Stdenv;
   }));
 
   llvmPackages_latest = llvmPackages_14;
