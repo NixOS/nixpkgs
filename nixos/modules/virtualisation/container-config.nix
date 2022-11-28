@@ -16,7 +16,7 @@ with lib;
     powerManagement.enable = mkDefault false;
     documentation.nixos.enable = mkDefault false;
 
-    networking.useHostResolvConf = mkDefault true;
+    networking.useHostResolvConf = mkDefault (!config.systemd.network.enable);
 
     # Containers should be light-weight, so start sshd on demand.
     services.openssh.startWhenNeeded = mkDefault true;
