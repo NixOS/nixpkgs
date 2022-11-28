@@ -31,6 +31,11 @@ let
       ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
+
+      export libc_includes="${lib.getDev stdenv.cc.libc}/include"
+      export libcpp_includes="${targetLlvmLibraries.libcxx}/include/c++/v1"
+      unwrapped=${cc} substituteAll ${../common/clangd_wrapper} $out/bin/clangd
+      chmod +x $out/bin/clangd
     '';
 
   in {

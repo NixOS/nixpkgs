@@ -39,8 +39,7 @@ in stdenv.mkDerivation {
       exit 1
     fi
 
-    substituteAll ${./wrapper} $out/bin/clangd
-    chmod +x $out/bin/clangd
+    ln -s $unwrapped/bin/clangd $out/bin/
 
     runHook postInstall
   '';
