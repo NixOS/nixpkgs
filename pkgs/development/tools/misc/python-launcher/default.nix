@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = [ python3 ];
 
-  dontUseCargoParallelTests = true;
+  useNextest = true;
 
   meta = with lib; {
     description = "An implementation of the `py` command for Unix-based platforms";
