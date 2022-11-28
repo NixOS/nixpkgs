@@ -89,6 +89,7 @@
         isPy39 = pythonVersion == "3.9";
         isPy310 = pythonVersion == "3.10";
         isPy311 = pythonVersion == "3.11";
+        isPy312 = pythonVersion == "3.12";
         isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
         isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
         isPy3k = isPy3;
@@ -197,6 +198,19 @@ in {
       suffix = "";
     };
     sha256 = "sha256-pX3ILXc1hhe6ZbmEHO4eO0QfOGw3id3AZ27KB38pUcM=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
+
+  python312 = callPackage ./cpython {
+    self = __splicedPackages.python312;
+    sourceVersion = {
+      major = "3";
+      minor = "12";
+      patch = "0";
+      suffix = "a2";
+    };
+    sha256 = "sha256-Hq/BOE5TLKxkMmMqdzUO9QShFMQjXB9vKoX4F/Wxkmo=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
