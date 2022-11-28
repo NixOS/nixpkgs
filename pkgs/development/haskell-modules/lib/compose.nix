@@ -478,7 +478,7 @@ rec {
   # This only works for packages that use `git` for their source.
   incremental = { interval }: pkg:
     let
-      requiredNixVersion = "2.12.0";
+      requiredNixVersion = "2.12.0pre20221128_32c182b";
       requiredGHCVersion = "9.4";
     in
       if builtins.compareVersions requiredNixVersion builtins.nixVersion == 1 then
