@@ -5905,6 +5905,13 @@
     githubId = 40234257;
     name = "ilkecan bozdogan";
   };
+  imincik = {
+    email = "ivan.mincik@gmail.com";
+    matrix = "@imincik:matrix.org";
+    github = "imincik";
+    githubId = 476346;
+    name = "Ivan Mincik";
+  };
   not-my-segfault = {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
