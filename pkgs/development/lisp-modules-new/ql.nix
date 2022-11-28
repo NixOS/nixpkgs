@@ -201,6 +201,9 @@ let
     "cl-sat.minisat" = pkg: {
       propagatedBuildInputs = [ pkgs.minisat ];
     };
+    vk = pkg: {
+      LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ vulkan-loader.out ];
+    };
   };
 
   qlpkgs =
