@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "posix_ipc";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cddb1ce2cf4aae383f2a0079c26c69bee257fe2720f372201ef047f8ceb8b97";
+    sha256 = "sha256-+GoVsys4Vzx44wXr2RANgZij2frMA/+v457cNYM3OOM=";
   };
 
   meta = with lib; {
