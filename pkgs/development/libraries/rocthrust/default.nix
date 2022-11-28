@@ -16,9 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
-  repoVersion = "2.16.0";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   # Comment out these outputs until tests/benchmarks are fixed (upstream?)
   # outputs = [
@@ -32,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocThrust";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-WODOeWWL0AOYu0djwDlVZuiJDxcchsAT7BFG9JKYScw=";
   };
 
@@ -79,11 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocthrust "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rocthrust "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocThrust/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocthrust "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -93,6 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.rocm.members;
     # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
     # Is this an upstream issue? We don't seem to be missing dependencies
-    broken = finalAttrs.rocmVersion != hip.version || buildTests || buildBenchmarks;
+    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
   };
 })

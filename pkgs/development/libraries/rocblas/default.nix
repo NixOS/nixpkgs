@@ -30,14 +30,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  repoVersion = "2.45.0";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocBLAS";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-z40WxF+suMeIZihBWJPRWyL20S2FUbeZb5JewmQWOJo=";
   };
 
@@ -118,11 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocBLAS/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocblas "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rocblas "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocBLAS/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocblas "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -132,6 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.rocm.members;
     # Tests and benchmarks are a can of worms that I will tackle in a different PR
     # It involves completely rewriting the amd-blis derivation
-    broken = finalAttrs.rocmVersion != hip.version || buildTests || buildBenchmarks;
+    broken = finalAttrs.version != hip.version || buildTests || buildBenchmarks;
   };
 })

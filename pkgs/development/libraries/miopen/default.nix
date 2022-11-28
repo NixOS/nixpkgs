@@ -57,11 +57,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopen";
-  # We have to manually specify the repoVersion for now
-  # Find the github release or `-- MIOpen_VERSION= X.X.X` in the build log
-  repoVersion = "2.18.0";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -74,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpen";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-5/JitdGJ0afzK4pGOOywRLsB3/Thc6/71sRkKIxf2Lg=";
   };
 
@@ -184,8 +180,9 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    rocmVersion="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version miopen "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version miopen "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -193,7 +190,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpen";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
     # MIOpen will produce a very large output due to KDBs fetched
     # Also possibly in the future because of KDB generation
     hydraPlatforms = [ ];
