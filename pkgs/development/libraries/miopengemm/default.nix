@@ -32,8 +32,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
-  rocmVersion = "5.3.3";
-  version = finalAttrs.rocmVersion;
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -48,7 +47,7 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpenGEMM";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-AiRzOMYRA/0nbQomyq4oOEwNZdkPYWRA2W6QFlctvFc=";
   };
 
@@ -114,8 +113,9 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    rocmVersion="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpenGEMM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version miopengemm "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpenGEMM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version miopengemm "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -123,6 +123,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpenGEMM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != clang.version;
+    broken = finalAttrs.version != clang.version;
   };
 })
