@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-iSsxpeTRZjIhZaYBeoKLHl9j1aBIXWjONmAInmKvU/I=";
   };
-  
+
   patches = [
     (fetchpatch {
       url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/0cb410dfc885ca1ecafd1f8a962b481574fb3b82.patch";
