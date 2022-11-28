@@ -72,6 +72,9 @@ stdenv.mkDerivation ({
        */
       ./2.35-master.patch.gz
 
+      /* Can be removed after next snapshot update or release update.  */
+      ./2.35-make-4.4.patch
+
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 

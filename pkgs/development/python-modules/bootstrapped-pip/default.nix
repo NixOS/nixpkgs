@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     mkdir -p $out/bin
-  '';
+  '' + pip.postPatch;
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ python ];

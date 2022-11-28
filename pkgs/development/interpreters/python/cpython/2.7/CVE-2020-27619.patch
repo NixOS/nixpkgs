@@ -1,0 +1,73 @@
+From 6a6c4240fa1e628dbcca09fdde39aea4d8eb6138 Mon Sep 17 00:00:00 2001
+From: "Miss Skeleton (bot)" <31488909+miss-islington@users.noreply.github.com>
+Date: Mon, 19 Oct 2020 21:46:10 -0700
+Subject: [PATCH 05/36] bpo-41944: No longer call eval() on content received
+ via HTTP in the CJK codec tests (GH-22566) (GH-22579)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+(cherry picked from commit 2ef5caa58febc8968e670e39e3d37cf8eef3cab8)
+
+Co-authored-by: Serhiy Storchaka <storchaka@gmail.com>
+
+Rebased for Python 2.7 by Michał Górny <mgorny@gentoo.org>
+---
+ Lib/test/multibytecodec_support.py            | 23 +++++++------------
+ .../2020-10-05-17-43-46.bpo-41944.rf1dYb.rst  |  1 +
+ 2 files changed, 9 insertions(+), 15 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Tests/2020-10-05-17-43-46.bpo-41944.rf1dYb.rst
+
+diff --git a/Lib/test/multibytecodec_support.py b/Lib/test/multibytecodec_support.py
+index 5b2329b6d8..b7d7a3aba7 100644
+--- a/Lib/test/multibytecodec_support.py
++++ b/Lib/test/multibytecodec_support.py
+@@ -279,30 +279,23 @@ class TestBase_Mapping(unittest.TestCase):
+             self._test_mapping_file_plain()
+ 
+     def _test_mapping_file_plain(self):
+-        _unichr = lambda c: eval("u'\\U%08x'" % int(c, 16))
+-        unichrs = lambda s: u''.join(_unichr(c) for c in s.split('+'))
++        def unichrs(s):
++            return ''.join(chr(int(x, 16)) for x in s.split('+'))
++
+         urt_wa = {}
+ 
+         with self.open_mapping_file() as f:
+             for line in f:
+                 if not line:
+                     break
+-                data = line.split('#')[0].strip().split()
++                data = line.split('#')[0].split()
+                 if len(data) != 2:
+                     continue
+ 
+-                csetval = eval(data[0])
+-                if csetval <= 0x7F:
+-                    csetch = chr(csetval & 0xff)
+-                elif csetval >= 0x1000000:
+-                    csetch = chr(csetval >> 24) + chr((csetval >> 16) & 0xff) + \
+-                             chr((csetval >> 8) & 0xff) + chr(csetval & 0xff)
+-                elif csetval >= 0x10000:
+-                    csetch = chr(csetval >> 16) + \
+-                             chr((csetval >> 8) & 0xff) + chr(csetval & 0xff)
+-                elif csetval >= 0x100:
+-                    csetch = chr(csetval >> 8) + chr(csetval & 0xff)
+-                else:
++                if data[0][:2] != '0x':
++                    self.fail("Invalid line: {line!r}".format(line=line))
++                csetch = bytes.fromhex(data[0][2:])
++                if len(csetch) == 1 and 0x80 <= csetch[0]:
+                     continue
+ 
+                 unich = unichrs(data[1])
+diff --git a/Misc/NEWS.d/next/Tests/2020-10-05-17-43-46.bpo-41944.rf1dYb.rst b/Misc/NEWS.d/next/Tests/2020-10-05-17-43-46.bpo-41944.rf1dYb.rst
+new file mode 100644
+index 0000000000..4f9782f1c8
+--- /dev/null
++++ b/Misc/NEWS.d/next/Tests/2020-10-05-17-43-46.bpo-41944.rf1dYb.rst
+@@ -0,0 +1 @@
++Tests for CJK codecs no longer call ``eval()`` on content received via HTTP.
+-- 
+2.38.1
+

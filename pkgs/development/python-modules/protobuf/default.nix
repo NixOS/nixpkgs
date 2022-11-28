@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , protobuf
-, pyext
 , isPyPy
 }:
 
@@ -30,8 +29,6 @@ buildPythonPackage {
       exit 1
     fi
   '';
-
-  nativeBuildInputs = [ pyext ];
 
   buildInputs = [ protobuf ];
 

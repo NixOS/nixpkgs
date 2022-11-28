@@ -41,7 +41,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     z3
     astroid
-  ];
+  ] ++ z3.requiredPythonModules;
 
   checkInputs = [
     pytestCheckHook

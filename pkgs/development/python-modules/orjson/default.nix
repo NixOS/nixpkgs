@@ -16,20 +16,20 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.8.1";
+  version = "3.8.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
     rev = version;
-    hash = "sha256-3U27JuKMsMla3BKbbpO0uXesGHYaVQs8MwtQvumkksY=";
+    hash = "sha256-jiyYCjZ6c62zmm4Ge9KbEI8/PtPunu79HVODyoHFdSg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-QXguyDxQHW9Fd3Nhmi5JzSxZQuk3HGPhhh/RGuOTZNY";
+    hash = "sha256-z1B0oSp37OGJ21Q57UUfmSRfUWLftiiBayN9y6yKNyg=";
   };
 
   format = "pyproject";
@@ -50,12 +50,6 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     xxhash
-  ];
-
-  disabledTests = lib.optionals (stdenv.is32bit) [
-    # integer overflow on 32bit
-    "test_numpy_array_d1_intp"
-    "test_numpy_array_d1_uintp"
   ];
 
   pythonImportsCheck = [ pname ];
