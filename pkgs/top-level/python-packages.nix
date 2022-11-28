@@ -702,6 +702,8 @@ self: super: with self; {
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
+  asyncua = callPackage ../development/python-modules/asyncua { };
+
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
