@@ -5378,7 +5378,12 @@ with pkgs;
 
   crlfuzz = callPackage ../tools/security/crlfuzz {};
 
-  hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc {
+    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+      nodejs = nodejs-16_x;
+    }) mkYarnPackage;
+    nodejs = nodejs-16_x;
+  };
 
   colord = callPackage ../tools/misc/colord { };
 
