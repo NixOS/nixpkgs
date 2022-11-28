@@ -757,8 +757,8 @@ with callPackage ./utils.nix {};
       name = "cl+ssl-src";
       repo = "cl-plus-ssl";
       owner = "cl-plus-ssl";
-      rev = "094db34fc3dd6d3802d3665bc477b55793a2c96a";
-      sha256 = "sha256-5bgiC7rtNJ17H+60GyUn1tz7WV1wtyK0RZpKFKKmrXQ=";
+      rev = "469c9f3c9d279473927a5eeb5a218776876bdf92";
+      sha256 = "7NayjFIJYvei+tyUrgmAzKBcKlvvdXAQMdIs5tw8WqE=";
     };
     lispDependencies = [
       alexandria
@@ -959,8 +959,8 @@ with callPackage ./utils.nix {};
       name = "dexador-src";
       repo = "dexador";
       owner = "fukamachi";
-      rev = "2a095bf7b2d59905b242f81b0bfa57d63d5ac23a";
-      sha256 = "sha256-yS+MNmLQuCwf2HmOZZYJU/D3XvPHkN321r+/L0SY4c8=";
+      rev = "9645a9cbdc337accbd42ca60bfd1bc371612bf25";
+      sha256 = "iFfNcLJQYSGN+eWCe44keFqR1OufBIJTWNa8MqklwkI=";
     };
     lispDependencies = [
       alexandria
@@ -1651,16 +1651,16 @@ with callPackage ./utils.nix {};
     owner = "Shinmera";
     repo = "parachute";
     name = "parachute-src";
-    rev = "8bc3e1b5a1808341967aeb89516f9fab23cd1d9e";
-    sha256 = "sha256-pZSyJ/CI80gZ/zX9k5XlfgCp6cewRT5ffxP3dHW49zI=";
+    rev = "7b75c4e63d878229cfedd81abcd3b98e26598b69";
+    sha256 = "w6ujdiBhc5OCcqgE7xV7QUMfUQ9pe87ie41VKdDhU50=";
   })) {};
 
   plump = callPackage (self: with self; lispify [ array-utils documentation-utils ] (pkgs.fetchFromGitHub {
     owner = "Shinmera";
     repo = "plump";
     name = "plump-src";
-    rev = "cf3633d812845c2f54bb559312e5b24b7fe73abc";
-    sha256 = "sha256-McmssiqmYhNp+o3qlpCljw3anKvZU2LWJjQf0WnPxVY=";
+    rev = "0c3e0b57b43b6e0c5794b6a902f1cf5bee2a2927";
+    sha256 = "juKAc6KlHy9JwB/MPv8JXTGkYUTDJKjC8DHkja8xy7s=";
   })) {};
 
   proc-parse = callPackage (self: with self; lispDerivation {
