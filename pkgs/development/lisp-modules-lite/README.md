@@ -384,6 +384,10 @@ with rec {
 ...
 ```
 
+### Modern ASDF
+
+Are you unhappy with your bundled ASDF? Just include `asdf` as any other lisp dependency to get the latest one. It will automatically be picked up.
+
 ## Output: binary vs .fasl files
 
 Is your program itself intended to be used as a dependency? Then you don’t need to do anything special: pre-compiled .fasls will be left next to each .lisp file, and you can include your derivation itself as a `lispDependencies` entry for another lisp derivation.

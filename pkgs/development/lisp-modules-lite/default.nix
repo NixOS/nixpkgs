@@ -377,6 +377,15 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ fiveam ];
   }) {};
 
+  asdf = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitLab {
+    name = "asdf-src";
+    domain = "gitlab.common-lisp.net";
+    owner = "asdf";
+    repo = "asdf";
+    rev = "3.3.6";
+    sha256 = "sha256-GCmGUMLniPakjyL/D/aEI93Y6bBxjdR+zxXdSgc9NWo=";
+  })) {};
+
   asdf-flv = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "net.didierverna.asdf-flv-src";
     owner = "didierverna";
