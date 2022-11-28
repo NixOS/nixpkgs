@@ -30551,7 +30551,7 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
-  nbstripout = callPackage ../applications/version-management/nbstripout { python = python3; };
+  nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
 
