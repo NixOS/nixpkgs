@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Kerberos manipulation library in Python";
     homepage = "https://github.com/skelsec/minikerberos";
+    changelog = "https://github.com/skelsec/minikerberos/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
