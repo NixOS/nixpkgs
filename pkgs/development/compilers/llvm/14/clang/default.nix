@@ -26,6 +26,9 @@ let
 
     buildInputs = [ libxml2 libllvm ];
 
+    # workaround https://github.com/NixOS/nixpkgs/issues/201254
+    NIX_LDFLAGS = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then "-lgcc" else null;
+
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"

@@ -86,6 +86,9 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "format" ];
 
+  # workaround https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then "-lgcc" else null;
+
   cmakeFlags = [
     "-DLLDB_INCLUDE_TESTS=${if doCheck then "YES" else "NO"}"
     "-DLLVM_ENABLE_RTTI=OFF"
