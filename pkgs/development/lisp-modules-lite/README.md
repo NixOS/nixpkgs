@@ -48,6 +48,7 @@ with lispPackagesLite;
 3. Run the following command:
 
 ```sh
+# This will take a few minutes. That is normal.
 nix run nixpkgs#nix-prefetch-github -- --nix --rev feat/lisp-packages-lite hraban nixpkgs | grep 'rev\|sha'
 ```
 
@@ -179,6 +180,7 @@ The implementation details:
 - Fully relies on ASDFv3 for finding systems: no path or system name rewriting in code
 - Automatic dependency resolution of all lisp modules
 - Automatic “deduplication” of lisp modules in dependency graph (i.e. any source derivation is only ever included once, and all systems for which it’s being loaded are passed in that one single call)
+- Flake support
 
 The trade-off is in favour of robustness, at the cost of more human work in managing the Nix derivation definitions.
 
@@ -345,6 +347,10 @@ This fetches a specific copy of my feature branch, loads only the `lispPackagesL
 
 You would have to manually update both the revision and sha256 explicitly, when changes happen to this feature branch. If (God forbid) you want future proofing, please fork the repo--I could delete or garbage collect my copy.
 
+### Flakes
+
+See the [flake example](examples/flake) for a demo which builds a `nix run` compatible binary.
+
 ### Setting custom Lisp
 
 By default this package uses SBCL, but you can use any Lisp you want. Pass a supported Lisp derivation as the `lisp` argument to override.
@@ -450,7 +456,6 @@ At this point you’d have an updated packages.nix and the user would need to:
 
 ### Decisions to make about future direction
 
-- Flakes? How much, if any support? All-in? Is it the future or a parallel universe?
 - Should this be part of nixpkgs or stand-alone? I think nixpkgs: this is, itself, a collection of packages, and the point is to democratize Common Lisp’s package management. I have a feeling that’s the point of projects that do belong in nixpkgs, but I’m not certain--I also heard something about a departure from the nixpkgs channel in the brave new world of flakes, so TBD. I certainly don’t want this to end up under another BDFL’s auspice.
 
 ## Comparison to `lisp-modules` and `lisp-modules-new`

@@ -1,0 +1,75 @@
+{
+  "nodes": {
+    "asdf-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1668734764,
+        "narHash": "sha256-9pYtv8aUurqrjL9IA0YpBGdWaZO7xKKXppe43nj+ays=",
+        "ref": "refs/heads/master",
+        "rev": "fe6e3ab741c71ecebc8503e20637d4c940326421",
+        "revCount": 4040,
+        "type": "git",
+        "url": "https://gitlab.common-lisp.net/asdf/asdf"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.common-lisp.net/asdf/asdf"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "hly-nixpkgs": {
+      "locked": {
+        "lastModified": 1669619182,
+        "narHash": "sha256-EtxEelGR5AyavXz9AlpSTueXw1mS0wcDAnsXK6XxfZ8=",
+        "owner": "hraban",
+        "repo": "nixpkgs",
+        "rev": "a2ac266f236150af30f9eb624c2e9e0ab1359a09",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hraban",
+        "ref": "feat/lisp-packages-lite",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1669597967,
+        "narHash": "sha256-R+2NaDkXsYkOpFOhmVR8jBZ77Pq55Z6ilaqwFLLn000=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "be9e3762e719211368d186f547f847737baad720",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "asdf-src": "asdf-src",
+        "flake-utils": "flake-utils",
+        "hly-nixpkgs": "hly-nixpkgs",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
