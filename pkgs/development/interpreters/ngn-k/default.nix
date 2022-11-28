@@ -13,14 +13,14 @@ in
 
 useStdenv.mkDerivation {
   pname = "ngn-k";
-  version = "unstable-2021-12-17";
+  version = "unstable-2022-11-27";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ngn";
     repo = "k";
-    rev = "26f83645e9ed4798b43390fb9dcdfa0ab8245a8f";
-    sha256 = "sha256-VcJcLcL1C8yQH6xvpKR0R0gMrhSfsU4tW+Yy0rGdSSw=";
+    rev = "79834b6b9be2a23eec8027d0a2ce11e29f01959c";
+    sha256 = "0dczfyqf33mwxfly39xsgwwgjqqm6pjyrlr6gx04zg8n4ch11zhl";
   };
 
   patches = [
@@ -28,10 +28,10 @@ useStdenv.mkDerivation {
   ];
 
   postPatch = ''
-    patchShebangs a19/a.sh a20/a.sh a21/a.sh dy/a.sh e/a.sh
+    patchShebangs --build a19/a.sh a20/a.sh a21/a.sh dy/a.sh e/a.sh
 
     # don't use hardcoded /bin/sh
-    for f in repl.k m.c;do
+    for f in repl.k repl-bg.k m.c;do
       substituteInPlace "$f" --replace "/bin/sh" "${runtimeShell}"
     done
   '';
@@ -43,6 +43,7 @@ useStdenv.mkDerivation {
 
   outputs = [ "out" "dev" "lib" ];
 
+  # TODO(@sternenseemann): package bulgarian translation
   installPhase = ''
     runHook preInstall
     install -Dm755 k "$out/bin/k"
