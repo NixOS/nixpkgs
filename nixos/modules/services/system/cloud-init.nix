@@ -163,7 +163,8 @@ in
         { text = cfg.config; }
     ;
 
-    systemd.network.enable = cfg.network.enable;
+    # Enable networkd if we're supposed to configure the network, but don't disable it otherwise
+    systemd.network.enable = mkIf cfg.network.enable true;
 
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";
