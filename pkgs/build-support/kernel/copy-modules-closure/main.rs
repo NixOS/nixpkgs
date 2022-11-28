@@ -168,9 +168,6 @@ fn copy_firmware(kernel : &KernelData,
                 &fw.to_string_lossy(),
                 &module.to_string_lossy()
                 );
-              if !allow_missing {
-                  panic!("{}","missing firmware");
-              }
               Ok(())
             };
             if let Err(err) = res {
