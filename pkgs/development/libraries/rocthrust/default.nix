@@ -9,12 +9,10 @@
 , rocm-comgr
 , rocprim
 , hip
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildBenchmarks ? false
 }:
-
-assert buildTests -> gtest != null;
 
 # Doesn't seem to work, thousands of errors compiling with no clear fix
 # Is this an upstream issue? We don't seem to be missing dependencies

@@ -10,11 +10,9 @@
 , rocm-smi
 , hip
 , gtest
-, chrpath ? null
+, chrpath
 , buildTests ? false
 }:
-
-assert buildTests -> chrpath != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";

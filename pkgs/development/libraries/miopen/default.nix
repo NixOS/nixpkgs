@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , writeScript
 , pkg-config
 , cmake
@@ -21,12 +22,11 @@
 , boost
 , sqlite
 , bzip2
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
-, zlib ? null
-, fetchurl ? null
+, texlive
+, doxygen
+, sphinx
+, zlib
+, python3Packages
 , buildDocs ? true
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
@@ -35,13 +35,6 @@
 , fetchKDBs ? true
 , useOpenCL ? false
 }:
-
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
-assert buildTests -> zlib != null;
-assert fetchKDBs -> fetchurl != null;
 
 let
   latex = lib.optionalAttrs buildDocs texlive.combine {

@@ -10,20 +10,14 @@
 , hip
 , sqlite
 , python3
-, gtest ? null
-, boost ? null
-, fftw ? null
-, fftwFloat ? null
-, llvmPackages ? null
+, gtest
+, boost
+, fftw
+, fftwFloat
+, llvmPackages
 , buildTests ? false
 , buildBenchmarks ? false
 }:
-
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> fftw != null;
-assert buildBenchmarks -> fftwFloat != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> llvmPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
