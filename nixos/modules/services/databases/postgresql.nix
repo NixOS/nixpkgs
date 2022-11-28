@@ -123,7 +123,88 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = let
+          databaseType = types.submodule {
+            options = {
+              name = mkOption {
+                type = types.str;
+                description = lib.mdDoc ''
+                  Name of the database to ensure.
+                '';
+              };
+
+              owner = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "db_user";
+                description = lib.mdDoc ''
+                  Name of the user that should own the new database.
+                '';
+              };
+
+              template = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "template0";
+                description = lib.mdDoc ''
+                  Name of the template to use for the new database.
+                '';
+              };
+
+              encoding = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "UTF8";
+                description = lib.mdDoc ''
+                  Name of the encoding to use for the new database.
+                '';
+              };
+
+              lcCollate = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "sv_SE.utf8";
+                description = lib.mdDoc ''
+                  Collation order to use for the new database.
+                '';
+              };
+
+              lcCtype = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "sv_SE.utf8";
+                description = lib.mdDoc ''
+                  Character classification to use for the new database.
+                '';
+              };
+
+              allowConnections = mkOption {
+                type = types.nullOr types.bool;
+                default = null;
+                description = lib.mdDoc ''
+                  Whether connections are allowed to the new database.
+                '';
+              };
+
+              connectionLimit = mkOption {
+                type = types.nullOr types.ints.unsigned;
+                default = null;
+                description = lib.mdDoc ''
+                  The number of connections that are allowed to the new
+                  database. The value `null` indicates no limit.
+                '';
+              };
+
+              isTemplate = mkOption {
+                type = types.nullOr types.bool;
+                default = null;
+                description = lib.mdDoc ''
+                  Whether this database is a template.
+                '';
+              };
+            };
+          };
+        in types.listOf (types.coercedTo types.str (n: { name = n; }) databaseType);
         default = [];
         description = lib.mdDoc ''
           Ensures that the specified databases exist.
@@ -360,7 +441,22 @@ in
           '';
 
         # Wait for PostgreSQL to be ready to accept connections.
-        postStart =
+        postStart = let
+          createDatabase = ps: let
+            addS = n: p: optional (p != null) "${n} '${p}'";
+            addL = n: p: optional (p != null) "${n} ${toString p}";
+          in
+            escapeShellArg (concatStringsSep " " (
+              [ "CREATE DATABASE \"${ps.name}\"" ]
+              ++ addS "OWNER" ps.owner
+              ++ addS "TEMPLATE" ps.template
+              ++ addS "ENCODING" ps.encoding
+              ++ addS "LC_COLLATE" ps.lcCollate
+              ++ addS "LC_CTYPE" ps.lcCtype
+              ++ addL "ALLOW_CONNECTIONS" ps.allowConnections
+              ++ addL "CONNECTION LIMIT" ps.connectionLimit
+              ++ addL "IS_TEMPLATE" ps.isTemplate));
+        in
           ''
             PSQL="psql --port=${toString cfg.port}"
 
@@ -377,7 +473,7 @@ in
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
             ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database.name}'" | grep -q 1 || $PSQL -tAc ${createDatabase database}
             '') cfg.ensureDatabases}
           '' + ''
             ${concatMapStrings (user: ''
