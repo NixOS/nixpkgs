@@ -7336,9 +7336,15 @@ self: super: with self; {
 
   proto-plus = callPackage ../development/python-modules/proto-plus { };
 
+  # Protobuf 4.x
   protobuf = callPackage ../development/python-modules/protobuf {
     # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
     inherit (pkgs) protobuf;
+  };
+
+  # Protobuf 3.x
+  protobuf3 = callPackage ../development/python-modules/protobuf {
+    protobuf = pkgs.protobuf3_20;
   };
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
@@ -12128,8 +12134,6 @@ self: super: with self; {
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
   };
-
-  xxh = callPackage ../tools/networking/xxh { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
