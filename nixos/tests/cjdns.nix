@@ -7,6 +7,9 @@ let
     { ... }:
     { services.cjdns.enable = true;
 
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
+
       # Turning off DHCP isn't very realistic but makes
       # the sequence of address assignment less stochastic.
       networking.useDHCP = false;

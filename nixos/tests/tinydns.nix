@@ -16,6 +16,9 @@ import ./make-test-python.nix ({ lib, ...} : {
           +.bla.foo.bar:1.2.3.4:300
         '';
       };
+
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
     };
   };
   testScript = ''

@@ -24,14 +24,11 @@ in {
           refresh_delay = 72;
         };
       };
-
-      services.dnsmasq.enable = true;
-      services.dnsmasq.servers = [ "127.0.0.1#${toString localProxyPort}" ];
     };
   };
 
   testScript = ''
-    client.wait_for_unit("dnsmasq")
+    client.wait_for_unit("systemd-resolved")
     client.wait_for_unit("dnscrypt-proxy2")
     client.wait_until_succeeds("ss --numeric --udp --listening | grep -q ${toString localProxyPort}")
   '';

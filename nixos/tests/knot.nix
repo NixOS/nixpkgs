@@ -57,6 +57,10 @@ in {
           { address = "fd00::1"; prefixLength = 64; }
         ];
       };
+
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
+
       services.knot.enable = true;
       services.knot.extraArgs = [ "-v" ];
       services.knot.keyFiles = [ tsigFile ];
