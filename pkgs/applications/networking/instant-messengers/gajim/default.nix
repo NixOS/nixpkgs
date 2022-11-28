@@ -56,11 +56,11 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb-run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus ];
 
   checkPhase = ''
     xvfb-run dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       ${python3.interpreter} -m unittest discover -s test/gtk -v
     ${python3.interpreter} -m unittest discover -s test/no_gui -v
   '';

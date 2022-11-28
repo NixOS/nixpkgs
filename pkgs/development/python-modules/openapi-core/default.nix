@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.16.1";
+  version = "0.16.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = version;
-    hash = "sha256-J3n34HR5lfMM0ik5HAZ2JCr75fX5FTqBWrZ7E3/6XSE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-i1MeKPVWowB12gE4kIWBjq6zvn2aIVW4ZDK8bKNAP1o=";
   };
 
   postPatch = ''
