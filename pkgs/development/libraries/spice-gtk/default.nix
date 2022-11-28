@@ -137,6 +137,8 @@ stdenv.mkDerivation rec {
     "-Dpolkit=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dlibcap-ng=disabled"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
   ];
 
   meta = with lib; {

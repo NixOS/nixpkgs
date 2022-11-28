@@ -141,7 +141,7 @@
       </listitem>
       <listitem>
         <para>
-          PHP 8.2.0 RC 6 is available.
+          PHP 8.2.0 RC 7 is available.
         </para>
       </listitem>
       <listitem>
@@ -707,6 +707,14 @@
           because of stability and compatibility issues. Users who still
           wish to remain using GTK can do so by using
           <literal>emacs-gtk</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kanidm</literal> has been updated to 1.1.0-alpha.10
+          and now requires a tls certificate and key. It will always
+          start an https and – if enabled – an ldaps server and no http
+          and ldap server anymore.
         </para>
       </listitem>
       <listitem>
