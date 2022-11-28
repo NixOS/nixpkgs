@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
   ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
   # No flags to build selectively it seems...

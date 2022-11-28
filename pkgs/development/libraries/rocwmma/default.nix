@@ -92,7 +92,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DROCWMMA_BUILD_VALIDATION_TESTS=ON"
     "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
