@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";
     homepage = "https://github.com/iMicknl/python-overkiz-api";
+    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
