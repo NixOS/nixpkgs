@@ -25,7 +25,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = "installManPage ci/release/template/man/d2.1";
+  postInstall = ''
+    installManPage ci/release/template/man/d2.1
+  '';
 
   subPackages = [ "cmd/d2" ];
 
