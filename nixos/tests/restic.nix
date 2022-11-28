@@ -2,7 +2,6 @@ import ./make-test-python.nix (
   { pkgs, ... }:
 
   let
-    password = "some_password";
     repository = "/tmp/restic-backup";
     repositoryFile = "${pkgs.writeText "repositoryFile" "/tmp/restic-backup-from-file"}";
     rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
@@ -88,42 +87,60 @@ import ./make-test-python.nix (
           "grep 'backup .* /opt' /tmp/fake-restic.log",
       )
       server.succeed(
+          # set up
           "mkdir -p /opt",
           "touch /opt/some_file",
           "mkdir -p /tmp/restic-rclone-backup",
+
+          # test that remotebackup runs custom commands and produces a snapshot
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
-          "systemctl start restic-backups-remotebackup-from-file.service",
-          "systemctl start restic-backups-rclonebackup.service",
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+
+          # test that remotebackup-from-file produces a snapshot
+          "systemctl start restic-backups-remotebackup-from-file.service",
           '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+
+          # test that rclonebackup produces a snapshot
+          "systemctl start restic-backups-rclonebackup.service",
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+
+          # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
           "grep 'backup .* /opt' /tmp/fake-restic.log",
           "grep 'check .* --some-check-option' /tmp/fake-restic.log",
+
+          # test that we can create four snapshots in remotebackup and rclonebackup
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
+
           "timedatectl set-time '2018-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
+
           "timedatectl set-time '2018-12-14 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
+
           "timedatectl set-time '2018-12-15 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
+
           "timedatectl set-time '2018-12-16 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
+
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
+
+          # test that remoteprune brings us back to 1 snapshot in remotebackup
           "systemctl start restic-backups-remoteprune.service",
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
       )
