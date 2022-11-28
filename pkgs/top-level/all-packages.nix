@@ -608,8 +608,7 @@ with pkgs;
 
   archiver = callPackage ../applications/misc/archiver { };
 
-  # It segfaults if it uses qt5.15
-  digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox {
+  digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
@@ -685,6 +684,8 @@ with pkgs;
   dippi = callPackage ../tools/graphics/dippi {};
 
   dispad = callPackage ../tools/X11/dispad { };
+
+  diswall = callPackage ../applications/networking/diswall { };
 
   dupeguru = callPackage ../applications/misc/dupeguru { };
 
@@ -1618,9 +1619,7 @@ with pkgs;
 
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
-  ludusavi = callPackage ../applications/backup/ludusavi {
-    inherit (plasma5Packages) kdialog;
-  };
+  ludusavi = callPackage ../applications/backup/ludusavi { };
 
   maiko = callPackage ../applications/emulators/maiko { };
 
@@ -2290,7 +2289,7 @@ with pkgs;
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
-  brewtarget = libsForQt514.callPackage ../applications/misc/brewtarget { } ;
+  brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
 
   # Derivation's result is not used by nixpkgs. Useful for validation for
   # regressions of bootstrapTools on hydra and on ofborg. Example:
@@ -3988,6 +3987,8 @@ with pkgs;
 
   esptool = callPackage ../tools/misc/esptool { };
 
+  esptool_3 = callPackage ../tools/misc/esptool/3.nix { };
+
   esptool-ck = callPackage ../tools/misc/esptool-ck { };
 
   ephemeralpg = callPackage ../development/tools/database/ephemeralpg {};
@@ -4280,8 +4281,6 @@ with pkgs;
   };
 
   grim = callPackage ../tools/graphics/grim { };
-
-  gringo = callPackage ../tools/misc/gringo { };
 
   grit = callPackage ../tools/misc/grit { };
 
@@ -5408,7 +5407,6 @@ with pkgs;
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
@@ -6851,8 +6849,6 @@ with pkgs;
 
   fsarchiver = callPackage ../tools/archivers/fsarchiver { };
 
-  fsfs = callPackage ../tools/filesystems/fsfs { };
-
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
@@ -7928,10 +7924,7 @@ with pkgs;
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
-  i2p = callPackage ../tools/networking/i2p {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  i2p = callPackage ../tools/networking/i2p { };
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
@@ -11089,7 +11082,7 @@ with pkgs;
 
   rockbox-utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
-  rosegarden = libsForQt514.callPackage ../applications/audio/rosegarden { };
+  rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
 
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
@@ -11261,8 +11254,6 @@ with pkgs;
   };
 
   screen-message = callPackage ../tools/X11/screen-message { };
-
-  screencloud = libsForQt5.callPackage ../applications/graphics/screencloud { };
 
   screenkey = callPackage ../applications/video/screenkey { };
 
@@ -11620,6 +11611,8 @@ with pkgs;
   spiped = callPackage ../tools/networking/spiped { };
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
+
+  sqlite3-to-mysql = callPackage ../tools/misc/sqlite3-to-mysql { };
 
   sqls = callPackage ../applications/misc/sqls { };
 
@@ -12089,8 +12082,6 @@ with pkgs;
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
-
-  tlspool = callPackage ../tools/networking/tlspool { };
 
   tlsx = callPackage ../tools/security/tlsx { };
 
@@ -12985,7 +12976,7 @@ with pkgs;
 
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
-  wkhtmltopdf = libsForQt514.callPackage ../tools/graphics/wkhtmltopdf { };
+  wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
@@ -13276,6 +13267,8 @@ with pkgs;
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
+  zsh-forgit = callPackage ../shells/zsh/zsh-forgit { };
+
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
 
   zsh-autocomplete = callPackage ../shells/zsh/zsh-autocomplete { };
@@ -13418,10 +13411,7 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
-  abcl = callPackage ../development/compilers/abcl {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  abcl = callPackage ../development/compilers/abcl { };
 
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
@@ -13509,7 +13499,9 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
-  ballerina = callPackage ../development/compilers/ballerina { openjdk = openjdk11; };
+  ballerina = callPackage ../development/compilers/ballerina {
+    openjdk = openjdk11_headless;
+  };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
@@ -14725,8 +14717,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_11.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_11.libraries or llvmPackages_11.libraries;
     targetLlvm = targetPackages.llvmPackages_11.llvm or llvmPackages_11.llvm;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
   }));
 
   llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
@@ -14734,8 +14724,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
     targetLlvm = targetPackages.llvmPackages_12.llvm or llvmPackages_12.llvm;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
   }));
 
   llvmPackages_13 = recurseIntoAttrs (callPackage ../development/compilers/llvm/13 ({
@@ -14743,8 +14731,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
     targetLlvm = targetPackages.llvmPackages_13.llvm or llvmPackages_13.llvm;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
   }));
 
   llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
@@ -14752,8 +14738,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_14.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
     targetLlvm = targetPackages.llvmPackages_14.llvm or llvmPackages_14.llvm;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.hostPlatform == stdenv.buildPlatform && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
   }));
 
   llvmPackages_latest = llvmPackages_14;
@@ -14768,9 +14752,7 @@ with pkgs;
 
   marst = callPackage ../development/compilers/marst { };
 
-  mercury = callPackage ../development/compilers/mercury {
-    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  mercury = callPackage ../development/compilers/mercury { };
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
@@ -14988,7 +14970,13 @@ with pkgs;
 
   rocfft = callPackage ../development/libraries/rocfft { };
 
+  rocrand = callPackage ../development/libraries/rocrand { };
+
   tensile = python3Packages.callPackage ../development/libraries/tensile { };
+
+  rocwmma = callPackage ../development/libraries/rocwmma {
+    inherit (llvmPackages) openmp;
+  };
 
   rocblas = callPackage ../development/libraries/rocblas {
     inherit (llvmPackages_rocm) llvm;
@@ -14999,6 +14987,19 @@ with pkgs;
   };
 
   rocthrust = callPackage ../development/libraries/rocthrust { };
+
+  miopen = callPackage ../development/libraries/miopen {
+    inherit (llvmPackages_rocm) clang llvm;
+    boost = boost.override { enableStatic = true; };
+  };
+
+  miopen-hip = miopen.override {
+    useOpenCL = false;
+  };
+
+  miopen-opencl = miopen.override {
+    useOpenCL = true;
+  };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
@@ -16304,23 +16305,13 @@ with pkgs;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
-  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
-    jdk = jdk8; # todo: remove override https://github.com/nixos/nixpkgs/pull/89731
-  };
-
-  antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
+  antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
+  antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
   antlr3 = antlr3_5;
 
-  inherit (callPackages ../development/tools/parsing/antlr/4.nix {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  }) antlr4_8;
-
   inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
+    antlr4_8
     antlr4_9
     antlr4_10
     antlr4_11;
@@ -17544,11 +17535,11 @@ with pkgs;
   patchelf = if with stdenv.buildPlatform; isAarch64 && isMusl then
     patchelf_0_13
   else
-    patchelf_0_14;
+    patchelfStable;
   patchelf_0_13 = callPackage ../development/tools/misc/patchelf/0.13.nix {
-    patchelf = patchelf_0_14;
+    patchelf = patchelfStable;
   };
-  patchelf_0_14 = callPackage ../development/tools/misc/patchelf { };
+  patchelfStable = callPackage ../development/tools/misc/patchelf { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
@@ -17884,6 +17875,8 @@ with pkgs;
   stm8flash = callPackage ../development/embedded/stm8/stm8flash { };
 
   strace = callPackage ../development/tools/misc/strace { };
+
+  strace-analyzer = callPackage ../development/tools/misc/strace-analyzer { };
 
   stylua = callPackage ../development/tools/stylua { };
 
@@ -18852,7 +18845,7 @@ with pkgs;
     samba = if stdenv.isDarwin then null else samba;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
-      VideoDecodeAcceleration;
+      VideoDecodeAcceleration VideoToolbox;
   };
 
   ffmpeg_5-full = ffmpeg-full.override {
@@ -19076,11 +19069,7 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  graphia = libsForQt514.callPackage ../applications/science/misc/graphia {
-    # Using gcc 10 because this fails to build with gcc 11
-    # Error similar to this https://github.com/RPCS3/rpcs3/issues/10291
-    stdenv = gcc10Stdenv;
-  };
+  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
   graphinder = callPackage ../tools/security/graphinder { };
 
@@ -22560,6 +22549,8 @@ with pkgs;
   speechd = callPackage ../development/libraries/speechd { };
 
   speech-tools = callPackage ../development/libraries/speech-tools {};
+
+  speedtest-exporter = callPackage ../development/libraries/speedtest-exporter {};
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
@@ -26708,9 +26699,7 @@ with pkgs;
 
   national-park-typeface = callPackage ../data/fonts/national-park { };
 
-  netease-music-tui = callPackage ../applications/audio/netease-music-tui {
-    openssl = openssl_1_1;
-  };
+  netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
   netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
@@ -27052,7 +27041,6 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
-    inherit (plasma5Packages) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
@@ -27250,6 +27238,8 @@ with pkgs;
   a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
   aacgain = callPackage ../applications/audio/aacgain { };
+
+  aaxtomp3 = callPackage ../applications/audio/aaxtomp3 {};
 
   abcde = callPackage ../applications/audio/abcde {
     inherit (python3Packages) eyeD3;
@@ -27727,7 +27717,7 @@ with pkgs;
 
   cava = callPackage ../applications/audio/cava { };
 
-  cb2bib = libsForQt514.callPackage ../applications/office/cb2bib { };
+  cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
@@ -28054,6 +28044,8 @@ with pkgs;
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
 
+  dockstarter = callPackage ../tools/virtualization/dockstarter {};
+
   doodle = callPackage ../applications/search/doodle { };
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
@@ -28367,8 +28359,6 @@ with pkgs;
   kerbrute = callPackage ../tools/security/kerbrute { };
 
   kvmtool = callPackage ../applications/virtualization/kvmtool { };
-
-  exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
@@ -28854,9 +28844,7 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freenet = callPackage ../applications/networking/p2p/freenet {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  freenet = callPackage ../applications/networking/p2p/freenet { };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
 
@@ -29393,6 +29381,8 @@ with pkgs;
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
+  popura = callPackage ../tools/networking/popura {};
+
   shepherd = nodePackages."@nerdwallet/shepherd";
 
   skate = callPackage ../applications/misc/skate { };
@@ -29698,7 +29688,7 @@ with pkgs;
     lua = lua5_1;
   };
 
-  ipe = libsForQt514.callPackage ../applications/graphics/ipe {
+  ipe = libsForQt5.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
     lua5 = lua5_3;
@@ -30765,6 +30755,8 @@ with pkgs;
 
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
+  onmetal-image = callPackage ../tools/virtualization/onmetal-image { };
+
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
@@ -30971,7 +30963,7 @@ with pkgs;
 
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 
-  mythtv = libsForQt514.callPackage ../applications/video/mythtv { };
+  mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   micro = callPackage ../applications/editors/micro { };
 
@@ -32793,7 +32785,6 @@ with pkgs;
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
-    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
@@ -33152,7 +33143,7 @@ with pkgs;
     gtk = gtk2;
   };
 
-  xxh = with python3Packages; toPythonApplication xxh;
+  xxh = callPackage ../tools/networking/xxh { };
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
@@ -33377,7 +33368,7 @@ with pkgs;
 
   xnotify = callPackage ../tools/X11/xnotify { };
 
-  xygrib = libsForQt514.callPackage ../applications/misc/xygrib {};
+  xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
@@ -34730,7 +34721,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  sienna = callPackage ../games/sienna { love = love_0_10; };
+  sienna = callPackage ../games/sienna { };
 
   sil = callPackage ../games/sil { };
 
@@ -35827,9 +35818,7 @@ with pkgs;
     gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
     stdenv = gccStdenv;
   };
-  cvc4 = callPackage ../applications/science/logic/cvc4 {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  cvc4 = callPackage ../applications/science/logic/cvc4 { };
 
   cvc5 = callPackage ../applications/science/logic/cvc5 { };
 
@@ -36377,7 +36366,7 @@ with pkgs;
 
   ### SCIENCE/ROBOTICS
 
-  apmplanner2 = libsForQt514.callPackage ../applications/science/robotics/apmplanner2 { };
+  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
 
@@ -36985,6 +36974,8 @@ with pkgs;
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
+
+  nix-serve-ng = haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
@@ -37871,7 +37862,6 @@ with pkgs;
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
   simple-http-server = callPackage ../servers/simple-http-server {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 

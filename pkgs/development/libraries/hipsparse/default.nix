@@ -11,22 +11,14 @@
 , hip
 , gfortran
 , git
-, fetchzip ? null
 , gtest ? null
 , buildTests ? false
 }:
 
-assert buildTests -> fetchzip != null;
 assert buildTests -> gtest != null;
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
-let
-  matrices = lib.optionalAttrs buildTests import ./deps.nix {
-    inherit fetchzip;
-    mirror1 = "https://sparse.tamu.edu/MM";
-    mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
-  };
-in stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
   repoVersion = "2.3.1";
   rocmVersion = "5.3.3";
@@ -81,25 +73,25 @@ in stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildTests ''
     mkdir -p matrices
 
-    ln -s ${matrices.matrix-01}/*.mtx matrices
-    ln -s ${matrices.matrix-02}/*.mtx matrices
-    ln -s ${matrices.matrix-03}/*.mtx matrices
-    ln -s ${matrices.matrix-04}/*.mtx matrices
-    ln -s ${matrices.matrix-05}/*.mtx matrices
-    ln -s ${matrices.matrix-06}/*.mtx matrices
-    ln -s ${matrices.matrix-07}/*.mtx matrices
-    ln -s ${matrices.matrix-08}/*.mtx matrices
-    ln -s ${matrices.matrix-09}/*.mtx matrices
-    ln -s ${matrices.matrix-10}/*.mtx matrices
-    ln -s ${matrices.matrix-11}/*.mtx matrices
-    ln -s ${matrices.matrix-12}/*.mtx matrices
-    ln -s ${matrices.matrix-13}/*.mtx matrices
-    ln -s ${matrices.matrix-14}/*.mtx matrices
-    ln -s ${matrices.matrix-15}/*.mtx matrices
-    ln -s ${matrices.matrix-16}/*.mtx matrices
-    ln -s ${matrices.matrix-17}/*.mtx matrices
-    ln -s ${matrices.matrix-18}/*.mtx matrices
-    ln -s ${matrices.matrix-19}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-01}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-02}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-03}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-04}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-05}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-06}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-07}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-08}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-09}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-10}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-11}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-12}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-13}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-14}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-15}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-16}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-17}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-18}/*.mtx matrices
+    ln -s ${rocsparse.passthru.matrices.matrix-19}/*.mtx matrices
 
     # Not used by the original cmake, causes an error
     rm matrices/*_b.mtx

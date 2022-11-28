@@ -1,20 +1,22 @@
-{ lib, fetchFromGitHub, python3, openssl }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.3.1";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-9WmiLji7Zoad5WIzgkpvkI9t96sfdkCtFh6zqVxF7qo=";
+    hash = "sha256-haLwf3loOvqdqQN/iuVBciQ6nCnuc9AqqOGKvDwLBHE=";
   };
 
-  postPatch = ''
-    substituteInPlace test/test_imagegen.py \
-      --replace "sys.executable, ESPTOOL_PY" "ESPTOOL_PY"
-  '';
+  patches = [
+    ./test-call-bin-directly.patch
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     bitstring
@@ -24,26 +26,16 @@ python3.pkgs.buildPythonApplication rec {
     reedsolo
   ];
 
-  # wrapPythonPrograms will overwrite esptool.py with a bash script,
-  # but espefuse.py tries to import it. Since we don't add any binary paths,
-  # use patchPythonScript directly.
-  dontWrapPythonPrograms = true;
-  postFixup = ''
-    buildPythonPath "$out $pythonPath"
-    for f in $out/bin/*.py; do
-        echo "Patching $f"
-        patchPythonScript "$f"
-    done
-  '';
-
   checkInputs = with python3.pkgs; [
     pyelftools
+    pytest
   ];
 
   # tests mentioned in `.github/workflows/test_esptool.yml`
   checkPhase = ''
     runHook preCheck
 
+    export ESPSECURE_PY=$out/bin/espsecure.py
     export ESPTOOL_PY=$out/bin/esptool.py
     ${python3.interpreter} test/test_imagegen.py
     ${python3.interpreter} test/test_espsecure.py
