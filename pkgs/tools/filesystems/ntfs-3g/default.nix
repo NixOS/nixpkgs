@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
 , gettext, mount, libuuid, kmod, macfuse-stubs, DiskArbitration
 , crypto ? false, libgcrypt, gnutls
 }:
@@ -28,6 +28,16 @@ stdenv.mkDerivation rec {
     # https://github.com/tuxera/ntfs-3g/pull/39
     ./autoconf-sbin-helpers.patch
     ./consistent-sbindir-usage.patch
+    (fetchpatch {
+      name = "CVE-2022-40284-1.patch";
+      url = "https://github.com/tuxera/ntfs-3g/commit/18bfc676119a1188e8135287b8327b0760ba44a1.patch";
+      hash = "sha256-CxM1kHYqQ1Dbwj0VEUtqEnWrB9aQy/O65FHWtcznwDQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-40284-2.patch";
+      url = "https://github.com/tuxera/ntfs-3g/commit/76c3a799a97fbcedeeeca57f598be508ae2a1656.patch";
+      hash = "sha256-riGev/z++VQdFkwdMYfBwJa3F8WR6yGDUf2SIsb1kD4=";
+    })
   ];
 
   configureFlags = [
