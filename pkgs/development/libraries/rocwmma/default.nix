@@ -18,10 +18,6 @@
 , gpuTargets ? [ ] # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
-# Building tests isn't working for now
-# undefined reference to symbol '_ZTIN7testing4TestE'
-assert buildTests == false;
-
 let
   latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
@@ -142,6 +138,8 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocWMMA";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    # Building tests isn't working for now
+    # undefined reference to symbol '_ZTIN7testing4TestE'
+    broken = finalAttrs.rocmVersion != hip.version || buildTests;
   };
 })

@@ -28,11 +28,6 @@
 , gpuTargets ? [ "all" ]
 }:
 
-# Tests and benchmarks are a can of worms that I will tackle in a different PR
-# It involves completely rewriting the amd-blis derivation
-assert buildTests == false;
-assert buildBenchmarks == false;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
   repoVersion = "2.45.0";
@@ -135,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    # Tests and benchmarks are a can of worms that I will tackle in a different PR
+    # It involves completely rewriting the amd-blis derivation
+    broken = finalAttrs.rocmVersion != hip.version || buildTests || buildBenchmarks;
   };
 })
