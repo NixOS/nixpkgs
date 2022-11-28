@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-Dpython=python3"
-    "-DAMDGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     "-DBUILD_WITH_TENSILE=${if buildTensile then "ON" else "OFF"}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
