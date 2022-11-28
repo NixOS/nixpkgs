@@ -186,7 +186,7 @@ in
               '';
               default = {};
               defaultText = lib.literalMD ''
-                If not set then the user created will have the default permissions assigned by postgres
+                The default, `null`, means that the user created will have the default permissions assigned by PostgreSQL. Subsequent server starts will not set or unset the clause, so imperative changes are preserved.
               '';
               type = types.submodule {
                 options = let
