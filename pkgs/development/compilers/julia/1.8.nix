@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , which
 , python3
 , gfortran
@@ -40,6 +41,15 @@ stdenv.mkDerivation rec {
       path = name: "https://raw.githubusercontent.com/archlinux/svntogit-community/6fd126d089d44fdc875c363488a7c7435a223cec/trunk/${name}";
     in
     [
+      # Pull upstream fix to fix tests mpfr-4.1.1
+      #   https://github.com/JuliaLang/julia/pull/47659
+      (fetchpatch {
+        name = "mfr-4.1.1.patch";
+        url = "https://github.com/JuliaLang/julia/commit/59965205ccbdffb4e25e1b60f651ca9df79230a4.patch";
+        hash = "sha256-QJ5wxZMhz+or8BqcYv/5fNSTxDAvdSizTYqt7630kcw=";
+        includes = [ "stdlib/MPFR_jll/test/runtests.jl" ];
+      })
+
       (fetchurl {
         url = path "julia-hardcoded-libs.patch";
         sha256 = "sha256-kppSpVA7bRohd0wXDs4Jgct9ocHnpbeiiSz7ElFom1U=";
