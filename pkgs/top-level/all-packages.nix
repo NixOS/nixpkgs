@@ -5122,6 +5122,10 @@ with pkgs;
 
   bbe = callPackage ../tools/misc/bbe { };
 
+  bkcrack = callPackage ../tools/security/bkcrack {
+    inherit (llvmPackages) openmp;
+  };
+
   bdsync = callPackage ../tools/backup/bdsync { };
 
   beamerpresenter = beamerpresenter-mupdf;
