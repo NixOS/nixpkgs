@@ -14,11 +14,6 @@
 , buildBenchmarks ? false
 }:
 
-# Doesn't seem to work, thousands of errors compiling with no clear fix
-# Is this an upstream issue? We don't seem to be missing dependencies
-assert buildTests == false;
-assert buildBenchmarks == false;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocthrust";
   repoVersion = "2.16.0";
@@ -96,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocThrust";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    # Tests/Benchmarks don't seem to work, thousands of errors compiling with no clear fix
+    # Is this an upstream issue? We don't seem to be missing dependencies
+    broken = finalAttrs.rocmVersion != hip.version || buildTests || buildBenchmarks;
   };
 })

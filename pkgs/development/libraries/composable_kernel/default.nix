@@ -11,11 +11,6 @@
 , gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
 
-# Several tests seem to either not compile or have a race condition
-# Undefined reference to symbol '_ZTIN7testing4TestE'
-# Try removing this next update
-assert buildTests == false;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
   version = "unstable-2022-11-19";
@@ -87,5 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
+    # Several tests seem to either not compile or have a race condition
+    # Undefined reference to symbol '_ZTIN7testing4TestE'
+    # Try removing this next update
+    broken = buildTests;
   };
 })
