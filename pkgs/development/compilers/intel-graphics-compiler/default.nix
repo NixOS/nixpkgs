@@ -6,7 +6,6 @@
 , bison
 , flex
 , llvmPackages_11
-, lld_11
 , opencl-clang
 , python3
 , spirv-tools
@@ -20,38 +19,36 @@ let
   vc_intrinsics_src = fetchFromGitHub {
     owner = "intel";
     repo = "vc-intrinsics";
-    rev = "v0.3.0";
-    sha256 = "sha256-1Rm4TCERTOcPGWJF+yNoKeB9x3jfqnh7Vlv+0Xpmjbk=";
+    rev = "v0.6.0";
+    sha256 = "sha256-seVqRtdQ4ciWhsXzneS7pG1aaFtw28SPu9XDkBtr5nc=";
   };
+
   llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
-  inherit (llvmPkgs) llvm;
-  inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang libclang spirv-llvm-translator;
-  inherit (lib) getVersion optional optionals versionOlder versions;
+    spirv-llvm-translator = spirv-llvm-translator.override { llvm = llvm; };
+  } // lib.optionalAttrs buildWithPatches opencl-clang;
+
+  inherit (llvmPackages_11) lld llvm;
+  inherit (llvmPkgs) clang libclang spirv-llvm-translator;
 in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.11061";
+  version = "1.0.12260.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    sha256 = "sha256-qS/+GTqHtp3T6ggPKrCDsrTb7XvVOUaNbMzGU51jTu4=";
+    sha256 = "sha256-fNBgJGIpHC+rnKsV1Kq1ubz/4l0+ltUHaUpaWsYTgmg=";
   };
 
-  nativeBuildInputs = [ clang cmake bison flex python3 ];
+  nativeBuildInputs = [ cmake bison flex python3 ];
 
-  buildInputs = [ spirv-headers spirv-tools clang opencl-clang spirv-llvm-translator llvm lld_11 ];
+  buildInputs = [ spirv-headers spirv-tools spirv-llvm-translator llvm lld ];
 
   strictDeps = true;
 
-  # checkInputs = [ lit pythonPackages.nose ];
-
-  # FIXME: How do we run the test suite?
-  # https://github.com/intel/intel-graphics-compiler/issues/98
+  # testing is done via intel-compute-runtime
   doCheck = false;
 
   postPatch = ''
@@ -74,10 +71,10 @@ stdenv.mkDerivation rec {
   prebuilds = runCommandLocal "igc-cclang-prebuilds" { } ''
     mkdir $out
     ln -s ${clang}/bin/clang $out/
-    ln -s clang $out/clang-${versions.major (getVersion clang)}
+    ln -s clang $out/clang-${lib.versions.major (lib.getVersion clang)}
     ln -s ${opencl-clang}/lib/* $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c.h $out/
-    ln -s ${lib.getLib libclang}/lib/clang/${getVersion clang}/include/opencl-c-base.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c.h $out/
+    ln -s ${lib.getLib libclang}/lib/clang/${lib.getVersion clang}/include/opencl-c-base.h $out/
   '';
 
   cmakeFlags = [
@@ -86,15 +83,14 @@ stdenv.mkDerivation rec {
     "-DIGC_OPTION__SPIRV_TOOLS_MODE=Prebuilds"
     "-DCCLANG_BUILD_PREBUILDS=ON"
     "-DCCLANG_BUILD_PREBUILDS_DIR=${prebuilds}"
-    "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
+    "-DIGC_PREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
   ];
 
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gloaming ];
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/intel-graphics-compiler.x86_64-darwin
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
