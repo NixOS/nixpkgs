@@ -23,6 +23,9 @@ let
           1.0.168.192.in-addr.arpa IN PTR ns.example.org.
         '';
       };
+
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
     };
     services.dnsdist = {
       enable = true;
