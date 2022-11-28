@@ -272,6 +272,9 @@ package-maintainers:
     - wstunnel
   gridaphobe:
     - located-base
+  ivanbrennan:
+    - xmonad
+    - xmonad-contrib
   jb55:
     # - bson-lens
     - cased
