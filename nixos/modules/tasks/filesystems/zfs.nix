@@ -503,6 +503,10 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+        {
+          assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
+          message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
+        }
       ];
 
       boot = {
