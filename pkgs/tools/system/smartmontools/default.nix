@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
-, enableMail ? false
+, enableMail ? true
 , gnused
 , mailutils
 , inetutils
