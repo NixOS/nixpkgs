@@ -17505,6 +17505,8 @@ with pkgs;
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
+  patsh = callPackage ../development/tools/misc/patsh { };
+
   pax-rs = callPackage ../development/tools/pax-rs { };
 
   perfect-hash = callPackage ../development/tools/misc/perfect-hash { };
