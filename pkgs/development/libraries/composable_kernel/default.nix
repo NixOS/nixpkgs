@@ -5,18 +5,11 @@
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildExamples ? false
-, gpuTargets ? null # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
-
-assert buildTests -> gtest != null;
-
-# Several tests seem to either not compile or have a race condition
-# Undefined reference to symbol '_ZTIN7testing4TestE'
-# Try removing this next update
-assert buildTests == false;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
@@ -54,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-  ] ++ lib.optionals (gpuTargets != null) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
   # No flags to build selectively it seems...
@@ -89,5 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
+    # Several tests seem to either not compile or have a race condition
+    # Undefined reference to symbol '_ZTIN7testing4TestE'
+    # Try removing this next update
+    broken = buildTests;
   };
 })
