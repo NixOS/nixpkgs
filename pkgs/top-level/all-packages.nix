@@ -15207,9 +15207,6 @@ with pkgs;
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
-  rustracer = callPackage ../development/tools/rust/racer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
