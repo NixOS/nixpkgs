@@ -23,6 +23,7 @@
 , gtk3
 , dconf
 , libglvnd
+, darwin
 , buildPackages
 
   # options
@@ -43,7 +44,7 @@ let
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtModule srcs; };
+      callPackage = self.newScope ({ inherit qtModule stdenv srcs; });
     in
     {
 
@@ -53,9 +54,16 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        inherit (darwin.apple_sdk_11_0.frameworks) AGL AVFoundation AppKit GSS MetalKit;
         patches = [
           ./patches/qtbase-qmake-pkg-config.patch
           ./patches/qtbase-tzdir.patch
+          # Remove symlink check causing build to bail out and fail.
+          # https://gitlab.kitware.com/cmake/cmake/-/issues/23251
+          (fetchpatch {
+            url = "https://github.com/Homebrew/formula-patches/raw/c363f0edf9e90598d54bc3f4f1bacf95abbda282/qt/qt_internal_check_if_path_has_symlinks.patch";
+            sha256 = "sha256-Gv2L8ymZSbJxcmUijKlT2NnkIB3bVH9D7YSsDX2noTU=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix {};

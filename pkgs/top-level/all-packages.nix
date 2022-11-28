@@ -22060,11 +22060,11 @@ with pkgs;
   qt6 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-6) {
       inherit newScope;
-      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
+      inherit lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
       inherit bison cups dconf harfbuzz libGL perl gtk3 ninja;
       inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-      inherit buildPackages;
-      inherit libglvnd;
+      inherit darwin buildPackages libglvnd;
+      stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       cmake = cmake.overrideAttrs (attrs: {
         patches = attrs.patches ++ [
           ../development/libraries/qt-6/patches/cmake.patch
