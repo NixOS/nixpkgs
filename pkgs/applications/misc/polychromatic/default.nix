@@ -42,6 +42,15 @@ python3Packages.buildPythonApplication rec {
   preConfigure = ''
     scripts/build-styles.sh
   '';
+  nativeBuildInputs = with python3Packages; [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    sassc
+    wrapGAppsHook
+    qt5.wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     colorama
@@ -57,18 +66,6 @@ python3Packages.buildPythonApplication rec {
     ibus
     usbutils
   ];
-
-  nativeBuildInputs = with python3Packages; [
-    gettext
-    gobject-introspection
-    meson
-    ninja
-    sassc
-    wrapGAppsHook
-    qt5.wrapQtAppsHook
-  ];
-
-
 
   dontWrapGapps = true;
   dontWrapQtApps = true;
