@@ -25,6 +25,8 @@ let
           secretKeyFile = "/etc/powerdns-admin/secret";
           saltFile = "/etc/powerdns-admin/salt";
         };
+        # Occupies port 53 otherwise
+        services.resolved.enable = false;
         # It's insecure to have secrets in the world-readable nix store, but this is just a test
         environment.etc."powerdns-admin/secret".text = "secret key";
         environment.etc."powerdns-admin/salt".text = "salt";
