@@ -27,11 +27,11 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "515.86.01";
-    sha256_64bit = "sha256-FBd34covEel9jTMmAhPxvjJ+tzkiriL03atAS7LvRmQ=";
-    openSha256 = "sha256-9QVq6eN+usbzMb0hYvAFPlyr6MDYHvgWPz2orm+5QFc=";
-    settingsSha256 = "sha256-I8CE4EywZrsqzEy7plEG3bNfzTiT+vZJ1sqEQBrtLUQ=";
-    persistencedSha256 = "sha256-vjn315k7i16U1NjY3EB0pw6sLddEcnKaT9CrHOCY268=";
+    version = "525.60.11";
+    sha256_64bit = "sha256-gW7mwuCBPMw9SnlY9x/EmjfGDv4dUdYUbBznJAOYPV0=";
+    openSha256 = "sha256-33ATZuYu+SOOxM6UKXp6J+f1+zbmHvaK4v13X3UZTTM=";
+    settingsSha256 = "sha256-gA1x6oEpnkr/OPP4eR1L5gC5srvEKtDrSpnv2QEaEpE=";
+    persistencedSha256 = "sha256-AFMy3agoJ6yVsGgUvTfOzHlz30iApBpAReckq9iS7AA=";
   };
 
   latest = selectHighestVersion production (generic {
