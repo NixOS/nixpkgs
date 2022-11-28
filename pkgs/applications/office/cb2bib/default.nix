@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qmake, qtbase, qtwebkit, qtx11extras, lzo, libX11 }:
+{ lib, stdenv, fetchurl, qmake, qtbase, qtwebkit, qtx11extras, lzo, libX11, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cb2bib";
@@ -8,15 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0gv7cnxi84lr6d5y71pd67h0ilmf5c88j1jxgyn9dvj19smrv99h";
   };
   buildInputs = [ qtbase qtwebkit qtx11extras lzo libX11 ];
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   configurePhase = ''
     runHook preConfigure
     ./configure --prefix $out --qmakepath $QMAKE
     runHook postConfigure
   '';
-
-  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Rapidly extract unformatted, or unstandardized bibliographic references from email alerts, journal Web pages and PDF files";
