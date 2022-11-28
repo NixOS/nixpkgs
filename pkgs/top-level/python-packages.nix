@@ -4756,7 +4756,7 @@ self: super: with self; {
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
-  jinja2_time = callPackage ../development/python-modules/jinja2_time { };
+  jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
 
