@@ -15,14 +15,14 @@ in
 
 useStdenv.mkDerivation {
   pname = "ngn-k";
-  version = "unstable-2022-11-27";
+  version = "unstable-2022-11-28";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ngn";
     repo = "k";
-    rev = "79834b6b9be2a23eec8027d0a2ce11e29f01959c";
-    sha256 = "0dczfyqf33mwxfly39xsgwwgjqqm6pjyrlr6gx04zg8n4ch11zhl";
+    rev = "e5138f182a8ced07dd240e3fe58274130842a85d";
+    sha256 = "1pn416znrdndb8iccprzx4zicmsx8c6i9dm3wq5z3jg8nan53p69";
   };
 
   patches = [
@@ -65,6 +65,6 @@ useStdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [ "x86_64-linux" "x86_64-freebsd" ];
+    platforms = [ "x86_64-linux" "x86_64-freebsd13" ];
   };
 }
