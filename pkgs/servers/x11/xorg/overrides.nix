@@ -963,7 +963,9 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xauth ]
                          ++ lib.optionals isDarwin [ xorg.libX11 xorg.xorgproto ];
     postFixup = ''
-      substituteInPlace $out/bin/startx --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc
+      substituteInPlace $out/bin/startx \
+        --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc \
+        --replace $out/etc/X11/xinit/xinitrc /etc/X11/xinit/xinitrc
     '';
   });
 
