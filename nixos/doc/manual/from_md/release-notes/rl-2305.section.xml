@@ -14,8 +14,8 @@
       <listitem>
         <para>
           NixOS now uses
-          <link linkend="opt-systemd.network">systemd-networkd</link> as
-          its default networking backend. With networkd, many network
+          <link linkend="opt-systemd.network.enable">systemd-networkd</link>
+          as its default networking backend. With networkd, many network
           configurations which previously required use of
           <xref linkend="opt-networking.localCommands" /> can be
           expressed declaratively. Networkd’s connection management is
