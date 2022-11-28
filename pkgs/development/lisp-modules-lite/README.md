@@ -9,9 +9,83 @@ Completely baffled by Nix? By Lisp? Do you see a bunch of letter spaghetti and w
 
 The worlds of Lisp and Nix are both independently confusing and idiosynratic. It’s a match made in hell.
 
-### Practical example
+<details>
 
-For a practical example:
+<summary>
+
+### Practical example: easy mode: `nix-shell`
+
+</summary>
+
+If you’re really, utterly confused by how to install anything, but for some magical reason you do have Nix available (wat), this is by far the easiest way to get something working.
+
+Enter the [`nix-shell` example](examples/nix-shell) and run `nix-shell`. Tada: you have `sbcl` available on the command line, and one lisp package preloaded: `alexandria`:
+
+```
+$ cd examples/nix-shell
+$ nix-shell
+[nix-shell:…/nix-shell]$ sbcl
+This is SBCL 2.2.9.nixos, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+* (require :asdf)
+("ASDF" "asdf" "UIOP" "uiop")
+* (asdf:load-system :alexandria)
+T
+* (alexandria:iota 10)
+(0 1 2 3 4 5 6 7 8 9)
+*
+```
+
+Add any other packages to `default.nix` as you need them.
+
+If you have flake support (probably you do?), you can also try the [flake develop example](examples/flake-develop).
+
+Either way see their respective READMEs for more info.
+
+To actually build a binary executable you can run later, read on.
+
+</details>
+
+<details>
+
+<summary>
+
+### Practical example: flakes
+
+</summary>
+
+This is the easiest way to start building a binary, in number of actual steps.
+
+Go to the [flake example](examples/flake) and follow the instructions. It’s easy.
+
+But, a word of caution: flakes are a layer *on top of Nix*. This is fine as long as it works, but if you really don’t know any Nix at all, it’s yet another thing to learn before you get it.
+
+For some people that’s ideal: they don’t care about the details right now, “just do the easiest thing and get out of my way.” If so then flakes are for you! Also they’re (probably) the future of Nix so it’s a safe bet.
+
+But others, like me, only get confused by layers of abstraction, we’re more “depth first learners”, and seeing yet another thing whose purpose I don’t understand (what problems do flakes solve?) in a language I don’t understand (Nix?) in a paradigm I don’t understand (lazy evaluation?) is far more confusing than a raw low level approach.
+
+Yes, after a month of building my own Lisp-in-Nix implementation, now I understand Nix well enough to understand flakes. And now I love them. But one month ago? No way.
+
+But it really depends on you. Give them a spin, see what sticks.
+
+</details>
+
+<details>
+
+<summary>
+
+### Practical example: “regular Nix”
+
+</summary>
+
+Do you want to avoid flakes? Does your system not support flakes? Do you not know what flakes even are and is everything confusing and do you just want to try *something?!*
+
+Try this:
 
 1. Copy [examples/make-binary](examples/make-binary) to a fresh directory.
 
@@ -58,7 +132,15 @@ Grab the two lines of output, and replace their corresponding lines in the snipp
 
 5. Done. You should have your binary in `result/bin/demo`. Feel free to mess around in the source files and rebuild.
 
-### Nix
+</details>
+
+<details>
+
+<summary>
+
+### Background info (confused? start here)
+
+</summary>
 
 Nix, at its core, is a *programming language* that lets you implement every step of a build system: from fetching the source, to building it, to installing it on your system. There is a huge central repository of many such packages across many programming languages, and their compilers, and tools, etc, all implemented in Nix: that’s “nixpkgs”. It contains e.g. GCC, which lets you build other apps, but it also contains useful functions like `lib.fetchFromGitHub`.
 
@@ -132,7 +214,9 @@ Notable language that *doesn’t* have a package repository: Go. In Go, you spec
 
 (“Vendoring”: including your dependencies in your own project’s repository. Think `git add node_modules`.)
 
-Theoretically, Nix makes package repositories obsolete. Specifically: nixpkgs makes package repositories obsolete. More specifically: nixpkgs *is* a package repository.
+Theoretically, Nix makes package repositories obsolete. Specifically: nixpkgs makes package repositories obsolete. More specifically: nixpkgs *is* a package repository.[^1]
+
+[^1]: Ok *even more specifically*: it’s not a package repository as it doesn’t actually store any actual packages! It just stores a deterministic configuration for how to build those packages. So it’s a... “package recipe repository”? The point is, with Nix, the derivation (= recipe) might as well be the final package itself. Like for a program, the source code might as well be the binary: whether that’s true depends on your perspective and your star sign.
 
 Practically, most x-language-in-Nix ecosystems are bootstrapped by leveraging their respective existing package repositories. It’s easier for both maintainers and users to just copy all of NPM / Pip / ... into nixpkgs. Maintainers don’t need to worry about where to find each project, or when to update it. Users get a familiar environment. “Oh, this is like NPM / Pip / ..., but with different syntax.”
 
@@ -151,6 +235,8 @@ Now, back to this project, lisp-packages-lite...
 
 </details>
 
+</details>
+
 # Nix Packages Lite
 
 Nix-only implementation of a lispDerivation builder, and registry of popular Common Lisp packages.
@@ -161,8 +247,8 @@ This is an experiment to discover what a Lisp-in-Nix system would look like, if 
 
 This project has two parts:
 
-1. A lisp derivation builder in Nix ([`default.nix`](default.nix))
-2. A registry of the most commonly used Lisp packages ([`packages.nix`](packages.nix))
+1. A lisp derivation builder in Nix (`lispDerivation`)
+2. A registry of the most commonly used Lisp packages
 
 Together, they offer a "batteries included" build environment for your Lisp project in Nix. This is the same functionality offered by other modules in `nixpkgs`, namely `lispPackages` and `lispPackagesNew`.
 
@@ -419,13 +505,11 @@ To test all packages, see [examples/test-all](examples/test-all).
 ### Important
 
 - Don't clobber existing `buildPhase` etc.
-- Tool to fetch updates from all packages
 
 ### Nice-to-have
 
 - Get all remaining packages’ tests passing.
 - An example showing fasl-only building, no binary
-- Complete the list of "standard mkDerivation args" (dontUnpack, ...)
 - Don’t use `CL_SOURCE_REGISTRY` but use source map files?
 - Don’t clobber existing `CL_SOURCE_REGISTRY`
 - Document how to overwrite a package
@@ -434,6 +518,7 @@ To test all packages, see [examples/test-all](examples/test-all).
 - More lisps
 - Test on Linux
 - integrate with borg? First: decide if this belongs in nixpkgs at all.
+- Check if `lispDerivation` is actually the best name for this function
 
 ### TODO: Fetching updates from source packages
 

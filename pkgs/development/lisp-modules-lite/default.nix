@@ -159,19 +159,50 @@ with callPackage ./utils.nix {};
       derivArgs = removeAttrs args ["lispDependencies" "lispCheckDependencies" "lispSystem" "_lispDeduplicateMyself"];
       pname = "${b.concatStringsSep "_" lispSystems'}";
 
-      # Add here all "standard" derivation args which we want to make system
-      # dependent, if desired (meaning the user specified them as a function).
+      # Add here all "standard" derivation args which are system
+      # dependent. Meaning these can be either strings as per, or functions, in
+      # which case they will be called with the set of systems enabled for this
+      # derivation. This is used to fix auto deduplication (unioning / joining)
+      # of lisp derivations.
       stdArgs = [
-        # I still don’t understand the difference between these two. Isn’t that
-        # crazy? In all of the internet there isn’t a single “here’s what this
-        # actually is” example. I did find a fifty page github discussion
-        # lamenting the lack of such an explanation. Without anyone ever
-        # actually giving one. Pretty wild.
+        # Standard args that are not phases
         "nativeBuildInputs"
         "buildInputs"
-        "buildPhase"
-        "installPhase"
         "patches"
+        # Am I forgetting anything?
+
+        # All the phases
+        "preUnpack"
+        "unpackPhase"
+        "postUnpack"
+
+        "prePatch"
+        "patchPhase"
+        "postPatch"
+
+        "preConfigure"
+        "configurePhase"
+        "postConfigure"
+
+        "preBuild"
+        "buildPhase"
+        "postBuild"
+
+        "preCheck"
+        "checkPhase"
+        "postCheck"
+
+        "preInstall"
+        "installPhase"
+        "postInstall"
+
+        "preFixup"
+        "fixupPhase"
+        "postFixup"
+
+        "preDist"
+        "distPhase"
+        "postDist"
       ];
       localizedArgs = a.mapAttrs (_: callIfFunc lispSystems') (optionalKeys stdArgs args);
 
@@ -268,18 +299,31 @@ with callPackage ./utils.nix {};
         # TODO: How to combine this with user supplied args? What’s the expected
         # UX?
         buildPhase = ''
+          runHook preBuild
+
           # Import current package from PWD
           export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
-          env | grep CL_SOURCE_REGISTRY
+          echo "Build CL_SOURCE_REGISTRY: $CL_SOURCE_REGISTRY"
           ${callLisp lisp (asdfOpScript lispBuildOp pname lispSystems')}
+
+          runHook postBuild
         '';
         installPhase = ''
+          runHook preInstall
+
           cp -R "." "$out"
+
+          runHook postInstall
         '';
         checkPhase = ''
+          runHook preCheck
+
           # Import current package from PWD
           export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
+          echo "Check CL_SOURCE_REGISTRY: $CL_SOURCE_REGISTRY"
           ${callLisp lisp (asdfOpScript "test-system" pname _lispOrigSystems)}
+
+          runHook postCheck
         '';
       } // localizedArgs // (a.optionalAttrs (length allDepsDerivs > 0) {
         # It looks like this is instantiated for every single derivation
@@ -406,33 +450,27 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ prove ];
   }) {};
 
-  inherit (callPackage ({
-    alexandria
-    , babel
-    , trivial-features
-    , trivial-gray-streams
-    , hu_dwim_stefil
-  }:
-  lispMultiDerivation {
-    src = pkgs.fetchFromGitHub {
-      name = "babel-src";
-      owner = "cl-babel";
-      repo = "babel";
-      rev = "f892d0587c7f3a1e6c0899425921b48008c29ee3";
-      sha256 = "sha256-U2E8u3ZWgH9eG4SV/t9CE1dUpcthuQMXgno/W1Ow2RE=";
-    };
+  inherit (callPackage (self: with self;
+    lispMultiDerivation {
+      src = pkgs.fetchFromGitHub {
+        name = "babel-src";
+        owner = "cl-babel";
+        repo = "babel";
+        rev = "f892d0587c7f3a1e6c0899425921b48008c29ee3";
+        sha256 = "sha256-U2E8u3ZWgH9eG4SV/t9CE1dUpcthuQMXgno/W1Ow2RE=";
+      };
 
-    systems = {
-      babel = {
-        lispDependencies = [ alexandria trivial-features ];
-        lispCheckDependencies = [ hu_dwim_stefil ];
+      systems = {
+        babel = {
+          lispDependencies = [ alexandria trivial-features ];
+          lispCheckDependencies = [ hu_dwim_stefil ];
+        };
+        babel-streams = {
+          lispDependencies = [ alexandria babel trivial-gray-streams ];
+          lispCheckDependencies = [ hu_dwim_stefil ];
+        };
       };
-      babel-streams = {
-        lispDependencies = [ alexandria babel trivial-gray-streams ];
-        lispCheckDependencies = [ hu_dwim_stefil ];
-      };
-    };
-  }) {}) babel babel-streams;
+    }) {}) babel babel-streams;
 
   blackbird = callPackage (self: with self; lispDerivation {
     lispSystem = "blackbird";
@@ -506,6 +544,69 @@ with callPackage ./utils.nix {};
     rev = "v1.1.7";
     sha256 = "sha256-DfqbKCuK4oTh1qrKHdOCdWhcdUrT5YFSfUK4sbwd9ks=";
   })) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = pkgs.fetchFromGitHub {
+      name = "coalton-src";
+      repo = "coalton";
+      owner = "coalton-lang";
+      rev = "ae5a11a76a2ca2060499cf3fba22361cbe8d39a8";
+      sha256 = "FkEJdR+q+gRss2CrTBN90JnzvPWcHGc2KhLOaMOgW24=";
+    };
+    systems = {
+      coalton = {
+        lispDependencies = [
+          alexandria
+          trivia
+          fset
+          float-features
+          split-sequence
+          trivial-garbage
+        ];
+        lispCheckDependencies = [
+          fiasco
+          coalton-examples
+        ];
+      };
+      coalton-examples = {
+        lispSystems = [
+          "coalton-json"
+          "quil-coalton"
+          "small-coalton-programs"
+          "thih-coalton"
+        ];
+        lispDependencies = [ coalton json-streams ];
+        lispCheckDependencies = [ fiasco ];
+      };
+      coalton-benchmarks = {
+        lispSystem = "coalton/benchmarks";
+        lispDependencies = [
+          coalton
+          trivial-benchmark
+          yason
+        ];
+      };
+      coalton-doc = {
+        lispSystem = "coalton/doc";
+        lispDependencies = [
+          coalton
+          html-entities
+          yason
+        ];
+      };
+    };
+    preBuild = let
+      testDirectories = [
+        "$PWD/examples/coalton-json"
+        "$PWD/examples/quil-coalton"
+        "$PWD/examples/small-coalton-programs"
+        "$PWD/examples/thih"
+      ];
+      testPaths = b.concatStringsSep ":" testDirectories;
+    in ''
+      export CL_SOURCE_REGISTRY="${testPaths}:$CL_SOURCE_REGISTRY"
+    '';
+  }) {}) coalton coalton-benchmarks coalton-doc coalton-examples;
 
   circular-streams = callPackage (self: with self; lispDerivation {
     lispSystem = "circular-streams";
@@ -798,6 +899,14 @@ with callPackage ./utils.nix {};
       };
     };
   }) {}) cl-ppcre cl-ppcre-unicode;
+
+  cl-quickcheck = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "mcandre";
+    repo = "cl-quickcheck";
+    name = "cl-quickcheck-src";
+    rev = "a76e360f0ead6809269b06221492fb7b3bfc8169";
+    sha256 = "wCzt4zfwsB28sgZFJ/HWtjODE1a9+9/wmG3TCdvq3jE=";
+  })) {};
 
   cl-speedy-queue = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "cl-speedy-queue-src";
@@ -1141,16 +1250,26 @@ with callPackage ./utils.nix {};
 
   fare-utils = callPackage (self: with self; lispDerivation {
     lispSystem = "fare-utils";
-    # While the PR to fix the test .asd is pending, point at my fork
     src = pkgs.fetchFromGitHub {
       name = "fare-utils-src";
-      owner = "hraban";
+      owner = "fare";
       repo = "fare-utils";
-      rev = "8bf19331fc541e4fb40b55ae9747d774eb427828";
-      sha256 = "sha256-Eye1XJUNWhptVlkukrwVmYL9dKpyrn8PJEdMDPntYzw=";
+      rev = "1a4f345d7911b403d07a5f300e6006ce3efa4047";
+      sha256 = "CTCYiXb5uy+QQBhkkDJEowax41rly677BSfLfpHX9vk=";
     };
+    preCheck = ''
+      export CL_SOURCE_REGISTRY="$PWD/test:$CL_SOURCE_REGISTRY"
+    '';
     lispCheckDependencies = [ hu_dwim_stefil ];
   }) {};
+
+  fiasco = callPackage (self: with self; lispify [ alexandria trivial-gray-streams ] (pkgs.fetchFromGitHub {
+    name = "fiasco-src";
+    owner = "capitaomorte";
+    repo = "fiasco";
+    rev = "bb47d2fef4eb24cc16badc1c9a73d73c3a7e18f5";
+    sha256 = "XB0VGAIkmoVf7PSt1wgIDYJRGu36uj/8XgGIU/AUEc0=";
+  })) {};
 
   fiveam = callPackage (self: with self; lispify [ alexandria asdf-flv trivial-backtrace ] (pkgs.fetchFromGitHub {
     name = "fiveam-src";
@@ -1159,6 +1278,19 @@ with callPackage ./utils.nix {};
     rev = "v1.4.2";
     sha256 = "sha256-ktwyRdDG3Z0KOnM0C8lbq7ZAZVqozTbwkiUsWuktsBI=";
   })) {};
+
+  float-features = callPackage (self: with self; lispDerivation {
+    lispSystem = "float-features";
+    src = pkgs.fetchFromGitHub {
+      name = "float-features-src";
+      repo = "float-features";
+      owner = "Shinmera";
+      rev = "d324a09bf4a78983efbdd18bd08bd54fd84c899b";
+      sha256 = "KCJbLV8Whu7fzlzpfPyz3x42xC9EMJWvdSagl9ZlGuA=";
+    };
+    lispDependencies = [ documentation-utils ];
+    lispCheckDependencies = [ parachute ];
+  }) {};
 
   flexi-streams = callPackage (self: with self; lispify [ trivial-gray-streams ] (pkgs.fetchFromGitHub {
     name = "flexi-streams-src";
@@ -1196,13 +1328,6 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-bXxeNNnFsGbgP/any8rR3xBvHE9Rb4foVfrdQRHroxo=";
   })) {};
 
-  html-encode = callPackage (self: with self; lispify [ ] (pkgs.fetchzip rec {
-    pname = "html-encode-src";
-    version = "1.2";
-    url = "http://beta.quicklisp.org/orphans/html-encode-${version}.tgz";
-    sha256 = "sha256-qw2CstJIDteQC4N1eQEsD9+HRm1i9GP/XjjIZXtZr/k=";
-  })) {};
-
   http-body = callPackage (self: with self; lispDerivation {
     lispSystem = "http-body";
     src = pkgs.fetchFromGitHub {
@@ -1229,6 +1354,25 @@ with callPackage ./utils.nix {};
       prove
       trivial-utf-8
     ];
+  }) {};
+
+  html-encode = callPackage (self: with self; lispify [ ] (pkgs.fetchzip rec {
+    pname = "html-encode-src";
+    version = "1.2";
+    url = "http://beta.quicklisp.org/orphans/html-encode-${version}.tgz";
+    sha256 = "sha256-qw2CstJIDteQC4N1eQEsD9+HRm1i9GP/XjjIZXtZr/k=";
+  })) {};
+
+  html-entities = callPackage (self: with self; lispDerivation {
+    lispSystem = "html-entities";
+    src = pkgs.fetchFromGitHub {
+      owner = "BnMcGn";
+      repo = "html-entities";
+      rev = "4af018048e891f41d77e7d680ed3aeb639e1eedb";
+      sha256 = "2dkxvAPlweCb34Yyp9oySbF4bgFFF0v8CTpu46ihXqw=";
+    };
+    lispDependencies = [ cl-ppcre ];
+    lispCheckDependencies = [ fiveam ];
   }) {};
 
   hu_dwim_asdf = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
@@ -1343,6 +1487,18 @@ with callPackage ./utils.nix {};
     rev = "1.5.3";
     sha256 = "sha256-giEXCF+9q5fcCmE3Q6NDCq+rV6+qcglArJdf9q5D1FA=";
   })) {};
+
+  json-streams = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "rotatef";
+      repo = "json-streams";
+      name = "json-streams-src";
+      rev = "5da012e8133affbf75024e7500feb37394690752";
+      sha256 = "gtI+OMlqppGHRpAoPMC/j16NGkKmTdfGwQTUGMQZKjI=";
+    };
+    lispSystem = "json-streams";
+    lispCheckDependencies = [ cl-quickcheck flexi-streams ];
+  }) {};
 
   puri = callPackage (self: with self; lispDerivation {
     lispSystem = "puri";
@@ -1930,6 +2086,14 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-RKNfjk5IrZSSOyc13VnR9GQ7mHj3IEWzizKmjVeHVu4=";
   })) {};
 
+  trivial-benchmark = callPackage (self: with self; lispify [ alexandria ] (pkgs.fetchFromGitHub {
+    name = "trivial-benchmark-src";
+    owner = "Shinmera";
+    repo = "trivial-benchmark";
+    rev = "7d132c3d8d937bc17d3ae1fa5872cc069629e2a2";
+    sha256 = "CY0qZyxs+x3YQAUVXVrYtwqwgvtbTi8dRt2FPeUbF9k=";
+  })) {};
+
   trivial-cltl2 = callPackage (self: with self; lispDerivation {
     lispSystem = "trivial-cltl2";
     src = pkgs.fetchFromGitHub {
@@ -2100,4 +2264,12 @@ with callPackage ./utils.nix {};
     lispSystem = "xsubseq";
     lispCheckDependencies = [ prove ];
   }) {};
+
+  yason = callPackage (self: with self; lispify [ alexandria trivial-gray-streams ] (pkgs.fetchFromGitHub {
+    name = "yason-src";
+    owner = "phmarek";
+    repo = "yason";
+    rev = "826ea4f51f148cdd3065727fcc9f84960f2e0b2c";
+    sha256 = "bG2g7V4yv83hW3fTJcPUdcb1UB+JcVg3wCmHHyaUBBI=";
+  })) {};
 })
