@@ -331,6 +331,20 @@ rustPlatform.buildRustPackage {
 }
 ```
 
+#### Using `cargo-nextest` {#using-cargo-nextest}
+
+Tests can be run with [cargo-nextest](https://github.com/nextest-rs/nextest)
+by setting `useNextest = true`. The same options still apply, but nextest
+accepts a different set of arguments and the settings might need to be
+adapted to be compatible with cargo-nextest.
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  useNextest = true;
+}
+```
+
 #### Setting `test-threads` {#setting-test-threads}
 
 `buildRustPackage` will use parallel test threads by default,
@@ -474,6 +488,9 @@ you of the correct hash.
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.
+* `cargoNextestHook`: run tests using
+  [cargo-nextest](https://github.com/nextest-rs/nextest). The same
+  options for `cargoCheckHook` also applies to `cargoNextestHook`.
 * `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
 * `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
