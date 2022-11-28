@@ -31,6 +31,10 @@ in
 
   nodes = {
     machine = { ... }: {
+
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
+
       services.quorum = {
         enable = true;
         permissioned = false;
