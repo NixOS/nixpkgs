@@ -9794,8 +9794,6 @@ self: super: with self; {
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
-  rig = callPackage ../development/python-modules/rig { };
-
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
   ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
