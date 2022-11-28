@@ -19044,8 +19044,6 @@ with pkgs;
 
   gd = callPackage ../development/libraries/gd {
     automake = automake115x;
-    libtiff = null;
-    libXpm = null;
   };
 
   gdal = callPackage ../development/libraries/gdal { };
