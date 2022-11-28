@@ -79,6 +79,8 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
+  # ActiveState is a fork of cpython that includes fixes for security
+  # issues after its EOL
   src = fetchFromGitHub {
     owner = "ActiveState";
     repo = "cpython";
@@ -120,6 +122,13 @@ let
 
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
+
+      # remove once 2.7.18.6 is released
+      (fetchpatch {
+        name = "CVE-2021-3733.patch";
+        url = "https://github.com/ActiveState/cpython/commit/eeb7fe50450f08a782921f3229abed2f23e7b2d7.patch";
+        sha256 = "sha256-ch4cMoFythDmyvlVxOAVw3Ow4PPWVDq5o9c1qox2824=";
+      })
 
       # The workaround is for unittests on Win64, which we don't support.
       # It does break aarch64-darwin, which we do support. See:
