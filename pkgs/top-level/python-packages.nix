@@ -1110,8 +1110,6 @@ self: super: with self; {
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
-  backports_ssl_match_hostname = callPackage ../development/python-modules/backports_ssl_match_hostname { };
-
   backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
 
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
