@@ -414,7 +414,6 @@ broken-packages:
   - bizzlelude-js
   - bkr
   - blakesum
-  - Blammo
   - blas
   - blaze-html-contrib
   - blaze-html-hexpat
@@ -753,7 +752,6 @@ broken-packages:
   - collections-api
   - co-log-concurrent
   - co-log-json
-  - co-log-polysemy-formatting
   - co-log-sys
   - colonnade
   - colorless
@@ -1044,7 +1042,6 @@ broken-packages:
   - dead-simple-json
   - debug-tracy
   - decepticons
-  - decimal-literals
   - DecisionTree
   - decoder-conduit
   - deepcontrol
@@ -3737,7 +3734,6 @@ broken-packages:
   - PArrows
   - Parry
   - parse
-  - parseargs
   - parsec2
   - parsec3
   - parsec-free
@@ -3943,7 +3939,6 @@ broken-packages:
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
   - polysemy-log-co
-  - polysemy-managed
   - polysemy-mocks
   - polysemy-readline
   - polysemy-scoped-fs
@@ -4534,7 +4529,6 @@ broken-packages:
   - servant-namedargs
   - servant-nix
   - servant-pandoc
-  - servant-polysemy
   - servant-pool
   - servant-proto-lens
   - servant-purescript
@@ -4911,7 +4905,6 @@ broken-packages:
   - stripe
   - stripe-core
   - stripe-servant
-  - strongweak
   - structural-traversal
   - structures
   - stt
@@ -5071,7 +5064,6 @@ broken-packages:
   - termbox-tea
   - termination-combinators
   - termplot
-  - term-rewriting
   - terntup
   - tersmu
   - tesla

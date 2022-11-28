@@ -2315,4 +2315,26 @@ self: super: {
 
   # unix-compat <0.5
   hxt-cache = doJailbreak super.hxt-cache;
+
+  # base <4.16
+  fast-builder = doJailbreak super.fast-builder;
+
+  # QuickCheck <2.14
+  term-rewriting = doJailbreak super.term-rewriting;
+
+  # tests can't find the test binary anymore - parseargs-example
+  parseargs = dontCheck super.parseargs;
+
+  # base <4.14
+  decimal-literals = doJailbreak super.decimal-literals;
+
+  # multiple bounds too strict
+  snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
+
+  # doctest <0.19
+  polysemy = doJailbreak super.polysemy;
+
+  # multiple bounds too strict
+  co-log-polysemy = doJailbreak super.co-log-polysemy;
+  co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
