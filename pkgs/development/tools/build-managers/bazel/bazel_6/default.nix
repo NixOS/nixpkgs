@@ -26,15 +26,15 @@
 }:
 
 let
-  version = "6.0.0-pre.20220720.3";
+  version = "6.0.0-pre.20221020.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-i8d4yLSq8fL+YT11wYmBvLDLSprq1gVfyjsKBYci1bk=";
+    hash = "sha256-uejhUpbcctjU60mq2ML0GLLw3OL1CqpaMEL4kgxqJfI=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
+  # Update with `eval $(nix-build -A bazel_6.updater)`,
   # then add new dependencies from the dict in ./src-deps.json as required.
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
@@ -54,7 +54,7 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.26.0.tar.gz"
+      srcs."android_tools_pkg-0.27.0.tar.gz"
       srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
@@ -69,6 +69,9 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
+      srcs."4694024279bdac52b77e22dc87808bd0fd732b69.tar.gz"
+      srcs."2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz"
+      srcs."bazel-gazelle-v0.24.0.tar.gz"
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
