@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/lib
 
-    mkdir -p $out/include
-    cp src/*.h $out/include
+    install -m 0755 -D -t $out/include/iniparser/ src/*.h
+    ln -s $out/include/iniparser/*.h $out/include
 
     mkdir -p $out/share/doc/${pname}-${version}
     for i in AUTHORS INSTALL LICENSE README.md; do
