@@ -2,8 +2,8 @@ import ./make-test-python.nix (
   { pkgs, ... }:
 
   let
-    repository = "/tmp/restic-backup";
-    repositoryFile = "${pkgs.writeText "repositoryFile" "/tmp/restic-backup-from-file"}";
+    remoteRepository = "/tmp/restic-backup";
+    remoteFromFileRepository = "/tmp/restic-backup-from-file";
     rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
 
     backupPrepareCommand = ''
@@ -17,7 +17,6 @@ import ./make-test-python.nix (
     '';
 
     passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
-    initialize = true;
     paths = [ "/opt" ];
     pruneOpts = [
       "--keep-daily 2"
@@ -39,12 +38,18 @@ import ./make-test-python.nix (
         {
           services.restic.backups = {
             remotebackup = {
-              inherit repository passwordFile initialize paths pruneOpts backupPrepareCommand backupCleanupCommand;
+              inherit passwordFile paths pruneOpts backupPrepareCommand backupCleanupCommand;
+              repository = remoteRepository;
+              initialize = true;
             };
-            remotebackup-from-file = {
-              inherit repositoryFile passwordFile initialize paths pruneOpts;
+            remote-from-file-backup = {
+              inherit passwordFile paths pruneOpts;
+              initialize = true;
+              repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
             };
             rclonebackup = {
+              inherit passwordFile paths pruneOpts;
+              initialize = true;
               repository = rcloneRepository;
               rcloneConfig = {
                 type = "local";
@@ -56,14 +61,15 @@ import ./make-test-python.nix (
                 [local]
                 type=ftp
               '';
-              inherit passwordFile initialize paths pruneOpts;
             };
             remoteprune = {
-              inherit repository passwordFile;
+              inherit passwordFile;
+              repository = remoteRepository;
               pruneOpts = [ "--keep-last 1" ];
             };
             custompackage = {
-              inherit repository passwordFile paths;
+              inherit passwordFile paths;
+              repository = "some-fake-repository";
               package = pkgs.writeShellScriptBin "restic" ''
                 echo "$@" >> /tmp/fake-restic.log;
               '';
@@ -81,8 +87,8 @@ import ./make-test-python.nix (
       server.start()
       server.wait_for_unit("dbus.socket")
       server.fail(
-          "${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots",
-          '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots"',
+          "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots",
+          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots"',
           "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
           "grep 'backup .* /opt' /tmp/fake-restic.log",
       )
@@ -96,11 +102,11 @@ import ./make-test-python.nix (
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",
-          '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
 
-          # test that remotebackup-from-file produces a snapshot
-          "systemctl start restic-backups-remotebackup-from-file.service",
-          '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          # test that remote-from-file-backup produces a snapshot
+          "systemctl start restic-backups-remote-from-file-backup.service",
+          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
 
           # test that rclonebackup produces a snapshot
           "systemctl start restic-backups-rclonebackup.service",
@@ -137,12 +143,12 @@ import ./make-test-python.nix (
           "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
 
           # test that remoteprune brings us back to 1 snapshot in remotebackup
           "systemctl start restic-backups-remoteprune.service",
-          '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
       )
     '';
   }
