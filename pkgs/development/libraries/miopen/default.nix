@@ -184,7 +184,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    rocmVersion="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    rocmVersion="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
     update-source-version miopen "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
   '';
 
