@@ -12,9 +12,9 @@
 , doxygen ? null
 , sphinx ? null
 , python3Packages ? null
+, buildDocs ? true
 , buildTests ? false
 , buildSamples ? false
-, buildDocs ? false
 , gpuTargets ? null # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
@@ -30,7 +30,7 @@ assert buildDocs -> python3Packages != null;
 assert buildTests == false;
 
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -42,7 +42,7 @@ let
     tabulary
     varwidth
     titlesec;
-  });
+  };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
   repoVersion = "0.8";
@@ -51,12 +51,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ] ++ lib.optionals buildDocs [
+    "doc"
   ] ++ lib.optionals buildTests [
     "test"
   ] ++ lib.optionals buildSamples [
     "sample"
-  ] ++ lib.optionals buildDocs [
-    "docs"
   ];
 
   src = fetchFromGitHub {
@@ -85,7 +85,7 @@ in stdenv.mkDerivation (finalAttrs: {
     latex
     doxygen
     sphinx
-    python3Packages.sphinx_rtd_theme
+    python3Packages.sphinx-rtd-theme
     python3Packages.breathe
   ];
 
@@ -119,7 +119,10 @@ in stdenv.mkDerivation (finalAttrs: {
     ../docs/run_doc.sh
   '';
 
-  postInstall = lib.optionalString buildTests ''
+  postInstall = lib.optionalString buildDocs ''
+    mv ../docs/source/_build/html $out/share/doc/rocwmma
+    mv ../docs/source/_build/latex/rocWMMA.pdf $out/share/doc/rocwmma
+  '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/*_test* $test/bin
   '' + lib.optionalString buildSamples ''
@@ -129,12 +132,6 @@ in stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/simple_dlrm $sample/bin
   '' + lib.optionalString (buildTests || buildSamples) ''
     rmdir $out/bin
-  '';
-
-  postFixup = lib.optionalString buildDocs ''
-    mkdir -p $docs/share/doc/rocwmma
-    mv ../docs/source/_build/html $docs/share/doc/rocwmma
-    mv ../docs/source/_build/latex/rocWMMA.pdf $docs/share/doc/rocwmma
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
