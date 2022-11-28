@@ -227,6 +227,16 @@ in
                 Name of the user to ensure.
               '';
             };
+
+            passwordFile = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = lib.mdDoc ''
+                Absolute path to file that contains the desired user password.
+                If `null` then no password is assigned to the user.
+              '';
+            };
+
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
@@ -457,23 +467,32 @@ in
               ++ addL "CONNECTION LIMIT" ps.connectionLimit
               ++ addL "IS_TEMPLATE" ps.isTemplate);
 
-          # Run a single SQL command.
-          psqlCmd = cmd: "$PSQL -tA <<< ${escapeShellArg cmd}";
+          # Run a single SQL command using psql with a list of additional
+          # command line options.
+          psqlCmd = cmd: args: concatStringsSep " " (
+            [ "$PSQL -tA" ]
+            ++ args
+            ++ [ "<<<" (escapeShellArg cmd)]);
 
           ensureDatabases = map (database: ''
-              ${psqlCmd "SELECT 1 FROM pg_database WHERE datname = '${database.name}'"} \
+              ${psqlCmd "SELECT 1 FROM pg_database WHERE datname = '${database.name}'" []} \
                 | grep -q 1 \
-                || ${psqlCmd (createDatabase database)}
+                || ${psqlCmd (createDatabase database) []}
             '') cfg.ensureDatabases;
 
           ensureUsers = map (user: ''
-              ${psqlCmd "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'"} \
+              ${psqlCmd "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" []} \
                 | grep -q 1 \
-                || ${psqlCmd "CREATE USER \"${user.name}\""}
+                || ${psqlCmd "CREATE USER \"${user.name}\"" []}
+            '' + optionalString (user.passwordFile != null) ''
+              ${psqlCmd "ALTER USER \"${user.name}\" PASSWORD :'passwd'"
+                [
+                  "-v" ''"passwd=$(< "${user.passwordFile}")"''
+                ]}
             '') cfg.ensureUsers;
 
           ensureUserGrant = user: mapAttrsToList (database: permission: ''
-              ${psqlCmd "GRANT ${permission} ON ${database} TO \"${user.name}\""}
+              ${psqlCmd "GRANT ${permission} ON ${database} TO \"${user.name}\"" []}
             '') user.ensurePermissions;
 
           ensureUserGrants = concatMap ensureUserGrant cfg.ensureUsers;
