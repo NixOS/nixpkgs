@@ -941,6 +941,18 @@ final: prev:
     meta.homepage = "https://github.com/jlanzarotta/bufexplorer/";
   };
 
+  bufferize-vim = buildVimPluginFrom2Nix {
+    pname = "bufferize.vim";
+    version = "2022-06-25";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "bufferize.vim";
+      rev = "013857c12340bc14e285727eaf7d0bfb9807c768";
+      sha256 = "1f4681p7zxchzi628n633j54y6mw13ayjcw0sf6yy2iywrrppdfy";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/bufferize.vim/";
+  };
+
   bufferline-nvim = buildVimPluginFrom2Nix {
     pname = "bufferline.nvim";
     version = "2022-11-16";
