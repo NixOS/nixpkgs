@@ -1,4 +1,4 @@
-use std::os::unix::ffi::{OsStrExt,OsStringExt};
+use std::os::unix::ffi::OsStringExt;
 use std::ffi::{OsStr,OsString};
 use std::path::{Path,PathBuf};
 
@@ -7,7 +7,6 @@ use std::fs;
 use std::fs::{OpenOptions};
 use std::process::{Command,exit};
 use std::io::Write;
-use std::io::ErrorKind;
 use std::io;
 
 use std::collections::HashSet;
