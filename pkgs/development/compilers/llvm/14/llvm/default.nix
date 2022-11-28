@@ -129,6 +129,9 @@ in stdenv.mkDerivation (rec {
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
+  # workaround https://github.com/NixOS/nixpkgs/issues/201254
+  NIX_LDFLAGS = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then "-lgcc" else null;
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
