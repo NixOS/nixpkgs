@@ -180,7 +180,7 @@ let
       if isDarwin then "darwin"
       else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
 
-    abiFlags = optionalString (isPy36 || isPy37) "m";
+    abiFlags = optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
     pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
@@ -228,13 +228,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (isPy35 || isPy36) [
-    # Determinism: Write null timestamps when compiling python files.
-    ./3.5/force_bytecode_determinism.patch
-  ] ++ optionals isPy35 [
-    # Backports support for LD_LIBRARY_PATH from 3.6
-    ./3.5/ld_library_path.patch
-  ] ++ optionals (isPy35 || isPy36 || isPy37) [
+  ] ++ optionals isPy37 [
     # Backport a fix for discovering `rpmbuild` command when doing `python setup.py bdist_rpm` to 3.5, 3.6, 3.7.
     # See: https://bugs.python.org/issue11122
     ./3.7/fix-hardcoded-path-checking-for-rpmbuild.patch
@@ -250,12 +244,7 @@ in with passthru; stdenv.mkDerivation {
     ./3.11/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
     # Backport from CPython 3.8 of a good list of tests to run for PGO.
-    (
-      if isPy36 || isPy37 then
-        ./3.6/profile-task.patch
-      else
-        ./3.5/profile-task.patch
-    )
+    ./3.7/profile-task.patch
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
@@ -265,9 +254,7 @@ in with passthru; stdenv.mkDerivation {
     # only works for GCC and Apple Clang. This makes distutils to call C++
     # compiler when needed.
     (
-      if isPy35 then
-        ./3.5/python-3.x-distutils-C++.patch
-      else if pythonAtLeast "3.7" && pythonOlder "3.11" then
+      if pythonAtLeast "3.7" && pythonOlder "3.11" then
         ./3.7/python-3.x-distutils-C++.patch
       else if pythonAtLeast "3.11" then
         ./3.11/python-3.x-distutils-C++.patch
@@ -281,15 +268,7 @@ in with passthru; stdenv.mkDerivation {
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
-    (
-      if isPy36 then
-        ./3.6/fix-finding-headers-when-cross-compiling.patch
-      else
-        ./3.7/fix-finding-headers-when-cross-compiling.patch
-    )
-  ] ++ optionals (isPy36) [
-    # Backport a fix for ctypes.util.find_library.
-    ./3.6/find_library.patch
+    ./3.7/fix-finding-headers-when-cross-compiling.patch
   ];
 
   postPatch = ''
