@@ -1,8 +1,7 @@
 { lib, buildPythonPackage, fetchPypi
 , requests
 , py
-, pytest
-, pytest-flake8
+, pytestCheckHook
 , lazy
 }:
 
@@ -15,16 +14,20 @@ buildPythonPackage rec {
     sha256 = "sha256-O015TOlvFcN7hxwV4SgGmo6vanMuWb+i9KZOYhYZLJM=";
   };
 
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
+
   propagatedBuildInputs = [
     requests
     py
     lazy
   ];
-  checkInputs = [ pytest pytest-flake8 ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";
