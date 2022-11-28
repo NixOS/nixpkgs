@@ -9010,7 +9010,9 @@ with pkgs;
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
-  libportal = callPackage ../development/libraries/libportal { };
+  libportal = callPackage ../development/libraries/libportal {
+    inherit (libsForQt5) qtbase qtx11extras;
+  };
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };

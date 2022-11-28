@@ -11,7 +11,8 @@
 , glib
 , gtk3
 , gtk4
-, libsForQt5
+, qtbase
+, qtx11extras
 , variant ? null
 }:
 
@@ -49,8 +50,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gi-docgen
-  ] ++ lib.optionals (variant != "qt5") [
     gobject-introspection
+  ] ++ lib.optionals (variant != "qt5") [
     vala
   ];
 
@@ -61,14 +62,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (variant == "gtk4") [
     gtk4
   ] ++ lib.optionals (variant == "qt5") [
-    libsForQt5.qtbase
+    qtbase
+    qtx11extras
   ];
 
   mesonFlags = [
     "-Dbackends=${lib.optionalString (variant != null) variant}"
     "-Dvapi=${if variant != "qt5" then "true" else "false"}"
-    "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
   ];
+
+  dontWrapQtApps = true;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
