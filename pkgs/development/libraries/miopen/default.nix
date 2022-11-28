@@ -185,7 +185,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
-    patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.nativeBuildInputs ++ finalAttrs.buildInputs)}:$out/lib $test/bin/*
+    patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])}:$out/lib $test/bin/*
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
