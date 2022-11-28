@@ -5,13 +5,11 @@
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
+, gtest
 , buildTests ? false
 , buildExamples ? false
 , gpuTargets ? [ ] # gpuTargets = [ "gfx803" "gfx900" "gfx1030" ... ]
 }:
-
-assert buildTests -> gtest != null;
 
 # Several tests seem to either not compile or have a race condition
 # Undefined reference to symbol '_ZTIN7testing4TestE'

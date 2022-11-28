@@ -11,11 +11,9 @@
 , hip
 , gfortran
 , git
-, gtest ? null
+, gtest
 , buildTests ? false
 }:
-
-assert buildTests -> gtest != null;
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {

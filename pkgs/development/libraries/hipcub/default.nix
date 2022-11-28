@@ -9,14 +9,11 @@
 , rocm-comgr
 , rocprim
 , hip
-, gtest ? null
-, gbenchmark ? null
+, gtest
+, gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
 }:
-
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> gbenchmark != null;
 
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {

@@ -6,21 +6,15 @@
 , rocm-cmake
 , rocm-opencl-runtime
 , clang
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
-, openblas ? null
+, texlive
+, doxygen
+, sphinx
+, openblas
+, python3Packages
 , buildDocs ? true
 , buildTests ? false
 , buildBenchmarks ? false
 }:
-
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
-assert buildTests -> openblas != null;
 
 let
   latex = lib.optionalAttrs buildDocs texlive.combine {

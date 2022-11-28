@@ -8,14 +8,11 @@
 , rocm-device-libs
 , rocm-comgr
 , hip
-, gtest ? null
-, gbenchmark ? null
+, gtest
+, gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
 }:
-
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> gbenchmark != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
