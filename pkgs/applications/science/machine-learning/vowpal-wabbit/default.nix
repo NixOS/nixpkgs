@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix x86_64-linux build by adding missing include
+    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4275
     (fetchpatch {
       url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/0cb410dfc885ca1ecafd1f8a962b481574fb3b82.patch";
       sha256 = "sha256-bX3eJ+vMTEMAo3EiESQTDryBP0h2GtnMa/Fz0rTeaNY=";
