@@ -11,7 +11,6 @@
 , CoreVideo
 , cymem
 , cython
-, dataclasses
 , fetchPypi
 , hypothesis
 , mock
@@ -67,7 +66,6 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     contextvars
-    dataclasses
   ];
 
   checkInputs = [
