@@ -27,7 +27,7 @@
 , python3Packages ? null
 , zlib ? null
 , fetchurl ? null
-, buildDocs ? false
+, buildDocs ? true
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
 # This isn't strictly required, but is recommended
@@ -44,7 +44,7 @@ assert buildTests -> zlib != null;
 assert fetchKDBs -> fetchurl != null;
 
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -56,7 +56,7 @@ let
     tabulary
     varwidth
     titlesec;
-  });
+  };
 
   kdbs = lib.optionalAttrs fetchKDBs import ./deps.nix {
     inherit fetchurl;
@@ -112,7 +112,7 @@ in stdenv.mkDerivation (finalAttrs: {
     latex
     doxygen
     sphinx
-    python3Packages.sphinx_rtd_theme
+    python3Packages.sphinx-rtd-theme
     python3Packages.breathe
     python3Packages.myst-parser
   ] ++ lib.optionals buildTests [
@@ -179,20 +179,13 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     rm $out/bin/install_precompiled_kernels.sh
+  '' + lib.optionalString buildDocs ''
+    mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
+    mv ../doc/pdf/miopen.pdf $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
     patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.nativeBuildInputs ++ finalAttrs.buildInputs)}:$out/lib $test/bin/*
-  '';
-
-  postFixup = lib.optionalString (buildDocs && !useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-hip
-  '' + lib.optionalString (buildDocs && useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-opencl
-  '' + lib.optionalString buildDocs ''
-    mkdir -p $docDir
-    mv ../doc/html $docDir
-    mv ../doc/pdf/miopen.pdf $docDir
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
