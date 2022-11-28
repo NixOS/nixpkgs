@@ -17552,6 +17552,8 @@ with pkgs;
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
+  patsh = callPackage ../development/tools/misc/patsh { };
+
   pax-rs = callPackage ../development/tools/pax-rs { };
 
   perfect-hash = callPackage ../development/tools/misc/perfect-hash { };
@@ -31550,7 +31552,7 @@ with pkgs;
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = libsForQt5.callPackage ../applications/audio/qmmp { };
+  qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
