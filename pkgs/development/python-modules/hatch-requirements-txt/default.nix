@@ -4,10 +4,10 @@
 , hatchling
 }:
 
-let 
+let
   pname = "hatch-requirements-txt";
   version = "0.2.0";
-in 
+in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";

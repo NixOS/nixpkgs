@@ -15,7 +15,7 @@
 , requests
 }:
 
-let 
+let
   pname = "mkdocs-material";
   version = "8.5.10";
 in

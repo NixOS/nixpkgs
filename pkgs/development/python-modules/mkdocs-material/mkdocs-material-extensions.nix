@@ -4,10 +4,10 @@
 , hatchling
 }:
 
-let 
+let
   pname = "mkdocs-material-extensions";
   version = "1.1.1";
-in 
+in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
