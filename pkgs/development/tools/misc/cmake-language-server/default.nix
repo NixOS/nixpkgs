@@ -1,7 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
-, poetry
+, poetry-core
 , cmake-format
 , pygls
 , cmake
@@ -27,7 +27,7 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
