@@ -454,6 +454,7 @@ let format' = format; in let
       ${optionalString (fsType == "ext4" && deterministic) ''
         tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
       ''}
+
       # make systemd-boot find ESP without udev
       mkdir /dev/block
       ln -s /dev/vda1 /dev/block/254:1
