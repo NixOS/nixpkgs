@@ -5,19 +5,16 @@
 , xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , glSupport ? x11Support && config.cairo.gl or (libGLSupported && stdenv.isLinux)
-, libGL ? null # libGLU libGL is no longer a big dependency
+, libGL # libGLU libGL is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
 
-assert glSupport -> x11Support && libGL != null;
-
 let
-  version = "1.16.0";
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "cairo";
-  inherit version;
+  version = "1.16.0";
 
   src = fetchurl {
     url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
@@ -137,7 +134,6 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";
-
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output
       devices.  Currently supported output targets include the X
@@ -149,11 +145,8 @@ in stdenv.mkDerivation rec {
       media while taking advantage of display hardware acceleration
       when available (e.g., through the X Render Extension).
     '';
-
     homepage = "http://cairographics.org/";
-
     license = with licenses; [ lgpl2Plus mpl10 ];
-
     platforms = platforms.all;
   };
 }

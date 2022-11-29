@@ -9412,6 +9412,8 @@ with pkgs;
 
   mosh = callPackage ../tools/networking/mosh { };
 
+  motrix = callPackage ../tools/networking/motrix { };
+
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
@@ -29187,6 +29189,8 @@ with pkgs;
   gspell = callPackage ../development/libraries/gspell { };
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
+
+  gtklock = callPackage ../tools/wayland/gtklock { };
 
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
