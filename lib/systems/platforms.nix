@@ -16,6 +16,12 @@ rec {
       autoModules = true;
       target = "bzImage";
     };
+    gcc = {
+      # this should match the microarchitecture level of lib.systems.architectures.features.default
+      # but nehalem is used instead of x86-64-v2 because as of writting the bootstrapping gcc in stage 0 does not understand it
+      arch = "nehalem";
+      tune = "generic";
+    };
   };
 
   pc_simplekernel = lib.recursiveUpdate pc {
