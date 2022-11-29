@@ -31,8 +31,6 @@ python3.pkgs.buildPythonApplication rec {
     toml
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ lib.optionals (pythonOlder "3.8") [
     backports.cached-property
     importlib_metadata

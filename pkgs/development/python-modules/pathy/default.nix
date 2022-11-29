@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, dataclasses
 , fetchPypi
 , fetchpatch
 , google-cloud-storage
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "0.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,8 +26,6 @@ buildPythonPackage rec {
     smart-open
     typer
     google-cloud-storage
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [

@@ -5,13 +5,11 @@
 , buildPythonPackage
 , catalogue
 , confection
-, contextvars
 , CoreFoundation
 , CoreGraphics
 , CoreVideo
 , cymem
 , cython
-, dataclasses
 , fetchPypi
 , hypothesis
 , mock
@@ -34,7 +32,7 @@ buildPythonPackage rec {
   version = "8.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -65,9 +63,6 @@ buildPythonPackage rec {
     wasabi
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextvars
-    dataclasses
   ];
 
   checkInputs = [

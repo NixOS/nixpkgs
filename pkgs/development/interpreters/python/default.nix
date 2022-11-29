@@ -84,8 +84,6 @@
         });
     in rec {
         isPy27 = pythonVersion == "2.7";
-        isPy35 = pythonVersion == "3.5";
-        isPy36 = pythonVersion == "3.6";
         isPy37 = pythonVersion == "3.7";
         isPy38 = pythonVersion == "3.8";
         isPy39 = pythonVersion == "3.9";

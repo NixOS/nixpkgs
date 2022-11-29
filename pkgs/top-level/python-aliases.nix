@@ -186,6 +186,7 @@ mapAliases ({
   repeated_test = repeated-test; # added 2022-11-15
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
+  rig = throw "rig has been removed because it was pinned to python 2.7 and 3.5, failed to build and is otherwise unmaintained"; # added 2022-11-28
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
   ROPGadget = ropgadget; # added 2021-07-06
   rotate-backups = throw "rotate-backups was removed in favor of the top-level rotate-backups"; # added 2021-07-01

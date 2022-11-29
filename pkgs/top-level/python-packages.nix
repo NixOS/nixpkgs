@@ -1098,8 +1098,6 @@ self: super: with self; {
 
   backports-cached-property = callPackage ../development/python-modules/backports-cached-property { };
 
-  backports_abc = callPackage ../development/python-modules/backports_abc { };
-
   backports_csv = callPackage ../development/python-modules/backports_csv { };
 
   backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
@@ -1111,8 +1109,6 @@ self: super: with self; {
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
-
-  backports_ssl_match_hostname = callPackage ../development/python-modules/backports_ssl_match_hostname { };
 
   backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
 
@@ -1956,8 +1952,6 @@ self: super: with self; {
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
 
-  contextvars = callPackage ../development/python-modules/contextvars { };
-
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
@@ -2172,8 +2166,6 @@ self: super: with self; {
   databricks-connect = callPackage ../development/python-modules/databricks-connect { };
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
-
-  dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
@@ -2835,8 +2827,6 @@ self: super: with self; {
   easygui = callPackage ../development/python-modules/easygui { };
 
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
-
-  easysnmp = callPackage ../development/python-modules/easysnmp { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
@@ -9793,8 +9783,6 @@ self: super: with self; {
   rich-click = callPackage ../development/python-modules/rich-click { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
-
-  rig = callPackage ../development/python-modules/rig { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 

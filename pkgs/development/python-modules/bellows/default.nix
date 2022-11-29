@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , click
 , click-log
-, dataclasses
 , pure-pcapy3
 , pyserial-asyncio
 , voluptuous
@@ -34,8 +33,6 @@ buildPythonPackage rec {
     pyserial-asyncio
     voluptuous
     zigpy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [

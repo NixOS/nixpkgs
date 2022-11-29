@@ -3,7 +3,6 @@
 , fetchPypi
 , curtsies
 , cwcwidth
-, dataclasses
 , greenlet
 , jedi
 , pygments
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   version = "0.23";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,8 +41,6 @@ buildPythonPackage rec {
     typing-extensions
     urwid
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   postInstall = ''
