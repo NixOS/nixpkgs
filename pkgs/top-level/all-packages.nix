@@ -30054,7 +30054,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
+  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
+  };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
