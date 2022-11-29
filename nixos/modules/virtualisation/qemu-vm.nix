@@ -316,14 +316,34 @@ in
           '';
         };
 
+    virtualisation.bootPartition =
+      mkOption {
+        type = types.nullOr types.path;
+        default = if cfg.useEFIBoot then "${cfg.bootDevice}1" else null;
+        defaultText = literalExpression ''if cfg.useEFIBoot then "''${cfg.bootDevice}1" else null;'';
+        example = "/dev/vda1";
+        description =
+          lib.mdDoc ''
+            The boot partition to be used to mount /boot filesystem.
+            In legacy boots, this should be null.
+            By default, in EFI boot, it is the first partition of the boot device.
+          '';
+      };
+
     virtualisation.rootDevice =
       mkOption {
         type = types.path;
         default =
-          if (cfg.useBootLoader && cfg.bootDevice == options.virtualisation.bootDevice.default)
+          if (cfg.useBootLoader && cfg.useEFIBoot && cfg.useDefaultFilesystems)
           then "${cfg.bootDevice}2"
           else
-            if !cfg.useBootLoader then cfg.bootDevice else null;
+          (
+            if (cfg.useBootLoader && !cfg.useEFIBoot && cfg.useDefaultFilesystems)
+            then
+              "${cfg.bootDevice}1"
+            else
+              null
+          );
         defaultText = ''if (cfg.useBootLoader && !hasPrefix "/dev/mapper/" ''${cfg.bootDevice}) then "''${cfg.bootDevice}2" else cfg.bootDevice;'';
         example = "/dev/vda2";
         description =
@@ -897,8 +917,6 @@ in
       optional cfg.writableStore "overlay"
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
-    # TODO: needed? virtualisation.bootDevice = mkDefault (driveDeviceName 1);
-
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
     virtualisation.sharedDirectories = {
@@ -1042,10 +1060,10 @@ in
           neededForBoot = true;
         };
       } //
-      optionalAttrs cfg.useBootLoader {
+      optionalAttrs (cfg.useBootLoader && cfg.bootPartition != null) {
         # see note [Disk layout with `useBootLoader`]
         "/boot" = {
-          device = "${lookupDriveDeviceName "root" cfg.qemu.drives}1"; # 1 for e.g. `vda1`, as created in `systemImage`
+          device = cfg.bootPartition; # 1 for e.g. `vda1`, as created in `systemImage`
           fsType = "vfat";
           noCheck = true; # fsck fails on a r/o filesystem
         };

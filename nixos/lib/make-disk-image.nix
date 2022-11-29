@@ -462,6 +462,7 @@ let format' = format; in let
       ${optionalString (fsType == "ext4" && deterministic) ''
         tune2fs -T now ${optionalString deterministic "-U ${rootFSUID}"} -c 0 -i 0 $rootDisk
       ''}
+
       # make systemd-boot find ESP without udev
       mkdir /dev/block
       ln -s /dev/vda1 /dev/block/254:1
@@ -492,10 +493,6 @@ let format' = format; in let
         ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
             ln -s /dev/vda ${config.boot.loader.grub.device}
         ''}
-        # TODO: needed?
-        # For GRUB 0.97 compatibility
-        mkdir -p /mnt/boot/grub
-        echo '(hd0) /dev/vda' > /mnt/boot/grub/device.map
 
         # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
