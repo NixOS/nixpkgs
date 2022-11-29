@@ -47,14 +47,18 @@ rec {
   inferiors = {
     # x86_64 Intel
     # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-    default        = [ ];
-    westmere       = [ ];
+    default        = [ "x86-64-v2"      ];
+    x86-64         = [ ];
+    x86-64-v2      = [ "x86-64"         ] ++ inferiors.x86-64;
+    westmere       = [ "x86-64-v2"      ] ++ inferiors.x86-64-v2;
     sandybridge    = [ "westmere"       ] ++ inferiors.westmere;
     ivybridge      = [ "sandybridge"    ] ++ inferiors.sandybridge;
-    haswell        = [ "ivybridge"      ] ++ inferiors.ivybridge;
+    x86-64-v3      = [ "ivybridge"      ] ++ inferiors.ivybridge;
+    haswell        = [ "x86-64-v3"      ] ++ inferiors.x86-64-v3;
     broadwell      = [ "haswell"        ] ++ inferiors.haswell;
     skylake        = [ "broadwell"      ] ++ inferiors.broadwell;
-    skylake-avx512 = [ "skylake"        ] ++ inferiors.skylake;
+    x86-64-v4      = [ "skylake"        ] ++ inferiors.skylake;
+    skylake-avx512 = [ "x86-64-v4"      ] ++ inferiors.x86-64-v4;
     cannonlake     = [ "skylake-avx512" ] ++ inferiors.skylake-avx512;
     icelake-client = [ "cannonlake"     ] ++ inferiors.cannonlake;
     icelake-server = [ "icelake-client" ] ++ inferiors.icelake-client;
