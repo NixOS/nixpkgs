@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gotrue";
@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netlify/gotrue/cmd.Version=${version}"
+    "-X=github.com/netlify/gotrue/cmd.Version=${version}"
   ];
 
   # integration tests require network access
