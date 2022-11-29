@@ -9412,6 +9412,8 @@ with pkgs;
 
   mosh = callPackage ../tools/networking/mosh { };
 
+  motrix = callPackage ../tools/networking/motrix { };
+
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
