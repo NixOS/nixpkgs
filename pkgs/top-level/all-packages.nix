@@ -1317,6 +1317,8 @@ with pkgs;
 
   cidrgrep = callPackage ../tools/text/cidrgrep { };
 
+  clematis = callPackage ../tools/misc/clematis { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
@@ -16864,6 +16866,8 @@ with pkgs;
   };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+
+  sqlcl = callPackage ../development/tools/database/sqlcl { };
 
   sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
@@ -36289,6 +36293,8 @@ with pkgs;
   root = callPackage ../applications/science/misc/root {
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
+    # https://github.com/NixOS/nixpkgs/issues/201254
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {

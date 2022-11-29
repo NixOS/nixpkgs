@@ -12050,6 +12050,7 @@ self: super: with self; {
   };
 
   xapp = callPackage ../development/python-modules/xapp {
+    inherit (pkgs.buildPackages) meson;
     inherit (pkgs) gtk3 gobject-introspection polkit;
     inherit (pkgs.cinnamon) xapp;
   };
