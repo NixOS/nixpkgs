@@ -59,7 +59,7 @@ fn main() {
             // (which it doesn't actually use...).  Get rid of them to prevent
             // the whole kernel from being included in the initrd.
             nuke_refs(&target);
-            writeln!(insmod_list,"{}",target.display());
+            writeln!(insmod_list,"{}",target.display()).unwrap();
         }
         copy_firmware(&kernel,allow_missing,&firmware_dir,&out_dir,&module);
     }
