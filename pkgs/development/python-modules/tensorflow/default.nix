@@ -236,8 +236,7 @@ let
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
 
-    # aarch64-darwin needs this env set
-    LIBTOOL = "${cctools}/bin/libtool";
+    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
