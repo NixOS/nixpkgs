@@ -16,14 +16,14 @@ use std::hash::Hash;
 fn main() {
     let args : Vec<OsString> = env::args_os().collect();
     let allow_missing = env::var_os("allowMissing").is_some();
-    let firmware = env::var_os("firmware").unwrap();
+    let firmware_dir = env::var_os("firmware").unwrap();
     let out_dir = env::var_os("out").unwrap();
     let kernel_dir = env::var_os("kernel").unwrap();
     let version = env::var_os("version").unwrap();
 
     let kernel_dir = Path::new(&kernel_dir).to_path_buf();
     let out_dir = Path::new(&out_dir).to_path_buf();
-    let firmware_dir = Path::new(&firmware).to_path_buf();
+    let firmware_dir = Path::new(&firmware_dir).to_path_buf();
     let kernel = KernelData { path : kernel_dir, version : version };
 
     // resolve the root modules
