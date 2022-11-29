@@ -204,7 +204,7 @@ let
           ) (callPackageKeepDeriver expr args);
 
     callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
-      callCabal2nixWithOptions' {
+      self.callCabal2nixWithOptions' {
         inherit name src extraCabal2nixOptions;
       } args;
 
