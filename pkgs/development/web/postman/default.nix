@@ -2,14 +2,14 @@
 
 let
   pname = "postman";
-  version = "9.31.0";
+  version = "10.5.2";
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.postman;
     platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron Crafter ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron Crafter Vinetos ];
   };
 
 in
