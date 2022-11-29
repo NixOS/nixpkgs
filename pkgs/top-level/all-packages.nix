@@ -19607,6 +19607,8 @@ with pkgs;
 
   hts-engine = callPackage ../development/libraries/hts-engine { };
 
+  hts-voice-nitech-jp-atr503-m001 = callPackage ../data/misc/hts-voice-nitech-jp-atr503-m001 { };
+
   http-parser = callPackage ../development/libraries/http-parser { };
 
   hubble = callPackage ../applications/networking/cluster/hubble { };
