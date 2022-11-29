@@ -370,16 +370,14 @@ let
     dontAddBazelOpts = true;
 
     fetchAttrs = {
-      # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      sha256 = if cudaSupport then
-        "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
-      else if stdenv.isDarwin && stdenv.isAarch64 then
-        # FIXME: this checksum is currently wrong, since the tensorflow dependency fetch is broken on darwin
-        "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E="
-      else if stdenv.isDarwin && stdenv.isx86_64 then
-        "sha256-/qPUDgfKsWCZh/pgZM4wm9+4U9U5kxxv7q3Uh7zKSO4="
-      else
-        "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
+      sha256 = {
+      x86_64-linux = if cudaSupport
+        then "sha256-SudzMTxfifKJJso6haCgOD2dXeAhYSXHA2nzq1ErTHg="
+        else "sha256-bwZwK24DlUevN5gIdKmBkq1dJpn0i2H4hq+IN77BzjE=";
+      aarch64-linux = "sha256-ZbCNZSHF9of+KGTNEqFdKQ44MVNto/rTyo2XEsKXISg=";
+      x86_64-darwin = "sha256-/qPUDgfKsWCZh/pgZM4wm9+4U9U5kxxv7q3Uh7zKSO4=";
+      aarch64-darwin = "sha256-u+ODHAZDlGe06PUWId4sNKyl60vhAPMd01jMm2EvN8E=";
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
     buildAttrs = {
