@@ -42,13 +42,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     protobuf
+    rustPlatform.bindgenHook
   ];
 
   # fat LTO requires ~3.4GB RAM
   requiredSystemFeatures = [ "big-parallel" ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include";
 
   meta = with lib; {
     description = "Reference client for NEAR Protocol";
