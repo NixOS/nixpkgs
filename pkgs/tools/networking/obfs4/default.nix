@@ -30,11 +30,10 @@ buildGoModule rec {
       specification, and its modular architecture allows it to support
       multiple pluggable transports.
     '';
-    homepage = "https://www.torproject.org/projects/obfsproxy";
+    homepage = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/obfs4";
     maintainers = with maintainers; [ thoughtpolice ];
     mainProgram = "obfs4proxy";
-    changelog = "https://gitweb.torproject.org/pluggable-transports/obfs4.git/plain/ChangeLog";
-    downloadPage = "https://gitweb.torproject.org/pluggable-transports/obfs4.git/";
+    changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/obfs4/-/raw/${src.rev}/ChangeLog";
     license = with lib.licenses; [ bsd2 bsd3 gpl3 ];
   };
 }
