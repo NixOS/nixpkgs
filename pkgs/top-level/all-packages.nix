@@ -31408,6 +31408,8 @@ with pkgs;
 
   poke = callPackage ../applications/editors/poke { };
 
+  pokefinder = qt6Packages.callPackage ../tools/games/pokefinder { };
+
   pokemonsay = callPackage ../tools/misc/pokemonsay { };
 
   polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
