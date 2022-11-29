@@ -10,7 +10,16 @@
       In addition to numerous new and upgraded packages, this release
       has the following highlights:
     </para>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
+      <listitem>
+        <para>
+          On x86 platforms nixpkgs is now build by default with the
+          <literal>x86_64-v2</literal> microarchitecture level. This
+          means any x86 processor that does not support SSE4.2 and AES
+          instructions is no longer supported by the precompiled binary
+          cache.
+        </para>
+      </listitem>
       <listitem>
         <para>
           Cinnamon has been updated to 5.6, see
