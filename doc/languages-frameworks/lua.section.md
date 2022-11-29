@@ -200,7 +200,7 @@ luaposix = buildLuarocksPackage {
 The `buildLuarocksPackage` delegates most tasks to luarocks:
 
 * it adds `luarocks` as an unpacker for `src.rock` files (zip files really).
-* configurePhase` writes a temporary luarocks configuration file which location
+* `configurePhase` writes a temporary luarocks configuration file which location
 is exported via the environment variable `LUAROCKS_CONFIG`.
 * the `buildPhase` does nothing.
 * `installPhase` calls `luarocks make --deps-mode=none --tree $out` to build and

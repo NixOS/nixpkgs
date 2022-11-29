@@ -5,19 +5,21 @@
 , lib
 , patchelf
 , stdenv
+, runCommand
+, expect
 }:
 let
-  inherit (dotnetCorePackages) sdk_6_0;
+  inherit (dotnetCorePackages) sdk_6_0 runtime_6_0;
 in
-buildDotnetModule rec {
+let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.1";
+  version = "1.39.2";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "Fd9fS5iSEynZfRwZexDlVndE/zSZdUdugR0VgXXAdmI=";
+    sha256 = "/MxBdMjPpq3Gwhi/93+JCAI+BuiiWu0n9QThQi+s/kE=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -35,14 +37,14 @@ buildDotnetModule rec {
     "-property:AssemblyVersion=${version}.0"
     "-property:FileVersion=${version}.0"
     "-property:InformationalVersion=${version}"
-    "-property:RuntimeFrameworkVersion=6.0.0-preview.7.21317.1"
+    "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
     "-property:RollForward=LatestMajor"
   ];
 
   postPatch = ''
     # Relax the version requirement
     substituteInPlace global.json \
-      --replace '7.0.100-preview.4.22252.9' '${sdk_6_0.version}'
+      --replace '7.0.100-rc.1.22431.12' '${sdk_6_0.version}'
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
@@ -66,16 +68,48 @@ buildDotnetModule rec {
     makeWrapper $out/lib/omnisharp-roslyn/OmniSharp $out/bin/OmniSharp \
       --prefix LD_LIBRARY_PATH : ${sdk_6_0.icu}/lib \
       --set-default DOTNET_ROOT ${sdk_6_0}
-
-    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
-    rm $out/lib/omnisharp-roslyn/NuGet.*.dll
-    rm $out/lib/omnisharp-roslyn/System.Configuration.ConfigurationManager.dll
   '';
+
+  passthru.tests = {
+    no-sdk = runCommand "no-sdk" { nativeBuildInputs = [ finalPackage expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "\"ERROR\",\"Name\":\"OmniSharp.MSBuild.Discovery.Providers.SdkInstanceProvider\""
+        expect eof
+        catch wait result
+        if { [lindex $result 3] == 0 } {
+          exit 1
+        }
+      EOF
+      touch $out
+    '';
+
+    with-sdk = runCommand "with-sdk" { nativeBuildInputs = [ finalPackage sdk_6_0 expect ]; meta.timeout = 60; } ''
+      HOME=$TMPDIR
+      expect <<"EOF"
+        spawn OmniSharp
+        expect_before timeout {
+          send_error "timeout!\n"
+          exit 1
+        }
+        expect "{\"Event\":\"started\","
+        send \x03
+        expect eof
+        catch wait result
+        exit [lindex $result 3]
+      EOF
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.unix;
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode # dependencies
@@ -84,4 +118,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ tesq0 ericdallo corngood mdarocha ];
     mainProgram = "OmniSharp";
   };
-}
+}; in finalPackage

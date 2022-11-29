@@ -1380,7 +1380,7 @@ let
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "sha256-aJTmihIPRUU02ZBF6jMl93QOpxJgvDFfguKXMdVwpug=";
+        sha256 = "1s56f3ak35z2h9gk3g302akhwx7p4lrylichv4s4ai8g2a5fd538";
       };
 
       beamDeps = [];
@@ -1511,6 +1511,19 @@ let
         pkg = "${name}";
         version = "${version}";
         sha256 = "1rahpgz1lsd66r7ycns1ryz2qymamz1anrlps986900lsai2jxvc";
+      };
+
+      beamDeps = [];
+    };
+
+    websockex = buildMix rec {
+      name = "websockex";
+      version = "0.4.3";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "1r2kmi2pcmdzvgbd08ci9avy0g5p2lhx80jn736a98w55c3ygwlm";
       };
 
       beamDeps = [];

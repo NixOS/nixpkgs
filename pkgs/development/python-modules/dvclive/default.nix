@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tabulate
 }:
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-4sixsWZNnI3UJRlFyB21eAdUCgF8iIZ56ECgIeFV/u8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     dvc-render

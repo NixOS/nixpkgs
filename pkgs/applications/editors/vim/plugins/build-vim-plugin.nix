@@ -8,6 +8,12 @@
 }:
 
 rec {
+  addRtp = drv:
+    drv // {
+      rtp = lib.warn "`rtp` attribute is deprecated, use `outPath` instead." drv.outPath;
+      overrideAttrs = f: addRtp (drv.overrideAttrs f);
+    };
+
   buildVimPlugin = attrs@{
     name ? "${attrs.pname}-${attrs.version}",
     namePrefix ? "vimplugin-",
@@ -36,9 +42,7 @@ rec {
         runHook postInstall
       '';
     });
-    in toVimPlugin(drv.overrideAttrs(oa: {
-      rtp = "${drv}";
-    }));
+    in addRtp (toVimPlugin drv);
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this

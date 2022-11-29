@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p4c";
-  version = "1.2.3.0";
+  version = "1.2.3.2";
 
   src = fetchFromGitHub {
     owner = "p4lang";
     repo = "p4c";
     rev = "v${version}";
-    sha256 = "sha256-LwRfLvnn1JAvSXPTkVcIB4PbPrrVweIv72Xk5g015ck=";
+    sha256 = "sha256-EeTYH7CsmPPBL05zJ+g4aM677n0NqDD+H40lBuKpY6M=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_DOCS=${toCMakeBoolean enableDocumentation}"
     "-DENABLE_GC=ON"
     "-DENABLE_GTESTS=${toCMakeBoolean enableGTests}"
-    "-DENABLE_PROTOBUF_STATIC=ON"
+    "-DENABLE_PROTOBUF_STATIC=OFF"  # static protobuf has been removed since 3.21.6
     "-DENABLE_MULTITHREAD=${toCMakeBoolean enableMultithreading}"
     "-DENABLE_GMP=ON"
   ];
@@ -65,10 +65,9 @@ stdenv.mkDerivation rec {
     bison
     flex
     cmake
-    python3
   ]
-  ++ lib.optional enableDocumentation [ doxygen graphviz ]
-  ++ lib.optional enableBPF [ libllvm libbpf ];
+  ++ lib.optionals enableDocumentation [ doxygen graphviz ]
+  ++ lib.optionals enableBPF [ libllvm libbpf ];
 
   buildInputs = [
     protobuf
@@ -76,6 +75,7 @@ stdenv.mkDerivation rec {
     boehmgc
     gmp
     flex
+    python3
   ];
 
   meta = with lib; {

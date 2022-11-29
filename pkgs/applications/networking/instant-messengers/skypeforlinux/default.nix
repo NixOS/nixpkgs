@@ -110,11 +110,11 @@ in stdenv.mkDerivation {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
     substituteInPlace $out/share/applications/skypeforlinux-share.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
     substituteInPlace $out/share/kservices5/ServiceMenus/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
   '';
 
   meta = with lib; {

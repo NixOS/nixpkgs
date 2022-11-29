@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}c++"
   ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   installPhase = ''
     runHook preInstall

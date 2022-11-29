@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -9,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.1.0";
+  version = "0.18.1.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "sha256-xniGiGqZpL1b6alnCxa2MNzuDQxPgMdNjqifOC8h0qM=";
+    sha256 = "sha256-yV1ysoesEcjL+JX6hkmcrBDmazOWBvYK6EjshxJzcAw=";
     fetchSubmodules = true;
   };
 

@@ -59,7 +59,7 @@ let
         ${mkKeyValuePairs cfg.settings}
         ${cfg.extraOptions}
       '';
-      checkPhase =
+      checkPhase = lib.optionalString cfg.checkConfig (
         if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
           echo "Ignoring validation for cross-compilation"
         ''
@@ -72,9 +72,9 @@ let
             ${cfg.package}/bin/nix show-config ${optionalString (isNixAtLeast "2.3pre") "--no-net"} \
               ${optionalString (isNixAtLeast "2.4pre") "--option experimental-features nix-command"} \
             |& sed -e 's/^warning:/error:/' \
-            | (! grep '${if cfg.checkConfig then "^error:" else "^error: unknown setting"}')
+            | (! grep '${if cfg.checkAllErrors then "^error:" else "^error: unknown setting"}')
           set -o pipefail
-        '';
+        '');
     };
 
   legacyConfMappings = {
@@ -206,7 +206,7 @@ in
 
       daemonIOSchedPriority = mkOption {
         type = types.int;
-        default = 0;
+        default = 4;
         example = 1;
         description = lib.mdDoc ''
           Nix daemon process I/O scheduling priority. This priority propagates
@@ -225,6 +225,19 @@ in
               example = "nixbuilder.example.org";
               description = lib.mdDoc ''
                 The hostname of the build machine.
+              '';
+            };
+            protocol = mkOption {
+              type = types.enum [ null "ssh" "ssh-ng" ];
+              default = "ssh";
+              example = "ssh-ng";
+              description = lib.mdDoc ''
+                The protocol used for communicating with the build machine.
+                Use `ssh-ng` if your remote builder and your
+                local Nix version support that improved protocol.
+
+                Use `null` when trying to change the special localhost builder
+                without a protocol which is for example used by hydra.
               '';
             };
             system = mkOption {
@@ -382,8 +395,15 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          If enabled (the default), checks for data type mismatches and that Nix
-          can parse the generated nix.conf.
+          If enabled, checks that Nix can parse the generated nix.conf.
+        '';
+      };
+
+      checkAllErrors = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
         '';
       };
 
@@ -670,13 +690,15 @@ in
         concatMapStrings
           (machine:
             (concatStringsSep " " ([
-              "${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
+              "${optionalString (machine.protocol != null) "${machine.protocol}://"}${optionalString (machine.sshUser != null) "${machine.sshUser}@"}${machine.hostName}"
               (if machine.system != null then machine.system else if machine.systems != [ ] then concatStringsSep "," machine.systems else "-")
               (if machine.sshKey != null then machine.sshKey else "-")
               (toString machine.maxJobs)
               (toString machine.speedFactor)
-              (concatStringsSep "," (machine.supportedFeatures ++ machine.mandatoryFeatures))
-              (concatStringsSep "," machine.mandatoryFeatures)
+              (let res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+               in if (res == []) then "-" else (concatStringsSep "," res))
+              (let res = machine.mandatoryFeatures;
+               in if (res == []) then "-" else (concatStringsSep "," machine.mandatoryFeatures))
             ]
             ++ optional (isNixAtLeast "2.4pre") (if machine.publicHostKey != null then machine.publicHostKey else "-")))
             + "\n"

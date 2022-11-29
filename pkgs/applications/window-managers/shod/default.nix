@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "shod";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "shod";
     rev = "v${version}";
-    sha256 = "sha256-jrPuI3ADppqaJ2y9GksiJZZd4LtN1P5yjWwlf9VuYDc=";
+    sha256 = "sha256-hunHcYWxboCWM+SYH5u09MKP0b7U/9CVfhC6vLVpc3Q=";
   };
 
   buildInputs = [

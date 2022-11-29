@@ -42,11 +42,8 @@ in
 
       hostname = lib.mkOption {
         type = lib.types.str;
-        default = if config.networking.domain != null then
-                    config.networking.fqdn
-                  else
-                    config.networking.hostName;
-        defaultText = lib.literalExpression "config.networking.fqdn";
+        default = config.networking.fqdnOrHostName;
+        defaultText = lib.literalExpression "config.networking.fqdnOrHostName";
         example = "discourse.example.com";
         description = lib.mdDoc ''
           The hostname to serve Discourse on.
@@ -798,13 +795,13 @@ in
           "public"
           "sockets"
         ];
-        RuntimeDirectoryMode = 0750;
+        RuntimeDirectoryMode = "0750";
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
           "tmp"
         ];
-        StateDirectoryMode = 0750;
+        StateDirectoryMode = "0750";
         LogsDirectory = "discourse";
         TimeoutSec = "infinity";
         Restart = "on-failure";

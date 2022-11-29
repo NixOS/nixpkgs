@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  makeFlags = lib.optional stdenv.hostPlatform.isStatic [ "DISABLE_SHARED=1"];
+  makeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "DISABLE_SHARED=1"];
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 

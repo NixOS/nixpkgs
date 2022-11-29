@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , installShellFiles
 , pbr
@@ -21,14 +21,14 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TEGzUNgYTkb2VrvW2E3lurD6N1XcIhH2tjmPlsJ/5MI=";
+    hash = "sha256-yoyQyhyqRQZ8yyn3sv94JqkVZQMybwxLGFForZowr3o=";
   };
 
   nativeBuildInputs = [

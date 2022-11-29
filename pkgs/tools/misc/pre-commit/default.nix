@@ -37,9 +37,9 @@ buildPythonPackage rec {
     pyyaml
     toml
     virtualenv
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.7") [
+  ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
   ];
 
@@ -142,6 +142,21 @@ buildPythonPackage rec {
     "test_install_existing_hooks_no_overwrite"
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
+
+    # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
+    # but we use an absolute path so it's not an issue.
+    "test_environment_not_sourced"
+
+    # broken with Git 2.38.1, upstream issue filed at https://github.com/pre-commit/pre-commit/issues/2579
+    "test_golang_with_recursive_submodule"
+    "test_install_in_submodule_and_run"
+    "test_is_in_merge_conflict_submodule"
+    "test_get_conflicted_files_in_submodule"
+    "test_sub_nothing_unstaged"
+    "test_sub_something_unstaged"
+    "test_sub_staged"
+    "test_submodule_does_not_discard_changes"
+    "test_submodule_does_not_discard_changes_recurse"
   ];
 
   pythonImportsCheck = [

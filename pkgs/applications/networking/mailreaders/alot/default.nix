@@ -15,7 +15,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   outputs = [
     "out"
-  ] ++ lib.optional withManpage [
+  ] ++ lib.optionals withManpage [
     "man"
   ];
 

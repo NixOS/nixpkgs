@@ -1,9 +1,13 @@
-{ mkDerivation
+{ gcc11Stdenv
 , lib
-, pkg-config
+, srcs
+
 , cmake
-, cmark
 , extra-cmake-modules
+, pkg-config
+, wrapQtAppsHook
+
+, cmark
 , kconfig
 , kdbusaddons
 , ki18n
@@ -25,10 +29,17 @@
 , sonnet
 }:
 
-mkDerivation rec {
+# Workaround for AArch64 not using GCC11 yet.
+gcc11Stdenv.mkDerivation rec {
   pname = "neochat";
+  inherit (srcs.neochat) version src;
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     cmark

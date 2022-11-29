@@ -2,9 +2,10 @@
 , targetPackages
 
 , crossStageStatic, libcCross
+, threadsCross
 , version
 
-, gmp, mpfr, libmpc, libelf, isl
+, gmp, mpfr, libmpc, isl
 , cloog ? null
 
 , enableLTO
@@ -86,7 +87,7 @@ let
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then "mcf"
+                          else if targetPlatform.isWindows then (threadsCross.model or "win32")
                           else "single"}"
       "--enable-nls"
     ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
@@ -110,7 +111,6 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
     ++ lib.optionals (!crossStageStatic) [
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"

@@ -302,6 +302,12 @@ Container system, boot system and library changes are some examples of the pull 
 
 It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
 
+In case the PR is stuck waiting for the original author to apply a trivial
+change (a typo, capitalisation change, etc.) and the author allowed the members
+to modify the PR, consider applying it yourself. (or commit the existing review
+suggestion) You should pay extra attention to make sure the addition doesn't go
+against the idea of the original PR and would not be opposed by the author.
+
 <!--
 The following paragraphs about how to deal with unactive contributors is just a proposition and should be modified to what the community agrees to be the right policy.
 

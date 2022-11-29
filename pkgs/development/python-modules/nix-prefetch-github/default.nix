@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "5.2.1";
+  version = "5.2.2";
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "etmlRavPzJKLmyw3PYMgeMveFj4aVi38crHjdtDuaLg=";
+    sha256 = "sha256-+0s47YhpMojxmRHKC7kazov2ZUsOs2/Y2EmHAAcARf0=";
   };
 
   checkInputs = [ unittestCheckHook git which ];

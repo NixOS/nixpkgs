@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, prusa-slicer, wxGTK31-gtk3 }:
+{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, prusa-slicer, wxGTK31 }:
 let
   appname = "SuperSlicer";
   pname = "super-slicer";
@@ -71,7 +71,7 @@ let
     passthru = allVersions;
 
   };
-  prusa-slicer' = prusa-slicer.override { wxGTK31-gtk3-override = wxGTK31-gtk3; };
+  prusa-slicer' = prusa-slicer.override { wxGTK31-override = wxGTK31; };
   allVersions = builtins.mapAttrs (_name: version: (prusa-slicer'.overrideAttrs (override version))) versions;
 in
 allVersions.stable

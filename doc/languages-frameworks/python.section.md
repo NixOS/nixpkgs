@@ -789,7 +789,7 @@ documentation source root.
 ```
 
 The hook is also available to packages outside the python ecosystem by
-referencing it using `python3.pkgs.sphinxHook`.
+referencing it using `sphinxHook` from top-level.
 
 ### Develop local package {#develop-local-package}
 
@@ -1670,9 +1670,9 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 
 ```nix
   nixpkgs.config.packageOverrides = super: {
-    python = super.python.override {
+    python3 = super.python3.override {
       packageOverrides = python-self: python-super: {
-        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        twisted = python-super.twisted.overridePythonAttrs (oldAttrs: {
           src = super.fetchPypi {
             pname = "twisted";
             version = "19.10.0";
@@ -1780,6 +1780,10 @@ The following rules are desired to be respected:
   that characters should be converted to lowercase and `.` and `_` should be
   replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Packages from sources such as GitHub and GitLab that do not exist on PyPI
+  should not use a name that is already used on PyPI. When possible, they should
+  use the package repository name prefixed with the owner (e.g. organization) name
+  and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
 

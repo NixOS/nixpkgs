@@ -46,7 +46,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -127,22 +126,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-08-08";
+  version = "2022-11-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "2b1c1e65d5fbbe25625a31ee93cb14c9a9edf969";
-    sha256 = "sha256-mjCdJPB4t5OLGZ0r5usJTVs1BBr4cWeGGE7imyUfQnQ=";
+    rev = "14d4624dc20956ec9ff54882e70c5c0bc377921a";
+    sha256 = "sha256-xY3CDFjLG3po2tdaTZToqZmLCQnSwsUqAn8sIXFrybw=";
   };
-
-  patches = [
-    # https://github.com/NixOS/hydra/pull/1215: scmdiff: Hardcode --git-dir
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/b6ea85a601ddac9cb0716d8cb4d446439fa0778f.patch";
-      sha256 = "sha256-QHjwLYQucdkBs6OsFI8kWo5ugkPXXlTgdbGFxKBHAHo=";
-    })
-  ];
 
   buildInputs =
     [

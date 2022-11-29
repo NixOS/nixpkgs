@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dapper";
-  version = "0.5.8";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = "dapper";
     rev = "v${version}";
-    sha256 = "sha256-t1w8bhwCjZHmvgBG6Tv8kgqTbC7v5P5QOvJGuTJUC04=";
+    sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
   vendorSha256 = null;
 

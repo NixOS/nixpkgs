@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub
-, buildPythonApplication, python
+, buildPythonPackage, python
 , pytestCheckHook, mock, path, pyhamcrest, pytest-html
 , glibcLocales
 , colorama, cucumber-tag-expressions, parse, parse-type, six
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "behave";
   version = "1.2.7.dev2";
 

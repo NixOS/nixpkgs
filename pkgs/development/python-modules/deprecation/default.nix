@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # avoiding mass rebuilds for python3.9, but no longer
   # needed with patch
-  checkInputs = [ unittestCheckHook ] ++ lib.optional (pythonOlder "3.10") [
+  checkInputs = [ unittestCheckHook ] ++ lib.optionals (pythonOlder "3.10") [
     unittest2
   ];
 

@@ -32,7 +32,7 @@ in rustPlatform.buildRustPackage rec {
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
     mkdir -p $HOME
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    yarn config --offline set yarn-offline-mirror $yarnOfflineCache
     ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/

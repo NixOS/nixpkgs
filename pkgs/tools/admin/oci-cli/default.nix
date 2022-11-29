@@ -67,7 +67,8 @@ buildPythonApplication rec {
       --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
       --replace "PyYAML>=5.4,<6" "PyYAML" \
       --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
-      --replace "terminaltables==3.1.0" "terminaltables"
+      --replace "terminaltables==3.1.0" "terminaltables" \
+      --replace "oci==2.78.0" "oci"
   '';
 
   # https://github.com/oracle/oci-cli/issues/187

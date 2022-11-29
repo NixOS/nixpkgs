@@ -3,12 +3,12 @@
 , nixosTests
 , python3
 , ghostscript
-, imagemagick
+, imagemagickBig
 , jbig2enc
 , optipng
 , pngquant
 , qpdf
-, tesseract4
+, tesseract5
 , unpaper
 , liberation_ttf
 , fetchFromGitHub
@@ -16,27 +16,22 @@
 
 let
   # Use specific package versions required by paperless-ngx
-  py = python3.override {
+  python = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
 
       # use paperless-ngx version of django-q
       # see https://github.com/paperless-ngx/paperless-ngx/pull/1014
-      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
+      django-q = super.django-q.overridePythonAttrs (oldAttrs: {
         src = fetchFromGitHub {
           owner = "paperless-ngx";
           repo = "django-q";
-          sha256 = "sha256-aoDuPig8Nf8fLzn7GjBn69aF2zH2l8gxascAu9lIG3U=";
-          rev = "71abc78fdaec029cf71e9849a3b0fa084a1678f7";
+          hash = "sha256-alu7tZwUn77xhUF9c/aGmwRwO//mR/FucXjvXUl/6ek=";
+          rev = "8b5289d8caf36f67fb99448e76ead20d5b498c1b";
         };
         # due to paperless-ngx modification of the pyproject.toml file
         # the patch is not needed any more
-        patches = [];
-      });
-
-      # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
-      django-extensions = super.django-extensions.overridePythonAttrs (_: {
-        doCheck = false;
+        patches = [ ];
       });
 
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
@@ -46,24 +41,69 @@ let
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
         };
       });
+
+      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
+      # and https://github.com/django/channels_redis/issues/332
+      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.1";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = "channels_redis";
+          rev = version;
+          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
+        };
+      });
+
+      channels = super.channels.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.5";
+        pname = "channels";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = pname;
+          rev = version;
+          sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
+        pytestFlagsArray = [ "--asyncio-mode=auto" ];
+      });
+
+      daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.2";
+        pname = "daphne";
+        src = fetchFromGitHub {
+          owner = "django";
+          repo = pname;
+          rev = version;
+          hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
+        };
+      });
     };
   };
 
-  path = lib.makeBinPath [ ghostscript imagemagick jbig2enc optipng pngquant qpdf tesseract4 unpaper ];
+  path = lib.makeBinPath [
+    ghostscript
+    imagemagickBig
+    jbig2enc
+    optipng
+    pngquant
+    qpdf
+    tesseract5
+    unpaper
+  ];
 in
-py.pkgs.pythonPackages.buildPythonApplication rec {
+python.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.8.0";
+  version = "1.9.2";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-BLfhh04RvBJFRQiPXkMl8XlWqZOWKmjjl+6lZ326stU=";
+    hash = "sha256-fafjVXRfzFrINzI/Ivfm1VY4YpemHkHwThBP54XoXM4=";
   };
 
   format = "other";
 
-  propagatedBuildInputs = with py.pkgs.pythonPackages; [
+  propagatedBuildInputs = with python.pkgs.pythonPackages; [
     aioredis
     arrow
     asgiref
@@ -169,7 +209,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
   # Compile manually because `pythonRecompileBytecodeHook` only works for
   # files in `python.sitePackages`
   postBuild = ''
-    ${py.interpreter} -OO -m compileall src
+    ${python.interpreter} -OO -m compileall src
   '';
 
   installPhase = ''
@@ -181,7 +221,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
       --prefix PATH : "${path}"
   '';
 
-  checkInputs = with py.pkgs.pythonPackages; [
+  checkInputs = with python.pkgs.pythonPackages; [
     pytest-django
     pytest-env
     pytest-sugar
@@ -190,7 +230,9 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "src" ];
+  pytestFlagsArray = [
+    "src"
+  ];
 
   # The tests require:
   # - PATH with runtime binaries
@@ -206,17 +248,15 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
       --replace "--cov --cov-report=html" ""
   '';
 
-  passthru = {
-    # PYTHONPATH of all dependencies used by the package
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
-    inherit path;
 
+  passthru = {
+    inherit python path;
     tests = { inherit (nixosTests) paperless; };
   };
 
   meta = with lib; {
-    description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
-    homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
+    description = "Tool to scan, index, and archive all of your physical documents";
+    homepage = "https://paperless-ngx.readthedocs.io/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lukegb gador erikarvstedt ];
   };

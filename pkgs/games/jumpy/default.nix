@@ -5,8 +5,7 @@
 , pkg-config
 , alsa-lib
 , libGL
-, libX11
-, libXi
+, xorg
 , udev
 , Cocoa
 , OpenGL
@@ -32,8 +31,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
     libGL
-    libX11
-    libXi
+    xorg.libX11
+    xorg.libXi
     udev
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa

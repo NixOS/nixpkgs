@@ -8,26 +8,36 @@
 , uchar
 }:
 
+let param =
+  if lib.versionAtLeast ppxlib.version "0.26.0" then {
+    version = "2.6";
+    sha256 = "sha256-AU+dV+jTG9v3BXzip2Bnv04Ewyo3pyUglDDBFsOsFf0=";
+  } else {
+    version = "2.5";
+    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
+  }
+; in
+
 let
-  unicodeVersion = "14.0.0";
+  unicodeVersion = "15.0.0";
   baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
   DerivedCoreProperties = fetchurl {
     url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
-    sha256 = "sha256:1g77s8g9443dd92f82pbkim7rk51s7xdwa3mxpzb1lcw8ryxvvg3";
+    sha256 = "sha256-02cpC8CGfmtITGg3BTC90aCLazJARgG4x6zK+D4FYo0=";
   };
   DerivedGeneralCategory = fetchurl {
     url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
-    sha256 = "sha256:080l3bwwppm7gnyga1hzhd07b55viklimxpdsx0fsxhr8v47krnd";
+    sha256 = "sha256-/imkXAiCUA5ZEUCqpcT1Bn5qXXRoBhSK80QAxIucBvk=";
   };
   PropList = fetchurl {
     url = "${baseUrl}/ucd/PropList.txt";
-    sha256 = "sha256:08k75jzl7ws9l3sm1ywsj24qa4qvzn895wggdpp5nyj1a2wgvpbb";
+    sha256 = "sha256-4FwKKBHRE9rkq9gyiEGZo+qNGH7huHLYJAp4ipZUC/0=";
   };
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.5";
+  inherit (param) version;
 
   minimalOCamlVersion = "4.08";
 
@@ -35,7 +45,7 @@ buildDunePackage rec {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
+    inherit (param) sha256;
   };
 
   propagatedBuildInputs = [

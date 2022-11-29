@@ -47,9 +47,10 @@ rec {
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
+        else if final.isFreeBSD             then "fblibc"
+        else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"
         else if final.isNone                then "newlib"
-        else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also
@@ -99,7 +100,7 @@ rec {
           genode = "Genode";
         }.${final.parsed.kernel.name} or null;
 
-         # uname -p
+         # uname -m
          processor = final.parsed.cpu.name;
 
          # uname -r
@@ -141,6 +142,14 @@ rec {
           powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
+      # Name used by UEFI for architectures.
+      efiArch =
+        if final.isx86_32 then "ia32"
+        else if final.isx86_64 then "x64"
+        else if final.isAarch32 then "arm"
+        else if final.isAarch64 then "aa64"
+        else final.parsed.cpu.name;
+
       darwinArch = {
         armv7a  = "armv7";
         aarch64 = "arm64";
@@ -158,38 +167,46 @@ rec {
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+    } // (
+      let
+        selectEmulator = pkgs:
+          let
+            qemu-user = pkgs.qemu.override {
+              smartcardSupport = false;
+              spiceSupport = false;
+              openGLSupport = false;
+              virglSupport = false;
+              vncSupport = false;
+              gtkSupport = false;
+              sdlSupport = false;
+              pulseSupport = false;
+              smbdSupport = false;
+              seccompSupport = false;
+              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
+            };
+            wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
+          in
+          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
+            pkgs.stdenv.hostPlatform.canExecute final
+          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          else if final.isWindows
+          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
+          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
+          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          else if final.isWasi
+          then "${pkgs.wasmtime}/bin/wasmtime"
+          else if final.isMmix
+          then "${pkgs.mmixware}/bin/mmix"
+          else null;
+      in {
+        emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
 
-      emulator = pkgs: let
-        qemu-user = pkgs.qemu.override {
-          smartcardSupport = false;
-          spiceSupport = false;
-          openGLSupport = false;
-          virglSupport = false;
-          vncSupport = false;
-          gtkSupport = false;
-          sdlSupport = false;
-          pulseSupport = false;
-          smbdSupport = false;
-          seccompSupport = false;
-          hostCpuTargets = ["${final.qemuArch}-linux-user"];
-        };
-        wine-name = "wine${toString final.parsed.cpu.bits}";
-        wine = (pkgs.winePackagesFor wine-name).minimal;
-      in
-        if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.canExecute final
-        then "${pkgs.runtimeShell} -c '\"$@\"' --"
-        else if final.isWindows
-        then "${wine}/bin/${wine-name}"
-        else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
-        then "${qemu-user}/bin/qemu-${final.qemuArch}"
-        else if final.isWasi
-        then "${pkgs.wasmtime}/bin/wasmtime"
-        else if final.isMmix
-        then "${pkgs.mmixware}/bin/mmix"
-        else throw "Don't know how to run ${final.config} executables.";
+        emulator = pkgs:
+          if (final.emulatorAvailable pkgs)
+          then selectEmulator pkgs
+          else throw "Don't know how to run ${final.config} executables.";
 
-    } // mapAttrs (n: v: v final.parsed) inspect.predicates
+    }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;

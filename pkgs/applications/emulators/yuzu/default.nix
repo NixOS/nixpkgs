@@ -15,13 +15,13 @@ let
 in {
   mainline = libsForQt5.callPackage ./generic.nix rec {
     pname = "yuzu-mainline";
-    version = "1137";
+    version = "1162";
 
     src = fetchFromGitHub {
       owner = "yuzu-emu";
       repo = "yuzu-mainline";
       rev = "mainline-0-${version}";
-      sha256 = "sha256-DLU5hmjTnlpRQ6sbcU7as/KeI9dDJAFUzVLciql5niE=";
+      sha256 = "sha256-1UNgB/3l6RN0OLRrmXqzwcEUgXlWGSE7PvHbZ8YSDro=";
       fetchSubmodules = true;
     };
 
@@ -30,13 +30,13 @@ in {
 
   early-access = libsForQt5.callPackage ./generic.nix rec {
     pname = "yuzu-ea";
-    version = "2907";
+    version = "2945";
 
     src = fetchFromGitHub {
       owner = "pineappleEA";
       repo = "pineapple-src";
       rev = "EA-${version}";
-      sha256 = "sha256-spPW2/qeVyd1P1/Z2lcuA69igS3xV4KtcJ59yf9X4JI=";
+      sha256 = "sha256-/051EtQxhB5oKH/JxZZ2AjnxOBcRxCBIwd4Qr8lq7Ok=";
       fetchSubmodules = true;
     };
 

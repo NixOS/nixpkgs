@@ -211,7 +211,7 @@ $ sudo groupdel nixbld
         Generate your NixOS configuration:
       </para>
       <programlisting>
-$ sudo `which nixos-generate-config` --root /
+$ sudo `which nixos-generate-config`
 </programlisting>
       <para>
         Note that this will place the generated configuration files in

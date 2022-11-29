@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, gobject-introspection
 , jellyfin-apiclient-python
 , jinja2
 , mpv
@@ -9,6 +10,7 @@
 , python-mpv-jsonipc
 , pywebview
 , tkinter
+, wrapGAppsHook
 }:
 
 buildPythonApplication rec {
@@ -19,6 +21,11 @@ buildPythonApplication rec {
     inherit pname version;
     sha256 = "sha256-JiSC6WjrLsWk3/m/EHq7KNXaJ6rqT2fG9TT1jPvYlK0=";
   };
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     jellyfin-apiclient-python
@@ -51,6 +58,12 @@ buildPythonApplication rec {
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
   '';
+
+  # needed for pystray to access appindicator using GI
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+  dontWrapGApps = true;
 
   # no tests
   doCheck = false;

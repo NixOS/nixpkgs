@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , isPy3k
 , daemonize
 , dbus-python
@@ -16,7 +16,7 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
-buildPythonApplication (common // rec {
+buildPythonPackage (common // rec {
   pname = "openrazer_daemon";
 
   disabled = !isPy3k;

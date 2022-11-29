@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
     rev = version;
-    sha256 = "03j04b1mk2fq0ni2ydpw40fdd36k545z8a1pq9x5c779080cwpla";
+    hash = "sha256-cFmsdQXfGxgpKe32dw1lgoANU9Drhu5Mecyz37BVP4g=";
   };
 
   format = "other";
@@ -21,6 +21,10 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook ];
+
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs =
     [ gtk3 gobject-introspection libnotify libsecret gnome.adwaita-icon-theme ] ++

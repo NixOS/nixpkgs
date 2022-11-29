@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-+UP1abTDYLn+lhMvo9G57X0nlColai7isNswog+3Y40=";
+    sha256 = "sha256-+fQnit2J3WQpir4HldkWKCex6byfp2IqEWCi4oJ5HgU=";
   };
-  vendorSha256 = "sha256-opVnj6dTtHrPYM1v+EFw39XDMF/fampAn7n+JvlBcJk=";
+  vendorSha256 = "sha256-Wz5OoCrIY/xEXk+eqXtqtgVGD8oGUPmhzT5mOcZRD8w=";
 
   subPackages = [ "." ];
 

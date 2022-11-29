@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "erfa";
   version = "2.0.0";
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "liberfa";

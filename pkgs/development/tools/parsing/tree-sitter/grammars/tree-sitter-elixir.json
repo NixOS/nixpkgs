@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/elixir-lang/tree-sitter-elixir",
-  "rev": "05e3631c6a0701c1fa518b0fee7be95a2ceef5e2",
-  "date": "2022-08-04T13:28:43-05:00",
-  "path": "/nix/store/ixqcx5344qr5bzjgyl05zcp2f0gnkbz8-tree-sitter-elixir",
-  "sha256": "0qy4dgs72dyr9cv16q8na7xxkhsqjyk99xnwpgqm1sa8m0yjjyp6",
+  "rev": "b20eaa75565243c50be5e35e253d8beb58f45d56",
+  "date": "2022-10-16T19:20:07+00:00",
+  "path": "/nix/store/424sg83igjqrkl4yzyiqv0byv4hzii0n-tree-sitter-elixir",
+  "sha256": "1i0c0xki3sv24649p0ws7xs2jagbwg7z7baz1960239bj94nl487",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

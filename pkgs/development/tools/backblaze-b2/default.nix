@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-vyqExulsV0wDijLotPO3RAOk9o4ne0Vq74KJKhSBrvo=";
+    sha256 = "sha256-qHnnUTSLY1yncqIjG+IMLoNauvgwU04qsvH7dZZ8AlI=";
   };
 
   postPatch = ''
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [
     backoff
+    more-itertools
     pytestCheckHook
   ];
 

@@ -40,6 +40,13 @@ in stdenv.mkDerivation {
     "-DCMAKE_BUILD_TYPE=Release"
   ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
+  # https://github.com/pothosware/SoapySDR/issues/352
+  postPatch = ''
+    substituteInPlace lib/SoapySDR.in.pc \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking
     for i in ${toString extraPackages}; do

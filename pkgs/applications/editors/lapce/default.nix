@@ -17,26 +17,30 @@
 , ApplicationServices
 , Carbon
 , AppKit
+, wrapGAppsHook
+, gobject-introspection
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.1.2";
+  version = "unstable-2022-09-21";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-jH473FdBI3rGt90L3WwMDPP8M3w0rtG5D758ceCMw94=";
+    rev = "c5a924ef34250e9117e2b57c19c1f29f6b9b3ea7";
+    sha256 = "sha256-0nAUbtokDgSxPcJCa9xGM8Rpbu282o7OHAQtAfdNmJU=";
   };
 
-  cargoSha256 = "sha256-0Kya2KcyBDlt0TpFV60VAA3+JPfwId/+k8k+H97EhB0=";
+  cargoSha256 = "sha256-uIFC5x8TzsvTGylQ0AttIRAUWU0k0P7UeF96vUc7cKw=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     perl
     copyDesktopItems
+    wrapGAppsHook # FIX: No GSettings schemas are installed on the system
+    gobject-introspection
   ];
 
   # Get openssl-sys to use pkg-config

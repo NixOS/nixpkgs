@@ -17,17 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Wvs288K8BVjUuWvvzpDGBwOxL7mAXjVtgIwJAsQd0L4=";
   };
 
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-  '';
-
   nativeBuildInputs = [
     autoreconfHook pkg-config
   ];
   buildInputs = [
     guile
   ];
+
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

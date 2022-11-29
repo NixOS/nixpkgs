@@ -98,5 +98,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";
+    mainProgram = "zbarimg";
   };
 }

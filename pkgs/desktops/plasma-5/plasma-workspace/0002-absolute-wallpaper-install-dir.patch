@@ -1,23 +1,9 @@
-From 914d2ec5e669ecf8771cc1308028990f733fb8cc Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Wed, 5 Feb 2020 05:03:11 -0600
-Subject: [PATCH] absolute-wallpaper-install-dir
-
----
- sddm-theme/theme.conf.cmake | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
-index a560da3..f723c1e 100644
---- a/sddm-theme/theme.conf.cmake
-+++ b/sddm-theme/theme.conf.cmake
+--- a/lookandfeel/sddm-theme/theme.conf.cmake
++++ b/lookandfeel/sddm-theme/theme.conf.cmake
 @@ -4,5 +4,5 @@ logo=${KDE_INSTALL_FULL_DATADIR}/sddm/themes/breeze/default-logo.svg
  type=image
  color=#1d99f3
  fontSize=10
--background=${KDE_INSTALL_FULL_WALLPAPERDIR}/Next/contents/images/5120x2880.jpg
-+background=${NIXPKGS_BREEZE_WALLPAPERS}/Next/contents/images/5120x2880.jpg
+-background=${KDE_INSTALL_FULL_WALLPAPERDIR}/Next/contents/images/5120x2880.png
++background=${NIXPKGS_BREEZE_WALLPAPERS}/Next/contents/images/5120x2880.png
  needsFullUserModel=false
--- 
-2.30.0
-

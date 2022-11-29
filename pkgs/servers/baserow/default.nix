@@ -1,66 +1,21 @@
 { lib
-, buildPythonPackage
 , fetchFromGitLab
-, regex
-, service-identity
-, itsdangerous
-, requests
-, redis
-, channels
-, channels-redis
-, psycopg2
-, gunicorn
-, django-cors-headers
-, django-celery-email
-, advocate
-, django-storages
-, pillow
-, faker
-, uvicorn
-, twisted
-, django
-, drf-jwt
-, cryptography
-, tqdm
-, celery-redbeat
-, drf-spectacular
-, websockets
-, asgiref
-, antlr4-python3-runtime
-, psutil
-, dj-database-url
-, django-health-check
-, celery
-, unicodecsv
-, django-celery-beat
-, django-redis
-, zipp
-, boto3
-, cached-property
-, importlib-resources
-, zope_interface
-, freezegun
-, pyinstrument
-, responses
-, pytestCheckHook
-, setuptools
-, pytest-django
-, python
-, httpretty
-, pytest-unordered
-, openapi-spec-validator }:
+, makeWrapper
+, python3
+}:
 
 let
 
-  baserow_premium = with python.pkgs; ( buildPythonPackage rec {
+  baserow_premium = with python3.pkgs; ( buildPythonPackage rec {
     pname = "baserow_premium";
-    version = "1.10.2";
+    version = "1.12.1";
+    foramt = "setuptools";
 
     src = fetchFromGitLab {
       owner = "bramw";
       repo = pname;
-      rev = version;
-      sha256 = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
+      rev = "refs/tags/${version}";
+      hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
     };
 
     sourceRoot = "source/premium/backend";
@@ -70,15 +25,16 @@ let
 
 in
 
-buildPythonPackage rec {
+with python3.pkgs; buildPythonPackage rec {
   pname = "baserow";
-  version = "1.10.2";
+  version = "1.12.1";
+  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "bramw";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-4BrhTwAxHboXz8sMZL0V68skgNw2D2/YJuiWVNe0p4w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
   };
 
   sourceRoot = "source/backend";
@@ -87,9 +43,15 @@ buildPythonPackage rec {
     # remove dependency constraints
     sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
     sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
+    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
   '';
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   propagatedBuildInputs = [
+    autobahn
     advocate
     antlr4-python3-runtime
     boto3
@@ -97,6 +59,7 @@ buildPythonPackage rec {
     celery-redbeat
     channels
     channels-redis
+    daphne
     dj-database-url
     django-celery-beat
     django-celery-email
@@ -122,8 +85,15 @@ buildPythonPackage rec {
     twisted
     unicodecsv
     uvicorn
+    watchgod
     zipp
-  ];
+  ] ++ uvicorn.optional-dependencies.standard;
+
+  postInstall = ''
+    wrapProgram $out/bin/baserow \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix DJANGO_SETTINGS_MODULE : "baserow.config.settings.base"
+  '';
 
   checkInputs = [
     baserow_premium
@@ -145,8 +115,8 @@ buildPythonPackage rec {
     cp -r src/baserow/core/management/backup $out/lib/${python.libPrefix}/site-packages/baserow/core/management/
   '';
 
-  # Disable linting checks
   disabledTests = [
+    # Disable linting checks
     "flake8_plugins"
   ];
 
@@ -164,8 +134,8 @@ buildPythonPackage rec {
   DJANGO_SETTINGS_MODULE = "baserow.config.settings.test";
 
   meta = with lib; {
-    homepage = "https://baserow.io";
     description = "No-code database and Airtable alternative";
+    homepage = "https://baserow.io";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

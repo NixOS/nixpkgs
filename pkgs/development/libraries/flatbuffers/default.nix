@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "2.0.7";
+  version = "22.10.26";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "sha256-tIM6CdIPq++xFbpA22zDm3D4dT9soNDe/9GRY/FyLrw=";
+    sha256 = "sha256-Kub076FkWwHNlphGtTx2c3Jojv8otKLo492uN6Oq1F0=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

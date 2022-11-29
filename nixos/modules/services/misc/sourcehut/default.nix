@@ -101,7 +101,7 @@ let
     todosrht
   ]);
   mkOptionNullOrStr = description: mkOption {
-    inherit description;
+    description = lib.mdDoc description;
     type = with types; nullOr str;
     default = null;
   };
@@ -1419,5 +1419,5 @@ in
   ];
 
   meta.doc = ./sourcehut.xml;
-  meta.maintainers = with maintainers; [ julm tomberek ];
+  meta.maintainers = with maintainers; [ tomberek ];
 }

@@ -36,6 +36,8 @@ mkDerivation rec {
     # Fix setting the kayboard layout on GNOME wayland
     # By default the module uses the setxkbmap, which will not change the keyboard
     ./waylandkbd.patch
+    # Change default location where calamares searches for locales
+    ./supportedlocale.patch
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

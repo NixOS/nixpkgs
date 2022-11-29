@@ -18,13 +18,13 @@
 # want it to match the upstream format because sage depends on it.
 , texinfo4
 , texlive
-, enableDocs ? true
+, enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.1";
+  version = "4.3.1p2";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-3r3epwaVbyveyYtmfxuevO4Q52J6FbI6RRqiaHQGJIk=";
+    # rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    rev = "370a87f29e7b2a3fefe287184bd4f75b793cb03c";
+    sha256 = "sha256-T2tJ5yHTLzrXdozQB/XGZn4lNhpwVd9L30ZOzKAHxWs=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are

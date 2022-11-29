@@ -1,4 +1,5 @@
 { autoPatchelfHook
+, autoSignDarwinBinariesHook
 , coreutils
 , curl
 , dotnetCorePackages
@@ -6,7 +7,6 @@
 , fetchFromGitHub
 , fetchurl
 , git
-, glibc
 , icu
 , libkrb5
 , lib
@@ -27,9 +27,12 @@ let
     inherit sha256;
   };
 
-  nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix { inherit fetchNuGet; } ++
+  sdkSource = linkFarmFromDrvs "nuget-sdk-packages" (
     dotnetSdk.passthru.packages { inherit fetchNuGet; }
+  );
+
+  nugetSource = linkFarmFromDrvs "nuget-packages" (
+    import ./deps.nix { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -37,35 +40,43 @@ let
   runtimeIds = {
     "x86_64-linux" = "linux-x64";
     "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
   };
   runtimeId = runtimeIds.${stdenv.system};
   fakeSha1 = "0000000000000000000000000000000000000000";
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.296.1";
+  version = "2.299.1";
+
+  inherit sdkSource;
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-vE1x/wRzjcRR56jUgW8PVM2SzsG87IKXOZghloZBgYM=";
+    hash = "sha256-o6N7GDfSEWX6QaEga5hQpbpDcBh7Alcy9mK3QlODTbs=";
   };
 
   nativeBuildInputs = [
     dotnetSdk
     dotnetPackages.Nuget
     makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoSignDarwinBinariesHook
   ];
 
   buildInputs = [
     curl # libcurl.so.4
     libkrb5 # libgssapi_krb5.so.2
-    lttng-ust # liblttng-ust.so.0
     stdenv.cc.cc.lib # libstdc++.so.6
     zlib # libz.so.1
     icu
+  ] ++ lib.optionals stdenv.isLinux [
+    lttng-ust # liblttng-ust.so.0
   ];
 
   patches = [
@@ -99,6 +110,8 @@ stdenv.mkDerivation rec {
       --replace '/bin/ln' '${coreutils}/bin/ln'
   '';
 
+  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = stdenv.isDarwin;
+
   configurePhase = ''
     runHook preConfigure
 
@@ -110,6 +123,7 @@ stdenv.mkDerivation rec {
     # Restore the dependencies
     dotnet restore src/ActionsRunner.sln \
       --runtime "${runtimeId}" \
+      --source "${sdkSource}" \
       --source "${nugetSource}"
 
     runHook postConfigure
@@ -130,6 +144,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   # Fully qualified name of disabled tests
   disabledTests =
@@ -189,6 +205,13 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+    ]
+    ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+      "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
+      "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
+      "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
     ];
   checkInputs = [ git ];
 
@@ -263,7 +286,7 @@ stdenv.mkDerivation rec {
   # Stripping breaks the binaries
   dontStrip = true;
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
   '';
 
@@ -271,17 +294,16 @@ stdenv.mkDerivation rec {
     fix_rpath() {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/$1
     }
-
     wrap() {
       makeWrapper $out/lib/$1 $out/bin/$1 \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (buildInputs ++ [ openssl ])} \
         "''${@:2}"
     }
-
+  '' + lib.optionalString stdenv.isLinux ''
     fix_rpath Runner.Listener
     fix_rpath Runner.PluginHost
     fix_rpath Runner.Worker
-
+  '' + ''
     wrap Runner.Listener
     wrap Runner.PluginHost
     wrap Runner.Worker
@@ -290,7 +312,7 @@ stdenv.mkDerivation rec {
 
     wrap config.sh --run 'export RUNNER_ROOT=''${RUNNER_ROOT:-$HOME/.github-runner}' \
       --run 'mkdir -p $RUNNER_ROOT' \
-      --prefix PATH : ${lib.makeBinPath [ glibc.bin ]} \
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]} \
       --chdir $out
   '';
 
@@ -302,12 +324,12 @@ stdenv.mkDerivation rec {
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {
     name = "create-deps-file";
-    runtimeInputs = [ dotnetSdk nuget-to-nix ];
+    runtimeInputs = [ coreutils dotnetSdk (nuget-to-nix.override { dotnet-sdk = dotnetSdk; }) ];
     text = ''
       # Disable telemetry data
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      rundir=$(pwd)
+      deps_file="$(realpath "''${1:-$(mktemp -t "${pname}-deps-XXXXXX.nix")}")"
 
       printf "\n* Setup workdir\n"
       workdir="$(mktemp -d /tmp/${pname}.XXX)"
@@ -324,10 +346,8 @@ stdenv.mkDerivation rec {
       dotnet restore src/ActionsRunner.sln --packages nuget_pkgs --no-cache --force --runtime "${rid}"
       '') (lib.attrValues runtimeIds)}
 
-      cd "$rundir"
-      deps_file=''${1-"/tmp/${pname}-deps.nix"}
       printf "\n* Make %s file\n" "$(basename "$deps_file")"
-      nuget-to-nix "$workdir/nuget_pkgs" > "$deps_file"
+      nuget-to-nix "$workdir/nuget_pkgs" "${sdkSource}" > "$deps_file"
       printf "\n* Dependency file writen to %s" "$deps_file"
     '';
   };
@@ -336,7 +356,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal ];
+    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse ];
     platforms = attrNames runtimeIds;
   };
 }

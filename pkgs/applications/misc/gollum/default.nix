@@ -1,4 +1,4 @@
-{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, git, docutils }:
+{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, git, docutils, nixosTests }:
 
 bundlerApp rec {
   pname = "gollum";
@@ -10,6 +10,7 @@ bundlerApp rec {
   nativeBuildInputs = [ makeWrapper ];
 
   passthru.updateScript = bundlerUpdateScript "gollum";
+  passthru.tests.gollum = nixosTests.gollum;
 
   meta = with lib; {
     description = "A simple, Git-powered wiki with a sweet API and local frontend";

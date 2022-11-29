@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , aiofiles
 , aiohttp
 , click-log
@@ -13,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "dinghy";
-  version = "0.13.2";
+  version = "0.15.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nedbat";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uRiWcrs3xIb6zxNg0d6/+NCqnEgadHSTLpS53CoZ5so=";
+    hash = "sha256-bfB1VVeIl1KzjY0oQ0jQ8M/fK5LZQqYU7AX201QX+Mk=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +36,13 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "dinghy.cli" ];
+  pythonImportsCheck = [
+    "dinghy.cli"
+  ];
 
   meta = with lib; {
     description = "A GitHub activity digest tool";

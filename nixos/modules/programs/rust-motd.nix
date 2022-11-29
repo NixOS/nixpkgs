@@ -7,7 +7,7 @@ let
   format = pkgs.formats.toml { };
 in {
   options.programs.rust-motd = {
-    enable = mkEnableOption "rust-motd";
+    enable = mkEnableOption (lib.mdDoc "rust-motd");
     enableMotdInSSHD = mkOption {
       default = true;
       type = types.bool;
@@ -69,7 +69,7 @@ in {
         ProtectKernelTunables = true;
         ProtectSystem = "full";
         StateDirectory = "rust-motd";
-        RestrictAddressFamilies = "none";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

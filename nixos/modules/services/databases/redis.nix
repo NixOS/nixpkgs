@@ -105,6 +105,13 @@ in {
               '';
             };
 
+            extraParams = mkOption {
+              type = with types; listOf str;
+              default = [];
+              description = lib.mdDoc "Extra parameters to append to redis-server invocation";
+              example = [ "--sentinel" ];
+            };
+
             bind = mkOption {
               type = with types; nullOr str;
               default = "127.0.0.1";
@@ -340,16 +347,26 @@ in {
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/redis-server /run/${redisName name}/redis.conf";
-        ExecStartPre = [("+"+pkgs.writeShellScript "${redisName name}-credentials" (''
-            install -o '${conf.user}' -m 600 ${redisConfig conf.settings} /run/${redisName name}/redis.conf
-          '' + optionalString (conf.requirePassFile != null) ''
+        ExecStart = "${cfg.package}/bin/redis-server /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+        ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
+          redisConfVar = "/var/lib/${redisName name}/redis.conf";
+          redisConfRun = "/run/${redisName name}/nixos.conf";
+          redisConfStore = redisConfig conf.settings;
+        in ''
+          touch "${redisConfVar}" "${redisConfRun}"
+          chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+          chmod 0600 "${redisConfVar}" "${redisConfRun}"
+          if [ ! -s ${redisConfVar} ]; then
+            echo 'include "${redisConfRun}"' > "${redisConfVar}"
+          fi
+          echo 'include "${redisConfStore}"' > "${redisConfRun}"
+          ${optionalString (conf.requirePassFile != null) ''
             {
-              printf requirePass' '
+              echo -n "requirepass "
               cat ${escapeShellArg conf.requirePassFile}
-            } >>/run/${redisName name}/redis.conf
-          '')
-        )];
+            } >> "${redisConfRun}"
+          ''}
+        '');
         Type = "notify";
         # User and group
         User = conf.user;

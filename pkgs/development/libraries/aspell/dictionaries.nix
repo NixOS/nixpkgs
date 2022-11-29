@@ -105,6 +105,26 @@ let
         homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
       } // (args.meta or {});
 
+    } // lib.optionalAttrs (stdenv.isDarwin && elem language [ "is" "nb" ]) {
+      # tar: Cannot open: Illegal byte sequence
+      unpackPhase = ''
+        runHook preUnpack
+
+        tar -xf $src --strip-components=1 || true
+
+        runHook postUnpack
+      '';
+
+      postPatch = getAttr language {
+        is = ''
+          cp icelandic.alias íslenska.alias
+          sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
+        '';
+        nb = ''
+          cp bokmal.alias bokmål.alias
+          sed -i 's/ bokm.l\.alias/ bokmål.alias/g' Makefile.pre
+        '';
+      };
     } // removeAttrs args [ "language" "filename" "sha256" "meta" ];
     in buildDict buildArgs;
 

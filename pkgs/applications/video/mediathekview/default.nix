@@ -1,33 +1,38 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, zip }:
+{ lib, stdenv, fetchurl, makeWrapper, libglvnd, libnotify, jre, zip }:
 
 stdenv.mkDerivation rec {
-  version = "13.8.0";
+  version = "13.9.1";
   pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
-    sha256 = "0zfkwz5psv7m0881ykgqrxwjhadg39c55aj2wpy7m1jdara86c5q";
+    sha256 = "4BYKkYhl1YjiAZyfNRdV5KQL+dVkL058uhTG892mXUM=";
   };
+
 
   nativeBuildInputs = [ makeWrapper zip ];
 
-  installPhase = ''
+  installPhase =
+  let
+    libraryPath = lib.strings.makeLibraryPath [ libglvnd libnotify ];
+  in
+  ''
     runHook preInstall
 
     mkdir -p $out/{bin,lib}
 
-    # log4j mitigation, see https://logging.apache.org/log4j/2.x/security.html
-    zip -d MediathekView.jar org/apache/logging/log4j/core/lookup/JndiLookup.class
-
     install -m644 MediathekView.jar $out/lib
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-jar $out/lib/MediathekView.jar"
+      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
-      --add-flags "-jar $out/lib/MediathekView.jar"
+      --add-flags "-jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
+      --add-flags "-Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
+      --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     runHook postInstall
   '';

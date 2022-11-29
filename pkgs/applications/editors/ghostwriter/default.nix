@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "wereturtle";
+    owner = "KDE";
     repo = pname;
     rev = version;
-    hash = "sha256-Vr1w9bAtjQK1ZevFDWQ7xNsUrdv5qrP+JHe1Cuc2CvE=";
+    hash = "sha256-8JtCO5jrkbZ4uEM7SALg64L4HSzdzzh7r1pldxzaXeI=";
   };
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
@@ -33,8 +33,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A cross-platform, aesthetic, distraction-free Markdown editor";
-    homepage = src.meta.homepage;
-    changelog = "https://github.com/wereturtle/ghostwriter/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://kde.github.io/ghostwriter";
+    changelog = "https://github.com/KDE/ghostwriter/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda erictapen ];

@@ -1,11 +1,11 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "sybil";
   version = "3.0.1";
   format = "setuptools";

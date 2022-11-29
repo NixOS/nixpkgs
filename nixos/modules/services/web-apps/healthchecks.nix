@@ -15,14 +15,14 @@ let
 
   environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
 
-  healthchecksManageScript = with pkgs; (writeShellScriptBin "healthchecks-manage" ''
+  healthchecksManageScript = pkgs.writeShellScriptBin "healthchecks-manage" ''
+    sudo=exec
     if [[ "$USER" != "${cfg.user}" ]]; then
-        echo "please run as user 'healtchecks'." >/dev/stderr
-        exit 1
+      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env --preserve-env=PYTHONPATH'
     fi
-    export $(cat ${environmentFile} | xargs);
-    exec ${pkg}/opt/healthchecks/manage.py "$@"
-  '');
+    export $(cat ${environmentFile} | xargs)
+    $sudo ${pkg}/opt/healthchecks/manage.py "$@"
+  '';
 in
 {
   options.services.healthchecks = {
@@ -163,7 +163,7 @@ in
           WorkingDirectory = cfg.dataDir;
           User = cfg.user;
           Group = cfg.group;
-          EnvironmentFile = environmentFile;
+          EnvironmentFile = [ environmentFile ];
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };

@@ -121,7 +121,7 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-      "systemd-update-utmp.service"
+    ] ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service" ++ [
 
       # Password entry.
       "systemd-ask-password-console.path"
@@ -151,6 +151,9 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ optionals cfg.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+      "systemd-portabled.service"
     ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
@@ -325,8 +328,8 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = lib.mdDoc ''
-        Extra config options for systemd. See man systemd-system.conf for
-        available options.
+        Extra config options for systemd. See systemd-system.conf(5) man page
+        for available options.
       '';
     };
 
@@ -555,7 +558,8 @@ in
       # Environment of PID 1
       systemd.managerEnvironment = {
         # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
-        PATH = lib.makeBinPath config.system.fsPackages;
+        # util-linux is needed for the main fsck utility wrapping the fs-specific ones
+        PATH = lib.makeBinPath (config.system.fsPackages ++ [cfg.package.util-linux]);
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
         TZDIR = "/etc/zoneinfo";
         # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable

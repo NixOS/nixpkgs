@@ -1,10 +1,13 @@
 { lib, buildDunePackage, fetchFromGitHub, alcotest, reason
+, result
 , ppxlib
 , yojson }:
 
 buildDunePackage rec {
   pname = "graphql_ppx";
   version = "1.2.2";
+
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.08";
 
@@ -19,14 +22,13 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     reason
+    result
     yojson
   ];
 
   checkInputs = [ alcotest ];
 
   doCheck = true;
-
-  useDune2 = true;
 
   meta = {
     homepage = "https://github.com/reasonml-community/graphql_ppx";

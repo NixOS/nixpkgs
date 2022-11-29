@@ -17,8 +17,12 @@
 , writeText
 , gstreamer
 , gst-plugins-base
+, gst-plugins-good
+, gst-libav
+, gst-vaapi
 , gtk3
 , dconf
+, libglvnd
 , buildPackages
 
   # options
@@ -49,7 +53,39 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        patches = [
+          ./patches/qtbase-qmake-pkg-config.patch
+          ./patches/qtbase-tzdir.patch
+        ];
       };
+      env = callPackage ./qt-env.nix {};
+      full = env "qt-full-${qtbase.version}" ([
+        qt3d
+        qt5compat
+        qtcharts
+        qtconnectivity
+        qtdeclarative
+        qtdoc
+        qtimageformats
+        qtlottie
+        qtmultimedia
+        qtnetworkauth
+        qtpositioning
+        qtsensors
+        qtserialbus
+        qtserialport
+        qtshadertools
+        qtquick3d
+        qtsvg
+        qtscxml
+        qttools
+        qttranslations
+        qtvirtualkeyboard
+        qtwebchannel
+        qtwebengine
+        qtwebsockets
+        qtwebview
+      ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]);
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
@@ -58,11 +94,12 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
+        inherit gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
       };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
       qtpositioning = callPackage ./modules/qtpositioning.nix { };
@@ -70,7 +107,9 @@ let
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
+      qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
+      qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
@@ -87,8 +126,18 @@ let
       wrapQtAppsHook = makeSetupHook {
           deps = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
+
+      qmake = makeSetupHook {
+        deps = [ self.qtbase.dev ];
+        substitutions = {
+          inherit debug;
+          fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+        };
+      } ./hooks/qmake-hook.sh;
     };
 
+  # TODO(@Artturin): convert to makeScopeWithSplicing
+  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   self = lib.makeScope newScope addPackages;
 in
 self

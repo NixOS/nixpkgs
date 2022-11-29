@@ -12,7 +12,7 @@
 mkDerivation {
   pname = "kdepim-runtime";
   meta = {
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools shared-mime-info ];
@@ -24,6 +24,6 @@ mkDerivation {
     qca-qt5 qtkeychain qtnetworkauth qtspeech qtxmlpatterns
   ];
   qtWrapperArgs = [
-    "--prefix SASL_PATH : ${lib.makeSearchPath "lib/sasl2" [ cyrus_sasl libkgapi ]}"
+    "--prefix SASL_PATH : ${lib.makeSearchPath "lib/sasl2" [ cyrus_sasl.out libkgapi ]}"
   ];
 }

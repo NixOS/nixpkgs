@@ -1,14 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    parallel (1.21.0)
-    pg (1.2.3)
-    pgsync (0.6.8)
+    parallel (1.22.1)
+    pg (1.4.4)
+    pgsync (0.7.2)
       parallel
       pg (>= 0.18.2)
       slop (>= 4.8.2)
       tty-spinner
-    slop (4.9.1)
+    slop (4.9.3)
     tty-cursor (0.7.1)
     tty-spinner (0.9.3)
       tty-cursor (~> 0.7)
@@ -20,4 +20,4 @@ DEPENDENCIES
   pgsync
 
 BUNDLED WITH
-   2.2.24
+   2.3.7

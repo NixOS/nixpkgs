@@ -91,8 +91,9 @@ in
         example = "nftables-multiport";
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
-          shorewall, etc) It is used to define action_* variables. Can be overridden
-          globally or per section within jail.local file
+          iptables-ipset-proto6-allports, shorewall, etc) It is used to
+          define action_* variables. Can be overridden globally or per
+          section within jail.local file
         '';
       };
 
@@ -212,10 +213,18 @@ in
               filter   = apache-nohome
               action   = iptables-multiport[name=HTTP, port="http,https"]
               logpath  = /var/log/httpd/error_log*
+              backend = auto
               findtime = 600
               bantime  = 600
               maxretry = 5
             ''';
+           dovecot = '''
+             # block IPs which failed to log-in
+             # aggressive mode add blocking for aborted connections
+             enabled = true
+             filter = dovecot[mode=aggressive]
+             maxretry = 3
+           ''';
           }
         '';
         type = types.attrsOf types.lines;

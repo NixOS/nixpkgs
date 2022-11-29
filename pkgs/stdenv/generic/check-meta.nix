@@ -13,15 +13,14 @@ let
 
   getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
-  # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
-  # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
-  shouldCheckMeta = config.checkMeta or false;
-
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  allowNonSource = config.allowNonSource or true
-    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
+  allowNonSource = let
+    envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
+  in if envVar != ""
+     then envVar != "0"
+     else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -248,6 +247,16 @@ let
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
+
+  # A shallow type check. We are using NixOS'
+  # option types here, which however have the major drawback
+  # of not providing full type checking (part of the type check is
+  # done by the module evaluation itself). Therefore, the checks
+  # will not recurse into attributes.
+  # We still provide the full type for documentation
+  # purposes and in the hope that they will be used eventually.
+  # See https://github.com/NixOS/nixpkgs/pull/191171 for an attempt
+  # to fix this, or mkOptionType in lib/types.nix for more information.
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
@@ -279,6 +288,10 @@ let
     });
     timeout = int;
 
+    # Needed for Hydra to expose channel tarballs:
+    # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
+    isHydraChannel = bool;
+
     # Weirder stuff that doesn't appear in the documentation?
     maxSilent = int;
     knownVulnerabilities = listOf str;
@@ -288,7 +301,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = bool;
+    available = unspecified;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;
@@ -297,17 +310,23 @@ let
     badPlatforms = platforms;
   };
 
+  # WARNING: this does not check inner values of the attribute, like list elements or nested attributes.
+  # See metaTypes above and mkOptionType in lib/types.nix for more information
   checkMetaAttr = k: v:
     if metaTypes?${k} then
-      if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
-    else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+      if metaTypes.${k}.check v then
+        null
+      else
+        "key 'meta.${k}' has a value of invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+    else
+      "key 'meta.${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+  checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
-    in if shouldCheckMeta
+    in if config.checkMeta
        then builtins.length missingOutputs > 0
        else false;
 
@@ -326,7 +345,17 @@ let
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
     }
-    // (if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
+    // (
+    # Check meta attribute types first, to make sure it is always called even when there are other issues
+    # Note that this is not a full type check and functions below still need to by careful about their inputs!
+    let res = checkMeta (attrs.meta or {}); in if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    # --- Put checks that cannot be ignored here ---
+    else if checkOutputsToInstall attrs then
+      { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
+
+    # --- Put checks that can be ignored here ---
+    else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
       { valid = "no"; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlocklistedLicense attrs then
       { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
@@ -338,10 +367,7 @@ let
       { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
-    else if checkOutputsToInstall attrs then
-      { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
-    else let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+
     # --- warnings ---
     # Please also update the type in /pkgs/top-level/config.nix alongside this.
     else if hasNoMaintainers attrs then

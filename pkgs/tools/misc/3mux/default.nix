@@ -13,9 +13,10 @@ buildGoModule rec {
 
   patches = [
     # Fix the build for Darwin when building with Go 1.18.
+    # https://github.com/aaronjanse/3mux/pull/127
     (fetchpatch {
       name = "darwin-go-1.18-fix.patch";
-      url = "https://github.com/aaronjanse/3mux/pull/127/commits/91aed826c50f75a5175b63c72a1fb6a4ad57a008.patch";
+      url = "https://github.com/aaronjanse/3mux/commit/91aed826c50f75a5175b63c72a1fb6a4ad57a008.patch";
       sha256 = "sha256-MOPAyWAYYWrlCCgw1rBaNmHZO9oTIpIQwLJcs0aY/m8=";
     })
   ];

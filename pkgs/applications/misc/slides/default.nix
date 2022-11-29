@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "slides";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "slides";
     rev = "v${version}";
-    sha256 = "sha256-Ca0/M4B6yAdV4hbJ95gH9MVZg3EFIY5bSMkkYy2+P+Q=";
+    sha256 = "sha256-K8VsqaNUPxh3/Yddy6DFiOyjRuZ6r6bU456Pm31A1og=";
   };
 
   checkInputs = [
@@ -21,7 +21,7 @@ buildGoModule rec {
     go
   ];
 
-  vendorSha256 = "sha256-pn7c/6RF/GpECQtaxsTau91T7pLg+ZAUBbnR7h8DfnY=";
+  vendorSha256 = "sha256-c3YCf22L5+rTmH5ePeJ0/goRj5rKY6v+Zon3183MhMY=";
 
   ldflags = [
     "-s"

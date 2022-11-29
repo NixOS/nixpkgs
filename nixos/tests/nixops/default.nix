@@ -19,6 +19,7 @@ let
   });
 
   testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+    name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
         imports = [ ../../modules/installer/cd-dvd/channel.nix ];

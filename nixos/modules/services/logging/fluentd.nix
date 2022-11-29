@@ -12,11 +12,7 @@ in {
   options = {
 
     services.fluentd = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Whether to enable fluentd.";
-      };
+      enable = mkEnableOption (lib.mdDoc "fluentd");
 
       config = mkOption {
         type = types.lines;

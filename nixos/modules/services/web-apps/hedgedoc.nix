@@ -999,8 +999,8 @@ in
 
         ```
           # snippet of HedgeDoc-related config
-          services.hedgedoc.configuration.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
-          services.hedgedoc.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
+          services.hedgedoc.settings.dbURL = "postgres://hedgedoc:\''${DB_PASSWORD}@db-host:5432/hedgedocdb";
+          services.hedgedoc.settings.minio.secretKey = "$MINIO_SECRET_KEY";
         ```
 
         ```

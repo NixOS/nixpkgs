@@ -293,6 +293,17 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
+      clang_base_path = "${llvmPackages.clang}";
+      use_qt = false;
+    } // optionalAttrs (!chromiumVersionAtLeast "108") {
+      use_system_libwayland_server = true;
+    } // optionalAttrs (chromiumVersionAtLeast "108") {
+      # The default has changed to false. We'll build with libwayland from
+      # Nixpkgs for now but might want to eventually use the bundled libwayland
+      # as well to avoid incompatibilities (if this continues to be a problem
+      # from time to time):
+      use_system_libwayland = true;
+      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -325,7 +336,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName

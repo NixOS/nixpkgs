@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , ocaml, findlib, ocamlbuild, ocaml_oasis
-, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
+, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, mmap, lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
 , utop, libxml2, ncurses
 , linenoise
 , ppx_bap
@@ -16,12 +16,12 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-bap";
-  version = "2.4.0";
+  version = "2.5.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "1xc8zfcwm40zihs3ajcrh2x32xd08qnygay03qy3qxhybr5hqngr";
+    sha256 = "1c30zxn0zyi0wypvjmik3fd6n6a8xjcb102qfnccn1af052bvsrd";
   };
 
   sigs = fetchurl {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
                   z3
                   utop libxml2 ncurses ];
 
-  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
+  propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_bap core_kernel ezjsonm fileutils mmap lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc yojson ];
 
   installPhase = ''
@@ -66,10 +66,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./curses_is_ncurses.patch
-    (fetchpatch {
-      url = "https://github.com/BinaryAnalysisPlatform/bap/commit/8b1bba30ebb551256a5b15122e70d07f40184039.patch";
-      sha256 = "0il0ik5f6nyqyrlln3n43mz1zpqq34lfnhmp10wdsah4ck2dy75h";
-    })
   ];
 
   preConfigure = ''

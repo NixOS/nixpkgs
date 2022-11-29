@@ -4,7 +4,8 @@
 , fetchFromGitHub
 , poetry-core
 , async-timeout
-, dbus-next
+, bleak
+, dbus-fast
 , myst-parser
 , pytestCheckHook
 , sphinxHook
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.3.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PRYu3PTmSg25DiSuLnv1tp1cOZsXHGTmxRA2V39ab4k=";
+    hash = "sha256-K5EeDcGcjrZYQTbuYAzT7XhcAqpYW1w/jP5T0cOPsVU=";
   };
 
   postPatch = ''
@@ -44,7 +45,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
-    dbus-next
+    bleak
+    dbus-fast
   ];
 
   pythonImportsCheck = [
@@ -56,9 +58,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/main/CHANGELOG.md";
     description = "Tools to enumerate and find Bluetooth Adapters";
     homepage = "https://bluetooth-adapters.readthedocs.io/";
+    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

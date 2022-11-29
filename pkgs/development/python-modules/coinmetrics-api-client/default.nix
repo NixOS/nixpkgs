@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
-  version = "2022.8.29.6";
+  version = "2022.9.22.15";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EPPRKOdFbLLYw0K5C4nojR8GueekoFW7xIlwKeSV1EY=";
+    hash = "sha256-37tuZDsGQAmbWSEGc7rjrXtCoSxuBN3MDMmjWHr0eS4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

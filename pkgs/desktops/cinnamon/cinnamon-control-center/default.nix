@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.4.6";
+  version = "5.4.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-8BDmQT/xDnpwR2YC0TGaqWPnZ61IBmVvft2Mcf6YN+A=";
+    hash = "sha256-38n1QCygkBq+wOLwui1oF6MtDWxAFWxp5U1omSVtbro=";
   };
 
   buildInputs = [
@@ -75,6 +75,10 @@ stdenv.mkDerivation rec {
     ./panels/datetime/tz.h:34:#  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab" */
 
   postPatch = ''
+    find . -type f -exec sed -i \
+      -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
+      {} +
+
     sed 's|TZ_DIR "/usr/share/zoneinfo/"|TZ_DIR "${tzdata}/share/zoneinfo/"|g' -i ./panels/datetime/test-timezone.c
     sed 's|TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"|TZ_DATA_FILE "${tzdata}/share/zoneinfo/zone.tab"|g' -i ./panels/datetime/tz.h
     sed 's|"/usr/share/i18n/locales/"|"${glibc}/share/i18n/locales/"|g' -i panels/datetime/test-endianess.c

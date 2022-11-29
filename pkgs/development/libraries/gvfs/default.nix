@@ -7,6 +7,7 @@
 , gettext
 , dbus
 , glib
+, udevSupport ? stdenv.isLinux
 , libgudev
 , udisks2
 , libgcrypt
@@ -72,26 +73,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libgudev
-    udisks2
     libgcrypt
     dbus
     libgphoto2
     avahi
     libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    openssh
+    gsettings-desktop-schemas
+    libsoup_3
+  ] ++ lib.optionals udevSupport [
+    libgudev
+    udisks2
     fuse3
     libcdio
     samba
     libmtp
     libcap
     polkit
-    libimobiledevice
-    libbluray
     libcdio-paranoia
-    libnfs
-    openssh
-    gsettings-desktop-schemas
-    libsoup_3
   ] ++ lib.optionals gnomeSupport [
     gcr
     glib-networking # TLS support
@@ -103,6 +105,17 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+  ] ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
   ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
@@ -128,7 +141,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ] ++ teams.gnome.members;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
   };
 }

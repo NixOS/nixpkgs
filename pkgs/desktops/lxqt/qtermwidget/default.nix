@@ -6,18 +6,18 @@
 , qtbase
 , qttools
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "qtermwidget";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "tb1Vlkv8HsNlFCFOYfPnJlhdJmhyDmLE9SaTXZT0gGs=";
+    sha256 = "utQC0CNZtwHD0yAaV9Tr0iEUBa8DcrEMNKmWyuhj6GQ=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ mkDerivation rec {
     qttools
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

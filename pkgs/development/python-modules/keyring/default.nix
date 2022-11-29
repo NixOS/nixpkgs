@@ -6,6 +6,7 @@
 , setuptools-scm
 , importlib-metadata
 , dbus-python
+, jaraco_classes
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -13,26 +14,26 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.7.0";
-  disabled = pythonOlder "3.7";
-
+  version = "23.11.0";
   format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eC4c0RMukb9Fn80kO88lsyYBXBrAsZjkQI+R+meRBis=";
+    hash = "sha256-rRkiY+LN1fEodd7cLaE1NDWafnYOd/jQS1CWioIcI2E=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
+  propagatedBuildInputs = [
+    jaraco_classes
   ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
-    dbus-python
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [
@@ -44,11 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # E       ValueError: too many values to unpack (expected 1)
-    "test_entry_point"
-  ];
-
   disabledTestPaths = [
     "tests/backends/test_macOS.py"
   ];
@@ -56,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://github.com/jaraco/keyring";
+    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/CHANGES.rst";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;

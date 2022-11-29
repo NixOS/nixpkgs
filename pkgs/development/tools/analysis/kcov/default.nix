@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , zlib
@@ -8,9 +9,7 @@
 , elfutils
 , python3
 , libiberty
-# TODO: switch back to latest versions when upstream ports
-# to binutils-2.39: https://github.com/SimonKagstrom/kcov/issues/381
-, libopcodes_2_38
+, libopcodes
 , runCommand
 , gcc
 , rustc
@@ -29,10 +28,20 @@ let
         sha256 = "sha256-6LoIo2/yMUz8qIpwJVcA3qZjjF+8KEM1MyHuyHsQD38=";
       };
 
+      patches = [
+        # Pull upstream patch for binutils-2/39 support:
+        #   https://github.com/SimonKagstrom/kcov/pull/383
+        (fetchpatch {
+          name = "binutils-2.39.patch";
+          url = "https://github.com/SimonKagstrom/kcov/commit/fd1a4fd2f02cee49afd74e427e38c61b89154582.patch";
+          hash = "sha256-licQkC8qDg2i6No3j0yKEU6i+Owi4lhrnfGvETkzz7w=";
+        })
+      ];
+
       preConfigure = "patchShebangs src/bin-to-c-source.py";
       nativeBuildInputs = [ cmake pkg-config python3 ];
 
-      buildInputs = [ curl zlib elfutils libiberty libopcodes_2_38 ];
+      buildInputs = [ curl zlib elfutils libiberty libopcodes ];
 
       strictDeps = true;
 

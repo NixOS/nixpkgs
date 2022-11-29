@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , lib
 , darwin
 , git
@@ -35,6 +36,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-Y7iiZVIT9Vbe4YmTfGTU8p3H3odQKms2FBnnWgvF7mI=";
+
+  patches = [
+    (fetchpatch
+      { url = "https://gitlab.com/sequoia-pgp/sequoia/-/commit/7916f90421ecb9a75e32f0284459bcc9a3fd02b0.patch";
+        sha256 = "sha256-KBBn6XaGzIT0iVzoCYsS0N+OkZzGuWmUmIF2hl49FEI=";
+      }
+    )
+  ];
 
   nativeBuildInputs = [
     pkg-config

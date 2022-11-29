@@ -1,7 +1,10 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../.. -i bash -p nodePackages.node2nix curl jq nix-update common-updater-scripts
+#! nix-shell -i bash -p nodePackages.node2nix curl jq nix-update common-updater-scripts
 
 set -euo pipefail
+
+SCRIPT_DIR="$(dirname "$0")"
+cd "$SCRIPT_DIR"
 
 CURRENT_VERSION=$(nix eval -f ../../.. --raw zigbee2mqtt.version)
 TARGET_VERSION="$(curl https://api.github.com/repos/Koenkk/zigbee2mqtt/releases/latest | jq -r ".tag_name")"

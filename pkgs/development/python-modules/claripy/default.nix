@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, setuptools
 , cachetools
 , decorator
 , fetchFromGitHub
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.15";
+  version = "9.2.26";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3v5te+j3I4yzxoBO8kY8VGLCrWfb1iOz9GHzun1DT0I=";
+    hash = "sha256-niJaHsvIX7NFA+pWufTA6j+Jvj6LcGlC+RaLNFn7yBo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cachetools

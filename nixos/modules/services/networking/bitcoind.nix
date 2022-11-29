@@ -204,7 +204,7 @@ in
         '';
       in {
         description = "Bitcoin daemon";
-        after = [ "network.target" ];
+        after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = cfg.user;

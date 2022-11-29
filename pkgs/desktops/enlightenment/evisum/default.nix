@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , efl
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     efl
   ];
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "System and process monitor written with EFL";

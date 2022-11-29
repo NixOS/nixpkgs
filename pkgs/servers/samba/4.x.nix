@@ -7,7 +7,6 @@
 , flex
 , perl
 , libxslt
-, heimdal
 , docbook_xsl
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
@@ -21,9 +20,11 @@
 , gnutls
 , libunwind
 , systemd
+, samba
 , jansson
 , libtasn1
 , tdb
+, libxcrypt
 , cmocka
 , rpcsvc-proto
 , bash
@@ -46,11 +47,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.5";
+  version = "4.17.3";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aRFeM4MZN7pRUb4CR5QxR3Za7OZYunQ/RHQWcq1o0X8=";
+    hash = "sha256-XRxCDLMexhPHhvmFN/lZZZCB7ca+g3PmjocUCGiTjiY=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -71,16 +72,19 @@ stdenv.mkDerivation rec {
     flex
     perl
     perl.pkgs.ParseYapp
+    perl.pkgs.JSON
     libxslt
     buildPackages.stdenv.cc
-    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
+
+  wafPath = "buildtools/bin/waf";
 
   buildInputs = [
     bash
@@ -97,6 +101,7 @@ stdenv.mkDerivation rec {
     gnutls
     libtasn1
     tdb
+    libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
@@ -107,8 +112,6 @@ stdenv.mkDerivation rec {
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
-
-  wafPath = "buildtools/bin/waf";
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -122,11 +125,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
   '';
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
+    "--with-libunwind"
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -141,7 +146,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optional stdenv.isAarch32 [
+  ] ++ optionals stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148
     "--jobs 1"
   ];
@@ -155,6 +160,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
+
+  # Save asn1_compile and compile_et so they are available to run on the build
+  # platform when cross-compiling
+  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$dev/bin"
+    cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.

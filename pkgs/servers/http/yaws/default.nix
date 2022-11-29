@@ -1,23 +1,19 @@
-{lib, stdenv, fetchurl, erlang, pam, perl }:
+{lib, stdenv, fetchFromGitHub, erlang, pam, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "yaws";
-  version = "2.0.6";
+  version = "2.1.1";
 
-  src = fetchurl {
-    url = "http://yaws.hyber.org/download/${pname}-${version}.tar.gz";
-    sha256 = "03nh97g7smsgm6sw5asssmlq7zgx6y2gnn7jn0lv2x5mkf5nzyb9";
+  src = fetchFromGitHub {
+    owner = "erlyaws";
+    repo = pname;
+    rev = "${pname}-${version}";
+    hash = "sha256-F1qhq0SEChWw/EBodXKWTqMNmGoTwP2JgkmfANUFD9I=";
   };
-
-  # The tarball includes a symlink yaws -> yaws-1.95, which seems to be
-  # necessary for importing erlang files
-  unpackPhase = ''
-    tar xzf $src
-    cd $name
-  '';
 
   configureFlags = [ "--with-extrainclude=${pam}/include/security" ];
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ erlang pam perl ];
 
   postInstall = ''
@@ -25,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high performance HTTP 1.1 server in Erlang";
-    homepage = "http://yaws.hyber.org";
+    description = "A webserver for dynamic content written in Erlang.";
+    homepage = "https://github.com/erlyaws/yaws";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu ];

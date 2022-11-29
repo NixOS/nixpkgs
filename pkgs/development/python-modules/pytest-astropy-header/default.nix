@@ -6,29 +6,21 @@
 , pytest-cov
 , pytestCheckHook
 , numpy
-, astropy
-, scipy
-, h5py
-, scikitimage
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy-header";
-  version = "0.1.2";
+  version = "0.2.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y87agr324p6x5gvhziymxjlw54pyn4gqnd49papbl941djpkp5g";
+    sha256 = "77891101c94b75a8ca305453b879b318ab6001b370df02be2c0b6d1bb322db10";
   };
-  patches = [ (fetchpatch {
-      url = "https://github.com/astropy/pytest-astropy-header/pull/16.patch";
-      sha256 = "11ln63zq0kgsdx1jw3prlzpcdbxmc99p9cwr18s0x6apy0k6df31";
-    })
-    (fetchpatch {
-      url = "https://github.com/astropy/pytest-astropy-header/pull/29.patch";
-      sha256 = "18l434c926r5z1iq3b6lpnp0lrssszars9y1y9hs6216r60jgjpl";
-    })
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   buildInputs = [
@@ -37,12 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    pytest-cov
     numpy
-    scipy
-    h5py
-    scikitimage
-    astropy
   ];
 
   meta = with lib; {

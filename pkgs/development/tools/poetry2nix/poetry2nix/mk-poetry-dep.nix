@@ -26,7 +26,7 @@ pythonPackages.callPackage
     }@args:
     let
       inherit (python) stdenv;
-      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromLegacy fetchFromPypi moduleName;
+      inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromLegacy fetchFromPypi normalizePackageName;
 
       inherit (import ./pep425.nix {
         inherit lib poetryLib python stdenv;
@@ -88,26 +88,16 @@ pythonPackages.callPackage
             else (builtins.elemAt (lib.strings.splitString "-" name) 2);
         };
 
-      # Prevent infinite recursion
-      skipSetupToolsSCM = [
-        "setuptools_scm"
-        "setuptools-scm"
-        "toml" # Toml is an extra for setuptools-scm
-        "tomli" # tomli is an extra for later versions of setuptools-scm
-        "flit-core"
-        "packaging"
-        "six"
-        "pyparsing"
-        "typing-extensions"
-      ];
-      baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
       format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;
+
+      hooks = python.pkgs.callPackage ./hooks { };
     in
     buildPythonPackage {
-      pname = moduleName name;
+      pname = normalizePackageName name;
       version = version;
 
-      inherit format;
+      # Circumvent output separation (https://github.com/NixOS/nixpkgs/pull/190487)
+      format = if format == "pyproject" then "poetry2nix" else format;
 
       doCheck = false; # We never get development deps
 
@@ -115,19 +105,24 @@ pythonPackages.callPackage
       dontStrip = format == "wheel";
 
       nativeBuildInputs = [
-        pythonPackages.poetry2nixFixupHook
+        hooks.poetry2nixFixupHook
       ]
       ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
+      ++ lib.optionals (format == "wheel") [
+        hooks.wheelUnpackHook
+        pythonPackages.pipInstallHook
+        pythonPackages.setuptools
+      ]
       ++ lib.optionals (format == "pyproject") [
-        pythonPackages.removePathDependenciesHook
-        pythonPackages.removeGitDependenciesHook
+        hooks.removePathDependenciesHook
+        hooks.removeGitDependenciesHook
+        hooks.pipBuildHook
       ];
 
       buildInputs = (
-        baseBuildInputs
-        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
-        ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+        lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isDirectory buildSystemPkgs
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) pythonPackages.setuptools
       );
 
       propagatedBuildInputs =
@@ -149,7 +144,7 @@ pythonPackages.callPackage
             );
           depAttrs = lib.attrNames deps;
         in
-        builtins.map (n: pythonPackages.${moduleName n}) depAttrs;
+        builtins.map (n: pythonPackages.${normalizePackageName n}) depAttrs;
 
       meta = {
         broken = ! isCompatible (poetryLib.getPythonVersion python) python-versions;
@@ -172,10 +167,7 @@ pythonPackages.callPackage
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (
-              let
-                nixVersion = builtins.substring 0 3 builtins.nixVersion;
-              in
-              lib.optionalAttrs ((sourceSpec ? rev) && (lib.versionAtLeast nixVersion "2.4")) {
+              lib.optionalAttrs ((sourceSpec ? rev) && (lib.versionAtLeast builtins.nixVersion "2.4")) {
                 allRefs = true;
               }
             ))

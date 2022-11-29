@@ -24,12 +24,12 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.30";
+  version = "0.29.32";
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    sha256 = "sha256-IjW2Laj+b6i5lCLI5YPy+5XhQ4Z9M3tcdeS5oahl+eM=";
+    hash = "sha256-hzPPR1i3kwTypOOev6xekjQbzke8zrJsElQ5iy+MGvc=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,20 @@ in buildPythonPackage rec {
     # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
     (fetchpatch {
       name = "trashcan.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cython/patches/trashcan.patch?id=4569a839f070a1a38d5dbce2a4d19233d25aeed2";
-      sha256 = "sha256-+pOF1XNTEtNseLpqPzrc1Jfwt5hGx7doUoccIhNneYY=";
+      url = "https://github.com/cython/cython/commit/f781880b6780117660b2026caadf4a6d7905722f.patch";
+      sha256 = "sha256-SnjaJdBZxm3O5gJ5Dxut6+eeVtZv+ygUUNwAwgoiFxg=";
+    })
+    # The above commit introduces custom trashcan macros, as well as
+    # compiler changes to use them in Cython-emitted code. The latter
+    # change is still useful, but the former has been upstreamed as of
+    # Python 3.8, and the patch below makes Cython use the upstream
+    # trashcan macros whenever available. This is needed for Python
+    # 3.11 support, because the API used in Cython's implementation
+    # changed: https://github.com/cython/cython/pull/4475
+    (fetchpatch {
+      name = "disable-trashcan.patch";
+      url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
+      sha256 = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
     })
   ];
 

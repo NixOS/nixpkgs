@@ -55,8 +55,8 @@ let
 
     # generate the new config by merging with the NixOS config options
     new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
-        "devices": (${builtins.toJSON devices}${optionalString (! cfg.overrideDevices) " + .devices"}),
-        "folders": (${builtins.toJSON folders}${optionalString (! cfg.overrideFolders) " + .folders"})
+        "devices": (${builtins.toJSON devices}${optionalString (cfg.devices == {} || ! cfg.overrideDevices) " + .devices"}),
+        "folders": (${builtins.toJSON folders}${optionalString (cfg.folders == {} || ! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')
 
     # send the new config
@@ -212,10 +212,18 @@ in {
             };
 
             path = mkOption {
-              type = types.str;
+              # TODO for release 23.05: allow relative paths again and set
+              # working directory to cfg.dataDir
+              type = types.str // {
+                check = x: types.str.check x && (substring 0 1 x == "/" || substring 0 2 x == "~/");
+                description = types.str.description + " starting with / or ~/";
+              };
               default = name;
               description = lib.mdDoc ''
                 The path to the folder which should be shared.
+                Only absolute paths (starting with `/`) and paths relative to
+                the [user](#opt-services.syncthing.user)'s home directory
+                (starting with `~/`) are allowed.
               '';
             };
 
@@ -325,11 +333,12 @@ in {
             };
 
             type = mkOption {
-              type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
+              type = types.enum [ "sendreceive" "sendonly" "receiveonly" "receiveencrypted" ];
               default = "sendreceive";
               description = lib.mdDoc ''
                 Whether to only send changes for this folder, only receive them
-                or both.
+                or both. `receiveencrypted` can be used for untrusted devices. See
+                <https://docs.syncthing.net/users/untrusted.html> for reference.
               '';
             };
 
@@ -404,7 +413,8 @@ in {
         example = "yourUser";
         description = mdDoc ''
           The user to run Syncthing as.
-          By default, a user named `${defaultUser}` will be created.
+          By default, a user named `${defaultUser}` will be created whose home
+          directory is [dataDir](#opt-services.syncthing.dataDir).
         '';
       };
 
@@ -528,6 +538,8 @@ in {
     };
 
     systemd.services = {
+      # upstream reference:
+      # https://github.com/syncthing/syncthing/blob/main/etc/linux-systemd/system/syncthing%40.service
       syncthing = mkIf cfg.systemService {
         description = "Syncthing service";
         after = [ "network.target" ];
@@ -539,7 +551,7 @@ in {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
-          SuccessExitStatus = "2 3 4";
+          SuccessExitStatus = "3 4";
           RestartForceExitStatus="3 4";
           User = cfg.user;
           Group = cfg.group;

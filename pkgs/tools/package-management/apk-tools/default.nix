@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     description = "Alpine Package Keeper";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
   };
 }

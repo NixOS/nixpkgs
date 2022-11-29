@@ -4,12 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "yubico-piv-tool";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-piv-tool/Releases/yubico-piv-tool-${version}.tar.gz";
-    sha256 = "sha256-t+3k3cPW4x3mey4t3NMZsitAzC4Jc7mGbQUqdUSTsU4=";
+    hash = "sha256-oCoS2VRdHvehuZhgbYm3tlWl9aFDdzbPUdsIP4dvVak=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "-Werror" ""
+  '';
 
   nativeBuildInputs = [ pkg-config cmake gengetopt ];
   buildInputs = [ openssl check ]
@@ -40,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with maintainers; [ viraptor anthonyroussel ];
   };
 }

@@ -47,7 +47,6 @@
 , icu
 , libX11
 , libXcomposite
-, libXcursor
 , libXext
 , libXi
 , libXrender
@@ -183,8 +182,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
   '';
 
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib:$PWD/build/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+  preHook = ''
+    . "$fix_qt_builtin_paths"
+    . "$fix_qt_module_paths"
+    . ${../hooks/move-qt-dev-tools.sh}
+    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   qtPluginPrefix = "lib/qt-6/plugins";
@@ -204,8 +208,46 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   postInstall = ''
-    mkdir -p $dev
-    mv $out/mkspecs $out/bin $out/libexec $dev/
+    moveToOutput "mkspecs" "$dev"
+  '';
+
+  devTools = [
+    "libexec/moc"
+    "libexec/rcc"
+    "libexec/syncqt.pl"
+    "libexec/qlalr"
+    "libexec/ensure_pro_file.cmake"
+    "libexec/cmake_automoc_parser"
+    "libexec/qvkgen"
+    "libexec/tracegen"
+    "libexec/uic"
+    "bin/fixqt4headers.pl"
+    "bin/moc"
+    "bin/qdbuscpp2xml"
+    "bin/qdbusxml2cpp"
+    "bin/qlalr"
+    "bin/qmake"
+    "bin/rcc"
+    "bin/syncqt.pl"
+    "bin/uic"
+  ];
+
+  postFixup = ''
+    # Don't retain build-time dependencies like gdb.
+    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
+    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
+    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
+
+    # Move development tools to $dev
+    moveQtDevTools
+    moveToOutput bin "$dev"
+    moveToOutput libexec "$dev"
+
+    # fixup .pc file (where to find 'moc' etc.)
+    sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
+      -e "/^bindir=/ c bindir=$dev/bin"
+
+    patchShebangs $out $dev
   '';
 
   dontStrip = debugSymbols;
@@ -215,8 +257,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
-    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ milahu nickcao ];
+    license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
+    maintainers = with maintainers; [ milahu nickcao LunNova ];
     platforms = platforms.linux;
   };
 }

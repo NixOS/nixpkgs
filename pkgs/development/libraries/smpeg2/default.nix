@@ -24,12 +24,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
+  outputs = [ "out" "dev" "man" ];
+
   preConfigure = ''
     sh autogen.sh
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/smpeg2-config \
+    moveToOutput bin/smpeg2-config "$dev"
+    wrapProgram $dev/bin/smpeg2-config \
       --prefix PATH ":" "${pkg-config}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${SDL2.dev}/lib/pkgconfig"
   '';

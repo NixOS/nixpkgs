@@ -34,10 +34,6 @@ in
 
     services.udev.packages = [ pkgs.usbrelayd ];
     systemd.packages = [ pkgs.usbrelayd ];
-    users.users.usbrelay = {
-      isSystemUser = true;
-      group = "usbrelay";
-    };
     users.groups.usbrelay = { };
   };
 

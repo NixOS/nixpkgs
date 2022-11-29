@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belr";
-  version = "5.1.12";
+  version = "5.1.55";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";

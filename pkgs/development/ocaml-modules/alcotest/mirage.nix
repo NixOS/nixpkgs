@@ -3,7 +3,7 @@
 buildDunePackage {
   pname = "alcotest-mirage";
 
-  inherit (alcotest) version src useDune2;
+  inherit (alcotest) version src;
 
   propagatedBuildInputs = [ alcotest lwt logs mirage-clock duration ];
 

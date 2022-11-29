@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, makeBinaryWrapper, jre_headless }:
+{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre_headless }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "ltex-ls";
   version = "15.2.0";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out
     cp -rfv bin/ lib/ $out
-    rm -fv $out/bin/*.bat
+    rm -fv $out/bin/.lsp-cli.json $out/bin/*.bat
     for file in $out/bin/{ltex-ls,ltex-cli}; do
       wrapProgram $file --set JAVA_HOME "${jre_headless}"
     done

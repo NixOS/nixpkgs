@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.08.29.00";
+  version = "2022.11.07.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-OALOfjr9qEqr8dbL9G8USKImU+hDP8iDfJijzT6KPLM=";
+    sha256 = "sha256-RzVJuhyLZe5KGnNYUxkiAeYdQf4Amm8cAlV/12kmTj4=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,12 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/libfolly.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace '=''${exec_prefix}//' '=/'
+  '';
 
   # folly-config.cmake, will `find_package` these, thus there should be
   # a way to ensure abi compatibility.

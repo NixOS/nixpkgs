@@ -4,6 +4,7 @@ let
 in
 {
   discourse-assign = callPackage ./discourse-assign {};
+  discourse-bbcode-color = callPackage ./discourse-bbcode-color {};
   discourse-calendar = callPackage ./discourse-calendar {};
   discourse-canned-replies = callPackage ./discourse-canned-replies {};
   discourse-chat-integration = callPackage ./discourse-chat-integration {};

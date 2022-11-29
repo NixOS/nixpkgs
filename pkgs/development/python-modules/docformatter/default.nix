@@ -1,22 +1,25 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , untokenize
+, mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "docformatter";
-  version = "1.4";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.6";
 
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "064e6d81f04ac96bc0d176cbaae953a0332482b22d3ad70d47c8a7f2732eef6f";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GSfsM6sPSLOIH0YJYFVTB3SigI62/ps51mA2iZ7GOEg=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    mock
     pytestCheckHook
   ];
 

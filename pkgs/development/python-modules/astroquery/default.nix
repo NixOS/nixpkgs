@@ -13,6 +13,7 @@
 , pytestCheckHook
 , pyvo
 , astropy-helpers
+, setuptools
 , isPy3k
 }:
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     pyvo
   ];
 
-  nativeBuildInputs = [ astropy-helpers ];
+  nativeBuildInputs = [ astropy-helpers setuptools ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''

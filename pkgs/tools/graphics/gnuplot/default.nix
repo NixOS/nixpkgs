@@ -8,7 +8,7 @@
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false, wxGTK32, Cocoa
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -21,11 +21,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.4";
+  version = "5.4.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-NyMAt4Z/WzU4sl/F0Kx3NK9uP+DSArbbkm5DaZE/CQI=";
+    sha256 = "sha256-ZvZ5EV3TBVnhEEmPyU2SaUnU03C0mZoELnJLjpEO5Hg=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
@@ -37,7 +37,8 @@ in
     ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
-    ++ lib.optional withWxGTK wxGTK;
+    ++ lib.optional withWxGTK wxGTK32
+    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.

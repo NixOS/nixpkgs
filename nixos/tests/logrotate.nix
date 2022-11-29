@@ -64,29 +64,6 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           notifempty = true;
         };
       };
-      # extraConfig compatibility - should be added to top level, early.
-      services.logrotate.extraConfig = ''
-        nomail
-      '';
-      # paths compatibility
-      services.logrotate.paths = {
-        compat_path = {
-          path = "compat_test_path";
-        };
-        # user/group should be grouped as 'su user group'
-        compat_user = {
-          user = config.users.users.root.name;
-          group = "root";
-        };
-        # extraConfig in path should be added to block
-        compat_extraConfig = {
-          extraConfig = "dateext";
-        };
-        # keep -> rotate
-        compat_keep = {
-          keep = 1;
-        };
-      };
     };
   };
 
@@ -127,12 +104,6 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
               "sed -ne '/\"postrotate\" {/,/}/p' /tmp/logrotate.conf | grep endscript",
               "grep '\"file1\"\n\"file2\" {' /tmp/logrotate.conf",
               "sed -ne '/\"import\" {/,/}/p' /tmp/logrotate.conf | grep noolddir",
-              "sed -ne '1,/^\"/p' /tmp/logrotate.conf | grep nomail",
-              "grep '\"compat_test_path\" {' /tmp/logrotate.conf",
-              "sed -ne '/\"compat_user\" {/,/}/p' /tmp/logrotate.conf | grep 'su root root'",
-              "sed -ne '/\"compat_extraConfig\" {/,/}/p' /tmp/logrotate.conf | grep dateext",
-              "[[ $(sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w rotate) = \"  rotate 1\" ]]",
-              "! sed -ne '/\"compat_keep\" {/,/}/p' /tmp/logrotate.conf | grep -w keep",
           )
           # also check configFile option
           failingMachine.succeed(

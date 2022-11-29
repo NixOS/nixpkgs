@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-okOooz0Z2d3EBm+lp68il2tXmbG5nRmDQmUdOXaHjpc=";
+    hash = "sha256-UO2D80cZurfPCtDXAEQ4nOJdhNtIghLtZN7gL+9xbGc=";
   };
 
   nativeBuildInputs = [

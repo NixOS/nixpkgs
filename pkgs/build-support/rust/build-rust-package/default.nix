@@ -52,8 +52,9 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null -> !(args ? cargoSha256) && !(args ? cargoHash)
-  -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
+assert cargoVendorDir == null && cargoLock == null
+    -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
+    -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
 assert buildType == "release" || buildType == "debug";
 
 let
@@ -70,10 +71,6 @@ let
     } // lib.optionalAttrs (args ? cargoSha256) {
       sha256 = args.cargoSha256;
     } // depsExtraArgs);
-
-  # If we have a cargoSha256 fixed-output derivation, validate it at build time
-  # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = args ? cargoHash || args ? cargoSha256;
 
   target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
@@ -127,7 +124,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   ];
 
   buildInputs = buildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;

@@ -16,7 +16,7 @@ let
   meta = with lib; {
     description = "A graph database written in rust ";
     homepage = "https://github.com/indradb/indradb";
-    license = licenses.asl20;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = platforms.unix;
   };
@@ -25,7 +25,7 @@ in
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
     version = "unstable-2021-01-05";
-    inherit src;
+    inherit src meta;
 
     cargoSha256 = "sha256-3WtiW31AkyNX7HiT/zqfNo2VSKR7Q57/wCigST066Js=";
 
@@ -43,7 +43,7 @@ in
   indradb-client = rustPlatform.buildRustPackage {
     pname = "indradb-client";
     version = "unstable-2021-01-05";
-    inherit src;
+    inherit src meta;
 
     cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 

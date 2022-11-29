@@ -1,72 +1,74 @@
 { config, pkgs, lib, ... }:
 let
   inherit (lib)
+    concatLists
+    concatMap
     concatMapStringsSep
     concatStringsSep
     filterAttrs
-    flatten
     isAttrs
-    isString
     literalExpression
     mapAttrs'
     mapAttrsToList
     mkIf
     mkOption
     optionalString
-    partition
-    typeOf
+    sort
     types
     ;
+
+  # The priority of an option or section.
+  # The configurations format are order-sensitive. Pairs are added as children of
+  # the last sections if possible, otherwise, they start a new section.
+  # We sort them in topological order:
+  # 1. Leaf pairs.
+  # 2. Sections that may contain (1).
+  # 3. Sections that may contain (1) or (2).
+  # 4. Etc.
+  prioOf = { name, value }:
+    if !isAttrs value then 0 # Leaf options.
+    else {
+      target = 1; # Contains: options.
+      subvolume = 2; # Contains: options, target.
+      volume = 3; # Contains: options, target, subvolume.
+    }.${name} or (throw "Unknow section '${name}'");
+
+  genConfig' = set: concatStringsSep "\n" (genConfig set);
+  genConfig = set:
+    let
+      pairs = mapAttrsToList (name: value: { inherit name value; }) set;
+      sortedPairs = sort (a: b: prioOf a < prioOf b) pairs;
+    in
+      concatMap genPair sortedPairs;
+  genSection = sec: secName: value:
+    [ "${sec} ${secName}" ] ++ map (x: " " + x) (genConfig value);
+  genPair = { name, value }:
+    if !isAttrs value
+    then [ "${name} ${value}" ]
+    else concatLists (mapAttrsToList (genSection name) value);
+
+  addDefaults = settings: { backend = "btrfs-progs-sudo"; } // settings;
+
+  mkConfigFile = name: settings: pkgs.writeTextFile {
+    name = "btrbk-${name}.conf";
+    text = genConfig' (addDefaults settings);
+    checkPhase = ''
+      set +e
+      ${pkgs.btrbk}/bin/btrbk -c $out dryrun
+      # According to btrbk(1), exit status 2 means parse error
+      # for CLI options or the config file.
+      if [[ $? == 2 ]]; then
+        echo "Btrbk configuration is invalid:"
+        cat $out
+        exit 1
+      fi
+      set -e
+    '';
+  };
 
   cfg = config.services.btrbk;
   sshEnabled = cfg.sshAccess != [ ];
   serviceEnabled = cfg.instances != { };
-  attr2Lines = attr:
-    let
-      pairs = mapAttrsToList (name: value: { inherit name value; }) attr;
-      isSubsection = value:
-        if isAttrs value then true
-        else if isString value then false
-        else throw "invalid type in btrbk config ${typeOf value}";
-      sortedPairs = partition (x: isSubsection x.value) pairs;
-    in
-    flatten (
-      # non subsections go first
-      (
-        map (pair: [ "${pair.name} ${pair.value}" ]) sortedPairs.wrong
-      )
-      ++ # subsections go last
-      (
-        map
-          (
-            pair:
-            mapAttrsToList
-              (
-                childname: value:
-                  [ "${pair.name} ${childname}" ] ++ (map (x: " " + x) (attr2Lines value))
-              )
-              pair.value
-          )
-          sortedPairs.right
-      )
-    )
-  ;
-  addDefaults = settings: { backend = "btrfs-progs-sudo"; } // settings;
-  mkConfigFile = settings: concatStringsSep "\n" (attr2Lines (addDefaults settings));
-  mkTestedConfigFile = name: settings:
-    let
-      configFile = pkgs.writeText "btrbk-${name}.conf" (mkConfigFile settings);
-    in
-    pkgs.runCommand "btrbk-${name}-tested.conf" { } ''
-      mkdir foo
-      cp ${configFile} $out
-      if (set +o pipefail; ${pkgs.btrbk}/bin/btrbk -c $out ls foo 2>&1 | grep $out);
-      then
-      echo btrbk configuration is invalid
-      cat $out
-      exit 1
-      fi;
-    '';
 in
 {
   meta.maintainers = with lib.maintainers; [ oxalica ];
@@ -196,7 +198,7 @@ in
       (
         name: instance: {
           name = "btrbk/${name}.conf";
-          value.source = mkTestedConfigFile name instance.settings;
+          value.source = mkConfigFile name instance.settings;
         }
       )
       cfg.instances;

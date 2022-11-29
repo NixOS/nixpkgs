@@ -11,13 +11,13 @@
 }@args:
 
 let
-  version = "2.9.0.beta9";
+  version = "2.9.0.beta12";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-pavNdAbk9yuWRg++p1MCmpBMuYKDs63QbJpHrPS9oAY=";
+    sha256 = "sha256-gL3/+m8SyyOSdcQ0jXo/qEWm0rAvHrmKM3pm5Lm4354=";
   };
 
   runtimeDeps = [
@@ -159,14 +159,14 @@ let
     ];
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/app/assets/javascripts/yarn.lock";
-    sha256 = "14d7y29460ggqcjnc9vk1q2lnxfl6ycyp8rc103g3gs2bl5sb6r0";
-  };
-
   assets = stdenv.mkDerivation {
     pname = "discourse-assets";
     inherit version src;
+
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/app/assets/javascripts/yarn.lock";
+      sha256 = "17va1k5r3v0hxpznm7qgmy8c0vicvyk28bn6cr5hqhjn3krzwf8b";
+    };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
@@ -203,7 +203,7 @@ let
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock app/assets/javascripts/yarn.lock
@@ -261,10 +261,6 @@ let
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit yarnOfflineCache;
-    };
   };
 
   discourse = stdenv.mkDerivation {

@@ -36,7 +36,7 @@
 , pango
 , pipewire
 , pciutils
-, libheimdal
+, heimdal
 , libpulseaudio
 , systemd
 , channel
@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       pango
       pipewire
       pciutils
-      libheimdal
+      heimdal
       libpulseaudio
       systemd
       ffmpeg
@@ -144,14 +144,15 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = true;
   dontPatchELF = true;
 
-  patchPhase = ''
+  postPatch = ''
     # Don't download updates from Mozilla directly
     echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
@@ -203,6 +204,7 @@ stdenv.mkDerivation {
         else "https://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
+    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
     license = licenses.mpl20;

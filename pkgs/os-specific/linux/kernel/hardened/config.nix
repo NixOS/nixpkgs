@@ -72,8 +72,12 @@ assert (stdenv.hostPlatform.isx86_64 -> versions.majorMinor version != "5.4");
   GCC_PLUGIN_STRUCTLEAK = whenAtLeast "4.11" yes; # A port of the PaX structleak plugin
   GCC_PLUGIN_STRUCTLEAK_BYREF_ALL = whenAtLeast "4.14" yes; # Also cover structs passed by address
   GCC_PLUGIN_STACKLEAK = whenAtLeast "4.20" yes; # A port of the PaX stackleak plugin
-  GCC_PLUGIN_RANDSTRUCT = whenAtLeast "4.13" yes; # A port of the PaX randstruct plugin
-  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenAtLeast "4.13" yes;
+  GCC_PLUGIN_RANDSTRUCT = whenBetween "4.13" "5.19" yes; # A port of the PaX randstruct plugin
+  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenBetween "4.13" "5.19" yes;
+
+  # Same as GCC_PLUGIN_RANDSTRUCT*, but has been renamed to `RANDSTRUCT*` in 5.19.
+  RANDSTRUCT = whenAtLeast "5.19" yes;
+  RANDSTRUCT_PERFORMANCE = whenAtLeast "5.19" yes;
 
   # Disable various dangerous settings
   ACPI_CUSTOM_METHOD = no; # Allows writing directly to physical memory

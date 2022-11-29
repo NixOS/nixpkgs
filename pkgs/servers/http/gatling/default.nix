@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.fefe.de/gatling/";
     license = lib.licenses.gpl2;
     platforms = platforms.linux;
+    broken = true; # 2022-11-16
   };
 }

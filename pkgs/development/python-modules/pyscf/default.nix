@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , blas
 , libcint
@@ -16,14 +17,20 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nwnhaqSn/9WHBjUPaEabK4x23fJ83WwEYvz6aCcvsDw=";
+    hash = "sha256-KMxwyAK00Zc0i76zWTMznfXQCVCt+4HOH8SlwuOCORk=";
   };
+
+  patches = [ (fetchpatch {
+    name = "libxc-6";  # https://github.com/pyscf/pyscf/pull/1467
+    url = "https://github.com/pyscf/pyscf/commit/ebcfacc90e119cd7f9dcdbf0076a84660349fc79.patch";
+    sha256 = "sha256-O+eDlUKJeThxQcHrMGqxjDfRCmCNP+OCgv/L72jAF/o=";
+  })];
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
   nativeBuildInputs = [ cmake ];
@@ -74,6 +81,7 @@ buildPythonPackage rec {
       -e test_jk_hermi0 \
       -e test_j_kpts \
       -e test_k_kpts \
+      -e test_lda \
       -e high_cost \
       -e skip \
       -e call_in_background \

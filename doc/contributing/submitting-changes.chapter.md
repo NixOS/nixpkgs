@@ -244,11 +244,15 @@ The `master` branch is the main development branch. It should only see non-break
 
 The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
 
+During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
+
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 
-The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master ` branch.
+The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master` branch.
 
 If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
+
+During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
 
 ### Stable release branches {#submitting-changes-stable-release-branches}
 

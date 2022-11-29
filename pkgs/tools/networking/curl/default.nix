@@ -1,9 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli
-, c-aresSupport ? false, c-ares
+, c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
 , gsaslSupport ? false, gsasl
-, patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -48,21 +47,19 @@ assert !(opensslSupport && wolfsslSupport);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.84.0";
+  version = "7.86.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    sha256 = "sha256-cC+ybnMZCjvXcHGqFG9Qe5gXzE384hjSq4fwDNO8BZ0=";
+    sha256 = "sha256-9cpp2wPuoX+ocFvfsan1jXakbJAQUYEJuzjzExN+Cig=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./sched.patch
-    ./atomic.patch
-  ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -78,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   # applications that use Curl.
   propagatedBuildInputs = with lib;
     optional brotliSupport brotli ++
-    optional c-aresSupport c-ares ++
+    optional c-aresSupport c-aresMinimal ++
     optional gnutlsSupport gnutls ++
     optional gsaslSupport gsasl ++
     optional gssSupport libkrb5 ++

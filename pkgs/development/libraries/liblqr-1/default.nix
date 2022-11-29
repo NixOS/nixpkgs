@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, Carbon }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, Carbon, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "liblqr-1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Carbon ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Carbon AppKit ];
   propagatedBuildInputs = [ glib ];
 
   meta = with lib; {

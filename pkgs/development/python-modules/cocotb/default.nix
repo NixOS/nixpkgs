@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , setuptools-scm
 , cocotb-bus
@@ -12,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.6.2";
+  version = "1.7.1";
 
-  # - we need to use the tarball from PyPi
-  #   or the full git checkout (with .git)
-  # - using fetchFromGitHub will cause a build failure,
-  #   because it does not include required metadata
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
+  # pypi source doesn't include tests
+  src = fetchFromGitHub {
+    owner = "cocotb";
+    repo = "cocotb";
+    rev = "v${version}";
+    sha256 = "sha256-wACgT5r0YmSYvLhTsuFhTcJqeCtGGLifOmr7/Lz2Vug=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -52,10 +51,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
-
-  checkPhase = ''
+  preCheck = ''
     export PATH=$out/bin:$PATH
+    mv cocotb cocotb.hidden
   '';
+
+  pythonImportsCheck = [ "cocotb" ];
 
   meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";

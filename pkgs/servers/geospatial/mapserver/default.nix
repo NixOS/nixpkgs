@@ -6,19 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "7.6.4";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-NMo/7CtWYIP1oPKki09oDWLCbj2vPk3xCU4rkHq8YKY=";
+    sha256 = "sha256-t9tthHszqtbFEh50IhQMtBb9rD9tU3QbDlUsVRVkQ6U=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional withPython [ swig python3.pkgs.setuptools ];
+  ] ++ lib.optionals withPython [ swig python3.pkgs.setuptools ];
 
   buildInputs = [
     cairo

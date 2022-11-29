@@ -1,4 +1,5 @@
 { lib
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.14.1";
+  version = "0.19.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gAhrhHTPwNipAFS22GXKjeVXqx0AGorvsqqEWKwRLzA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3uYAyItZ1X18pw3h3rTJpcv2H7O+e4sFCv1R7vb8QPI=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data

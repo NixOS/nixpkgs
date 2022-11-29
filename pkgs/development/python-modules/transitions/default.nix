@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
@@ -13,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.11";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eyDTKQbqTWDub2wfXcnJ8XiAJCXFsVUhPrDyXCd/BOQ=";
+    sha256 = "sha256-L1TRG9siV3nX5ykBHpOp+3F2aM49xl+NT1pde6L0jhA=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
+
+  # upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [
+    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_binary_stream"
+    "--deselect=tests/test_pygraphviz.py::PygraphvizTest::test_diagram"
+    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_binary_stream"
+    "--deselect=tests/test_pygraphviz.py::TestPygraphvizNested::test_diagram"
+  ];
 
   pythonImportsCheck = [
     "transitions"

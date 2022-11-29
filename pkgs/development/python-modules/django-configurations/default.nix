@@ -5,7 +5,6 @@
 , dj-search-url
 , django
 , django-cache-url
-, django-discover-runner
 , fetchPypi
 , importlib-metadata
 , mock
@@ -15,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-configurations";
-  version = "2.3.2";
+  version = "2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd1a77a60735839b7d105912cc3977735fa005ea06544c632fbd322d1e021677";
+    sha256 = "sha256-IrmWTmtlfa/Ho1QQoRXSDxRRFJqCc3rcbDMew2WIgZY=";
   };
 
   buildInputs = [
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    django-discover-runner
     mock
     dj-database-url
     dj-email-url

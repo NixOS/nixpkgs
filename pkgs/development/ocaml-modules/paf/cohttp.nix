@@ -22,8 +22,6 @@ buildDunePackage {
   inherit (paf)
     version
     src
-    useDune2
-    minimumOCamlVersion
   ;
 
   propagatedBuildInputs = [
@@ -34,7 +32,7 @@ buildDunePackage {
     ipaddr
   ];
 
-  doCheck = false;  # tests fail
+  doCheck = true;
   checkInputs = [
     alcotest-lwt
     fmt

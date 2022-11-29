@@ -9,7 +9,7 @@
 , gnupg
 , attrPath
 , runtimeShell
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
+, baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/"
 , versionPrefix ? ""
 , versionSuffix ? ""
 , versionKey ? "version"

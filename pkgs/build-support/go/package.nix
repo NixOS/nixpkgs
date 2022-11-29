@@ -171,6 +171,7 @@ let
         flags+=("-v" "-p" "$NIX_BUILD_CORES")
 
         if [ "$cmd" = "test" ]; then
+          flags+=(-vet=off)
           flags+=($checkFlags)
         fi
 

@@ -1,4 +1,4 @@
-{ fetchzip, lib, rustPlatform, makeWrapper }:
+{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-idItRkymr+cxk3zv2mPBR/frCGvzEUdSAhY7gghfR3M=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postInstall = ''
     # not needed at runtime
@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
     mkdir -p $out/lib
     cp -r runtime $out/lib
+    installShellCompletion contrib/completion/hx.{bash,fish,zsh}
   '';
   postFixup = ''
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime

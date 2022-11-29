@@ -2,7 +2,8 @@
 , fetchFromGitHub
 , buildPythonPackage
 , typing
-, unittestCheckHook
+, pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -19,11 +20,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
-  checkInputs = [ unittestCheckHook ];
+  # make the testsuite run with pytest, so we can disable individual tests
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  unittestFlagsArray = [ "tests" ];
+  pytestFlagsArray = [
+    "tests/testextensions.py"
+  ];
 
-  pythonImportsCheck = [ "mypy_extensions" ];
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/python/mypy_extensions/issues/24
+    "test_typeddict_errors"
+  ];
+
+  pythonImportsCheck = [
+    "mypy_extensions"
+  ];
 
   meta = with lib; {
     description = "Experimental type system extensions for programs checked with the mypy typechecker";

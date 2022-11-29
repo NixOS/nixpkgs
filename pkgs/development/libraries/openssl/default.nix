@@ -30,7 +30,7 @@ let
 
     postPatch = ''
       patchShebangs Configure
-    '' + lib.optionalString (lib.versionOlder version "1.1.0") ''
+    '' + lib.optionalString (lib.versionOlder version "1.1.1") ''
       patchShebangs test/*
       for a in test/t* ; do
         substituteInPlace "$a" \
@@ -40,7 +40,7 @@ let
     # config is a configure script which is not installed.
     + lib.optionalString (lib.versionAtLeast version "1.1.1") ''
       substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
-    '' + lib.optionalString (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+    '' + lib.optionalString (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
@@ -67,7 +67,8 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ];
+    nativeBuildInputs = [ perl ]
+      ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
       # perl is included to allow the interpreter path fixup hook to set the
       # correct interpreter in c_rehash.
@@ -84,6 +85,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         riscv64-linux = "./Configure linux64-riscv64";
+        mipsel-linux = "./Configure linux-mips32";
         mips64el-linux =
           if stdenv.hostPlatform.isMips64n64
           then "./Configure linux64-mips64"
@@ -129,12 +131,15 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
-      ++ lib.optional (lib.versionAtLeast version "3.0.0") "enable-ktls"
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      # We select KTLS here instead of the configure-time detection (which we patch out).
+      # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "1.1.1" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
@@ -154,7 +159,7 @@ let
     postInstall =
     (if static then ''
       # OPENSSLDIR has a reference to self
-      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+      remove-references-to -t $out $out/lib/*.a
     '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
@@ -210,24 +215,22 @@ let
 in {
 
 
-  openssl_1_1 = common rec {
-    version = "1.1.1q";
-    sha256 = "sha256-15Oc5hQCnN/wtsIPDi5XAxWKSJpyslB7i9Ub+Mj9EMo=";
+  openssl_1_1 = common {
+    version = "1.1.1s";
+    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
-    ] ++ lib.optionals (stdenv.isDarwin && (builtins.substring 5 5 version) < "m") [
-      ./1.1/macos-yosemite-compat.patch
     ];
     withDocs = true;
   };
 
   openssl_3 = common {
-    version = "3.0.5";
-    sha256 = "sha256-qn2Nm+9xrWUlxVuhHl9Dl4ic5Jwsk0nc6m0+TwsCSno=";
+    version = "3.0.7";
+    sha256 = "sha256-gwSdBComDmlvYkBqxcCL9wb9hDg/lFzyG9YentlcOW4=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

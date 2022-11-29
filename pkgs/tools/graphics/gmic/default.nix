@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gmic";
-  version = "3.1.5";
+  version = "3.1.6";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] version}.h";
-    sha256 = "FM8RscCrt6jYlwVB2DtpqYrh9B3pO0I6Y69tkf9W1/o=";
+    sha256 = "adObp8s+2TWaS+X/bQSphWRK6o85h+DGwlIDol6XN/4=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
 
     # CMake build files were moved to subdirectory.
     mv resources/CMakeLists.txt resources/cmake .
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';
 
   passthru = {

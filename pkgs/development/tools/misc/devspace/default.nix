@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "devspace";
-  version = "6.0.1";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "devspace";
     rev = "v${version}";
-    sha256 = "sha256-YT/DGxdsMXjCp908U2jfkQpDBPCTNjObdeIj06Bum/U=";
+    sha256 = "sha256-2LSRmTWbG7sxV5e6N44HAPdqIL/O2UxcnuHXmbTooWs=";
   };
 
   vendorSha256 = null;

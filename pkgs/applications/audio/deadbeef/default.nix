@@ -40,7 +40,7 @@ assert gtk2Support || gtk3Support;
 let
   inherit (lib) optionals;
 
-  version = "1.9.1";
+  version = "1.9.3";
 in clangStdenv.mkDerivation {
   pname = "deadbeef";
   inherit version;
@@ -50,7 +50,7 @@ in clangStdenv.mkDerivation {
     repo = "deadbeef";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-e3bAGpkRPIqVWl0nvSZ61JpIQZw24mqE9218SWHBCFo=";
+    sha256 = "sha256-Vt5JHrkNyxerqlShIBVbzZaunG0ZbHm5qf3fq9kMMXc=";
   };
 
   buildInputs = [

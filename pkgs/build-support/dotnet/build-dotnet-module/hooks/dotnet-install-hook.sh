@@ -12,31 +12,47 @@ dotnetInstallHook() {
         dotnetInstallFlags+=("--no-self-contained")
     fi
 
-    for project in ${projectFile[@]}; do
-        env \
-            dotnet publish "$project" \
-                -p:ContinuousIntegrationBuild=true \
-                -p:Deterministic=true \
-                -p:UseAppHost=true \
-                --output "$out/lib/${pname}" \
-                --configuration "@buildType@" \
-                --no-build \
-                ${dotnetInstallFlags[@]}  \
-                ${dotnetFlags[@]}
-    done
+    dotnetPublish() {
+        local -r project="${1-}"
+        env dotnet publish ${project-} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            -p:UseAppHost=true \
+            --output "$out/lib/${pname}" \
+            --configuration "@buildType@" \
+            --no-build \
+            ${dotnetInstallFlags[@]}  \
+            ${dotnetFlags[@]}
+    }
+
+    dotnetPack() {
+        local -r project="${1-}"
+         env dotnet pack ${project-} \
+             -p:ContinuousIntegrationBuild=true \
+             -p:Deterministic=true \
+             --output "$out/share" \
+             --configuration "@buildType@" \
+             --no-build \
+             ${dotnetPackFlags[@]}  \
+             ${dotnetFlags[@]}
+    }
+
+    if (( "${#projectFile[@]}" == 0 )); then
+        dotnetPublish
+    else
+        for project in ${projectFile[@]}; do
+            dotnetPublish "$project"
+        done
+    fi
 
     if [[ "${packNupkg-}" ]]; then
-        for project in ${projectFile[@]}; do
-            env \
-                dotnet pack "$project" \
-                    -p:ContinuousIntegrationBuild=true \
-                    -p:Deterministic=true \
-                    --output "$out/share" \
-                    --configuration "@buildType@" \
-                    --no-build \
-                    ${dotnetPackFlags[@]}  \
-                    ${dotnetFlags[@]}
-        done
+        if (( "${#projectFile[@]}" == 0 )); then
+            dotnetPack
+        else
+            for project in ${projectFile[@]}; do
+                dotnetPack "$project"
+            done
+        fi
     fi
 
     runHook postInstall

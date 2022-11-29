@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cfssl";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
     rev = "v${version}";
-    sha256 = "sha256-cyriV6z904QlkDlP80CSpakISJn7S81/2fcspAf5uk4=";
+    sha256 = "sha256-aZjb4mWoevRnPyL+b7H+VjIVklNe+u054OsmJbxPx4g=";
   };
 
   subPackages = [

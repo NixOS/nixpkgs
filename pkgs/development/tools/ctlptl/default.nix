@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "ctlptl";
-  version = "0.8.6";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FJtp4g4kIkXFYvYcM9yF3BY6tgHmip11/oIyMSfTwqM=";
+    sha256 = "sha256-h0JR641+VBiTJY8INXhxwvsyZGLH4YRdkddwo2IUDQk=";
   };
 
-  vendorSha256 = "sha256-s+Cc7pG/GLK0ZhXX/wK7jMNcDIeu/Am2vCgzrNXKpdw=";
+  vendorSha256 = "sha256-M9B/rfMBjYJb9szmYPVZqURlcv62qHOLJ3ka0v++z0s=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd ctlptl \
+      --bash <($out/bin/ctlptl completion bash) \
+      --fish <($out/bin/ctlptl completion fish) \
+      --zsh <($out/bin/ctlptl completion zsh)
+  '';
 
   meta = with lib; {
     description = "CLI for declaratively setting up local Kubernetes clusters";

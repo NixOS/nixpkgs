@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ "BSD" gpl2 ];
     maintainers = with maintainers; [ bgamari rongcuid ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

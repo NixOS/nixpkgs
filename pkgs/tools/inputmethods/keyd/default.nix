@@ -4,10 +4,11 @@
 , cmake
 , pkg-config
 , systemd
+, runtimeShell
+, python3
 }:
 
-stdenv.mkDerivation rec {
-  pname = "keyd";
+let
   version = "2.4.2";
 
   src = fetchFromGitHub {
@@ -17,11 +18,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-QWr+xog16MmybhQlEWbskYa/dypb9Ld54MOdobTbyMo=";
   };
 
+  pypkgs = python3.pkgs;
+
+  appMap = pypkgs.buildPythonApplication rec {
+    pname = "keyd-application-mapper";
+    inherit version src;
+    format = "other";
+
+    postPatch = ''
+      substituteInPlace scripts/${pname} \
+        --replace /bin/sh ${runtimeShell}
+    '';
+
+    propagatedBuildInputs = with pypkgs; [ xlib ];
+
+    dontBuild = true;
+
+    installPhase = ''
+      install -Dm555 -t $out/bin scripts/${pname}
+    '';
+
+    meta.mainProgram = pname;
+  };
+
+in
+stdenv.mkDerivation rec {
+  pname = "keyd";
+  inherit version src;
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace DESTDIR= DESTDIR=${placeholder "out"} \
-      --replace /usr "" \
-      --replace /var/log/keyd.log /var/log/keyd/keyd.log
+      --replace /usr ""
 
     substituteInPlace keyd.service \
       --replace /usr/bin $out/bin
@@ -32,6 +60,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    ln -sf ${lib.getExe appMap} $out/bin/${appMap.pname}
     rm -rf $out/etc
   '';
 

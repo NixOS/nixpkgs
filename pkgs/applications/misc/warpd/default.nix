@@ -14,19 +14,23 @@
 
 stdenv.mkDerivation rec {
   pname = "warpd";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "warpd";
     rev = "v${version}";
-    sha256 = "AR/uLgNX1VLPEcfUd8cnplMiaoEJlUxQ55Fst62RnbI=";
+    sha256 = "sha256-aNv2/+tREvKlpTAsbvmFxkXzONNt73/061i4E3fPFBM=";
     leaveDotGit = true;
   };
 
   nativeBuildInputs = [ git ];
 
-  buildInputs =  [
+  buildInputs =  if waylandSupport then [
+    cairo
+    libxkbcommon
+    wayland
+  ] else [
     libXi
     libXinerama
     libXft
@@ -34,13 +38,9 @@ stdenv.mkDerivation rec {
     libXtst
     libX11
     libXext
-  ] ++ lib.optionals waylandSupport [
-    cairo
-    libxkbcommon
-    wayland
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals waylandSupport [ "PLATFORM=wayland" ];
 
   postPatch = ''
     substituteInPlace Makefile \

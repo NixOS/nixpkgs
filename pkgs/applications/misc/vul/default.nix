@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vul";
-  version = "unstable-2020-02-15";
+  version = "unstable-2022-07-02";
 
   src = fetchFromGitHub {
     owner = "LukeSmithxyz";
     repo = pname;
-    rev = "f6ebd8f6b6fb8a111e7b59470d6748fcbe71c559";
-    sha256 = "aUl4f82sGOWkEvTDNILDszj5hztDRvYpHVovFl4oOCc=";
+    rev = "97efaedb79c9de62b6a19b04649fd8c00b85973f";
+    sha256 = "sha256-NwRUx7WVvexrCdPtckq4Szf5ISy7NVBHX8uAsRtbE+0=";
   };
 
   makeFlags = [
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Latin Vulgate Bible on the Command Line";
     homepage = "https://github.com/LukeSmithxyz/vul";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.j0hax ];
+    maintainers = [ maintainers.j0hax maintainers.cafkafk ];
   };
 }

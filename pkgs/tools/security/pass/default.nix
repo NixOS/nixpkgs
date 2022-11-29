@@ -31,7 +31,8 @@ let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
-      name = "pass-extensions-env";
+      # lib.getExe looks for name, so we keep it the same as mainProgram
+      name = "pass";
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = concatMap (x: x.buildInputs) selected;
@@ -156,6 +157,7 @@ stdenv.mkDerivation rec {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;
+    mainProgram = "pass";
     maintainers = with maintainers; [ lovek323 fpletz tadfisher globin ma27 ];
     platforms   = platforms.unix;
 

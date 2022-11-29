@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, python27Packages, python3Packages, wmctrl,
-  qtbase, mkDerivationWith }:
+{ lib, fetchFromGitHub, python3Packages, wmctrl, qtbase, mkDerivationWith }:
 
 {
   stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05

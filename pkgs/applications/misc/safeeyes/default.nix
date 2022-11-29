@@ -1,74 +1,70 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
+{ lib
+, python3
+, alsa-utils
+, gobject-introspection
+, libappindicator-gtk3
+, libnotify
+, wlrctl
+, gtk3
+, xprintidle
+, xprop
+, wrapGAppsHook
 }:
 
-let inherit (python3Packages) python buildPythonApplication fetchPypi croniter;
+with python3.pkgs;
 
-in buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "safeeyes";
   version = "2.1.3";
-  namePrefix = "";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1b5w887hivmdrkm1ydbar4nmnks6grpbbpvxgf9j9s46msj03c9x";
   };
 
-  buildInputs = [
-    gtk3
-    gobject-introspection
-    gnome.adwaita-icon-theme
-    gnome.adwaita-icon-theme
-  ];
-
   nativeBuildInputs = [
     wrapGAppsHook
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  buildInputs = [
+    gtk3
+    libappindicator-gtk3
+    libnotify
+  ];
+
+  propagatedBuildInputs = [
     babel
     psutil
     xlib
     pygobject3
     dbus-python
     croniter
-
-    libappindicator-gtk3
-    libnotify
-    xprintidle-ng
   ];
 
-  # patch smartpause plugin
-  postPatch = ''
-    sed -i \
-      -e 's!xprintidle!xprintidle-ng!g' \
-      safeeyes/plugins/smartpause/plugin.py
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
 
-    sed -i \
-      -e 's!xprintidle!xprintidle-ng!g' \
-      safeeyes/plugins/smartpause/config.json
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp -r safeeyes/platform/icons $out/share/icons/
+    cp safeeyes/platform/safeeyes.desktop $out/share/applications/safeeyes.desktop
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      --prefix XDG_DATA_DIRS : "${librsvg}/share"
-
-      # safeeyes images
-      --prefix XDG_DATA_DIRS : "$out/lib/${python.libPrefix}/site-packages/usr/share"
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle xprop ]}
     )
-    mkdir -p $out/share/applications
-    cp -r safeeyes/platform/icons $out/share/
-    cp safeeyes/platform/safeeyes.desktop $out/share/applications/
   '';
 
   doCheck = false; # no tests
 
-  meta = {
+  meta = with lib; {
     homepage = "http://slgobinath.github.io/SafeEyes";
     description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ srghma ];
-    platforms = lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ srghma ];
+    platforms = platforms.linux;
   };
 }

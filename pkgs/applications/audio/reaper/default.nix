@@ -17,12 +17,15 @@
 , libpulseaudio
 }:
 
+let
+  url_for_platform = version: arch: "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
+in
 stdenv.mkDerivation rec {
   pname = "reaper";
   version = "6.66";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${stdenv.hostPlatform.qemuArch}.tar.xz";
+    url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
       x86_64-linux = "sha256-kMXHHd+uIc5tKlDlxKjphZsfNMYvvV/4Zx84eRwPGcs=";
       aarch64-linux = "sha256-pB3qj9CJbI5iWBNKNX2niIfHrpSz9+qotX/zKGYDwYo=";
@@ -74,6 +77,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Digital audio workstation";

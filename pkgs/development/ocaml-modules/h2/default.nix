@@ -28,10 +28,9 @@ buildDunePackage rec {
   inherit (hpack)
     version
     src
-    useDune2
     ;
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   propagatedBuildInputs = [
     angstrom
@@ -42,7 +41,7 @@ buildDunePackage rec {
     httpaf
   ];
 
-  # Tests fail with 4.06
+  # Tests fail with ≤ 4.07
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   preCheck = ''
     ln -s "${http2-frame-test-case}" lib_test/http2-frame-test-case

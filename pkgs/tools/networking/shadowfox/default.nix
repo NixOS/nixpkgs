@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  vendorSha256 = "sha256-llseW3k8ygTXwkSpnRfQEnX3OVj2zdL8JDpIoRcC9kE=";
+  vendorSha256 = null; #vendorSha256 = "";
 
   doCheck = false;
 
@@ -27,5 +27,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
     mainProgram = "shadowfox-updater";
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
 , libtool, makeWrapper, autoreconfHook, fetchpatch
 }:
 
@@ -16,6 +16,13 @@ stdenv.mkDerivation rec {
       # Fix build with openssl >= 1.1.0
       url = "https://github.com/networkupstools/nut/commit/612c05efb3c3b243da603a3a050993281888b6e3.patch";
       sha256 = "0jdbii1z5sqyv24286j5px65j7b3gp8zk3ahbph83pig6g46m3hs";
+    })
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      avahi = "${avahi}/lib";
+      freeipmi = "${freeipmi}/lib";
+      libusb = "${libusb-compat-0_1}/lib";
+      neon = "${neon}/lib";
     })
   ];
 
@@ -37,11 +44,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
-
-  postInstall = ''
-    wrapProgram $out/bin/nut-scanner --prefix LD_LIBRARY_PATH : \
-      "$out/lib:${neon}/lib:${libusb-compat-0_1.out}/lib:${avahi}/lib:${freeipmi}/lib"
-  '';
 
   meta = with lib; {
     description = "Network UPS Tools";

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, python }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "5.4";
   pname = "wolfebin";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "thejoshwolfe";
     repo = "wolfebin";
     rev = version;
-    sha256 = "16xj6zz30sn9q05p211bmmsl0i6fknfxf8dssn6knm6nkiym8088";
+    sha256 = "sha256-tsI71/UdLaGZ3O2lNTd1c8S5OS2imquLovh0n0ez8Ts=";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   installPhase = ''
     install -m 755 -d $out/bin
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/thejoshwolfe/wolfebin";
     description = "Quick and easy file sharing";
     license = licenses.mit;
-    maintainers = [ maintainers.andrewrk ];
+    maintainers = with maintainers; [ andrewrk ];
     platforms = platforms.all;
   };
 }

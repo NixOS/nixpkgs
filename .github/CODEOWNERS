@@ -37,6 +37,7 @@
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
 /pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
 /pkgs/stdenv/cross                               @Ericson2314 @matthewbauer
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
@@ -48,11 +49,16 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs documentation
-/doc @fricklerhandwerk
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
+
+/doc/* @fricklerhandwerk
 /doc/build-aux/pandoc-filters @jtojnar
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+/doc/builders/trivial-builders.chapter.md @fricklerhandwerk
+/doc/contributing/ @fricklerhandwerk
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk
+/doc/stdenv @fricklerhandwerk
+/doc/using @fricklerhandwerk
 
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
@@ -186,6 +192,7 @@
 /nixos/modules/services/networking/babeld.nix @mweinelt
 /nixos/modules/services/networking/kea.nix @mweinelt
 /nixos/modules/services/networking/knot.nix @mweinelt
+/nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
 /nixos/tests/babeld.nix @mweinelt
 /nixos/tests/kea.nix @mweinelt
 /nixos/tests/knot.nix @mweinelt
@@ -287,3 +294,8 @@
 # Dotnet
 /pkgs/build-support/dotnet          @IvarWithoutBones
 /pkgs/development/compilers/dotnet  @IvarWithoutBones
+
+# Node.js
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt

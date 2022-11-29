@@ -1,21 +1,8 @@
-{ config, lib, pkgs, extendModules, noUserModules, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-
-
-  # This attribute is responsible for creating boot entries for
-  # child configuration. They are only (directly) accessible
-  # when the parent configuration is boot default. For example,
-  # you can provide an easy way to boot the same configuration
-  # as you use, but with another kernel
-  # !!! fix this
-  children =
-    mapAttrs
-      (childName: childConfig: childConfig.configuration.system.build.toplevel)
-      config.specialisation;
-
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
@@ -27,7 +14,7 @@ let
 
       # Containers don't have their own kernel or initrd.  They boot
       # directly into stage 2.
-      ${optionalString (!config.boot.isContainer) ''
+      ${optionalString config.boot.kernel.enable ''
         if [ ! -f ${kernelPath} ]; then
           echo "The bootloader cannot find the proper kernel image."
           echo "(Expecting ${kernelPath})"
@@ -72,14 +59,9 @@ let
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
-      echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
-
-      mkdir $out/specialisation
-      ${concatStringsSep "\n"
-      (mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children)}
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
@@ -93,6 +75,8 @@ let
         fi
       ''}
 
+      ${config.system.systemBuilderCommands}
+
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
       ${config.system.extraSystemBuilderCmds}
@@ -103,7 +87,7 @@ let
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+  baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -121,11 +105,9 @@ let
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
-    configurationName = config.boot.loader.grub.configurationName;
-
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
-  };
+  } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
 
@@ -140,16 +122,6 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
-  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
-     Call can be replaced by argument when that's merged.
-  */
-  tmpFixupSubmoduleBoundary = subopts:
-    lib.mkOption {
-      type = lib.types.submoduleWith {
-        modules = [ { options = subopts; } ];
-      };
-    };
-
 in
 
 {
@@ -160,49 +132,6 @@ in
   ];
 
   options = {
-
-    specialisation = mkOption {
-      default = {};
-      example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
-      description = lib.mdDoc ''
-        Additional configurations to build. If
-        `inheritParentConfig` is true, the system
-        will be based on the overall system configuration.
-
-        To switch to a specialised configuration
-        (e.g. `fewJobsManyCores`) at runtime, run:
-
-        ```
-        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        ```
-      '';
-      type = types.attrsOf (types.submodule (
-        local@{ ... }: let
-          extend = if local.config.inheritParentConfig
-            then extendModules
-            else noUserModules.extendModules;
-        in {
-          options.inheritParentConfig = mkOption {
-            type = types.bool;
-            default = true;
-            description = lib.mdDoc "Include the entire system's configuration. Set to false to make a completely differently configured system.";
-          };
-
-          options.configuration = mkOption {
-            default = {};
-            description = lib.mdDoc ''
-              Arbitrary NixOS configuration.
-
-              Anything you can add to a normal NixOS configuration, you can add
-              here, including imports and config values, although nested
-              specialisations will be ignored.
-            '';
-            visible = "shallow";
-            inherit (extend { modules = [ ./no-clone.nix ]; }) type;
-          };
-        })
-      );
-    };
 
     system.boot.loader.id = mkOption {
       internal = true;
@@ -231,7 +160,7 @@ in
       '';
     };
 
-    system.build = tmpFixupSubmoduleBoundary {
+    system.build = {
       installBootLoader = mkOption {
         internal = true;
         # "; true" => make the `$out` argument from switch-to-configuration.pl
@@ -273,6 +202,24 @@ in
         and links it from the resulting system
         (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
+      '';
+    };
+
+    system.systemBuilderCommands = mkOption {
+      type = types.lines;
+      internal = true;
+      default = "";
+      description = ''
+        This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.systemBuilderArgs = mkOption {
+      type = types.attrsOf types.unspecified;
+      internal = true;
+      default = {};
+      description = lib.mdDoc ''
+        `lib.mkDerivation` attributes that will be passed to the top level system builder.
       '';
     };
 
@@ -357,6 +304,4 @@ in
 
   };
 
-  # uses extendModules to generate a type
-  meta.buildDocsInSandbox = false;
 }

@@ -20,15 +20,15 @@
 , rocm-thunk
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-opencl-runtime";
-  version = "5.2.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
-    rev = "rocm-${version}";
-    hash = "sha256-Mk7Wssz34Uxtb9PRIEGrTn/tXtqxLMrq0damA/p/DsY=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-QvAF25Zfq9d1M/KIsr2S+Ggxzqw/MQ2OVcm9ZNfjTa8=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DAMD_OPENCL_PATH=${src}"
+    "-DAMD_OPENCL_PATH=${finalAttrs.src}"
     "-DROCCLR_PATH=${rocclr}"
     "-DCPACK_PACKAGING_INSTALL_PREFIX=/opt/rocm/opencl"
   ];
@@ -71,15 +71,15 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-OpenCL-Runtime/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocm-opencl-runtime "$version"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/ROCm-OpenCL-Runtime/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version rocm-opencl-runtime "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
     description = "OpenCL runtime for AMD GPUs, part of the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/ROCm-OpenCL-Runtime";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ acowley lovesegfault ];
+    maintainers = with maintainers; [ acowley lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
   };
-}
+})

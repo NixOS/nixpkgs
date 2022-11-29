@@ -1,14 +1,15 @@
 {
   "name": "micropad",
-  "version": "3.30.5",
+  "version": "4.2.0",
   "description": "A powerful note-taking app that helps you organise + take notes without restrictions.",
   "main": "main.js",
   "scripts": {
     "start": "yarn build && yarn electron . --is-dev --no-sandbox",
     "build": "yarn tsc -p tsconfig.json",
-    "update-core": "rm -rf core && rm -rf tmp && mkdir tmp && wget https://github.com/MicroPad/MicroPad-Core/releases/download/v${npm_package_version}/micropad.tar.xz -P ./tmp && cd tmp && tar -xf micropad.tar.xz && rm build/*.map && rm build/static/*/*.map && cp -r build ../core && cd .. && rm -rf tmp",
+    "update-core": "rm -rf core && rm -rf tmp && mkdir tmp && wget https://github.com/MicroPad/MicroPad-Core/releases/download/v${npm_package_version}/micropad.tar.xz -P ./tmp && cd tmp && tar -xf micropad.tar.xz && rm build/dist/*.map && cp -r build ../core && cd .. && rm -rf tmp",
     "pack": "yarn build && yarn electron-builder --dir",
-    "dist": "yarn build && yarn electron-builder"
+    "dist": "yarn build && yarn electron-builder",
+    "windows:version": "echo %npm_package_version%"
   },
   "repository": {
     "type": "git",
@@ -24,14 +25,16 @@
   },
   "homepage": "https://getmicropad.com",
   "devDependencies": {
-    "electron": "^17.1.0",
-    "electron-builder": "^23.0.2",
-    "typescript": "~4.5.4"
+    "@types/node": "^18.7.18",
+    "electron": "^21.2.2",
+    "electron-builder": "^23.3.3",
+    "typescript": "~4.8.3"
   },
   "dependencies": {
     "dictionary-en": "^3.0.0",
     "dictionary-en-au": "^2.1.1",
     "electron-context-menu": "^3.1.2",
+    "electron-window-state": "^5.0.3",
     "localforage": "^1.10.0",
     "typo-js": "^1.2.1"
   },
@@ -47,8 +50,22 @@
     ],
     "linux": {
       "target": [
-        "tar.gz",
-        "AppImage",
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "armv7l",
+            "arm64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "armv7l",
+            "arm64"
+          ]
+        },
         "snap",
         "deb",
         "rpm",
@@ -79,9 +96,19 @@
     },
     "win": {
       "target": [
-        "nsis",
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
         "portable"
       ]
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
     }
   }
 }

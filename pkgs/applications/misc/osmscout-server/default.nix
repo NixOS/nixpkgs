@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, pkg-config
 , qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
 , libosmscout, valhalla, libpostal, osrm-backend, protobuf
-, libmicrohttpd_0_9_70, sqlite, marisa, kyotocabinet, boost
+, libmicrohttpd, sqlite, marisa, kyotocabinet, boost
 }:
 
 let
@@ -14,20 +14,20 @@ let
 in
 mkDerivation rec {
   pname = "osmscout-server";
-  version = "2.1.2";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "osmscout-server";
     rev = version;
-    sha256 = "sha256-I14nQL0H2rMga+RDdAjykqmf7QIZveA6oGWu5PfZ89s=";
+    sha256 = "sha256-ngB3c6rUQ/+AeaJHKAFRl9lCkUobLWSnsn030brB+Bw=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [
     kirigami2 qtquickcontrols2 qtlocation
-    valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
+    valhalla libosmscout osrm-backend libmicrohttpd
     libpostal sqlite marisa kyotocabinet boost protobuf date
   ];
 

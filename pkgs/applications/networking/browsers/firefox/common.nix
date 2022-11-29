@@ -22,6 +22,7 @@
 , pkgs
 , stdenv
 , fetchpatch
+, patchelf
 
 # build time
 , autoconf
@@ -101,7 +102,7 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport
+, crashreporterSupport ? !privacySupport, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
@@ -228,7 +229,6 @@ buildStdenv.mkDerivation ({
     })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
@@ -264,7 +264,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
-  ++ lib.optionals crashreporterSupport [ dump_syms ]
+  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -294,9 +294,6 @@ buildStdenv.mkDerivation ({
   '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
     # Use our own python
     export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
-  '' + lib.optionalString (lib.versionOlder version "100.0") ''
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
@@ -434,7 +431,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -536,6 +533,10 @@ buildStdenv.mkDerivation ({
             ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
         done < <(find "$prefix" -type f -print0)
     }
+  '';
+
+  postFixup = lib.optionalString crashreporterSupport ''
+    patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
   doInstallCheck = true;

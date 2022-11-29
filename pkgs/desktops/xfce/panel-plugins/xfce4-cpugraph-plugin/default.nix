@@ -1,57 +1,36 @@
 { lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, glib
+, mkXfceDerivation
 , exo
+, gtk3
 , libXtst
-, xorgproto
+, libxfce4ui
 , libxfce4util
 , xfce4-panel
-, libxfce4ui
 , xfconf
-, gtk3
-, hicolor-icon-theme
-, xfce
+, xorgproto
 }:
 
-let
+mkXfceDerivation rec {
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
   pname  = "xfce4-cpugraph-plugin";
   version = "1.2.6";
-
-  src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-dzJG9XwYJKhUaNQRnBeusHFw7R66zo+kBsf7z1tHr5k=";
-  };
-
-  nativeBuildInputs = [
-    pkg-config
-    intltool
-  ];
+  rev-prefix = "xfce4-cpugraph-plugin-";
+  odd-unstable = false;
+  sha256 = "sha256-Elm10ZGN93R+1XZ4vJJZZIJ6OcaHpsrH0nQRMMuFnLY=";
 
   buildInputs = [
-    glib
     exo
+    gtk3
     libXtst
-    xorgproto
-    libxfce4util
     libxfce4ui
+    libxfce4util
     xfce4-panel
     xfconf
-    gtk3
-    hicolor-icon-theme
+    xorgproto
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
-
   meta = with lib; {
-    homepage = "https://docs.xfce.org/panel-plugins/xfce4-cpugraph-plugin";
     description = "CPU graph show for Xfce panel";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

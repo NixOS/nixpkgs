@@ -1,4 +1,9 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "lf";
@@ -16,6 +21,10 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
+
+  # Force the use of the pure-go implementation of the os/user library.
+  # Relevant issue: https://github.com/gokcehan/lf/issues/191
+  tags = lib.optionals (!stdenv.isDarwin) [ "osusergo" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop

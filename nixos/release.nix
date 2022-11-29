@@ -22,8 +22,8 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
       };
     } // {
       # for typechecking of the scripts and evaluation of
@@ -32,8 +32,8 @@ let
         import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = t: {
-          ${system} = hydraJob t.test.driver;
+        callTest = config: {
+          ${system} = hydraJob config.driver;
         };
       };
     };
@@ -169,13 +169,13 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;

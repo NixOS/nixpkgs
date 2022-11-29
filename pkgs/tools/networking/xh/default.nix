@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-y+Bixr+WRoTGjenkHSLbVmb9IHr9nicrAWyvkg5ey8E=";
+    sha256 = "sha256-4rFtbCfx6QFdp62FPjOYAhSWM03g3rXsF4pD22+EhcA=";
   };
 
-  cargoSha256 = "sha256-wyK10D9MMyNF+JSacWW6GQcaMYMbDf1PHhuZ5LwZo+I=";
+  cargoSha256 = "sha256-av/F1FHMd0o9NvwA2Q9mqSd89ZEqmUaVxC+JmSwEHhI=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
@@ -61,6 +61,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ payas SuperSandro2000 ];
+    maintainers = with maintainers; [ payas ];
   };
 }

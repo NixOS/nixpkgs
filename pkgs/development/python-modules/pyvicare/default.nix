@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.16.4";
+  version = "2.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "somm15";
     repo = "PyViCare";
     rev = version;
-    sha256 = "sha256-RFnQKGISPMrC53yAv3fu7FpbDNugLPQILXCPi5ik2qU=";
+    sha256 = "sha256-i1RXHrIkWqZw2LzVPEQSxgWa7PkUEsG6NO6H9egPWkk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

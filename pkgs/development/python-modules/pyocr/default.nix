@@ -2,8 +2,6 @@
 , fetchFromGitLab
 , buildPythonPackage
 , pillow
-, setuptools-scm
-, setuptools-scm-git-archive
 , tesseract
 , cuneiform
 , isPy3k
@@ -13,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyocr";
-  version = "0.7.2";
+  version = "0.8.3";
   disabled = !isPy3k;
 
   # Don't fetch from PYPI because it doesn't contain tests.
@@ -23,7 +21,7 @@ buildPythonPackage rec {
     owner = "OpenPaperwork";
     repo = "pyocr";
     rev = version;
-    sha256 = "09ab86bmizpv94w3mdvdqkjyyvk1vafw3jqhkiw5xx7p180xn3il";
+    sha256 = "sha256-gIn50H9liQcTb7SzoWnBwm5LTvkr+R+5OPvITls1B/w=";
   };
 
   patches = [
@@ -33,9 +31,11 @@ buildPythonPackage rec {
     })
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  buildInputs = [ setuptools-scm setuptools-scm-git-archive ];
+  # see the logic in setup.py
+  ENABLE_SETUPTOOLS_SCM = "0";
+  preConfigure = ''
+    echo 'version = "${version}"' > src/pyocr/_version.py
+  '';
 
   propagatedBuildInputs = [ pillow ];
 
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     inherit (src.meta) homepage;
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ symphorien ];
   };
 }

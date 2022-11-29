@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
-  version = "2.1.0";
+  version = "2.3.2";
 
   format = "setuptools";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/M7Wyb1GW6LPWm41jVnhWA6+dyTrdLyJ6pfsMozw5xI=";
+    hash = "sha256-ZflCOTqNhalBhxDkee3UwusiVA+ShtfabP0slE28/UQ=";
   };
 
   patches = [

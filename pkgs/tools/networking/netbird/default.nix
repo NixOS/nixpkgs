@@ -1,6 +1,6 @@
 { stdenv, lib, nixosTests, buildGoModule, fetchFromGitHub, installShellFiles
 , pkg-config
-, libayatana-appindicator, libX11, libXcursor, libXxf86vm
+, gtk3, libayatana-appindicator, libX11, libXcursor, libXxf86vm
 , Cocoa, IOKit, Kernel, UserNotifications, WebKit
 , ui ? false }:
 let
@@ -14,20 +14,21 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.8.10";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Re/tcS9aZhMtMuUIVrDLjTM8stm7LE6VF5H4EEmcqq4=";
+    sha256 = "sha256-9dp/OMHIA1qYM4XLWOTPmlUm6+7EOE9PFsIa8IcZ/8M=";
   };
 
-  vendorSha256 = "sha256-KtRQwrCBsOX7Jk9mKdDNOD7zfssADfBXCO1RPZbp5Aw=";
+  vendorSha256 = "sha256-TfHBvcG3e+yjifPVo0ZgcvLvD16fni4m71nCr4cCBD4=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
   buildInputs = lib.optionals (stdenv.isLinux && ui) [
+    gtk3
     libayatana-appindicator
     libX11
     libXcursor
@@ -84,6 +85,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://netbird.io";
+    changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
     maintainers = with maintainers; [ misuzu ];

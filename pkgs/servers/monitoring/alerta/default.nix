@@ -14,6 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     bcrypt
     blinker
+    cryptography
     flask
     flask-compress
     flask-cors

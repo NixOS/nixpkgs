@@ -392,6 +392,24 @@ let
         '';
       };
 
+      failDelay = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            If enabled, this will replace the `FAIL_DELAY` setting from `login.defs`.
+            Change the delay on failure per-application.
+            '';
+        };
+
+        delay = mkOption {
+          default = 3000000;
+          type = types.int;
+          example = 1000000;
+          description = lib.mdDoc "The delay time (in microseconds) on failure.";
+        };
+      };
+
       gnupg = {
         enable = mkOption {
           type = types.bool;
@@ -526,11 +544,13 @@ let
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
             (config.security.pam.enableEcryptfs
+              || config.security.pam.enableFscrypt
               || cfg.pamMount
               || cfg.enableKwallet
               || cfg.enableGnomeKeyring
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
+              || cfg.failDelay.enable
               || cfg.duoSecurity.enable))
             (
               ''
@@ -538,6 +558,9 @@ let
               '' +
               optionalString config.security.pam.enableEcryptfs ''
                 auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap
+              '' +
+              optionalString config.security.pam.enableFscrypt ''
+                auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
               '' +
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -550,6 +573,9 @@ let
               '' +
               optionalString cfg.gnupg.enable ''
                 auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
+              '' +
+              optionalString cfg.failDelay.enable ''
+                auth optional ${pkgs.pam}/lib/security/pam_faildelay.so delay=${toString cfg.failDelay.delay}
               '' +
               optionalString cfg.googleAuthenticator.enable ''
                 auth required ${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so no_increment_hotp
@@ -584,6 +610,9 @@ let
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
+          optionalString config.security.pam.enableFscrypt ''
+            password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
           '' +
@@ -615,12 +644,12 @@ let
           optionalString cfg.setLoginUid ''
             session ${if config.boot.isContainer then "optional" else "required"} pam_loginuid.so
           '' +
-          optionalString cfg.ttyAudit.enable ''
-            session required ${pkgs.pam}/lib/security/pam_tty_audit.so
-                open_only=${toString cfg.ttyAudit.openOnly}
-                ${optionalString (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"}
-                ${optionalString (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"}
-          '' +
+          optionalString cfg.ttyAudit.enable (concatStringsSep " \\\n  " ([
+            "session required ${pkgs.pam}/lib/security/pam_tty_audit.so"
+          ] ++ optional cfg.ttyAudit.openOnly "open_only"
+          ++ optional (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"
+          ++ optional (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"
+          )) +
           optionalString cfg.makeHomeDir ''
             session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077
           '' +
@@ -629,6 +658,14 @@ let
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
+          '' +
+          optionalString config.security.pam.enableFscrypt ''
+            # Work around https://github.com/systemd/systemd/issues/8598
+            # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
+            # anyways.
+            # See also https://github.com/google/fscrypt/issues/95
+            session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+            session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -1146,6 +1183,14 @@ in
     };
 
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
+    security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
+      Enables fscrypt to automatically unlock directories with the user's login password.
+
+      This also enables a service at security.pam.services.fscrypt which is used by
+      fscrypt to verify the user's password when setting up a new protector. If you
+      use something other than pam_unix to verify user passwords, please remember to
+      adjust this PAM service.
+    '');
 
     users.motd = mkOption {
       default = null;
@@ -1170,6 +1215,7 @@ in
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+      ++ optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
       ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
@@ -1211,6 +1257,9 @@ in
            it complains "Cannot create session: Already running in a
            session". */
         runuser-l = { rootOK = true; unixAuth = false; };
+      } // optionalAttrs (config.security.pam.enableFscrypt) {
+        # Allow fscrypt to verify login passphrase
+        fscrypt = {};
       };
 
     security.apparmor.includes."abstractions/pam" = let
@@ -1275,11 +1324,14 @@ in
       optionalString config.security.pam.enableEcryptfs ''
         mr ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so,
       '' +
+      optionalString config.security.pam.enableFscrypt ''
+        mr ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so,
+      '' +
       optionalString (isEnabled (cfg: cfg.pamMount)) ''
         mr ${pkgs.pam_mount}/lib/security/pam_mount.so,
       '' +
       optionalString (isEnabled (cfg: cfg.enableGnomeKeyring)) ''
-        mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,
+        mr ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so,
       '' +
       optionalString (isEnabled (cfg: cfg.startSession)) ''
         mr ${config.systemd.package}/lib/security/pam_systemd.so,

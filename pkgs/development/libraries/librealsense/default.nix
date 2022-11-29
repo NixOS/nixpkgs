@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
     ./py_pybind11_no_external_download.patch
   ];
 
+  postPatch = ''
+    # https://github.com/IntelRealSense/librealsense/issues/11092
+    # insert a "#include <iostream" at beginning of file
+    sed '1i\#include <iostream>' -i wrappers/python/pyrs_device.cpp
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja

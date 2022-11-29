@@ -4,6 +4,7 @@
 , rustPlatform
 , pkg-config
 , asciidoc
+, ncurses
 , dbus
 , cryptsetup
 , util-linux
@@ -18,28 +19,24 @@
 , tpm2-tools
 , coreutils
 , clevisSupport ? false
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.2.2";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dNbbKGRLSYVnPdKfxlLIwXNEf7P6EvGbOp8sfpaw38g=";
+    hash = "sha256-SHrD9zzGLGSlsf4UOqp4Xday6IDnryVDHIVRiPbE5CM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-tJT0GKLpZtiQ/AZACkNeC3zgso54k/L03dFI0m1Jbls=";
+    hash = "sha256-lkuFWVmO+qw2ZXbCwdhU5OpRZy589QKnudgNVTgsJhI=";
   };
-
-  patches = [
-    # Allow overriding BINARIES_PATHS with environment variable at compile time
-    ./paths.patch
-  ];
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
@@ -60,6 +57,7 @@ stdenv.mkDerivation rec {
     rust.rustc
     pkg-config
     asciidoc
+    ncurses # tput
   ];
 
   buildInputs = [
@@ -69,10 +67,9 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  BINARIES_PATHS = lib.makeBinPath ([
+  EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
-    udev
   ] ++ lib.optionals clevisSupport [
     clevis
     jose
@@ -83,8 +80,8 @@ stdenv.mkDerivation rec {
     coreutils
   ]);
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildFlags = [ "release" "release-min" "docs/stratisd.8" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "INSTALL=install" ];
+  buildFlags = [ "build" "build-min" "docs/stratisd.8" ];
 
   doCheck = true;
   checkTarget = "test";
@@ -94,6 +91,8 @@ stdenv.mkDerivation rec {
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';
+
+  passthru.tests = nixosTests.stratis;
 
   meta = with lib; {
     description = "Easy to use local storage management for Linux";

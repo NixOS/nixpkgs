@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "git-codereview";
-  version = "1.0.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
     rev = "v${version}";
-    sha256 = "sha256-Hyo2UWGlxxeSz3E73DeA0VoOnBJ1VedvpshnATJGbFo=";
+    sha256 = "sha256-vh2XFzvGEMutlaHKNhpuYdlnNl49zoNPkLYNUA1lWwc=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   ldflags = [ "-s" "-w" ];
 

@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fnm";
-  version = "1.31.1";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "Schniz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5DonN9tzap3mMu6/WS5evXtOjpRg4g80evCaSOsTgQA=";
+    sha256 = "sha256-ttprb8w4EWq2F8TbeUt+rCc0paxLXkEzISnAskIstmo=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
 
-  cargoSha256 = "sha256-E4Zbk3+fbjZMXRxBcTn9S8XMSts+5m78UIP33oZOsXQ=";
+  cargoSha256 = "sha256-6nw7q/XQ3EOaXmyiqJJjLSX4W9Mn9W5nfl8shUttBx0=";
 
   doCheck = false;
 

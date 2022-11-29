@@ -36,6 +36,7 @@ buildGoModule rec {
     description = "Export smartctl statistics for Prometheus";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ hexa ];
   };
 }

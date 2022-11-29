@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc14aa6b74d4d9e27dc2e9cbff000ed9be5cd723d3ac9672e66e4e8fce797227";
+    sha256 = "sha256-O015TOlvFcN7hxwV4SgGmo6vanMuWb+i9KZOYhYZLJM=";
   };
 
   propagatedBuildInputs = [

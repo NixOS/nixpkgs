@@ -18,16 +18,23 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "2.0.14";
+  version = "2.0.15";
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2ZuFZ2PHhbxNTmGdlZONgPfEJC7lI5Rc6dgiBj7VG2o=";
+    sha256 = "sha256-oz3+hNNjQ/5vXWPMuhA2N2KK8W8S42WeSeDbhV4oJ9M=";
   };
 
   patches = lib.optionals withPantheon [
+    # Required for the next patch to apply
+    # Reverts https://github.com/JoseExposito/touchegg/pull/603
+    (fetchpatch {
+      url = "https://github.com/JoseExposito/touchegg/commit/34e947181d84620021601e7f28deb1983a154da8.patch";
+      sha256 = "sha256-qbWwmEzVXvDAhhrGvMkKN4YNtnFfRW+Yra+i6VEQX4g=";
+      revert = true;
+    })
     # Disable per-application gesture by default to make sure the default
     # config does not conflict with Pantheon switchboard settings.
     (fetchpatch {

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , mock
 , netaddr
 , pytestCheckHook
@@ -21,6 +22,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "13chya6wix5jb82k67gr44bjx35gcdwz80nsvpv0gvzs6shn4d7b";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     netaddr

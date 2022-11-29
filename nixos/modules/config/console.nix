@@ -8,23 +8,14 @@ let
 
   makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
 
-  isUnicode = '' \
-    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive \
-    LANG=${config.i18n.defaultLocale} \
-    LC_IDENTIFICATION=${config.i18n.defaultLocale} \
-    locale -k identification-codeset | grep -i UTF-8 \
-  '';
+  isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = with pkgs.buildPackages; [ kbd locale ];
+    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
     LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
-    if ${isUnicode} ; then
-      loadkeys -b -u "${cfg.keyMap}" > $out
-    else
-      loadkeys -b "${cfg.keyMap}" > $out
-    fi
+    loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
   '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
@@ -43,14 +34,16 @@ let
       "/share/unimaps"
     ];
   };
-
-  setVconsole = !config.boot.isContainer;
 in
 
 {
   ###### interface
 
   options.console  = {
+    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+      default = true;
+    };
+
     font = mkOption {
       type = with types; either str path;
       default = "Lat2-Terminus16";
@@ -73,8 +66,8 @@ in
     };
 
     colors = mkOption {
-      type = types.listOf types.str;
-      default = [];
+      type = with types; listOf (strMatching "[[:xdigit:]]{6}");
+      default = [ ];
       example = [
         "002b36" "dc322f" "859900" "b58900"
         "268bd2" "d33682" "2aa198" "eee8d5"
@@ -134,12 +127,18 @@ in
           '');
     }
 
-    (mkIf (!setVconsole) {
-      systemd.services.systemd-vconsole-setup.enable = false;
+    (mkIf (!cfg.enable) {
+      systemd.services = {
+        "serial-getty@ttyS0".enable = false;
+        "serial-getty@hvc0".enable = false;
+        "getty@tty1".enable = false;
+        "autovt@".enable = false;
+        systemd-vconsole-setup.enable = false;
+      };
     })
 
-    (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = with pkgs; [ kbd locale ];
+    (mkIf cfg.enable (mkMerge [
+      { environment.systemPackages = [ pkgs.kbd ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -148,13 +147,8 @@ in
         environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
         boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-          if ${isUnicode} ; then
-            kbd_mode -u -C /dev/console
-            printf "\033%%G" >> /dev/console
-          else
-            kbd_mode -a -C /dev/console
-            printf "\033%%@" >> /dev/console
-          fi
+          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
+          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
           loadkmap < ${optimizedKeymap}
 
           ${optionalString cfg.earlySetup ''

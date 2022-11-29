@@ -2,12 +2,12 @@
 
 let
   pname = "restinio";
-  version = "0.6.16";
+  version = "0.6.17";
 in
 fetchzip {
   name = "${pname}-${version}";
   url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}.tar.bz2";
-  hash = "sha256-tl9HUsT9mCupuwp6T4dbPdYOQy3vYyctuwFQPfR8m0Y=";
+  hash = "sha256-8A13r3Qsn5S+kVWLPENoOjqz2tPMxSo6EWBvHG1cTAE=";
 
   stripRoot = false;
   postFetch = ''

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qmwdxpbmy4dvjxav3dls18qns734j0yfvxvjrh1nnkk36qhfp3q";
+    sha256 = "sha256-n/UuiVHw1zwlhwR/HDaKgoMnPy6fm9HWZ5FmAr7F/GE=";
   };
 
   cmakeFlags = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ];
 
   nativeBuildInputs = [ cmake gcc ];
   buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];

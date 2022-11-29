@@ -1,12 +1,13 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , marisa-trie
 , poetry-core
 , pythonOlder
+, setuptools
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "language-data";
   version = "1.0.1";
   format = "pyproject";
@@ -22,6 +23,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

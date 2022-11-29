@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+}:
 
 buildPythonPackage rec {
   version = "1.0.0";
@@ -9,6 +13,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-qP6TzPL/N+zJXsL0nqdKkabOc6TbShapjdJtOXz9CeU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # The tests try to connect to qemu
   doCheck = false;

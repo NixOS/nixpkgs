@@ -9,7 +9,7 @@
 , writeTextFile
 , isPyPy
 , cython
-, setuptoolsBuildHook
+, setuptools
  }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -39,7 +39,7 @@ let
 in buildPythonPackage rec {
   pname = "numpy";
   version = "1.16.6";
-  format = "pyproject.toml";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,7 +47,7 @@ in buildPythonPackage rec {
     sha256 = "e5cf3fdf13401885e8eea8170624ec96225e2174eb0c611c6f26dd33b489e3ff";
   };
 
-  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran pytest cython setuptools ];
   buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -73,7 +73,7 @@ in buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck

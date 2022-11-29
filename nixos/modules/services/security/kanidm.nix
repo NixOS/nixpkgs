@@ -100,6 +100,14 @@ in
             readOnly = true;
             type = lib.types.path;
           };
+          tls_chain = lib.mkOption {
+            description = lib.mdDoc "TLS chain in pem format.";
+            type = lib.types.path;
+          };
+          tls_key = lib.mkOption {
+            description = lib.mdDoc "TLS key in pem format.";
+            type = lib.types.path;
+          };
           log_level = lib.mkOption {
             description = lib.mdDoc "Log level of the server.";
             default = "default";
@@ -248,6 +256,8 @@ in
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"
+          "-/etc/ssl"
+          "-/etc/static/ssl"
         ];
         BindPaths = [
           # To create the socket

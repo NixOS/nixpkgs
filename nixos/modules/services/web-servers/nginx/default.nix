@@ -192,14 +192,22 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
+      ${optionalString (cfg.proxyCache.enable) ''
+        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
+                                          levels=${cfg.proxyCache.levels}
+                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
+                                          inactive=${cfg.proxyCache.inactive}
+                                          max_size=${cfg.proxyCache.maxSize};
+      ''}
+
       ${cfg.commonHttpConfig}
 
       ${vhosts}
 
       ${optionalString cfg.statusPage ''
         server {
-          listen 80;
-          ${optionalString enableIPv6 "listen [::]:80;" }
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
 
           server_name localhost;
 
@@ -246,8 +254,8 @@ let
           if vhost.listen != [] then vhost.listen
           else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -275,7 +283,10 @@ let
         redirectListen = filter (x: !x.ssl) defaultListen;
 
         acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
-          location /.well-known/acme-challenge {
+          # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
+          # We use ^~ here, so that we don't check any regexes (which could
+          # otherwise easily override this intended match accidentally).
+          location ^~ /.well-known/acme-challenge/ {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
             auth_basic off;
@@ -443,6 +454,24 @@ in
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = lib.mdDoc ''
           If vhosts do not specify listenAddresses, use these addresses by default.
+        '';
+      };
+
+      defaultHTTPListenPort = mkOption {
+        type = types.port;
+        default = 80;
+        example = 8080;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for HTTP by default.
+        '';
+      };
+
+      defaultSSLListenPort = mkOption {
+        type = types.port;
+        default = 443;
+        example = 8443;
+        description = lib.mdDoc ''
+          If vhosts do not specify listen.port, use these ports for SSL by default.
         '';
       };
 
@@ -684,6 +713,72 @@ in
         description = lib.mdDoc ''
             Sets the maximum size of the server names hash tables.
           '';
+      };
+
+      proxyCache = mkOption {
+        type = types.submodule {
+          options = {
+            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+
+            keysZoneName = mkOption {
+              type = types.str;
+              default = "cache";
+              example = "my_cache";
+              description = lib.mdDoc "Set name to shared memory zone.";
+            };
+
+            keysZoneSize = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "32m";
+              description = lib.mdDoc "Set size to shared memory zone.";
+            };
+
+            levels = mkOption {
+              type = types.str;
+              default = "1:2";
+              example = "1:2:2";
+              description = lib.mdDoc ''
+                The levels parameter defines structure of subdirectories in cache: from
+                1 to 3, each level accepts values 1 or 2. Сan be used any combination of
+                1 and 2 in these formats: x, x:x and x:x:x.
+              '';
+            };
+
+            useTempPath = mkOption {
+              type = types.bool;
+              default = false;
+              example = true;
+              description = lib.mdDoc ''
+                Nginx first writes files that are destined for the cache to a temporary
+                storage area, and the use_temp_path=off directive instructs Nginx to
+                write them to the same directories where they will be cached. Recommended
+                that you set this parameter to off to avoid unnecessary copying of data
+                between file systems.
+              '';
+            };
+
+            inactive = mkOption {
+              type = types.str;
+              default = "10m";
+              example = "1d";
+              description = lib.mdDoc ''
+                Cached data that has not been accessed for the time specified by
+                the inactive parameter is removed from the cache, regardless of
+                its freshness.
+              '';
+            };
+
+            maxSize = mkOption {
+              type = types.str;
+              default = "1g";
+              example = "2048m";
+              description = lib.mdDoc "Set maximum cache size";
+            };
+          };
+        };
+        default = {};
+        description = lib.mdDoc "Configure proxy cache";
       };
 
       resolver = mkOption {

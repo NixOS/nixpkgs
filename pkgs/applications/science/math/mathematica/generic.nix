@@ -41,6 +41,8 @@
 , pciutils
 , tre
 , unixODBC
+, xcbutilimage
+, xcbutilkeysyms
 , xkeyboard_config
 , xorg
 , zlib
@@ -94,6 +96,8 @@ in stdenv.mkDerivation {
     pciutils
     tre
     unixODBC
+    xcbutilimage
+    xcbutilkeysyms
     xkeyboard_config
   ] ++ (with xorg; [
     libICE

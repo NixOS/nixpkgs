@@ -17,28 +17,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pQ/t26dv9ZWLl0MHcAn0sgxryW2T2hM8XyOkXyfC5CY=";
+    sha256 = "sha256-XCEX2VCynbMUP5xsxWq8PlHnfrBfES5c2fuu2jhM+tI=";
   };
 
-  patches = [
-    ./version.patch
-    (fetchpatch {
-      name = "fix-tpce-test.patch";
-      url = "https://github.com/duckdb/duckdb/commit/82e13a4bb9f0683af6c52468af2fb903cce4286d.patch";
-      sha256 = "sha256-m0Bs0DOJQtkadbKZKk88NHyBFJkjxXUsiWYciuRIJLU=";
-    })
-    (fetchpatch {
-      name = "fix-list-type-metadata.patch";
-      url = "https://github.com/duckdb/duckdb/commit/26d123fdc57273903573c72b1ddafc52f365e378.patch";
-      sha256 = "sha256-ttqs5EjeSLhZQOXc43Y5/N5IYSESQTD1FZWV1uJ15Fo=";
-    })
-  ];
+  patches = [ ./version.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
@@ -52,31 +40,39 @@ stdenv.mkDerivation rec {
     "-DBUILD_JSON_EXTENSION=ON"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_REST=ON"
-    "-DBUILD_SUBSTRAIT_EXTENSION=ON"
     "-DBUILD_TPCDS_EXTENSION=ON"
     "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
+    "-DBUILD_INET_EXTENSION=ON"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ];
 
   doInstallCheck = true;
 
-  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
+  '' + lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
   '';
 
   installCheckPhase =
     let
       excludes = map (pattern: "exclude:'${pattern}'") [
-        "*test_slow"
-        "Test file buffers for reading/writing to file"
-        "[test_slow]"
+        "[s3]"
+        "Test closing database during long running query"
         "test/common/test_cast_hugeint.test"
         "test/sql/copy/csv/test_csv_remote.test"
         "test/sql/copy/parquet/test_parquet_remote.test"
         "test/sql/copy/parquet/test_parquet_remote_foreign_files.test"
+        "test/sql/storage/compression/chimp/chimp_read.test"
+        "test/sql/storage/compression/chimp/chimp_read_float.test"
+        "test/sql/storage/compression/patas/patas_compression_ratio.test_coverage"
+        "test/sql/storage/compression/patas/patas_read.test"
+        # these are only hidden if no filters are passed in
+        "[!hide]"
+        # this test apparently never terminates
+        "test/sql/copy/csv/auto/test_csv_auto.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"

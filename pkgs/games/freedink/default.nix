@@ -25,9 +25,11 @@ in stdenv.mkDerivation rec {
     sha256 = "19xximbcm6506kvpf3s0q96697kmzca3yrjdr6dgphklp33zqsqr";
   };
 
+  nativeBuildInputs = [ pkg-config intltool ];
+
   buildInputs = [
     SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
-    pkg-config intltool fontconfig libzip zip zlib
+    fontconfig libzip zip zlib
   ];
 
   preConfigure = ''

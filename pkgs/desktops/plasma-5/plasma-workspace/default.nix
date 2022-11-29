@@ -1,23 +1,72 @@
-{
-  mkDerivation, lib,
-
-  extra-cmake-modules, kdoctools,
-
-  coreutils, dbus, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
-  libXtst, libXft, pam, wayland, xmessage, xprop, xrdb, xsetroot,
-
-  baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
-  kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
-  kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
-  kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
-  kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
-  phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
-  appstream-qt, plasma-wayland-protocols,
-
-  qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
-  qtwayland, qtx11extras, qqc2-desktop-style,
-
-  pipewire, libdrm
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, coreutils
+, gnugrep
+, gnused
+, isocodes
+, libdbusmenu
+, libSM
+, libXcursor
+, libXtst
+, libXft
+, pam
+, wayland
+, xmessage
+, xsetroot
+, baloo
+, breeze-qt5
+, kactivities
+, kactivities-stats
+, kcmutils
+, kconfig
+, kcrash
+, kdbusaddons
+, kdeclarative
+, kdelibs4support
+, kdesu
+, kglobalaccel
+, kidletime
+, kinit
+, kjsembed
+, knewstuff
+, knotifyconfig
+, kpackage
+, kpeople
+, krunner
+, kscreenlocker
+, ktexteditor
+, ktextwidgets
+, kwallet
+, kwayland
+, kwin
+, kxmlrpcclient
+, libkscreen
+, libksysguard
+, libqalculate
+, networkmanager-qt
+, phonon
+, plasma-framework
+, prison
+, solid
+, kholidays
+, kquickcharts
+, appstream-qt
+, plasma-wayland-protocols
+, kpipewire
+, libkexiv2
+, qtgraphicaleffects
+, qtquickcontrols
+, qtquickcontrols2
+, qtscript
+, qttools
+, qtwayland
+, qtx11extras
+, qqc2-desktop-style
+, polkit-qt
+, pipewire
+, libdrm
 }:
 
 let inherit (lib) getBin getLib; in
@@ -28,19 +77,66 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    isocodes libdbusmenu libSM libXcursor libXtst libXft pam wayland
+    isocodes
+    libdbusmenu
+    libSM
+    libXcursor
+    libXtst
+    libXft
+    pam
+    wayland
 
-    baloo kactivities kactivities-stats kcmutils kconfig kcrash kdbusaddons
-    kdeclarative kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
-    knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
-    ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
-    libqalculate networkmanager-qt phonon plasma-framework prison solid
-    kholidays kquickcharts appstream-qt plasma-wayland-protocols
+    baloo
+    kactivities
+    kactivities-stats
+    kcmutils
+    kconfig
+    kcrash
+    kdbusaddons
+    kdeclarative
+    kdelibs4support
+    kdesu
+    kglobalaccel
+    kidletime
+    kjsembed
+    knewstuff
+    knotifyconfig
+    kpackage
+    kpeople
+    krunner
+    kscreenlocker
+    ktexteditor
+    ktextwidgets
+    kwallet
+    kwayland
+    kwin
+    kxmlrpcclient
+    libkscreen
+    libksysguard
+    libqalculate
+    networkmanager-qt
+    phonon
+    plasma-framework
+    prison
+    solid
+    kholidays
+    kquickcharts
+    appstream-qt
+    plasma-wayland-protocols
+    kpipewire
+    libkexiv2
 
-    qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland
-    qtx11extras qqc2-desktop-style
+    qtgraphicaleffects
+    qtquickcontrols
+    qtquickcontrols2
+    qtscript
+    qtwayland
+    qtx11extras
+    qqc2-desktop-style
+    polkit-qt
 
-    pipewire libdrm
+    pipewire
+    libdrm
   ];
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
@@ -60,12 +156,15 @@ mkDerivation {
       --replace 'ecm_query_qt(QtBinariesDir QT_INSTALL_BINS)' 'set(QtBinariesDir "${lib.getBin qttools}/bin")'
   '';
 
+  # work around wrapQtAppsHook double-wrapping kcminit_startup,
+  # which is a symlink to kcminit
+  postFixup = ''
+    ln -sf $out/bin/kcminit $out/bin/kcminit_startup
+  '';
+
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
-    ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
     ''-DNIXPKGS_XSETROOT="${getBin xsetroot}/bin/xsetroot"''
-    ''-DNIXPKGS_XPROP="${getBin xprop}/bin/xprop"''
-    ''-DNIXPKGS_DBUS_UPDATE_ACTIVATION_ENVIRONMENT="${getBin dbus}/bin/dbus-update-activation-environment"''
     ''-DNIXPKGS_START_KDEINIT_WRAPPER="${getLib kinit}/libexec/kf5/start_kdeinit_wrapper"''
     ''-DNIXPKGS_KDEINIT5_SHUTDOWN="${getBin kinit}/bin/kdeinit5_shutdown"''
   ];

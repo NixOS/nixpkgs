@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "6.5.1";
+  version = "7.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-jDuxOBLpZnvIP4x2BkAlEenC/nnWeG8SlSLnlpPuCWs=";
+    hash = "sha256-7RqhNSIUD3ofYoB7x1UoGdJDQ+6TmLenTpShjHji6GQ=";
   };
 
   propagatedBuildInputs = [
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Automatically find diff lines that need test coverage";
     homepage = "https://github.com/Bachmann1234/diff-cover";
+    changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dzabraev ];
   };

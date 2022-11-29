@@ -1,63 +1,63 @@
 {
   "stable": {
-    "version": "105.0.5195.102",
-    "sha256": "0qlj6s182d4nv0g76r0pcr1rvvh74pngcv79ml3cbqsir4khbfhw",
-    "sha256bin64": "0n6rghaszyd9s6l702wypm8k13770kl6njnc2pwzahbxq5v921wa",
+    "version": "107.0.5304.121",
+    "sha256": "12z0fhgxcsdkf6shnsg9maj3v901226cjcy8y2x8m88maw2apc0j",
+    "sha256bin64": "0dxcf0h5ngrfrdnygwvbxfjbwgaxp9dk3r4x0iin34m3b85mzzim",
     "deps": {
       "gn": {
-        "version": "2022-07-11",
+        "version": "2022-09-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "9ef321772ecc161937db69acb346397e0ccc484d",
-        "sha256": "0j85kgf8c1psys6kfsq5mph8n80hcbzhr7d2blqiiysmjj0wc6ng"
+        "rev": "fff29c1b3f9703ea449f720fe70fa73575ef24e5",
+        "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
       }
     },
     "chromedriver": {
-      "version": "105.0.5195.52",
-      "sha256_linux": "063k766d95ssngg0rlx3c8w9157miga2k9kwig2fbdn7qs5ch764",
-      "sha256_darwin": "0rs8g25p0v3krbj00jwh5fy2nw5anrr2dzxaxaj1c8ph6qn9iqn0",
-      "sha256_darwin_aarch64": "14v5r4s2c76md09wgpd3mhfhnw5y57dqkq1iqajgahgqmvvim1by"
+      "version": "107.0.5304.62",
+      "sha256_linux": "13s0kl0k8c6q6h548ay2qssv8j4bmm5b4p3h8bgby30nj9014bsh",
+      "sha256_darwin": "0awd59xz4cllkbd9r5hhk6sinf291ii81chi361nw67aj5vmj7is",
+      "sha256_darwin_aarch64": "01fr6518qycwsn6js64k7727jmp3hxmj70jcghmw1cgxam59nh7w"
     }
   },
   "beta": {
-    "version": "106.0.5249.21",
-    "sha256": "0d3ha2r54sjx1rhaas0mrgk2dl4xvgb83r5pbq9qzh52z43ynmlv",
-    "sha256bin64": "1lcfggqrzr8rbrayffgdygzx0g1i289zvg9fbq282p2x9nwb36cm",
+    "version": "108.0.5359.48",
+    "sha256": "0nk33rv4q22kgr9197y6a4w8yazgifsm5qvmmia41nnl24sqik57",
+    "sha256bin64": "062anw2i8rfi4v8zl0jdqxzn24xzl3ny24cbiyk8dyyf55r914v0",
     "deps": {
       "gn": {
-        "version": "2022-08-11",
+        "version": "2022-10-05",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0bcd37bd2b83f1a9ee17088037ebdfe6eab6d31a",
-        "sha256": "13zks2z65kg7fzzsysq4mswd4bhhy3h7ycdrpxfilcvixx2n2gac"
+        "rev": "b9c6c19be95a3863e02f00f1fe403b2502e345b6",
+        "sha256": "1rhadb6qk867jafr85x2m3asis3jv7x06blhmad2d296p26d5w6x"
       }
     }
   },
   "dev": {
-    "version": "106.0.5249.21",
-    "sha256": "0d3ha2r54sjx1rhaas0mrgk2dl4xvgb83r5pbq9qzh52z43ynmlv",
-    "sha256bin64": "0bawgqjkpllqif0jaah43vys57c9y8w7a5rjn35bxlmjrfmfwhwc",
+    "version": "109.0.5414.10",
+    "sha256": "05yhfb5gznllh9rm6jhzaakj5kvdlxa8c4zqml10h297dbyr44bf",
+    "sha256bin64": "01fzjxrgzhccj75gvqj5w2xhqrphwzycdfqbsd6nc5p08jizpvy0",
     "deps": {
       "gn": {
-        "version": "2022-08-11",
+        "version": "2022-11-10",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0bcd37bd2b83f1a9ee17088037ebdfe6eab6d31a",
-        "sha256": "13zks2z65kg7fzzsysq4mswd4bhhy3h7ycdrpxfilcvixx2n2gac"
+        "rev": "1c4151ff5c1d6fbf7fa800b8d4bb34d3abc03a41",
+        "sha256": "02621c9nqpr4pwcapy31x36l5kbyd0vdgd0wdaxj5p8hrxk67d6b"
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "105.0.5195.54",
-    "sha256": "0hj40scp54hp5xw036vb9v0h951hik4dq8skr52hffw24jqa9d5k",
+    "version": "107.0.5304.122",
+    "sha256": "0f2jdvlnp1s5ia01lnqk0ykqji2x4ab9g4kxk637n4csf0i1gj85",
     "sha256bin64": null,
     "deps": {
       "gn": {
-        "version": "2022-07-11",
+        "version": "2022-09-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "9ef321772ecc161937db69acb346397e0ccc484d",
-        "sha256": "0j85kgf8c1psys6kfsq5mph8n80hcbzhr7d2blqiiysmjj0wc6ng"
+        "rev": "fff29c1b3f9703ea449f720fe70fa73575ef24e5",
+        "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
       },
       "ungoogled-patches": {
-        "rev": "105.0.5195.54-1",
-        "sha256": "021y7cm1fdwkakhqrvz3jw5hx30740qn827wcvih0jdc3msfgd97"
+        "rev": "107.0.5304.122-1",
+        "sha256": "109j5jvsbj9dylj8prz7bkzc8czjv2c8bm0albwnkyxymcpd3w6p"
       }
     }
   }

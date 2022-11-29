@@ -426,7 +426,9 @@ class Machine:
             self.monitor.send(message)
             return self.wait_for_monitor_prompt()
 
-    def wait_for_unit(self, unit: str, user: Optional[str] = None) -> None:
+    def wait_for_unit(
+        self, unit: str, user: Optional[str] = None, timeout: int = 900
+    ) -> None:
         """Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as
         after timing out.
@@ -456,7 +458,7 @@ class Machine:
                 unit, f" with user {user}" if user is not None else ""
             )
         ):
-            retry(check_active)
+            retry(check_active, timeout)
 
     def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
         status, lines = self.systemctl('--no-pager show "{}"'.format(unit), user)
@@ -682,10 +684,10 @@ class Machine:
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
             retry(tty_matches)
 
-    def send_chars(self, chars: str) -> None:
+    def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
-                self.send_key(char)
+                self.send_key(char, delay)
 
     def wait_for_file(self, filename: str) -> None:
         """Waits until the file exists in machine's file system."""
@@ -710,7 +712,7 @@ class Machine:
             status, _ = self.execute("nc -z localhost {}".format(port))
             return status != 0
 
-        with self.nested("waiting for TCP port {} to be closed"):
+        with self.nested("waiting for TCP port {} to be closed".format(port)):
             retry(port_is_closed)
 
     def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
@@ -858,10 +860,11 @@ class Machine:
                 if matches is not None:
                     return
 
-    def send_key(self, key: str) -> None:
+    def send_key(self, key: str, delay: Optional[float] = 0.01) -> None:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
-        time.sleep(0.01)
+        if delay is not None:
+            time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
         assert self.process

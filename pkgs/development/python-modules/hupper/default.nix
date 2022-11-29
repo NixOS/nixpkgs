@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # segfaults in the testsuite that end up failing the tests in a background thread (in myapp)
   checkInputs = [
     pytestCheckHook
-  ] ++ lib.optional (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     watchdog
   ];
 

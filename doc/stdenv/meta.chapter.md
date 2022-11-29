@@ -44,8 +44,8 @@ $ nix-env -qa hello --json
                 "mips32-linux",
                 "x86_64-darwin",
                 "i686-cygwin",
-                "i686-freebsd",
-                "x86_64-freebsd",
+                "i686-freebsd13",
+                "x86_64-freebsd13",
                 "i686-openbsd",
                 "x86_64-openbsd"
             ],
@@ -212,6 +212,10 @@ runCommand "my-package-test" {
 ### `timeout` {#var-meta-timeout}
 
 A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
+
+`meta` attributes are not stored in the instantiated derivation.
+Therefore, this setting may be lost when the package is used as a dependency.
+To be effective, it must be presented directly to an evaluation process that handles the `meta.timeout` attribute.
 
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 

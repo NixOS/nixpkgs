@@ -1,22 +1,36 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
+, jdupes
 , librsvg
 , gitUpdater
+, colorVariants ? [] # default: all
+, themeVariants ? [] # default: blue
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "matcha-gtk-theme";
-  version = "2022-06-07";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "aliz" "azul" "sea" "pueril" "all" ] themeVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
+  version = "2022-11-15";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "26xa9EGo2hci08Zw+X/A0Pn0VHxU8yfvRMiRusml+tc=";
+    sha256 = "Rx22O8C7kbYADxqJF8u6kdcQnXNA5aS+NWOnx/X4urY=";
   };
+
+  nativeBuildInputs = [
+    jdupes
+  ];
 
   buildInputs = [
     gdk-pixbuf
@@ -33,15 +47,23 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/themes
-    name= ./install.sh --dest $out/share/themes
-    install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
+
+    name= ./install.sh \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --dest $out/share/themes
+
     mkdir -p $out/share/doc/${pname}
     cp -a src/extra/firefox $out/share/doc/${pname}
+
+    jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A stylish flat Design theme for GTK based desktop environments";

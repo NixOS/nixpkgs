@@ -36,6 +36,7 @@ let
     "fastly"
     "fritzbox"
     "influxdb"
+    "ipmi"
     "json"
     "jitsi"
     "kea"
@@ -72,9 +73,11 @@ let
     "unbound"
     "unifi"
     "unifi-poller"
+    "v2ray"
     "varnish"
     "wireguard"
     "flow"
+    "zfs"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
@@ -194,7 +197,7 @@ let
         serviceConfig.LockPersonality = true;
         serviceConfig.MemoryDenyWriteExecute = true;
         serviceConfig.NoNewPrivileges = true;
-        serviceConfig.PrivateDevices = true;
+        serviceConfig.PrivateDevices = mkDefault true;
         serviceConfig.ProtectClock = mkDefault true;
         serviceConfig.ProtectControlGroups = true;
         serviceConfig.ProtectHome = true;
@@ -242,6 +245,22 @@ in
 
   config = mkMerge ([{
     assertions = [ {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.configFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.configFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.webConfigFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.webConfigFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
       assertion = cfg.snmp.enable -> (
         (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
       );

@@ -12,7 +12,7 @@ version() {
 }
 
 vivaldi_version_old=$(version vivaldi)
-vivaldi_version=$(curl -sS https://vivaldi.com/download/ | sed -rne 's/.*vivaldi-stable_([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9]+)_amd64\.deb.*/\1/p')
+vivaldi_version=$(curl -sS https://vivaldi.com/download/ | sed -rne 's/.*vivaldi-stable_([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)-1_amd64\.deb.*/\1/p')
 
 if [[ "$vivaldi_version" = "$vivaldi_version_old" ]]; then
   echo "vivaldi is already up-to-date"
@@ -20,7 +20,7 @@ if [[ "$vivaldi_version" = "$vivaldi_version_old" ]]; then
 fi
 
 # Download vivaldi and save hash and file path.
-url="https://downloads.vivaldi.com/stable/vivaldi-stable_${vivaldi_version}_amd64.deb"
+url="https://downloads.vivaldi.com/stable/vivaldi-stable_${vivaldi_version}-1_amd64.deb"
 mapfile -t prefetch < <(nix-prefetch-url --print-path "$url")
 hash=${prefetch[0]}
 path=${prefetch[1]}

@@ -3,6 +3,7 @@
 , aiohttp
 , aioshutil
 , buildPythonPackage
+, dateparser
 , fetchFromGitHub
 , ipython
 , orjson
@@ -20,6 +21,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, setuptools
 , termcolor
 , typer
 , ffmpeg
@@ -27,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "4.2.0";
+  version = "4.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -36,20 +38,23 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBOPHeSEdM6cev2BZs1AwXmzNPVsekNklu9c+KhECiI=";
+    hash = "sha256-30nQ02UUXJHvHC+hWTWHsUeU83G8cOJHK+Tgo6AE5jc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=pyunifiprotect --cov-append" ""
-    substituteInPlace setup.cfg \
-      --replace "pydantic!=1.9.1" "pydantic"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
     aioshutil
+    dateparser
     orjson
     packaging
     pillow
@@ -57,7 +62,7 @@ buildPythonPackage rec {
     pyjwt
     pytz
     typer
-  ];
+  ] ++ typer.optional-dependencies.all;
 
   passthru.optional-dependencies = {
     shell = [
@@ -88,6 +93,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with the Unifi Protect API";
     homepage = "https://github.com/briis/pyunifiprotect";
+    changelog = "https://github.com/AngellusMortis/pyunifiprotect/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,15 +1,15 @@
-{ lib, buildDunePackage, fetchurl, lwt, duration, mirage-runtime, io-page }:
+{ lib, buildDunePackage, fetchurl, lwt, duration, mirage-runtime }:
 
 buildDunePackage rec {
   pname = "mirage-unix";
-  version = "4.0.1";
+  version = "5.0.1";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "sha256-9ymVBb3dkhb+MN97/sXe/oQ36CVx0kruj3sd19LiFZ4=";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    sha256 = "sha256-U1oLznUDBcJLcVygfSiyl5qRLDM27cm/WrjT0vSGhPg=";
   };
 
-  propagatedBuildInputs = [ lwt duration mirage-runtime io-page ];
+  propagatedBuildInputs = [ lwt duration mirage-runtime ];
   doCheck = true;
 
   meta = with lib; {

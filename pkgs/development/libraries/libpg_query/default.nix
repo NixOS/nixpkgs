@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "13-2.1.2";
+  version = "13-2.2.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     rev = version;
-    sha256 = "sha256-Y0oIcpZ0CPbFvyTC6YrSjcs14jk/K5pIyJjTo5vV5sQ=";
+    sha256 = "sha256-gEkcv/j8ySUYmM9lx1hRF/SmuQMYVHwZAIYOaCQWAFs=";
   };
 
   nativeBuildInputs = [ which ];

@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-public-api";
-  version = "0.15.0";
+  version = "0.24.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-3DBpvsjreBJz6NPHJsPV3dK+PvAvdwz7/gp9p/zBieI=";
+    sha256 = "sha256-6PAOyZmaqsHHyzS9sI591tnAi3/kwRlQR4K4iZJmR5Q=";
   };
 
-  cargoSha256 = "sha256-sP3oMphy+jbs8NUqyvanWHyDtEoFaUVQHKeTbOLfTH0=";
+  cargoSha256 = "sha256-wWSVpWmD1ZItXgH5q0u16oBQ+d4wKjg+pvt/ZlgiWBg=";
 
   nativeBuildInputs = [ pkg-config ];
 

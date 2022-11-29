@@ -4,19 +4,24 @@
 , importlib-metadata
 , mitogen
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hahWY7BIO8c6DmCgG+feZdNikbYWycFCl0E6P1uEQ/M=";
+    hash = "sha256-cEEEDbHC0Yf7zNFRSFsSRMQddYvoIXhYR5RjcOtrtwY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     mitogen
@@ -38,7 +43,6 @@ buildPythonPackage rec {
     "pr2modules.nftables"
     "pr2modules.nslink"
     "pr2modules.protocols"
-    "pr2modules.proxy"
   ];
 
   meta = with lib; {

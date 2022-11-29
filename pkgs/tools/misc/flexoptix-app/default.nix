@@ -1,15 +1,15 @@
 { lib, appimageTools, fetchurl, nodePackages }: let
   pname = "flexoptix-app";
-  version = "5.12.2";
+  version = "5.13.0";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-XVswjIXnuWLRiXFc38lDhSvxYTQtYjs4V/AGdiNLX0g=";
+    hash = "sha256-PUGxrGHjebCxtN7Q0N/crqOHTeunWqy3wmWTGqCFYTw=";
   };
 
   udevRules = fetchurl {
-    url = "https://www.flexoptix.net/skin/udev_rules/99-tprogrammer.rules";
+    url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
     hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
   };
 

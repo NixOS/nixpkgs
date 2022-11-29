@@ -9,10 +9,12 @@ let
     poller = { inherit (cfg.log) debug quiet; };
     unifi = { inherit (cfg) controllers; };
     influxdb.disable = true;
+    datadog.disable = true; # workaround for https://github.com/unpoller/unpoller/issues/442
     prometheus = {
       http_listen = "${cfg.listenAddress}:${toString cfg.port}";
       report_errors = cfg.log.prometheusErrors;
     };
+    inherit (cfg) loki;
   });
 
 in {
@@ -20,6 +22,7 @@ in {
 
   extraOpts = {
     inherit (options.services.unifi-poller.unifi) controllers;
+    inherit (options.services.unifi-poller) loki;
     log = {
       debug = mkEnableOption (lib.mdDoc "debug logging including line numbers, high resolution timestamps, per-device logs.");
       quiet = mkEnableOption (lib.mdDoc "startup and error logs only.");
@@ -28,7 +31,7 @@ in {
   };
 
   serviceOpts.serviceConfig = {
-    ExecStart = "${pkgs.unifi-poller}/bin/unifi-poller --config ${configFile}";
+    ExecStart = "${pkgs.unifi-poller}/bin/unpoller --config ${configFile}";
     DynamicUser = false;
   };
 }

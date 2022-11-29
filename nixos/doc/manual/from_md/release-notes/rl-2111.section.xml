@@ -1435,7 +1435,7 @@ Superuser created successfully.
         <para>
           The default GNAT version has been changed: The
           <literal>gnat</literal> attribute now points to
-          <literal>gnat11</literal> instead of <literal>gnat9</literal>.
+          <literal>gnat12</literal> instead of <literal>gnat9</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1467,6 +1467,16 @@ Superuser created successfully.
           (which is not typical for NixOS), they will be included in the
           initial ramdisk, increasing its size to a possibly problematic
           extent.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.haskell-language-server</literal> will now by
+          default be linked dynamically to improve TemplateHaskell
+          compatibility. To mitigate the increased closure size it will
+          now by default only support our current default ghc (at the
+          moment 9.0.2). Add other ghc versions via e.g.
+          <literal>pkgs.haskell-language-server.override { supportedGhcVersions = [ &quot;90&quot; &quot;92&quot; ]; }</literal>.
         </para>
       </listitem>
     </itemizedlist>
@@ -2085,6 +2095,18 @@ Superuser created successfully.
         <para>
           More jdk and jre versions are now exposed via
           <literal>java-packages.compiler</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The sets <literal>haskell.packages</literal> and
+          <literal>haskell.compiler</literal> now contain for every ghc
+          version an attribute with the minor version dropped. E.g. for
+          <literal>ghc8107</literal> there also now exists
+          <literal>ghc810</literal>. Those attributes point to the same
+          compilers and packagesets but have the advantage that e.g.
+          <literal>ghc92</literal> stays stable when we update from
+          <literal>ghc925</literal> to <literal>ghc926</literal>.
         </para>
       </listitem>
     </itemizedlist>

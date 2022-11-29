@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
+, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
@@ -24,7 +24,7 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip zip file which ];
     buildInputs = [
-      cpio perl zlib cups freetype alsa-lib libjpeg giflib
+      cpio perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -58,6 +58,8 @@ let
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
+      "--with-freetype=system"
+      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"

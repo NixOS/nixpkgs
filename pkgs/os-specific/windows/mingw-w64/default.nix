@@ -1,14 +1,14 @@
 { lib, stdenv, windows, fetchurl }:
 
 let
-  version = "9.0.0";
+  version = "10.0.0";
 in stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";
-    sha256 = "10a15bi4lyfi0k0haj0klqambicwma6yi7vssgbz8prg815vja8r";
+    hash = "sha256-umtDCu1yxjo3aFMfaj/8Kw/eLFejslFFDc9ImolPCJQ=";
   };
 
   outputs = [ "out" "dev" ];

@@ -1,16 +1,19 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview
+, camlp-streams
+}:
 
 let param =
   let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
-    version = "2.18.12";
+    version = "2.18.13";
     src = fetchFromGitHub {
       owner = "garrigue";
       repo = "lablgtk";
       rev = version;
-      sha256 = "sha256:0asib87c42apwf1ln8541x6i3mvyajqbarifvz11in0mqn5k7g7h";
+      sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
     };
     NIX_CFLAGS_COMPILE = null;
+    buildInputs = [ camlp-streams ];
   } else if check "3.12" then {
     version = "2.18.5";
     src = fetchurl {
@@ -26,11 +29,12 @@ let param =
 in
 
 stdenv.mkDerivation {
-  pname = "lablgtk";
+  pname = "ocaml${ocaml.version}-lablgtk";
   inherit (param) version src NIX_CFLAGS_COMPILE;
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
-  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ]
+  ++ param.buildInputs or [];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

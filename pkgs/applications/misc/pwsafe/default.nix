@@ -1,29 +1,59 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, zip, gettext, perl
-, wxGTK30, libXext, libXi, libXt, libXtst, xercesc
-, qrencode, libuuid, libyubikey, yubikey-personalization
-, curl, openssl, file
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zip
+, gettext
+, perl
+, wxGTK30-gtk3
+, libXext
+, libXi
+, libXt
+, libXtst
+, xercesc
+, qrencode
+, libuuid
+, libyubikey
+, yubikey-personalization
+, curl
+, openssl
+, file
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.14.0"; # do NOT update to 3.x Windows releases
-  # nixpkgs-update: no auto update
+  version = "1.15.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-s3IXe4gTwUOzQslNfWrcN/srrG9Jv02zfkGgiZN3C1s=";
+    hash = "sha256-EyyQHp2MlGgUnikClgvP7I313Bh6H3yVPXel8Z/U6gQ=";
   };
 
   nativeBuildInputs = [
-    cmake gettext perl pkg-config zip
+    cmake
+    gettext
+    perl
+    pkg-config
+    zip
   ];
+
   buildInputs = [
-    libXext libXi libXt libXtst wxGTK30
-    curl qrencode libuuid openssl xercesc
-    libyubikey yubikey-personalization
+    libXext
+    libXi
+    libXt
+    libXtst
+    wxGTK30-gtk3
+    curl
+    qrencode
+    libuuid
+    openssl
+    xercesc
+    libyubikey
+    yubikey-personalization
     file
   ];
 
@@ -52,6 +82,11 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^([^1]|1[^.])"; # ignore anything other than 1.x
+    url = src.gitRepoUrl;
+  };
 
   meta = with lib; {
     description = "A password database utility";

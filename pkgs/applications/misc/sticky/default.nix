@@ -7,6 +7,7 @@
 , gspell
 , gtk3
 , gobject-introspection
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -73,11 +74,17 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = ''master.*'';
+    };
+  };
+
   meta = with lib; {
     description = "A sticky notes app for the linux desktop";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui bobby285271 ];
   };
 }

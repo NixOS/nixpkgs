@@ -212,9 +212,9 @@ in
 
         staticClients = forEach cfg.dex.oidcClients (client: {
           inherit (client) id;
-          redirectURIs = [ client.callbackURI ];
+          redirectURIs = [ client.callbackURL ];
           name = "OIDC for ${client.id}";
-          secret = "$DEX_CLIENT_${client.id}";
+          secretEnv = "DEX_CLIENT_${client.id}";
         });
       };
     };
@@ -284,5 +284,5 @@ in
     ];
   };
 
-  meta.maintainers = [ majewsky ] ++ teams.c3d2.members;
+  meta.maintainers = [ maintainers.majewsky ] ++ teams.c3d2.members;
 }

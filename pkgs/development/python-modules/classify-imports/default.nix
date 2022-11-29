@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "classify-imports";
-  version = "4.1.0";
+  version = "4.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-w/+Sf2ZVSDmFNPICJfAKzfukcznWyFBhi7hjIELtYGI=";
+    hash = "sha256-f5wZfisKz9WGdq6u0rd/zg2CfMwWvQeR8xZQNbD7KfU=";
   };
 
   pythonImportsCheck = [

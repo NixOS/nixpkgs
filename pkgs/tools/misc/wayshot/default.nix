@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wayshot";
-  version = "1.1.9";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = pname;
     rev = version;
-    hash = "sha256-4tzL/9p/qBCSWX+O7wZlKi9qb7mIt+hoxcQY7cWlFoU=";
+    hash = "sha256-/uZ98ICdPTilUD3vBEbJ4AxGWY1xIbkK6O+bkhqIUKA=";
   };
 
-  cargoHash = "sha256-/FAI2VUoyQ1+3CuA7sEpeF5oeJdGB9CRZEp1leLnTh4=";
+  cargoHash = "sha256-j/gSrXY5n/zW3IogHewyrupTKtEm5EtOzfOzglyTP9A=";
 
   meta = with lib; {
     description = "A native, blazing-fast screenshot tool for wlroots based compositors such as sway and river";

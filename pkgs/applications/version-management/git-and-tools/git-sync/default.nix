@@ -21,13 +21,12 @@ stdenv.mkDerivation rec {
     cp -a contrib/git-* $out/bin/
   '';
 
-  wrapperPath = with lib; makeBinPath [
-    inotify-tools
+  wrapperPath = with lib; makeBinPath ([
     coreutils
     git
     gnugrep
     gnused
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ inotify-tools ]);
 
   postFixup = ''
     wrap_path="${wrapperPath}":$out/bin

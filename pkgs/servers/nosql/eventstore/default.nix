@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "21.10.5";
+  version = "22.6.0";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "sha256-uUDjTGCiQgXmvOUsujIA0JkGQGuw9U4zLKDP1WIFq1o=";
+    sha256 = "sha256-+s/FjHKBpcpxFecuPrc26fA6WW20Uurxx1RunRY3JWI=";
     leaveDotGit = true;
   };
 
@@ -32,8 +32,8 @@ buildDotnetModule rec {
   runtimeDeps = [ mono ];
 
   nugetBinariesToPatch = lib.optionals stdenv.isLinux [
-    "grpc.tools/2.39.1/tools/linux_x64/protoc"
-    "grpc.tools/2.39.1/tools/linux_x64/grpc_csharp_plugin"
+    "grpc.tools/2.41.0/tools/linux_x64/protoc"
+    "grpc.tools/2.41.0/tools/linux_x64/grpc_csharp_plugin"
   ];
 
   postConfigure = ''
@@ -70,6 +70,8 @@ buildDotnetModule rec {
     sleep 30s;
     kill "$PID";
   '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://geteventstore.com/";

@@ -22,17 +22,18 @@
 # choose renderer: mupdf or poppler or both (not recommended)
 , usePoppler ? false
 , useMupdf ? true
+, useExternalRenderer ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.2.2";
+  version = "0.2.3-1";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
-    rev = "v${version}";
-    sha256 = "16v263nnnipih3lxg95rmwz0ihnvpl4n1wlj9r6zavnspzlp9dvb";
+    rev = "dd41a00b3c6c8b881fa62945165c965634df66f0";
+    sha256 = "11yj1zl8hdnqbynkbyzg8kwyx1jl8c87x8f8qyllpk0s6cg304d0";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,9 @@ stdenv.mkDerivation rec {
     "-DGIT_VERSION=OFF"
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
+    "-DUSE_QTPDF=OFF"
+    "-DUSE_MUPDF_THIRD=ON"
+    "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
     "-DUSE_MUJS=OFF"
     "-DUSE_GUMBO=ON"
     "-DUSE_TRANSLATIONS=ON"

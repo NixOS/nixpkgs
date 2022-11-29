@@ -201,19 +201,39 @@ def convertMD(options: Dict[str, Any]) -> str:
         return option[key]['_type'] == typ
 
     for (name, option) in options.items():
-        if optionIs(option, 'description', 'mdDoc'):
-            option['description'] = convertString(name, option['description']['text'])
-        if optionIs(option, 'example', 'literalMD'):
-            docbook = convertString(name, option['example']['text'])
-            option['example'] = { '_type': 'literalDocBook', 'text': docbook }
-        if optionIs(option, 'default', 'literalMD'):
-            docbook = convertString(name, option['default']['text'])
-            option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+        try:
+            if optionIs(option, 'description', 'mdDoc'):
+                option['description'] = convertString(name, option['description']['text'])
+            elif markdownByDefault:
+                option['description'] = convertString(name, option['description'])
+
+            if optionIs(option, 'example', 'literalMD'):
+                docbook = convertString(name, option['example']['text'])
+                option['example'] = { '_type': 'literalDocBook', 'text': docbook }
+            if optionIs(option, 'default', 'literalMD'):
+                docbook = convertString(name, option['default']['text'])
+                option['default'] = { '_type': 'literalDocBook', 'text': docbook }
+        except Exception as e:
+            raise Exception(f"Failed to render option {name}: {str(e)}")
+
 
     return options
 
-warningsAreErrors = sys.argv[1] == "--warnings-are-errors"
-optOffset = 1 if warningsAreErrors else 0
+warningsAreErrors = False
+errorOnDocbook = False
+markdownByDefault = False
+optOffset = 0
+for arg in sys.argv[1:]:
+    if arg == "--warnings-are-errors":
+        optOffset += 1
+        warningsAreErrors = True
+    if arg == "--error-on-docbook":
+        optOffset += 1
+        errorOnDocbook = True
+    if arg == "--markdown-by-default":
+        optOffset += 1
+        markdownByDefault = True
+
 options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
 overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
@@ -241,9 +261,37 @@ for (k, v) in overrides.items():
 
 severity = "error" if warningsAreErrors else "warning"
 
+def is_docbook(o, key):
+    val = o.get(key, {})
+    if not isinstance(val, dict):
+        return False
+    return val.get('_type', '') == 'literalDocBook'
+
 # check that every option has a description
 hasWarnings = False
+hasErrors = False
+hasDocBookErrors = False
 for (k, v) in options.items():
+    if errorOnDocbook:
+        if isinstance(v.value.get('description', {}), str):
+            hasErrors = True
+            hasDocBookErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} description uses DocBook\x1b[0m",
+                file=sys.stderr)
+        elif is_docbook(v.value, 'defaultText'):
+            hasErrors = True
+            hasDocBookErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} default uses DocBook\x1b[0m",
+                file=sys.stderr)
+        elif is_docbook(v.value, 'example'):
+            hasErrors = True
+            hasDocBookErrors = True
+            print(
+                f"\x1b[1;31merror: option {v.name} example uses DocBook\x1b[0m",
+                file=sys.stderr)
+
     if v.value.get('description', None) is None:
         hasWarnings = True
         print(f"\x1b[1;31m{severity}: option {v.name} has no description\x1b[0m", file=sys.stderr)
@@ -254,6 +302,22 @@ for (k, v) in options.items():
             f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
             "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
 
+if hasDocBookErrors:
+    print("Explanation: The documentation contains descriptions, examples, or defaults written in DocBook. " +
+        "NixOS is in the process of migrating from DocBook to Markdown, and " +
+        "DocBook is disallowed for in-tree modules. To change your contribution to "+
+        "use Markdown, apply mdDoc and literalMD. For example:\n" +
+        "\n" +
+        "  example.foo = mkOption {\n" +
+        "    description = lib.mdDoc ''your description'';\n" +
+        "    defaultText = lib.literalMD ''your description of default'';\n" +
+        "  }\n" +
+        "\n" +
+        "  example.enable = mkEnableOption (lib.mdDoc ''your thing'');",
+        file = sys.stderr)
+
+if hasErrors:
+    sys.exit(1)
 if hasWarnings and warningsAreErrors:
     print(
         "\x1b[1;31m" +

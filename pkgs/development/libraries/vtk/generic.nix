@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
       ImageIO
       OpenGL
       GLUT
-    ] ++ optional enablePython [
+    ] ++ optionals enablePython [
       pythonInterpreter
     ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ];
@@ -96,6 +96,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
     # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "8");
   };
 }

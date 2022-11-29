@@ -1,8 +1,7 @@
 { lib
-, autoreconfHook
+, bash
 , bash-completion
 , bridge-utils
-, cmake
 , coreutils
 , curl
 , darwin
@@ -10,7 +9,6 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
-, fetchurl
 , gettext
 , glib
 , gnutls
@@ -33,6 +31,7 @@
 , readline
 , rpcsvc-proto
 , stdenv
+, substituteAll
 , xhtml1
 , yajl
 , writeScript
@@ -60,6 +59,7 @@
   # Darwin
 , gmp
 , libiconv
+, qemu
 , Carbon
 , AppKit
 
@@ -114,18 +114,24 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.6.0";
+  version = "8.9.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bSId7G2o808WfHGt5ioFEIhPyy4+XW+R349UgHKOvQU=";
+    sha256 = "sha256-79frEYItbf1weOkrcyI/Z/TjTg6kLMQbteaTi9LAt0g=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+  ] ++ lib.optionals enableZfs [
+    (substituteAll {
+      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+      zfs = "${zfs}/bin/zfs";
+      zpool = "${zfs}/bin/zpool";
+    })
   ];
 
   # remove some broken tests
@@ -134,6 +140,14 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+
+    for binary in mount umount mkfs; do
+      substituteInPlace meson.build \
+        --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
+    done
+
+    substituteInPlace meson.build \
+      --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   '' + optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
@@ -141,40 +155,44 @@ stdenv.mkDerivation rec {
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
+    sed -i '/domaincapstest/d' tests/meson.build
+    sed -i '/qemufirmwaretest/d' tests/meson.build
+    sed -i '/qemuvhostusertest/d' tests/meson.build
   '' + optionalString (isDarwin && isx86_64) ''
     sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
     sed -i '/virnetdaemontest/d' tests/meson.build
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
-
-    cmake
     docutils
+    libxml2 # for xmllint
+    libxslt # for xsltproc
+    gettext
     makeWrapper
     ninja
     pkg-config
+    perl
+    perlPackages.XMLXPath
   ]
   ++ optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
   ++ optional isDarwin darwin.developer_cmds;
 
   buildInputs = [
+    bash
     bash-completion
     curl
     dbus
-    gettext
     glib
     gnutls
     libgcrypt
     libpcap
     libtasn1
     libxml2
-    libxslt
-    perl
-    perlPackages.XMLXPath
-    pkg-config
     python3
     readline
     xhtml1
@@ -253,6 +271,7 @@ stdenv.mkDerivation rec {
       (cfg "runstatedir" "/run")
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
+      (cfg "qemu_datadir" (if isDarwin then "${qemu}/share/qemu" else ""))
 
       (feat "apparmor" isLinux)
       (feat "attr" isLinux)

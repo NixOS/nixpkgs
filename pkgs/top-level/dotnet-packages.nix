@@ -75,8 +75,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   RestSharp = fetchNuGet {
     pname = "RestSharp";
-    version = "105.2.3";
-    sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
+    version = "106.12.0";
+    sha256 = "sha256-NGzveByJvCRtHlI2C8d/mLs3akyMm77NER8TUG6HiD4=";
     outputFiles = [ "lib/*" ];
   };
 

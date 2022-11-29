@@ -5,14 +5,14 @@
 
 mkDerivation rec {
   pname = "qpwgraph";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
     rev = "v${version}";
-    sha256 = "sha256-ZpVQjlqz1aPpf04qHMsN06s1n5msf32oB7cJYZf6xAU=";
+    sha256 = "sha256-uN3SAmpurINV+7vw51fWdwnuW2yBxnedY6BXdwn/S2s=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

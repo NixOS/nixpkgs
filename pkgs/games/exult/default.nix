@@ -1,47 +1,62 @@
-{ lib, stdenv, fetchurl, pkg-config, SDL2, libogg, libvorbis, zlib, unzip }:
-
-let
-
-  # Digital recordings of the music on an original Roland MT-32.  So
-  # we don't need actual MIDI playback capability.
-  audio = fetchurl {
-    url = "mirror://sourceforge/exult/exult_audio.zip";
-    sha256 = "0s5wvgy9qja06v38g0qwzpaw76ff96vzd6gb1i3lb9k4hvx0xqbj";
-  };
-
-in
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, autoconf
+, automake
+, libogg
+, libtool
+, libvorbis
+, pkg-config
+, zlib
+, enableTools ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "exult";
-  version = "1.6";
+  version = "1.8";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/exult/exult-${version}.tar.gz";
-    sha256 = "1dm27qkxj30567zb70q4acddsizn0xyi3z87hg7lysxdkyv49s3s";
+  src = fetchFromGitHub {
+    owner = "exult";
+    repo = "exult";
+    rev = "v${version}";
+    hash = "sha256-Y7FpgiGuqR4ZG/PNSfLcNcRWeeC7GebUTighXsCfy+E=";
   };
 
-  configureFlags = [ "--disable-tools" ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config unzip ];
-  buildInputs = [ SDL2 libogg libvorbis zlib ];
+  buildInputs = [
+    SDL2
+    libogg
+    libvorbis
+    zlib
+  ];
 
-  enableParallelBuilding = true;
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
-  NIX_LDFLAGS = "-lX11";
+  configureFlags = lib.optional (!enableTools) "--disable-tools";
 
-  postInstall =
-    ''
-      mkdir -p $out/share/exult/music
-      unzip -o -d $out/share/exult ${audio}
-      chmod 644 $out/share/exult/*.flx
-    ''; # */
-
-  meta = {
-    homepage = "http://exult.sourceforge.net/";
-    description = "A reimplementation of the Ultima VII game engine";
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.unix;
-    hydraPlatforms = lib.platforms.linux; # darwin times out
-    license = lib.licenses.gpl2Plus;
+  meta = with lib; {
+    description = "Exult is a project to recreate Ultima VII for modern operating systems";
+    longDescription = ''
+      Ultima VII, an RPG from the early 1990's, still has a huge following. But,
+      being a DOS game with a very nonstandard memory manager, it is difficult
+      to run it on the latest computers. Exult is a project that created an
+      Ultima VII game engine that runs on modern operating systems, capable of
+      using the data and graphics files that come with the game. Exult aims to
+      let those people who own Ultima VII play the game on modern hardware, in
+      as close to (or perhaps even surpassing) its original splendor as is
+      possible.
+    '';
+    homepage = "http://exult.info";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ azahi eelco ];
   };
 }

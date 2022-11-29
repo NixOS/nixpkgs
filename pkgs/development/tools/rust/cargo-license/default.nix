@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-z68idQqjH0noNZLwoTtnLrIOXZPG4kAYS9+7yrFXKOA=";
+    sha256 = "sha256-M/QGM8jPLrDIoF1TVYDoVcHni1qaRCyZwHlYgia24Ro=";
   };
 
-  cargoSha256 = "sha256-8QgDKgJC5l2h5ysQaICjToI7gGxnmlolTwEtxHJMlj8=";
+  cargoSha256 = "sha256-2m+ornrQQzijyF30uQ6xpEiid6r6I1wTa8nn6Q0wNKo=";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";
     homepage = "https://github.com/onur/cargo-license";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ basvandijk ];
+    maintainers = with maintainers; [ basvandijk figsoda ];
   };
 }

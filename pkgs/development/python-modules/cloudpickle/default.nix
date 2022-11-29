@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uyM+h2pYSR2VkKZ2+Tx6VHOgj3R9Wrnff5zlZLPnk44=";
+    hash = "sha256-P0IZRpxVRTz+RzflZLZ8KhSRCdq/fyQkeJSLiV9hEG8=";
   };
 
   checkInputs = [

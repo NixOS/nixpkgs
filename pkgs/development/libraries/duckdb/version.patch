@@ -1,27 +1,34 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 92c097228..5f51929f6 100644
+index 349af6acf7..7ffec0b4cb 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -157,45 +157,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
+@@ -196,52 +196,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
    set(SUN TRUE)
  endif()
  
--execute_process(
--        COMMAND git log -1 --format=%h
--        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
--        RESULT_VARIABLE GIT_RESULT
--        OUTPUT_VARIABLE GIT_COMMIT_HASH
--        OUTPUT_STRIP_TRAILING_WHITESPACE)
--execute_process(
--        COMMAND git describe --tags --abbrev=0
--        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
--        OUTPUT_VARIABLE GIT_LAST_TAG
--        OUTPUT_STRIP_TRAILING_WHITESPACE)
--execute_process(
--        COMMAND git describe --tags --long
--        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
--        OUTPUT_VARIABLE GIT_ITERATION
--        OUTPUT_STRIP_TRAILING_WHITESPACE)
+-find_package(Git)
+-if(Git_FOUND)
+-  if (NOT DEFINED GIT_COMMIT_HASH)
+-    execute_process(
+-            COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
+-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-            RESULT_VARIABLE GIT_RESULT
+-            OUTPUT_VARIABLE GIT_COMMIT_HASH
+-            OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  endif()
+-  execute_process(
+-          COMMAND ${GIT_EXECUTABLE} describe --tags --abbrev=0
+-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-          OUTPUT_VARIABLE GIT_LAST_TAG
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  execute_process(
+-          COMMAND ${GIT_EXECUTABLE} describe --tags --long
+-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-          OUTPUT_VARIABLE GIT_ITERATION
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
+-else()
+-  message("Git NOT FOUND")
+-endif()
 -
 -if(GIT_RESULT EQUAL "0")
 -  string(REGEX REPLACE "v([0-9]+).[0-9]+.[0-9]+" "\\1" DUCKDB_MAJOR_VERSION "${GIT_LAST_TAG}")
@@ -47,5 +54,5 @@ index 92c097228..5f51929f6 100644
 -endif()
 +set(DUCKDB_VERSION "@DUCKDB_VERSION@")
  
- option(AMALGAMATION_BUILD
-        "Build from the amalgamation files, rather than from the normal sources."
+ message(STATUS "git hash ${GIT_COMMIT_HASH}, version ${DUCKDB_VERSION}")
+ 

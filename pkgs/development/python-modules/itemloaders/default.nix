@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapy";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ueq1Rsuae+wz4eFc1O7luBVR4XWGbefpDr124H6j56g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZzpWIJNDve6SvLDb+QUDVSXUfJabFuRwtyBeCUasUgY=";
   };
 
   propagatedBuildInputs = [

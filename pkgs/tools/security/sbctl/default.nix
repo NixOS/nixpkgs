@@ -41,5 +41,8 @@ buildGoModule rec {
     homepage = "https://github.com/Foxboron/sbctl";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];
+    # go-uefi do not support darwin at the moment:
+    # see upstream on https://github.com/Foxboron/go-uefi/issues/13
+    platforms = platforms.linux;
   };
 }

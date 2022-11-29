@@ -81,7 +81,8 @@ in
            - write-files
            - growpart
            - resizefs
-           - update_etc_hosts
+           - update_hostname
+           - resolv_conf
            - ca-certs
            - rsyslog
            - users-groups

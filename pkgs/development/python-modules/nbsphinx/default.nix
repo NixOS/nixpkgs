@@ -12,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.8.9";
+  version = "0.8.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-St6GsqQfj0Hv0+qZ2uhMM2j+i6P4N9UMiBXOlCTFmU8=";
+    sha256 = "sha256-qNaARviquRbilAubOBm9PvndzoaKo4hF6jZmRcq7YlQ=";
   };
 
   propagatedBuildInputs = [

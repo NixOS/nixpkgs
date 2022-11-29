@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
 
 stdenv.mkDerivation rec {
   pname = "delly";
-  version = "1.1.3";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
       owner = "dellytools";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-fGwSRYpvGYyYvRvP1ljs3mhXRpONzO5/QVegjqMsOdk=";
+      sha256 = "sha256-/I//7MhsC/CcBeIJblzbjXp/yOSBm83KWJsrYpl6UJk=";
   };
 
   buildInputs = [ zlib htslib bzip2 xz ncurses boost ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     cacert
   ];
 

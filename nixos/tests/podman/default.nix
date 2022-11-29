@@ -1,5 +1,3 @@
-# This test runs podman and checks if simple container starts
-
 import ../make-test-python.nix (
   { pkgs, lib, ... }: {
     name = "podman";
@@ -8,31 +6,31 @@ import ../make-test-python.nix (
     };
 
     nodes = {
-      podman =
-        { pkgs, ... }:
-        {
-          virtualisation.podman.enable = true;
+      podman = { pkgs, ... }: {
+        virtualisation.podman.enable = true;
 
-          # To test docker socket support
-          virtualisation.podman.dockerSocket.enable = true;
-          environment.systemPackages = [
-            pkgs.docker-client
-          ];
-
-          users.users.alice = {
-            isNormalUser = true;
-            home = "/home/alice";
-            description = "Alice Foobar";
-            extraGroups = [ "podman" ];
-          };
-
-          users.users.mallory = {
-            isNormalUser = true;
-            home = "/home/mallory";
-            description = "Mallory Foobar";
-          };
-
+        users.users.alice = {
+          isNormalUser = true;
         };
+      };
+      docker = { pkgs, ... }: {
+        virtualisation.podman.enable = true;
+
+        virtualisation.podman.dockerSocket.enable = true;
+
+        environment.systemPackages = [
+          pkgs.docker-client
+        ];
+
+        users.users.alice = {
+          isNormalUser = true;
+          extraGroups = [ "podman" ];
+        };
+
+        users.users.mallory = {
+          isNormalUser = true;
+        };
+      };
     };
 
     testScript = ''
@@ -45,6 +43,7 @@ import ../make-test-python.nix (
 
 
       podman.wait_for_unit("sockets.target")
+      docker.wait_for_unit("sockets.target")
       start_all()
 
       with subtest("Run container as root with runc"):
@@ -74,8 +73,10 @@ import ../make-test-python.nix (
           podman.succeed("podman stop sleeping")
           podman.succeed("podman rm sleeping")
 
-      # create systemd session for rootless
+      # start systemd session for rootless
       podman.succeed("loginctl enable-linger alice")
+      podman.succeed(su_cmd("whoami"))
+      podman.sleep(1)
 
       with subtest("Run container rootless with runc"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
@@ -120,22 +121,22 @@ import ../make-test-python.nix (
           assert pid == "2"
 
       with subtest("A podman member can use the docker cli"):
-          podman.succeed(su_cmd("docker version"))
+          docker.succeed(su_cmd("docker version"))
 
       with subtest("Run container via docker cli"):
-          podman.succeed("docker network create default")
-          podman.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
-          podman.succeed(
+          docker.succeed("docker network create default")
+          docker.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          docker.succeed(
             "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin localhost/scratchimg /bin/sleep 10"
           )
-          podman.succeed("docker ps | grep sleeping")
-          podman.succeed("podman ps | grep sleeping")
-          podman.succeed("docker stop sleeping")
-          podman.succeed("docker rm sleeping")
-          podman.succeed("docker network rm default")
+          docker.succeed("docker ps | grep sleeping")
+          docker.succeed("podman ps | grep sleeping")
+          docker.succeed("docker stop sleeping")
+          docker.succeed("docker rm sleeping")
+          docker.succeed("docker network rm default")
 
       with subtest("A podman non-member can not use the docker cli"):
-          podman.fail(su_cmd("docker version", user="mallory"))
+          docker.fail(su_cmd("docker version", user="mallory"))
 
       # TODO: add docker-compose test
 

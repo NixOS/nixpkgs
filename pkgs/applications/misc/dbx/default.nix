@@ -1,78 +1,78 @@
-{ buildPythonPackage
+{ lib
 , fetchFromGitHub
-, databricks-cli
-, scipy
-, path
-, pathspec
-, pydantic
-, protobuf
-, tqdm
-, mlflow
-, azure-identity
-, ruamel-yaml
-, emoji
-, cookiecutter
-, retry
-, azure-mgmt-datafactory
-, azure-mgmt-subscription
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
-, pytest-mock
-, lib
 , git
+, python3
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.6.8";
+  version = "0.7.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
     rev = "v${version}";
-    sha256 = "sha256-Ou+VdHFVQzmsxJiyaeDd/+FqHvJZeNGB+OXyoagJwtk=";
+    hash = "sha256-P/cniy0xYaDoUbKdvV7KCubCpmOAhYp3cg2VBRA+a6I=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
+    aiohttp
+    click
+    cookiecutter
+    cryptography
     databricks-cli
-    scipy
-    path
+    jinja2
+    mlflow
     pathspec
     pydantic
-    protobuf
-    tqdm
-    mlflow
-    azure-identity
-    ruamel-yaml
-    emoji
-    cookiecutter
+    pyyaml
+    requests
     retry
-    azure-mgmt-datafactory
-    azure-mgmt-subscription
-  ];
+    rich
+    typer
+    watchdog
+  ] ++ typer.optional-dependencies.all;
 
   checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-timeout
-    pytest-mock
     git
-  ];
+  ] ++ (with python3.pkgs; [
+    pytest-asyncio
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ]);
 
-  preCheck = ''
-    export HOME=$TMPDIR
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mlflow-skinny>=1.28.0,<=2.0.0" "mlflow" \
+      --replace "rich==12.5.1" "rich"
   '';
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin"
+  '';
+
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+
   disabledTests = [
-    # fails because of dbfs CLI wrong call
+    # Fails because of dbfs CLI wrong call
     "test_dbfs_unknown_user"
     "test_dbfs_no_root"
+    # Requires pylint, prospector, pydocstyle
+    "test_python_basic_sanity_check"
+  ];
+
+  pythonImportsCheck = [
+    "dbx"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/databrickslabs/dbx";
     description = "CLI tool for advanced Databricks jobs management";
+    homepage = "https://github.com/databrickslabs/dbx";
     license = licenses.databricks-dbx;
     maintainers = with maintainers; [ GuillaumeDesforges ];
   };

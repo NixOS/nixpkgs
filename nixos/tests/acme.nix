@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, lib, ... }: let
   commonConfig = ./common/acme/client;
 
-  dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
+  dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;
 
   dnsScript = nodes: let
     dnsAddress = dnsServerIP nodes;
@@ -39,6 +39,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   vhostBaseHttpd = {
     forceSSL = true;
     inherit documentRoot;
+  };
+
+  simpleConfig = {
+    security.acme = {
+      certs."http.example.test" = {
+        listenHTTP = ":80";
+      };
+    };
+
+    networking.firewall.allowedTCPPorts = [ 80 ];
   };
 
   # Base specialisation config for testing general ACME features
@@ -153,7 +163,7 @@ in {
         description = "Pebble ACME challenge test server";
         wantedBy = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
+          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
@@ -173,9 +183,29 @@ in {
       services.nginx.logError = "stderr info";
 
       specialisation = {
+        # Tests HTTP-01 verification using Lego's built-in web server
+        http01lego.configuration = simpleConfig;
+
+        renew.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            # Pebble provides 5 year long certs,
+            # needs to be higher than that to test renewal
+            security.acme.certs."http.example.test".validMinDays = 9999;
+          }
+        ];
+
+        # Tests that account creds can be safely changed.
+        accountchange.configuration = lib.mkMerge [
+          simpleConfig
+          {
+            security.acme.certs."http.example.test".email = "admin@example.test";
+          }
+        ];
+
         # First derivation used to test general ACME features
         general.configuration = { ... }: let
-          caDomain = nodes.acme.config.test-support.acme.caDomain;
+          caDomain = nodes.acme.test-support.acme.caDomain;
           email = config.security.acme.defaults.email;
           # Exit 99 to make it easier to track if this is the reason a renew failed
           accountCreateTester = ''
@@ -316,7 +346,7 @@ in {
 
   testScript = { nodes, ... }:
     let
-      caDomain = nodes.acme.config.test-support.acme.caDomain;
+      caDomain = nodes.acme.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
@@ -438,7 +468,7 @@ in {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.wait_for_unit("network-online.target")
@@ -446,7 +476,35 @@ in {
 
       download_ca_certs(client)
 
-      # Perform general tests first
+      # Perform http-01 w/ lego test first
+      with subtest("Can request certificate with Lego's built in web server"):
+          switch_to(webserver, "http01lego")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+
+      # Perform renewal test
+      with subtest("Can renew certificates when they expire"):
+          hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          switch_to(webserver, "renew")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+          hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          assert hash != hash_after
+
+      # Perform account change test
+      with subtest("Handles email change correctly"):
+          hash = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          switch_to(webserver, "accountchange")
+          webserver.wait_for_unit("acme-finished-http.example.test.target")
+          check_fullchain(webserver, "http.example.test")
+          check_issuer(webserver, "http.example.test", "pebble")
+          hash_after = webserver.succeed("sha256sum /var/lib/acme/http.example.test/cert.pem")
+          # Has to do a full run to register account, which creates new certs.
+          assert hash != hash_after
+
+      # Perform general tests
       switch_to(webserver, "general")
 
       with subtest("Can request certificate with HTTP-01 challenge"):
@@ -594,4 +652,4 @@ in {
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
     '';
-})
+}

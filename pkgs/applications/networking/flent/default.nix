@@ -1,23 +1,39 @@
-{ lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
-, pythonPackages, qt5, sphinx, xvfb-run }:
-
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  procps,
+  python,
+  qt5,
+  xvfb-run,
+}:
 buildPythonApplication rec {
   pname = "flent";
-  version = "2.0.1";
+  version = "2.1.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "300a09938dc2b4a0463c9144626f25e0bd736fd47806a9444719fa024d671796";
+    sha256 = "sha256-21gd6sPYCZll3Q2O7kucTRhXvc5byXeQr50+1bZVT3M=";
   };
 
-  buildInputs = [ sphinx ];
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  propagatedBuildInputs = [ matplotlib procps pyqt5 ];
-  checkInputs = [ procps pythonPackages.mock pyqt5 xvfb-run ];
+  buildInputs = [python.pkgs.sphinx];
+  nativeBuildInputs = [qt5.wrapQtAppsHook];
+  propagatedBuildInputs = [
+    procps
+    python.pkgs.matplotlib
+    python.pkgs.pyqt5
+    python.pkgs.qtpy
+  ];
+  checkInputs = [
+    python.pkgs.mock
+    xvfb-run
+  ];
 
   checkPhase = ''
+    # we want the gui tests to always run
+    sed -i 's|self.skip|pass; #&|' unittests/test_gui.py
+
     cat >test-runner <<EOF
     #!/bin/sh
-
     ${python.pythonForBuild.interpreter} nix_run_setup test
     EOF
     chmod +x test-runner
@@ -34,6 +50,6 @@ buildPythonApplication rec {
     homepage = "https://flent.org";
     license = licenses.gpl3;
 
-    maintainers = [ maintainers.mmlb ];
+    maintainers = [maintainers.mmlb];
   };
 }

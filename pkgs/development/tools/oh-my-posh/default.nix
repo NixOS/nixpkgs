@@ -1,26 +1,39 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "8.37.1";
+  version = "12.20.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZiDrG1GkUple+Q+MoNQlHdbq3P8PeQFWvxMC9dh7VTM=";
+    hash = "sha256-nGhPfwZw73w0iJLdBiXjRQnKPnKIuk6K/5GFKeHlcVw=";
   };
 
-  vendorSha256 = "sha256-t4FpvXsGVsTYoGM8wY2JelscnlmDzrLMPYk7zGUfo58=";
+  vendorHash = "sha256-OrtKFkWXqVoXKmN6BT8YbCNjR1gRTT4gPNwmirn7fjU=";
 
   sourceRoot = "source/src";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [ "-s" "-w" "-X" "main.Version=${version}" ];
+
+  tags = [ "netgo" "osusergo" "static_build" ];
+
+  postInstall = ''
+    mkdir -p $out/share/oh-my-posh
+    cp -r ${src}/themes $out/share/oh-my-posh/
+    installShellCompletion --cmd oh-my-posh \
+      --bash <($out/bin/oh-my-posh completion bash) \
+      --fish <($out/bin/oh-my-posh completion fish) \
+      --zsh <($out/bin/oh-my-posh completion zsh)
+  '';
 
   meta = with lib; {
     description = "A prompt theme engine for any shell";
     homepage = "https://ohmyposh.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    maintainers = with maintainers; [ lucperkins urandom ];
   };
 }

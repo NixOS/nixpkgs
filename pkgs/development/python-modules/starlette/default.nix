@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , aiofiles
 , anyio
 , contextlib2
@@ -33,6 +34,14 @@ buildPythonPackage rec {
     hash = "sha256-vP2TJPn9lRGnLGkO8lUmnsoT6rSnhuWDD3WqNk76SM0=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/encode/starlette/commit/ab70211f0e1fb7390668bf4891eeceda8d9723a0.diff";
+      excludes = [ "requirements.txt" ]; # conflicts
+      hash = "sha256-UHf4c4YUWp/1I1vD8J0hMewdlfkmluA+FyGf9ZsSv3Y=";
+    })
+  ];
+
   postPatch = ''
     # remove coverage arguments to pytest
     sed -i '/--cov/d' setup.cfg
@@ -50,7 +59,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 

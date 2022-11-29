@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
+, isPyPy
 , python
 , coverage
+, buildPackages
 }:
 
 buildPythonPackage rec {
@@ -23,20 +26,18 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = lib.optionalString
-      ((python.isPy3k or false) && (python.pname != "pypy3"))
-  ''
-    2to3 -wn nose functional_tests unit_tests
+  preBuild = lib.optionalString (isPy3k && (!isPyPy)) ''
+    ${python.pythonForBuild}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 
   propagatedBuildInputs = [ coverage ];
 
-  doCheck = false;  # lot's of transient errors, too much hassle
-  checkPhase = if python.is_py3k or false then ''
-    ${python}/bin/${python.executable} setup.py build_tests
+  doCheck = false; # lot's of transient errors, too much hassle
+  checkPhase = if isPy3k then ''
+    ${python.pythonForBuild.interpreter} setup.py build_tests
   '' else "" + ''
     rm functional_tests/test_multiprocessing/test_concurrent_shared.py* # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
-    ${python}/bin/${python.executable} selftest.py
+    ${python.pythonForBuild.interpreter} selftest.py
   '';
 
   meta = with lib; {

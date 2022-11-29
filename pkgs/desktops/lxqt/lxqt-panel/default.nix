@@ -17,7 +17,7 @@
 , lxmenu-data
 , lxqt-build-tools
 , lxqt-globalkeys
-, lxqtUpdateScript
+, gitUpdater
 , menu-cache
 , pcre
 , qtbase
@@ -30,13 +30,13 @@
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "w5/uS8kRb5yFUXd1NImWMXxx40YtzxMZMS87e9syb6A=";
+    sha256 = "A/zoK6V+4tFeu8mSFukLeKnFVKl66QtKLtu7N7Z2P2w=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ mkDerivation rec {
     xorg.libpthreadstubs
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-panel";

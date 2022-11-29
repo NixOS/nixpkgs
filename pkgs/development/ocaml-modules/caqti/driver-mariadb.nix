@@ -2,7 +2,6 @@
 
 buildDunePackage {
   pname = "caqti-driver-mariadb";
-  useDune2 = true;
   inherit (caqti) version src;
 
   propagatedBuildInputs = [ caqti mariadb ];

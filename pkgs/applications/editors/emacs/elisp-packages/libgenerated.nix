@@ -45,6 +45,18 @@ let
           inherit sha256 url;
         }
       ) {};
+      sourcehut = self.callPackage ({ fetchzip }:
+        fetchzip {
+          url = "https://git.sr.ht/~${repo}/archive/${commit}.tar.gz";
+          inherit sha256;
+        }
+      ) {};
+      codeberg = self.callPackage ({ fetchzip }:
+        fetchzip {
+          url = "https://codeberg.org/${repo}/archive/${commit}.tar.gz";
+          inherit sha256;
+        }
+      ) {};
     };
 
 in {

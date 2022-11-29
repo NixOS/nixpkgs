@@ -35,7 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password run `mkpasswd -m sha-512`.
+    To generate a hashed password run `mkpasswd`.
 
     If set to an empty string (`""`), this user will
     be able to log in without being asked for a password (but not via remote
@@ -592,6 +592,26 @@ in {
       '';
     };
 
+    # Warn about user accounts with deprecated password hashing schemes
+    system.activationScripts.hashes = {
+      deps = [ "users" ];
+      text = ''
+        users=()
+        while IFS=: read -r user hash tail; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\$(y|gy|7|2b|2y|2a|6)\$ ]]; then
+            users+=("$user")
+          fi
+        done </etc/shadow
+
+        if (( "''${#users[@]}" )); then
+          echo "
+        WARNING: The following user accounts rely on password hashes that will
+        be removed in NixOS 23.05. They should be renewed as soon as possible."
+          printf ' - %s\n' "''${users[@]}"
+        fi
+      '';
+    };
+
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
@@ -697,7 +717,7 @@ in {
           value = "[a-zA-Z0-9/+.-]+";
           options = "${id}(=${value})?(,${id}=${value})*";
           scheme  = "${id}(${sep}${options})?";
-          content = "${base64}${sep}${base64}";
+          content = "${base64}${sep}${base64}(${sep}${base64})?";
           mcf = "^${sep}${scheme}${sep}${content}$";
         in
         if (allowsLogin user.hashedPassword

@@ -20,6 +20,7 @@
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
@@ -45,7 +46,6 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkg-config
     qtbase
     qtsvg
     sox
@@ -54,9 +54,10 @@ mkDerivation rec {
     opencv3
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake which pkg-config ];
 
   outputs = [ "out" "dev" ];
 
@@ -70,13 +71,16 @@ mkDerivation rec {
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   passthru = {
     inherit ffmpeg;
   };
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.mlt";
     rev-prefix = "v";
   };
 

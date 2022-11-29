@@ -53,7 +53,7 @@ autoPatchelf() {
         esac
     done
 
-    local ignoreMissingDepsArray=($autoPatchelfIgnoreMissingDeps)
+    readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
     if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
         echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
              "= true;' is deprecated and will be removed in a future release." \

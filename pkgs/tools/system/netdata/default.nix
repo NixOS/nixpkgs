@@ -99,9 +99,9 @@ in stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
-  ] ++ optional (!withDBengine) [
+  ] ++ optionals (!withDBengine) [
     "--disable-dbengine"
-  ] ++ optional (!withCloud) [
+  ] ++ optionals (!withCloud) [
     "--disable-cloud"
   ];
 

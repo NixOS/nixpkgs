@@ -12,20 +12,21 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.5.5";
+  version = "7.11.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
-    owner = "vemel";
+    owner = "youtype";
     repo = "mypy_boto3_builder";
-    rev = version;
-    hash = "sha256-rv0c0QoXOd7aSOLhGDGfq4v0bnGBOJhGhZVNhS5hgOs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4iyh/oXuYsdtqEf1Dh4Z3y8AHWiS1TmimO5HUwsHrHA=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     mdformat
     newversion
     pyparsing
+    setuptools
   ];
 
   checkInputs = [
@@ -58,7 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    homepage = "https://vemel.github.io/mypy_boto3_builder/";
+    homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

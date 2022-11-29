@@ -3,7 +3,7 @@
 , xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales
+, ncompress, mkfontdir, tcl, libXaw, libxcrypt, gcc, glibcLocales
 , autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
 , rpcsvc-proto }:
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXinerama libXt libXext libtirpc motif libXft xbitmaps
-    libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh
+    libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh libxcrypt
   ];
   nativeBuildInputs = [
     bison ncompress autoPatchelfHook makeWrapper fakeroot

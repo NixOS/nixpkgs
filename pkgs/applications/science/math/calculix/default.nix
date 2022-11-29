@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, gfortran, arpack, spooles, blas, lapack }:
 
+assert (blas.isILP64 == lapack.isILP64 &&
+        blas.isILP64 == arpack.isILP64 &&
+        !blas.isILP64);
+
 stdenv.mkDerivation rec {
   pname = "calculix";
   version = "2.19";

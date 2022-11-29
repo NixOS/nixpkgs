@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "astor";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -10,14 +15,15 @@ buildPythonPackage rec {
   };
 
   # disable tests broken with python3.6: https://github.com/berkerpeksag/astor/issues/89
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   disabledTests = [
-    "check_expressions"
-    "check_astunparse"
-    "convert_stdlib"
-    "codegen_as_submodule"
-    "positional_only_arguments"
-    "codegen_from_root"
+    # https://github.com/berkerpeksag/astor/issues/196
+    "test_convert_stdlib"
+    # https://github.com/berkerpeksag/astor/issues/212
+    "test_huge_int"
   ];
 
   meta = with lib; {

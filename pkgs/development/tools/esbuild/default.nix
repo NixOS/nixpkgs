@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "esbuild";
-  version = "0.15.6";
+  version = "0.15.16";
 
   src = fetchFromGitHub {
     owner = "evanw";
     repo = "esbuild";
     rev = "v${version}";
-    sha256 = "sha256-xEM5xGgwT2bys4OFDyrZsREkKl92lSl3m+QDQS4rfBQ=";
+    sha256 = "sha256-m23K1BH1Cw452GN14G9rmFi0a+sGnPwIdSyWXqTqiKw=";
   };
 
   vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";

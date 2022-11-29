@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.12";
+  version = "6.16";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
+    sha256 = "sha256-v2CfoV7QAzLcPXKY5nkUi9+HbHujiulUJS4GVBKxTY4=";
   };
 
   yarnDeps = mkYarnModules {
@@ -29,7 +29,7 @@ let
   buildDeps = with pythonPackages; [
     flask
     flask-gravatar
-    flask_login
+    flask-login
     flask_mail
     flask_migrate
     flask-sqlalchemy
@@ -38,7 +38,6 @@ let
     passlib
     pytz
     simplejson
-    six
     sqlparse
     wtforms
     flask-paranoid
@@ -72,14 +71,29 @@ let
     azure-identity
   ];
 
-  # override necessary on pgadmin4 6.12
+  # keep the scope, as it is used throughout the derivation and tests
+  # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
+    # flask 2.2 is incompatible with pgadmin 6.15
+    # https://redmine.postgresql.org/issues/7651
+    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
+      version = "2.1.3";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+        sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
+    });
+    # pgadmin 6.15 is incompatible with the major flask-security-too update to 5.0.x
+    flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
+      version = "4.1.5";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+      };
+      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        final.pythonPackages.flask_mail
+        final.pythonPackages.pyqrcode
+      ];
     });
   });
 
@@ -124,7 +138,7 @@ pythonPackages.buildPythonApplication rec {
 
     # build the documentation
     cd docs/en_US
-    ${sphinx}/bin/sphinx-build -W -b html -d _build/doctrees . _build/html
+    sphinx-build -W -b html -d _build/doctrees . _build/html
 
     # Build the clean tree
     cd ../../web
@@ -156,7 +170,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx ];
   buildInputs = [
     zlib
     pythonPackages.wheel

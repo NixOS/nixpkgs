@@ -11,22 +11,17 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "221";
+  version = "225";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-E4p8uBICWIbplszgP8zdghO7qEI46WCk3eeP71jas9o=";
+    sha256 = "sha256-nuQmvYpCSzw2kUj/UdcBpn6jabaVMYT47MDblzpb/o0=";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
     ./ignore_links.patch
-
-    # due to https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/953a599c2b903298b038b34abf515cea69f4fc19
-    # the version detection of LLVM is broken and the comparison result is compared against
-    # the expected result from LLVM 10 (rather than 7 which is our default).
-    ./fix-tests.patch
   ];
 
   postPatch = ''
@@ -51,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 tlsh
     ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
+    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr python3Packages.rpm acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
       hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
@@ -67,21 +62,12 @@ python3Packages.buildPythonApplication rec {
   '';
 
   disabledTests = [
-    # Disable flaky test and a failing one
-    "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
-    "test_obj_no_differences"
 
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
-
-    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
-    "test_non_unicode_filename"
-
-    # disable formatting tests because they can break on black updates
-    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"

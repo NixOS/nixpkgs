@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , SDL2
 , cmake
-, libepoxy
-, ffmpeg_4
+, ffmpeg
 , imagemagick
 , libedit
 , libelf
+, libepoxy
 , libzip
-, makeDesktopItem
+, lua
 , minizip
 , pkg-config
 , qtbase
@@ -18,15 +18,15 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
-    rev = version;
-    hash = "sha256-0ZtoyyoD+YjplJlPFpZgIg5119j/6X8ZaSZP+UpX5K0=";
+    rev = finalAttrs.version;
+    hash = "sha256-2thc2v3aD8t1PrREZIjzRuYfP7b3BA7uFb6R95zxsZI=";
   };
 
   nativeBuildInputs = [
@@ -37,29 +37,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    libepoxy
-    ffmpeg_4
+    ffmpeg
     imagemagick
     libedit
     libelf
+    libepoxy
     libzip
+    lua
     minizip
     qtbase
     qtmultimedia
     qttools
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "mgba";
-      exec = "mgba-qt";
-      icon = "mgba";
-      comment = "A Game Boy Advance Emulator";
-      desktopName = "mgba";
-      genericName = "Game Boy Advance Emulator";
-      categories = [ "Game" "Emulator" ];
-      startupNotify = false;
-    })
   ];
 
   meta = with lib; {
@@ -79,9 +67,9 @@ stdenv.mkDerivation rec {
       runners, and a modern feature set for emulators that older emulators may
       not support.
     '';
+    changelog = "https://github.com/mgba-emu/mgba/blob/${finalAttrs.version}/CHANGES";
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
   };
-}
-# TODO: use desktopItem functions
+})

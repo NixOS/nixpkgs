@@ -1,24 +1,35 @@
-{ lib, python3Packages, mopidy }:
+{ lib
+, python3
+, mopidy
+}:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
+        version = "0.22.0";
+        format = "setuptools";
+        src = old.src.override {
+          inherit version;
+          hash = "sha256-CZ4uoW4UHn5C+MckQXysTdydaApn99b0UCnF5RPb7DI=";
+        };
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
-  version = "0.3.5";
+  version = "0.3.7";
 
-  src = python3Packages.fetchPypi {
+  src = python.pkgs.fetchPypi {
     inherit version;
     pname = "Mopidy-YTMusic";
-    sha256 = "0pncyxfqxvznb9y4ksndbny1yf5mxh4089ak0yz86dp2qi5j99iv";
+    sha256 = "0gqjvi3nfzkqvbdhihzai241p1h5p037bj2475cc93xwzyyqxcrq";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'ytmusicapi>=0.20.0,<0.21.0' 'ytmusicapi>=0.20.0'
-  '';
-
   propagatedBuildInputs = [
-    mopidy
-    python3Packages.ytmusicapi
-    python3Packages.pytube
+    (mopidy.override { pythonPackages = python.pkgs; })
+    python.pkgs.ytmusicapi
+    python.pkgs.pytube
   ];
 
   pythonImportsCheck = [ "mopidy_ytmusic" ];

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_repack";
-  version = "1.4.7";
+  version = "1.4.8";
 
   buildInputs = [ postgresql openssl zlib readline ];
 
   src = fetchFromGitHub {
     owner  = "reorg";
     repo   = "pg_repack";
-    rev    = "refs/tags/ver_${version}";
-    sha256 = "12j8crgljvkm9dz790xcsr8l7sv8ydvb2imrb0jh1jvj0r9yg1v5";
+    rev    = "ver_${version}";
+    sha256 = "sha256-Et8aMRzG7ez0uy9wG6qsg57/kPPZdUhb+/gFxW86D08=";
   };
 
   installPhase = ''

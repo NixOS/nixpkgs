@@ -14,15 +14,15 @@
 
 buildGoModule rec {
   pname = "ymuse";
-  version = "0.20";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = "ymuse";
     rev = "v${version}";
-    sha256 = "sha256-wDQjNBxwxFVFdSswubp4AVD35aXKJ8i0ahk/tgRsDRc=";
+    sha256 = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
   };
-  vendorSha256 = "sha256-Ap/nf0NT0VkP2k9U1HzEiptDfLjKkBopP5h0czP3vis=";
+  vendorSha256 = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,7 +39,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    install -Dm644 ./resources/ymuse.desktop -t $out/share/applications
+    install -Dm644 ./resources/com.yktoo.ymuse.desktop -t $out/share/applications
+    install -Dm644 ./resources/metainfo/com.yktoo.ymuse.metainfo.xml -t $out/share/metainfo
     cp -r ./resources/icons $out/share
 
     app_id="ymuse"

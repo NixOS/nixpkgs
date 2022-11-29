@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cw1vg0fbj36zyggnzidx9cbjwfc1yr4zqmsipxnvns7xa2awbdk";
   };
 
-  buildInputs = [ intltool openssl expat libgcrypt ];
+  nativeBuildInputs = [ intltool ];
+  buildInputs = [ openssl expat libgcrypt ];
 
   patchPhase = ''
     substituteInPlace configure \

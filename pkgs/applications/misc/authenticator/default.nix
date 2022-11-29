@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , appstream-glib
 , clang
 , desktop-file-utils

@@ -17,13 +17,16 @@
 , libdrm
 , libjpeg_turbo
 , libopus
+, withLibsoup2 ? false
 , libsoup
+, libsoup_3
 , libusb1
 , lz4
 , meson
 , ninja
 , openssl
 , perl
+, phodav_2_0
 , phodav
 , pixman
 , pkg-config
@@ -84,7 +87,6 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gtk-doc
-    libsoup
     meson
     ninja
     perl
@@ -108,10 +110,11 @@ stdenv.mkDerivation rec {
     libcacard
     libjpeg_turbo
     libopus
+    (if withLibsoup2 then libsoup else libsoup_3)
     libusb1
     lz4
     openssl
-    phodav
+    (if withLibsoup2 then phodav_2_0 else phodav)
     pixman
     spice-protocol
     usbredir
@@ -134,6 +137,8 @@ stdenv.mkDerivation rec {
     "-Dpolkit=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dlibcap-ng=disabled"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
   ];
 
   meta = with lib; {

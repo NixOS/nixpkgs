@@ -11,13 +11,39 @@ let
 
   extras = {
     "cl+ssl" = pkg: {
-      nativeLibs = [ openssl ];
+      nativeLibs = [ openssl_1_1 ];
     };
     cl-cffi-gtk-glib = pkg: {
       nativeLibs = [ glib ];
     };
     cl-cffi-gtk-cairo = pkg: {
       nativeLibs = [ cairo ];
+    };
+    cl-cairo2 = pkg: {
+      nativeLibs = [ cairo ];
+    };
+    cl-cairo2-xlib = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-freetype2 = pkg: {
+      nativeLibs = [ freetype ];
+      nativeBuildInputs = [ freetype ];
+      patches = [ ./patches/cl-freetype2-fix-grovel-includes.patch ];
+    };
+    cl-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-gtk2-gdk = pkg: {
+      nativeLibs = [ gtk2-x11 ];
+    };
+    cl-gtk2-glib = pkg: {
+      nativeLibs = [ glib ];
+    };
+    cl-gtk2-pango = pkg: {
+      nativeLibs = [ pango ];
+    };
+    cl-rsvg2 = pkg: {
+      nativeLibs = [ librsvg ];
     };
     cl-cffi-gtk-gdk = pkg: {
       nativeLibs = [ gtk3 ];
@@ -32,7 +58,7 @@ let
       nativeLibs = [ glib gobject-introspection ];
     };
     cl-mysql = pkg: {
-      nativeLibs = [ mysql-client ];
+      nativeLibs = [ mariadb.client ];
     };
     clsql-postgresql = pkg: {
       nativeLibs = [ postgresql.lib ];
@@ -44,7 +70,7 @@ let
       nativeLibs = [ webkitgtk ];
     };
     dbd-mysql = pkg: {
-      nativeLibs = [ mysql-client ];
+      nativeLibs = [ mariadb.client ];
     };
     lla = pkg: {
       nativeLibs = [ openblas ];
@@ -60,6 +86,9 @@ let
     trivial-ssh-libssh2 = pkg: {
       nativeLibs = [ libssh2 ];
     };
+    mssql = pkg: {
+      nativeLibs = [ freetds ];
+    };
     sqlite = pkg: {
       nativeLibs = [ sqlite ];
     };
@@ -71,6 +100,16 @@ let
       # build doesnt fail without this, but fails on runtime
       # weird...
       nativeLibs = [ allegro5 ];
+    };
+    cl-ode = pkg: {
+      nativeLibs = let
+        ode' = ode.overrideAttrs (o: {
+          configureFlags = [
+            "--enable-shared"
+            "--enable-double-precision"
+          ];
+        });
+      in [ ode' ];
     };
     classimp = pkg: {
       nativeLibs = [ assimp ];
@@ -107,7 +146,7 @@ let
       nativeLibs = [ rdkafka ];
     };
     cl-async-ssl = pkg: {
-      nativeLibs = [ openssl ];
+      nativeLibs = [ openssl_1_1 ];
     };
     osicat = pkg: {
       LD_LIBRARY_PATH = "${pkg}/posix/";
@@ -117,11 +156,55 @@ let
       nativeLibs = [ libfixposix ];
       systems = [ "iolib" "iolib/os" "iolib/pathnames" ];
     };
+    "cl-ana.hdf-cffi" = pkg: {
+      nativeBuildInputs = [ pkgs.hdf5 ];
+      nativeLibs = [ pkgs.hdf5 ];
+      NIX_LDFLAGS = [ "-lhdf5" ];
+    };
+    gsll = pkg: {
+      nativeBuildInputs = [ pkgs.gsl ];
+      nativeLibs = [ pkgs.gsl ];
+    };
+    cl-libyaml = pkg: {
+      nativeLibs = [ pkgs.libyaml ];
+    };
+    cl-libxml2 = pkg: {
+      nativeLibs = [ pkgs.libxml2 ];
+    };
+    cl-readline = pkg: {
+      nativeLibs = [ pkgs.readline ];
+    };
+    pzmq = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-compat = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-examples = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    pzmq-test = pkg: {
+      nativeBuildInputs = [ pkgs.zeromq ];
+      nativeLibs = [ pkgs.zeromq ];
+    };
+    trivial-package-manager = pkg: {
+      propagatedBuildInputs = [ pkgs.which ];
+    };
+    "cl-sat.glucose" = pkg: {
+      propagatedBuildInputs = [ pkgs.glucose ];
+      patches = [ ./patches/cl-sat.glucose-binary-from-PATH-if-present.patch ];
+
+    };
+    "cl-sat.minisat" = pkg: {
+      propagatedBuildInputs = [ pkgs.minisat ];
+    };
   };
 
   qlpkgs =
     if builtins.pathExists ./imported.nix
-    # then filterAttrs (n: v: all (check: !(check n v)) broken) (import ./imported.nix { inherit pkgs; })
     then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
     else {};
 

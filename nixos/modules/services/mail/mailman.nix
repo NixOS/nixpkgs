@@ -263,6 +263,15 @@ in {
 
       serve = {
         enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
+
+        virtualRoot = mkOption {
+          default = "/";
+          example = lib.literalExpression "/lists";
+          type = types.str;
+          description = lib.mdDoc ''
+            Path to mount the mailman-web django application on.
+          '';
+        };
       };
 
       extraPythonPackages = mkOption {
@@ -433,8 +442,8 @@ in {
       enable = mkDefault true;
       virtualHosts = lib.genAttrs cfg.webHosts (webHost: {
         locations = {
-          "/".extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
-          "/static/".alias = webSettings.STATIC_ROOT + "/";
+          ${cfg.serve.virtualRoot}.extraConfig = "uwsgi_pass unix:/run/mailman-web.socket;";
+          "${cfg.serve.virtualRoot}/static/".alias = webSettings.STATIC_ROOT + "/";
         };
       });
     };
@@ -561,7 +570,8 @@ in {
           type = "normal";
           plugins = ["python3"];
           home = webEnv;
-          module = "mailman_web.wsgi";
+          manage-script-name = true;
+          mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
           http = "127.0.0.1:18507";
         };
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);

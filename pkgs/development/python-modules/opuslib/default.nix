@@ -1,5 +1,6 @@
 { buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   isPy27,
   libopus,
   nose,
@@ -15,12 +16,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "orion-labs";
-    repo = "opuslib";
+    repo = pname;
     rev = "92109c528f9f6c550df5e5325ca0fcd4f86b0909";
-    sha256 = "0kd37wimwd1g6c0w5hq2hiiljgbi1zg3rk5prval086khkzq469p";
+    hash = "sha256-NxmC/4TTIEDVzrfMPN4PcT1JY4QCw8IBMy80XiM/o00=";
   };
 
   patches = [
+    # https://github.com/orion-labs/opuslib/pull/22
+    (fetchpatch {
+      name = "fix-variadic-functions-on-aarch64-darwin.patch";
+      url = "https://github.com/orion-labs/opuslib/commit/8aee916e4da4b3183d49cff5a986dc2408076d8d.patch";
+      hash = "sha256-oa1HCFHNS3ejzSf0jxv9NueUKOZgdCtpv+xTrjYW5os=";
+    })
     (substituteAll {
       src = ./opuslib-paths.patch;
       opusLibPath = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -105,7 +105,7 @@ let
         # Fixes determinism by normalizing metadata for the archive of kheaders
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
-      prePatch = ''
+      postPatch = ''
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
         # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
@@ -118,24 +118,22 @@ let
         # See also https://kernelnewbies.org/BuildId
         sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
 
-        # Some linux-hardened patches now remove certain files in the scripts directory, so we cannot
-        # patch all scripts until after patches are applied.
-        # However, scripts/ld-version.sh is still ran when generating a configfile for a kernel, so it needs
-        # to be patched prior to patchPhase
-        patchShebangs scripts/ld-version.sh
-      '';
+        # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
+        [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
 
-      postPatch = ''
         # Set randstruct seed to a deterministic but diversified value. Note:
         # we could have instead patched gen-random-seed.sh to take input from
         # the buildFlags, but that would require also patching the kernel's
         # toplevel Makefile to add a variable export. This would be likely to
         # cause future patch conflicts.
-        if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
-          substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
-            --replace NIXOS_RANDSTRUCT_SEED \
-            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
-        fi
+        for file in scripts/gen-randstruct-seed.sh scripts/gcc-plugins/gen-random-seed.sh; do
+          if [ -f "$file" ]; then
+            substituteInPlace "$file" \
+              --replace NIXOS_RANDSTRUCT_SEED \
+              $(echo ${randstructSeed}${src} ${placeholder "configfile"} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+            break
+          fi
+        done
 
         patchShebangs scripts
 
@@ -381,6 +379,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "O=$(buildRoot)"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"

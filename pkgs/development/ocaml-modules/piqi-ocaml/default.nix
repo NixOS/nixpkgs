@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims, num }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.7";
+  version = "0.7.8";
   pname = "piqi-ocaml";
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "alavrik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1913jpsb8mvqi8609j4g4sm5jhg50dq0xqxgy8nmvknfryyc89nm";
+    sha256 = "sha256-6Luq49sbo+AqLSq57mc6fLhrRx0K6G5LCUIzkGPfqYo=";
   };
 
   nativeBuildInputs = [ ocaml findlib ];

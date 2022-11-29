@@ -127,7 +127,7 @@ in {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.wiki-js}/server";
+        ExecStart = "${pkgs.nodejs-16_x}/bin/node ${pkgs.wiki-js}/server";
       };
     };
   };

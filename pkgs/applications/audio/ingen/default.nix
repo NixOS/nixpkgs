@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
-, lv2, makeWrapper, pkg-config, python3, raul, serd, sord, sratom
+, lv2, pkg-config, python3, raul, serd, sord, sratom
 , wafHook
 , suil
 }:

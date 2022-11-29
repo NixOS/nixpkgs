@@ -1,23 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "kuttl";
-  version = "0.11.1";
+  version = "0.14.0";
   cli = "kubectl-kuttl";
 
   src = fetchFromGitHub {
-    owner  = "kudobuilder";
-    repo   = "kuttl";
-    rev    = "v${version}";
-    sha256 = "sha256-jvearvhl2fQV5OOVmvf3C4MjE//wkVs8Ly9BIwv15/8=";
+    owner = "kudobuilder";
+    repo = "kuttl";
+    rev = "v${version}";
+    sha256 = "sha256-xQS7qCUTM3X4SpUZfxKHb08poJ2W52R7+TNe4BFL5sY=";
   };
 
-  vendorSha256 = "sha256-EytHUfr6RbgXowYlfuajvNt9VwmGmvw9TBRtwYMAIh4=";
+  vendorSha256 = "sha256-u8Ezk78CrAhSeeMVXj09/Hiegtx+ZNKlr/Fg0O7+iOY=";
 
   subPackages = [ "cmd/kubectl-kuttl" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/kudobuilder/kuttl/pkg/version.gitVersion=${version}"
   ];
 

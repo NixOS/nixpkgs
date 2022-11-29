@@ -8,6 +8,7 @@
 , qttools
 , lxqt
 , libconfig
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -38,7 +39,7 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
-  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

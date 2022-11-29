@@ -22,7 +22,7 @@ with lib; mkCoqDerivation rec {
   '';
   prefixKey = "-prefix ";
 
-  useDune2 = true;
+  useDune = true;
 
   buildInputs = [
     copyDesktopItems

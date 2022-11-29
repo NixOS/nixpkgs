@@ -10,7 +10,7 @@
 buildDunePackage {
   pname = "carton-lwt";
 
-  inherit (carton) version src useDune2 postPatch;
+  inherit (carton) version src postPatch;
 
   propagatedBuildInputs = [
     carton

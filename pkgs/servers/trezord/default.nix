@@ -8,19 +8,26 @@
 
 buildGoModule rec {
   pname = "trezord-go";
-  version = "2.0.31";
+  version = "2.0.32";
+  commit = "9aa6576";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "trezord-go";
     rev = "v${version}";
-    sha256 = "130nhk1pnr3xx9qkcij81mm3jxrl5zvvdqhvrgvrikqg3zlb6v5b";
+    fetchSubmodules = true;
+    sha256 = "sha256-T7YoHi2sA22nfNbgX2WB5NIFIwxBkxn0CsSXyQTxgJc=";
   };
 
-  vendorSha256 = "0wb959xzyvr5zzjvkfqc422frmf97q5nr460f02wwx0pj6ch0y61";
+  vendorSha256 = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";
 
   propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
     ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X main.githash=${commit}"
+  ];
 
   meta = with lib; {
     description = "Trezor Communication Daemon aka Trezor Bridge";
