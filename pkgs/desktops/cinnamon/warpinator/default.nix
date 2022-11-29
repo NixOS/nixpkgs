@@ -68,9 +68,13 @@ python3.pkgs.buildPythonApplication rec  {
       {} +
   '';
 
+  dontWrapGApps = true; # Prevent double wrapping
+
   preFixup = ''
     # these get loaded via import from bin, so don't need wrapping
     chmod -x+X $out/libexec/warpinator/*.py
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = gitUpdater {
