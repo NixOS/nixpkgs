@@ -11050,6 +11050,8 @@ with pkgs;
 
   rhash = callPackage ../tools/security/rhash { };
 
+  rhoas = callPackage ../tools/admin/rhoas { };
+
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
   riemann-tools = callPackage ../tools/misc/riemann-tools { };
 
