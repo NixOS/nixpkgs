@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/ROCclr/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/ROCm-Developer-Tools/ROCclr/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
     update-source-version rocclr "$version" --ignore-same-hash
   '';
 
