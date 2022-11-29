@@ -112,6 +112,10 @@ in {
     # TODO: remove once LXD gets proper support for cgroupsv2
     # (currently most of the e.g. CPU accounting stuff doesn't work)
     systemd.enableUnifiedCgroupHierarchy = false;
+    # systemd-oomd is marked as failed unless we have cgroupsv2
+    # ("Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)"),
+    # so disable.
+    systemd.services.systemd-oomd.enable = false;
 
     systemd.sockets.lxd = {
       description = "LXD UNIX socket";
