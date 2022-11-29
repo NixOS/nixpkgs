@@ -424,7 +424,7 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = !(xlaSupport -> cudaSupport);
+      broken = !(xlaSupport -> cudaSupport) || (stdenv.hostPlatform.system == "x86_64-darwin");
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s
