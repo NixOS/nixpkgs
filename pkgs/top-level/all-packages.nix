@@ -4272,6 +4272,8 @@ with pkgs;
 
   nwipe = callPackage ../tools/security/nwipe { };
 
+  nx = callPackage ../tools/nix/nx { };
+
   nx2elf = callPackage ../tools/compression/nx2elf { };
 
   nx-libs = callPackage ../tools/X11/nx-libs { };

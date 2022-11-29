@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "nx"
+version = "1.0.0"
+description = "A fast and beautiful NixOS and Nix management utility"
+authors = ["Michal <mchal_@tuta.io>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+nx = "nx.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.7.0"}
+randomname = "^0.1.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
