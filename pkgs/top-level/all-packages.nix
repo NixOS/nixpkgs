@@ -15917,7 +15917,11 @@ with pkgs;
     x11Support = true;
   };
 
-  pythonInterpreters = callPackage ./../development/interpreters/python { };
+  pythonInterpreters = callPackage ./../development/interpreters/python {
+    callPackage = newScope {
+      readline = readline81;
+    };
+  };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
   # List of extensions with overrides to apply to all Python package sets.
