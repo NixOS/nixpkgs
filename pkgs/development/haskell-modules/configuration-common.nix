@@ -2337,4 +2337,8 @@ self: super: {
   # multiple bounds too strict
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
+
+  text-builder-linear = super.text-builder-linear.override {
+    text = super.text_2_0_1;
+  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

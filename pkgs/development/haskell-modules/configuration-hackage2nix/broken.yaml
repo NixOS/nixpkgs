@@ -5088,7 +5088,6 @@ broken-packages:
   - text-all
   - text-and-plots
   - text-ascii
-  - text-builder-linear
   - text-compression
   - text-containers
   - text-display
