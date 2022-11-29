@@ -29185,6 +29185,8 @@ with pkgs;
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
+  gtklock = callPackage ../tools/wayland/gtklock { };
+
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
   gv = callPackage ../applications/misc/gv { };
