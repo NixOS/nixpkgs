@@ -41,11 +41,8 @@ fn main() {
     }).collect();
 
     let cl = closure(|module| mod_resolved_deps(&kernel,allow_missing,&module), &roots);
-    let mut insmod_list = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(out_dir.join("insmod-list"))
-        .unwrap();
+
+    let mut insmod_data = Vec::new();
 
     for module in cl {
         for source in mod_paths(&kernel,allow_missing,&module).iter()
@@ -59,9 +56,21 @@ fn main() {
             // (which it doesn't actually use...).  Get rid of them to prevent
             // the whole kernel from being included in the initrd.
             nuke_refs(&target);
-            writeln!(insmod_list,"{}",target.display()).unwrap();
+            insmod_data.push(target.clone())
         }
         copy_firmware(&kernel,allow_missing,&firmware_dir,&out_dir,&module);
+    }
+
+    let mut insmod_list = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open(out_dir.join("insmod-list"))
+        .unwrap();
+
+    insmod_data.sort_unstable();
+
+    for module in insmod_data {
+        writeln!(insmod_list,"{}",module.display()).unwrap();
     }
 }
 
