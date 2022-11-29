@@ -670,12 +670,12 @@
   };
   javascript = buildGrammar {
     language = "javascript";
-    version = "936d976";
+    version = "cefdcea";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-javascript";
-      rev = "936d976a782e75395d9b1c8c7c7bf4ba6fe0d86b";
-      hash = "sha256-uZW1L9ZE1YSZbwxiqSDiKycWv5mSRG4k4MlWFYoWRbw=";
+      rev = "cefdcea72a8cf86c1f10ca55e837397da07afdab";
+      hash = "sha256-o+th1Va11YtsHaA5IR9IAYRk3SDxTop0gxfSjR2u/o8=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
   };
@@ -846,24 +846,24 @@
   };
   markdown = buildGrammar {
     language = "markdown";
-    version = "272e080";
+    version = "16d0b5e";
     source = fetchFromGitHub {
       owner = "MDeiml";
       repo = "tree-sitter-markdown";
-      rev = "272e080bca0efd19a06a7f4252d746417224959e";
-      hash = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
+      rev = "16d0b5e54d781150bea1070ffb360d47e6238659";
+      hash = "sha256-Nz9vEOV9yz3Vk8TM41clp6isViHNiko9T9mEq4NA76k=";
     };
     location = "tree-sitter-markdown";
     meta.homepage = "https://github.com/MDeiml/tree-sitter-markdown";
   };
   markdown_inline = buildGrammar {
     language = "markdown_inline";
-    version = "272e080";
+    version = "16d0b5e";
     source = fetchFromGitHub {
       owner = "MDeiml";
       repo = "tree-sitter-markdown";
-      rev = "272e080bca0efd19a06a7f4252d746417224959e";
-      hash = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
+      rev = "16d0b5e54d781150bea1070ffb360d47e6238659";
+      hash = "sha256-Nz9vEOV9yz3Vk8TM41clp6isViHNiko9T9mEq4NA76k=";
     };
     location = "tree-sitter-markdown-inline";
     meta.homepage = "https://github.com/MDeiml/tree-sitter-markdown";
@@ -994,12 +994,12 @@
   };
   pascal = buildGrammar {
     language = "pascal";
-    version = "2fd40f4";
+    version = "9e99540";
     source = fetchFromGitHub {
       owner = "Isopod";
       repo = "tree-sitter-pascal";
-      rev = "2fd40f477d3e2794af152618ccfac8d92eb72a66";
-      hash = "sha256-/nChZspacQymw+1P7yrkOpa7BIBVIKeLKUv0y9Hk8oc=";
+      rev = "9e995404ddff8319631d72d4b46552e737206912";
+      hash = "sha256-y8xPnVZ15+eAnjrLSGjS5wIbLgSKbz9bipgL0o8acmA=";
     };
     meta.homepage = "https://github.com/Isopod/tree-sitter-pascal.git";
   };
