@@ -778,6 +778,8 @@ with pkgs;
 
   pet = callPackage ../development/tools/pet { };
 
+  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear {};
+
   pkger = callPackage ../development/libraries/pkger { };
 
   tapview = callPackage ../development/tools/tapview { };
@@ -1436,6 +1438,8 @@ with pkgs;
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
+
+  steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
 
   sx-go = callPackage ../tools/security/sx-go { };
 

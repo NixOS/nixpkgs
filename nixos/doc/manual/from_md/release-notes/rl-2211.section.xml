@@ -79,6 +79,32 @@
       </listitem>
       <listitem>
         <para>
+          <literal>nscd</literal> functionality, necessary to provide
+          non-glibc-builtin NSS modules (such as
+          <literal>nss_systemd</literal> or <literal>nss_ldap</literal>)
+          can now be provided by <literal>nsncd</literal>, by setting
+          <literal>services.nscd.enableNsncd</literal> to
+          <literal>true</literal>.
+        </para>
+        <para>
+          The <literal>nscd</literal> daemon provided by glibc, which is
+          currently used by NixOS isn’t very reliable. For example, it’s
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135888">not
+          fully possible to disable caching functionality</link>,
+          causing various issues and failed lookups.
+        </para>
+        <para>
+          In contrast to nscd’s behavior of caching module responses on
+          its own, nsncd merely forwards requests to NSS modules, which
+          might cache or not.
+        </para>
+        <para>
+          We plan to use <literal>nsncd</literal> by default in NixOS
+          23.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>emacs</literal> enables native compilation which
           means:
         </para>
