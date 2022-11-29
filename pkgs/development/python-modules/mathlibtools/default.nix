@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mathlibtools";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iBYSh5Y8MYqzjeNt70eURr40SSKh0x41plemeaaOfy8=";
+    hash = "sha256-HwtmrDGInCI5Hl+qhl+7hOBJ3Ux0g8IjoAVa4iAccl8=";
   };
 
   propagatedBuildInputs = [
