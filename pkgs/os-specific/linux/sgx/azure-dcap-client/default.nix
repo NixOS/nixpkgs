@@ -7,6 +7,7 @@
 , openssl
 , pkg-config
 , linkFarmFromDrvs
+, callPackage
 }:
 
 let
@@ -77,6 +78,10 @@ stdenv.mkDerivation rec {
     "-C src/Linux"
     "prefix=$(out)"
   ];
+
+  # Online test suite; run with
+  # $(nix-build -A sgx-azure-dcap-client.tests.suite)/bin/tests
+  passthru.tests.suite = callPackage ./test-suite.nix { };
 
   meta = with lib; {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
