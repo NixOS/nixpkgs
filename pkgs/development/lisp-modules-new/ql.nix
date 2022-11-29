@@ -47,6 +47,10 @@ let
     cl-cairo2-xlib = pkg: {
       nativeLibs = [ gtk2-x11 ];
     };
+    cl-devil = pkg: {
+      nativeBuildInputs = [ pkgs.libdevil ];
+      nativeLibs = [ pkgs.libdevil ];
+    };
     cl-freetype2 = pkg: {
       nativeLibs = [ freetype ];
       nativeBuildInputs = [ freetype ];
