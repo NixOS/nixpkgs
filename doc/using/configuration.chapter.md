@@ -319,7 +319,7 @@ if [ -d $HOME/.nix-profile/etc/profile.d ]; then
 fi
 ```
 
-Now just run `source $HOME/.profile` and you can starting loading man pages from your environment.
+Now just run `source $HOME/.profile` and you can start loading man pages from your environment.
 
 ### GNU info setup {#sec-gnu-info-setup}
 
