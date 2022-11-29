@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage rec {
   pname = "copy-modules-closure";
   version = "0.1.0";
   src = ./.;
-  cargoVendorDir = "vendor";
+  cargoLock.lockFile = ./Cargo.lock;
   meta = with lib; {
     description = "Copy closure of modules from kernel modules tree";
     license = licenses.mit;
