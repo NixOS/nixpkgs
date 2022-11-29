@@ -5,6 +5,7 @@
 , ipykernel
 , ipywidgets
 , jupyter-client
+, jupyter_core
 , lib
 , nbconvert
 , nbformat
@@ -41,6 +42,7 @@ let nbclient = buildPythonPackage rec {
     nbformat
     nest-asyncio
     jupyter-client
+    jupyter_core
   ];
 
   # circular dependencies if enabled by default
