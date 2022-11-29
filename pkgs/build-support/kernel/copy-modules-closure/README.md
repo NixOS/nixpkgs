@@ -2,8 +2,8 @@
 
 # What?
 
-This program, when passed a set of kernel modules as arguments, computes the closure of these. It then copies all modules from that closure to a new location. That means that all modules that are required for the given ones to work will be contained in the generated closure.
-It also copies required firmware and generates an "insmod-list" file, which records the modules in the closure.
+This program computes the closure of the linux kernel modules passed on the command line. It then copies all modules in that closure to a new location. That means that all modules that are required for the given ones to work will be contained in the generated output.
+It also copies required firmware and generates an "insmod-list" file, which records all modules in the closure.
 
 # Why?
 
