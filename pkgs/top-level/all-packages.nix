@@ -36645,6 +36645,8 @@ with pkgs;
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
+  gotrue = callPackage ../tools/security/gotrue {};
+
   gowitness = callPackage ../tools/security/gowitness { };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
