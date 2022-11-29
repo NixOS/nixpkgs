@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitLab }:
+{ lib, buildGoModule, fetchFromGitLab, installShellFiles }:
 
 buildGoModule rec {
   pname = "obfs4";
@@ -16,6 +16,12 @@ buildGoModule rec {
   vendorHash = "sha256-7NF3yMouhjSM9SBNKHkeWV7qy0XTGnepEX28kBpbgdk=";
 
   ldflags = [ "-s" "-w" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage doc/obfs4proxy.1
+  '';
 
   meta = with lib; {
     description = "Circumvents censorship by transforming Tor traffic between clients and bridges";
