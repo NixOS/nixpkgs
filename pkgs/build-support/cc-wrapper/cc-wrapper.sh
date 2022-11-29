@@ -111,7 +111,7 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
         if [[ "$p" = -m*=native ]]; then
-            skip "$p"
+            >&2 echo "warning: Skipping impure flag $p because NIX_ENFORCE_NO_NATIVE is set"
         else
             kept+=("$p")
         fi
