@@ -4,6 +4,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, hatchling
+, setuptools
   # runtime deps
 , click
 , ghp-import
@@ -23,15 +25,23 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.3.0";
+  version = "1.4.2";
   disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-S4xkr3jS5GvkMu8JnEGfqhmkxy3FtZZb7Rbuniltudg=";
+    sha256 = "sha256-/NxiKbCd2acYcNe5ww3voM9SGVE2IDqknngqApkDbNs=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+    setuptools
+  ];
+
+  patches = [ ./mkdocs-markdown-bump.patch ];
 
   propagatedBuildInputs = [
     click
