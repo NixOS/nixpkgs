@@ -31117,6 +31117,8 @@ with pkgs;
 
   openimageio2 = callPackage ../applications/graphics/openimageio/2.x.nix { };
 
+  open-jtalk = callPackage ../applications/audio/open-jtalk { };
+
   openjump = callPackage ../applications/misc/openjump { };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
