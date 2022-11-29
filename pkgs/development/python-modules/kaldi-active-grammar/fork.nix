@@ -70,6 +70,20 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Replace the shebangs for the various build scripts
     patchShebangs src
+    # Compatability with OpenBLAS 0.3.21
+    substituteInPlace src/matrix/cblas-wrappers.h \
+      --replace stptri_ LAPACK_stptri \
+      --replace dtptri_ LAPACK_dtptri \
+      --replace sgetrf_ LAPACK_sgetrf \
+      --replace dgetrf_ LAPACK_dgetrf \
+      --replace sgetri_ LAPACK_sgetri \
+      --replace dgetri_ LAPACK_dgetri \
+      --replace sgesvd_ LAPACK_sgesvd \
+      --replace dgesvd_ LAPACK_dgesvd \
+      --replace ssptri_ LAPACK_ssptri \
+      --replace dsptri_ LAPACK_dsptri \
+      --replace ssptrf_ LAPACK_ssptrf \
+      --replace dsptrf_ LAPACK_dsptrf
   '';
 
   configurePhase = ''
