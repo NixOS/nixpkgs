@@ -174,6 +174,10 @@ let
     osicat = pkg: {
       LD_LIBRARY_PATH = "${pkg}/posix/";
     };
+    png = pkg: {
+      nativeBuildInputs = [ pkgs.libpng ];
+      nativeLibs = [ pkgs.libpng ];
+    };
     pzmq = pkg: {
       nativeBuildInputs = [ pkgs.zeromq ];
       nativeLibs = [ pkgs.zeromq ];
