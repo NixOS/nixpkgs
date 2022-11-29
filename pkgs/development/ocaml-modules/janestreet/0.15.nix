@@ -87,6 +87,7 @@ with self;
 
   async_js = janePackage {
     pname = "async_js";
+    duneVersion = "3";
     hash = "184j077bz686k5lrqswircnrdqldb316ngpzq7xri1pcsl39sy3q";
     meta.description = "A small library that provide Async support for JavaScript platforms";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -207,6 +208,7 @@ with self;
 
   bonsai = janePackage {
     pname = "bonsai";
+    duneVersion = "3";
     hash = "150zx2g1dmhyrxwqq8j7f2m3hjpmk5bk182ihx2gdbarhw1ainpm";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ ppx_pattern_bind ];
@@ -382,6 +384,7 @@ with self;
 
   incr_dom = janePackage {
     pname = "incr_dom";
+    duneVersion = "3";
     hash = "1sija9w2im8vdp61h387w0mww9hh7jgkgsjcccps4lbv936ac7c1";
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
@@ -570,6 +573,7 @@ with self;
 
   ppx_css = janePackage {
     pname = "ppx_css";
+    duneVersion = "3";
     hash = "09dpmj3f3m3z1ji9hq775iqr3cfmv5gh7q9zlblizj4wx4y0ibyi";
     meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [ core_kernel ppxlib js_of_ocaml js_of_ocaml-ppx sedlex ];
@@ -1045,6 +1049,7 @@ with self;
     hash = "15xia9v4ighzm0gv3vbqk9nvg47cvzqmfnl2zr67yxv4b98kyzv3";
     meta.description = "OCaml bindings for the virtual-dom library";
     buildInputs = [ js_of_ocaml-ppx ];
+    duneVersion = "3";
     propagatedBuildInputs = [ core_kernel gen_js_api js_of_ocaml lambdasoup tyxml ];
   };
 
