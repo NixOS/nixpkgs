@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3];
-  buildInputs = with llvmPackages; [ libclang clang-unwrapped ];
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3 ];
+  buildInputs = with llvmPackages; [ libclang clang-unwrapped python3 ];
 
   cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
 
