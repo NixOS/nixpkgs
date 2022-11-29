@@ -82,16 +82,25 @@ in
         '';
     };
     networking.nftables.rulesetFile = mkOption {
-      type = types.path;
-      default = pkgs.writeTextFile {
-        name = "nftables-rules";
-        text = cfg.ruleset;
-      };
-      defaultText = literalMD ''a file with the contents of {option}`networking.nftables.ruleset`'';
+      type = types.nullOr types.path;
+      default = null;
       description =
         lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
+        '';
+    };
+    networking.nftables.stopRuleset = mkOption {
+      type = types.lines;
+      default = "flush ruleset";
+      example = ''
+        table inet nixos_fw
+        delete table inet nixos_fw
+      '';
+      description =
+        lib.mdDoc ''
+          The ruleset to clear ruleset/tables/chains on stop and reload.
+          Should be in a format that can be loaded using "/bin/nft -f".
         '';
     };
   };
@@ -113,17 +122,21 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
+        stopRulesScript = pkgs.writeScript "nftables-stopRules" ''
+          #! ${pkgs.nftables}/bin/nft -f
+          ${cfg.stopRuleset}
+        '';
         rulesScript = pkgs.writeScript "nftables-rules" ''
           #! ${pkgs.nftables}/bin/nft -f
-          flush ruleset
-          include "${cfg.rulesetFile}"
+          include "${stopRulesScript}"
+          ${if cfg.rulesetFile != null then ''include "${cfg.rulesetFile}"'' else cfg.ruleset}
         '';
       in {
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = rulesScript;
         ExecReload = rulesScript;
-        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+        ExecStop = stopRulesScript;
       };
     };
   };
