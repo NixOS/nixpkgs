@@ -22,7 +22,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
-  # format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
