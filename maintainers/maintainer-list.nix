@@ -15183,6 +15183,12 @@
     githubId = 647076;
     name = "Yorick van Pelt";
   };
+  yorwba = {
+    email = "yorwb4@gmail.com";
+    github = "Yorwba";
+    githubId = 6555947;
+    name = "Yorwba";
+  };
   yrashk = {
     email = "yrashk@gmail.com";
     github = "yrashk";
