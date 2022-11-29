@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   hts-engine,
+  hts-voice-nitech-jp-atr503-m001,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,16 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/open-jtalk/Open%20JTalk/open_jtalk-${version}/open_jtalk-${version}.tar.gz";
     sha256 = "sha256-IP3GrrbHV4ZgNKvBdYIFc9tD5ChHB8hm/NAsjsGN5x8=";
   };
+
+  # set defaults for dictionary and voice files
+  patches = [
+    ./dic-path.patch
+    ./voice-path.patch
+  ];
+  voice = "${hts-voice-nitech-jp-atr503-m001}/share/hts-voice/nitech_jp_atr503_m001.htsvoice";
+  postPatch = ''
+    substituteAllInPlace bin/open_jtalk.c
+  '';
 
   buildInputs = [ hts-engine ];
 
