@@ -23,7 +23,7 @@ buildPythonPackage rec {
   checkInputs = [
     service-identity
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin && !stdenv.isAarch64) [
+  ] ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [
     pyopenssl
   ];
 
