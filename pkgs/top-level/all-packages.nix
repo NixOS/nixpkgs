@@ -153,6 +153,8 @@ with pkgs;
 
   ### BUILD SUPPORT
 
+  appmenu-gtk3-module = callPackage ../development/libraries/appmenu-gtk3-module {};
+
   auditBlasHook = makeSetupHook
     { name = "auto-blas-hook"; deps = [ blas lapack ]; }
     ../build-support/setup-hooks/audit-blas.sh;
