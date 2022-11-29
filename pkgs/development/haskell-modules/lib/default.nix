@@ -355,5 +355,5 @@ rec {
   # built. Will delay failures, if any, to compile time.
   allowInconsistentDependencies = compose.allowInconsistentDependencies;
 
-  incremental = pkgs: args: compose.incremental args pkgs;
+  incremental = pkg: args: compose.incremental args pkg;
 }
