@@ -19605,6 +19605,8 @@ with pkgs;
 
   htmlcxx = callPackage ../development/libraries/htmlcxx { };
 
+  hts-engine = callPackage ../development/libraries/hts-engine { };
+
   http-parser = callPackage ../development/libraries/http-parser { };
 
   hubble = callPackage ../applications/networking/cluster/hubble { };
