@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k, contextvars
+{ buildPythonPackage, lib, fetchPypi, glibcLocales, isPy3k
 , pythonOlder, pytest, curio
 }:
 
@@ -14,8 +14,6 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   buildInputs = [ glibcLocales ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   checkInputs = [ pytest curio ];
 

@@ -10,7 +10,6 @@
 , automat
 , bcrypt
 , constantly
-, contextvars
 , cryptography
 , git
 , glibcLocales
@@ -139,7 +138,6 @@ buildPythonPackage rec {
     optional-dependencies = rec {
       conch = [ appdirs bcrypt cryptography pyasn1 ];
       conch_nacl = conch ++ [ pynacl ];
-      contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
       http2 = [ h2 priority ];
       serial = [ pyserial ];
       tls = [ idna pyopenssl service-identity ];

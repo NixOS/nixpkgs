@@ -4,10 +4,8 @@
 , pytest-runner
 , pytest
 , pytest-asyncio
-, contextvars
 , sqlalchemy
 , isPy27
-, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -33,7 +31,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   checkPhase = ''
     pytest
