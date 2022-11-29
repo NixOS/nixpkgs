@@ -3905,6 +3905,8 @@ with pkgs;
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
+  dynamic-wallpaper = callPackage ../tools/graphics/dynamic-wallpaper { };
+
   dyncall = callPackage ../development/libraries/dyncall { };
 
   dyndnsc = callPackage ../applications/networking/dyndns/dyndnsc { };
@@ -5122,6 +5124,10 @@ with pkgs;
 
   bbe = callPackage ../tools/misc/bbe { };
 
+  bkcrack = callPackage ../tools/security/bkcrack {
+    inherit (llvmPackages) openmp;
+  };
+
   bdsync = callPackage ../tools/backup/bdsync { };
 
   beamerpresenter = beamerpresenter-mupdf;
@@ -5378,7 +5384,12 @@ with pkgs;
 
   crlfuzz = callPackage ../tools/security/crlfuzz {};
 
-  hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc {
+    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+      nodejs = nodejs-16_x;
+    }) mkYarnPackage;
+    nodejs = nodejs-16_x;
+  };
 
   colord = callPackage ../tools/misc/colord { };
 
@@ -6346,6 +6357,8 @@ with pkgs;
   choose = callPackage ../tools/text/choose { };
 
   conform = callPackage ../applications/version-management/git-and-tools/conform { };
+
+  d2 = callPackage ../tools/text/d2 { };
 
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
@@ -10714,6 +10727,8 @@ with pkgs;
 
   pydeps = with python3Packages; toPythonApplication pydeps;
 
+  python-launcher = callPackage ../development/tools/misc/python-launcher { };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;
@@ -10927,7 +10942,7 @@ with pkgs;
 
   reredirect = callPackage ../tools/misc/reredirect { };
 
-  retext = libsForQt5.callPackage ../applications/editors/retext { };
+  retext = qt6Packages.callPackage ../applications/editors/retext { };
 
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
@@ -15251,9 +15266,6 @@ with pkgs;
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
-  rustracer = callPackage ../development/tools/rust/racer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -17542,6 +17554,8 @@ with pkgs;
   patchelfStable = callPackage ../development/tools/misc/patchelf { };
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
+
+  patsh = callPackage ../development/tools/misc/patsh { };
 
   pax-rs = callPackage ../development/tools/pax-rs { };
 
@@ -24014,9 +24028,7 @@ with pkgs;
 
   openbgpd = callPackage ../servers/openbgpd { };
 
-  openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
-  # Current stable release; don't backport release updates!
-  openafs = openafs_1_8;
+  openafs = callPackage ../servers/openafs/1.8 { };
 
   openresty = callPackage ../servers/http/openresty {
     withPerl = false;
@@ -29171,6 +29183,8 @@ with pkgs;
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
+  gtklock = callPackage ../tools/wayland/gtklock { };
+
   guardian-agent = callPackage ../tools/networking/guardian-agent { };
 
   gv = callPackage ../applications/misc/gv { };
@@ -31539,7 +31553,7 @@ with pkgs;
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
-  qmmp = libsForQt5.callPackage ../applications/audio/qmmp { };
+  qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
@@ -38068,6 +38082,10 @@ with pkgs;
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  ldid = callPackage ../development/tools/ldid {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   xcolor = callPackage ../tools/graphics/xcolor { };
 

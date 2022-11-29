@@ -10,17 +10,13 @@
 , rocm-smi
 , hip
 , gtest
-, chrpath ? null
+, chrpath
 , buildTests ? false
 }:
 
-assert buildTests -> chrpath != null;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  repoVersion = "2.12.10";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -31,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-whRXGD8oINDYhFs8+hEWKWoGNqacGlyy7xi8peA8Qsk=";
   };
 
@@ -79,11 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rccl/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rccl "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rccl "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rccl/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rccl "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -91,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rccl";
     license = with licenses; [ bsd2 bsd3 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
   };
 })

@@ -3,7 +3,7 @@
 , libpsm2, libfabric, pmix, ucx
 
 # Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+, cudaSupport ? false, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -17,8 +17,6 @@
 # Enable Fortran support
 , fortranSupport ? true
 }:
-
-assert !cudaSupport || cudatoolkit != null;
 
 let
   cudatoolkit_joined = symlinkJoin {

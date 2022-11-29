@@ -12,22 +12,16 @@
 , hip
 , gfortran
 , git
-, gtest ? null
-, boost ? null
-, python3Packages ? null
+, gtest
+, boost
+, python3Packages
 , buildTests ? false
 , buildBenchmarks ? false # Seems to depend on tests
 }:
 
-assert (buildTests || buildBenchmarks) -> gtest != null;
-assert (buildTests || buildBenchmarks) -> boost != null;
-assert (buildTests || buildBenchmarks) -> python3Packages != null;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  repoVersion = "2.3.2";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -40,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocSPARSE";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-1069oBrIpZ4M9CAkzoQ9a5j3WlCXErirTbgTUZuT6b0=";
   };
 
@@ -143,11 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl jq common-updater-scripts
-      json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocSPARSE/releases?per_page=1")"
-      repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-      rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-      update-source-version rocsparse "$repoVersion" --ignore-same-hash --version-key=repoVersion
-      update-source-version rocsparse "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+      version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+        -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocSPARSE/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+      update-source-version rocsparse "$version" --ignore-same-hash
     '';
   };
 
@@ -156,6 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
   };
 })

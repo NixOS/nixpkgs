@@ -9,13 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir";
-  rocmVersion = "5.3.3";
-  version = finalAttrs.rocmVersion;
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocMLIR";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-s/5gAH5vh2tgATZemPP66juQFDg8BR2sipzX2Q6pOOQ=";
   };
 
@@ -35,8 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    rocmVersion="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocMLIR/tags?per_page=2" | jq '.[1].name | split("-") | .[1]' --raw-output)"
-    update-source-version rocmlir "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocMLIR/tags?per_page=2" | jq '.[1].name | split("-") | .[1]' --raw-output)"
+    update-source-version rocmlir "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocMLIR";
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
   };
 })

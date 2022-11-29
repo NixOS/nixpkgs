@@ -6,31 +6,20 @@
 , rocm-cmake
 , hip
 , openmp
-, gtest ? null
-, rocblas ? null
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
+, gtest
+, rocblas
+, texlive
+, doxygen
+, sphinx
+, python3Packages
+, buildDocs ? true
 , buildTests ? false
 , buildSamples ? false
-, buildDocs ? false
-, gpuTargets ? null # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
+, gpuTargets ? [ ] # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
-assert buildTests -> gtest != null;
-assert buildTests -> rocblas != null;
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
-
-# Building tests isn't working for now
-# undefined reference to symbol '_ZTIN7testing4TestE'
-assert buildTests == false;
-
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -42,27 +31,25 @@ let
     tabulary
     varwidth
     titlesec;
-  });
+  };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  repoVersion = "0.8";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
+  ] ++ lib.optionals buildDocs [
+    "doc"
   ] ++ lib.optionals buildTests [
     "test"
   ] ++ lib.optionals buildSamples [
     "sample"
-  ] ++ lib.optionals buildDocs [
-    "docs"
   ];
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocWMMA";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-wU3R1XGTy7uFbceUyE0wy+XayicuyJIVfd1ih6pbTN0=";
   };
 
@@ -85,7 +72,7 @@ in stdenv.mkDerivation (finalAttrs: {
     latex
     doxygen
     sphinx
-    python3Packages.sphinx_rtd_theme
+    python3Packages.sphinx-rtd-theme
     python3Packages.breathe
   ];
 
@@ -98,8 +85,8 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != null) [
-    "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DROCWMMA_BUILD_VALIDATION_TESTS=ON"
     "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
@@ -119,7 +106,10 @@ in stdenv.mkDerivation (finalAttrs: {
     ../docs/run_doc.sh
   '';
 
-  postInstall = lib.optionalString buildTests ''
+  postInstall = lib.optionalString buildDocs ''
+    mv ../docs/source/_build/html $out/share/doc/rocwmma
+    mv ../docs/source/_build/latex/rocWMMA.pdf $out/share/doc/rocwmma
+  '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/*_test* $test/bin
   '' + lib.optionalString buildSamples ''
@@ -131,20 +121,12 @@ in stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  postFixup = lib.optionalString buildDocs ''
-    mkdir -p $docs/share/doc/rocwmma
-    mv ../docs/source/_build/html $docs/share/doc/rocwmma
-    mv ../docs/source/_build/latex/rocWMMA.pdf $docs/share/doc/rocwmma
-  '';
-
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocWMMA/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocwmma "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rocwmma "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocWMMA/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocwmma "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -152,6 +134,8 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocWMMA";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    # Building tests isn't working for now
+    # undefined reference to symbol '_ZTIN7testing4TestE'
+    broken = finalAttrs.version != hip.version || buildTests;
   };
 })

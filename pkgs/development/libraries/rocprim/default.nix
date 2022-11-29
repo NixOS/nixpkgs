@@ -8,20 +8,15 @@
 , rocm-device-libs
 , rocm-comgr
 , hip
-, gtest ? null
-, gbenchmark ? null
+, gtest
+, gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
 }:
 
-assert buildTests -> gtest != null;
-assert buildBenchmarks -> gbenchmark != null;
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  repoVersion = "2.11.1";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -34,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "rocPRIM";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-jfTuGEPyssARpdo0ZnfVJt0MBkoHnmBtf6Zg4xXNJ1U=";
   };
 
@@ -80,11 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    json="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocPRIM/releases?per_page=1")"
-    repoVersion="$(echo "$json" | jq '.[0].name | split(" ") | .[1]' --raw-output)"
-    rocmVersion="$(echo "$json" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version rocprim "$repoVersion" --ignore-same-hash --version-key=repoVersion
-    update-source-version rocprim "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/rocPRIM/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version rocprim "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -92,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/rocPRIM";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
   };
 })

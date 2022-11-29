@@ -702,6 +702,8 @@ self: super: with self; {
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
+  asyncua = callPackage ../development/python-modules/asyncua { };
+
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
@@ -2492,8 +2494,6 @@ self: super: with self; {
   django-csp = callPackage ../development/python-modules/django-csp { };
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
-
-  django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
 
@@ -4756,7 +4756,7 @@ self: super: with self; {
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
-  jinja2_time = callPackage ../development/python-modules/jinja2_time { };
+  jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
 
@@ -9648,6 +9648,8 @@ self: super: with self; {
 
   recordlinkage = callPackage ../development/python-modules/recordlinkage { };
 
+  recurring-ical-events = callPackage ../development/python-modules/recurring-ical-events { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
@@ -12051,6 +12053,7 @@ self: super: with self; {
     };
   };
 
+  x-wr-timezone = callPackage ../development/python-modules/x-wr-timezone { };
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 
