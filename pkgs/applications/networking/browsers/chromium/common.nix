@@ -303,6 +303,7 @@ let
       # as well to avoid incompatibilities (if this continues to be a problem
       # from time to time):
       use_system_libwayland = true;
+      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

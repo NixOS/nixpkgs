@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , writeScript
 , pkg-config
 , cmake
@@ -21,13 +22,12 @@
 , boost
 , sqlite
 , bzip2
-, texlive ? null
-, doxygen ? null
-, sphinx ? null
-, python3Packages ? null
-, zlib ? null
-, fetchurl ? null
-, buildDocs ? false
+, texlive
+, doxygen
+, sphinx
+, zlib
+, python3Packages
+, buildDocs ? true
 , buildTests ? false
 # LFS isn't working, so we will manually fetch these
 # This isn't strictly required, but is recommended
@@ -36,15 +36,8 @@
 , useOpenCL ? false
 }:
 
-assert buildDocs -> texlive != null;
-assert buildDocs -> doxygen != null;
-assert buildDocs -> sphinx != null;
-assert buildDocs -> python3Packages != null;
-assert buildTests -> zlib != null;
-assert fetchKDBs -> fetchurl != null;
-
 let
-  latex = lib.optionalAttrs buildDocs (texlive.combine {
+  latex = lib.optionalAttrs buildDocs texlive.combine {
     inherit (texlive) scheme-small
     latexmk
     tex-gyre
@@ -56,7 +49,7 @@ let
     tabulary
     varwidth
     titlesec;
-  });
+  };
 
   kdbs = lib.optionalAttrs fetchKDBs import ./deps.nix {
     inherit fetchurl;
@@ -64,11 +57,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopen";
-  # We have to manually specify the repoVersion for now
-  # Find the github release or `-- MIOpen_VERSION= X.X.X` in the build log
-  repoVersion = "2.18.0";
-  rocmVersion = "5.3.3";
-  version = "${finalAttrs.repoVersion}-${finalAttrs.rocmVersion}";
+  version = "5.3.3";
 
   outputs = [
     "out"
@@ -81,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "MIOpen";
-    rev = "rocm-${finalAttrs.rocmVersion}";
+    rev = "rocm-${finalAttrs.version}";
     hash = "sha256-5/JitdGJ0afzK4pGOOywRLsB3/Thc6/71sRkKIxf2Lg=";
   };
 
@@ -112,7 +101,7 @@ in stdenv.mkDerivation (finalAttrs: {
     latex
     doxygen
     sphinx
-    python3Packages.sphinx_rtd_theme
+    python3Packages.sphinx-rtd-theme
     python3Packages.breathe
     python3Packages.myst-parser
   ] ++ lib.optionals buildTests [
@@ -179,27 +168,21 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     rm $out/bin/install_precompiled_kernels.sh
+  '' + lib.optionalString buildDocs ''
+    mv ../doc/html $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
+    mv ../doc/pdf/miopen.pdf $out/share/doc/miopen-${if useOpenCL then "opencl" else "hip"}
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
-    patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.nativeBuildInputs ++ finalAttrs.buildInputs)}:$out/lib $test/bin/*
-  '';
-
-  postFixup = lib.optionalString (buildDocs && !useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-hip
-  '' + lib.optionalString (buildDocs && useOpenCL) ''
-    export docDir=$doc/share/doc/miopen-opencl
-  '' + lib.optionalString buildDocs ''
-    mkdir -p $docDir
-    mv ../doc/html $docDir
-    mv ../doc/pdf/miopen.pdf $docDir
+    patchelf --set-rpath ${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])}:$out/lib $test/bin/*
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    rocmVersion="$(curl -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    update-source-version miopen "$rocmVersion" --ignore-same-hash --version-key=rocmVersion
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -sL "https://api.github.com/repos/ROCmSoftwarePlatform/MIOpen/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    update-source-version miopen "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
@@ -207,7 +190,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCmSoftwarePlatform/MIOpen";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
-    broken = finalAttrs.rocmVersion != hip.version;
+    broken = finalAttrs.version != hip.version;
     # MIOpen will produce a very large output due to KDBs fetched
     # Also possibly in the future because of KDB generation
     hydraPlatforms = [ ];

@@ -5,6 +5,7 @@
 , bqn-path ? null
 , mbqn-source ? null
 , libffi
+, pkg-config
 }:
 
 let
@@ -20,15 +21,20 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2022-10-04";
+  version = "0.pre+date=2022-11-27";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "abcb575a537712763e9e53b6cb0eb415346b00e6";
-    hash = "sha256:05gqw2ppcykv36ji8mkp8mq502q84vk9algp9c2d3z495xqy8rn6";
+    rev = "dbc7c83f7085d05e87721bedf1ee38931f671a8e";
+    hash = "sha256:0nal1fs9y7nyx4d5q1qw868lxk7mivzw2y16wc3hw97pq4qf0dpb";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # TODO(@sternenseemann): allow building against dzaima's replxx fork
   buildInputs = [
     libffi
   ];
@@ -45,11 +51,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     # Purity: avoids git downloading bytecode files
-    touch src/gen/customRuntime
+    mkdir -p build/bytecodeLocal/gen
   '' + (if genBytecode then ''
-    ${bqn-path} genRuntime ${mbqn-source}
+    ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} src/gen/
+    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} build/bytecodeLocal/gen/
   '')
   # Need to adjust ld flags for darwin manually
   # https://github.com/dzaima/CBQN/issues/26

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , agg
 , alsa-lib
@@ -31,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release_${lib.replaceChars ["."] ["_"] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
   };
+
+  patches = [
+    # Fix compiling on GCC for AArch64
+    (fetchpatch {
+      url = "https://github.com/TASEmulators/desmume/commit/24eb5ed95c6cbdaba8b3c63a99e95e899e8a5061.patch";
+      hash = "sha256-J3ZRU1tPTl+4/jg0DBo6ro6DTUZkpQCey+QGF2EugCQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -81,8 +90,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64 && stdenv.isLinux; # ofborg failed
   };
 })
-# TODO: investigate the patches
-# TODO: investigate other platforms
