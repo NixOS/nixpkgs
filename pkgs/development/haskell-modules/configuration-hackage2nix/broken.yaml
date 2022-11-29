@@ -4725,7 +4725,6 @@ broken-packages:
   - snaplet-sass
   - snaplet-scoped-session
   - snaplet-ses-html
-  - snaplet-sqlite-simple
   - snaplet-typed-sessions
   - snap-predicates
   - snappy-conduit
