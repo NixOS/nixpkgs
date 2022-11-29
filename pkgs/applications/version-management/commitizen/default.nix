@@ -6,7 +6,7 @@
 , jinja2
 , lib
 , packaging
-, poetry
+, poetry-core
 , pytest-freezegun
 , pytest-mock
 , pytest-regressions
@@ -34,7 +34,7 @@ buildPythonApplication rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     termcolor
