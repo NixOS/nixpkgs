@@ -25,6 +25,16 @@ in
       default = false;
       description = lib.mdDoc "Whether to build the PSW package in debug mode.";
     };
+    environment = mkOption {
+      type = with types; attrsOf str;
+      default = { };
+      description = mdDoc "Additional environment variables to pass to the AESM service.";
+      # Example environment variable for `sgx-azure-dcap-client` provider library
+      example = {
+        AZDCAP_COLLATERAL_VERSION = "v2";
+        AZDCAP_DEBUG_LOG_LEVEL = "INFO";
+      };
+    };
     quoteProviderLibrary = mkOption {
       type = with types; nullOr path;
       default = null;
@@ -104,7 +114,7 @@ in
           NAME = "aesm_service";
           AESM_PATH = storeAesmFolder;
           LD_LIBRARY_PATH = makeLibraryPath [ cfg.quoteProviderLibrary ];
-        };
+        } // cfg.environment;
 
         # Make sure any of the SGX application enclave devices is available
         unitConfig.AssertPathExists = [

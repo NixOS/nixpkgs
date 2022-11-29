@@ -28,7 +28,12 @@
 
     specialisation = {
       withQuoteProvider.configuration = { ... }: {
-        services.aesmd.quoteProviderLibrary = pkgs.sgx-azure-dcap-client;
+        services.aesmd = {
+          quoteProviderLibrary = pkgs.sgx-azure-dcap-client;
+          environment = {
+            AZDCAP_DEBUG_LOG_LEVEL = "INFO";
+          };
+        };
       };
     };
   };
@@ -89,5 +94,9 @@
         ld_library_path = machine.succeed(f"xargs -0 -L1 -a /proc/{main_pid}/environ | grep LD_LIBRARY_PATH")
         assert ld_library_path.startswith("LD_LIBRARY_PATH=${pkgs.sgx-azure-dcap-client}/lib:"), \
           "LD_LIBRARY_PATH is not set to the configured quote provider library"
+
+      with subtest("aesmd.service with quote provider library has set AZDCAP_DEBUG_LOG_LEVEL"):
+        azdcp_debug_log_level = machine.succeed(f"xargs -0 -L1 -a /proc/{main_pid}/environ | grep AZDCAP_DEBUG_LOG_LEVEL")
+        assert azdcp_debug_log_level == "AZDCAP_DEBUG_LOG_LEVEL=INFO\n", "AZDCAP_DEBUG_LOG_LEVEL is not set to INFO"
     '';
 }
