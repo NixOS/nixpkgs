@@ -64,7 +64,9 @@ buildPythonPackage rec {
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
 
-  pytestFlagsArray = [ "tests/" ];
+  pytestFlagsArray = [
+    "tests/"
+  ];
 
   disabledTests = [
     # These tests require network access.
@@ -75,6 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
+    changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
