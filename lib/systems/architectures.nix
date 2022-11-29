@@ -46,14 +46,18 @@ rec {
   # a superior CPU has all the features of an inferior and is able to build and test code for it
   inferiors = {
     # x86_64 Intel
-    default        = [ ];
-    westmere       = [ ];
+    default        = [ "x86-64-v2"   ];
+    x86-64         = [ ];
+    x86-64-v2      = [ "x86-64"      ] ++ inferiors.x86-64;
+    westmere       = [ "x86-64-v2"   ] ++ inferiors.x86-64-v2;
     sandybridge    = [ "westmere"    ] ++ inferiors.westmere;
     ivybridge      = [ "sandybridge" ] ++ inferiors.sandybridge;
-    haswell        = [ "ivybridge"   ] ++ inferiors.ivybridge;
+    x86-64-v3      = [ "ivybridge"   ] ++ inferiors.ivybridge;
+    haswell        = [ "x86-64-v3"   ] ++ inferiors.x86-64-v3;
     broadwell      = [ "haswell"     ] ++ inferiors.haswell;
     skylake        = [ "broadwell"   ] ++ inferiors.broadwell;
-    skylake-avx512 = [ "skylake"     ] ++ inferiors.skylake;
+    x86-64-v4      = [ "skylake"     ] ++ inferiors.skylake;
+    skylake-avx512 = [ "x86-64-v4"   ] ++ inferiors.x86-64-v4;
 
     # x86_64 AMD
     # TODO: fill this (need testing)
