@@ -12,9 +12,6 @@ use std::io;
 use std::collections::HashSet;
 use std::collections::VecDeque;
 use std::hash::Hash;
-use std::hash::BuildHasherDefault;
-use hashers::fx_hash::FxHasher;
-
 
 fn main() {
     let args : Vec<OsString> = env::args_os().collect();
@@ -243,7 +240,7 @@ fn parse_soft_deps(line : Vec<u8>) -> Vec<OsString> {
 
 fn mod_resolved_deps(kernel : &KernelData,
                      allow_missing : bool,
-                     module : &OsString) -> HashSet<OsString,BuildHasherDefault<FxHasher>> {
+                     module : &OsString) -> HashSet<OsString> {
     let deps = mod_deps(&kernel,allow_missing,&module);
     let soft_deps = mod_soft_deps(&kernel,allow_missing,&module);
     deps.into_iter()
@@ -268,16 +265,16 @@ fn nuke_refs(path : &Path){
 
 
 // Traverse dependency tree in DFS fashion, returns the closure in form of a HashSet.
-fn closure<F : Fn(&T) -> HashSet<T,BuildHasherDefault<FxHasher>>,T : Hash + Eq + Clone>(
+fn closure<F : Fn(&T) -> HashSet<T>,T : Hash + Eq + Clone>(
     f : F,
-    start : &VecDeque<T>
+    start : &HashSet<T>
     )
-    -> HashSet<T,BuildHasherDefault<FxHasher>> {
+    -> HashSet<T> {
 
-    let mut visited = new_hash_set();
+    let mut visited = HashSet::new();
     let mut todo : VecDeque::<T> = start.iter().cloned().collect();
     while let Some(p) = todo.pop_front() {
-        let deps : HashSet<T,BuildHasherDefault<FxHasher>> = f(&p);
+        let deps : HashSet<T> = f(&p);
         visited.insert(p);
         for dep in deps {
             if !visited.contains(&dep) {
@@ -286,11 +283,6 @@ fn closure<F : Fn(&T) -> HashSet<T,BuildHasherDefault<FxHasher>>,T : Hash + Eq +
         }
     }
     return visited;
-}
-
-fn new_hash_set<T>() -> HashSet<T,BuildHasherDefault<FxHasher>> {
-  let hasher = BuildHasherDefault::<FxHasher>::default();
-  HashSet::with_hasher(hasher)
 }
 
 fn to_os(bs : &[u8]) -> OsString {
