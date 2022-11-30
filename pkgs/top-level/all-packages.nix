@@ -32082,21 +32082,11 @@ with pkgs;
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
+  prusa-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer { };
 
-  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31 = wxGTK31.override {
-      # https://github.com/supermerill/SuperSlicer/issues/1093
-      withEGL = false;
-    };
-  };
+  super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
-  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31 = wxGTK31.override {
-      # https://github.com/supermerill/SuperSlicer/issues/1093
-      withEGL = false;
-    };
-  }).latest;
+  super-slicer-latest = super-slicer.latest;
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
