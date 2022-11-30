@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
-, pytest
+, python
 , setuptools
 , numpy
 , zlib
@@ -26,8 +26,6 @@ buildPythonPackage rec {
     sha256 = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
-  checkInputs = [ pytest ];
-
   nativeBuildInputs = [ setuptools cython ];
 
   propagatedBuildInputs = [
@@ -41,11 +39,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    py.test test/tst_*.py
+    pushd test/
+    NO_NET=1 NO_CDL=1 ${python.interpreter} run_all.py
   '';
-
-  # Tests need fixing.
-  doCheck = false;
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
