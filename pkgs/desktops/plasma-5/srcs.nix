@@ -396,11 +396,11 @@
     };
   };
   plasma-workspace = {
-    version = "5.26.4";
+    version = "5.26.4.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.26.4/plasma-workspace-5.26.4.tar.xz";
-      sha256 = "06pbghl8gpq63gg9jj29jsizgfq7bcqj9kx48gkqcwvd9gd1q1f9";
-      name = "plasma-workspace-5.26.4.tar.xz";
+      url = "${mirror}/stable/plasma/5.26.4/plasma-workspace-5.26.4.1.tar.xz";
+      sha256 = "7fcca23ff8de6f4aa2261f0180be54422f25047002b7ca6c648e7216459b80fc";
+      name = "plasma-workspace-5.26.4.1.tar.xz";
     };
   };
   plasma-workspace-wallpapers = {
