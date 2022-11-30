@@ -476,6 +476,9 @@ rec {
   # incremental build reuses the `dist` directory from the last full rebuild.
   #
   # This only works for packages that use `git` for their source.
+  #
+  # The `interval` argument is in seconds.  For example, if you wanted to do a
+  # full rebuild every day, you would specify `interval = 24 * 60 * 60;`.
   incremental = { interval }: pkg:
     let
       requiredNixVersion = "2.12.0pre20221128_32c182b";
