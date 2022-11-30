@@ -489,33 +489,35 @@ rec {
         overrideCabal
           (old: {
             previousBuild =
-              overrideCabal
-              (old: {
-                enableSeparateDistOutput = true;
-                src =
-                  let
-                    srcAttributes =
-                      if lib.isAttrs old.src
-                      then old.src
-                      else { url = old.src; };
+              (overrideCabal
+                (old: {
+                  doInstallDist = true;
+                  enableSeparateDistOutput = true;
+                  src =
+                    let
+                      srcAttributes =
+                        if lib.isAttrs old.src
+                        then old.src
+                        else { url = old.src; };
 
-                    url = srcAttributes.url or null;
-                    name = srcAttributes.name or null;
-                    submodules = srcAttributes.fetchSubmodules or null;
+                      url = srcAttributes.url or null;
+                      name = srcAttributes.name or null;
+                      submodules = srcAttributes.fetchSubmodules or null;
 
-                  in
-                    builtins.fetchGit
-                      { ${ if name == null then null else "name" } = name;
-                        ${ if url == null then null else "url" } = url;
-                        ${ if submodules == null then null else "submodules" } = submodules;
-                        date =
-                          let
-                            now = builtins.currentTime;
-                          in
-                            "${toString ((now / interval) * interval)}";
-                      };
-              })
-              pkg;
+                    in
+                      builtins.fetchGit
+                        { ${ if name == null then null else "name" } = name;
+                          ${ if url == null then null else "url" } = url;
+                          ${ if submodules == null then null else "submodules" } = submodules;
+                          date =
+                            let
+                              now = builtins.currentTime;
+                            in
+                              "${toString ((now / interval) * interval)}";
+                        };
+                })
+                pkg
+              ).dist;
           })
           pkg;
 }

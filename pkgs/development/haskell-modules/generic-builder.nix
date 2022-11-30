@@ -26,6 +26,7 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
+, doInstallDist ? false
 , editedCabalFile ? null
 # aarch64 outputs otherwise exceed 2GB limit
 , enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.targetPlatform.isAarch64 or false)
@@ -318,7 +319,7 @@ stdenv.mkDerivation ({
   prePhases = ["setupCompilerEnvironmentPhase"];
   preConfigurePhases = ["compileBuildDriverPhase"];
   preInstallPhases =
-    ["haddockPhase"] ++ optional enableSeparateDistOutput "installDistPhase";
+    ["haddockPhase"] ++ optional doInstallDist "installDistPhase";
 
   inherit src;
 
@@ -468,7 +469,7 @@ stdenv.mkDerivation ({
     optionalString (previousBuild != null) ''
       mkdir -p dist;
       rm -r dist/build
-      cp -r ${previousBuild.dist} dist/build
+      cp -r ${previousBuild}/dist/build dist/build
       find dist/build -exec chmod u+w {} +
       find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
     ''
@@ -559,10 +560,14 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-  ${if enableSeparateDistOutput then "installDistPhase" else null} = ''
+  ${if doInstallDist then "installDistPhase" else null} = ''
     runHook preInstallDist
 
-    cp -r dist/build $dist
+    installDistDir=${if enableSeparateDistOutput then "$dist" else "$out"}
+
+    mkdir -p $installDistDir/dist
+
+    cp -r dist/build $installDistDir/dist
 
     runHook postInstallDist
   '';
