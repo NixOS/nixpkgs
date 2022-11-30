@@ -125,9 +125,7 @@ in
 
   config = mkIf cfg.enable {
 
-    system.requiredKernelConfig =
-      lib.optional cfg.driSupport32Bit
-      (config.lib.kernelConfig.isYes "IA32_EMULATION");
+    system.requiredKernelConfig = lib.optional cfg.driSupport32Bit (config.lib.kernelConfig.isYes "IA32_EMULATION");
 
     systemd.tmpfiles.rules = [
       "L+ /run/opengl-driver - - - - ${package}"
