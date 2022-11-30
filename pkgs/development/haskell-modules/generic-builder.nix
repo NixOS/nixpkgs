@@ -317,7 +317,8 @@ stdenv.mkDerivation ({
 
   prePhases = ["setupCompilerEnvironmentPhase"];
   preConfigurePhases = ["compileBuildDriverPhase"];
-  preInstallPhases = ["haddockPhase"];
+  preInstallPhases =
+    ["haddockPhase"] ++ optional enableSeparateDistOutput "installDistPhase";
 
   inherit src;
 
@@ -465,8 +466,11 @@ stdenv.mkDerivation ({
 
   buildPhase =
     optionalString (previousBuild != null) ''
-      mkdir -p dist/build
-      tar --extract --gzip --directory dist/build --file ${previousBuild.dist}
+      mkdir -p dist;
+      rm -r dist/build
+      cp -r ${previousBuild.dist} dist/build
+      find dist/build -exec chmod u+w {} +
+      find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
     ''
     + ''
       runHook preBuild
@@ -551,10 +555,16 @@ stdenv.mkDerivation ({
     mkdir -p $doc
     ''}
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
-    ${optionalString enableSeparateDistOutput ''
-    tar --create --gzip --mtime='1970-01-01T00:00:00Z' --file "$dist" --directory dist/build .
-    ''}
+
     runHook postInstall
+  '';
+
+  ${if enableSeparateDistOutput then "installDistPhase" else null} = ''
+    runHook preInstallDist
+
+    cp -r dist/build $dist
+
+    runHook postInstallDist
   '';
 
   passthru = passthru // rec {
