@@ -14,7 +14,7 @@ nixeval() {
 }
 
 vendorhash() {
-    (nix --extra-experimental-features nix-command build --impure -f "$nixpkgs" --no-link "$1" 2>&1 >/dev/null | tail -n3 | grep -F got: | cut -d: -f2- | stripwhitespace) 2>/dev/null || true
+    (nix --extra-experimental-features nix-command build --impure --argstr nixpkgs "$nixpkgs" --argstr attr "$1" --expr '{ nixpkgs, attr }: let pkgs = import nixpkgs {}; in with pkgs.lib; (getAttrFromPath (splitString "." attr) pkgs).overrideAttrs (attrs: { outputHash = fakeHash; })' --no-link 2>&1 >/dev/null | tail -n3 | grep -F got: | cut -d: -f2- | stripwhitespace) 2>/dev/null || true
 }
 
 findpath() {
@@ -32,7 +32,6 @@ attr="${UPDATE_NIX_ATTR_PATH:-open-stage-control}"
 version="$(cd "$nixpkgs" && list-git-tags --pname="$(nixeval "$attr".pname)" --attr-path="$attr" | grep '^v' | sed -e 's|^v||' | sort -V | tail -n1)"
 
 pkgpath="$(findpath "$attr")"
-pkgdir="$(dirname "$pkgpath")"
 
 updated="$(cd "$nixpkgs" && update-source-version "$attr" "$version" --file="$pkgpath" --print-changes | jq -r length)"
 
@@ -40,14 +39,6 @@ if [ "$updated" -eq 0 ]; then
     echo 'update.sh: Package version not updated, nothing to do.'
     exit 0
 fi
-
-# Download package.json from the latest release
-curl -sSL https://raw.githubusercontent.com/jean-emmanuel/open-stage-control/v"$version"/package.json | grep -v '"electron"\|"electron-installer-debian"' >"$pkgdir"/package.json
-
-# Lock dependencies with npm
-(cd "$pkgdir" && npm install --package-lock-only --ignore-scripts --legacy-peer-deps)
-
-rm -f "$pkgdir"/package.json
 
 # Update FOD hash
 curhash="$(nixeval "$attr.npmDeps.outputHash")"

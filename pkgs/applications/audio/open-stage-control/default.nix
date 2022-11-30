@@ -2,21 +2,21 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-XgwlRdwUSl4gIRKqk6BnMAKarVvp291zk8vmNkuRWKo=";
+    hash = "sha256-6tRd8boVwWc8qGlklYqA/Kp76VOMvtUJlu/G/InvHkA=";
   };
 
-  # Use generated package-lock.json since upstream does not provide one in releases
+  # Remove some Electron stuff from package.json
   postPatch = ''
-    ln -sT ${./package-lock.json} ./package-lock.json
+    sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
   '';
 
-  npmDepsHash = "sha256-5KZXZ4agHcAh3gai5w9YodETIEGJtDq/kyEZOHb9dOc=";
+  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
 
   nativeBuildInputs = [
     copyDesktopItems

@@ -355,7 +355,7 @@
         <para>
           <link xlink:href="https://gitlab.com/CalcProgrammer1/OpenRGB/-/tree/master">OpenRGB</link>,
           a FOSS tool for controlling RGB lighting. Available as
-          <link xlink:href="options.html#opt-services-hardware-openrgb-enable">services.hardware.openrgb.enable</link>.
+          <link xlink:href="options.html#opt-services.hardware.openrgb.enable">services.hardware.openrgb.enable</link>.
         </para>
       </listitem>
       <listitem>
@@ -812,6 +812,15 @@
           disables the config check. The new
           <literal>nix.checkAllErrors</literal> option behaves like
           <literal>nix.checkConfig</literal> previously did.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nix.buildMachines</literal> got a new submodule
+          option <literal>protocol</literal>. An undocumented hack to
+          set the protocol via <literal>hostName</literal> is no longer
+          working and the <literal>protocol</literal> option should be
+          used instead.
         </para>
       </listitem>
       <listitem>
