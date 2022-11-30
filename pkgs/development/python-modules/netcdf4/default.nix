@@ -1,9 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi, isPyPy, pytest
-, numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, pytest
+, setuptools
+, numpy
+, zlib
+, netcdf
+, hdf5
+, curl
+, libjpeg
+, cython
+, cftime
 }:
+
 buildPythonPackage rec {
   pname = "netCDF4";
   version = "1.6.2";
+  format = "pyproject";
 
   disabled = isPyPy;
 
@@ -14,9 +28,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  buildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ setuptools cython ];
 
   propagatedBuildInputs = [
     cftime
