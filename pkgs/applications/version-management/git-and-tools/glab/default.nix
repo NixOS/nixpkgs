@@ -36,9 +36,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Open-source GitLab command line tool";
+    description = "GitLab CLI tool bringing GitLab to your command line";
     license = licenses.mit;
-    homepage = "https://glab.readthedocs.io/";
+    homepage = "https://gitlab.com/gitlab-org/cli";
     maintainers = with maintainers; [ freezeboy ];
   };
 }
