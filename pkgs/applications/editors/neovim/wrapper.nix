@@ -55,7 +55,7 @@ let
       postBuild = lib.optionalString stdenv.isLinux ''
         rm $out/share/applications/nvim.desktop
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
-          --replace 'Name=Neovim' 'Name=WrappedNeovim'
+          --replace 'Name=Neovim' 'Name=Neovim wrapper'
       ''
       + optionalString withPython3 ''
         makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH
