@@ -24,7 +24,7 @@ let
       generator =
         let
           specialisationLoader = (lib.mapAttrsToList
-            (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/${filename}" ])
+            (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/bootspec/${filename}" ])
             children);
         in
         ''
