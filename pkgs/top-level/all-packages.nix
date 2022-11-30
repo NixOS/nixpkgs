@@ -38381,7 +38381,7 @@ with pkgs;
   bottom = callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
-    wlroots = wlroots_0_14;
+    wlroots = wlroots_0_15;
   };
 
   psftools = callPackage ../os-specific/linux/psftools {};
