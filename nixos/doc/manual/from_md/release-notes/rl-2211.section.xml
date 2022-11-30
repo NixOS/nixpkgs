@@ -216,6 +216,23 @@
           release announcement</link> for more information.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>aarch64-linux</literal> is now included in the
+          <literal>nixos-22.11</literal> and
+          <literal>nixos-22.11-small</literal> channels. This means that
+          <literal>x86_64-linux</literal> and
+          <literal>aarch64-linux</literal> will recieve updates at the
+          same time.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>aarch64-linux</literal> ISOs are now available on the
+          <link xlink:href="https://nixos.org/download.html">downloads
+          page</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-internal">
