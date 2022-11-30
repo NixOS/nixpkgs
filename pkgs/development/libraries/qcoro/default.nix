@@ -11,13 +11,13 @@
 
 gcc11Stdenv.mkDerivation rec {
   pname = "qcoro";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "danvratil";
     repo = "qcoro";
     rev = "v${version}";
-    sha256 = "sha256-6kRWBzspwsO0Q6/8gQUr69DJjmkPa3lWrKTmSgVn6V4=";
+    sha256 = "cHd2CwzP4oD/gy9qsDWIMgvlfBQq1p9C4G7JNAs4XW4=";
   };
 
   outputs = [ "out" "dev" ];
