@@ -37885,6 +37885,8 @@ with pkgs;
 
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
 
+  wiremock = callPackage ../tools/networking/wiremock { };
+
   teseq = callPackage ../applications/misc/teseq {  };
 
   ape = callPackage ../applications/misc/ape { };
