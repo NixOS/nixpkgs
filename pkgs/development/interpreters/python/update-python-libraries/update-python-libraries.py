@@ -249,15 +249,16 @@ FORMATS = {
 
 def _determine_fetcher(text):
     # Count occurences of fetchers.
-    nfetchers = sum(text.count('src = {}'.format(fetcher)) for fetcher in FETCHERS.keys())
+    matches = {fetcher: len(re.findall(f'src = (.*\.)?{fetcher}', text)) for fetcher in FETCHERS.keys()}
+    nfetchers = sum(matches.values())
     if nfetchers == 0:
         raise ValueError("no fetcher.")
     elif nfetchers > 1:
         raise ValueError("multiple fetchers.")
     else:
         # Then we check which fetcher to use.
-        for fetcher in FETCHERS.keys():
-            if 'src = {}'.format(fetcher) in text:
+        for fetcher, count in matches.items():
+            if count > 0:
                 return fetcher
 
 
