@@ -375,37 +375,6 @@ stdenv.mkDerivation ({
       fi
   '' + ''
     done
-  ''
-  # only use the links hack if we're actually building dylibs. otherwise, the
-  # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
-  # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
-    # Work around a limit in the macOS Sierra linker on the number of paths
-    # referenced by any one dynamic library:
-    #
-    # Create a local directory with symlinks of the *.dylib (macOS shared
-    # libraries) from all the dependencies.
-    local dynamicLinksDir="$out/lib/links"
-    mkdir -p $dynamicLinksDir
-
-    # Unprettify all package conf files before reading/writing them
-    for d in "$packageConfDir/"*; do
-      # gawk -i inplace seems to strip the last newline
-      gawk -f ${unprettyConf} "$d" > tmp
-      mv tmp "$d"
-    done
-
-    for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
-      for lib in "$d/"*.{dylib,so}; do
-        # Allow overwriting because C libs can be pulled in multiple times.
-        ln -sf "$lib" "$dynamicLinksDir"
-      done
-    done
-    # Edit the local package DB to reference the links directory.
-    for f in "$packageConfDir/"*.conf; do
-      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
-    done
-  '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
