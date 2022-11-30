@@ -208,6 +208,8 @@ package-maintainers:
     - pava
     - slynx
     - tlynx
+    - xmonad
+    - xmonad-contrib
   expipiplus1:
     - VulkanMemoryAllocator
     - autoapply

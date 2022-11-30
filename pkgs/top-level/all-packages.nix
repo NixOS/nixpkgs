@@ -778,6 +778,8 @@ with pkgs;
 
   pet = callPackage ../development/tools/pet { };
 
+  pe-bear = libsForQt5.callPackage ../applications/misc/pe-bear {};
+
   pkger = callPackage ../development/libraries/pkger { };
 
   tapview = callPackage ../development/tools/tapview { };
@@ -1317,6 +1319,8 @@ with pkgs;
 
   cidrgrep = callPackage ../tools/text/cidrgrep { };
 
+  clematis = callPackage ../tools/misc/clematis { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
@@ -1434,6 +1438,8 @@ with pkgs;
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
+
+  steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch {};
 
   sx-go = callPackage ../tools/security/sx-go { };
 
@@ -9412,6 +9418,8 @@ with pkgs;
 
   mosh = callPackage ../tools/networking/mosh { };
 
+  motrix = callPackage ../tools/networking/motrix { };
+
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
@@ -16861,6 +16869,8 @@ with pkgs;
   };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
+
+  sqlcl = callPackage ../development/tools/database/sqlcl { };
 
   sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
@@ -30042,7 +30052,9 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
+  ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
+  };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
@@ -36284,6 +36296,8 @@ with pkgs;
   root = callPackage ../applications/science/misc/root {
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
+    # https://github.com/NixOS/nixpkgs/issues/201254
+    stdenv = if stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU then gcc11Stdenv else stdenv;
   };
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
