@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SgA2eKXZIPWbyJkopk8E9rTgkUWl6LWP2dw2fn3H8qc=";
+    sha256 = "sha256-JwrTwCn4qXcjXjy4cPYM3WCblJS0J5Xxnc6WESMwCpU=";
   };
 
-  cargoSha256 = "sha256-rTVc8zzbzLzP0LV8h7IWE1S+ZqDVfnO18iT0CrOrI9A=";
+  cargoSha256 = "sha256-p3q5S6IFQQgNp/MHGSUE1DVLFyMLWDTv/dxrUACKSWo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
