@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.20";
+  version = "3.0.21";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eafd4ced27ca5dc370881d4358d1ab5041b32d88d31af8e3c24167fe4af64ed6";
+    sha256 = "sha256-pXuZUurEoSVApN+0zNSiQ0A+zrJ7DRMkW15BRMhzHTI=";
   };
 
   propagatedBuildInputs = [
