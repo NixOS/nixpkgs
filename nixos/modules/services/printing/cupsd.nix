@@ -395,10 +395,7 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled
