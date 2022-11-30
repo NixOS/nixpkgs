@@ -12,12 +12,6 @@
 	extensions?: {...}
 }
 
-#SecureBootExtensions: #V1 & {
-	extensions: {
-		osRelease: string
-	}
-}
-
 Document: {
 	v1: #V1
 }
