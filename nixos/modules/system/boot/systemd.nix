@@ -612,6 +612,10 @@ in
 
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
 
+    # Avoid potentially degraded system state due to
+    # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."
+    systemd.services.systemd-oomd.enable = mkIf (!cfg.enableUnifiedCgroupHierarchy) false;
+
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {
         frequency = "monthly";
