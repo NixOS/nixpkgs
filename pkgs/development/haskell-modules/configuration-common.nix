@@ -896,7 +896,23 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/5795
   # This issue can be mitigated with 'dontCheck' which skips the tests and their compilation.
   dhall-json = self.generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
-  dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] super.dhall-nix;
+  dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ]
+    (overrideCabal (drv: {
+      patches = [
+        # Compatibility with hnix 0.16, waiting for release
+        # https://github.com/dhall-lang/dhall-haskell/pull/2474
+        (pkgs.fetchpatch {
+          name = "dhall-nix-hnix-0.16.patch";
+          url = "https://github.com/dhall-lang/dhall-haskell/commit/49b9b3e3ce1718a89773c2b1bfa3c2af1a6e8752.patch";
+          sha256 = "12sh5md81nlhyzzkmf7jrll3w1rvg2j48m57hfyvjn8has9c4gw6";
+          stripLen = 1;
+          includes = [ "dhall-nix.cabal" "src/Dhall/Nix.hs" ];
+        })
+      ] ++ drv.patches or [];
+      prePatch = drv.prePatch or "" + ''
+        ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+      '';
+    }) super.dhall-nix);
   dhall-yaml = self.generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
   dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ] super.dhall-nixpkgs;
 
