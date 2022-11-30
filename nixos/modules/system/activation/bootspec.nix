@@ -38,6 +38,9 @@ let
         ''
           mkdir -p $out/bootspec
 
+          # Inject toplevel and init in the bootspec.
+          # This can be done only here because we *cannot* depend on $out, except
+          # by living in $out itself.
           ${pkgs.jq}/bin/jq '
             .v1.toplevel = $toplevel |
             .v1.init = $init
@@ -47,7 +50,7 @@ let
             --arg init "$out/init" \
             < ${json} \
             | ${pkgs.jq}/bin/jq \
-              --sort-keys \
+              --sort-keys \ # Slurp all specialisations and inject them as values in .specialisations.{name} = {specialisation bootspec}.
               '.v1.specialisation = ($ARGS.named | map_values(. | first | .v1))' \
               ${lib.concatStringsSep " " specialisationLoader} \
             > $out/bootspec/${filename}
