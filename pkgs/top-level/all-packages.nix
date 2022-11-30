@@ -3602,6 +3602,8 @@ with pkgs;
 
   wlopm = callPackage ../tools/wayland/wlopm { };
 
+  wlprop = callPackage ../tools/wayland/wlprop {};
+
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
   wlrctl = callPackage ../tools/wayland/wlrctl { };
@@ -11009,7 +11011,7 @@ with pkgs;
 
   renameutils = callPackage ../tools/misc/renameutils { };
 
-  renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
+  renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
   replace = callPackage ../tools/text/replace { };
 
@@ -13436,16 +13438,23 @@ with pkgs;
 
   abcl = callPackage ../development/compilers/abcl { };
 
+  temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
+  temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
+
+  temurin-bin-18 = javaPackages.compiler.temurin-bin.jdk-18;
+  temurin-jre-bin-18 = javaPackages.compiler.temurin-bin.jre-18;
+
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
+
   temurin-bin-16 = javaPackages.compiler.temurin-bin.jdk-16;
   temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
   temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-17;
-  temurin-jre-bin = temurin-jre-bin-17;
+  temurin-bin = temurin-bin-19;
+  temurin-jre-bin = temurin-jre-bin-19;
 
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
@@ -14496,14 +14505,14 @@ with pkgs;
 
   openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
-  openjdk18-bootstrap = javaPackages.compiler.openjdk18-bootstrap;
-  openjdk18 = javaPackages.compiler.openjdk18;
-  openjdk18_headless = javaPackages.compiler.openjdk18.headless;
-  jdk18 = openjdk18;
-  jdk18_headless = openjdk18_headless;
+  openjdk19 = javaPackages.compiler.openjdk19;
+  openjdk19_headless = javaPackages.compiler.openjdk19.headless;
+  jdk19 = openjdk19;
+  jdk19_headless = openjdk19_headless;
 
   /* default JDK */
-  jdk = jdk17;
+  jdk = jdk19;
+  jdk_headless = jdk19_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -14512,13 +14521,16 @@ with pkgs;
   # 'jre_minimal' to build a bespoke JRE containing only the modules you need.
   #
   # For a general-purpose system, 'jre' defaults to the full JDK:
-  jre = jdk17;
-  jre_headless = jdk17_headless;
+  jre = jdk;
+  jre_headless = jdk_headless;
 
+  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk17;
+  };
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
-  openjdk = openjdk17;
-  openjdk_headless = openjdk17_headless;
+  openjdk = jdk;
+  openjdk_headless = jdk_headless;
 
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
@@ -15837,7 +15849,7 @@ with pkgs;
   php82 = callPackage ../development/interpreters/php/8.2.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     pcre2 = pcre2.override {
-      withJitSealloc = !stdenv.isDarwin;
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
     };
   };
   php82Extensions = recurseIntoAttrs php82.extensions;
@@ -15847,7 +15859,7 @@ with pkgs;
   php81 = callPackage ../development/interpreters/php/8.1.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     pcre2 = pcre2.override {
-      withJitSealloc = !stdenv.isDarwin;
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
     };
   };
   php81Extensions = recurseIntoAttrs php81.extensions;
@@ -15857,7 +15869,7 @@ with pkgs;
   php80 = callPackage ../development/interpreters/php/8.0.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     pcre2 = pcre2.override {
-      withJitSealloc = !stdenv.isDarwin;
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
     };
   };
   php80Extensions = recurseIntoAttrs php80.extensions;
@@ -17015,6 +17027,8 @@ with pkgs;
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   explain = callPackage ../development/tools/explain { };
+
+  func = callPackage ../applications/networking/cluster/func { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
@@ -24685,6 +24699,8 @@ with pkgs;
 
   webmetro = callPackage ../servers/webmetro { };
 
+  wesher = callPackage ../servers/wesher { };
+
   wishlist = callPackage ../servers/wishlist { };
 
   wsdd = callPackage ../servers/wsdd { };
@@ -25212,7 +25228,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Hypervisor;
   };
 
-  libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
+  libkrun-sev = libkrun.override { sevVariant = true; };
 
   libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
@@ -28345,6 +28361,8 @@ with pkgs;
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
+  gtkcord4 = callPackage ../applications/audio/gtkcord4 {};
+
   haruna = libsForQt5.callPackage ../applications/video/haruna { };
 
   hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
@@ -29755,7 +29773,7 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk18;
+    jdk = javaPackages.compiler.openjdk18;
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
@@ -31780,6 +31798,8 @@ with pkgs;
 
   rkdeveloptool-pine64 = callPackage ../misc/rkdeveloptool-pine64 { };
 
+  rke = callPackage ../applications/networking/cluster/rke {};
+
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
@@ -32084,21 +32104,11 @@ with pkgs;
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
+  prusa-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer { };
 
-  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31 = wxGTK31.override {
-      # https://github.com/supermerill/SuperSlicer/issues/1093
-      withEGL = false;
-    };
-  };
+  super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
-  super-slicer-latest = (callPackage ../applications/misc/prusa-slicer/super-slicer.nix {
-    wxGTK31 = wxGTK31.override {
-      # https://github.com/supermerill/SuperSlicer/issues/1093
-      withEGL = false;
-    };
-  }).latest;
+  super-slicer-latest = super-slicer.latest;
 
   snapmaker-luban = callPackage ../applications/misc/snapmaker-luban { };
 
@@ -36650,6 +36660,10 @@ with pkgs;
   gobuster = callPackage ../tools/security/gobuster { };
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
+
+  gotrue = callPackage ../tools/security/gotrue {};
+
+  gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix {};
 
   gowitness = callPackage ../tools/security/gowitness { };
 

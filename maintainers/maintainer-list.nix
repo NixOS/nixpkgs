@@ -8787,6 +8787,12 @@
     githubId = 4141584;
     name = "Maxime Daniel";
   };
+  maxwell-lt = {
+    email = "maxwell.lt@live.com";
+    github = "maxwell-lt";
+    githubId = 17859747;
+    name = "Maxwell L-T";
+  };
   maxxk = {
     email = "maxim.krivchikov@gmail.com";
     github = "maxxk";
@@ -14256,6 +14262,13 @@
     email = "twitchyliquid64@ciphersink.net";
     github = "twitchyliquid64";
     githubId = 6328589;
+  };
+  tylerjl = {
+    email = "tyler+nixpkgs@langlois.to";
+    github = "tylerjl";
+    githubId = 1733846;
+    matrix = "@ty:tjll.net";
+    name = "Tyler Langlois";
   };
   typetetris = {
     email = "ericwolf42@mail.com";

@@ -1,19 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
+{ lib, buildGoModule, fetchFromGitLab, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "glab";
-  version = "1.22.0";
+  version = "1.23.0";
 
-  src = fetchFromGitHub {
-    owner = "profclems";
-    repo = pname;
+  src = fetchFromGitLab {
+    owner = "gitlab-org";
+    repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-7w6cbeZYhmV0EXXcWlXFq2pQGGxc5Ok4bba0g3fcgmE=";
+    sha256 = "sha256-NHBLaUEWurWnwbLiEsi3/pHqxKcgjjx+oRAGZXxni/Q=";
   };
 
-  vendorSha256 = "sha256-hGpJXCs5lZ6QQHr6LW1fCT+CVtOaUpYXJPchDPDdbaM=";
+  vendorSha256 = "sha256-NuK63ibb1t+HnSR/gCFS7HWVtfGLazVx2M+qxRNCR1I=";
 
   ldflags = [
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 
@@ -34,9 +36,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An open-source GitLab command line tool";
+    description = "GitLab CLI tool bringing GitLab to your command line";
     license = licenses.mit;
-    homepage = "https://glab.readthedocs.io/";
+    homepage = "https://gitlab.com/gitlab-org/cli";
     maintainers = with maintainers; [ freezeboy ];
   };
 }
