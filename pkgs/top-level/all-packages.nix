@@ -36657,6 +36657,10 @@ with pkgs;
 
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
+  gotrue = callPackage ../tools/security/gotrue {};
+
+  gotrue-supabase = callPackage ../tools/security/gotrue/supabase.nix {};
+
   gowitness = callPackage ../tools/security/gowitness { };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
