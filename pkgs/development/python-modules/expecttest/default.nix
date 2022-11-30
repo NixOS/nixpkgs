@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , hypothesis
 , lib
-, poetry
+, poetry-core
 , pytestCheckHook
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-5CnpVFSbf3FcAa06Y7atG8sxu8uevpfrliB2HuVcrx0=";
   };
 
-  buildInputs = [ poetry ];
+  buildInputs = [ poetry-core ];
 
   checkInputs = [ hypothesis pytestCheckHook ];
 

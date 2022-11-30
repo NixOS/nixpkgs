@@ -41,7 +41,8 @@ stdenv.mkDerivation {
     runHook preInstall
     install -Dm755 scala-cli $out/bin/.scala-cli-wrapped
     makeWrapper $out/bin/.scala-cli-wrapped $out/bin/scala-cli \
-      --set JAVA_HOME ${jre.home}
+      --set JAVA_HOME ${jre.home} \
+      --argv0 "$out/bin/scala-cli"
     runHook postInstall
   '';
 
