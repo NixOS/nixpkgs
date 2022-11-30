@@ -31,14 +31,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.39.21.1";
+  version = "0.39.22.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = version;
-    sha256 = "sha256-cX2HwlsWOJ34msEnPP38jq+kzSxOM/spe0Ja2lZ/Q7w=";
+    sha256 = "sha256-qK44m64/skmeoBgHToTyOpeWUF2kgks10OHoAoLim+k=";
   };
 
   postPatch = ''
@@ -49,33 +49,35 @@ py.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with py.pkgs; [
-    flask
-    flask-wtf
+    apprise
+    beautifulsoup4
+    brotli
+    chardet
+    cryptography
     eventlet
-    validators
-    timeago
-    inscriptis
     feedgen
+    flask
     flask-login
     flask-restful
+    flask-wtf
+    inscriptis
     jinja2
     jinja2-time
-    pytz
-    brotli
-    requests
-    urllib3
-    chardet
-    wtforms
     jsonpath-ng
     jq
-    apprise
-    paho-mqtt
-    cryptography
-    beautifulsoup4
     lxml
-    selenium
-    werkzeug
+    paho-mqtt
+    pillow
     playwright
+    pytz
+    requests
+    selenium
+    setuptools
+    timeago
+    urllib3
+    validators
+    werkzeug
+    wtforms
   ] ++ requests.optional-dependencies.socks;
 
   # tests can currently not be run in one pytest invocation and without docker
