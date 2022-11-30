@@ -23260,6 +23260,8 @@ with pkgs;
 
   yubihsm-shell = callPackage ../tools/security/yubihsm-shell { };
 
+  yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
