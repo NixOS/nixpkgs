@@ -2,56 +2,121 @@
 
 This document documents why the `lib.path` library is designed the way it is.
 
-## Goals
+The goal of this library is to support the built-in path value type with extra functionality.
+Since the path value type implicitly imports paths from the eval-time system into the store,
+this library explicitly doesn't support build-time or runtime paths, including paths of derivations.
 
-- Work without filesystem access
+Overall, this library works with two basic forms of paths:
+- Absolute paths are represented with the path value type. Nix automatically normalises these paths.
+- Relative paths are represented with the string value type. This library normalises these paths as safely as possible.
 
-  We don't know where these paths will be used, eval-time, build-time or runtime.
+Notably absolute paths in a string value type are not supported, the use of the string value type for relative paths is only because the path value type doesn't support relative paths.
 
-- Handle absolute and relative paths
+This library is designed to be as safe and intuitive as possible, throwing errors when potentially unsafe operations are tried, and giving an expected result otherwise.
 
-- Take path or string Nix data types as input
-
-  Nix paths are convenient if you need to refer to project-local files, since they resolve relatively to the Nix file they are declared in.
-
-  However, they always resolve to absolute paths.
-  We need strings to allow specifying relative paths.
-
-- Returns string data types
-
-  Since Nix paths don't support relative paths and they mangle ".."
-
-- Don't allow ambiguous paths
-
-  We don't know how these paths are used in the end.
-  When symlinks are involved, paths containting `..` may produce unexpected results.
-
-  TODO: Alternatively, something like "Ignoring symlinks, every filesystem location under an anchor (either / or .) has exactly one normalised path pointing to it"
-
-  TODO: Do we really want this though? See the `..` discussion below
-
-## Implementation notes
-
-In this library's main docs, discourage users from converting output strings into Nix paths, as this will invoke Nix's broken path handling.
-
-This library is only the first step towards a full filesystem handling library, consisting of three parts:
-- `lib.path`: no filesystem access, works with eval-/build-/run-time paths
-- `lib.filesystem`: filesystem access, but doesn't import into the store, only works with eval-time paths
-- `lib.sources`: imports eval-time paths into the store
-
-TODO: Do `builtins` interacting with paths all work with strings? If they get strings, do they work correctly with `..` and symlinks?
+This library is designed to work well as a dependency for the `lib.filesystem` and `lib.sources` library components. Contrary to these library components, `lib.path` is designed to not read any paths from the filesystem.
 
 ## Use cases
 - Source filters and [Source combinators](https://github.com/NixOS/nixpkgs/pull/112083)
 - Filesystem paths in NixOS
 
-## Other implementations and references
 
-- [Rust](https://doc.rust-lang.org/std/path/struct.Path.html)
-- [Python](https://docs.python.org/3/library/pathlib.html)
-- [Haskell](https://hackage.haskell.org/package/filepath-1.4.100.0/docs/System-FilePath.html)
-- [Nodejs](https://nodejs.org/api/path.html)
-- [POSIX.1-2017](https://pubs.opengroup.org/onlinepubs/9699919799/nframe.html)
+## API
+
+### `join`
+
+Joins paths together with `/`. All but the first component must be relative. Returns the same data type as the first element.
+
+Examples:
+- `join [/foo "bar"] == /foo/bar`
+- `join ["foo" "bar/baz"] == "foo/bar/baz"`
+- `join [/foo ".." "bar"] == <error>`
+- `join [/foo "/bar"] == <error>`
+- `join [ "foo" (removePrefix /. /bar) ] == "foo/bar"`
+
+Laws:
+- The result is normalised:
+  `join ps == normalise (join ps)`
+- Joining a single path is that path itself, but normalised:
+  join [ p ] == normalise p
+
+Use cases:
+- TODO
+
+### `normalise`
+
+Normalizes paths. For absolute path values, nothing is done as Nix already normalises those. For relative path the following is done:
+- Limiting repeating `/` to a single one (does not change a [POSIX Pathname](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_271))
+- Removing extraneous `.` components (does not change the result of [POSIX Pathname Resolution](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13))
+- Erroring for empty strings (not allowed as a [POSIX Filename](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_170))
+- Removing trailing `/` and `/.` (See [justification](#trailing-slashes))
+- Erroring for ".." components (See [justification](#parents))
+- Removing leading `./` (See [justification](#leading-dots))
+
+Examples:
+- `normalise "foo//bar" == "foo/bar"`
+- `normalise "foo/./bar" == "foo/bar"`
+- `normalise "" == <error>`
+- `normalise "foo/bar/" == "foo/bar"`
+- `normalise "foo/bar/." == "foo/bar"`
+- `normalise "foo/../bar" == <error>`
+- `normalise "./foo/bar" == "foo/bar"`
+
+Laws:
+- Idempotency:
+  `normalise (normalise p) == normalise p`
+- Behaves like `realpath`:
+  `isAbsolute p => normalise p == realpath --no-symlinks --canonicalize-missing p`
+  `isRelative p => normalise p == realpath --no-symlinks --canonicalize-missing --relative-to=. p`
+
+Use cases:
+- As an attribute name for a path -> value lookup attribute set
+  - E.g. `environment.etc.<path>`
+- Path equality comparison
+
+### `removePrefix`
+
+Removes a base directory prefix from a path, returning a relative path.
+
+Examples:
+- `removePrefix /foo /foo/bar == "bar"`
+- `removePrefix /baz /foo/bar == <error>`
+- `removePrefix "foo" "foo/bar" == "bar"`
+- `removePrefix "foo" /foo/bar == <error>`
+- `removePrefix /. /foo/bar == "foo/bar"`
+
+Use cases:
+- For source combinators, a way to set a source to point to a subpath using `setSubpath ./foo/bar ./.`. This needs to calculate the relative path `foo/bar` from the absolute path `./foo/bar` resolved by Nix
+
+Laws:
+
+### `hasPrefix`
+
+Returns whether a path has a specific base directory prefix. Returns true iff `removePrefix` doesn't error for the same arguments.
+
+Examples:
+- `hasPrefix /foo /foo/bar == true`
+- `hasPrefix /baz /foo/bar == false`
+- `hasPrefix "foo" "foo/bar" == true`
+- `hasPrefix "foo" /foo/bar == false`
+- `hasPrefix /. /foo/bar == true`
+
+Use cases:
+- Checking whether `removePrefix` would error before calling it
+
+Laws:
+
+### Out of scope (for now at least)
+
+- isAbsolute and related functions
+- baseNameOf
+- dirOf
+- isRelativeTo
+- commonAncestor
+- equals
+- extension getter/setter
+- List of all ancestors (including self), like <https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.ancestors>
+
 
 ## General design decisions
 
@@ -202,132 +267,10 @@ Decision: All functions remove trailing slashes in their results
 TODO:
 - Add more language comparisons
 
-## API
+## Other implementations and references
 
-TODO:
-- baseNameOf
-- dirOf
-- isRelativeTo
-- commonAncestor
-- equals
-- extension getter/setter
-- List of all ancestors (including self), like <https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.ancestors>
-
-### `isAbsolute`
-
-Whether a path is absolute, meaning it starts with a slash. Does not check whether the path is valid.
-
-Examples:
-- `isAbsolute "" == <error>`
-- `isAbsolute "/" == true`
-- `isAbsolute "/foo" == true`
-- `isAbsolute "." == false`
-- `isAbsolute "bar" == false`
-
-Decisions:
-- Also counts exactly two leading `/` as an absolute path, even though it's not [according to POSIX](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_02).
-  Justification [here](#two-slashes)
-- Does not check whether the path is valid because the function doesn't return the path and it would not be efficient.
-  Only functions operating on the full path should make sure it's valid.
-
-### `isRelative`
-
-Whether a path is relative, meaning it doesn't start with a slash.
-This is the boolean inverse of `isAbsolute`.
-
-### `relativeTo`
-
-Turns an absolute path into a relative path.
-
-Examples:
-- `relativeTo "/foo" "/foo/bar" == "bar"`
-- `relativeTo "/baz" "/foo/bar" == <error>`
-- `relativeTo "foo" "foo/bar" == "bar"`
-- `relativeTo "foo" "/foo/bar" == <error>`
-- `relativeTo "/" "/foo/bar" == "foo/bar"`
-
-Use cases:
-- For source combinators, a way to set a source to point to a subpath using `setSubpath ./foo/bar ./.`. This needs to calculate the relative path `foo/bar` from the absolute path `./foo/bar` resolved by Nix
-
-Laws:
-
-### `split`
-
-Splits a path into its components.
-If the path is absolute, the first resulting component is `/`.
-If the path is relative, the first resulting component is `.`.
-
-Examples:
-- `split "/" == ["/"]`
-- `split "/foo" == ["/" "foo"]`
-- `split "." == [ ]`
-- `split "bar" == [ "bar" ]`
-
-Invariants:
-- Inverse of `join`:
-  `join (split p) == normalise p`
-- Components can't be split any further:
-  `! exists cs . join cs == p && length cs > length (split p)`
-- TODO: Law that ensures components are normalized?
-
-Use cases:
-- TODO
-
-### `join`
-
-Joins path components together. All but the first component must be relative, though they can contain non-leading slashes.
-
-Examples:
-- `join ["/foo" "bar"] == "/foo/bar"`
-- `join ["foo" "bar/baz"] == "foo/bar/baz"`
-- `join ["/foo" "/bar"] == <error>`
-- `join ["/foo" (relativeTo "/" "/bar") ] == "/foo/bar"`
-
-Laws:
-- Inverse of `split`:
-  `join (split p) == normalise p`
-- Associativity (TODO: Why do we need this?):
-  `join [ (join [a b]) c ] == join [ a (join [b c]) ]`
-- The result is normalised:
-  join as == normalise (join as)
-- Joining a single path is that path itself, but normalised:
-  join [ p ] == normalise p
-
-Use cases:
-- TODO
-
-### `normalise`
-
-Normalizes the path by:
-- Limiting repeating `/` to a single one (does not change a [POSIX Pathname](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_271))
-- Removing extraneous `.` components (does not change the result of [POSIX Pathname Resolution](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13))
-- Erroring for empty strings (not allowed as a [POSIX Filename](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_170))
-- Removing trailing `/` and `/.` (See [justification](#trailing-slashes))
-- Erroring for ".." components (See [justification](#parents))
-- Removing `./` from relative paths (See [justification](#leading-dots))
-
-Examples:
-- `normalise "foo" == "foo"`
-- `normalise "/foo//bar" == "/foo/bar"`
-- `normalise "/foo/./bar" == "/foo/bar"`
-- `normalise "" == <error>"`
-- `normalise "/foo/" == "/foo"`
-- `normalise "/foo/." == "/foo"`
-- `normalise "/foo/../bar" == <error>`
-- `normalise "//foo" == "/foo"`
-- `normalise "///foo" == "/foo"`
-- `normalise "//././//foo/.//.///bar/." == "/foo/bar"`
-
-Laws:
-- Same as splitting and joining:
-  join (split p) == normalise p
-- Idempotency:
-  `normalise (normalise p) == normalise p`
-- Behaves like `realpath`:
-  `isAbsolute p => normalise p == realpath --no-symlinks --canonicalize-missing p`
-  `isRelative p => normalise p == realpath --no-symlinks --canonicalize-missing --relative-to=. p`
-
-Use cases:
-- As an attribute name for a path -> value lookup attribute set
-  - E.g. `environment.etc.<path>`
-- Path equality comparison 
+- [Rust](https://doc.rust-lang.org/std/path/struct.Path.html)
+- [Python](https://docs.python.org/3/library/pathlib.html)
+- [Haskell](https://hackage.haskell.org/package/filepath-1.4.100.0/docs/System-FilePath.html)
+- [Nodejs](https://nodejs.org/api/path.html)
+- [POSIX.1-2017](https://pubs.opengroup.org/onlinepubs/9699919799/nframe.html)

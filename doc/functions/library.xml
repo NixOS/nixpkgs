@@ -26,6 +26,8 @@
 
  <xi:include href="./library/generated/options.xml" />
 
+ <xi:include href="./library/generated/path.xml" />
+
  <xi:include href="./library/generated/filesystem.xml" />
 
  <xi:include href="./library/generated/sources.xml" />
