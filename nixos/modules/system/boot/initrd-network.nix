@@ -40,16 +40,6 @@ in
       '';
     };
 
-    boot.initrd.network.udhcpc.extraArgs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
-        Additional command-line arguments passed verbatim to udhcpc if
-        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
-        are enabled.
-      '';
-    };
-
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
@@ -66,39 +56,9 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
-    '';
+    boot.kernelParams = mkIf config.networking.useDHCP [ "ip=dhcp" ];
 
-    boot.initrd.preLVMCommands = mkBefore (
-      # Search for interface definitions in command line.
-      ''
-        ifaces=""
-        for o in $(cat /proc/cmdline); do
-          case $o in
-            ip=*)
-              ipconfig $o && ifaces="$ifaces $(echo $o | cut -d: -f6)"
-              ;;
-          esac
-        done
-      ''
-
-      # Otherwise, use DHCP.
-      + optionalString doDhcp ''
-        # Bring up all interfaces.
-        for iface in ${dhcpIfShellExpr}; do
-          echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
-        done
-
-        # Acquire DHCP leases.
-        for iface in ${dhcpIfShellExpr}; do
-          echo "acquiring IP address via DHCP on $iface..."
-          udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
-        done
-      ''
-
-      + cfg.postCommands);
+    boot.initrd.preLVMCommands = mkBefore cfg.postCommands;
 
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do
