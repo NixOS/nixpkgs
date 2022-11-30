@@ -19,9 +19,9 @@ let
   # We only want to create a database if we're actually going to connect to it.
   databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == null;
 
-  tlsEnabled = (cfg.enableACME
+  tlsEnabled = cfg.enableACME
                 || cfg.sslCertificate != null
-                || cfg.sslCertificateKey != null);
+                || cfg.sslCertificateKey != null;
 in
 {
   options = {
