@@ -12400,4 +12400,6 @@ self: super: with self; {
   zwave-js-server-python = callPackage ../development/python-modules/zwave-js-server-python { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
+
+  zxing_cpp = callPackage ../development/python-modules/zxing_cpp { };
 }
