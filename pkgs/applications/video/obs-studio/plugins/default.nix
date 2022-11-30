@@ -1,4 +1,4 @@
-{ callPackage, qt6Packages, pkgsi686Linux }:
+{ lib, callPackage, qt6Packages, pkgsi686Linux, config }:
 
 # When adding new plugins:
 # - Respect alphabetical order. On diversion, file a PR.
@@ -32,7 +32,8 @@
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
 
-  obs-websocket = throw "obs-websocket has been removed: Functionality has been integrated into obs-studio itself.";
-
   wlrobs = callPackage ./wlrobs.nix { };
+
+} // lib.optionalAttrs config.allowAliases {
+  obs-websocket = throw "obs-websocket has been removed: Functionality has been integrated into obs-studio itself.";
 }
