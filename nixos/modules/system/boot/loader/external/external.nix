@@ -7,7 +7,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ cole-h grahamc ];
+    maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
     # Don't edit the docbook xml directly, edit the md and generate it:
     # `pandoc external.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > external.xml`
     doc = ./external.xml;
@@ -30,7 +30,7 @@ in
     boot.loader = {
       grub.enable = mkDefault false;
       systemd-boot.enable = mkDefault false;
-      supportsInitrdSecrets = false;
+      supportsInitrdSecrets = mkDefault false;
     };
 
     system.build.installBootLoader = cfg.installHook;
