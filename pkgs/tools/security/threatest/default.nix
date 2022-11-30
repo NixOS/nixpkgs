@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "threatest";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ehyE19VGSLykJUOXoYMFr2Y82Bwpj2ZK5//VJybVAtk=";
+    hash = "sha256-9/TIiBp3w7NaECX929Tai5nqHKxb7YxYEr2hAl2ttsM=";
   };
 
   vendorHash = "sha256-vTzgxByZ2BC7nuq/+LJV7LR0KsUxh1EbHFe81PwqCJc=";
