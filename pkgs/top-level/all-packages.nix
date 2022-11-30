@@ -24198,6 +24198,7 @@ with pkgs;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  mongodb = hiPrio mongodb-6_0;
 
   mongodb-4_0 = callPackage ../servers/nosql/mongodb/v4_0.nix {
     sasl = cyrus_sasl;
