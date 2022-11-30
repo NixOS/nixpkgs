@@ -58,6 +58,8 @@ lib.makeScope newScope (self:
 
     regex = callPackage ../development/nim-packages/regex { };
 
+    result = callPackage ../development/nim-packages/nim-result { };
+
     rocksdb = callPackage ../development/nim-packages/rocksdb {
       inherit (pkgs) rocksdb;
     };
@@ -67,6 +69,8 @@ lib.makeScope newScope (self:
     sdl2 = callPackage ../development/nim-packages/sdl2 { };
 
     segmentation = callPackage ../development/nim-packages/segmentation { };
+
+    shell = callPackage ../development/nim-packages/shell { };
 
     snappy =
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
