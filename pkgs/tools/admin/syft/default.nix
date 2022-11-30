@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.62.1";
+  version = "0.62.2";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mzDowDWnIxQCbCxqPun6oCqMeke4KE+kaVDH/V5TFC4=";
+    sha256 = "sha256-n3ZkSsyaNreIohCrGYQUnRAnher1VqbV8vQKA20bnPs=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
