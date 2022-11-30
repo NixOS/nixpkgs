@@ -24822,6 +24822,8 @@ with pkgs;
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
+  alertmanager-executor = callPackage ../servers/monitoring/alertmanager-executor { };
+
   tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };

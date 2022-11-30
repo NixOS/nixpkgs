@@ -675,6 +675,7 @@
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
+  ./services/monitoring/alertmanager-executor.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
