@@ -4,6 +4,7 @@ use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use JSON;
+use DateTime;
 
 # Keep track of deleted uids and gids.
 my $uidMapFile = "/var/lib/nixos/uid-map";
@@ -20,6 +21,22 @@ sub updateFile {
     my ($path, $contents, $perms) = @_;
     return if $is_dry;
     write_file($path, { atomic => 1, binmode => ':utf8', perms => $perms // 0644 }, $contents) or die;
+}
+
+# Converts an ISO date to number of days since 1970-01-01
+sub dateToDays {
+    my ($date) = @_;
+    my ($year, $month, $day) = split('-', $date, -3);
+    my $dt = DateTime->new(
+        year      => $year,
+        month     => $month,
+        day       => $day,
+        hour      => 0,
+        minute    => 0,
+        second    => 0,
+        time_zone => 'UTC',
+    );
+    return $dt->epoch / 86400;
 }
 
 sub nscdInvalidate {
@@ -283,14 +300,16 @@ my %shadowSeen;
 
 foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
-    my ($name, $hashedPassword, @rest) = split(':', $line, -9);
-    my $u = $usersOut{$name};;
+    # struct name copied from `man 3 shadow`
+    my ($sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) = split(':', $line, -9);
+    my $u = $usersOut{$sp_namp};;
     next if !defined $u;
-    $hashedPassword = "!" if !$spec->{mutableUsers};
-    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
-    chomp $hashedPassword;
-    push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
-    $shadowSeen{$name} = 1;
+    $sp_pwdp = "!" if !$spec->{mutableUsers};
+    $sp_pwdp = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    $sp_expire = dateToDays($u->{expires}) if defined $u->{expires};
+    chomp $sp_pwdp;
+    push @shadowNew, join(":", $sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) . "\n";
+    $shadowSeen{$sp_namp} = 1;
 }
 
 foreach my $u (values %usersOut) {
