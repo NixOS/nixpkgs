@@ -13,6 +13,62 @@
     <itemizedlist>
       <listitem>
         <para>
+          Software that uses the <literal>crypt</literal> password
+          hashing API is now using the implementation provided by
+          <link xlink:href="https://github.com/besser82/libxcrypt"><literal>libxcrypt</literal></link>
+          instead of glibc’s, which enables support for more secure
+          algorithms.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Support for algorithms that <literal>libxcrypt</literal>
+              <link xlink:href="https://github.com/besser82/libxcrypt/blob/v4.4.28/lib/hashes.conf#L41">does
+              not consider strong</link> are
+              <emphasis role="strong">deprecated</emphasis> as of this
+              release, and will be removed in NixOS 23.05.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              This includes system login passwords. Given this, we
+              <emphasis role="strong">strongly encourage</emphasis> all
+              users to update their system passwords, as you will be
+              unable to login if password hashes are not migrated by the
+              time their support is removed.
+            </para>
+            <itemizedlist spacing="compact">
+              <listitem>
+                <para>
+                  When using
+                  <literal>users.users.&lt;name&gt;.hashedPassword</literal>
+                  to configure user passwords, run
+                  <literal>mkpasswd</literal>, and use the yescrypt hash
+                  that is provided as the new value.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  On the other hand, for interactively configured user
+                  passwords, simply re-set the passwords for all users
+                  with <literal>passwd</literal>.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  This release introduces warnings for the use of
+                  deprecated hash algorithms for both methods of
+                  configuring passwords. To make sure you migrated
+                  correctly, run
+                  <literal>nixos-rebuild switch</literal>.
+                </para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           GNOME has been upgraded to version 43. Please take a look at
           their <link xlink:href="https://release.gnome.org/43/">Release
           Notes</link> for details.
