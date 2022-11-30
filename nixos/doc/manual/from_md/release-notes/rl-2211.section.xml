@@ -1709,6 +1709,14 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://oprypin.github.io/mkdocs-same-dir">mkdocs-same-dir</link>,
+          a Python plugin for mkdocs to allow placing
+          <literal>mkdocs.yml</literal> in the same directory as
+          documentation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
