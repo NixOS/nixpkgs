@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.28.0";
+  version = "0.33.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-MGAkjjP6efdME4SncV18aLOOC4XxWutaYTINSIRCSp0=";
+    sha256 = "sha256-77c52e21df129e96a7860163029e267f38e705bc7be014b79668ad15f6e0c8e2=";
   };
 
   cargoSha256 = "sha256-k2BrkdLRFmppQcPm2dkbQIOlmIv/jsfwD8S/rsLxm+0=";
