@@ -1,8 +1,17 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.11">
   <title>Release 22.11 (“Raccoon”, 2022.11/??)</title>
   <para>
+    The NixOS release team is happy to announce a new version of NixOS
+    22.11. NixOS is both a linux distribution, and a set of packages
+    usable on other Linux systems and macOS.
+  </para>
+  <para>
     This release is supported until the end of June 2023, handing over
     to NixOS 23.05.
+  </para>
+  <para>
+    To upgrade to the latest release follow the
+    <link linkend="sec-upgrading">upgrade chapter</link>.
   </para>
   <section xml:id="sec-release-22.11-highlights">
     <title>Highlights</title>
@@ -69,85 +78,70 @@
       </listitem>
       <listitem>
         <para>
-          GNOME has been upgraded to version 43. Please take a look at
-          their <link xlink:href="https://release.gnome.org/43/">Release
-          Notes</link> for details.
+          The NixOS documentation is now generated from markdown. While
+          docbook is still part of the documentation build process, it’s
+          a big step towards the full migration.
         </para>
       </listitem>
       <listitem>
         <para>
-          KDE Plasma has been upgraded from v5.24 to v5.26. Please see
-          the release notes for
-          <link xlink:href="https://kde.org/announcements/plasma/5/5.25.0/">v5.25</link>
-          and
-          <link xlink:href="https://kde.org/announcements/plasma/5/5.26.0/">v5.26</link>
-          for more details on the included changes.
+          <literal>aarch64-linux</literal> is now included in the
+          <literal>nixos-22.11</literal> and
+          <literal>nixos-22.11-small</literal> channels. This means that
+          when those channel update, both
+          <literal>x86_64-linux</literal> and
+          <literal>aarch64-linux</literal> will be available in the
+          binary cache.
         </para>
       </listitem>
       <listitem>
         <para>
-          Cinnamon has been updated to 5.4, and the Cinnamon module now
-          defaults to Blueman as the Bluetooth manager and slick-greeter
-          as the LightDM greeter, to match upstream.
+          <literal>aarch64-linux</literal> ISOs are now available on the
+          <link xlink:href="https://nixos.org/download.html">downloads
+          page</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
+          <literal>nsncd</literal> is now available as a replacement of
+          <literal>nscd</literal>.
         </para>
-      </listitem>
-      <listitem>
         <para>
-          PHP now defaults to PHP 8.1, updated from 8.0.
+          <literal>nscd</literal> is responsible for resolving
+          hostnames, users and more in NixOS and has been a long
+          standing source of bugs, such as sporadic network freezes.
         </para>
-      </listitem>
-      <listitem>
         <para>
-          PHP is now built in <literal>NTS</literal> (Non-Thread Safe)
-          mode by default.
+          More context in this
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135888">issue</link>.
         </para>
-        <itemizedlist spacing="compact">
-          <listitem>
-            <para>
-              For Apache and <literal>mod_php</literal> usage, we enable
-              <literal>ZTS</literal> (Zend Thread Safe) mode. This has
-              been a common practice for a long time in other
-              distributions.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-      <listitem>
         <para>
-          Perl has been updated to 5.36, and its core module
-          <literal>HTTP::Tiny</literal> was patched to verify SSL/TLS
-          certificates by default.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>nscd</literal> functionality, necessary to provide
-          non-glibc-builtin NSS modules (such as
-          <literal>nss_systemd</literal> or <literal>nss_ldap</literal>)
-          can now be provided by <literal>nsncd</literal>, by setting
+          Help us test the new implementation by setting
           <literal>services.nscd.enableNsncd</literal> to
           <literal>true</literal>.
         </para>
         <para>
-          The <literal>nscd</literal> daemon provided by glibc, which is
-          currently used by NixOS isn’t very reliable. For example, it’s
-          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/135888">not
-          fully possible to disable caching functionality</link>,
-          causing various issues and failed lookups.
-        </para>
-        <para>
-          In contrast to nscd’s behavior of caching module responses on
-          its own, nsncd merely forwards requests to NSS modules, which
-          might cache or not.
-        </para>
-        <para>
           We plan to use <literal>nsncd</literal> by default in NixOS
           23.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Linode cloud images are now supported by importing
+          <literal>${modulesPath}/virtualisation/linode-image.nix</literal>
+          and accessing <literal>system.build.linodeImage</literal> on
+          the output.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hardware.nvidia</literal> has a new option,
+          <literal>hardware.nvidia.open</literal>, that can be used to
+          enable the usage of NVIDIA’s open-source kernel driver. Note
+          that the driver’s support for GeForce and Workstation GPUs is
+          still alpha quality, see
+          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">the
+          release announcement</link> for more information.
         </para>
       </listitem>
       <listitem>
@@ -178,61 +172,6 @@
           </listitem>
         </itemizedlist>
       </listitem>
-      <listitem>
-        <para>
-          <literal>nixos-generate-config</literal> now generates
-          configurations that can be built in pure mode. This is
-          achieved by setting the new
-          <literal>nixpkgs.hostPlatform</literal> option.
-        </para>
-        <para>
-          You may have to unset the <literal>system</literal> parameter
-          in <literal>lib.nixosSystem</literal>, or similarly remove
-          definitions of the
-          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
-          options.
-        </para>
-        <para>
-          Alternatively, you can remove the
-          <literal>hostPlatform</literal> line and use NixOS like you
-          would in NixOS 22.05 and earlier.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          It is now possible to generate NixOS images for the Linode
-          cloud provider, via
-          <literal>system.build.linodeImage</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>hardware.nvidia</literal> has a new option,
-          <literal>hardware.nvidia.open</literal>, that can be used to
-          enable the usage of NVIDIA’s open-source kernel driver. Note
-          that the driver’s support for GeForce and Workstation GPUs is
-          still alpha quality, see
-          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">the
-          release announcement</link> for more information.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>aarch64-linux</literal> is now included in the
-          <literal>nixos-22.11</literal> and
-          <literal>nixos-22.11-small</literal> channels. This means that
-          <literal>x86_64-linux</literal> and
-          <literal>aarch64-linux</literal> will recieve updates at the
-          same time.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>aarch64-linux</literal> ISOs are now available on the
-          <link xlink:href="https://nixos.org/download.html">downloads
-          page</link>.
-        </para>
-      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-internal">
@@ -240,38 +179,28 @@
     <itemizedlist>
       <listitem>
         <para>
-          Improved performances of
-          <literal>lib.closePropagation</literal> which was previously
-          quadratic. This is used in e.g.
-          <literal>ghcWithPackages</literal>. Please see backward
-          incompatibilities notes below.
+          Haskell <literal>ghcWithPackages</literal> is now up to 15
+          times faster to evaluate, thanks to changing
+          <literal>lib.closePropagation</literal> from a quadratic to
+          linear complexity. Please see backward incompatibilities notes
+          below.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/pull/194391">https://github.com/NixOS/nixpkgs/pull/194391</link>
         </para>
       </listitem>
       <listitem>
         <para>
-          During cross-compilation, tests are now executed if the test
-          suite can be executed by the build platform. This is the case
-          when doing “native” cross-compilation where the build and host
-          platforms are largely the same, but the nixpkgs’ cross
-          compilation infrastructure is used, e.g.
-          <literal>pkgsStatic</literal> and <literal>pkgsLLVM</literal>.
-          Another possibility is that the build platform is a superset
-          of the host platform, e.g. when cross-compiling from
-          <literal>x86_64-unknown-linux</literal> to
-          <literal>i686-unknown-linux</literal>. The predicate gating
-          test suite execution is the newly added
-          <literal>canExecute</literal> predicate: You can e.g. check if
-          <literal>stdenv.buildPlatform</literal> can execute binaries
-          built for <literal>stdenv.hostPlatform</literal> (i.e.
-          produced by <literal>stdenv.cc</literal>) by evaluating
-          <literal>stdenv.buildPlatform.canExecute stdenv.hostPlatform</literal>.
+          For cross-compilation targets that can also run on the
+          building machine, we also enabled running tests now. This is
+          for example the case for the pkgsStatic and pkgsLLVm package
+          sets or i686 packages on <literal>x86_64</literal> machine.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <literal>nixpkgs.hostPlatform</literal> and
-          <literal>nixpkgs.buildPlatform</literal> options have been
-          added. These cover and override the
+          To simplify cross-compilation in NixOS, this release
+          introduces the <literal>nixpkgs.hostPlatform</literal> and
+          <literal>nixpkgs.buildPlatform</literal> options. These cover
+          and override the
           <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
           options.
         </para>
@@ -304,6 +233,64 @@
           the change and to allow for a transition period so that in
           time the ecosystem can switch without breaking compatibility
           with any supported NixOS release.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-version-updates">
+    <title>Notable version updates</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          Nix has been upgraded from
+          <link xlink:href="https://github.com/NixOS/nix/compare/2.8.1...2.11.0">v2.8.1
+          to v2.11.0</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GNOME has been upgraded to version 43. Please take a look at
+          their <link xlink:href="https://release.gnome.org/43/">Release
+          Notes</link> for details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          KDE Plasma has been upgraded from v5.24 to v5.26. Please see
+          the release notes for
+          <link xlink:href="https://kde.org/announcements/plasma/5/5.25.0/">v5.25</link>
+          and
+          <link xlink:href="https://kde.org/announcements/plasma/5/5.26.0/">v5.26</link>
+          for more details on the included changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Cinnamon has been updated to 5.4, and the Cinnamon module now
+          defaults to Blueman as the Bluetooth manager and slick-greeter
+          as the LightDM greeter, to match upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP now defaults to PHP 8.1, updated from 8.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Perl has been updated to 5.36, and its core module
+          <literal>HTTP::Tiny</literal> was patched to verify SSL/TLS
+          certificates by default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Python now defalts to 3.10, updated from 3.9.
         </para>
       </listitem>
     </itemizedlist>
@@ -908,6 +895,22 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
   <section xml:id="sec-release-22.11-notable-changes">
     <title>Other Notable Changes</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          PHP is now built in <literal>NTS</literal> (Non-Thread Safe)
+          mode by default.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              For Apache and <literal>mod_php</literal> usage, we enable
+              <literal>ZTS</literal> (Zend Thread Safe) mode. This has
+              been a common practice for a long time in other
+              distributions.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
       <listitem>
         <para>
           <literal>firefox</literal>, <literal>thunderbird</literal> and
