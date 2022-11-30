@@ -32,12 +32,12 @@
 , which
 , icu
 , boost
-, jdk
+, jdk17
 , ant
 , cups
 , xorg
 , fontforge
-, jre_minimal
+, jre17_minimal
 , openssl
 , gperf
 , cppunit
@@ -121,7 +121,7 @@ let
     getDev getLib
     optional optionals optionalString;
 
-  jre' = jre_minimal.override {
+  jre' = jre17_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
@@ -460,7 +460,7 @@ in
     bison
     fontforge
     gdb
-    jdk
+    jdk17
     libtool
     pkg-config
   ]

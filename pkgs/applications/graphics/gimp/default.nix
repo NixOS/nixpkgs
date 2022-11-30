@@ -48,7 +48,7 @@
 , Cocoa
 , gtk-mac-integration-gtk2
 , withPython ? false
-, python2 ? null
+, python2
 }:
 
 let
