@@ -1977,10 +1977,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1qzqyglw7akval4rxjyqygs2abdrziy6ry0cy135lq1hlwl4axj8";
+      sha256 = "0axd0s02w4ia2i6smn5qy0z53j3j5jkpdwz9dvz34zi33ww9nm5j";
       type = "gem";
     };
-    version = "15.4.0.pre.rc2";
+    version = "15.4.4";
   };
   github-markup = {
     groups = ["default"];

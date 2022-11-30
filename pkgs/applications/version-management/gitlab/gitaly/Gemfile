@@ -12,6 +12,10 @@ gem 'sentry-raven', '~> 3.0', require: false
 gem 'faraday', '~> 1.0'
 gem 'rbtrace', require: false
 
+# The Gitaly Gem contains the Protobuf and gRPC definitions required by the
+# Ruby sidecar.
+gem 'gitaly', '~> 15.4.0'
+
 # Labkit provides observability functionality
 gem 'gitlab-labkit', '~> 0.24'
 
@@ -28,8 +32,6 @@ group :development, :test do
   gem 'timecop', require: false
   gem 'factory_bot', require: false
   gem 'pry', '~> 0.12.2', require: false
-
-  gem 'grpc-tools', '~> 1.42.0'
 end
 
 # Gems required in omnibus-gitlab pipeline
