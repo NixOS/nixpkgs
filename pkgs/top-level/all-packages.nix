@@ -11009,7 +11009,7 @@ with pkgs;
 
   renameutils = callPackage ../tools/misc/renameutils { };
 
-  renderdoc = libsForQt5.callPackage ../applications/graphics/renderdoc { };
+  renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
   replace = callPackage ../tools/text/replace { };
 
