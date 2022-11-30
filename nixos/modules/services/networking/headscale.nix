@@ -82,7 +82,17 @@ in
         type = types.path;
         default = "${dataDir}/private.key";
         description = lib.mdDoc ''
-          Path to private key file, generated automatically if it does not exist.
+          Path to legacy TS2019 private key file, generated automatically if it
+          does not exist. Not used by headscale >= 0.17.0
+        '';
+      };
+
+      noisePrivateKeyFile = mkOption {
+        type = types.path;
+        default = "${dataDir}/noise_private.key";
+        description = lib.mdDoc ''
+          Path to noise TS2021 private key file, generated automatically if it
+          does not exist. Only used by headscale >= 0.17.0
         '';
       };
 
@@ -186,15 +196,6 @@ in
           default = "${dataDir}/db.sqlite";
           description = lib.mdDoc "Path to the sqlite3 database file.";
         };
-      };
-
-      logLevel = mkOption {
-        type = types.str;
-        default = "info";
-        description = lib.mdDoc ''
-          headscale log level.
-        '';
-        example = "debug";
       };
 
       dns = {
@@ -345,6 +346,11 @@ in
     };
 
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "headscale" "logLevel" ] [ "services" "headscale" "settings" "log" "level" ])
+  ];
+
   config = mkIf cfg.enable {
 
     services.headscale.settings = {
@@ -352,6 +358,7 @@ in
       listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
 
       private_key_path = mkDefault cfg.privateKeyFile;
+      noise.private_key_path = mkDefault cfg.noisePrivateKeyFile;
 
       derp = {
         urls = mkDefault cfg.derp.urls;
@@ -368,8 +375,6 @@ in
 
       db_type = mkDefault cfg.database.type;
       db_path = mkDefault cfg.database.path;
-
-      log_level = mkDefault cfg.logLevel;
 
       dns_config = {
         nameservers = mkDefault cfg.dns.nameservers;
