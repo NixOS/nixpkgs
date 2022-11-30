@@ -17025,6 +17025,8 @@ with pkgs;
 
   explain = callPackage ../development/tools/explain { };
 
+  func = callPackage ../applications/networking/cluster/func { };
+
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   license_finder = callPackage ../development/tools/license_finder { };
