@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for controlling Genie garage doors connected to Aladdin Connect devices";
     homepage = "https://github.com/mkmer/AIOAladdinConnect";
+    changelog = "https://github.com/mkmer/AIOAladdinConnect/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
