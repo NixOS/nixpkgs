@@ -10,6 +10,7 @@
 , hadoop
 , pytestCheckHook
 , python
+, runCommand
 }:
 
 buildPythonPackage rec {
@@ -49,6 +50,12 @@ buildPythonPackage rec {
     "test_core"
     "test_cli"
   ];
+
+  passthru.tests.smokeTest = runCommand "${pname}-client-test" { } ''
+    mkdir /tmp/home
+    export HOME=/tmp/home
+    ${python.withPackages (p: [p.skein])}/bin/python -c "import skein; skein.Client()"
+  '';
 
   meta = with lib; {
     homepage = "https://jcristharif.com/skein";
