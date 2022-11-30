@@ -1512,7 +1512,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <literal>haskellPackage.callHackage</literal> is not always
+          <literal>haskellPackages.callHackage</literal> is not always
           invalidated if <literal>all-cabal-hashes</literal> changes,
           leading to less rebuilds of haskell dependencies.
         </para>
@@ -1825,10 +1825,10 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          [xray] (https://github.com/XTLS/Xray-core), a fully compatible
-          v2ray-core replacement. Features XTLS, which when enabled on
-          server and client, brings UDP FullCone NAT to proxy setups.
-          Available as
+          <link xlink:href="https://github.com/XTLS/Xray-core">xray</link>,
+          a fully compatible v2ray-core replacement. Features XTLS,
+          which when enabled on server and client, brings UDP FullCone
+          NAT to proxy setups. Available as
           <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
         </para>
       </listitem>
