@@ -104,24 +104,24 @@ in
 
     # Simple check tootctl commands
     # Check Mastodon version
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl version' | grep '${pkgs.mastodon.version}'")
+    server.succeed("mastodon-tootctl version | grep '${pkgs.mastodon.version}'")
 
     # Manage accounts
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl email_domain_blocks add example.com'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl email_domain_blocks list' | grep 'example.com'")
-    server.fail("su - mastodon -s /bin/sh -c 'mastodon-env tootctl email_domain_blocks list' | grep 'mastodon.local'")
-    server.fail("su - mastodon -s /bin/sh -c 'mastodon-env tootctl accounts create alice --email=alice@example.com'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl email_domain_blocks remove example.com'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl accounts create bob --email=bob@example.com'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl accounts approve bob'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl accounts delete bob'")
+    server.succeed("mastodon-tootctl email_domain_blocks add example.com")
+    server.succeed("mastodon-tootctl email_domain_blocks list | grep example.com")
+    server.fail("mastodon-tootctl email_domain_blocks list | grep mastodon.local")
+    server.fail("mastodon-tootctl accounts create alice --email=alice@example.com")
+    server.succeed("mastodon-tootctl email_domain_blocks remove example.com")
+    server.succeed("mastodon-tootctl accounts create bob --email=bob@example.com")
+    server.succeed("mastodon-tootctl accounts approve bob")
+    server.succeed("mastodon-tootctl accounts delete bob")
 
     # Manage IP access
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl ip_blocks add 192.168.0.0/16 --severity=no_access'")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl ip_blocks export' | grep '192.168.0.0/16'")
-    server.fail("su - mastodon -s /bin/sh -c 'mastodon-env tootctl ip_blocks export' | grep '172.16.0.0/16'")
+    server.succeed("mastodon-tootctl ip_blocks add 192.168.0.0/16 --severity=no_access")
+    server.succeed("mastodon-tootctl ip_blocks export | grep 192.168.0.0/16")
+    server.fail("mastodon-tootctl ip_blocks export | grep 172.16.0.0/16")
     client.fail("curl --fail https://mastodon.local/about")
-    server.succeed("su - mastodon -s /bin/sh -c 'mastodon-env tootctl ip_blocks remove 192.168.0.0/16'")
+    server.succeed("mastodon-tootctl ip_blocks remove 192.168.0.0/16")
     client.succeed("curl --fail https://mastodon.local/about")
 
     server.shutdown()
