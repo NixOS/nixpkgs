@@ -1135,6 +1135,7 @@
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
+  ./services/web-apps/pigallery2.nix
   ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/matomo.nix
