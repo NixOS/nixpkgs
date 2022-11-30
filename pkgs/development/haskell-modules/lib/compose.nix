@@ -464,8 +464,8 @@ rec {
     allowInconsistentDependencies = true;
   });
 
-  # The motivation for this utility is for use for CI builds in order to avoid a
-  # full rebuild on every commit to the trunk development branch or every pull
+  # The motivation for this utility is for use with CI builds in order to avoid
+  # a full rebuild on every commit to the trunk development branch or every pull
   # request.  For more details, see:
   #
   # https://harry.garrood.me/blog/easy-incremental-haskell-ci-builds-with-ghc-9.4/
