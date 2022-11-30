@@ -2,20 +2,21 @@
 
 buildGoModule rec {
   pname = "headscale";
-  version = "0.16.4";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    sha256 = "sha256-j5fbWxRMkYlsgL1QDEDlitKB3FOmDTy17FcuztALISw=";
+    sha256 = "sha256-KBTZpf9hHX1GeI2r0Tksa8oWdCVZz1wXKpy9htvk2RY=";
   };
 
-  vendorSha256 = "sha256-RzmnAh81BN4tbzAGzJbb6CMuws8kuPJDw7aPkRRnSS8=";
+  vendorSha256 = "sha256-Cq0WipTQ+kGcvnfP0kjyvjyonl2OC9W7Tj0MCuB1lDU=";
 
   ldflags = [ "-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
+  checkFlags = [ "-short" ];
 
   postInstall = ''
     installShellCompletion --cmd headscale \
