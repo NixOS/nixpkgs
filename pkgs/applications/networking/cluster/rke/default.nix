@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-zV1lrJhzrUAcEk6jYLCFrHcYw3CZart46qXErCTjZyQ=";
 
+  subPackages = [ "." ];
+
   ldflags = [ "-s" "-w" "-X=main.VERSION=v${version}" ];
 
   meta = with lib; {
