@@ -914,7 +914,12 @@ self: super: {
       '';
     }) super.dhall-nix);
   dhall-yaml = self.generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
-  dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ] super.dhall-nixpkgs;
+  dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ]
+    (overrideCabal (drv: {
+      # Allow hnix 0.16, needs unreleased bounds change
+      # https://github.com/dhall-lang/dhall-haskell/pull/2474
+      jailbreak = assert drv.version == "1.0.9" && drv.revision == "1"; true;
+    }) super.dhall-nixpkgs);
 
   stack = self.generateOptparseApplicativeCompletions [ "stack" ] super.stack;
 
