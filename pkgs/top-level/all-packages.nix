@@ -14426,6 +14426,8 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
+  gnostic = callPackage ../development/compilers/gnostic {};
+
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gobang = callPackage ../development/tools/database/gobang {
