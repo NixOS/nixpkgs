@@ -588,7 +588,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = lib.mdDoc ''
         Port the service should bind do.
@@ -825,7 +825,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8952;
         description = lib.mdDoc ''
           Port number for remote control operations (uses TLS over TCP).
