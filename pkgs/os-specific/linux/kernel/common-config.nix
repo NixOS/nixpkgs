@@ -126,7 +126,6 @@ let
     networking = {
       NET                = yes;
       IP_ADVANCED_ROUTER = yes;
-      IP_PNP             = no;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
@@ -235,6 +234,12 @@ let
       INFINIBAND = module;
       INFINIBAND_IPOIB = module;
       INFINIBAND_IPOIB_CM = yes;
+
+      # dhcp support for initrd
+      IP_PNP = yes;
+      IP_PNP_DHCP = yes;
+      IP_PNP_BOOTP = yes;
+      IP_PNP_RARP = yes;
     };
 
     wireless = {
