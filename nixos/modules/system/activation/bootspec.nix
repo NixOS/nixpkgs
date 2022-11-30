@@ -87,7 +87,7 @@ in
   config = lib.mkIf (cfg.enable) {
     warnings = [
       ''RFC-0125 is not merged yet, this is a feature preview of bootspec.
-        Schema is not definitive and features are not stabilized until RFC-0125 is merged.
+        The schema is not definitive and features are not guaranteed to be stable until RFC-0125 is merged.
         See:
         - https://github.com/NixOS/nixpkgs/pull/172237 to track merge status in nixpkgs.
         - https://github.com/NixOS/rfcs/pull/125 to track RFC status.
