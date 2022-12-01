@@ -21,6 +21,8 @@ buildPythonPackage rec {
   pname = "azure-core";
   disabled = pythonOlder "3.6";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
