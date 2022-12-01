@@ -65,9 +65,15 @@ rec {
     # on the toplevel, booleans and lists are handled by `mkBool` and `mkList`,
     # though they can still appear as values of a list.
     # By default, everything is printed verbatim and complex types
-    # are forbidden (lists, attrsets, functions). `null` values are omitted.
+    # are forbidden (lists, attrsets, functions), except that any
+    # attrsets appearing to arise from use of mkForce/mkOverride
+    # are unwrapped. `null` values are omitted.
     mkOption ?
-      k: v: if v == null
+      k: setting:
+        # Unwrap the value if it appears to have been set by mkForce/mkOverride.
+        let v = setting?content then setting.content else setting;
+        in
+          if v == null
             then []
             else [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
     }:
