@@ -132,7 +132,7 @@ let
   /*
     Filter sources by a list of regular expressions.
 
-    Example: src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    Example: src = sourceByRegex ./my-subproject [".*\\.py" "database.sql"]
   */
   sourceByRegex = src: regexes:
     let

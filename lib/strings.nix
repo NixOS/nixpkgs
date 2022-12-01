@@ -589,6 +589,40 @@ rec {
       else
         str;
 
+  /* Looks up a path's prefix in a list of sources. Each source is an attribute set of the type
+
+         { name : string; root : string or path; mkUrl : optional (string -> string); }
+
+     If the path is found under one of the sources' `root`, then the returned attrset has `source`
+     set to the source's `name`, `path` set to the subpath under `root` (with a leading slash trimmed),
+     and `url` optionally set by calling `mkUrl path`. The first matching source is used.
+
+     If no source matches, the returned attrset only contains the original path.
+
+     Type: (list of {name, root, extraAttrs?}) -> (string or path) -> {path, source?, ...}
+
+     Example:
+       lookupPrefix [ nixpkgsSource ] ./strings.nix
+       => { path = "lib/strings.nix"; source = "nixpkgs"; url = "https://github.com/NixOS/nixpkgs/blob/master/lib/strings.nix"; }
+       lookupPrefix [ nixpkgsSource ] "/foo/bar"
+       => { path = "/foo/bar"; }
+  */
+  lookupPrefix = sources: path:
+    let p = toString path; in
+    lib.foldr ({ root, name, mkUrl ? null }: default:
+      let r = toString root; in
+      if hasPrefix (r + "/") p || p == r then
+        let subpath = removePrefix "/" (removePrefix r p); in
+        { source = name; path = subpath; }
+        // lib.optionalAttrs (mkUrl != null) { url = mkUrl subpath; }
+      else default
+    ) { path = p; } sources;
+  nixpkgsSource = {
+    name = "nixpkgs";
+    root = ../.;
+    mkUrl = path: "https://github.com/NixOS/nixpkgs/blob/${lib.trivial.manualRevision}/${path}";
+  };
+
   /* Return true if string v1 denotes a version older than v2.
 
      Example:

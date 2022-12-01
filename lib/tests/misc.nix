@@ -312,6 +312,16 @@ runTests {
     expected = true;
   };
 
+  testLookupPrefixMatch = {
+    expr = strings.lookupPrefix [ nixpkgsSource (nixpkgsSource // { name = "ignored"; }) ] ../strings.nix;
+    expected = { path = "lib/strings.nix"; source = "nixpkgs"; url = "https://github.com/NixOS/nixpkgs/blob/${trivial.manualRevision}/lib/strings.nix"; };
+  };
+
+  testLookupPrefixNoMatch = {
+    expr = strings.lookupPrefix [ nixpkgsSource ] "/foo/bar";
+    expected = { path = "/foo/bar"; };
+  };
+
   testNormalizePath = {
     expr = strings.normalizePath "//a/b//c////d/";
     expected = "/a/b/c/d/";
