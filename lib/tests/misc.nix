@@ -731,8 +731,9 @@ runTests {
   testToPretty =
     let
       deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
+      searchPath = [ { name = "foo"; root = /path/to/foo; } ];
     in {
-    expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
+    expr = mapAttrs (const (generators.toPretty { multiline = false; inherit searchPath; })) rec {
       int = 42;
       float = 0.1337;
       bool = true;
@@ -740,6 +741,8 @@ runTests {
       string = "fn\${o}\"r\\d";
       newlinestring = "\n";
       path = /. + "/foo";
+      relativePath = /path/to/foo/bar/qux;
+      rootPath = /path/to/foo;
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
@@ -757,6 +760,8 @@ runTests {
       string = ''"fn\''${o}\"r\\d"'';
       newlinestring = "\"\\n\"";
       path = "/foo";
+      relativePath = "<foo/bar/qux>";
+      rootPath = "<foo>";
       null_ = "null";
       function = "<function>";
       functionArgs = "<function, args: {arg?, foo}>";

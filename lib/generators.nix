@@ -289,7 +289,12 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
-    multiline ? true
+    multiline ? true,
+    /* Render paths with these prefixes using angle bracket syntax, e.g.
+         toPretty { searchPath = [ { name = "foo"; root = "/path/to/foo"; } ]; } /path/to/foo/bar/qux
+         ==> "<foo/bar/qux>"
+       Type: [ { name = string; root = string or path; } ] */
+    searchPath ? []
   }:
     let
     go = indent: v: with builtins;
@@ -316,7 +321,10 @@ rec {
     else if true  ==   v then "true"
     else if false ==   v then "false"
     else if null  ==   v then "null"
-    else if isPath     v then toString v
+    else if isPath     v then
+      let res = libStr.lookupPrefix searchPath v; in
+      if res ? source then "<${res.source}${libStr.optionalString (res.path != "") "/"}${res.path}>"
+                      else res.path
     else if isList     v then
       if v == [] then "[ ]"
       else "[" + introSpace
