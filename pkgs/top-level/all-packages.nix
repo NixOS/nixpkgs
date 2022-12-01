@@ -15762,7 +15762,9 @@ with pkgs;
   mbqn = callPackage ../development/interpreters/bqn/mlochbaum-bqn { };
 
   cbqn = cbqn-bootstrap.phase2;
+  cbqn-replxx = cbqn-bootstrap.phase2-replxx;
   cbqn-standalone = cbqn-bootstrap.phase0;
+  cbqn-standalone-replxx = cbqn-bootstrap.phase0-replxx;
 
   # Below, the classic self-bootstrapping process
   cbqn-bootstrap = lib.dontRecurseIntoAttrs {
@@ -15787,6 +15789,14 @@ with pkgs;
       mbqn-source = null;
     };
 
+    phase0-replxx = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv;
+      genBytecode = false;
+      bqn-path = null;
+      mbqn-source = null;
+      enableReplxx = true;
+    };
+
     phase1 = callPackage ../development/interpreters/bqn/cbqn {
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
@@ -15797,6 +15807,13 @@ with pkgs;
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = true;
       bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
+    };
+
+    phase2-replxx = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
+      genBytecode = true;
+      bqn-path = "${buildPackages.cbqn-bootstrap.phase1}/bin/cbqn";
+      enableReplxx = true;
     };
   };
 
