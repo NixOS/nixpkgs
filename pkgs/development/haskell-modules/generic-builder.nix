@@ -388,7 +388,13 @@ stdenv.mkDerivation ({
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
+  #
+  # Note: We need to disable this work-around if incremental builds are enabled
+  # because otherwise Nix will change permissions on the `$out/lib/links`
+  # directory to read-only when the build is done after the dist directory has
+  # already been exported, which triggers an unnecessary rebuild of modules
+  # included in the exported dist directory.
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateDistOutput) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #

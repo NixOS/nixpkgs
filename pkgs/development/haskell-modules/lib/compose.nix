@@ -479,6 +479,13 @@ rec {
   #
   # The `interval` argument is in seconds.  For example, if you wanted to do a
   # full rebuild every day, you would specify `interval = 24 * 60 * 60;`.
+  #
+  # This function may require a sufficiently new version of macOS because it
+  # disables the work-around from https://github.com/NixOS/nixpkgs/pull/25537
+  # in order for incremental builds to work on Mac.  However, the work-around
+  # appears to no longer be necessary anyway on newer versions of macOS.  For
+  # example, this was stress-tested successfully without the work-around on
+  # macOS Ventura 13.0.1.
   incremental = { interval }: pkg:
     let
       requiredNixVersion = "2.12.0pre20221128_32c182b";
