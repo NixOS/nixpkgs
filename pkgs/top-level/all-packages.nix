@@ -23775,6 +23775,8 @@ with pkgs;
 
   hyp = callPackage ../servers/http/hyp { };
 
+  peering-manager = callPackage ../servers/web-apps/peering-manager { };
+
   podgrab = callPackage ../servers/misc/podgrab { };
 
   portunus = callPackage ../servers/portunus { };
