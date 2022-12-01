@@ -1750,7 +1750,7 @@ with pkgs;
 
   git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-and-tools/git-remote-codecommit { };
 
-  git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
+  git-repo-updater = python3Packages.callPackage ../applications/version-management/git-and-tools/git-repo-updater { };
 
   git-review = python3Packages.callPackage ../applications/version-management/git-review { };
 
