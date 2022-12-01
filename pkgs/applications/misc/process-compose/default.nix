@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "process-compose";
-  version = "0.24.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "TKLLq6I+Mcvdz51m8nydTWcslBcQlJCJFoJ10SgfVWU=";
+    sha256 = "7UVCGyFay0yQAcO1NKb1+vsNqX1v9Hf5NUgjnHlgnG0=";
   };
 
-  ldflags = [ "-X main.version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/F1bonacc1/process-compose";
     license = licenses.asl20;
     maintainers = with maintainers; [ thenonameguy ];
-    mainProgram = "process-compose";
   };
 }

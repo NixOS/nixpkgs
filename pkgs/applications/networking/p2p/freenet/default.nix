@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, bash, coreutils, substituteAll }:
+{ lib, stdenv, fetchurl, jdk, bash, coreutils, substituteAll, nixosTests }:
 
 let
   version = "build01494";
@@ -55,6 +55,8 @@ in stdenv.mkDerivation {
   };
 
   dontUnpack = true;
+
+  passthru.tests = { inherit (nixosTests) freenet; };
 
   installPhase = ''
     mkdir -p $out/bin
