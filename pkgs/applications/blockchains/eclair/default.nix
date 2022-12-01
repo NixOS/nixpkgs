@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "eclair";
-  version = "0.7.0-patch-disconnect";
-  revision = "cad88bf";
+  version = "0.8.0";
+  revision = "0077471";
 
   src = fetchzip {
     url = "https://github.com/ACINQ/eclair/releases/download/v${version}/eclair-node-${version}-${revision}-bin.zip";
-    hash = "sha256-agOxflCXfoeSeGliB/PAMMyCdqYYajciHMfLrSiZx1Q=";
+    hash = "sha256-jkXdt1aQRVgItfFPuyh45uXjUFgJtKng/17Po5i7ang=";
   };
 
   propagatedBuildInputs = [ jq openjdk11 ];
