@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , coreutils
 , fetchurl
 , patchelf
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     sha256 = "06pb4wjz76wlwhhzky9vkyi4aq6775k63c2kw3j9prqdipxqzf9j";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc
     ncurses5
     zlib
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     gtk2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xilinx Vivado";
     homepage = "https://www.xilinx.com/products/design-tools/vivado.html";
     license = licenses.unfree;
