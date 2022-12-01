@@ -3931,6 +3931,8 @@ with pkgs;
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
 
+  easyocr = with python3.pkgs; toPythonApplication easyocr;
+
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
 
   ecasound = callPackage ../applications/audio/ecasound { };
