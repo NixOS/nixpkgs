@@ -9,6 +9,7 @@
 , ffmpeg
 , vlc
 , xdg-utils
+, xdotool
 , which
 
 , jackSupport ? true
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
     # seem to have an effect for some plugins.
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc xdotool ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
