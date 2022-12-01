@@ -1750,6 +1750,9 @@ with pkgs;
 
   git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-and-tools/git-remote-codecommit { };
 
+  gitRepo = git-repo;
+  git-repo = callPackage ../applications/version-management/git-and-tools/git-repo { };
+
   git-repo-updater = python3Packages.callPackage ../applications/version-management/git-and-tools/git-repo-updater { };
 
   git-review = python3Packages.callPackage ../applications/version-management/git-review { };
@@ -1811,8 +1814,6 @@ with pkgs;
   };
 
   git2cl = callPackage ../applications/version-management/git-and-tools/git2cl { };
-
-  gitRepo = callPackage ../applications/version-management/git-repo { };
 
   gitbatch = callPackage ../applications/version-management/git-and-tools/gitbatch { };
 
