@@ -1,0 +1,39 @@
+From 165ee1f4c1208636254392335d34934dc50d273e Mon Sep 17 00:00:00 2001
+From: ppenguin <hieronymusv@gmail.com>
+Date: Tue, 15 Mar 2022 23:15:07 +0100
+Subject: [PATCH] fix setup.py to work in nixpkgs
+
+---
+ setup.py | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index d705846..d7345a2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -42,10 +42,10 @@
+ 
+     author='Thomas J. Duck',
+     author_email='tomduck@tomduck.ca',
+-    description='Equation number filter for pandoc',
++    description='Section number filter for pandoc',
+     long_description=DESCRIPTION,
+     license='GPL',
+-    keywords='pandoc equation numbers filter',
++    keywords='pandoc section numbers filter',
+     url='https://github.com/tomduck/pandoc-secnos',
+     download_url='https://github.com/tomduck/pandoc-secnos/tarball/' + \
+                  __version__,
+@@ -63,12 +63,3 @@
+         'Programming Language :: Python'
+         ]
+ )
+-
+-# Check that the pandoc-secnos script is on the PATH
+-if not shutil.which('pandoc-secnos'):
+-    msg = """
+-          ERROR: `pandoc-secnos` script not found. This will need to 
+-          be corrected.  If you need help, please file an Issue at
+-          https://github.com/tomduck/pandoc-secnos/issues.\n"""
+-    print(textwrap.dedent(msg))
+-    sys.exit(-1)

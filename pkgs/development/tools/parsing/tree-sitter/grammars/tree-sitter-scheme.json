@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/6cdh/tree-sitter-scheme",
+  "rev": "bdcd2c8496701153506a9e3e1b76dfed852873ba",
+  "date": "2022-11-06T17:17:49+08:00",
+  "path": "/nix/store/l096qb2872kab34avgscn9bwizrzail5-tree-sitter-scheme",
+  "sha256": "12knvhmayck9da3zj2w55al4yjhkkr9gxmfdmrjiz7vn9wc1dxr9",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

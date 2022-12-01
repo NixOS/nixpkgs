@@ -1,0 +1,43 @@
+diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
+index 9a18184fd3..278d146dd1 100644
+--- a/Source/CMakeLists.txt
++++ b/Source/CMakeLists.txt
+@@ -933,7 +933,6 @@ endif()
+ # On Apple we need CoreFoundation and CoreServices
+ if(APPLE)
+   target_link_libraries(CMakeLib "-framework CoreFoundation")
+-  target_link_libraries(CMakeLib "-framework CoreServices")
+ endif()
+ 
+ if(WIN32 AND NOT UNIX)
+diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
+index 77403b076a..d5aac95e1e 100644
+--- a/Source/cmGlobalXCodeGenerator.cxx
++++ b/Source/cmGlobalXCodeGenerator.cxx
+@@ -49,10 +49,6 @@ struct cmLinkImplementation;
+ 
+ #if !defined(CMAKE_BOOTSTRAP) && defined(__APPLE__)
+ #  include <CoreFoundation/CoreFoundation.h>
+-#  if !TARGET_OS_IPHONE
+-#    define HAVE_APPLICATION_SERVICES
+-#    include <ApplicationServices/ApplicationServices.h>
+-#  endif
+ #endif
+ 
+ #if !defined(CMAKE_BOOTSTRAP)
+diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
+index 79452ffff6..a848731b7e 100644
+--- a/Utilities/cmlibarchive/CMakeLists.txt
++++ b/Utilities/cmlibarchive/CMakeLists.txt
+@@ -2013,11 +2013,6 @@ IF(ENABLE_TEST)
+ ENDIF(ENABLE_TEST)
+ ENDIF()
+ 
+-# We need CoreServices on Mac OS.
+-IF(APPLE)
+-  LIST(APPEND ADDITIONAL_LIBS "-framework CoreServices")
+-ENDIF(APPLE)
+-
+ add_subdirectory(libarchive)
+ IF(0) # CMake does not build libarchive's command-line tools.
+ add_subdirectory(cat)

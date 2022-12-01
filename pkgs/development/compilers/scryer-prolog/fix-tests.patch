@@ -1,0 +1,29 @@
+diff --git a/tests/scryer/src_tests.rs b/tests/scryer/src_tests.rs
+index b0b9efb5..8fddd842 100644
+--- a/tests/scryer/src_tests.rs
++++ b/tests/scryer/src_tests.rs
+@@ -46,24 +46,6 @@ fn rules() {
+     load_module_test("src/tests/rules.pl", "");
+ }
+ 
+-#[serial]
+-#[test]
+-fn setup_call_cleanup_load() {
+-    load_module_test(
+-        "src/tests/setup_call_cleanup.pl",
+-        "1+21+31+2>_17737+_177381+_158071+2>41+2>_177381+2>31+2>31+2>4ba"
+-    );
+-}
+-
+-#[test]
+-fn setup_call_cleanup_process() {
+-    run_top_level_test_with_args(
+-        &["src/tests/setup_call_cleanup.pl", "-f", "-g", "halt"],
+-        "",
+-        "1+21+31+2>_19590+_195911+_176601+2>41+2>_195911+2>31+2>31+2>4ba"
+-    );
+-}
+-
+ #[serial]
+ #[test]
+ fn clpz_load() {

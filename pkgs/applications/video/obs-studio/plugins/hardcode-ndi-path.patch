@@ -1,0 +1,19 @@
+diff --git a/src/obs-ndi.cpp b/src/obs-ndi.cpp
+index 1a8aeb3..9a36ea9 100644
+--- a/src/obs-ndi.cpp
++++ b/src/obs-ndi.cpp
+@@ -132,13 +132,7 @@ const NDIlib_v5 *load_ndilib()
+ 	const char *redistFolder = std::getenv(NDILIB_REDIST_FOLDER);
+ 	if (redistFolder)
+ 		libraryLocations.push_back(redistFolder);
+-#if defined(__linux__) || defined(__APPLE__)
+-	libraryLocations.push_back("/usr/lib");
+-	libraryLocations.push_back("/usr/lib64");
+-	libraryLocations.push_back("/usr/lib/x86_64-linux-gnu");
+-	libraryLocations.push_back("/usr/local/lib");
+-	libraryLocations.push_back("/usr/local/lib64");
+-#endif
++	libraryLocations.push_back("@NDI@/lib");
+ 
+ 	for (std::string path : libraryLocations) {
+ 		blog(LOG_DEBUG, "[load_ndilib] Trying library path: '%s'", path.c_str());

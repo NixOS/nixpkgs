@@ -1,0 +1,118 @@
+diff --git a/collectors/Makefile.am b/collectors/Makefile.am
+index a0a972e8f..b4a2a5f53 100644
+--- a/collectors/Makefile.am
++++ b/collectors/Makefile.am
+@@ -32,7 +32,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
+ usergoconfigdir=$(configdir)/go.d
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(usercustompluginsconfigdir)
+ 	$(INSTALL) -d $(DESTDIR)$(usergoconfigdir)
+ 
+diff --git a/collectors/charts.d.plugin/Makefile.am b/collectors/charts.d.plugin/Makefile.am
+index 03c7f0a94..01985db01 100644
+--- a/collectors/charts.d.plugin/Makefile.am
++++ b/collectors/charts.d.plugin/Makefile.am
+@@ -34,7 +34,7 @@ dist_userchartsconfig_DATA = \
+     $(NULL)
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userchartsconfigdir)
+ 
+ chartsconfigdir=$(libconfigdir)/charts.d
+diff --git a/collectors/ebpf.plugin/Makefile.am b/collectors/ebpf.plugin/Makefile.am
+index 2d5f92a6b..8b11c7502 100644
+--- a/collectors/ebpf.plugin/Makefile.am
++++ b/collectors/ebpf.plugin/Makefile.am
+@@ -9,7 +9,7 @@ SUFFIXES = .in
+ userebpfconfigdir=$(configdir)/ebpf.d
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userebpfconfigdir)
+ 
+ dist_noinst_DATA = \
+diff --git a/collectors/python.d.plugin/Makefile.am b/collectors/python.d.plugin/Makefile.am
+index 667f1627c..eb6810057 100644
+--- a/collectors/python.d.plugin/Makefile.am
++++ b/collectors/python.d.plugin/Makefile.am
+@@ -32,7 +32,7 @@ dist_userpythonconfig_DATA = \
+     $(NULL)
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userpythonconfigdir)
+ 
+ pythonconfigdir=$(libconfigdir)/python.d
+diff --git a/collectors/statsd.plugin/Makefile.am b/collectors/statsd.plugin/Makefile.am
+index c8144c137..f8aaa89b6 100644
+--- a/collectors/statsd.plugin/Makefile.am
++++ b/collectors/statsd.plugin/Makefile.am
+@@ -19,5 +19,5 @@ dist_userstatsdconfig_DATA = \
+     $(NULL)
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userstatsdconfigdir)
+diff --git a/health/Makefile.am b/health/Makefile.am
+index d5eb88468..ab246e77a 100644
+--- a/health/Makefile.am
++++ b/health/Makefile.am
+@@ -19,7 +19,7 @@ dist_userhealthconfig_DATA = \
+     $(NULL)
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(userhealthconfigdir)
+ 
+ healthconfigdir=$(libconfigdir)/health.d
+diff --git a/system/Makefile.am b/system/Makefile.am
+index a88ccab65..bda6ee2b6 100644
+--- a/system/Makefile.am
++++ b/system/Makefile.am
+@@ -3,7 +3,6 @@
+ 
+ MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
+ CLEANFILES = \
+-    edit-config \
+     netdata-openrc \
+     netdata.logrotate \
+     netdata.service \
+@@ -20,15 +19,13 @@ include $(top_srcdir)/build/subst.inc
+ SUFFIXES = .in
+ 
+ dist_config_SCRIPTS = \
+-    edit-config \
+     $(NULL)
+ 
+ dist_config_DATA = \
+-    .install-type \
+     $(NULL)
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(configdir)
+ 
+ nodist_noinst_DATA = \
+diff --git a/web/Makefile.am b/web/Makefile.am
+index ccaccd764..16a2977e5 100644
+--- a/web/Makefile.am
++++ b/web/Makefile.am
+@@ -12,7 +12,7 @@ SUBDIRS = \
+ usersslconfigdir=$(configdir)/ssl
+ 
+ # Explicitly install directories to avoid permission issues due to umask
+-install-exec-local:
++no-install-exec-local:
+ 	$(INSTALL) -d $(DESTDIR)$(usersslconfigdir)
+ 
+ dist_noinst_DATA = \

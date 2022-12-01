@@ -1,0 +1,9 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 57edba6..d06b6d9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,3 +1,4 @@
+ PROJECT (cdrkit C)
++INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/include)
+ SUBDIRS(include genisoimage wodim libedc libhfs_iso libparanoia icedax libusal librols libunls readom netscsid 3rd-party/dirsplit)
+ 

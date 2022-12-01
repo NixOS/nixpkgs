@@ -1,0 +1,17 @@
+--- a/site_scons/mongo_scons_utils.py
++++ b/site_scons/mongo_scons_utils.py
+@@ -84,14 +84,11 @@
+ def default_buildinfo_environment_data():
+     return (
+         ('distmod', '$MONGO_DISTMOD', True, True,),
+         ('distarch', '$MONGO_DISTARCH', True, True,),
+         ('cc', '$CC_VERSION', True, False,),
+-        ('ccflags', '$CCFLAGS', True, False,),
+         ('cxx', '$CXX_VERSION', True, False,),
+-        ('cxxflags', '$CXXFLAGS', True, False,),
+-        ('linkflags', '$LINKFLAGS', True, False,),
+         ('target_arch', '$TARGET_ARCH', True, True,),
+         ('target_os', '$TARGET_OS', True, False,),
+     )
+ 
+ # If you want buildInfo and --version to be relatively empty, set

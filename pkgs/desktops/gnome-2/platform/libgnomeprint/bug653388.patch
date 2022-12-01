@@ -1,0 +1,21 @@
+From 9b82b7e75b83395e7c5692085e1934202cf7f65f Mon Sep 17 00:00:00 2001
+From: Jeremy Huddleston <jeremyhu@freedesktop.org>
+Date: Wed, 12 Oct 2011 15:08:59 +0000
+Subject: Add missing include
+
+https://bugzilla.gnome.org/show_bug.cgi?id=653388
+---
+diff --git a/libgnomeprint/modules/cups/gnome-print-cups-transport.c b/libgnomeprint/modules/cups/gnome-print-cups-transport.c
+index aeb7111..85de91b 100644
+--- a/libgnomeprint/modules/cups/gnome-print-cups-transport.c
++++ b/libgnomeprint/modules/cups/gnome-print-cups-transport.c
+@@ -34,6 +34,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
++#include <stdio.h>
+ #include <unistd.h>
+ #include <locale.h>
+ 
+--
+cgit v0.9.0.2

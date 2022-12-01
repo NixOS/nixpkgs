@@ -1,0 +1,54 @@
+From 2e8060f9ade13ba18ae5930c0781227bfcce11a5 Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Mon, 10 Jan 2022 22:16:38 +0300
+Subject: [PATCH] Disable accounts setup phase and oslogin
+
+On NixOS we set up necessary groups and sudoers rules declaratively,
+and have most of `/etc` directory read-only. This creates (harmless)
+error messages when trying to create google-sudoers file.
+
+"oslogin" daemon sets up configuration necessary for OS Login to
+work, including PAM, NSS and sudoers. On NixOS we perform all this
+configuration declaratively and have most of /etc mounted read-only.
+This creates (harmless) error messages when running the daemon.
+---
+ google_guest_agent/non_windows_accounts.go | 9 ---------
+ google_guest_agent/oslogin.go              | 2 +-
+ 2 files changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/google_guest_agent/non_windows_accounts.go b/google_guest_agent/non_windows_accounts.go
+index 81013e3..05b830f 100644
+--- a/google_guest_agent/non_windows_accounts.go
++++ b/google_guest_agent/non_windows_accounts.go
+@@ -104,15 +104,6 @@ func (a *accountsMgr) set() error {
+ 		sshKeys = make(map[string][]string)
+ 	}
+ 
+-	logger.Debugf("create sudoers file if needed")
+-	if err := createSudoersFile(); err != nil {
+-		logger.Errorf("Error creating google-sudoers file: %v.", err)
+-	}
+-	logger.Debugf("create sudoers group if needed")
+-	if err := createSudoersGroup(); err != nil {
+-		logger.Errorf("Error creating google-sudoers group: %v.", err)
+-	}
+-
+ 	mdkeys := newMetadata.Instance.Attributes.SSHKeys
+ 	if !newMetadata.Instance.Attributes.BlockProjectKeys {
+ 		mdkeys = append(mdkeys, newMetadata.Project.Attributes.SSHKeys...)
+diff --git a/google_guest_agent/oslogin.go b/google_guest_agent/oslogin.go
+index d05f733..980e84c 100644
+--- a/google_guest_agent/oslogin.go
++++ b/google_guest_agent/oslogin.go
+@@ -76,7 +76,7 @@ func (o *osloginMgr) timeout() bool {
+ }
+ 
+ func (o *osloginMgr) disabled(os string) bool {
+-	return os == "windows"
++	return true
+ }
+ 
+ func (o *osloginMgr) set() error {
+-- 
+2.34.1
+

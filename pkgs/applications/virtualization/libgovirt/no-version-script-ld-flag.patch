@@ -1,0 +1,14 @@
+--- a/govirt/Makefile.in
++++ b/govirt/Makefile.in
+@@ -511,8 +511,7 @@
+ libgovirt_la_LDFLAGS = \
+ 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
+ 	-export-dynamic						\
+-	-no-undefined						\
+-	-Wl,--version-script=$(srcdir)/govirt.sym
++	-no-undefined
+ 
+ libgovirt_la_CFLAGS = \
+ 	$(WARNINGFLAGS_C)
+
+Diff finished.  Fri Oct 28 10:36:38 2022

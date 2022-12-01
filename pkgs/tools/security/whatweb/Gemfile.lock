@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    bson (4.14.1)
+    ipaddr (1.2.4)
+    json (2.6.1)
+    mongo (2.17.1)
+      bson (>= 4.8.2, < 5.0.0)
+    public_suffix (4.0.6)
+    rchardet (1.8.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  addressable
+  ipaddr
+  json
+  mongo
+  rchardet
+
+BUNDLED WITH
+   2.1.4
