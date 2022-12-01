@@ -41,6 +41,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Simple async wrapper around the Octoprint API";
     homepage = "https://github.com/rfleming71/pyoctoprintapi";
+    changelog = "https://github.com/rfleming71/pyoctoprintapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers= with maintainers; [ hexa ];
   };
