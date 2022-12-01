@@ -15802,7 +15802,7 @@
   };
   portothree = {
     name = "Gustavo Porto";
-    email = "gustavoporto@ya.ru";
+    email = "gus@p8s.co";
     github = "portothree";
     githubId = 3718120;
   };
