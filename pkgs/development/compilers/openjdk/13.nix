@@ -4,7 +4,8 @@
 , libXcursor, libXrandr, fontconfig, openjdk13-bootstrap, fetchpatch
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+# disabled by default since openjfx11 depends on python2 (EOL)
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
