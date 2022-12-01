@@ -257,6 +257,7 @@ in {
   haste-server = handleTest ./haste-server.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
+  headscale = handleTest ./headscale.nix {};
   healthchecks = handleTest ./web-apps/healthchecks.nix {};
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
   hbase_2_4 = handleTest ./hbase.nix { package=pkgs.hbase_2_4; };
