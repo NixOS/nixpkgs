@@ -9,11 +9,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "klibc";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
-    sha256 = "sha256-ZidT2oiJ50TfwNtutAIcM3fufvjtZtfVd2X4yeJZOc0=";
+    hash = "sha256-XrMOXh7HPcTjhMYLuUOvicUxdMgvh3Ev3TTdMoZNX2A=";
   };
 
   patches = [ ./no-reinstall-kernel-headers.patch ];
