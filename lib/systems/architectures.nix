@@ -5,6 +5,7 @@ rec {
   features = {
     default        = [ ];
     # x86_64 Intel
+    nehalem        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
     ivybridge      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -50,7 +51,8 @@ rec {
     default        = [ "x86-64-v2"      ];
     x86-64         = [ ];
     x86-64-v2      = [ "x86-64"         ] ++ inferiors.x86-64;
-    westmere       = [ "x86-64-v2"      ] ++ inferiors.x86-64-v2;
+    nehalem        = [ "x86-64-v2"      ] ++ inferiors.x86-64-v2;
+    westmere       = [ "nehalem"        ] ++ inferiors.nehalem;
     sandybridge    = [ "westmere"       ] ++ inferiors.westmere;
     ivybridge      = [ "sandybridge"    ] ++ inferiors.sandybridge;
     x86-64-v3      = [ "ivybridge"      ] ++ inferiors.ivybridge;
