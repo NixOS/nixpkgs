@@ -131,7 +131,7 @@ let
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
-      optionAttrSetToDocList optionAttrSetToDocList'
+      optionAttrSetToDocList optionsToDocTemplate
       scrubOptionValue literalExpression literalExample literalDocBook
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption

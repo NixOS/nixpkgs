@@ -11,9 +11,7 @@
 
   <xsl:output method='xml' encoding="UTF-8" />
 
-  <xsl:param name="revision" />
   <xsl:param name="documentType" />
-  <xsl:param name="program" />
   <xsl:param name="variablelistId" />
   <xsl:param name="optionIdPrefix" />
 
@@ -218,56 +216,29 @@
     <simplelist>
       <!--
         Example:
-          opt.declarations = [ { name = "foo/bar.nix"; url = "https://github.com/....."; } ];
+          opt.declarations = [
+            { source = "nixpkgs"; path = "foo/bar.nix"; url = ...; } # <nixpkgs/foo/bar.nix>
+            { path = "/foo/bar.nix"; }                               # links to file:///foo/bar.nix
+            { path = "foo/bar.nix"; }                                # no link
+          ];
       -->
-      <xsl:for-each select="list/attrs[attr[@name = 'name']]">
+      <xsl:for-each select="list/attrs[attr[@name = 'path']]">
         <member><filename>
-          <xsl:if test="attr[@name = 'url']">
-            <xsl:attribute name="xlink:href"><xsl:value-of select="attr[@name = 'url']/string/@value"/></xsl:attribute>
-          </xsl:if>
-          <xsl:value-of select="attr[@name = 'name']/string/@value"/>
-        </filename></member>
-      </xsl:for-each>
-
-      <!--
-        When the declarations/definitions are raw strings,
-        fall back to hardcoded location logic, specific to Nixpkgs.
-      -->
-      <xsl:for-each select="list/string">
-        <member><filename>
-          <!-- Hyperlink the filename either to the NixOS Subversion
-          repository (if it’s a module and we have a revision number),
-          or to the local filesystem. -->
           <xsl:choose>
-            <xsl:when test="not(starts-with(@value, '/'))">
-              <xsl:choose>
-                <xsl:when test="$revision = 'local'">
-                  <xsl:attribute name="xlink:href">https://github.com/NixOS/nixpkgs/blob/master/<xsl:value-of select="@value"/></xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:attribute name="xlink:href">https://github.com/NixOS/nixpkgs/blob/<xsl:value-of select="$revision"/>/<xsl:value-of select="@value"/></xsl:attribute>
-                </xsl:otherwise>
-              </xsl:choose>
+            <xsl:when test="attr[@name = 'url']">
+              <xsl:attribute name="xlink:href"><xsl:value-of select="attr[@name = 'url']/string/@value"/></xsl:attribute>
             </xsl:when>
-            <xsl:when test="$revision != 'local' and $program = 'nixops' and contains(@value, '/nix/')">
-              <xsl:attribute name="xlink:href">https://github.com/NixOS/nixops/blob/<xsl:value-of select="$revision"/>/nix/<xsl:value-of select="substring-after(@value, '/nix/')"/></xsl:attribute>
+            <xsl:when test="attr[@name = 'source']"></xsl:when>
+            <xsl:when test="starts-with(attr[@name = 'path']/string/@value, '/')">
+              <xsl:attribute name="xlink:href">file://<xsl:value-of select="str:encode-uri(attr[@name = 'path']/string/@value, false())" /></xsl:attribute>
             </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="xlink:href">file://<xsl:value-of select="@value"/></xsl:attribute>
-            </xsl:otherwise>
           </xsl:choose>
-          <!-- Print the filename and make it user-friendly by replacing the
-          /nix/store/<hash> prefix by the default location of nixos
-          sources. -->
           <xsl:choose>
-            <xsl:when test="not(starts-with(@value, '/'))">
-              &lt;nixpkgs/<xsl:value-of select="@value"/>&gt;
-            </xsl:when>
-            <xsl:when test="contains(@value, 'nixops') and contains(@value, '/nix/')">
-              &lt;nixops/<xsl:value-of select="substring-after(@value, '/nix/')"/>&gt;
+            <xsl:when test="attr[@name = 'source']">
+              &lt;<xsl:value-of select="attr[@name = 'source']/string/@value"/>/<xsl:value-of select="attr[@name = 'path']/string/@value"/>&gt;
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="@value" />
+              <xsl:value-of select="attr[@name = 'path']/string/@value"/>
             </xsl:otherwise>
           </xsl:choose>
         </filename></member>

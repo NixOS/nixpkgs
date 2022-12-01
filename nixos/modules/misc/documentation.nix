@@ -14,6 +14,7 @@ let
     in
       cfg.nixos.options.splitBuild
         && builtins.isPath m
+        && hasPrefix "${modulesPath}/" (toString m)
         && isFunction f
         && instance ? options
         && instance.meta.buildDocsInSandbox or true;
@@ -29,9 +30,6 @@ let
 
   manual = import ../../doc/manual rec {
     inherit pkgs config;
-    version = config.system.nixos.release;
-    revision = "release-${version}";
-    extraSources = cfg.nixos.extraModuleSources;
     options =
       let
         scrubbedEval = evalModules {
@@ -63,19 +61,18 @@ let
       in scrubbedEval.options;
 
     baseOptionsJSON =
-      let
-        filter =
-          builtins.filterSource
-            (n: t:
-              cleanSourceFilter n t
-              && (t == "directory" -> baseNameOf n != "tests")
-              && (t == "file" -> hasSuffix ".nix" n)
-            );
-      in
         pkgs.runCommand "lazy-options.json" {
-          libPath = filter (pkgs.path + "/lib");
-          pkgsLibPath = filter (pkgs.path + "/pkgs/pkgs-lib");
-          nixosPath = filter (pkgs.path + "/nixos");
+          filteredNixpkgs = builtins.path {
+            name = "filtered-nixpkgs";
+            path = pkgs.path;
+            filter = let dirs = [ "lib/" "pkgs/pkgs-lib/" "nixos/" ]; in
+              path: type: let p = lib.removePrefix (toString pkgs.path + "/") (toString path); in
+              cleanSourceFilter path type && (
+                if type == "directory" then
+                  baseNameOf path != "tests" && p != "nixos/doc" && lib.any (dir: lib.hasPrefix dir (p + "/") || lib.hasPrefix (p + "/") dir) dirs
+                else
+                  p == ".version" || lib.any (dir: lib.hasPrefix dir p) dirs);
+          };
           modules = map (p: ''"${removePrefix "${modulesPath}/" (toString p)}"'') docModules.lazy;
         } ''
           export NIX_STORE_DIR=$TMPDIR/store
@@ -83,15 +80,12 @@ let
           ${pkgs.buildPackages.nix}/bin/nix-instantiate \
             --show-trace \
             --eval --json --strict \
-            --argstr libPath "$libPath" \
-            --argstr pkgsLibPath "$pkgsLibPath" \
-            --argstr nixosPath "$nixosPath" \
+            -I nixpkgs="$filteredNixpkgs" \
             --arg modules "[ $modules ]" \
             --argstr stateVersion "${options.system.stateVersion.default}" \
-            --argstr release "${config.system.nixos.release}" \
-            $nixosPath/lib/eval-cacheable-options.nix > $out \
+            '<nixpkgs/nixos/lib/eval-cacheable-options.nix>' > $out \
             || {
-              echo -en "\e[1;31m"
+              printf '\e[1;31m'
               echo 'Cacheable portion of option doc build failed.'
               echo 'Usually this means that an option attribute that ends up in documentation (eg' \
                 '`default` or `description`) depends on the restricted module arguments' \
@@ -101,7 +95,7 @@ let
                 'location. Remove the references to restricted arguments (eg by escaping' \
                 'their antiquotations or adding a `defaultText`) or disable the sandboxed' \
                 'build for the failing module by setting `meta.buildDocsInSandbox = false`.'
-              echo -en "\e[0m"
+              printf '\e[0m'
               exit 1
             } >&2
         '';
@@ -158,7 +152,12 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+    (mkChangedOptionModule [ "documentation" "nixos" "extraModuleSources" ] [ "_module" "sources" ]
+      (config: mkAfter (map (root: { name = "_unknown"; inherit root; }) config.documentation.nixos.extraModuleSources)))
   ];
+
+  # needed for the documentation.nixos.extraModuleSources changed option module
+  meta.buildDocsInSandbox = false;
 
   options = {
 
@@ -296,19 +295,6 @@ in
           the options from all the NixOS modules included in the current
           `configuration.nix`. Disabling this will make the manual
           generator to ignore options defined outside of `baseModules`.
-        '';
-      };
-
-      nixos.extraModuleSources = mkOption {
-        type = types.listOf (types.either types.path types.str);
-        default = [ ];
-        description = lib.mdDoc ''
-          Which extra NixOS module paths the generated NixOS's documentation should strip
-          from options.
-        '';
-        example = literalExpression ''
-          # e.g. with options from modules in ''${pkgs.customModules}/nix:
-          [ pkgs.customModules ]
         '';
       };
 

@@ -137,10 +137,10 @@ rec {
       # When extended with extendModules or moduleType, a fresh instance of
       # this module is used, to avoid conflicts and allow chaining of
       # extendModules.
-      internalModule = rec {
-        _file = "lib/modules.nix";
+      internalModule = {
+        _file = ./modules.nix;
 
-        key = _file;
+        key = "lib/modules.nix";
 
         options = {
           _module.args = mkOption {
@@ -238,6 +238,32 @@ rec {
               within a configuration, but can be used in module imports.
             '';
           };
+
+          _module.sources = mkOption {
+            type = with types; let
+              # Using a submodule here results in infinite recursion, unsurprisingly
+              sourceType = mkOptionType {
+                name = "source";
+                description = "module source accepted by lib.strings.lookupPrefix";
+                descriptionClass = "composite";
+                check = source: isAttrs source
+                  && source ? root && path.check source.root
+                  && source ? name && str.check source.name
+                  && (source ? mkUrl -> isFunction source.mkUrl);
+                merge = lib.options.mergeOneOption;
+              };
+            in listOf sourceType;
+            default = [ ];
+            internal = true;
+            description = lib.mdDoc ''
+              A list of module sources, in the format accepted by `lib.strings.lookupPrefix`.
+              These are used by `lib.optionsToDocTemplate` for rendering store paths as URLs in documentation.
+            '';
+            example = lib.literalExpression ''
+              # e.g. with options from modules in ''${pkgs.foo}/nix:
+              [ { name = "foo"; root = pkgs.foo; mkUrl = m: "https://example.com/foo/" + m; ]
+            '';
+          };
         };
 
         config = {
@@ -246,6 +272,7 @@ rec {
             moduleType = type;
           };
           _module.specialArgs = specialArgs;
+          _module.sources = mkAfter [ lib.nixpkgsSource ];
         };
       };
 
@@ -646,7 +673,7 @@ rec {
      'loc' is the list of attribute names where the option is located.
 
      'opts' is a list of modules.  Each module has an options attribute which
-     correspond to the definition of 'loc' in 'opt.file'. */
+     correspond to the definition of 'loc' in 'opt._file'. */
   mergeOptionDecls =
    loc: opts:
     foldl' (res: opt:
@@ -673,7 +700,12 @@ rec {
             if getSubModules != null then map (setDefaultModuleLocation opt._file) getSubModules ++ res.options
             else res.options;
         in opt.options // res //
-          { declarations = res.declarations ++ [opt._file];
+          { declarations =
+              # Ensure the "main" declaration (the one with the default if there's one,
+              # description otherwise) ends up first in the list.
+              if opt.options ? default || (! (res ? default) && opt.options ? description)
+              then [opt._file] ++ res.declarations
+              else res.declarations ++ [opt._file];
             options = submodules;
           } // typeSet
     ) { inherit loc; declarations = []; options = []; } opts;
@@ -901,7 +933,7 @@ rec {
   mkBefore = mkOrder 500;
   mkAfter = mkOrder 1500;
 
-  # The default priority for things that don't have a priority specified.
+  # The default override priority for things that don't have a priority specified.
   defaultPriority = 100;
 
   # Convenient property used to transfer all definitions and their

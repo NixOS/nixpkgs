@@ -948,7 +948,7 @@ runTests {
           modules = [ module ];
         }).options;
 
-        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
+        locs = filter (o: ! o.internal) (optionsToDocTemplate { inherit options; });
       in map (o: o.loc) locs;
     expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };

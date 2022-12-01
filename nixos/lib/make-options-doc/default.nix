@@ -18,17 +18,19 @@
 */
 { pkgs
 , lib
+
+# Passed to lib.optionsToDocTemplate
 , options
-, transformOptions ? lib.id  # function for additional tranformations of the options
+, transformOptions ? lib.id
+
 , documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
                             #      and/or rename function to moduleOptionDoc for clean slate
 
-  # If you include more than one option list into a document, you need to
-  # provide different ids.
+# If you include more than one option list into a document, you need to
+# provide different ids.
 , variablelistId ? "configuration-variable-list"
-  # String to prefix to the option XML/HTML id attributes.
+# String to prefix to the option XML/HTML id attributes.
 , optionIdPrefix ? "opt-"
-, revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
 # (non-nixos modules imported via configuration.nix, other module sources).
@@ -45,9 +47,10 @@
 }:
 
 let
-  rawOpts = lib.optionAttrSetToDocList options;
-  transformedOpts = map transformOptions rawOpts;
-  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+  rawOpts = lib.optionsToDocTemplate {
+    inherit options transformOptions;
+  };
+  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) rawOpts;
   optionsList = lib.flip map filteredOpts
    (opt: opt
     // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
@@ -173,7 +176,6 @@ in rec {
     ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
       --stringparam documentType '${documentType}' \
-      --stringparam revision '${revision}' \
       --stringparam variablelistId '${variablelistId}' \
       --stringparam optionIdPrefix '${optionIdPrefix}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml

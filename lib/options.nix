@@ -214,38 +214,64 @@ rec {
   */
   getFiles = map (x: x.file);
 
-  # Generate documentation template from the list of option declaration like
-  # the set generated with filterOptionSets.
-  optionAttrSetToDocList = optionAttrSetToDocList' [];
+  /* Generates a flat list of options suitable for documentation generation from
+     an `options` attrset produced by `evalModules`.
 
-  optionAttrSetToDocList' = _: options:
-    concatMap (opt:
-      let
-        docOption = rec {
-          loc = opt.loc;
-          name = showOption opt.loc;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible =
-            if (opt?visible && opt.visible == "shallow")
-            then true
-            else opt.visible or true;
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
+     The returned options obey the following specification:
 
-        subOptions =
-          let ss = opt.type.getSubOptions opt.loc;
-          in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
-        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
-      in
-        # To find infinite recursion in NixOS option docs:
-        # builtins.trace opt.loc
-        [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
+     - `type` is a string
+     - `default` and `example` are {_type, text} attrsets as returned by
+       `literalExpression`, `literalMD`, etc.
+     - `declarations` is a list of {path, source?, url?} attrsets as returned by
+       `lib.strings.lookupPrefix`
+  */
+  optionsToDocTemplate =
+    { options
+    # Additional transformation to apply to each option.
+    , transformOptions ? lib.id
+    }: let
+      moduleSources = options._module.sources.value or [];
+      mkDeclaration = lib.strings.lookupPrefix moduleSources;
+      renderOptionValue = v:
+        if v ? _type && v ? text then v
+        else literalExpression (lib.generators.toPretty {
+          multiline = true;
+          allowPrettyValues = true;
+          searchPath = moduleSources;
+        } v);
+      go = opts:
+        lib.flip concatMap (collect isOption opts) (opt: let
+          docOption = rec {
+            loc = opt.loc;
+            name = showOption opt.loc;
+            description = opt.description or null;
+            declarations = map mkDeclaration (filter (x: x != unknownModule) opt.declarations);
+            internal = opt.internal or false;
+            visible =
+              (opt?visible && opt.visible == "shallow")
+              || opt.visible or true;
+            readOnly = opt.readOnly or false;
+            type = opt.type.description or "unspecified";
+          }
+          // optionalAttrs (opt ? example) { example = renderOptionValue opt.example; }
+          // optionalAttrs (opt ? default) { default = renderOptionValue (opt.defaultText or opt.default); }
+          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
+
+          subOptions =
+            let ss = opt.type.getSubOptions opt.loc;
+            in if ss != {} then go ss else [];
+          subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
+        in
+          # To find infinite recursion in NixOS option docs:
+          # builtins.trace opt.loc
+          [ (transformOptions docOption) ] ++ optionals subOptionsVisible subOptions);
+    in go options;
+
+  /* For backwards compatibility. */
+  optionAttrSetToDocList = options: optionsToDocTemplate {
+    inherit options;
+    transformOptions = opt: opt // { declarations = map (d: d.path) opt.declarations; };
+  };
 
 
   /* This function recursively removes all derivation attributes from
@@ -256,7 +282,7 @@ rec {
      (on the order of megabytes) and is not actually used by the
      manual generator.
 
-     This function was made obsolete by renderOptionValue and is kept for
+     This function was made obsolete by optionsToDocTemplate and is kept for
      compatibility with out-of-tree code.
   */
   scrubOptionValue = x:
@@ -265,17 +291,6 @@ rec {
     else if isList x then map scrubOptionValue x
     else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
     else x;
-
-
-  /* Ensures that the given option value (default or example) is a `_type`d string
-     by rendering Nix values to `literalExpression`s.
-  */
-  renderOptionValue = v:
-    if v ? _type && v ? text then v
-    else literalExpression (lib.generators.toPretty {
-      multiline = true;
-      allowPrettyValues = true;
-    } v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the

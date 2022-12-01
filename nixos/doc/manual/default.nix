@@ -1,41 +1,24 @@
 { pkgs
 , options
 , config
-, version
-, revision
-, extraSources ? []
 , baseOptionsJSON ? null
 , warningsAreErrors ? true
 , allowDocBook ? true
-, prefix ? ../../..
 }:
 
 with pkgs;
 
 let
-  inherit (lib) hasPrefix removePrefix;
-
   lib = pkgs.lib;
+
+  version = lib.trivial.release;
 
   docbook_xsl_ns = pkgs.docbook-xsl-ns.override {
     withManOptDedupPatch = true;
   };
 
-  # We need to strip references to /nix/store/* from options,
-  # including any `extraSources` if some modules came from elsewhere,
-  # or else the build will fail.
-  #
-  # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
-  # you'd need to include `extraSources = [ pkgs.customModules ]`
-  prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
-  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
-
   optionsDoc = buildPackages.nixosOptionsDoc {
-    inherit options revision baseOptionsJSON warningsAreErrors allowDocBook;
-    transformOptions = opt: opt // {
-      # Clean up declaration sites to not refer to the NixOS source tree.
-      declarations = map stripAnyPrefixes opt.declarations;
-    };
+    inherit options baseOptionsJSON warningsAreErrors allowDocBook;
   };
 
   nixos-lib = import ../../lib { };
@@ -48,19 +31,6 @@ let
       };
     in buildPackages.nixosOptionsDoc {
       inherit (eval) options;
-      inherit (revision);
-      transformOptions = opt: opt // {
-        # Clean up declaration sites to not refer to the NixOS source tree.
-        declarations =
-          map
-            (decl:
-              if hasPrefix (toString ../../..) (toString decl)
-              then
-                let subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
-                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
-              else decl)
-            opt.declarations;
-      };
       documentType = "none";
       variablelistId = "test-options-list";
       optionIdPrefix = "test-opt-";
