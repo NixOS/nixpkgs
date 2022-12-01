@@ -1,41 +1,104 @@
-GEM
-  remote: https://rubygems.org/
+GIT
+  remote: https://github.com/Ahmedgagan/mailcatcher.git
+  revision: 6815f296fda555e5263720e41469c4637a872220
+  ref: use-async
   specs:
-    daemons (1.3.1)
-    eventmachine (1.0.9.1)
-    mail (2.7.1)
-      mini_mime (>= 0.1.1)
-    mailcatcher (0.7.1)
-      eventmachine (= 1.0.9.1)
+    mailcatcher (1.0.0.beta1)
+      async (~> 1.25)
+      async-http (~> 0.56.3)
+      async-io (~> 1.32.1)
+      async-websocket (~> 0.19.0)
+      falcon (~> 0.39.1)
       mail (~> 2.3)
       rack (~> 1.5)
       sinatra (~> 1.2)
-      skinny (~> 0.2.3)
       sqlite3 (~> 1.3)
-      thin (~> 1.5.0)
-    mini_mime (1.0.1)
-    rack (1.6.11)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    async (1.30.3)
+      console (~> 1.10)
+      nio4r (~> 2.3)
+      timers (~> 4.1)
+    async-container (0.16.12)
+      async
+      async-io
+    async-http (0.56.6)
+      async (>= 1.25)
+      async-io (>= 1.28)
+      async-pool (>= 0.2)
+      protocol-http (~> 0.22.0)
+      protocol-http1 (~> 0.14.0)
+      protocol-http2 (~> 0.14.0)
+      traces (~> 0.4.0)
+    async-http-cache (0.4.3)
+      async-http (~> 0.56)
+    async-io (1.32.2)
+      async
+    async-pool (0.3.12)
+      async (>= 1.25)
+    async-websocket (0.19.2)
+      async-http (~> 0.54)
+      async-io (~> 1.23)
+      protocol-websocket (~> 0.7.0)
+    build-environment (1.13.0)
+    console (1.16.2)
+      fiber-local
+    falcon (0.39.2)
+      async
+      async-container (~> 0.16.0)
+      async-http (~> 0.56.0)
+      async-http-cache (~> 0.4.0)
+      async-io (~> 1.22)
+      build-environment (~> 1.13)
+      bundler
+      localhost (~> 1.1)
+      process-metrics (~> 0.2.0)
+      rack (>= 1.0)
+      samovar (~> 2.1)
+    fiber-local (1.0.0)
+    localhost (1.1.9)
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
+    mapping (1.1.1)
+    mini_mime (1.1.2)
+    mini_portile2 (2.8.0)
+    nio4r (2.5.8)
+    process-metrics (0.2.1)
+      console (~> 1.8)
+      samovar (~> 2.1)
+    protocol-hpack (1.4.2)
+    protocol-http (0.22.9)
+    protocol-http1 (0.14.6)
+      protocol-http (~> 0.22)
+    protocol-http2 (0.14.2)
+      protocol-hpack (~> 1.4)
+      protocol-http (~> 0.18)
+    protocol-websocket (0.7.5)
+      protocol-http (~> 0.2)
+      protocol-http1 (~> 0.2)
+    rack (1.6.13)
     rack-protection (1.5.5)
       rack
+    samovar (2.1.4)
+      console (~> 1.0)
+      mapping (~> 1.0)
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
-    skinny (0.2.4)
-      eventmachine (~> 1.0.0)
-      thin (>= 1.5, < 1.7)
-    sqlite3 (1.4.0)
-    thin (1.5.1)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
-    tilt (2.0.9)
+    sqlite3 (1.5.4)
+      mini_portile2 (~> 2.8.0)
+    tilt (2.0.11)
+    timers (4.3.5)
+    traces (0.4.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  mailcatcher
+  mailcatcher!
 
 BUNDLED WITH
    2.1.4
