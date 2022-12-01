@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ds0e4C6UaVH7bCt/+YDduJEhQ31hq15t/epaeTZ9kDY=";
+    hash = "sha256-ds0e4C6UaVH7bCt/+YDduJEhQ31hq15t/epaeTZ9kDY=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
+    changelog = "https://github.com/enthought/pyface/releases/tag/${version}";
     maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };
