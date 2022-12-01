@@ -32,7 +32,7 @@ appimageTools.wrapType2 rec {
     description = "An unofficial Microsoft Teams client";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = licenses.gpl3;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = [ maintainers.aacebedo ];
   };
