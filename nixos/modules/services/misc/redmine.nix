@@ -211,49 +211,49 @@ in
         subversion = mkOption {
           type = types.bool;
           default = false;
-          description = "Subversion integration.";
+          description = lib.mdDoc "Subversion integration.";
         };
 
         mercurial = mkOption {
           type = types.bool;
           default = false;
-          description = "Mercurial integration.";
+          description = lib.mdDoc "Mercurial integration.";
         };
 
         git = mkOption {
           type = types.bool;
           default = false;
-          description = "git integration.";
+          description = lib.mdDoc "git integration.";
         };
 
         cvs = mkOption {
           type = types.bool;
           default = false;
-          description = "cvs integration.";
+          description = lib.mdDoc "cvs integration.";
         };
 
         breezy = mkOption {
           type = types.bool;
           default = false;
-          description = "bazaar integration.";
+          description = lib.mdDoc "bazaar integration.";
         };
 
         imagemagick = mkOption {
           type = types.bool;
           default = false;
-          description = "Allows exporting Gant diagrams as PNG.";
+          description = lib.mdDoc "Allows exporting Gant diagrams as PNG.";
         };
 
         ghostscript = mkOption {
           type = types.bool;
           default = false;
-          description = "Allows exporting Gant diagrams as PDF.";
+          description = lib.mdDoc "Allows exporting Gant diagrams as PDF.";
         };
 
         minimagick_font_path = mkOption {
           type = types.str;
           default = "";
-          description = "";
+          description = lib.mdDoc "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
       };
