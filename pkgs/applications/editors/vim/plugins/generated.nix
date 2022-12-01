@@ -8237,6 +8237,18 @@ final: prev:
     meta.homepage = "https://github.com/tjdevries/train.nvim/";
   };
 
+  treesj = buildVimPluginFrom2Nix {
+    pname = "treesj";
+    version = "2022-12-01";
+    src = fetchFromGitHub {
+      owner = "Wansmer";
+      repo = "treesj";
+      rev = "da296173b61330aebfd16129a5bf1263700014f1";
+      sha256 = "1wbbxdf2k1vfrnfllms0g5mnsf5bhsipacfwa546sfnc41j360v9";
+    };
+    meta.homepage = "https://github.com/Wansmer/treesj/";
+  };
+
   tremor-vim = buildVimPluginFrom2Nix {
     pname = "tremor-vim";
     version = "2021-09-07";
