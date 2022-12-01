@@ -670,12 +670,12 @@
   };
   javascript = buildGrammar {
     language = "javascript";
-    version = "cefdcea";
+    version = "7a29d06";
     source = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-javascript";
-      rev = "cefdcea72a8cf86c1f10ca55e837397da07afdab";
-      hash = "sha256-o+th1Va11YtsHaA5IR9IAYRk3SDxTop0gxfSjR2u/o8=";
+      rev = "7a29d06274b7cf87d643212a433d970b73969016";
+      hash = "sha256-fMPCHdfHHyg7yNi9LDA35z+WFfPRbctrh38dZV5qZt4=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-javascript";
   };
@@ -1291,12 +1291,12 @@
   };
   sql = buildGrammar {
     language = "sql";
-    version = "4f1b912";
+    version = "41f1de2";
     source = fetchFromGitHub {
       owner = "derekstride";
       repo = "tree-sitter-sql";
-      rev = "4f1b91246b43190e34957d9de9a0f3625879ba33";
-      hash = "sha256-g1dQ897JQwthConYMlGY25hsypr4weDsDCOWyafriw8=";
+      rev = "41f1de238b7b4a8cc9e118759881aad8585d36ad";
+      hash = "sha256-LORSWO5Ui/Nq1SReERSWZ+BEtxKEJ545LPpA6HbY8Z4=";
     };
     meta.homepage = "https://github.com/derekstride/tree-sitter-sql";
   };
@@ -1494,12 +1494,12 @@
   };
   vhs = buildGrammar {
     language = "vhs";
-    version = "2f87b9d";
+    version = "8a0df32";
     source = fetchFromGitHub {
       owner = "charmbracelet";
       repo = "tree-sitter-vhs";
-      rev = "2f87b9d973597e69552ecf6a4fe16470fbd8c44e";
-      hash = "sha256-G1ytXVBeGN1606aFrPdNFp3Khlg/BTFq2VS176Knb7k=";
+      rev = "8a0df32b72a8cf8d3e3e84f16c19e9ba46d3dba5";
+      hash = "sha256-bWI/MW7U5ht7jmL3BSm5HwD1BMDNGwkBShJIpRlhonI=";
     };
     meta.homepage = "https://github.com/charmbracelet/tree-sitter-vhs";
   };
@@ -1527,12 +1527,12 @@
   };
   wgsl = buildGrammar {
     language = "wgsl";
-    version = "af16e7d";
+    version = "61d2604";
     source = fetchFromGitHub {
       owner = "szebniok";
       repo = "tree-sitter-wgsl";
-      rev = "af16e7d9e230004888fb52d33599ad38b4cf6052";
-      hash = "sha256-rp6SqiGVAxlAbrYhNLhwqawjpFXZd2R4A4cNQx6qFZs=";
+      rev = "61d2604525d47238ecbce8aa38f10cb81ba68fd3";
+      hash = "sha256-dSWQAJN9+EyqPbGZv9wTR8upsK56ZWu9jOpJkJtkabs=";
     };
     meta.homepage = "https://github.com/szebniok/tree-sitter-wgsl";
   };
