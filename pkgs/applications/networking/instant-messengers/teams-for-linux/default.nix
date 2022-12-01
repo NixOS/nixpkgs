@@ -15,7 +15,7 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
-    ++ with pkgs; [ libdrm pipewire ];
+    ++ (with pkgs; [ libdrm pipewire libappindicator ]);
 
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}
