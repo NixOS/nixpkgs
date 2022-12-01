@@ -6249,7 +6249,7 @@ with pkgs;
   ddrutility = callPackage ../tools/system/ddrutility { };
 
   inherit (callPackages ../applications/networking/p2p/deluge {
-    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
+    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x;
   })
     deluge-gtk
     deluged
@@ -21103,7 +21103,7 @@ with pkgs;
 
   libtorrent-rasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python2;
+    python = python3;
   };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
