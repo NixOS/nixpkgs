@@ -1718,7 +1718,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
+  git-lfs = lowPrio (callPackage ../applications/version-management/git-and-tools/git-lfs { });
 
   git-my = callPackage ../applications/version-management/git-and-tools/git-my { };
 
