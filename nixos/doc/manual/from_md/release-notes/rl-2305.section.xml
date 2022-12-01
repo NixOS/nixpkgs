@@ -197,6 +197,21 @@
       </listitem>
       <listitem>
         <para>
+          To reduce closure size in
+          <literal>nixos/modules/profiles/minimal.nix</literal> profile
+          disabled installation documentations and manuals. Also
+          disabled <literal>logrotate</literal> and
+          <literal>udisks2</literal> services.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The minimal ISO image now use
+          <literal>nixos/modules/profiles/minimal.nix</literal> profile.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
