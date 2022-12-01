@@ -15,7 +15,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "warpinator";
-  version = "1.2.15";
+  version = "1.4.1";
 
   format = "other";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec  {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-WLeJTSf8906CjvJvBWnmFRVV1ngOuIK0V/3qZ82Bx7s=";
+    hash = "sha256-gZ19WVolm8uoDZcX3OgLGkB8nFUPZIwCmKGQop9/xJ8=";
   };
 
   nativeBuildInputs = [
@@ -68,9 +68,13 @@ python3.pkgs.buildPythonApplication rec  {
       {} +
   '';
 
+  dontWrapGApps = true; # Prevent double wrapping
+
   preFixup = ''
     # these get loaded via import from bin, so don't need wrapping
     chmod -x+X $out/libexec/warpinator/*.py
+
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = gitUpdater {

@@ -1071,6 +1071,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  archer-65 = {
+    email = "mario.liguori.056@gmail.com";
+    github = "archer-65";
+    githubId = 76066109;
+    name = "Mario Liguori";
+  };
   archseer = {
     email = "blaz@mxxn.io";
     github = "archseer";
@@ -8787,6 +8793,12 @@
     githubId = 4141584;
     name = "Maxime Daniel";
   };
+  maxwell-lt = {
+    email = "maxwell.lt@live.com";
+    github = "maxwell-lt";
+    githubId = 17859747;
+    name = "Maxwell L-T";
+  };
   maxxk = {
     email = "maxim.krivchikov@gmail.com";
     github = "maxxk";
@@ -9662,6 +9674,12 @@
     github = "mwilsoncoding";
     githubId = 43796009;
     name = "Max Wilson";
+  };
+  myaats = {
+    email = "mats@mats.sh";
+    github = "Myaats";
+    githubId = 6295090;
+    name = "Mats";
   };
   myrl = {
     email = "myrl.0xf@gmail.com";
@@ -12726,6 +12744,13 @@
     githubId = 4294323;
     name = "Langston Barrett";
   };
+  sielicki = {
+    name = "Nicholas Sielicki";
+    email = "nix@opensource.nslick.com";
+    github = "sielicki";
+    githubId = 4522995;
+    matrix = "@sielicki:matrix.org";
+  };
   siers = {
     email = "veinbahs+nixpkgs@gmail.com";
     github = "siers";
@@ -14240,6 +14265,13 @@
     email = "twitchyliquid64@ciphersink.net";
     github = "twitchyliquid64";
     githubId = 6328589;
+  };
+  tylerjl = {
+    email = "tyler+nixpkgs@langlois.to";
+    github = "tylerjl";
+    githubId = 1733846;
+    matrix = "@ty:tjll.net";
+    name = "Tyler Langlois";
   };
   typetetris = {
     email = "ericwolf42@mail.com";

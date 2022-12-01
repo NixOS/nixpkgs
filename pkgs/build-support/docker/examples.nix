@@ -92,10 +92,11 @@ rec {
     ];
 
     extraCommands = ''
+      mkdir -p tmp
+
       # nginx still tries to read this directory even if error_log
       # directive is specifying another file :/
       mkdir -p var/log/nginx
-      mkdir -p var/cache/nginx
     '';
 
     config = {
