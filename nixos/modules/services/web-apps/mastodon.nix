@@ -213,13 +213,24 @@ in {
       };
 
       localDomain = lib.mkOption {
-        description = lib.mdDoc "The domain serving your Mastodon instance. If webDomain is configured to host the application on a subdomain then enable pretty @username@example.com style usernames on your domain root is possible";
+        description = lib.mdDoc ''
+          The domain serving your Mastodon instance. If webDomain is configured
+          to host the application on a subdomain then enable pretty
+          @username@example.com style usernames on your domain root is possible.
+          Study https://docs.joinmastodon.org/admin/config/ before configuring
+          as this value cannot be changed once other servers federate
+          with you.
+        '';
         example = "example.org";
         type = lib.types.str;
       };
 
       webDomain = lib.mkOption {
-        description = lib.mdDoc "The web domain serving your Mastodon instance. If different to localDomain then a manual web-finger 301 redirect must be configured. See https://docs.joinmastodon.org/admin/config/";
+        description = lib.mdDoc ''
+          The web domain serving your Mastodon instance. If different to
+          localDomain then a manual web-finger 301 redirect must be
+          configured. See https://docs.joinmastodon.org/admin/config/
+        '';
         example = "social.example.org";
         type = lib.types.str;
         default = cfg.localDomain;
