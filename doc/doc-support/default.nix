@@ -1,9 +1,9 @@
-{ pkgs ? (import ../.. {}), nixpkgs ? { }}:
+{ pkgs ? import ../.. {} }:
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs; };
   functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs; };
   version = pkgs.lib.version;
 

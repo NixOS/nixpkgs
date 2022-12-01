@@ -35,7 +35,7 @@ let
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
-      manual = import ../../doc { inherit pkgs nixpkgs; };
+      manual = import ../../doc { inherit pkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 

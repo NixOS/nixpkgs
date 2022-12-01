@@ -1,7 +1,7 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs ? import ./.. { } }:
 let
   lib = pkgs.lib;
-  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+  doc-support = import ./doc-support { inherit pkgs; };
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 

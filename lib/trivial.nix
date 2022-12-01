@@ -222,6 +222,10 @@ rec {
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
+  /* The revision to which the manual should link.
+     Set this to "release-YY.MM" after branch-off. */
+  manualRevision = "master";
+
   /* Determine whether the function is being called from inside a Nix
      shell.
 

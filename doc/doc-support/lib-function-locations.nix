@@ -1,7 +1,5 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs ? import ./.. { } }:
 let
-  revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.revision or "master");
-
   libDefPos = set:
     builtins.map
       (name: {
@@ -57,7 +55,7 @@ let
     [ "'"      ]
     [ "-prime" ];
 
-  urlPrefix = "https://github.com/NixOS/nixpkgs/blob/${revision}";
+  urlPrefix = "https://github.com/NixOS/nixpkgs/blob/${nixpkgsLib.trivial.manualRevision}";
   xmlstrings = (nixpkgsLib.strings.concatMapStrings
       ({ name, value }:
       ''
