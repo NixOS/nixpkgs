@@ -115,6 +115,7 @@ in
     (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "useChroot" ]; to = [ "nix" "useSandbox" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2003; from = [ "nix" "chrootDirs" ]; to = [ "nix" "sandboxPaths" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
+    (mkRenamedOptionModuleWith { sinceRelease = 2211; from = [ "nix" "readOnlyStore" ]; to = [ "boot" "readOnlyNixStore" ]; })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ] ++ mapAttrsToList (oldConf: newConf: mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" oldConf ]; to = [ "nix" "settings" newConf ]; }) legacyConfMappings;
 
@@ -363,17 +364,6 @@ in
           perform secure concurrent builds.  If you receive an error
           message saying that “all build users are currently in use”,
           you should increase this value.
-        '';
-      };
-
-      readOnlyStore = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          If set, NixOS will enforce the immutability of the Nix store
-          by making {file}`/nix/store` a read-only bind
-          mount.  Nix will automatically make the store writable when
-          needed.
         '';
       };
 
