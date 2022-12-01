@@ -22,11 +22,11 @@ let
       hash = "sha256-BhNAApgZ/w/92XjpoDY6ZEIhSTwgJ4D3/EfNvPmNM2o=";
     } else if llvmMajor == "11" then {
       version = "unstable-2022-05-04";
-      rev = "99420daab98998a7e36858befac9c5ed109d4920"; # 265 commits ahead of v11.0.0
-      hash = "sha256-/vUyL6Wh8hykoGz1QmT1F7lfGDEmG4U3iqmqrJxizOg=";
+      rev = "a31ffaeef77e23d500b3ea3d35e0c42ff5648ad9"; # 266 commits ahead of v11.0.0
+      hash = "sha256-rkYMFVfS3xG8ozs7zhiSBjIxvxEetetctE+fLS3hXoU=";
     } else throw "Incompatible LLVM version.";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "SPIRV-LLVM-Translator";
   inherit (branch) version;
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
     license     = licenses.ncsa;
-    platforms   = platforms.all;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
   };
 }
