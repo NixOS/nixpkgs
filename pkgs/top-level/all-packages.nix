@@ -1698,7 +1698,7 @@ with pkgs;
 
   git-fast-export = callPackage ../applications/version-management/git-and-tools/fast-export { };
 
-  git-fire = callPackage ../tools/misc/git-fire { };
+  git-fire = callPackage ../applications/version-management/git-and-tools/git-fire { };
 
   git-ftp = callPackage ../development/tools/git-ftp { };
 
