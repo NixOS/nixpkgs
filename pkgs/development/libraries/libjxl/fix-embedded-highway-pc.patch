@@ -1,0 +1,51 @@
+diff --git a/third_party/highway/CMakeLists.txt b/third_party/highway/CMakeLists.txt
+index 730586a..d54edd2 100644
+--- a/third_party/highway/CMakeLists.txt
++++ b/third_party/highway/CMakeLists.txt
+@@ -419,6 +419,19 @@ foreach (source ${HWY_TEST_SOURCES})
+   endif()
+ endforeach()
+ 
++# Allow adding prefix if CMAKE_INSTALL_INCLUDEDIR not absolute.
++if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++    set(PKGCONFIG_TARGET_INCLUDES "${CMAKE_INSTALL_INCLUDEDIR}")
++else()
++    set(PKGCONFIG_TARGET_INCLUDES "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++endif()
++# Allow adding prefix if CMAKE_INSTALL_LIBDIR not absolute.
++if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++    set(PKGCONFIG_TARGET_LIBS "${CMAKE_INSTALL_LIBDIR}")
++else()
++    set(PKGCONFIG_TARGET_LIBS "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
++endif()
++
+ # Add a pkg-config file for libhwy and the contrib/test libraries.
+ set(HWY_LIBRARY_VERSION "${CMAKE_PROJECT_VERSION}")
+ set(HWY_PC_FILES libhwy.pc libhwy-test.pc)
+diff --git a/third_party/highway/libhwy-test.pc.in b/third_party/highway/libhwy-test.pc.in
+index 0416b10..e097fd7 100644
+--- a/third_party/highway/libhwy-test.pc.in
++++ b/third_party/highway/libhwy-test.pc.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKGCONFIG_TARGET_LIBS@
++includedir=@PKGCONFIG_TARGET_INCLUDES@
+ 
+ Name: libhwy-test
+ Description: Efficient and performance-portable SIMD wrapper, test helpers.
+diff --git a/third_party/highway/libhwy.pc.in b/third_party/highway/libhwy.pc.in
+index 6439892..4026a20 100644
+--- a/third_party/highway/libhwy.pc.in
++++ b/third_party/highway/libhwy.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@PKGCONFIG_TARGET_LIBS@
++includedir=@PKGCONFIG_TARGET_INCLUDES@
+ 
+ Name: libhwy
+ Description: Efficient and performance-portable SIMD wrapper
