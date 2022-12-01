@@ -40,6 +40,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment.ROON_DATAROOT = "/var/lib/${name}";
+      environment.ROON_ID_DIR = "/var/lib/${name}";
 
       serviceConfig = {
         ExecStart = "${pkgs.roon-server}/bin/RoonServer";
