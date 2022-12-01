@@ -10,7 +10,7 @@ let
 
   python = cfg.package.pythonModule;
 
-  escapeStr = s: escape ["'"] s;
+  escapeStr = escape [ "'" ];
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
@@ -245,9 +245,7 @@ in {
         description = "Buildbot User.";
         isNormalUser = true;
         createHome = true;
-        home = cfg.home;
-        group = cfg.group;
-        extraGroups = cfg.extraGroups;
+        inherit (cfg) home group extraGroups;
         useDefaultShell = true;
       };
     };
