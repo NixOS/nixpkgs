@@ -1700,7 +1700,7 @@ with pkgs;
 
   git-fire = callPackage ../applications/version-management/git-and-tools/git-fire { };
 
-  git-ftp = callPackage ../development/tools/git-ftp { };
+  git-ftp = callPackage ../applications/version-management/git-and-tools/git-ftp { };
 
   git-gone = callPackage ../applications/version-management/git-and-tools/git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
