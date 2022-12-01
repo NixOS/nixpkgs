@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-er0+HuCQw2FPeyuBc1BVdutmidYzcKIBqdeteqwsXiA=";
+    sha256 = "sha256-YNzZ/wQz5s5J5ctXekNo0FksRoX03rZE1wXIghYcck4=";
   };
 
   propagatedBuildInputs = [ cffi ];
