@@ -76,8 +76,8 @@ rec {
     # By default, everything is printed verbatim and complex types
     # are forbidden (lists, attrsets, functions). `null` values are omitted.
     #
-    # NOTE: If you override this attribute then you
-    # may need to override `preprocessValue` as well.
+    # NOTE: If you override this attribute to support attrsets
+    # then you may need to override `preprocessValue` as well.
     mkOption ?
       k: v: if v == null
             then []
