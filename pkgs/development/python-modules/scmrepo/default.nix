@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
