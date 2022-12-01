@@ -70,6 +70,14 @@ stdenv.mkDerivation rec {
     xz
   ];
 
+  postPatch = ''
+    # If it uses the executable name, then there's nothing we can do
+    # when wrapping to stop it looking in
+    # $out/etc/.virt-builder-wrapped, which won't exist.
+    substituteInPlace common/mlstdutils/std_utils.ml \
+        --replace Sys.executable_name '(Array.get Sys.argv 0)'
+  '';
+
   preConfigure = ''
     patchShebangs ocaml-dep.sh.in ocaml-link.sh.in run.in
   '';
@@ -85,6 +93,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    wrapProgram $out/bin/virt-builder \
+      --argv0 virt-builder \
+      --suffix VIRT_BUILDER_DIRS : /etc:$out/etc
     wrapProgram $out/bin/virt-win-reg \
       --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';
