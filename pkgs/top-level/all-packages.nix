@@ -1619,7 +1619,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-aggregator = callPackage ../development/tools/git-aggregator { };
+  git-aggregator = callPackage ../applications/version-management/git-and-tools/git-aggregator { };
 
   git-annex-metadata-gui = libsForQt5.callPackage ../applications/version-management/git-and-tools/git-annex-metadata-gui {
     inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
