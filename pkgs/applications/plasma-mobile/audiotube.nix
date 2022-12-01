@@ -8,6 +8,7 @@
 , kcrash
 , ki18n
 , kirigami2
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , python3Packages
@@ -30,6 +31,7 @@ mkDerivation rec {
     kcrash
     ki18n
     kirigami2
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
   ] ++ pythonPath;
