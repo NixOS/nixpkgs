@@ -66,7 +66,7 @@ rec {
     # by default we extract its "content" attribute.
     #
     # See also the mention of this attribute in the comments for `mkOption`.
-    unwrapOverride ? v: v.content
+    unwrapOverride ? v: v.content,
 
     # how to format any remaining value to a command list;
     # on the toplevel, booleans and lists are handled by `mkBool` and `mkList`,
