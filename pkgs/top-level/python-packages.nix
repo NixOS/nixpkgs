@@ -2826,6 +2826,8 @@ self: super: with self; {
 
   easygui = callPackage ../development/python-modules/easygui { };
 
+  easyocr = callPackage ../development/python-modules/easyocr { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
