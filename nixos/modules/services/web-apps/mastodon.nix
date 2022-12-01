@@ -229,7 +229,9 @@ in {
         description = lib.mdDoc ''
           The web domain serving your Mastodon instance. If different to
           localDomain then a manual web-finger 301 redirect must be
-          configured. See https://docs.joinmastodon.org/admin/config/
+          configured. Study https://docs.joinmastodon.org/admin/config/ before configuring
+          as this value cannot be changed once other servers federate
+          with you.
         '';
         example = "social.example.org";
         type = lib.types.str;
