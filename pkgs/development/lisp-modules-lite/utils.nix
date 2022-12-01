@@ -67,6 +67,8 @@ rec {
   # through.
   callIfFunc = val: f: if isFunction f then f val else f;
 
+  flatMap = f: rpipe [ (map f) l.flatten ];
+
   normaliseStrings = rpipe [ l.unique l.naturalSort ];
 
   # This is a /nested/ union operation on attrsets: if you have e.g. a 2-layer
@@ -143,49 +145,10 @@ rec {
 
   isLispDeriv = x: x ? lispSystems;
 
-  # Get the derivation path of the original source code of this derivation,
-  # recursively passing through derivations until we hit an actual source
-  # derivation.
-  # TODO: Is this recursive algo a good idea for bona fide .src = lispDerivation
-  # {} .. ? Doesn’t sound like it. We’re phasing out the entire
-  # behind-the-scenes .src rewriting so I think we can leave off the recursion
-  # here.
-  srcPath = drv: if drv ? src && isLispDeriv drv
-                 then srcPath drv.src
-                 else derivPath drv;
-
 
   ## PACKAGE UTILS
 
   # Utility function that just adds some lisp dependencies to an existing
   # derivation.
   trimName = s.removeSuffix "-src";
-  lispify = lispDependencies: src:
-    lispDerivation ({
-      inherit lispDependencies src;
-      # Convention.
-      lispSystem = src.lispSystem or trimName (src.pname or src.name);
-    } // (
-      optionalKeys [ "version" "CL_SOURCE_REGISTRY" ] src
-    ) // (
-      a.mapAttrs (_: trimName) (optionalKeys [ "name" "pname" ] src)
-    ));
-
-  # Get a source from debian package repository.
-  fetchDebianPkg = { pname, version, ... }@args:
-    let
-      a = lib.head (lib.stringToCharacters pname);
-      src = pkgs.fetchzip (args // {
-        pname = "${pname}-src";
-        url = "http://deb.debian.org/debian/pool/main/${a}/${pname}/${pname}_${version}.orig.tar.xz";
-      });
-    in
-      lib.sources.cleanSourceWith {
-        filter = path: type:
-          let
-            relPath = lib.removePrefix (toString src) (toString path);
-          in
-            relPath != "/debian" || type != "directory";
-        inherit src;
-      };
 }

@@ -3,8 +3,8 @@
 with pkgs.lispPackagesLite;
 
 lispDerivation {
-  src = ./.;
+  src = pkgs.lib.cleanSource ./.;
   lispSystem = "dev";
-  lispDependencies = [ alexandria ];
+  lispDependencies = [ arrow-macros ];
   buildInputs = [ pkgs.sbcl ];
 }

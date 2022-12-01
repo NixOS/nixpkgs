@@ -480,11 +480,17 @@ with rec {
 
 Are you unhappy with your bundled ASDF? Just include `asdf` as any other lisp dependency to get the latest one. It will automatically be picked up.
 
-## Output: binary vs .fasl files
+## Output: binary, .fasl files, or a lisp binary?
 
-Is your program itself intended to be used as a dependency? Then you don’t need to do anything special: pre-compiled .fasls will be left next to each .lisp file, and you can include your derivation itself as a `lispDependencies` entry for another lisp derivation.
+Is your program itself intended to be used as a dependency? Then you don’t need to do anything special: pre-compiled .fasls will be left next to each .lisp file, and you can include your derivation itself as a `lispDependencies` entry for another lisp derivation. This is appropriate for libraries, e.g. alexandria.
 
-Do you want to output a single executable, instead? This is natively supported by ASDF, so you can leverage that. See [ASDF best practices][ASDF best practices] to configure ASDF. You can use a custom `installPhase` to only copy out the resulting binary to your `$out`, if you want to avoid the build noise. See the [`make-binary`](examples/make-binary) example in this project.
+Do you want to output a single executable, instead? This is natively supported by ASDF, so you can leverage that. See:
+
+- The modern example, using a [`flake`](examples/flake)
+- The classic [`make-binary`](examples/make-binary) using `nix-build`
+- [ASDF best practices][ASDF best practices] to configure ASDF.
+
+A third way to deliver your final output is as a lisp interpreter itself, which has been configured to find a predetermined set of dependencies.
 
 ## Testing
 

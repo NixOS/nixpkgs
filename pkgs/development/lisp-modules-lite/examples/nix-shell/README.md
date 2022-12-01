@@ -9,7 +9,7 @@ nix-shell
 If you have [direnv](https://direnv.net/) installed, just enter the directory
 and it should automatically load it for you.
 
-Now you can run SBCL with alexandria on the path:
+Now you can run SBCL with arrow-macros on the ASDF path, plus all its dependencies (which includes Alexandria):
 
 ```
 sbcl --script <<EOF

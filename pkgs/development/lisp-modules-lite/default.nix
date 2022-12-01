@@ -26,332 +26,50 @@ with self;
 with lib;
 
 with callPackage ./utils.nix {};
+with callPackage ./lisp-derivation.nix { inherit lisp; };
 
+# These utility functions really are for this file only
+let
+  lispify = lispDependencies: src:
+    lispDerivation ({
+      inherit lispDependencies src;
+      # Convention.
+      lispSystem = src.lispSystem or trimName (src.pname or src.name);
+    } // (
+      optionalKeys [ "version" "CL_SOURCE_REGISTRY" ] src
+    ) // (
+      a.mapAttrs (_: trimName) (optionalKeys [ "name" "pname" ] src)
+    ));
+
+  # Get a source from debian package repository.
+  fetchDebianPkg = { pname, version, ... }@args:
+    let
+      a = lib.head (lib.stringToCharacters pname);
+      src = pkgs.fetchzip (args // {
+        pname = "${pname}-src";
+        url = "http://deb.debian.org/debian/pool/main/${a}/${pname}/${pname}_${version}.orig.tar.xz";
+      });
+    in
+      lib.sources.cleanSourceWith {
+        filter = path: type:
+          let
+            relPath = lib.removePrefix (toString src) (toString path);
+          in
+            relPath != "/debian" || type != "directory";
+        inherit src;
+      };
+
+  fetchKpePkg = { name, version, sha256 }: pkgs.fetchzip {
+    pname = "${name}-src";
+    inherit version sha256;
+    url = "http://git.kpe.io/?p=${name}.git;a=snapshot;h=${version}";
+    # This is necessary because the auto generated filename for a gitweb
+    # URL contains invalid characters.
+    extension = "tar.gz";
+  };
+in
 {
-  # Build a lisp derivation from this source, for the specific given
-  # systems. When two separate packages include the same src, but both for a
-  # different system, it resolves to the same derivation.
-  lispDerivation = {
-    # The system(s) defined by this derivation
-    lispSystem ? null,
-    lispSystems ? null,
-    # The lisp dependencies FOR this derivation
-    lispDependencies ? [],
-    lispCheckDependencies ? [],
-    CL_SOURCE_REGISTRY ? "",
-    # If you were to build this from source. Not necessarily the final src of
-    # the actual derivation; that depends on the dependency chain.
-    src,
-    doCheck ? false,
-
-    # Example:
-    # - lispBuildOp = "make",
-    # - lispBuildOp = "load-system",
-    # - lispBuildOp = "operate 'asdf:load-op",
-    # - lispBuildOp = "operate 'asdf:compile-bundle-op",
-    # - lispBuildOp = "operate 'asdf:monolithic-deliver-asd-op"
-    # If you control the source, though, you are much better off configuring the
-    # defsystem in the .asd to do the right thing when called as ‘make’.
-    lispBuildOp ? "make",
-
-    # As the name suggests:
-    # - this is a private arg for internal recursion purposes -- do not use
-    # - this indicates whether I want to deduplicate myself. It is used to
-    #   terminate the self deduplication recursion without segfaulting.
-    _lispDeduplicateMyself ? true,
-
-    ...
-  } @ args:
-    # Mutually exclusive args but one is required. XOR.
-    assert (lispSystem == null) != (lispSystems == null);
-    let
-      ####
-      #### DEPENDENCY GRAPH
-      ####
-
-      lispSystemsArg = args.lispSystems or [ args.lispSystem ];
-
-      # Create a single source map entry for this derivation. This is the core
-      # datastructure around which the derivation deduplication detection
-      # mechanism is built.
-      entryFor = drv: { ${srcPath drv} = drv; };
-      # Given a lispDerivation, get all its dependencies in the { src-drv =>
-      # lisp-drv } format. The invariant for lispDerivation.allDeps is that it
-      # can’t contain itself, so this is a non-destructive operation.
-      depsFor = dep: dep.allDeps // (entryFor dep);
-
-      # Create a { src-drv => lisp-drv } describing all of MY
-      # dependencies. Worst edge case:
-      #
-      #                -> foo-b -> zim
-      #              /               \
-      # foo-a -> bar                  \
-      #              \                 v
-      #                ------------> foo-c
-      #
-      # Assuming foo-* are all systems in the same source derivation. This edge
-      # case is the most complicated, and it’s the reason for this entire
-      # pre-parsing-dependency-tracking quagmire. It’s not unusual with -test
-      # derivations. This graph is solved by incrementally including the
-      # dependent systems in the parent derivations, and rebuilding them
-      # all. So, with an arrow indicating the lispDependencies:
-      #
-      # [foo-a & foo-b & foo-c] -> bar -> [foo-b & foo-c] -> zim -> foo-c
-      #
-      # Complications:
-      # - The derivation doing the deduplication of foo-b and foo-c is not,
-      #   itself, a foo, so it doesn’t have easy access to an authoritative
-      #   definition of foo. It must recognize from the two separate derivations
-      #   that they are equal, and construct an entirely new foo that
-      #   encapsulates them both.
-      # - If any of the systems is defined with doCheck = true, this affects the
-      #   build, and the final combined derivation must also be built with
-      #   checks.
-      # - If you rebuild fully from source every time, e.g. foo-{a,b,c}, foo-c
-      #   will only be built because it is a dependency of zim. ASDF’s cache
-      #   tracking mechanism causes any system /whose dependencies must be
-      #   rebuilt/ itself also stale. This means a rebuild of foo-c would cause
-      #   a rebuild of zim--that will fail, because zim is in the store. The
-      #   only solution to this is to fetch the prebuilt cache of foo-c by
-      #   making foo-c the src of foo-b, and foo-b the src of foo-a.
-      #
-      # Note that bar only depends on a single "foo" derivation, which is built
-      # with foo-b and foo-c; not on two copies of foo, one with b & c, one with
-      # just c.
-
-      mySrc = srcPath src;
-      lispDependencies' = lispDependencies ++ (optionals doCheck lispCheckDependencies);
-      # Always order dependencies deterministically.
-      # If either of the two is not a lisp deriv, we’re basically in the foo-b
-      # situation. This situation only happens when we are in a derivation
-      # that has itself as a dependency. It never occurs from an unrelated
-      # dependency, because those will never have an entry for this src
-      # anyway.
-      #
-      # We are in the “bar” situation, above. Or perhaps in this situation:
-      #
-      #          -- blub-a
-      #        /
-      # bim --
-      #        \
-      #          -- blub-b
-      #
-      # Either way, the solution is the same: create an entirely new
-      # derivation that unions the two dependencies.
-      allDepsIncMyself = nestedUnion (reduce (x: x.merge)) 1 (map depsFor lispDependencies');
-      allDeps = removeAttrs allDepsIncMyself [ mySrc ];
-
-      # All derivations I depend on, directly or indirectly, without me. Sort
-      # deterministically to avoid rebuilding the same derivation just because
-      # the order of dependencies was different (in the envvar).
-      allDepsDerivs = pipe allDeps [attrValues (map b.toString) l.naturalSort];
-
-      ####
-      #### THE FINAL DERIVATION
-      ####
-
-      # I use naturalSort because it’s an easy way to sort a list strings in Nix
-      # but any sort will do. What’s important is that this is deterministically
-      # sorted.
-     lispSystems' = normaliseStrings lispSystemsArg;
-      # Clean out the arguments to this function which aren’t deriv props. Leave
-      # in the systems because it’s a useful and harmless prop.
-      derivArgs = removeAttrs args ["lispDependencies" "lispCheckDependencies" "lispSystem" "_lispDeduplicateMyself"];
-      pname = "${b.concatStringsSep "_" lispSystems'}";
-
-      # Add here all "standard" derivation args which are system
-      # dependent. Meaning these can be either strings as per, or functions, in
-      # which case they will be called with the set of systems enabled for this
-      # derivation. This is used to fix auto deduplication (unioning / joining)
-      # of lisp derivations.
-      stdArgs = [
-        # Standard args that are not phases
-        "nativeBuildInputs"
-        "buildInputs"
-        "patches"
-        # Am I forgetting anything?
-
-        # All the phases
-        "preUnpack"
-        "unpackPhase"
-        "postUnpack"
-
-        "prePatch"
-        "patchPhase"
-        "postPatch"
-
-        "preConfigure"
-        "configurePhase"
-        "postConfigure"
-
-        "preBuild"
-        "buildPhase"
-        "postBuild"
-
-        "preCheck"
-        "checkPhase"
-        "postCheck"
-
-        "preInstall"
-        "installPhase"
-        "postInstall"
-
-        "preFixup"
-        "fixupPhase"
-        "postFixup"
-
-        "preDist"
-        "distPhase"
-        "postDist"
-      ];
-      localizedArgs = a.mapAttrs (_: callIfFunc lispSystems') (optionalKeys stdArgs args);
-
-      # Secret arg to track how we were originally invoked by the end user. This
-      # only matters for tests: for regular builds, you want to ‘make’
-      # everything, but for tests you specifically really only want to test the
-      # specific system that was originally requested. This matters because
-      # tracking test dependencies can become tricky. Don’t forget that merging
-      # transitively dependent lisp systems for the same source repository into
-      # a single derivation is only really a convenience feature to help marry
-      # Nix and ASDF; it is not in fact something that the user necessarily
-      # cares about.
-      _lispOrigSystems = args._lispOrigSystems or lispSystems';
-      me = pkgs.stdenv.mkDerivation (derivArgs // {
-        inherit pname;
-        lispSystems = lispSystems';
-        name = "system-${pname}";
-        passthru = (derivArgs.passthru or {}) // {
-          # Give others access to the args with which I was built
-          inherit args;
-          # (There is probably a neater, more idiomatic way to do this
-          # overriding business.)
-          merge = other:
-            # CAREFUL!! You can merge recursively! That means the body of this
-            # function must not evaluate any properties that cause any recursive
-            # properties to be evaluated. This only works because Nix is lazily
-            # evaluated.
-            # Not technically necessary but it makes for slightly cleaner API.
-            assert isLispDeriv other;
-            assert mySrc == srcPath other;
-            let
-              # The new arguments that define this merged derivation: which
-              # systems do you build, and are you in check mode y/n? The
-              # dependencies are automatically inferred when necessary.
-
-              # Don’t get the lispSystems from the original args: we want to
-              # know what the final, real collection of lisp system names was
-              # that was used for this derivation.
-              newLispSystems = normaliseStrings (lispSystems' ++ other.lispSystems);
-              newDoCheck = doCheck || other.args.doCheck or false;
-            in
-              # Only build a new one if it improves on both existing
-              # derivations.
-              if newDoCheck == other.doCheck && newLispSystems == other.lispSystems
-              then other.overrideAttrs (_: { inherit _lispOrigSystems; })
-              # N.B.: Only propagate ME if I have equal doCheck to other. This
-              # is subtly different from newDoCheck == doCheck. It solves the
-              # problem where a doCheck = true depends (transitively) on itself
-              # with doCheck false: that should /not/ be deduplicated, because
-              # some dependency in the middle clearly depends on me (with
-              # doCheck = false), so if I deduplicate I will end up re-building
-              # my non-test files here, which will cause a rebuild in that
-              # already-built-dependency.
-              else if doCheck == other.doCheck && newLispSystems == lispSystems'
-              then me
-              else
-                # Patches are removed because I assume the source to already have
-                # been patched by now. For it is myself.
-                lispDerivation ((removeAttrs args ["patches" "lispSystem"]) // {
-                  # By this point, we assume that this top level derivation
-                  # contains all its own recursive self-dependencies and doesn’t
-                  # need any more deduplication.
-                  _lispDeduplicateMyself = false;
-                  inherit _lispOrigSystems;
-                  lispDependencies = l.unique (lispDependencies ++ other.args.lispDependencies or []);
-                  lispCheckDependencies = l.unique (lispCheckDependencies ++ other.args.lispCheckDependencies or []);
-                  doCheck = newDoCheck;
-                  lispSystems = newLispSystems;
-                  # Important: we assume all the other args are automatically
-                  # compatible for the new derivation, notably buildPhase,
-                  # patches, etc. This means you can’t define two separate
-                  # systems from the same source (foo-b and foo-c) and give each
-                  # a distinct buildPhase--rather, you must define a single
-                  # buildPhase as a function which takes an array of system
-                  # names as an arg, and decides based on that arg what to
-                  # do. There is special support for this in the lispDerivation.
-
-                  # And now for the pièce de résistence:
-                  src = other;
-                });
-          # Invariant: this never includes myself.
-          inherit allDeps;
-          enableCheck = if doCheck
-                        then me
-                        else lispDerivation (args // { doCheck = true; });
-        };
-        # Store .fasl files next to the respective .lisp file
-        ASDF_OUTPUT_TRANSLATIONS = "/:/";
-        # Like lisp-modules-new, pre-build every package independently.
-        #
-        # Reason to do this: packages like libuv contain quite complex build
-        # steps, and letting the final derivation do all the work becomes
-        # untenable.
-        # TODO: How to combine this with user supplied args? What’s the expected
-        # UX?
-        buildPhase = ''
-          runHook preBuild
-
-          # Import current package from PWD
-          export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
-          echo "Build CL_SOURCE_REGISTRY: $CL_SOURCE_REGISTRY"
-          ${callLisp lisp (asdfOpScript lispBuildOp pname lispSystems')}
-
-          runHook postBuild
-        '';
-        installPhase = ''
-          runHook preInstall
-
-          cp -R "." "$out"
-
-          runHook postInstall
-        '';
-        checkPhase = ''
-          runHook preCheck
-
-          # Import current package from PWD
-          export CL_SOURCE_REGISTRY="$PWD''${CL_SOURCE_REGISTRY:+:$CL_SOURCE_REGISTRY}"
-          echo "Check CL_SOURCE_REGISTRY: $CL_SOURCE_REGISTRY"
-          ${callLisp lisp (asdfOpScript "test-system" pname _lispOrigSystems)}
-
-          runHook postCheck
-        '';
-      } // localizedArgs // (a.optionalAttrs (length allDepsDerivs > 0) {
-        # It looks like this is instantiated for every single derivation
-        # which is /technically/ unnecessary--you could get away with only
-        # doing this for derivations that actually get built--but to be
-        # frank it doesn’t matter a lot. N.B.: Appended to the empty string
-        # recursive.
-        # TODO: Don’t override existing CL_SOURCE_REGISTRY.
-        CL_SOURCE_REGISTRY = s.concatStringsSep ":" allDepsDerivs;
-      }));
-    in
-      # If I depend on myself in any way, first flatten me and all my transitive
-      # dependent copies of me into one big union derivation.
-      if _lispDeduplicateMyself && allDepsIncMyself ? ${mySrc}
-      then me.merge allDepsIncMyself.${mySrc}
-      else me;
-
-  # If a single src derivation specifies multiple lisp systems, you can use this
-  # helper to define them.
-  lispMultiDerivation = args: a.mapAttrs (name: system:
-    let
-      namearg = a.optionalAttrs (! system ? lispSystems) { lispSystem = name; };
-    in
-      # Default system name is the derivation name in the containing ‘systems’
-      # attrset, but can be overridden if the Lisp name is incompatible with Nix
-      # identifiers.
-      lispDerivation ((removeAttrs args ["systems"]) // namearg // system)
-  ) args.systems;
+  inherit lispDerivation lispMultiDerivation lispWithSystems;
 
   inherit (callPackage (self: with self; lispMultiDerivation {
     src = pkgs.fetchFromGitHub {
@@ -373,14 +91,71 @@ with callPackage ./utils.nix {};
     };
   }) {}) _3bmd _3bmd-ext-code-blocks;
 
-  alexandria = callPackage ({}: lispify [ ] (pkgs.fetchFromGitLab {
-    name = "alexandria-src";
-    domain = "gitlab.common-lisp.net";
-    owner = "alexandria";
-    repo = "alexandria";
-    rev = "v1.4";
-    sha256 = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
+  _40ants-doc = callPackage (self: with self; lispDerivation {
+    lispSystem = "40ants-doc";
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "doc";
+      name = "doc-src";
+      rev = "fbaaeba78e01639ee6e8b3a867efe749c2f59d0d";
+      sha256 = "G4yh6mBY/45X9C0KEw5sErEHpMRZ+2lZzcTSH9kQDuk=";
+    };
+    lispDependencies = [
+      cl-ppcre
+      commondoc-markdown
+      named-readtables
+      pythonic-string-reader
+      slynk
+      str
+      swank
+    ];
+    lispCheckDependencies = [ rove ];
+  }) {};
+
+  # Something very odd is happening with the ASDF scope here. I have absolutely
+  # no idea why and I’m almost frightened to even find out. If I use the same
+  # self: with self; syntax as everywhere else, this captures asdf’s src (!),
+  # not the derivation itself. But only asdf, not e.g. alexandria. What’s worse:
+  # this fixes it. Wat?????????????????
+  _40ants-asdf-system = callPackage ({ asdf, ... }@self: with self; (lispDerivation {
+    lispSystem = "40ants-asdf-system";
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "40ants-asdf-system";
+      name = "40ants-asdf-system-src";
+      rev = "d349c2104a1e62e1be40e30f0a2ed0fc7ae19a5e";
+      sha256 = "K0Xqyg3mwdb5wIhdr77qSNvNdIufymypNC3Yh9s7Yag=";
+    };
+    # Depends on a modern ASDF. SBCL’s built-in ASDF crashes this.
+    lispDependencies = [ asdf ];
+    lispCheckDependencies = [ rove ];
   })) {};
+
+  access = callPackage (self: with self; lispDerivation {
+    lispSystem = "access";
+    src = pkgs.fetchFromGitHub {
+      owner = "AccelerationNet";
+      repo = "access";
+      name = "access-src";
+      rev = "1f3440b03823e01bc6f1384daf18626234f86447";
+      sha256 = "8P4dBjxbcMCr6cgwpTS0sCU0E513bxxf5ifWS34n+Ek=";
+    };
+    lispDependencies = [ alexandria closer-mop iterate cl-ppcre ];
+    lispCheckDependencies = [ lisp-unit2 ];
+  }) {};
+
+  alexandria = callPackage (self: with self; lispDerivation {
+    lispSystem = "alexandria";
+    src = pkgs.fetchFromGitLab {
+      name = "alexandria-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "alexandria";
+      repo = "alexandria";
+      rev = "v1.4";
+      sha256 = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
+    };
+    lispCheckDependencies = l.optional ((lisp.pname or "") != "sbcl") rt;
+  }) {};
 
   anaphora = callPackage (self: with self; lispDerivation {
     lispSystem = "anaphora";
@@ -393,6 +168,30 @@ with callPackage ./utils.nix {};
       sha256 = "sha256-CzApbUmdDmD+BWPcFGJN0rdZu991354EdTDPn8FSRbc=";
     };
   }) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "AccelerationNet";
+      repo = "arnesi";
+      name = "arnesi-src";
+      rev = "1e7dc4cb2cad8599113c7492c78f4925e839522e";
+      sha256 = "cM045vNFKPdVymsUoF9G1/aVV510EBWRywa/0F4X8kk=";
+    };
+    systems = {
+      arnesi = {
+        lispDependencies = [ collectors ];
+        lispCheckDependencies = [ fiveam ];
+      };
+      arnesi-cl-ppcre-extras = {
+        lispSystem = "arnesi/cl-ppcre-extras";
+        lispDependencies = [ arnesi cl-ppcre ];
+      };
+      arnesi-slime-extras = {
+        lispSystem = "arnesi/slime-extras";
+        lispDependencies = [ arnesi swank ];
+      };
+    };
+  }) {}) arnesi arnesi-cl-ppcre-extras arnesi-slime-extras;
 
   array-utils = callPackage (self: with self; lispDerivation {
     lispSystem = "array-utils";
@@ -448,6 +247,19 @@ with callPackage ./utils.nix {};
       sha256 = "sha256-mncs6+mGNBoZea6jPtgjFxYPbFguUne8MepxTHgsC1c=";
     };
     lispCheckDependencies = [ prove ];
+  }) {};
+
+  atomics = callPackage (self: with self; lispDerivation {
+    lispSystem = "atomics";
+    src = pkgs.fetchFromGitHub {
+      owner = "shinmera";
+      repo = "atomics";
+      name = "atomics-src";
+      rev = "9ee0bdebcd2bb9b242671a75460db13fbf45454c";
+      sha256 = "H5B2rQvcqUwiLuKuOGc774+IMUsk8G0fbFUpgHGT5VY=";
+    };
+    lispDependencies = [ documentation-utils ];
+    lispCheckDependencies = [ parachute ];
   }) {};
 
   inherit (callPackage (self: with self;
@@ -692,14 +504,10 @@ with callPackage ./utils.nix {};
   cl-base64 = callPackage (self: with self; lispDerivation rec {
     lispSystem = "cl-base64";
     version = "577683b18fd880b82274d99fc96a18a710e3987a";
-    src = pkgs.fetchzip {
-      pname = "cl-base64-src";
+    src = fetchKpePkg {
       inherit version;
-      url = "http://git.kpe.io/?p=cl-base64.git;a=snapshot;h=${version}";
+      name = "cl-base64";
       sha256 = "sha256-cuVDuPj8gXiN9kLgWpWerkZgodno2s3OENZoByApUoo=";
-      # This is necessary because the auto generated filename for a gitweb
-      # URL contains invalid characters.
-      extension = "tar.gz";
     };
     lispCheckDependencies = [ ptester kmrcl ];
   }) {};
@@ -763,6 +571,19 @@ with callPackage ./utils.nix {};
     };
     lispDependencies = [ alexandria cl-ppcre ];
     lispCheckDependencies = [ clunit2 ];
+  }) {};
+
+  cl-containers = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "cl-containers";
+      name = "cl-containers-src";
+      rev = "3d1df53c22403121bffb5d553cf7acb1503850e7";
+      sha256 = "/pzhdbRpOLZafcFnUgD9yR8d6hXjx0Vm2hbZELCTRqM=";
+    };
+    lispDependencies = [ metatilities-base ];
+    lispCheckDependencies = [ lift ];
+    lispSystem = "cl-containers";
   }) {};
 
   cl-cookie = callPackage (self: with self; lispDerivation {
@@ -838,6 +659,30 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ prove ];
   }) {};
 
+  cl-js = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-js";
+    src = pkgs.fetchFromGitHub {
+      owner = "akapav";
+      repo = "js";
+      name = "cl-js-src";
+      rev = "3a9a1a887bef6b571922f2820f871935121052a5";
+      sha256 = "p4KM37SGRI70iMO4XDy6QrOPed9V0VJdxbqyb0C5wq0=";
+    };
+    lispDependencies = [ parse-js cl-ppcre ];
+  }) {};
+
+  cl-json = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-json";
+    lispCheckDependencies = [ fiveam ];
+    src = pkgs.fetchFromGitHub {
+      owner = "sharplispers";
+      repo = "cl-json";
+      name = "cl-json-src";
+      rev = "994dd38c94344383f39f95d75987f6dc47a0cca1";
+      sha256 = "JavUsbAPdJqsWYeemliL039HzBCVpfW4vyeGdsifaos=";
+    };
+  }) {};
+
   cl-libuv = callPackage (self: with self; lispDerivation rec {
     lispDependencies = [ alexandria cffi cffi-grovel ];
     buildInputs = [ pkgs.libuv ];
@@ -850,6 +695,109 @@ with callPackage ./utils.nix {};
       rev = version;
       sha256 = "sha256-sGN4sIM+yy7VXudzrU6jV/+DLEY12EOK69TXnh94rGU=";
     };
+  }) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    # src = pkgs.fetchFromGitHub {
+    #   owner = "archimag";
+    #   repo = "cl-libxml2";
+    #   name = "cl-libxml2-src";
+    #   rev = "8d03110c532c1a3fe15503fdfefe82f60669e4bd";
+    #   sha256 = "PCumcbKT2J8ffvbJgt3ESZ0mhTk809QN0+U6NgJLBCQ=";
+    # };
+    # Temporarily point at my own fork while figuring out Darwin build. Could
+    # also use Nix patches but this is easier for me to manage.
+    src = pkgs.fetchFromGitHub {
+      owner = "hraban";
+      repo = "cl-libxml2";
+      rev = "6ca0386e9914f733cfcde38000e84f90ccee42cb";
+      sha256 = "T5hEn517H2DlIaqLsSb6CtcV2z+6nDxnm9QqhsblsIc=";
+    };
+    systems = {
+      cl-libxml2 = {
+        lispSystems = [ "cl-libxml2" "xfactory" "xoverlay" ];
+        lispDependencies = [
+          iterate
+          cffi
+          puri
+          flexi-streams
+          alexandria
+          garbage-pools
+          metabang-bind
+        ];
+        lispCheckDependencies = [ lift ];
+      };
+      # Defined as a separate Nix derivation because it has complicated and
+      # fragile build steps, and as far as I can tell QL doesn’t even export
+      # this at all. Consider this derivation experimental for now. It’d be nice
+      # if it actually worked, of course.
+      cl-libxslt = {
+        lispDependencies = [ cl-libxml2 ];
+      };
+    };
+    makeFlags = [
+      "CC=cc"
+    ];
+    buildInputs = systems:
+      (l.optional (b.elem "cl-libxml2" systems) pkgs.libxml2) ++
+      (l.optional (b.elem "cl-libxslt" systems) pkgs.libxslt);
+    outputs = systems:
+      [ "out" ] ++
+      l.optional (b.elem "cl-libxslt" systems) "lib";
+    # This :force t isn’t necessary, and it breaks tests
+    postUnpack = ''
+      (cd "$sourceRoot"; sed -i  -e "s/ :force t//" *.asd)
+    '';
+    preBuild = systems:
+      if b.elem "cl-libxslt" systems
+      then
+        let
+          libname =
+            # There has to be a better way. How do you make CC automatically
+            # decide on the "correct" extension?
+            if pkgs.hostPlatform.isDarwin then "cllibxml2.dylib"
+            else "cllibxml2.so"; # I’m not even going to try windows
+        in ''
+          LIBNAME=${libname} make -C foreign
+          mkdir -p $lib
+          cp -r foreign/${libname} $lib/
+          export LD_LIBRARY_PATH=$lib
+        ''
+      else "";
+  }) {}) cl-libxml2 cl-libxslt;
+
+  cl-locale = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "cl-locale";
+      name = "cl-locale-src";
+      rev = "0a36cc0dcf5e0a8c8bf97869cd6199980ca25eec";
+      sha256 = "N9mqMbFt7NZitXX792NYOPGhBiJVUXddeD5wfaG1CuY=";
+    };
+    lispDependencies = [ anaphora arnesi cl-annot cl-syntax cl-syntax-annot ];
+    lispCheckDependencies = [ flexi-streams prove ];
+    lispSystem = "cl-locale";
+  }) {};
+
+  cl-markdown = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-markdown";
+    src = pkgs.fetchFromGitLab {
+      name = "cl-markdown-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "cl-markdown";
+      repo = "cl-markdown";
+      rev = "4808ef7657e58e52733f528fd9812dc2df9f4e90";
+      sha256 = "sha256-b2NMT7o8Fp9W+w2BwPYUpkxjWTsQMlFxcRNNW8yJevI=";
+    };
+    lispDependencies = [
+      anaphora
+      cl-containers
+      cl-ppcre
+      dynamic-classes
+      metabang-bind
+      metatilities-base
+    ];
+    lispCheckDependencies = [ lift trivial-shell ];
   }) {};
 
   cl-plus-ssl = callPackage (self: with self; lispDerivation {
@@ -908,6 +856,38 @@ with callPackage ./utils.nix {};
     sha256 = "wCzt4zfwsB28sgZFJ/HWtjODE1a9+9/wmG3TCdvq3jE=";
   })) {};
 
+  cl-redis = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-redis";
+    lispDependencies = [
+      babel
+      cl-ppcre
+      flexi-streams
+      rutils
+      usocket
+    ];
+    lispCheckDependencies = [ bordeaux-treads should-test ];
+    src = pkgs.fetchFromGitHub {
+      owner = "vseloved";
+      repo = "cl-redis";
+      name = "cl-redis-src";
+      rev = "7d592417421cf7cd1cffa96043b457af0490df7d";
+      sha256 = "cSMnapc92NBgoUkFx8pNOYcKoWZesmF9XGd0VlaHqnQ=";
+    };
+  }) {};
+
+  cl-slice = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-slice";
+    src = pkgs.fetchFromGitHub {
+      owner = "tpapp";
+      repo = "cl-slice";
+      name = "cl-slice-src";
+      rev = "c531683f287216aebbb0affbe090611fa1b5d697";
+      sha256 = "lLH2jnDGllr7W5Az14io8OOAhNxMDhPsMqrR4omzf/k=";
+    };
+    lispDependencies = [ alexandria anaphora let-plus ];
+    lispCheckDependencies = [ clunit ];
+  }) {};
+
   cl-speedy-queue = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "cl-speedy-queue-src";
     owner = "zkat";
@@ -915,6 +895,18 @@ with callPackage ./utils.nix {};
     rev = "0425c7c62ad3b898a5ec58cd1b3e74f7d91eec4b";
     sha256 = "sha256-OGaqhBkHKNUwHY3FgnMbWGdsUfBn0QDTl2vTZPu28DM=";
   })) {};
+
+  cl-strings = callPackage (self: with self; lispDerivation {
+    lispSystem = "cl-strings";
+    src = pkgs.fetchFromGitHub {
+      owner = "diogoalexandrefranco";
+      repo = "cl-strings";
+      name = "cl-strings-src";
+      rev = "93ec4177fc51f403a9f1ef0a8933f36d917f2140";
+      sha256 = "UpXjI9KsWvOhsjGSo1zVMNlD1I4Pwu9+cZoD60jREMk=";
+    };
+    lispCheckDependencies = [ prove ];
+  }) {};
 
   inherit (callPackage (self: with self; lispMultiDerivation {
     src = pkgs.fetchFromGitHub {
@@ -1047,12 +1039,33 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-24XWonW5plv83h9Sule6q6nEFUAZOlxofwxadSFrY4A=";
   })) {};
 
+  clunit = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "tgutu";
+    repo = "clunit";
+    name = "clunit-src";
+    rev = "6f6d72873f0e1207f037470105969384f8380628";
+    sha256 = "BUGiep0Sm7s4rFMqCH9b19AQx6r3V5xXRhHSj20XrsU=";
+  })) {};
+
   clunit2 = callPackage (self: with self; lispify [ ] (pkgs.fetchzip rec {
     pname = "clunit2-src";
     version = "200839e8e47e9212ded2d36520d84b9be681037c";
     url = "https://notabug.org/cage/clunit2/archive/${version}.tar.gz";
     sha256 = "sha256-5Pud/s5LywqrY+EjDG2iCtuuildTzfDmVYzqhnJ5iyQ=";
   })) {};
+
+  collectors = callPackage (self: with self; lispDerivation {
+    lispSystem = "collectors";
+    lispDependencies = [ alexandria closer-mop symbol-munger ];
+    lispCheckDependencies = [ lisp-unit2 ];
+    src = pkgs.fetchFromGitHub {
+      owner = "AccelerationNet";
+      repo = "collectors";
+      name = "collectors-src";
+      rev = "748f0a1613ce161edccad4cc815eccd7fc55aaf3";
+      sha256 = "K14tHE/klD3vX/Llaw5uUU1sSLswOpVGk4tLgfnBrNc=";
+    };
+  }) {};
 
   colorize = callPackage (self: with self; lispify [ alexandria html-encode split-sequence ] (pkgs.fetchFromGitHub {
     name = "colorize-src";
@@ -1061,6 +1074,91 @@ with callPackage ./utils.nix {};
     rev = "ea676b584e0899cec82f21a9e6871172fe3c0eb5";
     sha256 = "sha256-ibMfRqzw8Q28UrAdm4/AIS866rk5Qud2HLl+puIkr90=";
   })) {};
+
+  common-doc = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "CommonDoc";
+      repo = "common-doc";
+      name = "common-doc-src";
+      rev = "1406ab65b8f111f14f1b7759a1a83c65ced763ab";
+      sha256 = "9UrUzUoxjqUo4qXNRhYyY5Mf7pcSFH+rjoUEceGKUw8=";
+    };
+    # These all use practically the same dependencies. Light-weight enough that
+    # it’s not worth the hassle to split them up, IMO.
+    lispSystems = [
+      "common-doc"
+      "common-doc-graphviz"
+      "common-doc-gnuplot"
+      "common-doc-include"
+      "common-doc-tex"
+    ];
+    lispDependencies = [
+      alexandria
+      anaphora
+      closer-mop
+      local-time
+      quri
+      split-sequence
+      trivial-shell
+      trivial-types
+    ];
+    lispCheckDependencies = [ fiveam ];
+  }) {};
+
+  common-html = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "CommonDoc";
+      repo = "common-html";
+      name = "common-html-src";
+      rev = "96987bd9db21639ed55d1b7d72196f9bc58243fd";
+      sha256 = "vwcM5yHeUG36NC9j63nSAjLoZra5K7ti+cvbkijhIcQ=";
+    };
+    lispSystems = ["common-html"];
+    lispDependencies = [ common-doc plump anaphora alexandria ];
+    lispCheckDependencies = [ fiveam ];
+  }) {};
+
+  commondoc-markdown = callPackage (self: with self; lispDerivation {
+    lispSystem = "commondoc-markdown";
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "commondoc-markdown";
+      name = "commondoc-markdown-src";
+      rev = "cb070f615d2e5e706ad448b469ec9d2196f70e9f";
+      sha256 = "D5EKw+QRNJJ503UzPrHOxVo+AsI/Dw/rbfeFLgHKs4I=";
+    };
+    lispDependencies = [
+      _3bmd
+      _3bmd-ext-code-blocks
+      common-doc
+      common-html
+      str
+      ironclad
+      f-underscore
+    ];
+    lispCheckDependencies = [ hamcrest rove ];
+  }) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "cl-dbi";
+      name = "cl-dbi-src";
+      rev = "738a74dd69adb2a7c21fa67e140d89c7df25b227";
+      sha256 = "z4VEjEK7onbfigg4s1E6+972PMkBnZlcq+hpjaw6Hzk=";
+    };
+
+    systems = {
+      dbi = {
+        lispDependencies = [ bordeaux-threads split-sequence closer-mop ];
+        lispCheckDependencies = [
+          alexandria
+          rove
+          trivial-types
+        ];
+      };
+    };
+  }) {}) dbi;
 
   dexador = callPackage (self: with self; lispDerivation {
     lispSystem = "dexador";
@@ -1098,14 +1196,44 @@ with callPackage ./utils.nix {};
     ];
   }) {};
 
-  # TODO: if clisp, then depend on cl-ppcre
-  dissect = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
-    name = "dissect-src";
-    owner = "Shinmera";
-    repo = "dissect";
-    rev = "6c15c887a8d3db2ce83037ff31f8a0b528aa446b";
-    sha256 = "sha256-px1DT8MRzeqEwsV/sJBJHrlsHrWEDQopfGzuHc+QqoE=";
-  })) {};
+  dissect = callPackage (self: with self; lispDerivation {
+    lispSystem = "dissect";
+    src = pkgs.fetchFromGitHub {
+      name = "dissect-src";
+      owner = "Shinmera";
+      repo = "dissect";
+      rev = "6c15c887a8d3db2ce83037ff31f8a0b528aa446b";
+      sha256 = "sha256-px1DT8MRzeqEwsV/sJBJHrlsHrWEDQopfGzuHc+QqoE=";
+    };
+    lispDependencies = l.optional ((lisp.pname or "") == "clisp") cl-ppcre;
+  }) {};
+
+  djula = callPackage (self: with self; lispDerivation {
+    lispSystem = "djula";
+    src = pkgs.fetchFromGitHub {
+      owner = "mmontone";
+      repo = "djula";
+      name = "djula-src";
+      rev = "6f142594e0372437e64f610b796350ad89ba0be1";
+      sha256 = "A8nQgAE7oYXt9n0rAFvMSDgXW9xDNE8pzztQnGEwz3s=";
+    };
+    lispDependencies = [
+      access
+      alexandria
+      babel
+      cl-locale
+      cl-ppcre
+      cl-slice
+      closer-mop
+      gettext
+      iterate
+      local-time
+      parser-combinators
+      split-sequence
+      trivial-backtrace
+    ];
+    lispCheckDependencies = [ fiveam ];
+  }) {};
 
   documentation-utils = callPackage (self: with self; lispDerivation {
     lispSystem = "documentation-utils";
@@ -1141,6 +1269,19 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ fiveam ];
   }) {};
 
+  dynamic-classes = callPackage (self: with self; lispDerivation {
+    lispSystem = "dynamic-classes";
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "dynamic-classes";
+      name = "dynamic-classes-src";
+      rev = "844b077e5ac5ef2127603e692af983e9952ebae9";
+      sha256 = "sivl+wrjb/9ToYxdH7AenmhpQb9JFsykKQFr2M1/XGk=";
+    };
+    lispDependencies = [ metatilities-base ];
+    lispCheckDependencies = [ lift ];
+  }) {};
+
   eos = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "eos-src";
     owner = "adlai";
@@ -1161,6 +1302,15 @@ with callPackage ./utils.nix {};
     lispDependencies = [ alexandria trivial-with-current-source-form ];
     lispCheckDependencies = [ fiveam ];
   }) {};
+
+  f-underscore = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitLab {
+    name = "f-underscore-src";
+    domain = "gitlab.common-lisp.net";
+    owner = "bpm";
+    repo = "f-underscore";
+    rev = "7988171194cd259e12469dd7c30000be6ef1b31a";
+    sha256 = "sha256-ZVkb87TCDSRU4fXg7gRAYrwY3EO3aiPpAR4B1bNYG1c=";
+  })) {};
 
   fast-http = callPackage (self: with self; lispDerivation {
     src = pkgs.fetchFromGitHub {
@@ -1254,14 +1404,31 @@ with callPackage ./utils.nix {};
       name = "fare-utils-src";
       owner = "fare";
       repo = "fare-utils";
-      rev = "1a4f345d7911b403d07a5f300e6006ce3efa4047";
-      sha256 = "CTCYiXb5uy+QQBhkkDJEowax41rly677BSfLfpHX9vk=";
+      rev = "2f9c48a23a5c0802566d869d73a58471c05e63f1";
+      sha256 = "Eye1XJUNWhptVlkukrwVmYL9dKpyrn8PJEdMDPntYzw=";
     };
-    preCheck = ''
-      export CL_SOURCE_REGISTRY="$PWD/test:$CL_SOURCE_REGISTRY"
-    '';
     lispCheckDependencies = [ hu_dwim_stefil ];
   }) {};
+
+  # I’m defining this as a multideriv because it exposes lots of derivs. Even
+  # though I only use one at the moment, it’s likely to change in the future.
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = let
+      rev = "9084944079736eac085494523a41c8265d4671b7";
+      repo = "femlisp";
+    in
+      pkgs.fetchzip {
+        name = "femlisp-src";
+        url = "https://git.savannah.nongnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+        sha256 = "sha256-SqsbPY7OD+mk8Fc0WDxLqFh0GGoychIqgtDtgWXogiI=";
+      };
+    systems = {
+      infix = {};
+    };
+    dontConfigure = true;
+    lispAsdPath = systems:
+      l.optional (builtins.elem "infix" systems) "external/infix";
+  }) {}) infix;
 
   fiasco = callPackage (self: with self; lispify [ alexandria trivial-gray-streams ] (pkgs.fetchFromGitHub {
     name = "fiasco-src";
@@ -1270,6 +1437,19 @@ with callPackage ./utils.nix {};
     rev = "bb47d2fef4eb24cc16badc1c9a73d73c3a7e18f5";
     sha256 = "XB0VGAIkmoVf7PSt1wgIDYJRGu36uj/8XgGIU/AUEc0=";
   })) {};
+
+  find-port = callPackage (self: with self; lispDerivation {
+    lispSystem = "find-port";
+    lispCheckDependencies = [ fiveam ];
+    lispDependencies = [ usocket ];
+    src = pkgs.fetchFromGitHub {
+      owner = "eudoxia0";
+      repo = "find-port";
+      name = "find-port-src";
+      rev = "811727f88d7f000623bf92fdb0e64678a7112a28";
+      sha256 = "MavFV5bYVtB4BrBgwHxJX5NeEaYekTKxO6v3JdrBhrs=";
+    };
+  }) {};
 
   fiveam = callPackage (self: with self; lispify [ alexandria asdf-flv trivial-backtrace ] (pkgs.fetchFromGitHub {
     name = "fiveam-src";
@@ -1320,6 +1500,34 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-XqPr1MK8rZvz+f+cumVoX/RynfMhsJnXhrSBxZQqSJQ=";
   })) {};
 
+  garbage-pools = lispDerivation {
+    lispSystem = "garbage-pools";
+    src = pkgs.fetchFromGitHub {
+      owner = "archimag";
+      repo = "garbage-pools";
+      name = "garbage-pools-src";
+      rev = "9a7cb7f48b04197c0495df3b6d2e8395ad13f790";
+      sha256 = "YRenK0wQuWkFWAr3MGSRflNSv+TZEsZNjRCNIE3mWBI=";
+    };
+    lispCheckDependencies = [ lift ];
+  };
+
+  gettext = callPackage (self: with self; lispDerivation {
+    lispSystem = "gettext";
+    src = pkgs.fetchFromGitHub {
+      owner = "rotatef";
+      repo = "gettext";
+      name = "gettext-src";
+      rev = "a432020cbad99fc22cbe6bb9aa8a83a35000d7aa";
+      sha256 = "WZXXPxrCypuHhXCPnDOl7KZiahuL7rVMhGWaaF9V8N8=";
+    };
+    lispDependencies = [ split-sequence yacc flexi-streams ];
+    lispCheckDependencies = [ stefil ];
+    preCheck = ''
+      export CL_SOURCE_REGISTRY="$PWD/gettext-tests:$CL_SOURCE_REGISTRY"
+    '';
+  }) {};
+
   global-vars = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "global-vars-src";
     owner = "lmj";
@@ -1327,6 +1535,25 @@ with callPackage ./utils.nix {};
     rev = "c749f32c9b606a1457daa47d59630708ac0c266e";
     sha256 = "sha256-bXxeNNnFsGbgP/any8rR3xBvHE9Rb4foVfrdQRHroxo=";
   })) {};
+
+  hamcrest = callPackage (self: with self; lispDerivation {
+    lispSystem = "hamcrest";
+    lispCheckDependencies = [ prove rove ];
+    lispDependencies = [
+      _40ants-asdf-system
+      alexandria
+      iterate
+      cl-ppcre
+      split-sequence
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "cl-hamcrest";
+      name = "hamcrest-src";
+      rev = "9abb4978271907e11c21411ba350b0d6d7d9cb12";
+      sha256 = "VY8QTbXnkxCagKrwv+kjuPF4jhHK8N6oaPjKxOb+rFQ=";
+    };
+  }) {};
 
   http-body = callPackage (self: with self; lispDerivation {
     lispSystem = "http-body";
@@ -1479,14 +1706,18 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ rt ];
   }) {};
 
-  iterate = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitLab {
-    name = "iterate-src";
-    domain = "gitlab.common-lisp.net";
-    owner = "iterate";
-    repo = "iterate";
-    rev = "1.5.3";
-    sha256 = "sha256-giEXCF+9q5fcCmE3Q6NDCq+rV6+qcglArJdf9q5D1FA=";
-  })) {};
+  iterate = callPackage (self: with self; lispDerivation {
+    lispSystem = "iterate";
+    src = pkgs.fetchFromGitLab {
+      name = "iterate-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "iterate";
+      repo = "iterate";
+      rev = "1.5.3";
+      sha256 = "sha256-giEXCF+9q5fcCmE3Q6NDCq+rV6+qcglArJdf9q5D1FA=";
+    };
+    lispCheckDependencies = l.optional ((lisp.pname or "") != "sbcl") rt;
+  }) {};
 
   json-streams = callPackage (self: with self; lispDerivation {
     src = pkgs.fetchFromGitHub {
@@ -1499,6 +1730,83 @@ with callPackage ./utils.nix {};
     lispSystem = "json-streams";
     lispCheckDependencies = [ cl-quickcheck flexi-streams ];
   }) {};
+
+  marshal = callPackage (self: with self; lispDerivation {
+    lispSystem = "marshal";
+    lispCheckDependencies = [ xlunit ];
+    src = pkgs.fetchFromGitHub {
+      owner = "wlbr";
+      repo = "cl-marshal";
+      name = "cl-marshal-src";
+      rev = "0e48cd4ef4ba1896d38ea0a87f376c1ff25eec71";
+      sha256 = "2ptzXESvKeHgsAqdT7EYflbtQYinpGvFona4QTDAlF0=";
+    };
+  }) {};
+
+  metatilities = callPackage (self: with self; lispDerivation {
+    lispSystem = "metatilities";
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "metatilities";
+      name = "metatilities-src";
+      rev = "82e13df0545d0e47ae535ea35c5c99dd3a44e69e";
+      sha256 = "bZuWup9boM8+Xo+D+BIw6XgnIMhU0yJnj4DsDG2zEG8=";
+    };
+    lispDependencies = [ moptilities cl-containers metabang-bind ];
+    lispCheckDependencies = [ lift ];
+  }) {};
+
+  metatilities-base = callPackage (self: with self; lispDerivation {
+    lispSystem = "metatilities-base";
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "metatilities-base";
+      name = "metatilities-base-src";
+      rev = "ef04337759972fd622c9b27b53149f3d594a841f";
+      sha256 = "M38SlEVrOJm4NPTbK/f34lDrY47d+Ln3t1ZuzmyZORk=";
+    };
+    lispCheckDependencies = [ lift ];
+  }) {};
+
+  moptilities = callPackage (self: with self; lispDerivation {
+    lispSystem = "moptilities";
+    lispDependencies = [ closer-mop ];
+    lispCheckDependencies = [ lift ];
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "moptilities";
+      name = "moptilities-src";
+      rev = "a436f16b357c96b82397ec018ea469574c10dd41";
+      sha256 = "zJVnrgOv43bTfdMJEACiE7oHrXUz1OhR6vQQuSReIuA=";
+    };
+  }) {};
+
+  parse-js = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "marijnh";
+    repo = "parse-js";
+    name = "parse-js-src";
+    rev = "fbadc6029bec7039602abfc06c73bb52970998f6";
+    sha256 = "aey215BagBLQJSS78xl2ybuVmcGNkfuGLsrHWbLNrfE=";
+  })) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "Ramarren";
+      repo = "cl-parser-combinators";
+      name = "cl-parser-combinators-src";
+      rev = "9c7569a4f6af5e60c0d3a51d9c15c16d1714c845";
+      sha256 = "SMMWbY1xzivIMDYWvTTvI21ix3kc3+8VnUzUXhTcicw=";
+    };
+    systems = {
+      parser-combinators = {
+        lispDependencies = [ iterate alexandria ];
+        lispCheckDependencies = [ stefil infix ];
+      };
+      parser-combinators-cl-ppcre = {
+        lispDependencies = [ parser-combinators cl-ppcre ];
+      };
+    };
+  }) {}) parser-combinators parser-combinators-cl-ppcre;
 
   puri = callPackage (self: with self; lispDerivation {
     lispSystem = "puri";
@@ -1541,14 +1849,10 @@ with callPackage ./utils.nix {};
   kmrcl = callPackage (self: with self; lispDerivation rec {
     lispSystem = "kmrcl";
     version = "4a27407aad9deb607ffb8847630cde3d041ea25a";
-    src = pkgs.fetchzip {
-      pname = "kmrcl-src";
+    src = fetchKpePkg {
       inherit version;
-      url = "http://git.kpe.io/?p=kmrcl.git;a=snapshot;h=${version}";
+      name = "kmrcl";
       sha256 = "sha256-oq28Xy1NrL/v4cipw4sObu3YkDBIAo0OR8wWqCoB/Rk=";
-      # This is necessary because the auto generated filename for a gitweb
-      # URL contains invalid characters.
-      extension = "tar.gz";
     };
     lispCheckDependencies = [ rt ];
   }) {};
@@ -1566,6 +1870,48 @@ with callPackage ./utils.nix {};
         lack = {
           lispDependencies = [ lack-util ];
           lispCheckDependencies = [ clack prove ];
+        };
+
+        # meta nix-only derivation for packages that just want all of lack
+        lack-full = {
+          lispSystems = [
+            "lack-app-directory"
+            "lack-app-file"
+            "lack-component"
+            "lack-middleware-accesslog"
+            "lack-middleware-auth-basic"
+            "lack-middleware-backtrace"
+            "lack-middleware-csrf"
+            "lack-middleware-mount"
+            "lack-middleware-session"
+            "lack-middleware-static"
+            "lack-request"
+            "lack-response"
+            "lack-session-store-dbi"
+            "lack-session-store-redis"
+            "lack-util-writer-stream"
+            "lack-util"
+            "lack"
+          ];
+          lispDependencies = [
+            lack
+            lack-middleware-backtrace
+            lack-request
+            lack-response
+            lack-util
+            # Kitchen sink dependencies
+            # In an ideal world this would be unnecessary: every individual lack
+            # system would be listed explicitly in Nix, with its dependencies. I
+            # just can’t be bothered to do that right now.
+            cl-base64
+            cl-redis
+            dbi
+            marshal
+            trivial-mimes
+            trivial-rfc-1123
+            trivial-utf-8
+          ];
+          lispCheckDependencies = [ lack-test ];
         };
 
         lack-middleware-backtrace = {
@@ -1586,6 +1932,13 @@ with callPackage ./utils.nix {};
             flexi-streams
             hunchentoot
             prove
+          ];
+        };
+
+        lack-response = {
+          lispDependencies = [
+            local-time
+            quri
           ];
         };
 
@@ -1613,8 +1966,10 @@ with callPackage ./utils.nix {};
         };
       };
     }) {}) lack
+           lack-full
            lack-middleware-backtrace
            lack-request
+           lack-response
            lack-test
            lack-util;
 
@@ -1670,6 +2025,19 @@ with callPackage ./utils.nix {};
     };
   }) {};
 
+  lisp-unit2 = callPackage (self: with self; lispify [
+    alexandria
+    cl-interpol
+    iterate
+    symbol-munger
+  ] (pkgs.fetchFromGitHub {
+    owner = "AccelerationNet";
+    repo = "lisp-unit2";
+    name = "lisp-unit2-src";
+    rev = "b5aa17b298cf2f669f4c0262c471e1ee4ab4699a";
+    sha256 = "ySzQKSbsQjfVOksQNzQh2td+oICmD6iVwmP3YIWwFpA=";
+  })) {};
+
   local-time = callPackage (self: with self; lispDerivation {
     lispSystem = "local-time";
     src = pkgs.fetchFromGitHub {
@@ -1694,6 +2062,40 @@ with callPackage ./utils.nix {};
     lispDependencies = [ bordeaux-threads ];
     lispCheckDependencies = [ stefil ];
   }) {};
+
+  log4cl-extras = callPackage (self: with self; lispDerivation {
+    lispSystem = "log4cl-extras";
+    lispCheckDependencies = [ hamcrest ];
+    lispDependencies = [
+      _40ants-doc
+      alexandria
+      cl-strings
+      dissect
+      global-vars
+      jonathan
+      log4cl
+      named-readtables
+      pythonic-string-reader
+      with-output-to-stream
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "log4cl-extras";
+      name = "log4cl-extras-src";
+      rev = "c0d34c3c953ee4b5d052f03d6cc63ade90a76437";
+      sha256 = "Oj2p+xc3PqmNNzKr6tK6Ug8o4VlMQl2QcFGsvNV3W7c=";
+    };
+  }) {};
+
+  # Technically this package also contains a benchmark system with different
+  # dependencies but I’m not going to bother exposing that to this scope.
+  lparallel = callPackage (self: with self; lispify [ alexandria bordeaux-threads ] (pkgs.fetchFromGitHub {
+    owner = "lmj";
+    repo = "lparallel";
+    name = "lparallel-src";
+    rev = "9c11f40018155a472c540b63684049acc9b36e15";
+    sha256 = "CfN9GsaW56v/c+wuSl0YSbDKyLQb8goV+BrntTL1Cjw=";
+  })) {};
 
   lquery = callPackage (self: with self; lispDerivation {
     lispSystem = "lquery";
@@ -1725,6 +2127,18 @@ with callPackage ./utils.nix {};
       rev = "9ab6e64a30261df109549d21ee7940df87db66bb";
       sha256 = "sha256-ed01iQytK5lp41aBBGa5bKB5S90BKgF6G5wgIMWlARk=";
     };
+    lispCheckDependencies = [ lift ];
+  }) {};
+
+  metacopy = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchdarcs {
+      name = "metacopy-src";
+      url = "http://dwim.hu/live/metacopy/";
+      rev = "d823378e31206959d8d0473186b26d67536b854b";
+      sha256 = "sha256-PZF851VEfD0crmwFpOJSt5qPwStfGoWdG4O5QlFgm/c=";
+    };
+    lispSystem = "metacopy";
+    lispDependencies = [ moptilities ];
     lispCheckDependencies = [ lift ];
   }) {};
 
@@ -1803,12 +2217,64 @@ with callPackage ./utils.nix {};
     };
   }) {}) optima optima-ppcre;
 
+  osicat = callPackage (self: with self; lispDerivation {
+    lispSystem = "osicat";
+    src = pkgs.fetchFromGitHub {
+      owner = "osicat";
+      repo = "osicat";
+      name = "osicat-src";
+      rev = "a8bfead630a3c8a8792dcb77a5983a4c5ac6a56c";
+      sha256 = "b38LAAsRnnpVQ26E00PBskmGL9oG0NHnqOhM80Lwsr8=";
+    };
+    # I am ashamed to say I /still/ don’t know how dynamic linking really works
+    # in Nix. My God it’s not a learning curve it’s a fractal.
+    postInstall = ''
+      mkdir -p $out/lib
+      ( cd $out/lib ; for f in ../posix/libosicat* ; do ln -s $f ./ ; done )
+    '';
+    lispDependencies = [ alexandria cffi trivial-features cffi-grovel ];
+    lispCheckDependencies = [ rt ];
+  }) {};
+
   parachute = callPackage (self: with self; lispify [ documentation-utils form-fiddle trivial-custom-debugger ] (pkgs.fetchFromGitHub {
     owner = "Shinmera";
     repo = "parachute";
     name = "parachute-src";
     rev = "7b75c4e63d878229cfedd81abcd3b98e26598b69";
     sha256 = "w6ujdiBhc5OCcqgE7xV7QUMfUQ9pe87ie41VKdDhU50=";
+  })) {};
+
+  parenscript = callPackage (self: with self; lispDerivation {
+    lispSystem = "parenscript";
+    version = "2.7.1";
+    src = pkgs.fetchzip {
+      name = "parenscript-src";
+      # TODO: Somehow create a versioned URL from this.
+      url = "https://common-lisp.net/project/parenscript/release/parenscript-latest.tgz";
+      sha256 = "0vg9b9j5psil5iba1d9k6vfxl5rn133qvy750dny20qkp9mf3a13";
+    };
+    lispDependencies = [ anaphora cl-ppcre named-readtables ];
+    lispCheckDependencies = [ fiveam cl-js ];
+  }) {};
+
+  parse-declarations = callPackage ({}: lispDerivation {
+    lispSystem = "parse-declarations-1.0";
+    src = pkgs.fetchFromGitLab {
+      name = "parse-declarations-src";
+      domain = "gitlab.common-lisp.net";
+      owner = "parse-declarations";
+      repo = "parse-declarations";
+      rev = "549aebbfb9403a7fe948654126b9c814f443f4f2";
+      sha256 = "sha256-rd//Wwn0pmpua9KYgixE8BzoZqd6XURUrzYVRvTE5Q0=";
+    };
+  }) {};
+
+  parse-number = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "sharplispers";
+    repo = "parse-number";
+    name = "parse-number-src";
+    rev = "de944fd22c9e5db450d48cdf829abd38a375c07c";
+    sha256 = "75VcTh+9ACghhHsw8dqQ1S8rh/SL4T6954UtGD6AudI=";
   })) {};
 
   plump = callPackage (self: with self; lispify [ array-utils documentation-utils ] (pkgs.fetchFromGitHub {
@@ -1882,6 +2348,40 @@ with callPackage ./utils.nix {};
     };
   }) {};
 
+  reblocks  = callPackage (self: with self; lispDerivation {
+    lispSystem = "reblocks";
+    src = pkgs.fetchFromGitHub {
+      owner = "40ants";
+      repo = "reblocks";
+      name = "reblocks-src";
+      rev = "88c99b8bc5d9e2888b3dfedbd132a00a01b1fe9e";
+      sha256 = "vLacastbgCCLPsXKU6rhZxpx+ZI/6Fqbt7j700GCkLQ=";
+    };
+    lispCheckDependencies = [ hamcrest ];
+    lispDependencies = [
+      _40ants-doc
+      circular-streams
+      cl-cookie
+      cl-fad
+      clack
+      dexador
+      f-underscore
+      find-port
+      http-body
+      lack-full
+      log4cl
+      log4cl-extras
+      metacopy
+      metatilities
+      parenscript
+      routes
+      salza2
+      spinneret-cl-markdown
+      trivial-open-browser
+      trivial-timeout
+    ];
+  }) {};
+
   rfc2388 = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitLab {
     name = "rfc2388-src";
     domain = "gitlab.common-lisp.net";
@@ -1890,6 +2390,19 @@ with callPackage ./utils.nix {};
     rev = "51bf93e91cb6c2d515c7674db19cc87d4550fd0b";
     sha256 = "sha256-RqFzdYyAEvJZKcSjSNXHog2KYxxFmyHupiX2DphUV4U=";
   })) {};
+
+  routes = callPackage (self: with self; lispDerivation {
+    lispSystem = "routes";
+    src = pkgs.fetchFromGitHub {
+      owner = "archimag";
+      repo = "cl-routes";
+      name = "cl-routes-src";
+      rev = "1b79e85aa653e1ec87e21ca745abe51547866fa9";
+      sha256 = "IS+9osD50/fjph6iLEohe59BcvcgUHkvKBWiLS4b8/4=";
+    };
+    lispDependencies = [ puri iterate split-sequence ];
+    lispCheckDependencies = [ lift ];
+  }) {};
 
   # For some reason none of these dependencies are specified in the .asd
   rove = callPackage (self: with self; lispify [
@@ -1907,15 +2420,112 @@ with callPackage ./utils.nix {};
   rt = callPackage (self: with self; lispDerivation rec {
     lispSystem = "rt";
     version = "a6a7503a0b47953bc7579c90f02a6dba1f6e4c5a";
-    src = pkgs.fetchzip {
-      pname = "rt-src";
+    src = fetchKpePkg {
       inherit version;
-      url = "http://git.kpe.io/?p=rt.git;a=snapshot;h=${version}";
+      name = "rt";
       sha256 = "sha256-KxlltS8zCpuYX6Yp05eC2t/eWcTavD0XyOsp1XMWUY8=";
-      # This is necessary because the auto generated filename for a gitweb
-      # URL contains invalid characters.
-      extension = "tar.gz";
     };
+  }) {};
+
+  # rutils and rutilsx have the same dependencies etc, it’s not worth the hassle
+  # creating separate derivations for them.
+  rutils = callPackage (self: with self; lispDerivation {
+    lispSystems = [ "rutils" "rutilsx" ];
+    src = pkgs.fetchFromGitHub {
+      name = "rutils-src";
+      owner = "vseloved";
+      repo = "rutils";
+      rev = "79cb02922f025e818ef4100957abdc9f8d671e2c";
+      sha256 = "GHZ1iHupzMSeE9R/Hghzfio+RM2TKA7uq3BBfCYxFIE=";
+    };
+    lispDependencies = [ named-readtables closer-mop ];
+    lispCheckDependencies = [ should-test ];
+  }) {};
+
+  salza2 = callPackage (self: with self; lispDerivation {
+    lispSystem = "salza2";
+    src = pkgs.fetchzip {
+      name = "salza2-src";
+      # TODO: Somehow create a versioned URL from this.
+      url = "http://www.xach.com/lisp/salza2.tgz";
+      sha256 = "sha256-IGjFOcpN/ZG++w2LsXqt6xy2wbSVFehvLvraFVuniNw=";
+    };
+    lispDependencies = [ trivial-gray-streams ];
+    lispCheckDependencies = [
+      chipz
+      flexi-streams
+      parachute
+    ];
+  }) {};
+
+  serapeum = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "ruricolist";
+      repo = "serapeum";
+      name = "serapeum-src";
+      rev = "9b041a9938b15e3ce017784842c85df2c5f8e9f1";
+      sha256 = "p0NMPzw/6jT1r0A+OuSjFvmsXcy5FA2uZ4YY+jsoKAo=";
+    };
+    lispSystem = "serapeum";
+    lispDependencies = [
+      alexandria
+      bordeaux-threads
+      global-vars
+      introspect-environment
+      parse-declarations
+      parse-number
+      split-sequence
+      string-case
+      trivia
+      trivial-cltl2
+      trivial-file-size
+      trivial-garbage
+      trivial-macroexpand-all
+    ];
+    lispCheckDependencies = [
+      fiveam
+      local-time
+      trivial-macroexpand-all
+      atomics
+    ];
+  }) {};
+
+  should-test = callPackage (self: with self; lispDerivation {
+    lispSystem = "should-test";
+    lispDependencies = [ rutils local-time osicat cl-ppcre];
+    # TODO: This should be propagated from osicat somehow, not in every client
+    # using osicat.
+    preBuild = ''
+export LD_LIBRARY_PATH=''${LD_LIBRARY_PATH+$LD_LIBRARY_PATH:}${osicat}/lib
+'';
+    buildInputs = [ osicat ];
+    src = pkgs.fetchFromGitHub {
+      owner = "vseloved";
+      repo = "should-test";
+      name = "should-test-src";
+      rev = "48facb9f9c07aeceb71fc0c48ce17fd7d54a09d4";
+      sha256 = "1dbuhCwkseODlRebU/ohx7NJ/VyRpiiBeRgJB+lRGLs=";
+    };
+  }) {};
+
+  simple-date-time = callPackage (self: with self; lispify [ cl-ppcre ] (pkgs.fetchFromGitHub {
+    owner = "quek";
+    repo = "simple-date-time";
+    name = "simple-date-time-src";
+    rev = "d6992afddedf67a8172a0120a1deac32afcaa2e8";
+    sha256 = "pAqI7g0bUFi1dIMF0BkhtC0cEW1Os+n+hNg39kZwPBo=";
+  })) {};
+
+  slynk = callPackage (self: with self; lispDerivation {
+    lispSystem = "slynk";
+    src = pkgs.fetchFromGitHub {
+      owner = "joaotavora";
+      repo = "sly";
+      name = "sly-src";
+      rev = "992e3f3c1a599a8a10af12323d547b35ce70362c";
+      sha256 = "EeZVY9Wmkn5YbzhM0Xvi8bSyFjA+TqHv2GERMFZ2K08=";
+    };
+    lispAsdPath = [ "slynk" ];
   }) {};
 
   smart-buffer = callPackage (self: with self; lispDerivation {
@@ -1930,6 +2540,36 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ babel prove ];
     lispDependencies = [ flexi-streams xsubseq ];
   }) {};
+
+  inherit (callPackage (self: with self; lispMultiDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "ruricolist";
+      repo = "spinneret";
+      name = "spinneret-src";
+      rev = "c638fb73de220d71b8ab00627405525424527587";
+      sha256 = "4+dIzE/ZXB9i0rKgvKaL+OjZ9p0ym/J9VYp90IbUbXs=";
+    };
+    lispCheckDependencies = [ fiveam parenscript ];
+
+    systems = {
+      spinneret = {
+        lispDependencies = [
+          alexandria
+          cl-ppcre
+          global-vars
+          parenscript
+          serapeum
+          trivia
+          trivial-gray-streams
+        ];
+      };
+      spinneret-cl-markdown = {
+        lispSystem = "spinneret/cl-markdown";
+        lispDependencies = [ spinneret cl-markdown ];
+      };
+    };
+  }) {}) spinneret
+         spinneret-cl-markdown;
 
   split-sequence = callPackage (self: with self; lispDerivation {
     lispSystem = "split-sequence";
@@ -1988,6 +2628,14 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ prove ];
   }) {};
 
+  string-case = callPackage ({}: lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "pkhuong";
+    repo = "string-case";
+    name = "string-case-src";
+    rev = "718c761e33749e297cd2809c7ba3ade1985c49f7";
+    sha256 = "rYKpJYSaXVhj9ZQAlWekTubhMZfHcsuyGUYXCKAfsdg=";
+  })) {};
+
   swank = callPackage (self: with self; lispDerivation {
     lispSystem = "swank";
     # The Swank Lisp system is bundled with SLIME
@@ -1999,6 +2647,19 @@ with callPackage ./utils.nix {};
       sha256 = "sha256-FUXICb0X9z7bDIewE3b2HljzheJAugAiT4pxmoY+OHM=";
     };
     patches = ./patches/slime-fix-swank-loader-fasl-cache-pwd.diff;
+  }) {};
+
+  symbol-munger = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "AccelerationNet";
+      repo = "symbol-munger";
+      name = "symbol-munger-src";
+      rev = "e96558e8315b8eef3822be713354787b2348b25e";
+      sha256 = "31n3osRTSRq6QcTCeP8iYTt1S69U7vAHKCKIdLuF2pk=";
+    };
+    lispSystem = "symbol-munger";
+    lispDependencies = [ alexandria iterate ];
+    lispCheckDependencies = [ lisp-unit2 ];
   }) {};
 
   inherit (callPackage (self: with self; lispMultiDerivation {
@@ -2077,6 +2738,14 @@ with callPackage ./utils.nix {};
          trivia-quasiquote
          trivia-trivial;
 
+  trivial-arguments = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "Shinmera";
+    name = "trivial-arguments-src";
+    repo = "trivial-arguments";
+    rev = "ecd84ed9cf9ef8f1e873d7409e6bd04979372aa7";
+    sha256 = "CDkM43FGqUa23zRV49lbElWo//7WIpNtxxJJuJXDags=";
+  })) {};
+
   trivial-backtrace = callPackage (self: with self; lispify [ lift ] (pkgs.fetchFromGitLab {
     name = "trivial-backtrace-src";
     domain = "gitlab.common-lisp.net";
@@ -2129,6 +2798,18 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ rt cffi cffi-grovel alexandria ];
   }) {};
 
+  trivial-file-size = callPackage (self: with self; lispDerivation {
+    src = pkgs.fetchFromGitHub {
+      owner = "ruricolist";
+      repo = "trivial-file-size";
+      name = "trivial-file-size-src";
+      rev = "77e98d99d04e017d227a64157f3f8db4b0e0dfe4";
+      sha256 = "3CF84lgakSdFmN8Q4+ffUf1DckoFevF4f65C/f6QJUo=";
+    };
+    lispCheckDependencies = [ fiveam ];
+    lispSystem = "trivial-file-size";
+  }) {};
+
   trivial-garbage = callPackage (self: with self; lispDerivation {
     src = pkgs.fetchFromGitHub {
       name = "trivial-garbage-src";
@@ -2157,6 +2838,14 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-G+YCIB3bKN4RotJUjT/6bnivSBalseFRhIlwsEm5EUk=";
   })) {};
 
+  trivial-macroexpand-all = callPackage ({}: lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "cbaggers";
+    repo = "trivial-macroexpand-all";
+    name = "trivial-macroexpand-all-src";
+    rev = "933270ac7107477de1bc92c1fd641fe646a7a8a9";
+    sha256 = "bRGt5l/XhpyM/NXIj+iBQM4wRF2f1uYzG5HIsoi1MKQ=";
+  })) {};
+
   trivial-mimes = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "trivial-mimes-src";
     repo = "trivial-mimes";
@@ -2165,6 +2854,34 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-8KifeVu/uPm0iBmAY62PkqNNDpAQcA3qVTyA4/Q3Zzc=";
   })) {};
 
+  trivial-open-browser = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
+    owner = "eudoxia0";
+    repo = "trivial-open-browser";
+    name = "trivial-open-browser-src";
+    rev = "7ab4743dea9d592639f15c565bfa0756e828c427";
+    sha256 = "q2nskSt9tyO+p6LMt/OZ0dBCOMSCmN6UiUAQHG/wqkc=";
+  })) {};
+
+  trivial-rfc-1123 = callPackage (self: with self; lispify [ cl-ppcre ] (pkgs.fetchFromGitHub {
+    owner = "stacksmith";
+    repo = "trivial-rfc-1123";
+    name = "trivial-rfc-1123-src";
+    rev = "9ef59c3fdec08b0e3c9ed02d39533887b6d1b8e3";
+    sha256 = "3cCwIsm8Wd2jq/YKey8l01v0aKe/CaM8O9c6EOTlnvA=";
+  })) {};
+
+  trivial-shell = callPackage (self: with self; lispDerivation {
+    lispSystem = "trivial-shell";
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "trivial-shell";
+      name = "trivial-shell-src";
+      rev = "e02ec191b34b52deca5d1c4ee99d4fa13b8772e0";
+      sha256 = "BWEx0TrGKEeECA/loODJ2++79Z4CX2S9dlIXGQudtyI=";
+    };
+    lispCheckDependencies = [ lift ];
+  }) {};
+
   trivial-sockets = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "trivial-sockets-src";
     owner = "usocket";
@@ -2172,6 +2889,18 @@ with callPackage ./utils.nix {};
     rev = "v0.4";
     sha256 = "sha256-oNmzHkPgmyf4qrOM9n3H0ZXOdQ8fJ8HSVbjrO37pSXY=";
   })) {};
+
+  trivial-timeout = callPackage (self: with self; lispDerivation {
+    lispSystem = "trivial-timeout";
+    lispCheckDependencies = [ lift ];
+    src = pkgs.fetchFromGitHub {
+      owner = "gwkkwg";
+      repo = "trivial-timeout";
+      name = "trivial-timeout-src";
+      rev = "27b21a6651b24554191c28953e2a8cce69a2a16c";
+      sha256 = "B7zd4A/Au2lDzCnjn2bwsW5tWNOrNlB2IiqGuS5Z+ls=";
+    };
+  }) {};
 
   trivial-types = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "trivial-types-src";
@@ -2224,6 +2953,28 @@ with callPackage ./utils.nix {};
     lispCheckDependencies = [ fiveam ];
   }) {};
 
+  typo = callPackage (self: with self; lispDerivation {
+    lispSystem = "typo";
+    lispDependencies = [
+      alexandria
+      closer-mop
+      introspect-environment
+      trivia
+      trivial-arguments
+      trivial-garbage
+    ];
+    src = pkgs.fetchFromGitHub {
+      owner = "marcoheisig";
+      repo = "Typo";
+      rev = "0e883490f81edf2a1be4e5b101d1caec78d7853b";
+      sha256 = "1W+wCd8B6nHctfC6VsGY6kMb53Cmebk6dPkcN6iclSE=";
+    };
+    lispAsdPath = [ "code" ];
+    preCheck = ''
+      export CL_SOURCE_REGISTRY="$PWD/code/test-suite:$CL_SOURCE_REGISTRY"
+    '';
+  }) {};
+
   unit-test = callPackage (self: with self; lispify [ ] (pkgs.fetchFromGitHub {
     name = "unit-test-src";
     owner = "hanshuebner";
@@ -2253,6 +3004,27 @@ with callPackage ./utils.nix {};
     sha256 = "sha256-nqVv41WDV5ncToM8UWchvWrp5rWCbNgzJV2ZI++dZhQ=";
   })) {};
 
+  with-output-to-stream = callPackage (self: with self; lispDerivation {
+    lispSystem = "with-output-to-stream";
+    version = "1.0";
+    src = pkgs.fetchzip {
+      name = "with-output-to-stream-src";
+      # TODO: Somehow create a versioned URL from this.
+      url = "https://tarballs.hexstreamsoft.com/libraries/latest/with-output-to-stream_latest.tar.gz";
+      sha256 = "sha256-VRszRJil9IltmwkrobOwAN+k1bfXscXPZm/2JRmbaV8=";
+    };
+  }) {};
+
+  xlunit = callPackage (self: with self; lispDerivation rec {
+    lispSystem = "xlunit";
+    version = "3805d34b1d8dc77f7e0ee527a2490194292dd0fc";
+    src = fetchKpePkg {
+      inherit version;
+      name = "xlunit";
+      sha256 = "sha256-g/dCnf5PqvhTLfsASs8SKzqcIENuSA+jJho+m251Lys=";
+    };
+  }) {};
+
   xsubseq = callPackage (self: with self; lispDerivation {
     src = pkgs.fetchFromGitHub {
       name = "xsubseq-src";
@@ -2263,6 +3035,20 @@ with callPackage ./utils.nix {};
     };
     lispSystem = "xsubseq";
     lispCheckDependencies = [ prove ];
+  }) {};
+
+  # QL calls this "cl-yacc", but the system name is "yacc", so I’m sticking to
+  # "yacc". Regardless of the repo name--that’s not authoritative. The system
+  # name is.
+  yacc = callPackage (self: with self; lispDerivation {
+    lispSystem = "yacc";
+    src = pkgs.fetchFromGitHub {
+      owner = "jech";
+      repo = "cl-yacc";
+      name = "cl-yacc-src";
+      rev = "1334f5469251ffb3f8738a682dc8ee646cb26635";
+      sha256 = "K9LJC4Q79xomFv8rAEHiX34CV0Zye+W8bWpv5P41JJk=";
+    };
   }) {};
 
   yason = callPackage (self: with self; lispify [ alexandria trivial-gray-streams ] (pkgs.fetchFromGitHub {

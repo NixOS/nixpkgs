@@ -37,10 +37,6 @@
                 arrow-macros
               ];
               src = pkgs.lib.cleanSource ./.;
-              installPhase = ''
-                mkdir -p "$out/bin"
-                cp dist/demo "$out/bin/"
-              '';
               meta = {
                 license = "AGPLv3";
               };
