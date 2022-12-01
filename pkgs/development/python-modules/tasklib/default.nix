@@ -1,4 +1,8 @@
-{ lib, pythonPackages, taskwarrior, writeShellScriptBin }:
+{ lib
+, pythonPackages
+, taskwarrior
+, writeShellScriptBin
+}:
 
 with pythonPackages;
 
@@ -12,7 +16,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XM1zG1JjbdEEV6i42FjLDQJv+qsePnUbr3kb+APjfXs=";
+    hash = "sha256-XM1zG1JjbdEEV6i42FjLDQJv+qsePnUbr3kb+APjfXs=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +32,8 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/robgolding/tasklib";
-    description = "A library for interacting with taskwarrior databases";
+    description = "Library for interacting with taskwarrior databases";
+    changelog = "https://github.com/GothenburgBitFactory/tasklib/releases/tag/${version}";
     maintainers = with maintainers; [ arcnmx ];
     platforms = platforms.all;
     license = licenses.bsd3;
