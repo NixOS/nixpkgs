@@ -224,6 +224,17 @@
     };
     version = "3.3.0";
   };
+  gitaly = {
+    dependencies = ["grpc"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "06riyr8apqb37z8c6x86np4blnrb96aigcs67vj930drr2mbwbrj";
+      type = "gem";
+    };
+    version = "15.4.0";
+  };
   github-linguist = {
     dependencies = ["charlock_holmes" "escape_utils" "mini_mime" "rugged"];
     groups = ["default"];
@@ -325,16 +336,6 @@
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0jjq2ing7px4zvdrg9xcq5a9qsciq6g3v14n95a3d9n6cyg69lmk";
-      type = "gem";
-    };
-    version = "1.42.0";
-  };
-  grpc-tools = {
-    groups = ["development" "test"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0xipvw8zcm1c3pna6fgmy83x0yvffii8d7wafwcxmszxa647brw1";
       type = "gem";
     };
     version = "1.42.0";
