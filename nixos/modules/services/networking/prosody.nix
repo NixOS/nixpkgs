@@ -263,7 +263,7 @@ let
     if builtins.isString x then ''"${x}"''
     else if builtins.isBool x then boolToString x
     else if builtins.isInt x then toString x
-    else if builtins.isList x then ''{ ${lib.concatStringsSep ", " (map (n: toLua n) x) } }''
+    else if builtins.isList x then "{ ${lib.concatMapStringsSep ", " toLua x} }"
     else throw "Invalid Lua value";
 
   createSSLOptsStr = o: ''

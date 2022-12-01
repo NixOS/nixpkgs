@@ -57,6 +57,14 @@ in
         '';
       };
 
+      muteKernelMessages = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Disable kernel messages on console while physlock is running.
+        '';
+      };
+
       lockOn = {
 
         suspend = mkOption {
@@ -116,7 +124,7 @@ in
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.muteKernelMessages "m"}${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
         };
       };
 

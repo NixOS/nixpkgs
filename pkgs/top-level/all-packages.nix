@@ -4049,6 +4049,8 @@ with pkgs;
 
   crossplane = with python3Packages; toPythonApplication crossplane;
 
+  crowdsec = callPackage ../tools/security/crowdsec { };
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
@@ -14527,6 +14529,8 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
+  gnostic = callPackage ../development/compilers/gnostic {};
+
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gobang = callPackage ../development/tools/database/gobang {
@@ -15181,6 +15185,7 @@ with pkgs;
 
   cargo-about = callPackage ../development/tools/rust/cargo-about { };
   cargo-all-features = callPackage ../development/tools/rust/cargo-all-features { };
+  cargo-apk = callPackage ../development/tools/rust/cargo-apk { };
   cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -30433,7 +30438,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  sapling = callPackage ../applications/version-management/sapling { };
+  sapling = callPackage ../applications/version-management/sapling {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
+  };
 
   mercurialFull = mercurial.override { fullBuild = true; };
 

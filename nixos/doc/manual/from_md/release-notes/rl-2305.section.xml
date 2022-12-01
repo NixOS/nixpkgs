@@ -78,6 +78,13 @@
           relying on this should provide their own implementation.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>nix.readOnlyStore</literal> option has been
+          renamed to <literal>boot.readOnlyNixStore</literal> to clarify
+          that it configures the NixOS boot process, not the Nix daemon.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-23.05-notable-changes">
