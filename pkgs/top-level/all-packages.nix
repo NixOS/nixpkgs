@@ -25871,6 +25871,8 @@ with pkgs;
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
+  steamos-devkit = callPackage ../development/tools/steamos-devkit { };
+
   swiftdefaultapps = callPackage ../os-specific/darwin/swiftdefaultapps { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {

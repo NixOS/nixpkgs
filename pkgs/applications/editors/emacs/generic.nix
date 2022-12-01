@@ -7,7 +7,7 @@
   , patches ? _: [ ]
   , macportVersion ? null
 }:
-{ stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, substituteAll, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, m17n_lib, libotf
@@ -67,7 +67,25 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
   pname = pname + lib.optionalString ( !withX && !withNS && !withMacport && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
 
-  patches = patches fetchpatch;
+  patches = patches fetchpatch ++ lib.optionals nativeComp [
+    (substituteAll {
+      src = if lib.versionOlder version "29"
+            then ./native-comp-driver-options-28.patch
+            else ./native-comp-driver-options.patch;
+      backendPath = (lib.concatStringsSep " "
+        (builtins.map (x: ''"-B${x}"'') [
+          # Paths necessary so the JIT compiler finds its libraries:
+          "${lib.getLib libgccjit}/lib"
+          "${lib.getLib libgccjit}/lib/gcc"
+          "${lib.getLib stdenv.cc.libc}/lib"
+
+          # Executable paths necessary for compilation (ld, as):
+          "${lib.getBin stdenv.cc.cc}/bin"
+          "${lib.getBin stdenv.cc.bintools}/bin"
+          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+        ]));
+    })
+  ];
 
   src = if macportVersion != null then fetchFromBitbucket {
     owner = "mituharu";
@@ -112,25 +130,6 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
     done
     ''
 
-    # Make native compilation work both inside and outside of nix build
-    (lib.optionalString nativeComp (let
-      backendPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''\"-B${x}\"'') [
-          # Paths necessary so the JIT compiler finds its libraries:
-          "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc"
-          "${lib.getLib stdenv.cc.libc}/lib"
-
-          # Executable paths necessary for compilation (ld, as):
-          "${lib.getBin stdenv.cc.cc}/bin"
-          "${lib.getBin stdenv.cc.bintools}/bin"
-          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
-        ]));
-    in ''
-      substituteInPlace lisp/emacs-lisp/comp.el --replace \
-        "(defcustom native-comp-driver-options nil" \
-        "(defcustom native-comp-driver-options '(${backendPath})"
-    ''))
     ""
   ];
 
