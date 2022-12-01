@@ -7,7 +7,7 @@
   , patches ? _: [ ]
   , macportVersion ? null
 }:
-{ stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, substituteAll, ncurses, xlibsWrapper, libXaw, libXpm
+{ stdenv, llvmPackages_6, lib, fetchurl, fetchpatch, substituteAll, ncurses, libXaw, libXpm
 , Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, m17n_lib, libotf
@@ -143,7 +143,7 @@ let emacs = (if withMacport then llvmPackages_6.stdenv else stdenv).mkDerivation
     ++ lib.optionals stdenv.isLinux [ dbus libselinux alsa-lib acl gpm ]
     ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withX
-      [ xlibsWrapper libXaw Xaw3d gconf cairo ]
+      [ libXaw Xaw3d gconf cairo ]
     ++ lib.optionals (withX || withPgtk)
       [ libXpm libpng libjpeg giflib libtiff ]
     ++ lib.optionals (withX || withNS || withPgtk ) [ librsvg ]
