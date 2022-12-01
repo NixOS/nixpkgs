@@ -314,10 +314,7 @@
           generated using <literal>lib.systems.elaborate</literal>. In
           most cases you will want to use the new
           <literal>canExecute</literal> predicate instead which also
-          considers the kernel / syscall interface. It is briefly
-          described in the release’s
-          <link linkend="sec-release-22.11-highlights">highlights
-          section</link>.
+          takes the kernel / syscall interface into account.
           <literal>lib.systems.parse.isCompatible</literal> still
           exists, but has changed semantically: Architectures with
           differing endianness modes are <emphasis>no longer considered
