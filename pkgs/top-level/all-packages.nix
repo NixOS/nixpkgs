@@ -1736,7 +1736,7 @@ with pkgs;
 
   git-publish = python3Packages.callPackage ../applications/version-management/git-and-tools/git-publish { };
 
-  git-quick-stats = callPackage ../development/tools/git-quick-stats { };
+  git-quick-stats = callPackage ../applications/version-management/git-and-tools/git-quick-stats { };
 
   git-quickfix = callPackage ../applications/version-management/git-and-tools/git-quickfix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
