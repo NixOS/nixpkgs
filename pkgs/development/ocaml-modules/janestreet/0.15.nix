@@ -281,7 +281,8 @@ with self;
 
   core_unix = janePackage {
     pname = "core_unix";
-    hash = "1xzxqzg23in5ivz0v3qshzpr4w92laayscqj9im7jylh2ar1xi0a";
+    version = "0.15.2";
+    hash = "sha256-9f2PiLo+4Bjnfvh3scvIiPHj0wPZozmMMiCTe7vC1EA=";
     meta.description = "Unix-specific portions of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ core_kernel expect_test_helpers_core ocaml_intrinsics ppx_jane timezone spawn ];
