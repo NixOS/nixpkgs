@@ -60,6 +60,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.sourcehut.dispatch</literal> and the
+          corresponding package
+          (<literal>sourcehut.dispatchsrht</literal>) have been removed
+          due to
+          <link xlink:href="https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/">upstream
+          deprecation</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
