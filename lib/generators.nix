@@ -30,11 +30,16 @@ rec {
    * The builtin `toString` function has some strange defaults,
    * suitable for bash scripts but not much else.
    */
-  mkValueStringDefault = {}: v: with builtins;
-    let err = t: v: abort
-          ("generators.mkValueStringDefault: " +
-           "${t} not supported: ${toPretty {} v}");
-    in   if isInt      v then toString v
+  mkValueStringDefault = let
+    err = t: v: abort
+      ("generators.mkValueStringDefault: " +
+       "${t} not supported: ${toPretty {} v}");
+  in {
+    mkValueStringList ? err "lists",
+    mkValueStringAttrset ? err "attrsets",
+    mkValueStringFunction ? err "functions"
+  }: v: with builtins;
+    if isInt           v then toString v
     # convert derivations to store paths
     else if lib.isDerivation v then toString v
     # we default to not quoting strings
@@ -45,11 +50,11 @@ rec {
     else if false ==   v then "false"
     else if null  ==   v then "null"
     # if you have lists you probably want to replace this
-    else if isList     v then err "lists" v
+    else if isList     v then mkValueStringList v
     # same as for lists, might want to replace
-    else if isAttrs    v then err "attrsets" v
+    else if isAttrs    v then mkValueStringAttrset v
     # functions can’t be printed of course
-    else if isFunction v then err "functions" v
+    else if isFunction v then mkValueStringFunction v
     # Floats currently can't be converted to precise strings,
     # condition warning on nix version once this isn't a problem anymore
     # See https://github.com/NixOS/nix/pull/3480
