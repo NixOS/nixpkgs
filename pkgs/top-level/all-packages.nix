@@ -1732,7 +1732,7 @@ with pkgs;
 
   git-open = callPackage ../applications/version-management/git-and-tools/git-open { };
 
-  git-privacy = callPackage ../development/tools/git-privacy { };
+  git-privacy = callPackage ../applications/version-management/git-and-tools/git-privacy { };
 
   git-publish = python3Packages.callPackage ../applications/version-management/git-and-tools/git-publish { };
 
