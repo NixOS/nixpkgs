@@ -1,8 +1,8 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.11">
-  <title>Release 22.11 (“Raccoon”, 2022.11/??)</title>
+  <title>Release 22.11 (“Raccoon”, 2022.11/30)</title>
   <para>
     The NixOS release team is happy to announce a new version of NixOS
-    22.11. NixOS is both a linux distribution, and a set of packages
+    22.11. NixOS is both a Linux distribution, and a set of packages
     usable on other Linux systems and macOS.
   </para>
   <para>
@@ -190,9 +190,10 @@
       <listitem>
         <para>
           For cross-compilation targets that can also run on the
-          building machine, we also enabled running tests now. This is
-          for example the case for the pkgsStatic and pkgsLLVm package
-          sets or i686 packages on <literal>x86_64</literal> machine.
+          building machine, we now run tests. This, for example, is the
+          case for the <literal>pkgsStatic</literal> and
+          <literal>pkgsLLVM</literal> package sets or i686 packages on
+          <literal>x86_64</literal> machines.
         </para>
       </listitem>
       <listitem>
@@ -242,9 +243,12 @@
     <itemizedlist>
       <listitem>
         <para>
-          Nix has been upgraded from
-          <link xlink:href="https://github.com/NixOS/nix/compare/2.8.1...2.11.0">v2.8.1
-          to v2.11.0</link>
+          Nix has been upgraded from v2.8.1 to v2.11.0. For more
+          information, please see the release notes for
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.9.html">2.9</link>,
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.10.html">2.10</link>
+          and
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.11.html">2.11</link>.
         </para>
       </listitem>
       <listitem>
@@ -254,9 +258,9 @@
       </listitem>
       <listitem>
         <para>
-          GNOME has been upgraded to version 43. Please take a look at
-          their <link xlink:href="https://release.gnome.org/43/">Release
-          Notes</link> for details.
+          GNOME has been upgraded to version 43. Please see the
+          <link xlink:href="https://release.gnome.org/43/">release
+          notes</link> for details.
         </para>
       </listitem>
       <listitem>
@@ -290,7 +294,7 @@
       </listitem>
       <listitem>
         <para>
-          Python now defalts to 3.10, updated from 3.9.
+          Python now defaults to 3.10, updated from 3.9.
         </para>
       </listitem>
     </itemizedlist>
@@ -393,7 +397,7 @@
           checkouts via the <literal>sparseCheckout</literal> option.
           This used to accept a multi-line string with
           directories/patterns to check out, but now requires a list of
-          strings
+          strings.
         </para>
       </listitem>
       <listitem>
@@ -403,7 +407,7 @@
           <literal>ssh-keygen -A</literal> as they are insecure. Also,
           <literal>SetEnv</literal> directives in
           <literal>ssh_config</literal> and
-          <literal>sshd_config</literal> are now first-match-wins
+          <literal>sshd_config</literal> are now first-match-wins.
         </para>
       </listitem>
       <listitem>
@@ -511,7 +515,7 @@
           <literal>kanidm</literal> has been updated to 1.1.0-alpha.10
           and now requires a TLS certificate and key. It will always
           start <literal>https</literal> and-–-if enabled-–-an LDAPS
-          server and no HTTP and LDAP server anymore
+          server and no HTTP and LDAP server anymore.
         </para>
       </listitem>
       <listitem>
@@ -1508,7 +1512,7 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <literal>haskellPackage.callHackage</literal> is not always
+          <literal>haskellPackages.callHackage</literal> is not always
           invalidated if <literal>all-cabal-hashes</literal> changes,
           leading to less rebuilds of haskell dependencies.
         </para>
@@ -1529,9 +1533,24 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
     <itemizedlist>
       <listitem>
         <para>
+          <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
+          a simple and extensible webmail. Available as
+          <link linkend="opt-services.alps.enable">services.alps</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
           Nix based app VMs. Available as
           <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
+          the authentication software for the German ID card. Available
+          as
+          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
         </para>
       </listitem>
       <listitem>
@@ -1544,18 +1563,10 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          [xray] (https://github.com/XTLS/Xray-core), a fully compatible
-          v2ray-core replacement. Features XTLS, which when enabled on
-          server and client, brings UDP FullCone NAT to proxy setups.
-          Available as
-          <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
-          a self-hostable sync server for Firefox. Available as
-          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
+          an enterprise resource planning and customer relationship
+          manager. Enable using
+          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
         </para>
       </listitem>
       <listitem>
@@ -1567,39 +1578,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://komga.org/">Komga</link>, a free and
-          open source comics/mangas media server. Available as
-          <link linkend="opt-services.komga.enable">services.komga</link>.
+          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
+          an SSH tarpit that exposes Prometheus metrics. Available as
+          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
-          a self-hosted multi-tenant recipe collection. Available as
-          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://hbase.apache.org/">HBase
-          cluster</link>, a distributed, scalable, big data store.
-          Available as
-          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/edneville/please">Please</link>,
-          a Sudo clone written in Rust. Available as
-          <link linkend="opt-security.please.enable">security.please</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
-          an SMS alerting tool for the Prometheus Alertmanager.
-          Available as
-          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+          <link xlink:href="https://github.com/skeeto/endlessh">endlessh</link>,
+          an SSH tarpit. Available as
+          <link linkend="opt-services.endlessh.enable">services.endlessh</link>.
         </para>
       </listitem>
       <listitem>
@@ -1614,17 +1602,53 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
-          a hardware True Random Number Generator dongle. Available as
-          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
+          the CLI client for ExpressVPN. Available as
+          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
-          an alert acknowledgement management daemon for Prometheus
-          Alertmanager. Available as
-          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
+          free, self-hostable RSS feed aggregator. Available as
+          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
+          IMAP/SMTP autodiscover server. Available as
+          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
+          Tempo</link>, a distributed tracing store. Available as
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
+          a hardware True Random Number Generator dongle. Available as
+          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
         </para>
       </listitem>
       <listitem>
@@ -1644,9 +1668,60 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prymitive/kthxbye">kthxbye</link>,
+          an alert acknowledgement management daemon for Prometheus
+          Alertmanager. Available as
+          <link xlink:href="options.html#opt-services.kthxbye.enable">services.kthxbye</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://languagetool.org/">languagetool</link>,
           a multilingual grammar, style, and spell checker. Available as
           <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://listmonk.app">Listmonk</link>, a
+          self-hosted newsletter manager. Enable using
+          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
+          fast, simple, hackable OSM map viewer for mobile and desktop
+          Linux. Available as
+          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
+          a small and easy HTTP server based on thttpd. Available as
+          <link linkend="opt-services.merecat.enable">services.merecat</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
+          notification service. Available as
+          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
         </para>
       </listitem>
       <listitem>
@@ -1665,45 +1740,10 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://ntfy.sh">ntfy.sh</link>, a push
-          notification service. Available as
-          <link linkend="opt-services.ntfy-sh.enable">services.ntfy-sh</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://git.sr.ht/~migadu/alps">alps</link>,
-          a simple and extensible webmail. Available as
-          <link linkend="opt-services.alps.enable">services.alps</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/skeeto/endlessh">endlessh</link>,
-          an SSH tarpit. Available as
-          <link linkend="opt-services.endlessh.enable">services.endlessh</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/shizunge/endlessh-go">endlessh-go</link>,
-          an SSH tarpit that exposes Prometheus metrics. Available as
-          <link linkend="opt-services.endlessh-go.enable">services.endlessh-go</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
-          a simple object storage server for geodistributed deployments,
-          alternative to MinIO. Available as
-          <link linkend="opt-services.garage.enable">services.garage</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://netbird.io">netbird</link>, a zero
-          configuration VPN. Available as
-          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
         </para>
       </listitem>
       <listitem>
@@ -1717,6 +1757,29 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/edneville/please">Please</link>,
+          a Sudo clone written in Rust. Available as
+          <link linkend="opt-security.please.enable">security.please</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
+          IPMI exporter</link>, an IPMI exporter for Prometheus.
+          Available as
+          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/messagebird/sachet/">Sachet</link>,
+          an SMS alerting tool for the Prometheus Alertmanager.
+          Available as
+          <link linkend="opt-services.prometheus.sachet.enable">services.prometheus.sachet</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://schleuder.org/">schleuder</link>, a
           mailing list manager with PGP support. Enable using
           <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
@@ -1724,38 +1787,16 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://www.dolibarr.org/">Dolibarr</link>,
-          an enterprise resource planning and customer relationship
-          manager. Enable using
-          <link linkend="opt-services.dolibarr.enable">services.dolibarr</link>.
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://freshrss.org/">FreshRSS</link>, a
-          free, self-hostable RSS feed aggregator. Available as
-          <link linkend="opt-services.freshrss.enable">services.freshrss</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
-          the CLI client for ExpressVPN. Available as
-          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://troglobit.com/projects/merecat/">merecat</link>,
-          a small and easy HTTP server based on thttpd. Available as
-          <link linkend="opt-services.merecat.enable">services.merecat</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
-          IMAP/SMTP autodiscover server. Available as
-          <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
         </para>
       </listitem>
       <listitem>
@@ -1769,33 +1810,9 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
-          Tempo</link>, a distributed tracing store. Available as
-          <link linkend="opt-services.tempo.enable">services.tempo</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.ausweisapp.bund.de/">AusweisApp2</link>,
-          the authentication software for the German ID card. Available
-          as
-          <link linkend="opt-programs.ausweisapp.enable">programs.ausweisapp</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
-          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
-          Available as
-          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/prometheus-community/ipmi_exporter">Prometheus
-          IPMI exporter</link>, an IPMI exporter for Prometheus.
-          Available as
-          <link linkend="opt-services.prometheus.exporters.ipmi.enable">services.prometheus.exporters.ipmi</link>.
+          <link xlink:href="https://uptime.kuma.pet/">Uptime
+          Kuma</link>, a fancy self-hosted monitoring tool. Available as
+          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
         </para>
       </listitem>
       <listitem>
@@ -1808,24 +1825,11 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://listmonk.app">Listmonk</link>, a
-          self-hosted newsletter manager. Enable using
-          <link xlink:href="options.html#opt-services.listmonk.enable">services.listmonk</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://uptime.kuma.pet/">Uptime
-          Kuma</link>, a fancy self-hosted monitoring tool. Available as
-          <link linkend="opt-services.uptime-kuma.enable">services.uptime-kuma</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://mepo.milesalan.com">Mepo</link>, a
-          fast, simple, hackable OSM map viewer for mobile and desktop
-          Linux. Available as
-          <link linkend="opt-programs.mepo.enable">programs.mepo.enable</link>.
+          <link xlink:href="https://github.com/XTLS/Xray-core">xray</link>,
+          a fully compatible v2ray-core replacement. Features XTLS,
+          which when enabled on server and client, brings UDP FullCone
+          NAT to proxy setups. Available as
+          <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
         </para>
       </listitem>
     </itemizedlist>

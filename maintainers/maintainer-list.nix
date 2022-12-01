@@ -1071,6 +1071,12 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+  archer-65 = {
+    email = "mario.liguori.056@gmail.com";
+    github = "archer-65";
+    githubId = 76066109;
+    name = "Mario Liguori";
+  };
   archseer = {
     email = "blaz@mxxn.io";
     github = "archseer";
@@ -9677,6 +9683,12 @@
     github = "mwilsoncoding";
     githubId = 43796009;
     name = "Max Wilson";
+  };
+  myaats = {
+    email = "mats@mats.sh";
+    github = "Myaats";
+    githubId = 6295090;
+    name = "Mats";
   };
   myrl = {
     email = "myrl.0xf@gmail.com";
