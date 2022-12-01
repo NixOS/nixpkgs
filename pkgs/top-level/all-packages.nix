@@ -30679,6 +30679,7 @@ with pkgs;
   mpvScripts = recurseIntoAttrs {
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+    inhibit-gnome = callPackage ../applications/video/mpv/scripts/inhibit-gnome.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
     mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix {};
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix {};
