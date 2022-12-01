@@ -30582,6 +30582,8 @@ with pkgs;
     buildGoModule = buildGo118Module; # tests fail with 1.19
   };
 
+  nqptp = callPackage ../tools/networking/nqptp { };
+
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
   mm = callPackage ../applications/networking/instant-messengers/mm { };
