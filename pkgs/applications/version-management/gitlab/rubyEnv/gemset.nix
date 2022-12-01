@@ -290,9 +290,6 @@
     };
     version = "0.2.0";
   };
-  attr_encrypted = {
-    dependencies = ["encryptor"];
-  };
   attr_required = {
     groups = ["default"];
     platforms = [];
@@ -1096,7 +1093,7 @@
     version = "4.8.1";
   };
   devise-two-factor = {
-    dependencies = ["activesupport" "attr_encrypted" "devise" "railties" "rotp"];
+    dependencies = ["activesupport" "devise" "railties" "rotp"];
     groups = ["default"];
     platforms = [];
     source = {
