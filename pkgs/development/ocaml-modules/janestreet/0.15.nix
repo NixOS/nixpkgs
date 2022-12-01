@@ -900,7 +900,8 @@ with self;
 
   sexp_pretty = janePackage {
     pname = "sexp_pretty";
-    hash = "1p1jspwjvrhm8li22xl0n8wngs12d9g7nc1svk6xc32jralnxblg";
+    version = "0.15.1";
+    hash = "sha256-UJEO2P4C7ZaD110MEfkG4FXfGDVAAW2TAK489faV6SM=";
     minimumOCamlVersion = "4.07";
     meta.description = "S-expression pretty-printer";
     propagatedBuildInputs = [ ppx_base re sexplib ];
