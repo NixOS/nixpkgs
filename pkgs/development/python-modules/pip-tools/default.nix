@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.8.0";
+  version = "6.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
+    hash = "sha256-kMXcFQ44VuRGO4HMyZMHzPlVTl24OT6yc3BcsLj3HGA=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
