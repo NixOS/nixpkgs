@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "High performance rendering for Python";
     homepage = "https://github.com/moderngl/moderngl";
+    changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
     # should be mesaPlatforms, darwin build breaks.
