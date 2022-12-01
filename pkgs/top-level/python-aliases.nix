@@ -216,6 +216,7 @@ mapAliases ({
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   Wand = wand; # added 2022-11-13
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
