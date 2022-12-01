@@ -3,7 +3,6 @@
 , fetchPypi
 , six
 , traceback2
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -12,12 +11,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y855kmx7a8rnf81d3lh5lyxai1908xjp0laf4glwa4c8472m212";
+    hash = "sha256-IogqDkGMKE4fcYqCKzsCKUTVPS2QjhaQsxmp0+ssBXk=";
   };
-
-  patches = lib.optionals (pythonAtLeast "3.7") [
-    ./collections-compat.patch
-  ];
 
   propagatedBuildInputs = [ six traceback2 ];
 

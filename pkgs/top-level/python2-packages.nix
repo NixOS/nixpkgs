@@ -143,6 +143,8 @@ with self; with super; {
 
   typing = callPackage ../development/python2-modules/typing { };
 
+  unittest2 = callPackage ../development/python2-modules/unittest2 { };
+
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };
