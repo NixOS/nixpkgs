@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.13.0";
+  version = "0.13.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Boc86//WWo/KfCDA49wDJlXH7o3g9VIgXK07V0JlwpM=";
+    sha256 = "sha256-hH9XoEOlhAjyRnCuAYT/bt+1/VcxdDIIIowCjdxRRDg=";
   };
 
   nativeBuildInputs = [
