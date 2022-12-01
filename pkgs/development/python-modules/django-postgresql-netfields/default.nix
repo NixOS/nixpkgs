@@ -7,18 +7,17 @@
 # required for tests
 #, djangorestframework
 #, psycopg2
-#, unittest2
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
+  version = "1.3.0";
   pname = "django-postgresql-netfields";
 
   src = fetchFromGitHub {
     owner = "jimfunk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rrh38f3zl3jk5ijs6g75dxxvxygf4lczbgc7ahrgzf58g4a48lm";
+    hash = "sha256-I+X4yfadtiiZlW7QhfwVbK1qyWn/khH9fWXszCo9uro=";
   };
 
   # tests need a postgres database
@@ -32,7 +31,6 @@ buildPythonPackage rec {
   # buildInputs = [
     # djangorestframework
     # psycopg2
-    # unittest2
   # ];
 
   propagatedBuildInputs = [
