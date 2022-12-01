@@ -10,13 +10,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sketchybar";
-  version = "2.8.2";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${version}";
-    sha256 = "sha256-GmM+0h6xxUzW2kpTDZWAiqJAXoQgdsJRlNbvsuxKmZ8=";
+    sha256 = "sha256-vVOO4rAEp8/h6lkqDwn44GZYIEBrkqsuoDSz3aZs+pQ=";
   };
 
   buildInputs = [ Carbon Cocoa SkyLight ]
