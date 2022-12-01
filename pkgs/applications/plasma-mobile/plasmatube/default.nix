@@ -2,6 +2,7 @@
 , mkDerivation
 , cmake
 , extra-cmake-modules
+, wrapGAppsHook
 , gst_all_1
 , kcoreaddons
 , kdeclarative
@@ -17,6 +18,7 @@ mkDerivation {
 
   nativeBuildInputs = [
     extra-cmake-modules
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -41,6 +43,11 @@ mkDerivation {
     substituteInPlace src/videomodel.cpp \
       --replace "@yt-dlp@" "${yt-dlp}/bin/yt-dlp"
   '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+  dontWrapGApps = true;
 
   meta = {
     description = "Youtube player powered by an invidious server";
