@@ -290,6 +290,9 @@
     };
     version = "0.2.0";
   };
+  attr_encrypted = {
+    dependencies = ["encryptor"];
+  };
   attr_required = {
     groups = ["default"];
     platforms = [];
@@ -1093,7 +1096,7 @@
     version = "4.8.1";
   };
   devise-two-factor = {
-    dependencies = ["activesupport" "devise" "railties" "rotp"];
+    dependencies = ["activesupport" "attr_encrypted" "devise" "railties" "rotp"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -2018,10 +2021,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hpgljz05rhik15z081ghxw9pw83vz78p12wjdgxj3qz1a4x8pfq";
+      sha256 = "10bq1l9445b9ff921kyayrn5w1b0f7qm1sjia3wmnl54jq2vxfk2";
       type = "gem";
     };
-    version = "15.5.0";
+    version = "15.5.2";
   };
   gitlab = {
     dependencies = ["httparty" "terminal-table"];
