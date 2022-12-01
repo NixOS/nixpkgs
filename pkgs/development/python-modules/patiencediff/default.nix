@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.8";
+  version = "0.2.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-RmybTW2QENtZYzqe/hlMV8hKX+l0kGNS5PmEPCF/F0U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DvbOA/NXHTuE84zWicOUtAKgGHUmKrAWgeFW1+uA8JY=";
   };
 
   nativeBuildInputs = [
