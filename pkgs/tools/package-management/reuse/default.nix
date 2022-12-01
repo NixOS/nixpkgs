@@ -2,14 +2,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "1.0.0";
+  version = "1.1.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "0yplsbd5251s8cabazbdqb00jqv8ibbgal7fhj5pfxv5lsz17vkv";
+    hash = "sha256-bjUDImMFwMhRjCa7XzGlqR8h+KfTsyxonrQlRGgApwo=";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     binaryornot
@@ -17,7 +22,6 @@ python3Packages.buildPythonApplication rec {
     debian
     jinja2
     license-expression
-    requests
     setuptools
     setuptools-scm
   ];
