@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , openssl
 , cryptography
 , pytestCheckHook
@@ -21,14 +22,18 @@ buildPythonPackage rec {
     sha256 = "sha256-eoO3snLdWVIi1nL1zimqAw8fuDdjDvIp9i5y45XOiWg=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-flaky-darwin-handshake-tests.patch";
+      url = "https://github.com/pyca/pyopenssl/commit/8a75898356806784caf742e8277ef03de830ce11.patch";
+      hash = "sha256-UVsZ8Nq1jUTZhOUAilRgdtqMYp4AN7qvWHqc6RleqRI=";
+    })
+  ];
+
   postPatch = ''
     # remove cryptography pin
     sed "/cryptography/ s/,<[0-9]*//g" setup.py
   '';
-
-  # Seems to fail unpredictably on Darwin. See https://hydra.nixos.org/build/49877419/nixlog/1
-  # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.
-  doCheck = !stdenv.isDarwin;
 
   nativeBuildInputs = [ openssl ];
   propagatedBuildInputs = [ cryptography ];
@@ -79,7 +84,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyca/pyopenssl";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    # https://github.com/pyca/pyopenssl/issues/873
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }
