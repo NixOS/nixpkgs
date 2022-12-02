@@ -187,7 +187,6 @@ self: super: {
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   squeal-postgresql = dontCheck super.squeal-postgresql;
-  postgrest = dontCheck super.postgrest;
   postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
   sophia = dontCheck super.sophia;
@@ -2313,4 +2312,18 @@ self: super: {
   # multiple bounds too strict
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
+
+  # 2022-12-02: Needs newer postgrest package
+  # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
+  # 2022-12-02: Too strict bounds: https://github.com/PostgREST/postgrest/issues/2580
+  # 2022-12-02: Tests require running postresql server
+  postgrest = dontCheck (doJailbreak (overrideSrc rec {
+    version = "10.1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "PostgREST";
+      repo = "postgrest";
+      rev = "v${version}";
+      sha256 = "sha256-ceSPBH+lzGU1OwjolcaE1BCpkKCJrvMU5G8TPeaJesM=";
+    };
+  } super.postgrest));
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
