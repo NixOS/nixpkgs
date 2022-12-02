@@ -1829,7 +1829,7 @@ with pkgs;
 
   gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
 
-  gitsign = callPackage ../tools/security/gitsign { };
+  gitsign = callPackage ../applications/version-management/git-and-tools/gitsign { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
