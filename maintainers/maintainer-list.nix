@@ -5170,6 +5170,12 @@
       fingerprint = "C006 B8A0 0618 F3B6 E0E4  2ECD 5D47 2848 30FA A4FA";
     }];
   };
+  gotcha = {
+    email = "gotcha@bubblenet.be";
+    github = "gotcha";
+    githubId = 105204;
+    name = "Godefroid Chapelle";
+  };
   govanify = {
     name = "Gauvain 'GovanifY' Roussel-Tarbouriech";
     email = "gauvain@govanify.com";
