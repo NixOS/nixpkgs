@@ -71,7 +71,7 @@ in stdenv.mkDerivation {
     ${lib.optionalString sanitizersWorking ''
       printf "checking whether sanitizers are fully functional... ">&2
       $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
-      ${emulator} ./sanitizers
+      ASAN_OPTIONS=use_sigaltstack=0 ${emulator} ./sanitizers
     ''}
 
     touch $out
