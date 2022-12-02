@@ -1771,7 +1771,7 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  git-sizer = callPackage ../applications/version-management/git-sizer { };
+  git-sizer = callPackage ../applications/version-management/git-and-tools/git-sizer { };
 
   git-standup = callPackage ../applications/version-management/git-and-tools/git-standup { };
 
