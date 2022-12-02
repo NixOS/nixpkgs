@@ -3980,7 +3980,6 @@ broken-packages:
   - postgresql-tx-simple
   - postgresql-tx-squeal
   - postgresql-typed-lifted
-  - postgrest
   - postgres-tmp
   - postgrest-ws
   - postgres-websockets
