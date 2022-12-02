@@ -1799,7 +1799,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-up = callPackage ../applications/version-management/git-up {
+  git-up = callPackage ../applications/version-management/git-and-tools/git-up {
     pythonPackages = python3Packages;
   };
 
