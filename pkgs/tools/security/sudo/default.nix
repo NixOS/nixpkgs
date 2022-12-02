@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with lib.maintainers; [ eelco delroth ];
 
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
