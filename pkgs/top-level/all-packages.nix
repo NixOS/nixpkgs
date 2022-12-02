@@ -7161,7 +7161,6 @@ with pkgs;
   fortune = callPackage ../tools/misc/fortune { };
 
   fox = callPackage ../development/libraries/fox {
-    libpng = libpng12;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
