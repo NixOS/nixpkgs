@@ -235,7 +235,7 @@ in
       };
 
       httpPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3000;
         description = lib.mdDoc "HTTP listen port.";
       };
@@ -310,7 +310,7 @@ in
               };
 
               SSH_PORT = mkOption {
-                type = types.int;
+                type = types.port;
                 default = 22;
                 example = 2222;
                 description = lib.mdDoc ''
