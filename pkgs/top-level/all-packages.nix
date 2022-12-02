@@ -2783,7 +2783,9 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
+    openjdk11 = openjdk11.override { enableJavaFX = true; };
+  };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -6249,7 +6251,7 @@ with pkgs;
   ddrutility = callPackage ../tools/system/ddrutility { };
 
   inherit (callPackages ../applications/networking/p2p/deluge {
-    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
+    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x;
   })
     deluge-gtk
     deluged
@@ -9790,22 +9792,12 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_4;
-
-  # Nomad never updates major go versions within a release series and is unsupported
-  # on Go versions that it did not ship with. Due to historic bugs when compiled
-  # with different versions we pin Go for all versions.
-  # Upstream partially documents used Go versions here
-  # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
-  nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
-    buildGoModule = buildGo119Module;
-  };
-  nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
-    buildGoModule = buildGo119Module;
-  };
-  nomad_1_4 = callPackage ../applications/networking/cluster/nomad/1.4.nix {
-    buildGoModule = buildGo119Module;
-  };
+  inherit (callPackage ../applications/networking/cluster/nomad { })
+    nomad
+    nomad_1_2
+    nomad_1_3
+    nomad_1_4
+    ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
 
@@ -21110,7 +21102,7 @@ with pkgs;
 
   libtorrent-rasterbar-1_2_x = callPackage ../development/libraries/libtorrent-rasterbar/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    python = python2;
+    python = python3;
   };
 
   libtorrent-rasterbar = libtorrent-rasterbar-2_0_x;
