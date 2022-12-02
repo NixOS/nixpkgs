@@ -1,12 +1,9 @@
 { lib, fetchFromGitHub, rustPlatform }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "dfrs";
   version = "0.0.7";
-in
-rustPlatform.buildRustPackage {
-  inherit pname;
-  inherit version;
+
   src = fetchFromGitHub {
     owner = "anthraxx";
     repo = pname;
