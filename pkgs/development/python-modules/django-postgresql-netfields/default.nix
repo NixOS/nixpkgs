@@ -4,6 +4,7 @@
 , netaddr
 , six
 , fetchFromGitHub
+, pythonOlder
 # required for tests
 #, djangorestframework
 #, psycopg2
