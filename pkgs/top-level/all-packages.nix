@@ -1825,7 +1825,7 @@ with pkgs;
 
   gitlint = python3Packages.callPackage ../applications/version-management/git-and-tools/gitlint { };
 
-  gitls = callPackage ../tools/security/gitls { };
+  gitls = callPackage ../applications/version-management/git-and-tools/gitls { };
 
   gitnuro = callPackage ../applications/version-management/git-and-tools/gitnuro { };
 
