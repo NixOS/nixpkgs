@@ -14,11 +14,11 @@ in
   };
 
   options.boot.loader.external = {
-    enable = mkEnableOption "use an external tool to install your bootloader";
+    enable = mkEnableOption (lib.mdDoc "use an external tool to install your bootloader");
 
     installHook = mkOption {
       type = with types; path;
-      description = ''
+      description = lib.mdDoc ''
         The full path to a program of your choosing which performs the bootloader installation process.
 
         The program will be called with an argument pointing to the output of the system's toplevel.
