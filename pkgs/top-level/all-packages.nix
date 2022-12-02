@@ -1853,7 +1853,7 @@ with pkgs;
 
   hut = callPackage ../applications/version-management/git-and-tools/hut { };
 
-  josh = callPackage ../applications/version-management/josh { };
+  josh = callPackage ../applications/version-management/git-and-tools/josh { };
 
   lab = callPackage ../applications/version-management/git-and-tools/lab { };
 
