@@ -60,46 +60,6 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
-  # Patch for GHC 9.2 and jailbreak for doctest
-  # https://github.com/isovector/type-errors/pull/5#issuecomment-1325866252
-  # https://github.com/isovector/type-errors/issues/6
-  type-errors = assert super.type-errors.version == "0.2.0.0"; overrideCabal (drv: {
-    jailbreak = true;
-
-    # Allow picking patches from the repository that don't apply on the revisions
-    revision = null;
-    editedCabalFile = null;
-
-    patches = drv.patches or [] ++ [
-      # Recreate a bunch of changes that would otherwise be done by revisions
-      (fetchpatch {
-        name = "haskell-type-errors-bounds-update-1.patch";
-        url = "https://github.com/isovector/type-errors/commit/5717d158cf6652364ae1729c06b9a0d4bbb55abb.patch";
-        sha256 = "040mcyz1bibq682wpanynwfffh923m6g13728v204ygsbvgaqswy";
-        excludes = [ "**.yaml*" ];
-      })
-      (fetchpatch {
-        name = "haskell-type-errors-bounds-update-2.patch";
-        url = "https://github.com/isovector/type-errors/commit/f15ed756d85aaa42df73de49eba4b47b877f4d0d.patch";
-        sha256 = "0mpwpk65agzfnisnwhf818gjxahyhbglhmfkb5cdz5qnqn8x7qqx";
-        excludes = [ "**.yaml" ];
-      })
-      (fetchpatch {
-        name = "haskell-type-errors-bounds-update-3.patch";
-        url = "https://github.com/isovector/type-errors/commit/c73bd09eb7d1a7a6b5c61bd640c983496d0a9f83.patch";
-        sha256 = "0g76ihkgip3f0lkg7pdcd12sb8v48fhrwxg4vxhiq2zaphzk7p65";
-        excludes = [ "**.yaml" ];
-      })
-      # Finally, apply unreleased change adding support for 9.2
-      (fetchpatch {
-        name = "haskell-type-errors-ghc-9.2.patch";
-        url = "https://github.com/isovector/type-errors/commit/ceb6088a1a59d65f72915e8afd534993bb827d96.patch";
-        sha256 = "0vzwfrh5pl3yz6ng499h7w3ff2xb8qsipl8p3xa2mz38w1brb9gz";
-      })
-    ];
-    # jailbreak = true;
-  }) super.type-errors;
-
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
   # and the upper bound doesn't exist in code anymore:
