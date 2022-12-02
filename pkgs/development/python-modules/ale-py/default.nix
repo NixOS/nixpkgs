@@ -14,6 +14,7 @@
 , python
 , pythonOlder
 , setuptools
+, stdenv
 , typing-extensions
 , wheel
 , zlib
@@ -77,5 +78,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
     license = licenses.gpl2;
     maintainers = with maintainers; [ billhuang ];
+    broken = stdenv.isDarwin; # fails to link with missing library
   };
 }
