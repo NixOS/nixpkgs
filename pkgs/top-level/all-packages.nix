@@ -1831,7 +1831,7 @@ with pkgs;
 
   gitsign = callPackage ../applications/version-management/git-and-tools/gitsign { };
 
-  gitstats = callPackage ../applications/version-management/gitstats { };
+  gitstats = callPackage ../applications/version-management/git-and-tools/gitstats { };
 
   gitstatus = callPackage ../applications/version-management/git-and-tools/gitstatus { };
 
