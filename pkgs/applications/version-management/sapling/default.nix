@@ -138,9 +138,9 @@ let
     ]);
 
     buildInputs = [
-      curl
       openssl
     ] ++ lib.optionals stdenv.isDarwin [
+      curl
       libiconv
       CoreFoundation
       CoreServices
