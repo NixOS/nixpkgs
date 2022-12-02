@@ -12246,6 +12246,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
 
+  topiary = callPackage ../development/tools/misc/topiary { };
+
   todo = callPackage ../tools/misc/todo { };
 
   tor = callPackage ../tools/security/tor { };
