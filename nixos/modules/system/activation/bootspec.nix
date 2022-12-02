@@ -64,11 +64,20 @@ let
 in
 {
   options.boot.bootspec = {
-    enable = lib.mkEnableOption "Enable generation of RFC-0125 bootspec in $system/bootspec, e.g. /run/current-system/bootspec";
+    enable = lib.mkEnableOption (lib.mdDoc "Enable generation of RFC-0125 bootspec in $system/bootspec, e.g. /run/current-system/bootspec");
+
     extensions = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = { };
+      description = lib.mdDoc ''
+        User-defined data that extends the bootspec document.
+
+        To reduce incompatibility and prevent names from clashing
+        between applications, it is **highly recommended** to use a
+        unique namespace for your extensions.
+      '';
     };
+
     # This will be run as a part of the `systemBuilder` in ./top-level.nix. This
     # means `$out` points to the output of `config.system.build.toplevel` and can
     # be used for a variety of things (though, for now, it's only used to report
@@ -77,10 +86,12 @@ in
       internal = true;
       default = schemas.v1.generator;
     };
+
     validator = lib.mkOption {
       internal = true;
       default = schemas.v1.validator;
     };
+
     filename = lib.mkOption {
       internal = true;
       default = schemas.v1.filename;
