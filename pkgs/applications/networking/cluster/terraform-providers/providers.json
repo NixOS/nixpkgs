@@ -1159,11 +1159,11 @@
     "vendorHash": null
   },
   "ucloud": {
-    "hash": "sha256-x3+OuRzZdS429v0JNyZkM3v1etUgURSyi9qkt7RhqlI=",
+    "hash": "sha256-x1YQYan1W2AVg/L6BP8HfORpR2neoljZkQP3tDBM+MI=",
     "homepage": "https://registry.terraform.io/providers/ucloud/ucloud",
     "owner": "ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.32.5",
+    "rev": "v1.33.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
