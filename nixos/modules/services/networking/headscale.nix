@@ -387,7 +387,7 @@ in
       db_type = mkDefault cfg.database.type;
       db_path = mkDefault cfg.database.path;
 
-      log {
+      log = {
         format = mkDefault cfg.logFormat;
         level = mkDefault cfg.logLevel;
       };
