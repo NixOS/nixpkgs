@@ -188,6 +188,15 @@ in
         };
       };
 
+      logFormat = mkOption {
+        type = types.str;
+        default = "text";
+        description = lib.mdDoc ''
+          'text' or 'json'
+        '';
+        example = "json";
+      };
+
       logLevel = mkOption {
         type = types.str;
         default = "info";
@@ -369,8 +378,11 @@ in
       db_type = mkDefault cfg.database.type;
       db_path = mkDefault cfg.database.path;
 
-      log_level = mkDefault cfg.logLevel;
-
+      log {
+        format = mkDefault cfg.logFormat;
+        level = mkDefault cfg.logLevel;
+      };
+      
       dns_config = {
         nameservers = mkDefault cfg.dns.nameservers;
         domains = mkDefault cfg.dns.domains;
