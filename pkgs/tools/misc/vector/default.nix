@@ -32,7 +32,7 @@
 
 let
   pname = "vector";
-  version = "0.25.1";
+  version = "0.25.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
+    homepage = "https://github.com/vectordotdev/vector";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice happysalada ];
     platforms = with platforms; all;
