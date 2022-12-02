@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
+      "https://github.com/lcn2/calc/releases/download/v${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
     sha256 = "sha256-3o8jKmEYxNQtExOkjqTVU24mtSok+T/RnRw6goNzThM=";
