@@ -1823,7 +1823,7 @@ with pkgs;
 
   gitless = callPackage ../applications/version-management/git-and-tools/gitless { };
 
-  gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
+  gitlint = python3Packages.callPackage ../applications/version-management/git-and-tools/gitlint { };
 
   gitls = callPackage ../tools/security/gitls { };
 
