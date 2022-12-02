@@ -86,6 +86,14 @@ in
         '';
       };
 
+      NoisePrivateKeyFile = mkOption {
+        type = types.path;
+        default = "${dataDir}/noise_private.key";
+        description = lib.mdDoc ''
+          Path to Noise private key file, generated automatically if it does not exist.
+        '';
+      };
+
       derp = {
         urls = mkOption {
           type = types.listOf types.str;
@@ -370,6 +378,10 @@ in
       listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
 
       private_key_path = mkDefault cfg.privateKeyFile;
+      
+      noise = {
+        private_key_path = mkDefault cfg.NoiseprivateKeyFile;
+      };
 
       derp = {
         urls = mkDefault cfg.derp.urls;
