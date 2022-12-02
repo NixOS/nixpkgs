@@ -75,6 +75,32 @@ let
     echo '\documentclass{article}' > $out/main.tex
   '') // { pname = "test-ftplugin"; };
 
+  extendedLua = neovim-unwrapped.lua.override {
+    packageOverrides = lua: _: lib.mapAttrs (n: f: lua.callPackage f { }) {
+      # This is an empty luarocks plugin with with a help file.
+      # When overriden by buildNeovimPluginFrom2Nix a doc/tags should be built.
+      nvim-doc-test = { buildLuarocksPackage }: buildLuarocksPackage rec {
+        pname = "nvim-doc-test";
+        version = "scm-1";
+        src = runCommandLocal "${pname}-src" {} ''
+          mkdir -p "$out/doc"
+          cat << EOF > "$out/doc/test.txt"
+            *test.txt*  Just a documentation file with some tags
+          EOF
+          cat << EOF > "$out/${pname}-${version}.rockspec"
+            rockspec_format = "3.0"
+            package = '${pname}'
+            version = '${version}'
+            source = { url = "" }
+            build = { type = 'builtin' }
+          EOF
+        '';
+      };
+    };
+  };
+  buildNeovimPluginFrom2Nix =
+    neovimUtils.buildNeovimPluginFrom2Nix.override { lua = extendedLua; };
+
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}" ({
@@ -165,6 +191,20 @@ rec {
       [ -f $out/doc/tags ]
     '';
   });
+
+  luaPluginWithDoc = buildNeovimPluginFrom2Nix {
+    pname = "nvim-doc-test";
+    version = "scm-1";
+  };
+  # check that the vim-doc hook works for luarocks packages as well
+  # we know for a fact packer has a doc folder
+  checkForTagsLua =  pkgs.runCommandLocal "checkLuaDoc" { } ''
+    source ${nmt}/bash-lib/assertions.sh
+    plugin="${luaPluginWithDoc}"
+    assertDirectoryNotEmpty "$plugin/doc"
+    assertFileExists "$plugin/doc/tags"
+    touch "$out"
+  '';
 
 
   # nixpkgs should detect that no wrapping is necessary
