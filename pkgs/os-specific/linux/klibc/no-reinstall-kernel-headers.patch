@@ -1,11 +1,12 @@
-diff -Naur klibc-2.0.3-orig/scripts/Kbuild.install klibc-2.0.3/scripts/Kbuild.install
---- klibc-2.0.3-orig/scripts/Kbuild.install	2013-12-03 13:53:46.000000000 -0500
-+++ klibc-2.0.3/scripts/Kbuild.install	2014-01-04 18:17:09.342609021 -0500
-@@ -95,7 +95,6 @@
+diff --git a/scripts/Kbuild.install b/scripts/Kbuild.install
+index 0788637f..6708e19f 100644
+--- a/scripts/Kbuild.install
++++ b/scripts/Kbuild.install
+@@ -102,7 +102,6 @@ header:
  	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include
  	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)lib
  	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)bin
 -	$(Q)cp -rfL $(KLIBCKERNELSRC)/include/. $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include/.
- 	$(Q)cp -rf usr/include/. $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include/.
- 	$(Q)chmod -R a+rX $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include
- 	$(Q)$(install-data) $(srctree)/klcc/klcc.1 $(INSTALLROOT)$(mandir)/man1/$(KCROSS)klcc.1
+ ifneq ($(srctree),$(objtree))
+ 	$(Q)cp -rf $(srctree)/usr/include/. $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include/.
+ endif
