@@ -10,7 +10,12 @@
 , ninja
 , wrapGAppsHook4
 , libadwaita
+, gnome
+, webp-pixbuf-loader
+, gdk-pixbuf
 , libgweather
+, librsvg
+, shared-mime-info
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,8 +53,32 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libadwaita
+    gdk-pixbuf
     libgweather
+    librsvg
+    shared-mime-info
   ];
+
+  # based on eog
+  postInstall = ''
+    # Pull in WebP support
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+    )
+  '';
 
   doCheck = true;
 
