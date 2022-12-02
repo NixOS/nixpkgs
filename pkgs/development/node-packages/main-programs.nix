@@ -15,6 +15,7 @@
   "@angular/cli" = "ng";
   "@antora/cli" = "antora";
   "@astrojs/language-server" = "astro-ls";
+  "@azure/static-web-apps-cli" = "swa";
   "@bitwarden/cli" = "bw";
   "@commitlint/cli" = "commitlint";
   "@forge/cli" = "forge";

@@ -81,6 +81,22 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
+  "@azure/static-web-apps-cli" = prev."@azure/static-web-apps-cli".override (oldAttrs: {
+    buildInputs = with pkgs; [
+      buildPackages.makeWrapper
+      libsecret
+      pkg-config
+      final.node-gyp-build
+    ];
+    postFixup = ''
+      wrapProgram "$out/bin/swa" \
+        --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
+        --prefix PATH : "$out/bin"
+      substituteInPlace $out/lib/node_modules/@azure/static-web-apps-cli/node_modules/spawn-command/lib/spawn-command.js \
+        --replace "/bin/sh" "${pkgs.bash}/bin/bash"
+    '';
+  });
+
   balanceofsatoshis = prev.balanceofsatoshis.override {
     nativeBuildInputs = [ pkgs.installShellFiles ];
     postInstall = ''

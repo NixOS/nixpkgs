@@ -5,6 +5,7 @@
 , "@antora/cli"
 , "@antora/site-generator-default"
 , "@astrojs/language-server"
+, "@azure/static-web-apps-cli"
 , "@bitwarden/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
