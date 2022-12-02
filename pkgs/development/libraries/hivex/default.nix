@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libintl }:
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper, perlPackages
+, libxml2, libintl
+}:
 
 stdenv.mkDerivation rec {
   pname = "hivex";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook makeWrapper perlPackages.perl pkg-config ];
   buildInputs = [
     libxml2
   ]
