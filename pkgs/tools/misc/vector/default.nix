@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-7iYiSO966o0M9M0ijGCpuRVRgus+tURLBN9S5lPDRb8=";
   };
 
-  cargoHash = "sha256-EqK6r/pFFKmnpPPUhqdC3bztYQZ+2w7u7V8Rj+9oWII=";
+  cargoHash = "sha256:1ih47596l9knag7bsk48za0fmrcyzi6l0jyss1hdfp9wd2g9x59p";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
