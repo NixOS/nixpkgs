@@ -125,6 +125,12 @@ in let
       inherit llvm_meta;
     };
 
+    # Wrapper for standalone command line utilities (Python scripts)
+    clang-tools-python = callPackage ../common/clang-tools/python.nix {
+      inherit (tools) clang-unwrapped clang-tools;
+      inherit llvm_meta;
+    };
+
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM

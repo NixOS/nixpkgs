@@ -15486,6 +15486,8 @@ with pkgs;
 
   clang-tools = llvmPackages.clang-tools;
 
+  clang-tools-python = llvmPackages_14.clang-tools-python;
+
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
     inherit (llvmPackages_14) clang;

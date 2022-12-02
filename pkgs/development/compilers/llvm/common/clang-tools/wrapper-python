@@ -1,0 +1,5 @@
+#!/bin/sh
+
+###PATH_PREFIXING_COMMAND###
+
+exec -a "$0" @pythonInterpreter@ @clangUnwrappedPython@/bin/"$(basename "$0")" "$@"
