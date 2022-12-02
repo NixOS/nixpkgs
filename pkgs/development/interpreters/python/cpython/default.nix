@@ -308,6 +308,9 @@ in with passthru; stdenv.mkDerivation {
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl' != null) [
     "--with-openssl=${openssl'.dev}"
+  ] ++ optionals (libxcrypt != null) [
+    "CFLAGS=-I${libxcrypt}/include"
+    "LIBS=-L${libxcrypt}/lib"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
