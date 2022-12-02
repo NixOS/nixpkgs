@@ -19991,7 +19991,9 @@ with pkgs;
 
   lmdbxx = callPackage ../development/libraries/lmdbxx { };
 
-  lemon-graph = callPackage ../development/libraries/lemon-graph { };
+  lemon-graph = callPackage ../development/libraries/lemon-graph {
+    stdenv = if stdenv.isLinux then gcc11Stdenv else stdenv;
+  };
 
   levmar = callPackage ../development/libraries/levmar { };
 
