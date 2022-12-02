@@ -1821,7 +1821,7 @@ with pkgs;
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
-  gitless = callPackage ../applications/version-management/gitless { };
+  gitless = callPackage ../applications/version-management/git-and-tools/gitless { };
 
   gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
 
