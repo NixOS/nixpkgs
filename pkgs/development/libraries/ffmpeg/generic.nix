@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
       "--enable-zlib"
       "--enable-libopus"
       "--enable-libspeex"
-      "--enable-libx265"
+      (enableFeature (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isAarch) "libx265") # Cross-compiles only on arm just now
       (ifMinVer "4.2" (enableFeature (reqMin "4.2") "libdav1d"))
     # Developer flags
       (enableFeature debugDeveloper "debug")
@@ -155,8 +155,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvorbis xz soxr x264 x265 xvidcore zimg zlib libopus speex nv-codec-headers
-  ] ++ optionals openglSupport [ libGL libGLU ]
+    libvorbis xz soxr x264 xvidcore zimg zlib libopus speex nv-codec-headers
+  ] ++ optional (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isAarch) x265 # Cross-compiles only on arm just now
+    ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
     ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
