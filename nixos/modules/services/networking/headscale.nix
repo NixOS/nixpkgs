@@ -215,6 +215,15 @@ in
           '';
         };
 
+        overrideLocalDns = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc ''
+            Whether to use [Override local DNS](https://tailscale.com/kb/1054/dns/).
+          '';
+          example = true;
+        };
+
         domains = mkOption {
           type = types.listOf types.str;
           default = [ ];
@@ -385,6 +394,7 @@ in
       
       dns_config = {
         nameservers = mkDefault cfg.dns.nameservers;
+        override_local_dns = mkDefault cfg.dns.overrideLocalDns;
         domains = mkDefault cfg.dns.domains;
         magic_dns = mkDefault cfg.dns.magicDns;
         base_domain = mkDefault cfg.dns.baseDomain;
