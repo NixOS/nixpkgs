@@ -424,11 +424,11 @@
     "vendorHash": "sha256-cStVmI58V46I3MYYYrbCY3llnOx2pyuM2Ku+rhe5DVQ="
   },
   "github": {
-    "hash": "sha256-+I2h3wQnLd9EX99begsj4CI5R5i93JowBbGydYQNJHg=",
+    "hash": "sha256-1C/GG3VhQfnU71rucYefpRsfrS//lpPXHqT/QAHM2z0=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v5.9.1",
+    "rev": "v5.11.0",
     "spdx": "MIT",
     "vendorHash": null
   },
