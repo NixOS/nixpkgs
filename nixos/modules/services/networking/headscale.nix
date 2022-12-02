@@ -378,7 +378,7 @@ in
       listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
 
       private_key_path = mkDefault cfg.privateKeyFile;
-      
+
       noise = {
         private_key_path = mkDefault cfg.NoiseprivateKeyFile;
       };
@@ -403,7 +403,7 @@ in
         format = mkDefault cfg.logFormat;
         level = mkDefault cfg.logLevel;
       };
-      
+
       dns_config = {
         nameservers = mkDefault cfg.dns.nameservers;
         override_local_dns = mkDefault cfg.dns.overrideLocalDns;
