@@ -1,8 +1,17 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.8.9.16";
+  version = "0.8.9.31";
+
+  src = fetchFromGitHub {
+    owner = "coderholic";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-9Fc42f0plduihXDDLXWBdt62maxDJ0cwumIvbiMcrGc=";
+  };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = with python3Packages; [
     requests
@@ -10,15 +19,12 @@ python3Packages.buildPythonApplication rec {
     dnspython
   ];
 
-  src = fetchFromGitHub {
-    owner = "coderholic";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-uerQfyGHWhLbO6UkLSMA1tdfW/8fDQkcm6hYIdwwC7I=";
-  };
-
   checkPhase = ''
     $out/bin/pyradio --help
+  '';
+
+  postInstall = ''
+    installManPage *.1
   '';
 
   meta = with lib; {

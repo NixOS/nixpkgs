@@ -4,30 +4,45 @@
 , pytestCheckHook
 , requests-mock
 , oauthlib
-, requests_oauthlib
+, requests-oauthlib
 , requests
 , pyaml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pleroma-bot";
   version = "0.8.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "robertoszek";
-    repo = "pleroma-bot";
+    repo = pname;
     rev = version;
-    sha256 = "1q0xhgqq41zbqiawpd4kbdx41zhwxxp5ipn1c2rc8d7pjyb5p75w";
+    hash = "sha256-vJxblpf3NMSyYMHeWG7vHP5AeluTtMtVxOsHgvGDHeA=";
   };
 
-  propagatedBuildInputs = [ pyaml requests requests_oauthlib oauthlib ];
-  checkInputs = [ pytestCheckHook requests-mock ];
+  propagatedBuildInputs = [
+    pyaml
+    requests
+    requests-oauthlib
+    oauthlib
+  ];
 
-  pythonImportsCheck = [ "pleroma_bot" ];
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [
+    "pleroma_bot"
+  ];
 
   meta = with lib; {
-    homepage = "https://robertoszek.github.io/pleroma-bot/";
     description = "Bot for mirroring one or multiple Twitter accounts in Pleroma/Mastodon";
+    homepage = "https://robertoszek.github.io/pleroma-bot/";
     license = licenses.mit;
     maintainers = with maintainers; [ robertoszek ];
   };

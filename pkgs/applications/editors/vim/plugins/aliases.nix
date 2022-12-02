@@ -130,6 +130,7 @@ mapAliases (with prev; {
   unite               = unite-vim;
   UltiSnips           = ultisnips;
   vim-addon-vim2nix   = vim2nix;
+  vim-sourcetrail     = throw "vim-sourcetrail has been removed: abandoned by upstream"; # Added 2022-08-14
   vimproc             = vimproc-vim;
   vimshell            = vimshell-vim;
   vinegar             = vim-vinegar;

@@ -2,23 +2,20 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, testVersion
+, testers
 , discordchatexporter-cli
 }:
 
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";
-  version = "2.33.2";
+  version = "2.36.1";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    sha256 = "wOSa6O3O4QlGL5ecnR14ldXPYV5mDoPDlJjcwN5Lrek=";
+    sha256 = "svBVXny8ZsZnXG5cDPDKlR2dNhPzPOW4VGaOZkLrRNA=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.nix;
@@ -29,7 +26,7 @@ buildDotnetModule rec {
 
   passthru = {
     updateScript = ./updater.sh;
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = discordchatexporter-cli;
       version = "v${version}";
     };

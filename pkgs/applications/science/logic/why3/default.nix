@@ -1,13 +1,13 @@
-{ callPackage, fetchurl, fetchpatch, lib, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
+    sha256 = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
   };
 
   buildInputs = with ocamlPackages; [
@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     # WebIDE
     js_of_ocaml js_of_ocaml-ppx
     # S-expression output for why3pp
-    ppx_deriving ppx_sexp_conv
+    ppx_deriving ppx_sexp_conv ]
+    ++
     # Coq Support
-    coqPackages.coq coqPackages.flocq
-  ];
+    (with coqPackages; [ coq flocq ])
+  ;
 
   propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
 

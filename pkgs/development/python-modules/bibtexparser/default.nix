@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, future
 , pyparsing
 , pytestCheckHook
 , pythonOlder
@@ -9,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "1.2.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,24 +16,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${pname}";
-    rev = "v${version}";
-    hash = "sha256-M9fDI28Yq0uUHPx51wiuRPmRTLkjVqj7ixapbSftnJc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dP3ETzgVPI4NsxFI6Hv+nUInrjF+I1FwdqmeAetzL38=";
   };
 
   propagatedBuildInputs = [
-    future
     pyparsing
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/sciunto-org/python-bibtexparser/pull/259
-    substituteInPlace bibtexparser/tests/test_crossref_resolving.py \
-      --replace "import unittest2 as unittest" "import unittest"
-  '';
 
   pythonImportsCheck = [
     "bibtexparser"

@@ -7,7 +7,7 @@ let
     if stdenv.is64bit then "64"
     else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsa-lib ];
+  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
 
 in
 stdenv.mkDerivation rec {
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = kernel.kernelAtLeast "5.16";
     homepage = "http://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;

@@ -11,12 +11,12 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "1.8.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
-    rev = version;
-    sha256 = "sha256-oaUR/2G8dcQ5A4YZeLTSzyMNLI8a29pSoEtTdWvTVKE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-gT8Zrjzzunm5nt0GHYY0z2ZxtKBSc6FXndlrStbwo64=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     google-auth
     google-auth-oauthlib
     google-cloud-pubsub
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   checkInputs = [

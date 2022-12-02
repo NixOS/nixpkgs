@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: netmap.o:(.bss+0x20): multiple definition of `sizecheck'; iouyap.o:(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     install -D -m555 iouyap $out/bin/iouyap;
   '';

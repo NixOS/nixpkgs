@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     pillow
     pygments
     pygobject3
-    pyreadability
+    readability-lxml
     pytz
     requests
   ];

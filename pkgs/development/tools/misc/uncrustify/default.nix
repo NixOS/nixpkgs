@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uncrustify";
-  version = "0.74.0";
+  version = "0.75.1";
 
   src = fetchFromGitHub {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
-    sha256 = "0v48vhmzxjzysbf0vhxzayl2pkassvbabvwg84xd6b8n5i74ijxd";
+    sha256 = "sha256-wLzj/KcqXlcTsOJo7T166jLcWi1KNLmgblIqqkj7/9c=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

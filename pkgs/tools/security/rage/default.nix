@@ -1,25 +1,30 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
-, Foundation, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, Foundation
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0OQnYc1IWYscvSw5YZH54Fh8cBasLlcVqrQcQ4MAsU8=";
+    sha256 = "sha256-/qrhD7AqVGMBi6PyvYww5PxukUU//KrttKqnPS0OYPc=";
   };
 
-  cargoSha256 = "sha256-31s70pgEQDw3uifmhv1iWQuzKQVc2q+f76PPnGKIYdc=";
+  cargoSha256 = "sha256-hVjtjeaIyySAHm3v0kFQ387THqYU1s+nGdBUwzIzBjg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Foundation
-    Security
-    libiconv
   ];
 
   # cargo test has an x86-only dependency

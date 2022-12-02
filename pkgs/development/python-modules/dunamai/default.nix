@@ -6,11 +6,12 @@
 , importlib-metadata
 , packaging
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.10.0";
+  version = "1.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "dunamai";
-    rev = "v${version}";
-    sha256 = "sha256-Sp0yfNkFwNc2qR9aSPteBqZcqRokM9whOVmduXVK3CI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UoqVfRdwOgxNLY17+dPgYO1GIPw3ZUwE/tiVzHjBxcY=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    setuptools
   ];
 
   pythonImportsCheck = [ "dunamai" ];

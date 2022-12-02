@@ -138,29 +138,29 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/architecture/index.html' />.
+          See <http://guide.munin-monitoring.org/en/latest/architecture/index.html>.
         '';
       };
 
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>munin-node.conf</filename> extra configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html' />
+        description = lib.mdDoc ''
+          {file}`munin-node.conf` extra configuration. See
+          <http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
       };
 
       extraPluginConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>plugin-conf.d</filename> extra plugin configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/plugin/use.html' />
+        description = lib.mdDoc ''
+          {file}`plugin-conf.d` extra plugin configuration. See
+          <http://guide.munin-monitoring.org/en/latest/plugin/use.html>
         '';
         example = ''
           [fail2ban_*]
@@ -171,7 +171,7 @@ in
       extraPlugins = mkOption {
         default = {};
         type = with types; attrsOf path;
-        description = ''
+        description = lib.mdDoc ''
           Additional Munin plugins to activate. Keys are the name of the plugin
           symlink, values are the path to the underlying plugin script. You
           can use the same plugin script multiple times (e.g. for wildcard
@@ -179,15 +179,15 @@ in
 
           Note that these plugins do not participate in autoconfiguration. If
           you want to autoconfigure additional plugins, use
-          <option>services.munin-node.extraAutoPlugins</option>.
+          {option}`services.munin-node.extraAutoPlugins`.
 
           Plugins enabled in this manner take precedence over autoconfigured
           plugins.
 
           Plugins will be copied into the Nix store, and it will attempt to
           modify them to run properly by fixing hardcoded references to
-          <literal>/bin</literal>, <literal>/usr/bin</literal>,
-          <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
+          `/bin`, `/usr/bin`,
+          `/sbin`, and `/usr/sbin`.
         '';
         example = literalExpression ''
           {
@@ -201,24 +201,24 @@ in
       extraAutoPlugins = mkOption {
         default = [];
         type = with types; listOf path;
-        description = ''
+        description = lib.mdDoc ''
           Additional Munin plugins to autoconfigure, using
-          <literal>munin-node-configure --suggest</literal>. These should be
+          `munin-node-configure --suggest`. These should be
           the actual paths to the plugin files (or directories containing them),
           not just their names.
 
           If you want to manually enable individual plugins instead, use
-          <option>services.munin-node.extraPlugins</option>.
+          {option}`services.munin-node.extraPlugins`.
 
           Note that only plugins that have the 'autoconfig' capability will do
           anything if listed here, since plugins that cannot autoconfigure
           won't be automatically enabled by
-          <literal>munin-node-configure</literal>.
+          `munin-node-configure`.
 
           Plugins will be copied into the Nix store, and it will attempt to
           modify them to run properly by fixing hardcoded references to
-          <literal>/bin</literal>, <literal>/usr/bin</literal>,
-          <literal>/sbin</literal>, and <literal>/usr/sbin</literal>.
+          `/bin`, `/usr/bin`,
+          `/sbin`, and `/usr/sbin`.
         '';
         example = literalExpression ''
           [
@@ -234,14 +234,14 @@ in
         # NaNs in the output.
         default = [ "munin_stats" ];
         type = with types; listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Munin plugins to disable, even if
-          <literal>munin-node-configure --suggest</literal> tries to enable
+          `munin-node-configure --suggest` tries to enable
           them. To disable a wildcard plugin, use an actual wildcard, as in
           the example.
 
           munin_stats is disabled by default as it tries to read
-          <literal>/var/log/munin/munin-update.log</literal> for timing
+          `/var/log/munin/munin-update.log` for timing
           information, and the NixOS build of Munin does not write this file.
         '';
         example = [ "diskstats" "zfs_usage_*" ];
@@ -253,12 +253,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
           munin-graphs and munin-html in that order.
 
-          HTML output is in <filename>/var/www/munin/</filename>, configure your
+          HTML output is in {file}`/var/www/munin/`, configure your
           favourite webserver to serve static files.
         '';
       };
@@ -266,11 +266,11 @@ in
       extraGlobalConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>munin.conf</filename> extra global configuration.
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />.
+        description = lib.mdDoc ''
+          {file}`munin.conf` extra global configuration.
+          See <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
           Useful to setup notifications, see
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/tutorial/alert.html' />
+          <http://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -280,10 +280,10 @@ in
       hosts = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
+          <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
         '';
         example = literalExpression ''
           '''
@@ -296,7 +296,7 @@ in
       extraCSS = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Custom styling for the HTML that munin-cron generates. This will be
           appended to the CSS files used by munin-cron and will thus take
           precedence over the builtin styles.

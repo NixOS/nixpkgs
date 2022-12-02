@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pathable";
-  version = "0.4.0";
+  version = "0.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = version;
-    hash = "sha256-3qekweG+o7f6nm1cnCEHrWYn/fQ42GZrZkPwGbZcU38=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4QRFjbeaggoEPVGAmSY+qVMNW0DKqarNfRXaH6B58ew=";
   };
 
   nativeBuildInputs = [

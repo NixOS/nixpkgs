@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs, bash }:
 
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fkfh8j7rd8mkpgz6nsx4v7665d375266shl1aasdad8blgqmf0c";
   };
 
+  strictDeps = true;
+  buildInputs = [ bash ];
+
   patches = [
     (substituteAll {
       src = ./gitstatusd.patch;
@@ -37,6 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
+    install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
     install -D config/* --target-directory=$out/share/zsh-powerlevel10k/config
     install -D internal/* --target-directory=$out/share/zsh-powerlevel10k/internal
     cp -R gitstatus $out/share/zsh-powerlevel10k/gitstatus

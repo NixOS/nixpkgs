@@ -1,23 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pycryptodome
 , pycryptodomex
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "unicrypto";
-  version = "0.0.5";
+  version = "0.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aSQPJgSTNGhh5jlpfi/aJF8UZWx98grm2eaxuzassp4=";
+    hash = "sha256-nV3YWK1a1gj6UkmHsX6IVdZNbSRQygyhFjj02S/GyAs=";
   };
 
   propagatedBuildInputs = [
+    pycryptodome
     pycryptodomex
   ];
 

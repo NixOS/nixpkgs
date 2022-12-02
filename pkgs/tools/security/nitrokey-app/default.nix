@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     '';
     homepage         = "https://github.com/Nitrokey/nitrokey-app";
     license          = licenses.gpl3;
-    maintainers      = with maintainers; [ kaiha fpletz ];
+    maintainers      = with maintainers; [ kaiha ];
   };
 }

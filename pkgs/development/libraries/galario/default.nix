@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = lib.optional enablePython [
+  propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
+  checkInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src
@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
     ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
     ${if enablePython then "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh" else ""}
   '';
+
+  cmakeFlags = lib.optionals enablePython [
+    # RPATH of binary /nix/store/.../lib/python3.10/site-packages/galario/double/libcommon.so contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   doCheck = true;
 

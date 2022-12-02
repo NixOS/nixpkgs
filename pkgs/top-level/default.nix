@@ -79,15 +79,13 @@ in let
       ./config.nix
       ({ options, ... }: {
         _file = "nixpkgs.config";
-        # filter-out known options, FIXME: remove this eventually
-        config = builtins.intersectAttrs options config1;
+        config = config1;
       })
     ];
   };
 
   # take all the rest as-is
-  config = lib.showWarnings configEval.config.warnings
-    (config1 // builtins.removeAttrs configEval.config [ "_module" ]);
+  config = lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
   # (Currently to get a cross tool chain, or forced-i686 package.) Rather than

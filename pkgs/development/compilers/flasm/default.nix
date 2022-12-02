@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, unzip, bison, flex, gperf, zlib }:
+{ lib, stdenv, fetchzip, unzip, fetchpatch, bison, flex, gperf, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "flasm";
@@ -9,6 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "03hvxm66rb6rjwbr07hc3k7ia5rim2xlhxbd9qmcai9xwmyiqafg";
     stripRoot = false;
   };
+
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchains:
+    #  https://sourceforge.net/p/flasm/patches/2/
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://sourceforge.net/p/flasm/patches/2/attachment/0001-flasm-fix-build-on-gcc-10-fno-common.patch";
+      sha256 = "0ic7k1mmyvhpnxam89dbg8i9bfzk70zslfdxgpmkszx097bj1hv6";
+    })
+  ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

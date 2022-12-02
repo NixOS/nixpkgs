@@ -1,134 +1,68 @@
-{ lib
-, stdenv
+{ stdenv
+, callPackage
+, channel ? "stable"
 , fetchurl
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gtk3
-, libX11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, libdrm
-, libxcb
-, libxkbcommon
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, udev
-, xdg-utils
+, lib
+# This is only relevant for Linux, so we need to pass it through
+, polkitPolicyOwners ? [ ] }:
 
-  # The 1Password polkit file requires a list of users for whom polkit
-  # integrations should be enabled. This should be a list of strings that
-  # correspond to usernames.
-, polkitPolicyOwners ? []
-}:
 let
-  # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
-  policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
 
-in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.6.0";
+  version = if channel == "stable" then "8.9.8" else "8.9.10-1.BETA";
 
-  src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "AgmLbf2YHZr8McSIL5dxp5HxOC7gLrZWIopuA7aL0JI=";
+  sources = {
+    stable = {
+      x86_64-linux = {
+        url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "sha256-s5GFGsSelnvqdoEgCzU88BG0dc4bUG4IX3fbeciIPIk=";
+      };
+      aarch64-linux = {
+        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "sha256-wNF9jwHTxuojFQ+s05jhb7dFihE/36cadaBONqrMYF0=";
+      };
+      x86_64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
+        sha256 = "sha256-Ok0M6jPZ513iTE646PDPu+dK6Y3b/J8oejJQQkQMS2w=";
+      };
+      aarch64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
+        sha256 = "sha256-zocY/0IgiGwuY/ZrMbip34HoRp90ATWRpfAIRhyH9M8=";
+      };
+    };
+    beta = {
+      x86_64-linux = {
+        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "sha256-fW+9mko1OZ5zlTnbZucOjvjus8KVZA4Mcga/4HJyJL4=";
+      };
+      aarch64-linux = {
+        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "sha256-jczDhKMCEHjE5yXr5jczSalGa4pVFs7V8BcIhueT88M=";
+      };
+      x86_64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-x86_64.zip";
+        sha256 = "sha256-apgXMoZ7yNtUgf6efuSjAK6TGFR230FMK4j95OoXgwQ=";
+      };
+      aarch64-darwin = {
+        url = "https://downloads.1password.com/mac/1Password-${version}-aarch64.zip";
+        sha256 = "sha256-tdGu648joHu5E8ECU1TpkxgfU6ZMHlJAy+VcNDtIscA=";
+      };
+    };
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  dontConfigure = true;
-  dontBuild = true;
-  dontPatchELF = true;
-
-  installPhase =
-    let rpath = lib.makeLibraryPath [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      dbus
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
-      libdrm
-      libxcb
-      libxkbcommon
-      libxshmfence
-      mesa
-      nspr
-      nss
-      pango
-      systemd
-    ] + ":${stdenv.cc.cc.lib}/lib64";
-    in ''
-      runHook preInstall
-
-      mkdir -p $out/bin $out/share/1password
-      cp -a * $out/share/1password
-
-      # Desktop file
-      install -Dt $out/share/applications resources/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
-
-      '' + (lib.optionalString (polkitPolicyOwners != [ ])
-      ''
-      # Polkit file
-        mkdir -p $out/share/polkit-1/actions
-        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
-        '') + ''
-
-      # Icons
-      cp -a resources/icons $out/share
-
-      interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-      patchelf --set-interpreter $interp $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
-      patchelf --set-rpath ${rpath}:$out/share/1password $out/share/1password/{1password,1Password-BrowserSupport,1Password-KeyringHelper}
-      for file in $(find $out -type f -name \*.so\* ); do
-        patchelf --set-rpath ${rpath}:$out/share/1password $file
-      done
-
-      # Electron is trying to open udev via dlopen()
-      # and for some reason that doesn't seem to be impacted from the rpath.
-      # Adding udev to LD_LIBRARY_PATH fixes that.
-      makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-
-      runHook postInstall
-    '';
-
-  passthru.updateScript = ./update.sh;
+  src = fetchurl {
+    inherit (sources.${channel}.${stdenv.system}) url sha256;
+  };
 
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
+    platforms = builtins.attrNames sources.${channel};
   };
-}
+
+in if stdenv.isDarwin
+then callPackage ./darwin.nix { inherit pname version src meta; }
+else callPackage ./linux.nix { inherit pname version src meta polkitPolicyOwners; }

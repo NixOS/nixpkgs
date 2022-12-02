@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
+{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django-compressor
 , django-allauth, mailmanclient, django, mock
 }:
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django-gravatar2 django_compressor django-allauth mailmanclient
+    django-gravatar2 django-compressor django-allauth mailmanclient
   ];
   checkInputs = [ django mock ];
 

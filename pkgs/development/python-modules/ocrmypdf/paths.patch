@@ -1,29 +1,29 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index 1146cc5f..43f3915c 100644
+index 9e21c33c..21f134b3 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
-@@ -40,15 +40,7 @@ For details see:
+@@ -32,15 +32,7 @@ log = logging.getLogger(__name__)
  # Most reliable what to get the bitness of Python interpreter, according to Python docs
- _is_64bit = sys.maxsize > 2 ** 32
+ _IS_64BIT = sys.maxsize > 2**32
  
--_gswin = None
+-_GSWIN = None
 -if os.name == 'nt':
--    if _is_64bit:
--        _gswin = 'gswin64c'
+-    if _IS_64BIT:
+-        _GSWIN = 'gswin64c'
 -    else:
--        _gswin = 'gswin32c'
+-        _GSWIN = 'gswin32c'
 -
--GS = _gswin if _gswin else 'gs'
--del _gswin
+-GS = _GSWIN if _GSWIN else 'gs'
+-del _GSWIN
 +GS = '@gs@'
  
  
  def version():
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 2e8a058b..65a09088 100644
+index 0f8f7392..db792b10 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
-@@ -14,7 +14,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -12,7 +12,7 @@ from ocrmypdf.subprocess import get_version, run
  
  
  def version():
@@ -32,7 +32,7 @@ index 2e8a058b..65a09088 100644
  
  
  def available():
-@@ -27,7 +27,7 @@ def available():
+@@ -25,7 +25,7 @@ def available():
  
  def convert_group(*, cwd, infiles, out_prefix):
      args = [
@@ -41,7 +41,7 @@ index 2e8a058b..65a09088 100644
          '-b',
          out_prefix,
          '-s',  # symbol mode (lossy)
-@@ -46,7 +46,7 @@ def convert_group_mp(args):
+@@ -44,7 +44,7 @@ def convert_group_mp(args):
  
  
  def convert_single(*, cwd, infile, outfile):
@@ -51,10 +51,10 @@ index 2e8a058b..65a09088 100644
          proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
      proc.check_returncode()
 diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
-index ca8a4542..d0544174 100644
+index 64e91139..ab5b9c49 100644
 --- a/src/ocrmypdf/_exec/pngquant.py
 +++ b/src/ocrmypdf/_exec/pngquant.py
-@@ -19,7 +19,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -17,7 +17,7 @@ from ocrmypdf.subprocess import get_version, run
  
  
  def version():
@@ -63,7 +63,7 @@ index ca8a4542..d0544174 100644
  
  
  def available():
-@@ -46,7 +46,7 @@ def input_as_png(input_file: Path):
+@@ -44,7 +44,7 @@ def input_as_png(input_file: Path):
  def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max: int):
      with input_as_png(input_file) as input_stream:
          args = [
@@ -73,10 +73,10 @@ index ca8a4542..d0544174 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index a3688f65..61f54465 100644
+index ad98836a..a12d3002 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
-@@ -75,7 +75,7 @@ class TesseractVersion(StrictVersion):
+@@ -111,7 +111,7 @@ class TesseractVersion(Version):
  
  
  def version() -> str:
@@ -84,8 +84,8 @@ index a3688f65..61f54465 100644
 +    return get_version('@tesseract@', regex=r'tesseract\s(.+)')
  
  
- def has_user_words():
-@@ -97,7 +97,7 @@ def get_languages():
+ def has_user_words() -> bool:
+@@ -138,7 +138,7 @@ def get_languages() -> set[str]:
          msg += output
          return msg
  
@@ -94,20 +94,20 @@ index a3688f65..61f54465 100644
      try:
          proc = run(
              args_tess,
-@@ -119,7 +119,7 @@ def get_languages():
+@@ -160,7 +160,7 @@ def get_languages() -> set[str]:
  
  
- def tess_base_args(langs: List[str], engine_mode: Optional[int]) -> List[str]:
+ def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
 -    args = ['tesseract']
 +    args = ['@tesseract@']
      if langs:
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index aec365c2..cc5cb7e4 100644
+index d7f24265..d14f85de 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
-@@ -31,7 +31,7 @@ log = logging.getLogger(__name__)
+@@ -66,7 +66,7 @@ class UnpaperImageTooLargeError(Exception):
  
  
  def version() -> str:
@@ -115,13 +115,13 @@ index aec365c2..cc5cb7e4 100644
 +    return get_version('@unpaper@')
  
  
- def _setup_unpaper_io(tmpdir: Path, input_file: Path) -> Tuple[Path, Path]:
-@@ -71,7 +71,7 @@ def _setup_unpaper_io(tmpdir: Path, input_file: Path) -> Tuple[Path, Path]:
- def run(
-     input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: List[str]
+ SUPPORTED_MODES = {'1', 'L', 'RGB'}
+@@ -120,7 +120,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+ def run_unpaper(
+     input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
  ) -> None:
 -    args_unpaper = ['unpaper', '-v', '--dpi', str(round(dpi, 6))] + mode_args
 +    args_unpaper = ['@unpaper@', '-v', '--dpi', str(round(dpi, 6))] + mode_args
  
-     with TemporaryDirectory() as tmpdir:
-         input_pnm, output_pnm = _setup_unpaper_io(Path(tmpdir), input_file)
+     with _setup_unpaper_io(input_file) as (input_png, output_pnm, tmpdir):
+         # To prevent any shenanigans from accepting arbitrary parameters in

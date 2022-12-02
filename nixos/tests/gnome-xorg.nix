@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     maintainers = teams.gnome.members;
   };
 
-  machine = { nodes, ... }: let
+  nodes.machine = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in
 

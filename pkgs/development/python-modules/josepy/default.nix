@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.12.0";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "267004a64f08c016cd54b7aaf7c323fa3ef3679fb62f4b086cd56448d0fecb25";
+    sha256 = "sha256-iTHa84+KTIUnSg6LfLJa3f2NHyj5+4++0FPdUa7HXck=";
   };
 
   propagatedBuildInputs = [

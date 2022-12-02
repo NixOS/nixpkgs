@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, pam, systemd ? null
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+, capabilitiesSupport ? true
+, libcap_ng
+, libxcrypt
+, ncursesSupport ? true
+, ncurses
+, pamSupport ? true
+, pam
+, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, systemd
 , nlsSupport ? true
+, translateManpages ? true
+, po4a
 }:
 
 stdenv.mkDerivation rec {
-  pname = "util-linux";
-  version = "2.37.4";
+  pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
+  version = "2.38.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Y05pFq2RM2bDU2tkaOeER2lUm5mnsr+AMU3nirVlW4M=";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
+    hash = "sha256-YEkqGbRObPmj3f9oMlszO4tStsWc4+vWoOyqTFEX6E8=";
   };
 
   patches = [
@@ -40,10 +50,11 @@ stdenv.mkDerivation rec {
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
     (lib.enableFeature nlsSupport "nls")
-    (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
+    (lib.withFeature ncursesSupport "ncursesw")
+    (lib.withFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
@@ -55,10 +66,14 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals translateManpages [ po4a ];
+
+  buildInputs = [ zlib libxcrypt ]
+    ++ lib.optionals pamSupport [ pam ]
+    ++ lib.optionals capabilitiesSupport [ libcap_ng ]
+    ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals systemdSupport [ systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 

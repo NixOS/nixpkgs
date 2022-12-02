@@ -1,21 +1,36 @@
-{ lib, stdenv, fetchurl, buildPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2021e";
+  version = "2022f";
 
-  srcs =
-    [ (fetchurl {
-        url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "1cdjdcxl0s9xf0dg1z64kh7llm80byxqlzrkkjzcdlyh6yvl5v07";
-      })
-      (fetchurl {
-        url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "0x8pcfmjvxk29yfh8bklchv2f0vpl4yih0gc4wyx292l78wncijq";
-      })
-    ];
+  srcs = [
+    (fetchurl {
+      url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
+      hash = "sha256-mZDXH2ddISVnuTH+iq4cq3An+J/vuKedgIppM6Z68AA=";
+    })
+    (fetchurl {
+      url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
+      hash = "sha256-5FQ+kPhPkfqCgJ6piTAFL9vBOIDIpiPuOk6qQvimTBU=";
+    })
+  ];
 
   sourceRoot = ".";
+
+  patches = lib.optionals stdenv.hostPlatform.isWindows [
+    ./0001-Add-exe-extension-for-MS-Windows-binaries.patch
+  ] ++ [
+    (fetchpatch {
+      name = "fix-get-random-on-osx-1.patch";
+      url = "https://github.com/eggert/tz/commit/5db8b3ba4816ccb8f4ffeb84f05b99e87d3b1be6.patch";
+      hash = "sha256-FevGjiSahYwEjRUTvRY0Y6/jUO4YHiTlAAPixzEy5hw=";
+    })
+    (fetchpatch {
+      name = "fix-get-random-on-osx-2.patch";
+      url = "https://github.com/eggert/tz/commit/841183210311b1d4ffb4084bfde8fa8bdf3e6757.patch";
+      hash = "sha256-1tUTZBMT7V463P7eygpFS6/k5gTeeXumk5+V4gdKpEI=";
+    })
+  ];
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [];
@@ -34,22 +49,17 @@ stdenv.mkDerivation rec {
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "CFLAGS+=-DHAVE_DIRECT_H"
+    "CFLAGS+=-DHAVE_SYMLINK=0"
+    "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   doCheck = false; # needs more tools
 
-  installFlags = [ "ZIC=./zic-native" ];
-
-  preInstall = ''
-     mv zic.o zic.o.orig
-     mv zic zic.orig
-     make $makeFlags cc=${stdenv.cc.nativePrefix}cc AR=${stdenv.cc.nativePrefix}ar zic
-     mv zic zic-native
-     mv zic.o.orig zic.o
-     mv zic.orig zic
-  '';
+  installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "zic=${buildPackages.tzdata.bin}/bin/zic"
+  ];
 
   postInstall =
     ''

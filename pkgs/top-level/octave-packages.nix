@@ -23,19 +23,12 @@ with lib;
 
 makeScope newScope (self:
   let
-    inherit (octave) blas lapack gfortran python texinfo gnuplot;
-
     callPackage = self.callPackage;
 
     buildOctavePackage = callPackage ../development/interpreters/octave/build-octave-package.nix {
       inherit lib stdenv;
       inherit octave;
       inherit computeRequiredOctavePackages;
-    };
-
-    wrapOctave = callPackage ../development/interpreters/octave/wrap-octave.nix {
-      inherit octave;
-      inherit (pkgs) makeSetupHook makeWrapper;
     };
 
     # Given a list of required Octave package derivations, get a list of

@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , gettext
 , gtk-doc
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.36";
+  version = "1.10.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "2ZQV9M3/ZCIwAZ7FzdKx+/HsVQqK6GUhn3VIKmQre3o=";
+    sha256 = "T8PZxAS3sTMD2TlPlpYcUpjXGvqfH6evXk8PboQqCUA=";
   };
 
   patches = [
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     libxml2
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/nma-ws/nma-eap.c --subst-var-by \
-      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$out" "$name"}
   '';
 
   postInstall = ''

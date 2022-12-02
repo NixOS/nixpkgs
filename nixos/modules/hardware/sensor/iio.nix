@@ -8,7 +8,7 @@ with lib;
   options = {
     hardware.sensor.iio = {
       enable = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Enable this option to support IIO sensors with iio-sensor-proxy.
 
           IIO sensors are used for orientation and ambient light

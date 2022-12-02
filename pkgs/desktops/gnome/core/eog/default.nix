@@ -22,6 +22,7 @@
 , shared-mime-info
 , wrapGAppsHook
 , librsvg
+, webp-pixbuf-loader
 , libexif
 , gobject-introspection
 , gi-docgen
@@ -29,14 +30,21 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "42.0";
+  version = "43.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+zW/tRZ6QhIfWae5t6wNdbvQUXua/W2Rgx6E01c13fg=";
+    sha256 = "sha256-/tef88oZusYvJxVcm91p7vh1hwuXHm3LCqOMCT0TGXE=";
   };
+
+  patches = [
+    # Fix path to libeog.so in the gir file.
+    # We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -71,6 +79,17 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
@@ -98,5 +117,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    # requires <gio/gdesktopappinfo.h>
+    broken = stdenv.isDarwin;
   };
 }

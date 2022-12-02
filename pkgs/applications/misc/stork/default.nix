@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stork";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jameslittle230";
     repo = "stork";
     rev = "v${version}";
-    sha256 = "sha256-aBsxRLUufVUauySCxZKk/ZfcU/5KR7jOHmnx6mHmsFs=";
+    sha256 = "sha256-4aNY66y4dY+/MsZZGb5GBIlpZI+bAySff9+BEQUlx9M=";
   };
 
-  cargoSha256 = "sha256-oNoWGdXYfp47IpqU1twbORPOYrHjArNf43Zyeyat4Xs=";
+  cargoSha256 = "sha256-XyFZSQylBetf9tJLaV97oHbpe0aBadEZ60NyyxK8lfo=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "flammkuchen";
-  version = "0.9.2";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f249fe5bf85f717d3836e0db6fa9443a8a43101ce07704715b42251c44fc968e";
+    sha256 = "sha256-KtMGQftoYVNNMtfYeYiaQyMLAySpf9YXLMxj+e/CV5I=";
   };
 
   checkInputs = [

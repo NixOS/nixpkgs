@@ -10,7 +10,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure a setcap wrapper for traceroute.
         '';
       };

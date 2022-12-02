@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -16,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Sx+reZKBbahjkVgo8hC8EP5vMsRhnprwGjKumQqH83k=";
+    sha256 = "sha256-LfQESmKxSJ4tWlp3EZTBajOxZC3IEOUtJmX8A5ROpmU=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +65,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
     license = licenses.gpl3Only;

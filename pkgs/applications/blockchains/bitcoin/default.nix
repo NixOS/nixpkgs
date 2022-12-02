@@ -25,23 +25,21 @@
 
 with lib;
 let
-  version = "22.0";
-  majorVersion = versions.major version;
   desktop = fetchurl {
-    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
+    # c2e5f3e is the last commit when the debian/bitcoin-qt.desktop file was changed
+    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/c2e5f3e20a8093ea02b73cbaf113bc0947b4140e/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  inherit version;
+  version = "24.0";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
-      "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "d0e9d089b57048b1555efa7cd5a63a7ed042482045f6f33402b1df425bf9613b";
+    sha256 = "9cfa4a9f4acb5093e85b8b528392f0f05067f3f8fafacd4dcfe8a396158fd9f4";
   };
 
   nativeBuildInputs =

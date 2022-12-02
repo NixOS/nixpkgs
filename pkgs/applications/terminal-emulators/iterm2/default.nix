@@ -11,12 +11,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.4.15";
+  version = "3.4.17";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${lib.replaceStrings ["."] ["_"] version}.zip";
-    sha256 = "sha256-ZE/uYBKB2popdIdZWA8AvyJiwMzt32u6u/H/AyNcoVo=";
+    sha256 = "sha256-t7DWK1KqHChKR+ru0wYvdDOuJDBQBaOgyol1lMjMeTU=";
   };
+
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall

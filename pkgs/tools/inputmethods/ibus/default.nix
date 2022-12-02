@@ -1,7 +1,5 @@
 { lib, stdenv
 , substituteAll
-, fetchurl
-, fetchpatch
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -21,23 +19,20 @@
 , gtk-doc
 , runCommand
 , isocodes
-, cldr-emoji-annotation
+, cldr-annotations
 , unicode-character-database
 , unicode-emoji
 , python3
 , json-glib
 , libnotify ? null
-, enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-assert withWayland -> wayland != null && libxkbcommon != null;
 
 with lib;
 
@@ -57,28 +52,22 @@ let
     nativeBuildInputs = [ makeWrapper ];
   } ''
       makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
   '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.26";
+  version = "1.5.27";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "7Vuj4Gyd+dLUoCkR4SPkfGPwVQPRo2pHk0pRAsmtjxc=";
+    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
   };
 
   patches = [
-    # Fixes systemd unit installation path https://github.com/ibus/ibus/pull/2388
-    (fetchpatch {
-      url = "https://github.com/ibus/ibus/commit/33b4b3932bfea476a841f8df99e20049b83f4b0e.patch";
-      sha256 = "kh8SBR+cqsov/B0A2YXLJVq1F171qoSRUKbBPHjPRHI=";
-    })
-
     (substituteAll {
       src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
@@ -91,6 +80,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
+    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
   '';
 
   preAutoreconf = "touch ChangeLog";
@@ -100,13 +91,11 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
+    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 

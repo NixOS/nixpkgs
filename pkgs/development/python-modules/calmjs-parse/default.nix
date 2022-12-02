@@ -8,13 +8,15 @@
 
 buildPythonPackage rec {
   pname = "calmjs-parse";
-  version = "1.2.5";
+  version = "1.3.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "calmjs";
     repo = "calmjs.parse";
     rev = version;
-    sha256 = "0ypfbas33k1706p6w1bf9gnrv38z8fa4qci1iaks80dp58g8sv4r";
+    hash = "sha256-QhHNp9g88RhGHqRRjg4nk7aXjAgGCOauOagWJoJ3fqc=";
   };
 
   propagatedBuildInputs = [

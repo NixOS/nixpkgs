@@ -2,18 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.21.0";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-chVnD5mxnA50yEL65KUYJwpkZ4jPWiLVHHXeeFxtHBo=";
+    sha256 = "sha256-TWKiSE8mqXz5i4vd32WylTsyxMXXKGmVl3U2q2sMwDQ=";
   };
-
-  # This release fails the test suite on darwin, remove when debugged.
-  # See https://github.com/NixOS/nixpkgs/pull/150618 for discussion.
-  patches = lib.optionals stdenv.isDarwin ./darwin-remove-net-test.patch;
 
   postPatch = ''
     substituteInPlace janet.1 \
@@ -26,13 +22,17 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/janet -e '(+ 1 2 3)'
+  '';
+
   meta = with lib; {
     description = "Janet programming language";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ andrewchambers peterhoeg ];
     platforms = platforms.all;
-    # Marked as broken when patch is applied, see comment above patch.
-    broken = stdenv.isDarwin;
   };
 }

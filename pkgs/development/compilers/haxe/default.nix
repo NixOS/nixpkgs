@@ -6,26 +6,26 @@ let
     then with ocaml-ng.ocamlPackages_4_12; [
       ocaml
       findlib
-      sedlex_2
+      sedlex
       xml-light
       ptmap
       camlp5
       sha
       dune_2
       luv
-      ocaml_extlib
+      extlib
     ] else if lib.versionAtLeast version "4.0"
     then with ocaml-ng.ocamlPackages_4_10; [
       ocaml
       findlib
-      sedlex_2
+      sedlex
       xml-light
       ptmap
       camlp5
       sha
       dune_2
       luv
-      ocaml_extlib-1-7-7
+      extlib-1-7-7
     ] else with ocaml-ng.ocamlPackages_4_05; [
       ocaml
       camlp4
@@ -115,7 +115,7 @@ let
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
         license = with licenses; [ gpl2Plus mit ]; # based on upstream opam file
-        maintainers = [ maintainers.marcweber maintainers.locallycompact ];
+        maintainers = [ maintainers.marcweber maintainers.locallycompact maintainers.logo ];
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
@@ -147,7 +147,7 @@ in {
     sha256 = "0rns6d28qzkbai6yyws08yzbyvxfn848nj0fsji7chdi0y7pzzj0";
   };
   haxe_4_2 = generic {
-    version = "4.2.1";
-    sha256 = "sha256-0j6M21dh8DB1gC/bPYNJrVuDbJyqQbP+61ItO5RBUcA=";
+    version = "4.2.5";
+    sha256 = "sha256-Y0gx6uOQX4OZgg8nK4GJxRR1rKh0S2JUjZQFVQ4cfTs=";
   };
 }

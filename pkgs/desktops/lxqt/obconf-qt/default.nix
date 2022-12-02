@@ -10,7 +10,7 @@
 , xorg
 , lxqt-build-tools
 , openbox
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
@@ -41,13 +41,13 @@ mkDerivation rec {
     openbox
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/obconf-qt";
     description = "The Qt port of obconf, the Openbox configuration tool";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

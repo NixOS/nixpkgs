@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "geojson-client";
-  version = "0.7";
+  version = "0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-geojson-client";
     rev = "v${version}";
-    sha256 = "sha256-7EhdIfVM6d5fp6k+RdX6z33O5sZGeF/ThNkSXL8EjE8=";
+    sha256 = "sha256-nzM5P1ww6yWM3e2v3hRw0ECoYmRPhTs0Q7Wwicl+IpU=";
   };
 
   propagatedBuildInputs = [

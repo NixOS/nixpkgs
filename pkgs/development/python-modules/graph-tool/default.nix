@@ -1,18 +1,34 @@
-{ fetchurl, python, cairomm, sparsehash, pycairo, autoreconfHook
-, pkg-config, boost, expat, scipy, cgal, gmp, mpfr
-, gobject-introspection, pygobject3, gtk3, matplotlib, ncurses
-, buildPythonPackage
+{ buildPythonPackage
 , lib
+, fetchurl
+
+, autoreconfHook
+, boost
+, cairomm
+, cgal
+, expat
+, gmp
+, gobject-introspection
+, gtk3
+, matplotlib
+, mpfr
+, numpy
+, pkg-config
+, pycairo
+, pygobject3
+, python
+, scipy
+, sparsehash
 }:
 
 buildPythonPackage rec {
   pname = "graph-tool";
   format = "other";
-  version = "2.43";
+  version = "2.45";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-XxvuCUIgz7JIaNsPr0f44v/Sb3fdcJmVhC5NnomNqGw=";
+    hash = "sha256-+S2nrM/aArKXke/k8LPtkzKfJyMq9NOvwHySQh7Ghmg=";
   };
 
   configureFlags = [
@@ -23,34 +39,35 @@ buildPythonPackage rec {
     "--enable-openmp"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ ncurses ];
+  enableParallelBuilding = true;
 
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  # https://git.skewed.de/count0/graph-tool/-/wikis/installation-instructions#manual-compilation
   propagatedBuildInputs = [
     boost
+    cairomm
     cgal
     expat
     gmp
-    mpfr
-    python
-    scipy
-    # optional
-    sparsehash
-    # drawing
-    cairomm
     gobject-introspection
     gtk3
-    pycairo
     matplotlib
+    mpfr
+    numpy
+    pycairo
     pygobject3
+    scipy
+    sparsehash
   ];
-
-  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Python module for manipulation and statistical analysis of graphs";
-    homepage    = "https://graph-tool.skewed.de/";
-    license     = licenses.gpl3;
-    maintainers = [ maintainers.joelmo ];
+    homepage = "https://graph-tool.skewed.de";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }

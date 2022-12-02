@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vt-py";
-  version = "0.14.0";
+  version = "0.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-901VW56vr6ysMlzspgVbPMLnDIpJRgSEOEQ8ohHp+mc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nveMsebW828ATEW6vw+var+GxbJj2N0mNaQlkx+GH3w=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for VirusTotal";
     homepage = "https://virustotal.github.io/vt-py/";
+    changelog = "https://github.com/VirusTotal/vt-py/releases/tag//${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

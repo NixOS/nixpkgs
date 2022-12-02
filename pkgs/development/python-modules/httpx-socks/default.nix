@@ -20,27 +20,32 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.3";
+  version = "0.7.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "11wnhx9nfsg5lsnlgh33zngyhc2klichpfrkwajbbyq95fdqj8ri";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-HwLJ2pScgiNmM/l14aKp47MMuGW1qSaIq7ujpCSRtqA=";
   };
 
   propagatedBuildInputs = [
-    async-timeout
-    curio
-    httpcore
     httpx
+    httpcore
     python-socks
-    sniffio
-    trio
   ];
+
+  passthru.optional-dependencies = {
+    asyncio = [
+      async-timeout
+    ];
+    trio = [
+      trio
+    ];
+  };
 
   checkInputs = [
     flask
@@ -65,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Proxy (HTTP, SOCKS) transports for httpx";
     homepage = "https://github.com/romis2012/httpx-socks";
+    changelog = "https://github.com/romis2012/httpx-socks/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

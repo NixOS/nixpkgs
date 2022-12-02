@@ -6,8 +6,9 @@ import re
 import requests
 import sys
 
-releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15", "openjdk16")
-oses = ("mac", "linux")
+# openjdk15 is only for bootstrapping openjdk
+releases = ("openjdk8", "openjdk11", "openjdk13", "openjdk14", "openjdk15", "openjdk16", "openjdk17")
+oses = ("mac", "linux", "alpine_linux")
 types = ("jre", "jdk")
 impls = ("hotspot", "openj9")
 
@@ -15,12 +16,13 @@ arch_to_nixos = {
     "x64": ("x86_64",),
     "aarch64": ("aarch64",),
     "arm": ("armv6l", "armv7l"),
+    "ppc64le": ("powerpc64le",),
 }
 
 def get_sha256(url):
     resp = requests.get(url)
     if resp.status_code != 200:
-        print("error: could not fetch checksum from url {}: code {}".format(url, resp.code), file=sys.stderr)
+        print("error: could not fetch checksum from url {}: code {}".format(url, resp.status_code), file=sys.stderr)
         sys.exit(1)
     return resp.text.strip().split(" ")[0]
 

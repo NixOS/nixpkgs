@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ lv2 serd sord ];
+  dontAddWafCrossFlags = true;
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/sratom";

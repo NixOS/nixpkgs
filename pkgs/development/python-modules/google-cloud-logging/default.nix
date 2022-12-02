@@ -9,24 +9,25 @@
 , google-cloud-core
 , google-cloud-testutils
 , mock
+, pandas
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.0.0";
+  version = "3.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RS42Hh3Lwo8iCMCAXBp8usAwdkVWcD2XZW0FIYuTNwg=";
+    hash = "sha256-qr2RiIFl1njOOhoblub93foMQ63xpgp9Wj5p0SoLoHw=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "google-cloud-appengine-logging >= 0.1.0, < 1.0.0dev" "google-cloud-appengine-logging >= 0.1.0"
-  '';
 
   propagatedBuildInputs = [
     google-api-core
@@ -41,8 +42,10 @@ buildPythonPackage rec {
     flask
     google-cloud-testutils
     mock
+    pandas
     pytestCheckHook
     pytest-asyncio
+    rich
   ];
 
   disabledTests = [

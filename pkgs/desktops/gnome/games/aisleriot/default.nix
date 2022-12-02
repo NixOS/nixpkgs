@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, nix-update-script
+, gitUpdater
 , pkg-config
 , itstool
 , gtk3
@@ -10,7 +10,7 @@
 , librsvg
 , libxml2
 , desktop-file-utils
-, guile_3_0
+, guile
 , libcanberra-gtk3
 , ninja
 , appstream-glib
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.21";
+  version = "3.22.26";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "aisleriot";
     rev = version;
-    sha256 = "sha256-dpzuePxSoJcwUlj314r5G9A8aF1Yz49r+DxNTfA8/Ks=";
+    sha256 = "sha256-enUDJ6KM3QDsPb3ckKOxpRzMe4I0bj4TQR94oZWJJJY=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     librsvg
-    guile_3_0
+    guile
     libcanberra-gtk3
   ];
 
@@ -60,8 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.${pname}";
+    updateScript = gitUpdater {
     };
   };
 

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmdoc";
-  version = "0.9.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "ryantm";
     repo = "mmdoc";
     rev = version;
-    hash = "sha256-Lz2+vsXjz9BVOCI1vIrNTvZgh19OuvXEhnMw2QBZr1w=";
+    hash = "sha256-ZPdAMlKGwEO54hxHcQh1xgu6eUGsoX12xD/9JehzRdw=";
   };
 
   nativeBuildInputs = [ ninja meson pkg-config xxd ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.isx86_64;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Minimal Markdown Documentation";
     homepage = "https://github.com/ryantm/mmdoc";
     license = licenses.cc0;

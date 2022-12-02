@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     # Also, it is unclear what is covered by "verbatim" - we will edit configs
     hydraPlatforms = [];
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
   };
 }

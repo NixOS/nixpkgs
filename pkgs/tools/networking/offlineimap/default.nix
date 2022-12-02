@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     certifi
     distro
     imaplib2
-    kerberos
     pysocks
     rfc6555
     urllib3

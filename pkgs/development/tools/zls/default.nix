@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zls";
-  version = "unstable-2021-06-06";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = pname;
-    rev = "39d87188647bd8c8eed304ee18f2dd1df6942f60";
-    sha256 = "sha256-22N508sVkP1OLySAijhtTPzk2fGf+FVnX9LTYRbRpB4=";
+    rev = version;
+    sha256 = "sha256-MVo21qNCZop/HXBqrPcosGbRY+W69KNCc1DfnH47GsI=";
     fetchSubmodules = true;
   };
 
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zigtools/zls";
     license = licenses.mit;
     maintainers = with maintainers; [ fortuneteller2k ];
+    platforms = platforms.unix;
   };
 }

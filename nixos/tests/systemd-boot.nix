@@ -20,7 +20,7 @@ in
     name = "systemd-boot";
     meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
-    machine = common;
+    nodes.machine = common;
 
     testScript = ''
       machine.start()
@@ -44,7 +44,7 @@ in
     name = "systemd-boot-specialisation";
     meta.maintainers = with pkgs.lib.maintainers; [ lukegb ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       specialisation.something.configuration = {};
     };
@@ -67,7 +67,7 @@ in
     name = "systemd-boot-fallback";
     meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.efi.canTouchEfiVariables = mkForce false;
     };
@@ -93,7 +93,7 @@ in
     name = "systemd-boot-update";
     meta.maintainers = with pkgs.lib.maintainers; [ danielfullmer ];
 
-    machine = common;
+    nodes.machine = common;
 
     testScript = ''
       machine.succeed("mount -o remount,rw /boot")
@@ -115,7 +115,7 @@ in
     name = "systemd-boot-memtest86";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
@@ -133,7 +133,7 @@ in
     name = "systemd-boot-netbootxyz";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.netbootxyz.enable = true;
     };
@@ -148,7 +148,7 @@ in
     name = "systemd-boot-entry-filename";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
@@ -168,7 +168,7 @@ in
     name = "systemd-boot-extra-entries";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.extraEntries = {
         "banana.conf" = ''
@@ -187,7 +187,7 @@ in
     name = "systemd-boot-extra-files";
     meta.maintainers = with pkgs.lib.maintainers; [ Enzime ];
 
-    machine = { pkgs, lib, ... }: {
+    nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.extraFiles = {
         "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;

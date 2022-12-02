@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchPypi
 , django
 , colorama
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "green";
-  version = "3.4.1";
+  version = "3.4.3";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5dda2d2a277012227011f8f21523d70a550ebe5d47cc890fa16b9fcd9a91da53";
+    sha256 = "sha256-iGXQt3tcsThR3WAaWK0sgry1LafKEG8FOMV4fxJzaKY=";
   };
 
   patches = [

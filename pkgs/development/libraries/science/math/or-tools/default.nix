@@ -1,108 +1,99 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, abseil-cpp
+{ abseil-cpp
 , bzip2
-, zlib
-, lsb-release
-, which
-, protobuf
 , cbc
+, cmake
+, eigen
 , ensureNewerSourcesForZipFilesHook
+, fetchFromGitHub
+, fetchpatch
+, glpk
+, lib
+, pkg-config
+, protobuf
 , python
+, re2
+, stdenv
 , swig4
+, unzip
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "9.1";
-  disabled = python.pythonOlder "3.6";  # not supported upstream
+  version = "9.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "sha256-dEYMPWpa3J9EqtCq3kubdUYJivNRTOKUpNDx3UC1IcQ=";
+    sha256 = "sha256-joWonJGuxlgHhXLznRhC1MDltQulXzpo4Do9dec1bLY=";
   };
-
-  # The original build system uses cmake which does things like pull
-  # in dependencies through git and Makefile creation time. We
-  # obviously don't want to do this so instead we provide the
-  # dependencies straight from nixpkgs and use the make build method.
-
-  # Cbc is linked against bzip2 and declares this in its pkgs-config file,
-  # but this makefile doesn't use pkgs-config, so we also have to add lbz2
-  configurePhase = ''
-    substituteInPlace makefiles/Makefile.third_party.unix.mk \
-      --replace 'COINUTILS_LNK = $(STATIC_COINUTILS_LNK)' \
-                'COINUTILS_LNK = $(STATIC_COINUTILS_LNK) -lbz2'
-
-    cat <<EOF > Makefile.local
-      UNIX_ABSL_DIR=${abseil-cpp}
-      UNIX_PROTOBUF_DIR=${protobuf}
-      UNIX_CBC_DIR=${cbc}
-      USE_SCIP=OFF
-    EOF
-  '';
-
-  # Many of these 'samples' (which are really the tests) require using SCIP, and or-tools 8.1
-  # will just crash if SCIP is not found because it doesn't fall back to using one of
-  # the available solvers: https://github.com/google/or-tools/blob/b77bd3ac69b7f3bb02f55b7bab6cbb4bab3917f2/ortools/linear_solver/linear_solver.cc#L427
-  # We don't compile with SCIP because it does not have an open source license.
-  # See https://github.com/google/or-tools/issues/2395
-  preBuild = ''
-    for file in ortools/linear_solver/samples/*.cc; do
-      if grep -q SCIP_MIXED_INTEGER_PROGRAMMING $file; then
-        substituteInPlace $file --replace SCIP_MIXED_INTEGER_PROGRAMMING CBC_MIXED_INTEGER_PROGRAMMING
-      fi;
-    done
-
-    substituteInPlace ortools/linear_solver/samples/simple_mip_program.cc \
-      --replace 'SCIP' 'CBC'
-  '';
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+  patches = [
+    # Disable test that requires external input: https://github.com/google/or-tools/issues/3429
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/7072ae92ec204afcbfce17d5360a5884c136ce90.patch";
+      hash = "sha256-iWE+atp308q7pC1L1FD6sK8LvWchZ3ofxvXssguozbM=";
+    })
+    # Fix test that broke in parallel builds: https://github.com/google/or-tools/issues/3461
+    (fetchpatch {
+      url = "https://github.com/google/or-tools/commit/a26602f24781e7bfcc39612568aa9f4010bb9736.patch";
+      hash = "sha256-gM0rW0xRXMYaCwltPK0ih5mdo3HtX6mKltJDHe4gbLc=";
+    })
   ];
-  buildFlags = [ "cc" "pypi_archive" ];
 
-  doCheck = true;
-  checkTarget = "test_cc";
-
-  installTargets = [ "install_cc" ];
-  # The upstream install_python target installs to $HOME.
-  postInstall = ''
-    mkdir -p "$python/${python.sitePackages}"
-    (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
-  '';
-
-  # protobuf generation is not thread safe
-  enableParallelBuilding = false;
-
+  cmakeFlags = [
+    "-DBUILD_DEPS=OFF"
+    "-DBUILD_PYTHON=ON"
+    "-DBUILD_pybind11=OFF"
+    "-DFETCH_PYTHON_DEPS=OFF"
+    "-DUSE_GLPK=ON"
+    "-DUSE_SCIP=OFF"
+  ];
   nativeBuildInputs = [
     cmake
-    lsb-release
-    swig4
-    which
     ensureNewerSourcesForZipFilesHook
-    python.pkgs.setuptools
-    python.pkgs.wheel
+    pkg-config
+    python
+    python.pkgs.pip
+    swig4
+    unzip
   ];
   buildInputs = [
-    zlib
     bzip2
-    python
+    cbc
+    eigen
+    glpk
+    python.pkgs.absl-py
+    python.pkgs.mypy-protobuf
+    python.pkgs.pybind11
+    python.pkgs.setuptools
+    python.pkgs.wheel
+    re2
+    zlib
   ];
   propagatedBuildInputs = [
     abseil-cpp
     protobuf
-
     python.pkgs.protobuf
-    python.pkgs.six
-    python.pkgs.absl-py
-    python.pkgs.mypy-protobuf
+    python.pkgs.numpy
   ];
+  checkInputs = [
+    python.pkgs.matplotlib
+    python.pkgs.pandas
+    python.pkgs.virtualenv
+  ];
+
+  doCheck = true;
+
+  # This extra configure step prevents the installer from littering
+  # $out/bin with sample programs that only really function as tests,
+  # and disables the upstream installation of a zipped Python egg that
+  # can’t be imported with our Python setup.
+  installPhase = ''
+    cmake . -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON=OFF -DBUILD_SAMPLES=OFF
+    cmake --install .
+    pip install --prefix="$python" python/
+  '';
 
   outputs = [ "out" "python" ];
 

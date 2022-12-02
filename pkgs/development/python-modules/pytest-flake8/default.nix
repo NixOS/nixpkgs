@@ -1,33 +1,41 @@
-{lib, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch, pytest, flake8}:
+{ lib
+, fetchpatch
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, flake8
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
-  version = "1.0.7";
+  version = "1.1.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  # although pytest is a runtime dependency, do not add it as
-  # propagatedBuildInputs in order to allow packages depend on another version
-  # of pytest more easily
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ flake8 ];
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0259761a903563f33d6f099914afef339c085085e643bee8343eb323b32dd6b";
+    sha256 = "ba4f243de3cb4c2486ed9e70752c80dd4b636f7ccb27d4eba763c35ed0cd316e";
   };
 
-  # see https://github.com/tholo/pytest-flake8/pull/82/commits
   patches = [
+    # https://github.com/tholo/pytest-flake8/issues/87
+    # https://github.com/tholo/pytest-flake8/pull/88
     (fetchpatch {
-      url = "https://github.com/tholo/pytest-flake8/commit/eda4ef74c0f25b856fe282742ea206b21e94c24c.patch";
-      sha256 = "0kq0wshds00rk6wvkn6ccjrjyqxg7m9l7dlyaqw974asizw6byci";
+      url = "https://github.com/tholo/pytest-flake8/commit/976e6180201f7808a3007c8c5903a1637b18c0c8.patch";
+      hash = "sha256-Hbcpz4fTXtXRnIWuKuDhOVpGx9H1sdQRKqxadk2s+uE=";
     })
   ];
 
-  checkPhase = ''
-    pytest .
-  '';
+  propagatedBuildInputs = [
+    flake8
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";

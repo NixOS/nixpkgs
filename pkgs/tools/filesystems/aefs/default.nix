@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchurl, fetchpatch, fuse }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, fuse
+, git
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aefs";
-  version = "0.4pre259-8843b7c";
+  version = "unstable-2015-05-06";
 
-  src = fetchurl {
-    url = "http://tarballs.nixos.org/aefs-${version}.tar.bz2";
-    sha256 = "167hp58hmgdavg2mqn5dx1xgq24v08n8d6psf33jhbdabzx6a6zq";
+  src = fetchFromGitHub {
+    owner = "edolstra";
+    repo = "aefs";
+    rev = "e7a9bf8cfa9166668fe1514cc1afd31fc4e10e9a";
+    hash = "sha256-a3YQWxJ7+bYhf1W1kdIykV8U1R4dcDZJ7K3NvNxbF0s=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/edolstra/aefs/commit/15d8df8b8d5dc1ee20d27a86c4d23163a67f3123.patch";
-      sha256 = "0k36hsyvf8a0ji2hpghgqff2fncj0pllxn8p0rs0aj4h7j2vp4iv";
-    })
-  ];
 
   # autoconf's AC_CHECK_HEADERS and AC_CHECK_LIBS fail to detect libfuse on
   # Darwin if FUSE_USE_VERSION isn't set at configure time.
@@ -26,13 +27,16 @@ stdenv.mkDerivation rec {
   #     $ grep -R FUSE_USE_VERSION
   configureFlags = lib.optional stdenv.isDarwin "CPPFLAGS=-DFUSE_USE_VERSION=26";
 
+  nativeBuildInputs = [ autoreconfHook git ];
+
   buildInputs = [ fuse ];
 
   meta = with lib; {
     homepage = "https://github.com/edolstra/aefs";
     description = "A cryptographic filesystem implemented in userspace using FUSE";
-    platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

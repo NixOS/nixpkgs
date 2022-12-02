@@ -1,35 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, testers
+, uasm
+}:
 
 stdenv.mkDerivation rec {
   pname = "uasm";
-  version = "2.53";
+  version = "2.55";
 
   src = fetchFromGitHub {
     owner = "Terraspace";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Aohwrcb/KTKUFFpfmqVDPNjJh1dMYSNnBJ2eFaP20pM=";
+    # Specifying only the tag results in the following error during download:
+    # the given path has multiple possibilities: #<Git::Ref:0x00007f618689c378>, #<Git::Ref:0x00007f618689c1e8>
+    # Probably because upstream has both a tag and a branch with the same name
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-CIbHPKJa60SyJeFgF1Tux7RfJZBChhUVXR7HGa+gCtQ=";
   };
 
-  # https://github.com/Terraspace/UASM/pull/154
-  patches = [
-    # fix `invalid operands to binary - (have 'char *' and 'uint_8 *' {aka 'unsigned char *'})`
+  patches = lib.optionals stdenv.isDarwin [
     (fetchpatch {
-      name = "fix_pointers_compare.patch";
-      url = "https://github.com/clouds56/UASM/commit/9cd3a400990e230571e06d4c758bd3bd35f90ab6.patch";
-      sha256 = "sha256-8mY36dn+g2QNJ1JbWt/y4p0Ha9RSABnOE3vlWANuhsA=";
-    })
-    # fix `dbgcv.c:*:*: fatal error: direct.h: No such file or directory`
-    (fetchpatch {
-      name = "fix_build_dbgcv_c_on_unix.patch";
-      url = "https://github.com/clouds56/UASM/commit/806d54cf778246c96dcbe61a4649bf0aebcb0eba.patch";
-      sha256 = "sha256-uc1LaizdYEh1Ry55Cq+6wrCa1OeBPFo74H5iBpmteAE=";
+      name = "fix-v2_55-compilation-on-macos.patch";
+      url = "https://github.com/Terraspace/UASM/commit/b50c430cc3083c7f32e288a9f64fe1cafb03091d.patch";
+      sha256 = "sha256-FGFB282LSEKtGD1cIRH+Qi5bye5Gx4xb0Ty4J03xjCU";
     })
   ];
 
   enableParallelBuilding = true;
 
-  makefile = "gccLinux64.mak";
+  makefile =
+    if stdenv.isDarwin then
+      "ClangOSX64.mak"
+    else
+      "gccLinux64.mak";
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -40,10 +47,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = uasm;
+    command = "uasm -h";
+    version = "v${version}";
+  };
+
   meta = with lib; {
     homepage = "http://www.terraspace.co.uk/uasm.html";
     description = "A free MASM-compatible assembler based on JWasm";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;
   };

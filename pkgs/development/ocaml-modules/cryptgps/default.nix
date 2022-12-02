@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       itself.
     '';
     license = lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

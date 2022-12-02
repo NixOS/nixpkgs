@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iina";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${version}/IINA.v${version}.dmg";
-    sha256 = "sha256-kbh+gAVfCXoct6jJGXnetTAzFfIGdVLL5zh/SL/EJzY=";
+    sha256 = "sha256-xkZkKiiEywUWkiFw4PbUmQsStB1iRLCNU/MY27lRjC8=";
   };
 
   nativeBuildInputs = [ undmg ];

@@ -1,16 +1,16 @@
-{ lib, stdenvNoCC, fetchurl, unzip }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20220118";
+  version = "1.20221028";
 
-  src = fetchurl {
-    url = "https://github.com/raspberrypi/firmware/archive/${version}.zip";
-    sha256 = "sha256-98rbwKIuB7vb4MWbFCr7TYsvJB0HzPdH8Tw0+bktK/M=";
+  src = fetchFromGitHub {
+    owner = "raspberrypi";
+    repo = "firmware";
+    rev = version;
+    hash = "sha256-GgPAWFCrLrrLiUDM+pt3VV6+IvCljMN9nh7L84vTQJs=";
   };
-
-  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     mkdir -p $out/share/raspberrypi/
@@ -26,5 +26,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
     maintainers = with maintainers; [ dezgeg ];
+    broken = stdenvNoCC.isDarwin; # Hash mismatch on source, mystery.
   };
 }

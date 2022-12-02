@@ -24,6 +24,7 @@ let
 
     meta = with lib; {
       homepage = "http://bitscope.com/software/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [
@@ -31,10 +32,7 @@ let
       ];
     } // (attrs.meta or {});
 
-    buildInputs = [
-      dpkg
-      makeWrapper
-    ];
+    nativeBuildInputs = [ makeWrapper dpkg ];
 
     libs = attrs.libs or [
       atk

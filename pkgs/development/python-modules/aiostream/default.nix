@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.4.4";
+  version = "0.4.5";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "07if27z1h0mg236sj9lc8nl0bqy9sdrj83ls73mrc69h76bzg5xi";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WOtscg02Dq5YNSAfq4pIyH3oUP/5G+cjBwKB6c+SUVA=";
   };
 
   checkInputs = [ pytestCheckHook pytest-cov pytest-asyncio ];

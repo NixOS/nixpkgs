@@ -18,78 +18,82 @@ assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
-  pname = "z3";
-  version = "4.8.14";
+let common = { version, sha256, patches ? [ ] }:
+  stdenv.mkDerivation rec {
+    pname = "z3";
+    inherit version sha256 patches;
+    src = fetchFromGitHub {
+      owner = "Z3Prover";
+      repo = pname;
+      rev = "z3-${version}";
+      sha256 = sha256;
+    };
 
-  src = fetchFromGitHub {
-    owner = "Z3Prover";
-    repo = pname;
-    rev = "z3-${version}";
-    sha256 = "jPSTVSndp/T7n+VxZ/g9Rjco00Up+9xeDIVkeLl1MTw=";
-  };
+    nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    buildInputs = [ python ]
+      ++ optional javaBindings jdk
+      ++ optionals ocamlBindings [ ocaml findlib zarith ]
+    ;
+    propagatedBuildInputs = [ python.pkgs.setuptools ];
+    enableParallelBuilding = true;
 
-  nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ python ]
-    ++ optional javaBindings jdk
-    ++ optionals ocamlBindings [ ocaml findlib zarith ]
-  ;
-  propagatedBuildInputs = [ python.pkgs.setuptools ];
-  enableParallelBuilding = true;
-
-  postPatch = optionalString ocamlBindings ''
-    export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
-    mkdir -p $OCAMLFIND_DESTDIR/stublibs
-  '';
-
-  configurePhase = concatStringsSep " "
-    (
-      [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
-        ++ optional javaBindings "--java"
-        ++ optional ocamlBindings "--ml"
-        ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
-    ) + "\n" + "cd build";
-
-  postInstall = ''
-    mkdir -p $dev $lib
-    mv $out/lib $lib/lib
-    mv $out/include $dev/include
-  '' + optionalString pythonBindings ''
-    mkdir -p $python/lib
-    mv $lib/lib/python* $python/lib/
-    ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
-  '' + optionalString javaBindings ''
-    mkdir -p $java/share/java
-    mv com.microsoft.z3.jar $java/share/java
-    moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
-  '';
-
-  outputs = [ "out" "lib" "dev" "python" ]
-    ++ optional javaBindings "java"
-    ++ optional ocamlBindings "ocaml";
-
-   passthru = {
-    updateScript = writeScript "update-z3" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts curl jq
-
-      set -eu -o pipefail
-
-      # Expect tags in format
-      #    [{name: "Nightly", ..., {name: "z3-vv.vv.vv", ...].
-      # Below we extract frst "z3-vv.vv" and drop "z3-" prefix.
-      newVersion="$(curl -s https://api.github.com/repos/Z3Prover/z3/releases |
-          jq 'first(.[].name|select(startswith("z3-"))|ltrimstr("z3-"))' --raw-output
-      )"
-      update-source-version ${pname} "$newVersion"
+    postPatch = optionalString ocamlBindings ''
+      export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
+      mkdir -p $OCAMLFIND_DESTDIR/stublibs
     '';
-   };
 
-  meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
-    homepage = "https://github.com/Z3Prover/z3";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ttuegel ];
+    configurePhase = concatStringsSep " "
+      (
+        [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
+          ++ optional javaBindings "--java"
+          ++ optional ocamlBindings "--ml"
+          ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
+      ) + "\n" + "cd build";
+
+    doCheck = true;
+    checkPhase = ''
+      make test
+      ./test-z3 -a
+    '';
+
+    postInstall = ''
+      mkdir -p $dev $lib
+      mv $out/lib $lib/lib
+      mv $out/include $dev/include
+    '' + optionalString pythonBindings ''
+      mkdir -p $python/lib
+      mv $lib/lib/python* $python/lib/
+      ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
+    '' + optionalString javaBindings ''
+      mkdir -p $java/share/java
+      mv com.microsoft.z3.jar $java/share/java
+      moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
+    '';
+
+    outputs = [ "out" "lib" "dev" "python" ]
+      ++ optional javaBindings "java"
+      ++ optional ocamlBindings "ocaml";
+
+    meta = with lib; {
+      description = "A high-performance theorem prover and SMT solver";
+      homepage = "https://github.com/Z3Prover/z3";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ thoughtpolice ttuegel ];
+    };
+  };
+in
+{
+  z3_4_11 = common {
+    version = "4.11.0";
+    sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
+  };
+  z3_4_8 = common {
+    version = "4.8.15";
+    sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";
+  };
+  z3_4_7 = common {
+    version = "4.7.1";
+    sha256 = "1s850r6qifwl83zzgvrb5l0jigvmymzpv18ph71hg2bcpk7kjw3d";
   };
 }

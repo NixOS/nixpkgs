@@ -15,7 +15,7 @@ buildPythonPackage rec {
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
     sha256 = "sha256-v1z6caEMJNXqbcbTmFXoy3KQewHiz6qK4vhNU6Qbukk=";
-    extraPostFetch = "rm -rf $out/docs/reST";
+    postFetch = "rm -rf $out/docs/reST";
   };
 
   patches = [

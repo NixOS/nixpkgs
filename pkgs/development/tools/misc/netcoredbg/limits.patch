@@ -1,0 +1,12 @@
+diff --git a/src/debugger/frames.cpp b/src/debugger/frames.cpp
+index 534936b..21366f9 100644
+--- a/src/debugger/frames.cpp
++++ b/src/debugger/frames.cpp
+@@ -9,6 +9,7 @@
+ #include "utils/platform.h"
+ #include "utils/logger.h"
+ #include "utils/torelease.h"
++#include <limits>
+ 
+ namespace netcoredbg
+ {

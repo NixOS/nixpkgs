@@ -1,10 +1,10 @@
-{ lib, fetchurl, makeDesktopItem, appimageTools, gtk3 }:
+{ lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.3.45";
+  version = "2.4.2";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "sha256-kX8jMCUkz7B0muxsEwEttEX+DA2P+6swdZJGHyo7ScA=";
+    sha256 = "sha256-A0Gd/CDd1COWbBXa87eW+A8AKyQzubJ3qSpj/JnWeZk=";
   };
   desktopItem = makeDesktopItem {
     inherit name;
@@ -30,10 +30,6 @@ appimageTools.wrapType2 {
         ln -s ${desktopItem}/share/applications $out/share/
         cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
       '';
-
-  profile = ''
-    export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}''${XDG_DATA_DIRS:+:"''$XDG_DATA_DIRS"}"
-  '';
 
   extraPkgs = pkgs: with pkgs; [
     wget
@@ -63,6 +59,7 @@ appimageTools.wrapType2 {
     alsa-lib
     at-spi2-core
     cups
+    libxcrypt
   ];
 
   meta = with lib; {
@@ -70,6 +67,6 @@ appimageTools.wrapType2 {
     description = "Software for Saleae logic analyzers";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.j-hui ];
+    maintainers = with maintainers; [ j-hui newam ];
   };
 }

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     inherit (ocaml.meta) platforms;
     description = "Natively-compiled OCaml scripts";
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "ocamlscript";
   };
 }

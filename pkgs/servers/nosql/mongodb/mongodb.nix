@@ -1,27 +1,78 @@
-{ lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, curl, Security, CoreFoundation, cctools }:
+{ lib
+, stdenv
+, fetchurl
+, sconsPackages
+, boost
+, gperftools
+, pcre-cpp
+, snappy
+, zlib
+, libyamlcpp
+, sasl
+, openssl
+, libpcap
+, python3
+, curl
+, Security
+, CoreFoundation
+, cctools
+, xz
+}:
 
 # Note:
-# The command line tools are written in Go as part of a different package (mongodb-tools)
+#   The command line administrative tools are part of other packages:
+#   see pkgs.mongodb-tools and pkgs.mongosh.
 
 with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
-}@args:
+}:
 
 let
-  variants = if versionAtLeast version "4.2"
-    then rec { python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
-            scons = sconsPackages.scons_latest;
-            mozjsVersion = "60";
-            mozjsReplace = "defined(HAVE___SINCOS)";
-          }
-    else rec { python = scons.python.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
-            scons = sconsPackages.scons_3_1_2;
-            mozjsVersion = "45";
-            mozjsReplace = "defined(HAVE_SINCOS)";
-          };
+  variants =
+    if versionAtLeast version "6.0" then rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+        packaging
+        pymongo
+      ]);
+
+      # 4.2 < mongodb <= 6.0.x needs scons 3.x built with python3
+      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    } else if versionAtLeast version "4.2" then rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        cheetah3
+        psutil
+        setuptools
+      ]);
+
+      # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
+      scons = sconsPackages.scons_3_1_2.override { python = python3; };
+
+      mozjsVersion = "60";
+      mozjsReplace = "defined(HAVE___SINCOS)";
+
+    } else rec {
+      python = scons.python.withPackages (ps: with ps; [
+        pyyaml
+        typing
+        cheetah
+      ]);
+
+      scons = sconsPackages.scons_3_1_2;
+      mozjsVersion = "45";
+      mozjsReplace = "defined(HAVE_SINCOS)";
+   };
+
   system-libraries = [
     "boost"
     "pcre"
@@ -44,7 +95,9 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ variants.scons ];
+  nativeBuildInputs = [ variants.scons ]
+    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+
   buildInputs = [
     boost
     curl
@@ -68,9 +121,16 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+   '' + lib.optionalString (versionAtLeast version "4.4" && versionOlder version "4.6") ''
+    # Fix debug gcc 11 and clang 12 builds on Fedora
+    # https://github.com/mongodb/mongo/commit/e78b2bf6eaa0c43bd76dbb841add167b443d2bb0.patch
+    substituteInPlace src/mongo/db/query/plan_summary_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
+    substituteInPlace src/mongo/db/exec/plan_stats.h --replace '#include <string>' '#include <optional>
+    #include <string>'
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
-
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
@@ -95,7 +155,8 @@ in stdenv.mkDerivation rec {
     "--use-sasl-client"
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-  ] ++ map (lib: "--use-system-${lib}") system-libraries;
+  ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
+    ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
@@ -119,7 +180,12 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  prefixKey = "--prefix=";
+  installTargets =
+    if (versionAtLeast version "6.0") then "install-devcore"
+    else if (versionAtLeast version "4.4") then "install-core"
+    else "install";
+
+  prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
 
   enableParallelBuilding = true;
 
@@ -131,6 +197,9 @@ in stdenv.mkDerivation rec {
     inherit license;
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
-    platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
+    platforms = subtractLists systems.doubles.i686 (
+      if (versionAtLeast version "6.0") then systems.doubles.linux
+      else systems.doubles.unix
+    );
   };
 }

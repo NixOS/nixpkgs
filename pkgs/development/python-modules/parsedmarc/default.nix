@@ -1,26 +1,35 @@
 { buildPythonPackage
 , fetchPypi
 , fetchurl
-, pythonOlder
 , lib
 , nixosTests
+, python
+, pythonOlder
 
 # pythonPackages
-, tqdm
 , dnspython
 , expiringdict
-, urllib3
-, requests
 , publicsuffix2
 , xmltodict
 , geoip2
+, urllib3
+, requests
 , imapclient
 , dateparser
+, mailsuite
+, elasticsearch
 , elasticsearch-dsl
 , kafka-python
-, mailsuite
+, tqdm
 , lxml
 , boto3
+, msgraph-core
+, azure-identity
+, google-api-core
+, google-api-python-client
+, google-auth
+, google-auth-httplib2
+, google-auth-oauthlib
 }:
 
 let
@@ -31,32 +40,48 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "7.0.1";
+  version = "8.2.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mi4hx410y7ikpfy1582lm252si0c3yryj0idqgqbx417fm21jjc";
+    sha256 = "eb82328dffb4a62ddaefbcc22efd5a2694350504a56d41ba1e161f2d998dcbff";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "elasticsearch<7.14.0" "elasticsearch"
+  '';
+
   propagatedBuildInputs = [
-    tqdm
     dnspython
     expiringdict
-    urllib3
-    requests
     publicsuffix2
     xmltodict
     geoip2
+    urllib3
+    requests
     imapclient
     dateparser
+    mailsuite
+    elasticsearch
     elasticsearch-dsl
     kafka-python
-    mailsuite
+    tqdm
     lxml
     boto3
+    msgraph-core
+    azure-identity
+    google-api-core
+    google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
   ];
+
+  # no tests on PyPI, no tags on GitHub
+  doCheck = false;
 
   pythonImportsCheck = [ "parsedmarc" ];
 

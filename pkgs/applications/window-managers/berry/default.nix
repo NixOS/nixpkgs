@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "berry";
-  version = "0.1.10";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
     repo = pname;
     rev = version;
-    hash = "sha256-6asph0QXzhmHuYcfrLcQ8RTP4QzX8m6AcCp5ImA++9M=";
+    hash = "sha256-xMJRiLNtwVRQf9HiCF3ClLKEmdDNxcY35IYxe+L7+Hk=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     fontconfig
     freetype
   ];
+
+  postPatch = ''
+    sed -i --regexp-extended 's/(pkg_verstr=").*(")/\1${version}\2/' configure
+  '';
 
   preConfigure = ''
     patchShebangs configure

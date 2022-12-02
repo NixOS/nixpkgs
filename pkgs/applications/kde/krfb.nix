@@ -11,7 +11,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/krfb/";
     description = "Desktop sharing (VNC)";
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = with lib.maintainers; [ jerith666 ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

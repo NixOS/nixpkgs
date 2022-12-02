@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "2.5.0";
+  version = "2.6.0";
 
   disabled = pythonOlder "3.7";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "andrivet";
     repo = "python-asn1";
     rev = "v${version}";
-    sha256 = "sha256-5Fnk94aUkV9lHnd64wuHzGcPqW7AC0O0dEwXMBL+tuo=";
+    sha256 = "sha256-oz9xZhFU4himXttVtfW6tTn7lfB0c7MlgxtbKxdJtUA=";
   };
 
   propagatedBuildInputs = [

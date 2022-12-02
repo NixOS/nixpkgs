@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, netifaces
+, cryptography
+, ifaddr
 , voluptuous
 , pyyaml
 , pytest-asyncio
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknx";
-  version = "0.19.2";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-LJ7MmKCWx+n7caud0pN4+7f9H4XzwuAAn9u86X/FACo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5uRPMu9qZ0ofMdgk8d1IpKjHjnEP+zhWs+EDQx9wk6U=";
   };
 
   propagatedBuildInputs = [
-    voluptuous
-    netifaces
-    pyyaml
+    cryptography
+    ifaddr
   ];
 
   checkInputs = [
@@ -38,6 +38,13 @@ buildPythonPackage rec {
     "xknx"
   ];
 
+  disabledTests = [
+    # Test requires network access
+    "test_scan_timeout"
+    "test_start_secure_routing_knx_keys"
+    "test_start_secure_routing_manual"
+  ];
+
   meta = with lib; {
     description = "KNX Library Written in Python";
     longDescription = ''
@@ -45,6 +52,7 @@ buildPythonPackage rec {
       packets. It provides support for KNX/IP routing and tunneling devices.
     '';
     homepage = "https://github.com/XKNX/xknx";
+    changelog = "https://github.com/XKNX/xknx/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

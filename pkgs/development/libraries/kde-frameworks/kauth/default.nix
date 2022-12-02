@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kauth";
+  pname = "kauth";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = lib.optional enablePolkit polkit-qt ++ [ qttools ];
   propagatedBuildInputs = [ kcoreaddons ];

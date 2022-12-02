@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , setuptools-scm
 , pydantic
+, toml
 , typeguard
 , mock
 , pytest-asyncio
@@ -12,29 +13,28 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.11.3";
-  disabled = !isPy3k;
+  version = "0.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
-    repo = pname;
+    repo = "pygls";
     rev = "v${version}";
-    sha256 = "sha256-/nmDaA67XzrrmfwlBm5syTS4hn25m30Zb3gvOdL+bR8=";
+    hash = "sha256-guwOnB4EEUpucfprNLLr49Yn8EdOpRzzG+cT4NCn0rA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+    toml
+  ];
 
   propagatedBuildInputs = [
     pydantic
     typeguard
   ];
-  # We don't know why an early version of pydantic is required, see:
-  # https://github.com/openlawlibrary/pygls/issues/221
-  preBuild = ''
-    substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7,<1.9" "pydantic"
-  '';
 
   checkInputs = [
     mock
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${src.rev}/CHANGELOG.md";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
     license = licenses.asl20;

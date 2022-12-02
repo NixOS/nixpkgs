@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, writeText, unzip, nixosTests }:
+{ lib, stdenv, fetchurl, writeText, unzip, nixosTests, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "invoiceplane";
-  version = "1.5.11";
+  version = "1.6-beta-3";
 
   src = fetchurl {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    sha256 = "137g0xps4kb3j7f5gz84ql18iggbya6d9dnrfp05g2qcbbp8kqad";
+    sha256 = "sha256-sw5LaU3v4MIdX99WGKOaerVc9m3d8aQVuvrLn7KvcKE=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/
-    cp -r . $out/
+    cp -r ip/. $out/
   '';
 
   passthru.tests = {

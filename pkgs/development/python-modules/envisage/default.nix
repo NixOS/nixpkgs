@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "envisage";
-  version = "6.0.1";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8864c29aa344f7ac26eeb94788798f2d0cc791dcf95c632da8d79ebc580e114c";
+    sha256 = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
   };
 
   # for the optional dependency ipykernel, only versions < 6 are

@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "1.13.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "1d9bk8lhmw5lc8k0mw80g0vbwgxyh3gw5c7ppy3sir07s9y0y0fn";
+    sha256 = "0k0zbh6adwr99y9aazlyvp6s1k8zaq2j6x8kqb8q9a5qjjg56lay";
   };
 
   depsBuildBuild = [
@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-terminfo=foot"
     # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
+    # Install systemd user units for foot-server
+    "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   # build and run binary generating PGO profiles,

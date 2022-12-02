@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "nginx-modsecurity";
 
-  machine = { config, lib, pkgs, ... }: {
+  nodes.machine = { config, lib, pkgs, ... }: {
     services.nginx = {
       enable = true;
       additionalModules = [ pkgs.nginxModules.modsecurity-nginx ];

@@ -1,7 +1,7 @@
 { mkDerivation, lib, fetchFromGitLab, cmake, extra-cmake-modules
 , ki18n
 , kitemmodels
-, oathToolkit
+, oath-toolkit
 , qgpgme
 , plasma-framework
 , qt5 }:
@@ -21,7 +21,7 @@ mkDerivation rec {
   buildInputs  = [
     ki18n
     kitemmodels
-    oathToolkit
+    oath-toolkit
     qgpgme
     plasma-framework
     qt5.qtbase

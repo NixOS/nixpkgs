@@ -1,7 +1,7 @@
 { lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 , standalone ? stdenv.hostPlatform.useLLVM or false
-, withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
+, withLibunwind ? !stdenv.isDarwin && !stdenv.hostPlatform.isWasm
 }:
 
 stdenv.mkDerivation {
@@ -44,28 +44,30 @@ stdenv.mkDerivation {
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
-  installPhase = if stdenv.isDarwin
-    then ''
-      for file in lib/*.dylib; do
-        # this should be done in CMake, but having trouble figuring out
-        # the magic combination of necessary CMake variables
-        # if you fancy a try, take a look at
-        # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-        ${stdenv.cc.targetPrefix}install_name_tool -id $out/$file $file
+  preInstall = lib.optionalString stdenv.isDarwin ''
+    for file in lib/*.dylib; do
+      # Fix up the install name. Preserve the basename, just replace the path.
+      installName="$out/lib/$(basename $(otool -D $file | tail -n 1))"
+
+      # this should be done in CMake, but having trouble figuring out
+      # the magic combination of necessary CMake variables
+      # if you fancy a try, take a look at
+      # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
+      ${stdenv.cc.targetPrefix}install_name_tool -id $installName $file
+
+      # cc-wrapper passes '-lc++abi' to all c++ link steps, but that causes
+      # libcxxabi to sometimes link against a different version of itself.
+      # Here we simply make that second reference point to ourselves.
+      for other in $(otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other $installName $file
       done
-      make install
-      install -d 755 $out/include
-      install -m 644 ../include/*.h $out/include
-    ''
-    else ''
-      install -d -m 755 $out/include $out/lib
-      install -m 644 lib/libc++abi.a $out/lib
-      install -m 644 ../include/cxxabi.h $out/include
-    '' + lib.optionalString enableShared ''
-      install -m 644 lib/libc++abi.so.1.0 $out/lib
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
-      ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
-    '';
+    done
+  '';
+
+  postInstall = ''
+    mkdir -p "$dev/include"
+    install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
+  '';
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

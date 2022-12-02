@@ -5,6 +5,7 @@
 , appdirs
 , ifaddr
 , pythonOlder
+, lxml
 , mock
 , nix-update-script
 , pytestCheckHook
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.27.1";
+  version = "0.28.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,12 +25,13 @@ buildPythonPackage rec {
     owner = "SoCo";
     repo = "SoCo";
     rev = "v${version}";
-    hash = "sha256-8U7wfxqen+hgK8j9ooPHCAKvd9kSZicToTyP7XzQFrg=";
+    hash = "sha256-Po9ns+XQ8WuILKrinllm/lqZFWEBnylesCoqs+cnKs4=";
   };
 
   propagatedBuildInputs = [
     appdirs
     ifaddr
+    lxml
     requests
     xmltodict
   ];

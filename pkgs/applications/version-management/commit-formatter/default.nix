@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Eliot00/commit-formatter";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ elliot ];
+    mainProgram = "git-cf";
   };
 }

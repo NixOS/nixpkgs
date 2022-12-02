@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPyPy
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , curl
 , openssl
@@ -20,6 +22,16 @@ buildPythonPackage rec {
     sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
 
+  patches = [
+    # Pull upstream patch for curl-3.83:
+    #  https://github.com/pycurl/pycurl/pull/753
+    (fetchpatch {
+      name = "curl-3.83.patch";
+      url = "https://github.com/pycurl/pycurl/commit/d47c68b1364f8a1a45ab8c584c291d44b762f7b1.patch";
+      sha256 = "sha256-/lGq7O7ZyytzBAxWJPigcWdvypM7OHLBcp9ItmX7z1g=";
+    })
+  ];
+
   preConfigure = ''
     substituteInPlace setup.py --replace '--static-libs' '--libs'
     export PYCURL_SSL_LIBRARY=openssl
@@ -27,7 +39,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -50,16 +62,6 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # libcurl stopped passing the reason phrase from the HTTP status line
-    # https://github.com/pycurl/pycurl/issues/679
-    "test_failonerror"
-    "test_failonerror_status_line_invalid_utf8_python3"
-    # bottle>=0.12.17 escapes utf8 properly, so these test don't work anymore
-    # https://github.com/pycurl/pycurl/issues/669
-    "test_getinfo_content_type_invalid_utf8_python3"
-    "test_getinfo_cookie_invalid_utf8_python3"
-    "test_getinfo_raw_content_type_invalid_utf8"
-    "test_getinfo_raw_cookie_invalid_utf8"
     # tests that require network access
     "test_keyfunction"
     "test_keyfunction_bogus_return"
@@ -71,12 +73,15 @@ buildPythonPackage rec {
     "test_libcurl_ssl_gnutls"
     # AssertionError: assert 'crypto' in ['curl']
     "test_ssl_in_static_libs"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "cadata_test"
   ];
 
   meta = with lib; {
     homepage = "http://pycurl.io/";
     description = "Python Interface To The cURL library";
     license = with licenses; [ lgpl2Only mit ];
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -664,10 +664,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04vxmjr200akcil9fqxc9ghbb9q0lyrh2q03xxncycd5vln910fi";
+      sha256 = "1pfk942d6qwhw151hxaz7n4knk6whyxqvvywdx2cdw9yhykyaqzq";
       type = "gem";
     };
-    version = "6.2.0";
+    version = "6.2.1";
   };
   factory_bot_rails = {
     dependencies = ["factory_bot" "railties"];
@@ -1452,10 +1452,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1p6b3q411h2mw4dsvhjrp1hh66hha5cm69fqg85vn2lizz71n6xz";
+      sha256 = "1g43ii497cwdqhfnaxfl500bq5yfc5hfv5df1lvf6wcjnd708ihd";
       type = "gem";
     };
-    version = "1.13.3";
+    version = "1.13.4";
   };
   nori = {
     groups = ["default"];
@@ -1700,10 +1700,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19mf9f5zx23cjjn0p77wz1igzpfr22mxhljgavffl8fwqq74v4ih";
+      sha256 = "01ldw5ba6xfn2k97n75n52qs4f0fy8xmn58c4247xf476nfvg035";
       type = "gem";
     };
-    version = "3.2.5";
+    version = "3.2.6";
   };
   power_assert = {
     groups = ["default" "development" "test"];
@@ -1786,10 +1786,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1xvkz9xrd1cqnlm0qac1iwwxzndx3cc17zrjncpa4lzjfwbxhsnm";
+      sha256 = "0df9bknc2dllk8v9fhgidzbvbryaxa8fgifrk40cdz9csjsphbky";
       type = "gem";
     };
-    version = "4.3.11";
+    version = "4.3.12";
   };
   pundit = {
     dependencies = ["activesupport"];
@@ -1832,6 +1832,17 @@
       type = "gem";
     };
     version = "2.2.3";
+  };
+  rack-attack = {
+    dependencies = ["rack"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1rc6simyql7ax5zzp667x6krl0xxxh3asc1av6gcn8j6cyl86wsx";
+      type = "gem";
+    };
+    version = "6.6.0";
   };
   rack-livereload = {
     dependencies = ["rack"];
@@ -2273,10 +2284,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "134zg0dzd7216lyczkhv01v27ikkmipjihcy2bzi0qv72p1i923i";
+      sha256 = "1wybcipkfawg4pragmayiig03xc084x3hbwywsh1dr9x9pa8f9hj";
       type = "gem";
     };
-    version = "1.1.5";
+    version = "1.1.6";
   };
   slack-notifier = {
     groups = ["default"];

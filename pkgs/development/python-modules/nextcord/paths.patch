@@ -1,26 +1,71 @@
 diff --git a/nextcord/opus.py b/nextcord/opus.py
-index 97d437a3..755e1a5c 100644
+index 52e4ddbd..d8b8090b 100644
 --- a/nextcord/opus.py
 +++ b/nextcord/opus.py
-@@ -213,7 +213,7 @@ def _load_default() -> bool:
-             _filename = os.path.join(_basedir, 'bin', f'libopus-0.{_target}.dll')
+@@ -255,7 +255,7 @@ def _load_default() -> bool:
+             _filename = os.path.join(_basedir, "bin", f"libopus-0.{_target}.dll")
              _lib = libopus_loader(_filename)
          else:
--            _lib = libopus_loader(ctypes.util.find_library('opus'))
-+            _lib = libopus_loader('@libopus@')
-     except Exception:
-         _lib = None
+-            opus = ctypes.util.find_library("opus")
++            opus = "@libopus@"
  
+             if opus is None:
+                 _lib = None
 diff --git a/nextcord/player.py b/nextcord/player.py
-index bedefc5a..34de0459 100644
+index 5d0674cc..fd1c20ef 100644
 --- a/nextcord/player.py
 +++ b/nextcord/player.py
-@@ -140,7 +140,7 @@ class FFmpegAudio(AudioSource):
-     .. versionadded:: 1.3
-     """
+@@ -148,7 +148,7 @@ class FFmpegAudio(AudioSource):
+         self,
+         source: Union[str, io.BufferedIOBase],
+         *,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         args: Any,
+         **subprocess_kwargs: Any,
+     ):
+@@ -275,7 +275,7 @@ class FFmpegPCMAudio(FFmpegAudio):
+         self,
+         source: Union[str, io.BufferedIOBase],
+         *,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         pipe: bool = False,
+         stderr: Optional[IO[str]] = None,
+         before_options: Optional[str] = None,
+@@ -378,7 +378,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+         *,
+         bitrate: int = 128,
+         codec: Optional[str] = None,
+-        executable: str = "ffmpeg",
++        executable: str = "@ffmpeg@",
+         pipe=False,
+         stderr=None,
+         before_options=None,
+@@ -532,7 +532,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+         """
  
--    def __init__(self, source: Union[str, io.BufferedIOBase], *, executable: str = 'ffmpeg', args: Any, **subprocess_kwargs: Any):
-+    def __init__(self, source: Union[str, io.BufferedIOBase], *, executable: str = '@ffmpeg@', args: Any, **subprocess_kwargs: Any):
-         piping = subprocess_kwargs.get('stdin') == subprocess.PIPE
-         if piping and isinstance(source, str):
-             raise TypeError("parameter conflict: 'source' parameter cannot be a string when piping to stdin")
+         method = method or "native"
+-        executable = executable or "ffmpeg"
++        executable = executable or "@ffmpeg@"
+         probefunc = fallback = None
+ 
+         if isinstance(method, str):
+@@ -577,7 +577,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+ 
+     @staticmethod
+     def _probe_codec_native(
+-        source, executable: str = "ffmpeg"
++        source, executable: str = "@ffmpeg@"
+     ) -> Tuple[Optional[str], Optional[int]]:
+         exe = executable[:2] + "probe" if executable in ("ffmpeg", "avconv") else executable
+         args = [
+@@ -606,7 +606,7 @@ class FFmpegOpusAudio(FFmpegAudio):
+ 
+     @staticmethod
+     def _probe_codec_fallback(
+-        source, executable: str = "ffmpeg"
++        source, executable: str = "@ffmpeg@"
+     ) -> Tuple[Optional[str], Optional[int]]:
+         args = [executable, "-hide_banner", "-i", source]
+         proc = subprocess.Popen(

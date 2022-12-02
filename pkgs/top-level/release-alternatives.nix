@@ -9,7 +9,7 @@ let
   blasUsers = [
     # "julia_07" "julia_10" "julia_11" "julia_13" "octave" "octaveFull"
     "fflas-ffpack" "linbox" "R" "ipopt" "hpl" "rspamd" "octopus"
-    "sundials" "superlu" "suitesparse_5_3" "suitesparse_4_4"
+    "superlu" "suitesparse_5_3" "suitesparse_4_4"
     "suitesparse_4_2" "scs" "scalapack" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "libcint" "iml" "globalarrays" "arrayfire" "armadillo"
     "xfitter" "lammps" "plink-ng" "quantum-espresso" "siesta"
@@ -33,10 +33,10 @@ let
     ["haskellPackages" "bindings-levmar"]
   ] ++ lib.optionals allowUnfree [ "magma" ];
   blas64Users = [
-    "rspamd" "suitesparse_5_3" "suitesparse_4_4"
+    "rspamd" "sundials" "suitesparse_5_3" "suitesparse_4_4"
     "suitesparse_4_2" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "iml" "globalarrays" "arrayfire"
-    "xfitter" "lammps" "plink-ng" "quantum-espresso"
+    "lammps" "plink-ng" "quantum-espresso"
     "calculix" "csdp" "getdp" "jags"
     "lammps" "lammps-mpi"
     # ["ocamlPackages" "lacaml"]

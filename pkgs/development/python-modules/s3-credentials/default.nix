@@ -8,11 +8,12 @@
 , pytestCheckHook
 , hypothesis
 , pytest-mock
+, moto
 }:
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.10";
+  version = "0.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,24 +21,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    hash = "sha256-JgqKmZG3K4JwQ1Bzw2oll/LQ1njA9wFhX0/uYr9XjAU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vKOcOSt9vscj5ixrHZGL6PRun/x38JLbni75nw2YAbg=";
   };
 
   propagatedBuildInputs = [
+    boto3
     click
     click-default-group
-    boto3
   ];
 
   checkInputs = [
-    pytestCheckHook
     hypothesis
+    moto
     pytest-mock
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "s3_credentials"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert 'directory/th...ory/...
+    "test_put_objects"
   ];
 
   meta = with lib; {

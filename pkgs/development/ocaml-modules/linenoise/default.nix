@@ -2,17 +2,15 @@
 
 buildDunePackage rec {
   pname = "linenoise";
-  version = "1.3.0";
+  version = "1.4.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner = "fxfactorial";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "0m9mm1arsawi5w5aqm57z41sy1wfxvhfgbdiw7hzy631i391144g";
+    sha256 = "sha256-bIpZ9TO4/j24nQw5nsW7fUF7af5lhd/EmwhQRd0NYb4=";
   };
 
   propagatedBuildInputs = [ result ];

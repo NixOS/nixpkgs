@@ -12,6 +12,7 @@
 , knotifications
 , zxing-cpp
 , qxmpp
+, sonnet
 , gst_all_1
 }:
 
@@ -38,6 +39,7 @@ mkDerivation rec {
     knotifications
     zxing-cpp
     qxmpp
+    sonnet
     gstreamer
     gst-plugins-bad
     gst-plugins-base

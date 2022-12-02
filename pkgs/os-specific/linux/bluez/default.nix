@@ -11,7 +11,7 @@
 , pkg-config
 , python3
 , readline
-, systemd
+, systemdMinimal
 , udev
 , withExperimental ? false
 }: let
@@ -22,11 +22,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.63";
+  version = "5.65";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k0nhHoFguz1yCDXScSUNinQk02kPUonm22/gfMZsbXY=";
+    sha256 = "sha256-JWWk1INUtXbmrZLiW1TtZoCCllgciruAWHBR+Zk9ltQ=";
   };
 
   buildInputs = [
@@ -47,11 +47,11 @@ in stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+  outputs = [ "out" "dev" "test" ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
     # Disable some tests:
     # - test-mesh-crypto depends on the following kernel settings:
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = lib.optionalString doCheck ''
+  postInstall = ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -126,6 +126,7 @@ in stdenv.mkDerivation rec {
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
+    install -Dm755 attrib/gatttool $out/bin/gatttool
   '';
 
   enableParallelBuilding = true;

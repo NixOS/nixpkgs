@@ -37,7 +37,13 @@ rec {
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs, ... }: buildFHSUserEnv
+  wrapAppImage = args@{
+    name ? "${args.pname}-${args.version}",
+    src,
+    extraPkgs,
+    meta ? {},
+    ...
+  }: buildFHSUserEnv
     (defaultFhsEnvArgs // {
       inherit name;
 
@@ -45,12 +51,24 @@ rec {
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
       runScript = "appimage-exec.sh -w ${src} --";
+
+      meta = {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      } // meta;
     } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
 
   wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
       inherit name extraPkgs;
       src = extract { inherit name src; };
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru = lib.pipe args [
+        lib.attrNames
+        (lib.remove "src")
+        (removeAttrs args)
+      ] // args.passthru or { };
     });
 
   defaultFhsEnvArgs = {
@@ -61,7 +79,6 @@ rec {
       gtk3
       bashInteractive
       gnome.zenity
-      python2
       xorg.xrandr
       which
       perl
@@ -106,9 +123,8 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; opensslSupport = false; })
+      curlWithGnuTls
       nspr
       nss
       fontconfig
@@ -147,11 +163,13 @@ rec {
       wayland
       mesa
       libxkbcommon
+      vulkan-loader
 
       flac
       freeglut
       libjpeg
       libpng12
+      libpulseaudio
       libsamplerate
       libmikmod
       libtheora

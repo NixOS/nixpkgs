@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "e25bfdba1c1f2103c69529f1a30b22a14ce311f1";
     sha256 = "12c96avka1dfb9wxqmjd57j30w9h8yx4y4w34kyq6xnf6lwnkcxp";
   };
+
+  patches = [
+    # Pull upstream fix for -fno-common toolchains:
+    #  https://github.com/openstreetmap/mod_tile/pull/202
+    (fetchpatch {
+      name = "fno-common";
+      url = "https://github.com/openstreetmap/mod_tile/commit/a22065b8ae3c018820a5ca9bf8e2b2bb0a0bfeb4.patch";
+      sha256 = "1ywfa14xn9aa96vx1adn1ndi29qpflca06x986bx9c5pqk761yz3";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];

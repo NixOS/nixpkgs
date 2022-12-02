@@ -104,6 +104,8 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-objcopy/MachO/universal-object.test
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
@@ -136,6 +138,13 @@ in stdenv.mkDerivation (rec {
         --replace 'Starting llvm::' 'Starting {{.*}}' \
         --replace 'Finished llvm::' 'Finished {{.*}}'
     done
+  '';
+
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation

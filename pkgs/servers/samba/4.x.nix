@@ -7,7 +7,6 @@
 , flex
 , perl
 , libxslt
-, heimdal
 , docbook_xsl
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
@@ -21,13 +20,17 @@
 , gnutls
 , libunwind
 , systemd
+, samba
 , jansson
 , libtasn1
 , tdb
+, libxcrypt
 , cmocka
 , rpcsvc-proto
+, bash
 , python3Packages
 , nixosTests
+, libiconv
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -45,11 +48,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.5";
+  version = "4.17.3";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aRFeM4MZN7pRUb4CR5QxR3Za7OZYunQ/RHQWcq1o0X8=";
+    hash = "sha256-XRxCDLMexhPHhvmFN/lZZZCB7ca+g3PmjocUCGiTjiY=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -70,20 +73,24 @@ stdenv.mkDerivation rec {
     flex
     perl
     perl.pkgs.ParseYapp
+    perl.pkgs.JSON
     libxslt
     buildPackages.stdenv.cc
-    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 
+  wafPath = "buildtools/bin/waf";
+
   buildInputs = [
-    python3Packages.python
+    bash
     python3Packages.wrapPython
+    python3Packages.python
     readline
     popt
     dbus
@@ -95,7 +102,9 @@ stdenv.mkDerivation rec {
     gnutls
     libtasn1
     tdb
+    libxcrypt
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
+    ++ optionals stdenv.isDarwin [ libiconv ]
     ++ optionals enableLDAP [ openldap.dev python3Packages.markdown ]
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
@@ -105,8 +114,6 @@ stdenv.mkDerivation rec {
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
-
-  wafPath = "buildtools/bin/waf";
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -120,11 +127,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
   '';
 
   wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
+    "--with-libunwind"
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -139,7 +148,7 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
-  ] ++ optional stdenv.isAarch32 [
+  ] ++ optionals stdenv.isAarch32 [
     # https://bugs.gentoo.org/683148
     "--jobs 1"
   ];
@@ -153,6 +162,13 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
+  '';
+
+  # Save asn1_compile and compile_et so they are available to run on the build
+  # platform when cross-compiling
+  postInstall = optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p "$dev/bin"
+    cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
@@ -170,13 +186,19 @@ stdenv.mkDerivation rec {
     EOF
     find $out -type f -regex '.*\.so\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
 
-    # Samba does its own shebang patching, but uses build Python
-    find "$out/bin" -type f -executable -exec \
-      sed -i '1 s^#!${python3Packages.python.pythonForBuild}/bin/python.*^#!${python3Packages.python.interpreter}^' {} \;
-
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
+
+    # Samba does its own shebang patching, but uses build Python
+    find $out/bin -type f -executable | while read file; do
+      isScript "$file" || continue
+      sed -i 's^${lib.getBin buildPackages.python3Packages.python}/bin^${lib.getBin python3Packages.python}/bin^' "$file"
+    done
   '';
+
+  disallowedReferences =
+    lib.optionals (buildPackages.python3Packages.python != python3Packages.python)
+      [ buildPackages.python3Packages.python ];
 
   passthru = {
     tests.samba = nixosTests.samba;
@@ -188,6 +210,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     # N.B. enableGlusterFS does not build
+    # TODO: darwin support needs newer SDK for "_futimens" and "_utimensat"
+    # see https://github.com/NixOS/nixpkgs/issues/101229
     broken = stdenv.isDarwin || enableGlusterFS;
     maintainers = with maintainers; [ aneeshusa ];
   };

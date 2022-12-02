@@ -17,15 +17,19 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Fix flapping test; https://github.com/python-metar/python-metar/issues/161
     (fetchpatch {
-      # Fix flapping test; https://github.com/python-metar/python-metar/issues/161
       url = "https://github.com/python-metar/python-metar/commit/716fa76682e6c2936643d1cf62e3d302ef29aedd.patch";
       hash = "sha256-y82NN+KDryOiH+eG+2ycXCO9lqQLsah4+YpGn6lM2As=";
+      name = "fix_flapping_test.patch";
     })
+
+    # Fix circumvent a sometimes impossible test
+    # https://github.com/python-metar/python-metar/issues/165
     (fetchpatch {
-      # Fix failing test: https://github.com/python-metar/python-metar/issues/165
-      url = "https://github.com/python-metar/python-metar/commit/a4f9a4764b99bb0313876366d30728169db2770b.patch";
-      hash = "sha256-sURHUb4gCKVMqEWFklTsxF0kr0SxC02Yr0287rZIvC0=";
+      url = "https://github.com/python-metar/python-metar/commit/b675f4816d15fbfc27e23ba9a40cdde8bb06a552.patch";
+      hash = "sha256-v+E3Ckwxb42mpGzi2C3ka96wHvurRNODMU3xLxDoVZI=";
+      name = "fix_impossible_test.patch";
     })
   ];
 

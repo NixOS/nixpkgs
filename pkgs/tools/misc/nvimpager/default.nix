@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0guSL4RvYQFwok7zGuevhQY6DHjnETRLpEIEQfGslcg=";
+    sha256 = "sha256-tjnmY7dJUE5k8hlAfNKcHqmpw0ciS6T5WJOpDvvt2V0=";
   };
 
   buildInputs = [
@@ -30,13 +30,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ lua51Packages.busted util-linux neovim ];
+  # filter out one test that fails in the sandbox of nix
   checkPhase = ''
     runHook preCheck
-    script -c "busted --lpath './?.lua' test"
+    script -ec "busted --lpath './?.lua' --filter-out 'handles man' test"
     runHook postCheck
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax

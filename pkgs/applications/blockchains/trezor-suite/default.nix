@@ -8,7 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "22.3.2";
+  version = "22.10.3";
   name = "${pname}-${version}";
 
   suffix = {
@@ -19,8 +19,8 @@ let
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     sha512 = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/latest/download/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-GW8wmfTjuWrXijyPKeDJgF+mas1pfEMgAASmlvCURfFwg+oSL0B/0Z2qm5QRXIHmyd7eg/Zd8nEZL7Fg2Lb9ww==";
-      x86_64-linux  = "sha512-/XQ/sI0TP++3KHlkBXLHe/SVGKcmyjT7vPkV0NCK4rlL70VE+wKLKQK6XKp4V81B5w2+3a/uPOWtmcVr5iVkSA==";
+      aarch64-linux = "sha512-fI0N1V+6SEZ9eNf+G/w5RcY8oeA5MsVzJnpnWoMzkkHZh5jVHgNbcqVgSPbzvQ/WZNv1MX37KETcxmDwRx//yw==";
+      x86_64-linux  = "sha512-zN89Qw6fQh27EaN9ARNwqhiBaiNoMic6Aq2UPG0OSUtOjEOdkGJ2pbR8MgWVccSgRH8ZmAAXZ0snVKfZWHbCjA==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -42,8 +42,7 @@ appimageTools.wrapType2 rec {
     cp -a ${appimageContents}/resources/images/ $out/share/${pname}/resources
 
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    install -m 444 -D ${appimageContents}/resources/images/icons/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
+    install -m 444 -D ${appimageContents}/resources/images/desktop/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
 

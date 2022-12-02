@@ -4,12 +4,12 @@
 
 let
   pname = "netboot.xyz-efi";
-  version = "2.0.53";
+  version = "2.0.60";
 in fetchurl {
   name = "${pname}-${version}";
 
   url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz.efi";
-  sha256 = "sha256-v7XqrhG94BLTpDHDazTiowQUXu/ITEcgVMmhlqgmSQE=";
+  sha256 = "sha256-E4NiziF1W1U0FcV2KWj3YVCGtbrKI48RDBpSw2NAMc0=";
 
   meta = with lib; {
     homepage = "https://netboot.xyz/";

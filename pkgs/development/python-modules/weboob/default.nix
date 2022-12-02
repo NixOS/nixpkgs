@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , cssselect
 , feedparser
@@ -12,7 +12,7 @@
 , lxml
 , mechanize
 , nose
-, pdfminer
+, pdfminer-six
 , pillow
 , prettytable
 , pyqt5
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Babel
+    babel
     cssselect
     python-dateutil
     feedparser
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     libyaml
     lxml
     mechanize
-    pdfminer
+    pdfminer-six
     pillow
     prettytable
     pyqt5

@@ -1,11 +1,13 @@
 { stdenv
 , pkgs
 , lib
-, nodejs
+, nodejs-16_x
 , runtimeShell
 }:
 
 let
+  nodejs = nodejs-16_x;
+
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;

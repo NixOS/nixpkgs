@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU }:
+{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU, catch }:
 
 stdenv.mkDerivation rec {
   pname = "recastai";
@@ -13,11 +13,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QP3lMMFR6fiKQTksAkRL6X9yaoVz2xt4QSIP9g6piww=";
   };
 
+  postPatch = ''
+    cp ${catch}/include/catch/catch.hpp Tests/catch.hpp
+
+    # https://github.com/recastnavigation/recastnavigation/issues/524
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
+  doCheck = true;
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libGL SDL2 libGLU ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     license = licenses.zlib;

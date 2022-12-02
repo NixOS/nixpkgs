@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , markdown-it-py
 , pytest-regressions
 , pytestCheckHook
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-3zFSTjqwjUV6+fU6falYbIzj/Hp7E/9EXKZIi00tkg4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     markdown-it-py

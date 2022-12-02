@@ -1,4 +1,4 @@
-From 70328c307001f4bb75d30d93c5bba3c3cd790c88 Mon Sep 17 00:00:00 2001
+From 747a741772cde6bb340eb8bdb493390280de8d16 Mon Sep 17 00:00:00 2001
 From: Keno Fischer <keno@juliacomputing.com>
 Date: Sat, 16 Jun 2018 20:56:54 -0400
 Subject: [PATCH] 9p: darwin: Provide fallback impl for utimensat
@@ -160,7 +160,7 @@ index db451b0784..320697f347 100644
 +    return utimensat(dirfd, filename, times, AT_SYMLINK_NOFOLLOW);
 +}
 diff --git a/hw/9pfs/9p-util.h b/hw/9pfs/9p-util.h
-index 1f74d37558..a4b002d1b5 100644
+index 97e681e167..fd50d6243a 100644
 --- a/hw/9pfs/9p-util.h
 +++ b/hw/9pfs/9p-util.h
 @@ -36,6 +36,12 @@ static inline int qemu_lsetxattr(const char *path, const char *name,
@@ -176,14 +176,14 @@ index 1f74d37558..a4b002d1b5 100644
  static inline void close_preserve_errno(int fd)
  {
      int serrno = errno;
-@@ -96,6 +102,8 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
+@@ -98,6 +104,8 @@ ssize_t flistxattrat_nofollow(int dirfd, const char *filename,
                                char *list, size_t size);
  ssize_t fremovexattrat_nofollow(int dirfd, const char *filename,
                                  const char *name);
 +int utimensat_nofollow(int dirfd, const char *filename,
 +                       const struct timespec times[2]);
  
- /**
+ /*
   * Darwin has d_seekoff, which appears to function similarly to d_off.
 -- 
 2.35.1

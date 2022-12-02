@@ -1,32 +1,40 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, python2
+, python3
 , unstableGitUpdater
 }:
+
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2022-03-11";
+  version = "unstable-2022-11-21";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "e3beafbdb4f2ac3f889f81aec0cad5ec473c8612";
-    sha256 = "sha256-xZSZUJ2TNaUzfwEFpnzr5EPlOvILLyiQ/3K1iiup7kU=";
+    rev = "c51f169c06921152a2e9c386016660d0bb09f767";
+    sha256 = "sha256-l5dOj4cKrKdQ0grmbIdXm5dmkrQv6L+NqCMN1i3z3SE=";
   };
 
   sourceRoot = "source/klippy";
 
-  # there is currently an attempt at moving it to Python 3, but it will remain
-  # Python 2 for the foreseeable future.
-  # c.f. https://github.com/KevinOConnor/klipper/pull/3278
   # NB: This is needed for the postBuild step
-  nativeBuildInputs = [ (python2.withPackages ( p: with p; [ cffi ] )) ];
+  nativeBuildInputs = [ (python3.withPackages ( p: with p; [ cffi ] )) ];
 
-  buildInputs = [ (python2.withPackages (p: with p; [ cffi pyserial greenlet jinja2 ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
 
   # we need to run this to prebuild the chelper.
-  postBuild = "python2 ./chelper/__init__.py";
+  postBuild = ''
+    python ./chelper/__init__.py
+  '';
+
+  # Python 3 is already supported but shebangs aren't updated yet
+  postPatch = ''
+    for file in klippy.py console.py parsedump.py; do
+      substituteInPlace $file \
+        --replace '/usr/bin/env python2' '/usr/bin/env python'
+    done
+  '';
 
   # NB: We don't move the main entry point into `/bin`, or even symlink it,
   # because it uses relative paths to find necessary modules. We could wrap but
@@ -50,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
     homepage = "https://github.com/KevinOConnor/klipper";
-    maintainers = with maintainers; [ lovesegfault zhaofengli ];
+    maintainers = with maintainers; [ lovesegfault zhaofengli cab404 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

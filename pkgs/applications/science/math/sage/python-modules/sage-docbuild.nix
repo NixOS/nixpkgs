@@ -2,6 +2,7 @@
 , buildPythonPackage
 , sage-src
 , sphinx
+, jupyter-sphinx
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     sphinx
+    jupyter-sphinx
   ];
 
   preBuild = ''

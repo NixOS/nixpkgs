@@ -2,6 +2,7 @@
 , black
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 , cachecontrol
 , lockfile
 , mistune
@@ -13,15 +14,19 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.2.20220103095339";
+  version = "8.3.20220913105718";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "051690a2f89b98e35100cd2cb489406a5169a60c2f27a716f3f287a42d45be2d";
+    hash = "sha256-18/xLIq1+yM8iQBIeXvRIO4A5GqZS/3qOKXmi439+sQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     cachecontrol
@@ -32,21 +37,31 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    black
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.pycodegen;
+
+  preCheck = ''
+    rm tox.ini
+  '';
 
   disabledTests = [
-    # setup for these tests requires network access
+    # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
+    # Test requires network
+    "test_yaml_tab_error"
   ];
 
   pythonImportsCheck = [
     "schema_salad"
   ];
 
+  passthru.optional-dependencies = {
+    pycodegen = [ black ];
+  };
+
   meta = with lib; {
+    broken = true; # disables on outdated version of mistune
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
     license = with licenses; [ asl20 ];

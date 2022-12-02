@@ -10,16 +10,19 @@
 , mock
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.11.0";
+  version = "2.13.11";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-btPJ2X+I0f8C3YDB9bZwPv7HWnqsq9koWsT+CyK1AgM=";
+    hash = "sha256-CFh47PuzmR/qavOgEaot2fVBXRnHYNDemlhSTSqhut4=";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +50,9 @@ buildPythonPackage rec {
     "tests/unit/pubsub_v1"
   ];
 
-  pythonImportsCheck = [ "google.cloud.pubsub" ];
+  pythonImportsCheck = [
+    "google.cloud.pubsub"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";

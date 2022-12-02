@@ -2,6 +2,7 @@
 , version
 , disabled
 , src
+, patches ? []
 , meta
 , passthru ? {}
 , ...
@@ -10,7 +11,7 @@
 with args;
 
 buildPythonPackage rec {
-  inherit pname version src meta passthru;
+  inherit pname version src meta passthru patches;
 
   # Disable imagefont tests, because they don't work well with infinality:
   # https://github.com/python-pillow/Pillow/issues/1259
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 
-  buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
+  buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp libxcrypt tcl lcms2 ]
     ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
     ++ lib.optionals (isPyPy) [ tk libX11 ];
 

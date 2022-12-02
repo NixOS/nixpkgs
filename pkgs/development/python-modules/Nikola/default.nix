@@ -1,6 +1,6 @@
 { lib
 , aiohttp
-, Babel
+, babel
 , blinker
 , buildPythonPackage
 , python-dateutil
@@ -41,17 +41,17 @@
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "8.2.0";
-  disabled = pythonOlder "3.5";
+  version = "8.2.3";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9998fedfcb932e19e3b54faeb497a49cde8b15163af764c5afe5847fef5ec1ff";
+    sha256 = "sha256-c8eadkmYWS88nGwi6QwPqHg7FBXlkdazKSrbWDMw/UA=";
   };
 
   propagatedBuildInputs = [
     aiohttp
-    Babel
+    babel
     blinker
     python-dateutil
     docutils

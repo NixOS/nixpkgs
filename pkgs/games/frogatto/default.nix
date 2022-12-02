@@ -18,7 +18,7 @@ let
 in buildEnv {
   name = "frogatto-${version}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];
   pathsToLink = [
     "/bin"
@@ -30,7 +30,7 @@ in buildEnv {
 
   postBuild = ''
     wrapProgram $out/bin/frogatto \
-      --run "cd $out/share/frogatto"
+      --chdir "$out/share/frogatto"
   '';
 
   meta = with lib; {

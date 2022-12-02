@@ -8,8 +8,7 @@
 }:
 
 let
-  libtorrent = (python3.pkgs.toPythonModule (
-    libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
+  libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
 stdenv.mkDerivation rec {
   pname = "tribler";
@@ -74,10 +73,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
         --set QT_PLUGIN_PATH "${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}" \
-        --set _TRIBLERPATH $out/src \
+        --set _TRIBLERPATH "$out/src" \
         --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
         --set NO_AT_BRIDGE 1 \
-        --run 'cd $_TRIBLERPATH' \
+        --chdir "$out/src" \
         --add-flags "-O $out/src/run_tribler.py"
 
     mkdir -p $out/share/applications $out/share/icons

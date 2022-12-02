@@ -1,23 +1,42 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
-, makeWrapper, fetchpatch, substituteAll
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
+, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 let
   pname = "signald";
-  version = "0.17.0";
+  version = "0.23.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-eN6lEs6PuRczbzQZmGlNf6Ahp4FbWpA3EArlATEiZHU=";
+    sha256 = "sha256-RN0OYjOmVtHKeFkviep952uf3qWuBj8lhcaP1Lk/gDo=";
+  };
+
+  jre' = jre_minimal.override {
+    jdk = jdk17_headless;
+    # from https://gitlab.com/signald/signald/-/blob/0.23.0/build.gradle#L173
+    modules = [
+      "java.base"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.httpserver"
+
+      # for java/beans/PropertyChangeEvent
+      "java.desktop"
+      # for sun/misc/Unsafe
+      "jdk.unsupported"
+    ];
   };
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [ gradle perl ];
     patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -35,8 +54,8 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "sha256-kZ25p+lIkOqNoFFBgJRYFcvKJenKICVa1PasaaEHmRA=";
-      aarch64-linux = "sha256-CbFNigp3R7ETX0uXv6PNuhDpmPc4sowbWmwZ+5txXQs=";
+      x86_64-linux = "sha256-ANiNDdTuCuDEH5zUPsrVF6Uegdq3zVsMv+uMtYRX0jE=";
+      aarch64-linux = "sha256-V9zn4v/ZeLELAwFJ5y7OVAeJwZp4DmHm4KWxE6KpwGs=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -67,12 +86,12 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jdk17_headless}"
+      --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle_6 makeWrapper ];
+  nativeBuildInputs = [ git gradle makeWrapper ];
 
   doCheck = true;
 
@@ -84,6 +103,10 @@ in stdenv.mkDerivation rec {
       clients.
     '';
     homepage = "https://signald.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ expipiplus1 ma27 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

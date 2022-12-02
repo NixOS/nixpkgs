@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, makeWrapper
 , dbus
 , ffmpeg
 , x264
@@ -11,6 +12,7 @@
 , libdrm
 , pkg-config
 , pango
+, pipewire
 , cmake
 , autoconf
 , libtool
@@ -23,13 +25,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "weylus";
-  version = "0.11.4";
+  version = "unstable-2022-06-07";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gq2czxvahww97j4i3k18np29zl6wx85f8253wn3ibqrpfnklz6l";
+    rev = "b169a6be2bf3e8d105273d92f032cca5438de53a";
+    sha256 = "sha256-J9eVFIfmyBviVuT1MYKb5yoacbPqOAT3A8jahWv5qw8=";
   };
 
   buildInputs = [
@@ -62,22 +64,33 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     nodePackages.typescript
+    makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config
     autoconf
     libtool
   ];
 
-  cargoSha256 = "1pigmch0sy9ipsafd83b8q54xwqjxdaif363n1q8n46arq4v81j0";
+  cargoSha256 = "sha256-R46RSRdtfqi1PRQ0MaSIIqtj+Pr3yikm6NeMwwu1CSw=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
+
+  postFixup = let
+    GST_PLUGIN_PATH = lib.makeSearchPathOutput  "lib" "lib/gstreamer-1.0" [
+      gst_all_1.gst-plugins-base
+      pipewire
+    ];
+  in lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
+  '';
 
   postInstall = ''
     install -vDm755 weylus.desktop $out/share/applications/weylus.desktop
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];

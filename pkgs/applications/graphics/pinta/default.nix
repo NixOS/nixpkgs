@@ -20,9 +20,6 @@ buildDotnetModule rec {
   runtimeDeps = [ gtk3 ];
   buildInputs = runtimeDeps;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
   # $ ./result

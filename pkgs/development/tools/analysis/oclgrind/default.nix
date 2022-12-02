@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages, readline, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "oclgrind";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.llvm llvmPackages.clang-unwrapped readline python2 ];
+  checkInputs = [ python3 ];
+  buildInputs = [ llvmPackages.llvm llvmPackages.clang-unwrapped readline ];
 
   cmakeFlags = [
     "-DCLANG_ROOT=${llvmPackages.clang-unwrapped}"

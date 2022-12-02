@@ -7,6 +7,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
+, egl-wayland
 , cairo
 , dbus
 , pango
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland
     wayland-protocols
+    egl-wayland
     cairo
     dbus
     pango

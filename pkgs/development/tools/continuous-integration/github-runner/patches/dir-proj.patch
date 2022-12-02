@@ -1,21 +1,21 @@
-From 4267ee7fa5169b4fd5ce732118769e559806a390 Mon Sep 17 00:00:00 2001
-From: Vincent Haupert <mail@vincent-haupert.de>
-Date: Sat, 13 Mar 2021 21:52:03 +0100
-Subject: [PATCH] Patch dir.proj
+From 5a850bb7946ce5c0620ac5f072d93a77cc064219 Mon Sep 17 00:00:00 2001
+From: Aaron Andersen <aaron@fosslib.net>
+Date: Thu, 29 Sep 2022 10:12:28 -0400
+Subject: [PATCH] [PATCH] Patch dir.proj
 
 Don't execute Git for GitInfoCommitHash property
 Don't restore for build target
 Don't restore for test target
 ---
- src/dir.proj | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ src/dir.proj | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/src/dir.proj b/src/dir.proj
-index 1c91e0c..8b27d3f 100644
+index 056a312..f029720 100644
 --- a/src/dir.proj
 +++ b/src/dir.proj
 @@ -2,9 +2,6 @@
- <Project ToolsVersion="14.0" DefaultTargets="Build" 
+ <Project ToolsVersion="14.0" DefaultTargets="Build"
      xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
      <Target Name="GenerateConstant">
 -        <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
@@ -24,30 +24,22 @@ index 1c91e0c..8b27d3f 100644
          <Message Text="Building $(Product): $(GitInfoCommitHash) --- $(PackageRuntime)" Importance="high"/>
  
          <ItemGroup>
-@@ -39,14 +36,13 @@
+@@ -41,14 +38,13 @@
      </ItemGroup>
  
      <Target Name="Build" DependsOnTargets="GenerateConstant">
 -        <MSBuild Targets="Restore" Projects="@(ProjectFiles)" StopOnFirstFailure="true" />
          <MSBuild Targets="Publish" Projects="@(ProjectFiles)" BuildInParallel="false" StopOnFirstFailure="true" Properties="Configuration=$(BUILDCONFIG);PackageRuntime=$(PackageRuntime);Version=$(RunnerVersion);RuntimeIdentifier=$(PackageRuntime);PublishDir=$(MSBuildProjectDirectory)/../_layout/bin" />
-         <Exec Command="%22$(DesktopMSBuild)%22 Runner.Service/Windows/RunnerService.csproj /p:Configuration=$(BUILDCONFIG) /p:OutputPath=%22$(MSBuildProjectDirectory)/../_layout/bin%22" ConsoleToMSBuild="true" Condition="'$(PackageRuntime)' == 'win-x64' Or '$(PackageRuntime)' == 'win-x86'" />
+         <Exec Command="%22$(DesktopMSBuild)%22 Runner.Service/Windows/RunnerService.csproj /p:Configuration=$(BUILDCONFIG) /p:PackageRuntime=$(PackageRuntime) /p:OutputPath=%22$(MSBuildProjectDirectory)/../_layout/bin%22" ConsoleToMSBuild="true" Condition="'$(PackageRuntime)' == 'win-x64' Or '$(PackageRuntime)' == 'win-x86' Or '$(PackageRuntime)' == 'win-arm64'" />
      </Target>
  
      <Target Name="Test" DependsOnTargets="GenerateConstant">
 -        <Exec Command="dotnet build Test/Test.csproj -c $(BUILDCONFIG) /p:PackageRuntime=$(PackageRuntime)" ConsoleToMSBuild="true" />
--        <Exec Command="dotnet test Test/Test.csproj --no-build --logger:trx" ConsoleToMSBuild="true" />
+-        <Exec Command="dotnet test Test/Test.csproj -c $(BUILDCONFIG) --no-build --logger:trx" ConsoleToMSBuild="true" />
 +        <Exec Command="dotnet build Test/Test.csproj --no-restore -c $(BUILDCONFIG) /p:PackageRuntime=$(PackageRuntime)" ConsoleToMSBuild="true" />
-+        <Exec Command="dotnet test Test/Test.csproj --no-restore --no-build --logger:trx" ConsoleToMSBuild="true" />
++        <Exec Command="dotnet test Test/Test.csproj --no-restore -c $(BUILDCONFIG) --no-build --logger:trx" ConsoleToMSBuild="true" />
      </Target>
  
      <Target Name="Layout" DependsOnTargets="Clean;Build">
-@@ -84,4 +80,4 @@
-         <RemoveDir Directories="Test/bin" />
-         <RemoveDir Directories="Test/obj" />
-     </Target>
--</Project>
-\ No newline at end of file
-+</Project>
 -- 
-2.30.1
-
+2.36.2

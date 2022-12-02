@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.9.13";
+  version = "0.10.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0ry5x38sv8gh505z6ip90jymm7kfgyf80y3vjb2i6z567bnblam6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bu6eYQukhLE8sLkS3PbqTgXOqJFXJYXTcXAhmjaq48g=";
   };
 
   nativeBuildInputs = [

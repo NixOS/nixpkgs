@@ -1,4 +1,4 @@
-{ buildPecl, lib, gpgme, file, gnupg }:
+{ buildPecl, lib, gpgme, file, gnupg, php }:
 
 buildPecl {
   pname = "gnupg";
@@ -29,6 +29,7 @@ buildPecl {
   doCheck = true;
 
   meta = with lib; {
+    broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";

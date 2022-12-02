@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/foldex/r2mod_cli";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.reedrw ];
+    mainProgram = "r2mod";
     platforms = platforms.unix;
   };
 }

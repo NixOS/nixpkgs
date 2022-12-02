@@ -7,8 +7,8 @@ in buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "jupyter";
     publisher = "ms-toolsai";
-    version = "2021.9.1101343141";
-    sha256 = "1c5dgkk5yn6a8k3blbqakqdy8ppwgfbm0ciki7ix696bvlksbpdg";
+    version = "2022.9.1202862440";
+    sha256 = "sha256-0F6eTEXt0PJY0+1o/qZEuUcD9sjHSnUrI1OS4IO2WLc=";
   };
 
   nativeBuildInputs = [

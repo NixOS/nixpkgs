@@ -19,7 +19,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             This enables Linux Containers (LXC), which provides tools
             for creating and managing system or application containers
             on Linux.
@@ -31,10 +31,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             This is the system-wide LXC config. See
-            <citerefentry><refentrytitle>lxc.system.conf</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry>.
+            {manpage}`lxc.system.conf(5)`.
           '';
       };
 
@@ -43,10 +42,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             Default config (default.conf) for new containers, i.e. for
-            network config. See <citerefentry><refentrytitle>lxc.container.conf
-            </refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+            network config. See {manpage}`lxc.container.conf(5)`.
           '';
       };
 
@@ -55,11 +53,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             This is the config file for managing unprivileged user network
-            administration access in LXC. See <citerefentry>
-            <refentrytitle>lxc-usernet</refentrytitle><manvolnum>5</manvolnum>
-            </citerefentry>.
+            administration access in LXC. See {manpage}`lxc-usernet(5)`.
           '';
       };
   };

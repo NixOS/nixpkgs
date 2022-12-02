@@ -2,23 +2,20 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.3.2";
-  tag = "v${version}";
-  # Update commit to match the tag above
-  # TODO make updadeScript
-  commit = "ecc2af9dcaa12975e654cde8cbbeaffbb315f75c";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    rev = tag;
-    sha256 = "sha256-n+C4l4U3cDU+fgCnGWOYLdyjknw7n/xPEtC1i8AaU4o=";
+    rev = "v${version}";
+    sha256 = "sha256-cL1QV0D8m8rqSDuQgsYBPY7n5K2dy9s9c8VRx65+SV0=";
   };
 
-  vendorSha256 = "sha256-Km+1o6yuuxJs+DNTQ/XVTUFurD5gM5ohwDc7MwJuu5s=";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorSha256 = "sha256-F5EY1/WWRPBN5fqp2J2mdpIzL1gNKR0ltzSdarT6dFw=";
 
-  # Set target as ./cmd per release-cli
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L222
+  # Set target as ./cmd per cli-local
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
   subPackages = [ "cmd" ];
 
   ldflags =
@@ -27,9 +24,14 @@ buildGoModule rec {
       "-s" "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${commit}"
-      "-X ${package_url}.gitTag=${tag}"
+      "-X ${package_url}.gitCommit=${src.rev}"
+      "-X ${package_url}.gitTag=${src.rev}"
       "-X ${package_url}.gitTreeState=clean"
+      "-X ${package_url}.kubectlVersion=v0.24.2"
+      # NOTE: Update kubectlVersion when upgrading this package with
+      # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
+      # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
+      # Will need a way to automate it :P
     ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,7 +45,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${tag} > /dev/null
+    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
   '';
 
   postInstall = ''

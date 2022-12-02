@@ -12,12 +12,9 @@ let
     (systemdUtils.lib)
     makeUnit
     generateUnits
-    makeJobScript
-    unitConfig
-    serviceConfig
-    commonUnitText
     targetToUnit
     serviceToUnit
+    sliceToUnit
     socketToUnit
     timerToUnit
     pathToUnit;
@@ -48,65 +45,59 @@ in {
       default = "";
       type = types.lines;
       example = "DefaultCPUAccounting=yes";
-      description = ''
+      description = lib.mdDoc ''
         Extra config options for systemd user instances. See man systemd-user.conf for
         available options.
       '';
     };
 
     systemd.user.units = mkOption {
-      description = "Definition of systemd per-user units.";
+      description = lib.mdDoc "Definition of systemd per-user units.";
       default = {};
-      type = with types; attrsOf (submodule (
-        { name, config, ... }:
-        { options = concreteUnitOptions;
-          config = {
-            unit = mkDefault (makeUnit name config);
-          };
-        }));
+      type = systemdUtils.types.units;
     };
 
     systemd.user.paths = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = pathOptions; } unitConfig ]);
-      description = "Definition of systemd per-user path units.";
+      type = systemdUtils.types.paths;
+      description = lib.mdDoc "Definition of systemd per-user path units.";
     };
 
     systemd.user.services = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = serviceOptions; } unitConfig serviceConfig ] );
-      description = "Definition of systemd per-user service units.";
+      type = systemdUtils.types.services;
+      description = lib.mdDoc "Definition of systemd per-user service units.";
     };
 
     systemd.user.slices = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = sliceOptions; } unitConfig ] );
-      description = "Definition of systemd per-user slice units.";
+      type = systemdUtils.types.slices;
+      description = lib.mdDoc "Definition of systemd per-user slice units.";
     };
 
     systemd.user.sockets = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = socketOptions; } unitConfig ] );
-      description = "Definition of systemd per-user socket units.";
+      type = systemdUtils.types.sockets;
+      description = lib.mdDoc "Definition of systemd per-user socket units.";
     };
 
     systemd.user.targets = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = targetOptions; } unitConfig] );
-      description = "Definition of systemd per-user target units.";
+      type = systemdUtils.types.targets;
+      description = lib.mdDoc "Definition of systemd per-user target units.";
     };
 
     systemd.user.timers = mkOption {
       default = {};
-      type = with types; attrsOf (submodule [ { options = timerOptions; } unitConfig ] );
-      description = "Definition of systemd per-user timer units.";
+      type = systemdUtils.types.timers;
+      description = lib.mdDoc "Definition of systemd per-user timer units.";
     };
 
     systemd.additionalUpstreamUserUnits = mkOption {
       default = [];
       type = types.listOf types.str;
       example = [];
-      description = ''
+      description = lib.mdDoc ''
         Additional units shipped with systemd that should be enabled for per-user systemd instances.
       '';
       internal = true;
@@ -119,7 +110,12 @@ in {
     ];
 
     environment.etc = {
-      "systemd/user".source = generateUnits "user" cfg.units upstreamUserUnits [];
+      "systemd/user".source = generateUnits {
+        type = "user";
+        inherit (cfg) units;
+        upstreamUnits = upstreamUserUnits;
+        upstreamWants = [];
+      };
 
       "systemd/user.conf".text = ''
         [Manager]
@@ -149,6 +145,10 @@ in {
       { # Ensure that pam_systemd gets included. This is special-cased
         # in systemd to provide XDG_RUNTIME_DIR.
         startSession = true;
+        # Disable pam_mount in systemd-user to prevent it from being called
+        # multiple times during login, because it will prevent pam_mount from
+        # unmounting the previously mounted volumes.
+        pamMount = false;
       };
 
     # Some overrides to upstream units.

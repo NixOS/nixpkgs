@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p dotnet-sdk_3
+#!nix-shell -i bash -p dotnet-sdk_6
 set -euo pipefail
 
 # Writes deps for dotnet package in $pkgSrc to $depsFile.

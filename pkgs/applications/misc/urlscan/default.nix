@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlscan";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZJdmsb+2ElgLFWsicc0S8EQAZhF+gnn+ARgdAyaFDgc=";
+    hash = "sha256-lCOOVAdsr5LajBGY7XUi4J5pJqm5rOH5IMKhA6fju5w=";
   };
 
   propagatedBuildInputs = [

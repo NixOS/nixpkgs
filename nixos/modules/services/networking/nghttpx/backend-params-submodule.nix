@@ -3,7 +3,7 @@
     proto = lib.mkOption {
       type        = lib.types.enum [ "h2" "http/1.1" ];
       default     = "http/1.1";
-      description = ''
+      description = lib.mdDoc ''
         This option configures the protocol the backend server expects
         to use.
 
@@ -15,7 +15,7 @@
     tls = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         This option determines whether nghttpx will negotiate its
         connection with a backend server using TLS or not. The burden
         is on the backend server to provide the TLS certificate!
@@ -28,7 +28,7 @@
     sni = lib.mkOption {
       type        = lib.types.nullOr lib.types.str;
       default     = null;
-      description = ''
+      description = lib.mdDoc ''
         Override the TLS SNI field value. This value (in nghttpx)
         defaults to the host value of the backend configuration.
 
@@ -40,7 +40,7 @@
     fall = lib.mkOption {
       type        = lib.types.int;
       default     = 0;
-      description = ''
+      description = lib.mdDoc ''
         If nghttpx cannot connect to the backend N times in a row, the
         backend is assumed to be offline and is excluded from load
         balancing. If N is 0 the backend is never excluded from load
@@ -54,7 +54,7 @@
     rise = lib.mkOption {
       type        = lib.types.int;
       default     = 0;
-      description = ''
+      description = lib.mdDoc ''
         If the backend is excluded from load balancing, nghttpx will
         periodically attempt to make a connection to the backend. If
         the connection is successful N times in a row the backend is
@@ -69,7 +69,7 @@
     affinity = lib.mkOption {
       type        = lib.types.enum [ "ip" "none" ];
       default     = "none";
-      description = ''
+      description = lib.mdDoc ''
         If "ip" is given, client IP based session affinity is
         enabled. If "none" is given, session affinity is disabled.
 
@@ -91,7 +91,7 @@
     dns = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         Name resolution of a backends host name is done at start up,
         or configuration reload. If "dns" is true, name resolution
         takes place dynamically.
@@ -108,7 +108,7 @@
     redirect-if-not-tls = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         If true, a backend match requires the frontend connection be
         TLS encrypted. If it is not, nghttpx responds to the request
         with a 308 status code and https URI the client should use

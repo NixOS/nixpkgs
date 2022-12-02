@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "4.1.5";
+  version = "4.3.1";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -18,20 +18,8 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
-  };
 
 in
 
@@ -43,17 +31,12 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "0wvbjj80r1zxpz24adkicxsdjnv3nciga6rl1wfmky463w03rca2";
+    sha256 = "1h9r32wdn0p7br36r719x96c8gay83dijw80y2ks951mam16mkkb";
   };
-
-  postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-  '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -81,7 +64,6 @@ python3.pkgs.buildPythonApplication {
   ];
 
   preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum_grs/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -92,16 +74,11 @@ python3.pkgs.buildPythonApplication {
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store/*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electrum-grs.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-grs %u"' \
                 "Exec=$out/bin/electrum-grs %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-grs --testnet %u"' \
                 "Exec=$out/bin/electrum-grs --testnet %u"
-
   '';
 
   postFixup = lib.optionalString enableQt ''

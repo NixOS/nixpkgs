@@ -42,31 +42,36 @@ in {
   fetchYarnDeps = let
     f = {
       name ? "offline",
-      yarnLock,
+      src ? null,
       hash ? "",
       sha256 ? "",
-    }: let
+      ...
+    }@args: let
       hash_ =
         if hash != "" then { outputHashAlgo = null; outputHash = hash; }
         else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
         else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
-    in stdenv.mkDerivation {
+    in stdenv.mkDerivation ({
       inherit name;
 
-      dontUnpack = true;
+      dontUnpack = src == null;
       dontInstall = true;
 
       nativeBuildInputs = [ prefetch-yarn-deps ];
       GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
       buildPhase = ''
+        runHook preBuild
+
+        yarnLock=''${yarnLock:=$PWD/yarn.lock}
         mkdir -p $out
-        (cd $out; prefetch-yarn-deps --verbose --builder ${yarnLock})
+        (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+
+        runHook postBuild
       '';
 
       outputHashMode = "recursive";
-      inherit (hash_) outputHashAlgo outputHash;
-    };
+    } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
     tests = callPackage ./tests {};

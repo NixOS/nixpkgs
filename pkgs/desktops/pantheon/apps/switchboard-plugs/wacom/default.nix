@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -19,23 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1n2yfq4s9xpnfqjikchjp4z2nk8cmfz4g0p18cplzh5w1lvz17lm";
+    sha256 = "sha256-+E+MTIi2Dvv7TvzYEzudeIqlDcP8VP61eBh/PQz9SWI=";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-wacom/pull/29
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-wacom/commit/2a7dee180d73ffb3521d806efb7028f5a71cb511.patch";
-      sha256 = "06ra5c0f14brmj2mmsqscpc4d1114i4qazgnsazzh2hrp04ilnva";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

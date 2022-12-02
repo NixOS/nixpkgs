@@ -19,7 +19,7 @@ let
   # per debian's udev deb hook (https://man7.org/linux/man-pages/man1/dh_installudev.1.html)
   destination = "60-scdaemon.rules";
 
-  scdaemonUdevRulesPkg = pkgs.runCommandNoCC "scdaemon-udev-rules" {} ''
+  scdaemonUdevRulesPkg = pkgs.runCommand "scdaemon-udev-rules" {} ''
     loc="$out/lib/udev/rules.d/"
     mkdir -p "''${loc}"
     cp "${scdaemonRules}" "''${loc}/${destination}"
@@ -28,7 +28,7 @@ let
   cfg = config.hardware.gpgSmartcards;
 in {
   options.hardware.gpgSmartcards = {
-    enable = mkEnableOption "udev rules for gnupg smart cards";
+    enable = mkEnableOption (lib.mdDoc "udev rules for gnupg smart cards");
   };
 
   config = mkIf cfg.enable {

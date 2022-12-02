@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2022.2.9";
+  version = "2022.8.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ftp0EXZDaBuyyqaVtI854iQ7SIf3z5kdWt/9gT5cg3M=";
+    hash = "sha256-PnTg/UiDhHfrz0Dgm3eAvQle5ZILIjj0heLGhGOj3LQ=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +40,13 @@ buildPythonPackage rec {
     "test_write_ome"
     # Test file is missing
     "test_write_predictor"
+    "test_issue_imagej_hyperstack_arg"
+    "test_issue_description_overwrite"
+    # AssertionError
+    "test_write_bigtiff"
+    "test_write_imagej_raw"
+    # https://github.com/cgohlke/tifffile/issues/142
+    "test_func_bitorder_decode"
   ];
 
   pythonImportsCheck = [

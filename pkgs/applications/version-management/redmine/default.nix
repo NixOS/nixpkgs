@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
+{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
 
 let
-  version = "4.2.4";
+  version = "4.2.8";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -15,10 +15,8 @@ in
     inherit version;
 
     src = fetchurl {
-      # https://www.redmine.org/news/134
-      # > "These releases are not available yet on the releases page from a technical reason, we are sorry for this and we expected to have them uploaded next week. I'll post here an update after we have them uploaded."
-      url = "https://www.redmine.org/attachments/download/28862/${pname}-${version}.tar.gz";
-      sha256 = "7f50fd4a6cf1c1e48091a87696b813ba264e11f04dec67fb006858a1b49a5c7d";
+      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+      sha256 = "sha256-C0McBS2P02uTIB2vrzYVzbjQNGDvzyQA59MmYrKrYnI=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -44,10 +42,12 @@ in
       makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
     '';
 
+    passthru.tests.redmine = nixosTests.redmine;
+
     meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
-      maintainers = [ maintainers.aanderse ];
+      maintainers = with maintainers; [ aanderse felixsinger ];
       license = licenses.gpl2;
     };
   }

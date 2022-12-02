@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, darwin
 , mkDerivation
 , fetchgit
 , gnuradio
@@ -39,6 +41,8 @@ in mkDerivation {
   inherit version src;
   disabledForGRafter = "3.9";
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [
     log4cpp
     mpir
@@ -56,6 +60,9 @@ in mkDerivation {
   ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift
     python.pkgs.thrift
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.IOKit
+    darwin.apple_sdk.frameworks.Security
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then

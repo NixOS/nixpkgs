@@ -3,6 +3,7 @@
 , libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
 # than the default LLVM verion's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
@@ -18,7 +19,7 @@
 }:
 
 let
-  release_version = "14.0.0";
+  release_version = "14.0.6";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   rev = ""; # When using a Git commit
@@ -30,7 +31,7 @@ let
     owner = "llvm";
     repo = "llvm-project";
     rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1ixqzjzq4ad3mv1w44gwcg1shy34c2b3i9ja71vx1wa7l2ms2376";
+    sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
   };
 
   llvm_meta = {
@@ -158,16 +159,17 @@ let
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
-        echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
-      '' + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
-        echo "-lunwind" >> $out/nix-support/cc-ldflags
-      '' + lib.optionalString stdenv.targetPlatform.isWasm ''
-        echo "-fno-exceptions" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags =
+        [ "-rtlib=compiler-rt"
+          "-Wno-unused-command-line-argument"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
+        ++ lib.optional
+          (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false)
+          "-lunwind"
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -177,11 +179,12 @@ let
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-        echo "-nostdlib++" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt}/lib"
+        "-nostdlib++"
+      ];
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -191,10 +194,11 @@ let
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];
-      extraBuildCommands = ''
-        echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-        echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands cc;
+      extraBuildCommands = mkExtraBuildCommands cc;
+      nixSupport.cc-cflags = [
+        "-rtlib=compiler-rt"
+        "-B${targetLlvmLibraries.compiler-rt}/lib"
+      ];
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -202,9 +206,8 @@ let
       libcxx = null;
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
-      extraBuildCommands = ''
-        echo "-nostartfiles" >> $out/nix-support/cc-cflags
-      '' + mkExtraBuildCommands0 cc;
+      extraBuildCommands = mkExtraBuildCommands0 cc;
+      nixSupport.cc-cflags = [ "-nostartfiles" ];
     };
 
     clangNoCompilerRtWithLibc = wrapCCWith rec {
@@ -271,7 +274,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
 

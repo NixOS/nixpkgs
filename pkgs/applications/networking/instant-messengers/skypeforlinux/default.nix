@@ -7,7 +7,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.81.0.268";
+  version = "8.87.0.406";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -68,7 +68,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "sha256-MqXLK+AdYkQVTeTjul9Dru78597FuThRUVq7/y9FYUU=";
+        sha256 = "sha256-lWnQIdMmfz90h3tOWkQv0vo3HnRi3z6W27vK28+Ksjo=";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -110,16 +110,17 @@ in stdenv.mkDerivation {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
     substituteInPlace $out/share/applications/skypeforlinux-share.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
     substituteInPlace $out/share/kservices5/ServiceMenus/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/
+      --replace /usr/bin/ ""
   '';
 
   meta = with lib; {
     description = "Linux client for skype";
     homepage = "https://www.skype.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];

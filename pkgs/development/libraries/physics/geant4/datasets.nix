@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, geant_version }:
+{ lib, stdenv, fetchurl, geant4 }:
 
 let
   mkDataset = { pname, version, sha256, envvar }:
     stdenv.mkDerivation {
       inherit pname version;
-      inherit geant_version;
+      geant_version = geant4.version;
 
       src = fetchurl {
         url = "https://cern.ch/geant4-data/datasets/${pname}.${version}.tar.gz";
@@ -15,7 +15,7 @@ let
       dontBuild = true;
       dontConfigure = true;
 
-      datadir = "${placeholder "out"}/share/Geant4-${geant_version}/data/${pname}${version}";
+      datadir = "${placeholder "out"}/share/Geant4-${geant4.version}/data/${pname}${version}";
       installPhase = ''
         mkdir -p $datadir
         mv ./* $datadir

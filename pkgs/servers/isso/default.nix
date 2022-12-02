@@ -16,13 +16,13 @@ in
 with python3Packages; buildPythonApplication rec {
 
   pname = "isso";
-  version = "0.12.6.1";
+  version = "0.12.6.2";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-b2iJmOOsaI4lqJ5//jmHflXRx4yFDaAoKZixXoWIyZg=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-T5T3EJS8ef8uo+P9qkC+7I70qv+4PFrnhImr04Fz57U=";
   };
 
   propagatedBuildInputs = [

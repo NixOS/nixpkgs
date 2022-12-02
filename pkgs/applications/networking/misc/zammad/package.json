@@ -14,5 +14,5 @@
     "stylelint-prettier": "^2.0.0"
   },
   "name": "Zammad",
-  "version": "5.1.0"
+  "version": "5.1.1"
 }

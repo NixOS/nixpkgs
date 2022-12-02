@@ -70,7 +70,7 @@ rec {
         Note: -f is necessary to keep it from being a pain to update
         hash on rev updates. Command will fail w/o and not print hash.
       */
-      extraPostFetch = ''
+      postFetch = ''
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
       '';
     };

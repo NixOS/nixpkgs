@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "miniscript";
-  version = "unstable-2020-12-01";
+  version = "unstable-2022-07-19";
 
   src = fetchFromGitHub {
     owner = "sipa";
     repo = pname;
-    rev = "02682a398a35b410571b10cde7f39837141ddad6";
-    sha256 = "079jz4g88cfzfm9a6ykby9haxwcs033c1288mgr8cl2hw4qd2sjl";
+    rev = "ca675488c4aa9605f6ae70c0e68a148a6fb277b4";
+    sha256 = "sha256-kzLIJ0os6UnC0RPEybfw6wGrZpgmRCgj3zifmZjieoU=";
   };
 
   installPhase = ''

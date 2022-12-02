@@ -5,7 +5,7 @@ let
   version = "1.5.11";
 in
 
-if !lib.versionAtLeast ocaml.version "4.07"
+if lib.versionOlder ocaml.version "4.07"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "http://sawja.inria.fr/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

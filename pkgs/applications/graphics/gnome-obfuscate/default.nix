@@ -8,31 +8,32 @@
 , pkg-config
 , python3
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 
 , appstream-glib
 , desktop-file-utils
 , glib
 , gtk4
 , libadwaita
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-obfuscate";
-  version = "0.0.4";
+  version = "0.0.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
     rev = version;
-    sha256 = "sha256-P8Y2Eizn1BMZXuFjGMXF/3oAUzI8ZNTrnbLyU+V6uk4=";
+    sha256 = "sha256-jEMOg2yHi6K57XhA/7hkwwvedmikoB8pGV3ka+jixq8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-5MzWz5NH2sViIfaP8xOQLreEal5TYkji11VaUgieT3U=";
+    sha256 = "sha256-P04BeidLXouPLzT/vsa4VC5AOENF0W4gqXqzdmRFhmE=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustPlatform.rust.cargo
     rustPlatform.rust.rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
   ];
 
   postPatch = ''

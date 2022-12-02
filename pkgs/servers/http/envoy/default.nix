@@ -1,17 +1,21 @@
 { lib
-, bazel_4
+, bazel_5
+, bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn
 , go
 , jdk
 , ninja
+, patchelf
 , python3
 , linuxHeaders
 , nixosTests
+
+# v8 (upstream default), wavm, wamr, wasmtime, disabled
+, wasmRuntime ? "wamr"
 }:
 
 let
@@ -20,21 +24,21 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.21.1";
-    rev = "af50070ee60866874b0a9383daf9364e884ded22";
+    version = "1.23.1";
+    rev = "edd69583372955fdfa0b8ca3820dd7312c094e46";
   };
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_4;
+  bazel = bazel_5;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev ;
-    hash = "sha256:11mm72zmb479ss585jzqzhklyyqmdadnvr91ghzvjxc0j2a1hrr4";
+    inherit (srcVer) rev;
+    sha256 = "sha256:157dbmp479xv5507n48yibvlgi2ac0l3sl9rzm28cm9lhzwva3k0";
 
-    extraPostFetch = ''
+    postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
       echo ${srcVer.rev} > $out/SOURCE_VERSION
@@ -45,19 +49,22 @@ buildBazelPackage rec {
   postPatch = ''
     sed -i 's,#!/usr/bin/env python3,#!${python3}/bin/python,' bazel/foreign_cc/luajit.patch
     sed -i '/javabase=/d' .bazelrc
-    # Patch paths to build tools, and disable gold because it just segfaults.
-    substituteInPlace bazel/external/wee8.genrule_cmd \
-      --replace '"''$$gn"' '"''$$(command -v gn)"' \
-      --replace '"''$$ninja"' '"''$$(command -v ninja)"' \
-      --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
+    sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
+
+    # Use system Python.
+    sed -i -e '/python_interpreter_target =/d' -e '/@python3_10/d' bazel/python_dependencies.bzl
   '';
 
   patches = [
-    # make linux/tcp.h relative. drop when upgrading to >1.21
-    (fetchpatch {
-      url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
-      sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
-    })
+    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
+    ./bump-brotli.patch
+
+    # fix linux-aarch64 WAMR builds
+    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
+    ./fix-aarch64-wamr.patch
+
+    # use system Python, not bazel-fetched binary Python
+    ./use-system-python.patch
   ];
 
   nativeBuildInputs = [
@@ -67,6 +74,7 @@ buildBazelPackage rec {
     go
     jdk
     ninja
+    patchelf
   ];
 
   buildInputs = [
@@ -74,7 +82,10 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
+    sha256 = {
+      x86_64-linux = "10f1lcn8pynqcj2hlz100zbpmawvn0f2hwpcw3m9v6v3fcs2l6pr";
+      aarch64-linux = "1na7gna9563mm1y7sy34fh64f1kxz151xn26zigbi9amwcpjbav6";
+    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -88,8 +99,12 @@ buildBazelPackage rec {
         -e 's,${python3},__NIXPYTHON__,' \
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
-        $bazelOut/external/local_config_sh/BUILD
+        $bazelOut/external/local_config_sh/BUILD \
+        $bazelOut/external/base_pip3/BUILD.bazel
+
       rm -r $bazelOut/external/go_sdk
+      rm -r $bazelOut/external/local_jdk
+      rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
@@ -100,6 +115,16 @@ buildBazelPackage rec {
     dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
     preConfigure = ''
+      # Make executables work, for the most part.
+      find $bazelOut/external -type f -executable | while read execbin; do
+        file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
+        patchelf \
+          --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
+          "$execbin"
+      done
+
+      ln -s ${bazel-gazelle}/bin $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
       sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/foreign_cc/private/framework/toolchains/linux_commands.bzl
 
       # Add paths to Nix store back.
@@ -107,7 +132,8 @@ buildBazelPackage rec {
         -e 's,__NIXPYTHON__,${python3},' \
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
-        $bazelOut/external/local_config_sh/BUILD
+        $bazelOut/external/local_config_sh/BUILD \
+        $bazelOut/external/base_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
@@ -122,13 +148,28 @@ buildBazelPackage rec {
     "-c opt"
     "--spawn_strategy=standalone"
     "--noexperimental_strict_action_env"
-    "--cxxopt=-Wno-maybe-uninitialized"
-    "--cxxopt=-Wno-uninitialized"
+    "--cxxopt=-Wno-error"
+
+    # Force use of system Java.
+    "--extra_toolchains=@local_jdk//:all"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
+
+    "--define=wasm=${wasmRuntime}"
+  ] ++ (lib.optionals stdenv.isAarch64 [
+    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+    #       |         ^
+    "--define=tcmalloc=disabled"
+  ]);
+  bazelFetchFlags = [
+    "--define=wasm=${wasmRuntime}"
   ];
 
   passthru.tests = {
-    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
-    inherit (nixosTests) pomerium;
+    envoy = nixosTests.envoy;
+    # tested as a core component of Pomerium
+    pomerium = nixosTests.pomerium;
   };
 
   meta = with lib; {
@@ -136,6 +177,6 @@ buildBazelPackage rec {
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Other platforms will generate different fetch hashes.
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

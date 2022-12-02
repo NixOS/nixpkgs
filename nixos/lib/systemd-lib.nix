@@ -122,10 +122,15 @@ in rec {
         (if isList value then value else [value]))
         as));
 
-  generateUnits = generateUnits' true;
-
-  generateUnits' = allowCollisions: type: units: upstreamUnits: upstreamWants:
-    pkgs.runCommand "${type}-units"
+  generateUnits = { allowCollisions ? true, type, units, upstreamUnits, upstreamWants, packages ? cfg.packages, package ? cfg.package }:
+    let
+      typeDir = ({
+        system = "system";
+        initrd = "system";
+        user = "user";
+        nspawn = "nspawn";
+      }).${type};
+    in pkgs.runCommand "${type}-units"
       { preferLocalBuild = true;
         allowSubstitutes = false;
       } ''
@@ -133,7 +138,7 @@ in rec {
 
       # Copy the upstream systemd units we're interested in.
       for i in ${toString upstreamUnits}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
           target="$(readlink "$fn")"
@@ -150,7 +155,7 @@ in rec {
       # Copy .wants links, but only those that point to units that
       # we're interested in.
       for i in ${toString upstreamWants}; do
-        fn=${cfg.package}/example/systemd/${type}/$i
+        fn=${package}/example/systemd/${typeDir}/$i
         if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
@@ -162,14 +167,14 @@ in rec {
       done
 
       # Symlink all units provided listed in systemd.packages.
-      packages="${toString cfg.packages}"
+      packages="${toString packages}"
 
       # Filter duplicate directories
       declare -A unique_packages
       for k in $packages ; do unique_packages[$k]=1 ; done
 
       for i in ''${!unique_packages[@]}; do
-        for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
+        for fn in $i/etc/systemd/${typeDir}/* $i/lib/systemd/${typeDir}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
             if [[ -d "$fn" ]]; then
               targetDir="$out/$(basename "$fn")"
@@ -182,11 +187,14 @@ in rec {
         done
       done
 
-      # Symlink all units defined by systemd.units. If these are also
-      # provided by systemd or systemd.packages, then add them as
+      # Symlink units defined by systemd.units where override strategy
+      # shall be automatically detected. If these are also provided by
+      # systemd or systemd.packages, then add them as
       # <unit-name>.d/overrides.conf, which makes them extend the
       # upstream unit.
-      for i in ${toString (mapAttrsToList (n: v: v.unit) units)}; do
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists") units))}; do
         fn=$(basename $i/*)
         if [ -e $out/$fn ]; then
           if [ "$(readlink -f $i/$fn)" = /dev/null ]; then
@@ -205,11 +213,21 @@ in rec {
         fi
       done
 
+      # Symlink units defined by systemd.units which shall be
+      # treated as drop-in file.
+      for i in ${toString (mapAttrsToList
+          (n: v: v.unit)
+          (lib.filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units))}; do
+        fn=$(basename $i/*)
+        mkdir -p $out/$fn.d
+        ln -s $i/$fn $out/$fn.d/overrides.conf
+      done
+
       # Create service aliases from aliases option.
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             ln -sfn '${name}' $out/'${name2}'
-          '') unit.aliases) units)}
+          '') (unit.aliases or [])) units)}
 
       # Create .wants and .requires symlinks from the wantedBy and
       # requiredBy options.
@@ -217,13 +235,13 @@ in rec {
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.wants'
             ln -sfn '../${name}' $out/'${name2}.wants'/
-          '') unit.wantedBy) units)}
+          '') (unit.wantedBy or [])) units)}
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/'${name2}.requires'
             ln -sfn '../${name}' $out/'${name2}.requires'/
-          '') unit.requiredBy) units)}
+          '') (unit.requiredBy or [])) units)}
 
       ${optionalString (type == "system") ''
         # Stupid misc. symlinks.
@@ -270,9 +288,9 @@ in rec {
           { Conflicts = toString config.conflicts; }
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
-        // optionalAttrs (config.restartTriggers != [])
+        // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
           { X-Restart-Triggers = toString config.restartTriggers; }
-        // optionalAttrs (config.reloadTriggers != [])
+        // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
           { X-Reload-Triggers = toString config.reloadTriggers; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
@@ -280,6 +298,8 @@ in rec {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure; }
+        // optionalAttrs (config.onSuccess != []) {
+          OnSuccess = toString config.onSuccess; }
         // optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
         } // optionalAttrs (options.startLimitBurst.isDefined) {
@@ -288,44 +308,23 @@ in rec {
     };
   };
 
-  serviceConfig = { name, config, ... }: {
-    config = mkMerge
-      [ { # Default path for systemd services.  Should be quite minimal.
-          path = mkAfter
-            [ pkgs.coreutils
-              pkgs.findutils
-              pkgs.gnugrep
-              pkgs.gnused
-              systemd
-            ];
-          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
-        }
-        (mkIf (config.preStart != "")
-          { serviceConfig.ExecStartPre =
-              [ (makeJobScript "${name}-pre-start" config.preStart) ];
-          })
-        (mkIf (config.script != "")
-          { serviceConfig.ExecStart =
-              makeJobScript "${name}-start" config.script + " " + config.scriptArgs;
-          })
-        (mkIf (config.postStart != "")
-          { serviceConfig.ExecStartPost =
-              [ (makeJobScript "${name}-post-start" config.postStart) ];
-          })
-        (mkIf (config.reload != "")
-          { serviceConfig.ExecReload =
-              makeJobScript "${name}-reload" config.reload;
-          })
-        (mkIf (config.preStop != "")
-          { serviceConfig.ExecStop =
-              makeJobScript "${name}-pre-stop" config.preStop;
-          })
-        (mkIf (config.postStop != "")
-          { serviceConfig.ExecStopPost =
-              makeJobScript "${name}-post-stop" config.postStop;
-          })
-      ];
+  serviceConfig = { config, ... }: {
+    config.environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
   };
+
+  stage2ServiceConfig = {
+    imports = [ serviceConfig ];
+    # Default path for systemd services. Should be quite minimal.
+    config.path = mkAfter [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      systemd
+    ];
+  };
+
+  stage1ServiceConfig = serviceConfig;
 
   mountConfig = { config, ... }: {
     config = {
@@ -354,7 +353,7 @@ in rec {
     '';
 
   targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -363,7 +362,7 @@ in rec {
     };
 
   serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Service]
@@ -374,18 +373,18 @@ in rec {
               # systemd max line length is now 1MiB
               # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
               in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
-          ${if def.reloadIfChanged then ''
+          ${if def ? reloadIfChanged && def.reloadIfChanged then ''
             X-ReloadIfChanged=true
-          '' else if !def.restartIfChanged then ''
+          '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
             X-RestartIfChanged=false
           '' else ""}
-          ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
+          ${optionalString (def ? stopIfChanged && !def.stopIfChanged) "X-StopIfChanged=false"}
           ${attrsToSection def.serviceConfig}
         '';
     };
 
   socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Socket]
@@ -396,7 +395,7 @@ in rec {
     };
 
   timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Timer]
@@ -405,7 +404,7 @@ in rec {
     };
 
   pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Path]
@@ -414,7 +413,7 @@ in rec {
     };
 
   mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Mount]
@@ -423,7 +422,7 @@ in rec {
     };
 
   automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Automount]
@@ -432,7 +431,7 @@ in rec {
     };
 
   sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy enable;
+    { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
       text = commonUnitText def +
         ''
           [Slice]

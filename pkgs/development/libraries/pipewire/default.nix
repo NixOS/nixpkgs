@@ -3,11 +3,12 @@
 , buildPackages
 , fetchFromGitLab
 , fetchpatch
-, removeReferencesTo
 , python3
 , meson
 , ninja
+, eudev
 , systemd
+, enableSystemd ? true
 , pkg-config
 , docutils
 , doxygen
@@ -18,7 +19,6 @@
 , libjack2
 , libusb1
 , udev
-, libva
 , libsndfile
 , vulkan-headers
 , vulkan-loader
@@ -31,7 +31,6 @@
 , nixosTests
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind
 , valgrind
-, withMediaSession ? true
 , libcameraSupport ? true
 , libcamera
 , libdrm
@@ -44,7 +43,9 @@
 , sbc
 , libfreeaptx
 , ldacbt
+, liblc3
 , fdk_aac
+, libopus
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , ofonoSupport ? true
@@ -64,11 +65,10 @@
 
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
-  mesonList = l: "[" + lib.concatStringsSep "," l + "]";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.48";
+    version = "0.3.60";
 
     outputs = [
       "out"
@@ -86,7 +86,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-+gk/MJ9YimHBwN2I42DRP+I2OqBFFtZ81Fd/l89HcSk=";
+      sha256 = "sha256-HDE2QAV2jnEJCqgiGx4TVP4ceeKAqwd4P3OYw6auNAM=";
     };
 
     patches = [
@@ -102,6 +102,26 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # Following are backported patches as recommended by upstream.
+      # FIXME: remove in 0.3.61
+      # fix tdesktop with pw-pulse
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b720da771efa950cf380101bed42d5d5ee177908.diff";
+        hash = "sha256-p/BvatnbEJAMLQUUOECKAK7FppaNp9ei3FHjAw2spM8=";
+      })
+
+      # fix a crash when quickly switching Bluetooth profiles
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/bf3516ba0496b644b3944b114253f23964178897.diff";
+        hash = "sha256-LqasplS/azCPekslJQPTd9MZkUcRqA0ks94FtwyY3GA=";
+      })
+
+      # fix no sound in VMs (Pipewire on the guest)
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/b46d8a8c921a8da6883610ad4b68da95bf59b59e.diff";
+        hash = "sha256-2VHBwXbzUAGP/fG4xxoFLHSb9oXQK1BPuNv3zAV8cEg=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -128,11 +148,11 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
@@ -149,18 +169,23 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
-      "-Dsystemd-system-service=enabled"
+      "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
+      "-Dudev=${mesonEnableFeature (!enableSystemd)}"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      "-Dbluez5-codec-lc3plus=disabled"
+      "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
@@ -194,8 +219,11 @@ let
         cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
       ''}
 
-      moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
-      moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ${lib.optionalString enableSystemd ''
+        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ''}
+
       moveToOutput "bin/pipewire-pulse" "$pulse"
 
       moveToOutput "bin/pw-jack" "$jack"

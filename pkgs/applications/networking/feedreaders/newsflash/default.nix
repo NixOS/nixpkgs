@@ -5,35 +5,35 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
+, libxml2
 , openssl
 , sqlite
 , webkitgtk
 , glib-networking
 , librsvg
-, xdg-utils
 , gst_all_1
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "1.5.1";
+  version = "2.2.2";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = version;
-    hash = "sha256-fLG7oYt+gdl3Lwnu6c7VLJWSHCFY5LyNeDKoUNGg3Yw=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    sha256 = "sha256-QEfbuTJ0spp0g/XPoS0ZaqudSkWZtXMd3ZTzAHiv45Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-dQlbK3SfY6p1xinroXz5wcaBbq2LuDM9sMlfJ6ueTTg=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    src = finalAttrs.src;
+    sha256 = "sha256-AGsiB+xNSZzaG/PFgjKNKQopRUcyX27sLdyhT626Gcc=";
   };
 
   patches = [
@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs build-aux/cargo.sh
   '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf
@@ -67,8 +67,9 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libxml2
     openssl
     sqlite
     webkitgtk
@@ -78,9 +79,6 @@ stdenv.mkDerivation rec {
 
     # SVG support for gdk-pixbuf
     librsvg
-
-    # Open links in browser
-    xdg-utils
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -95,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
     platforms = platforms.unix;
+    mainProgram = "com.gitlab.newsflash";
   };
-}
+})

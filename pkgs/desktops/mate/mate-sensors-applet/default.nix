@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, libxml2, libxslt, libatasmart, libnotify
-, lm_sensors, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, gtk3
+, libxml2
+, libxslt
+, libatasmart
+, libnotify
+, lm_sensors
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-sensors-applet";
@@ -31,7 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     homepage = "https://github.com/mate-desktop/mate-sensors-applet";

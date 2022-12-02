@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "kubemq-community";
-  version = "2.2.12";
+  version = "2.3.5";
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06n3avcqknqzf9y03xqcsg36pwcha29j2psp9xsnir7hrx66zww8";
+    sha256 = "sha256-kR2/Is1fQqpRyQ8yKSEvXV5xzXcHldCqgnCRNRZ+Ekg=";
   };
 
   CGO_ENABLED=0;
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   doCheck = false;  # grpc tests are flaky
 
-  vendorSha256 = "1sh0dzz8z065964k2gzkzw9p3db3rcf6mv901zym0wqm4p71045w";
+  vendorSha256 = "sha256-mie+Akfsn+vjoxYnI23Zxk0OTFbMf51BDbJk2c0U7iU=";
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemq-community";

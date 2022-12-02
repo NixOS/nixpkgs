@@ -106,6 +106,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.isDarwin;
   };
 }

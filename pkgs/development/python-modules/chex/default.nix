@@ -12,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "chex";
-  # As of 2021-12-29, the latest official version has broken tests with jax 0.2.26:
-  # `AttributeError: module 'jax.interpreters.xla' has no attribute 'xb'`
-  version = "unstable-2021-12-16";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
-    rev = "5adc10e0b4218f8ec775567fca38b68bbad42a3a";
-    sha256 = "00xib6zv9pwid2q7wcr109qj3fa3g3b852skz8444kw7r0qxy7z3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FYB0IhokM74HBY2wOJYE6xJrHxHHWhDSAZpWFs6HFu0=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +37,11 @@ buildPythonPackage rec {
   checkInputs = [
     jaxlib
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # See https://github.com/deepmind/chex/issues/204.
+    "test_uninspected_checks"
   ];
 
   meta = with lib; {

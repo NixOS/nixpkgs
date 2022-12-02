@@ -2,7 +2,6 @@
 , beautifulsoup4
 , buildPythonPackage
 , click
-, dataclasses
 , dataclasses-json
 , fetchFromGitHub
 , htmlmin
@@ -19,17 +18,22 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.40";
+  version = "0.42.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-H0jvOnrWE4/xxRYNehshHBRNc/qLX1+sCV7O1ACCdew=";
+    hash = "sha256-WVLIx85ivHz5b6C1AfgMAApngeFCuWwWhaBWNcfOvXA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = "^2021.1"' 'pytz = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -45,20 +49,12 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [
     beautifulsoup4
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/coveooss/json-schema-for-humans/issues/127
-    substituteInPlace pyproject.toml \
-      --replace 'PyYAML = "^5.4.1"' 'PyYAML = "*"'
-  '';
 
   disabledTests = [
     # Tests require network access

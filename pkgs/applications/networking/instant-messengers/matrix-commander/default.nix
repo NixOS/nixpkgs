@@ -1,37 +1,57 @@
-{ stdenv, lib, fetchFromGitHub, cacert, python3 }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, cacert
+, setuptools
+, matrix-nio
+, python-magic
+, markdown
+, pillow
+, urllib3
+, aiofiles
+, notify2
+, dbus-python
+, pyxdg
+, python-olm
+}:
 
-stdenv.mkDerivation {
+buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "unstable-2021-08-05";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
-    rev = "7ab3fd9a0ef4eb19d882cb3701d2025b4d41b63a";
-    sha256 = "sha256-WWf7GbJxGlqIdsS1d0T1DO0WN2RBepHGgJrl/nt7UIg=";
+    rev = "v${version}";
+    sha256 = "sha256-/hNTaajZTyeIcGILIXqUVbBvZ8AUNZKBDsZ4Gr5RL2o=";
   };
 
-  buildInputs = [
-    cacert
-    (python3.withPackages(ps: with ps; [
-      matrix-nio
-      magic
-      markdown
-      pillow
-      urllib3
-      aiofiles
-      notify2
-    ]))];
+  format = "pyproject";
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    cp $src/matrix-commander.py $out/bin/matrix-commander
-    chmod +x $out/bin/matrix-commander
-
-    runHook postInstall
+  postPatch = ''
+    # Dependencies already bundled with Python
+    sed -i \
+      -e '/uuid/d' \
+      -e '/argparse/d' \
+      -e '/asyncio/d' \
+      -e '/datetime/d' \
+      setup.cfg requirements.txt
   '';
+
+  propagatedBuildInputs = [
+    cacert
+    setuptools
+    matrix-nio
+    python-magic
+    markdown
+    pillow
+    urllib3
+    aiofiles
+    notify2
+    dbus-python
+    pyxdg
+    python-olm
+  ];
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";

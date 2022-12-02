@@ -2,7 +2,7 @@
 , acme
 , aiohttp
 , asynctest
-, atomicwrites
+, atomicwrites-homeassistant
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,26 +15,27 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.54.0";
+  version = "0.56.0";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UL7HPmii65p+WO22y0qv8zq3yICKarRORqE+FK1u7OE=";
+    sha256 = "sha256-IgDOugHr4fCD9o3QQY5w/ibjak/d56R31KgQAbjUkkI=";
   };
 
   postPatch = ''
-    sed -i 's/"acme.*"/"acme"/' setup.py
     substituteInPlace setup.py \
-      --replace "cryptography>=2.8,<4.0" "cryptography" \
-      --replace "snitun==" "snitun>="
+      --replace "acme==" "acme>=" \
+      --replace "cryptography>=2.8,<38.0" "cryptography" \
+      --replace "pycognito==" "pycognito>=" \
+      --replace "snitun==" "snitun>=" \
   '';
 
   propagatedBuildInputs = [
     acme
     aiohttp
-    atomicwrites
+    atomicwrites-homeassistant
     attrs
     pycognito
     snitun

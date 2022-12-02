@@ -3,12 +3,16 @@
 , docopt
 , fetchFromGitHub
 , requests
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tellduslive";
   version = "0.10.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "molobrakos";
@@ -20,12 +24,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docopt
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "tellduslive" ];
+
+  pythonImportsCheck = [
+    "tellduslive"
+  ];
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "git-credential-gopass";
-  version = "1.12.0";
+  version = "1.14.11";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IvYxpUMclDAKJ/EkRbNrX8eIFyhtY9Q0B0RipweieZA=";
+    hash = "sha256-JA5VpiImpdxdGSnuzXDBPW8JiLspEhjeR+rlfN41BBM=";
   };
 
-  vendorSha256 = "sha256-N6eU6KsnUrYBK90ydwUH8LNkR9KRjgc4ciGOGvy7pw8=";
+  vendorHash = "sha256-6GRK1M358LC6S/sjiN42+whz1Z3S+PRKyPOZr8n+daQ=";
 
   subPackages = [ "." ];
 
@@ -27,7 +27,8 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/git-credential-gopass --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/git-credential-gopass \
+      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
   meta = with lib; {

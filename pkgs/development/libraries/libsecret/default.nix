@@ -18,7 +18,6 @@
 , gjs
 , libintl
 , dbus
-, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +30,10 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,33 +52,50 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgcrypt
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  installCheckInputs = [
+  checkInputs = [
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3
-    xvfb-run
     dbus
     gjs
   ];
 
-  # needs to run after install because typelibs point to absolute paths
-  doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
+  doCheck = stdenv.isLinux;
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs ./tool/test-*.sh
   '';
 
-  installCheckPhase = ''
-    export NO_AT_BRIDGE=1
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p $out/lib $out/lib
+    ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
+    ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    # This is test-only so it won’t be overwritten during installation.
+    rm "$out/lib/libmock-service.so"
   '';
 
   postFixup = ''
@@ -95,6 +115,7 @@ stdenv.mkDerivation rec {
     description = "A library for storing and retrieving passwords and other secrets";
     homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = lib.licenses.lgpl21Plus;
+    mainProgram = "secret-tool";
     inherit (glib.meta) platforms maintainers;
   };
 }

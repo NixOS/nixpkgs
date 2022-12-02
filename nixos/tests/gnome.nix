@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     maintainers = teams.gnome.members;
   };
 
-  machine =
+  nodes.machine =
     { ... }:
 
     { imports = [ ./common/user-account.nix ];

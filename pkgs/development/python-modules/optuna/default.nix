@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "2.10.0";
+  version = "2.10.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0fha0pwxq6n3mbpvpz3vk8hh61zqncj5cnq063kzfl5d8rd48vcd";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-HHVEoLCZtEJEfc4xYobQrzRcDDxxeQjgL2Rw2KeVbi0=";
   };
 
   checkInputs = [

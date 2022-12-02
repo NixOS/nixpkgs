@@ -1,17 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "codesearch";
-  version = "1.0.0";
-
-  goPackagePath = "github.com/google/codesearch";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "codesearch";
     rev = "v${version}";
-    sha256 = "sha256-3kJ/JT89krbIvprWayBL4chUmT77Oa1W13UNCr4fe4k=";
+    sha256 = "sha256-i03w8PZ31j5EutUZaamZsHz+z4qgX4prePbj5DLA78s=";
   };
+
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Fast, indexed regexp search over large file trees";

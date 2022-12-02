@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "alda";
-  version = "2.2.0";
+  version = "2.2.3";
 
   src_alda = fetchurl {
     url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/client/linux-amd64/alda";
-    sha256 = "0z3n81fmv3fxwgr641r6jjn1dmi5d3rw8d6r8jdfjhgpxanyi9a7";
+    hash = "sha256-cyOAXQ3ITIgy4QusjdYBNmNIzB6BzfbQEypvJbkbvWo=";
   };
 
   src_player = fetchurl {
     url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/player/non-windows/alda-player";
-    sha256 = "11kji846hbn1f2w1s7rc1ing203jkamy89j1jmysajvirdpp8nha";
+    hash = "sha256-HsX0mNWrusL2FaK2oK8xhmr/ai+3ZiMmrJk7oS3b93g=";
   };
 
   dontUnpack = true;

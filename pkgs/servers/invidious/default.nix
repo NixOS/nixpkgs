@@ -21,6 +21,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
+    fetchSubmodules = true;
     inherit (versions.invidious) rev sha256;
   };
 
@@ -67,7 +68,14 @@ crystal.buildCrystalPackage rec {
   shardsFile = ./shards.nix;
   crystalBinaries.invidious = {
     src = "src/invidious.cr";
-    options = [ "--release" "--progress" "--verbose" "--no-debug" "-Dskip_videojs_download" ];
+    options = [
+      "--release"
+      "--progress"
+      "--verbose"
+      "--no-debug"
+      "-Dskip_videojs_download"
+      "-Ddisable_quic"
+    ];
   };
 
   postConfigure = ''

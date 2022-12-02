@@ -4,6 +4,7 @@
 , makeWrapper
 , gdb
 , python3
+, bintools-unwrapped
 , file
 , ps
 , git
@@ -20,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gef";
-  version = "2022.01";
+  version = "2022.06";
 
   src = fetchFromGitHub {
     owner = "hugsy";
     repo = "gef";
     rev = version;
-    sha256 = "sha256-Ot0OYMbXFGCzJdmDHD+LoZRDShCbYJ+IGzLTcU2Rfd4=";
+    sha256 = "sha256-XMm4K5X3F5DDtI/usHxNZwqzYpjck8sVaZIYKGuE6Qc=";
   };
 
   dontBuild = true;
@@ -39,7 +40,12 @@ in stdenv.mkDerivation rec {
     makeWrapper ${gdb}/bin/gdb $out/bin/gef \
       --add-flags "-q -x $out/share/gef/gef.py" \
       --set NIX_PYTHONPATH ${pythonPath} \
-      --prefix PATH : ${lib.makeBinPath [ python3 file ps ]}
+      --prefix PATH : ${lib.makeBinPath [
+        python3
+        bintools-unwrapped # for readelf
+        file
+        ps
+      ]}
   '';
 
   checkInputs = [

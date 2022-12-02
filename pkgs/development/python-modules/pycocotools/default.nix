@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pycocotools";
-  version = "2.0.4";
+  version = "2.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2ab586aa389b9657b6d73c2b9a827a3681f8d00f36490c2e8ab05902e3fd9e93";
+    sha256 = "sha256-f+CJsFzBjoBtzzvXZHCNhtq5IqEA83NOt3+3enCh0Yw=";
   };
 
   propagatedBuildInputs = [

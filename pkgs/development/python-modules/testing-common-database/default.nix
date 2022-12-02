@@ -9,6 +9,11 @@ buildPythonPackage rec {
     sha256 = "0wvdv0frl7xib05sixjv9m6jywaa2wdhdhsqqdfk45akk2r80pcn";
   };
 
+  postPatch =  ''
+    substituteInPlace src/testing/common/database.py \
+      --replace "collections.Callable" "collections.abc.Callable"
+  '';
+
   # There are no unit tests
   doCheck = false;
 

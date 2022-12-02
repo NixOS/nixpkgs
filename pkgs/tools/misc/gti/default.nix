@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gti";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
     rev = "v${version}";
-    sha256 = "1jivnjswlhwjfg5v9nwfg3vfssvqbdxxf9znwmfb5dgfblg9wxw9";
+    sha256 = "sha256-x6ncvnZPPrVcQYwtwkSenW+ri0L6FpuDa7U7uYUqiyk=";
   };
 
   postPatch = ''

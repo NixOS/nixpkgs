@@ -3,10 +3,10 @@
 , fetchFromGitHub
 , appstream-glib
 , desktop-file-utils
-, libepoxy
 , glib
 , gtk4
-, wayland
+, libepoxy
+, libadwaita
 , meson
 , mpv
 , ninja
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.22";
+  version = "0.24";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-QGN8YLtyb9YVNDK2ZDQwHJVg6UTIQssfNK9lQqxMNKQ=";
+    hash = "sha256-8Y/dCeoS29R1UHwmLOp0d+JNNC4JH5pLpiqfBZU+kLI=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +36,24 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
   ];
+
   buildInputs = [
-    libepoxy
     glib
     gtk4
-    wayland
+    libadwaita
+    libepoxy
     mpv
   ];
 
   postPatch = ''
     patchShebangs meson-post-install.py src/generate-authors.py
-    # Remove this for next release
-    substituteInPlace meson-post-install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/celluloid-player/celluloid";
@@ -63,9 +66,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
-  };
-
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
   };
 }

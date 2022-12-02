@@ -1,30 +1,36 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, filelock
+, cons
+, cython
 , etuples
+, fetchFromGitHub
+, filelock
+, jax
+, jaxlib
 , logical-unification
 , minikanren
-, cons
 , numba
 , numba-scipy
-, libgpuarray
-, sympy
-, cython
+, numpy
 , pytestCheckHook
+, pythonOlder
+, scipy
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.4.0";
+  version = "2.8.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
     repo = "aesara";
-    rev = "38d7a813646c1e350170c46bafade0e7d0e2427c";
-    sha256 = "sha256-933bM15BZi4sTjnIOGAg5dc5tXVWQ9lFzktOtzj5DNQ=";
+    rev = "refs/tags/rel-${version}";
+    hash = "sha256-xHh7u0NDMjQiu0TdjmiHQebfpXJkuAF7dUAAtXrmrPo=";
   };
 
   nativeBuildInputs = [
@@ -32,28 +38,44 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    filelock
+    cons
     etuples
+    filelock
     logical-unification
     minikanren
-    cons
-    numba
-    numba-scipy
-    libgpuarray
-    sympy
+    numpy
+    scipy
+    typing-extensions
   ];
 
   checkInputs = [
+    jax
+    jaxlib
+    numba
+    numba-scipy
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--durations=50" ""
+  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [ "aesara" ];
+  pythonImportsCheck = [
+    "aesara"
+  ];
+
+  disabledTestPaths = [
+    # Don't run the most compute-intense tests
+    "tests/scan/"
+    "tests/tensor/"
+    "tests/sandbox/"
+    "tests/sparse/sandbox/"
+  ];
 
   meta = with lib; {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
@@ -61,5 +83,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aesara-devs/aesara/releases";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Etjean ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

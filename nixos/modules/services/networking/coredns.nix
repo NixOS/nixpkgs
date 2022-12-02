@@ -7,7 +7,7 @@ let
   configFile = pkgs.writeText "Corefile" cfg.config;
 in {
   options.services.coredns = {
-    enable = mkEnableOption "Coredns dns server";
+    enable = mkEnableOption (lib.mdDoc "Coredns dns server");
 
     config = mkOption {
       default = "";
@@ -17,14 +17,17 @@ in {
         }
       '';
       type = types.lines;
-      description = "Verbatim Corefile to use. See <link xlink:href=\"https://coredns.io/manual/toc/#configuration\"/> for details.";
+      description = lib.mdDoc ''
+        Verbatim Corefile to use.
+        See <https://coredns.io/manual/toc/#configuration> for details.
+      '';
     };
 
     package = mkOption {
       default = pkgs.coredns;
       defaultText = literalExpression "pkgs.coredns";
       type = types.package;
-      description = "Coredns package to use.";
+      description = lib.mdDoc "Coredns package to use.";
     };
   };
 

@@ -1,6 +1,7 @@
 { lib
 , pythonPackages
 , fetchFromGitHub
+, nixosTests
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -53,11 +54,15 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "patroni" ];
 
+  passthru.tests = {
+    patroni = nixosTests.patroni;
+  };
+
   meta = with lib; {
     homepage = "https://patroni.readthedocs.io/en/latest/";
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.deshaw.members;
   };
 }

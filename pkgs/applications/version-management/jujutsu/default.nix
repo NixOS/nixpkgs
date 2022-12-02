@@ -9,22 +9,22 @@
 , Security
 , SystemConfiguration
 , libiconv
-, testVersion
+, testers
 , jujutsu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.3.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-BOT2pKcOSOha28fba62X+GgILcplhkMWhZo7Q0gGTQ8=";
+    sha256 = "sha256-ITYpdCUh+WzP2RrAkSep3DsQ7dztvOMuwESKimn8JBQ=";
   };
 
-  cargoSha256 = "sha256-uvR+WXX2iIWFhcPYpOoOS1WBvOXuhTmgVVT2446c6XE=";
+  cargoSha256 = "sha256-eH8/R4dwQ08Q7Dyw8CnE+DGjneAmtTdsRben2cxpG8Q=";
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru.tests = {
-    version = testVersion {
+    version = testers.testVersion {
       package = jujutsu;
       command = "jj --version";
     };
@@ -56,5 +56,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "jj";
   };
 }

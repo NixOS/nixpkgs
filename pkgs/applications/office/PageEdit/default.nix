@@ -2,18 +2,18 @@
 
 mkDerivation rec {
   pname = "PageEdit";
-  version = "1.7.0";
+  version = "1.9.10";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
     rev = version;
-    hash = "sha256-/t08ZS2iYWIDkco0nhACBQs1X+X77SJ/g+ow7KemfRY=";
+    hash = "sha256-y2Z5enEptiOrwEGBKlo4H4I9ojIPG9KP3BlvTCj4PVY=";
   };
 
   nativeBuildInputs = [ cmake qttranslations ];
   propagatedBuildInputs = [ qtsvg qtwebengine ];
-  cmakeFlags = "-DINSTALL_BUNDLED_DICTS=0";
+  cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";

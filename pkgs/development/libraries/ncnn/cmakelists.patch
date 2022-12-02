@@ -1,13 +1,26 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 98611276..989350bb 100644
+index c453d23e..66b4aa24 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -260,6 +260,8 @@ if(NCNN_VULKAN)
-                 include("${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
-             endif()
-             include("${GLSLANG_TARGET_DIR}/glslangTargets.cmake")
+@@ -478,6 +478,8 @@ if(NCNN_VULKAN)
+ 
+             find_package(Threads)
+ 
 +            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools/SPIRV-ToolsTarget.cmake")
 +            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools-opt/SPIRV-Tools-optTargets.cmake")
-             include("${GLSLANG_TARGET_DIR}/SPIRVTargets.cmake")
+             include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
+             include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
+             if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+diff --git a/src/ncnn.pc.in b/src/ncnn.pc.in
+index b580fcee..be2becd0 100644
+--- a/src/ncnn.pc.in
++++ b/src/ncnn.pc.in
+@@ -1,6 +1,6 @@
+ prefix=${pcfiledir}/../..
+-librarydir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++librarydir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
  
-             if (NOT TARGET glslang OR NOT TARGET SPIRV)
+ Name: @CMAKE_PROJECT_NAME@
+ Description: high-performance neural network inference framework optimized for the mobile platform

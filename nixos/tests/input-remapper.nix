@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       maintainers = with pkgs.lib.maintainers; [ LunNova ];
     };
 
-    machine = { config, ... }:
+    nodes.machine = { config, ... }:
       let user = config.users.users.sybil; in
       {
         imports = [

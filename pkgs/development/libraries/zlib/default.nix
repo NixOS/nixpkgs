@@ -21,19 +21,19 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "zlib";
-  version = "1.2.11";
+  version = "1.2.13";
 
   src = fetchurl {
-    urls =
-      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
-      ];
-    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
+    urls = [
+      # This URL works for 1.2.13 only; hopefully also for future releases.
+      "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+      # Stable archive path, but captcha can be encountered, causing hash mismatch.
+      "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
+    ];
+    hash = "sha256-s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
   };
-
-  patches = lib.optional stdenv.hostPlatform.isCygwin ./disable-cygwin-widechar.patch;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
@@ -42,10 +42,17 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
+  strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
+
+  dontConfigure = stdenv.hostPlatform.libc == "msvcrt";
+
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
 
   # For zlib's ./configure (as of verion 1.2.11), the order
   # of --static/--shared flags matters!
@@ -118,20 +125,10 @@ stdenv.mkDerivation (rec {
     "SHARED_MODE=1"
   ];
 
-  passthru = {
-    inherit version;
-  };
-
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preConfigure = ''
-    export CHOST=${stdenv.hostPlatform.config}
-  '';
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  dontConfigure = true;
-})
+}

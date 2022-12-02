@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;
   };
 }

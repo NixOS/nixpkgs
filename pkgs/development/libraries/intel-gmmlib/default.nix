@@ -2,20 +2,27 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+# for passthru.tests
+, intel-compute-runtime
+, intel-media-driver
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.1.2";
+  version = "22.3.1";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
-    sha256 = "sha256-5exS0B2iRbmFkKtoHzL4NnZ7L3DaukthUYkoj2tpZuE=";
+    sha256 = "sha256-bk1yBxMrPkFnPcV5uvEmbf3X2WG6iJNbD1WNxoOSnA8=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests = {
+    inherit intel-compute-runtime intel-media-driver;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/intel/gmmlib";

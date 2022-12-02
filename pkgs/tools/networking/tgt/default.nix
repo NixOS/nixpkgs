@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.81";
+  version = "1.0.84";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SgMpoaVAuTbgpmnXRfQFWlK5gl01fsE9vJxu3C2ctPU=";
+    sha256 = "sha256-NlEEakmut4WMI+mpm+SJOgHmWELRcl/dZJspks3VoqY=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''

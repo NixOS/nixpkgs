@@ -5,6 +5,7 @@
 , pkg-config
 , SystemConfiguration
 , Security
+, CoreFoundation
 , curl
 , libiconv
 , openssl
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.23.1";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-XzjZEVyPVn+7VrjG4QsqVBFmuGC1TWTWLEoqFcwQhaI=";
+    sha256 = "sha256-wMF2uF6h06c/vBBXr2IGk/9RsOxnxvffEtIOR+s+iVk=";
   };
 
-  cargoSha256 = "sha256-p87ZnOxaF9ytSUxp0P3QE3K1/jo7hz/N7BH1f2Lc0I0=";
+  cargoSha256 = "sha256-UF0bEV77IqGBmqGCqg2cHzom7JDRqlLpoSxbNQsKKiY=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security libiconv curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
 
   checkInputs = [ git ];
 

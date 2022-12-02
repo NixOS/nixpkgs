@@ -1,11 +1,11 @@
-{ stdenv
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitHub
 , which
-, go
 , makeWrapper
 , rsync
 , installShellFiles
+, runtimeShell
 , kubectl
 , nixosTests
 
@@ -15,46 +15,41 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-    "test/e2e/e2e.test"
   ]
 }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "kubernetes";
-  version = "1.23.5";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-LhJ3gThcsWnawSOmHSzWOG8tfODIPo4dJTMeLKmvMdM=";
+    sha256 = "sha256-1k0L8QUj/764X0Y7qxjFMnatTGKeRPBUroHjSMMe5M4=";
   };
 
-  nativeBuildInputs = [ makeWrapper which go rsync installShellFiles ];
+  vendorSha256 = null;
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper which rsync installShellFiles ];
 
   outputs = [ "out" "man" "pause" ];
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  postPatch = ''
-    # go env breaks the sandbox
-    substituteInPlace "hack/lib/golang.sh" \
-      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
-
-    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
-    # hack/update-munge-docs.sh only performs some tests on the documentation.
-    # They broke building k8s; disabled for now.
-    echo "true" > "hack/update-munge-docs.sh"
-
-    patchShebangs ./hack
-  '';
-
   WHAT = lib.concatStringsSep " " ([
     "cmd/kubeadm"
   ] ++ components);
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
+    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${runtimeShell}"
+    patchShebangs ./hack ./cluster/addons/addon-manager
+    make "SHELL=${runtimeShell}" "WHAT=$WHAT"
     ./hack/update-generated-docs.sh
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -77,7 +72,6 @@ stdenv.mkDerivation rec {
       --subst-var out
 
     chmod +x $out/bin/kube-addons
-    patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
@@ -88,10 +82,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  disallowedReferences = [ go ];
-
-  GOFLAGS = [ "-trimpath" ];
-
   meta = with lib; {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
@@ -100,5 +90,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes;
+  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
 }

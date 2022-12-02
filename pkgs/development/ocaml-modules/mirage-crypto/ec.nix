@@ -21,10 +21,8 @@ buildDunePackage rec {
   pname = "mirage-crypto-ec";
 
   inherit (mirage-crypto)
-    minimumOCamlVersion
     src
-    version
-    useDune2;
+    version;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

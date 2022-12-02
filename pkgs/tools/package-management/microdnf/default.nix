@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microdnf";
-  version = "3.8.1";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yKIhXjeiCOq5JsAquaPnYAJZk53FioOKGIAT2xYfLO8=";
+    sha256 = "sha256-/6yMHjB9HNEEQuAc8zEvmjjl6wur0jByS1hLz39+rHI=";
   };
 
   nativeBuildInputs = [ pkg-config cmake gettext help2man ];

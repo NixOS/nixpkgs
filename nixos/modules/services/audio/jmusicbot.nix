@@ -7,18 +7,18 @@ in
 {
   options = {
     services.jmusicbot = {
-      enable = mkEnableOption "jmusicbot, a Discord music bot that's easy to set up and run yourself";
+      enable = mkEnableOption (lib.mdDoc "jmusicbot, a Discord music bot that's easy to set up and run yourself");
 
       package = mkOption {
         type = types.package;
         default = pkgs.jmusicbot;
         defaultText = literalExpression "pkgs.jmusicbot";
-        description = "JMusicBot package to use";
+        description = lib.mdDoc "JMusicBot package to use";
       };
 
       stateDir = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The directory where config.txt and serversettings.json is saved.
           If left as the default value this directory will automatically be created before JMusicBot starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
           Untouched by the value of this option config.txt needs to be placed manually into this directory.

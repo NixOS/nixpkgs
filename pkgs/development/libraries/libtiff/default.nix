@@ -21,15 +21,13 @@
 , imlib
 }:
 
-#FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
-
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1j3snghqjbhwmnm5vz3dr1zm68dj15mgbx1wqld7vkl7n2nfaihf";
+    sha256 = "1vdbk3sc497c58kxmp02irl6nqkfm9rjs3br7g59m59qfnrj6wli";
   };
 
   patches = [
@@ -39,19 +37,25 @@ stdenv.mkDerivation rec {
     # `version` in the project's include paths
     ./rename-version.patch
     (fetchpatch {
-      name = "CVE-2022-22844.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/03047a26952a82daaa0792957ce211e0aa51bc64.patch";
-      sha256 = "0cfih55f5qpc84mvlwsffik80bgz6drkflkhrdyqq8m84jw3mbwb";
+      name = "CVE-2022-34526.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
+      sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
     })
     (fetchpatch {
-      name = "CVE-2022-0561.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/eecb0712f4c3a5b449f70c57988260a667ddbdef.patch";
-      sha256 = "0m57fdxyvhhr9cc260lvkkn2g4zr4n4v9nricc6lf9h6diagd7mk";
+      name = "CVE-2022-2953.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/48d6ece8389b01129e7d357f0985c8f938ce3da3.patch";
+      sha256 = "sha256-h9hulV+dnsUt/2Rsk4C1AKdULkvweM2ypIJXYQ3BqQU=";
     })
     (fetchpatch {
-      name = "CVE-2022-0562.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/561599c99f987dc32ae110370cfdd7df7975586b.patch";
-      sha256 = "0ycirjjc1vigj03kwjb92n6jszsl9p17ccw5hry7lli9gxyyr0an";
+      name = "CVE-2022-3626.CVE-2022-3627.CVE-2022-3597.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/236b7191f04c60d09ee836ae13b50f812c841047.patch";
+      excludes = [ "doc/tools/tiffcrop.rst" ];
+      sha256 = "sha256-L2EMmmfMM4oEYeLapO93wvNS+HlO0yXsKxijXH+Wuas=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-3598.CVE-2022-3570.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/cfbb883bf6ea7bedcb04177cc4e52d304522fdff.patch";
+      sha256 = "sha256-SLq2+JaDEUOPZ5mY4GPB6uwhQOG5cD4qyL5o9i8CVVs=";
     })
   ];
 

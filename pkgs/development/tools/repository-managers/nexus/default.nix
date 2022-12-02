@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Repository manager for binary software components";
     homepage = "http://www.sonatype.org/nexus";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     platforms = platforms.all;
     maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];

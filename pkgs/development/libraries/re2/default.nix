@@ -1,50 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, python3Packages
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2022-02-01";
+  version = "2022-06-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "sha256-3RspCfJD2jV7GYuzeBUcxkZsdHyL14kaz8lSoIrH7b8=";
+    hash = "sha256-UontAjOXpnPcOgoFHjf+1WSbCR7h58/U7nn4meT200Y=";
   };
 
-  preConfigure = ''
-    substituteInPlace Makefile --replace "/usr/local" "$out"
-    # we're using gnu sed, even on darwin
-    substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ cmake ninja ];
+
+  postPatch = ''
+    substituteInPlace re2Config.cmake.in \
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
   '';
 
-  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+  # Needed for case-insensitive filesystems (i.e. MacOS) because a file named
+  # BUILD already exists.
+  cmakeBuildDir = "build_dir";
 
-  enableParallelBuilding = true;
-  # Broken when shared/static are tested in parallel:
-  #   cp: cannot create regular file 'obj/testinstall.cc': File exists
-  #   make: *** [Makefile:334: static-testinstall] Error 1
-  # Will be fixed by https://code-review.googlesource.com/c/re2/+/59830
-  enableParallelChecking = false;
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS:BOOL=ON";
 
-  preCheck = "patchShebangs runtests";
+  # This installs a pkg-config definition.
+  postInstall = ''
+    pushd "$src"
+    make common-install prefix="$dev" SED_INPLACE="sed -i"
+    popd
+  '';
+
   doCheck = true;
-  checkTarget = "test";
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
-
-  doInstallCheck = true;
-  installCheckTarget = "testinstall";
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+  passthru.tests = {
+    inherit
+      chromium
+      grpc
+      mercurial;
+    inherit (python3Packages)
+      fb-re2
+      google-re2;
+    haskell-re2 = haskellPackages.re2;
   };
 
-  meta = {
+  meta = with lib; {
+    description = "A regular expression library";
+    longDescription = ''
+      RE2 is a fast, safe, thread-friendly alternative to backtracking regular
+      expression engines like those used in PCRE, Perl, and Python. It is a C++
+      library.
+    '';
+    license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    description = "An efficient, principled regular expression library";
-    license = lib.licenses.bsd3;
-    platforms = with lib.platforms; all;
+    maintainers = with maintainers; [ azahi ];
+    platforms = platforms.all;
   };
 }

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     maintainers = [ ma27 ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.jq ];
 
     services.gotify = {

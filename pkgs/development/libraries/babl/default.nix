@@ -1,7 +1,7 @@
 { stdenv
 , lib
-, fetchurl
 , fetchpatch
+, fetchurl
 , meson
 , ninja
 , pkg-config
@@ -12,21 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.90";
+  version = "0.1.98";
 
   outputs = [ "out" "dev" ];
 
-  patches = [
-    # Fix darwin build
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/babl/-/commit/33b18e74c9589fd4d5507ab88bd1fb19c15965dd.patch";
-      sha256 = "bEjjOjHGTF55o1z31G9GNDqERxn/7vUuWZQYHosSEBQ=";
-    })
-  ];
-
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bi67Y283WBWI49AkmbPS9p+axz40omL0KRHX9ZBqkkM=";
+    sha256 = "87Ii+E5GJzXeY/qcNlGULyt4/TFMc6IuBf98c6/SOvE=";
   };
 
   nativeBuildInputs = [

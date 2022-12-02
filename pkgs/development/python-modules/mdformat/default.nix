@@ -6,13 +6,14 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tomli
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.14";
+  version = "0.7.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bImBW6r8g/4MQ9yNrBBhk7AGqKRXFyAew6HHEmqelxw=";
+    sha256 = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, twisted, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, autobahn
+, mock
+, twisted
+}:
 
 buildPythonPackage rec {
   pname = "magic-wormhole-transit-relay";
@@ -9,17 +15,18 @@ buildPythonPackage rec {
     sha256 = "0ppsx2s1ysikns1h053x67z2zmficbn3y3kf52bzzslhd2s02j6b";
   };
 
-  propagatedBuildInputs = [ twisted ];
+  propagatedBuildInputs = [ autobahn twisted ];
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock twisted ];
 
   checkPhase = ''
-    ${twisted}/bin/trial wormhole_transit_relay
+    trial -j$NIX_BUILD_CORES wormhole_transit_relay
   '';
 
   meta = with lib; {
     description = "Transit Relay server for Magic-Wormhole";
-    homepage = "https://github.com/warner/magic-wormhole-transit-relay";
+    homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,9 +1,9 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , cmake
 , pkg-config
+, wrapQtAppsHook
 , alsa-lib
 , boost
 , chromaprint
@@ -19,13 +19,15 @@
 , protobuf
 , sqlite
 , taglib
+, libgpod
+, libidn2
 , libpulseaudio
 , libselinux
 , libsepol
 , p11-kit
 , util-linux
 , qtbase
-, qtx11extras
+, qtx11extras ? null # doesn't exist in qt6
 , qttools
 , withGstreamer ? true
 , glib-networking
@@ -34,16 +36,26 @@
 , libvlc
 }:
 
-mkDerivation rec {
+let
+  inherit (lib) optionals;
+
+in
+stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.2";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/pwHWmQTV1QBK+5SS0/NC6wMm2QQm+iCZArxiHjn4M4=";
+    hash = "sha256-N3jLw2UXLXLpTmFIHihzcMXrxJY0gmvwoawTQ0vRR+w=";
   };
+
+  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
+  postPatch = ''
+    substituteInPlace src/context/contextalbum.cpp \
+      --replace pictures/strawberry.png pictures/strawberry-grey.png
+  '';
 
   buildInputs = [
     alsa-lib
@@ -52,6 +64,7 @@ mkDerivation rec {
     fftw
     gnutls
     libcdio
+    libidn2
     libmtp
     libpthreadstubs
     libtasn1
@@ -62,14 +75,16 @@ mkDerivation rec {
     taglib
     qtbase
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
+    libgpod
     libpulseaudio
     libselinux
     libsepol
     p11-kit
-  ] ++ lib.optionals withGstreamer (with gst_all_1; [
+  ] ++ optionals withGstreamer (with gst_all_1; [
     glib-networking
     gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
@@ -81,7 +96,8 @@ mkDerivation rec {
     ninja
     pkg-config
     qttools
-  ] ++ lib.optionals stdenv.isLinux [
+    wrapQtAppsHook
+  ] ++ optionals stdenv.isLinux [
     util-linux
   ];
 

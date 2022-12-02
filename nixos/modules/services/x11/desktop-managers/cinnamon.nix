@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -12,22 +12,23 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
+  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
 in
 
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption "Cinnamon default applications";
+      apps.enable = mkEnableOption (lib.mdDoc "Cinnamon default applications");
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption "the cinnamon desktop manager";
+      enable = mkEnableOption (lib.mdDoc "the cinnamon desktop manager");
 
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -38,13 +39,13 @@ in
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = "Additional gsettings overrides.";
+        description = lib.mdDoc "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "List of packages for which gsettings are overridden.";
+        description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
     };
 
@@ -52,19 +53,28 @@ in
       default = [];
       example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
-      description = "Which packages cinnamon should exclude from the default environment";
+      description = lib.mdDoc "Which packages cinnamon should exclude from the default environment";
     };
 
   };
 
   config = mkMerge [
-    (mkIf (cfg.enable && config.services.xserver.displayManager.lightdm.enable && config.services.xserver.displayManager.lightdm.greeters.gtk.enable) {
-      services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = mkDefault (builtins.readFile "${pkgs.cinnamon.mint-artwork}/etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf");
-      })
-
     (mkIf cfg.enable {
       services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
 
+      services.xserver.displayManager.lightdm.greeters.slick = {
+        enable = mkDefault true;
+
+        # Taken from mint-artwork.gschema.override
+        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+          name = mkDefault "Mint-X";
+          package = mkDefault pkgs.cinnamon.mint-themes;
+        };
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
+          name = mkDefault "Mint-X-Dark";
+          package = mkDefault pkgs.cinnamon.mint-x-icons;
+        };
+      };
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Cinnamon"; then
             true
@@ -82,6 +92,7 @@ in
       '';
 
       # Default services
+      services.blueman.enable = mkDefault true;
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -91,7 +102,7 @@ in
         cinnamon-common
         cinnamon-screensaver
         nemo
-        xapps
+        xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -117,11 +128,8 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; [
+      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
         desktop-file-utils
-        nixos-artwork.wallpapers.simple-dark-gray
-        onboard
-        sound-theme-freedesktop
 
         # common-files
         cinnamon-common
@@ -146,24 +154,32 @@ in
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd
-        orca
 
         # theme
         gnome.adwaita-icon-theme
-        hicolor-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
-        mint-artwork
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        vanilla-dmz
 
         # other
         glib # for gsettings
-        shared-mime-info # for update-mime-database
         xdg-user-dirs
-      ];
+      ] ++ utils.removePackagesByName [
+        # accessibility
+        onboard
+        orca
+
+        # theme
+        sound-theme-freedesktop
+        nixos-artwork.wallpapers.simple-dark-gray
+        mint-artwork
+        mint-cursor-themes
+        mint-themes
+        mint-x-icons
+        mint-y-icons
+      ] config.environment.cinnamon.excludePackages);
+
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -177,7 +193,7 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
+      # Harmonize Qt5 applications under Cinnamon
       qt5.enable = true;
       qt5.platformTheme = "gnome";
       qt5.style = "adwaita";
@@ -196,23 +212,23 @@ in
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
-        blueberry
         warpinator
 
-        # cinnamon xapps
+        # cinnamon xapp
         xviewer
         xreader
-        xed
+        xed-editor
         xplayer
         pix
 
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
-      ] config.environment.cinnamon.excludePackages);
+        gnome-screenshot
+      ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

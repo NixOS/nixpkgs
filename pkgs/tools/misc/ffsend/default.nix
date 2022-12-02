@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
+{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, openssl
 , installShellFiles
-, CoreFoundation, CoreServices, Security, AppKit, libiconv
+, Security, AppKit
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -17,20 +17,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.74";
+  version = "0.2.76";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "0ia9agh0h9hp06ijmlgnw63n3xz2jajjw1maz27sawqp342x9vn5";
+    sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
-  cargoSha256 = "0dl671sw3amny52a81bx7imh94dvi91dprwhcm1b0g40mjic45pw";
+  cargoSha256 = "sha256-zNLU9QnBGna5qb+iu2imOUvCIw3ZWRFsQlpFo5ECtKo=";
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs =
-    if stdenv.isDarwin then [ libiconv CoreFoundation CoreServices Security AppKit ]
+    if stdenv.isDarwin then [ Security AppKit ]
     else [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (
@@ -56,7 +57,7 @@ buildRustPackage rec {
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyball equirosa ];
+    maintainers = with maintainers; [ lilyball equirosa marsam ];
     platforms = platforms.unix;
   };
 }

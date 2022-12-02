@@ -24,6 +24,14 @@ perlPackages.buildPerlModule {
 
   src = "${biberSource}/source/bibtex/biber/biblatex-biber.tar.gz";
 
+  patches = [
+    # Perl 5.36.0 compatibility: https://github.com/plk/biber/pull/411
+    (fetchpatch {
+      url = "https://github.com/plk/biber/commit/d9e961710074d266ad6bdf395c98868d91952088.patch";
+      sha256 = "08fx7mvq78ndnj59xv3crncih7a8201rr31367kphysz2msjbj52";
+    })
+  ];
+
   buildInputs = with perlPackages; [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K

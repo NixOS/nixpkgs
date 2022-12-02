@@ -27,7 +27,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     pyparsing
     pyqtgraph
     spyder
-    pathpy
+    path
     qtconsole
     requests
   ];

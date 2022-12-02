@@ -37,9 +37,11 @@ PKG_SET = "home-assistant.python.pkgs"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
-    "youtube_dl": "youtube-dl-light",
+    "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
+    "ha-av": "av",
+    "ha-HAP-python": "hap-python",
     "tensorflow": "tensorflow",
-    "fiblary3": "fiblary3-fork", # https://github.com/home-assistant/core/issues/66466
+    "youtube_dl": "youtube-dl-light",
 }
 
 
@@ -98,13 +100,37 @@ def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: S
     return requirements
 
 
+def repository_root() -> str:
+    return os.path.abspath(sys.argv[0] + "/../../../..")
+
+
+# For a package attribute and and an extra, check if the package exposes it via passthru.optional-dependencies
+def has_extra(package: str, extra: str):
+    cmd = [
+        "nix-instantiate",
+        repository_root(),
+        "-A",
+        f"{package}.optional-dependencies.{extra}",
+    ]
+    try:
+        subprocess.run(
+            cmd,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        return False
+    return True
+
+
 def dump_packages() -> Dict[str, Dict[str, str]]:
     # Store a JSON dump of Nixpkgs' python3Packages
     output = subprocess.check_output(
         [
             "nix-env",
             "-f",
-            os.path.dirname(sys.argv[0]) + "/../../..",
+            repository_root(),
             "-qa",
             "-A",
             PKG_SET,
@@ -130,7 +156,7 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         # python(minor).(major)-(pname)-(version or unstable-date)
         # we need the version qualifier, or we'll have multiple matches
         # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
-        pattern = re.compile(f"^python\\d\\.\\d-{name}-(?:\\d|unstable-.*)", re.I)
+        pattern = re.compile(f"^python\\d+\\.\\d+-{name}-(?:\\d|unstable-.*)", re.I)
         for attr_path, package in packages.items():
             if pattern.match(package["name"]):
                 attr_paths.append(attr_path)
@@ -142,8 +168,8 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
         return None
 
 
-def get_pkg_version(package: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
-    pkg = packages.get(f"{PKG_SET}.{package}", None)
+def get_pkg_version(attr_path: str, packages: Dict[str, Dict[str, str]]) -> Optional[str]:
+    pkg = packages.get(attr_path, None)
     if not pkg:
         return None
     return pkg["version"]
@@ -158,6 +184,7 @@ def main() -> None:
     outdated = {}
     for component in sorted(components.keys()):
         attr_paths = []
+        extra_attrs = []
         missing_reqs = []
         reqs = sorted(get_reqs(components, component, set()))
         for req in reqs:
@@ -165,24 +192,36 @@ def main() -> None:
             # Therefore, if there's a "#" in the line, only take the part after it
             req = req[req.find("#") + 1 :]
             name, required_version = req.split("==", maxsplit=1)
-            # Remove extra_require from name, e.g. samsungctl instead of
-            # samsungctl[websocket]
+            # Split package name and extra requires
+            extras = []
             if name.endswith("]"):
+                extras = name[name.find("[")+1:name.find("]")].split(",")
                 name = name[:name.find("[")]
             attr_path = name_to_attr_path(name, packages)
-            if our_version := get_pkg_version(name, packages):
-                if Version.parse(our_version) < Version.parse(required_version):
-                    outdated[name] = {
-                      'wanted': required_version,
-                      'current': our_version
-                    }
+            if attr_path:
+                if our_version := get_pkg_version(attr_path, packages):
+                    attr_name = attr_path.split(".")[-1]
+                    if Version.parse(our_version) < Version.parse(required_version):
+                        outdated[attr_name] = {
+                          'wanted': required_version,
+                          'current': our_version
+                        }
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix
-                attr_paths.append(attr_path[len(PKG_SET + ".") :])
+                pname = attr_path[len(PKG_SET + "."):]
+                attr_paths.append(pname)
+                for extra in extras:
+                    # Check if package advertises extra requirements
+                    extra_attr = f"{pname}.optional-dependencies.{extra}"
+                    if has_extra(attr_path, extra):
+                        extra_attrs.append(extra_attr)
+                    else:
+                        missing_reqs.append(extra_attr)
+
             else:
                 missing_reqs.append(name)
         else:
-            build_inputs[component] = (attr_paths, missing_reqs)
+            build_inputs[component] = (attr_paths, extra_attrs, missing_reqs)
 
     with open(os.path.dirname(sys.argv[0]) + "/component-packages.nix", "w") as f:
         f.write("# Generated by parse-requirements.py\n")
@@ -191,11 +230,14 @@ def main() -> None:
         f.write(f'  version = "{version}";\n')
         f.write("  components = {\n")
         for component, deps in build_inputs.items():
-            available, missing = deps
+            available, extras, missing = deps
             f.write(f'    "{component}" = ps: with ps; [')
             if available:
-                f.write(" " + " ".join(available))
-            f.write(" ];")
+                f.write("\n      " + "\n      ".join(available))
+            f.write("\n    ]")
+            if extras:
+                f.write("\n    ++ " + "\n    ++ ".join(extras))
+            f.write(";")
             if len(missing) > 0:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")
@@ -203,13 +245,13 @@ def main() -> None:
         f.write("  # components listed in tests/components for which all dependencies are packaged\n")
         f.write("  supportedComponentsWithTests = [\n")
         for component, deps in build_inputs.items():
-            available, missing = deps
+            available, extras, missing = deps
             if len(missing) == 0 and component in components_with_tests:
                 f.write(f'    "{component}"' + "\n")
         f.write("  ];\n")
         f.write("}\n")
 
-    supported_components = reduce(lambda n, c: n + (build_inputs[c][1] == []),
+    supported_components = reduce(lambda n, c: n + (build_inputs[c][2] == []),
                                   components.keys(), 0)
     total_components = len(components)
     print(f"{supported_components} / {total_components} components supported, "

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, fetchFromGitHub
 , meson, ninja, pkg-config
 , python3
 , curl
@@ -11,16 +11,15 @@
 , gtest
 }:
 
-
 stdenv.mkDerivation rec {
   pname = "kiwix-lib";
-  version = "9.4.1";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
     owner = "kiwix";
     repo = pname;
     rev = version;
-    sha256 = "034nk6l623v78clrs2d0k1vg69sbzrd8c0q79qiqmlkinck1nkxw";
+    sha256 = "sha256-ECvdraN1J5XJQLeZDngxO5I7frwZ8+W8tFpbB7o8UeM=";
   };
 
   nativeBuildInputs = [

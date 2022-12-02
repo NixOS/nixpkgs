@@ -30,6 +30,7 @@ mkDerivation rec {
     description = "A deployment tool for PHP";
     license = licenses.mit;
     homepage = "https://deployer.org/";
+    mainProgram = "dep";
     maintainers = with maintainers; teams.php.members;
   };
 }

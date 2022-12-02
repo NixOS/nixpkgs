@@ -12,7 +12,7 @@ in
     snapshotRootOnBoot = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to snapshot root on boot
       '';
     };
@@ -20,31 +20,29 @@ in
     snapshotInterval = mkOption {
       type = types.str;
       default = "hourly";
-      description = ''
+      description = lib.mdDoc ''
         Snapshot interval.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
     cleanupInterval = mkOption {
       type = types.str;
       default = "1d";
-      description = ''
+      description = lib.mdDoc ''
         Cleanup interval.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
     filters = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Global display difference filter. See man:snapper(8) for more details.
       '';
     };
@@ -64,7 +62,7 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         Subvolume configuration
       '';
 
@@ -72,7 +70,7 @@ in
         options = {
           subvolume = mkOption {
             type = types.path;
-            description = ''
+            description = lib.mdDoc ''
               Path of the subvolume or mount point.
               This path is a subvolume and has to contain a subvolume named
               .snapshots.
@@ -83,7 +81,7 @@ in
           fstype = mkOption {
             type = types.enum [ "btrfs" ];
             default = "btrfs";
-            description = ''
+            description = lib.mdDoc ''
               Filesystem type. Only btrfs is stable and tested.
             '';
           };
@@ -91,7 +89,7 @@ in
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Additional configuration next to SUBVOLUME and FSTYPE.
               See man:snapper-configs(5).
             '';

@@ -9,26 +9,23 @@
 , stdenv
 , zlib
 }:
-stdenv.mkDerivation rec {
+let
+  version = "1.8-1125";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+  host = stdenv.hostPlatform.system;
+  system = if host == "x86_64-linux" then "linuxx64"
+           else if host == "aarch64-linux" then "linuxarmv8"
+           else throw "Unsupported platform ${host}";
+  src = fetchurl {
+    url = "https://download.roonlabs.com/updates/stable/RoonBridge_${system}_${urlVersion}.tar.bz2";
+    hash = if system == "linuxx64" then "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
+           else if system == "linuxarmv8" then "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
+           else throw "Unsupported platform ${host}";
+  };
+in
+stdenv.mkDerivation {
   pname = "roon-bridge";
-  version = "1.8-880";
-
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-      inherit (stdenv.targetPlatform) system;
-      noSuchSystem = throw "Unsupposed system: ${system}";
-    in
-      {
-        x86_64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxx64_${urlVersion}.tar.bz2";
-          sha256 = "sha256-YTLy3D1CQR1hlsGw2MmZtxHT82T0PCYZxD4adt2m1+o=";
-        };
-        aarch64-linux = fetchurl {
-          url = "http://download.roonlabs.com/builds/RoonBridge_linuxarmv8_${urlVersion}.tar.bz2";
-          sha256 = "sha256-aCQtYMUIzwhmYJW4a8cFzIRuxyMVIkeaJH4w1Lasp3M=";
-        };
-      }.${system} or noSuchSystem;
+  inherit src version;
 
   dontConfigure = true;
   dontBuild = true;
@@ -68,7 +65,7 @@ stdenv.mkDerivation rec {
       ${fixBin "${placeholder "out"}/Bridge/RoonBridgeHelper"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --run "cd $out"
+      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --chdir "$out"
 
       runHook postInstall
     '';
@@ -77,6 +74,7 @@ stdenv.mkDerivation rec {
     description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];

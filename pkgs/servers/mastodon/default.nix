@@ -1,4 +1,4 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, fetchpatch, bundlerEnv, nixosTests
+{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
 
@@ -15,19 +15,6 @@ stdenv.mkDerivation rec {
   # Using overrideAttrs on src does not build the gems and modules with the overridden src.
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-0432.patch";
-      url = "https://github.com/mastodon/mastodon/commit/4d6d4b43c6186a13e67b92eaf70fe1b70ea24a09.patch";
-      sha256 = "sha256-C18X2ErBqP/dIEt8NrA7hdiqxUg5977clouuu7Lv4/E=";
-    })
-  ];
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-Z+nFMJcC2f+nDUxa2vPYnNezMLBGXfLdh+xMXPHqYyw=";
-  };
 
   mastodon-gems = bundlerEnv {
     name = "${pname}-gems-${version}";
@@ -53,17 +40,30 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
-    nativeBuildInputs = [ fixup_yarn_lock mastodon-gems nodejs-slim yarn ];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
+    };
+
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
 
     buildPhase = ''
       export HOME=$PWD
+      # This option is needed for openssl-3 compatibility
+      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
+      export NODE_OPTIONS=--openssl-legacy-provider
       fixup_yarn_lock ~/yarn.lock
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+
+      patchShebangs ~/bin
       patchShebangs ~/node_modules
+
+      # skip running yarn install
+      rm -rf ~/bin/yarn
 
       OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder \
         rails assets:precompile
@@ -121,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ petabyteboy happy-river erictapen izorkin ];
+    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
   };
 }

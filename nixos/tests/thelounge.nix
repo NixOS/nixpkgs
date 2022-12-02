@@ -1,4 +1,6 @@
 import ./make-test-python.nix {
+  name = "thelounge";
+
   nodes = {
     private = { config, pkgs, ... }: {
       services.thelounge = {

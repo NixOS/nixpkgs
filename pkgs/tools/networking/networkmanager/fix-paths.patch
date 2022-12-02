@@ -24,10 +24,10 @@ index e23b3a5282..c7246a3b61 100644
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
-index a11486d54b..de8e9022c6 100644
+index c51da9ac82..ad67a301ef 100644
 --- a/src/core/devices/nm-device.c
 +++ b/src/core/devices/nm-device.c
-@@ -13571,14 +13571,14 @@ nm_device_start_ip_check(NMDevice *self)
+@@ -13879,14 +13879,14 @@ nm_device_start_ip_check(NMDevice *self)
              gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
              if (gw) {
                  _nm_utils_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
@@ -45,10 +45,10 @@ index a11486d54b..de8e9022c6 100644
              }
          }
 diff --git a/src/libnm-client-impl/meson.build b/src/libnm-client-impl/meson.build
-index 21a01e0b04..091c98428f 100644
+index 46464a6328..d943d4351a 100644
 --- a/src/libnm-client-impl/meson.build
 +++ b/src/libnm-client-impl/meson.build
-@@ -162,7 +162,6 @@ if enable_introspection
+@@ -171,7 +171,6 @@ if enable_introspection
        input: libnm_core_settings_sources,
        output: 'nm-propery-infos-' + info + '.xml',
        command: [
@@ -56,7 +56,7 @@ index 21a01e0b04..091c98428f 100644
          join_paths(meson.source_root(), 'tools', 'generate-docs-nm-property-infos.py'),
          info,
          '@OUTPUT@',
-@@ -219,7 +218,6 @@ if enable_introspection
+@@ -228,7 +227,6 @@ if enable_introspection
        'env',
        'GI_TYPELIB_PATH=' + gi_typelib_path,
        'LD_LIBRARY_PATH=' + ld_library_path,
@@ -65,10 +65,10 @@ index 21a01e0b04..091c98428f 100644
        '--lib-path', meson.current_build_dir(),
        '--gir', '@INPUT@',
 diff --git a/src/libnm-platform/nm-platform-utils.c b/src/libnm-platform/nm-platform-utils.c
-index 9ad030df76..8d800fb1c0 100644
+index bebc53a851..93710455d5 100644
 --- a/src/libnm-platform/nm-platform-utils.c
 +++ b/src/libnm-platform/nm-platform-utils.c
-@@ -2207,7 +2207,7 @@ nmp_utils_modprobe(GError **error, gboolean suppress_error_logging, const char *
+@@ -2209,7 +2209,7 @@ nmp_utils_modprobe(GError **error, gboolean suppress_error_logging, const char *
  
      /* construct the argument list */
      argv = g_ptr_array_sized_new(4);
@@ -78,7 +78,7 @@ index 9ad030df76..8d800fb1c0 100644
      g_ptr_array_add(argv, (char *) arg1);
  
 diff --git a/src/libnmc-base/nm-vpn-helpers.c b/src/libnmc-base/nm-vpn-helpers.c
-index e2c0c394bd..1a507aa0d4 100644
+index 7ad5bee509..2641dbf637 100644
 --- a/src/libnmc-base/nm-vpn-helpers.c
 +++ b/src/libnmc-base/nm-vpn-helpers.c
 @@ -198,25 +198,8 @@ nm_vpn_openconnect_authenticate_helper(const char *host,
@@ -86,13 +86,13 @@ index e2c0c394bd..1a507aa0d4 100644
      const char *const   *iter;
      const char          *path;
 -    const char *const    DEFAULT_PATHS[] = {
--        "/sbin/",
--        "/usr/sbin/",
--        "/usr/local/sbin/",
--        "/bin/",
--        "/usr/bin/",
--        "/usr/local/bin/",
--        NULL,
+-           "/sbin/",
+-           "/usr/sbin/",
+-           "/usr/local/sbin/",
+-           "/bin/",
+-           "/usr/bin/",
+-           "/usr/local/bin/",
+-           NULL,
 -    };
  
 -    path = nm_utils_file_search_in_paths("openconnect",
@@ -109,10 +109,10 @@ index e2c0c394bd..1a507aa0d4 100644
      if (!g_spawn_sync(NULL,
                        (char **) NM_MAKE_STRV(path, "--authenticate", host),
 diff --git a/src/libnmc-setting/meson.build b/src/libnmc-setting/meson.build
-index 8f07ae634e..a1326b3403 100644
+index 49314cad2e..6d52624699 100644
 --- a/src/libnmc-setting/meson.build
 +++ b/src/libnmc-setting/meson.build
-@@ -6,7 +6,6 @@ if enable_docs
+@@ -7,7 +7,6 @@ if enable_docs
      input: [nm_settings_docs_xml_gir, nm_property_infos_xml['nmcli']],
      output: 'settings-docs-input.xml',
      command: [

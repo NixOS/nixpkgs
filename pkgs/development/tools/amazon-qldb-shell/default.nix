@@ -1,10 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , clang
 , cmake
 , fetchFromGitHub
 , llvmPackages
 , rustPlatform
-, testVersion
+, testers
+, Security
 }:
 
 let
@@ -21,13 +23,14 @@ let
     };
 
     nativeBuildInputs = [ clang cmake ];
-    buildInputs = [ llvmPackages.libclang ];
+    buildInputs = [ llvmPackages.libclang ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     cargoSha256 = "sha256-y3dNEa2U9mwsENPda44zweszlk4UJXGtfeH+er8mi0U=";
 
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-    passthru.tests.version = testVersion { inherit package; };
+    passthru.tests.version = testers.testVersion { inherit package; };
 
     meta = with lib; {
       description = "An interface to send PartiQL statements to Amazon Quantum Ledger Database (QLDB)";

@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 fpletz ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

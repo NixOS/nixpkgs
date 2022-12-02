@@ -6,6 +6,7 @@
 , dbus-python
 , packaging
 , enlightenment
+, directoryListingUpdater
 }:
 
 # Should be bumped along with EFL!
@@ -34,16 +35,18 @@ buildPythonPackage rec {
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --prefix=$out
+    ${python.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "Python bindings for Enlightenment Foundation Libraries";
     homepage = "https://github.com/DaveMDS/python-efl";
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

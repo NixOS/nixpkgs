@@ -1,60 +1,76 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, attrs
 , buildPythonPackage
+, filelock
+, lxml
 , mypy-extensions
+, psutil
+, py
+, pytest-forked
+, pytest-xdist
+, pytestCheckHook
 , python
 , pythonOlder
+, setuptools
+, six
 , typed-ast
 , typing-extensions
 , tomli
+, types-setuptools
 , types-typed-ast
+, types-psutil
+, virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.931";
-  disabled = pythonOlder "3.6";
+  version = "0.991";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "v${version}";
-    sha256 = "1v83flrdxh8grcp40qw04q4hzjflih9xwib64078vsxv2w36f817";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ljnMlQUlz4oiZqlqOlqJOumrP6wKLDGiDtT3Y5OEQog=";
   };
 
-  patches = [
-    # FIXME: Remove patch after upstream has decided the proper solution.
-    #        https://github.com/python/mypy/pull/11143
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
-      sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
-    })
-  ];
-
-  buildInputs = [
+  nativeBuildInputs = [
+    setuptools
     types-typed-ast
+    types-setuptools
+    types-psutil
   ];
 
   propagatedBuildInputs = [
     mypy-extensions
-    tomli
-    typed-ast
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typed-ast
   ];
 
-  # Tests not included in pip package.
+  passthru.optional-dependencies = {
+    dmypy = [ psutil ];
+    reports = [ lxml ];
+  };
+
+  # TODO: enable tests
   doCheck = false;
 
   pythonImportsCheck = [
     "mypy"
     "mypy.api"
     "mypy.fastparse"
-    "mypy.report"
     "mypy.types"
     "mypyc"
     "mypyc.analysis"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+    # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
+    "mypy.report"
   ];
 
   # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled

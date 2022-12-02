@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, cctools
 , python3
 , vulkan-headers
 , vulkan-loader
@@ -10,48 +11,48 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "3ee5f2f1d3316e228916788b300d786bb574d337";
-    sha256 = "1l5h9d92mzd35pgs0wibqfg7vbl771lwnvdlcsyhf6999khn5dzv";
+    rev = "81cc10a498b25a90147cccd6e8939493c1e9e20e";
+    hash = "sha256-jTOxZ1nU7kvtdWjPzyIp/5ZeKw3JtYyqhlFeIE7CyX8=";
   };
 
   lodepng = fetchFromGitHub {
     owner = "lvandeve";
     repo = "lodepng";
-    rev = "34628e89e80cd007179b25b0b2695e6af0f57fac";
-    sha256 = "10yaf218xnmhv7rsq6dysqrps43r30cgrs1z63h47z40x43ikia0";
+    rev = "5601b8272a6850b7c5d693dd0c0e16da50be8d8d";
+    hash = "sha256-dD8QoyOoGov6VENFNTXWRmen4nYYleoZ8+4TpICNSpo=";
   };
 
   shaderc = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "ba92b11e1fcaf4c38a64f84d643d6429175bf650";
-    sha256 = "041hip43siy2sr7h6habk9sxdmd45ag4kqgi8jk0vm1b8pqzkhqn";
+    rev = "e72186b66bb90ed06aaf15cbdc9a053581a0616b";
+    hash = "sha256-hd1IGsWksgAfB8Mq5yZOzSyNGxXsCJxb350pD/Gcskk=";
   };
 
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "3fdabd0da2932c276b25b9b4a988ba134eba1aa6";
-    sha256 = "17h5cn4dyw8ixp1cpw8vf1z90m0fn1hhlvh0iycmknccbb1z34q7";
+    rev = "b42ba6d92faf6b4938e6f22ddd186dbdacc98d78";
+    hash = "sha256-ks9JCj5rj+Xu++7z5RiHDkU3/sFXhcScw8dATfB/ot0=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "fd3cabd8b5fc43ce83884ac06486c283b9902b4f";
-    sha256 = "1h3smicw5gzpa17syb30085zccydzs4f41fl30bcmiipdn2xfpjr";
+    rev = "a73e724359a274d7cf4f4248eba5be1e7764fbfd";
+    hash = "sha256-vooJHtgVRlBNkQG4hulYOxIgHH4GMhXw7N4OEbkKJvU=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "amber";
-  version = "unstable-2020-09-23";
+  version = "unstable-2022-04-21";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
-    rev = "0eee2d45d053dfc566baa58442a9b1b708e4f2a7";
-    sha256 = "1rrbvmn9hvhj7xj89yqvy9mx0vg1qapdm5fkca8mkd3516d9f5pw";
+    rev = "8b145a6c89dcdb4ec28173339dd176fb7b6f43ed";
+    hash = "sha256-+xFYlUs13khT6r475eJJ+XS875h2sb+YbJ8ZN4MOSAA=";
   };
 
   buildInputs = [
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    cctools
   ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies

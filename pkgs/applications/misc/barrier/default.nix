@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
   openssl, wrapGAppsHook,
-  avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
+  avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
+  fetchpatch
 }:
 
 mkDerivation rec {
@@ -14,6 +15,16 @@ mkDerivation rec {
     sha256 = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # This patch can be removed when a new version of barrier (greater than 2.4.0)
+    # is released, which will contain this commit.
+    (fetchpatch {
+      name = "add-missing-cstddef-header.patch";
+      url = "https://github.com/debauchee/barrier/commit/4b12265ae5d324b942698a3177e1d8b1749414d7.patch";
+      sha256 = "sha256-ajMxP7szBFi4h8cMT3qswfa3k/QiJ1FGI3q9fkCFQQk=";
+    })
+  ];
 
   buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
   nativeBuildInputs = [ cmake wrapGAppsHook ];

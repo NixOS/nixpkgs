@@ -1,18 +1,26 @@
-{ cmake, fetchFromGitHub, lib, ninja, stdenv }:
+{ cmake, fetchFromGitHub, lib, ninja, stdenv, testers, quick-lint-js }:
+
 
 stdenv.mkDerivation rec {
   pname = "quick-lint-js";
-  version = "2.3.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
-    sha256 = "1ay59pmprcswip6zzbqfy5g2rdv4lgmps8vrxay4l9w6xn9lg03v";
+    sha256 = "sha256-hWwEaUf+TntRfxI3HjJV+hJ+dV6TRncxSCbaxE1sIjs=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
   doCheck = true;
+
+  # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=ON" ];
+
+  passthru.tests = {
+    version = testers.testVersion { package = quick-lint-js; };
+  };
 
   meta = with lib; {
     description = "Find bugs in Javascript programs";

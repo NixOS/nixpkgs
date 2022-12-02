@@ -3,11 +3,19 @@ attrs:
 {
   postConfigure = attrs.postConfigure + ''
     sed -e '/CPPUNIT_TEST(Import_Export_Import);/d' -i './sw/qa/inc/swmodeltestbase.hxx'
+    sed -e '/CPPUNIT_ASSERT(!bRTL);/d' -i './vcl/qa/cppunit/text.cxx'
+
+    sed -e '/CPPUNIT_ASSERT_EQUAL(0, nMinRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(4, nMinRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(11, nMinRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(18, nMinRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+
+    sed -e '/CPPUNIT_ASSERT_EQUAL(3, nEndRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(9, nEndRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(17, nEndRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
+    sed -e '/CPPUNIT_ASSERT_EQUAL(22, nEndRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
   '';
-  configureFlags = attrs.configureFlags ++ [
-    (lib.enableFeature kdeIntegration "kf5")
-    "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
-    "--without-system-qrcodegen"
-  ];
-  patches = attrs.patches or [] ++ [ ../xdg-open-brief.patch ]; # drop this when switching to 7.2
+  configureFlags = attrs.configureFlags;
+
+  patches = attrs.patches or [];
 }

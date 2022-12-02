@@ -1,18 +1,35 @@
-{ pkgs, nodejs-14_x, stdenv, lib }:
+{ pkgs, nodejs-16_x, stdenv, lib, nixosTests }:
 
 let
   nodePackages = import ./node-composition.nix {
     inherit pkgs;
-    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
 in
 nodePackages.n8n.override {
-  nativeBuildInputs = with pkgs.nodePackages; [
-    node-pre-gyp
+  nativeBuildInputs = [
+    pkgs.nodePackages.node-pre-gyp
   ];
 
-  passthru.updateScript = ./generate-dependencies.sh;
+  buildInputs = [
+    pkgs.postgresql
+  ];
+
+  # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
+  # This can supposedly be fixed by building a custom copy of the module from source, but that's way
+  # too much complexity for a setup no one would ever actually run.
+  #
+  # NB: If you _are_ actually running n8n on Oracle on aarch64, feel free to submit a patch.
+  preRebuild = lib.optionalString stdenv.isAarch64 ''
+    rm -rf node_modules/oracledb
+  '';
+
+  dontNpmInstall = true;
+
+  passthru = {
+    updateScript = ./generate-dependencies.sh;
+    tests = nixosTests.n8n;
+  };
 
   meta = with lib; {
     description = "Free and open fair-code licensed node based Workflow Automation Tool";

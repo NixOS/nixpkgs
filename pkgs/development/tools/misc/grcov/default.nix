@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "grcov";
-  version = "0.8.8";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OITtZdI9d5zQVI02s5gJF9lWCjZZgE7YZRfFROU040o=";
+    sha256 = "sha256-fyITsOlkBY1f9AjQqUII7G1Onm0i0FIqNspPi8J+eOM=";
   };
 
-  cargoSha256 = "sha256-AZVkS/huEsA1wdVB/xUGCCjY5AWJxaU1DD/OlEURw/c=";
+  cargoSha256 = "sha256-qbxJJGwJ7hRNIujud10AYnM2NaNwjBB5zhOxXp/5z/k=";
 
   # tests do not find grcov path correctly
   checkFlags = let

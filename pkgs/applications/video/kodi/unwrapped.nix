@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, pkg-config, cmake, gnumake, yasm, python3Packages
-, libgcrypt, libgpg-error, libunistring
+, pkg-config, cmake, yasm, python3Packages
+, libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
@@ -107,6 +107,15 @@ in stdenv.mkDerivation {
 
     src = kodi_src;
 
+    # This is a backport of
+    # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
+    # to Kodi 19.4 Matrix.
+    # This can be removed once a new release of Kodi comes out and we upgrade
+    # to it.
+    patches = [
+      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
+    ];
+
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
       libxml2 python3Packages.python
@@ -122,14 +131,14 @@ in stdenv.mkDerivation {
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
-      libgcrypt libgpg-error libunistring
+      libxcrypt libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]
-    ++ lib.optional x11Support [
+    ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
       libXinerama libXrandr.dev libXtst libXfixes
     ]
@@ -149,7 +158,7 @@ in stdenv.mkDerivation {
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional gbmSupport [
+    ++ lib.optionals gbmSupport [
       libxkbcommon.dev
       mesa.dev
       libinput.dev
@@ -160,7 +169,7 @@ in stdenv.mkDerivation {
       doxygen
       makeWrapper
       which
-      pkg-config gnumake
+      pkg-config
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
       jre_headless yasm gettext python3Packages.python flatbuffers
 
@@ -185,7 +194,13 @@ in stdenv.mkDerivation {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
-    ] ++ lib.optional waylandSupport [
+      # When wrapped KODI_HOME will likely contain symlinks to static assets
+      # that Kodi's built in webserver will cautiously refuse to serve up
+      # (because their realpaths are outside of KODI_HOME and the other
+      # whitelisted directories). This adds the entire nix store to the Kodi
+      # webserver whitelist to avoid this problem.
+      "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
+    ] ++ lib.optionals waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
 

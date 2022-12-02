@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cairographics.org/cairo-ocaml";
     description = "ocaml bindings for cairo library";
     license = lib.licenses.gpl2;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

@@ -1,39 +1,41 @@
-{ lib
-, pkg-config
-, fetchFromGitHub
-, buildGoModule
-, btrfs-progs
-, gpgme
-, libassuan
-, lvm2
-, testVersion
-, podman-tui
-}:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, testers, podman-tui }:
+
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.2.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-y5bFr31CQ4JES6tjvThyy7qmoKFC59uwtDMG5r+r8K4=";
+    hash = "sha256-UhlhNmVPTOXVWpL4pxF5c6ZQj//pXrzZWlRUaKGSTSA=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
-  nativeBuildInputs = [ pkg-config ];
+  CGO_ENABLED = 0;
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libassuan
-    lvm2
-  ];
+  tags = [ "containers_image_openpgp" "remote" ]
+    ++ lib.optional stdenv.isDarwin "darwin";
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testVersion {
+  preCheck =
+    let
+      skippedTests = [
+        "TestDialogs"
+        "TestNetdialogs"
+      ];
+    in
+    ''
+      export USER=$(whoami)
+      export HOME=/home/$USER
+
+      # Disable flaky tests
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
+
+  passthru.tests.version = testers.testVersion {
     package = podman-tui;
     command = "podman-tui version";
     version = "v${version}";
@@ -44,6 +46,5 @@ buildGoModule rec {
     description = "Podman Terminal UI";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
-    platforms = platforms.linux;
   };
 }

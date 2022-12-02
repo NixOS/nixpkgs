@@ -22,6 +22,11 @@ runCommand "optifine-${mcVersion}" {
 
   nativeBuildInputs = [ jre makeWrapper ];
 
+  passthru.updateScript = {
+    command = [ ./update.py ];
+    supportedFeatures = [ "commit" ];
+  };
+
   meta = with lib; {
     homepage = "https://optifine.net/";
     description = "A Minecraft ${mcVersion} optimization mod";
@@ -30,6 +35,7 @@ runCommand "optifine-${mcVersion}" {
       It allows Minecraft to run faster and look better with full support for HD textures and many configuration options.
       This is for version ${mcVersion} of Minecraft.
     '';
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.unix;

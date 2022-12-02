@@ -12,8 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3ea9WzJTXxeyjJrCS2ZgfgJQUGrBQypBEso8c/XWYsM=";
   };
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.in --replace '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
+  '';
+
   makeFlags = [ "CC:=$(CC)" ];
   doCheck = true;
+
+  configureFlags = [ "--enable-shared" ];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/lzip/${pname}.html";

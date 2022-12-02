@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2022.01.0";
+  version = "2022.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = version;
-    hash = "sha256-wNeK1GdjK9GKaaECcFeBLjFf/h3MbLI5e4MX0UNoTqE=";
+    hash = "sha256-+S4AziibYWos/hZ1v3883b1Vv3y4xjIDUrQ8c2XJ1MQ=";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +55,9 @@ buildPythonPackage rec {
     "gcsfs/tests/test_retry.py"
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlagsArray = [
+    "-x"
+  ];
 
   pythonImportsCheck = [
     "gcsfs"
@@ -64,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
+    changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nbren12 ];
   };

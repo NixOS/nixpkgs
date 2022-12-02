@@ -6,7 +6,7 @@ let
   cfg = config.programs.udevil;
 
 in {
-  options.programs.udevil.enable = mkEnableOption "udevil";
+  options.programs.udevil.enable = mkEnableOption (lib.mdDoc "udevil");
 
   config = mkIf cfg.enable {
     security.wrappers.udevil =

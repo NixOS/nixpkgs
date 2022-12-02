@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bedops";
-  version = "2.4.40";
+  version = "2.4.41";
 
   src = fetchFromGitHub {
     owner = "bedops";
     repo = "bedops";
     rev = "v${version}";
-    sha256 = "sha256-rJVl3KbzGblyQZ7FtJXeEv/wjQJmzYGNjzhvkoMoBWY=";
+    sha256 = "sha256-VJBoi1+tHA4oOVOsClUfimB+mOV5ZSQsDcDq3vAZwBA=";
   };
 
   buildInputs = [ zlib bzip2 jansson ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "scite";
-  version = "5.0.2";
+  version = "5.2.2";
 
   src = fetchurl {
-    url = "https://www.scintilla.org/scite502.tgz";
-    sha256 = "00n2gr915f7kvp2250dzn6n0p6lhr6qdlm1m7y2xi6qrrky0bpan";
+    url = "https://www.scintilla.org/scite522.tgz";
+    sha256 = "1q46clclx8r0b8zbq2zi89sygszgqf9ra5l83r2fs0ghvjgh2cxd";
   };
 
   nativeBuildInputs = [ pkg-config ];

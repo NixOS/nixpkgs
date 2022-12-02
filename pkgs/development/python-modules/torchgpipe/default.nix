@@ -1,17 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest-runner
+, pythonOlder
 , pytestCheckHook
-, pytorch
+, torch
 }:
 
 buildPythonPackage rec {
   pname = "torchgpipe";
   version = "0.0.7";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kakaobrain";
@@ -20,9 +19,14 @@ buildPythonPackage rec {
     sha256 = "0ki0njhmz1i3pkpr3y6h6ac7p5qh1kih06mknc2s18mfw34f2l55";
   };
 
-  propagatedBuildInputs = [ pytorch ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
+  '';
 
-  checkInputs = [ pytest-runner pytestCheckHook ];
+  propagatedBuildInputs = [ torch ];
+
+  checkInputs = [ pytestCheckHook ];
   disabledTests = [
     "test_inplace_on_requires_grad"
     "test_input_requiring_grad"

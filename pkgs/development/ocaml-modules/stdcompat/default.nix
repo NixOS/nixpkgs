@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # build fails otherwise
   enableParallelBuilding = false;
 
-  configureFlags = "--libdir=$(OCAMLFIND_DESTDIR)";
+  configureFlags = [ "--libdir=$(OCAMLFIND_DESTDIR)" ];
 
   meta = {
     homepage = "https://github.com/thierry-martinez/stdcompat";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pyml";
-  version = "20211015";
+  version = "20220615";
 
   src = fetchFromGitHub {
     owner  = "thierry-martinez";
     repo   = pname;
     rev    = version;
-    sha256 = "sha256-GCO6KlRhJmADFjQ5QF4naMQBskF63yqnJnLnuQsagEk=";
+    sha256 = "sha256-my/xn9vrYTcHyjXGBNamgqpBz2/6bTyQHuE9ViVGLjw=";
   };
 
   nativeBuildInputs = [

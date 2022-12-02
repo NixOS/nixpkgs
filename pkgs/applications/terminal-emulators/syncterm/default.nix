@@ -31,9 +31,12 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [ ncurses SDL2 ]; # Both of these are dlopen()'ed at runtime.
 
   meta = with lib; {
+    # error: unsupported option '-fsanitize=safe-stack' for target 'x86_64-apple-darwin'
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
     maintainers = with maintainers; [ embr ];
+    platforms = platforms.unix;
     license = licenses.gpl2Plus;
   };
 }

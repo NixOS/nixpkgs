@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "stestr";
-  version = "3.2.1";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wj7nq0QSKNiDZZBKIk+4RC2gwCifkBz0qUIukpt76c0=";
+    sha256 = "sha256-wsHHO/x8/KORJxWeP7x0GTrr8s0C2KBCfy5YZI42zyY=";
   };
 
   postPatch = ''

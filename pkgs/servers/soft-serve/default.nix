@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "soft-serve";
-  version = "0.2.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
     rev = "v${version}";
-    sha256 = "sha256-IaSXkbOBuvC7BhM+rGGYMcvk6jjKVDHH+lSs3y2UM40=";
+    sha256 = "sha256-MziobrOqEUsg/XhzLChNker3OU9YAH0LmQ+i+UYoPkE=";
   };
 
-  vendorSha256 = "sha256-m5xwxs6XvmPffDX9dkkEG0/LdlDDm6Eq9CC0tVdauVI=";
+  vendorSha256 = "sha256-YmAPZtGq2wWqrmTwFOPvSZ3pXa3hUFd+TQfU+Nzhlvs=";
 
   doCheck = false;
 
@@ -27,6 +27,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tasty, self-hosted Git server for the command line";
     homepage = "https://github.com/charmbracelet/soft-serve";
+    changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${version}";
     mainProgram = "soft";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];

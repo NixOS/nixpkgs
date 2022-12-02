@@ -3,7 +3,7 @@
 , fetchPypi
 , setuptools-scm
 # , backports
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # Requires backports package
   doCheck = false;
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "tests" ];
 
   meta = with lib; {
     description = "Backports of new features in Python’s weakref module";

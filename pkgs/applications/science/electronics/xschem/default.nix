@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xschem";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "StefanSchippers";
     repo = "xschem";
     rev = version;
-    sha256 = "sha256-C57jo8tAbiqQAgf4Xp2lpFGOr6F1knPpFcYxPiqSM4k=";
+    sha256 = "sha256-SHpESg5mn9lSDOURQusQUsug8Jqin/W5rqkVgmseSgA=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Schematic capture and netlisting EDA tool";
     longDescription = ''
       Xschem is a schematic capture program, it allows creation of

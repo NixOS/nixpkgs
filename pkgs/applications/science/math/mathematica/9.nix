@@ -1,9 +1,17 @@
 { lib
-, stdenv
-, coreutils
 , patchelf
 , requireFile
+, stdenv
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
+, version
+# dependencies
 , alsa-lib
+, coreutils
+, cudaPackages
 , fontconfig
 , freetype
 , gcc
@@ -13,6 +21,8 @@
 , openssl
 , unixODBC
 , xorg
+# options
+, cudaSupport
 }:
 
 let
@@ -23,18 +33,8 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
+  inherit meta src version;
   pname = "mathematica";
-  version = "9.0.0";
-
-  src = requireFile {
-    name = "Mathematica_${version}_LINUX.sh";
-    message = ''
-      This nix expression requires that Mathematica_9.0.0_LINUX.sh is
-      already part of the store. Find the file on your Mathematica CD
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "106zfaplhwcfdl9rdgs25x83xra9zcny94gb22wncbfxvrsk3a4q";
-  };
 
   buildInputs = [
     coreutils
@@ -114,10 +114,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
-    license = lib.licenses.unfree;
-  };
 }

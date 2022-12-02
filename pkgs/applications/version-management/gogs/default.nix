@@ -8,16 +8,16 @@ with lib;
 
 buildGoModule rec {
   pname = "gogs";
-  version = "0.12.5";
+  version = "0.12.10";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "sha256-I3kFRKgVMGMKgHU5VEeNai8FseN/ea6MzEP94AR2Zfo=";
+    sha256 = "sha256-EFGC94aIMW7AYJpgaHBT4W7BjXd+oijMqQPH40rIvlg=";
   };
 
-  vendorSha256 = "sha256-3dT5D+oDd0mpJp/cP53TQcRUkmqh6g3sRBWWAUqhaAo=";
+  vendorSha256 = "sha256-5AnQ7zF2UK1HNoyr6gwFdVv+KMJEGkjKPpDEpUXckUg=";
 
   subPackages = [ "." ];
 

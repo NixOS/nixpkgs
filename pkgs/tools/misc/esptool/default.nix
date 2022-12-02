@@ -1,38 +1,55 @@
-{ lib, fetchFromGitHub, python3, openssl }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.3";
+  version = "4.4";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "sha256-CmGie+M3AboOk8X+LkRhIxTRQZgDlklouzmz8kiIZuI=";
+    hash = "sha256-haLwf3loOvqdqQN/iuVBciQ6nCnuc9AqqOGKvDwLBHE=";
   };
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-future-import flake8-import-order openssl ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ pyserial pyaes ecdsa reedsolo bitstring cryptography ];
+  patches = [
+    ./test-call-bin-directly.patch
+  ];
 
-  # wrapPythonPrograms will overwrite esptool.py with a bash script,
-  # but espefuse.py tries to import it. Since we don't add any binary paths,
-  # use patchPythonScript directly.
-  dontWrapPythonPrograms = true;
-  postFixup = ''
-    buildPythonPath "$out $pythonPath"
-    for f in $out/bin/*.py; do
-        echo "Patching $f"
-        patchPythonScript "$f"
-    done
+  propagatedBuildInputs = with python3.pkgs; [
+    bitstring
+    cryptography
+    ecdsa
+    pyserial
+    reedsolo
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pyelftools
+    pytest
+  ];
+
+  # tests mentioned in `.github/workflows/test_esptool.yml`
+  checkPhase = ''
+    runHook preCheck
+
+    export ESPSECURE_PY=$out/bin/espsecure.py
+    export ESPTOOL_PY=$out/bin/esptool.py
+    ${python3.interpreter} test/test_imagegen.py
+    ${python3.interpreter} test/test_espsecure.py
+    ${python3.interpreter} test/test_merge_bin.py
+    ${python3.interpreter} test/test_modules.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dezgeg dotlambda ];
+    maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
     platforms = platforms.linux;
   };
 }

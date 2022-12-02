@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
     ln -s $out/share/sauerbraten/cube.png $out/share/icon/sauerbraten.png
 
     makeWrapper $out/share/sauerbraten/sauer_server $out/bin/sauerbraten_server \
-      --run "cd $out/share/sauerbraten"
+      --chdir "$out/share/sauerbraten"
     makeWrapper $out/share/sauerbraten/sauer_client $out/bin/sauerbraten_client \
-      --run "cd $out/share/sauerbraten" \
+      --chdir "$out/share/sauerbraten" \
       --add-flags "-q\''${HOME}/.config/sauerbraten"
 
     runHook postInstall

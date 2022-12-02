@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 
+  enableParallelBuilding = true;
+
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
     ./setup-hook.sh
@@ -50,6 +52,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
+    mainProgram = "iconv";
 
     # This library is not needed on GNU platforms.
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;

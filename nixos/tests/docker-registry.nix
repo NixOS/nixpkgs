@@ -35,7 +35,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     registry.start()
     registry.wait_for_unit("docker-registry.service")
-    registry.wait_for_open_port("8080")
+    registry.wait_for_open_port(8080)
     client1.succeed("docker push registry:8080/scratch")
 
     client2.start()

@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.58.2";
+  version = "0.61.2";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
-    rev = "v${version}";
-    sha256 = "sha256-ArpvP4tbRf1fK8BPokRXqS3YyaFiOLBrR8uQHko5iKo=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-282h1fBWhAfwqCuP+dU3ajn0gQtmOcPNTMKZ0a2+vHU=";
   };
 
   postPatch = ''

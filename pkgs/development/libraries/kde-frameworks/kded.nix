@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kded";
+  pname = "kded";
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
   buildInputs = [
     gsettings-desktop-schemas kconfig kcoreaddons kcrash kdbusaddons

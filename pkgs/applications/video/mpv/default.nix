@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , addOpenGLRunpath
 , docutils
 , perl
@@ -24,6 +23,7 @@
 , waylandSupport ? stdenv.isLinux
   , wayland
   , wayland-protocols
+  , wayland-scanner
   , libxkbcommon
 
 , x11Support ? stdenv.isLinux
@@ -32,6 +32,7 @@
   , libXext
   , libXxf86vm
   , libXrandr
+  , libXpresent
 
 , cddaSupport ? false
   , libcdio
@@ -39,7 +40,7 @@
 
 , vulkanSupport ? stdenv.isLinux
   , libplacebo
-  , shaderc
+  , shaderc # instead of spirv-cross
   , vulkan-headers
   , vulkan-loader
 
@@ -54,12 +55,14 @@
 , cacaSupport        ? true,           libcaca
 , cmsSupport         ? true,           lcms2
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav
+, dvbinSupport       ? stdenv.isLinux
 , jackaudioSupport   ? false,          libjack2
 , javascriptSupport  ? true,           mujs
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, rubberbandSupport  ? stdenv.isLinux, rubberband
+, pipewireSupport    ? stdenv.isLinux, pipewire
+, rubberbandSupport  ? true,           rubberband
 , screenSaverSupport ? true,           libXScrnSaver
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
@@ -74,14 +77,12 @@
 , zimgSupport        ? true,           zimg
 }:
 
-with lib;
-
 let
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.34.1";
+  version = "0.35.0";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -89,15 +90,19 @@ in stdenv.mkDerivation rec {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${version}";
-    sha256 = "12qxwm1ww5vhjddl8yvj1xa0n1fi9z3lmzwhaiday2v59ca0qgsk";
+    sha256 = "sha256-U3NDSxlX4/WkoHFkOvpcwPMwfwTnSpCw0QI5yLMK08o=";
   };
 
   postPatch = ''
-    patchShebangs ./TOOLS/
+    patchShebangs version.* ./TOOLS/
   '';
 
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+
+  # These flags are not supported and cause the build
+  # to fail, even when cross compilation itself works.
+  dontAddWafCrossFlags = true;
 
   wafConfigureFlags = [
     "--enable-libmpv-shared"
@@ -114,19 +119,20 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature sixelSupport    "sixel")
     (lib.enableFeature vaapiSupport    "vaapi")
     (lib.enableFeature waylandSupport  "wayland")
-    (lib.enableFeature stdenv.isLinux  "dvbin")
+    (lib.enableFeature dvbinSupport  "dvbin")
   ] # Disable whilst Swift isn't supported
     ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
     addOpenGLRunpath
-    docutils
+    docutils # for rst2man
     perl
     pkg-config
     python3
     wafHook
     which
-  ] ++ lib.optionals swiftSupport [ swift ];
+  ] ++ lib.optionals swiftSupport [ swift ]
+    ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
     ffmpeg
@@ -148,6 +154,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals javascriptSupport  [ mujs ]
     ++ lib.optionals libpngSupport      [ libpng ]
     ++ lib.optionals openalSupport      [ openalSoft ]
+    ++ lib.optionals pipewireSupport    [ pipewire ]
     ++ lib.optionals pulseSupport       [ libpulseaudio ]
     ++ lib.optionals rubberbandSupport  [ rubberband ]
     ++ lib.optionals screenSaverSupport [ libXScrnSaver ]
@@ -160,7 +167,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals vdpauSupport       [ libvdpau ]
     ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
-    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]

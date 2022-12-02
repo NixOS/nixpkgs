@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     perl
-    makeWrapper
   ] ++ (with perlPackages; [
     FileRemove
     DigestSHA1

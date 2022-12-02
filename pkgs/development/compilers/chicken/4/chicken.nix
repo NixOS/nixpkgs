@@ -39,11 +39,15 @@ stdenv.mkDerivation {
     ./0001-Introduce-CHICKEN_REPOSITORY_EXTRA.patch
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
-  ] ++ (lib.optionals (bootstrap-chicken != null) [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = lib.optionals (bootstrap-chicken != null) [
     bootstrap-chicken
-  ]);
+  ];
 
   preBuild = lib.optionalString (bootstrap-chicken != null) ''
     # Backup the build* files - those are generated from hostname,

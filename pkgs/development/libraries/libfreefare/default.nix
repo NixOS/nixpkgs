@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, libnfc, openssl
-, libobjc ? null }:
+, libobjc ? null
+, IOKit, Security
+}:
 
 stdenv.mkDerivation {
   pname = "libfreefare";
@@ -11,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libnfc openssl ] ++ lib.optional stdenv.isDarwin libobjc;
+  buildInputs = [ libnfc openssl ] ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   meta = with lib; {
     description = "The libfreefare project aims to provide a convenient API for MIFARE card manipulations";

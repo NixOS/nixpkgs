@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, kernel, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "xone-${version}-${kernel.version}";
-  version = "0.2";
+  pname = "xone";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "medusalix";
-    repo = "xone";
-    rev = "v${version}";
-    sha256 = "sha256-m4305Xl5w4nyAVqubjwWsiyPDVtfGykjlSW2eKEytVk=";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-h+j4xCV9R6hp9trsv1NByh9m0UBafOz42ZuYUjclILE=";
   };
 
   setSourceRoot = ''

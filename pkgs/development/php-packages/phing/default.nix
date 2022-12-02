@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "phing";
-  version = "2.17.2";
+  version = "2.17.4";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://www.phing.info/get/phing-${version}.phar";
-    sha256 = "sha256-KDqJdHIqgtar6ofNG4ENRlpRg9XYFeL5YS7Rclh1+PQ=";
+    sha256 = "sha256-3QZsl5QJkFX5Z4RovMtw2ELCp8Zl4xiZsIBikakJ474=";
   };
 
   dontUnpack = true;

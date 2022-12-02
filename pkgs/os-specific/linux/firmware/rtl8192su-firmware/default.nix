@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 with lib;
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "rtl8192su";
   version = "unstable-2016-10-05";
 

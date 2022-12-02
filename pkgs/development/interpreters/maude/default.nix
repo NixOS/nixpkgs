@@ -22,13 +22,17 @@ stdenv.mkDerivation {
     sha256 = "b112d7843f65217e3b5a9d40461698ef8dab7cbbe830af21216dfb924dc88a2f";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ flex bison unzip makeWrapper ];
   buildInputs = [
-    flex bison ncurses buddy tecla gmpxx libsigsegv makeWrapper cln yices
+    ncurses buddy tecla gmpxx libsigsegv cln yices
   ];
 
   hardeningDisable = [ "stackprotector" ] ++
     lib.optionals stdenv.isi686 [ "pic" "fortify" ];
+
+  # Fix for glibc-2.34, see
+  # https://gitweb.gentoo.org/repo/gentoo.git/commit/dev-lang/maude/maude-3.1-r1.ebuild?id=f021cc6cfa1e35eb9c59955830f1fd89bfcb26b4
+  configureFlags = [ "--without-libsigsegv" ];
 
   preConfigure = ''
     configureFlagsArray=(
@@ -53,6 +57,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = {
+    broken = stdenv.isDarwin;
     homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
     license = lib.licenses.gpl2Plus;

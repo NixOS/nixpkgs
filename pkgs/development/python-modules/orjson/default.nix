@@ -4,6 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , buildPythonPackage
+, cffi
 , libiconv
 , numpy
 , psutil
@@ -15,28 +16,30 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.6.7";
+  version = "3.8.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
     rev = version;
-    sha256 = "1a55f1ipii7hg42bvsii053xczbgwwv8w6wgdb14qyirm5c9szd3";
+    hash = "sha256-3U27JuKMsMla3BKbbpO0uXesGHYaVQs8MwtQvumkksY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1piy0b1gh56n8srzhyd1n971a6pqpgmwhr4v9a81wg0xkbva8gdk";
+    hash = "sha256-QXguyDxQHW9Fd3Nhmi5JzSxZQuk3HGPhhh/RGuOTZNY";
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = with rustPlatform; [
+  nativeBuildInputs = [
+    cffi
+  ] ++ (with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
-  ];
+  ]);
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -47,6 +50,12 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     xxhash
+  ];
+
+  disabledTests = lib.optionals (stdenv.is32bit) [
+    # integer overflow on 32bit
+    "test_numpy_array_d1_intp"
+    "test_numpy_array_d1_uintp"
   ];
 
   pythonImportsCheck = [ pname ];

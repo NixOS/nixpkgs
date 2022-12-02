@@ -10,8 +10,8 @@ You create a container with identifier `foo` as follows:
 # nixos-container create foo
 ```
 
-This creates the container's root directory in `/var/lib/containers/foo`
-and a small configuration file in `/etc/containers/foo.conf`. It also
+This creates the container's root directory in `/var/lib/nixos-containers/foo`
+and a small configuration file in `/etc/nixos-containers/foo.conf`. It also
 builds the container's initial system configuration and stores it in
 `/nix/var/nix/profiles/per-container/foo/system`. You can modify the
 initial configuration of the container on the command line. For

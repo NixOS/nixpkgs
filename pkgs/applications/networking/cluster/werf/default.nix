@@ -2,39 +2,52 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, pkg-config
-, gpgme
-, glibc
-, lvm2
+, installShellFiles
 , btrfs-progs
+, testers
+, werf
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.78";
+  version = "1.2.191";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    sha256 = "sha256-ehrzb7WvkYL8oj2RSzKc1KDagV0zg6vMzgpT2sPyhcI=";
+    hash = "sha256-MNIHY3bswPGd8hhR0/9ZxifSv+/kWvLmNESqYRVPao8=";
   };
-  vendorSha256 = "sha256-w8ZeAQbZIVOBoRa9fJhXgTeYRCYpkh/U4pwb5u6A9mQ=";
+
+  vendorHash = "sha256-GjcmpHyjhjCWE5gQR/oTHfhHYg5WRu8uhgAuWhdxlYk=";
+
   proxyVendor = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gpgme ]
-    ++ lib.optionals stdenv.isLinux [ glibc.static lvm2 btrfs-progs ];
+  subPackages = [ "cmd/werf" ];
 
-  # Flags are derived from
-  # https://github.com/werf/werf/blob/main/scripts/build_release_v3.sh
-  ldflags = [ "-s" "-w" "-X github.com/werf/werf/pkg/werf.Version=v${version}" ]
-    ++ lib.optionals stdenv.isLinux [
-    "-linkmode external"
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs ]
+    ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
+
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
     "-extldflags=-static"
+    "-linkmode external"
   ];
-  tags = [ "dfrunmount" "dfssh" "containers_image_openpgp" ]
-    ++ lib.optionals stdenv.isLinux [
+
+  tags = [
+    "containers_image_openpgp"
+    "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
+    "dfssh"
+  ] ++ lib.optionals (CGO_ENABLED == 1) [
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"
@@ -42,11 +55,40 @@ buildGoModule rec {
     "static_build"
   ];
 
-  subPackages = [ "cmd/werf" ];
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Remove tests that require external services.
+    rm -rf \
+      integration/suites \
+      pkg/true_git/*test.go \
+      test/e2e
+  '' + lib.optionalString (CGO_ENABLED == 0) ''
+    # A workaround for osusergo.
+    export USER=nixbld
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd werf \
+      --bash <($out/bin/werf completion --shell=bash) \
+      --zsh <($out/bin/werf completion --shell=zsh)
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = werf;
+    command = "werf version";
+    version = src.rev;
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/werf/werf";
     description = "GitOps delivery tool";
+    longDescription = ''
+      The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
+      implement CI/CD and Giterminism.
+    '';
+    homepage = "https://werf.io";
+    changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ azahi ];
   };

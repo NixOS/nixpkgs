@@ -18,6 +18,7 @@
 
   # Apache
   apache = [
+    "https://dlcdn.apache.org/"
     "https://www-eu.apache.org/dist/"
     "https://ftp.wayne.edu/apache/"
     "https://www.apache.org/dist/"
@@ -162,6 +163,11 @@
   # PostgreSQL
   postgresql = [
     "https://ftp.postgresql.org/pub/"
+  ];
+
+  # Qt
+  qt = [
+    "https://download.qt.io/"
   ];
 
   # Roy marples mirrors
@@ -317,7 +323,6 @@
     "https://luarocks.org/"
     "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
     "https://luafr.org/moonrocks/"
-    "http://luarocks.logiceditor.com/rocks/"
   ];
 
   # Python PyPI

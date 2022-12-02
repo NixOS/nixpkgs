@@ -8,13 +8,13 @@ let
   kerneldir = "lib/modules/${kernel.modDirVersion}";
 in stdenv.mkDerivation rec {
   pname = "gcadapter-oc-kmod";
-  version = "1.4";
+  version = "unstable-2021-12-11";
 
   src = fetchFromGitHub {
     owner = "HannesMann";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1nqhj3vqq9rnj37cnm2c4867mnxkr8di3i036shcz44h9qmy9d40";
+    rev = "d4ddf15deb74c51dbdfc814d481ef127c371f444";
+    sha256 = "sha256-bHA1611rcO8/d48b1CHsiurEt3/n+5WErtHXAU7Eh1o=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

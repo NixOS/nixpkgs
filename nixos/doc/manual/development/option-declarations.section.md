@@ -11,7 +11,7 @@ options = {
     type = type specification;
     default = default value;
     example = example value;
-    description = "Description for use in the NixOS manual.";
+    description = lib.mdDoc "Description for use in the NixOS manual.";
   };
 };
 ```
@@ -44,19 +44,24 @@ The function `mkOption` accepts the following arguments.
 :   A textual representation of the default value to be rendered verbatim in
     the manual. Useful if the default value is a complex expression or depends
     on other values or packages.
-    Use `lib.literalExpression` for a Nix expression, `lib.literalDocBook` for
-    a plain English description in DocBook format.
+    Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
+    a plain English description in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
 
 `example`
 
 :   An example value that will be shown in the NixOS manual.
-    You can use `lib.literalExpression` and `lib.literalDocBook` in the same way
+    You can use `lib.literalExpression` and `lib.literalMD` in the same way
     as in `defaultText`.
 
 `description`
 
-:   A textual description of the option, in DocBook format, that will be
-    included in the NixOS manual.
+:   A textual description of the option, in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format, that will be
+    included in the NixOS manual. During the migration process from DocBook
+    it is necessary to mark descriptions written in CommonMark with `lib.mdDoc`.
+    The description may still be written in DocBook (without any marker), but this
+    is discouraged and will be deprecated in the future.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -79,7 +84,7 @@ lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = "Whether to enable magic.";
+  description = lib.mdDoc "Whether to enable magic.";
 }
 ```
 
@@ -112,7 +117,7 @@ lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression "pkgs.hello";
-  description = "The hello package to use.";
+  description = lib.mdDoc "The hello package to use.";
 }
 ```
 
@@ -120,15 +125,15 @@ lib.mkOption {
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
-  example = "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
-  description = "The GHC package to use.";
+  example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  description = lib.mdDoc "The GHC package to use.";
 }
 ```
 

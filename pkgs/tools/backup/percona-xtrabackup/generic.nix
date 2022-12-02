@@ -2,7 +2,7 @@
 , curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpg-error, lz4
 , ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
 , perlPackages
-, version, sha256, extraPatches ? [], extraPostInstall ? "", ...
+, version, sha256, fetchSubmodules ? false, extraPatches ? [], extraPostInstall ? "", ...
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     owner = "percona";
     repo = "percona-xtrabackup";
     rev = "${pname}-${version}";
-    inherit sha256;
+    inherit sha256 fetchSubmodules;
   };
 
   nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
-    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
+    (curl.override { inherit openssl; }) cyrus_sasl libaio libedit libevent libev libgcrypt libgpg-error lz4
     ncurses numactl openssl protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''

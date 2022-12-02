@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "proxify";
-  version = "0.0.6";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "proxify";
     rev = "v${version}";
-    sha256 = "sha256-g6HYwcQ4zAPLdu2o7oS1uWyFMp5FpGuJVXPtfAqYHJc=";
+    sha256 = "sha256-0zXWW6U+x9W+fMsvYTfWRdoftsQCp2JXXkfbqS63Svk=";
   };
 
-  vendorSha256 = "sha256-JJhxVfvcqOW6zvg+m8lIcrRgxIStFKXMuWo1BMmIv+o=";
+  vendorSha256 = "sha256-OldZyaPROtnPZPczFjn+kl61TI5zco/gM2MuPn2gYjo=";
 
   meta = with lib; {
     description = "Proxy tool for HTTP/HTTPS traffic capture";

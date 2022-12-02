@@ -1,8 +1,8 @@
 Author: Matthew Bauer
 Description: Remove unavailable getent databases
 Version: 7.1.2
---- a/getent.c	2018-04-16 13:33:49.000000000 -0500
-+++ b/getent.c	2018-04-16 13:29:30.000000000 -0500
+--- a/usr.bin/getent/getent.c	2018-04-16 13:33:49.000000000 -0500
++++ b/usr.bin/getent/getent.c	2018-04-16 13:29:30.000000000 -0500
 @@ -42,7 +42,6 @@
  #include <grp.h>
  #include <limits.h>

@@ -1,13 +1,12 @@
 diff -ru a/Makefile b/Makefile
---- a/Makefile	1970-01-01 01:00:01.000000000 +0100
-+++ b/Makefile	1970-01-01 01:00:01.000000000 +0100
-@@ -21,8 +21,8 @@
- build/dep/osdialog/osdialog_gtk2.c.o: FLAGS += $(shell pkg-config --cflags gtk+-2.0)
+--- a/Makefile 1970-01-01 01:00:01.000000000 +0100
++++ b/Makefile 1970-01-01 01:00:01.000000000 +0100
+@@ -36,7 +36,7 @@ build/dep/osdialog/osdialog_gtk3.c.o: FLAGS += $(shell pkg-config --cflags gtk+-
  
- 	LDFLAGS += -rdynamic \
--		dep/lib/libGLEW.a dep/lib/libglfw3.a dep/lib/libjansson.a dep/lib/libcurl.a dep/lib/libssl.a dep/lib/libcrypto.a dep/lib/libzip.a dep/lib/libz.a dep/lib/libspeexdsp.a dep/lib/libsamplerate.a dep/lib/librtmidi.a dep/lib/librtaudio.a \
-+		-lGLEW -lglfw -ljansson -lcurl -lssl -lcrypto -lzip -lz -lspeexdsp -lsamplerate -lrtmidi -lrtaudio \
-		-lpthread -lGL -ldl -lX11 -lasound -ljack \
- 		$(shell pkg-config --libs gtk+-2.0)
- 	TARGET := Rack
- endif
+ 	LDFLAGS += -Wl,--whole-archive
+ 	LDFLAGS += -static-libstdc++ -static-libgcc
+-	LDFLAGS += dep/lib/libGLEW.a dep/lib/libglfw3.a dep/lib/libjansson.a dep/lib/libcurl.a dep/lib/libssl.a dep/lib/libcrypto.a dep/lib/libarchive.a dep/lib/libzstd.a dep/lib/libspeexdsp.a dep/lib/libsamplerate.a dep/lib/librtmidi.a dep/lib/librtaudio.a
++	LDFLAGS += -lGLEW -lglfw -ljansson -lcurl -lssl -lcrypto -larchive -lz -lspeexdsp -lsamplerate -lrtmidi -lrtaudio
+ 	LDFLAGS += -Wl,--no-whole-archive
+ 	LDFLAGS += -lpthread -lGL -ldl -lX11 -lasound -ljack -lpulse -lpulse-simple
+ 	LDFLAGS += $(shell pkg-config --libs gtk+-3.0)

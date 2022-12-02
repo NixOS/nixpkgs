@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     make build-shared
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

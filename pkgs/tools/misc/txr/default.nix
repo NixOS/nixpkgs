@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "txr";
-  version = "274";
+  version = "280";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-bWgz0kmPLN0V0rkFRiCqxkBjhN8FV9fL+Vu8GSw9Ja4=";
+    sha256 = "sha256-1iqWerUehLFPM63ZjJYY6xo9oHoNK7ne/a6M3+4L4so=";
   };
 
   buildInputs = [ libffi ];
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     homepage = "http://nongnu.org/txr";
     maintainers = with lib.maintainers; [ dtzWill ];
-    platforms = platforms.linux; # Darwin fails although it should work AFAIK
+    platforms = platforms.all;
   };
 }

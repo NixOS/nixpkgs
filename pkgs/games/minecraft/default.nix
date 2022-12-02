@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --set JAVA_HOME ${lib.getBin jre} \
-      --run "cd /tmp" \
+      --chdir /tmp \
       "''${gappsWrapperArgs[@]}"
   '';
 
@@ -149,6 +149,7 @@ stdenv.mkDerivation rec {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

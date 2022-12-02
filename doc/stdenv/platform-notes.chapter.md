@@ -60,3 +60,8 @@ Some common issues when packaging software for Darwin:
   ```
 
   The package `xcbuild` can be used to build projects that really depend on Xcode. However, this replacement is not 100% compatible with Xcode and can occasionally cause issues.
+
+- x86_64-darwin uses the 10.12 SDK by default, but some software is not compatible with that version of the SDK. In that case,
+  the 11.0 SDK used by aarch64-darwin is available for use on x86_64-darwin. To use it, reference `apple_sdk_11_0` instead of
+  `apple_sdk` in your derivation and use `pkgs.darwin.apple_sdk_11_0.callPackage` instead of `pkgs.callPackage`. On Linux, this will
+  have the same effect as `pkgs.callPackage`, so you can use `pkgs.darwin.apple_sdk_11_0.callPackage` regardless of platform.

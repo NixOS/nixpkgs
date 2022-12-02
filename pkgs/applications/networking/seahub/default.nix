@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3, makeWrapper }:
+{ lib
+, fetchFromGitHub
+, python3
+, makeWrapper
+, nixosTests
+}:
 let
   # Seahub 8.x.x does not support django-webpack-loader >=1.x.x
   python = python3.override {
@@ -7,7 +12,7 @@ let
         version = "0.7.0";
         src = old.src.override {
           inherit version;
-          sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
+          hash = "sha256-ejyIIBqlRIH5OZRlYVy+e5rs6AgUlqbQKHt8uOIy9Ec=";
         };
       });
     };
@@ -15,23 +20,28 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "8.0.8";
+  version = "9.0.6";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "c51346155b2f31e038c3a2a12e69dcc6665502e2"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "0dagiifxllfk73xdzfw2g378jccpzplhdrmkwbaakbhgbvvkg92k";
+    rev = "876b7ba9b680fc668e89706aff535593772ae921"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
   };
 
   dontBuild = true;
+
   doCheck = false; # disabled because it requires a ccnet environment
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     django
     future
+    django-compressor
     django-statici18n
     django-webpack-loader
     django-simple-captcha
@@ -40,11 +50,11 @@ python.pkgs.buildPythonApplication rec {
     mysqlclient
     pillow
     python-dateutil
-    django_compressor
     djangorestframework
     openpyxl
     requests
-    requests_oauthlib
+    requests-oauthlib
+    chardet
     pyjwt
     pycryptodome
     qrcode
@@ -61,14 +71,17 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    tests = {
+      inherit (nixosTests) seafile;
+    };
   };
 
   meta = with lib; {
-    homepage = "https://github.com/haiwen/seahub";
     description = "The web end of seafile server";
+    homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ greizgh schmittlauch ];
+    platforms = platforms.linux;
   };
 }

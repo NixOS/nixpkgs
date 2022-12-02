@@ -7,6 +7,7 @@
 , libxkbcommon
 , libinput
 , pixman
+, pythonOlder
 , udev
 , wlroots
 , wayland
@@ -18,11 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.11";
+  version = "0.15.24";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-L+59uf3/wqWnmWpqm8RAyIEarbj2Sdwf1Pbweh/z9C8=";
+    sha256 = "sha256-TvYhxiAbK+mpcEE9y79WH96dzeDnvI0xPaUxSYQqyHE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

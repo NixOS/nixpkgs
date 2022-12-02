@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gofu";
-  version = "unstable-2021-09-11";
+  version = "unstable-2022-04-01";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = pname;
-    rev = "cb398f58a5cb4f3e858fe60e84debde6ab58f7c8";
-    sha256 = "sha256-R8Pr8SyLeoTaYKKV+PzHDPi1/RY4j7pkUbW8kE4ydBU=";
+    rev = "be0e424eecec3fec19ba3518f8fd1bb07b6908dc";
+    sha256 = "sha256-jMOmvCsuRtL9EgPicdNEksVgFepL/JZA53o2wzr8uzQ=";
   };
 
   vendorSha256 = null;

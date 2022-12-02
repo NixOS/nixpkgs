@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
-  version = "0.23.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-fOq67Cxtb2A9Obh2o5/aFy5bYBnyFKYQDPcpxOXMy1s=";
+    sha256 = "sha256-8OW0n6aS7bDDbzbrMfJLL8Yvq3vJg47qHQB4zY0xxAw=";
   };
 
   vendorSha256 = null;
@@ -17,13 +17,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # third_party/VENDOR-LICENSE breaks build/check as go files are still included
-  # docs is a tool for generating docs
-  excludedPackages = "\\(third_party\\|cmd/docs\\)";
+  subPackages = [ "cmd/tkn" ];
 
   preCheck = ''
     # some tests try to write to the home dir
     export HOME="$TMPDIR"
+
+    # run all tests
+    unset subPackages
 
     # the tests expect the clientVersion ldflag not to be set
     unset ldflags
@@ -61,5 +62,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk mstrangfeld vdemeester ];
+    mainProgram = "tkn";
   };
 }

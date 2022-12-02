@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "2.9.1";
+  version = "2.9.2";
   format = "pyproject";
 
   src = fetchFromGitHub rec {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "v${version}";
-    sha256 = "sha256:0vdly2k4i7bfcqc8zh2miv9dbpmqvayxk72qn9d4hr7z15wph233";
+    sha256 = "sha256-TQEZeZDl4N78dE7CXy5OwquUoHuxxjmDAC3wdxqydaQ=";
   };
 
   nativeBuildInputs = [

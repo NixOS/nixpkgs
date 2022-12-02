@@ -87,8 +87,13 @@ in stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.frostwire.com/";
     description = "BitTorrent Client and Cloud File Downloader";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
+    broken = true; # at 2022-09-30, errors with changing hash.
   };
 }

@@ -5,6 +5,7 @@
 , openssl
 , perl
 , pkg-config
+, python3
 , rustPlatform
 , sqlcipher
 , sqlite
@@ -16,25 +17,23 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.76.0";
+  version = "1.102.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = version;
-    hash = "sha256-aeYOszOFyLaC1xKswYZLzqoWSFFWOOeOkc+WrtqU0jo=";
+    hash = "sha256-xw/lUNs39nkBrydpcgUBL3j6XrZFafKslxx6zUiElWw=";
   };
 
   patches = [
-    # https://github.com/deltachat/deltachat-core-rust/pull/2589
-    ./darwin-dylib.patch
     ./no-static-lib.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-sBFXcLXpAkX+HzRKrLKaHhi5ieS8Yc/Uf30WcXyWrok=";
+    hash = "sha256-CiqYKFABHcFSjYUH/qop1xWCoygQJajI7nhv04ElD10=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +60,10 @@ stdenv.mkDerivation rec {
   checkInputs = with rustPlatform; [
     cargoCheckHook
   ];
+
+  passthru.tests = {
+    python = python3.pkgs.deltachat;
+  };
 
   meta = with lib; {
     description = "Delta Chat Rust Core library";

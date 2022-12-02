@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, mate, python3Packages, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, mate
+, python3Packages
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
@@ -26,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Python binding for Caja components";

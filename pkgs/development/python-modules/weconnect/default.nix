@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.37.0";
+  version = "0.48.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,16 +20,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    rev = "v${version}";
-    sha256 = "sha256-h6jKtQt9vCh5bnhIqWLniUIJ41GxCs0uSi4vBVNs8tE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GXTjG/3Gk58C6TxKrgtblUZI+xf7Te9OA8HnDvNEIvA=";
   };
 
   propagatedBuildInputs = [
-    ascii-magic
     oauthlib
-    pillow
     requests
   ];
+
+  passthru.optional-dependencies = {
+    Images = [
+      ascii-magic
+      pillow
+    ];
+  };
 
   checkInputs = [
     pytest-httpserver
@@ -42,8 +47,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
-    substituteInPlace requirements.txt \
-      --replace "pillow~=9.0.0" "pillow"
+    substituteInPlace image_extra_requirements.txt \
+      --replace "pillow~=9.2.0" "pillow"
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""

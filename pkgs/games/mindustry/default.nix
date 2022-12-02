@@ -1,9 +1,9 @@
-{ lib, stdenv
+{ lib, stdenv, fetchurl
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, gradle_6
+, gradle
 , jdk
 , perl
 
@@ -13,7 +13,13 @@
 , stb
 , ant
 , alsa-lib
+, alsa-plugins
 , glew
+
+# for soloud
+, libpulseaudio ? null
+, libjack2 ? null
+
 
 # Make the build version easily overridable.
 # Server and client build versions must match, and an empty build version means
@@ -26,30 +32,42 @@
 
 let
   pname = "mindustry";
-  # Note: when raising the version, ensure that all SNAPSHOT versions in
-  # build.gradle are replaced by a fixed version
-  # (the current one at the time of release) (see postPatch).
-  version = "126.2";
+  version = "140.4";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "URmjmfzQAVVl6erbh3+FVFdN7vGTNwYKPtcrwtt9vkg=";
+    sha256 = "0lfDISvC5dOd76BuPPniPf+8hXWQ/wtreNHN75k2jVA=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "pUUak5P9t4RmSdT+/oH/8oo6l7rjIN08XDJ06TcUn8I=";
+    sha256 = "lZ3ACijauUC9jVRq9I/QwX9ozFF/dw+ArEMND+RMItM=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
-    # this is never pinned in upstream, see https://github.com/Anuken/Arc/issues/39
-    rev = "b33dfc5178fcb2613ee68136f4a4869cadc0b06a";
-    sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
+    # This is pinned in Arc's arc-core/build.gradle
+    rev = "v0.9";
+    sha256 = "6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
+  };
+  freetypeSource = fetchurl {
+    # This is pinned in Arc's extensions/freetype/build.gradle
+    url = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz";
+    sha256 = "1b4dcngjcly9n80hnyr4d5s6qp8bspabfs7v3h07gb13pdg7kasy";
+  };
+  glewSource = fetchurl {
+    # This is pinned in Arc's backends/backend-sdl/build.gradle
+    url = "https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip";
+    sha256 = "1m702jzfjhdr76cb71qplv6amhw15nnb1h6wbq4mlfbl6y8nl159";
+  };
+  SDLmingwSource = fetchurl {
+    # This is pinned in Arc's backends/backend-sdl/build.gradle
+    url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
+    sha256 = "1lbbjxl3a8vdillvv7654m6mp34lfkncvig5a8iwdmjpm214s29q";
   };
 
   patches = [
@@ -73,20 +91,15 @@ let
   };
 
   cleanupMindustrySrc = ''
-    pushd Mindustry
+    # Ensure the prebuilt shared objects don't accidentally get shipped
+    rm -r Arc/natives/natives-*/libs/*
+    rm -r Arc/backends/backend-*/libs/*
 
     # Remove unbuildable iOS stuff
-    sed -i '/^project(":ios"){/,/^}/d' build.gradle
-    sed -i '/robo(vm|VM)/d' build.gradle
-    rm ios/build.gradle
-
-    # Pin 'SNAPSHOT' versions
-    sed -i 's/com.github.anuken:packr:-SNAPSHOT/com.github.anuken:packr:034efe51781d2d8faa90370492133241bfb0283c/' build.gradle
-
-    popd
+    sed -i '/^project(":ios"){/,/^}/d' Mindustry/build.gradle
+    sed -i '/robo(vm|VM)/d' Mindustry/build.gradle
+    rm Mindustry/ios/build.gradle
   '';
-
-  gradle = (gradle_6.override (old: { java = jdk; }));
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -112,7 +125,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "+7vSwQT6LwHgKE9DubISznq4G4DgvlnD7WaF1KywBzU=";
+    outputHash = "FbLd3kk/awFz91o8pZcwJTFozwJ7R+RlDOsMRaala5Q=";
   };
 
 in
@@ -121,20 +134,7 @@ assert lib.assertMsg (enableClient || enableServer)
 stdenv.mkDerivation rec {
   inherit pname version unpackPhase patches;
 
-  postPatch = ''
-    # ensure the prebuilt shared objects don't accidentally get shipped
-    rm Arc/natives/natives-desktop/libs/libarc*.so
-    rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
-  '' + cleanupMindustrySrc;
-
-  # Propagate glew to prevent it from being cleaned up.
-  # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-  # and will assume that it's not actually needed.
-  # This can cause issues.
-  # See https://github.com/NixOS/nixpkgs/issues/109798.
-  propagatedBuildInputs = lib.optionals enableClient [
-    glew.out
-  ];
+  postPatch = cleanupMindustrySrc;
 
   buildInputs = lib.optionals enableClient [
     SDL2
@@ -157,18 +157,29 @@ stdenv.mkDerivation rec {
     export GRADLE_USER_HOME=$(mktemp -d)
 
     # point to offline repo
+    sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
     sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
+    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
+    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
+    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
 
     pushd Mindustry
   '' + optionalString enableClient ''
+
+    pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon sdlnatives -Pdynamic -Pbuildversion=${buildVersion}
+    gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
     glewlib=${lib.getLib glew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf ../Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
       --add-needed $sdllib
+    # Put the freshly-built libraries where the pre-built libraries used to be:
+    cp arc-core/libs/*/* natives/natives-desktop/libs/
+    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    popd
+
     gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
   '' + optionalString enableServer ''
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
@@ -180,7 +191,20 @@ stdenv.mkDerivation rec {
     install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar"
+      --add-flags "-jar $out/share/mindustry.jar" \
+      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
+
+    # Retain runtime depends to prevent them from being cleaned up.
+    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+    # and will assume that it's not actually needed.
+    # This can cause issues.
+    # See https://github.com/NixOS/nixpkgs/issues/109798.
+    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
+      echo "# $dep" >> $out/bin/mindustry
+    done
+
     install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
   '' + optionalString enableServer ''
     install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
@@ -195,8 +219,12 @@ stdenv.mkDerivation rec {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "A sandbox tower defense game";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz petabyteboy ];
+    maintainers = with maintainers; [ chkno fgaz ];
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

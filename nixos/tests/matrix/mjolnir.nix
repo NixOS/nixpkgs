@@ -32,6 +32,7 @@ import ../make-test-python.nix (
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
+      broken = true; # times out after spending many hours
     };
 
     nodes = {
@@ -43,6 +44,7 @@ import ../make-test-python.nix (
             tls_certificate_path = "${cert}";
             tls_private_key_path = "${key}";
             enable_registration = true;
+            enable_registration_without_verification = true;
             registration_shared_secret = "supersecret-registration";
 
             listeners = [ {

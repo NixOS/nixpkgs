@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Pandas support for pint";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint-pandas";

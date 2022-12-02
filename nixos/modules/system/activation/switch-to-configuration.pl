@@ -1,12 +1,25 @@
 #! @perl@/bin/perl
 
+# Issue #166838 uncovered a situation in which a configuration not suitable
+# for the target architecture caused a cryptic error message instead of
+# a clean failure. Due to this mismatch, the perl interpreter in the shebang
+# line wasn't able to be executed, causing this script to be misinterpreted
+# as a shell script.
+#
+# Let's detect this situation to give a more meaningful error
+# message. The following two lines are carefully written to be both valid Perl
+# and Bash.
+printf "Perl script erroneously interpreted as shell script,\ndoes target platform match nixpkgs.crossSystem platform?\n" && exit 1
+    if 0;
+
 use strict;
 use warnings;
 use Config::IniFiles;
 use File::Path qw(make_path);
 use File::Basename;
 use File::Slurp qw(read_file write_file edit_file);
-use Net::DBus;
+use JSON::PP;
+use IPC::Cmd;
 use Sys::Syslog qw(:standard :macros);
 use Cwd qw(abs_path);
 
@@ -112,12 +125,29 @@ EOF
 # virtual console 1 and we restart the "tty1" unit.
 $SIG{PIPE} = "IGNORE";
 
+# Replacement for Net::DBus that calls busctl of the current systemd, parses
+# it's json output and returns the response using only core modules to reduce
+# dependencies on perlPackages in baseSystem
+sub busctl_call_systemd1_mgr {
+    my (@args) = @_;
+    my $cmd = [
+        "$cur_systemd/busctl", "--json=short", "call", "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager",
+        @args
+    ];
+
+    my ($ok, $err, undef, $stdout) = IPC::Cmd::run(command => $cmd);
+    die $err unless $ok;
+
+    my $res = decode_json(join "", @$stdout);
+    return $res;
+}
+
 # Asks the currently running systemd instance via dbus which units are active.
 # Returns a hash where the key is the name of each unit and the value a hash
 # of load, state, substate.
 sub get_active_units {
-    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
-    my $units = $mgr->ListUnitsByPatterns([], []);
+    my $units = busctl_call_systemd1_mgr("ListUnitsByPatterns", "asas", 0, 0)->{data}->[0];
     my $res = {};
     for my $item (@{$units}) {
         my ($id, $description, $load_state, $active_state, $sub_state,
@@ -137,9 +167,7 @@ sub get_active_units {
 # Takes the name of the unit as an argument and returns a bool whether the unit is active or not.
 sub unit_is_active {
     my ($unit_name) = @_;
-
-    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
-    my $units = $mgr->ListUnitsByNames([$unit_name]);
+    my $units = busctl_call_systemd1_mgr("ListUnitsByNames", "as", 1, , "--", $unit_name)->{data}->[0];
     if (scalar(@{$units}) == 0) {
         return 0;
     }

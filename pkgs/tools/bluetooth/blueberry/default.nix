@@ -3,27 +3,24 @@
 , fetchFromGitHub
 , bluez-tools
 , cinnamon
+, gnome
 , gobject-introspection
 , intltool
 , pavucontrol
 , python3Packages
 , util-linux
 , wrapGAppsHook
-, callPackage
 }:
 
-let
-  gnome-bluetooth = callPackage ./gnome-bluetooth.nix {};
-in
 stdenv.mkDerivation rec {
   pname = "blueberry";
-  version = "1.4.7";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ziAdLFSZS8bh+OBSYLqxJ3g7mgFai/psvlBw3Qt17w0=";
+    sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez-tools
-    cinnamon.xapps
-    gnome-bluetooth
+    cinnamon.xapp
+    gnome.gnome-bluetooth_1_0
     python3Packages.python
     util-linux
   ];
@@ -94,6 +91,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/blueberry";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ bobby285271 romildo ];
   };
 }

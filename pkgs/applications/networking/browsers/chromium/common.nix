@@ -7,7 +7,7 @@
 # Native build inputs:
 , ninja, pkg-config
 , python3, perl
-, gnutar, which
+, which
 , llvmPackages
 # postPatch:
 , pkgsBuildHost
@@ -39,14 +39,12 @@
 , glibc # gconv + locale
 
 # Package customization:
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , cupsSupport ? true, cups ? null
 , proprietaryCodecs ? true
 , pulseSupport ? false, libpulseaudio ? null
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
-, libgcrypt ? null # gnomeSupport || cupsSupport
+, libgcrypt ? null # cupsSupport
 , systemdSupport ? stdenv.isLinux
 , systemd
 }:
@@ -128,7 +126,7 @@ let
     nativeBuildInputs = [
       ninja pkg-config
       python3WithPackages perl
-      gnutar which
+      which
       llvmPackages.bintools
     ];
 
@@ -154,8 +152,6 @@ let
       curl
       libepoxy
     ] ++ optional systemdSupport systemd
-      ++ optionals gnomeSupport [ gnome2.GConf libgcrypt ]
-      ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
@@ -164,9 +160,20 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # Required to fix the build with a more recent wayland-protocols version
+      # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
+      # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
+      ./patches/angle-wayland-include-protocol.patch
     ];
 
     postPatch = ''
+      # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
+      substituteInPlace BUILD.gn \
+        --replace '"//infra/orchestrator:orchestrator_all",' ""
+      # Disable build flags that require LLVM 15:
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace '"-Xclang",' "" \
+        --replace '"-no-opaque-pointers",' ""
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -186,6 +193,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
+      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -253,7 +261,7 @@ let
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
       # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
+      system_wayland_scanner_path = "${wayland.bin}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -271,7 +279,7 @@ let
 
       # Optional features:
       use_gio = true;
-      use_gnome_keyring = gnomeKeyringSupport;
+      use_gnome_keyring = false; # Superseded by libsecret
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -283,6 +291,15 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
+      # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
+      chrome_pgo_phase = 0;
+      clang_base_path = "${llvmPackages.clang}";
+      use_qt = false;
+      # The default has changed to false. We'll build with libwayland from
+      # Nixpkgs for now but might want to eventually use the bundled libwayland
+      # as well to avoid incompatibilities (if this continues to be a problem
+      # from time to time):
+      use_system_libwayland = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -315,7 +332,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName

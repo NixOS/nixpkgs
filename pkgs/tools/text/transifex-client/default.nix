@@ -1,13 +1,18 @@
-{ lib, buildPythonApplication, fetchPypi
-, python-slugify, requests, urllib3, six, setuptools, GitPython }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, python-slugify
+, requests
+, urllib3
+, six
+, setuptools
+, GitPython
+, pythonRelaxDepsHook
+}:
 
 buildPythonApplication rec {
   pname = "transifex-client";
   version = "0.14.4";
-
-  propagatedBuildInputs = [
-    urllib3 requests python-slugify six setuptools GitPython
-  ];
 
   src = fetchPypi {
     inherit pname version;
@@ -15,10 +20,17 @@ buildPythonApplication rec {
   };
 
   # https://github.com/transifex/transifex-client/issues/323
-  prePatch = ''
-    substituteInPlace requirements.txt \
-      --replace "python-slugify<5.0.0" "python-slugify"
-  '';
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [ "python-slugify" ];
+
+  propagatedBuildInputs = [
+    GitPython
+    python-slugify
+    requests
+    setuptools
+    six
+    urllib3
+  ];
 
   # Requires external resources
   doCheck = false;

@@ -14,12 +14,12 @@
 , Security
 , AppKit
 , CoreServices
+, sqlcipher
 }:
 
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "schildichat-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in
 stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
@@ -88,9 +88,11 @@ stdenv.mkDerivation rec {
     done
 
     # executable wrapper
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+    # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
+      --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
@@ -117,12 +119,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = {
+  meta = with lib; {
     description = "Matrix client / Element Desktop fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
+    maintainers = teams.matrix.members ++ (with maintainers; [ kloenk yuka ]);
+    license = licenses.asl20;
+    platforms = platforms.all;
   };
 }

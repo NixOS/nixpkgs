@@ -1,7 +1,7 @@
 import ./make-test-python.nix {
   name = "systemd-confinement";
 
-  machine = { pkgs, lib, ... }: let
+  nodes.machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
@@ -153,7 +153,7 @@ import ./make-test-python.nix {
 
     options.__testSteps = lib.mkOption {
       type = lib.types.lines;
-      description = "All of the test steps combined as a single script.";
+      description = lib.mdDoc "All of the test steps combined as a single script.";
     };
 
     config.environment.systemPackages = lib.singleton testClient;

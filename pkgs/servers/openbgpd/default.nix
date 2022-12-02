@@ -35,6 +35,12 @@ in stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: bgpd-rde_peer.o:/build/source/src/bgpd/bgpd.h:133: multiple definition of `bgpd_process';
+  #     bgpd-bgpd.o:/build/source/src/bgpd/bgpd.h:133: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
     description =
       "A free implementation of the Border Gateway Protocol, Version 4. It allows ordinary machines to be used as routers exchanging routes with other systems speaking the BGP protocol";

@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , poetry-core
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     colour
+    setuptools
   ];
 
   # Module has no tests

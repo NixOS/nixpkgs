@@ -3,15 +3,17 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
-  version = "1.2.198.0";
+  version = "1.3.231.0";
 
   src = (assert version == vulkan-headers.version;
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Loader";
       rev = "sdk-${version}";
-      sha256 = "sha256-k3eCdZqCjFxpKa0pZ0K4XcORxdSOlr1dFa7C3Qzi04Y=";
+      hash = "sha256-HWaa3JT0znhvqbvZdcsAwy8Dr6HDQp4rgpVmMOuCo0s=";
     });
+
+  patches = [ ./fix-pkgconfig.patch ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ vulkan-headers ]
@@ -19,7 +21,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include" ]
     ++ lib.optional stdenv.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
-    ++ lib.optional stdenv.isLinux "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share";
+    ++ lib.optional stdenv.isLinux "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
 
   outputs = [ "out" "dev" ];
 

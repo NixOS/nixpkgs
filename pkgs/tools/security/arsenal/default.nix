@@ -5,19 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "arsenal";
-  version = "1.0.2";
+  version = "1.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "arsenal";
     rev = version;
-    sha256 = "sha256-RZxGSrtEa3hAtowD2lUb9BgwpSWlYo90fU9nDvUfoAk=";
+    sha256 = "sha256-NbNXyR5aNKvRJU9JWGk/ndwU1bhNgDOdcRqBkAY9nPA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     libtmux
     docutils
+    pyfzf
     pyperclip
+    pyyaml
   ];
 
   # Project has no tests

@@ -27,16 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
-  version = "42.0";
+  version = "43";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-88qik6Xob2zK0Y+BcnPbHGcGHmgNedg5qop1KOW7JtY=";
+    sha256 = "sha256-PW4VMxdIYVdZaqOAL4dnZBTFcHOPRQqUoEH+iDVCCmk=";
   };
 
-  patches = [
+  patches = lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./bubblewrap-paths.patch;
       bubblewrap_bin = "${bubblewrap}/bin/bwrap";
@@ -58,14 +58,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bubblewrap
     xkeyboard_config
     libxkbcommon # for xkbregistry
     isocodes
-    wayland
     gtk3
     gtk4
     glib
+  ] ++ lib.optionals stdenv.isLinux [
+    bubblewrap
+    wayland
     libseccomp
     systemd
   ];
@@ -77,8 +78,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Ddesktop_docs=false"
-    "-Ddate_in_gnome_version=false"
-    "-Dgnome_distributor=NixOS"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd=disabled"
+    "-Dudev=disabled"
   ];
 
   separateDebugInfo = stdenv.isLinux;
@@ -93,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "Library with common API for various GNOME modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
 }

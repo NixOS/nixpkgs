@@ -1,5 +1,6 @@
 { cmake
 , fetchFromGitHub
+, fetchpatch
 , lib
 , libusb1
 , mkDerivation
@@ -20,6 +21,16 @@ mkDerivation rec {
     rev = version;
     sha256 = "1074kvkamwnlkwdajsw1799wddcfkjh2ay6l842r0s4cvrxrai85";
   };
+
+  patches = [
+    # Pull upstream patch for -fno-common toolchain support:
+    #   https://github.com/openambitproject/openambit/pull/244
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/openambitproject/openambit/commit/b6d97eab417977b6dbe355e0b071d0a56cc3df6b.patch";
+      sha256 = "1p0dg902mlcfjvs01dxl9wv2b50ayp4330p38d14q87mn0c2xl5d";
+    })
+  ];
 
   nativeBuildInputs = [ cmake qttools ];
   buildInputs = [ libusb1 python3 qtbase udev zlib ];

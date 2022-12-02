@@ -1,24 +1,31 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg }:
+{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd }:
 
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.49";
+  version = "2.1.54";
 
   sources = {
     linux = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "sha256-uG39g9CXnquArFsxtFHWWoDaNwu8y2KKh+SqGt8aqi0=";
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
+      sha256 = "sha256-NFhgVd4ctEsh7iaSZ9v0OMszd81H41eq+y+FRIhcCtE=";
     };
-    darwin = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-      sha256 = "sha256-sEVWZQpICL7RYrOuPm1Y5XhzPxCwNk1WGP1rctTtE4Y=";
+
+    # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
+    darwin-x86_64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
+      sha256 = "sha256-kus59Z9Oe4sbAlF4szeg751hlSEUR0ijKz4rjfHEWgA=";
+    };
+    darwin-aarch64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
+      sha256 = "sha256-ROIpGB3W21ttWj+cRkf0rpLFrO4LR6+ZyGRsalz5J+E=";
     };
   };
 
   unpacked = stdenv.mkDerivation {
     inherit pname version;
 
+    nativeBuildInputs = [ zstd ];
     src = sources.linux;
 
     installPhase = ''
@@ -37,7 +44,7 @@ let
 
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
 
@@ -46,6 +53,9 @@ in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
+
+  # Dependencies of anki
+  targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
 
   runScript = writeShellScript "anki-wrapper.sh" ''
     exec ${unpacked}/bin/anki
@@ -63,7 +73,7 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
 }) else stdenv.mkDerivation {
   inherit pname version passthru;
 
-  src = sources.darwin;
+  src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";

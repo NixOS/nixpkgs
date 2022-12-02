@@ -175,14 +175,16 @@ index 978d73f7d9..463e3c5579 100644
      QPoint windowPoint = QPointF::fromCGPoint([self convertPoint:sender.draggingLocation fromView:nil]).toPoint();
  
      qCDebug(lcQpaMouse) << QEvent::DragLeave << self << "at" << windowPoint;
-@@ -294,10 +290,7 @@ static QPoint mapWindowCoordinates(QWindow *source, QWindow *target, QPoint poin
+@@ -294,12 +294,7 @@ static QPoint mapWindowCoordinates(QWindow *source, QWindow *target, QPoint poin
      if (!target)
          return;
  
 -    QCocoaDrag* nativeDrag = QCocoaIntegration::instance()->drag();
 -    Q_ASSERT(nativeDrag);
 -    nativeDrag->exitDragLoop();
--    nativeDrag->setAcceptedAction(qt_mac_mapNSDragOperation(operation));
+-    // for internal drag'n'drop, don't override the action the drop event accepted
+-    if (!nativeDrag->currentDrag())
+-        nativeDrag->setAcceptedAction(qt_mac_mapNSDragOperation(operation));
 +    QCocoaIntegration::instance()->drag();
  
      // Qt starts drag-and-drop on a mouse button press event. Cococa in

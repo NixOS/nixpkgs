@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "1.9.0";
+  version = "3.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Q/ltNdr2Huvfj1RmKFopJbaR4FSM7ziWadmDKPS26vc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hjeMGqCoCC1CYvBPVkSsvU+Us+dtPwNFAFa0y+WNCLg=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
+    changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

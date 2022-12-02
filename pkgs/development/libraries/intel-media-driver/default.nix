@@ -10,11 +10,13 @@
 , libdrm
 , enableX11 ? stdenv.isLinux
 , libX11
+  # for passhtru.tests
+, pkgsi686Linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "22.2.2";
+  version = "22.6.3";
 
   outputs = [ "out" "dev" ];
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "sha256-ksh8xx46x9OgXBrhJr3FnBI9g4PHXUDhLPbgpvccffM=";
+    sha256 = "sha256-lQg+L64DW2ZIBeJRimNkba7EL+SM4jSnX9PWIx4j2AY=";
   };
 
   patches = [
@@ -31,6 +33,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
     })
+    # fix compilation on 32bit
+    # https://github.com/intel/media-driver/pull/1557
+    ./32bit.patch
   ];
 
   cmakeFlags = [
@@ -52,6 +57,10 @@ stdenv.mkDerivation rec {
       $out/lib/dri/iHD_drv_video.so
   '';
 
+  passthru.tests = {
+    inherit (pkgsi686Linux) intel-media-driver;
+  };
+
   meta = with lib; {
     description = "Intel Media Driver for VAAPI — Broadwell+ iGPUs";
     longDescription = ''
@@ -63,6 +72,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

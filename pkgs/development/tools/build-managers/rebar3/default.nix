@@ -3,7 +3,7 @@
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.18.0";
+  version = "3.20.0";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "09648hzc2mnjwf9klm20cg4hb5rn2xv2gmzcg98ffv37p5yfl327";
+      sha256 = "1mh5cd3cpnvfv2cwm5bs64ldd2d7iqvikn47v9bpfd76nck3h8nh";
     };
 
     buildInputs = [ erlang ];
@@ -81,7 +81,7 @@ let
           (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
         ]
       }
-      latest=$(list-git-tags --url=https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
       if [ "$latest" != "${version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"

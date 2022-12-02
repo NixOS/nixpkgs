@@ -1,19 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, django, django_appconf }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-appconf
+, pytest-django
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.2.0";
+  version = "2.3.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dbcdac190d93e0b4eabcab8875c8eb68795eceb442f926843ec5cbe1432fe628";
+  src = fetchFromGitHub {
+    owner = "zyegfryed";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2fFJJNdF0jspS7djDL8sToPTetzNR6pfNp5ohCNa30I=";
   };
 
-  propagatedBuildInputs = [ django django_appconf ];
+  propagatedBuildInputs = [
+    django
+    django-appconf
+  ];
 
-  # pypi package does not contains test harness
-  # source tarball requires setting up a config
-  doCheck = false;
+  pythonImportsCheck = [
+    "statici18n"
+  ];
+
+  DJANGO_SETTINGS_MODULE = "tests.test_project.project.settings";
+
+  checkInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Helper for generating Javascript catalog to static files";

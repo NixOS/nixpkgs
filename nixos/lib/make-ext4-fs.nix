@@ -78,6 +78,15 @@ pkgs.stdenv.mkDerivation {
       # get rid of the unnecessary slack here--but see
       # https://github.com/NixOS/nixpkgs/issues/125121 for caveats.
 
+      # shrink to fit
+      resize2fs -M $img
+
+      # Add 16 MebiByte to the current_size
+      new_size=$(dumpe2fs -h $img | awk -F: \
+        '/Block count/{count=$2} /Block size/{size=$2} END{print (count*size+16*2**20)/size}')
+
+      resize2fs $img $new_size
+
       if [ ${builtins.toString compressImage} ]; then
         echo "Compressing image"
         zstd -v --no-progress ./$img -o $out

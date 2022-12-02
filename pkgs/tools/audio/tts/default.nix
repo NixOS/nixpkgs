@@ -21,7 +21,8 @@ let
       # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
       librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.1";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          pname = "librosa";
           inherit version;
           sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
         };
@@ -31,19 +32,21 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.6.1";
-  format = "setuptools";
+  version = "0.9.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-YzMR/Tl1UvjdSqV/h4lYR6DuarEqEIM7RReqYznFU4Q=";
+    sha256 = "sha256-p4I583Rs/4eig7cnOcJjri2ugOLAeF2nvPIvMZrN1Ss=";
   };
 
   postPatch = let
     relaxedConstraints = [
+      "cython"
       "gruut"
+      "inflect"
       "librosa"
       "mecab-python3"
       "numba"
@@ -57,7 +60,6 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
-    sed -i '/tensorboardX/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
@@ -67,27 +69,29 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     anyascii
     coqpit
-    coqui-trainer
     flask
     fsspec
+    g2pkk
     gdown
     gruut
     inflect
+    jamo
     jieba
     librosa
     matplotlib
     mecab-python3
+    nltk
     numba
     pandas
     pypinyin
     pysbd
-    pytorch-bin
-    pyworld
     scipy
     soundfile
     tensorflow
+    torch-bin
     torchaudio-bin
     tqdm
+    trainer
     umap-learn
     unidic-lite
     webrtcvad
@@ -123,8 +127,13 @@ python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # Requires network acccess to download models
-    "test_synthesize"
+    "test_korean_text_to_phonemes"
+    "test_models_offset_0_step_3"
+    "test_models_offset_1_step_3"
+    "test_models_offset_2_step_3"
     "test_run_all_models"
+    "test_synthesize"
+    "test_voice_conversion"
     # Mismatch between phonemes
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
@@ -146,7 +155,6 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
     "tests/tts_tests/test_tacotron2_train.py"
-    "tests/tts_tests/test_tacotron2_train_fsspec_path.py"
     "tests/tts_tests/test_tacotron_train.py"
     "tests/tts_tests/test_vits_d-vectors_train.py"
     "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"

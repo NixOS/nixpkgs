@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "opam-file-format";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = pname;
     rev = version;
-    sha256 = "1fxhppdmrysr2nb5z3c448h17np48f3ga9jih33acj78r4rdblcs";
+    sha256 = "sha256-wnAnvLNOc9FRBdLIFR08OKVaIjSEqJrcCIn4hmtYtjY=";
   };
 
   useDune2 = true;
@@ -18,5 +18,6 @@ buildDunePackage rec {
     license = licenses.lgpl21;
     maintainers = with maintainers; [ vbgl ];
     homepage = "https://github.com/ocaml/opam-file-format/";
+    changelog = "https://github.com/ocaml/opam-file-format/raw/${version}/CHANGES";
   };
 }

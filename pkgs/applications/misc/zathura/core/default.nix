@@ -10,11 +10,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "zathura";
-  version = "0.4.8";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1nr0ym1mi2afk4ycdf1ppmkcv7i7hyzwn4p3r4m0j2qm3nvaiami";
+    sha256 = "15314m9chmh5jkrd9vk2h2gwcwkcffv2kjcxkd4v3wmckz5sfjy6";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
   mesonFlags = [
     "-Dsqlite=enabled"
-    "-Dmagic=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"

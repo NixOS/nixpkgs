@@ -35,12 +35,12 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "satysfi";
-    version = "0.0.6";
+    version = "0.0.8";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "1wdmcz2b7v37msmsvjvbyj7x5a80qfws8a7w72q0g5959pw5fdxj";
+      sha256 = "sha256-cVGe1N3qMlEGAE/jPUji/X3zlijadayka1OL6iFioY4=";
       fetchSubmodules = true;
     };
 
@@ -49,6 +49,8 @@ in
       '/usr/local/share/satysfi"; "/usr/share/satysfi' \
       $out/share/satysfi
     '';
+
+    DUNE_PROFILE = "release";
 
     nativeBuildInputs = [ ruby dune_2 ];
 

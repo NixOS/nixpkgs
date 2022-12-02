@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.3.4";
+  version = "0.5.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FWcPHtEYqS+81dU4lB+4BLFOXtFumcyhucwvmu2TAt8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-orJkWVBZnbhRjYDI6s5fPymzpTmZE5MsmYWp3JOKjnU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -23,9 +23,14 @@ python3.pkgs.buildPythonApplication rec {
     click
     prettytable
     pysigma
+    pysigma-backend-elasticsearch
+    pysigma-backend-insightidr
+    pysigma-backend-opensearch
+    pysigma-backend-qradar
     pysigma-backend-splunk
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
+    pysigma-pipeline-windows
   ];
 
   checkInputs = with python3.pkgs; [
@@ -34,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'prettytable = "^3.1.1"' 'prettytable = "*"'
+      --replace '= "^' '= ">='
   '';
 
   pythonImportsCheck = [
@@ -46,5 +51,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sigma";
   };
 }

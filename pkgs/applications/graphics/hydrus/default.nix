@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , wrapQtAppsHook
-, miniupnpc_2
+, miniupnpc
 , ffmpeg
 , enableSwftools ? false
 , swftools
@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "478";
+  version = "503";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "v${version}";
-    sha256 = "sha256-ZsQzKc2fOFTzI/kBS8ws2+XT9kRAn4L55n1EZgVy4Kk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nJn5EphbmVYAAOisV3fym/nHlJl/aPZ2Iyp+Z2/N3Jc=";
   };
 
   nativeBuildInputs = [
@@ -33,16 +33,15 @@ python3Packages.buildPythonPackage rec {
     html5lib
     lxml
     lz4
-    nose
     numpy
     opencv4
     pillow
     psutil
-    pylzma
     pyopenssl
     pyside2
     pysocks
-    pythonPackages.mpv
+    python-dateutil
+    python3Packages.mpv
     pyyaml
     qtpy
     requests
@@ -52,7 +51,11 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = with python3Packages; [ nose mock httmock ];
+  checkInputs = with python3Packages; [
+    nose
+    mock
+    httmock
+  ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
@@ -105,7 +108,7 @@ python3Packages.buildPythonPackage rec {
   dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc_2 ]})
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc ]})
   '';
 
   meta = with lib; {

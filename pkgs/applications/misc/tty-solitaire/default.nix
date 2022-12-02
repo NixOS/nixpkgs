@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mpereira/tty-solitaire";
     platforms = ncurses.meta.platforms;
     maintainers = [ maintainers.AndersonTorres ];
+    mainProgram = "ttysolitaire";
   };
 }

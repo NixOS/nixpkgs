@@ -5,9 +5,7 @@
 buildDunePackage {
   pname = "macaddr-sexp";
 
-  inherit (macaddr) version src minimumOCamlVersion;
-
-  useDune2 = true;
+  inherit (macaddr) version src;
 
   propagatedBuildInputs = [ ppx_sexp_conv ];
 

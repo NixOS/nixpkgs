@@ -20,17 +20,15 @@
 , zlib
 }:
 
-assert stdenv ? glibc;
-
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.1.2.2";
+  version = "2.2.2.1";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
-    hash = "sha256-6YsA6tC94yJuuWp5rXXqHzqRy28tvmJzjOR92YwQYO0=";
+    hash = "sha256-fkN5VNiXRVKCCAyrG6Z2s5qLEtHQNB2874VprhHBhAg=";
   };
 
   sourceRoot = "source/src";
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
 
   meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

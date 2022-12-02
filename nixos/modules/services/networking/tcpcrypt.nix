@@ -17,7 +17,7 @@ in
     networking.tcpcrypt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable opportunistic TCP encryption. If the other end
         speaks Tcpcrypt, then your traffic will be encrypted; otherwise
         it will be sent in clear text. Thus, Tcpcrypt alone provides no

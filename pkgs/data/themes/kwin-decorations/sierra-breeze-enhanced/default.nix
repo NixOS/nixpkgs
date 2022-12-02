@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";
-  version = "1.0.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
     rev = "V${version}";
-    sha256 = "0kqbfn1jqsbii3hqcqlb93x8cg8dyh5mf66i9r237w41knks5mnw";
+    sha256 = "sha256-x3OTLH8gcWrqpFGQPZHwvyPFwLhEGeHhU4cRqvtPupQ=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];

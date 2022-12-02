@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, git }:
+{ lib, stdenv, rustPlatform, fetchCrate, git, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
@@ -10,6 +10,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
 
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   cargoSha256 = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
 
   # fac includes a unit test called ls_files_works which assumes it's
@@ -26,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';
@@ -40,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://physics.oregonstate.edu/~roundyd/fac";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ dpercy ];
     mainProgram = "fac";
   };

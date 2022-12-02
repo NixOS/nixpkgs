@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the GNU lshd SSH2 daemon, which allows
           secure remote login.
         '';
@@ -30,7 +30,7 @@ in
       portNumber = mkOption {
         default = 22;
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           The port on which to listen for connections.
         '';
       };
@@ -38,7 +38,7 @@ in
       interfaces = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of network interfaces where listening for connections.
           When providing the empty list, `[]', lshd listens on all
           network interfaces.
@@ -49,7 +49,7 @@ in
       hostKey = mkOption {
         default = "/etc/lsh/host-key";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Path to the server's private key.  Note that this key must
           have been created, e.g., using "lsh-keygen --server |
           lsh-writekey --server", so that you can run lshd.
@@ -59,31 +59,31 @@ in
       syslog = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable syslog output.";
+        description = lib.mdDoc "Whether to enable syslog output.";
       };
 
       passwordAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable password authentication.";
+        description = lib.mdDoc "Whether to enable password authentication.";
       };
 
       publicKeyAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable public key authentication.";
+        description = lib.mdDoc "Whether to enable public key authentication.";
       };
 
       rootLogin = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable remote root login.";
+        description = lib.mdDoc "Whether to enable remote root login.";
       };
 
       loginShell = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, override the default login shell with the
           specified value.
         '';
@@ -93,7 +93,7 @@ in
       srpKeyExchange = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable SRP key exchange and user authentication.
         '';
       };
@@ -101,18 +101,18 @@ in
       tcpForwarding = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable TCP/IP forwarding.";
+        description = lib.mdDoc "Whether to enable TCP/IP forwarding.";
       };
 
       x11Forwarding = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable X11 forwarding.";
+        description = lib.mdDoc "Whether to enable X11 forwarding.";
       };
 
       subsystems = mkOption {
         type = types.listOf types.path;
-        description = ''
+        description = lib.mdDoc ''
           List of subsystem-path pairs, where the head of the pair
           denotes the subsystem name, and the tail denotes the path to
           an executable implementing it.

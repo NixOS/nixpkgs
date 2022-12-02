@@ -4,6 +4,8 @@
 , genBytecode ? false
 , bqn-path ? null
 , mbqn-source ? null
+, libffi
+, pkg-config
 }:
 
 let
@@ -11,22 +13,31 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "b000b951aa8f3590b196b4c09056604c0b32a168";
-    hash = "sha256-znW0xOXogP4TfifUmk3cs4aN/9mMSpSD2WJppmeI1Fg=";
+    rev = "3df8ae563a626ff7ae0683643092f0c3bc2481e5";
+    hash = "sha256:0rh9qp1bdm9aa77l0kn9n4jdy08gl6l7898lncskxiq9id6xvyb8";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2021-12-13";
+  version = "0.pre+date=2022-11-27";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "e7662b0f6a44add0749fba2a6d7309a5c1eb2601";
-    hash = "sha256-2nfkTZBIGHX5cok6Ea3KSewakZy8Ey8nSO2Fe4xGgvg=";
+    rev = "dbc7c83f7085d05e87721bedf1ee38931f671a8e";
+    hash = "sha256:0nal1fs9y7nyx4d5q1qw868lxk7mivzw2y16wc3hw97pq4qf0dpb";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # TODO(@sternenseemann): allow building against dzaima's replxx fork
+  buildInputs = [
+    libffi
+  ];
 
   dontConfigure = true;
 
@@ -40,12 +51,17 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     # Purity: avoids git downloading bytecode files
-    touch src/gen/customRuntime
+    mkdir -p build/bytecodeLocal/gen
   '' + (if genBytecode then ''
-    ${bqn-path} genRuntime ${mbqn-source}
+    ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
-  '');
+    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} build/bytecodeLocal/gen/
+  '')
+  # Need to adjust ld flags for darwin manually
+  # https://github.com/dzaima/CBQN/issues/26
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=(LD_LIBS="-ldl -lffi")
+  '';
 
   installPhase = ''
      runHook preInstall
@@ -63,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
     platforms = platforms.all;
   };
 }

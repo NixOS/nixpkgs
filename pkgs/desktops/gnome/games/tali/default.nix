@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "40.6";
+  version = "40.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "g/ugR+3s0ZbTBxmnDi9NCYa7Jswr1flVoKkgDqY/BhI=";
+    sha256 = "bBeMFg/LtNEb49FWnVOODngUDVC721KnWDGI95XAF+4=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "Sort of poker with dice and less money";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

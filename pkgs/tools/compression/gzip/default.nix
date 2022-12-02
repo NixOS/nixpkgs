@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gzip";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
-    sha256 = "01vrly90rvc98af6rcmrb3gwv1l6pylasvsdka23dffwizb9b6lv";
+    sha256 = "sha256-zl4D5Rn2N+H4FAEazjXE+HszwLur7sNbr1+9NHnpGVY=";
   };
 
   outputs = [ "out" "man" "info" ];
@@ -24,7 +24,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xz.bin ];
 
-  makeFlags = [ "SHELL=/bin/sh" "GREP=grep" ];
+  makeFlags = [
+    "SHELL=/bin/sh"
+    "GREP=grep"
+    # gzip 1.12 doesn't build `zless` unless it can find `less`, but we
+    # can avoid having `less` as a build input if we just override these.
+    "ZLESS_MAN=zless.1"
+    "ZLESS_PROG=zless"
+  ];
 
   # Many gzip executables are shell scripts that depend upon other gzip
   # executables being in $PATH.  Rather than try to re-write all the

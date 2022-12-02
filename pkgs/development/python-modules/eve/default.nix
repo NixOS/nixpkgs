@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , flask
 , events
 , pymongo
@@ -10,13 +11,17 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Eve";
-  version = "1.1.5";
+  pname = "eve";
+  version = "2.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5647ee7dd6e063b967276e49f564cd4f96decdd0a218482bdf86c404a2be1fbf";
+    inherit version;
+    pname = "Eve";
+    sha256 = "sha256-RZ6dwekCKA+PomBp2Ht7/0elOLLUs/sO0KgdxxTOjtc=";
   };
+
+  disabled = pythonOlder "3.7";
 
   propagatedBuildInputs = [
     cerberus
@@ -29,7 +34,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "events>=0.3,<0.4" "events>=0.3,<0.5"
+      --replace "flask<2.2" "flask" \
+      --replace "events>=0.3,<0.4" "events>=0.3"
   '';
 
   pythonImportsCheck = [ "eve" ];
@@ -40,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://python-eve.org/";
     description = "Open source Python REST API framework designed for human beings";
+    changelog = "https://github.com/pyeve/eve/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

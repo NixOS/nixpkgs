@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
     # https://fedoraproject.org/wiki/Licensing:Unrar
-    extraPostFetch = lib.optionalString (!enableUnfree) ''
+    postFetch = lib.optionalString (!enableUnfree) ''
       rm -r $out/CPP/7zip/Compress/Rar*
       find $out -name makefile'*' -exec sed -i '/Rar/d' {} +
     '';

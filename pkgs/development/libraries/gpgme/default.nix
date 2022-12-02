@@ -18,20 +18,25 @@
 , pythonSupport ? false
 , swig2 ? null
 , python ? null
+# only for passthru.tests
+, libsForQt5
+, python3
 }:
 let
   inherit (stdenv.hostPlatform) system;
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "1xb9k88rrafdi0n95nzx0d6bz7hcn9b44hciqbigrqkvxc6gblsf";
+    hash = "sha256-Nh1OrkfOkl26DqVpr0DntSxkXEri5l5WIb8bbN2LDp4=";
   };
 
   patches = [
+    # Fix compilation on i686, would not be needed after 1.18.1 releases, https://dev.gnupg.org/T5522
+    ./t-addexistingsubkey-i686.patch
     # https://dev.gnupg.org/rMc4cf527ea227edb468a84bf9b8ce996807bd6992
     ./fix_gpg_list_keys.diff
     # https://lists.gnupg.org/pipermail/gnupg-devel/2020-April/034591.html
@@ -44,6 +49,9 @@ stdenv.mkDerivation rec {
     ./python-310-detection-without-distutils.patch
     # Find correct version string for Python >= 3.10, https://dev.gnupg.org/D546
     ./python-find-version-string-above-310.patch
+    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
+    ./test_t-verify_double-plaintext.patch
+
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
   ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
   # Fix _AC_UNDECLARED_WARNING for autoconf>=2.70
@@ -101,14 +109,24 @@ stdenv.mkDerivation rec {
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64"
+    ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
+
+  # prevent tests from being run during the buildPhase
+  makeFlags = [ "tests=" ];
 
   doCheck = true;
 
+  checkFlags = [ "-C" "tests" ];
+
+  passthru.tests = {
+    python = python3.pkgs.gpgme;
+    qt = libsForQt5.qgpgme;
+  };
+
   meta = with lib; {
     homepage = "https://gnupg.org/software/gpgme/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -118,6 +136,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

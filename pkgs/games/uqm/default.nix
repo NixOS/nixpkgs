@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
-, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
+, SDL2, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null
@@ -28,37 +28,37 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "uqm";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sc2/uqm-${version}-source.tgz";
-    sha256 = "08dj7fsvflxx69an6vpf3wx050mk0ycmdv401yffrrqbgxgmqsd3";
+    url = "mirror://sourceforge/sc2/uqm-${version}-src.tgz";
+    sha256 = "JPL325z3+vU7lfniWA5vWWIFqY7QwzXP6DTGR4WtT1o=";
   };
 
   content = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-content.uqm";
-    sha256 = "1gx39ns698hyczd4nx73mr0z86bbi4q3h8sw3pxjh1lzla5xpxmq";
+    sha256 = "d9dawl5vt1WjPEujs4p7e8Qfy8AolokbDMmskhS3Lu8=";
   };
 
   voice = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-voice.uqm";
-    sha256 = "0yf9ff5sxk229202gsa7ski6wn7a8hkjjyr1yr7mjdxsnh0zik5w";
+    sha256 = "ntv1HXfYtTM5nF86+1STFKghDXqrccosUbTySDIzekU=";
   };
 
   music = fetchurl {
     url = "mirror://sourceforge/sc2/uqm-${version}-3domusic.uqm";
-    sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
+    sha256 = "RM087H6VabQRettNd/FSKJCXJWYmc5GuCWMUhdIx2Lk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
+  buildInputs = [ SDL2 libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages
     mkdir -p uqm-${version}/content/addons
-    ln -s "$content" "uqm-${version}/content/packages/uqm-0.7.0-content.uqm"
-    ln -s "$music" "uqm-${version}/content/addons/uqm-0.7.0-3domusic.uqm"
-    ln -s "$voice" "uqm-${version}/content/addons/uqm-0.7.0-voice.uqm"
+    ln -s "$content" "uqm-${version}/content/packages/uqm-${version}-content.uqm"
+    ln -s "$music" "uqm-${version}/content/addons/uqm-${version}-3domusic.uqm"
+    ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
   '' + lib.optionalString useRemixPacks (lib.concatMapStrings (disc: ''
     ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
   '') remixPacks) + lib.optionalString use3DOVideos ''

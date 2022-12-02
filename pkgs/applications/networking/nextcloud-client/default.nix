@@ -2,8 +2,11 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
+, extra-cmake-modules
 , inotify-tools
+, installShellFiles
 , libcloudproviders
+, librsvg
 , libsecret
 , openssl
 , pcre
@@ -15,20 +18,23 @@
 , qtwebsockets
 , qtquickcontrols2
 , qtgraphicaleffects
+, plasma5Packages
+, sphinx
 , sqlite
-, inkscape
 , xdg-utils
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.4.4";
+  version = "3.6.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-e4me4mpK0N3UyM5MuJP3jxwM5h1dGBd+JzAr5f3BOGQ=";
+    sha256 = "sha256-eTcQrbYYY+V87i6PuIEWCFczIqL8oxtdojPY/mZpJBU=";
   };
 
   patches = [
@@ -37,10 +43,19 @@ mkDerivation rec {
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
+  postPatch = ''
+    for file in src/libsync/vfs/*/CMakeLists.txt; do
+      substituteInPlace $file \
+        --replace "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
+    done
+  '';
+
   nativeBuildInputs = [
     pkg-config
     cmake
-    inkscape
+    extra-cmake-modules
+    librsvg
+    sphinx
   ];
 
   buildInputs = [
@@ -49,6 +64,7 @@ mkDerivation rec {
     libsecret
     openssl
     pcre
+    plasma5Packages.kio
     qtbase
     qtkeychain
     qttools
@@ -61,9 +77,8 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-    # See also: https://bugreports.qt.io/browse/QTBUG-85967
-    "--set QML_DISABLE_DISK_CACHE 1"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+    # make xdg-open overrideable at runtime
+    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   cmakeFlags = [
@@ -71,11 +86,16 @@ mkDerivation rec {
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
 
+  postBuild = ''
+    make doc-man
+  '';
+
   meta = with lib; {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
+    mainProgram = "nextcloud";
   };
 }

@@ -12,7 +12,9 @@
 , libpng
 , libpulseaudio
 , libsamplerate
-, libxml2
+, libXdmcp
+, openssl
+, pcre
 , perl
 , pkg-config
 , portaudio
@@ -20,6 +22,8 @@
 , soundtouch
 , stdenv
 , udev
+, vulkan-headers
+, vulkan-loader
 , wrapGAppsHook
 , wxGTK
 , zlib
@@ -28,14 +32,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.2105";
+  version = "1.7.3331";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-/A8u7oDIVs0Zmne0ebaXxOeIQbM9pr62KEH6FJR2umk=";
+    hash = "sha256-0RcmBMxKj/gnkNEjn2AUSSO1DzyNSf1lOZWPSUq6764=";
   };
 
   cmakeFlags = [
@@ -44,9 +49,10 @@ stdenv.mkDerivation rec {
     "-DPACKAGE_MODE=TRUE"
     "-DWAYLAND_API=TRUE"
     "-DXDG_STD=TRUE"
+    "-DUSE_VULKAN=TRUE"
   ];
 
-  nativeBuildInputs = [ cmake perl pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake perl pkg-config vulkan-headers wrapGAppsHook ];
 
   buildInputs = [
     alsa-lib
@@ -60,15 +66,24 @@ stdenv.mkDerivation rec {
     libpng
     libpulseaudio
     libsamplerate
-    libxml2
+    libXdmcp
+    openssl
+    pcre
     portaudio
     SDL2
     soundtouch
     udev
+    vulkan-loader
     wayland
     wxGTK
     zlib
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+    )
+  '';
 
   meta = with lib; {
     description = "Playstation 2 emulator";
@@ -81,13 +96,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://pcsx2.net";
     maintainers = with maintainers; [ hrdinka govanify ];
-    mainProgram = "PCSX2";
 
     # PCSX2's source code is released under LGPLv3+. It However ships
     # additional data files and code that are licensed differently.
     # This might be solved in future, for now we should stick with
     # license.free
     license = licenses.free;
-    platforms = platforms.x86;
+    platforms = platforms.x86_64;
   };
 }

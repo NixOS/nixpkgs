@@ -37,6 +37,11 @@
 , libjpeg_turbo
 , buildServer ? true
 , nocaps ? false
+, AudioToolbox
+, AVFoundation
+, Carbon
+, Cocoa
+, CoreMedia
 }:
 
 let
@@ -47,22 +52,30 @@ let
       dir = "libfreerdp/crypto/test";
       file = "Test_x509_cert_info.c";
     }
+  ] ++ lib.optionals stdenv.isDarwin [
+    {
+      dir = "winpr/libwinpr/sysinfo/test";
+      file = "TestGetComputerName.c";
+    }
   ];
 
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.6.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "sha256-+yKdB/glNf74drv9EvBwVMWrqr5ADBkSJVVDH+UKb2U=";
+    sha256 = "sha256-I9xJWHoY8fZ5T9zca77gFciC+7JdD6fMwV16giiY4FU=";
   };
 
   postPatch = ''
     export HOME=$TMP
+
+    # skip NIB file generation on darwin
+    sed -z 's/NIB file generation.*//' -i client/Mac{,/cli}/CMakeLists.txt
 
     # failing test(s)
     ${lib.concatMapStringsSep "\n" (e: ''
@@ -82,7 +95,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    alsa-lib
     cairo
     cups
     ffmpeg
@@ -111,9 +123,18 @@ stdenv.mkDerivation rec {
     orc
     pcre
     pcsclite
-    wayland
     zlib
-  ] ++ lib.optional stdenv.isLinux systemd;
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    systemd
+    wayland
+  ] ++ lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    AVFoundation
+    Carbon
+    Cocoa
+    CoreMedia
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -132,7 +153,18 @@ stdenv.mkDerivation rec {
     WITH_VAAPI = true;
     WITH_JPEG = (libjpeg_turbo != null);
     WITH_CAIRO = (cairo != null);
+    WITH_X11 = true;
   };
+
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [
+    "-DTARGET_OS_IPHONE=0"
+    "-DTARGET_OS_WATCH=0"
+    "-include AudioToolbox/AudioToolbox.h"
+  ];
+
+  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-framework AudioToolbox"
+  ];
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";

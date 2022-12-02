@@ -45,14 +45,18 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  buildInputs = [
+  buildInputs = (lib.optionals stdenv.isLinux [
     libcap_ng
+  ]) ++ [
     libvirt
     libxml2
     gobject-introspection
   ];
 
   strictDeps = true;
+
+  # https://gitlab.com/libvirt/libvirt-glib/-/issues/4
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=pointer-sign" ];
 
   meta = with lib; {
     description = "Library for working with virtual machines";
@@ -66,6 +70,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://libvirt.org/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

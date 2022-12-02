@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "timescaledb";
-  version = "2.6.0";
+  version = "2.8.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
-    # some branches are named like tags which confuses git
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-OiY7u7n78k+LsXo/B463p02tw5Fmq/OiVcLcZVutUdA=";
+    rev = version;
+    sha256 = "sha256-2ayWm1lXR1rgDHdpKO0gMJzGRag95qVPU7jSCJRtar0=";
   };
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
     changelog = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ volth marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
     broken = versionOlder postgresql.version "12";

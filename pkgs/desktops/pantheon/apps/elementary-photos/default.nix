@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -32,23 +31,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.4";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-NhF/WgS6IOwgALSCNyFNxz8ROVTb+mUX+lBtnWEyhEI=";
+    sha256 = "sha256-VhJggQMy1vk21zNA5pR4uAPGCwnIxLUHVO58AZs+h6s=";
   };
-
-  patches = [
-    # Fix build with vala 0.56
-    # https://github.com/elementary/photos/pull/711
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/6594f1323726fb0d38519a7bdafe16f9170353cb.patch";
-      sha256 = "sha256-Ie9ULC8Xw4KLQJANPXh4LDywMjWfniPX/P76eHW8LHc=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream

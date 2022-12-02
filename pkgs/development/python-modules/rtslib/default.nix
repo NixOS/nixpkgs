@@ -1,15 +1,23 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
+{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, six, pyudev, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "rtslib";
-  version = "2.1.74";
+  version = "2.1.75";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
-    rev = "v${version}";
-    sha256 = "1in10z6ckmkfhykar435k1fmswbfajysv4g9nsav893ij8g694fy";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qBlr4K+LeJIC6Hwy6dN9n/VjHIUYCy8pLlRtPvooWyE=";
   };
+
+  patches = [
+    # <https://github.com/open-iscsi/rtslib-fb/pull/187>
+    (fetchpatch {
+      url = "https://github.com/zhaofengli/rtslib-fb/commit/1c3c8257940a88e65676f4333363ddf259a06723.patch";
+      sha256 = "sha256-nDzL8pUKwKIej+6rOg7Om5AkwkClKk6qKlImbpoufz4=";
+    })
+  ];
 
   propagatedBuildInputs = [ six pyudev pygobject3 ];
 

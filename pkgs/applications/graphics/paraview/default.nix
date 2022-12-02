@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchurl
+{ lib, fetchFromGitLab, fetchurl
 , boost, cmake, ffmpeg, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
 , mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
@@ -42,13 +42,6 @@ in mkDerivation rec {
   # Find the Qt platform plugin "minimal"
   preConfigure = ''
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-  '';
-
-  # During build, binaries are called that rely on freshly built
-  # libraries.  These reside in build/lib, and are not found by
-  # default.
-  preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   cmakeFlags = [

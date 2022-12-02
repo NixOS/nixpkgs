@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

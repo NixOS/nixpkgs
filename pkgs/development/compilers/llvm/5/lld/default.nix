@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   meta = llvm_meta // {
+    broken = stdenv.isDarwin;
     homepage = "https://lld.llvm.org/";
     description = "The LLVM linker (unwrapped)";
     longDescription = ''

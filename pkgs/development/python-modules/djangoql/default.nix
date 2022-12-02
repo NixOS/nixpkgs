@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Advanced search language for Django";
     homepage = "https://github.com/ivelum/djangoql";
     license = licenses.mit;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

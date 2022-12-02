@@ -1,6 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , cython
-, enum34
 , glibcLocales
 , matplotlib
 , monty
@@ -11,10 +12,10 @@
 , plotly
 , pybtex
 , pydispatcher
+, pythonOlder
 , requests
 , ruamel-yaml
 , scipy
-, six
 , spglib
 , sympy
 , tabulate
@@ -23,14 +24,16 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.2.7";
+  version = "2022.3.29";
+  format = "setuptools";
 
-  # sdist doesn't include c files
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
     rev= "v${version}";
-    sha256 = "sha256-92Dxmo1Z9LR2caSOftIf1I6jeZmqDe3SqhhoCofWraw=";
+    hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +42,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    enum34
     matplotlib
     monty
     networkx
@@ -52,16 +54,18 @@ buildPythonPackage rec {
     requests
     ruamel-yaml
     scipy
-    six
     spglib
     sympy
     tabulate
     uncertainties
   ];
 
-  # No tests in pypi tarball.
+  # Tests are not detected by pytest
   doCheck = false;
-  pythonImportsCheck = [ "pymatgen" ];
+
+  pythonImportsCheck = [
+    "pymatgen"
+  ];
 
   meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";

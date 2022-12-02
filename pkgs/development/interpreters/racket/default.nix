@@ -49,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.4"; # always change at once with ./minimal.nix
+  version = "8.7"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -58,14 +58,13 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-uJ+vL+FtBNILkFbwi7qZ6yBA1Rcr7o886zmZ/tFuatM=";
+    sha256 = "sha256-dqfmbUfnPrDcP8on/IGONuHUv/502iY8Xv47iAGjCgE=";
   };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
     (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
-    (lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
   nativeBuildInputs = [ cacert wrapGAppsHook ];
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset AR
-    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c src/ChezScheme/workarea; do
+    for f in src/lt/configure src/cs/c/configure src/bc/src/string.c; do
       substituteInPlace "$f" \
         --replace /usr/bin/uname ${coreutils}/bin/uname \
         --replace /bin/cp ${coreutils}/bin/cp \
@@ -129,8 +128,8 @@ stdenv.mkDerivation rec {
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ lib.optional disableDocs [ "--disable-docs" ]
-                   ++ lib.optional stdenv.isDarwin [ "--enable-xonx" ];
+                   ++ lib.optionals disableDocs [ "--disable-docs" ]
+                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -149,7 +148,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://racket-lang.org/";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ kkallio henrytill vrthra ];
+    maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }

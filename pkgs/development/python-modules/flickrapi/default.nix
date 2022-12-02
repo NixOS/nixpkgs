@@ -1,35 +1,68 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 , requests-toolbelt
-, requests_oauthlib
-, pytest
-, pytest-runner
-, pytest-cov
+, requests-oauthlib
+, six
+, pytestCheckHook
 , responses
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname   = "flickrapi";
-  version = "2.4.0";
+  pname = "flickrapi";
+  version = "2.4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "03g2z21k6nhxgwysjrgnxj9m1yg25mnnkr10gpyfhfkd9w77pcpz";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sybrenstuvel";
+    repo = pname;
+    rev = "version-${version}";
+    hash = "sha256-vRZrlXKI0UDdmDevh3XUngH4X8G3VlOCSP0z/rxhIgw=";
   };
 
-  propagatedBuildInputs = [ requests requests-toolbelt requests_oauthlib ];
+  propagatedBuildInputs = [
+    requests
+    requests-toolbelt
+    requests-oauthlib
+    six
+  ];
 
-  checkInputs = [ pytest pytest-runner pytest-cov responses ];
-  doCheck = false; # Otherwise:
-  # ========================= no tests ran in 0.01 seconds =========================
-  # builder for '/nix/store/c8a58v6aa18zci08q2l53s12ywn8jqhq-python3.6-flickrapi-2.4.0.drv' failed with exit code 5
+  checkInputs = [
+    pytestCheckHook
+    responses
+  ];
 
-  meta = {
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  disabledTests = [
+    # Tests require network access
+    "test_default_format"
+    "test_etree_default_format"
+    "test_etree_format_error"
+    "test_etree_format_happy"
+    "test_explicit_format"
+    "test_json_callback_format"
+    "test_json_format"
+    "test_parsed_json_format"
+    "test_walk"
+    "test_xmlnode_format"
+    "test_xmlnode_format_error"
+  ];
+
+  pythonImportsCheck = [
+    "flickrapi"
+  ];
+
+  meta = with lib; {
     description = "A Python interface to the Flickr API";
-    homepage    = "https://stuvel.eu/flickrapi";
-    license     = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ obadz ];
+    homepage = "https://stuvel.eu/flickrapi";
+    license = licenses.psfl;
+    maintainers = with maintainers; [ obadz ];
   };
 }

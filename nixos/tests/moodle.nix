@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "moodle";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.moodle.enable = true;
       services.moodle.virtualHost.hostName = "localhost";
@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   testScript = ''
     start_all()
-    machine.wait_for_unit("phpfpm-moodle.service")
+    machine.wait_for_unit("phpfpm-moodle.service", timeout=1800)
     machine.wait_until_succeeds("curl http://localhost/ | grep 'You are not logged in'")
   '';
 })

@@ -5,7 +5,8 @@
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? config.cudaSupport or false, cudatoolkit_11
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -27,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1d0476bzcz86lwdnyjn7hyzkmhfiqh47ls5h09jlbm7v7k9x69hw";
+    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ optional jackaudioSupport libjack2
-    ++ optional cudaSupport cudatoolkit_11
+    ++ optional cudaSupport cudaPackages.cudatoolkit
     ++ optional colladaSupport opencollada
     ++ optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests ];
@@ -76,9 +77,7 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
+                  '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
@@ -88,7 +87,11 @@ stdenv.mkDerivation rec {
                   '${python310Packages.numpy}/${python.sitePackages}/numpy'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '');
+    '') +
+    (if hipSupport then ''
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+    '' else "");
 
   cmakeFlags =
     [
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport [
+    ++ optionals cudaSupport [
       "-DWITH_CYCLES_CUDA_BINARIES=ON"
       "-DWITH_CYCLES_DEVICE_OPTIX=ON"
       "-DOPTIX_ROOT_DIR=${optix}"

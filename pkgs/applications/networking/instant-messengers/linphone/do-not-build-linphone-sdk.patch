@@ -1,30 +1,31 @@
-From 08b8b1811a1ad079fa713d19a8cc6bf2dc782bb7 Mon Sep 17 00:00:00 2001
-From: David P <megver83@parabola.nu>
-Date: Thu, 26 Nov 2020 15:56:30 -0300
-Subject: [PATCH 1/2] do not build linphone-sdk
+From e6a9992461f368d08d1ad63ffe454714ec0c59ce Mon Sep 17 00:00:00 2001
+From: Lorenz Brun <lorenz@brun.one>
+Date: Fri, 28 Jan 2022 02:36:01 +0100
+Subject: [PATCH] Remove Linphone SDK build
 
-Signed-off-by: David P <megver83@parabola.nu>
 ---
- CMakeLists.txt                                | 61 +------------------
- .../cmake_builder/additional_steps.cmake      |  9 ---
- 2 files changed, 3 insertions(+), 67 deletions(-)
+ CMakeLists.txt                                | 86 ++-----------------
+ .../cmake_builder/additional_steps.cmake      |  9 --
+ 2 files changed, 5 insertions(+), 90 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index f7eb05f2..5921ee5b 100644
+index 2002b925..6d92a8e5 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -118,7 +118,6 @@ list(APPEND APP_OPTIONS "-DENABLE_RELATIVE_PREFIX=${ENABLE_RELATIVE_PREFIX}")
- 
+@@ -152,7 +152,6 @@ list(APPEND APP_OPTIONS "-DENABLE_RELATIVE_PREFIX=${ENABLE_RELATIVE_PREFIX}")
  list(APPEND APP_OPTIONS "-DLINPHONE_OUTPUT_DIR=${LINPHONE_OUTPUT_DIR}")
+ list(APPEND APP_OPTIONS "-DENABLE_QT_GL=${ENABLE_VIDEO}")#Activate on video
  
 -include(ExternalProject)
  set(PROJECT_BUILD_COMMAND "")
  if(CMAKE_BUILD_PARALLEL_LEVEL)
  	list(APPEND APP_OPTIONS "-DCMAKE_BUILD_PARALLEL_LEVEL=${CMAKE_BUILD_PARALLEL_LEVEL}")
-@@ -136,29 +135,8 @@ if(UNIX AND NOT APPLE)
- 	set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/lib64:$ORIGIN/../lib64:$ORIGIN/lib:$ORIGIN/../lib:${LINPHONE_OUTPUT_DIR}/${CMAKE_INSTALL_LIBDIR}")
- 	list(APPEND APP_OPTIONS "-DCMAKE_INSTALL_RPATH=${CMAKE_INSTALL_RPATH}")
+@@ -190,30 +189,8 @@ if(ENABLE_BUILD_APP_PLUGINS)
+ 	endif()
  endif()
+ 
+-
+-if(NOT LINPHONE_QT_ONLY)
 -ExternalProject_Add(sdk PREFIX "${CMAKE_BINARY_DIR}/sdk"
 -    SOURCE_DIR "${CMAKE_SOURCE_DIR}/linphone-sdk"
 -    INSTALL_DIR "${LINPHONE_OUTPUT_DIR}"
@@ -35,7 +36,7 @@ index f7eb05f2..5921ee5b 100644
 -    INSTALL_COMMAND ${CMAKE_COMMAND} -E echo "Install step is already done at build time."
 -    LIST_SEPARATOR | # Use the alternate list separator
 -    CMAKE_ARGS ${APP_OPTIONS} ${USER_ARGS} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=${PREFIX_PATH}
--    #BUILD_ALWAYS NO #${DO_BUILD}
+-    BUILD_ALWAYS NO #${DO_BUILD}
 -)
 -ExternalProject_Add_Step(sdk force_build
 -	COMMENT "Forcing build for 'desktop'"
@@ -43,17 +44,16 @@ index f7eb05f2..5921ee5b 100644
 -	DEPENDERS build
 -	ALWAYS 1
 -)
+-endif()
  include(FindPkgConfig)
  
 -set(APP_DEPENDS sdk)
--
--
- find_package(Qt5 5.12 COMPONENTS Core REQUIRED)
+ find_package(Qt5 5.10 COMPONENTS Core REQUIRED)
  
  if ( NOT Qt5_FOUND )
-@@ -173,39 +151,6 @@ find_package(Mediastreamer2 CONFIG QUIET)
+@@ -227,62 +204,9 @@ find_package(belcard CONFIG QUIET)
+ find_package(Mediastreamer2 CONFIG QUIET)
  find_package(ortp CONFIG QUIET)
- 
  
 -if(NOT (LinphoneCxx_FOUND) OR NOT (Linphone_FOUND) OR NOT (bctoolbox_FOUND) OR NOT (belcard_FOUND) OR NOT (Mediastreamer2_FOUND) OR NOT (ortp_FOUND) OR FORCE_APP_EXTERNAL_PROJECTS)
 -	message("Projects are set as External projects. You can start building them by using for example : cmake --build . --target install")
@@ -63,23 +63,51 @@ index f7eb05f2..5921ee5b 100644
 -		BINARY_DIR "${CMAKE_BINARY_DIR}/linphone-app"
 -		DEPENDS ${APP_DEPENDS}
 -		BUILD_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config $<CONFIG> ${PROJECT_BUILD_COMMAND}
--		INSTALL_COMMAND ${CMAKE_COMMAND} -E echo "Install step will not be done by external project"
+-		INSTALL_COMMAND ${CMAKE_COMMAND} -E echo "Install step is already done at build time."
 -		LIST_SEPARATOR | # Use the alternate list separator
 -		CMAKE_ARGS ${APP_OPTIONS} ${USER_ARGS} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=${PREFIX_PATH}
 -	# ${APP_OPTIONS}
 -		BUILD_ALWAYS ON
 -	)
+-	if( ENABLE_BUILD_APP_PLUGINS)
+-		ExternalProject_Add(app-plugins PREFIX "${CMAKE_BINARY_DIR}/plugins-app"
+-			SOURCE_DIR "${CMAKE_SOURCE_DIR}/plugins"
+-			INSTALL_DIR "${APPLICATION_OUTPUT_DIR}"
+-			BINARY_DIR "${CMAKE_BINARY_DIR}/plugins-app"
+-			DEPENDS linphone-qt
+-			BUILD_COMMAND ${CMAKE_COMMAND} --build <BINARY_DIR> --config $<CONFIG> ${PROJECT_BUILD_COMMAND}
+-			INSTALL_COMMAND ${CMAKE_COMMAND} -E echo "Install step is already done at build time."
+-			LIST_SEPARATOR | # Use the alternate list separator
+-			CMAKE_ARGS ${APP_OPTIONS} ${USER_ARGS} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=${PREFIX_PATH}
+-		)
+-	endif()
 -	install(CODE "message(STATUS Running install)")
 -	set(AUTO_REGENERATION auto_regeneration)
--	add_custom_target(${AUTO_REGENERATION} ALL
--		COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}
--		DEPENDS linphone-qt)
+-	if(	ENABLE_BUILD_APP_PLUGINS)
+-		add_custom_target(${AUTO_REGENERATION} ALL
+-			COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}
+-			DEPENDS app-plugins)
+-	else()
+-		add_custom_target(${AUTO_REGENERATION} ALL
+-			COMMAND ${CMAKE_COMMAND} ${CMAKE_CURRENT_SOURCE_DIR}
+-			DEPENDS linphone-qt)
+-	endif()
 -else()
 -	message("Adding Linphone Desktop in an IDE-friendly state")
 -	set(CMAKE_INSTALL_PREFIX "${APPLICATION_OUTPUT_DIR}")
 -	add_subdirectory(${CMAKE_SOURCE_DIR}/linphone-app)
--	add_dependencies(app-library ${APP_DEPENDS})
--endif()
+-	if(NOT LINPHONE_QT_ONLY)
+-		add_dependencies(app-library ${APP_DEPENDS})
+-	endif()
+-	if( ENABLE_BUILD_APP_PLUGINS)
+-		add_subdirectory(${CMAKE_SOURCE_DIR}/plugins "plugins-app")
+-	endif()
++message("Adding Linphone Desktop in an IDE-friendly state")
++set(CMAKE_INSTALL_PREFIX "${APPLICATION_OUTPUT_DIR}")
++add_subdirectory(${CMAKE_SOURCE_DIR}/linphone-app)
++if( ENABLE_BUILD_APP_PLUGINS)
++	add_subdirectory(${CMAKE_SOURCE_DIR}/plugins "plugins-app")
+ endif()
 -ExternalProject_Add(linphone-qt-only PREFIX "${CMAKE_BINARY_DIR}/linphone-app"
 -    SOURCE_DIR "${CMAKE_SOURCE_DIR}/linphone-app"
 -    INSTALL_DIR "${APPLICATION_OUTPUT_DIR}"
@@ -89,11 +117,8 @@ index f7eb05f2..5921ee5b 100644
 -    LIST_SEPARATOR | # Use the alternate list separator
 -    CMAKE_ARGS ${APP_OPTIONS} ${USER_ARGS} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=${PREFIX_PATH}
 -    EXCLUDE_FROM_ALL ON
--    BUILD_ALWAYS ON
+-    #BUILD_ALWAYS ON
 -)
-+message("Adding Linphone Desktop in an IDE-friendly state")
-+set(CMAKE_INSTALL_PREFIX "${APPLICATION_OUTPUT_DIR}")
-+add_subdirectory(${CMAKE_SOURCE_DIR}/linphone-app)
 diff --git a/linphone-app/cmake_builder/additional_steps.cmake b/linphone-app/cmake_builder/additional_steps.cmake
 index 7f7fd573..a69a04e8 100644
 --- a/linphone-app/cmake_builder/additional_steps.cmake
@@ -114,5 +139,5 @@ index 7f7fd573..a69a04e8 100644
    endif ()
  endif ()
 -- 
-2.29.2
+2.25.1
 

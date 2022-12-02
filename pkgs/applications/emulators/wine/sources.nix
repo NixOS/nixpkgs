@@ -21,14 +21,14 @@ in rec {
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
-      version = "2.47.2";
+      version = "2.47.3";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
-      sha256 = "07d6nrk2g0614kvwdjym1wq21d2bwy3pscwikk80qhnd6rrww875";
+      sha256 = "sha256-5bmwbTzjVWRqjS5y4ETjfh4MjRhGTrGYWtzRh6f0jgE=";
     };
     gecko64 = fetchurl rec {
-      version = "2.47.2";
+      version = "2.47.3";
       url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
-      sha256 = "0iffhvdawc499nbn4k99k33cr7g8sdfcvq8k3z1g6gw24h87d5h5";
+      sha256 = "sha256-pT7pVDkrbR/j1oVF9uTiqXr7yNyLA6i0QzSVRc4TlnU=";
     };
 
     ## see http://wiki.winehq.org/Mono
@@ -46,22 +46,22 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "7.4";
+    version = "7.20";
     url = "https://dl.winehq.org/wine/source/7.x/wine-${version}.tar.xz";
-    sha256 = "sha256-co6GbW5JzpKioMUUMz6f8Ivb9shvXvTmGAFDuNK31BY=";
+    sha256 = "sha256-dRt58itan3LJ7BX3VbALE9PtBz6RaMPvStq9nbN9DVA=";
     inherit (stable) gecko32 gecko64 patches;
 
     mono = fetchurl rec {
-      version = "7.1.1";
+      version = "7.4.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
-      sha256 = "sha256-ncjlYDt7xkNU65SuTqD2ghQkdno/9E/w0Z40akkMEeo=";
+      sha256 = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
     };
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "0vlj3b8bnidyhlgkjrnlbah3878zjy3s557vbp16qka42zjaa51q";
+    sha256 = "sha256-yzZE06FBoPL65+m8MrKlmW5cSIcX3dZYAOY9wjEJaJw=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -70,12 +70,13 @@ in rec {
   };
 
   wayland = fetchFromGitLab rec {
-    version = "7.0-rc2";
-    sha256 = "sha256-FU9L8cyIIfFQ+8f/AUg7IT+RxTpyNTuSfL0zBnur0SA=";
+    # https://gitlab.collabora.com/alf/wine/-/tree/wayland
+    version = "7.20";
+    sha256 = "sha256-UrukAnlfrr6eeVwFSEOWSVSfyMHbMT1o1tfXxow61xY=";
     domain = "gitlab.collabora.com";
     owner = "alf";
     repo = "wine";
-    rev = "95f0154c96a4b7d81e783ee5ba2f5d9cc7cda351";
+    rev = "1dc9821ef0b6109c74d0c95cd5418caf7f9feaf1";
 
     inherit (unstable) gecko32 gecko64;
 
@@ -84,8 +85,8 @@ in rec {
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20210825";
-    sha256 = "sha256-exMhj3dS8uXCEgOaWbftaq94mBOmtZIXsXb9xNX5ha8=";
+    version = "20220411";
+    sha256 = "sha256-FjH10nZDYbqXI6/vKpZJKfv2maXSVkahNDf5UTU3eyU=";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

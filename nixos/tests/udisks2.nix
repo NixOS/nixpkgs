@@ -15,7 +15,7 @@ in
     maintainers = [ eelco ];
   };
 
-  machine =
+  nodes.machine =
     { ... }:
     { services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];

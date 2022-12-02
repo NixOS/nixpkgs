@@ -44,14 +44,11 @@ extStoreName="${extPublisher}-${extName}"
 
 
 function rm_tmpdir() {
-  #echo "Removing \`tmpDir='$tmpDir'\`"
-  rm -rf -- "$tmpDir"
-  unset tmpDir
-  trap - INT TERM HUP EXIT
+  rm -rf "$tmpDir"
 }
 function make_trapped_tmpdir() {
   tmpDir=$(mktemp -d)
-  trap rm_tmpdir INT TERM HUP EXIT
+  trap rm_tmpdir EXIT
 }
 
 echo

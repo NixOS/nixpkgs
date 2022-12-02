@@ -19,15 +19,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "digibyte";
-  version = "7.17.2";
+  version = "7.17.3";
 
   name = pname + toString (optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "digibyte-core";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04czj7mx3wpbx4832npk686p9pg5zb6qwlcvnmvqf31hm5qylbxj";
+    sha256 = "zPwnC2qd28fA1saG4nysPlKU1nnXhfuSG3DpCY6T+kM=";
   };
 
   nativeBuildInputs = [

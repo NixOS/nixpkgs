@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six, }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six, }:
 
 buildPythonPackage rec {
   pname = "jsonstreams";
@@ -17,6 +17,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A JSON streaming writer";
     homepage = "https://github.com/dcbaker/jsonstreams";
     license = licenses.mit;

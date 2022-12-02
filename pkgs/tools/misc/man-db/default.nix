@@ -1,18 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, libpipeline, db, groff, libiconv, makeWrapper, buildPackages, nixosTests }:
+{ buildPackages
+, db
+, fetchurl
+, groff
+, gzip
+, lib
+, libiconv
+, libpipeline
+, makeWrapper
+, nixosTests
+, pkg-config
+, stdenv
+, zstd
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.10.1";
+  version = "2.10.2";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    sha256 = "sha256-L/2PLoASL+cuYMdAyFHmo+FcmnkhGF60dSwcZygkvtY=";
+    sha256 = "sha256-7peVTUkqE3MZA8nQcnubAeUIntvWlfDNtY1AWlr1UU0=";
   };
 
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   checkInputs = [ libiconv /* for 'iconv' binary */ ];
 
@@ -38,7 +53,7 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
@@ -53,21 +68,14 @@ stdenv.mkDerivation rec {
     # (multi-call binary). `apropos` is actually just a symlink to whatis. So we need to
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
-      wrapProgram "$file" --prefix PATH : "${groff}/bin"
+      wrapProgram "$file" \
+        --prefix PATH : "${lib.makeBinPath [ groff gzip zstd ]}"
     done
   '';
 
-  postFixup = lib.optionalString (buildPackages.groff != groff) ''
-    # Check to make sure none of the outputs depend on build-time-only groff:
-    for outName in $outputs; do
-      out=''${!outName}
-      echo "Checking $outName(=$out) for references to build-time groff..."
-      if grep -r '${buildPackages.groff}' $out; then
-        echo "Found an erroneous dependency on groff ^^^" >&2
-        exit 1
-      fi
-    done
-  '';
+  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    buildPackages.groff
+  ];
 
   enableParallelBuilding = true;
 

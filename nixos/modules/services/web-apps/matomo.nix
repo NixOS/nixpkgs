@@ -12,8 +12,6 @@ let
   phpExecutionUnit = "phpfpm-${pool}";
   databaseService = "mysql.service";
 
-  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
-
 in {
   imports = [
     (mkRenamedOptionModule [ "services" "piwik" "enable" ] [ "services" "matomo" "enable" ])
@@ -32,7 +30,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable Matomo web analytics with php-fpm backend.
           Either the nginx option or the webServerUser option is mandatory.
         '';
@@ -40,7 +38,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        description = ''
+        description = lib.mdDoc ''
           Matomo package for the service to use.
           This can be used to point to newer releases from nixos-unstable,
           as they don't get backported if they are not security-relevant.
@@ -53,8 +51,8 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "lighttpd";
-        description = ''
-          Name of the web server user that forwards requests to <option>services.phpfpm.pools.&lt;name&gt;.socket</option> the fastcgi socket for Matomo if the nginx
+        description = lib.mdDoc ''
+          Name of the web server user that forwards requests to {option}`services.phpfpm.pools.<name>.socket` the fastcgi socket for Matomo if the nginx
           option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php`, `matomo.php` and `piwik.php` (legacy name) to this socket.
@@ -64,27 +62,25 @@ in {
       periodicArchiveProcessing = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable periodic archive processing, which generates aggregated reports from the visits.
 
           This means that you can safely disable browser triggers for Matomo archiving,
           and safely enable to delete old visitor logs.
           Before deleting visitor logs,
-          make sure though that you run <literal>systemctl start matomo-archive-processing.service</literal>
+          make sure though that you run `systemctl start matomo-archive-processing.service`
           at least once without errors if you have already collected data before.
         '';
       };
 
       hostname = mkOption {
         type = types.str;
-        default = "${user}.${fqdn}";
+        default = "${user}.${config.networking.fqdnOrHostName}";
         defaultText = literalExpression ''
-          if config.${options.networking.domain} != null
-          then "${user}.''${config.${options.networking.fqdn}}"
-          else "${user}.''${config.${options.networking.hostName}}"
+          "${user}.''${config.${options.networking.fqdnOrHostName}}"
         '';
         example = "matomo.yourdomain.org";
-        description = ''
+        description = lib.mdDoc ''
           URL of the host, without https prefix. You may want to change it if you
           run Matomo on a different URL than matomo.yourdomain.
         '';
@@ -112,12 +108,12 @@ in {
             enableACME = false;
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for Matomo.
             Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
-            If enabled, then by default, the <option>serverName</option> is
-            <literal>''${user}.''${config.networking.hostName}.''${config.networking.domain}</literal>,
+            If enabled, then by default, the {option}`serverName` is
+            `''${user}.''${config.networking.hostName}.''${config.networking.domain}`,
             SSL is active, and certificates are acquired via ACME.
             If this is set to null (the default), no nginx virtualHost will be configured.
         '';

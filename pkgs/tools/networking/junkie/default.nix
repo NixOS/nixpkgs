@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, libpcap, guile, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
+  patches = [
+    # Pull upstream patch for -fno-common toolchains:
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/rixed/junkie/commit/52209c5b0c9a09981739ede9701cd73e82a88ea5.patch";
+      sha256 = "1qg01jinqn5wr2mz77rzaidnrli35di0k7lnx6kfm7dh7v8kxbrr";
+    })
+  ];
   buildInputs = [ libpcap guile openssl ];
   nativeBuildInputs = [ pkg-config ];
   configureFlags = [

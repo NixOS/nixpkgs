@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
-  version = "0.9.1";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${version}";
-    sha256 = "sha256-PIr2bCEKj1dXKiGWloZv2v+ed6JdHK3z+p11ugWGzAk=";
+    sha256 = "sha256-gK2Yabh9AwAX1AecOPGTOthE4ENCA4NIjwWNJNkXxJc=";
   };
 
   nativeBuildInputs = [ cmake nasm ];
@@ -27,11 +27,10 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       aom
-      bsd2
       bsd3
     ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

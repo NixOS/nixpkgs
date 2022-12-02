@@ -1,35 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , pytestCheckHook
 , pytest-asyncio
 , pretend
 , freezegun
-, twisted
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
 , simplejson
-, six
+, typing-extensions
 , pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.5.0";
-  format = "flit";
+  version = "22.3.0";
+  format = "pyproject";
 
-  # sdist is missing conftest.py
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = version;
-    sha256 = "0bc5lj0732j0hjq89llgrncyzs6k3aaffvg07kr3la44w0hlrb4l";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-+r+M+uTXdNBWQf0TGQuZgsCXg2CBKwH8ZE2+uAe0Dzg=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-asyncio pretend freezegun simplejson twisted ];
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
-  meta = {
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [
+    "structlog"
+  ];
+
+  checkInputs = [
+    freezegun
+    pretend
+    pytest-asyncio
+    pytestCheckHook
+    simplejson
+  ];
+
+  meta = with lib; {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

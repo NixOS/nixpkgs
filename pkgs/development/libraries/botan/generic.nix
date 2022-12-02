@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
   patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python3 bzip2 zlib gmp openssl boost ]
+  buildInputs = [ python3 bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
   '';
 
   enableParallelBuilding = true;

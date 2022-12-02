@@ -46,20 +46,13 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
+  # This is the last version of nix where https://github.com/NixOS/nix/issues/6572
+  # is not an unsolved breaking bug. Please keep it until the issue is fixed
+  # and in latest stable nix.
   nix_2_6 = common {
     version = "2.6.1";
     sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
@@ -68,18 +61,65 @@ in lib.makeExtensible (self: {
   nix_2_7 = common {
     version = "2.7.0";
     sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
+    patches = [
+      # remove when there's a 2.7.1 release
+      # https://github.com/NixOS/nix/pull/6297
+      # https://github.com/NixOS/nix/issues/6243
+      # https://github.com/NixOS/nixpkgs/issues/163374
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
+        sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
+      })
+    ];
   };
 
-  stable = self.nix_2_7;
+  nix_2_8 = common {
+    version = "2.8.1";
+    sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
+  };
 
-  unstable = lib.lowPrio (common rec {
-    version = "2.8";
-    suffix = "pre20220322_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "d5d4d980427aca3849b90bfe1694b6d1d14532fb";
-      sha256 = "sha256-fV7nUcRhVmgIvDUraAzHV2TDVHDn1jETfv2zdDMQ59Y=";
-    };
-  });
+  nix_2_9 = common {
+    version = "2.9.2";
+    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
+    patches = [
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
+  };
+
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
+  };
+
+  nix_2_11 = common {
+    version = "2.11.1";
+    sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
+    patches = [
+      ./patches/flaky-tests.patch
+      (fetchpatch {
+        # https://github.com/NixOS/nix/pull/7283
+        name = "fix-requires-non-existing-output.patch";
+        url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+        sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+      })
+    ];
+  };
+
+  stable = self.nix_2_11;
+
+  unstable = self.stable;
 })

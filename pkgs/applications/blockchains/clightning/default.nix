@@ -3,11 +3,12 @@
 , darwin
 , fetchurl
 , autoconf
-, automake
 , autogen
+, automake
 , gettext
 , libtool
-, pkg-config
+, lowdown
+, protobuf
 , unzip
 , which
 , gmp
@@ -17,22 +18,22 @@
 , zlib
 }:
 let
-  py3 = python3.withPackages (p: [ p.Mako p.mrkd ]);
+  py3 = python3.withPackages (p: [ p.Mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.10.2";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "3c9dcb686217b2efe0e988e90b95777c4591e3335e259e01a94af87e0bf01809";
+    sha256 = "sha256-SlDDOJ6H2UVT/dof23CYSzCliAc+5CAYQc87AzOtYjg=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
-  nativeBuildInputs = [ autogen autoconf automake gettext pkg-config py3 unzip which ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ] ++ [ libtool ];
+  nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   buildInputs = [ gmp libsodium sqlite zlib ];
 

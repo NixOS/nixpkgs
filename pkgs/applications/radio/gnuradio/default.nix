@@ -48,13 +48,13 @@
 , pname ? "gnuradio"
 , versionAttr ? {
   major = "3.10";
-  minor = "1";
-  patch = "1";
+  minor = "4";
+  patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-vsAK+GQzcpA9Vsa6q4RFEzVpbF7/+yZkMsemKn6VhIg=";
+  sourceSha256 = "sha256-Ov2NGiEj3mhqYwDYXWd6wcCAv78Ux2/LWyGjQ/ukQNk=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -135,6 +135,12 @@ let
         libsndfile
       ];
       cmakeEnableFlag = "GRC";
+    };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
@@ -221,6 +227,7 @@ let
         setuptools
         click
         click-plugins
+        pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
     };
@@ -310,7 +317,7 @@ stdenv.mkDerivation rec {
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;

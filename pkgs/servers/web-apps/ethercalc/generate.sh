@@ -9,6 +9,7 @@ set -euo pipefail
 cd -- "$(dirname -- "$BASH_SOURCE[0]")"
 
 node2nix \
+     --nodejs-14 \
      --input node-packages.json \
      --output node-packages-generated.nix \
      --composition node-packages.nix \

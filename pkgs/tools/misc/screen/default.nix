@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, ncurses, utmp, pam ? null }:
+{ lib, stdenv, fetchurl, autoreconfHook, ncurses, libxcrypt, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
   pname = "screen";
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     "--enable-pam"
     "--with-sys-screenrc=/etc/screenrc"
     "--enable-colors256"
+    "--enable-rxvt_osc"
   ];
 
   nativeBuildInputs = [
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     ncurses
+    libxcrypt
   ] ++ lib.optional stdenv.isLinux pam
     ++ lib.optional stdenv.isDarwin utmp;
 

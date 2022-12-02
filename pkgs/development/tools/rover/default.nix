@@ -3,26 +3,20 @@
 , fetchFromGitHub
 , perl
 , rustPlatform
-, librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.4.8";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9o2bGa9vxN7EprKgsy9TI7AFmwjo1OT1pDyiLierTq0=";
+    sha256 = "sha256-wBHMND/xpm9o7pkWMUj9lEtEkzy3mX+E4Dt7qDn6auY=";
   };
 
-  cargoSha256 = "sha256-4oNuyZ1xNK2jP9QFEcthCjEQRyvFykd5N0j5KCXrzVY=";
-
-  # The v8 package will try to download a `librusty_v8.a` release at build time
-  # to our read-only filesystem. To avoid this we pre-download the file and
-  # export it via RUSTY_V8_ARCHIVE
-  RUSTY_V8_ARCHIVE = librusty_v8;
+  cargoSha256 = "sha256-n0R2MdAYGsOsYt4x1N1KdGvBZYTALyhSzCGW29bnFU4=";
 
   nativeBuildInputs = [
     perl

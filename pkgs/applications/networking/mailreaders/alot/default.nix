@@ -15,7 +15,7 @@ with python3.pkgs; buildPythonApplication rec {
 
   outputs = [
     "out"
-  ] ++ lib.optional withManpage [
+  ] ++ lib.optionals withManpage [
     "man"
   ];
 
@@ -40,7 +40,7 @@ with python3.pkgs; buildPythonApplication rec {
     file
     gpgme
     notmuch2
-    python_magic
+    python-magic
     service-identity
     twisted
     urwid

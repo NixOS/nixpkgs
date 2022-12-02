@@ -3,6 +3,7 @@
 , aresponses
 , asynctest
 , backoff
+, beautifulsoup4
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "simplisafe-python";
-  version = "2022.03.0";
+  version = "2022.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-B4Tg122S2lJaBXBKUSN2ndt5EOiC5HyORTQXofZKUpw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-fGCYsuhqPs3ZYInx6Z3iRb4dtjoA7mJKpBDVx+6d/qA=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    beautifulsoup4
     docutils
     pytz
     voluptuous
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     # simplipy/api.py:253: InvalidCredentialsError
     "test_request_error_failed_retry"
     "test_update_error"
+    # ClientConnectorError: Cannot connect to host auth.simplisafe.com:443 ssl:default [Temporary failure in name resolution]
+    "test_client_async_from_refresh_token_unknown_error"
   ];
 
   disabledTestPaths = [
@@ -76,6 +80,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    changelog = "https://github.com/bachya/simplisafe-python/releases/tag/${version}";
     description = "Python library the SimpliSafe API";
     homepage = "https://simplisafe-python.readthedocs.io/";
     license = with licenses; [ mit ];

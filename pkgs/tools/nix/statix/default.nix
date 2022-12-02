@@ -5,16 +5,16 @@ rustPlatform.buildRustPackage rec {
   # also update version of the vim plugin in
   # pkgs/applications/editors/vim/plugins/overrides.nix
   # the version can be found in flake.nix of the source code
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "nerdypepper";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9208bR3awxXR1MSh9HbsKeen5V4r4hPuJFkK/CMJRfg=";
+    sha256 = "sha256-OQk80eTUufVUbYvZ38el2lmkgkU+5gr0hLTrBvzIp4A=";
   };
 
-  cargoSha256 = "sha256-f1/PMbXUiqjFI8Y0mvgEyNqGGYqGq3nV094mg1aZIHM=";
+  cargoSha256 = "sha256-j+FcV5JtO66Aa0ncIUfjuWtqnMmFb7zW7rNXttYBUU4=";
 
   buildFeatures = lib.optional withJson "json";
 

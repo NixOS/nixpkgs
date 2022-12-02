@@ -46,7 +46,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         truncate --size=$size $fname
       }
 
-      interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+      interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
       if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
         target_size=$(get_file_size bin/fsnotifier64)
         patchelf --set-interpreter "$interpreter" bin/fsnotifier64
@@ -63,7 +63,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
     mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname}}
     cp -a . $out/$pname
-    ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
+    [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
+    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg
     mv bin/fsnotifier* $out/libexec/${pname}/.
 
     jdk=${jdk.home}
@@ -80,6 +81,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default JDK_HOME "$jdk" \
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
+      --set-default JETBRAINSCLIENT_JDK "$jdk" \
       --set ${hiName}_JDK "$jdk" \
       --set ${hiName}_VM_OPTIONS ${vmoptsFile}
 

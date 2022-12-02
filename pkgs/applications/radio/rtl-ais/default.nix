@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   pname = "rtl-ais";
   version = "0.8.1";
-  buildInputs = [ pkg-config rtl-sdr libusb1 ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ rtl-sdr libusb1 ];
 
   src = fetchFromGitHub {
     owner = "dgiardini";
@@ -19,6 +20,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/dgiardini/rtl-ais";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mgdm ];
+    mainProgram = "rtl_ais";
     platforms = platforms.unix;
   };
 }

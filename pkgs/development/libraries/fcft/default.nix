@@ -15,19 +15,20 @@ let
   ];
 
   # Courtesy of sternenseemann and FRidh, commit c9a7fdfcfb420be8e0179214d0d91a34f5974c54
-  mesonFeatureFlag = opt: b: "-D${opt}=${if b then "enabled" else "disabled"}";
+  mesonFeatureFlag = feature: flag:
+    "-D${feature}=${if flag then "enabled" else "disabled"}";
 in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.0.1";
+  version = "3.1.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    sha256 = "0jxy92ny8b7s7yvz1mr8zpf7l2zsn506fi9f98pvh9k25jprg0cx";
+    sha256 = "sha256-3gsaXnflGiGOpIkqDQe5u6x8d18x67/dc4Hh1iU89+o=";
   };
 
   depsBuildBuild = [ pkg-config ];

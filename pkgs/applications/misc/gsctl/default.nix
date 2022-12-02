@@ -1,22 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, kubectl, stdenv }:
 
 buildGoModule rec {
   pname = "gsctl";
-  version = "1.1.4";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "giantswarm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uCNWgaLZMm1vPxFduj8mpjKYuYlp1ChF6bK+bmAWy50=";
+    sha256 = "sha256-eemPsrSFwgUR1Jz7283jjwMkoJR38QiaiilI9G0IQuo=";
   };
 
-  vendorSha256 = "sha256-lZgHrQYqoyoM1Iv6vCqTMcv62zSKyxaAsq56kUXHrIA=";
+  vendorSha256 = "sha256-6b4H8YAY8d/qIGnnGPYZoXne1LXHLsc0OEq0lCeqivo=";
 
-  ldflags =
-    [ "-s" "-w" "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}" ];
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/giantswarm/gsctl/buildinfo.Version=${version}"
+  ];
 
-  doCheck = false;
+  checkInputs = [
+    kubectl
+  ];
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "The Giant Swarm command line interface";

@@ -108,6 +108,6 @@ mkDerivation rec {
     homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.lumina.members;
   };
 }

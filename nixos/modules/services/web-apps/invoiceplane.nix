@@ -25,6 +25,7 @@ let
     ENCRYPTION_KEY=
     ENCRYPTION_CIPHER=AES-256
     SETUP_COMPLETED=false
+    REMOVE_INDEXPHP=true
   '';
 
   extraConfig = hostName: cfg: pkgs.writeText "extraConfig.php" ''
@@ -36,10 +37,10 @@ let
     version = src.version;
     src = pkgs.invoiceplane;
 
-    patchPhase = ''
+    postPhase = ''
       # Patch index.php file to load additional config file
       substituteInPlace index.php \
-        --replace "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = new \Dotenv\Dotenv(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+        --replace "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
     '';
 
     installPhase = ''
@@ -67,12 +68,12 @@ let
     {
       options = {
 
-        enable = mkEnableOption "InvoicePlane web application";
+        enable = mkEnableOption (lib.mdDoc "InvoicePlane web application");
 
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/invoiceplane/${name}";
-          description = ''
+          description = lib.mdDoc ''
             This directory is used for uploads of attachements and cache.
             The directory passed here is automatically created and permissions
             adjusted as required.
@@ -83,50 +84,53 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database host address.";
+            description = lib.mdDoc "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = "Database host port.";
+            description = lib.mdDoc "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = "Database name.";
+            description = lib.mdDoc "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "invoiceplane";
-            description = "Database user.";
+            description = lib.mdDoc "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/invoiceplane-dbpassword";
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password corresponding to
-              <option>database.user</option>.
+              {option}`database.user`.
             '';
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = lib.mdDoc "Create the database and database user locally.";
           };
         };
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
-            <note><para>These templates need to be packaged before use, see example.</para></note>
+
+            ::: {.note}
+            These templates need to be packaged before use, see example.
+            :::
           '';
           example = literalExpression ''
             let
@@ -160,8 +164,8 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the InvoicePlane PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the InvoicePlane PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
@@ -174,11 +178,31 @@ let
             DISABLE_SETUP=true
             IP_URL=https://invoice.example.com
           '';
-          description = ''
+          description = lib.mdDoc ''
             InvoicePlane configuration. Refer to
-            <link xlink:href="https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example"/>
+            <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
             for details on supported values.
           '';
+        };
+
+        cron = {
+
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = lib.mdDoc ''
+              Enable cron service which periodically runs Invoiceplane tasks.
+              Requires key taken from the administration page. Refer to
+              <https://wiki.invoiceplane.com/en/1.0/modules/recurring-invoices>
+              on how to configure it.
+            '';
+          };
+
+          key = mkOption {
+            type = types.str;
+            description = lib.mdDoc "Cron key taken from the administration page.";
+          };
+
         };
 
       };
@@ -194,20 +218,20 @@ in
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
           default = {};
-          description = "Specification of one or more WordPress sites to serve";
+          description = lib.mdDoc "Specification of one or more WordPress sites to serve";
         };
 
         options.webserver = mkOption {
           type = types.enum [ "caddy" ];
           default = "caddy";
-          description = ''
+          description = lib.mdDoc ''
             Which webserver to use for virtual host management. Currently only
             caddy is supported.
           '';
         };
       };
       default = {};
-      description = "InvoicePlane configuration.";
+      description = lib.mdDoc "InvoicePlane configuration.";
     };
 
   };
@@ -221,8 +245,11 @@ in
       }
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
-      }]
-    ) eachSite);
+      }
+      { assertion = cfg.cron.enable -> cfg.cron.key != null;
+        message = ''services.invoiceplane.sites."${hostName}".cron.key must be set in order to use cron service.'';
+      }
+    ]) eachSite);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -236,7 +263,7 @@ in
     };
 
     services.phpfpm = {
-      phpPackage = pkgs.php74;
+      phpPackage = pkgs.php81;
       pools = mapAttrs' (hostName: cfg: (
         nameValuePair "invoiceplane-${hostName}" {
           inherit user;
@@ -252,6 +279,7 @@ in
   }
 
   {
+
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
       "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
       "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
@@ -281,6 +309,34 @@ in
       group = webserver.group;
       isSystemUser = true;
     };
+
+  }
+  {
+
+    # Cron service implementation
+
+    systemd.timers = mapAttrs' (hostName: cfg: (
+      nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnBootSec = "5m";
+          OnUnitActiveSec = "5m";
+          Unit = "invoiceplane-cron-${hostName}.service";
+        };
+      })
+    )) eachSite;
+
+    systemd.services =
+      mapAttrs' (hostName: cfg: (
+        nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
+          serviceConfig = {
+            Type = "oneshot";
+            User = user;
+            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
+          };
+        })
+    )) eachSite;
+
   }
 
   (mkIf (cfg.webserver == "caddy") {
@@ -289,9 +345,8 @@ in
       virtualHosts = mapAttrs' (hostName: cfg: (
         nameValuePair "http://${hostName}" {
           extraConfig = ''
-            root    * ${pkg hostName cfg}
+            root * ${pkg hostName cfg}
             file_server
-
             php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
           '';
         }
@@ -299,7 +354,5 @@ in
     };
   })
 
-
   ]);
 }
-

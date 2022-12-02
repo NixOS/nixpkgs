@@ -9,7 +9,7 @@ with lib;
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the multiple spanning tree protocol daemon.
       '';
     };

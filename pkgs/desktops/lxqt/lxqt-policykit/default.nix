@@ -14,18 +14,18 @@
 , liblxqt
 , libqtxdg
 , pcre
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0hmxzkkggnpci305xax9663cbjqdh6n0j0dawwcpwj4ks8mp7xh7";
+    sha256 = "SvJ4XN0JZs2VAt5H9CJXrJhThxnQnlbsLP44CW7zpGM=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,14 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-policykit";
     description = "The LXQt PolicyKit agent";
+    mainProgram = "lxqt-policykit-agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

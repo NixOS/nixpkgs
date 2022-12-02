@@ -9,13 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.4.2";
+  version = "5.4.3";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4oPnC1WgSf82TMXmSP3lh+TZsOh+SyZkxp5jkTXms7g=";
+    hash = "sha256-Yrhjxe5s7UAyr+lI88FITzdVUJldO4SYFFI3/ijlRsI=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov" ""
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
   '';
 
   # https://github.com/agronholm/cbor2/issues/99

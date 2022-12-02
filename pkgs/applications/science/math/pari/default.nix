@@ -3,17 +3,18 @@
 , fetchurl
 , gmp
 , libX11
+, libpthreadstubs
 , perl
 , readline
 , tex
-, withThread ? true, libpthreadstubs
+, withThread ? true
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.13.3";
+  version = "2.15.1";
 
   src = fetchurl {
     urls = [
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-zLp/FgbGhU8UQ2N7tXrQlY1Bx/R1P4roRZ8dZMJnoco=";
+    hash = "sha256-RUGdt3xmhb7mfkLg7LeOGe9WK+eq/GN8ikGXDy6Qnj0=";
   };
 
   buildInputs = [
@@ -39,15 +40,10 @@ stdenv.mkDerivation rec {
     "--with-gmp=${lib.getDev gmp}"
     "--with-readline=${lib.getDev readline}"
   ]
-  ++ lib.optional stdenv.isDarwin "--host=x86_64-darwin"
   ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
-  '';
-
-  postConfigure = lib.optionalString stdenv.isDarwin ''
-    echo 'echo x86_64-darwin' > config/arch-osname
   '';
 
   makeFlags = [ "all" ];
@@ -80,7 +76,8 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes AndersonTorres ] ++ teams.sage.members;
+    maintainers = with maintainers; [ ertes ] ++ teams.sage.members;
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "gp";
   };
 }

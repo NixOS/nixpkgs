@@ -6,6 +6,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
   nodes = {
     machine = { config, ... }: {
+      networking.extraHosts = ''
+        127.0.0.1 all.api.radio-browser.info
+      '';
+
       services.murmur = {
         enable = true;
         registerName = "NixOS tests";

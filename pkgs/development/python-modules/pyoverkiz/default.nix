@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.3.12";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,9 +23,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    rev = "v${version}";
-    hash = "sha256-guL//OHiwlKN55kyoRPIUXuoHOVrho+vSgeV3SAdfNM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PGictIBXrUIorAU9Ic41LzEQPJliCpwGoOlkteHUuEw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -52,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";
     homepage = "https://github.com/iMicknl/python-overkiz-api";
+    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , GitPython
 , isort
 , jupyter-client
@@ -18,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.13.7";
+  version = "1.14.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -26,9 +28,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DWK5ZoPL6Ek3dXHOlZfecQKLNwBqDjMZ77XZ7YLCXKI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-DDF4aTLkhEl4xViYh/E0/y6swcwZ9KbeS0qKm+HdFz8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mwouts/jupytext/commit/be9b65b03600227b737b5f10ea259a7cdb762b76.patch";
+      hash = "sha256-3klx8I+T560EVfsKe/FlrSjF6JzdKSCt6uhAW2cSwtc=";
+    })
+  ];
 
   buildInputs = [
     jupyter-packaging
@@ -51,12 +60,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/mwouts/jupytext/pull/885
-    substituteInPlace setup.py \
-      --replace "markdown-it-py~=1.0" "markdown-it-py>=1.0.0,<3.0.0"
-  '';
-
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable
     export HOME=$(mktemp -d);
@@ -69,6 +72,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
+  ] ++ lib.optionals stdenv.isDarwin [
+    # requires access to trash
+    "test_load_save_rename"
   ];
 
   pythonImportsCheck = [

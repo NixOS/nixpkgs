@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , docbook_xml_dtd_43
 , docbook-xsl-nons
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.10";
+  version = "0.1.12";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-6fqcP8LWvRoDf5gJz+kW0w5+3PP/luuoPMak1QLKzzM=";
+    sha256 = "sha256-9+wtCJzvT9uAXRXj/koFG7asxm5JIDw0Ffp4wK6tbDk=";
   };
 
   patches = [

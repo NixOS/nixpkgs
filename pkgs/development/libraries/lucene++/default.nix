@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, gtest, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, gtest, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "lucene++";
@@ -14,12 +14,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost gtest zlib ];
 
-  doCheck = true;
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
+
+  patches = [
+    (fetchpatch {
+      name = "pkgconfig_use_correct_LIBDIR_for_destination_library";
+      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/39cd44bd54e918d25ee464477992ad0dc234dcba.patch";
+      sha256 = "sha256-PP6ENNhPJMWrYDlTnr156XV8d5aX/VNX8v4vvi9ZiWo";
+    })
+  ];
 
   postPatch = ''
-     substituteInPlace src/test/CMakeLists.txt \
-            --replace "add_subdirectory(gtest)" ""
+    substituteInPlace src/test/CMakeLists.txt \
+      --replace "add_subdirectory(gtest)" ""
   '';
+
+  doCheck = true;
 
   checkPhase = ''
     runHook preCheck
@@ -30,6 +40,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/include/pkgconfig $out/lib/
+    cp $src/src/contrib/include/*h $out/include/lucene++/
   '';
 
   meta = {

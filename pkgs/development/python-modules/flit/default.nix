@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , docutils
 , requests
-, pytest
+, pytestCheckHook
 , testpath
 , responses
 , flit-core
@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.6.0";
+  version = "3.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    sha256 = "sha256-D3q/1g6njrrmizooGmzNd9g2nKs00dMGj9jrrv3Y6HQ=";
+    sha256 = "sha256-zKgaeK3fskz2TuHvIWlxBrdZIWfIJHhaqopZ3+V36wY=";
   };
 
   nativeBuildInputs = [
@@ -40,18 +40,17 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  checkInputs = [ pytest testpath responses ];
+  checkInputs = [ pytestCheckHook testpath responses ];
 
-  # Disable test that needs some ini file.
-  # Disable test that wants hg
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
-  '';
+  disabledTests = [
+    # needs some ini file.
+    "test_invalid_classifier"
+  ];
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
-    homepage = "https://github.com/takluyver/flit";
+    homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = [ maintainers.fridh ];
+    maintainers = with maintainers; [ fridh SuperSandro2000 ];
   };
 }

@@ -12,11 +12,11 @@
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03cd45edab8716ebbfdb754e65fea72e873c73dc91aec098fe4a01e35324ac7a";
+    sha256 = "17beb467d3cb39fffec3227c468f0dd8db8a09129faeb95a6bb4c84b2b6c6683";
   };
 
   patches = [

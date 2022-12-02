@@ -1,41 +1,46 @@
 { lib
+, asciidoc
 , fetchFromGitHub
-, buildPythonApplication
-, asciidoc-full
-, docopt
-, gettext
 , gobject-introspection
 , gtk3
-, keyutils
+, installShellFiles
 , libappindicator-gtk3
 , libnotify
 , librsvg
-, nose
-, pygobject3
-, pyyaml
+, python3
 , udisks2
 , wrapGAppsHook
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.4.0";
+  version = "2.4.2";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-T4kMPMXfehZT7P+TOd1llR2TbHPA/quNL545xxlmJfE=";
+    hash = "sha256-lQMJVSY3JeZYYOFDyV29Ye2j8r+ngE/ta2wQYipy4hU=";
   };
 
-  outputs = [ "out" "man" ];
+  patches = [
+    ./locale-path.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace udiskie/locale.py --subst-var out
+  '';
 
   nativeBuildInputs = [
-    asciidoc-full # Man page
-    gettext
+    asciidoc # Man page
     gobject-introspection
+    installShellFiles
     wrapGAppsHook
   ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     gobject-introspection
@@ -46,8 +51,9 @@ buildPythonApplication rec {
     udisks2
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     docopt
+    keyutils
     pygobject3
     pyyaml
   ];
@@ -57,21 +63,20 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mkdir -p $man/share/man/man8
-    cp -v doc/udiskie.8 $man/share/man/man8/
+    installManPage doc/udiskie.8
   '';
 
-  checkInputs = [
-    keyutils
-    nose
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    nosetests
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";
+    changelog = "https://github.com/coldfix/udiskie/blob/${src.rev}/CHANGES.rst";
     description = "Removable disk automounter for udisks";
     longDescription = ''
       udiskie is a udisks2 front-end that allows to manage removeable media such
@@ -88,6 +93,6 @@ buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres dotlambda ];
   };
 }

@@ -16,15 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "expat";
-  version = "2.4.6";
+  version = "2.5.0";
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3lV5S3qbwhSFL9wHW+quzYVO/hNhWX5iaO6HlGlRKJs=";
+    sha256 = "1gnwihpfz4x18rwd6cbrdggmfqjzwsdfh1gpmc0ph21c4gq2097g";
   };
+
+  strictDeps = true;
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
+
+  enableParallelBuilding = true;
 
   configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
 
@@ -45,6 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit python3;
+    inherit (python3.pkgs) xmltodict;
     inherit (haskellPackages) hexpat;
     inherit (perlPackages) XMLSAXExpat XMLParser;
     inherit (luaPackages) luaexpat;

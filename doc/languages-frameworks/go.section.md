@@ -11,8 +11,8 @@ The function `buildGoModule` builds Go programs managed with Go modules. It buil
 
 In the following is an example expression using `buildGoModule`, the following arguments are of special significance to the function:
 
-- `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
-- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform dependant `vendorSha256` checksums.
+- `vendorHash`: is the hash of the output of the intermediate fetcher derivation. `vendorHash` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorHash = null;`
+- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform dependant `vendorHash` checksums.
 
 ```nix
 pet = buildGoModule rec {
@@ -26,7 +26,7 @@ pet = buildGoModule rec {
     sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
   };
 
-  vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j";
+  vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
@@ -142,4 +142,8 @@ Removes the pre-existing vendor directory. This should only be used if the depen
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+
+### `excludedPackages` {#var-go-excludedPackages}
+
+Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.

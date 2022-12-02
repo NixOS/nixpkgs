@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.53";
+  version = "2.4.54";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-0LvREhpXtfKm/5LXuW+AUMWkXT8U2xGPZJedUlhY22M=";
+    sha256 = "sha256-6zl/7u/MryVPjUXeN2jZ1o6Oc4UcSa/VtxdtHs+Aw0A=";
   };
 
   # FIXME: -dev depends on -doc
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [ perl ] ++
+  buildInputs = [ perl libxcrypt ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag

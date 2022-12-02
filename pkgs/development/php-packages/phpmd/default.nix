@@ -29,6 +29,5 @@ mkDerivation {
     license = licenses.bsd3;
     homepage = "https://phpmd.org/";
     maintainers = teams.php.members;
-    broken = versionOlder php.version "7.4";
   };
 }

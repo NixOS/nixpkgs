@@ -1,7 +1,33 @@
-{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin }:
+{ lib, stdenv, fetchurl, coreutils, nettools, java, scala, polyml, z3, veriT, vampire, eprover-ho, naproche, rlwrap, perl, makeDesktopItem, isabelle-components, isabelle, symlinkJoin, fetchhg }:
 # nettools needed for hostname
 
-stdenv.mkDerivation rec {
+let
+  sha1 = stdenv.mkDerivation {
+    pname = "isabelle-sha1";
+    version = "2021-1";
+
+    src = fetchhg {
+      url = "https://isabelle.sketis.net/repos/sha1";
+      rev = "e0239faa6f42";
+      sha256 = "sha256-4sxHzU/ixMAkSo67FiE6/ZqWJq9Nb9OMNhMoXH2bEy4=";
+    };
+
+    buildPhase = (if stdenv.isDarwin then ''
+      LDFLAGS="-dynamic -undefined dynamic_lookup -lSystem"
+    '' else ''
+      LDFLAGS="-fPIC -shared"
+    '') + ''
+      CFLAGS="-fPIC -I."
+      $CC $CFLAGS -c sha1.c -o sha1.o
+      $LD $LDFLAGS sha1.o -o libsha1.so
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib
+      cp libsha1.so $out/lib/
+    '';
+  };
+in stdenv.mkDerivation rec {
   pname = "isabelle";
   version = "2021-1";
 
@@ -21,10 +47,15 @@ stdenv.mkDerivation rec {
         sha256 = "0jfaqckhg388jh9b4msrpkv6wrd6xzlw18m0bngbby8k8ywalp9i";
       };
 
-  buildInputs = [ polyml z3 veriT vampire eprover-ho ]
-    ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
+  buildInputs = [ polyml z3 veriT vampire eprover-ho nettools ]
+    ++ lib.optionals (!stdenv.isDarwin) [ java ];
 
-  sourceRoot = dirname;
+  sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
+
+  postUnpack = if stdenv.isDarwin then ''
+    mv $sourceRoot ${dirname}
+    sourceRoot=${dirname}
+  '' else null;
 
   postPatch = ''
     patchShebangs .
@@ -82,7 +113,13 @@ stdenv.mkDerivation rec {
       --replace 'cmd.add("/usr/bin/env");' "" \
       --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
+    substituteInPlace src/Pure/General/sha1.ML \
+      --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+
     rm -r heaps
+  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+    substituteInPlace lib/scripts/isabelle-platform \
+      --replace 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,nunchaku,SPASS,zipperposition}; do
@@ -149,9 +186,13 @@ stdenv.mkDerivation rec {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # source bundles binary dependencies
+    ];
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 } // {
   withComponents = f:

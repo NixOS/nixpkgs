@@ -1,0 +1,13 @@
+diff --git a/utils/rclutil.cpp b/utils/rclutil.cpp
+index 60ff5fb..4a59ccc 100644
+--- a/utils/rclutil.cpp
++++ b/utils/rclutil.cpp
+@@ -279,7 +279,7 @@ const string& path_pkgdatadir()
+         "a subfolder of the installation directory. \n"
+         "Please set the RECOLL_DATADIR environment variable to point to it\n"
+         "(e.g. setx RECOLL_DATADIR \"C:/Program Files (X86)/Recoll/Share)\"\n";
+-#elif defined(__APPLE__) && !defined(MACPORTS) && !defined(HOMEBREW)
++#elif defined(__APPLE__) && !defined(MACPORTS) && !defined(HOMEBREW) && !defined(NIXPKGS)
+     uint32_t size = 0;
+     _NSGetExecutablePath(nullptr, &size);
+     char *path= (char*)malloc(size+1);

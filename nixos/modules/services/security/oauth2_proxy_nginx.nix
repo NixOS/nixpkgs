@@ -9,14 +9,14 @@ in
       type = types.str;
       default = config.services.oauth2_proxy.httpAddress;
       defaultText = literalExpression "config.services.oauth2_proxy.httpAddress";
-      description = ''
+      description = lib.mdDoc ''
         The address of the reverse proxy endpoint for oauth2_proxy
       '';
     };
     virtualHosts = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         A list of nginx virtual hosts to put behind the oauth2 proxy
       '';
     };

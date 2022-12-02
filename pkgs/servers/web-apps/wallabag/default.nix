@@ -1,11 +1,14 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 }:
 
 # Point the environment variable $WALLABAG_DATA to a data directory
-# that contains the folder `app/config` which must be a clone of
+# that contains the folder `app` which must be a clone of
 # wallabag's configuration files with your customized `parameters.yml`.
+# In practice you need to copy `${pkgs.wallabag}/app` and the
+# customizzed `parameters.yml` to $WALLABAG_DATA.
 # These need to be updated every package upgrade.
 #
 # After a package upgrade, empty the `var/cache` folder or unexpected
@@ -13,18 +16,30 @@
 
 let
   pname = "wallabag";
-  version = "2.4.3";
+  version = "2.5.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
+  # Release tarball includes vendored files
   src = fetchurl {
-    url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    hash = "sha256-u6TflAzxoaxjLhNMv5ua+NPBv4kxGycgz2QXnhtDHTo=";
+    urls = [
+      "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
+      "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
+    ];
+    hash = "sha256-Q989SorGPm3KBuQhGAinYU6HGIa9RrhtRPvwGALU6jk=";
   };
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
+
+    # Use sendmail from php.ini instead of FHS path.
+    (fetchpatch {
+      url = "https://github.com/symfony/swiftmailer-bundle/commit/31a4fed8f621f141ba70cb42ffb8f73184995f4c.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/symfony/swiftmailer-bundle/";
+      sha256 = "rxHiGhKFd/ZWnIfTt6omFLLoNFlyxOYNCHIv/UtxCho=";
+    })
   ];
 
   dontBuild = true;

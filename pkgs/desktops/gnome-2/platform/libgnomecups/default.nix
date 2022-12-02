@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, pkg-config, gtk2, gettext, libxml2, intltool, libart_lgpl }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, gettext, libxml2, intltool, libart_lgpl }:
 
 stdenv.mkDerivation rec {
-  name = "libgnomecups-0.2.3";
+  pname = "libgnomecups";
+  version = "0.2.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgnomecups/0.2/${name}.tar.bz2";
+    url = "mirror://gnome/sources/libgnomecups/${lib.versions.majorMinor version}/libgnomecups-${version}.tar.bz2";
     sha256 = "0a8xdaxzz2wc0n1fjcav65093gixzyac3948l8cxx1mk884yhc71";
   };
 
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glib.patch ./cups_1.6.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 gettext intltool libart_lgpl ];
+  nativeBuildInputs = [ pkg-config intltool ];
+  buildInputs = [ gtk2 gettext libart_lgpl ];
 
   propagatedBuildInputs = [ libxml2 ];
 }

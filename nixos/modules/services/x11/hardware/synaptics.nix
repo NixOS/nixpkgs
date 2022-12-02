@@ -30,7 +30,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable touchpad support. Deprecated: Consider services.xserver.libinput.enable.";
+        description = lib.mdDoc "Whether to enable touchpad support. Deprecated: Consider services.xserver.libinput.enable.";
       };
 
       dev = mkOption {
@@ -38,7 +38,7 @@ in {
         default = null;
         example = "/dev/input/event0";
         description =
-          ''
+          lib.mdDoc ''
             Path for touchpad device.  Set to null to apply to any
             auto-detected touchpad.
           '';
@@ -47,73 +47,73 @@ in {
       accelFactor = mkOption {
         type = types.nullOr types.str;
         default = "0.001";
-        description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+        description = lib.mdDoc "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
       minSpeed = mkOption {
         type = types.nullOr types.str;
         default = "0.6";
-        description = "Cursor speed factor for precision finger motion.";
+        description = lib.mdDoc "Cursor speed factor for precision finger motion.";
       };
 
       maxSpeed = mkOption {
         type = types.nullOr types.str;
         default = "1.0";
-        description = "Cursor speed factor for highest-speed finger motion.";
+        description = lib.mdDoc "Cursor speed factor for highest-speed finger motion.";
       };
 
       scrollDelta = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 75;
-        description = "Move distance of the finger for a scroll event.";
+        description = lib.mdDoc "Move distance of the finger for a scroll event.";
       };
 
       twoFingerScroll = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll.";
+        description = lib.mdDoc "Whether to enable two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll.";
       };
 
       horizTwoFingerScroll = mkOption {
         type = types.bool;
         default = cfg.twoFingerScroll;
         defaultText = literalExpression "config.${opt.twoFingerScroll}";
-        description = "Whether to enable horizontal two-finger drag-scrolling.";
+        description = lib.mdDoc "Whether to enable horizontal two-finger drag-scrolling.";
       };
 
       vertTwoFingerScroll = mkOption {
         type = types.bool;
         default = cfg.twoFingerScroll;
         defaultText = literalExpression "config.${opt.twoFingerScroll}";
-        description = "Whether to enable vertical two-finger drag-scrolling.";
+        description = lib.mdDoc "Whether to enable vertical two-finger drag-scrolling.";
       };
 
       horizEdgeScroll = mkOption {
         type = types.bool;
         default = ! cfg.horizTwoFingerScroll;
         defaultText = literalExpression "! config.${opt.horizTwoFingerScroll}";
-        description = "Whether to enable horizontal edge drag-scrolling.";
+        description = lib.mdDoc "Whether to enable horizontal edge drag-scrolling.";
       };
 
       vertEdgeScroll = mkOption {
         type = types.bool;
         default = ! cfg.vertTwoFingerScroll;
         defaultText = literalExpression "! config.${opt.vertTwoFingerScroll}";
-        description = "Whether to enable vertical edge drag-scrolling.";
+        description = lib.mdDoc "Whether to enable vertical edge drag-scrolling.";
       };
 
       tapButtons = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable tap buttons.";
+        description = lib.mdDoc "Whether to enable tap buttons.";
       };
 
       buttonsMap = mkOption {
         type = types.listOf types.int;
         default = [1 2 3];
         example = [1 3 2];
-        description = "Remap touchpad buttons.";
+        description = lib.mdDoc "Remap touchpad buttons.";
         apply = map toString;
       };
 
@@ -121,34 +121,34 @@ in {
         type = types.listOf types.int;
         default = [1 2 3];
         example = [1 3 2];
-        description = "Remap several-fingers taps.";
+        description = lib.mdDoc "Remap several-fingers taps.";
         apply = map toString;
       };
 
       palmDetect = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable palm detection (hardware support required)";
+        description = lib.mdDoc "Whether to enable palm detection (hardware support required)";
       };
 
       palmMinWidth = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 5;
-        description = "Minimum finger width at which touch is considered a palm";
+        description = lib.mdDoc "Minimum finger width at which touch is considered a palm";
       };
 
       palmMinZ = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 20;
-        description = "Minimum finger pressure at which touch is considered a palm";
+        description = lib.mdDoc "Minimum finger pressure at which touch is considered a palm";
       };
 
       horizontalScroll = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable horizontal scrolling (on touchpad)";
+        description = lib.mdDoc "Whether to enable horizontal scrolling (on touchpad)";
       };
 
       additionalOptions = mkOption {
@@ -158,7 +158,7 @@ in {
           Option "RTCornerButton" "2"
           Option "RBCornerButton" "3"
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional options for synaptics touchpad driver.
         '';
       };

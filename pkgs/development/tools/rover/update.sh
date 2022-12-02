@@ -26,17 +26,6 @@ rover_tar_url="https://github.com/apollographql/rover/archive/refs/tags/${rover_
 # Convert hash to SRI representation
 rover_sri_hash=$(nix hash to-sri --type sha256 "$rover_hash")
 
-# Identify librusty version and hash
-librusty_version=$(
-    sed --quiet '/^name = "v8"$/{n;p}' "${repo}/Cargo.lock" \
-        | grep --only-matching --perl-regexp '^version = "\K[^"]+'
-)
-librusty_arch=x86_64-unknown-linux-gnu
-librusty_url="https://github.com/denoland/rusty_v8/releases/download/v${librusty_version}/librusty_v8_release_${librusty_arch}.a"
-echo "Fetching librusty"
-librusty_hash=$(nix-prefetch-url "$librusty_url" --type sha256)
-librusty_sri_hash=$(nix hash to-sri --type sha256 "$librusty_hash")
-
 # Update rover version.
 sed --in-place \
     "s|version = \"[0-9.]*\"|version = \"$rover_version\"|" \
@@ -60,16 +49,6 @@ cargoSha256=$(
 sed --in-place \
     "s|cargoSha256 = \".*\"|cargoSha256 = \"$cargoSha256\"|" \
     "$dirname/default.nix"
-
-# Update librusty version
-sed --in-place \
-    "s|version = \"[0-9.]*\"|version = \"$librusty_version\"|" \
-    "$dirname/librusty_v8.nix"
-
-# Update librusty hash
-sed --in-place \
-    "s|x86_64-linux = \"[^\"]*\"|x86_64-linux = \"$librusty_sri_hash\"|" \
-    "$dirname/librusty_v8.nix"
 
 # Update apollo api schema info
 response="$(mktemp)"

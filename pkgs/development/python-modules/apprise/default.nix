@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , click
 , cryptography
@@ -7,31 +7,29 @@
 , gntp
 , installShellFiles
 , markdown
-, mock
 , paho-mqtt
+, pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , requests
-, requests_oauthlib
-, six
-, slixmpp
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.7";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BOMeSvwmGiZvA95+e2bceCGXRwowU5+zJAl7Sn4wKqM=";
+    hash = "sha256-bjGvoY9HRS6szVb7fug9kkUsU00V85JAftGg48RlJEs=";
   };
 
   nativeBuildInputs = [
-    Babel
     installShellFiles
   ];
 
@@ -41,21 +39,26 @@ buildPythonPackage rec {
     markdown
     pyyaml
     requests
-    requests_oauthlib
-    six
+    requests-oauthlib
   ];
 
   checkInputs = [
+    babel
     gntp
-    mock
     paho-mqtt
+    pytest-mock
+    pytest-xdist
     pytestCheckHook
-    slixmpp
   ];
 
   disabledTests = [
     "test_apprise_cli_nux_env"
     "test_plugin_mqtt_general"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
   ];
 
   postInstall = ''

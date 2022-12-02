@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 libxml2 llvm perl sqlite ];
   doCheck = true;
-  buildFlags = "GCC_BASE:=${GCC_BASE}";
+  buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Semantic parser for C";
-    homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
+    homepage    = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice jkarlson ];

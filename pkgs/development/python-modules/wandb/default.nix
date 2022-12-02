@@ -1,8 +1,9 @@
-{ azure-core
+{ lib
+, stdenv
+, azure-core
 , bokeh
 , buildPythonPackage
 , click
-, configparser
 , docker_pycreds
 , fetchFromGitHub
 , flask
@@ -10,8 +11,8 @@
 , GitPython
 , jsonref
 , jsonschema
-, lib
 , matplotlib
+, nbclient
 , nbformat
 , pandas
 , pathtools
@@ -22,8 +23,9 @@
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, python
-, python-dateutil
+, pythonOlder
+, pythonRelaxDepsHook
+, torch
 , pyyaml
 , requests
 , scikit-learn
@@ -31,87 +33,51 @@
 , setproctitle
 , setuptools
 , shortuuid
-, stdenv
+, substituteAll
 , tqdm
-, yaspin
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.11";
+  version = "0.13.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
-    repo = "client";
-    rev = "v${version}";
-    sha256 = "0av4vv4llan40678bw0vlah0gn6hjg5pdqwq0c5cv15lqrdb8g32";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1GoFmncG5bUWJOIUDLatopQMxCFsmlcj8aofJMGUTzQ=";
   };
 
-  # The wandb requirements.txt does not distinguish python2/3 dependencies. We
-  # need to drop the subprocess32 dependency when building for python3.
-  patchPhase = ''
-    substituteInPlace requirements.txt --replace "subprocess32>=3.5.3" ""
-  '';
+  patches = [
+    # Replace git paths
+    (substituteAll {
+      src = ./hardcode-git-path.patch;
+      git = "${lib.getBin git}/bin/git";
+    })
+  ];
 
-  # git is not a setup.py dependency of wandb, but wandb does expect git to be
-  # in PATH. See https://gist.github.com/samuela/57aeee710e41ab2bf361b7ed8fbbeabf
-  # for the error message, and an example usage here: https://github.com/wandb/client/blob/master/wandb/sdk/internal/meta.py#L139-L141.
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
     click
-    configparser
     docker_pycreds
-    git
     GitPython
     pathtools
     promise
     protobuf
     psutil
-    python-dateutil
     pyyaml
     requests
     sentry-sdk
     setproctitle
     setuptools
     shortuuid
-    yaspin
-  ];
-
-  disabledTestPaths = [
-    # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
-    "tests/test_cli.py"
-    "tests/test_data_types.py"
-    "tests/test_file_stream.py"
-    "tests/test_file_upload.py"
-    "tests/test_footer.py"
-    "tests/test_internal_api.py"
-    "tests/test_label_full.py"
-    "tests/test_login.py"
-    "tests/test_meta.py"
-    "tests/test_metric_full.py"
-    "tests/test_metric_internal.py"
-    "tests/test_mode_disabled.py"
-    "tests/test_mp_full.py"
-    "tests/test_public_api.py"
-    "tests/test_redir.py"
-    "tests/test_runtime.py"
-    "tests/test_sender.py"
-    "tests/test_start_method.py"
-    "tests/test_tb_watcher.py"
-    "tests/test_telemetry_full.py"
-    "tests/wandb_agent_test.py"
-    "tests/wandb_artifacts_test.py"
-    "tests/wandb_integration_test.py"
-    "tests/wandb_run_test.py"
-    "tests/wandb_settings_test.py"
-    "tests/wandb_sweep_test.py"
-    "tests/wandb_verify_test.py"
-
-    # Fails and borks the pytest runner as well.
-    "tests/wandb_test.py"
-
-    # Tries to access /homeless-shelter
-    "tests/test_tables.py"
   ];
 
   checkInputs = [
@@ -121,21 +87,83 @@ buildPythonPackage rec {
     jsonref
     jsonschema
     matplotlib
+    nbclient
     nbformat
     pandas
     pydantic
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    torch
     scikit-learn
     tqdm
   ];
 
-  pythonImportsCheck = [ "wandb" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  disabledTestPaths = [
+    # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/unit_tests_old/test_cli.py"
+    "tests/unit_tests_old/test_data_types.py"
+    "tests/unit_tests_old/test_file_stream.py"
+    "tests/unit_tests_old/test_file_upload.py"
+    "tests/unit_tests_old/test_footer.py"
+    "tests/unit_tests_old/test_internal_api.py"
+    "tests/unit_tests_old/test_keras.py"
+    "tests/unit_tests_old/test_metric_internal.py"
+    "tests/unit_tests_old/test_public_api.py"
+    "tests/unit_tests_old/test_report_api.py"
+    "tests/unit_tests_old/test_runtime.py"
+    "tests/unit_tests_old/test_sender.py"
+    "tests/unit_tests_old/test_tb_watcher.py"
+    "tests/unit_tests_old/test_time_resolution.py"
+    "tests/unit_tests_old/test_wandb_agent.py"
+    "tests/unit_tests_old/test_wandb_artifacts.py"
+    "tests/unit_tests_old/test_wandb_integration.py"
+    "tests/unit_tests_old/test_wandb_run.py"
+    "tests/unit_tests/test_cli.py"
+    "tests/unit_tests/test_data_types.py"
+    "tests/unit_tests/test_file_upload.py"
+    "tests/unit_tests/test_footer.py"
+    "tests/unit_tests/test_internal_api.py"
+    "tests/unit_tests/test_label_full.py"
+    "tests/unit_tests/test_login.py"
+    "tests/unit_tests/test_metric_full.py"
+    "tests/unit_tests/test_metric_internal.py"
+    "tests/unit_tests/test_mode_disabled.py"
+    "tests/unit_tests/test_model_workflows.py"
+    "tests/unit_tests/test_mp_full.py"
+    "tests/unit_tests/test_plots.py"
+    "tests/unit_tests/test_public_api.py"
+    "tests/unit_tests/test_runtime.py"
+    "tests/unit_tests/test_sender.py"
+    "tests/unit_tests/test_start_method.py"
+    "tests/unit_tests/test_tb_watcher.py"
+    "tests/unit_tests/test_telemetry_full.py"
+    "tests/unit_tests/test_util.py"
+
+    # Tries to access /homeless-shelter
+    "tests/unit_tests/test_tables.py"
+  ];
+
+  # Disable test that fails on darwin due to issue with python3Packages.psutil:
+  # https://github.com/giampaolo/psutil/issues/1219
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_tpu_system_stats"
+  ];
+
+  pythonImportsCheck = [
+    "wandb"
+  ];
 
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";
-    homepage = "https://github.com/wandb/client";
+    homepage = "https://github.com/wandb/wandb";
+    changelog = "https://github.com/wandb/wandb/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

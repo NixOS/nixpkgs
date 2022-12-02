@@ -4,24 +4,27 @@
 , fetchPypi
 , sphinx
 , beautifulsoup4
+, sphinx-basic-ng
 }:
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2022.3.4";
+  version = "2022.9.29";
   format = "wheel";
-  disable = pythonOlder "3.6";
+
+  disable = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-bHGCk+v4d1XwufFIseaXyeOqvXr5VWRNS8ruXOddt4E=";
+    hash = "sha256-VZ7heZnA9ScoSB3PaxsM+Ml0PmjF46GMtFp5knR4aak=";
   };
 
   propagatedBuildInputs = [
     sphinx
     beautifulsoup4
+    sphinx-basic-ng
   ];
 
   installCheckPhase = ''
@@ -35,7 +38,9 @@ buildPythonPackage rec {
     cd -
   '';
 
-  pythonImportsCheck = [ "furo" ];
+  pythonImportsCheck = [
+    "furo"
+  ];
 
   meta = with lib; {
     description = "A clean customizable documentation theme for Sphinx";

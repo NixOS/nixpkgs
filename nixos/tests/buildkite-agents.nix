@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     maintainers = [ flokli ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.buildkite-agents = {
       one = {
         privateSshKeyPath = (import ./ssh-keys.nix pkgs).snakeOilPrivateKey;

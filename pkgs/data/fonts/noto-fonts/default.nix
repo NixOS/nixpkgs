@@ -71,11 +71,11 @@ let
         owner = "googlefonts";
         repo = "noto-cjk";
         inherit rev sha256;
-        sparseCheckout = "${typeface}/OTC";
+        sparseCheckout = [ "${typeface}/Variable/OTC" ];
       };
 
       installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/OTC/*.ttc
+        install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${typeface}/Variable/OTC/*.otf.ttc
       '';
 
       passthru.tests.noto-fonts = nixosTests.noto-fonts;
@@ -117,18 +117,18 @@ in
     typeface = "Sans";
     version = "2.004";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-pNC/WJCYHSlU28E/CSFsrEMbyCe/6tjevDlOvDK9RwU=";
+    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.000";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-Iy4lmWj5l+/Us/dJJ/Jl4MEojE9mrFnhNQxX2zhVngY=";
+    sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
   };
 
   noto-fonts-emoji = let
-    version = "2.034";
+    version = "2.038";
     emojiPythonEnv =
       buildPackages.python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenvNoCC.mkDerivation {
@@ -139,7 +139,7 @@ in
       owner = "googlefonts";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1d6zzk0ii43iqfnjbldwp8sasyx99lbjp1nfgqjla7ixld6yp98l";
+      sha256 = "1rgmcc6nqq805iqr8kvxxlk5cf50q714xaxk3ld6rjrd69kb8ix9";
     };
 
     depsBuildBuild = [
@@ -171,8 +171,10 @@ in
     enableParallelBuilding = true;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/share/fonts/noto
-      cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
+      cp NotoColorEmoji.ttf $out/share/fonts/noto
+      runHook postInstall
     '';
 
     meta = with lib; {

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ stdenv gtk2 ];
+  buildInputs = [ gtk2 ];
 
   preferLocalBuild = true;
 

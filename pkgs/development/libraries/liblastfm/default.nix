@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
+  NIX_CFLAGS_COMPILE =
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+      "-std=c++11"
+    ];
+
   dontWrapQtApps = true;
 
   meta = with lib; {

@@ -20,37 +20,26 @@
 , uvicorn
 , uvloop
 , websockets
+, aioquic
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "21.12.1";
+  version = "22.9.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" ||
-    pythonAtLeast "3.10";  # see GHSA-7p79-6x2v-5h88
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0jyl23q7b7fyqzan97qflkqcvmfpzbxbzv0qgygxasrzh80zx67g";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KbcHnAdr59hk7W36BiTb/hD74ktj/DGzq1vcuZ/lGfQ=";
   };
-
-  postPatch = ''
-    # Loosen dependency requirements.
-    substituteInPlace setup.py \
-      --replace '"pytest==6.2.5"' '"pytest"' \
-      --replace '"gunicorn==20.0.4"' '"gunicorn"' \
-      --replace '"pytest-sanic",' "" \
-    # Patch a request headers test to allow brotli encoding
-    # (we build httpx with brotli support, upstream doesn't).
-    substituteInPlace tests/test_headers.py \
-      --replace "deflate\r\n" "deflate, br\r\n"
-  '';
 
   propagatedBuildInputs = [
     aiofiles
+    aioquic
     httptools
     multidict
     sanic-routing
@@ -63,8 +52,6 @@ buildPythonPackage rec {
     beautifulsoup4
     gunicorn
     pytest-asyncio
-    pytest-benchmark
-    pytest-sugar
     pytestCheckHook
     sanic-testing
     uvicorn
@@ -79,6 +66,9 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
+  '' + lib.optionalString stdenv.isDarwin  ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
   # uvloop usage is buggy
@@ -89,38 +79,46 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Lack of uvloop setup through fixtures
-    "test_create_asyncio_server"
-    "test_listeners_triggered_async"
-    "test_tls_options"
-    # Tests are flaky
-    "test_keep_alive_client_timeout"
-    "test_check_timeouts_request_timeout"
-    "test_check_timeouts_response_timeout"
-    "test_reloader_live"
-    "test_zero_downtime"
-    # Not working from 21.9.1
-    "test_create_server_main"
-    "test_create_server_main_convenience"
-    "test_debug"
+    # Require networking
+    "test_full_message"
+    # Fails to parse cmdline arguments
+    "test_dev"
     "test_auto_reload"
-    "test_no_exceptions_when_cancel_pending_request"
-    "test_ipv6_address_is_not_wrapped"
-    # Failure of the redirect tests seems to be related to httpx>0.20.0
-    "test_redirect"
-    "test_chained_redirect"
-    "test_unix_connection"
-    # These appear to be very sensitive to output of commands
-    "test_access_logs"
-    "test_auto_reload"
-    "test_host_port"
-    "test_no_exceptions_when_cancel_pending_request"
+    "test_host_port_ipv6_loopback"
     "test_num_workers"
-    "test_server_run"
-    "test_version"
+    "test_debug"
+    "test_access_logs"
+    "test_noisy_exceptions"
+    # OSError: foo
+    "test_bad_headers"
+    "test_create_server_trigger_events"
+    "test_json_body_requests"
+    "test_missing_startup_raises_exception"
+    "test_no_body_requests"
+    "test_oserror_warning"
+    "test_running_multiple_offset_warning"
+    "test_streaming_body_requests"
+    "test_trigger_before_events_create_server"
+    "test_keep_alive_connection_context"
+    # Racy tests
+    "test_keep_alive_client_timeout"
+    "test_keep_alive_server_timeout"
+    "test_zero_downtime"
+    # TLS tests
+    "test_missing_sni"
+    "test_no_matching_cert"
+    "test_wildcards"
+    # They thtow execptions
+    "test_load_app_simple"
+    "worker/test_loader.py"
+    # broke with ujson 5.4 upgrade
+    # https://github.com/sanic-org/sanic/pull/2504
+    "test_json_response_json"
   ];
 
   disabledTestPaths = [
+    # We are not interested in benchmarks
+    "benchmark/"
     # unable to create async loop
     "test_app.py"
     "test_asgi.py"
@@ -132,13 +130,13 @@ buildPythonPackage rec {
   # for the same local port
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "sanic"
-  ];
+  pythonImportsCheck = [ "sanic" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
+    changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc AluisioASG ];
   };

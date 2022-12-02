@@ -1,48 +1,64 @@
-{ fetchFromGitHub
+{ lib
 , rustPlatform
-, lib
-, stdenv
-, fetchpatch
+, fetchFromGitHub
+, cmake
+, installShellFiles
 , pkg-config
 , zstd
+, stdenv
 , CoreFoundation
-, libiconv
 , libresolv
 , Security
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.11.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-16oiZAyj6haBk6mgUT25pPDUrCMd7pGo2kAQ0gTe2kM=";
+    rev = version;
+    sha256 = "sha256-LiX91GMJdmhosCZcL3JlzYRieqeQs+YWMAtKTzSBzZY=";
   };
+
+  cargoSha256 = "sha256-D1GVwNpuqoiwJsWAZfTR9qUC1xuHR+O0bq9rxmgkYXk=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
     ./zstd-pkg-config.patch
-    # fix flaky test
-    (fetchpatch {
-      url = "https://github.com/o2sh/onefetch/commit/2c1f2f0b2c666f6ce94af0299f88048dd1d83484.patch";
-      sha256 = "sha256-pI3yCFYkqOmLgKnCwexv1LcCrCkhi44zhEAx0szaMkg=";
-    })
   ];
 
-  cargoSha256 = "sha256-6wnfn33mfye5o/vY1JQX1Lc4+jzHiKKgGsSLxeJWyFc=";
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ cmake installShellFiles pkg-config ];
 
   buildInputs = [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
+
+  checkInputs = [
+    git
+  ];
+
+  preCheck = ''
+    git init
+    git config user.name nixbld
+    git config user.email nixbld@example.com
+    git add .
+    git commit -m test
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd onefetch \
+      --bash <($out/bin/onefetch --generate bash) \
+      --fish <($out/bin/onefetch --generate fish) \
+      --zsh <($out/bin/onefetch --generate zsh)
+  '';
 
   meta = with lib; {
     description = "Git repository summary on your terminal";
     homepage = "https://github.com/o2sh/onefetch";
+    changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne kloenk SuperSandro2000 ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk SuperSandro2000 ];
   };
 }

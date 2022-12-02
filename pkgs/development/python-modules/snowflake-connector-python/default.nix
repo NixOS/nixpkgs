@@ -1,57 +1,57 @@
 { lib
-, buildPythonPackage
-, pythonOlder
 , asn1crypto
-, azure-storage-blob
-, boto3
+, buildPythonPackage
 , certifi
 , cffi
+, charset-normalizer
 , fetchPypi
-, future
+, filelock
 , idna
-, ijson
 , oscrypto
-, pyarrow
-, pyasn1-modules
 , pycryptodomex
 , pyjwt
 , pyopenssl
+, pythonOlder
 , pytz
 , requests
-, six
-, urllib3
+, setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.7.4";
-  disabled = pythonOlder "3.6";
+  version = "2.8.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Es8Xe7yHetAl9bAO83ecTuv9r0cueRL4fCvNyfOGQAg=";
+    hash = "sha256-JvPnxwi+xOsp+hhXIs0GyYx4oz6aovmvHsgHk9R6z8o=";
   };
 
   propagatedBuildInputs = [
-    azure-storage-blob
     asn1crypto
-    boto3
     certifi
     cffi
-    future
+    charset-normalizer
+    filelock
     idna
-    ijson
     oscrypto
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    six
-    pyarrow
-    pyasn1-modules
-    urllib3
+    setuptools
+    typing-extensions
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL" \
+      --replace "charset-normalizer~=2.0.0" "charset_normalizer>=2"
+  '';
 
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
@@ -63,8 +63,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake Connector for Python";
-    homepage = "https://www.snowflake.com/";
+    homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

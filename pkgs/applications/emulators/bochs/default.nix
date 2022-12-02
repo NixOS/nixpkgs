@@ -5,25 +5,30 @@
 , curl
 , docbook_xml_dtd_45
 , docbook_xsl
-, gtk2
+, gtk3
 , libGL
 , libGLU
 , libX11
 , libXpm
+, libobjc
 , libtool
 , ncurses
 , pkg-config
 , readline
 , wget
 , wxGTK
+, enableSDL2 ? true
+, enableTerm ? true
+, enableWx ? !stdenv.isDarwin
+, enableX11 ? !stdenv.isDarwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
@@ -33,24 +38,28 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
+
   buildInputs = [
-    SDL2
     curl
-    gtk2
+    readline
+    wget
+  ] ++ lib.optionals enableSDL2 [
+    SDL2
+  ] ++ lib.optionals enableTerm [
+    ncurses
+  ] ++ lib.optionals enableWx [
+    gtk3
+    wxGTK
+  ] ++ lib.optionals enableX11 [
     libGL
     libGLU
     libX11
     libXpm
-    ncurses
-    readline
-    wget
-    wxGTK
+  ] ++ lib.optionals stdenv.isDarwin [
+    libobjc
   ];
 
   configureFlags = [
-    "--with-x=yes"
-    "--with-x11=yes"
-
     "--with-rfb=no"
     "--with-vncsrv=no"
     "--with-nogui"
@@ -83,8 +92,6 @@ stdenv.mkDerivation rec {
     "--enable-cpu-level=6" # from 3 to 6
     "--enable-debugger" #conflicts with gdb-stub option
     "--enable-debugger-gui"
-    "--enable-e1000"
-    "--enable-es1370"
     "--enable-evex"
     "--enable-fpu"
     "--enable-gdb-stub=no" # conflicts with debugger option
@@ -93,12 +100,8 @@ stdenv.mkDerivation rec {
     "--enable-iodebug"
     "--enable-large-ramfile"
     "--enable-largefile"
-    "--enable-ne2000"
     "--enable-pci"
-    "--enable-plugins=yes"
-    "--enable-pnic"
     "--enable-repeat-speedups"
-    "--enable-sb16"
     "--enable-show-ips"
     "--enable-smp"
     "--enable-vmx=2"
@@ -111,11 +114,23 @@ stdenv.mkDerivation rec {
     "--enable-voodoo"
     "--enable-x86-64"
     "--enable-x86-debugger"
-  ]
-  # Boolean flags
-  ++ lib.optionals (SDL2 != null) [ "--with-sdl2" ]
-  ++ lib.optionals (ncurses != null) [ "--with-term" ]
-  ++ lib.optionals (gtk2 != null && wxGTK != null) [ "--with-wx" ];
+  ] ++ lib.optionals enableSDL2 [
+    "--with-sdl2"
+  ] ++ lib.optionals enableTerm [
+    "--with-term"
+  ] ++ lib.optionals enableWx [
+    "--with-wx"
+  ] ++ lib.optionals enableX11 [
+    "--with-x"
+    "--with-x11"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "--enable-e1000"
+    "--enable-es1370"
+    "--enable-ne2000"
+    "--enable-plugins"
+    "--enable-pnic"
+    "--enable-sb16"
+  ];
 
   enableParallelBuilding = true;
 
@@ -131,6 +146,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})
 # TODO: a better way to organize the options
 # TODO: docbook (docbook-tools from RedHat mirrors should help)

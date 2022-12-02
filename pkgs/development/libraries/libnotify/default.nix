@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.7.9";
+  version = "0.8.1";
 
   outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qa7cx6ra5hwqnxw95b9svgjg5q6ynm8y843iqjszxvds5z53h36";
+    sha256 = "0DPm1NbMv0akNsMWKKS2YbNtyh9dQXT+AXPidPTmJVc=";
   };
 
   mesonFlags = [
@@ -61,10 +61,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/GNOME/libnotify";
     description = "A library that sends desktop notifications to a notification daemon";
-    platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    homepage = "https://gitlab.gnome.org/GNOME/libnotify";
     license = licenses.lgpl21;
+    maintainers = teams.gnome.members;
+    mainProgram = "notify-send";
+    platforms = platforms.unix;
   };
 }

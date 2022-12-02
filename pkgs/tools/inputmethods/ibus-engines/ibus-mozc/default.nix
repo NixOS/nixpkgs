@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
-    rev = "063c41f1d7c1a877f44c1f8caad6be1897350336";
-    sha256 = "sha256-sgsfJZALpPHFB5bXu4OkRssViRDaPcgLfEyGhbqvJbI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sgsfJZALpPHFB5bXu4OkRssViRDaPcgLfEyGhbqvJbI=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     install    -m 644 data/images/unix/ui-alpha_half.png    $out/share/ibus-mozc/alpha_half.png
     install    -m 644 data/images/unix/ui-alpha_full.png    $out/share/ibus-mozc/alpha_full.png
     install -D -m 755 out_linux/Release/mozc_renderer       $out/lib/mozc/mozc_renderer
+    install -D -m 755 out_linux/Release/mozc_emacs_helper   $out/lib/mozc/mozc_emacs_helper
 
     runHook postInstall
   '';

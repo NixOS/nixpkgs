@@ -3,13 +3,11 @@
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
-, lib
+, lib, libkrb5
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
 , channel ? "stable"
-, gnomeSupport ? false, gnome2 ? null
-, gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -46,7 +44,7 @@ let
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
-      inherit gnome2 gnomeSupport gnomeKeyringSupport proprietaryCodecs
+      inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
@@ -171,20 +169,23 @@ in stdenv.mkDerivation {
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
+
+    # Needed for kerberos at runtime
+    libkrb5
   ];
 
   outputs = ["out" "sandbox"];
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 libkrb5 ];
 
   in with lib; ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg commandLineArgs} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

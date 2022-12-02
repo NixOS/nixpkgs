@@ -2,36 +2,44 @@
 , buildPythonPackage
 , callPackage
 , fetchPypi
+, hatchling
 , pythonOlder
-, argcomplete
 , ipython
 , jupyter-client
+, packaging
+, psutil
 , tornado
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.7.0";
+  version = "6.15.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d82b904fdc2fd8c7b1fbe0fa481c68a11b4cd4c8ef07e6517da1f10cc3114d24";
+    sha256 = "sha256-uB1XsOFxZwhEvynNwRVisQENPahxFcRRPg7mYKg2h2U=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'debugpy>=1.0.0,<2.0'," ""
+    sed -i "/debugpy/d" pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     ipython
     jupyter-client
+    packaging
+    psutil
     tornado
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    argcomplete
   ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel

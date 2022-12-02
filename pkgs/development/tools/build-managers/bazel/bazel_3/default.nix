@@ -5,7 +5,7 @@
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python27, python3, writeScript
+, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
@@ -110,14 +110,17 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  arch = stdenv.hostPlatform.parsed.cpu.name;
+
+  # on aarch64 Darwin, `uname -m` returns "arm64"
+  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
     src = srcDepsSet."java_tools_javac11_${system}-v10.0.zip";
 
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ gcc-unwrapped ];
 
     sourceRoot = ".";
@@ -163,6 +166,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
     inherit platforms;
@@ -185,6 +192,8 @@ stdenv.mkDerivation rec {
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
     ./no-arc.patch
 
+    ./gcc11.patch
+
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
     # action environment to a non hermetic value (e.g. "/usr/local/bin").
@@ -202,6 +211,10 @@ stdenv.mkDerivation rec {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
+
+    # disable suspend detection during a build inside Nix as this is
+    # not available inside the darwin sandbox
+    ../bazel_darwin_sandbox.patch
   ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
 
@@ -300,12 +313,7 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      }
-          # dm-sonnet is only packaged for linux
-      // (lib.optionalAttrs stdenv.isLinux {
-          # TODO(timokau) dm-sonnet is broken currently
-          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
-      }));
+      });
     };
 
   # update the list of workspace dependencies
@@ -398,11 +406,9 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute j2objc and objc wrapper's python shebang to plain python path.
-      # These scripts explicitly depend on Python 2.7, hence we use python27.
-      # See also `postFixup` where python27 is added to $out/nix-support
-      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|g' \
@@ -416,8 +422,6 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
-        # We default to python3 where possible. See also `postFixup` where
-        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
           --replace "/usr/bin/env bash" ${customBash}/bin/bash \
@@ -608,10 +612,6 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
-    echo "${python27}" >> $out/nix-support/depends
     echo "${python3}" >> $out/nix-support/depends
     # The string literal specifying the path to the bazel-rc file is sometimes
     # stored non-contiguously in the binary due to gcc optimisations, which leads

@@ -3,7 +3,7 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) id;
+  inherit (lib.trivial) flip id mergeAttrs pipe;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
@@ -76,6 +76,25 @@ rec {
   getAttrFromPath = attrPath:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg);
+
+  /* Map each attribute in the given set and merge them into a new attribute set.
+
+     Type:
+       concatMapAttrs ::
+         (String -> a -> AttrSet)
+         -> AttrSet
+         -> AttrSet
+
+     Example:
+       concatMapAttrs
+         (name: value: {
+           ${name} = value;
+           ${name + value} = value;
+         })
+         { x = "a"; y = "b"; }
+       => { x = "a"; xa = "a"; y = "b"; yb = "b"; }
+  */
+  concatMapAttrs = f: flip pipe [ (mapAttrs f) attrValues (foldl' mergeAttrs { }) ];
 
 
   /* Update or set specific paths of an attribute set.
@@ -248,7 +267,7 @@ rec {
   /* Apply fold functions to values grouped by key.
 
      Example:
-       foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
+       foldAttrs (item: acc: [item] ++ acc) [] [{ a = 2; } { a = 3; }]
        => { a = [ 2 3 ]; }
   */
   foldAttrs = op: nul:
@@ -606,7 +625,7 @@ rec {
   getMan = getOutput "man";
 
   /* Pick the outputs of packages to place in buildInputs */
-  chooseDevOutputs = drvs: builtins.map getDev drvs;
+  chooseDevOutputs = builtins.map getDev;
 
   /* Make various Nix tools consider the contents of the resulting
      attribute set when looking for what to build, find, etc.
@@ -621,6 +640,20 @@ rec {
    */
   dontRecurseIntoAttrs =
     attrs: attrs // { recurseForDerivations = false; };
+
+  /* `unionOfDisjoint x y` is equal to `x // y // z` where the
+     attrnames in `z` are the intersection of the attrnames in `x` and
+     `y`, and all values `assert` with an error message.  This
+      operator is commutative, unlike (//). */
+  unionOfDisjoint = x: y:
+    let
+      intersection = builtins.intersectAttrs x y;
+      collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
+      mask = builtins.mapAttrs (name: value: builtins.throw
+        "unionOfDisjoint: collision on ${name}; complete list: ${collisions}")
+        intersection;
+    in
+      (x // y) // mask;
 
   /*** deprecated stuff ***/
 

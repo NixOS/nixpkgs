@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "1d1l8fhdn3w2zg7wakvlmjmgjh9lh9h5fal1clgyiqmhfix4cn4m";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Python curses command line CSV and tabular data viewer";

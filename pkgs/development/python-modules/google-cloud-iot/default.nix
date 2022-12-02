@@ -7,21 +7,34 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
+, pythonOlder
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "2.4.1";
+  version = "2.6.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AjGoEAAI8aTACtcZp7zT5n9y6WCMc4GOfgUusUVXAVk=";
+    hash = "sha256-d3RRVqgetOS3sAT6UkV5DB/NZMjeZd5tBtd9ME8Wvs4=";
   };
 
-  propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    grpc-google-iam-v1
+    google-api-core
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # requires credentials

@@ -14,23 +14,23 @@ in
     boot.cleanTmpDir = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to delete all files in <filename>/tmp</filename> during boot.
+      description = lib.mdDoc ''
+        Whether to delete all files in {file}`/tmp` during boot.
       '';
     };
 
     boot.tmpOnTmpfs = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-         Whether to mount a tmpfs on <filename>/tmp</filename> during boot.
+      description = lib.mdDoc ''
+         Whether to mount a tmpfs on {file}`/tmp` during boot.
       '';
     };
 
     boot.tmpOnTmpfsSize = mkOption {
       type = types.oneOf [ types.str types.types.ints.positive ];
       default = "50%";
-      description = ''
+      description = lib.mdDoc ''
         Size of tmpfs in percentage.
         Percentage is defined by systemd.
       '';

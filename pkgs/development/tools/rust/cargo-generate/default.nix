@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config, libiconv, curl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.12.0";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
-    owner = "ashleygwilliams";
+    owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-VMcyBa8bjH4n8hKS+l5xcaQCBYkBVWjDV2uk4JmhxFs=";
+    sha256 = "sha256-7F6Pqq/iFmI3JzDKoMmSyVm6BUr+Ev9GPidOofcLNV4=";
   };
 
-  cargoSha256 = "sha256-9RMzvZLGRFGJ0Bw2is2aeRCoLzHsZZ6LCfoCTrKjHbo=";
+  # patch Cargo.toml to not vendor libgit2 and openssl
+  cargoPatches = [ ./no-vendor.patch ];
+
+  cargoSha256 = "sha256-kC8BGobS1iMq+vIwE24Lip+HGdVnA/NjHFAb6cqOz44=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl  ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ libgit2 openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld
@@ -27,13 +38,17 @@ rustPlatform.buildRustPackage rec {
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
-  checkFlags = [ "--skip favorites::favorites_default_to_git_if_not_defined" ]
-      ++ lib.optionals stdenv.isDarwin [ "--skip git::should_canonicalize" ];
+  checkFlags = [
+    "--skip=favorites::favorites_default_to_git_if_not_defined"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--skip=git::utils::should_canonicalize"
+  ];
 
   meta = with lib; {
-    description = "cargo, make me a project";
-    homepage = "https://github.com/ashleygwilliams/cargo-generate";
-    license = licenses.asl20;
-    maintainers = [ maintainers.turbomack ];
+    description = "A tool to generaet a new Rust project by leveraging a pre-existing git repository as a template";
+    homepage = "https://github.com/cargo-generate/cargo-generate";
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ figsoda turbomack ];
   };
 }

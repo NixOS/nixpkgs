@@ -12,15 +12,15 @@
 , withHTML ? true
 }:
 
-stdenv.mkDerivation rec {
-  pname = "CastXML";
-  version = "0.4.4";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "castxml";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VtkMjZOcF5OAHkezlupXOpNwqUD1oKHdRbtG2FZBRL4=";
+    owner = "CastXML";
+    repo = "CastXML";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9IdQWNbk28OdpxVU1t4d1sGvjc62GeWUueYGDKRfOy4=";
   };
 
   nativeBuildInputs = [
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

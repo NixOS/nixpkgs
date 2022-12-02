@@ -38,7 +38,7 @@ let
       fetch = fetchzip;
       arguments = baseArgs // {
         url = "${baseUrl}/archive/${rev}.tar.gz";
-        extraPostFetch = optionalString (vc == "hg") ''
+        postFetch = optionalString (vc == "hg") ''
           rm -f "$out/.hg_archival.txt"
         ''; # impure file; see #12002
       };

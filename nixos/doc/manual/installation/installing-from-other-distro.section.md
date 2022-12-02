@@ -148,7 +148,7 @@ The first steps to all these are the same:
     Generate your NixOS configuration:
 
     ```ShellSession
-    $ sudo `which nixos-generate-config` --root /
+    $ sudo `which nixos-generate-config`
     ```
 
     Note that this will place the generated configuration files in
@@ -177,7 +177,7 @@ The first steps to all these are the same:
     was probably single user):
 
     ```ShellSession
-    $ sudo chown -R 0.0 /nix
+    $ sudo chown -R 0:0 /nix
     ```
 
 1.  Set up the `/etc/NIXOS` and `/etc/NIXOS_LUSTRATE` files:

@@ -5,12 +5,14 @@
 , isPy3k
 , decorator
 , http-parser
-, python_magic
+, python-magic
 , urllib3
 , pytestCheckHook
 , pytest-mock
 , aiohttp
+, fastapi
 , gevent
+, httpx
 , redis
 , requests
 , sure
@@ -19,18 +21,18 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.10.4";
+  version = "3.10.8";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "831c23bf891c525828b7da49a358c6e0698481e4c8b3a61a69e87f36d06ef969";
+    sha256 = "sha256-aiofKFE9CPLMVJm+IT6VmtJSsVuH7ucpv5Kp1w7d2FE=";
   };
 
   propagatedBuildInputs = [
     decorator
     http-parser
-    python_magic
+    python-magic
     urllib3
   ];
 
@@ -38,7 +40,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     aiohttp
+    fastapi
     gevent
+    httpx
     redis
     requests
     sure
@@ -67,6 +71,7 @@ buildPythonPackage rec {
     "test_truesendall_after_mocket_session"
     "test_real_request_session"
     "test_asyncio_record_replay"
+    "test_gethostbyname"
   ];
 
   pythonImportsCheck = [ "mocket" ];

@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     platforms = platforms.unix;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ scolobb ma27 ];
+    maintainers = with maintainers; [ scolobb ];
   };
 }

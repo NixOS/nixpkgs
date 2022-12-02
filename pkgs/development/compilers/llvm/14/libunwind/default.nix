@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
       I). It is a dependency of the C++ ABI library, and sometimes is a
       dependency of other runtimes.
     '';
-    broken = true; # TODO: gnu-install-dirs.patch fails to apply
   };
 }

@@ -13,6 +13,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "tremc";
   version = "0.9.2";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "tremc";
@@ -44,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
+  makeWrapperArgs = ["--prefix PATH : ${lib.escapeShellArg wrapperPath}"];
 
   installPhase = ''
     make DESTDIR=$out install

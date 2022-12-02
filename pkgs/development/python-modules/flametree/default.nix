@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "flametree";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "Flametree";
-    rev = "v${version}";
-    sha256 = "1ynrk1ivl1vjiga0ayl8k89vs5il7i0pf9jz2ycn771c47szwk4x";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-oyiuhsYouGDKRssKc0aYIoG32H7GS6Bn4RtI7/9N158=";
   };
 
   checkInputs = [

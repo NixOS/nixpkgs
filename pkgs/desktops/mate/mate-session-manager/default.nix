@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
-  libSM, libXtst, gtk3, libepoxy, polkit, hicolor-icon-theme, mate,
-  wrapGAppsHook, fetchpatch, mateUpdateScript
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, xtrans
+, dbus-glib
+, systemd
+, libSM
+, libXtst
+, gtk3
+, libepoxy
+, polkit
+, hicolor-icon-theme
+, mate
+, wrapGAppsHook
+, fetchpatch
+, mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "mate" ];
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "MATE Desktop session manager";

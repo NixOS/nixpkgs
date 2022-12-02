@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, clusterctl }:
 
 buildGoModule rec {
   pname = "clusterctl";
-  version = "1.1.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cluster-api";
     rev = "v${version}";
-    sha256 = "sha256-0njXmYhZM4DXFeK9KboXnVw8uHdz4PFJ2aJxwhgyEc8=";
+    sha256 = "sha256-lqHHZtEtedU0Qtm6o6iy6JrQ1UiB9nSTZVyfq0cj0vI=";
   };
 
-  vendorSha256 = "sha256-JVRLPsfI1ITilAOkVIAa2IjjuAlJ2PCpvYEkhnTzRDA=";
+  vendorSha256 = "sha256-7e2ZJa6MfzznOoaBq0xQIXrdmDAzPzKh9QFlRfbxYMM=";
 
   subPackages = [ "cmd/clusterctl" ];
 
@@ -25,12 +25,18 @@ buildGoModule rec {
 
   postInstall = ''
     # errors attempting to write config to read-only $HOME
-    export HOME=$(mktemp -d)
+    export HOME=$TMPDIR
 
     installShellCompletion --cmd clusterctl \
       --bash <($out/bin/clusterctl completion bash) \
       --zsh <($out/bin/clusterctl completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = clusterctl;
+    command = "HOME=$TMPDIR clusterctl version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Kubernetes cluster API tool";

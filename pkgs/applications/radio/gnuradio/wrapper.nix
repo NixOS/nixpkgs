@@ -98,19 +98,21 @@ let
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtPluginPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
           "--prefix" "QML2_IMPORT_PATH" ":"
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtQmlPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
         ]
       else
@@ -137,8 +139,8 @@ let
   self = if doWrap then
     stdenv.mkDerivation {
       inherit pname version passthru;
+      nativeBuildInputs = [ makeWrapper ];
       buildInputs = [
-        makeWrapper
         xorg.lndir
       ];
       buildCommand = ''

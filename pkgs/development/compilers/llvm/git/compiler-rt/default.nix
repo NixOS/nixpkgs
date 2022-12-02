@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta, version
 , monorepoSrc, runCommand
-, cmake, python3, libllvm, libcxxabi
+, cmake, python3, xcbuild, libllvm, libcxxabi
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
 let
@@ -26,7 +27,8 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "${src.name}/${baseName}";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -44,7 +46,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
@@ -66,15 +68,16 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
     ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-  ] # Prevent a compilation error on darwin
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    # Prevent a compilation error on darwin
+    ./darwin-targetconditionals.patch
+    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    ./armv7l.patch
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -85,8 +88,6 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''
@@ -106,6 +107,8 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "scheme-manpages-unstable";
-  version = "2021-03-11";
+  pname = "scheme-manpages";
+  version = "unstable-2022-07-04";
 
   src = fetchFromGitHub {
     owner = "schemedoc";
     repo = "manpages";
-    rev = "d0163a4e29d29b2f0beb762be4095775134f5ef9";
-    sha256 = "0a8f7rq458c7985chwn1qb9yxcwyr0hl39r9vlvm5j687hy3igs2";
+    rev = "0b95de112857b185b83141ac9324fb0e786c56df";
+    sha256 = "sha256-HWkZJd4t7gsbbSGiQ92Lav9EMBPMLXmXFT6HVfyFLSI=";
   };
 
   dontBuild = true;

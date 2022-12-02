@@ -1,10 +1,29 @@
-{ lib, fetchFromGitHub
-, meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
-, python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3, gtksourceview4, gnome
-, steam, xdg-utils, pciutils, cabextract, wineWowPackages
-, freetype, p7zip, gamemode, mangohud
+{ lib
+, fetchFromGitHub
+, fetchFromGitLab
+, gitUpdater
+, python3Packages
+, blueprint-compiler
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, appstream-glib
+, desktop-file-utils
+, librsvg
+, gtk4
+, gtksourceview5
+, libadwaita
+, steam
+, cabextract
+, p7zip
+, xdpyinfo
+, imagemagick
+, procps
+, gamescope
+, mangohud
+, vmtouch
+, wine
 , bottlesExtraLibraries ? pkgs: [ ] # extra packages to add to steam.run multiPkgs
 , bottlesExtraPkgs ? pkgs: [ ] # extra packages to add to steam.run targetPkgs
 }:
@@ -20,97 +39,91 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.3.14-trento-3";
-  sha256 = "0wdqj9l69a9pnray2zcfgl2yw0hmrh23njbgwgqccimch014ckdq";
-  # Note: Update via pkgs/applications/misc/bottles/update.py
-  # mostly copypasted from pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
+  version = "2022.10.14.1";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    inherit sha256;
+    sha256 = "sha256-FO91GSGlc2f3TSLrlmRDPi5p933/Y16tdEpX4RcKhL0=";
   };
+
+  patches = [ ./vulkan_icd.patch ];
 
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
-  '';
+
+    substituteInPlace bottles/backend/wine/winecommand.py \
+      --replace \
+        "command = f\"{runner} {command}\"" \
+        "command = f\"{''' if runner == 'wine' or runner == 'wine64' else '${steam-run}/bin/steam-run '}{runner} {command}\"" \
+      --replace \
+        "command = f\"{_picked['entry_point']} {command}\"" \
+        "command = f\"${steam-run}/bin/steam-run {_picked['entry_point']} {command}\""
+    '';
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
-    wrapGAppsHook
-    gettext
+    wrapGAppsHook4
+    gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
   ];
 
   buildInputs = [
-    gdk-pixbuf
-    glib
-    gobject-introspection
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    gtksourceview4
-    libhandy
-    libnotify
-    webkitgtk
-    gnome.adwaita-icon-theme
+    librsvg
+    gtk4
+    gtksourceview5
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3Packages; [
     pyyaml
-    pytoml
     requests
-    pycairo
     pygobject3
-    lxml
-    dbus-python
-    gst-python
-    liblarch
     patool
     markdown
+    fvs
+    pefile
+    urllib3
+    chardet
+    certifi
+    idna
+    pillow
+    orjson
+    icoextract
   ] ++ [
-    steam-run
-    xdg-utils
-    pciutils
     cabextract
-    wineWowPackages.minimal
-    freetype
     p7zip
-    gamemode # programs.gamemode.enable
+    xdpyinfo
+    imagemagick
+    procps
+
+    gamescope
     mangohud
+    vmtouch
+    wine
   ];
 
   format = "other";
-  strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
   dontWrapGApps = true; # prevent double wrapping
-
-  preConfigure = ''
-    patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace src/backend/wine/winecommand.py \
-      --replace \
-        'self.__get_runner()' \
-        '(lambda r: (f"${steam-run}/bin/steam-run {r}", r)[r == "wine" or r == "wine64"])(self.__get_runner())'
-  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru = {
-    updateScript = ./update.py;
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino psydvl shamilton ];
+    maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
   };
 }

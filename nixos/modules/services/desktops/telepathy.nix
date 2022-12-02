@@ -19,7 +19,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Telepathy service, a communications framework
           that enables real-time communication via pluggable protocol backends.
         '';

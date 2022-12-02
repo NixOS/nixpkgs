@@ -3,9 +3,10 @@
 , autoreconfHook
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , flatpak
-, fuse
+, fuse3
+, bubblewrap
+, systemdMinimal
 , geoclue2
 , glib
 , gsettings-desktop-schemas
@@ -14,32 +15,37 @@
 , libxml2
 , nixosTests
 , pipewire
+, gdk-pixbuf
+, librsvg
+, python3
 , pkg-config
 , stdenv
-, substituteAll
+, runCommand
 , wrapGAppsHook
 , enableGeoLocation ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.12.1";
+  version = "1.15.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = pname;
-    rev = version;
-    sha256 = "1fc3LXN6wp/zQw4HQ0Q99HUvBhynHrQi2p3s/08izuE=";
+    repo = "xdg-desktop-portal";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Kw3zJeGwPfw1fDo8HsgYmrpgCk/PUvWZPRloKJNAJVc=";
   };
 
   patches = [
-    # Hardcode paths used by x-d-p itself.
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flatpak;
-    })
+    # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
+    # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
+    (runCommand "icon-validator.patch" { } ''
+      # Flatpak uses a different path
+      substitute "${flatpak.icon-validator-patch}" "$out" \
+        --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
+    '')
   ];
 
   nativeBuildInputs = [
@@ -53,12 +59,23 @@ stdenv.mkDerivation rec {
     acl
     dbus
     flatpak
-    fuse
+    fuse3
+    bubblewrap
+    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
     libportal
     pipewire
+
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+
+    # For document-fuse installed test.
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+    ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ];
@@ -77,6 +94,11 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.xdg-desktop-portal;
+
+      validate-icon = runCommand "test-icon-validation" { } ''
+        ${finalAttrs.finalPackage}/libexec/xdg-desktop-portal-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        grep format=svg "$out"
+      '';
     };
   };
 
@@ -86,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})

@@ -1,15 +1,25 @@
-{ lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+}:
 
-gcc9Stdenv.mkDerivation rec {
-  version = "5.5.0";
+stdenv.mkDerivation rec {
+  version = "5.6.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "sha256-ZZhkmDWGNWejwXZEcFO9p9NG1dopK7kXRj7OrkJCPR0=";
+    sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-flexible-array-member.patch";
+      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
+      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
@@ -17,9 +27,15 @@ gcc9Stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  # TODO: remove this preConfigure hook after 5.2.0 since it is fixed upstream
-  # see https://github.com/mozilla/rr/issues/2269
-  preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
+  # With LTO enabled, linking fails with the following message:
+  #
+  # src/AddressSpace.cc:1666: undefined reference to `rr_syscall_addr'
+  # ld.bfd: bin/rr: hidden symbol `rr_syscall_addr' isn't defined
+  # ld.bfd: final link failed: bad value
+  # collect2: error: ld returned 1 exit status
+  #
+  # See also https://github.com/NixOS/nixpkgs/pull/110846
+  preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
 
   nativeBuildInputs = [ cmake pkg-config which ];
   buildInputs = [
@@ -54,6 +70,6 @@ gcc9Stdenv.mkDerivation rec {
 
     license = with lib.licenses; [ mit bsd2 ];
     maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = lib.platforms.x86;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
   };
 }

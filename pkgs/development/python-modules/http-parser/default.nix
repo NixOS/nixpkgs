@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, cython
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,15 +14,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = pname;
-    rev = version;
-    sha256 = "05byv1079qi7ypvzm13yf5nc23ink6gr6c5wrhq7fwld4syscy2q";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WHimvSaNcncwzLwwk5+ZNg7BbHF+hPr39SfidEDYfhU=";
   };
 
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkPhase = "pytest testing/";
 
-  pythonImportsCheck = [ "http_parser" ];
+  pythonImportsCheck = [
+    "http_parser"
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "HTTP request/response parser for python in C";

@@ -26,20 +26,20 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the riemann-dash dashboard daemon.
         '';
       };
       config = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Contents added to the end of the riemann-dash configuration file.
         '';
       };
       dataDir = mkOption {
         type = types.str;
         default = "/var/riemann-dash";
-        description = ''
+        description = lib.mdDoc ''
           Location of the riemann-base dir. The dashboard configuration file is
           is stored to this directory. The directory is created automatically on
           service start, and owner is set to the riemanndash user.

@@ -2,14 +2,21 @@
 
 buildGoPackage rec {
   pname = "gotags";
-  version = "unstable-2015-08-03";
-
-  goPackagePath = "github.com/jstemmer/gotags";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "jstemmer";
-    repo = "gotags";
-    rev = "be986a34e20634775ac73e11a5b55916085c48e7";
-    sha256 = "sha256-Su7AA6HCdeZai8+yRSKzlrgXvsSEgrXGot2ABRL2PBw=";
+    repo = pname;
+    rev = "4c0c4330071a994fbdfdff68f412d768fbcca313";
+    sha256 = "sha256-cHTgt+zW6S6NDWBE6NxSXNPdn84CLD8WmqBe+uXN8sA=";
+  };
+
+  goPackagePath = "github.com/jstemmer/gotags";
+
+  meta = with lib; {
+    description = "ctags-compatible tag generator for Go";
+    homepage = "https://github.com/jstemmer/gotags";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urandom ];
   };
 }

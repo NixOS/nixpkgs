@@ -175,22 +175,22 @@ def get_specialisations(profile: Optional[str], generation: int, _: Optional[str
 
 def remove_old_entries(gens: List[SystemIdentifier]) -> None:
     rex_profile = re.compile("^@efiSysMountPoint@/loader/entries/nixos-(.*)-generation-.*\.conf$")
-    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-(.*)\.conf$")
+    rex_generation = re.compile("^@efiSysMountPoint@/loader/entries/nixos.*-generation-([0-9]+)(-specialisation-.*)?\.conf$")
     known_paths = []
     for gen in gens:
         known_paths.append(copy_from_profile(*gen, "kernel", True))
         known_paths.append(copy_from_profile(*gen, "initrd", True))
     for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos*-generation-[1-9]*.conf"):
+        if rex_profile.match(path):
+            prof = rex_profile.sub(r"\1", path)
+        else:
+            prof = None
         try:
-            if rex_profile.match(path):
-                prof = rex_profile.sub(r"\1", path)
-            else:
-                prof = "system"
             gen_number = int(rex_generation.sub(r"\1", path))
-            if not (prof, gen_number) in gens:
-                os.unlink(path)
         except ValueError:
-            pass
+            continue
+        if not (prof, gen_number, None) in gens:
+            os.unlink(path)
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
@@ -203,7 +203,6 @@ def get_profiles() -> List[str]:
             if not x.endswith("-link")]
     else:
         return []
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
@@ -241,30 +240,30 @@ def main() -> None:
         if "@graceful@" == "1":
             flags.append("--graceful")
 
-        subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@"] + flags + ["install"])
+        subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + flags + ["install"])
     else:
         # Update bootloader to latest if needed
-        systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
-        sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
+        available_out = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
+        installed_out = subprocess.check_output(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
-                      sdboot_status, re.IGNORECASE | re.MULTILINE)
+        installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
+                      installed_out, re.IGNORECASE | re.MULTILINE)
 
-        needs_install = False
+        available_match = re.search(r"^\((.*)\)$", available_out)
 
-        if m is None:
-            print("could not find any previously installed systemd-boot, installing.")
-            # Let systemd-boot attempt an installation if a previous one wasn't found
-            needs_install = True
-        else:
-            sdboot_version = f'({m.group(2)})'
-            if systemd_version != sdboot_version:
-                print("updating systemd-boot from %s to %s" % (sdboot_version, systemd_version))
-                needs_install = True
+        if installed_match is None:
+            raise Exception("could not find any previously installed systemd-boot")
 
-        if needs_install:
-            subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update"])
+        if available_match is None:
+            raise Exception("could not determine systemd-boot version")
+
+        installed_version = installed_match.group(1)
+        available_version = available_match.group(1)
+
+        if installed_version < available_version:
+            print("updating systemd-boot from %s to %s" % (installed_version, available_version))
+            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")

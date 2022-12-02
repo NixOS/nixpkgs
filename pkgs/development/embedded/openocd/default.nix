@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , pkg-config
 , hidapi
@@ -21,7 +22,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ hidapi libftdi1 libusb1 ]
     ++ lib.optional stdenv.isLinux libgpiod;
 
+  patches = [
+    # Patch is upstream, so can be removed when OpenOCD 0.12.0 or later is released.
+    (fetchpatch
+      {
+        url = "https://github.com/openocd-org/openocd/commit/cff0e417da58adef1ceef9a63a99412c2cc87ff3.patch";
+        sha256 = "Xxzf5miWy4S34sbQq8VQdAbY/oqGyhL/AJxiEPRuj3Q=";
+      })
+  ];
+
   configureFlags = [
+    "--disable-werror"
     "--enable-jtag_vpi"
     "--enable-usb_blaster_libftdi"
     (lib.enableFeature (! stdenv.isDarwin) "amtjtagaccel")

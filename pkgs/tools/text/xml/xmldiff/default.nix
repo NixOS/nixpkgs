@@ -2,6 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , lxml
+, setuptools
 , six
 }:
 
@@ -16,8 +17,9 @@ buildPythonApplication rec {
     hash = "sha256-xqudHYfwOce2C0pcFzId0JDIIC6R5bllmVKsH+CvTdE=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     lxml
+    setuptools
     six
   ];
 
@@ -36,6 +38,6 @@ buildPythonApplication rec {
       readable diffs in those situations.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres anpryl ];
   };
 }

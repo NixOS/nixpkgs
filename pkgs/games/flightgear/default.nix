@@ -2,11 +2,11 @@
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew
+, makeDesktopItem, qtbase, qtdeclarative, glew, curl
 }:
 
 let
-  version = "2020.3.12";
+  version = "2020.3.13";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
@@ -14,7 +14,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-gCsW9e8IuXwmJfAfxJ/nORF5W/PwCka+O8Chwm26OnY=";
+      sha256 = "sha256-C3iUVA7IJQ77OdXcaBnSpDphMFjmFZmn0nozQvdxSJM=";
     };
 
     dontUnpack = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-wPeZIAiGU0zPBkzeBCO1xEgm+iZd/hWvBEr2ZcsX0Qc=";
+    sha256 = "sha256-Zhq/r0davIz9G6tXVZRp76ZivG0D9Y6Nl3OFAD/lqow=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative
+    glew qtdeclarative curl
   ];
 
   postInstall = ''

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -24,6 +25,7 @@ buildGoModule rec {
       (including most of GTFOBins) in order to pop a root shell.
     '';
     homepage = "https://github.com/liamg/traitor";
+    platforms = platforms.linux;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

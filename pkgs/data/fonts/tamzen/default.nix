@@ -1,4 +1,4 @@
-{ fetchFromGitHub, mkfontscale, lib, stdenv }:
+{ fetchFromGitHub, xorg, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "tamzen-font";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "00x5fipzqimglvshhqwycdhaqslbvn3rl06jnswhyxfvz16ymj7s";
   };
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
     install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"

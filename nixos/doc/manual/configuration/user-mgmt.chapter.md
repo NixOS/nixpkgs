@@ -32,8 +32,7 @@ account will cease to exist. Also, imperative commands for managing users and
 groups, such as useradd, are no longer available. Passwords may still be
 assigned by setting the user\'s
 [hashedPassword](#opt-users.users._name_.hashedPassword) option. A
-hashed password can be generated using `mkpasswd -m
-  sha-512`.
+hashed password can be generated using `mkpasswd`.
 
 A user ID (uid) is assigned automatically. You can also specify a uid
 manually by adding

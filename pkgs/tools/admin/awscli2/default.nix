@@ -3,29 +3,30 @@
 , groff
 , less
 , fetchFromGitHub
+, nix-update-script
+, testers
+, awscli2
 }:
+
 let
   py = python3.override {
     packageOverrides = self: super: {
       awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.4";
+        version = "0.14.0";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256:1cmfkcv2zzirxsb989vx1hvna9nv24pghcvypl0zaxsjphv97mka";
+          hash = "sha256-MGLTFcsWVC/gTdgjny6LwyOO6QRc1QcLkVzy677Lqqw=";
         };
       });
 
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        # Releases: https://github.com/boto/botocore/commits/v2
-        version = "2.0.0dev155";
-        src = fetchFromGitHub {
-          owner = "boto";
-          repo = "botocore";
-          rev = "7083e5c204e139dc41f646e0ad85286b5e7c0c23";
-          sha256 = "sha256-aiCc/CXoTem0a9wI/AMBRK3g2BXJi7LpnUY/BxBEKVM=";
+      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.28";
+        src = self.fetchPypi {
+          pname = "prompt_toolkit";
+          inherit version;
+          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
         };
-        propagatedBuildInputs = super.botocore.propagatedBuildInputs ++ [ py.pkgs.awscrt ];
       });
     };
   };
@@ -33,19 +34,23 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.4.19"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.9.1"; # N.B: if you change this, check if overrides are still up-to-date
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-ZOSZBZT4d5jv5lg8KkGoOJqAvStUsGZbiXp3dpsrOpo=";
+    sha256 = "sha256-VK/82U+yb1KuIaAm9XuSZF55zIxvsYcIfNqVrzC6FOs=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     awscrt
     bcdoc
-    botocore
     colorama
     cryptography
     distro
@@ -57,30 +62,23 @@ with py.pkgs; buildPythonApplication rec {
     rsa
     ruamel-yaml
     wcwidth
+    python-dateutil
+    jmespath
+    urllib3
   ];
 
   checkInputs = [
     jsonschema
     mock
     pytestCheckHook
-    pytest-xdist
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
-      --replace "cryptography>=3.3.2,<3.4.0" "cryptography" \
+      --replace "distro>=1.5.0,<1.6.0" "distro" \
       --replace "docutils>=0.10,<0.16" "docutils" \
-      --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
-      --replace "wcwidth<0.2.0" "wcwidth" \
-      --replace "distro>=1.5.0,<1.6.0" "distro"
-  '';
-
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-
-    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
-    export HOME=$TMP
+      --replace "wcwidth<0.2.0" "wcwidth"
   '';
 
   postInstall = ''
@@ -96,13 +94,48 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  doCheck = true;
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
+
+    # Disable slow tests (only run unit tests)
+    "tests/backends"
+    "tests/functional"
+  ];
+
+  pythonImportsCheck = [
+    "awscli"
+  ];
+
+  passthru = {
+    python = py; # for aws_shell
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      version = version;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    mainProgram = "aws";
   };
 }

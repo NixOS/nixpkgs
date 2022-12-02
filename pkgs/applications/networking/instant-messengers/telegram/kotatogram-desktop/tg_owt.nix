@@ -25,8 +25,8 @@
 , abseil-cpp
 , pipewire
 , mesa
-, libglvnd
-, libepoxy
+, libdrm
+, libGL
 , Cocoa
 , AppKit
 , IOKit
@@ -46,13 +46,13 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2022-02-26";
+  version = "unstable-2022-04-13";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "a264028ec71d9096e0aa629113c49c25db89d260";
-    sha256 = "sha256-JR+M+4w0QsQLfIunZ/7W+5Knn+gX+RR3DBrpOz7q44I=";
+    rev = "63a934db1ed212ebf8aaaa20f0010dd7b0d7b396";
+    sha256 = "sha256-WddSsQ9KW1zYyYckzdUOvfFZArYAbyvXmABQNMtK6cM=";
     fetchSubmodules = true;
   };
 
@@ -61,11 +61,19 @@ stdenv.mkDerivation {
     ./tg_owt-10.12-sdk.patch
   ];
 
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
+      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
+      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
+      --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     libjpeg
     openssl
     libopus
@@ -87,8 +95,8 @@ stdenv.mkDerivation {
     glib
     pipewire
     mesa
-    libepoxy
-    libglvnd
+    libdrm
+    libGL
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     AppKit
@@ -111,14 +119,6 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
-
-  propagatedBuildInputs = [
-    # Required for linking downstream binaries.
-    abseil-cpp
-    openh264
-    usrsctp
-    libvpx
-  ];
 
   meta.license = lib.licenses.bsd3;
 }

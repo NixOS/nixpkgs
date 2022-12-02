@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , glib
-, libsoup
+, libsoup_3
 , libxml2
 , libxslt
 , check
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-olLgD8WA3rIdoNqMCqA7jDHoRAuESMi5gUP6tHfTIwU=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     libxslt
   ];
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libosinfo.org/";
     changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

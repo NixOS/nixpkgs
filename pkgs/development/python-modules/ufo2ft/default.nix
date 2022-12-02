@@ -7,18 +7,19 @@
 , compreffor
 , booleanoperations
 , cffsubr
+, ufoLib2
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "2.25.2";
+  version = "2.28.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ooWIHvyMtrht4WcGPiacY8dfjPSb5uitHnTRTKvf2AA=";
+    sha256 = "sha256-pWHvjAvHNWlmJiQ75JRmFyrjYnzbJG7M8/DGoIWpEBk=";
   };
 
   patches = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     compreffor
     booleanoperations
     cffsubr
+    ufoLib2
   ];
 
   checkInputs = [

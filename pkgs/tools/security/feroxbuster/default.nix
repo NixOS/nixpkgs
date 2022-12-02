@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "feroxbuster";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "epi052";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-RY9bFuALRaVXDrC0eIx0inPjRqNpRKNZf3mCrKIdGL8=";
+    rev = version;
+    hash = "sha256-B6FeY5pWW5+y/0HlVedkm8ol2z9GXgEYe5j7/uMhqsw=";
   };
 
-  cargoSha256 = "sha256-0Zawlx/lhF7K8nOsHYKO84pnctVMpm3RfnAFCOltOqE=";
+  cargoSha256 = "sha256-OFgt8yu2wlvkP/wjlmRRl8UyD9MUx9/0Rcs6K8jLkjo=";
 
   OPENSSL_NO_VENDOR = true;
 

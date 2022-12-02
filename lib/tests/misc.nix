@@ -22,7 +22,6 @@ in
 
 runTests {
 
-
 # TRIVIAL
 
   testId = {
@@ -251,6 +250,154 @@ runTests {
     expected = "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;";
   };
 
+  testToShellVars = {
+    expr = ''
+      ${toShellVars {
+        STRing01 = "just a 'string'";
+        _array_ = [ "with" "more strings" ];
+        assoc."with some" = ''
+          strings
+          possibly newlines
+        '';
+        drv = {
+          outPath = "/drv";
+          foo = "ignored attribute";
+        };
+        path = /path;
+        stringable = {
+          __toString = _: "hello toString";
+          bar = "ignored attribute";
+        };
+      }}
+    '';
+    expected = ''
+      STRing01='just a '\'''string'\''''
+      declare -a _array_=('with' 'more strings')
+      declare -A assoc=(['with some']='strings
+      possibly newlines
+      ')
+      drv='/drv'
+      path='/path'
+      stringable='hello toString'
+    '';
+  };
+
+  testHasInfixFalse = {
+    expr = hasInfix "c" "abde";
+    expected = false;
+  };
+
+  testHasInfixTrue = {
+    expr = hasInfix "c" "abcde";
+    expected = true;
+  };
+
+  testHasInfixDerivation = {
+    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expected = true;
+  };
+
+  testHasInfixPath = {
+    expr = hasInfix "tests" ./.;
+    expected = true;
+  };
+
+  testHasInfixPathStoreDir = {
+    expr = hasInfix builtins.storeDir ./.;
+    expected = true;
+  };
+
+  testHasInfixToString = {
+    expr = hasInfix "a" { __toString = _: "a"; };
+    expected = true;
+  };
+
+  testNormalizePath = {
+    expr = strings.normalizePath "//a/b//c////d/";
+    expected = "/a/b/c/d/";
+  };
+
+  testCharToInt = {
+    expr = strings.charToInt "A";
+    expected = 65;
+  };
+
+  testEscapeC = {
+    expr = strings.escapeC [ " " ] "Hello World";
+    expected = "Hello\\x20World";
+  };
+
+  testToInt = testAllTrue [
+    # Naive
+    (123 == toInt "123")
+    (0 == toInt "0")
+    # Whitespace Padding
+    (123 == toInt " 123")
+    (123 == toInt "123 ")
+    (123 == toInt " 123 ")
+    (123 == toInt "   123   ")
+    (0 == toInt " 0")
+    (0 == toInt "0 ")
+    (0 == toInt " 0 ")
+  ];
+
+  testToIntFails = testAllTrue [
+    ( builtins.tryEval (toInt "") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "00") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "01") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "002") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 002 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo123 ") == { success = false; value = false; } )
+  ];
+
+  testToIntBase10 = testAllTrue [
+    # Naive
+    (123 == toIntBase10 "123")
+    (0 == toIntBase10 "0")
+    # Whitespace Padding
+    (123 == toIntBase10 " 123")
+    (123 == toIntBase10 "123 ")
+    (123 == toIntBase10 " 123 ")
+    (123 == toIntBase10 "   123   ")
+    (0 == toIntBase10 " 0")
+    (0 == toIntBase10 "0 ")
+    (0 == toIntBase10 " 0 ")
+    # Zero Padding
+    (123 == toIntBase10 "0123")
+    (123 == toIntBase10 "0000123")
+    (0 == toIntBase10 "000000")
+    # Whitespace and Zero Padding
+    (123 == toIntBase10 " 0123")
+    (123 == toIntBase10 "0123 ")
+    (123 == toIntBase10 " 0123 ")
+    (123 == toIntBase10 " 0000123")
+    (123 == toIntBase10 "0000123 ")
+    (123 == toIntBase10 " 0000123 ")
+    (0 == toIntBase10 " 000000")
+    (0 == toIntBase10 "000000 ")
+    (0 == toIntBase10 " 000000 ")
+  ];
+
+  testToIntBase10Fails = testAllTrue [
+    ( builtins.tryEval (toIntBase10 "") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
+  ];
+
 # LISTS
 
   testFilter = {
@@ -330,6 +477,23 @@ runTests {
 
 
 # ATTRSETS
+
+  testConcatMapAttrs = {
+    expr = concatMapAttrs
+      (name: value: {
+        ${name} = value;
+        ${name + value} = value;
+      })
+      {
+        foo = "bar";
+        foobar = "baz";
+      };
+    expected = {
+      foo = "bar";
+      foobar = "baz";
+      foobarbaz = "baz";
+    };
+  };
 
   # code from the example
   testRecursiveUpdateUntil = {
@@ -471,6 +635,66 @@ runTests {
     '';
   };
 
+  testToINIWithGlobalSectionEmpty = {
+    expr = generators.toINIWithGlobalSection {} {
+      globalSection = {
+      };
+      sections = {
+      };
+    };
+    expected = ''
+    '';
+  };
+
+  testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
+    let
+      sections = {
+        "section 1" = {
+          attribute1 = 5;
+          x = "Me-se JarJar Binx";
+        };
+        "foo" = {
+          "he\\h=he" = "this is okay";
+        };
+      };
+    in {
+      expr =
+        generators.toINIWithGlobalSection {} {
+            globalSection = {};
+            sections = sections;
+        };
+      expected = generators.toINI {} sections;
+  };
+
+  testToINIWithGlobalSectionFull = {
+    expr = generators.toINIWithGlobalSection {} {
+      globalSection = {
+        foo = "bar";
+        test = false;
+      };
+      sections = {
+        "section 1" = {
+          attribute1 = 5;
+          x = "Me-se JarJar Binx";
+        };
+        "foo" = {
+          "he\\h=he" = "this is okay";
+        };
+      };
+    };
+    expected = ''
+      foo=bar
+      test=false
+
+      [foo]
+      he\h\=he=this is okay
+
+      [section 1]
+      attribute1=5
+      x=Me-se JarJar Binx
+    '';
+  };
+
   /* right now only invocation check */
   testToJSONSimple =
     let val = {
@@ -551,6 +775,21 @@ runTests {
       expr = (builtins.tryEval
         (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
       expected = false;
+    };
+
+  testWithRecursionDealsWithFunctors =
+    let
+      functor = {
+        __functor = self: { a, b, }: null;
+      };
+      a = {
+        value = "1234";
+        b = functor;
+        c.d = functor;
+      };
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+      expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
 
   testToPrettyMultiline = {
@@ -649,6 +888,11 @@ runTests {
     expected = "foo";
   };
 
+  testSanitizeDerivationNameUnicode = testSanitizeDerivationName {
+    name = "fö";
+    expected = "f-";
+  };
+
   testSanitizeDerivationNameAscii = testSanitizeDerivationName {
     name = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     expected = "-+--.-0123456789-=-?-ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-abcdefghijklmnopqrstuvwxyz-";
@@ -691,7 +935,7 @@ runTests {
 
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
-    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+    expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
   testCartesianProductOfEmptySet = {
@@ -913,4 +1157,262 @@ runTests {
     };
   };
 
+  ## Levenshtein distance functions and co.
+  testCommonPrefixLengthEmpty = {
+    expr = strings.commonPrefixLength "" "hello";
+    expected = 0;
+  };
+
+  testCommonPrefixLengthSame = {
+    expr = strings.commonPrefixLength "hello" "hello";
+    expected = 5;
+  };
+
+  testCommonPrefixLengthDiffering = {
+    expr = strings.commonPrefixLength "hello" "hey";
+    expected = 2;
+  };
+
+  testCommonSuffixLengthEmpty = {
+    expr = strings.commonSuffixLength "" "hello";
+    expected = 0;
+  };
+
+  testCommonSuffixLengthSame = {
+    expr = strings.commonSuffixLength "hello" "hello";
+    expected = 5;
+  };
+
+  testCommonSuffixLengthDiffering = {
+    expr = strings.commonSuffixLength "test" "rest";
+    expected = 3;
+  };
+
+  testLevenshteinEmpty = {
+    expr = strings.levenshtein "" "";
+    expected = 0;
+  };
+
+  testLevenshteinOnlyAdd = {
+    expr = strings.levenshtein "" "hello there";
+    expected = 11;
+  };
+
+  testLevenshteinOnlyRemove = {
+    expr = strings.levenshtein "hello there" "";
+    expected = 11;
+  };
+
+  testLevenshteinOnlyTransform = {
+    expr = strings.levenshtein "abcdef" "ghijkl";
+    expected = 6;
+  };
+
+  testLevenshteinMixed = {
+    expr = strings.levenshtein "kitchen" "sitting";
+    expected = 5;
+  };
+
+  testLevenshteinAtMostZeroFalse = {
+    expr = strings.levenshteinAtMost 0 "foo" "boo";
+    expected = false;
+  };
+
+  testLevenshteinAtMostZeroTrue = {
+    expr = strings.levenshteinAtMost 0 "foo" "foo";
+    expected = true;
+  };
+
+  testLevenshteinAtMostOneFalse = {
+    expr = strings.levenshteinAtMost 1 "car" "ct";
+    expected = false;
+  };
+
+  testLevenshteinAtMostOneTrue = {
+    expr = strings.levenshteinAtMost 1 "car" "cr";
+    expected = true;
+  };
+
+  # We test levenshteinAtMost 2 particularly well because it uses a complicated
+  # implementation
+  testLevenshteinAtMostTwoIsEmpty = {
+    expr = strings.levenshteinAtMost 2 "" "";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoIsZero = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "abcdef";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoIsOne = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "abddef";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0False = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "aczyef";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff0Outer = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zbcdez";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0DelLeft = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bcdefz";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff0DelRight = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zabcde";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff1False = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bddez";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff1DelLeft = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "bcdez";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff1DelRight = {
+    expr = strings.levenshteinAtMost 2 "abcdef" "zbcde";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff2False = {
+    expr = strings.levenshteinAtMost 2 "hello" "hxo";
+    expected = false;
+  };
+
+  testLevenshteinAtMostTwoDiff2True = {
+    expr = strings.levenshteinAtMost 2 "hello" "heo";
+    expected = true;
+  };
+
+  testLevenshteinAtMostTwoDiff3 = {
+    expr = strings.levenshteinAtMost 2 "hello" "ho";
+    expected = false;
+  };
+
+  testLevenshteinAtMostThreeFalse = {
+    expr = strings.levenshteinAtMost 3 "hello" "Holla!";
+    expected = false;
+  };
+
+  testLevenshteinAtMostThreeTrue = {
+    expr = strings.levenshteinAtMost 3 "hello" "Holla";
+    expected = true;
+  };
+
+  # lazyDerivation
+
+  testLazyDerivationIsLazyInDerivationForAttrNames = {
+    expr = attrNames (lazyDerivation {
+      derivation = throw "not lazy enough";
+    });
+    # It's ok to add attribute names here when lazyDerivation is improved
+    # in accordance with its inline comments.
+    expected = [ "drvPath" "meta" "name" "out" "outPath" "outputName" "outputs" "system" "type" ];
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.tests = "whatever is in tests";
+    }).tests;
+    expected = "whatever is in tests";
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr2 = {
+    # passthru.tests is not a special case. It works for any attr.
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.foo = "whatever is in foo";
+    }).foo;
+    expected = "whatever is in foo";
+  };
+
+  testLazyDerivationIsLazyInDerivationForMeta = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      meta = "whatever is in meta";
+    }).meta;
+    expected = "whatever is in meta";
+  };
+
+  testLazyDerivationReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out"];
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta = "test meta";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; };
+    expected = derivation;
+  };
+
+  testTypeDescriptionInt = {
+    expr = (with types; int).description;
+    expected = "signed integer";
+  };
+  testTypeDescriptionListOfInt = {
+    expr = (with types; listOf int).description;
+    expected = "list of signed integer";
+  };
+  testTypeDescriptionListOfListOfInt = {
+    expr = (with types; listOf (listOf int)).description;
+    expected = "list of list of signed integer";
+  };
+  testTypeDescriptionListOfEitherStrOrBool = {
+    expr = (with types; listOf (either str bool)).description;
+    expected = "list of (string or boolean)";
+  };
+  testTypeDescriptionEitherListOfStrOrBool = {
+    expr = (with types; either (listOf bool) str).description;
+    expected = "(list of boolean) or string";
+  };
+  testTypeDescriptionEitherStrOrListOfBool = {
+    expr = (with types; either str (listOf bool)).description;
+    expected = "string or list of boolean";
+  };
+  testTypeDescriptionOneOfListOfStrOrBool = {
+    expr = (with types; oneOf [ (listOf bool) str ]).description;
+    expected = "(list of boolean) or string";
+  };
+  testTypeDescriptionOneOfListOfStrOrBoolOrNumber = {
+    expr = (with types; oneOf [ (listOf bool) str number ]).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherListOfBoolOrEitherStringOrNumber = {
+    expr = (with types; either (listOf bool) (either str number)).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherEitherListOfBoolOrStringOrNumber = {
+    expr = (with types; either (either (listOf bool) str) number).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherNullOrBoolOrString = {
+    expr = (with types; either (nullOr bool) str).description;
+    expected = "null or boolean or string";
+  };
+  testTypeDescriptionEitherListOfEitherBoolOrStrOrInt = {
+    expr = (with types; either (listOf (either bool str)) int).description;
+    expected = "(list of (boolean or string)) or signed integer";
+  };
+  testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
+    expr = (with types; either int (listOf (either bool str))).description;
+    expected = "signed integer or list of (boolean or string)";
+  };
 }

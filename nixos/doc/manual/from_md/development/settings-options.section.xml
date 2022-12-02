@@ -55,6 +55,38 @@
     <variablelist>
       <varlistentry>
         <term>
+          <literal>pkgs.formats.javaProperties</literal> {
+          <emphasis><literal>comment</literal></emphasis> ?
+          <literal>&quot;Generated with Nix&quot;</literal> }
+        </term>
+        <listitem>
+          <para>
+            A function taking an attribute set with values
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term>
+                <literal>comment</literal>
+              </term>
+              <listitem>
+                <para>
+                  A string to put at the start of the file in a comment.
+                  It can have multiple lines.
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+          <para>
+            It returns the <literal>type</literal>:
+            <literal>attrsOf str</literal> and a function
+            <literal>generate</literal> to build a Java
+            <literal>.properties</literal> file, taking care of the
+            correct escaping, etc.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>pkgs.formats.json</literal> { }
         </term>
         <listitem>

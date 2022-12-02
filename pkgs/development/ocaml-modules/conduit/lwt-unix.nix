@@ -1,17 +1,17 @@
 { buildDunePackage
-, conduit-lwt, ppx_sexp_conv, ocaml_lwt, uri, ipaddr, ipaddr-sexp, ca-certs, logs
+, conduit-lwt, ppx_sexp_conv, lwt, uri, ipaddr, ipaddr-sexp, ca-certs, logs
 , lwt_ssl, tls, lwt_log, ssl
 }:
 
 buildDunePackage {
   pname = "conduit-lwt-unix";
-  inherit (conduit-lwt) version src minimumOCamlVersion useDune2;
+  inherit (conduit-lwt) version src;
 
   buildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [
     conduit-lwt
-    ocaml_lwt
+    lwt
     uri
     ipaddr
     ipaddr-sexp

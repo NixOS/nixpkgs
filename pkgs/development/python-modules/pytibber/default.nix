@@ -4,16 +4,15 @@
 , fetchFromGitHub
 , aiohttp
 , async-timeout
-, graphql-subscription-manager
+, gql
 , python-dateutil
-, pytz
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.22.1";
+  version = "0.26.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,17 +20,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyTibber";
-    rev = version;
-    hash = "sha256-kzKY9ixsAkfee5En0IzYl5izeXq3xY/8bc5Kz/qkE7U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Bok5dtEpteo20vnQa0myxFHiu2BViqlvKZ5TxAkfFUM=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
-    graphql-subscription-manager
+    gql
     python-dateutil
-    pytz
-  ];
+  ]
+  ++ gql.optional-dependencies.websockets;
 
   checkInputs = [
     pytest-asyncio
@@ -50,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${version}";
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
     license = licenses.mit;

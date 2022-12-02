@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
+, libjpeg, openssl_1_1, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2022-02-25";
+  version = "unstable-2022-09-14";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "a264028ec71d9096e0aa629113c49c25db89d260";
-    sha256 = "10p3x8z3ps8s1ivi9y8px2gsg4pvsvz6g9wbgh5w8hilikxqq7r5";
+    rev = "621f3da55331733bf0d1b223786b96b68c03dca1";
+    sha256 = "0xh4mm8lpiyj3c62iarsld8q82a1w81x3dxdlcwq8s6sg3r04fns";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
-    libjpeg openssl libopus ffmpeg alsa-lib libpulseaudio protobuf
+    libjpeg libopus ffmpeg alsa-lib libpulseaudio protobuf
     openh264 usrsctp libevent libvpx
     libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
     glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx
+    abseil-cpp openh264 usrsctp libevent libvpx openssl_1_1
   ];
 
   meta = with lib; {

@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; }
+  pkgs ? import ../.. { inherit system config; },
+  systemdStage1 ? false
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -22,6 +23,8 @@ let
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
+
+        ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.version = ${toString grubVersion};
@@ -290,6 +293,8 @@ let
           virtualisation.cores = 8;
           virtualisation.memorySize = 1536;
 
+          boot.initrd.systemd.enable = systemdStage1;
+
           # Use a small /dev/vdb as the root disk for the
           # installer. This ensures the target disk (/dev/vda) is
           # the same during and after installation.
@@ -298,6 +303,13 @@ let
             if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
           virtualisation.qemu.diskInterface =
             if grubVersion == 1 then "scsi" else "virtio";
+
+          # We don't want to have any networking in the guest whatsoever.
+          # Also, if any vlans are enabled, the guest will reboot
+          # (with a different configuration for legacy reasons),
+          # and spend 5 minutes waiting for the vlan interface to show up
+          # (which will never happen).
+          virtualisation.vlans = [];
 
           boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
@@ -312,6 +324,11 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
+            kmod.dev
+            libarchive.dev
             libxml2.bin
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
@@ -319,6 +336,13 @@ let
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             python3Minimal
+            # make-options-doc/default.nix
+            (let
+                self = (pkgs.python3Minimal.override {
+                  inherit self;
+                  includeSiteCustomize = true;
+                });
+              in self.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
             texinfo
@@ -687,6 +711,85 @@ in {
     '';
   };
 
+  bcachefsSimple = makeInstallerTest "bcachefs-simple" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+    };
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+      environment.systemPackages = with pkgs; [ keyutils ];
+    };
+
+    # We don't want to use the normal way of unlocking bcachefs defined in tasks/filesystems/bcachefs.nix.
+    # So, override initrd.postDeviceCommands completely and simply unlock with the predefined password.
+    extraConfig = ''
+      boot.initrd.postDeviceCommands = lib.mkForce "echo password | bcachefs unlock /dev/vda3";
+    '';
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "keyctl link @u @s",
+        "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
+        "echo password | bcachefs unlock /dev/vda3",
+        "mount -t bcachefs /dev/vda3 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
+  bcachefsMulti = makeInstallerTest "bcachefs-multi" {
+    extraInstallerConfig = {
+      boot.supportedFilesystems = [ "bcachefs" ];
+    };
+
+    createPartitions = ''
+      machine.succeed(
+        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+        + " mkpart primary ext2 1M 100MB"          # /boot
+        + " mkpart primary linux-swap 100M 1024M"  # swap
+        + " mkpart primary 1024M 4096M"            # /
+        + " mkpart primary 4096M -1s",             # /
+        "udevadm settle",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "mkfs.bcachefs -L root --metadata_replicas 2 --foreground_target ssd --promote_target ssd --background_target hdd --label ssd /dev/vda3 --label hdd /dev/vda4",
+        "mount -t bcachefs /dev/vda3:/dev/vda4 /mnt",
+        "mkfs.ext3 -L boot /dev/vda1",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot",
+      )
+    '';
+  };
+
   # Test a basic install using GRUB 1.
   grub1 = makeInstallerTest "grub1" rec {
     createPartitions = ''
@@ -805,6 +908,27 @@ in {
           # is actually looking up subvolumes
           "mkdir /mnt/boot",
           "mount -o defaults,subvol=badpath/boot LABEL=root /mnt/boot",
+      )
+    '';
+  };
+
+  # Test to see if we can deal with subvols that need to be escaped in fstab
+  btrfsSubvolEscape = makeInstallerTest "btrfsSubvolEscape" {
+    createPartitions = ''
+      machine.succeed(
+          "sgdisk -Z /dev/vda",
+          "sgdisk -n 1:0:+1M -n 2:0:+1G -N 3 -t 1:ef02 -t 2:8200 -t 3:8300 -c 3:root /dev/vda",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "mkfs.btrfs -L root /dev/vda3",
+          "btrfs device scan",
+          "mount LABEL=root /mnt",
+          "btrfs subvol create '/mnt/nixos in space'",
+          "btrfs subvol create /mnt/boot",
+          "umount /mnt",
+          "mount -o 'defaults,subvol=nixos in space' LABEL=root /mnt",
+          "mkdir /mnt/boot",
+          "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
     '';
   };

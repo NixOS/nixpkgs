@@ -24,36 +24,20 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "1.12.6";
+  version = "2.1.5";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MXKER2ijU+2yPnsBFH0cu/hjHI4uNt++AqggH5rhnaU=";
+    hash = "sha256-W+5B1JfOyTpJaT+le1zxyDNwGATrErxNNHw+x5VdfOc=";
   };
-
-  # this patch allows us to run additional tests that invoke pdm, which checks
-  # itself for an update on every invocation by default, drammatically slowing
-  # down test runs inside the sandbox
-  #
-  # the patch is necessary because the fixture is creating a project and
-  # doesn't appear to respect the settings in `$HOME`; possibly a bug upstream
-  patches = [
-    ./check-update.patch
-    (fetchurl {
-      # Mark test that require network access
-      url = "https://github.com/pdm-project/pdm/files/7911962/mark-network-tests.patch.txt";
-      hash = "sha256:1dizf9j3z7zk4lxvnszwx63xzd9r68f2iva5sszzf8s8na831dvd";
-    })
-  ];
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "pdm-pep517>=0.9,<0.10" "pdm-pep517"
-  '';
 
   propagatedBuildInputs = [
     blinker
-    click
+    cachecontrol
+    certifi
+    findpython
     installer
     packaging
     pdm-pep517
@@ -61,12 +45,17 @@ buildPythonApplication rec {
     pip
     platformdirs
     python-dotenv
-    pythonfinder
+    requests-toolbelt
     resolvelib
+    rich
     shellingham
     tomli
     tomlkit
-  ] ++ lib.optionals (pythonOlder "3.8") [
+    unearth
+    virtualenv
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
     typing-extensions
   ];
@@ -78,26 +67,19 @@ buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "--numprocesses $NIX_BUILD_CORES"
     "-m 'not network'"
   ];
 
-  preCheck = "HOME=$TMPDIR";
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTests = [
-    # sys.executable and expected executable are different
-    "test_set_non_exist_python_path"
+    # fails to locate setuptools (maybe upstream bug)
+    "test_convert_setup_py_project"
     # pythonfinder isn't aware of nix's python infrastructure
-    "test_auto_isolate_site_packages"
-    "test_use_invalid_wrapper_python"
     "test_use_wrapper_python"
-    # tries to read/write files without proper permissions
-    "test_completion_command"
-    "test_plugin_add"
-    "test_plugin_list"
-    "test_plugin_remove"
-    # tries to treat a gzip file as a zipfile and fails
-    "test_resolve_local_artifacts"
+    "test_use_invalid_wrapper_python"
   ];
 
   meta = with lib; {

@@ -9,12 +9,12 @@ in
 {
   options = {
     services.xserver.windowManager.clfswm = {
-      enable = mkEnableOption "clfswm";
+      enable = mkEnableOption (lib.mdDoc "clfswm");
       package = mkOption {
         type        = types.package;
         default     = pkgs.lispPackages.clfswm;
         defaultText = literalExpression "pkgs.lispPackages.clfswm";
-        description = ''
+        description = lib.mdDoc ''
           clfswm package to use.
         '';
       };

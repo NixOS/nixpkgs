@@ -1,45 +1,33 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
-, substituteAll
-, gdal
+, clipper
 , cmake
+, cups
+, doxygen
+, gdal
 , ninja
 , proj
-, clipper
-, zlib
-, qttools
+, qtimageformats
 , qtlocation
 , qtsensors
+, qttools
 , qttranslations
-, doxygen
-, cups
-, qtimageformats
+, substituteAll
+, zlib
 }:
 
 mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
   version = "0.9.5";
 
-  buildInputs = [
-    gdal
-    qtlocation
-    qtimageformats
-    qtsensors
-    clipper
-    zlib
-    proj
-    cups
-  ];
-
-  nativeBuildInputs = [ cmake doxygen ninja qttools ];
-
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "1w8ikqpgi0ksrzjal5ihfaik4grc5v3gdnnv79j20xkr2p4yn1h5";
+    hash = "sha256-BQbryRV5diBkOtva9sYuLD8yo3IwFqrkz3qC+C6eEfE=";
   };
 
   patches = [
@@ -53,6 +41,24 @@ mkDerivation rec {
       url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";
       sha256 = "1bkckapzccn6k0ri6bgrr0nhis9498fnwj7b32s2ysym8zcg0355";
     })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    ninja
+    qttools
+  ];
+
+  buildInputs = [
+    clipper
+    cups
+    gdal
+    proj
+    qtimageformats
+    qtlocation
+    qtsensors
+    zlib
   ];
 
   cmakeFlags = [
@@ -81,14 +87,12 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''
-      OpenOrienteering Mapper is an orienteering mapmaking program
-      and provides a free alternative to the existing proprietary solution.
-    '';
     homepage = "https://www.openorienteering.org/apps/mapper/";
+    description = "An orienteering mapmaking program";
     changelog = "https://github.com/OpenOrienteering/mapper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ mpickering sikmir ];
+    platforms = with platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }

@@ -43,6 +43,13 @@ stdenv.mkDerivation  rec {
     lrelease rbutilqt.pro
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libmkimxboot.a(elf.c.o):utils/imxtools/sbtools/misc.h:43: multiple definition of `g_nr_keys';
+  #     libmkimxboot.a(mkimxboot.c.o):utils/imxtools/sbtools/misc.h:43: first defined here
+  # TODO: try to remove with 1.5.1 update.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     runHook preInstall
 

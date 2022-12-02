@@ -8,7 +8,6 @@
 , libffi
 , makeWrapper
 , pkg-config
-, protobuf
 , python3
 , readline
 , symlinkJoin
@@ -56,7 +55,7 @@ let
     in lib.appendToName "with-plugins" ( symlinkJoin {
       inherit (yosys) name;
       paths = paths ++ [ yosys ] ;
-      buildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
           --set NIX_YOSYS_PLUGIN_DIRS $out/share/yosys/plugins \
@@ -72,20 +71,28 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "0.15";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "${pname}-${version}";
-    hash  = "sha256-1NCcsq0otVKTTSSmnX2kCvvngF1yzqYWlRVzu+XY65w=";
+    hash  = "sha256-mOakdXhSij8k4Eo7RwpKjd59IkNjw31NNFDJtL6Adgo=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config bison flex ];
-  buildInputs = [ tcl readline libffi python3 protobuf zlib ];
+  buildInputs = [
+    tcl
+    readline
+    libffi
+    zlib
+    (python3.withPackages (pp: with pp; [
+      click
+    ]))
+  ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "PREFIX=${placeholder "out"}"];
 
   patches = [
     ./plugin-search-dirs.patch
@@ -106,9 +113,6 @@ in stdenv.mkDerivation rec {
     chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
-
-    # we have to do this ourselves for some reason...
-    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
 
     if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
       echo "ERROR: yosys isn't compatible with the provided abc (${shortAbcRev}), failing."

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://support.epson.net/linux/en/imagescanv3.php";
     description = "Network scan plugin for ImageScan v3";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" ];

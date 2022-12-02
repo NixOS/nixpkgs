@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.hostPlatform.linuxArch}"
+    "KLIBCARCH=${if stdenv.hostPlatform.isRiscV64 then "riscv64" else stdenv.hostPlatform.linuxArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"
   ] # TODO(@Ericson2314): We now can get the ABI from
     # `stdenv.hostPlatform.parsed.abi`, is this still a good idea?

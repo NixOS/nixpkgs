@@ -11,6 +11,7 @@
 , graphicsmagick
 , gsettings-desktop-schemas
 , gtk3
+, hicolor-icon-theme
 , libnotify
 , librsvg
 , libxslt
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
     "LANG_GTKSOURCEVIEW_DIR=/share/gtksourceview-4/language-specs"
     # Pretend to be redhat so `install` doesn't try to chown/chgrp.
     "SYSTEM_TYPE=rpm"
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "GCC_PP=${stdenv.cc.targetPrefix}c++"
   ];
 
   preFixup = ''
@@ -82,7 +85,7 @@ stdenv.mkDerivation rec {
       XMLSimple
       XMLWriter
     ]}:"$out/share/perl5 \
-    --prefix XDG_DATA_DIRS : "$out/share" \
+    --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
     --set TEXINPUTS ":.:$out/tex/latex"
   '';
 
@@ -101,6 +104,7 @@ stdenv.mkDerivation rec {
     graphicsmagick
     gsettings-desktop-schemas
     gtk3
+    hicolor-icon-theme
     libnotify
     librsvg
     libxslt

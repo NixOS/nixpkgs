@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "syndication";
+  pname = "syndication";
   meta.maintainers = [ lib.maintainers.bkchr ];
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcodecs ];

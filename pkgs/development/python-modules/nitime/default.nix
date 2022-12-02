@@ -25,6 +25,11 @@ buildPythonPackage rec {
   buildInputs = [ cython ];
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
 
+  disabledTests = [
+    # https://github.com/nipy/nitime/issues/197
+    "test_FilterAnalyzer"
+  ];
+
   meta = with lib; {
     homepage = "https://nipy.org/nitime";
     description = "Algorithms and containers for time-series analysis in time and spectral domains";

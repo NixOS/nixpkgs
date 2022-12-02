@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -52,15 +53,16 @@
 , writeText
 , xorg
 , zlib
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.26.2";
+  version = "1.26.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "071h0pscbd8g341yy5rz9mk1xn8yhryldhl6mmr1y6lafaycyy99";
+    sha256 = "sha256-2fg6oP2TNPRN7rTklS3A5RRGg6+seG/uvOYDCVFhfRU=";
   };
 
   nativeBuildInputs = [
@@ -203,11 +205,13 @@ stdenv.mkDerivation rec {
     patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
     license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

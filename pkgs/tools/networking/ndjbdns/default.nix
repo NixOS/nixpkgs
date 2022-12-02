@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://pjp.dgplug.org/ndjbdns/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.msackman ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 

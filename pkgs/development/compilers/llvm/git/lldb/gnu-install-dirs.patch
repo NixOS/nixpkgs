@@ -1,16 +1,3 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 79d451965ed4..78188978d6de 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -12,6 +12,8 @@ set(CMAKE_MODULE_PATH
- # If we are not building as part of LLVM, build LLDB as a standalone project,
- # using LLVM as an external library.
- if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-+  include(GNUInstallDirs)
-+
-   project(lldb)
-   include(LLDBStandalone)
- 
 diff --git a/cmake/modules/AddLLDB.cmake b/cmake/modules/AddLLDB.cmake
 index 3291a7c808e1..b27d27ce6a87 100644
 --- a/cmake/modules/AddLLDB.cmake

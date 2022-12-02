@@ -126,4 +126,18 @@ rec {
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
         { shortName = licstr; }
       );
+
+  /* Get the path to the main program of a derivation with either
+     meta.mainProgram or pname or name
+
+     Type: getExe :: derivation -> string
+
+     Example:
+       getExe pkgs.hello
+       => "/nix/store/g124820p9hlv4lj8qplzxw1c44dxaw1k-hello-2.12/bin/hello"
+       getExe pkgs.mustache-go
+       => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
+  */
+  getExe = x:
+    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
 }

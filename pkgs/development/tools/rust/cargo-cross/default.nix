@@ -7,21 +7,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cross";
-  version = "0.2.1";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "rust-embedded";
     repo = "cross";
     rev = "v${version}";
-    sha256 = "1py5w4kf612x4qxi190ilsrx0zzwdzk9i47ppvqblska1s47qa2w";
+    sha256 = "sha256-gaY34ziC+ugw/HUTSh0Uk5WBfWMRZLybfpAMkUzsj8g=";
   };
 
-  cargoSha256 = "sha256-zk6cbN4iSHnyoeWupufVf2yQK6aq3S99uk9lqpjCw4c=";
+  cargoSha256 = "sha256-bdcdlnNr4CdkIJNoo8tb4ohVDmAcKIOP0nRr6BM+EPw=";
 
+  # Fixes https://github.com/cross-rs/cross/issues/943
   cargoPatches = [
     (fetchpatch {
-      url = "https://github.com/rust-embedded/cross/commit/e86ad2e5a55218395df7eaaf91900e22b809083c.patch";
-      sha256 = "1zrcj5fm3irmlrfkgb65kp2pjkry0rg5nn9pwsk9p0i6dpapjc7k";
+      url = "https://github.com/cross-rs/cross/commit/d639578881d21d28d91d155722201cc53b00c5e7.patch";
+      sha256 = "sha256-FWaYIEMonb1Z8g5yXfd/Rl/LnxSYVwLfFIvPY1mJNxU=";
     })
   ];
 

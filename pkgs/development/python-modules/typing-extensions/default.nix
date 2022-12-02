@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.0.1";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -16,17 +16,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-TKCR3qFJ+UXsVq+0ja5xTyHoaS7yKjlSI7zTKJYbag4=";
+    hash = "sha256-5tJnejL0f8frJ5XbHdFcHzTv9ha8ryz7Xpl/hU+hxKY=";
   };
 
   nativeBuildInputs = [
     flit-core
   ];
-
-  postPatch = ''
-    # Remove metadata for README which are outdated
-    sed -i -e '11,24d' pyproject.toml
-  '';
 
   # Tests are not part of PyPI releases. GitHub source can't be used
   # as it ends with an infinite recursion

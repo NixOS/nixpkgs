@@ -7,37 +7,37 @@ let
 in
   {
     options.services.etesync-dav = {
-      enable = mkEnableOption "etesync-dav";
+      enable = mkEnableOption (lib.mdDoc "etesync-dav");
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "The server host address.";
+        description = lib.mdDoc "The server host address.";
       };
 
       port = mkOption {
         type = types.port;
         default = 37358;
-        description = "The server host port.";
+        description = lib.mdDoc "The server host port.";
       };
 
       apiUrl = mkOption {
         type = types.str;
         default = "https://api.etesync.com/";
-        description = "The url to the etesync API.";
+        description = lib.mdDoc "The url to the etesync API.";
       };
 
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to open the firewall for the specified port.";
+        description = lib.mdDoc "Whether to open the firewall for the specified port.";
       };
 
       sslCertificate = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/var/etesync.crt";
-        description = ''
+        description = lib.mdDoc ''
           Path to server SSL certificate. It will be copied into
           etesync-dav's data directory.
         '';
@@ -47,7 +47,7 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/var/etesync.key";
-        description = ''
+        description = lib.mdDoc ''
           Path to server SSL certificate key.  It will be copied into
           etesync-dav's data directory.
         '';

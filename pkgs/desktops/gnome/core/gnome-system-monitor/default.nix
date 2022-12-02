@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     sha256 = "EyOdIgMiAaIr0pgzxXW2hIFnANLeFooVMCI1d8XAddw=";
   };
 
+  patches = [
+    # Fix pkexec detection on NixOS.
+    ./fix-paths.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext
@@ -37,6 +42,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     meson
     ninja
+    glib
   ];
 
   buildInputs = [

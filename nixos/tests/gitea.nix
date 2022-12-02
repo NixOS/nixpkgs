@@ -18,7 +18,7 @@ let
         services.gitea = {
           enable = true;
           database = { inherit type; };
-          disableRegistration = true;
+          settings.service.DISABLE_REGISTRATION = true;
         };
         environment.systemPackages = [ pkgs.gitea pkgs.jq ];
         services.openssh.enable = true;

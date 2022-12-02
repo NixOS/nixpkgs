@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , gettext
 , itstool
 , python3
@@ -19,24 +18,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.21.1";
+  version = "3.22.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "cP6Y65Ms4h1nFw47D2pzF+gT6GLemJM+pROYLpoDMgI=";
+    sha256 = "sha256-P8EHyY7251NY/9Kw0UyF3bSP4UoR6TmpQyL6qo6QxA0=";
   };
-
-  patches = [
-    # Pull upstream fix for meson-0.60:
-    #  https://gitlab.gnome.org/GNOME/meld/-/merge_requests/78
-    (fetchpatch {
-      name = "meson-0.60.patch";
-      url  = "https://gitlab.gnome.org/GNOME/meld/-/commit/cc7746c141d976a4779cf868774fae1fe7627a6d.patch";
-      sha256 = "sha256-4uJZyF00Z6svzrOebByZV1hutCZRkIQYC4rUxQr5fdQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -67,6 +56,10 @@ python3.pkgs.buildPythonApplication rec {
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
+  postPatch = ''
+    patchShebangs meson_shebang_normalisation.py
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -76,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Visual diff and merge tool";
-    homepage = "http://meldmerge.org/";
+    homepage = "https://meld.app/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];

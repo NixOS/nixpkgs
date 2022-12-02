@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
+    homepage = "https://www.netsurf-browser.org/";
     description = "Generalised utility library for netsurf browser";
     license = licenses.mit;
     maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];

@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = "https://www.antlr.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
   };

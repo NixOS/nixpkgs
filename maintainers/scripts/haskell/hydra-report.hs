@@ -20,14 +20,12 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ViewPatterns #-}
-{-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wall #-}
 
 import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
@@ -453,8 +451,8 @@ printBuildSummary
       showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
       showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
       tldr = case (errors, warnings) of
-               ([],[]) -> [":green_circle: **Ready to merge**"]
-               ([],_) -> [":yellow_circle: **Potential issues**"]
+               ([],[]) -> [":green_circle: **Ready to merge** (if there are no [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+               ([],_) -> [":yellow_circle: **Potential issues** (and possibly [evaluation errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
                _ -> [":red_circle: **Branch not mergeable**"]
       warnings =
          if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>

@@ -1,20 +1,22 @@
 { lib
 , stdenv
+, nixosTests
 , enableNvidiaCgToolkit ? false
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
+, withWayland ? stdenv.isLinux
 , alsa-lib
-, AppKit
+, dbus
 , fetchFromGitHub
 , ffmpeg_4
-, Foundation
+, flac
 , freetype
 , gamemode
 , libdrm
 , libGL
 , libGLU
-, libobjc
 , libpulseaudio
+, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -23,90 +25,98 @@
 , libxml2
 , libXxf86vm
 , makeWrapper
+, mbedtls
 , mesa
 , nvidia_cg_toolkit
 , pkg-config
 , python3
 , SDL2
+, substituteAll
 , udev
 , vulkan-loader
 , wayland
-, which
+, zlib
 }:
 
 let
-  version = "1.10.0";
-  libretroCoreInfo = fetchFromGitHub {
-    owner = "libretro";
-    repo = "libretro-core-info";
-    sha256 = "sha256-3j7fvcfbgyk71MmbUUKYi+/0cpQFNbYXO+DMDUjDqkQ=";
-    rev = "v${version}";
-  };
-  runtimeLibs = lib.optional withVulkan vulkan-loader
-    ++ lib.optional withGamemode gamemode.lib;
+  runtimeLibs =
+    lib.optional withVulkan vulkan-loader ++
+    lib.optional withGamemode (lib.getLib gamemode);
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  inherit version;
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "sha256-bpTSzODVRKRs1OW6JafjbU3e/AqdQeGzWcg1lb9SIyo=";
+    hash = "sha256-eEe0mM9gUWgEzoRH1Iuet20US9eXNtCVSBi2kX1njVw=";
     rev = "v${version}";
   };
 
   patches = [
-    ./0001-Disable-menu_show_core_updater.patch
-    ./0002-Use-fixed-paths-on-libretro_info_path.patch
+    (substituteAll {
+      src = ./use-fixed-path-for-libretro_core_info.patch;
+      libretro_info_path = libretro-core-info;
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace "frontend/drivers/platform_unix.c" \
-      --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info"
-    substituteInPlace "frontend/drivers/platform_darwin.m" \
-      --replace "@libretro_directory@" "$out/lib" \
-      --replace "@libretro_info_path@" "$out/share/libretro/info"
-  '';
-
   nativeBuildInputs = [ pkg-config ] ++
-    lib.optional stdenv.isLinux wayland ++
+    lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
 
-  buildInputs = [ ffmpeg_4 freetype libxml2 libGLU libGL python3 SDL2 which ] ++
-    lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
-    lib.optional withVulkan vulkan-loader ++
-    lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
-    lib.optionals stdenv.isLinux [
-      alsa-lib
-      libX11
-      libXdmcp
-      libXext
-      libXxf86vm
-      libdrm
-      libpulseaudio
-      libv4l
-      libxkbcommon
-      mesa
-      udev
-      wayland
-    ];
+  buildInputs = [
+    ffmpeg_4
+    flac
+    freetype
+    libGL
+    libGLU
+    libxml2
+    mbedtls
+    python3
+    SDL2
+    zlib
+  ] ++
+  lib.optional enableNvidiaCgToolkit nvidia_cg_toolkit ++
+  lib.optional withVulkan vulkan-loader ++
+  lib.optional withWayland wayland ++
+  lib.optionals stdenv.isLinux [
+    alsa-lib
+    dbus
+    libX11
+    libXdmcp
+    libXext
+    libXxf86vm
+    libdrm
+    libpulseaudio
+    libv4l
+    libxkbcommon
+    mesa
+    udev
+  ];
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+  configureFlags = [
+    "--disable-update_cores"
+    "--disable-builtinmbedtls"
+    "--disable-builtinzlib"
+    "--disable-builtinflac"
+  ] ++
+  lib.optionals stdenv.isLinux [
+    "--enable-dbus"
+    "--enable-egl"
+    "--enable-kms"
+  ];
 
-  postInstall = ''
-    mkdir -p $out/share/libretro/info
-    # TODO: ideally each core should have its own core information
-    cp -r ${libretroCoreInfo}/* $out/share/libretro/info
-  '' + lib.optionalString (runtimeLibs != [ ]) ''
+  postInstall = lib.optionalString (runtimeLibs != [ ]) ''
     wrapProgram $out/bin/retroarch \
       --prefix LD_LIBRARY_PATH ':' ${lib.makeLibraryPath runtimeLibs}
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
+
+  passthru.tests = nixosTests.retroarch;
 
   meta = with lib; {
     homepage = "https://libretro.com";
@@ -114,9 +124,12 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch thiagokokada ];
-    # FIXME: exits with error on macOS:
-    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
+    maintainers = with maintainers; teams.libretro.members ++ [ matthewbauer kolbycrouch ];
+    mainProgram = "retroarch";
+    # If you want to (re)-add support for macOS, see:
+    # https://docs.libretro.com/development/retroarch/compilation/osx/
+    # and
+    # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
     broken = stdenv.isDarwin;
   };
 }

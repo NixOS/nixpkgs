@@ -125,6 +125,13 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/

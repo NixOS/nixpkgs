@@ -2,6 +2,7 @@
 , buildPythonApplication, pycairo, pygobject3
 , gobject-introspection, gtk3, librsvg
 , alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
+, automake, autoconf, txt2man
 }:
 
 buildPythonApplication rec {
@@ -9,7 +10,7 @@ buildPythonApplication rec {
   version = "3.23.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/solfege/solfege-${version}.tar.gz";
+    url = "https://alpha.gnu.org/gnu/solfege/solfege-${version}.tar.gz";
     sha256 = "0sc17vf4xz6gy0s0z9ghi68yskikdmyb4gdaxx6imrm40734k8mp";
   };
 
@@ -20,9 +21,35 @@ buildPythonApplication rec {
     ./webbrowser.patch
   ];
 
-  nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
-  buildInputs = [ gobject-introspection gtk3 librsvg ];
-  propagatedBuildInputs = [ pycairo pygobject3 ];
+  preConfigure = ''
+    aclocal
+    autoconf
+  '';
+
+  nativeBuildInputs = [
+    automake
+    autoconf
+
+    gettext
+    pkg-config
+    texinfo
+    txt2man
+
+    # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gobject-introspection
+    gtk3
+    librsvg
+  ];
+
+  propagatedBuildInputs = [
+    pycairo
+    pygobject3
+  ];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsa-utils}/bin/aplay|' \
@@ -40,9 +67,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Ear training program";
-    homepage = "https://www.solfege.org/";
-    license = licenses.gpl3;
+    homepage = "https://www.gnu.org/software/solfege/";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor orivej ];
+    maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
   };
 }

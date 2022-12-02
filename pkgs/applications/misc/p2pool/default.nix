@@ -1,5 +1,6 @@
 { stdenv
 , cmake
+, curl
 , fetchFromGitHub
 , gss
 , hwloc
@@ -14,18 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "1.8";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-cQd3dtih7C+pEmkvlrsYTJtQWBVVMiFbtNQUM0Ck3tg=";
+    sha256 = "sha256-En2ogxAD61w7DRTsCGIp6fEP/cC2A+pTYIbjeJ1MktY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl ];
+  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ];
 
   installPhase = ''
     runHook preInstall

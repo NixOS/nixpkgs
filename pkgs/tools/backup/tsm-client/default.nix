@@ -5,6 +5,7 @@
 , fetchurl
 , autoPatchelfHook
 , rpmextract
+, libxcrypt
 , openssl
 , zlib
 , lvm2  # LVM image backup and restore functions (optional)
@@ -45,24 +46,24 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/spectrum-protect/8.1.15?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
 # going to the `downloadPage` (see `meta` below).
 # Find the "Backup-archive client" table on that page.
 # Look for "Download Documents" of the latest release.
-# Here, two links must be checked:
+# Here, two links must be checked if existing:
 # * "IBM Spectrum Protect Client ... Downloads and READMEs":
 #   In the table at the page's bottom,
 #   check the date of the "Linux x86_64 client"
 # * "IBM Spectrum Protect BA client ... interim fix downloads"
-# Look for the "Linux x86_64 client" rows
-# in the table # at the bottom of each page.
+# Look for the "Linux x86_64 client ..." rows
+# in the table at the bottom of each page.
 # Follow the "HTTPS" link of the row with the latest date stamp.
 # In the directory listing to show up, pick the big `.tar` file.
 #
-# (as of 2021-12-18)
+# (as of 2022-09-29)
 
 
 let
@@ -72,6 +73,7 @@ let
     downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
     description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
@@ -106,10 +108,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.13.3";
+    version = "8.1.15.2";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "1dwczf236drdaf4jcfzz5154vdwvxf5zraxhrhiddl6n80hnvbcd";
+      hash = "sha512-ljygVoW7zR+LVHf4LSoBn3qEHISobsxheLxs9NyKWQiwPWpfhSgJO+bX4QRzAmrpSTNrETxHkuXqzGSHaaBlzg==";
     };
     inherit meta passthru;
 
@@ -118,6 +120,7 @@ let
       rpmextract
     ];
     buildInputs = [
+      libxcrypt
       openssl
       stdenv.cc.cc
       zlib
@@ -158,6 +161,16 @@ let
         fi
         ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
       done
+    '';
+
+    # since 7b9fd5d1c9802131ca0a01ff08a3ff64379d2df4
+    # autopatchelf misses to add $out/lib to rpath;
+    # we have to call autopatchelf manually as it would
+    # run too late and overwrite our rpath otherwise
+    dontAutoPatchelf = true;
+    postFixup = ''
+      autoPatchelf $out
+      patchelf --add-rpath $out/lib $out/lib/*
     '';
   };
 

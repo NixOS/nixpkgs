@@ -12,10 +12,10 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
-      description = ''
+      description = lib.mdDoc ''
         Rules for creation, deletion and cleaning of volatile and temporary files
         automatically. See
-        <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        {manpage}`tmpfiles.d(5)`
         for the exact format.
       '';
     };
@@ -25,16 +25,16 @@ in
       default = [];
       example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
-      description = ''
-        List of packages containing <command>systemd-tmpfiles</command> rules.
+      description = lib.mdDoc ''
+        List of packages containing {command}`systemd-tmpfiles` rules.
 
         All files ending in .conf found in
-        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        {file}`«pkg»/lib/tmpfiles.d`
         will be included.
         If this folder does not exist or does not contain any files an error will be returned instead.
 
-        If a <filename>lib</filename> output is available, rules are searched there and only there.
-        If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
+        If a {file}`lib` output is available, rules are searched there and only there.
+        If there is no {file}`lib` output it will fall back to {file}`out`
         and if that does not exist either, the default output will be used.
       '';
     };
@@ -79,6 +79,7 @@ in
 
         ln -s "${systemd}/example/tmpfiles.d/home.conf"
         ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/portables.conf"
         ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
         ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
         ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
@@ -99,6 +100,22 @@ in
           ${concatStringsSep "\n" cfg.rules}
         '';
       })
+    ];
+
+    systemd.tmpfiles.rules = [
+      "d  /nix/var                           0755 root root - -"
+      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
+      "d  /run/lock                          0755 root root - -"
+      "d  /var/db                            0755 root root - -"
+      "L  /etc/mtab                          -    -    -    - ../proc/mounts"
+      "L  /var/lock                          -    -    -    - ../run/lock"
+      # Boot-time cleanup
+      "R! /etc/group.lock                    -    -    -    - -"
+      "R! /etc/passwd.lock                   -    -    -    - -"
+      "R! /etc/shadow.lock                   -    -    -    - -"
+      "R! /etc/mtab*                         -    -    -    - -"
+      "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
+      "R! /nix/var/nix/temproots             -    -    -    - -"
     ];
   };
 }

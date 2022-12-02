@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drush";
-  version = "8.4.10";
+  version = "8.4.11";
 
   src = fetchurl {
     url = "https://github.com/drush-ops/drush/releases/download/${version}/drush.phar";
-    sha256 = "sha256-yXSoTDFLsjDiYkRfrIxv2WTVdHzgxZRvtn3Pht5XF4k=";
+    sha256 = "sha256-4DD16PQHGZzAGwmm/WNeZ/dDKnlQslcb35AkpiJs5tQ=";
   };
 
   dontUnpack = true;

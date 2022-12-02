@@ -1,4 +1,5 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+, icu
 , lua
 , nixosTests
 , withLibevent ? true
@@ -13,7 +14,7 @@ with lib;
 
 let
   luaEnv = lua.withPackages(p: with p; [
-      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
+      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
@@ -21,21 +22,19 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.11.13"; # also update communityModules
+  version = "0.12.1"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
   # default setup.
   nixosModuleDeps = [
-    "bookmarks"
     "cloud_notify"
     "vcard_muc"
-    "smacks"
     "http_upload"
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OcYbNGoJtRJbYEy5aeFCBsu8uGyBFW/8a6LWJSfPBDI=";
+    sha256 = "sha256-p+y75B8BpCUYBVk6xtFdvGy3XZx6h2x2tFbPdP9LkOU=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -43,13 +42,13 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "54fa2116bbf3";
-    sha256 = "sha256-OKZ7tD75q8/GMXruUQ+r9l0BxzdbPHNf41fZ3fHVQVw=";
+    rev = "cce12a660b98";
+    sha256 = "sha256-dFWS1EFd2wtFnnuU4xKPnBisIdKkgMAvBtsfAEbdLjE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    luaEnv libidn openssl
+    luaEnv libidn openssl icu
   ]
   ++ withExtraLibs;
 
@@ -63,26 +62,14 @@ stdenv.mkDerivation rec {
     make -C tools/migration
   '';
 
-  luaEnvPath = lua.pkgs.lib.genLuaPathAbsStr luaEnv;
-  luaEnvCPath = lua.pkgs.lib.genLuaCPathAbsStr luaEnv;
-
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosody \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
       wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
-
+        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
-      wrapProgram $out/bin/prosody-migrator \
-        --set LUA_PATH "$luaEnvPath" \
-        --set LUA_CPATH "$luaEnvCPath"
     '';
 
   passthru = {
@@ -95,6 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
+    maintainers = with maintainers; [ globin ];
   };
 }

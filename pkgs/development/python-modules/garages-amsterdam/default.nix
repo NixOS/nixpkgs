@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "garages-amsterdam";
-  version = "4.0.0";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "garages_amsterdam";
-    rev = "v${version}";
-    sha256 = "sha256-3YSCf5sUnq2+Bt7LA30XeIMg4zsaPF3K5SVzGZ68SbY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ZWp543msRAgn/fFplEt6saSNbZ2flC5gwjxrll4w0W0=";
   };
 
   postPatch = ''

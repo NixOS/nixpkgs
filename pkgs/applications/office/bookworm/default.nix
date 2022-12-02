@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , appstream
-, bash
 , coreutils
 , curl
 , desktop-file-utils
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    bash
     meson
     ninja
     pkg-config

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, testVersion
+, testers
 , gummy
 , cmake
 , libX11
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gummy";
-  version = "0.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "fushko";
     repo = "gummy";
     rev = version;
-    sha256 = "sha256-CbZFuvFMmbFVX8k3duhhsg0fd9kVmhsj0VeFYil9YiE=";
+    sha256 = "sha256-dw2yOXTS61OIe+NOq8MPydhkZvTit13eC7cbL5nFseg=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
 
-  passthru.tests.version = testVersion { package = gummy; };
+  passthru.tests.version = testers.testVersion { package = gummy; };
 
   meta = with lib; {
     homepage = "https://github.com/Fushko/gummy";

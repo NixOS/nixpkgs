@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub
 , asciidoctor, autoreconfHook, pkg-config
-, boost, libctemplate, libmaxminddb, libpcap, libtins, openssl, protobuf, xz, zlib
+, boost, libctemplate, libmaxminddb, libpcap, libtins, openssl, protobuf, xz, zlib, catch2
 , cbor-diag, cddl, diffutils, file, mktemp, netcat, tcpdump, wireshark-cli
 }:
 
 stdenv.mkDerivation rec {
   pname = "compactor";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-AUNPUk70VwJ0nZgMPLMU258nqkL4QP6km0USrZi2ea0=";
+    hash = "sha256-SgmtlbYOrSMzVfzsrbg4qs+yGkXQialiJTI99EBsUjQ=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs test-scripts/
+    cp ${catch2}/include/catch2/catch.hpp tests/catch.hpp
   '';
 
   preConfigure = ''

@@ -9,9 +9,10 @@ Check for any minor version changes.
 
 { newScope
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl
+, bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -42,6 +43,8 @@ let
       # Patch framework detection to support X.framework/X.tbd,
       # extending the current support for X.framework/X.
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
+
+      ./qtbase.patch.d/0014-aarch64-darwin.patch
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
@@ -53,10 +56,25 @@ let
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
     ];
-    qtdeclarative = [ ./qtdeclarative.patch ];
+    qtdeclarative = [
+      ./qtdeclarative.patch
+      # prevent headaches from stale qmlcache data
+      ./qtdeclarative-default-disable-qmlcache.patch
+    ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
-    qtwebengine = lib.optionals stdenv.isDarwin [
+    qtwebengine = [
+      (fetchpatch {
+        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-python3.patch";
+        hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
+      })
+      (fetchpatch {
+        url = "https://github.com/archlinux/svntogit-packages/raw/372ae3de526f783bdcb5d51b997fbf511055466a/trunk/qt5-webengine-chromium-python3.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+        hash = "sha256-BODOw1ksPPns2fmMrk6KC5Po513xB0f1ycbsIL9MmHE=";
+      })
+    ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
     ];
@@ -101,7 +119,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -118,7 +136,7 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
       };
@@ -134,6 +152,7 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
+      qtlottie = callPackage ../modules/qtlottie.nix {};
       qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
@@ -156,6 +175,12 @@ let
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
         inherit (srcs.qtwebengine) version;
+        python = python3;
+        postPatch = ''
+          # update catapult for python3 compatibility
+          rm -r src/3rdparty/chromium/third_party/catapult
+          cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
+        '';
         inherit (darwin) cctools libobjc libunwind xnu;
         inherit (darwin.apple_sdk.libs) sandbox;
         inherit (darwin.apple_sdk.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
@@ -179,7 +204,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qtwebview qtx11extras qtxmlpatterns qtlottie
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
@@ -192,7 +217,7 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev makeWrapper ]
+        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };

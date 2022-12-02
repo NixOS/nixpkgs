@@ -1,39 +1,41 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , libarchive
 , SDL
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "dgen-sdl";
   version = "1.33";
-in stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/dgen/files/dgen/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-meLAYBfCKHPHf4gYbrzAmGckTrbgQsdjuwlLArje9h4=";
   };
 
-  buildInputs = [ SDL libarchive ];
+  buildInputs = [
+    SDL
+    libarchive
+  ];
 
   configureFlags = [
-    "--enable-joystick"
-    "--enable-debugger"
     "--enable-debug-vdp"
+    "--enable-debugger"
+    "--enable-joystick"
     "--enable-pico" # experimental
     "--enable-vgmdump"
-    "--with-star=no" # Needs ASM support
-    "--with-musa"
     "--with-cyclone=no" # Needs ASM support
-    "--with-mz80"
     "--with-cz80"
     "--with-drz80=no" # Needs ASM support
     "--with-dz80"
+    "--with-musa"
+    "--with-mz80"
+    "--with-star=no" # Needs ASM support
   ];
 
   meta = with lib; {
-    homepage = "https://dgen.sourceforge.net/";
+    homepage = "http://dgen.sourceforge.net/";
     description = "Sega Genesis/Mega Drive emulator";
     longDescription = ''
       DGen/SDL is a free, open source emulator for Sega Genesis/Mega Drive

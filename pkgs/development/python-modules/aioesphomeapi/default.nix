@@ -12,17 +12,22 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "10.8.2";
+  version = "12.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-zvilMBx9H2VDmu13IiAiCqXEGkbpAJpGnt4Ea7FlGVI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IhOufPNWxL9VHxzaW7OAQ1ncstxgw1Rfc4AbWFAnPJ8=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
+  '';
 
   propagatedBuildInputs = [
     noiseprotocol
@@ -43,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
+    changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab hexa ];
   };

@@ -72,38 +72,26 @@ let
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
 
-  bootstrapCompiler = let
-    revision = "561b417c65791cd8356b5f73620914ceff845d10";
-  in stdenv.mkDerivation {
+  bootstrapCompiler = stdenv.mkDerivation {
     pname = "nim-bootstrap";
-    version = "g${lib.substring 0 7 revision}";
-
-    src = fetchFromGitHub {
-      owner = "nim-lang";
-      repo = "csources_v1";
-      rev = revision;
-      sha256 = "sha256-gwBFuR7lzO4zttR/6rgdjXMRxVhwKeLqDwpmOwMyU7A=";
-    };
-
+    inherit (nim-unwrapped) version src;
     enableParallelBuilding = true;
-
     installPhase = ''
       runHook preInstall
       install -Dt $out/bin bin/nim
       runHook postInstall
     '';
   };
-
 in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.4";
+    version = "1.6.10";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-f8MJKFW1wiAM2f7tEz0EYFgj8lDXO01KxQEwA3DgoMI=";
+      hash = "sha256-E9dwL4tXCHur6M0FHBO8VqMXFBi6hntJxrvQmynST+o=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ];
@@ -133,9 +121,13 @@ in {
     buildPhase = ''
       runHook preBuild
       local HOME=$TMPDIR
-      ./bin/nim c koch
+    '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+      sed -i "s/aarch64/arm64/g" makefile
+    '' + ''
+      ./bin/nim c --parallelBuild:$NIX_BUILD_CORES koch
       ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
       ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
+      ./bin/nim js -d:release tools/dochack/dochack.nim
       runHook postBuild
     '';
 
@@ -143,7 +135,9 @@ in {
       runHook preInstall
       install -Dt $out/bin bin/*
       ln -sf $out/nim/bin/nim $out/bin/nim
+      ln -sf $out/nim/lib $out/lib
       ./install.sh $out
+      cp -a tools $out/nim/
       runHook postInstall
     '';
 
@@ -183,6 +177,14 @@ in {
       install -Dt $out/bin src/nimble
       runHook postBuild
     '';
+
+    meta = with lib; {
+      description = "Package manager for the Nim programming language";
+      homepage = "https://github.com/nim-lang/nimble";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ehmry ];
+      mainProgram = "nimble";
+    };
   };
 
   nim = let

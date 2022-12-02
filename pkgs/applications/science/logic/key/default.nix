@@ -7,7 +7,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, testVersion
+, testers
 , key
 }:
 
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru.tests.version =
-    testVersion {
+    testers.testVersion {
       package = key;
       command = "KeY --help";
     };
@@ -115,7 +115,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = executable-name;
     platforms = platforms.all;
   };
 }
-

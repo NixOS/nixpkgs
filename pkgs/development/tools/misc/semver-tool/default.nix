@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.qyliss ];
+    mainProgram = "semver";
   };
 }

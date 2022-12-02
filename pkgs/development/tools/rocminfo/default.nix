@@ -6,18 +6,19 @@
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
 , defaultTargets ? []}:
-stdenv.mkDerivation rec {
-  version = "5.0.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "5.3.3";
   pname = "rocminfo";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
-    rev = "rocm-${version}";
-    sha256 = "sha256-H9JdrDS/pbvYMKkayu/1rrXusHeXBH1CO9jYArsbCNI=";
+    rev = "rocm-${finalAttrs.version}";
+    sha256 = "sha256-4wZTm5AZgG8xEd6uYqxWq4bWZgcSYZ2WYA1z4RAPF8U=";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake rocm-cmake rocm-runtime ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ rocm-cmake rocm-runtime ];
   cmakeFlags = [
     "-DROCM_DIR=${rocm-runtime}"
     "-DROCRTST_BLD_TYPE=Release"
@@ -39,15 +40,16 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/rocminfo/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocminfo "$version"
+    version="$(curl ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} -sL "https://api.github.com/repos/RadeonOpenCompute/rocminfo/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    update-source-version rocminfo "$version" --ignore-same-hash
   '';
 
   meta = with lib; {
     description = "ROCm Application for Reporting System Info";
     homepage = "https://github.com/RadeonOpenCompute/rocminfo";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
-}
+})

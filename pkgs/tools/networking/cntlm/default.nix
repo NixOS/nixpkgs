@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     maintainers =
       [
         maintainers.qknight
-        maintainers.markWot
         maintainers.carlosdagos
       ];
     platforms = platforms.linux ++ platforms.darwin;

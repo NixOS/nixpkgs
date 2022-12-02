@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "1.1.1";
-  disabled = pythonOlder "3.6";
+  version = "1.2.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = "gboeing";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0dkv3fnlq23d7d30lhdf4a313lxy3a5qfldidvszs1z9n16ycnwb";
+    sha256 = "sha256-+dUv1QrUmCIOCyUyjYX1kJtZrPuSp3t9xz/sRV7ppgA=";
   };
 
   propagatedBuildInputs = [ geopandas matplotlib networkx numpy pandas requests Rtree shapely folium scikit-learn scipy gdal rasterio ];

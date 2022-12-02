@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1b2186b0a72aada6859bea2a5764145e3aaa2c1cfbb23c3a19b5f7b697563d3";
+    sha256 = "sha256-7qeLbxW2NSd9PZAoDNOG2P7qHKsPm+dZR6Ym6LArR30=";
   };
 
   buildInputs = [ pytest ];

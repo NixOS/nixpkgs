@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.4";
+  version = "1.4.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = version;
-    hash = "sha256-qp+e40z24RIOV5RfSw/nI/y1Z3972nCLN8DgQyLbDOc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BNPfoKXDLUckj/yg1Gz806CS5CyjWvc/Hy/NwnuWfo0=";
   };
 
   propagatedBuildInputs = [
@@ -70,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

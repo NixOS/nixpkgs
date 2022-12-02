@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
 let
   target = if stdenv.isDarwin then "macOS" else "Linux";
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.6.7";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-m9vtopRjxT9Re8pDdzfFUpg3zYAFE8zqFemgaNAbsvM=";
+    sha256 = "sha256-E9Wpdf9V6MltdFncVuDhwxtsLS8mese35HLi7kV1eXI=";
     fetchSubmodules = true;
   };
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Foundation
+    CoreFoundation
+    Foundation
   ];
 
   preBuild = ''
@@ -66,17 +66,17 @@ stdenv.mkDerivation rec {
     makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
-      --logpath='~/.cache/sumneko_lua/log' \
-      --metapath='~/.cache/sumneko_lua/meta'"
+      --logpath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/log \
+      --metapath=\''${XDG_CACHE_HOME:-\$HOME/.cache}/sumneko_lua/meta"
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Lua Language Server coded by Lua ";
+    description = "Lua Language Server coded by Lua";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "lua-language-server";
   };

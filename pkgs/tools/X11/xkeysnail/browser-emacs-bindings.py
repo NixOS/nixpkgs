@@ -20,7 +20,7 @@ def aa_flipmark():
         transform._mark_set = not transform._mark_set;
     return _aa_flipmark
 
-define_keymap(re.compile("Google-chrome|Chromium-browser|firefox-default"), {
+define_keymap(re.compile("Google-chrome|Chromium-browser|firefox"), {
     K("C-b"): with_mark(K("left")),
     K("C-f"): with_mark(K("right")),
     K("C-p"): with_mark(K("up")),

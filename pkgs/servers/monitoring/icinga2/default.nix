@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.13.2";
+  version = "2.13.6";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    sha256 = "sha256:1ijvav2ymgq1i8jycrqbp2y4r54y0dkwjnwxc20bmcixxh877zdn";
+    sha256 = "sha256-Zrq+pw1dZyKVxpbsXeEPU3hLqcaYj/0wqB9HmYXnd0Y=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  vim = runCommand "vim-icinga2-${version}" {} ''
+  vim = runCommand "vim-icinga2-${version}" { pname = "vim-icinga2"; } ''
     mkdir -p $out/share/vim-plugins
     cp -r "${src}/tools/syntax/vim" $out/share/vim-plugins/icinga2
   '';

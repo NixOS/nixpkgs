@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Pmw";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "080iml3868nxniyn56kcwnbghm10j7fw74a5nj0s19sm4zsji78b";
+    sha256 = "sha256-lIQSRXz8zwx3XdCOCRP7APkIlqM8eXN9VxxzEq6vVcY=";
   };
 
   propagatedBuildInputs = [ tkinter ];

@@ -9,6 +9,8 @@
 , future
 , imagemagick
 , importlib-resources
+, jax
+, jaxlib
 , jinja2
 , langdetect
 , lib
@@ -24,6 +26,7 @@
 , protobuf
 , pycocotools
 , pydub
+, pytest-xdist
 , pytestCheckHook
 , requests
 , scikitimage
@@ -34,17 +37,18 @@
 , termcolor
 , tifffile
 , tqdm
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "v${version}";
-    sha256 = "11kbpv54nwr0xf7z5mkj2lmrfqfmcdq8qcpapnqck1kiawr3yad6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-z52UZz9d1AaZklLOPbWuzByEl1hJ6ra4Hoz6eNGD+hg=";
   };
 
   patches = [
@@ -77,6 +81,8 @@ buildPythonPackage rec {
     beautifulsoup4
     ffmpeg
     imagemagick
+    jax
+    jaxlib
     jinja2
     langdetect
     matplotlib
@@ -88,11 +94,13 @@ buildPythonPackage rec {
     pillow
     pycocotools
     pydub
+    pytest-xdist
     pytestCheckHook
     scikitimage
     scipy
     tensorflow
     tifffile
+    zarr
   ];
 
   disabledTestPaths = [
@@ -115,6 +123,10 @@ buildPythonPackage rec {
 
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/image/lsun_test.py"
+
+    # Requires `envlogger` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
+    "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related

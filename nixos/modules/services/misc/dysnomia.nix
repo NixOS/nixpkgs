@@ -87,52 +87,52 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable Dysnomia";
+        description = lib.mdDoc "Whether to enable Dysnomia";
       };
 
       enableAuthentication = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to publish privacy-sensitive authentication credentials";
+        description = lib.mdDoc "Whether to publish privacy-sensitive authentication credentials";
       };
 
       package = mkOption {
         type = types.path;
-        description = "The Dysnomia package";
+        description = lib.mdDoc "The Dysnomia package";
       };
 
       properties = mkOption {
-        description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
+        description = lib.mdDoc "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
         default = {};
         type = types.attrs;
       };
 
       containers = mkOption {
-        description = "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
+        description = lib.mdDoc "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
         default = {};
         type = types.attrsOf types.attrs;
       };
 
       components = mkOption {
-        description = "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
+        description = lib.mdDoc "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
         type = types.attrsOf types.attrs;
       };
 
       extraContainerProperties = mkOption {
-        description = "An attribute set providing additional container settings in addition to the default properties";
+        description = lib.mdDoc "An attribute set providing additional container settings in addition to the default properties";
         default = {};
         type = types.attrs;
       };
 
       extraContainerPaths = mkOption {
-        description = "A list of paths containing additional container configurations that are added to the search folders";
+        description = lib.mdDoc "A list of paths containing additional container configurations that are added to the search folders";
         default = [];
         type = types.listOf types.path;
       };
 
       extraModulePaths = mkOption {
-        description = "A list of paths containing additional modules that are added to the search folders";
+        description = lib.mdDoc "A list of paths containing additional modules that are added to the search folders";
         default = [];
         type = types.listOf types.path;
       };
@@ -140,7 +140,7 @@ in
       enableLegacyModules = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to enable Dysnomia legacy process and wrapper modules";
+        description = lib.mdDoc "Whether to enable Dysnomia legacy process and wrapper modules";
       };
     };
   };
@@ -186,7 +186,7 @@ in
 
     dysnomia.properties = {
       hostname = config.networking.hostName;
-      inherit (config.nixpkgs.localSystem) system;
+      inherit (pkgs.stdenv.hostPlatform) system;
 
       supportedTypes = [
         "echo"

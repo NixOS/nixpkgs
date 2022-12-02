@@ -1,21 +1,38 @@
-{ fetchFromGitHub, gtk3, lib, pkg-config, stdenv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wrapGAppsHook4
+, gtk4
+, qrencode
+}:
 
 stdenv.mkDerivation rec {
   pname = "iwgtk";
-  version = "0.4";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "j-lentz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "129h7vq9b1r9a5c79hk8d06bj8lgzrnhq55x54hqri9c471jjh0s";
+    sha256 = "sha256-89rzDxalZtQkwAKS6hKPVY87kOWPySwDeZrPs2rGs/k=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  # patch systemd service to pass necessary environments and use absolute paths
+  patches = [ ./systemd-service.patch ];
 
-  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook4 ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  buildInputs = [ gtk4 qrencode ];
+
+  postInstall = ''
+    mv $out/share/lib/systemd $out/share
+    rmdir $out/share/lib
+    substituteInPlace $out/share/systemd/user/iwgtk.service --subst-var out
+  '';
 
   meta = with lib; {
     description = "Lightweight, graphical wifi management utility for Linux";

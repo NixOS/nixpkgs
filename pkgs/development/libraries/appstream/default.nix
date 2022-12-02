@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.15.2";
+  version = "0.15.5";
   # When bumping this package, please also check whether
   # fix-build-for-qt-olderthan-514.patch still applies by
   # building libsForQt512.appstream-qt.
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "ximion";
     repo = "appstream";
     rev = "v${version}";
-    sha256 = "sha256-/JZ49wjtcInbGUOVVjevVSrLCHcA60FMT165rhfb78Q=";
+    sha256 = "sha256-KVZCtu1w5FMgXZMiSW55rbrI6W/A9zWWKKvACtk/jjk=";
   };
 
   patches = [
@@ -93,14 +93,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software metadata handling library";
-    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
       and enhancing metadata provided by software components.  It provides
       specifications for meta-information which is shipped by upstream projects and
       can be consumed by other software.
     '';
+    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     license = licenses.lgpl21Plus;
+    mainProgram = "appstreamcli";
     platforms = platforms.unix;
   };
 }

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , future
 , hypothesis
+, packaging
 , parameterized
 , msgpack
 , pyserial
@@ -11,28 +12,46 @@
 , pythonOlder
 , typing-extensions
 , wrapt
+, uptime
 }:
 
 buildPythonPackage rec {
-  pname = "python-can";
-  version = "unstable-2022-01-11";
+  pname = "can";
+  version = "4.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hardbyte";
-    repo = pname;
-    rev = "2e24af08326ecd69fba9f02fed7b9c26f233c92b";
-    hash = "sha256-ZP5qtbjDtBZ2uT9DOSvSnfHyTlirr0oCEXhiLO1ydz0=";
+    repo = "python-can";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jNy47SapujTF3ReJtIbwUY53IftIH4cXZjkzHrnZMFQ=";
   };
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
+  '';
 
   propagatedBuildInputs = [
     msgpack
-    pyserial
+    packaging
     typing-extensions
     wrapt
   ];
+
+  passthru.optional-dependencies = {
+    serial = [
+      pyserial
+    ];
+    seeedstudio = [
+      pyserial
+    ];
+    pcan = [
+      uptime
+    ];
+  };
 
   checkInputs = [
     future
@@ -40,12 +59,7 @@ buildPythonPackage rec {
     parameterized
     pytest-timeout
     pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=can --cov-config=tox.ini --cov-report=xml --cov-report=term" ""
-  '';
+  ] ++ passthru.optional-dependencies.serial;
 
   disabledTestPaths = [
     # We don't support all interfaces
@@ -56,6 +70,9 @@ buildPythonPackage rec {
     # Tests require access socket
     "BasicTestUdpMulticastBusIPv4"
     "BasicTestUdpMulticastBusIPv6"
+    # pytest.approx is not supported in a boolean context (since pytest7)
+    "test_pack_unpack"
+    "test_receive"
   ];
 
   preCheck = ''
@@ -68,7 +85,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CAN support for Python";
-    homepage = "python-can.readthedocs.io";
+    homepage = "https://python-can.readthedocs.io";
+    changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab sorki ];
   };

@@ -1,38 +1,58 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, mock
+, fetchpatch
 , mypy
 , pytestCheckHook
 , python-lsp-server
 , pythonOlder
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.5.7";
-  disabled = pythonOlder "3.6";
+  version = "0.6.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
-    rev = version;
-    sha256 = "0am16z9kmj57r5pi32jhzlbdngzmvzzaiqjm7cba1izh7w5m6dvc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fZ2bPPjBK/H2jMI4S3EhvWJaNl4tK7HstxcHSAkoFW4=";
   };
 
-  disabledTests = [
-    "test_multiple_workspaces"
+  patches = [
+    (fetchpatch {
+      name = "0001-adapt-test-to-latest-mypy.patch";
+      url = "https://github.com/python-lsp/pylsp-mypy/commit/99cf687798464f810b128881dbbec82aa5353e04.patch";
+      sha256 = "sha256-wLaGMaW/gTab2fX7zGnemLQQNDWxBURYb7VsgEas61Y=";
+    })
   ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  propagatedBuildInputs = [
+    mypy
+    python-lsp-server
+    toml
+  ];
 
-  propagatedBuildInputs = [ mypy python-lsp-server ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pylsp_mypy" ];
+  pythonImportsCheck = [
+    "pylsp_mypy"
+  ];
+
+  disabledTests = [
+    # Tests wants to call dmypy
+    "test_option_overrides_dmypy"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/Richardk2n/pylsp-mypy";
     description = "Mypy plugin for the Python LSP Server";
+    homepage = "https://github.com/Richardk2n/pylsp-mypy";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

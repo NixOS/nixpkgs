@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lv2lint";
-  version = "0.14.0";
+  version = "0.16.2";
 
   src = fetchurl {
     url = "https://git.open-music-kontrollers.ch/lv2/${pname}/snapshot/${pname}-${version}.tar.xz";
-    sha256 = "sha256-yPKM7RToLNBT+AXSjfxxpncESmv89/wcGCt//pnEGqI=";
+    sha256 = "sha256-sjgQVx8uGNPWcUwKzGUhChpfzXj/8D8cggVTpcHEXPQ=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];

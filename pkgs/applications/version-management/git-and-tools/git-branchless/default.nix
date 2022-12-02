@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , git
 , libiconv
 , ncurses
@@ -15,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
-  version = "0.3.10";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
-    sha256 = "sha256-TLqAU1/olSS59Zeb+2m9Jq19EYTO1TnbKPYciHPKO2A=";
+    sha256 = "sha256-Rf7ai+s2Fp/RFA4on9YBoTjFpvzSZtAHf0rytfZf0rc=";
   };
 
-  cargoSha256 = "sha256-sA4KWGW4bxGUkotTWHUcRqcoaUJsSUCTK8hUkKiRcnY=";
+  cargoSha256 = "sha256-GVo0t2dJ6R+1UJf/NlKd5QLIQfDdFEHa+FSeW/Hk/4c=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -44,8 +43,9 @@ rustPlatform.buildRustPackage rec {
   '';
   # FIXME: these tests deadlock when run in the Nix sandbox
   checkFlags = [
-    "--skip=test_checkout_pty"
+    "--skip=test_switch_pty"
     "--skip=test_next_ambiguous_interactive"
+    "--skip=test_switch_auto_switch_interactive"
   ];
 
   meta = with lib; {

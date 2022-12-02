@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "spidev";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03cicc9kpi5khhq0bl4dcy8cjcl2j488mylp8sna47hnkwl5qzwa";
+    sha256 = "sha256-FNvDdZSkqu+FQDq2F5hdPD70ZNYrybdp71UttTcBEVs=";
   };
 
   # package does not include tests

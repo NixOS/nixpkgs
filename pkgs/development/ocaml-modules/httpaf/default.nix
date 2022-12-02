@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, ocaml
 , angstrom, faraday, alcotest
 }:
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ angstrom faraday ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     description = "A high-performance, memory-efficient, and scalable web server for OCaml";

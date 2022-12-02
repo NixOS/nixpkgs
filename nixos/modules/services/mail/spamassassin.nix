@@ -12,33 +12,36 @@ in
   options = {
 
     services.spamassassin = {
-      enable = mkEnableOption "the SpamAssassin daemon";
+      enable = mkEnableOption (lib.mdDoc "the SpamAssassin daemon");
 
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to run the SpamAssassin daemon in debug mode";
+        description = lib.mdDoc "Whether to run the SpamAssassin daemon in debug mode";
       };
 
       config = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           The SpamAssassin local.cf config
 
           If you are using this configuration:
-            add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
+
+              add_header all Status _YESNO_, score=_SCORE_ required=_REQD_ tests=_TESTS_ autolearn=_AUTOLEARN_ version=_VERSION_
 
           Then you can Use this sieve filter:
-            require ["fileinto", "reject", "envelope"];
 
-            if header :contains "X-Spam-Flag" "YES" {
-              fileinto "spam";
-            }
+              require ["fileinto", "reject", "envelope"];
+
+              if header :contains "X-Spam-Flag" "YES" {
+                fileinto "spam";
+              }
 
           Or this procmail filter:
-            :0:
-            * ^X-Spam-Flag: YES
-            /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
+
+              :0:
+              * ^X-Spam-Flag: YES
+              /var/vpopmail/domains/lastlog.de/js/.maildir/.spam/new
 
           To filter your messages based on the additional mail headers added by spamassassin.
         '';
@@ -54,7 +57,7 @@ in
 
       initPreConf = mkOption {
         type = with types; either str path;
-        description = "The SpamAssassin init.pre config.";
+        description = lib.mdDoc "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''
@@ -135,7 +138,7 @@ in
         User = "spamd";
         Group = "spamd";
         StateDirectory = "spamassassin";
-        ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
+        ExecStartPost = "+${config.systemd.package}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
       };
 
       script = ''

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.7.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vTik6KFOkKOik78/H0hvAv6xI+QSALOHD4N6befPaT4=";
+    sha256 = "sha256-KItiCVb1H/XgVZT6f0g/VvvXhhHf6MvMEqQsr62c6d0=";
   };
 
-  vendorSha256 = "sha256-ujtgcH5EF+PZAD/1Y0+yI4m7y2hNJ3w4KB2pvKbdgsU=";
+  vendorSha256 = "sha256-UpQ2yFprWdwE67MR5voPjgY7wqrtw/ZQbt05Tbo50XY=";
 
   ldflags = [
     "-s"
@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";
     homepage = "https://goreleaser.com";
-    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin ];
+    maintainers = with maintainers; [ c0deaddict endocrimes sarcasticadmin techknowlogick ];
     license = licenses.mit;
   };
 }

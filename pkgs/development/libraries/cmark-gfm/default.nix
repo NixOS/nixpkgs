@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "cmark-gfm";
-  version = "0.29.0.gfm.3";
+  version = "0.29.0.gfm.6";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "cmark-gfm";
     rev = version;
-    sha256 = "sha256-V3XegSjqKLCMpfnoYHr9/r5fSC2CC7A2jXkAcHUt7eA=";
+    sha256 = "sha256-ekHY5EGSrJrQwlXNjKpyj7k0Bzq1dYPacRsfNZ8K+lk=";
   };
 
   nativeBuildInputs = [ cmake ];
-  # tests load the library dynamically which for unknown reason failed
-  doCheck = false;
+
+  doCheck = true;
 
   # remove when https://github.com/github/cmark-gfm/pull/248 merged and released
   postInstall = ''

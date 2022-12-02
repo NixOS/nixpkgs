@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , go-md2man
@@ -14,13 +15,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.24.2";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "sha256-gBO+H26YGmOtP3CUHZjynAaOb0h+MJbJnWqxOZdif6w=";
+    sha256 = "sha256-1WB+lm2k7q4xViCUBhvCSuMCIlCMlAJ9etRajwGyOQs=";
   };
 
   outputs = [ "out" "man" ];
@@ -32,8 +33,9 @@ buildGoModule rec {
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
 
   buildInputs = [
-    btrfs-progs
     gpgme
+  ] ++ lib.optionals stdenv.isLinux [
+    btrfs-progs
     libapparmor
     libseccomp
     libselinux
@@ -43,8 +45,8 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/buildah GIT_COMMIT="unknown"
-    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    make bin/buildah
+    make -C docs GOMD2MAN="go-md2man"
     runHook postBuild
   '';
 
@@ -62,6 +64,5 @@ buildGoModule rec {
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
-    platforms = platforms.linux;
   };
 }

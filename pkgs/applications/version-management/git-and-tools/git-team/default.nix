@@ -1,25 +1,39 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go-mockery
+, installShellFiles
+}:
+
 buildGoModule rec {
   pname = "git-team";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "hekmekk";
     repo = "git-team";
     rev = "v${version}";
-    sha256 = "0nl5j64b61jw4bkf29y51svjbndmqqrqx96yaip4vjzj2dx9ywm4";
+    hash = "sha256-LZR30zqwit/xydQbpGm1LXd/tno/sTCaftgjVkVS6ZY=";
   };
 
-  vendorSha256 = "sha256-xJMWPDuqoNtCCUnKuUvwlYztyrej1uZttC0NsDvYnXI=";
+  vendorHash = "sha256-NTOUL1oE2IhgLyYYHwRCMW5yCxIRxUwqkfuhSSBXf6A=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    go-mockery
+    installShellFiles
+  ];
+
+  preBuild = ''
+    mockery --dir=src/ --all --keeptree
+  '';
 
   postInstall = ''
-    go run main.go --generate-man-page > ${pname}.1
-    installManPage ${pname}.1
+    go run main.go --generate-man-page > git-team.1
+    installManPage git-team.1
 
-    # Currently only bash completions are provided
-    installShellCompletion --cmd git-team --bash <($out/bin/git-team completion bash)
+    installShellCompletion --cmd git-team \
+      --bash <($out/bin/git-team completion bash) \
+      --zsh <($out/bin/git-team completion zsh)
   '';
 
   meta = with lib; {

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.110";
+  version = "2.4.113";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0dwpry9m5l27dlhq48j4bsiqwm0247cxdqwv3b7ddmkynk2f9kpf";
+    sha256 = "sha256-f9frKWf2O+tGBvItUOJ32ZNIDQXvdd2Iqb2OZ3Mj5eE=";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -18,15 +18,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 
-  patches = [ ./cross-build-nm-path.patch ];
-
   mesonFlags = [
-    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
-    "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
-    "-Dtegra=true"
-    "-Detnaviv=true"
+    "-Domap=enabled"
+    "-Dcairo-tests=disabled"
+    "-Dvalgrind=${if withValgrind then "enabled" else "disabled"}"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
+    "-Dtegra=enabled"
+    "-Detnaviv=enabled"
   ];
 
   meta = with lib; {

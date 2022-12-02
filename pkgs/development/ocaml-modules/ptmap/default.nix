@@ -25,6 +25,6 @@ buildDunePackage rec {
     homepage = "https://www.lri.fr/~filliatr/software.en.html";
     description = "Maps over integers implemented as Patricia trees";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

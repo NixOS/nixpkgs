@@ -10,12 +10,16 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lumina.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lumina.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the Lumina desktop manager";
+      description = lib.mdDoc "Enable the Lumina desktop manager";
     };
 
   };

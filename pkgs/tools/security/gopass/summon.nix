@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "gopass-summon-provider";
-  version = "1.12.0";
+  version = "1.14.11";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mRZXczIlW1s0VGZJ+KQue4Dz6XCXGfl56+g6iRv2lZg=";
+    hash = "sha256-UHho7obnpAYgtw269A07gKPgZawNeY4/bzXv1kGvgVw=";
   };
 
-  vendorSha256 = "sha256-fiV4rtel2jOw6y/ukOZHeFuNVqxHS3rnYhXJ6JZ+a/8=";
+  vendorHash = "sha256-6GRK1M358LC6S/sjiN42+whz1Z3S+PRKyPOZr8n+daQ=";
 
   subPackages = [ "." ];
 
@@ -27,7 +27,8 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/gopass-summon-provider --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/gopass-summon-provider \
+      --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
   meta = with lib; {

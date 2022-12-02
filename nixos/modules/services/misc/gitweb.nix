@@ -13,7 +13,7 @@ in
     projectroot = mkOption {
       default = "/srv/git";
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to git projects (bare repositories) that should be served by
         gitweb. Must not end with a slash.
       '';
@@ -22,7 +22,7 @@ in
     extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Verbatim configuration text appended to the generated gitweb.conf file.
       '';
       example = ''
@@ -35,7 +35,7 @@ in
     gitwebTheme = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Use an alternative theme for gitweb, strongly inspired by GitHub.
       '';
     };
@@ -47,7 +47,7 @@ in
         $highlight_bin = "${pkgs.highlight}/bin/highlight";
         ${cfg.extraConfig}
       '';
-      defaultText = literalDocBook "generated config file";
+      defaultText = literalMD "generated config file";
       type = types.path;
       readOnly = true;
       internal = true;

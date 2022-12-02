@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     wafHook
+    python3
   ];
 
   buildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "--lv2dir=${placeholder "out"}/lib/lv2"
   ];
+  dontAddWafCrossFlags = true;
 
   passthru.tests = {
     inherit pipewire;

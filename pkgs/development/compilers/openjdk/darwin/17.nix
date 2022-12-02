@@ -5,16 +5,16 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "17.30.15";
-      jdkVersion = "17.0.1";
-      sha256 = "sha256-CdZP5XY3O0MUQigRvIQC+7dwAXaCKw4eK/L/imytEOs=";
+      zuluVersion = "17.34.19";
+      jdkVersion = "17.0.3";
+      sha256 = "sha256-qImyxVC2y2QhxuVZwamKPyo46+n+7ytIFXpYI0e6w2c=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "17.30.15";
-      jdkVersion = "17.0.1";
-      sha256 = "sha256-zhBCXOnO/fsj6+q+vAlEz7QVMRFKLVvYnjwZzFz6mRM=";
+      zuluVersion = "17.34.19";
+      jdkVersion = "17.0.3";
+      sha256 = "sha256-eaRX8Qa/Mqr9JhpHSEcf0Q9c4qmqLMgWqRhkEEwAjf8=";
     };
   }."${stdenv.hostPlatform.system}";
 
@@ -75,7 +75,7 @@ let
       home = jdk;
     };
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
   };
 in
 jdk

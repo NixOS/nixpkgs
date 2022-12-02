@@ -1375,12 +1375,12 @@ let
 
     sweet_xml = buildMix rec {
       name = "sweet_xml";
-      version = "0.6.6";
+      version = "0.7.2";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0wrm3wx1c4wg8xj8lx1pg9xdpxhsbbry71l3kwgsizwjz1cc87if";
+        sha256 = "1s56f3ak35z2h9gk3g302akhwx7p4lrylichv4s4ai8g2a5fd538";
       };
 
       beamDeps = [];
@@ -1511,6 +1511,19 @@ let
         pkg = "${name}";
         version = "${version}";
         sha256 = "1rahpgz1lsd66r7ycns1ryz2qymamz1anrlps986900lsai2jxvc";
+      };
+
+      beamDeps = [];
+    };
+
+    websockex = buildMix rec {
+      name = "websockex";
+      version = "0.4.3";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "1r2kmi2pcmdzvgbd08ci9avy0g5p2lhx80jn736a98w55c3ygwlm";
       };
 
       beamDeps = [];

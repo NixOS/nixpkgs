@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nbconvert
-, pathpy
+, path
 , pytestCheckHook
 , setuptools-scm
 , pythonAtLeast
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
-    pathpy
+    path
     nbconvert
     pytestCheckHook
   ];

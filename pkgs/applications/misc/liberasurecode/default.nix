@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "liberasurecode";
-  version = "1.6.2";
+  version = "1.6.3";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "openstack";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qV7DL/7zrwrYOaPj6iHnChGA6KHFwYKjeaMnrGrTPrQ=";
+    sha256 = "sha256-HCp+FQ9nq4twk6FtfKhzT80wXXJbvG+clrDO2/9ATpU=";
   };
 
   postPatch = ''

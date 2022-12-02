@@ -3,21 +3,31 @@
 , protobuf
 , rustPlatform
 , fetchFromGitHub
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Mko5udM8BY50uUwn7xESxB+s0MEO1kAJX4Dt/DnEEa4=";
+    sha256 = "sha256-uJvi082HkWW9y8jwHTvzuzBAi7uVtjq/4U0bO0EWdVM=";
   };
 
-  cargoHash = "sha256-pYMMgBvLsqkj2peouDQK1vn97ByUjtdCrkbzuZZLXrY=";
-  buildInputs = [ protobuf ];
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
+  cargoHash = "sha256-jS6wAswGqgfmpPV6qERhqn1IhpcBSDNh8HDdPo04F0A=";
+
+  nativeBuildInputs = [ protobuf ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   PROTOC = "${protobuf}/bin/protoc";
 

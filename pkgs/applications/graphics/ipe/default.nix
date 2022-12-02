@@ -19,11 +19,11 @@
 
 mkDerivation rec {
   pname = "ipe";
-  version = "7.2.23";
+  version = "7.2.24";
 
   src = fetchurl {
-    url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${pname}-${version}-src.tar.gz";
-    sha256 = "0yvm3zfba1ljyy518vjnvwpyg7lgnmdwm19v5k0wfgz64aca56x1";
+    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
+    sha256 = "sha256-/rh58k0dziWRB5B3BEbVCwPkbuLr19KBV7FwWXFkT28=";
   };
 
   sourceRoot = "${pname}-${version}/src";

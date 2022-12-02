@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , coloredlogs
+, deprecation
 , fetchFromGitHub
 , ghostscript
 , img2pdf
-, importlib-metadata
 , importlib-resources
 , jbig2enc
-, pdfminer
+, packaging
+, pdfminer-six
 , pikepdf
 , pillow
 , pluggy
@@ -16,30 +17,35 @@
 , pytestCheckHook
 , pythonOlder
 , reportlab
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
-, stdenv
 , substituteAll
-, tesseract4
+, tesseract
 , tqdm
+, typing-extensions
 , unpaper
+, installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.4.1";
+  version = "14.0.1";
+
+  disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "jbarlow83";
+    owner = "ocrmypdf";
     repo = "OCRmyPDF";
     rev = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
-    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
-    extraPostFetch = ''
+    # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
+    postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    sha256 = "sha256-gxgeEwm3cYNllcmRTZhdyIWWGKXTewyVW314k732swE=";
+    hash = "sha256-eYn24FkAXj/ESCoC0QaLY+wRhkxZP1KnuY4VU1WiG24=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,51 +56,54 @@ buildPythonPackage rec {
       gs = "${lib.getBin ghostscript}/bin/gs";
       jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract4}/bin/tesseract";
+      tesseract = "${lib.getBin tesseract}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
     })
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
+    setuptools
     setuptools-scm
+    installShellFiles
   ];
 
   propagatedBuildInputs = [
     coloredlogs
+    deprecation
     img2pdf
-    pdfminer
+    packaging
+    pdfminer-six
     pikepdf
     pillow
     pluggy
     reportlab
     tqdm
-  ] ++ (lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ]) ++ (lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
-  ]);
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
 
   checkInputs = [
     pytest-xdist
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/ocrmypdf/OCRmyPDF/issues/933
-    substituteInPlace setup.cfg \
-      --replace "pdfminer.six!=20200720,>=20191110,<=20211012" "pdfminer.six!=20200720,>=20191110,<=20220319"
-  '';
-
   pythonImportsCheck = [
     "ocrmypdf"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd ocrmypdf \
+      --bash misc/completion/ocrmypdf.bash \
+      --fish misc/completion/ocrmypdf.fish
+  '';
+
   meta = with lib; {
-    homepage = "https://github.com/jbarlow83/OCRmyPDF";
+    homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
   };
 }

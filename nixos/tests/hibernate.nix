@@ -3,6 +3,7 @@
 { system ? builtins.currentSystem
 , config ? {}
 , pkgs ? import ../.. { inherit system config; }
+, systemdStage1 ? false
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -25,10 +26,16 @@ let
 
     powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
-    fileSystems = {
-      "/".device = "/dev/vda2";
+    fileSystems."/" = {
+      device = "/dev/vda2";
+      fsType = "ext3";
     };
     swapDevices = mkOverride 0 [ { device = "/dev/vda1"; } ];
+    boot.resumeDevice = mkIf systemdStage1 "/dev/vda1";
+    boot.initrd.systemd = mkIf systemdStage1 {
+      enable = true;
+      emergencyAccess = true;
+    };
   };
   installedSystem = (import ../lib/eval-config.nix {
     inherit system;
@@ -117,6 +124,11 @@ in makeTest {
       resume = create_named_machine("resume")
       resume.start()
       resume.succeed("grep 'not persisted to disk' /run/test/suspended")
+
+      # Ensure we don't restore from hibernation when booting again
+      resume.crash()
+      resume.wait_for_unit("default.target")
+      resume.fail("grep 'not persisted to disk' /run/test/suspended")
     '';
 
 }

@@ -43,12 +43,6 @@ in
     } {
       assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
       message = "networking.defaultGateway6.interface is not supported by networkd.";
-    } {
-      assertion = cfg.useDHCP == false;
-      message = ''
-        networking.useDHCP is not supported by networkd.
-        Please use per interface configuration and set the global option to false.
-      '';
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -65,21 +59,58 @@ in
         genericNetwork = override:
           let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
             ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-          in optionalAttrs (gateway != [ ]) {
-            routes = override [
-              {
+              makeGateway = gateway: {
                 routeConfig = {
                   Gateway = gateway;
                   GatewayOnLink = false;
                 };
-              }
-            ];
+              };
+          in optionalAttrs (gateway != [ ]) {
+            routes = override (map makeGateway gateway);
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
       in mkMerge [ {
         enable = true;
       }
+      (mkIf cfg.useDHCP {
+        networks."99-ethernet-default-dhcp" = lib.mkIf cfg.useDHCP {
+          # We want to match physical ethernet interfaces as commonly
+          # found on laptops, desktops and servers, to provide an
+          # "out-of-the-box" setup that works for common cases.  This
+          # heuristic isn't perfect (it could match interfaces with
+          # custom names that _happen_ to start with en or eth), but
+          # should be good enough to make the common case easy and can
+          # be overridden on a case-by-case basis using
+          # higher-priority networks or by disabling useDHCP.
+
+          # Type=ether matches veth interfaces as well, and this is
+          # more likely to result in interfaces being configured to
+          # use DHCP when they shouldn't.
+
+          # When wait-online.anyInterface is enabled, RequiredForOnline really
+          # means "sufficient for online", so we can enable it.
+          # Otherwise, don't block the network coming online because of default networks.
+          matchConfig.Name = ["en*" "eth*"];
+          DHCP = "yes";
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
+        };
+        networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
+          # Like above, but this is much more likely to be correct.
+          matchConfig.WLANInterfaceType = "station";
+          DHCP = "yes";
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
+          # We also set the route metric to one more than the default
+          # of 1024, so that Ethernet is preferred if both are
+          # available.
+          dhcpV4Config.RouteMetric = 1025;
+          ipv6AcceptRAConfig.RouteMetric = 1025;
+        };
+      })
       (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
           "40-${i.name}" = {
@@ -103,7 +134,7 @@ in
               # Most of these route options have not been tested.
               # Please fix or report any mistakes you may find.
               routeConfig =
-                optionalAttrs (route.prefixLength > 0) {
+                optionalAttrs (route.address != null && route.prefixLength != null) {
                   Destination = "${route.address}/${toString route.prefixLength}";
                 } //
                 optionalAttrs (route.options ? fastopen_no_cookie) {
@@ -111,6 +142,9 @@ in
                 } //
                 optionalAttrs (route.via != null) {
                   Gateway = route.via;
+                } //
+                optionalAttrs (route.type != null) {
+                  Type = route.type;
                 } //
                 optionalAttrs (route.options ? onlink) {
                   GatewayOnLink = true;

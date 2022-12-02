@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, openssl, libp11, pam, libintl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libp11, pam, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "pam_p11";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ pam openssl libp11 ]
+  buildInputs = [ pam libp11.passthru.openssl libp11 ]
     ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   meta = with lib; {

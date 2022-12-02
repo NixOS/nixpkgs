@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl, writeText, plugins ? [ ] }:
+{ lib, stdenv, fetchurl, writeText, plugins ? [ ], nixosTests }:
 
 let
-  version = "3.11.5";
-  stableVersion = lib.concatStrings (lib.take 2 (lib.splitVersion version));
+  version = "4.0.5";
+
+  versionParts = lib.take 2 (lib.splitVersion version);
+  # 4.2 -> 402, 3.11 -> 311
+  stableVersion = lib.removePrefix "0" (lib.concatMapStrings
+    (p: if (lib.toInt p) < 10 then (lib.concatStrings ["0" p]) else p)
+    versionParts);
 
 in stdenv.mkDerivation rec {
   pname = "moodle";
@@ -10,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "sha256-KFitrMThEcx7pU/+jmP8casEyg6/FlhpvjfIjf31vw0=";
+    sha256 = "sha256-m4LyAg/C/ZV3nBD4gNFNjwI6glg7ZAH2nSGg0mU2DsI=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -50,6 +55,10 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) moodle;
+  };
 
   meta = with lib; {
     description =

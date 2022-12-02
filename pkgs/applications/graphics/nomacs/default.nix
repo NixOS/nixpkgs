@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -67,5 +68,7 @@ mkDerivation rec {
     maintainers = with lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
     inherit (qtbase.meta) platforms;
+    # Broken on hydra since 2020-08-15: https://hydra.nixos.org/build/125495291 (bump from 3.16 to 3.17 prerelease)
+    broken = stdenv.isDarwin;
   };
 }

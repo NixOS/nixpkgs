@@ -9,6 +9,7 @@ mkCoqDerivation {
   repo = "coq-dpdgraph";
   inherit version;
   defaultVersion = switch coq.coq-version [
+    { case = "8.16"; out = "1.0+8.16"; }
     { case = "8.15"; out = "1.0+8.15"; }
     { case = "8.14"; out = "1.0+8.14"; }
     { case = "8.13"; out = "1.0+8.13"; }
@@ -22,6 +23,7 @@ mkCoqDerivation {
     { case = "8.5";  out = "0.6"; }
   ] null;
 
+  release."1.0+8.16".sha256 = "sha256-xy4xcVHaD1OHBdGUzUy3SeZnHtOf1+UIh6YjUYFINm0=";
   release."1.0+8.15".sha256 = "sha256:1pxr0gakcz297y8hhrnssv5j07ccd58pv7rh7qv5g7855pfqrkg7";
   release."1.0+8.14".sha256 = "sha256:01pmi7jcc77431jii6x6nd4m8jg4vycachiyi1h6dx9rp3a2508s";
   release."1.0+8.13".sha256 = "sha256:0f8lj8b99n8nsq2jf5m0snblfs8yz50hmlqqq9nlw4qklq7j4z5z";
@@ -39,9 +41,9 @@ mkCoqDerivation {
   release."0.6".sha256   = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   releaseRev = v: "v${v}";
 
-  extraNativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
   mlPlugin = true;
-  extraBuildInputs = [ coq.ocamlPackages.ocamlgraph ];
+  buildInputs = [ coq.ocamlPackages.ocamlgraph ];
 
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag

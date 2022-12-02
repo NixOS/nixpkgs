@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.27.0";
+  version = "0.28.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1521b129564444648c523a38f6446c137f1aae5c9c7de1ec151d5ebf03fd407d";
+    sha256 = "sha256-qjdnRylngKVjVeMGe5yL9DoqHET/mF3oKzpdnhYcorg=";
   };
 
   propagatedBuildInputs = [

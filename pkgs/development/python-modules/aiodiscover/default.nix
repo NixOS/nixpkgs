@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , dnspython
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.8";
+  version = "1.4.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,10 +22,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ts3PnL1ePWJHHaLuC0eQKqBOt+HeEeAayeVBAIhnUWs=";
+    sha256 = "sha256-tIbLb4Jk3vR1hVcdUPuYJrse7BcfE4Z/dXShs/uBDBo=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     dnspython
     netifaces
     pyroute2

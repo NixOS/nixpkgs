@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.3.14";
+  version = "2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
-    rev = "v${version}";
-    sha256 = "sha256-HJxqTwZ9byjZxdftQPTkVo0Ufio9gNGH69q5Q2gYR00=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-whLneq8RE1bok8jPlOteqIb5U07TvEa0O2mrzORp5HU=";
   };
 
   propagatedBuildInputs = [

@@ -3,13 +3,14 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools-scm
 , pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , click
 , colorama
-, dataclasses
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
 , mypy-extensions
 , pathspec
 , parameterized
@@ -20,25 +21,29 @@
 , uvloop
 }:
 
-
 buildPythonPackage rec {
   pname = "black";
-  version = "22.1.0";
+  version = "22.10.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p8AZLTVjX2/BF0vldct5FekuXdYp7nn9rw3PpBqAr7U=";
+    hash = "sha256-9RNYjaWZlD4M3k4yzJh56CXVhyDWVXBi0QmMWtgAgOE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized ];
+  checkInputs = [ pytestCheckHook parameterized aiohttp ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -61,19 +66,23 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ];
+  # multiple tests exceed max open files on hydra builders
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
-    aiohttp
-    aiohttp-cors
     click
-    colorama
     mypy-extensions
     pathspec
     platformdirs
     tomli
-    uvloop
   ] ++ lib.optional (pythonOlder "3.8") typed-ast
   ++ lib.optional (pythonOlder "3.10") typing-extensions;
+
+  passthru.optional-dependencies = {
+    d = [ aiohttp aiohttp-cors ];
+    colorama = [ colorama ];
+    uvloop = [ uvloop ];
+  };
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

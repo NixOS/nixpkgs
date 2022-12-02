@@ -1,11 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
 , hypothesis
 , setuptools-scm
 , six
 , attrs
 , py
 , setuptools
-, pytest-cov
 , pytest-timeout
 , pytest-tornado
 , mock
@@ -33,26 +35,6 @@ buildPythonPackage rec {
     sha256 = "67767320e971374f701a175aa59abd3a554723039d39fae908e72d16330d648b";
   };
 
-  checkInputs = [
-    hypothesis
-    pytest-cov
-    pytest-timeout
-    pytest-tornado
-    jsonschema
-    mock
-    tabulate
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_apply_filter_no_repo"
-    "test_diff_api_checkpoint"
-    "test_filter_cmd_invalid_filter"
-    "test_inline_merge"
-    "test_interrogate_filter_no_repo"
-    "test_merge"
-  ];
-
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
@@ -69,7 +51,32 @@ buildPythonPackage rec {
     GitPython
     notebook
     jinja2
-    ];
+  ];
+
+  checkInputs = [
+    hypothesis
+    pytest-timeout
+    pytest-tornado
+    jsonschema
+    mock
+    tabulate
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_apply_filter_no_repo"
+    "test_diff_api_checkpoint"
+    "test_filter_cmd_invalid_filter"
+    "test_inline_merge_source_add"
+    "test_inline_merge_source_patches"
+    "test_inline_merge_source_replace"
+    "test_inline_merge_cells_insertion"
+    "test_inline_merge_cells_replacement"
+    "test_interrogate_filter_no_repo"
+    "test_merge_input_strategy_inline"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";

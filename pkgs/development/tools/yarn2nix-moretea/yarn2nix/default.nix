@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
-, allowAliases ? pkgs.config.allowAliases or true
+, allowAliases ? pkgs.config.allowAliases
 }:
 
 let
@@ -58,7 +58,6 @@ in rec {
     "--offline"
     "--frozen-lockfile"
     "--ignore-engines"
-    "--ignore-scripts"
   ];
 
   mkYarnModules = {
@@ -69,7 +68,8 @@ in rec {
     yarnLock,
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
+    ignoreScripts ? true,
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -141,7 +141,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs yarnFlags}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ lib.optional ignoreScripts "--ignore-scripts" ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -241,7 +241,7 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
-    yarnFlags ? defaultYarnFlags,
+    yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
     pkgConfig ? {},
@@ -303,7 +303,7 @@ in rec {
         workspaceDependenciesTransitive;
 
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
-      inherit src pname;
+      inherit src version pname;
 
       name = baseName;
 
@@ -359,7 +359,7 @@ in rec {
         runHook postInstall
       '';
 
-      doDist = true;
+      doDist = attrs.doDist or true;
 
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option
@@ -376,11 +376,10 @@ in rec {
 
       meta = {
         inherit (nodejs.meta) platforms;
-        description = packageJSON.description or "";
-        homepage = packageJSON.homepage or "";
-        version = packageJSON.version or "";
-        license = if packageJSON ? license then getLicenseFromSpdxId packageJSON.license else "";
-      } // (attrs.meta or {});
+      } // lib.optionalAttrs (package ? description) { inherit (package) description; }
+        // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
+        // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
+        // (attrs.meta or {});
     });
 
   yarn2nix = mkYarnPackage {
@@ -413,7 +412,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 

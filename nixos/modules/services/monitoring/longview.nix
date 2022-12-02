@@ -16,7 +16,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, system metrics will be sent to Linode LongView.
         '';
       };
@@ -25,12 +25,12 @@ in {
         type = types.str;
         default = "";
         example = "01234567-89AB-CDEF-0123456789ABCDEF";
-        description = ''
+        description = lib.mdDoc ''
           Longview API key. To get this, look in Longview settings which
           are found at https://manager.linode.com/longview/.
 
           Warning: this secret is stored in the world-readable Nix store!
-          Use <option>apiKeyFile</option> instead.
+          Use {option}`apiKeyFile` instead.
         '';
       };
 
@@ -38,12 +38,12 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/longview-api-key";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the Longview API key.
           To get this, look in Longview settings which
           are found at https://manager.linode.com/longview/.
 
-          <option>apiKeyFile</option> takes precedence over <option>apiKey</option>.
+          {option}`apiKeyFile` takes precedence over {option}`apiKey`.
         '';
       };
 
@@ -51,7 +51,7 @@ in {
         type = types.str;
         default = "";
         example = "http://127.0.0.1/server-status";
-        description = ''
+        description = lib.mdDoc ''
           The Apache status page URL. If provided, Longview will
           gather statistics from this location. This requires Apache
           mod_status to be loaded and enabled.
@@ -62,7 +62,7 @@ in {
         type = types.str;
         default = "";
         example = "http://127.0.0.1/nginx_status";
-        description = ''
+        description = lib.mdDoc ''
           The Nginx status page URL. Longview will gather statistics
           from this URL. This requires the Nginx stub_status module to
           be enabled and configured at the given location.
@@ -72,7 +72,7 @@ in {
       mysqlUser = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The user for connecting to the MySQL database. If provided,
           Longview will connect to MySQL and collect statistics about
           queries, etc. This user does not need to have been granted
@@ -83,10 +83,10 @@ in {
       mysqlPassword = mkOption {
         type = types.str;
         default = "";
-        description = ''
-          The password corresponding to <option>mysqlUser</option>.
+        description = lib.mdDoc ''
+          The password corresponding to {option}`mysqlUser`.
           Warning: this is stored in cleartext in the Nix store!
-          Use <option>mysqlPasswordFile</option> instead.
+          Use {option}`mysqlPasswordFile` instead.
         '';
       };
 
@@ -94,8 +94,8 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/dbpassword";
-        description = ''
-          A file containing the password corresponding to <option>mysqlUser</option>.
+        description = lib.mdDoc ''
+          A file containing the password corresponding to {option}`mysqlUser`.
         '';
       };
 

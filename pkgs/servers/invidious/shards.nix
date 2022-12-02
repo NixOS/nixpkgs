@@ -20,14 +20,14 @@
   exception_page = {
     owner = "crystal-loot";
     repo = "exception_page";
-    rev = "v0.2.0";
-    sha256 = "0nlgnh5iykbr1v2132342k2mz6s2laws6nkgqsqlwhhcr4gb4jcx";
+    rev = "v0.2.2";
+    sha256 = "1c8askb9b7621jjz5pjj6b8pdbhw3r1l3dym6swg1saspf5j3jwi";
   };
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v1.1.0";
-    sha256 = "07vlvddy4mba9li2bvskzqzywwq55cyvlgkz13q6dsl4zfgc96ca";
+    rev = "v1.1.2";
+    sha256 = "1149q4qw0zrws5asqqr4snrdi67xsmisdcq58zcrbgqgsxgly9d0";
   };
   kilt = {
     owner = "jeromegn";

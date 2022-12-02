@@ -3,8 +3,15 @@
 , gjs
 , gnome
 , gobject-introspection
+, hddtemp
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
 , pulseaudio
 , python3
+, smartmontools
 , substituteAll
 , touchegg
 , vte
@@ -49,6 +56,17 @@ super: lib.trivial.pipe super [
     postPatch = ''
       substituteInPlace "extension.js" --replace "/usr/bin/ddcutil" "${ddcutil}/bin/ddcutil"
     '';
+  }))
+
+  (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
+        inherit hddtemp liquidctl lm_sensors procps smartmontools;
+        netcat = netcat-gnu;
+        nvmecli = nvme-cli;
+      })
+    ];
   }))
 
   (patchExtension "gnome-shell-screenshot@ttll.de" (old: {

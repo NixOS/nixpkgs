@@ -4,8 +4,8 @@
 # https://github.com/NixOS/nixpkgs/issues/21671
 
 buildPythonPackage rec {
-  version = pycryptodome.version;
   pname = "pycrypto";
+  version = pycryptodome.version;
 
   # Cannot build wheel otherwise (zip 1980 issue)
   SOURCE_DATE_EPOCH=315532800;
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://www.pycrypto.org/";
-    description = "Python Cryptography Toolkit";
+    homepage = "https://www.pycrypto.org/";
+    description = "Drop-in replacement for pycrypto using pycryptodome";
     platforms = pycryptodome.meta.platforms;
   };
 }

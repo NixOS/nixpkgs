@@ -5,26 +5,27 @@
 , ninja
 , vala
 , pkg-config
+, desktop-file-utils
 , wrapGAppsHook4
 , gobject-introspection
 , gettext
 , itstool
 , libxml2
-, python3
 , gnome
 , glib
 , gtk4
 , libadwaita
 , librsvg
+, pango
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "42.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Eq9Uk6YiBaxrt0VA8KhYQT2okolmo0boVDMLQdc7w5M=";
+    sha256 = "ZDP+3y9C+yK/IC2fE47C7gcjetXXQ4CQULXICbVs28s=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    python3
+    desktop-file-utils
     wrapGAppsHook4
     gobject-introspection
   ];
@@ -45,12 +46,8 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     librsvg
+    pango
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cimg";
-  version = "3.0.2";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    hash = "sha256-OWpztnyVXCg+uoAb6e/2eUK2ebBalDlz6Qcjf17IeMk=";
+    hash = "sha256-NZwivsTYgirZXuS25buGHL3uk75shRGMH4c3YdS7Mgg=";
   };
 
   outputs = [ "out" "doc" ];

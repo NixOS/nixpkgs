@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
+    '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
+        --set QT_QPA_PLATFORM xcb \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
@@ -102,6 +104,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "Teamspeak client license";
       url = "https://www.teamspeak.com/en/privacy-and-terms/";

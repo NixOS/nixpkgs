@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
+{ lib, stdenv, fetchFromGitHub, jre_headless, jdk_headless, ant, saxon }:
 
 stdenv.mkDerivation rec {
   pname = "jing-trang";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ jdk ant saxon ];
+  buildInputs = [ jdk_headless ant saxon ];
 
   CLASSPATH = "lib/saxon.jar";
 
@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";
     platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

@@ -9,7 +9,7 @@
 , postPhpize ? ""
 , makeFlags ? [ ]
 , src ? fetchurl {
-    url = "http://pecl.php.net/get/${pname}-${version}.tgz";
+    url = "https://pecl.php.net/get/${pname}-${version}.tgz";
     inherit (args) sha256;
   }
 , ...

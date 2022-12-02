@@ -1,11 +1,11 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  version = "1.5.0";
+  version = "1.6.0";
   pname = "drone-cli";
   revision = "v${version}";
 
-  vendorSha256 = "0hh079qvxs4bcf0yy42y6sb303wxxam5h2mz56irdl0q2vqkk0f0";
+  vendorSha256 = "sha256-0vHOPuSn7eczlUeCTz+SOMuDdRQTzw/TnH1rt/ltWOQ=";
 
   doCheck = false;
 
@@ -19,7 +19,7 @@ buildGoModule rec {
     owner = "harness";
     repo = "drone-cli";
     rev = revision;
-    sha256 = "sha256-TFIGKTVrAMSOFEmu3afdDKBgyEwF2KIv3rt1fS6rCxw=";
+    sha256 = "sha256-TVOj1C5X3fTRZF29hId13LjkkwaAFntlozpmYVUfVJI=";
   };
 
   meta = with lib; {

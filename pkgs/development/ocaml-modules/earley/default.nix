@@ -21,8 +21,9 @@ buildDunePackage rec {
 
   meta = {
     description = "Parser combinators based on Earley Algorithm";
+    homepage = "https://github.com/rlepigre/ocaml-earley";
     license = lib.licenses.cecill-b;
     maintainers = [ lib.maintainers.vbgl ];
-    homepage = "https://github.com/rlepigre/ocaml-earley";
+    mainProgram = "pa_ocaml";
   };
 }

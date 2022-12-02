@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  doCheck = !lib.versionAtLeast ocaml.version "4.06";
+  doCheck = lib.versionOlder ocaml.version "4.06";
   checkTarget = "testall";
 
   createFindlibDestdir = true;

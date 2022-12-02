@@ -3,12 +3,10 @@
 }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.08";
 
   pname = "asn1-combinators";
   version = "0.2.6";
-
-  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-v${version}.tbz";

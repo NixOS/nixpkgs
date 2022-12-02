@@ -1,5 +1,4 @@
 { mkDerivation
-, fetchFromGitHub
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -20,6 +19,8 @@
 
 mkDerivation rec {
   pname = "elisa";
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ libvlc ];
 

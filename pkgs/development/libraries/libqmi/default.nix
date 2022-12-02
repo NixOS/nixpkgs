@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.30.4";
+  version = "1.30.8";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ANfaMKT40RhfN8uiic+vHfzQSljy921qz99bhTEtbtY=";
+    sha256 = "sha256-hiSCzp460L1l0mQzTuMRzblLnfKGO1txNjCbQbisGZA=";
   };
 
   nativeBuildInputs = [
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--enable-gtk-doc"
-    "--enable-introspection"
+    "--enable-gtk-doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "yes" else "no"}"
+    "--enable-introspection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "yes" else "no"}"
   ];
 
   enableParallelBuilding = true;

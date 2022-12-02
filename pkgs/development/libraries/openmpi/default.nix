@@ -3,7 +3,7 @@
 , libpsm2, libfabric, pmix, ucx
 
 # Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+, cudaSupport ? false, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -18,8 +18,6 @@
 , fortranSupport ? true
 }:
 
-assert !cudaSupport || cudatoolkit != null;
-
 let
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -27,11 +25,11 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.2";
+  version = "4.1.4";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "09xmlr4mfs02kwcf5cmdgkcdjj81fjwjmpa3rz2k28f3gz7wfy4v";
+    sha256 = "03ckngrff1cl0l81vfvrfhp99rbgk7s0633kr1l468yibwbjx4cj";
   };
 
   postPatch = ''
@@ -50,7 +48,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
-    ++ lib.optional fabricSupport [ libpsm2 libfabric ];
+    ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
   nativeBuildInputs = [ perl ]
     ++ lib.optionals fortranSupport [ gfortran ];
@@ -72,16 +70,6 @@ in stdenv.mkDerivation rec {
     ;
 
   enableParallelBuilding = true;
-
-  # disable stackprotector on aarch64-darwin for now
-  # https://github.com/NixOS/nixpkgs/issues/127608
-  #
-  # build error:
-  #
-  # /private/tmp/nix-build-openmpi-4.1.1.drv-0/ccg7QqR8.s:13:15: error: index must be an integer in range [-256, 255].
-  #         ldr     x2, [x2, ___stack_chk_guard];momd
-  #
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   postInstall = ''
     rm -f $out/lib/*.la

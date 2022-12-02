@@ -37,11 +37,6 @@ buildPythonPackage rec {
       --replace 'python_paths = "."' ""
   '';
 
-  pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
-  ];
-
   pythonImportsCheck = [
     "yamlfix"
   ];

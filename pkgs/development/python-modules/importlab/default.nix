@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , networkx
@@ -25,6 +26,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "importlab" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A library that automatically infers dependencies for Python files";
     homepage = "https://github.com/google/importlab";
     license = licenses.mit;

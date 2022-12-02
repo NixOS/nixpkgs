@@ -11,6 +11,7 @@
 , substituteAll
 , lib
 , callPackage
+, pkgs
 }:
 
 let
@@ -133,6 +134,17 @@ let
     # test-overrideScope = let
     #  myPackages = python.pkgs.overrideScope extension;
     # in assert myPackages.foobar == myPackages.numpy; myPackages.python.withPackages(ps: with ps; [ foobar ]);
+  } // lib.optionalAttrs (python ? pythonAttr) {
+    # Test applying overrides using pythonPackagesOverlays.
+    test-pythonPackagesExtensions = let
+      pkgs_ = pkgs.extend(final: prev: {
+        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+          (python-final: python-prev: {
+            foo = python-prev.setuptools;
+          })
+        ];
+      });
+    in pkgs_.${python.pythonAttr}.pkgs.foo;
   };
 
   condaTests = let

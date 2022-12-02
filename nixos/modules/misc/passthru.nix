@@ -7,7 +7,7 @@
   options = {
     passthru = lib.mkOption {
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         This attribute set will be exported as a system attribute.
         You can put whatever you want here.
       '';

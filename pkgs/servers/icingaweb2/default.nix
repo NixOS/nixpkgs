@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";
-  version = "2.10.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icingaweb2";
     rev = "v${version}";
-    sha256 = "sha256:0fhhq6mzpwj3dh6w583n4sngshf15dm8zgbli5cacy7jkzmsz0wn";
+    hash = "sha256-MRk+ZshdOUg311+FNuEM+jspYM4ZqqQLx5dRBM1KNpI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -29,7 +29,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://www.icinga.com/products/icinga-web-2/";
     license = licenses.gpl2Only;
-    platforms = platforms.all;
     maintainers = with maintainers; [ das_j ];
+    mainProgram = "icingacli";
+    platforms = platforms.all;
   };
 }

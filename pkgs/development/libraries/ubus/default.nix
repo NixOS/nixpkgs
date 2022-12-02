@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     homepage = "https://git.openwrt.org/?p=project/ubus.git;a=summary";
     license = licenses.lgpl21Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

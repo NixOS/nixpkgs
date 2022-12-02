@@ -6,11 +6,11 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "wlc";
-  version = "1.12";
+  version = "1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256:01c1qxq6dxvpn8rgpbqs4iw5daa0rmlgygb3xhhfj7xpqv1v84ir";
+    sha256 = "sha256-MZ6avuMNT5HIIXW7ezukAJeO70o+SrgJnBnGjNy4tYE=";
   };
 
   propagatedBuildInputs = [

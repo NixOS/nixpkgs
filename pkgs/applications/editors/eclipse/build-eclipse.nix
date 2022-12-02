@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
-    libXrender libXtst libsecret makeWrapper zlib
+    libXrender libXtst libsecret zlib
   ] ++ lib.optional (webkitgtk != null) webkitgtk;
 
   buildCommand = ''
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.eclipse.org/";
     inherit description;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
 

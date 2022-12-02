@@ -28,5 +28,6 @@ buildPythonPackage rec {
       vcf will attempt to parse the content of each record based on the data
       types specified in the meta-information lines
     '';
+    broken = true; # uses the 2to3 feature, that got removed in setuptools 0.58
   };
 }

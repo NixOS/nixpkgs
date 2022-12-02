@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
     environment.systemPackages = [
       (pkgs.runCommand "patched-hello" {} ''
         install -D -m755 ${pkgs.hello}/bin/hello $out/bin/hello
-        patchelf $out/bin/hello --set-interpreter ${pkgs.nix-ld.ldPath}
+        patchelf $out/bin/hello --set-interpreter $(cat ${pkgs.nix-ld}/nix-support/ldpath)
       '')
     ];
   };

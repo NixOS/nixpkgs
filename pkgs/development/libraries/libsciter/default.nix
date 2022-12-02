@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     description = "Embeddable HTML/CSS/JavaScript engine for modern UI development";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ leixb ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

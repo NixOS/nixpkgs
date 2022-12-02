@@ -22,10 +22,14 @@
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , wayland
 , wayland-protocols
+, wayland-scanner
+, drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libdrm
+, mesa
 , libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , dbus
-, udevSupport ? false
+, udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , udev
 , ibusSupport ? false
 , ibus
@@ -55,19 +59,36 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.20";
+  version = "2.24.2";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xWq6HXtbDn6Znkp2mMcLY6M5T/lwS19uHFfgwW8E3QY=";
+    sha256 = "sha256-s17wqAKwnZDtOt0NysDpWCCAQgKRT1u3sP63EPGhMp8=";
   };
-  dontDisableStatic = withStatic;
+  dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
+  patches = [
+    # `sdl2-config --cflags` from Nixpkgs returns include path to just SDL2.
+    # On a normal distro this is enough for includes from all SDL2* packages to work,
+    # but on NixOS they're spread across different paths.
+    # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
+    ./find-headers.patch
+  ];
+
+  postPatch = ''
+    # Fix running wayland-scanner for the build platform when cross-compiling.
+    # See comment here: https://github.com/libsdl-org/SDL/issues/4860#issuecomment-1119003545
+    substituteInPlace configure \
+      --replace '$(WAYLAND_SCANNER)' 'wayland-scanner'
+  '';
+
+  strictDeps = true;
+
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland wayland-scanner ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
@@ -84,7 +105,8 @@ stdenv.mkDerivation rec {
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
-    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
+    ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
+    ++ optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs

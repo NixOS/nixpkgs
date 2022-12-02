@@ -89,11 +89,35 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
+    rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
+  '' + optionalString stdenv.hostPlatform.isRiscV ''
+    rm test/ExecutionEngine/frem.ll
+    rm test/ExecutionEngine/mov64zext32.ll
+    rm test/ExecutionEngine/test-interp-vec-arithm_float.ll
+    rm test/ExecutionEngine/test-interp-vec-arithm_int.ll
+    rm test/ExecutionEngine/test-interp-vec-logical.ll
+    rm test/ExecutionEngine/test-interp-vec-setcond-fp.ll
+    rm test/ExecutionEngine/test-interp-vec-setcond-int.ll
+    substituteInPlace unittests/Support/CMakeLists.txt \
+      --replace "CrashRecoveryTest.cpp" ""
+    rm unittests/Support/CrashRecoveryTest.cpp
+    substituteInPlace unittests/ExecutionEngine/Orc/CMakeLists.txt \
+      --replace "OrcCAPITest.cpp" ""
+    rm unittests/ExecutionEngine/Orc/OrcCAPITest.cpp
   '' + ''
     patchShebangs test/BugPoint/compile-custom.ll.py
+  '';
+
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -131,6 +155,7 @@ in stdenv.mkDerivation (rec {
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
+    "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812

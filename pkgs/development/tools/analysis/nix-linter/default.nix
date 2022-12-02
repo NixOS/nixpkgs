@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "nix-linter";
-  version = "0.2.0.3";
+  version = "0.2.0.4";
 
   src = fetchFromGitHub {
     owner = "Synthetica9";
     repo = "nix-linter";
-    rev = "38c4a14681cf3a1e6f098d8b723db503910a28d8";
-    sha256 = "16igk4xnm4mg9mw0zg2zk6s44axia3fs6334fasvjy0c7cjwk4c7";
+    rev = "ecdd50750fd3ffaff83c0637474b884a0c38f8b9";
+    sha256 = "0hm6iaamh1wlvqk8z4yfh4idgbclbsimxhlgflwz2hnv9mm12sf1";
   };
 
   isLibrary = false;

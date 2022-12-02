@@ -11,7 +11,7 @@ in
     tokenPath = mkOption {
       type = types.nullOr types.path;
       apply = final: if final == null then null else toString final;
-      description = ''
+      description = lib.mdDoc ''
         The token from your Buildkite "Agents" page.
 
         A run-time path to the token file, which is supposed to be provisioned
@@ -22,14 +22,14 @@ in
       type = types.str;
       default = "30s";
       example = "1min";
-      description = ''
+      description = lib.mdDoc ''
         How often to update metrics.
       '';
     };
     endpoint = mkOption {
       type = types.str;
       default = "https://agent.buildkite.com/v3";
-      description = ''
+      description = lib.mdDoc ''
         The Buildkite Agent API endpoint.
       '';
     };
@@ -37,7 +37,7 @@ in
       type = with types; nullOr (listOf str);
       default = null;
       example = literalExpression ''[ "my-queue1" "my-queue2" ]'';
-      description = ''
+      description = lib.mdDoc ''
         Which specific queues to process.
       '';
     };

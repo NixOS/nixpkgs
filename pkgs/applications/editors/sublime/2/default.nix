@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Sophisticated text editor for code, markup and prose";
     license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

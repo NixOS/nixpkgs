@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, abseil-cpp
 , c-ares
 , cmake
 , crc32c
@@ -42,6 +41,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace external/googleapis/CMakeLists.txt \
       --replace "https://github.com/googleapis/googleapis/archive/\''${GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
+
+    # https://github.com/googleapis/google-cloud-cpp/issues/8992
+    for file in external/googleapis/config.pc.in google/cloud/{,*/}config.pc.in; do
+      substituteInPlace "$file" \
+        --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
+    done
   '';
 
   nativeBuildInputs = [
@@ -58,10 +65,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    abseil-cpp
     c-ares
     crc32c
-    curl
+    (curl.override { inherit openssl; })
     grpc
     nlohmann_json
     openssl

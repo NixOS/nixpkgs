@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple Mode S decoder for RTLSDR devices";
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;

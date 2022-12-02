@@ -1,17 +1,21 @@
 { lib, fetchzip }:
 
-let version = "1.222"; in
-fetchzip {
-  name = "lxgw-wenkai-${version}";
+fetchzip rec {
+  pname = "lxgw-wenkai";
+  version = "1.245.1";
+
   url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
 
   postFetch = ''
-    tar -xzvf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+    mv $out/*.ttf $out/share/fonts/truetype
+
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
-  sha256 = "sha256-u2NTEYZrotOHktc2R5RWMFqeZ775/IpYJSUBO6PWijM=";
+  hash = "sha256-4RQ+aqAZPQH3t6v2KvrNWgYT3J3uMuY34XTuvyLEOeI=";
 
   meta = with lib; {
     homepage = "https://lxgw.github.io/";

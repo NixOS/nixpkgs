@@ -1,14 +1,15 @@
 getVersion() {
     local dir="$1"
     rev=
-    if [ -e "$dir/.git" ]; then
+    gitDir="$dir/.git"
+    if [ -e "$gitDir" ]; then
         if [ -z "$(type -P git)" ]; then
             echo "warning: Git not found; cannot figure out revision of $dir" >&2
             return
         fi
         cd "$dir"
-        rev=$(git rev-parse --short HEAD)
-        if git describe --always --dirty | grep -q dirty; then
+        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
+        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
             rev+=M
         fi
     fi
