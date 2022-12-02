@@ -1600,7 +1600,7 @@ with pkgs;
 
   gita = python3Packages.callPackage ../applications/version-management/git-and-tools/gita { };
 
-  gitoxide = callPackage ../applications/version-management/gitoxide {
+  gitoxide = callPackage ../applications/version-management/git-and-tools/gitoxide {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
