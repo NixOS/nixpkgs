@@ -39665,8 +39665,6 @@ with pkgs;
 
   faust = res.faust2;
 
-  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
-
   faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 
   faust2alqt = libsForQt5.callPackage ../applications/audio/faust/faust2alqt.nix { };
