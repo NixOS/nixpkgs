@@ -186,9 +186,9 @@ let
       depsOfOptionalPlugins = lib.subtractLists opt (findDependenciesRecursively opt);
       startWithDeps = findDependenciesRecursively start;
       allPlugins = lib.unique (startWithDeps ++ depsOfOptionalPlugins);
-      python3Env = python3.withPackages (ps:
-        lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [])) ps) allPlugins)
-      );
+      allPython3Dependencies = ps:
+        lib.flatten (builtins.map (plugin: (plugin.python3Dependencies or (_: [])) ps) allPlugins);
+      python3Env = python3.withPackages allPython3Dependencies;
 
       packdirStart = vimFarm "pack/${packageName}/start" "packdir-start" allPlugins;
       packdirOpt = vimFarm "pack/${packageName}/opt" "packdir-opt" opt;
@@ -201,7 +201,7 @@ let
         ln -s ${python3Env}/${python3Env.sitePackages} $out/pack/${packageName}/start/__python3_dependencies/python3
       '';
     in
-      [ packdirStart packdirOpt python3link ];
+      [ packdirStart packdirOpt ] ++ lib.optional (allPython3Dependencies python3.pkgs != []) python3link;
   in
     buildEnv {
       name = "vim-pack-dir";
