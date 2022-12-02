@@ -45,19 +45,19 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "107.0.5304.122",
-    "sha256": "0f2jdvlnp1s5ia01lnqk0ykqji2x4ab9g4kxk637n4csf0i1gj85",
+    "version": "108.0.5359.72",
+    "sha256": "1ijvphbmkzha8nbvz17dwypwj1lz7hzr7q9fvk6gma27b1m1d57m",
     "sha256bin64": null,
     "deps": {
       "gn": {
-        "version": "2022-09-14",
+        "version": "2022-10-05",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "fff29c1b3f9703ea449f720fe70fa73575ef24e5",
-        "sha256": "1c0dvpp4im1hf277bs5w7rgqxz3g2bax266i2g6smi3pl7a8jpnp"
+        "rev": "b9c6c19be95a3863e02f00f1fe403b2502e345b6",
+        "sha256": "1rhadb6qk867jafr85x2m3asis3jv7x06blhmad2d296p26d5w6x"
       },
       "ungoogled-patches": {
-        "rev": "107.0.5304.122-1",
-        "sha256": "109j5jvsbj9dylj8prz7bkzc8czjv2c8bm0albwnkyxymcpd3w6p"
+        "rev": "108.0.5359.72-1",
+        "sha256": "0gv9566w1q0abam7ngjb0qw7kg2dp43lixm51m9avsvvb6a4wyzz"
       }
     }
   }
