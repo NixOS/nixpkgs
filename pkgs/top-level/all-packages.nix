@@ -3365,6 +3365,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  aoc-cli = callPackage ../tools/misc/aoc-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   apprise = with python3Packages; toPythonApplication apprise;
 
   aptdec = callPackage ../development/libraries/aptdec {};
