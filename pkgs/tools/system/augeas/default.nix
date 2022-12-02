@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ readline libxml2 ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Configuration editing tool";
     license = licenses.lgpl21Only;
