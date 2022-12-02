@@ -2456,8 +2456,9 @@ with pkgs;
 
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
-    ammonite_2_13;
-  ammonite = if scala == scala_2_12 then ammonite_2_12 else ammonite_2_13;
+    ammonite_2_13
+    ammonite_3_2;
+  ammonite = if scala == scala_2_13 then ammonite_2_13 else ammonite_3_2;
 
   amp = callPackage ../applications/editors/amp {};
 

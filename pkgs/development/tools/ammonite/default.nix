@@ -9,7 +9,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.5.3";
+      version = "2.5.5";
 
       src = fetchurl {
         url =
@@ -84,10 +84,14 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-Iov55ohFjcGhur5UEng7aAZJPVua1H/JaKKW6OKS6Zg=";
+    sha256 = "sha256-vW/YhOcS259DT1UFKluiFEHG2MT8PpEGKpWzkvXIvng=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-dzUhKUQDHrYZ4WyCk4z4CTxb6vK05qfApR/WPOwhA5s=";
+    sha256 = "sha256-hPIdlsweeq6901XylEMdztvVvEiN+8FNC6H/CTmqtA4=";
+  };
+  ammonite_3_2 = common {
+    scalaVersion = "3.2";
+    sha256 = "sha256-j29K0HNgmAzZ7f4uk2xZGtpXNGJcOFSsS2V/XRFQRic=";
   };
 }
