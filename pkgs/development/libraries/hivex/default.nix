@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   ++ (with perlPackages; [ perl IOStringy ])
   ++ lib.optionals stdenv.isDarwin [ libintl ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     wrapProgram $out/bin/hivexregedit \
         --set PERL5LIB "$out/${perlPackages.perl.libPrefix}" \
