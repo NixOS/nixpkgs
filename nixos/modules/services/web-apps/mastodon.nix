@@ -236,7 +236,7 @@ in {
         example = "social.example.org";
         type = lib.types.str;
         default = cfg.localDomain;
-        defaultText = lib.literalexpression "localDomain";
+        defaultText = lib.literalExpression "localDomain";
       };
 
       secretKeyBaseFile = lib.mkOption {
