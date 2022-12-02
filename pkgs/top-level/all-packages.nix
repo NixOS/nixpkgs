@@ -1792,7 +1792,7 @@ with pkgs;
 
   git-test = callPackage ../applications/version-management/git-and-tools/git-test { };
 
-  git-town = callPackage ../tools/misc/git-town { };
+  git-town = callPackage ../applications/version-management/git-and-tools/git-town { };
 
   git-trim = callPackage ../applications/version-management/git-and-tools/git-trim {
     openssl = openssl_1_1;
