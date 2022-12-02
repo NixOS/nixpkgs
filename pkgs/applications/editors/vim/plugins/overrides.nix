@@ -10,7 +10,6 @@
 , substituteAll
 
   # Language dependencies
-, python2
 , python3
 , rustPlatform
 
@@ -1192,7 +1191,7 @@ self: super: {
   });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
-    buildInputs = [ python2 ];
+    buildInputs = [ python3 ];
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
