@@ -618,7 +618,7 @@ in {
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
+    environment.etc = mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";
@@ -626,7 +626,7 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    }) (filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
       "$HOME/.nix-profile"

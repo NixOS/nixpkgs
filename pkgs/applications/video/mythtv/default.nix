@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, which, qtbase, qtwebkit, qtscript
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
 , perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders, soundtouch, libzip
@@ -32,7 +32,7 @@ mkDerivation rec {
   setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
-    freetype qtbase qtscript lame zlib xlibsWrapper libGLU libGL
+    freetype qtbase qtscript lame zlib libGLU libGL
     perl libsamplerate libbluray lzo alsa-lib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2 soundtouch libzip
   ] ++ lib.optional withWebKit qtwebkit;

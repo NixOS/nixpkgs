@@ -441,6 +441,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.sourcehut.dispatch</literal> and the
+          corresponding package
+          (<literal>sourcehut.dispatchsrht</literal>) have been removed
+          due to
+          <link xlink:href="https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/">upstream
+          deprecation</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>p4</literal> package now only includes the
           open-source Perforce Helix Core command-line client and APIs.
           It no longer installs the unfree Helix Core Server binaries
@@ -1797,6 +1807,13 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
           a self-hosted multi-tenant recipe collection. Available as
           <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="http://www.litech.org/tayga/">TAYGA</link>,
+          an out-of-kernel stateless NAT64 implementation. Available as
+          <link linkend="opt-services.tayga.enable">services.tayga</link>.
         </para>
       </listitem>
       <listitem>

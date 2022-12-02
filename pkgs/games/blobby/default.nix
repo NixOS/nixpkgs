@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib, pkg-config }:
+{ lib, stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib, unzip, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "blobby-volley";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sed -e '1i#include <iostream>' -i src/NetworkMessage.cpp
   '';
 
+  inherit unzip;
+
   postInstall = ''
     cp ../data/Icon.bmp "$out/share/blobby/"
     mv "$out/bin"/blobby{,.bin}
@@ -28,7 +30,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
-    homepage = "http://blobby.sourceforge.net/";
+    homepage = "https://blobbyvolley.de/";
     downloadPage = "https://sourceforge.net/projects/blobby/files/Blobby%20Volley%202%20%28Linux%29/";
+    mainProgram = "blobby";
   };
 }

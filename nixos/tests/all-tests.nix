@@ -213,6 +213,7 @@ in {
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
+  freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   freshrss = handleTest ./freshrss.nix {};
   frr = handleTest ./frr.nix {};
@@ -637,6 +638,7 @@ in {
   systemd-misc = handleTest ./systemd-misc.nix {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
   taskserver = handleTest ./taskserver.nix {};
+  tayga = handleTest ./tayga.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};
   teleport = handleTest ./teleport.nix {};
