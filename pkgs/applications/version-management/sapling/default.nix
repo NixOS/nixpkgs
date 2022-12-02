@@ -123,6 +123,18 @@ let
       sed -i "s|https://files.pythonhosted.org/packages/[[:alnum:]]*/[[:alnum:]]*/[[:alnum:]]*/|file://$NIX_BUILD_TOP/$sourceRoot/hack_pydeps/|g" $sourceRoot/setup.py
     '';
 
+    # Now, copy the "sl web" (aka edenscm-isl) results into the output of this
+    # package, so that the command can actually work. NOTES:
+    #
+    # 1) This applies on all systems (so no conditional a la postFixup)
+    # 2) This doesn't require any kind of fixup itself, so we leave it out
+    #    of postFixup for that reason, too
+    preFixup = ''
+      sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
+      chmod +w $sitepackages
+      cp -r ${isl} $sitepackages/edenscm-isl
+    '';
+
     postFixup = lib.optionalString stdenv.isLinux ''
       wrapProgram $out/bin/sl \
         --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
@@ -165,12 +177,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out
-
     cp -r ${sapling}/* $out
-
-    sitepackages=$out/lib/${python38Packages.python.libPrefix}/site-packages
-    chmod +w $sitepackages
-    cp -r ${isl} $sitepackages/edenscm-isl
 
     runHook postInstall
   '';
