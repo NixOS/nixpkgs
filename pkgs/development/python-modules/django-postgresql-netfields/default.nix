@@ -10,8 +10,11 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
   pname = "django-postgresql-netfields";
+  version = "1.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jimfunk";
@@ -19,6 +22,12 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-I+X4yfadtiiZlW7QhfwVbK1qyWn/khH9fWXszCo9uro=";
   };
+
+  propagatedBuildInputs = [
+    django
+    netaddr
+    six
+  ];
 
   # tests need a postgres database
   doCheck = false;
@@ -33,15 +42,15 @@ buildPythonPackage rec {
     # psycopg2
   # ];
 
-  propagatedBuildInputs = [
-    django
-    netaddr
-    six
+  pythonImportsCheck = [
+    "netfields"
   ];
 
   meta = with lib; {
     description = "Django PostgreSQL netfields implementation";
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
+    changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }
