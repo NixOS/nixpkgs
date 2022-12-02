@@ -43,9 +43,10 @@ buildPythonPackage rec {
     # psycopg2
   # ];
 
-  pythonImportsCheck = [
-    "netfields"
-  ];
+  # Requires psycopg2
+  # pythonImportsCheck = [
+  #   "netfields"
+  # ];
 
   meta = with lib; {
     description = "Django PostgreSQL netfields implementation";
