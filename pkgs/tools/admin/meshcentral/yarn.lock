@@ -490,14 +490,14 @@
     "@types/node" "*"
 
 "@types/node@*":
-  version "18.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
-  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
+  version "18.11.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.10.tgz#4c64759f3c2343b7e6c4b9caf761c7a3a05cee34"
+  integrity sha512-juG3RWMBOqcOuXC643OAdSA525V44cVgGV6dUDuiFtss+8Fk5x1hI93Rsld43VeJVIeqlP9I7Fn9/qaVqoEAuQ==
 
 "@types/node@^14.14.14":
-  version "14.18.33"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.33.tgz#8c29a0036771569662e4635790ffa9e057db379b"
-  integrity sha512-qelS/Ra6sacc4loe/3MSjXNL1dNQ/GjxNHVzuChwMfmk7HuycRLVQN2qNY3XahK+fZc5E2szqQSKUyAF0E+2bg==
+  version "14.18.34"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.34.tgz#cd2e6fa0dbfb08a62582a7b967558e73c32061ec"
+  integrity sha512-hcU9AIQVHmPnmjRK+XUUYlILlr9pQrsqSrwov/JK1pnf3GTQowVBhx54FbvM0AU/VXGH4i3+vgXS5EguR7fysA==
 
 "@types/node@^17.0.45":
   version "17.0.45"
@@ -2411,9 +2411,9 @@ camelcase@^5.0.0:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001400:
-  version "1.0.30001434"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001434.tgz#ec1ec1cfb0a93a34a0600d37903853030520a4e5"
-  integrity sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==
+  version "1.0.30001435"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001435.tgz#502c93dbd2f493bee73a408fe98e98fb1dad10b2"
+  integrity sha512-kdCkUTjR+v4YAJelyiDTqiu82BDr4W4CP5sgTA0ZBmqn30XfS2ZghPLMowik9TPhS+psWJiUNxsqLyurDbmutA==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -3125,9 +3125,9 @@ decimal.js@^10.4.2:
   integrity sha512-ic1yEvwT6GuvaYwBLLY6/aFFgjZdySKTE8en/fkU3QICTmRtgtSlFn0u0BXN06InZwtfCelR7j8LRiDI/02iGA==
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha512-hjf+xovcEn31w/EUYdTXQh/8smFL/dzYjohQGEIgjyNavaJfBY2p5F527Bo1VPATxv0VYTUC2bOcXvqFwk78Og==
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-extend@~0.4.1:
   version "0.4.2"
@@ -6170,9 +6170,9 @@ minimatch@^2.0.1:
     brace-expansion "^1.0.0"
 
 minimatch@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.0.tgz#1717b464f4971b144f6aabe8f2d0b8e4511e09c7"
-  integrity sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.1.tgz#6c9dffcf9927ff2a31e74b5af11adf8b9604b022"
+  integrity sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==
   dependencies:
     brace-expansion "^2.0.1"
 
@@ -9023,9 +9023,9 @@ tweetnacl@^1.0.1:
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 twilio@*:
-  version "3.83.3"
-  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.83.3.tgz#5aec258aa433efa515c4302cb41ed35d72f2ac8f"
-  integrity sha512-uyYPXUmKIvpq54DGcq0elT0t2PLhDSwD7svu18SabiFSD6rmouws8gr9CZRix45IYSnIxTmOSr3i4vWR74/hQw==
+  version "3.83.4"
+  resolved "https://registry.yarnpkg.com/twilio/-/twilio-3.83.4.tgz#006047edc3d61a802ceadaac9f12c8acf12e25c5"
+  integrity sha512-aP9pK15Rpo1Q7VvNMhjdj305TgMhqQIDjt3M3UYSfAbrZcK8z+OENKSOUVxxS8gALmIw3dkDdBCOhOcLLZvUOA==
   dependencies:
     axios "^0.26.1"
     dayjs "^1.8.29"
