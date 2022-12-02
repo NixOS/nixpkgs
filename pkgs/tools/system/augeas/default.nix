@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Configuration editing tool";
     license = licenses.lgpl21Only;
-    homepage = "http://augeas.net/";
+    homepage = "https://augeas.net/";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
