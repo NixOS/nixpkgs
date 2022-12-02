@@ -11893,8 +11893,6 @@ self: super: with self; {
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
-  weakrefmethod = callPackage ../development/python-modules/weakrefmethod { };
-
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   web3 = callPackage ../development/python-modules/web3 { };
