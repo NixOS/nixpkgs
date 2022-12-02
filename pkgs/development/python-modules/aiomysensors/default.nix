@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
     homepage = "https://github.com/MartinHjelmare/aiomysensors";
+    changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
