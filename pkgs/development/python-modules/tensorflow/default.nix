@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.8.1";
+  version = "2.8.4";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -189,7 +189,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-+ZUS+uB8nzktq4B7PvhtHztT4OvWzvbdMb00dDCAGgM=";
+      hash = "sha256-MFqsVdSqbNDNZSQtCQ4/4DRpJPG35I0La4MLtRp37Rk=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -363,11 +363,12 @@ let
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
         "sha256-dQEyfueuQPcGvbhuh8Al45np3nRLDw2PCfC2lEqAH50="
+      else if stdenv.isDarwin then
+        "sha256-yfnZVtKWqNQGvlfq2owXhem0LmzDYriVfYgf1ZRlaDo="
+      else if stdenv.isAarch64 then
+        "sha256-cTIYZgqJQlqhK3JBRl1D8Jpayyuvp79Nud8XfnLPgKA="
       else
-        if stdenv.isDarwin then
-          "sha256-yfnZVtKWqNQGvlfq2owXhem0LmzDYriVfYgf1ZRlaDo="
-        else
-          "sha256:12i1ix2xwq77f3h8qr4h57g0aazrdsjjqa536cpwx3n1mvl5p6qi";
+        "sha256-EZtb6K7Bjs4vM6MoLKVu+SsF3imQZIzgcOdg3kWPIYo=";
     };
 
     buildAttrs = {

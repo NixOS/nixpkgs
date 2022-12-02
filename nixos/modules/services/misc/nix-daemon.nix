@@ -395,6 +395,7 @@ in
               str
               int
               bool
+              path
               package
             ]);
           in

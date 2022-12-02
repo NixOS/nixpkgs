@@ -48,6 +48,8 @@ GEM
     ffi (1.15.5)
     gemojione (3.3.0)
       json
+    gitaly (15.4.0)
+      grpc (~> 1.0)
     github-linguist (7.20.0)
       charlock_holmes (~> 0.7.7)
       escape_utils (~> 1.2.0)
@@ -87,7 +89,6 @@ GEM
     grpc (1.42.0)
       google-protobuf (~> 3.18)
       googleapis-common-protos-types (~> 1.0)
-    grpc-tools (1.42.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -228,6 +229,7 @@ DEPENDENCIES
   activesupport (~> 6.1.6.1)
   factory_bot
   faraday (~> 1.0)
+  gitaly (~> 15.4.0)
   github-linguist (~> 7.20.0)
   gitlab-gollum-lib (~> 4.2.7.10.gitlab.2)
   gitlab-gollum-rugged_adapter (~> 0.4.4.4.gitlab.1)
@@ -236,7 +238,6 @@ DEPENDENCIES
   gitlab-markup (~> 1.7.1)
   google-protobuf (~> 3.21.0)
   grpc (~> 1.42.0)
-  grpc-tools (~> 1.42.0)
   licensee (~> 9.15)
   pry (~> 0.12.2)
   rbtrace
