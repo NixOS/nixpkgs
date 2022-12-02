@@ -31,29 +31,42 @@ let
 
       generator =
         let
-          specialisationLoader = (lib.mapAttrsToList
-            (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/bootspec/${filename}" ])
-            children);
+          # NOTE: Be careful to not introduce excess newlines at the end of the
+          # injectors, as that may affect the pipes and redirects.
+
+          # Inject toplevel and init into the bootspec.
+          # This can only be done here because we *cannot* depend on $out
+          # referring to the toplevel, except by living in the toplevel itself.
+          toplevelInjector = lib.escapeShellArgs [
+            "${pkgs.jq}/bin/jq"
+            ''
+              .v1.toplevel = $toplevel |
+              .v1.init = $init
+            ''
+            "--sort-keys"
+            "--arg" "toplevel" "$out"
+            "--arg" "init" "$out/init"
+          ] + " < ${json}";
+
+          # We slurp all specialisations and inject them as values, such that
+          # `.specialisations.${name}` embeds the specialisation's bootspec
+          # document.
+          specialisationInjector =
+            let
+              specialisationLoader = (lib.mapAttrsToList
+                (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/bootspec/${filename}" ])
+                children);
+            in
+            lib.escapeShellArgs [
+              "${pkgs.jq}/bin/jq"
+              "--sort-keys"
+              ".v1.specialisation = ($ARGS.named | map_values(. | first | .v1))"
+            ] + " ${lib.concatStringsSep " " specialisationLoader}";
         in
         ''
           mkdir -p $out/bootspec
 
-          # Inject toplevel and init in the bootspec.
-          # This can be done only here because we *cannot* depend on $out, except
-          # by living in $out itself.
-          ${pkgs.jq}/bin/jq '
-            .v1.toplevel = $toplevel |
-            .v1.init = $init
-            ' \
-            --sort-keys \
-            --arg toplevel "$out" \
-            --arg init "$out/init" \
-            < ${json} \
-            | ${pkgs.jq}/bin/jq \
-              --sort-keys \
-              '.v1.specialisation = ($ARGS.named | map_values(. | first | .v1))' \
-              ${lib.concatStringsSep " " specialisationLoader} \
-            > $out/bootspec/${filename}
+          ${toplevelInjector} | ${specialisationInjector} > $out/bootspec/${filename}
         '';
 
       validator = pkgs.writeCueValidator ./bootspec.cue {
