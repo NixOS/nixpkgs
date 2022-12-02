@@ -191,6 +191,9 @@ rec {
   CoreData = [
     "/System/Library/Frameworks/CoreData.framework"
   ];
+  DisplayServices = [
+    "/System/Library/PrivateFrameworks/DisplayServices.framework/Versions/A/DisplayServices"
+  ];
   Cocoa = [
     "/System/Library/Frameworks/Cocoa.framework"
     "/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation"

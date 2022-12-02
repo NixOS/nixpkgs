@@ -15,6 +15,7 @@
   SignpostMetrics = {};
   PassKitCore = {};
   SkyLight = {};
+  DisplayServices = {};
 
   # Also expose CoreSymbolication; used by `root` package.
   CoreSymbolication = {};

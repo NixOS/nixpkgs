@@ -43,6 +43,7 @@ with frameworks; with libs; {
   DiscRecording           = { inherit libobjc CoreServices IOKit; };
   DiscRecordingUI         = {};
   DiskArbitration         = { inherit IOKit; };
+  DisplayServices         = {};
   EventKit                = {};
   ExceptionHandling       = {};
   FWAUserLib              = {};
