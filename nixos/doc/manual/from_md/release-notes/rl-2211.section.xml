@@ -2,8 +2,8 @@
   <title>Release 22.11 (“Raccoon”, 2022.11/30)</title>
   <para>
     The NixOS release team is happy to announce a new version of NixOS
-    22.11. NixOS is both a Linux distribution, and a set of packages
-    usable on other Linux systems and macOS.
+    22.11. NixOS is a Linux distribution, whose set of packages can also
+    be used on other Linux systems and macOS.
   </para>
   <para>
     This release is supported until the end of June 2023, handing over
