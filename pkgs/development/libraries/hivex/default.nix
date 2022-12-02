@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper, perlPackages
-, libxml2, libintl
+, ocamlPackages, libxml2, libintl
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
+  postPatch = ''
+    substituteInPlace ocaml/Makefile.am \
+        --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
+  '';
+
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook makeWrapper perlPackages.perl pkg-config ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper perlPackages.perl pkg-config ]
+  ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
     libxml2
   ]
