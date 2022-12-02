@@ -13,6 +13,8 @@ let
 in
 appimageTools.wrapType2 rec {
   inherit pname version src;
+  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ [ pkgs.libappindicator ];
 
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}
@@ -29,7 +31,7 @@ appimageTools.wrapType2 rec {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = [ maintainers.aacebedo ];
   };
