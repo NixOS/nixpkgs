@@ -41,6 +41,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  # upstream mkdocs could currently not update
+  # it's markdown dependency (breaking changes in minor version update).
+  # see: https://github.com/mkdocs/mkdocs/pull/3052
+  #
+  # Once mkdocs allows the version provided by nixpkgs this patch can be
+  # removed.
   patches = [ ./mkdocs-markdown-bump.patch ];
 
   propagatedBuildInputs = [
