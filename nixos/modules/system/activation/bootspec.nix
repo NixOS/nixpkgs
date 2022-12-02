@@ -50,7 +50,7 @@ let
             --arg init "$out/init" \
             < ${json} \
             | ${pkgs.jq}/bin/jq \
-              --sort-keys \ # Slurp all specialisations and inject them as values in .specialisations.{name} = {specialisation bootspec}.
+              --sort-keys \
               '.v1.specialisation = ($ARGS.named | map_values(. | first | .v1))' \
               ${lib.concatStringsSep " " specialisationLoader} \
             > $out/bootspec/${filename}

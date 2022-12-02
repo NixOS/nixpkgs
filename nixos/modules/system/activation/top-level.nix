@@ -79,7 +79,7 @@ let
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
-      ${optionalString (!config.boot.isContainer) ''
+      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
         ${config.boot.bootspec.validator} "$out/bootspec/${config.boot.bootspec.filename}"
       ''}
