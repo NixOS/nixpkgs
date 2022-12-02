@@ -21048,9 +21048,7 @@ with pkgs;
 
   libstroke = callPackage ../development/libraries/libstroke { };
 
-  libstrophe = callPackage ../development/libraries/libstrophe {
-    openssl = openssl_1_1;
-  };
+  libstrophe = callPackage ../development/libraries/libstrophe { };
 
   libspatialaudio = callPackage ../development/libraries/libspatialaudio { };
 
