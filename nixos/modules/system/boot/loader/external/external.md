@@ -6,7 +6,7 @@ Some users may prefer to create advanced workflows around managing the bootloade
 
 You can replace the built-in bootloader support with your own tooling using the "external" bootloader option.
 
-Imagine you have created a new packaged called FooBoot.
+Imagine you have created a new package called FooBoot.
 FooBoot provides a program at `${pkgs.fooboot}/bin/fooboot-install` which takes the system closure's path as its only argument and configures the system's bootloader.
 
 You can enable FooBoot like this:

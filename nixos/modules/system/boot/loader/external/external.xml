@@ -12,7 +12,7 @@
     tooling using the <quote>external</quote> bootloader option.
   </para>
   <para>
-    Imagine you have created a new packaged called FooBoot. FooBoot
+    Imagine you have created a new package called FooBoot. FooBoot
     provides a program at
     <literal>${pkgs.fooboot}/bin/fooboot-install</literal> which takes
     the system closure’s path as its only argument and configures the
@@ -21,7 +21,7 @@
   <para>
     You can enable FooBoot like this:
   </para>
-  <programlisting language="bash">
+  <programlisting language="nix">
 { pkgs, ... }: {
   boot.loader.external = {
     enable = true;
