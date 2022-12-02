@@ -1,5 +1,6 @@
-{lib, stdenv, python2, wordnet, writeScript}:
+{lib, stdenv, pypy2, wordnet, writeScript}:
 
+let python2 = pypy2; in
 stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
       DATA="$DATA `echo $i | sed -e s,data,index,` $i";
     done
 
-    python ${convert} $DATA
+    ${python2.interpreter} ${convert} $DATA
     echo en_US.UTF-8 > locale
   '';
 

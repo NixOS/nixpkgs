@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchurl, python2, dict, glibcLocales }:
+{ lib, stdenv, fetchurl, pypy2, dict, glibcLocales }:
 
+let python2 = pypy2; in
 stdenv.mkDerivation rec {
   pname = "dict-db-wiktionary";
   version = "20220420";
