@@ -217,8 +217,10 @@ let
     '';
   };
 in
-  (mapAttrs' (name: package: { inherit name; value=make-postgresql-test name package false;}) postgresql-versions) //
-  (mapAttrs' (name: package: { inherit name; value=mk-ensure-clauses-test name package;}) postgresql-versions) //
-  {
+  concatMapAttrs (name: package: {
+    ${name} = make-postgresql-test name package false;
+    ${name + "-clauses"} = mk-ensure-clauses-test name package;
+  }) postgresql-versions
+  // {
     postgresql_11-backup-all = make-postgresql-test "postgresql_11-backup-all" postgresql-versions.postgresql_11 true;
   }
