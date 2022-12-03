@@ -2,12 +2,13 @@
 , buildPythonPackage
 , distro
 , fetchFromGitHub
-, jdk
+, jre
 , numpy
 , pandas
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-Dfi6LzrLDz9VVDmbeK1dEaWuQosD4tvAH13Q4Mp3smA=";
   };
 
+  patches = [
+    ./java-interpreter-path.patch
+  ];
+
+  postPatch = ''
+    sed -i 's|@JAVA@|${jre}/bin/java|g' $(find -name '*.py')
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
@@ -34,10 +43,10 @@ buildPythonPackage rec {
     distro
     numpy
     pandas
+    setuptools
   ];
 
   checkInputs = [
-    jdk
     pytestCheckHook
   ];
 
