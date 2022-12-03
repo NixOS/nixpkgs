@@ -19,7 +19,7 @@
 , withGtk4 ? false
 , gtk4
 , withGnome ? true
-, gcr
+, gcr_4
 , glib
 , substituteAll
 , lib
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.10.2";
+  version = "1.10.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "T8PZxAS3sTMD2TlPlpYcUpjXGvqfH6evXk8PboQqCUA=";
+    sha256 = "eecw3aGfmzSIb0BkqhcPGiMmsIMp1lXYC2fpBsf3i3w=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
