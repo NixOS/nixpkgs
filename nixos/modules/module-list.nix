@@ -1240,6 +1240,7 @@
   ./system/boot/initrd-network.nix
   ./system/boot/initrd-ssh.nix
   ./system/boot/initrd-openvpn.nix
+  ./system/boot/initrd-tailscale.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
