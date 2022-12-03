@@ -149,11 +149,11 @@
   },
   "baiducloud": {
     "deleteVendor": true,
-    "hash": "sha256-0L/T12jeSkdZDJknVu5JffyaniZ1RVWgMpPu3qKNmWU=",
+    "hash": "sha256-Yw0dtfPiXLSLDvlAL3OUfZsd8ihc/OCBedsSSUcedOU=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.18.2",
+    "rev": "v1.18.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ya2FpsLQMIu8zWYObpyPgBHVkHoNKzHgdMxukbtsje4="
   },
