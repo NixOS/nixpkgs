@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "chat-downloader";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "6b6d63124371dc1f89979662209aad11dc9954faf8fadb5fa73bf711ff07800d";
+    sha256 = "f095cd90c312eecec647de2ff49f3ef4cfc30e3935731d21315380f331bdd095";
   };
 
   propagatedBuildInputs = [
