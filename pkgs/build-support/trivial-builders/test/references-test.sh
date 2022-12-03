@@ -23,40 +23,46 @@ set -euo pipefail
 # set -x
 # PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
 
-cd "$(dirname ${BASH_SOURCE[0]})"  # nixpkgs root
+cd "$(dirname "${BASH_SOURCE[0]}")"  # nixpkgs root
 
 if [[ -z ${SAMPLE:-} ]]; then
   echo "Running the script directly is currently not supported."
   echo "If you need to iterate, remove the raw path, which is not returned by nix-build."
   exit 1
-#   sample=( `nix-build --no-out-link sample.nix` )
-#   directRefs=( `nix-build --no-out-link invoke-writeDirectReferencesToFile.nix` )
-#   references=( `nix-build --no-out-link invoke-writeReferencesToFile.nix` )
+#   # shellcheck disable=SC2206 # deliberately unquoted
+#   sample=( $(nix-build --no-out-link sample.nix) )
+#   # shellcheck disable=SC2206 # deliberately unquoted
+#   directRefs=( $(nix-build --no-out-link invoke-writeDirectReferencesToFile.nix) )
+#   # shellcheck disable=SC2206 # deliberately unquoted
+#   references=( $(nix-build --no-out-link invoke-writeReferencesToFile.nix) )
 #   echo "sample: ${#sample[@]}"
 #   echo "direct: ${#directRefs[@]}"
 #   echo "indirect: ${#references[@]}"
 else
   # Injected by Nix (to avoid evaluating in a derivation)
   # turn them into arrays
-  sample=($SAMPLE)
-  directRefs=($DIRECT_REFS)
-  references=($REFERENCES)
+  # shellcheck disable=SC2206 # deliberately unquoted
+  sample=( $SAMPLE )
+  # shellcheck disable=SC2206 # deliberately unquoted
+  directRefs=( $DIRECT_REFS )
+  # shellcheck disable=SC2206 # deliberately unquoted
+  references=( $REFERENCES )
 fi
 
 echo >&2 Testing direct references...
 for i in "${!sample[@]}"; do
-  echo >&2 Checking '#'$i ${sample[$i]} ${directRefs[$i]}
+  echo >&2 Checking "#$i" "${sample[$i]}" "${directRefs[$i]}"
   diff -U3 \
-    <(sort <${directRefs[$i]}) \
-    <(nix-store -q --references ${sample[$i]} | sort)
+    <(sort <"${directRefs[$i]}") \
+    <(nix-store -q --references "${sample[$i]}" | sort)
 done
 
 echo >&2 Testing closure...
 for i in "${!sample[@]}"; do
-  echo >&2 Checking '#'$i ${sample[$i]} ${references[$i]}
+  echo >&2 Checking "#$i" "${sample[$i]}" "${references[$i]}"
   diff -U3 \
-    <(sort <${references[$i]}) \
-    <(nix-store -q --requisites ${sample[$i]} | sort)
+    <(sort <"${references[$i]}") \
+    <(nix-store -q --requisites "${sample[$i]}" | sort)
 done
 
 echo 'OK!'
