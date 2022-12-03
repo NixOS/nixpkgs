@@ -3646,6 +3646,15 @@
     githubId = 126339;
     name = "Domen Kozar";
   };
+  DomesticMoth = {
+    name = "Andrew";
+    email = "silkmoth@protonmail.com";
+    github = "DomesticMoth";
+    githubId = 91414737;
+    keys = [{
+      fingerprint = "7D6B AE0A A98A FDE9 3396  E721 F87E 15B8 3AA7 3087";
+    }];
+  };
   dominikh = {
     email = "dominik@honnef.co";
     github = "dominikh";
