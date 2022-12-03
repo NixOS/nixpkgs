@@ -21,6 +21,9 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
+  preBuild = ''
+    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
+  '';
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {

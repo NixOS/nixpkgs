@@ -60,6 +60,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.sourcehut.dispatch</literal> and the
+          corresponding package
+          (<literal>sourcehut.dispatchsrht</literal>) have been removed
+          due to
+          <link xlink:href="https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/">upstream
+          deprecation</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The EC2 image module previously detected and automatically
           mounted ext3-formatted instance store devices and partitions
           in stage-1 (initramfs), storing <literal>/tmp</literal> on the
@@ -109,6 +119,13 @@
           <link xlink:href="https://docs.getutm.app/">UTM</link>
           virtualisation
           <link xlink:href="https://search.nixos.org/packages?channel=unstable&amp;show=utm&amp;from=0&amp;size=1&amp;sort=relevance&amp;type=packages&amp;query=utm">package</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Resilio sync secret keys can now be provided using a secrets
+          file at runtime, preventing these secrets from ending up in
+          the Nix store.
         </para>
       </listitem>
     </itemizedlist>

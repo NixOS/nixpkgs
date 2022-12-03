@@ -33,6 +33,6 @@ mkDerivation rec {
     homepage = "https://github.com/flameshot-org/flameshot";
     maintainers = with maintainers; [ scode oxalica ];
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

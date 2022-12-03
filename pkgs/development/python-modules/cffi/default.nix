@@ -3,10 +3,12 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , libffi
 , pkg-config
 , pycparser
+, pythonAtLeast
 }:
 
 if isPyPy then null else buildPythonPackage rec {
@@ -30,13 +32,15 @@ if isPyPy then null else buildPythonPackage rec {
     # deemed safe to trust in cffi.
     #
     ./darwin-use-libffi-closures.diff
+  ] ++  lib.optionals (pythonAtLeast "3.11") [
+    # Fix test that failed because python seems to have changed the exception format in the
+    # final release. This patch should be included in the next version and can be removed when
+    # it is released.
+    (fetchpatch {
+      url = "https://foss.heptapod.net/pypy/cffi/-/commit/8a3c2c816d789639b49d3ae867213393ed7abdff.diff";
+      sha256 = "sha256-3wpZeBqN4D8IP+47QDGK7qh/9Z0Ag4lAe+H0R5xCb1E=";
+    })
   ];
-
-  buildInputs = [ libffi ];
-
-  nativeBuildInputs = [ pkg-config ];
-
-  propagatedBuildInputs = [ pycparser ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove setup.py impurities
@@ -45,6 +49,12 @@ if isPyPy then null else buildPythonPackage rec {
       --replace "'/usr/include/ffi'," "" \
       --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
+
+  buildInputs = [ libffi ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  propagatedBuildInputs = [ pycparser ];
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang

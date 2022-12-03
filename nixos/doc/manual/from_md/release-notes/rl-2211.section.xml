@@ -2,8 +2,8 @@
   <title>Release 22.11 (“Raccoon”, 2022.11/30)</title>
   <para>
     The NixOS release team is happy to announce a new version of NixOS
-    22.11. NixOS is both a Linux distribution, and a set of packages
-    usable on other Linux systems and macOS.
+    22.11. NixOS is a Linux distribution, whose set of packages can also
+    be used on other Linux systems and macOS.
   </para>
   <para>
     This release is supported until the end of June 2023, handing over
@@ -314,10 +314,7 @@
           generated using <literal>lib.systems.elaborate</literal>. In
           most cases you will want to use the new
           <literal>canExecute</literal> predicate instead which also
-          considers the kernel / syscall interface. It is briefly
-          described in the release’s
-          <link linkend="sec-release-22.11-highlights">highlights
-          section</link>.
+          takes the kernel / syscall interface into account.
           <literal>lib.systems.parse.isCompatible</literal> still
           exists, but has changed semantically: Architectures with
           differing endianness modes are <emphasis>no longer considered
@@ -437,16 +434,6 @@
           <literal>services.hbase-standalone</literal>. For production
           HBase clusters, use <literal>services.hadoop.hbase</literal>
           instead.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>services.sourcehut.dispatch</literal> and the
-          corresponding package
-          (<literal>sourcehut.dispatchsrht</literal>) have been removed
-          due to
-          <link xlink:href="https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/">upstream
-          deprecation</link>.
         </para>
       </listitem>
       <listitem>
@@ -1807,6 +1794,13 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
           <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
           a self-hosted multi-tenant recipe collection. Available as
           <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="http://www.litech.org/tayga/">TAYGA</link>,
+          an out-of-kernel stateless NAT64 implementation. Available as
+          <link linkend="opt-services.tayga.enable">services.tayga</link>.
         </para>
       </listitem>
       <listitem>
