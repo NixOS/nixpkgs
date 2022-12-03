@@ -338,6 +338,7 @@ mapAliases ({
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
   pytoml = throw "pytoml has been removed because it is unmaintained and is superseded by toml"; # Added 2023-04-11
+  pythonix = throw "pythonix has been removed, because it was archived upstream and it is incompatible with nix>2.3."; # Added 2022-12-04
   pytorch = torch; # added 2022-09-30
   pytorch-bin = torch-bin; # added 2022-09-30
   pytorchWithCuda = torchWithCuda; # added 2022-09-30
