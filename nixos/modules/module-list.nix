@@ -165,6 +165,7 @@
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/fzf.nix
   ./programs/gamemode.nix
   ./programs/geary.nix
   ./programs/git.nix

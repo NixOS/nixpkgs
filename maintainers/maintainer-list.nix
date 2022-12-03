@@ -6557,6 +6557,12 @@
     githubId = 6445082;
     name = "Joseph Lukasik";
   };
+  jhh = {
+    email = "jeff@j3ff.io";
+    github = "jhh";
+    githubId = 14412;
+    name = "Jeff Hutchison";
+  };
   jhhuh = {
     email = "jhhuh.note@gmail.com";
     github = "jhhuh";
@@ -14367,6 +14373,7 @@
   };
   urandom = {
     email = "colin@urandom.co.uk";
+    matrix = "@urandom0:matrix.org";
     github = "urandom2";
     githubId = 2526260;
     keys = [{
@@ -16019,5 +16026,11 @@
     email = "wuyoli@tilde.team";
     github = "wuyoli";
     githubId = 104238274;
+  };
+  ziguana = {
+    name = "Zig Uana";
+    email = "git@ziguana.dev";
+    github = "ziguana";
+    githubId = 45833444;
   };
 }

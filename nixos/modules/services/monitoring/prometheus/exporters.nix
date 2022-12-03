@@ -51,6 +51,7 @@ let
     "nginx"
     "nginxlog"
     "node"
+    "nut"
     "openldap"
     "openvpn"
     "pihole"
