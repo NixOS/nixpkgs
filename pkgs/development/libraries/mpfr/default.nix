@@ -11,7 +11,7 @@
 # files.
 
 stdenv.mkDerivation rec {
-  version = "4.1.1_p1";
+  version = "4.1.1";
   pname = "mpfr";
 
   src = fetchurl {
