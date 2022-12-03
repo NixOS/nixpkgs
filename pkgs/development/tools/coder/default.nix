@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "coder";
-  version = "0.12.5";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -32,6 +32,6 @@ buildGoModule rec {
     description = "Remote development environments on your infrastructure provisioned with Terraform";
     homepage = "https://coder.com";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = with maintainers; [ urandom ghuntley ];
   };
 }
