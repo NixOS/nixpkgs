@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   buildPhase = ''
-    source $stdenv/setup
-
     echo "unpacking $src..."
     mkdir extracted
     tar xzf $src -C extracted --strip-components=1
