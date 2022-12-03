@@ -27,6 +27,7 @@ import ./make-test-python.nix (
 
     passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
     paths = [ "/opt" ];
+    exclude = [ "/opt/excluded_file_*" ];
     pruneOpts = [
       "--keep-daily 2"
       "--keep-weekly 1"
@@ -47,17 +48,17 @@ import ./make-test-python.nix (
         {
           services.restic.backups = {
             remotebackup = {
-              inherit passwordFile paths pruneOpts backupPrepareCommand backupCleanupCommand;
+              inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
               repository = remoteRepository;
               initialize = true;
             };
             remote-from-file-backup = {
-              inherit passwordFile paths pruneOpts;
+              inherit passwordFile paths exclude pruneOpts;
               initialize = true;
               repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
             };
             rclonebackup = {
-              inherit passwordFile paths pruneOpts;
+              inherit passwordFile paths exclude pruneOpts;
               initialize = true;
               repository = rcloneRepository;
               rcloneConfig = {
@@ -104,6 +105,7 @@ import ./make-test-python.nix (
       server.succeed(
           # set up
           "cp -rT ${testDir} /opt",
+          "touch /opt/excluded_file_1 /opt/excluded_file_2",
           "mkdir -p /tmp/restic-rclone-backup",
 
           # test that remotebackup runs custom commands and produces a snapshot
