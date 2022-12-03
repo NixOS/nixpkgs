@@ -2,20 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-auditable";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-udn/Z+raf/fkJ5M/FSH9Au+J9ASu0rz6ZJSl8P+jLT4=";
+    sha256 = "sha256-mEmTgd7sC2jmYeb5pEO985v/aWWKlq/mSQUAGi32loY=";
   };
 
-  cargoSha256 = "sha256-k3wWdlLYGZZ44IHatXWq8TK2xCia3YES2jX286QkNH0=";
+  cargoSha256 = "sha256-G72UUqvFaTY/GQSkpz1wIzjb7vIWuAjvKMZosUB6YsA=";
 
   meta = with lib; {
     description = "A tool to make production Rust binaries auditable";
     homepage = "https://github.com/rust-secure-code/cargo-auditable";
+    changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
   };

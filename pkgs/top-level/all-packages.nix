@@ -3468,6 +3468,8 @@ with pkgs;
 
   beats = callPackage ../tools/misc/beats { };
 
+  BeatSaberModManager = callPackage ../games/BeatSaberModManager/default.nix { };
+
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
@@ -6259,6 +6261,8 @@ with pkgs;
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
   dfc  = callPackage ../tools/system/dfc { };
+
+  dfrs  = callPackage ../tools/system/dfrs { };
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
@@ -9872,6 +9876,8 @@ with pkgs;
 
   pwsafe = callPackage ../applications/misc/pwsafe { };
 
+  pw-viz = callPackage ../applications/misc/pw-viz { };
+
   napi-rs-cli = callPackage ../development/tools/napi-rs-cli { };
 
   neil = callPackage ../development/tools/neil { };
@@ -12245,6 +12251,8 @@ with pkgs;
   topgrade = callPackage ../tools/misc/topgrade {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
+
+  topiary = callPackage ../development/tools/misc/topiary { };
 
   todo = callPackage ../tools/misc/todo { };
 
@@ -19985,7 +19993,9 @@ with pkgs;
 
   lmdbxx = callPackage ../development/libraries/lmdbxx { };
 
-  lemon-graph = callPackage ../development/libraries/lemon-graph { };
+  lemon-graph = callPackage ../development/libraries/lemon-graph {
+    stdenv = if stdenv.isLinux then gcc11Stdenv else stdenv;
+  };
 
   levmar = callPackage ../development/libraries/levmar { };
 
@@ -35927,14 +35937,14 @@ with pkgs;
   isabelle = callPackage ../applications/science/logic/isabelle {
     polyml = polyml.overrideAttrs (_: {
       pname = "polyml-for-isabelle";
-      version = "2021-1";
+      version = "2022";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
       buildFlags = [ "compiler" ];
       src = fetchFromGitHub {
         owner = "polyml";
         repo = "polyml";
-        rev = "39d96a2def903ed019c6855e3b688df5070d633a";
-        sha256 = "sha256-S7d2Vr/nB+rCX9d4qQj4f7edVZKocKIjc5rrx9A/B4Q=";
+        rev = "bafe319bc3a65bf63bd98a4721a6f4dd9e0eabd6";
+        sha256 = "1ygs09zzq8icq1gc8qf4sb24lxx7sbcyd5hw3vw67a3ryaki0qw2";
       };
     });
 
